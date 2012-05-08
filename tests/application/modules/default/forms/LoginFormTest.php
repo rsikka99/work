@@ -1,0 +1,108 @@
+<?php
+
+class Default_Form_LoginFormTest extends PHPUnit_Framework_TestCase
+{
+    
+    protected $_form;
+
+    public function setUp ()
+    {
+        $this->_form = new Default_Form_Login();
+        parent::setUp();
+    }
+
+    public function tearDown ()
+    {
+        parent::tearDown();
+        $this->_form = null;
+    }
+
+    public function testCanRunPHPUNIT ()
+    {
+        $this->assertTrue(true, "This should never fail unless unit testing is broken");
+    }
+
+    /**
+     * This function returns an array of good data to put into the form
+     */
+    public function goodData ()
+    {
+        return array (
+                array (
+                        'lrobert', 
+                        'somepassword' 
+                ), 
+                array (
+                        'jsadler', 
+                        'O1as94_adsf#@' 
+                ), 
+                array (
+                        'someuser44', 
+                        '75647564' 
+                ) 
+        );
+    }
+
+    /**
+     * @dataProvider goodData
+     */
+    public function testFormAcceptsValidData ($username, $password)
+    {
+        $data = array (
+                'username' => $username, 
+                'password' => $password 
+        );
+        $this->assertTrue($this->_form->isValid($data), "User form did not accept good data. {$username} {$password}");
+    }
+
+    /**
+     * Provides bad data for tests to use
+     */
+    public function badData ()
+    {
+        return array (
+                array (
+                        '', 
+                        '' 
+                ), 
+                array (
+                        'lrobert', 
+                        '' 
+                ), 
+                array (
+                        '', 
+                        'somepassword' 
+                ), 
+                array (
+                        "lrobert'; DROP TABLE users; --", 
+                        'somepassword' 
+                ), 
+                array (
+                        'asdf!@#$%^&*(*', 
+                        'œ6©É' 
+                ), 
+                array (
+                        'goodusername', 
+                        'œ6©É' 
+                ), 
+                array (
+                        'asdf!@#$%^&*(*', 
+                        'goodpassword' 
+                ) 
+        );
+    }
+
+    /**
+     * @dataProvider badData
+     */
+    public function testFormRejectsBadData ($username, $password)
+    {
+        $data = array (
+                'username' => $username, 
+                'password' => $password 
+        );
+        $this->assertFalse($this->_form->isValid($data), "User form accepted bad data! {$username} {$password}");
+    }
+
+}
+

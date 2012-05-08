@@ -1,0 +1,55 @@
+<div class="row">
+	<div class="span12">
+		<h1>Error: <?php echo $this->message ?></h1>
+		<hr>
+	</div>
+    <?php if (isset($this->exceptions)): ?>
+    <div class="span12">
+		<div class="tabbable tabs-left">
+			<ul class="nav nav-tabs ">
+				<li><a href="#RequestParams" data-toggle="tab">Request Parameters</a></li>
+				<?php for($exceptionCount = 0; $exceptionCount <  count($this->exceptions); $exceptionCount ++) : ?>
+				<li class="active"><a href="#Exception<?php echo $exceptionCount + 1; ?>" data-toggle="tab">Exception #<?php echo $exceptionCount + 1; ?></a></li>
+                <?php endfor; ?>
+				
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane" id="RequestParams">
+					<h3>Request Parameters:</h3>
+					<div class="well">
+						<pre><?php 
+						    var_dump($this->request->getParams());
+						    ?></pre>
+					</div>
+				</div>
+				<?php for($exceptionCount = 0; $exceptionCount < count($this->exceptions); $exceptionCount ++) : ?>
+				<div class="tab-pane active" id="Exception<?php echo $exceptionCount + 1; ?>">
+					<h3>Exception #<?php echo $exceptionCount + 1; ?>:</h3>
+					<div class="well">
+						<p>
+							<b>Message:</b> <?php echo $this->exceptions[$exceptionCount]->getMessage(); ?>
+				</p>
+						<h3>Stack trace:</h3>
+						<pre><?php echo $this->exceptions[$exceptionCount]->getTraceAsString(); ?></pre>
+					</div>
+				</div>
+				<?php endfor;?>
+			</div>
+		</div>
+	</div>
+    <?php endif; ?>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

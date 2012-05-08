@@ -1,0 +1,52 @@
+<?php if (isset($this->result)) : ?>
+<div class="alert alert-success">
+	Your encrypted password is <strong><?php echo $this->result; ?></strong>
+</div>
+<?php endif; ?>
+
+<div class="well">
+	<form class="form-horizontal" method="POST">
+		<fieldset>
+			<legend>Encrypt your password</legend>
+			<div class="control-group">
+				<label class="control-label" for="password">Password: </label>
+				<div class="controls">
+					<input type="text" class="input-xlarge" id="password"
+						name="password">
+					<p class="help-block">Enter your password and submit</p>
+				</div>
+			</div>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary">Submit</button>
+				<button class="btn">Cancel</button>
+			</div>
+		</fieldset>
+	</form>
+
+
+	<form class="form-horizontal" method="POST">
+		<fieldset>
+			<legend>Encrypt your password</legend>
+			<div class="control-group">
+				<label class="control-label" for="password">Password: </label>
+				<div class="controls">
+					<input type="text" class="input-xlarge" id="password"
+						name="password">
+					<p class="help-block">Enter your password and submit</p>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="hash">Hash: </label>
+				<div class="controls">
+					<input type="text" class="input-xlarge" id="hash" name="hash">
+					<p class="help-block">Enter the hash of your previous password to
+						verify</p>
+				</div>
+			</div>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary">Submit</button>
+				<button class="btn">Cancel</button>
+			</div>
+		</fieldset>
+	</form>
+</div>

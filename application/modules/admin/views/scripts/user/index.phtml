@@ -1,0 +1,39 @@
+<?php if (isset($this->users) && count($this->users) > 0) : ?>
+<h1>View all Users</h1>
+<table class="table table-striped table-condensed table-bordered">
+    <thead>
+        <tr>
+            <th style="width: 30px;">ID</th>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th style="width: 100px;">Login Attempts</th>
+            <th style="width: 100px;">Frozen Until</th>
+            <th style="width: 60px;">Locked</th>
+            <th style="width: 80px;">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->users as $user) : /* @var $user Application_Model_User */ ?>
+        <tr>
+            <td><?php echo $user->getId(); ?></td>
+            <td><?php echo $user->getUsername(); ?></td>
+            <td><?php echo $user->getFirstname(); ?></td>
+            <td><?php echo $user->getLastname(); ?></td>
+            <td><?php echo $user->getLoginAttempts(); ?></td>
+            <td><?php echo ($user->isFrozen()) ? $user->getFrozenUntil() : ""; ?></td>
+            <td><?php echo ($user->getLocked()) ? "Yes" : "No"; ?></td>
+            <td>
+                <div class="btn-group">
+                    <a class="btn btn-warning" title="Edit User" href="<?php echo $this->baseUrl('/admin/user/edit') . "/id/{$user->getId()}" ?>"><i class="icon-pencil"></i></a>
+                    <a class="btn btn-danger" title="Delete User" href="<?php echo $this->baseUrl('/admin/user/delete') . "/id/{$user->getId()}" ?>"><i class="icon-minus-sign"></i></a>
+                </div>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<?php else : ?>
+    <h1>There are no users</h1>
+<?php endif; ?>
+

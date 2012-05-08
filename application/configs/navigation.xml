@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<nav>
+		<quotemenu>
+			<label>Quotes</label>
+			<class>dropdown</class>
+			<module>quote</module>
+			<controller>index</controller>
+			<action>index</action>
+			<pages>
+				<createquote>
+					<label>Create New Quote</label>
+					<module>quote</module>
+					<controller>build</controller>
+					<action>index</action>
+				</createquote>
+				<findquote>
+					<label>Find Existing Quote</label>
+					<module>quote</module>
+					<controller>index</controller>
+					<action>search</action>
+				</findquote>
+			</pages>
+		</quotemenu>
+		<dropdown>
+			<label>Admin</label>
+			<class>dropdown</class>
+			<module>admin</module>
+			<controller>index</controller>
+			<action>index</action>
+
+			<pages>
+				<UserManagement>
+					<label>User Management</label>
+					<module>admin</module>
+					<controller>user</controller>
+					<action>index</action>
+					<pages>
+						<create>
+							<label>Create User</label>
+							<module>admin</module>
+							<controller>user</controller>
+							<action>create</action>
+							<icon>plus-sign</icon>
+						</create>
+						<edit>
+							<label>Edit User</label>
+							<module>admin</module>
+							<controller>user</controller>
+							<action>edit</action>
+							<icon>pencil</icon>
+							<visible>0</visible>
+						</edit>
+						<delete>
+							<label>Delete User</label>
+							<module>admin</module>
+							<controller>user</controller>
+							<action>delete</action>
+							<visible>0</visible>
+						</delete>
+						<view>
+							<label>View User</label>
+							<module>admin</module>
+							<controller>user</controller>
+							<action>view</action>
+							<visible>0</visible>
+						</view>
+					</pages>
+				</UserManagement>
+				<DeviceManagement>
+					<label>Device Management</label>
+					<module>admin</module>
+					<controller>device</controller>
+					<action>index</action>
+					<pages>
+						<create>
+							<label>Add Device</label>
+							<module>admin</module>
+							<controller>device</controller>
+							<action>create</action>
+						</create>
+						<viewquotedevice>
+							<label>View Device</label>
+							<module>admin</module>
+							<controller>device</controller>
+							<action>view</action>
+						</viewquotedevice>
+						<updatequotedevice>
+							<label>Update Device</label>
+							<module>admin</module>
+							<controller>device</controller>
+							<action>update</action>
+						</updatequotedevice>
+						<deletequotedevice>
+							<label>Delete Device</label>
+							<module>admin</module>
+							<controller>device</controller>
+							<action>delete</action>
+						</deletequotedevice>
+					</pages>
+				</DeviceManagement>
+			</pages>
+		</dropdown>
+		<login>
+			<label>Login</label>
+			<module>default</module>
+			<controller>auth</controller>
+			<action>login</action>
+			<visible>0</visible>
+		</login>
+
+	</nav>
+</config>

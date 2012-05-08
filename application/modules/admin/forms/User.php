@@ -1,0 +1,268 @@
+<?php
+
+class Admin_Form_User extends EasyBib_Form
+{
+    
+    const MODE_CREATE = 0;
+    const MODE_EDIT = 1;
+    const MODE_USER_EDIT = 2;
+    
+    /**
+     * The mode of the form.
+     * This allows us to only display certain elements when in each mode
+     *
+     * @var integer
+     */
+    protected $formMode = self::MODE_CREATE;
+    
+    /*
+     * (non-PHPdoc) @see Zend_Form::__construct()
+     */
+    public function __construct ($formMode = null, $options = null)
+    {
+        if (null !== $formMode)
+        {
+            $this->formMode = $formMode;
+        }
+        
+        parent::__construct($options);
+    }
+
+    public function init ()
+    {
+        // Set the method for the display form to POST
+        $this->setMethod('POST');
+        /**
+         * Add class to form for label alignment
+         *
+         * - Vertical .form-vertical (not required)	Stacked, left-aligned labels
+         * over controls (default)
+         * - Inline .form-inline Left-aligned label and inline-block controls
+         * for compact style
+         * - Search .form-search Extra-rounded text input for a typical search
+         * aesthetic
+         * - Horizontal .form-horizontal
+         *
+         * Use .form-horizontal to have same experience as with Bootstrap v1!
+         */
+        $this->setAttrib('class', 'form-horizontal');
+        
+        $datetimeValidator = new My_Validate_DateTime();
+        
+        // Add CRSF checks to be annoying, but it prevents cross site forgery.
+        $test = new Zend_Validate_Identical();
+        $this->addElement('hash', 'crsf_field', array (
+                'errorMessages' => array (
+                        'Identical' => 'Form has timed out (probably), please submit the form again.' 
+                ) 
+        ));
+        
+        if ($this->getFormMode() !== self::MODE_USER_EDIT)
+        {
+            $this->addElement('text', 'username', array (
+                    'label' => 'Username:', 
+                    'required' => true, 
+                    'filters' => array (
+                            'StringTrim' 
+                    ), 
+                    'validators' => array (
+                            array (
+                                    'validator' => 'StringLength', 
+                                    'options' => array (
+                                            1, 
+                                            255 
+                                    ) 
+                            ) 
+                    ) 
+            ));
+        }
+        
+        if ($this->getFormMode() === self::MODE_EDIT)
+        {
+            
+            $this->addElement('text', 'loginAttempts', array (
+                    'label' => 'Login Attempts', 
+                    'disabled' => true 
+            ));
+            
+            $this->addElement('checkbox', 'resetLoginAttempts', array (
+                    'label' => 'Reset Login Attempts:', 
+                    'required' => true 
+            ));
+            /*
+             * $frozenUntil = new Zend_Form_Element_Text('frozen_until'); $frozenUntil->setLabel('Frozen Until:');
+             * $frozenUntil->setRequired(true); $frozenUntil->addValidator($datetimeValidator);
+             * $this->addElement($frozenUntil);
+             */
+            $minYear = (int)date('Y') - 2;
+            $maxYear = $minYear + 4;
+            $frozenUntil = new My_Form_Element_DateTimePicker('frozen_until');
+            $frozenUntil->setLabel('Frozen Until:')
+                ->setJQueryParam('dateFormat', 'yy/mm/dd')
+                ->setJqueryParam('timeFormat', 'hh:mm')
+                ->setJQueryParam('changeYear', 'true')
+                ->setJqueryParam('changeMonth', 'true')
+                ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
+                ->setDescription('yyyy/mm/dd hh:mm')
+                ->addValidator($datetimeValidator)
+                ->setRequired(false);
+            
+            $this->addElement($frozenUntil);
+        }
+        
+        $this->addElement('text', 'firstname', array (
+                'label' => 'First Name:', 
+                'required' => true, 
+                'filters' => array (
+                        'StringTrim' 
+                ), 
+                'validators' => array (
+                        array (
+                                'validator' => 'StringLength', 
+                                'options' => array (
+                                        1, 
+                                        255 
+                                ) 
+                        ) 
+                ) 
+        ));
+        
+        $this->addElement('text', 'lastname', array (
+                'label' => 'Last Name:', 
+                'required' => true, 
+                'filters' => array (
+                        'StringTrim' 
+                ), 
+                'validators' => array (
+                        array (
+                                'validator' => 'StringLength', 
+                                'options' => array (
+                                        1, 
+                                        255 
+                                ) 
+                        ) 
+                ) 
+        ));
+        
+        $this->addElement('text', 'email', array (
+                'label' => 'Email:', 
+                'required' => true, 
+                'filters' => array (
+                        'StringTrim' 
+                ), 
+                'validators' => array (
+                        array (
+                                'validator' => 'StringLength', 
+                                'options' => array (
+                                        1, 
+                                        255 
+                                ) 
+                        ), 
+                        array (
+                                'validator' => 'EmailAddress', 
+                                'allow' => Zend_Validate_Hostname::ALLOW_DNS 
+                        ) 
+                ), 
+                'errorMessages' => array (
+                        'EmailAddress' => 'Invalid Email Address' 
+                ) 
+        ));
+        
+        
+        if ($this->getFormMode() !== self::MODE_CREATE)
+        {
+            $this->addElement('checkbox', 'reset_password', array (
+                    'label' => 'Reset Password:', 
+                    'required' => true 
+            ));
+        }
+        
+        $password = new Zend_Form_Element_Password('password', array (
+                'label' => 'Password:', 
+                'required' => true, 
+                'filters' => array (
+                        'StringTrim' 
+                ), 
+                'validators' => array (
+                        array (
+                                'validator' => 'StringLength', 
+                                'options' => array (
+                                        1, 
+                                        255 
+                                ) 
+                        ) 
+                ) 
+        ));
+        
+        $passwordConfirm = new Zend_Form_Element_Password('password_confirm', array (
+                'label' => 'Confirm Password:', 
+                'required' => true, 
+                'filters' => array (
+                        'StringTrim' 
+                ), 
+                'validators' => array (
+                        array (
+                                'validator' => 'StringLength', 
+                                'options' => array (
+                                        1, 
+                                        255 
+                                ) 
+                        ), 
+                        array (
+                                'validator' => 'Identical', 
+                                'options' => array (
+                                        'token' => 'password' 
+                                ) 
+                        ) 
+                ), 
+                'errorMessages' => array (
+                        'Identical' => 'Passwords must match.' 
+                ) 
+        ));
+        
+        if ($this->getFormMode() !== self::MODE_CREATE)
+        {
+            $password->setRequired(false);
+            $passwordConfirm->setRequired(false);
+        }
+        
+        $this->addElement($password);
+        $this->addElement($passwordConfirm);
+        
+        $this->addElement('checkbox', 'locked', array (
+                'label' => 'Locked:' 
+        ));
+        
+        // Add the submit button
+        $this->addElement('submit', 'submit', array (
+                'ignore' => true, 
+                'label' => 'Save' 
+        ));
+        
+        // Add the cancel button
+        $this->addElement('submit', 'cancel', array (
+                'ignore' => true, 
+                'label' => 'Cancel' 
+        ));
+        
+        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
+    }
+
+    /**
+     *
+     * @return the $formMode
+     */
+    public function getFormMode ()
+    {
+        return $this->formMode;
+    }
+
+    /**
+     *
+     * @param string $formMode            
+     */
+    public function setFormMode ($formMode)
+    {
+        $this->formMode = $formMode;
+    }
+}
