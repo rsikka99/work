@@ -77,9 +77,9 @@ class Application_Model_User extends My_Model_Abstract
         // Set the filters
         $alnum = new Zend_Filter_Alnum(true);
         $this->_filters = array (
-                'id' => array (
-                         
-                ), 
+                'id' => array ()
+
+                , 
                 'username' => array (
                         'StringTrim', 
                         'StripTags', 
@@ -440,7 +440,9 @@ class Application_Model_User extends My_Model_Abstract
         
         if ($_frozenUntil !== null && ! $input->isValid('frozenUntil'))
         {
-            throw new Exception('Invalid date for frozen until provided');
+            $msgs = $input->getMessages();
+            $msg = $msgs[0][0];
+            throw new Exception('Invalid date for frozen until provided. ' . $msg);
         }
         
         $this->_frozenUntil = $input->frozenUntil;

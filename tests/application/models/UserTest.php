@@ -63,12 +63,12 @@ class Application_Model_UserTest extends PHPUnit_Framework_TestCase
                 ), 
                 array (
                         1, 
-                        'lrobert', 
+                        'dnikolopoulos', 
                         'tmtwdev', 
-                        'Lee', 
-                        'Robert', 
-                        'lrobert@tangentmtw.com', 
-                        0, 
+                        'Demetra', 
+                        'Nikolopoulos', 
+                        'dnikolopoulos@tangentmtw.com', 
+                        '2011-12-12 00:00:00', 
                         null, 
                         false 
                 ), 
@@ -80,6 +80,7 @@ class Application_Model_UserTest extends PHPUnit_Framework_TestCase
                         'Robert', 
                         'lrobert@tangentmtw.com', 
                         0, 
+                        '2011-02-28 13:59:59', 
                         null, 
                         false 
                 ), 
@@ -91,6 +92,7 @@ class Application_Model_UserTest extends PHPUnit_Framework_TestCase
                         'Robert', 
                         'lrobert@tangentmtw.com', 
                         0, 
+                        '2011-12-12 13:59:59', 
                         null, 
                         false 
                 ) 
@@ -130,6 +132,127 @@ class Application_Model_UserTest extends PHPUnit_Framework_TestCase
     {
         return array (
                 array (
+                        0, 
+                        'lee', 
+                        'tmtwdev', 
+                        'Lee', 
+                        'Robert', 
+                        'lrobert@tangentmtw.com', 
+                        0, 
+                        null, 
+                        false 
+                ), 
+                array (
+                        1, 
+                        'lrobert', 
+                        'tmt', 
+                        'Lee', 
+                        'Robert', 
+                        'lrobert@tangentmtw.com', 
+                        0, 
+                        null, 
+                        false 
+                ), 
+                array (
+                        2, 
+                        'lrobert', 
+                        'tmtwdev', 
+                        'Herman', 
+                        'Li', 
+                        'lrobert@tangentmtw.com', 
+                        0, 
+                        null, 
+                        false 
+                ), 
+                array (
+                        3, 
+                        'lrobert', 
+                        'tmtwdev', 
+                        'Li', 
+                        'Herman', 
+                        'lrobert@tangentmtw.com', 
+                        0, 
+                        null, 
+                        false 
+                ), 
+                array (
+                        4, 
+                        'lrobert', 
+                        'tmtwdev', 
+                        'Lee', 
+                        'Robert', 
+                        'lrobert', 
+                        0, 
+                        null, 
+                        false 
+                ), 
+                array (
+                        5, 
+                        'lrobert', 
+                        'tmtwdev', 
+                        'Lee', 
+                        'Robert', 
+                        'lrobert at tangentmtw dot com', 
+                        0, 
+                        null, 
+                        false 
+                ), 
+                array (
+                        6, 
+                        'lrobert', 
+                        'tmtwdev', 
+                        'Lee', 
+                        'Robert', 
+                        'lrobert@tangentmtw.com', 
+                        - 1, 
+                        null, 
+                        false 
+                ), 
+                array (
+                        7, 
+                        'lrobert', 
+                        'tmtwdev', 
+                        'Lee', 
+                        'Robert', 
+                        'lrobert@tangentmtw.com', 
+                        'I AM A BANANA', 
+                        null, 
+                        false 
+                ), 
+                array (
+                        8, 
+                        'lrobert', 
+                        'tmtwdev', 
+                        'Lee', 
+                        'Robert', 
+                        'lrobert@tangentmtw.com', 
+                        0, 
+                        'ABC', 
+                        false 
+                ), 
+                array (
+                        9, 
+                        'lrobert', 
+                        'tmtwdev', 
+                        'Lee', 
+                        'Robert', 
+                        'lrobert@tangentmtw.com', 
+                        '2012-24-02 10:10:10', 
+                        null, 
+                        false 
+                ), 
+                array (
+                        10, 
+                        'lrobert', 
+                        'tmtwdev', 
+                        'Lee', 
+                        'Robert', 
+                        'lrobert@tangentmtw.com', 
+                        0, 
+                        '2012-02-02 26:59:59', 
+                        false 
+                ), 
+                array (
                         1, 
                         'lrobert', 
                         'tmtwdev', 
@@ -137,7 +260,29 @@ class Application_Model_UserTest extends PHPUnit_Framework_TestCase
                         'Robert', 
                         'lrobert@tangentmtw.com', 
                         0, 
-                        null, 
+                        '2012-02-02 23:60:59', 
+                        false 
+                ), 
+                array (
+                        12, 
+                        'lrobert', 
+                        'tmtwdev', 
+                        'Lee', 
+                        'Robert', 
+                        'lrobert@tangentmtw.com', 
+                        0, 
+                        '2012-02-02 23:59:61', 
+                        false 
+                ), 
+                array (
+                        13, 
+                        'lrobert', 
+                        'tmtwdev', 
+                        'Lee', 
+                        'Robert', 
+                        'lrobert@tangentmtw.com', 
+                        0, 
+                        '2012-02-32 23:59:59', 
                         false 
                 ) 
         );
