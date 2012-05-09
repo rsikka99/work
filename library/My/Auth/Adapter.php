@@ -212,56 +212,43 @@ class My_Auth_Adapter extends Zend_Auth_Adapter_DbTable
         {
             $string = "{$diff->y} year";
             if ($diff->y > 1)
-            {
                 $string .= 's';
-            }
         }
         else if ($diff->m > 0)
         {
             $string = "{$diff->m} month";
             if ($diff->m > 1)
-            {
                 $string .= 's';
-            }
         }
         else if ($diff->d > 0)
         {
             $string = "{$diff->d} day";
             if ($diff->d > 1)
-            {
                 $string .= 's';
-            }
         }
         else if ($diff->h > 0)
         {
             $string = "{$diff->h} hour";
             if ($diff->h > 1)
-            {
                 $string .= 's';
-            }
         }
         else if ($diff->i > 0)
         {
             $string = "{$diff->i} minute";
             if ($diff->i > 1)
-            {
                 $string .= 's';
-            }
         }
         else
         {
             $string = "{$diff->s} second";
             if ($diff->i !== 1)
-            {
                 $string .= 's';
-            }
         }
         
         // If the date is in the past we should put that in the string 
         if ($diff->invert)
-        {
             $string .= " ago";
-        }
+        
         return $string;
     }
 }
