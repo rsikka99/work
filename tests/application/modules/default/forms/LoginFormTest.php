@@ -52,7 +52,7 @@ class Default_Form_LoginFormTest extends PHPUnit_Framework_TestCase
                 'username' => $username, 
                 'password' => $password 
         );
-        $this->assertTrue($this->_form->isValid($data), "User form did not accept good data. {$username} {$password}");
+        $this->assertTrue($this->_form->isValid($data), "Login form did not accept good data. {$username} {$password}");
     }
 
     /**
@@ -101,7 +101,7 @@ class Default_Form_LoginFormTest extends PHPUnit_Framework_TestCase
                 'username' => $username, 
                 'password' => $password 
         );
-        $this->assertFalse($this->_form->isValid($data), "User form accepted bad data! {$username} {$password}");
+        $this->assertFalse($this->_form->isValid($data), "Login form accepted bad data! {$username} {$password}");
     }
 
 }
