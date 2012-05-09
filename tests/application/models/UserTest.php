@@ -308,7 +308,7 @@ class Application_Model_UserTest extends PHPUnit_Framework_TestCase
                 'locked' => $locked 
         );
         
-            $this->_user->populate($data);        
+        $this->_user->populate($data);        
       
     }
 
