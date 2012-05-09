@@ -68,8 +68,8 @@ class Application_Model_UserTest extends PHPUnit_Framework_TestCase
                         'Demetra', 
                         'Nikolopoulos', 
                         'dnikolopoulos@tangentmtw.com', 
+                        0, 
                         '2011-12-12 00:00:00', 
-                        null, 
                         false 
                 ), 
                 array (
@@ -81,7 +81,6 @@ class Application_Model_UserTest extends PHPUnit_Framework_TestCase
                         'lrobert@tangentmtw.com', 
                         0, 
                         '2011-02-28 13:59:59', 
-                        null, 
                         false 
                 ), 
                 array (
@@ -93,10 +92,10 @@ class Application_Model_UserTest extends PHPUnit_Framework_TestCase
                         'lrobert@tangentmtw.com', 
                         0, 
                         '2011-12-12 13:59:59', 
-                        null, 
                         false 
                 ) 
         );
+    
     }
 
     /**
@@ -158,7 +157,7 @@ class Application_Model_UserTest extends PHPUnit_Framework_TestCase
                         'lrobert', 
                         'tmtwdev', 
                         'Herman', 
-                        'Li', 
+                        'i', 
                         'lrobert@tangentmtw.com', 
                         0, 
                         null, 
@@ -168,7 +167,7 @@ class Application_Model_UserTest extends PHPUnit_Framework_TestCase
                         3, 
                         'lrobert', 
                         'tmtwdev', 
-                        'Li', 
+                        'i', 
                         'Herman', 
                         'lrobert@tangentmtw.com', 
                         0, 
@@ -215,8 +214,8 @@ class Application_Model_UserTest extends PHPUnit_Framework_TestCase
                         'Lee', 
                         'Robert', 
                         'lrobert@tangentmtw.com', 
+                        0, 
                         'I AM A BANANA', 
-                        null, 
                         false 
                 ), 
                 array (
@@ -237,8 +236,8 @@ class Application_Model_UserTest extends PHPUnit_Framework_TestCase
                         'Lee', 
                         'Robert', 
                         'lrobert@tangentmtw.com', 
-                        '2012-24-02 10:10:10', 
-                        null, 
+                        0, 
+                        '2012-27-02 10:10:10', 
                         false 
                 ), 
                 array (

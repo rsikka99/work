@@ -77,9 +77,8 @@ class Application_Model_User extends My_Model_Abstract
         // Set the filters
         $alnum = new Zend_Filter_Alnum(true);
         $this->_filters = array (
-                'id' => array ()
-
-                , 
+                'id' => array (), 
+                
                 'username' => array (
                         'StringTrim', 
                         'StripTags', 
@@ -146,13 +145,19 @@ class Application_Model_User extends My_Model_Abstract
                                 'min' => 4, 
                                 'max' => 200 
                         )), 
-                        new Zend_Validate_EmailAddress() 
+                        new Zend_Validate_EmailAddress(array (
+                                'allow' => Zend_Validate_Hostname::ALLOW_DNS 
+                        )) 
                 ), 
                 'frozenUntil' => array (
                         new My_Validate_DateTime() 
                 ), 
                 'loginAttempts' => array (
-                        'Int' 
+                        'Int', 
+                        new Zend_Validate_Between(array (
+                                'min' => 0, 
+                                'max' => 500 
+                        )) 
                 ), 
                 'locked' => array (
                         Zend_Filter_Input::ALLOW_EMPTY => true 
@@ -440,9 +445,7 @@ class Application_Model_User extends My_Model_Abstract
         
         if ($_frozenUntil !== null && ! $input->isValid('frozenUntil'))
         {
-            $msgs = $input->getMessages();
-            $msg = $msgs[0][0];
-            throw new Exception('Invalid date for frozen until provided. ' . $msg);
+            throw new Exception('Invalid date for frozen until provided.');
         }
         
         $this->_frozenUntil = $input->frozenUntil;
