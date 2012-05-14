@@ -36,9 +36,44 @@ class My_Log
         }
     }
 
+    static function debug ($message, $source = null)
+    {
+        self::log($message, Zend_Log::DEBUG, $source);
+    }
+
     static function info ($message, $source = null)
     {
         self::log($message, Zend_Log::INFO, $source);
+    }
+
+    static function notice ($message, $source = null)
+    {
+        self::log($message, Zend_Log::NOTICE, $source);
+    }
+
+    static function warn ($message, $source = null)
+    {
+        self::log($message, Zend_Log::WARN, $source);
+    }
+
+    static function error ($message, $source = null)
+    {
+        self::log($message, Zend_Log::ERR, $source);
+    }
+
+    static function crit ($message, $source = null)
+    {
+        self::log($message, Zend_Log::CRIT, $source);
+    }
+
+    static function alert ($message, $source = null)
+    {
+        self::log($message, Zend_Log::ALERT, $source);
+    }
+
+    static function emerg ($message, $source = null)
+    {
+        self::log($message, Zend_Log::EMERG, $source);
     }
 
     /**
