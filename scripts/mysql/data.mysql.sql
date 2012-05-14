@@ -43,3 +43,10 @@ INSERT INTO `privileges` (`roleId`, `module`, `controller`, `action`) VALUES
     (2, 'default', 'index', '%'),
     (2, 'default', 'auth', 'login'),
     (2, 'default', 'auth', 'logout');
+    
+INSERT INTO `log_types` (`id`, `name`) VALUES
+(1, 'Application Log'),
+(2, 'Login Attempt'),
+(3, 'Proposal'),
+(4, 'Email'),
+(5, 'Security');

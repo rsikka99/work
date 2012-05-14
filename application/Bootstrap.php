@@ -24,14 +24,36 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         date_default_timezone_set("America/New_York");
     }
 
+    protected function _initLoggerToRegistry ()
+    {
+        $this->bootstrap('Log');
+        $this->bootstrap('Db');
+        if ($this->hasResource('Log'))
+        {
+            $logger = $this->getResource('Log');
+            $db = Zend_Db_Table::getDefaultAdapter();
+            // Set up the logging system and put it in the Zend Registry.
+            $columnMapping = array (
+                    'priority' => 'priority',
+                    'message' => 'message',
+                    'logTypeId' => 'logTypeId',
+                    'userId' => 'userId'
+            );
+            $logger->addWriter(new Zend_Log_Writer_Db($db, 'logs', $columnMapping));
+            $logger->addWriter(new Zend_Log_Writer_Firebug());
+            
+            Zend_Registry::set('Zend_Log', $this->getResource('Log'));
+        }
+    }
+
     protected function _initDoctype ()
     {
         $this->bootstrap('view');
         $view = $this->getResource('view');
         $view->doctype('HTML5');
     }
-    
-    protected function _initTwitterBootstrap()
+
+    protected function _initTwitterBootstrap ()
     {
         $this->bootstrap('view');
         $view = $this->getResource('view');

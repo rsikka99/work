@@ -16,7 +16,7 @@ CREATE TABLE `users` (
     `frozenUntil`       DATETIME        		 DEFAULT NULL,
     `locked`            TINYINT        	NOT NULL DEFAULT FALSE,
     PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB;
 
 -- Used to store php sessions in the database for better performance and scalability
 CREATE TABLE `sessions` (
@@ -25,23 +25,23 @@ CREATE TABLE `sessions` (
     `lifetime`          INTEGER         NOT NULL,
     `data`              TEXT,
     PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE `roles` (
-    `id`                INTEGER         NOT NULL auto_increment,
+    `id`                INTEGER         NOT NULL AUTO_INCREMENT,
     `name`              VARCHAR(255)    NOT NULL,
     CONSTRAINT PK_ROLES PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB;
 
 CREATE TABLE `privileges` (
-    `id`                INTEGER         NOT NULL auto_increment,
+    `id`                INTEGER         NOT NULL AUTO_INCREMENT,
     `roleId`            INTEGER         NOT NULL,
     `module`            VARCHAR(255)    NOT NULL,
     `controller`        VARCHAR(255)    NOT NULL,
     `action`            VARCHAR(255)    NOT NULL,
     CONSTRAINT PK_PRIVILEGES PRIMARY KEY (`id`),
     CONSTRAINT FK_privileges_roles FOREIGN KEY (`roleId`) REFERENCES `roles` (`id`)  ON DELETE CASCADE
-) ENGINE=MyISAM;
+) ENGINE=InnoDB;
 
 CREATE TABLE `user_roles` (
     `userId`            INTEGER         NOT NULL,
@@ -49,4 +49,23 @@ CREATE TABLE `user_roles` (
     CONSTRAINT PK_userRoles PRIMARY KEY (`userId`, `roleId`),
     CONSTRAINT FK_userRoles_users FOREIGN KEY (`userId`) REFERENCES `users` (`id`)  ON DELETE CASCADE,
     CONSTRAINT FK_userRoles_roles FOREIGN KEY (`roleId`) REFERENCES `roles` (`id`)  ON DELETE CASCADE
-) ENGINE=MyISAM;
+) ENGINE=InnoDB;
+
+
+CREATE TABLE `log_types` (
+	`id`                INTEGER         NOT NULL AUTO_INCREMENT,
+    `name`              VARCHAR(255)    NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE `logs` (
+	`id`                INTEGER         NOT NULL AUTO_INCREMENT,
+    `logTypeId`         INTEGER 	    NOT NULL DEFAULT 1,
+    `priority`          INTEGER 	    NOT NULL DEFAULT 6,
+    `message`           VARCHAR(255)    NOT NULL,
+    `timestamp`         TIMESTAMP		NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `userId`         	INTEGER					 DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`logTypeId`) REFERENCES `log_types` (`id`) ON DELETE RESTRICT,
+    FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB;
