@@ -21,35 +21,35 @@ class Application_Model_User extends My_Model_Abstract
      *
      * @var string
      */
-    protected $_username = "";
+    protected $_username;
     
     /**
      * The user's encrypted password
      *
      * @var string
      */
-    protected $_password = "";
+    protected $_password;
     
     /**
      * The user's first name
      *
      * @var string
      */
-    protected $_firstname = "";
+    protected $_firstname;
     
     /**
      * The user's last name
      *
      * @var string
      */
-    protected $_lastname = "";
+    protected $_lastname;
     
     /**
      * The user's email
      *
      * @var string
      */
-    protected $_email = "";
+    protected $_email;
     
     /**
      * The number of unsuccessful login attempts since the last successful one.
@@ -63,7 +63,7 @@ class Application_Model_User extends My_Model_Abstract
      *
      * @var String
      */
-    protected $_frozenUntil = null;
+    protected $_frozenUntil;
     
     /**
      * The flag that indicates if a user is locked out of the system
@@ -71,6 +71,20 @@ class Application_Model_User extends My_Model_Abstract
      * @var int
      */
     protected $_locked = 0;
+    
+    /**
+     * The date that a user accepted the eula
+     *
+     * @var String
+     */
+    protected $_eulaAccepted;
+    
+    /**
+     * The flag that indicates that the user must reset their password on the next login
+     *
+     * @var int
+     */
+    protected $_resetPassword = 0;
 
     public function __construct ($options = null)
     {
@@ -107,6 +121,13 @@ class Application_Model_User extends My_Model_Abstract
                         'Int' 
                 ), 
                 'locked' => array (
+                        new Zend_Filter_Boolean(Zend_Filter_Boolean::ALL) 
+                ), 
+                'eulaAccepted' => array (
+                        'StringTrim', 
+                        'StripTags' 
+                ), 
+                'resetPassword' => array (
                         new Zend_Filter_Boolean(Zend_Filter_Boolean::ALL) 
                 ) 
         );
@@ -150,7 +171,8 @@ class Application_Model_User extends My_Model_Abstract
                         )) 
                 ), 
                 'frozenUntil' => array (
-                        new My_Validate_DateTime() 
+                        new My_Validate_DateTime(), 
+                        Zend_Filter_Input::ALLOW_EMPTY => true 
                 ), 
                 'loginAttempts' => array (
                         'Int', 
@@ -160,6 +182,13 @@ class Application_Model_User extends My_Model_Abstract
                         )) 
                 ), 
                 'locked' => array (
+                        Zend_Filter_Input::ALLOW_EMPTY => true 
+                ), 
+                'eulaAccepted' => array (
+                        new My_Validate_DateTime(), 
+                        Zend_Filter_Input::ALLOW_EMPTY => true 
+                ), 
+                'resetPassword' => array (
                         Zend_Filter_Input::ALLOW_EMPTY => true 
                 ) 
         );
@@ -183,31 +212,37 @@ class Application_Model_User extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        if (isset($params->id))
+        if (isset($params->id) && ! is_null($params->id))
             $this->setId($params->id);
-        if (isset($params->username))
+        if (isset($params->username) && ! is_null($params->username))
             $this->setUsername($params->username);
         
-        if (isset($params->password))
+        if (isset($params->password) && ! is_null($params->password))
             $this->setPassword($params->password);
         
-        if (isset($params->firstname))
+        if (isset($params->firstname) && ! is_null($params->firstname))
             $this->setFirstname($params->firstname);
         
-        if (isset($params->lastname))
+        if (isset($params->lastname) && ! is_null($params->lastname))
             $this->setLastname($params->lastname);
         
-        if (isset($params->email))
+        if (isset($params->email) && ! is_null($params->email))
             $this->setEmail($params->email);
         
-        if (isset($params->frozenUntil))
+        if (isset($params->frozenUntil) && ! is_null($params->frozenUntil))
             $this->setFrozenUntil($params->frozenUntil);
         
-        if (isset($params->loginAttempts))
+        if (isset($params->loginAttempts) && ! is_null($params->loginAttempts))
             $this->setLoginAttempts($params->loginAttempts);
         
-        if (isset($params->locked))
+        if (isset($params->locked) && ! is_null($params->locked))
             $this->setLocked($params->locked);
+        
+        if (isset($params->eulaAccepted) && ! is_null($params->eulaAccepted))
+            $this->setEulaAccepted($params->eulaAccepted);
+        
+        if (isset($params->resetPassword) && ! is_null($params->resetPassword))
+            $this->setResetPassword($params->resetPassword);
     }
     
     /*
@@ -249,7 +284,7 @@ class Application_Model_User extends My_Model_Abstract
         
         if (! $input->isValid('id'))
         {
-            throw new Exception('Invalid id provided');
+            throw new InvalidArgumentException('Invalid id provided');
         }
         
         $this->_id = $input->id;
@@ -277,7 +312,7 @@ class Application_Model_User extends My_Model_Abstract
         
         if (! $input->isValid('username'))
         {
-            throw new Exception('Invalid username provided');
+            throw new InvalidArgumentException('Invalid username provided');
         }
         
         $this->_username = $input->username;
@@ -305,7 +340,7 @@ class Application_Model_User extends My_Model_Abstract
         
         if (! $input->isValid('password'))
         {
-            throw new Exception('Invalid password provided');
+            throw new InvalidArgumentException('Invalid password provided');
         }
         
         $this->_password = $input->password;
@@ -333,7 +368,7 @@ class Application_Model_User extends My_Model_Abstract
         
         if (! $input->isValid('firstname'))
         {
-            throw new Exception('Invalid firstname provided');
+            throw new InvalidArgumentException('Invalid firstname provided');
         }
         
         $this->_firstname = $input->firstname;
@@ -361,7 +396,7 @@ class Application_Model_User extends My_Model_Abstract
         
         if (! $input->isValid('lastname'))
         {
-            throw new Exception('Invalid lastname provided');
+            throw new InvalidArgumentException('Invalid lastname provided');
         }
         
         $this->_lastname = $input->lastname;
@@ -389,7 +424,7 @@ class Application_Model_User extends My_Model_Abstract
         
         if (! $input->isValid('email'))
         {
-            throw new Exception('Invalid email provided');
+            throw new InvalidArgumentException('Invalid email provided');
         }
         
         $this->_email = $input->email;
@@ -417,7 +452,7 @@ class Application_Model_User extends My_Model_Abstract
         
         if (! $input->isValid('loginAttempts'))
         {
-            throw new Exception('Invalid login attempts provided');
+            throw new InvalidArgumentException('Invalid login attempts provided');
         }
         
         $this->_loginAttempts = (int)$input->loginAttempts;
@@ -445,7 +480,7 @@ class Application_Model_User extends My_Model_Abstract
         
         if ($_frozenUntil !== null && ! $input->isValid('frozenUntil'))
         {
-            throw new Exception('Invalid date for frozen until provided.');
+            throw new InvalidArgumentException('Invalid date for frozen until provided.');
         }
         
         $this->_frozenUntil = $input->frozenUntil;
@@ -467,7 +502,6 @@ class Application_Model_User extends My_Model_Abstract
      */
     public function setLocked ($_locked)
     {
-        
         $input = new Zend_Filter_Input($this->_filters, $this->_validators, array (
                 'locked' => $_locked 
         ));
@@ -475,11 +509,67 @@ class Application_Model_User extends My_Model_Abstract
         if (! $input->isValid('locked'))
         {
             $message = $input->getMessages();
-            throw new Exception('Invalid value for locked provided.');
+            throw new InvalidArgumentException('Invalid value for locked provided.');
         }
         
         $this->_locked = (int)$input->locked;
         return $this;
     }
 
+    /**
+     *
+     * @return the $_eulaAccepted
+     */
+    public function getEulaAccepted ()
+    {
+        return $this->_eulaAccepted;
+    }
+
+    /**
+     *
+     * @param String $_eulaAccepted            
+     */
+    public function setEulaAccepted ($_eulaAccepted)
+    {
+        $input = new Zend_Filter_Input($this->_filters, $this->_validators, array (
+                'eulaAccepted' => $_eulaAccepted 
+        ));
+        
+        if ($_eulaAccepted !== null && ! $input->isValid('eulaAccepted'))
+        {
+            throw new InvalidArgumentException('Invalid date for eula accepted provided.');
+        }
+        
+        $this->_eulaAccepted = $input->eulaAccepted;
+        return $this;
+    }
+
+    /**
+     *
+     * @return the $_resetPassword
+     */
+    public function getResetPassword ()
+    {
+        return $this->_resetPassword;
+    }
+
+    /**
+     *
+     * @param boolean $_resetPassword            
+     */
+    public function setResetPassword ($_resetPassword)
+    {
+        $input = new Zend_Filter_Input($this->_filters, $this->_validators, array (
+                'resetPassword' => $_resetPassword 
+        ));
+        
+        if (! $input->isValid('resetPassword'))
+        {
+            $message = $input->getMessages();
+            throw new InvalidArgumentException('Invalid value for reset password provided.');
+        }
+        
+        $this->_resetPassword = (int)$input->resetPassword;
+        return $this;
+    }
 }

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<nav>
+		<menu>
+			<label>Admin Module</label>
+			<class>dropdown</class>
+			<module>admin</module>
+			<controller>index</controller>
+			<action>index</action>
+			<resource>admin_index_index</resource>
+			<order>-260</order>
+			<pages>
+				<UserManagement>
+					<label>User Management</label>
+					<class>dropdown</class>
+					<module>admin</module>
+					<controller>user</controller>
+					<action>index</action>
+					<resource>admin_user_index</resource>
+					<pages>
+						<viewall>
+							<label>View All</label>
+							<module>admin</module>
+							<controller>user</controller>
+							<action>index</action>
+							<resource>admin_user_index</resource>
+						</viewall>
+						<create>
+							<label>Create User</label>
+							<module>admin</module>
+							<controller>user</controller>
+							<action>create</action>
+							<resource>admin_user_create</resource>
+							<icon>plus-sign</icon>
+						</create>
+						<edit>
+							<label>Edit User</label>
+							<module>admin</module>
+							<controller>user</controller>
+							<action>edit</action>
+							<resource>admin_user_create</resource>
+							<icon>pencil</icon>
+							<visible>0</visible>
+						</edit>
+						<delete>
+							<label>Delete User</label>
+							<module>admin</module>
+							<controller>user</controller>
+							<action>delete</action>
+							<resource>admin_user_delete</resource>
+							<visible>0</visible>
+						</delete>
+						<view>
+							<label>View User</label>
+							<module>admin</module>
+							<controller>user</controller>
+							<action>view</action>
+							<resource>admin_user_view</resource>
+							<visible>0</visible>
+						</view>
+					</pages>
+				</UserManagement>
+				<RoleManagement>
+					<label>Role Management</label>
+					<class>dropdown</class>
+					<module>admin</module>
+					<controller>roles</controller>
+					<action>index</action>
+					<resource>admin_roles_index</resource>
+					<pages>
+						<viewall>
+							<label>View All</label>
+							<module>admin</module>
+							<controller>roles</controller>
+							<action>index</action>
+							<resource>admin_roles_index</resource>
+						</viewall>
+						<create>
+							<label>Create Role</label>
+							<module>admin</module>
+							<controller>roles</controller>
+							<action>create</action>
+							<resource>admin_roles_create</resource>
+							<icon>plus-sign</icon>
+						</create>
+						<edit>
+							<label>Edit Role</label>
+							<module>admin</module>
+							<controller>roles</controller>
+							<action>edit</action>
+							<resource>admin_roles_edit</resource>
+							<icon>pencil</icon>
+							<visible>0</visible>
+						</edit>
+						<delete>
+							<label>Delete Role</label>
+							<module>admin</module>
+							<controller>roles</controller>
+							<action>delete</action>
+							<resource>admin_roles_delete</resource>
+							<visible>0</visible>
+						</delete>
+						<view>
+							<label>View Role</label>
+							<module>admin</module>
+							<controller>roles</controller>
+							<action>view</action>
+							<resource>admin_roles_view</resource>
+							<visible>0</visible>
+						</view>
+					</pages>
+				</RoleManagement>
+			</pages>
+		</menu>
+	</nav>
+</config>

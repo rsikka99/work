@@ -18,7 +18,7 @@ abstract class My_Model_Abstract extends stdClass
             $this->populate($options);
         }
     }
-
+    
     abstract public function populate ($params);
 
     abstract public function toArray ();

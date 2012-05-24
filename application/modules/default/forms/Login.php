@@ -68,6 +68,12 @@ class Default_Form_Login extends EasyBib_Form
                 'label' => 'Login' 
         ));
         
-        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
+        // Add the submit button
+        $this->addElement('submit', 'forgotpassword', array (
+                'ignore' => true, 
+                'label' => 'Forgot Password' 
+        ));
+        
+        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'forgotpassword');
     }
 }

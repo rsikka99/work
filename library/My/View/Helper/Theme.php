@@ -15,6 +15,7 @@ class Zend_View_Helper_Theme extends Zend_View_Helper_Abstract
         if (is_null($this->theme)) {
             $this->theme = Zend_Registry::get('config')->app->theme;
         }
+        $resource = trim($resource, "/");
         return $this->view->baseUrl("/themes/" . $this->theme . "/$resource");
     }
 }

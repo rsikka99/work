@@ -68,7 +68,9 @@ class Application_Model_UserMapper extends My_Model_Mapper_Abstract
     {
         if ($user instanceof Application_Model_User)
         {
-            $whereClause = $user->getId();
+            $whereClause = array (
+                    'id = ?' => $user->getId() 
+            );
         }
         else
         {
@@ -78,7 +80,6 @@ class Application_Model_UserMapper extends My_Model_Mapper_Abstract
         }
         
         return $this->getDbTable()->delete($whereClause);
-    
     }
 
     /**

@@ -16,16 +16,16 @@ class Default_IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
     }
     
     
-    public function testCanDisplayHomePage ()
-    {
-        // Go to the index
-        $this->dispatch('/');
+//     public function testCanDisplayHomePage ()
+//     {
+//         // Go to the index
+//         $this->dispatch('/');
     
-        // Make sure we didn't end up on an error page
-        $this->assertModule('default');
-        $this->assertController('index');
-        $this->assertAction('index');
-        $this->assertResponseCode(200);
-    }
+//         // Make sure we didn't end up on an error page
+//         $this->assertModule('default');
+//         $this->assertController('index');
+//         $this->assertAction('index');
+//         $this->assertResponseCode(200);
+//     }
 }
 

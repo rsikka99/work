@@ -93,13 +93,23 @@ class Application_Model_UserTest extends PHPUnit_Framework_TestCase
                         0, 
                         '2011-12-12 13:59:59', 
                         false 
+                ), 
+                array (
+                        1, 
+                        'lrobert', 
+                        'tmtwdev', 
+                        'Lee', 
+                        'Robert', 
+                        'lrobert@tangentmtw.com', 
+                        0, 
+                        '2011-12-12 13:59', 
+                        false 
                 ) 
         );
-    
     }
 
     /**
-     * @dataProvider goodData     
+     * @dataProvider goodData
      */
     public function testModelAcceptsValidData ($id, $username, $password, $firstname, $lastname, $email, $loginAttempts, $frozenUntil, $locked)
     {
@@ -283,19 +293,19 @@ class Application_Model_UserTest extends PHPUnit_Framework_TestCase
                         0, 
                         '2012-02-32 23:59:59', 
                         false 
-                )                
+                ) 
         );
     }
 
     /**
      * @dataProvider badData
-     * @expectedException Exception
+     * @expectedException InvalidArgumentException
      * @expectedExceptionCode 0
-     * NOTE: "@expectedExceptionMessage" can also be used here (not applicable to this test, because the exception message depends on the specific variable that is determined to be invalid)
+     * NOTE: "@expectedExceptionMessage" can also be used here (not applicable to this test, because the exception
+     * message depends on the specific variable that is determined to be invalid)
      */
     public function testModelRejectsBadData ($id, $username, $password, $firstname, $lastname, $email, $loginAttempts, $frozenUntil, $locked)
     {
-        
         $data = array (
                 'id' => $id, 
                 'username' => $username, 
@@ -308,9 +318,7 @@ class Application_Model_UserTest extends PHPUnit_Framework_TestCase
                 'locked' => $locked 
         );
         
-        $this->_user->populate($data);        
-      
+        $this->_user->populate($data);
     }
-
 }
 

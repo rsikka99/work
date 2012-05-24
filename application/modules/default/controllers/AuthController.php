@@ -44,11 +44,16 @@ class Default_AuthController extends Zend_Controller_Action
      */
     function loginAction ()
     {
+        $this->view->layout()->setLayout('auth');
         $request = $this->getRequest();
         $form = new Default_Form_Login();
         
         if ($this->getRequest()->isPost())
         {
+            if ($request->getParam('forgotpassword', false))
+            {
+                $this->_helper->getHelper('Redirector')->gotoRoute(array('username' => $request->getParam('username', '')), 'forgotpassword');
+            }
             if ($form->isValid($request->getPost()))
             {
                 $auth = Zend_Auth::getInstance();
@@ -134,7 +139,7 @@ class Default_AuthController extends Zend_Controller_Action
      * We should persist all other session data as it can help keep a user
      * friendly experience
      */
-    function logoutAction ()
+    public function logoutAction ()
     {
         // Destroy only information that is part of a user being logged in.
         Zend_Auth::getInstance()->clearIdentity();
@@ -145,6 +150,11 @@ class Default_AuthController extends Zend_Controller_Action
     public function registerAction ()
     {
     
+    }
+    
+    public function forgotpasswordAction()
+    {
+        
     }
 
     public function cryptAction ()

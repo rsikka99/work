@@ -92,6 +92,10 @@ class My_Log
                 {
                     self::$logger->setEventItem('userId', $auth->getIdentity()->id);
                 }
+                else
+                {
+                    self::$logger->setEventItem('userId', null);
+                }
             }
             else
             {

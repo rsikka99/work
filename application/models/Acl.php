@@ -2,13 +2,25 @@
 
 class Application_Model_Acl extends Zend_Acl
 {
-    
     const ROLE_GUEST = 'guest';
     const ROLE_USER = 'user';
     const ROLE_ADMINISTRATOR = 'admin';
     const ROLE_ROOT = 'root';
-    
     protected static $_instance;
+    protected static $UnrestrictedPages = array (
+            'error' => array (
+                    '%' => array (
+                            '%' 
+                    ) 
+            ), 
+            'default' => array (
+                    'auth' => array (
+                            'login', 
+                            'logout', 
+                            'forgotpassword' 
+                    ) 
+            ) 
+    );
 
     /**
      * Gets a instance of Application_Model_Acl
@@ -97,22 +109,8 @@ class Application_Model_Acl extends Zend_Acl
      */
     public function isAllowed ($role = null, $request = null, $privilege = null)
     {
-        // Use the hard coded guest role id
-        $guestRoleId = 2;
-        $roleList = array (
-                array (
-                        "roleId" => $guestRoleId 
-                ) 
-        );
-        if (is_null($role))
-        {
-            // Use this to trigger guest status?
-            $userId = 'Guest';
-        }
-        else
-        {
-            $userId = (int)$role;
-        }
+        
+        
         $isAllowed = false;
         
         $resource ["moduleName"] = "";
@@ -131,21 +129,36 @@ class Application_Model_Acl extends Zend_Acl
         else
         {
             // We're processing a resource instead of a request object
-            $boom = explode("/", $request);
+            $boom = explode("_", $request);
             $resource ["moduleName"] = $boom [0];
             $resource ["controllerName"] = $boom [1];
             $resource ["actionName"] = $boom [2];
         }
+        
+        // If it's a global page, let the user through
+        if ($this->isGlobalPage($resource))
+        {
+            return true;
+        }
+        
+        if ($role === null)
+        {
+            return false;
+        }
+        
+        $userId = (int)$role;
         /**
          * Root (User 1) always has access
          */
         if ($userId === 1)
         {
-            $isAllowed = true;
+            return true;
         }
-        else if ($resource ["moduleName"] == "default" && ($resource ["controllerName"] == "error"))
+        
+        // Always allow access to the error controller in the default module
+        if ($resource ["moduleName"] == "default" && ($resource ["controllerName"] == "error"))
         {
-            //Always allow access to the error controller in the default module
+            
             $isAllowed = true;
         }
         else
@@ -170,98 +183,78 @@ class Application_Model_Acl extends Zend_Acl
                     $roleList = array_merge($result, $roleList);
                     
                     Zend_Registry::get('Zend_Cache')->save($roleList, 'acl_user_' . $userId);
-                
                 }
                 
                 $isAllowed = $this->hasAccessForRequest($roleList, $resource);
             }
             else
             {
-                
                 /*
                  * Without caching, we look directly for the required privileges
                  */
                 $db = Zend_Db_Table::getDefaultAdapter();
-                if (strcasecmp($userId, 'Guest') === 0)
-                {
-                    $stmt = $db->query("
-                            SELECT `module`, `controller`, `action` FROM `privileges`
-                            INNER JOIN `roles` ON `roles`.`id` = `privileges`.`roleId`
-                            WHERE `roles`.`id` = ? AND ( `module` = '%' OR ( `module` = ? AND ( `controller` = '%' OR ( `controller` = ? AND ( `action` = '%' OR `action` = ? ) ) ) ) );", array (
-                            $guestRoleId, 
-                            $resource ["moduleName"], 
-                            $resource ["controllerName"], 
-                            $resource ["actionName"] 
-                    ));
-                    $stmt->execute();
-                    $row = $stmt->fetch(); // Returns a row or false
-                    if ($row)
-                    {
-                        $isAllowed = true;
-                    }
-                }
-                else
-                {
-                    $stmt = $db->query("
+                
+                $stmt = $db->query("
                             SELECT `module`, `controller`, `action` FROM `privileges`
                             INNER JOIN `roles` ON `roles`.`id` = `privileges`.`roleId`
                             INNER JOIN `user_roles` ON `user_roles`.`roleId` = `roles`.`id`
-                            WHERE `user_roles`.`userId` = ? AND ( `module` = '%' OR ( `module` = ? AND ( `controller` = '%' OR ( `controller` = ? AND ( `action` = '%' OR `action` = ? ) ) ) ) );", array (
-                            $userId, 
-                            $resource ["moduleName"], 
-                            $resource ["controllerName"], 
-                            $resource ["actionName"] 
-                    ));
-                    $stmt->execute();
-                    $row = $stmt->fetch(); // Returns a row or false
-                    if ($row)
-                    {
-                        $isAllowed = true;
-                    }
-                    else
-                    {
-                        $stmt = $db->query("
-                                SELECT `module`, `controller`, `action` FROM `privileges`
-                                INNER JOIN `roles` ON `roles`.`id` = `privileges`.`roleId`
-                                WHERE `roles`.`id` = ? AND ( `module` = '%' OR ( `module` = ? AND ( `controller` = '%' OR ( `controller` = ? AND ( `action` = '%' OR `action` = ? ) ) ) ) );", array (
-                                $guestRoleId, 
-                                $resource ["moduleName"], 
-                                $resource ["controllerName"], 
-                                $resource ["actionName"] 
-                        ));
-                        $stmt->execute();
-                        $row = $stmt->fetch(); // Returns a row or false
-                        if ($row)
-                        {
-                            $isAllowed = true;
-                        }
-                    }
+                            WHERE `user_roles`.`userId` = ? AND 
+                            ( `module` = '%' OR 
+                                ( `module` = ? AND 
+                                    ( `controller` = '%' OR 
+                                        ( `controller` = ? AND 
+                                            ( `action` = '%' OR `action` = ? 
+                            ) ) ) ) );", array (
+                        $userId, 
+                        $resource ["moduleName"], 
+                        $resource ["controllerName"], 
+                        $resource ["actionName"] 
+                ));
+                
+                // If we get a row then we are allowed in
+                $stmt->execute();
+                $row = $stmt->fetch();
+                
+                if ($row)
+                {
+                    $isAllowed = true;
                 }
             }
         }
         return $isAllowed;
     }
 
-    public function preDispatch (Zend_Controller_Request_Abstract $request)
+    protected function isGlobalPage ($resource)
     {
-        $auth = Zend_Auth::getInstance();
-        if ($auth->hasIdentity())
+        $currentModule = $resource['moduleName'];
+        $currentController = $resource['controllerName'];
+        $currentAction = $resource['actionName'];
+        foreach ( self::$UnrestrictedPages as $module => $controllers )
         {
-            $this->isAllowed($auth->userId, $request);
-        
-        }
-        else
-        {
-            if (! $this->isAllowed(1, $request))
+            if (strcasecmp($module, $currentModule) === 0)
             {
-                $view = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('view');
-                $view->controller = $request->getControllerName();
-                $view->action = $request->getActionName();
-                $request->setControllerName('error')->setActionName('accessdenied');
+                foreach ( $controllers as $controller => $actions )
+                {
+                    if (strcasecmp($controller, '%') === 0)
+                    {
+                        return true;
+                    }
+                    if (strcasecmp($controller, $currentController) === 0)
+                    {
+                        foreach ( $actions as $action )
+                        {
+                            if (strcasecmp($action, $currentAction) === 0 || strcasecmp($action, '%') === 0)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
             }
         }
+        
+        return false;
     }
-
 }
 
 ?>

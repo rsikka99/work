@@ -2,23 +2,18 @@
 
 class My_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 {
-
     public function preDispatch (Zend_Controller_Request_Abstract $request)
     {
         try
         {
-            
             /* @var $acl Application_Model_Acl */
-            $acl = Zend_Registry::get('acl');
+            $acl = Zend_Registry::get('Zend_Acl');
             
+            $userId = null;
             $auth = Zend_Auth::getInstance();
             if ($auth->hasIdentity())
             {
                 $userId = (string)$auth->getIdentity()->id;
-            }
-            else
-            {
-                $userId = null;
             }
             
             if (! $acl->isAllowed($userId, $request))
@@ -47,7 +42,7 @@ class My_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
                     
                     // Redirect to the login page
                     $r = new Zend_Controller_Action_Helper_Redirector();
-                    $r->gotoSimple('login', 'auth', 'default');
+                    $r->gotoRoute(array (), 'login');
                     break;
                 default :
                     
@@ -63,10 +58,7 @@ class My_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
                     $request->setControllerName('error');
                     $request->setActionName('error');
                     break;
-            
             }
-        
         }
     }
-
 }

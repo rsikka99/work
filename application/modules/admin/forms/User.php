@@ -86,6 +86,7 @@ class Admin_Form_User extends EasyBib_Form
             ));
         }
         
+        // No need to edit this when creating a user
         if ($this->getFormMode() === self::MODE_EDIT)
         {
             
@@ -107,12 +108,12 @@ class Admin_Form_User extends EasyBib_Form
             $maxYear = $minYear + 4;
             $frozenUntil = new My_Form_Element_DateTimePicker('frozenUntil');
             $frozenUntil->setLabel('Frozen Until:')
-                ->setJQueryParam('dateFormat', 'yy/mm/dd')
+                ->setJQueryParam('dateFormat', 'yy-mm-dd')
                 ->setJqueryParam('timeFormat', 'hh:mm')
                 ->setJQueryParam('changeYear', 'true')
                 ->setJqueryParam('changeMonth', 'true')
                 ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
-                ->setDescription('yyyy/mm/dd hh:mm')
+                ->setDescription('yyyy-mm-dd hh:mm')
                 ->addValidator($datetimeValidator)
                 ->setRequired(false);
             $frozenUntil->addFilters(array (
@@ -123,6 +124,7 @@ class Admin_Form_User extends EasyBib_Form
             $this->addElement($frozenUntil);
         }
         
+
         $this->addElement('text', 'firstname', array (
                 'label' => 'First Name:', 
                 'required' => true, 
@@ -252,6 +254,11 @@ class Admin_Form_User extends EasyBib_Form
                         new Zend_Filter_Boolean(Zend_Filter_Boolean::ALL) 
                 ), 
                 'required' => false 
+        ));
+        
+        $this->addElement('checkbox', 'resetPassword', array (
+                'label' => 'Require Password Change On Next Login:',
+                'required' => true
         ));
         
         // Add the submit button

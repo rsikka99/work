@@ -54,7 +54,7 @@ class My_View_Helper_Navigation_Menu extends Zend_View_Helper_Navigation_Menu
             $result = $xpath->query('../ul', $item);
             
             if ($result->length === 1)
-            {
+            {                
                 $ul = $result->item(0);
                 $ul->setAttribute('class', 'dropdown-menu');
                 
@@ -73,12 +73,22 @@ class My_View_Helper_Navigation_Menu extends Zend_View_Helper_Navigation_Menu
                     $item->setAttribute('class', 'dropdown-toggle');
                 }
                 
-                $caret = $domDoc->createElement('b', '');
-                $caret->setAttribute('class', 'caret');
+                if (strpos($item->getAttribute('class'), 'subdropdown'))
+                {
+                    $caret = $domDoc->createElement('b', '');
+                    $caret->setAttribute('class', 'icon-arrow-right');
+                }
+                else
+                {
+                    $caret = $domDoc->createElement('b', '');
+                    $caret->setAttribute('class', 'caret');
+                }
                 
                 $item->appendChild($caret);
             }
         }
+        
+        
         return $domDoc->saveXML($xpath->query('/ul')
             ->item(0));
     }

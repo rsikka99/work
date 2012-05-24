@@ -1,11 +1,14 @@
 <?php
-$this->headLink()->prependStylesheet($this->theme("/global.css"));
+$this->headLink()->prependStylesheet($this->theme("/css/styles.css"));
+$this->headLink()->prependStylesheet($this->theme("/jquery/ui/grid/ui.jqgrid.css"));
 $this->headLink()->prependStylesheet($this->theme("/jquery/ui/jquery-ui-1.8.20.custom.css"));
-$this->headLink()->prependStylesheet($this->theme("/bootstrap/css/bootstrap.min.css"));
+$this->headLink()->prependStylesheet($this->theme("/bootstrap/css/bootstrap.css"));
 
 $this->headScript()->prependFile($this->baseUrl("/js/script.js"));
 $this->headScript()->prependFile($this->baseUrl("/js/plugins.js"));
 $this->headScript()->prependFile($this->theme("/bootstrap/js/bootstrap.min.js"));
+$this->headScript()->prependFile($this->baseUrl("/js/libs/jqgrid/jquery.jqGrid.min.js"));
+$this->headScript()->prependFile($this->baseUrl("/js/libs/jqgrid/i18n/grid.locale-en.js"));
 $this->headScript()->prependFile($this->baseUrl("/js/libs/jquery-ui-1.8.20.custom.min.js"));
 ?>
 <!DOCTYPE html>
@@ -29,47 +32,71 @@ $this->headScript()->prependFile($this->baseUrl("/js/libs/jquery-ui-1.8.20.custo
         <meta name="author" content="Tangent MTW">
 
         <?php echo $this->headLink(); ?>
-
         <!-- All JavaScript at the bottom, except this Modernizr build.
         Modernizr enables HTML5 elements & feature detects for optimal performance.
         Create your own custom Modernizr build: www.modernizr.com/download/ -->
         <script src="<?php echo $this->baseUrl("/js/libs/modernizr-2.5.3.min.js"); ?>"></script>
-
     </head>
     <body>
         <!-- Prompt to upgrade browsers/install chrome frame if IE 6 -->
         <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
-        
-        
-        <!-- Start of main container -->
-        <div class="container">
-        <header>
-            <!-- Start of Navbar -->
-            <div class="navbar">
-                <div class="navbar-inner">
-                    <div class="container">
-                        <a class="brand" href="<?php echo $this->baseUrl("/"); ?>"><?php echo $this->App()->title; ?></a>
-                        <?php echo $this->navigation()->menu()->setUlClass('nav')->setMaxDepth(1)->render(); ?>
-                        <?php //echo $this->navigation()->menu()->setUlClass('nav')->setPartial(array('menus/horizontal.phtml', 'default'))->render(); ?>
-                        <div class="pull-right"><?php echo $this->GetLoggedInUser();?></div>
+        <!-- Start of Navbar -->
+        <div class="navbar">
+            <div class="navbar-inner">
+            <div class="sidebar pull-right">
+                <div class="pull-right">
+                    <?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
+                    <div class="btn-group">
+                        <a class="btn btn-primary" href="#"><i class="icon-user icon-white"></i> <?php echo $this->Username(); ?></a>
+                        <a class="pull-right btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="<?php echo $this->url(array(), 'logout');?>">Logout</a></li>
+                        </ul>
                     </div>
+                    <?php else : ?>
+                        <a class="btn btn-danger" href="<?php echo $this->url(array(), 'login');?>"><i class="icon-user icon-white"></i> Login</a>
+                    <?php endif; ?>
                 </div>
             </div>
-            <!-- End of Navbar -->
-            
-            </header>
+            <div class="sidebar"><a class="brand" href="<?php echo $this->baseUrl("/"); ?>"><?php echo $this->App()->title; ?></a></div>
+                <div class="container">
+                    <?php echo $this->navigation()->menu()->setUlClass('nav nav-pills')->setMinDepth(0)->setMaxDepth(0)->render(); ?>
+                </div>
+            </div>
+        </div>
+        <!-- End of Navbar -->
+        <div class="subnav">
+            <div class="container">
+        <?php 
+        // Find the active branch, at a depth of one
+        $nav2Container = null;
+        $rootPage = $this->navigation()->getContainer()->getPages();
+        foreach($rootPage as $page) { 
+        	if($page->isActive(true)) { 
+        		$nav2Container = $page;
+        		break;
+        	}
+        }
+        
+        if ($nav2Container && $nav2Container->hasPages())
+        {
+        ?>
+
+                <?php echo $this->navigation()->menu()->setUlClass('nav nav-pills')->setMaxDepth(2)->render($nav2Container); ?>
+
+        <?php 
+        }                    
+        ?>
+            </div>
+        </div>        
+        <!-- Start of main container -->
+        <div class="container">
+            <header class="pageHeader"></header>
             
             <!-- Start of Breadcrumbs -->
             <?php echo $this->navigation()->breadcrumbs()->setMinDepth(0)->setRenderInvisible(true)->setLinkLast(true)->setSeparator('/')->setPartial(array('menus/breadcrumbs.phtml', 'default'))->render(); ?>
             <!-- End of Breadcrumbs -->
 
-            <!-- Start of Sub Menu -->
-            <?php echo $this->navigation()->menu()->setUlClass('nav nav-pills')->setPartial(array('menus/submenu.phtml', 'default'))->render(); ?>
-            <!-- End of Sub Menu -->
-            
-            
-            
-            
             <div class="row">
                 <div class="span12">
                     <?php echo $this->flashMessenger("info", '<div class="alert alert-%s">%s</div>'); ?>

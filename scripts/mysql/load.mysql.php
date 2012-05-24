@@ -7,8 +7,8 @@
 defined('APPLICATION_PATH') || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../../application'));
 
 set_include_path(implode(PATH_SEPARATOR, array (
-    APPLICATION_PATH . '/../../library', 
-    get_include_path() 
+        APPLICATION_PATH . '/../../library', 
+        get_include_path() 
 )));
 
 require_once 'Zend/Loader/Autoloader.php';
@@ -16,9 +16,9 @@ Zend_Loader_Autoloader::getInstance();
 
 // Define some CLI options
 $getopt = new Zend_Console_Getopt(array (
-    'withdata|w' => 'Load database with sample data', 
-    'env|e-s' => 'Application environment for which to create database (defaults to development)', 
-    'help|h' => 'Help -- usage message' 
+        'withdata|w' => 'Load database with sample data', 
+        'env|e-s' => 'Application environment for which to create database (defaults to development)', 
+        'help|h' => 'Help -- usage message' 
 ));
 try
 {
@@ -54,47 +54,89 @@ $dbAdapter = $bootstrap->getResource('db');
 
 // let the user know whats going on (we are actually creating a
 // database here)
-if ('testing' != APPLICATION_ENV)
-{
-    echo 'Writing Hardware Quote Generator Database in (control-c to cancel): ' . PHP_EOL;
-    for($x = 5; $x > 0; $x --)
-    {
-        echo $x . "\r";
-        sleep(1);
-    }
-}
+// if ('testing' != APPLICATION_ENV)
+// {
+//     echo 'Writing Database in (control-c to cancel): ' . PHP_EOL;
+//     for($x = 5; $x > 0; $x --)
+//     {
+//         echo $x . "\r";
+//         sleep(1);
+//     }
+// }
+
 
 // Check to see if we have a database file already
 $options = $bootstrap->getOption('resources');
-$dbFile = $options ['db'] ['params'] ['dbname'];
 
 // this block executes the actual statements that were loaded from
 // the schema file.
 try
 {
-    $schemaSql = file_get_contents(dirname(__FILE__) . '/schema.sqlite.sql');
-    // use the connection directly to load sql in batches
-    $dbAdapter->getConnection()->exec($schemaSql);
-    chmod($dbFile, 0666);
-    if ('testing' != APPLICATION_ENV)
+    $conn = $dbAdapter->getConnection();
+    if ($conn instanceof mysqli)
     {
-        echo PHP_EOL;
-        echo 'Database Created';
-        echo PHP_EOL;
-    }
-    
-    if ($withData)
-    {
-        $dataSql = file_get_contents(dirname(__FILE__) . '/data.sqlite.sql');
-        // use the connection directly to load sql in batches
-        $dbAdapter->getConnection()->exec($dataSql);
-        if ('testing' != APPLICATION_ENV)
+        $conn->query('DROP DATABASE IF EXISTS `' . $options ['db'] ['params'] ['dbname'] . '`;');
+        $conn->query('CREATE DATABASE `' . $options ['db'] ['params'] ['dbname'] . '`;');
+        $conn->select_db($options ['db'] ['params'] ['dbname']);
+        
+        $sql = file_get_contents(dirname(__FILE__) . '/schema.mysql.sql');
+        if ($conn->multi_query($sql))
         {
-            echo 'Data Loaded.';
-            echo PHP_EOL;
+            // We have to close all the results before we can insert data
+            do
+            {
+                if (FALSE !== ($result = $conn->store_result()))
+                {
+                    $result->close();
+                }
+            }
+            while ( $conn->next_result() );
+            
+            if ('testing' != APPLICATION_ENV)
+            {
+                echo PHP_EOL;
+                echo 'Database Created';
+                echo PHP_EOL;
+            }
+            
+            if ($withData)
+            {
+                $dataSql = file_get_contents(dirname(__FILE__) . '/data.mysql.sql');
+                
+                // use the connection directly to load sql in batches
+                if ($conn->multi_query($dataSql))
+                {
+                    // Close all the results
+                    do
+                    {
+                        if (FALSE !== ($result = $conn->store_result()))
+                        {
+                            $result->close();
+                        }
+                    }
+                    while ( $conn->next_result() );
+                    
+                    if ('testing' != APPLICATION_ENV)
+                    {
+                        echo 'Data Loaded.';
+                        echo PHP_EOL;
+                    }
+                }
+                else
+                {
+                    throw new Exception($conn->error);
+                }
+            }
+        }
+        else
+        {
+            throw new Exception($conn->error);
         }
     }
-
+    else
+    {
+        throw new Exception("Connection is not a mysqli connection!");
+    }
 }
 catch ( Exception $e )
 {

@@ -6,15 +6,18 @@ CREATE DATABASE tmtwdev_hwgen;
 USE tmtwdev_hwgen;
 
 CREATE TABLE `users` (
-    `id`                INTEGER         NOT NULL AUTO_INCREMENT,
-    `username`          VARCHAR(255)    NOT NULL,
-    `password`          VARCHAR(255)    NOT NULL,
-    `firstname`         VARCHAR(255)    NOT NULL,
-    `lastname`          VARCHAR(255)    NOT NULL,
-    `email`             VARCHAR(255)    NOT NULL,
-    `loginAttempts`     INTEGER         NOT NULL DEFAULT 0,
-    `frozenUntil`       DATETIME        		 DEFAULT NULL,
-    `locked`            TINYINT        	NOT NULL DEFAULT FALSE,
+    `id`                	INTEGER         NOT NULL AUTO_INCREMENT,
+    `username`          	VARCHAR(255)    NOT NULL,
+    `password`          	VARCHAR(255)    NOT NULL,
+    `firstname`         	VARCHAR(255)    NOT NULL,
+    `lastname`          	VARCHAR(255)    NOT NULL,
+    `email`             	VARCHAR(255)    NOT NULL,
+    `loginAttempts`     	INTEGER         NOT NULL DEFAULT 0,
+    `frozenUntil`       	DATETIME        		 DEFAULT NULL,
+    `locked`            	TINYINT        	NOT NULL DEFAULT FALSE,
+    `eulaAccepted`      	DATETIME        		 DEFAULT NULL,
+    `resetPassword`     	TINYINT        	NOT NULL DEFAULT FALSE,
+    `passwordResetRequest`  DATETIME        		 DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -62,10 +65,9 @@ CREATE TABLE `logs` (
 	`id`                INTEGER         NOT NULL AUTO_INCREMENT,
     `logTypeId`         INTEGER 	    NOT NULL DEFAULT 1,
     `priority`          INTEGER 	    NOT NULL DEFAULT 6,
-    `message`           VARCHAR(255)    NOT NULL,
+    `message`           TEXT   	 		NOT NULL,
     `timestamp`         TIMESTAMP		NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `userId`         	INTEGER					 DEFAULT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`logTypeId`) REFERENCES `log_types` (`id`) ON DELETE RESTRICT,
-    FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+    FOREIGN KEY (`logTypeId`) REFERENCES `log_types` (`id`) ON DELETE RESTRICT
 ) ENGINE=InnoDB;

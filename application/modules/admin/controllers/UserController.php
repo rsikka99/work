@@ -29,7 +29,7 @@ class Admin_UserController extends Zend_Controller_Action
         $id = $this->_getParam('id', 0);
         if ($id < 1)
         {
-            throw new Exception("Error Getting Stuff", 500);
+            throw new Exception("Error getching user", 500);
         }
         
         // Get the user
@@ -71,11 +71,6 @@ class Admin_UserController extends Zend_Controller_Action
                                         
                     // Save to the database
                     $userId = $mapper->insert($user);
-                    
-                    /*
-                     * $userProfileMapper = new Application_Model_User_ProfileMapper();
-                     * $userProfileMapper->save($userProfile);
-                     */
                     
                     $this->_helper->flashMessenger(array (
                             'success' => "User '" . $this->view->escape($values ["username"]) . "' saved sucessfully." 
@@ -133,8 +128,8 @@ class Admin_UserController extends Zend_Controller_Action
         }
         
         $username = $user->getUsername();
-        $firstname = $user->getUserProfile()->getFirstName();
-        $lastname = $user->getUserProfile()->getLastName();
+        $firstname = $user->getFirstname();
+        $lastname = $user->getLastname();
         
         $form = new Application_Form_Delete("Are you sure you want to delete {$username} ({$firstname} {$lastname})?");
         
@@ -149,15 +144,7 @@ class Admin_UserController extends Zend_Controller_Action
                 
                 if ($form->isValid($values))
                 {
-                    // Delete the user. Only cascade if they have a profile
-                    if ($user->getUserProfile() === null)
-                    {
-                        $mapper->delete($user->getId(), false);
-                    }
-                    else
-                    {
-                        $mapper->delete($user->getId(), true);
-                    }
+                    $mapper->delete($user);
                     
                     $this->_helper->flashMessenger(array (
                             'success' => "User deleted." 
@@ -231,22 +218,28 @@ class Admin_UserController extends Zend_Controller_Action
                 {
                     $mapper = new Application_Model_UserMapper();
                     $user = new Application_Model_User();
-                    if (isset($values["password"]))
+                    if (isset($values["password"]) && $values["reset_password"])
                     {
                         unset($values["passwordconfirm"]);
                         $values["password"] = $this->cryptPassword($values ["password"]);
                     }
+                    
+                    if (isset($values["frozenUntil"]) && empty($values["frozenUntil"]))
+                    {
+                        unset($values["frozenUntil"]);
+                    }
+                    
+                    if (isset($values["eulaAccepted"]) && empty($values["eulaAccepted"]))
+                    {
+                        unset($values["eulaAccepted"]);
+                    }
+                    
                     $user->populate($values);
                     $user->setId($userId);
                     
                     
                     // Save to the database with cascade insert turned on
                     $userId = $mapper->save($user, $userId);
-                    
-                    /*
-                     * $userProfileMapper = new Application_Model_User_ProfileMapper();
-                     * $userProfileMapper->save($userProfile);
-                     */
                     
                     $this->_helper->flashMessenger(array (
                             'success' => "User '" . $this->view->escape($values ["username"]) . "' saved sucessfully." 

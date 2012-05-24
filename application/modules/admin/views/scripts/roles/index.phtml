@@ -1,0 +1,238 @@
+<style>
+    .ui-button { margin-left: -1px;}
+</style>
+<?php $this->headScript()->captureStart(); ?>
+var currentRoleId = 1;
+function my_input(value, options)
+{
+	//debugger;
+	return $("<input id='"+options.id+"' name='"+options.name+"' type='text' size='10' value='"+value+"'/>");
+}
+$(function() {
+    $("#privileges").jqGrid({
+        url: '<?php echo $this->BaseUrl("/admin/roles/getprivileges/format/json");?>',
+        editurl: '<?php echo $this->BaseUrl("/admin/roles/edit/format/json");?>',
+        datatype: 'json',
+        height: 400,
+        width: 940,
+        postData: { roleId: currentRoleId },
+        mtype: 'POST',
+        colNames: ['ID', 'Module', 'Controller', 'Action'],
+        colModel: [
+            {name: 'id', index: 'id', width: 80, align: 'center'},
+            {
+                name: 'module',
+                index: 'module',
+                width: 250,
+                editable: true,
+                edittype: 'select',
+                editoptions: {
+                    	dataUrl: '<?php echo $this->BaseUrl("/admin/roles/getmodules"); ?>',
+                    	dataEvents :[
+                    	             {
+                    	                 type: 'change',
+                    	                 fn: function(e)
+                    	                 {
+                    	                     var thisval = $(e.target).val();
+                    	                     $.get('<?php echo $this->BaseUrl("/admin/roles/getcontrollers/moduleName/"); ?>'+thisval, function(data)
+                    	                     {
+                    	                         var res = $(data).html();
+                    	                         $("#controller").html(res);
+                    	                     }); // end get
+                    	                 }//end func
+                    	             } // end type
+                    	         ] // dataevents /* http://www.trirand.com/blog/?page_id=393/help/dynamically-populate-select-dropdown/ */
+                }
+            },
+            {
+                name: 'controller',
+                index: 'controller',
+                width: 250,
+                editable: true,
+                edittype: 'select',
+                editoptions: {
+                	dataUrl: '<?php echo $this->BaseUrl("/admin/roles/getcontrollers/"); ?>',
+                	dataEvents :[
+                	             {
+                	                 type: 'change',
+                	                 fn: function(e)
+                	                 {
+                	                     var thisval = $(e.target).val();
+                	                     var module =
+                	                     $.get('<?php echo $this->BaseUrl("/admin/roles/getactions/controller/"); ?>'+thisval + '<?php echo "/moduleName/"?>'+$("#module").val(), function(data)
+                	                     {
+                	                         var res = $(data).html();
+                	                         $("#action").html(res);
+                	                     }); // end get
+                	                 }//end func
+                	             } // end type
+                	         ] // dataevents /* http://www.trirand.com/blog/?page_id=393/help/dynamically-populate-select-dropdown/ */
+            	}
+            },
+            {
+                name: 'action',
+                index: 'action',
+                width: 250,
+                editable: true,
+                edittype: 'select',
+                editoptions: {
+                	dataUrl: '<?php echo $this->BaseUrl("/admin/roles/getactions/"); ?>',
+            	}
+            }
+        ],
+        hidegrid: false,
+        pager: '#toolbar',
+        rowNum: 10,
+        rowList: [10, 20, 30],
+        sortname: 'id',
+        sortorder: 'desc',
+        viewrecords: true,
+        gridview: true,
+        jsonReader : { repeatitems: false },
+        caption: 'Guest'
+    });
+    
+    $("#privileges").jqGrid('navGrid','#toolbar',
+    { /* Options */
+		edit: false, add: true, del: true
+	},
+    { /* Edit Options */
+        width: 400,
+	    height: 200,
+		onclickSubmit: function(rowid)
+		{
+        	return {roleId: currentRoleId };
+    	}
+	},
+	{ /* Add Options */
+	    width: 400,
+	    height: 200,
+		onclickSubmit: function(rowid)
+		{
+        	return {roleId: currentRoleId };
+    	}
+	});
+    
+    
+    $.widget( "ui.combobox", {
+		_create: function() {
+			var self = this,
+				select = this.element.hide(),
+				selected = select.children( ":selected" ),
+				value = selected.val() ? selected.text() : "";
+			var input = this.input = $( "<input>" )
+				.insertAfter( select )
+				.val( value )
+				.autocomplete({
+					delay: 0,
+					minLength: 0,
+					source: function( request, response ) {
+						var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
+						response( select.children( "option" ).map(function() {
+							var text = $( this ).text();
+							if ( this.value && ( !request.term || matcher.test(text) ) )
+								return {
+									label: text.replace(
+										new RegExp(
+											"(?![^&;]+;)(?!<[^<>]*)(" +
+											$.ui.autocomplete.escapeRegex(request.term) +
+											")(?![^<>]*>)(?![^&;]+;)", "gi"
+										), "<strong>$1</strong>" ),
+									value: text,
+									option: this
+								};
+						}) );
+					},
+					select: function( event, ui ) {
+						ui.item.option.selected = true;
+						self._trigger( "selected", event, {
+							item: ui.item.option
+						});
+						currentRoleId = ui.item.option.value;
+						$("#privileges").setCaption($(ui.item.option).text());
+		    			$("#privileges").jqGrid("setGridParam", {postData: { roleId: ui.item.option.value }} );
+		    			$("#privileges").trigger("reloadGrid");
+    	
+					},
+					change: function( event, ui ) {
+						if ( !ui.item ) {
+							var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+								valid = false;
+							select.children( "option" ).each(function() {
+								if ( $( this ).text().match( matcher ) ) {
+									this.selected = valid = true;
+									return false;
+								}
+							});
+							if ( !valid ) {
+								// remove invalid value, as it didn't match anything
+								$( this ).val( "" );
+								select.val( "" );
+								input.data( "autocomplete" ).term = "";
+								return false;
+							}
+						}
+					}
+				})
+				.addClass( "ui-widget ui-widget-content ui-corner-left" );
+
+			input.data( "autocomplete" )._renderItem = function( ul, item ) {
+				return $( "<li></li>" )
+					.data( "item.autocomplete", item )
+					.append( "<a>" + item.label + "</a>" )
+					.appendTo( ul );
+			};
+
+			this.button = $( "<button type='button'>&nbsp;</button>" )
+				.attr( "tabIndex", -1 )
+				.attr( "title", "Show All Items" )
+				.insertAfter( input )
+				.button({
+					icons: {
+						primary: "ui-icon-triangle-1-s"
+					},
+					text: false
+				})
+				.removeClass( "ui-corner-all" )
+				.addClass( "ui-corner-right ui-button-icon" )
+				.click(function() {
+					// close if already visible
+					if ( input.autocomplete( "widget" ).is( ":visible" ) ) {
+						input.autocomplete( "close" );
+						return;
+					}
+
+					// work around a bug (likely same cause as #5265)
+					$( this ).blur();
+
+					// pass empty string as value to search for, displaying all results
+					input.autocomplete( "search", "" );
+					input.focus();
+				});
+		},
+
+		destroy: function() {
+			this.input.remove();
+			this.button.remove();
+			this.element.show();
+			$.Widget.prototype.destroy.call( this );
+		}
+	});
+});
+
+$(function() {
+	$( "#roles" ).combobox();
+	$( "#toggle" ).click(function() {
+		$( "#combobox" ).toggle();
+	});
+});
+<?php $this->headScript()->captureEnd(); ?>
+<div id="roleManager">
+    <select name='role' id='roles'>
+    <?php foreach ($this->roles as $role) : ?>
+    	<option value='<?php echo $role->getId(); ?>'><?php echo $role->getName(); ?></option>
+    <?php endforeach; ?>
+    </select>
+</div>
+<table id="privileges"><tr><td/></tr></table>
+<div id="toolbar"></div>

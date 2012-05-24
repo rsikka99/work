@@ -29,12 +29,12 @@ class Default_ErrorController extends Zend_Controller_Action
             default :
                 switch ($errors->exception->getCode())
                 {
-                    case 403:
+                    case 403 :
                         // Access Denied!
                         $this->getResponse()->setHttpResponseCode(403);
                         $this->_helper->viewRenderer('403');
                         break;
-                    default:
+                    default :
                         // Application Error
                         $this->getResponse()->setHttpResponseCode(500);
                         $priority = Zend_Log::CRIT;
@@ -46,46 +46,33 @@ class Default_ErrorController extends Zend_Controller_Action
                 break;
         }
         
-        // Get the logger
-        $log = $this->getLog();
-        
         /*
-         * Generate a uid just in case two exceptions happen at the exact same
-         * time on different threads and we end up getting mixed lines of a
-         * different exception
+         * Generate a uid just in case two exceptions happen at the exact same time on different threads and we end up
+         * getting mixed lines of a different exception
          */
         $uid = uniqid();
         $this->view->uid = $uid;
         $exceptions = array ();
+        $priority = Zend_Log::CRIT;
         
         $ex = $errors->exception;
         
         // Declare the start of the trace
-        if ($log !== FALSE)
-        {
-            $log->crit("[$uid] - --------Started Trace--------.");
-        }
+        My_Log::crit("[$uid] - --------Started Trace--------.");
         
         // Loop through all the exceptions, and log them
         do
         {
             // Log exception, if logger available
-            if ($log !== FALSE)
-            {
-                $log->log("[$uid] - Exception '" . $ex->getCode() . "' occured in " . $ex->getFile() . " on line " . $ex->getLine() . ": " . $ex->getMessage(), $priority);
-                $log->log("[$uid] - Stack Trace:\n" . $ex->getTraceAsString(), $priority);
-            }
+            My_Log::log("[$uid] - Exception '" . $ex->getCode() . "' occured in " . $ex->getFile() . " on line " . $ex->getLine() . ": " . $ex->getMessage(), $priority);
+            My_Log::log("[$uid] - Stack Trace:\n" . $ex->getTraceAsString(), $priority);
             $exceptions [] = $ex;
-            
         }
         while ( ! is_null($ex = $ex->getPrevious()) );
         
         // Include request parameters afterwards
-        if ($log !== FALSE)
-        {
-            $log->log('Request Parameters', $priority, $errors->request->getParams());
-            $log->crit("[$uid] - --------Finished Trace--------.");
-        }
+        My_Log::log('Request Parameters', $priority, null, $errors->request->getParams());
+        My_Log::crit("[$uid] - --------Finished Trace--------.");
         
         // Conditionally display exceptions
         if ($this->getInvokeArg('displayExceptions') == true && $showProgrammerError)
@@ -93,14 +80,13 @@ class Default_ErrorController extends Zend_Controller_Action
             $this->view->exceptions = $exceptions;
             $this->_helper->viewRenderer('error');
         }
-
         
         $this->view->request = $errors->request;
     }
 
     /**
      * Gets the appropriate Zend_Log facility, or false if none are registered.
-     * 
+     *
      * @return boolean Zend_Log
      */
     public function getLog ()
@@ -111,7 +97,5 @@ class Default_ErrorController extends Zend_Controller_Action
         }
         return Zend_Registry::get("Zend_Log");
     }
-    
-
 }
 

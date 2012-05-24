@@ -34,8 +34,7 @@ window.log = function f(){ log.history = log.history || []; log.history.push(arg
 // Prevent "Uncaught RangeError: Maximum call stack size exceeded"
 $.ui.timepicker = $.ui.timepicker || {};
 if ($.ui.timepicker.version) {
-	return;
-}
+	return;}
 
 $.extend($.ui, { timepicker: { version: "1.0.0" } });
 
