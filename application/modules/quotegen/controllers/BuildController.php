@@ -1,6 +1,6 @@
 <?php
 
-class Quote_IndexController extends Zend_Controller_Action
+class Quotegen_BuildController extends Zend_Controller_Action
 {
 
     public function init()
