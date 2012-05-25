@@ -44,7 +44,6 @@ class Admin_UserController extends Zend_Controller_Action
         {
             $this->view->user = $user;
         }
-    
     }
 
     /**
@@ -68,7 +67,7 @@ class Admin_UserController extends Zend_Controller_Action
                     $mapper = new Application_Model_UserMapper();
                     $user = new Application_Model_User();
                     $user->populate($values);
-                                        
+                    
                     // Save to the database
                     $userId = $mapper->insert($user);
                     
@@ -78,7 +77,6 @@ class Admin_UserController extends Zend_Controller_Action
                     
                     // Reset the form after everything is saved successfully
                     $form->reset();
-                
                 }
                 else
                 {
@@ -111,7 +109,6 @@ class Admin_UserController extends Zend_Controller_Action
                     'warning' => 'Please select a user to delete first.' 
             ));
             $this->_redirect('/admin/user');
-        
         }
         
         $mapper = new Application_Model_UserMapper();
@@ -124,7 +121,6 @@ class Admin_UserController extends Zend_Controller_Action
                     'danger' => 'There was an error selecting the user to delete.' 
             ));
             $this->_redirect('/admin/user');
-        
         }
         
         $username = $user->getUsername();
@@ -151,7 +147,6 @@ class Admin_UserController extends Zend_Controller_Action
                     ));
                     
                     $this->_redirect('/admin/user');
-                
                 }
                 else
                 {
@@ -185,7 +180,6 @@ class Admin_UserController extends Zend_Controller_Action
                     'warning' => 'Please select a user to delete first.' 
             ));
             $this->_redirect('/admin/user');
-        
         }
         
         $mapper = new Application_Model_UserMapper();
@@ -198,13 +192,12 @@ class Admin_UserController extends Zend_Controller_Action
                     'danger' => 'There was an error selecting the user to delete.' 
             ));
             $this->_redirect('/admin/user');
-        
         }
         
         $form = new Admin_Form_User(Admin_Form_User::MODE_EDIT);
         
-        $values = $user->toArray(); 
-
+        $values = $user->toArray();
+        
         $request = $this->getRequest();
         
         if ($request->isPost())
@@ -213,49 +206,64 @@ class Admin_UserController extends Zend_Controller_Action
             
             if (! isset($values ['cancel']))
             {
-                
-                if ($form->isValid($values))
+                try
                 {
-                    $mapper = new Application_Model_UserMapper();
-                    $user = new Application_Model_User();
-                    if (isset($values["password"]) && $values["reset_password"])
+                    if ($form->isValid($values))
                     {
-                        unset($values["passwordconfirm"]);
-                        $values["password"] = $this->cryptPassword($values ["password"]);
+                        
+                        if (isset($values ["password"]) && ! empty($values ["password"]) && $values ["reset_password"])
+                        {
+                            unset($values ["passwordconfirm"]);
+                            $values ["password"] = $this->cryptPassword($values ["password"]);
+                        }
+                        else
+                        {
+                            if ($values ["reset_password"])
+                            {
+                                throw new InvalidArgumentException("You must specify a new password");
+                            }
+                            unset($values ["password"]);
+                            unset($values ["passwordconfirm"]);
+                        }
+                        
+                        if (isset($values ["frozenUntil"]) && empty($values ["frozenUntil"]))
+                        {
+                            unset($values ["frozenUntil"]);
+                        }
+                        
+                        if (isset($values ["eulaAccepted"]) && empty($values ["eulaAccepted"]))
+                        {
+                            unset($values ["eulaAccepted"]);
+                        }
+                        
+                        $mapper = new Application_Model_UserMapper();
+                        $user = new Application_Model_User();
+                        $user->populate($values);
+                        $user->setId($userId);
+                        
+                        // Save to the database with cascade insert turned on
+                        $userId = $mapper->save($user, $userId);
+                        
+                        $this->_helper->flashMessenger(array (
+                                'success' => "User '" . $this->view->escape($values ["username"]) . "' saved sucessfully." 
+                        ));
                     }
-                    
-                    if (isset($values["frozenUntil"]) && empty($values["frozenUntil"]))
+                    else
                     {
-                        unset($values["frozenUntil"]);
+                        throw new InvalidArgumentException("Please correct the errors below");
                     }
-                    
-                    if (isset($values["eulaAccepted"]) && empty($values["eulaAccepted"]))
-                    {
-                        unset($values["eulaAccepted"]);
-                    }
-                    
-                    $user->populate($values);
-                    $user->setId($userId);
-                    
-                    
-                    // Save to the database with cascade insert turned on
-                    $userId = $mapper->save($user, $userId);
-                    
-                    $this->_helper->flashMessenger(array (
-                            'success' => "User '" . $this->view->escape($values ["username"]) . "' saved sucessfully." 
-                    ));
                 }
-                else
+                catch ( InvalidArgumentException $e )
                 {
                     $this->_helper->flashMessenger(array (
-                            'danger' => 'Please correct the errors below' 
+                            'danger' => $e->getMessage()
                     ));
-                    $form->populate($values);
                 }
             }
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
+                $this->_helper->redirector('index');
             }
         }
         else
@@ -291,6 +299,5 @@ class Admin_UserController extends Zend_Controller_Action
         $salt = sprintf('$%1$s$%2$s$%3$s$', $method, $rounds, $pepper);
         return crypt($password, $salt);
     }
-
 }
 

@@ -86,115 +86,6 @@ class Application_Model_User extends My_Model_Abstract
      */
     protected $_resetPassword = 0;
 
-    public function __construct ($options = null)
-    {
-        // Set the filters
-        $alnum = new Zend_Filter_Alnum(true);
-        $this->_filters = array (
-                'id' => array (), 
-                
-                'username' => array (
-                        'StringTrim', 
-                        'StripTags', 
-                        $alnum 
-                ), 
-                'password' => array (), 
-                'firstname' => array (
-                        'StringTrim', 
-                        'StripTags', 
-                        $alnum 
-                ), 
-                'lastname' => array (
-                        'StringTrim', 
-                        'StripTags', 
-                        $alnum 
-                ), 
-                'email' => array (
-                        'StringTrim', 
-                        'StripTags' 
-                ), 
-                'frozenUntil' => array (
-                        'StringTrim', 
-                        'StripTags' 
-                ), 
-                'loginAttempts' => array (
-                        'Int' 
-                ), 
-                'locked' => array (
-                        new Zend_Filter_Boolean(Zend_Filter_Boolean::ALL) 
-                ), 
-                'eulaAccepted' => array (
-                        'StringTrim', 
-                        'StripTags' 
-                ), 
-                'resetPassword' => array (
-                        new Zend_Filter_Boolean(Zend_Filter_Boolean::ALL) 
-                ) 
-        );
-        
-        // Set the validators
-        $this->_validators = array (
-                'id' => array (
-                        'Int' 
-                ), 
-                'username' => array (
-                        new Zend_Validate_StringLength(array (
-                                'min' => 4, 
-                                'max' => 30 
-                        )) 
-                ), 
-                'password' => array (
-                        new Zend_Validate_StringLength(array (
-                                'min' => 4, 
-                                'max' => 255 
-                        )) 
-                ), 
-                'firstname' => array (
-                        new Zend_Validate_StringLength(array (
-                                'min' => 2, 
-                                'max' => 30 
-                        )) 
-                ), 
-                'lastname' => array (
-                        new Zend_Validate_StringLength(array (
-                                'min' => 2, 
-                                'max' => 30 
-                        )) 
-                ), 
-                'email' => array (
-                        new Zend_Validate_StringLength(array (
-                                'min' => 4, 
-                                'max' => 200 
-                        )), 
-                        new Zend_Validate_EmailAddress(array (
-                                'allow' => Zend_Validate_Hostname::ALLOW_DNS 
-                        )) 
-                ), 
-                'frozenUntil' => array (
-                        new My_Validate_DateTime(), 
-                        Zend_Filter_Input::ALLOW_EMPTY => true 
-                ), 
-                'loginAttempts' => array (
-                        'Int', 
-                        new Zend_Validate_Between(array (
-                                'min' => 0, 
-                                'max' => 500 
-                        )) 
-                ), 
-                'locked' => array (
-                        Zend_Filter_Input::ALLOW_EMPTY => true 
-                ), 
-                'eulaAccepted' => array (
-                        new My_Validate_DateTime(), 
-                        Zend_Filter_Input::ALLOW_EMPTY => true 
-                ), 
-                'resetPassword' => array (
-                        Zend_Filter_Input::ALLOW_EMPTY => true 
-                ) 
-        );
-        parent::__construct($options);
-    }
-
     public function isFrozen ()
     {
         $frozenDate = new DateTime($this->_frozenUntil);
@@ -278,17 +169,7 @@ class Application_Model_User extends My_Model_Abstract
      */
     public function setId ($_id)
     {
-        $input = new Zend_Filter_Input($this->_filters, $this->_validators, array (
-                'id' => $_id 
-        ));
-        
-        if (! $input->isValid('id'))
-        {
-            throw new InvalidArgumentException('Invalid id provided');
-        }
-        
-        $this->_id = $input->id;
-        return $this;
+        $this->_id = $_id;
     }
 
     /**
@@ -306,17 +187,7 @@ class Application_Model_User extends My_Model_Abstract
      */
     public function setUsername ($_username)
     {
-        $input = new Zend_Filter_Input($this->_filters, $this->_validators, array (
-                'username' => $_username 
-        ));
-        
-        if (! $input->isValid('username'))
-        {
-            throw new InvalidArgumentException('Invalid username provided');
-        }
-        
-        $this->_username = $input->username;
-        return $this;
+        $this->_username = $_username;
     }
 
     /**
@@ -334,17 +205,7 @@ class Application_Model_User extends My_Model_Abstract
      */
     public function setPassword ($_password)
     {
-        $input = new Zend_Filter_Input($this->_filters, $this->_validators, array (
-                'password' => $_password 
-        ));
-        
-        if (! $input->isValid('password'))
-        {
-            throw new InvalidArgumentException('Invalid password provided');
-        }
-        
-        $this->_password = $input->password;
-        return $this;
+        $this->_password = $_password;
     }
 
     /**
@@ -362,17 +223,7 @@ class Application_Model_User extends My_Model_Abstract
      */
     public function setFirstname ($_firstname)
     {
-        $input = new Zend_Filter_Input($this->_filters, $this->_validators, array (
-                'firstname' => $_firstname 
-        ));
-        
-        if (! $input->isValid('firstname'))
-        {
-            throw new InvalidArgumentException('Invalid firstname provided');
-        }
-        
-        $this->_firstname = $input->firstname;
-        return $this;
+        $this->_firstname = $_firstname;
     }
 
     /**
@@ -390,17 +241,7 @@ class Application_Model_User extends My_Model_Abstract
      */
     public function setLastname ($_lastname)
     {
-        $input = new Zend_Filter_Input($this->_filters, $this->_validators, array (
-                'lastname' => $_lastname 
-        ));
-        
-        if (! $input->isValid('lastname'))
-        {
-            throw new InvalidArgumentException('Invalid lastname provided');
-        }
-        
-        $this->_lastname = $input->lastname;
-        return $this;
+        $this->_lastname = $_lastname;
     }
 
     /**
@@ -418,17 +259,7 @@ class Application_Model_User extends My_Model_Abstract
      */
     public function setEmail ($_email)
     {
-        $input = new Zend_Filter_Input($this->_filters, $this->_validators, array (
-                'email' => $_email 
-        ));
-        
-        if (! $input->isValid('email'))
-        {
-            throw new InvalidArgumentException('Invalid email provided');
-        }
-        
-        $this->_email = $input->email;
-        return $this;
+        $this->_email = $_email;
     }
 
     /**
@@ -446,17 +277,7 @@ class Application_Model_User extends My_Model_Abstract
      */
     public function setLoginAttempts ($_loginAttempts)
     {
-        $input = new Zend_Filter_Input($this->_filters, $this->_validators, array (
-                'loginAttempts' => $_loginAttempts 
-        ));
-        
-        if (! $input->isValid('loginAttempts'))
-        {
-            throw new InvalidArgumentException('Invalid login attempts provided');
-        }
-        
-        $this->_loginAttempts = (int)$input->loginAttempts;
-        return $this;
+        $this->_loginAttempts = $_loginAttempts;
     }
 
     /**
@@ -470,21 +291,11 @@ class Application_Model_User extends My_Model_Abstract
 
     /**
      *
-     * @param String $_frozenUntil            
+     * @param string $_frozenUntil            
      */
     public function setFrozenUntil ($_frozenUntil)
     {
-        $input = new Zend_Filter_Input($this->_filters, $this->_validators, array (
-                'frozenUntil' => $_frozenUntil 
-        ));
-        
-        if ($_frozenUntil !== null && ! $input->isValid('frozenUntil'))
-        {
-            throw new InvalidArgumentException('Invalid date for frozen until provided.');
-        }
-        
-        $this->_frozenUntil = $input->frozenUntil;
-        return $this;
+        $this->_frozenUntil = $_frozenUntil;
     }
 
     /**
@@ -498,22 +309,11 @@ class Application_Model_User extends My_Model_Abstract
 
     /**
      *
-     * @param boolean $_locked            
+     * @param number $_locked            
      */
     public function setLocked ($_locked)
     {
-        $input = new Zend_Filter_Input($this->_filters, $this->_validators, array (
-                'locked' => $_locked 
-        ));
-        
-        if (! $input->isValid('locked'))
-        {
-            $message = $input->getMessages();
-            throw new InvalidArgumentException('Invalid value for locked provided.');
-        }
-        
-        $this->_locked = (int)$input->locked;
-        return $this;
+        $this->_locked = $_locked;
     }
 
     /**
@@ -527,21 +327,11 @@ class Application_Model_User extends My_Model_Abstract
 
     /**
      *
-     * @param String $_eulaAccepted            
+     * @param string $_eulaAccepted            
      */
     public function setEulaAccepted ($_eulaAccepted)
     {
-        $input = new Zend_Filter_Input($this->_filters, $this->_validators, array (
-                'eulaAccepted' => $_eulaAccepted 
-        ));
-        
-        if ($_eulaAccepted !== null && ! $input->isValid('eulaAccepted'))
-        {
-            throw new InvalidArgumentException('Invalid date for eula accepted provided.');
-        }
-        
-        $this->_eulaAccepted = $input->eulaAccepted;
-        return $this;
+        $this->_eulaAccepted = $_eulaAccepted;
     }
 
     /**
@@ -555,21 +345,10 @@ class Application_Model_User extends My_Model_Abstract
 
     /**
      *
-     * @param boolean $_resetPassword            
+     * @param number $_resetPassword            
      */
     public function setResetPassword ($_resetPassword)
     {
-        $input = new Zend_Filter_Input($this->_filters, $this->_validators, array (
-                'resetPassword' => $_resetPassword 
-        ));
-        
-        if (! $input->isValid('resetPassword'))
-        {
-            $message = $input->getMessages();
-            throw new InvalidArgumentException('Invalid value for reset password provided.');
-        }
-        
-        $this->_resetPassword = (int)$input->resetPassword;
-        return $this;
+        $this->_resetPassword = $_resetPassword;
     }
 }

@@ -8,7 +8,18 @@
  */
 abstract class My_Model_Abstract extends stdClass
 {
+    /**
+     * An array of filters that we can use in setters if we wish
+     *
+     * @var array
+     */
     protected $_filters;
+    
+    /**
+     * An array of validators that we can use in setters if we wish
+     *
+     * @var array
+     */
     protected $_validators;
 
     public function __construct (array $options = null)
@@ -18,7 +29,7 @@ abstract class My_Model_Abstract extends stdClass
             $this->populate($options);
         }
     }
-    
+
     abstract public function populate ($params);
 
     abstract public function toArray ();
