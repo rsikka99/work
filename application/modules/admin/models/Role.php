@@ -65,7 +65,7 @@ class Admin_Model_Role extends My_Model_Abstract
         );
         parent::__construct($options);
     }
-
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */

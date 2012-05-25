@@ -144,8 +144,9 @@ class Admin_Model_PrivilegeMapper extends My_Model_Mapper_Abstract
         }
         return $entries;
     }
-    
+
     /**
+     *
      * @see Zend_Db_Table
      * @return array Returns a count of objects
      */
@@ -154,19 +155,25 @@ class Admin_Model_PrivilegeMapper extends My_Model_Mapper_Abstract
         $count = 0;
         try
         {
-            $sql = $this->getDbTable()->select(Zend_Db_Table::SELECT_WITHOUT_FROM_PART)->from($this->getDbTable()->info("name"), "count(*)");
+            $sql = $this->getDbTable()
+                ->select(Zend_Db_Table::SELECT_WITHOUT_FROM_PART)
+                ->from($this->getDbTable()
+                ->info("name"), "count(*)");
             if ($whereClause)
             {
-                foreach ($whereClause as $column => $value)
+                foreach ( $whereClause as $column => $value )
                 {
-                    $sql->where($this->getDbTable()->getAdapter()->quoteInto($column, $value));
+                    $sql->where($this->getDbTable()
+                        ->getAdapter()
+                        ->quoteInto($column, $value));
                 }
             }
-            $result = $this->getDbTable()->getAdapter()->fetchRow($sql);
+            $result = $this->getDbTable()
+                ->getAdapter()
+                ->fetchRow($sql);
             if ($result)
             {
-                $count = $result["count(*)"];
-    
+                $count = $result ["count(*)"];
             }
         }
         catch ( Exception $e )

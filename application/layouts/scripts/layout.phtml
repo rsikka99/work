@@ -89,26 +89,40 @@ $this->headScript()->prependFile($this->baseUrl("/js/libs/jquery-ui-1.8.20.custo
         ?>
             </div>
         </div>        
-        <!-- Start of main container -->
-        <div class="container">
-            <header class="pageHeader"></header>
-            
-            <!-- Start of Breadcrumbs -->
-            <?php echo $this->navigation()->breadcrumbs()->setMinDepth(0)->setRenderInvisible(true)->setLinkLast(true)->setSeparator('/')->setPartial(array('menus/breadcrumbs.phtml', 'default'))->render(); ?>
-            <!-- End of Breadcrumbs -->
-
-            <div class="row">
-                <div class="span12">
-                    <?php echo $this->flashMessenger("info", '<div class="alert alert-%s">%s</div>'); ?>
-                    <?php echo $this->layout()->content ?>
+        
+        <div class="wrapper" id="eminem">
+            <header class="pageHeader">
+                <div class="headerSpace"></div>
+                <div class="container">
+                <!-- Start of Breadcrumbs -->
+                    <?php echo $this->navigation()->breadcrumbs()->setMinDepth(0)->setRenderInvisible(true)->setLinkLast(true)->setSeparator('/')->setPartial(array('menus/breadcrumbs.phtml', 'default'))->render(); ?>
+                <!-- End of Breadcrumbs -->
                 </div>
-                
-                <!--/span-->
+            </header>
+            <div class="innerWrapper">
+                <!-- Start of main container -->
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            <?php echo $this->flashMessenger("info", '<div class="alert alert-%s">%s</div>'); ?>
+                            <?php echo $this->layout()->content ?>
+                        </div>
+                        
+                        <!--/span-->
+                    </div>
+                    <hr>
+                </div>
+                <!-- End of main container -->
             </div>
-            <hr>
-            <footer>Copyright Tangent MTW &copy; <?php echo date("Y"); ?>. All Rights Reserved.</footer>
         </div>
-        <!-- End of main container -->
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="span6">Copyright Tangent MTW &copy; <?php echo date("Y"); ?>. All Rights Reserved.</div>
+                    <div class="span6" id="footerLinks">About | Eula | Terms of Service</div>
+                </div>
+            </div>
+        </footer>
 
         
         <!-- JavaScript at the bottom for fast page loading -->

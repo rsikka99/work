@@ -3,7 +3,17 @@
 .hide-text{font:0/0 a;color:transparent;text-shadow:none;background-color:transparent;border:0;}
 .input-block-level{display:block;width:100%;min-height:28px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;-ms-box-sizing:border-box;box-sizing:border-box;}
 html{overflow-y:scroll;}
-header.pageHeader{background-image:url('../images/header.png');background-repeat:no-repeat;height:100px;}
+html,body{background-color:#b9bab9;}
+div.wrapper{background-image:url('../images/background-repeat.png');background-repeat:repeat-x;}
+.pageHeader div.headerSpace{height:175px;}
+.pageHeader .breadcrumb{background:transparent;border:0;-webkit-box-shadow:0 0 0;-moz-box-shadow:0 0 0;box-shadow:0 0 0;}
+.pageHeader .breadcrumb li a{color:#FFF;text-shadow:0 0 0;}
+.pageHeader .breadcrumb .divider{color:#FFF;text-shadow:0 0 0;}
+footer{background-image:url('../images/footer-repeat.png');background-repeat:repeat-x;height:60px;}
+footer .container{padding-top:20px;color:#CCC;}
+#footerLinks{text-align:right;}
+div.innerWrapper{width:1100px;min-height:943px;padding-top:5px;margin:auto;background-image:url('../images/body-repeat.png');background-repeat:repeat-y;}
+header.pageHeader{background-image:url('../images/header.png');background-repeat:no-repeat;height:207px;width:1100px;margin:auto;}
 header.authHeader{background-image:url('../images/header.png');background-repeat:no-repeat;height:100px;}
 .navbar .sidebar{width:170px;}
 .navbar .navbar-inner{background-color:#4b4b4b;background-image:-moz-linear-gradient(top, #666666, #222222);background-image:-ms-linear-gradient(top, #666666, #222222);background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#666666), to(#222222));background-image:-webkit-linear-gradient(top, #666666, #222222);background-image:-o-linear-gradient(top, #666666, #222222);background-image:linear-gradient(top, #666666, #222222);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#666666', endColorstr='#222222', GradientType=0);border-color:#222222 #222222 #000000;border-color:rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);}

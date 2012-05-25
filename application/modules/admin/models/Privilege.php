@@ -53,15 +53,15 @@ class Admin_Model_Privilege extends My_Model_Abstract
                 'roleId' => array (), 
                 'module' => array (
                         'StringTrim', 
-                        'StripTags'
+                        'StripTags' 
                 ), 
                 'controller' => array (
                         'StringTrim', 
-                        'StripTags'
+                        'StripTags' 
                 ), 
                 'action' => array (
                         'StringTrim', 
-                        'StripTags'
+                        'StripTags' 
                 ) 
         );
         

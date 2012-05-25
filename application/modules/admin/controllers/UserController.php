@@ -182,8 +182,25 @@ class Admin_UserController extends Zend_Controller_Action
             $this->_redirect('/admin/user');
         }
         
+        // Get the user
         $mapper = new Application_Model_UserMapper();
         $user = $mapper->find($userId);
+        
+        // Get all available roles. In theory this should be a managable amount
+        $rolemapper = new Admin_Model_RoleMapper();
+        $roles = $rolemapper->fetchAll();
+        
+        $userrolemapper = new Admin_Model_UserRoleMapper();
+        $userRoles = $userrolemapper->fetchAll(array (
+                'userId = ?' => $userId 
+        ));
+        
+        // We need to get the current users roles
+        $currentUserRoles = array ();
+        foreach ( $userRoles as $userRole )
+        {
+            $currentUserRoles [] = $userRole->getRoleId();
+        }
         
         // If the user doesn't exist, send them back t the view all users page
         if (! $user)
@@ -194,23 +211,54 @@ class Admin_UserController extends Zend_Controller_Action
             $this->_redirect('/admin/user');
         }
         
-        $form = new Admin_Form_User(Admin_Form_User::MODE_EDIT);
+        // Create a new form with the mode and roles set
+        $form = new Admin_Form_User(Admin_Form_User::MODE_EDIT, $roles);
         
+        // Prepare the data for the form
         $values = $user->toArray();
+        $values ['userRoles'] = $currentUserRoles;
         
         $request = $this->getRequest();
         
+        // Make sure we are posting data
         if ($request->isPost())
         {
+            // Get the post data
             $values = $request->getPost();
             
+            // If we cancelled we don't need to validate anything
             if (! isset($values ['cancel']))
             {
                 try
                 {
+                    // Validate the form
                     if ($form->isValid($values))
                     {
+                        // Validate the roles
+                        if (isset($values ["userRoles"]))
+                        {
+                            foreach ( $values ["userRoles"] as $roleId )
+                            {
+                                $roleIsValid = false;
+                                /* @var $role Admin_Model_Role */
+                                foreach ( $roles as $role )
+                                {
+                                    if ($role->getId() == $roleId)
+                                    {
+                                        $roleIsValid = true;
+                                        break;
+                                    }
+                                }
+                                
+                                // Give an error if a role was not valid
+                                if (! $roleIsValid)
+                                {
+                                    throw new Exception("Invalid Role Selected!");
+                                }
+                            }
+                        }
                         
+                        // Set the password values if we checked the reset password box
                         if (isset($values ["password"]) && ! empty($values ["password"]) && $values ["reset_password"])
                         {
                             unset($values ["passwordconfirm"]);
@@ -218,6 +266,7 @@ class Admin_UserController extends Zend_Controller_Action
                         }
                         else
                         {
+                            // TODO: This whole password area could be done in a more logical sequence
                             if ($values ["reset_password"])
                             {
                                 throw new InvalidArgumentException("You must specify a new password");
@@ -226,11 +275,13 @@ class Admin_UserController extends Zend_Controller_Action
                             unset($values ["passwordconfirm"]);
                         }
                         
+                        // Unset an empty date
                         if (isset($values ["frozenUntil"]) && empty($values ["frozenUntil"]))
                         {
                             unset($values ["frozenUntil"]);
                         }
                         
+                        // Unset an empty date
                         if (isset($values ["eulaAccepted"]) && empty($values ["eulaAccepted"]))
                         {
                             unset($values ["eulaAccepted"]);
@@ -244,6 +295,68 @@ class Admin_UserController extends Zend_Controller_Action
                         // Save to the database with cascade insert turned on
                         $userId = $mapper->save($user, $userId);
                         
+                        // Save changes to the user roles
+                        if (isset($values ["userRoles"]))
+                        {
+                            $userRole = new Admin_Model_UserRole();
+                            $userRole->setUserId($userId);
+                            
+                            // Loop through our new roles
+                            foreach ( $values ["userRoles"] as $roleId )
+                            {
+                                $hasRole = false;
+                                /* @var $userRole Admin_Model_UserRole */
+                                foreach ( $userRoles as $userRole )
+                                {
+                                    if ($userRole->getRoleId() == $roleId)
+                                    {
+                                        $hasRole = true;
+                                        break;
+                                    }
+                                }
+                                
+                                // If the role is new
+                                if (! $hasRole)
+                                {
+                                    $userRole->setRoleId($roleId);
+                                    $userrolemapper->insert($userRole);
+                                }
+                            }
+                            
+                            // Loop through our old roles to see which were removed
+                            /* @var $userRole Admin_Model_UserRole */
+                            foreach ( $userRoles as $userRole )
+                            {
+                                $hasRole = false;
+                                
+                                foreach ( $values ["userRoles"] as $roleId )
+                                {
+                                    if ($userRole->getRoleId() == $roleId)
+                                    {
+                                        $hasRole = true;
+                                        break;
+                                    }
+                                }
+                                
+                                // If the old role is no longer needed
+                                if (! $hasRole)
+                                {
+                                    // Delete role
+                                    $userrolemapper->delete($userRole);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // If the user deselected all the boxes, delete all the roles
+                            if (count($userRoles) > 0)
+                            {
+                                $userrolemapper->delete(array (
+                                        'userId' => $userId 
+                                ));
+                            }
+                        }
+                        
                         $this->_helper->flashMessenger(array (
                                 'success' => "User '" . $this->view->escape($values ["username"]) . "' saved sucessfully." 
                         ));
@@ -256,7 +369,7 @@ class Admin_UserController extends Zend_Controller_Action
                 catch ( InvalidArgumentException $e )
                 {
                     $this->_helper->flashMessenger(array (
-                            'danger' => $e->getMessage()
+                            'danger' => $e->getMessage() 
                     ));
                 }
             }
@@ -266,11 +379,8 @@ class Admin_UserController extends Zend_Controller_Action
                 $this->_helper->redirector('index');
             }
         }
-        else
-        {
-            $form->populate($values);
-        }
         
+        $form->populate($values);
         $this->view->form = $form;
     }
 

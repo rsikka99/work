@@ -2,7 +2,6 @@
 
 class Admin_Form_User extends EasyBib_Form
 {
-    
     const MODE_CREATE = 0;
     const MODE_EDIT = 1;
     const MODE_USER_EDIT = 2;
@@ -14,16 +13,19 @@ class Admin_Form_User extends EasyBib_Form
      * @var integer
      */
     protected $formMode = self::MODE_CREATE;
+    protected $roles;
     
     /*
      * (non-PHPdoc) @see Zend_Form::__construct()
      */
-    public function __construct ($formMode = null, $options = null)
+    public function __construct ($formMode = null, $roles = null, $options = null)
     {
         if (null !== $formMode)
         {
             $this->formMode = $formMode;
         }
+        
+        $this->roles = $roles;
         
         parent::__construct($options);
     }
@@ -86,45 +88,6 @@ class Admin_Form_User extends EasyBib_Form
             ));
         }
         
-        // No need to edit this when creating a user
-        if ($this->getFormMode() === self::MODE_EDIT)
-        {
-            
-            $this->addElement('text', 'loginAttempts', array (
-                    'label' => 'Login Attempts', 
-                    'disabled' => true 
-            ));
-            
-            $this->addElement('checkbox', 'resetLoginAttempts', array (
-                    'label' => 'Reset Login Attempts:', 
-                    'required' => true 
-            ));
-            /*
-             * $frozenUntil = new Zend_Form_Element_Text('frozen_until'); $frozenUntil->setLabel('Frozen Until:');
-             * $frozenUntil->setRequired(true); $frozenUntil->addValidator($datetimeValidator);
-             * $this->addElement($frozenUntil);
-             */
-            $minYear = (int)date('Y') - 2;
-            $maxYear = $minYear + 4;
-            $frozenUntil = new My_Form_Element_DateTimePicker('frozenUntil');
-            $frozenUntil->setLabel('Frozen Until:')
-                ->setJQueryParam('dateFormat', 'yy-mm-dd')
-                ->setJqueryParam('timeFormat', 'hh:mm')
-                ->setJQueryParam('changeYear', 'true')
-                ->setJqueryParam('changeMonth', 'true')
-                ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
-                ->setDescription('yyyy-mm-dd hh:mm')
-                ->addValidator($datetimeValidator)
-                ->setRequired(false);
-            $frozenUntil->addFilters(array (
-                    'StringTrim', 
-                    'StripTags' 
-            ));
-            
-            $this->addElement($frozenUntil);
-        }
-        
-
         $this->addElement('text', 'firstname', array (
                 'label' => 'First Name:', 
                 'required' => true, 
@@ -187,6 +150,57 @@ class Admin_Form_User extends EasyBib_Form
                         'EmailAddress' => 'Invalid Email Address' 
                 ) 
         ));
+        
+        if ($this->roles)
+        {
+            $userRoles = new Zend_Form_Element_MultiCheckbox('userRoles');
+            $userRoles->setLabel("User Roles:");
+            /* @var $role Admin_Model_Role */
+            foreach ( $this->roles as $role )
+            {
+                $userRoles->addMultiOption($role->getId(), $role->getName());
+            }
+            $this->addElement($userRoles);
+        }
+        
+        // No need to edit this when creating a user
+        if ($this->getFormMode() === self::MODE_EDIT)
+        {
+            
+            $this->addElement('text', 'loginAttempts', array (
+                    'label' => 'Login Attempts:', 
+                    'disabled' => true 
+            ));
+            
+            $this->addElement('checkbox', 'resetLoginAttempts', array (
+                    'label' => 'Reset Login Attempts:', 
+                    'required' => true 
+            ));
+            
+            /*
+             * $frozenUntil = new Zend_Form_Element_Text('frozen_until'); $frozenUntil->setLabel('Frozen Until:');
+             * $frozenUntil->setRequired(true); $frozenUntil->addValidator($datetimeValidator);
+             * $this->addElement($frozenUntil);
+             */
+            $minYear = (int)date('Y') - 2;
+            $maxYear = $minYear + 4;
+            $frozenUntil = new My_Form_Element_DateTimePicker('frozenUntil');
+            $frozenUntil->setLabel('Frozen Until:')
+                ->setJQueryParam('dateFormat', 'yy-mm-dd')
+                ->setJqueryParam('timeFormat', 'hh:mm')
+                ->setJQueryParam('changeYear', 'true')
+                ->setJqueryParam('changeMonth', 'true')
+                ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
+                ->setDescription('yyyy-mm-dd hh:mm')
+                ->addValidator($datetimeValidator)
+                ->setRequired(false);
+            $frozenUntil->addFilters(array (
+                    'StringTrim', 
+                    'StripTags' 
+            ));
+            
+            $this->addElement($frozenUntil);
+        }
         
         if ($this->getFormMode() !== self::MODE_CREATE)
         {
@@ -257,8 +271,8 @@ class Admin_Form_User extends EasyBib_Form
         ));
         
         $this->addElement('checkbox', 'resetPassword', array (
-                'label' => 'Require Password Change On Next Login:',
-                'required' => true
+                'label' => 'Require Password Change On Next Login:', 
+                'required' => true 
         ));
         
         // Add the submit button
