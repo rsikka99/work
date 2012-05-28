@@ -9,7 +9,7 @@
 			<ul class="nav nav-tabs ">
 				<li><a href="#RequestParams" data-toggle="tab">Request Parameters</a></li>
 				<?php for($exceptionCount = 0; $exceptionCount <  count($this->exceptions); $exceptionCount ++) : ?>
-				<li class="active"><a href="#Exception<?php echo $exceptionCount + 1; ?>" data-toggle="tab">Exception #<?php echo $exceptionCount + 1; ?></a></li>
+				<li <?php echo ($exceptionCount === 0) ? 'class="active"': ''?>><a href="#Exception<?php echo $exceptionCount + 1; ?>" data-toggle="tab">Exception #<?php echo $exceptionCount + 1; ?></a></li>
                 <?php endfor; ?>
 				
 			</ul>
@@ -23,7 +23,7 @@
 					</div>
 				</div>
 				<?php for($exceptionCount = 0; $exceptionCount < count($this->exceptions); $exceptionCount ++) : ?>
-				<div class="tab-pane active" id="Exception<?php echo $exceptionCount + 1; ?>">
+				<div class="tab-pane <?php echo ($exceptionCount === 0) ? 'active': ''?>" id="Exception<?php echo $exceptionCount + 1; ?>">
 					<h3>Exception #<?php echo $exceptionCount + 1; ?>:</h3>
 					<div class="well">
 						<p>
