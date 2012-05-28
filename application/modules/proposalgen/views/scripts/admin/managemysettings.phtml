@@ -1,0 +1,18 @@
+<?php
+/**
+ * managemysettings.phtml
+ *
+ * @author	John Sadler
+ * @version	v1.0
+ */
+?>
+<h2><?php echo $this->title;?></h2>
+
+<dl class="zend_form">
+	<dt class="botMenu">
+		<div id="form_container" class="margined">
+		    <?php echo $this->FlashMessenger(); ?>
+			<?php echo $this->settingsForm; ?>
+		</div>
+	</dt>
+</dl>

@@ -1,0 +1,516 @@
+<?php
+/**
+ * bulkuserpricing.phtml
+ * 
+ * @author: John Sadler
+ * @version: v1.0
+ */
+?>
+
+<?php $this->headScript()->captureStart('append','text/javascript') ?>
+	var repop = '<?php echo isset($this->pricing_filter); ?>';
+	var refilter = '<?php echo isset($this->search_criteria); ?>';
+	var default_price = <?php echo $this->default_price; ?>;
+	var repop_array = '<?php echo $this->repop_array; ?>';
+	var repop_page = '<?php echo $this->repop_page; ?>';
+	
+    $(document).ready(function() {
+		//find center screen for modal popup
+		var sTop = ($(window).height()/2)-100;
+		var sLeft = ($(window).width()/2)-200;
+		
+		//*********************************************************************
+		//* DEALER DEVICES GRID
+		//*********************************************************************
+		jQuery("#devices_list").jqGrid({
+			url:'<?php echo $this->baseUrl(); ?>/admin/userdevices',
+			datatype:'json',
+			colNames:['Manufacturer','Printer Model','Printer Price','Override Price','New Price'],
+			colModel:[
+				{width: 130, name:'manufacturer_name', index:'manufacturer_name', editable:true, editoptions:{disabled:true}},
+				{width: 150, name:'printer_model', index:'printer_model', editable:true, editoptions:{disabled:true}},
+				{width: 100, name:'device_price', index:'device_price', editable:true, editoptions:{disabled:true}, formatter:'currency', align:'right', formatoptions:{prefix:"$",thousandsSeparator:","}},
+				{width: 80, name:'override_device_price', index:'override_device_price', editable:true, editoptions:{disabled:true}, formatter:'currency', align:'right', formatoptions:{prefix:"$",thousandsSeparator:","}},
+				{width: 100, name:'new_device_price', index:'new_device_price', align:'right'}
+			],
+			width:625,
+			height:'auto',
+			rowNum:10,
+			rowList:[10,20,30],
+			pager:'#devices_pager',
+			multiselect:true,
+			onPaging:function() {
+				$("#hdnPage").val(jQuery("#devices_list").jqGrid('getGridParam','page'));
+			},
+			gridComplete:function(){ 
+				var ids = jQuery("#devices_list").jqGrid('getDataIDs');
+				for(var i=0; i < ids.length; i++) { 
+					var cur_row = ids[i];
+					var admin_price = document.getElementById("devices_list").rows[i+1].cells[3].innerHTML.replace("$","").replace(/,/gi,"").replace(/ /gi,"");
+					var override_price = document.getElementById("devices_list").rows[i+1].cells[4].innerHTML.replace("$","").replace(/,/gi,"").replace(/ /gi,"");
+					var hidden_price = (override_price > 0 ? override_price : admin_price);
+					
+					if(admin_price == 0) {
+						document.getElementById("devices_list").rows[i+1].cells[3].innerHTML = "$ -";
+					} else {
+						document.getElementById("devices_list").rows[i+1].cells[3].innerHTML = "$ " + admin_price;
+					}
+					
+					if(override_price == 0) {
+						document.getElementById("devices_list").rows[i+1].cells[4].innerHTML = "$ -";
+					} else {
+						document.getElementById("devices_list").rows[i+1].cells[4].innerHTML = "$ " + override_price;
+					}
+					
+					hidden_price_element = "<input type='hidden' name='hdnDevicePrice"+cur_row+"' id='hdnDevicePrice"+cur_row+"' value='" + hidden_price + "' size='8' maxlength='8' />"; 
+					new_price_element = "$ <input type='text' name='txtDevicePrice"+cur_row+"' id='txtDevicePrice"+cur_row+"' size='8' maxlength='12' style='text-align:right;' onkeypress='javascript: return numbersonly(this, event);' />"; 
+					jQuery("#devices_list").jqGrid('setRowData',ids[i],{new_device_price: hidden_price_element + new_price_element});
+				}
+				
+				$("#default_price").show();
+				
+        		if(repop_array != '') {
+        			repop_form('Device');
+        		}
+        	},
+			editurl:'dummy.php'
+		});
+		
+		jQuery("#devices_list").jqGrid('navGrid','#devices_pager',
+				{add:false,del:false,edit:false,refresh:false,search:false},
+				{closeAfterEdit:true,recreateForm:true,closeOnEscape:true,width:400,top:sTop,left:sLeft},
+				{closeAfterAdd:true,recreateForm:true,closeOnEscape:true,width:400,top:sTop,left:sLeft},
+				{},
+				{},
+				{}
+		);
+		
+		//*********************************************************************
+		//* DEALER TONERS GRID
+		//*********************************************************************
+		jQuery("#toners_list").jqGrid({
+			url:'<?php echo $this->baseUrl(); ?>/admin/usertoners',
+			datatype:'json',
+			colNames:['Toner ID','SKU','Manufacturer','Type','Color','Yield','Toner Price','Override Price','New Price','MasterID','Machine Compatibility'],
+			colModel:[
+        		{tag:1, width:30, name:'toner_id', index:'toner_id', sorttype:'int', hidden:true},
+				{tag:2, width:60, name:'toner_SKU', index:'toner_SKU'},
+				{tag:3, width:90, name:'manufacturer_name', index:'manufacturer_name'},
+				{tag:4, width:50, name:'part_type_id', index:'part_type_id'},
+				{tag:5, width:45, name:'toner_color_name', index:'toner_color_name'},
+				{tag:6, width:40, name:'toner_yield', index:'toner_yield', align:'right'},
+				{tag:7, width:70, name:'toner_price', index:'toner_price', align:'right', formatter:'currency', formatoptions:{prefix:"$", thousandsSeparator:","}},
+				{tag:8, width:85, name:'override_toner_price', index:'override_toner_price', align:'right', formatter:'currency', formatoptions:{prefix:"$", thousandsSeparator:","}},
+				{tag:9, width:95, name:'new_toner_price', index:'new_toner_price', align:'right'},
+				{tag:10, width:50, name:'master_device_id', index:'master_device_id', hidden:true},
+				{tag:11, width:155, name:'device_list', index:'device_list'}
+			],
+			shrinkToFit:false,
+			width:625,
+			height:'auto',
+			rowNum:10,
+			rowList:[10,20,30],
+			pager:'#toners_pager',
+			multiselect:true,
+			onPaging:function() {
+				$("#hdnPage").val(jQuery("#toners_list").jqGrid('getGridParam','page'));
+			},
+			gridComplete:function(){ 
+				var ids = jQuery("#toners_list").jqGrid('getDataIDs');
+				for(var i=0; i < ids.length; i++) {
+					var cur_row = ids[i];
+					var admin_price = document.getElementById("toners_list").rows[i+1].cells[7].innerHTML.replace("$","").replace(/,/gi,"").replace(/ /gi,"");
+					var override_price = document.getElementById("toners_list").rows[i+1].cells[8].innerHTML.replace("$","").replace(/,/gi,"").replace(/ /gi,"");
+					var hidden_price = (override_price > 0 ? override_price : admin_price);
+					
+					if(admin_price == 0) {
+						document.getElementById("toners_list").rows[i+1].cells[7].innerHTML = "$ -";
+					} else {
+						document.getElementById("toners_list").rows[i+1].cells[7].innerHTML = "$ " + admin_price;
+					}
+					
+					if(override_price == 0) {
+						document.getElementById("toners_list").rows[i+1].cells[8].innerHTML = "$ -";
+					} else {
+						document.getElementById("toners_list").rows[i+1].cells[8].innerHTML = "$ " + override_price;
+					}
+					
+					hidden_price_element = "<input type='hidden' name='hdnTonerPrice"+cur_row+"' id='hdnTonerPrice"+cur_row+"' value='" + hidden_price + "' size='8' maxlength='8' />"; 
+					new_price_element = "$ <input type='text' name='txtTonerPrice"+cur_row+"' id='txtTonerPrice"+cur_row+"' size='8' maxlength='8' style='text-align:right;' onkeypress='javascript: return numbersonly(this, event);' />"; 
+					jQuery("#toners_list").jqGrid('setRowData',ids[i],{new_toner_price:hidden_price_element+new_price_element});
+					
+					var min = 4;
+					var max = 2;
+					var output = '';
+					device_list = document.getElementById("toners_list").rows[i+1].cells[11].innerHTML;
+					var pieces = device_list.split("; ");
+					output += '<div id="outer_'+ids[i]+'" style="text-align: left; width: 200px;">';
+					for(var j=0; j < pieces.length; j++) {
+						device = pieces[j];
+						if(j == max) {
+							output += '<div id="inner_'+ids[i]+'" style="display: none;">';
+						}
+						output += device + '<br />';
+						if(j > max && j == pieces.length - 1) {
+							output += '</div>';
+							output += '<a id="view_link_'+ids[i]+'" href="javascript: void(0);" class="blue_link" onclick="javascript: view_device_list('+ids[i]+');">View All...</a>';
+						}
+					}
+					output += '</div>';
+					jQuery("#toners_list").jqGrid('setRowData',ids[i],{device_list:output});
+					
+					$("#default_price").show();
+				
+            		if(repop_array != '') {
+            			repop_form('Toner');
+            		}
+					
+				}
+			},
+			editurl:'dummy.php'
+		});
+		
+		jQuery("#toners_list").jqGrid('navGrid','#toners_pager',
+				{add:false,del:false,edit:false,refresh:false,search:false},
+				{closeAfterEdit:true,recreateForm:true,closeOnEscape:true,width:400,top:sTop,left:sLeft},
+				{closeAfterAdd:true,recreateForm:true,closeOnEscape:true,width:400,top:sTop,left:sLeft},
+				{},
+				{},
+				{}
+		);
+		
+		$("#pricing_filter").change(function() {
+			//reset page to 1
+			repop_page = 1;
+			$("#hdnPage").val(1);
+			
+			//remove all options
+			$("#criteria_filter >option").remove();
+			
+			//add new options depending on selection
+			if($('#pricing_filter').val() == 'toner') {
+				$("#criteria_filter").append($('<option></option>').val('machine_compatibility').html('Machine Compatibility'));
+				$("#criteria_filter").append($('<option></option>').val('toner_sku').html('SKU'));
+				$("#criteria_filter").append($('<option></option>').val('manufacturer_name').html('Manufacturer'));
+			} else {
+				$("#criteria_filter").append($('<option></option>').val('manufacturer_name').html('Manufacturer'));
+				$("#criteria_filter").append($('<option></option>').val('printer_model').html('Printer Model'));
+			}
+		});
+				
+		$("#criteria_filter").change(function() {
+			var url = '';
+			
+			//clear searches
+			$("#txtCriteria").val('');
+			$("#cboCriteria").html('');
+			
+			switch (this.value) {
+				case "manufacturer_name":
+					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=man';
+					break;
+				case "type_name":
+					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=type';
+					break;
+				case "toner_color_name":
+					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=color';
+					break;
+				default:
+					break;
+			}
+			
+			if (url != '') {
+    		    $.ajax({
+    		    	type: "POST",
+    		        url: url,
+    		        contentType: "application/json; charset=utf-8",
+    		        dataType: "json",
+    		        success: function(data) {
+    		            var obj = jQuery.parseJSON(data);
+    		            var options = '';
+    		            for (var i = 0; i < data.rows.length; i++) {
+    		            	list = (data.rows[i].cell);
+        					options += '<option value="' + list[0] + '">' + list[1] + '</option>';
+      					}
+      					$("#cboCriteria").html(options);
+    		        },
+    		        error: function() {
+    		            $('#details_error').html("Error returning criteria list.");
+    		        },
+    		        complete: function() {
+    		        	$("#text_criteria").hide();
+    		        	$("#list_criteria").show();
+    		        }
+    			});
+    			
+    		} else {
+	        	$("#list_criteria").hide();
+	        	$("#text_criteria").show();
+    		}
+    		
+    	});
+		
+		$("#btnSearch").click(function() {
+			repop_page = 1;
+			repop_array = '';
+			$("#hdnPage").val(1);
+			$("#message_container").html('');
+    		update_grid('search');
+		});
+		
+		$("#btnClearSearch").click(function() {
+			repop_page = 1;
+			repop_array = '';
+			$("#hdnPage").val(1);
+			$("#message_container").html('');
+    		update_grid('clear');
+		});
+		
+		//*********************************************************************
+		//* Set Defaults
+		//*********************************************************************
+		$('#toners_table').hide();
+		
+		if(repop == 1) {
+			$('#devices_table').hide();
+        	if(refilter == 1) {
+    			setTimeout("update_grid('search')",300);
+    			refilter = 0;
+    		} else {
+				setTimeout("update_grid()",300);
+				$("#pricing_filter").change();
+			}
+		}
+		
+		if(repop_page != '') {
+			$("#hdnPage").val(repop_page);
+		}
+		
+		$('#criteria_filter').change();
+    });
+	
+	function repop_form(grid) {
+		repop_items = repop_array.split(',');
+		for(i=0; i < repop_items.length; i++) {
+			repop_item = repop_items[i].split(':');
+			repop_id = repop_item[0];
+			repop_value = repop_item[1];
+			$("#txt"+grid+"Price"+repop_id).val(repop_value);
+		}
+	}
+	
+	//*********************************************************************
+	//* UPDATE GRIDS
+	//*********************************************************************
+	function update_grid(action) {
+		var params = '';
+		$('#devices_table').hide();
+		$('#toners_table').hide();
+		
+		//update column headers
+		if($('#pricing_filter').val() == 'printer') {
+			default_price = <?php echo $this->default_price; ?>;
+			$("#default_price").html('Default Price: $<?php echo $this->default_price; ?>');
+			$("#devices_list").jqGrid('setLabel','device_price','Printer Price');
+			$("#devices_list").jqGrid('setLabel','new_price','New Price');
+		} else if($('#pricing_filter').val() == 'toner') {
+			default_price = 0;
+			$("#default_price").html('');
+			//do nothing
+		}
+		$("#default_price").show();
+		
+		var params = '&filter=&criteria=';
+		if(action == 'search') {
+			if ($("#cboCriteria").is(":visible")) {
+				criteria = $("#cboCriteria option:selected").text();
+			} else {
+				criteria = $("#txtCriteria").val();
+			}
+			params = '&filter='+$("#criteria_filter").val()+'&criteria='+criteria;
+		} else if(action == 'clear') {
+			$("#criteria_filter").attr('selectedIndex', 0);
+        	$("#list_criteria").hide();
+        	$("#text_criteria").show();
+			$("#cboCriteria").html('');
+			$("#txtCriteria").val('');
+			$("#criteria_filter").change();
+		}
+		
+		//refresh the grid
+		if($('#pricing_filter').val() == 'toner') {
+			$('#toners_list').setGridParam({url:'<?php echo $this->baseUrl(); ?>/admin/usertoners?type=' + $('#pricing_filter').val()+params, page: $("#hdnPage").val()});
+			$('#toners_list').trigger("reloadGrid");
+			setTimeout("$('#toners_table').show()",200);
+		} else { 
+			$('#devices_list').setGridParam({url:'<?php echo $this->baseUrl(); ?>/admin/userdevices?type=' + $('#pricing_filter').val()+params, page: $("#hdnPage").val()});
+			$('#devices_list').trigger('reloadGrid');
+			setTimeout("$('#devices_table').show()",200);
+		}
+	}
+	
+	function apply_percentage() {
+		var id = 0;
+		var old_price = 0;
+		var new_price = 0;
+		var sign = $("#cboSign").val();
+		var percentage = $("#txtUpdate").val();
+		var decimals = 2;
+
+		//find decimal places
+		if($('#pricing_filter').val() != 'printer' && $('#pricing_filter').val() != 'toner') {
+			decimals = 4;
+		}
+		
+		//toner or device?
+		var list = 'devices';
+		var type = 'Device';
+		if($('#pricing_filter').val() == 'toner') {
+			list = 'toners';
+			type = 'Toner';
+		}
+		
+		if(percentage > 0) {
+			var ids = jQuery("#"+list+"_list").jqGrid('getDataIDs');
+			for(var i=0; i < ids.length; i++) { 
+				var cur_row = ids[i];
+				var old_price = $("#hdn"+type+"Price"+cur_row).val();
+				
+				if(old_price == 0) {
+					old_price = default_price;
+				}
+				
+				if ($("#jqg_"+list+"_list_"+cur_row).is(':checked') && old_price > 0) {
+					if(sign == "-") {
+						new_price = old_price - (old_price * (percentage/100));
+						$("#txt"+type+"Price"+cur_row).css('color','black');
+						$("#txt"+type+"Price"+cur_row).val(new_price.toFixed(decimals));
+					} else {
+						new_price = (old_price * ((percentage/100)+1));
+						$("#txt"+type+"Price"+cur_row).css('color','black');
+						$("#txt"+type+"Price"+cur_row).val(new_price.toFixed(decimals));
+					}
+				}
+				
+			}
+		} else {
+			$("#message_container").html("Please enter a percentage.");
+		}
+	}
+	
+	function do_action(action) {
+		if(action == 'file') {
+			document.getElementById("hdnMode").action = "pricing";
+			document.getElementById("bulk").action = "bulkfilepricing";
+			document.getElementById("bulk").submit();
+		}
+	}
+	
+	function do_update() {
+		document.getElementById("hdnMode").value = 'update';
+		document.getElementById("bulk").submit();
+	}
+	
+	function view_device_list(id) {
+		if(document.getElementById('inner_'+id).style.display == 'none') {
+			document.getElementById('inner_'+id).style.display = 'block';
+			document.getElementById('view_link_'+id).innerHTML = 'Collapse...';
+		} else {
+			document.getElementById('inner_'+id).style.display = 'none';
+			document.getElementById('view_link_'+id).innerHTML = 'View All...';
+		}
+	}
+
+<?php $this->headScript()->captureEnd() ?>
+
+<h2><?php echo $this->title;?></h2>
+
+<form name="bulk" id="bulk" action="" method="post">
+	<input type="hidden" name="hdnPage" id="hdnPage" />
+	<input type="hidden" name="hdnRole" id="hdnRole" value="user" />
+	<input type="hidden" name="hdnMode" id="hdnMode" value="" />
+	<input type="hidden" name="hdnManufacturerID" id="hdnManufacturerID" value="" />
+	
+	<dl class="zend_form">
+		<dt class="botMenu">
+			
+			<div id="instruction_container">
+				<p>If you wish to remove a price, enter 0 as the new price and update.</p>
+			</div>
+	
+			<div id="message_container" class="message_container" style="height: 30px;">
+			    <?php echo $this->message; ?>
+			</div>
+			
+			<div id="options_container" style="margin: 0px 0px 10px 5px;">
+				<div id="filter_pricing" style="display: inline; padding: 0px 0px 0px 0px;">
+					<label for="pricing_filter" class="forms_label">Property:</label>
+					<select name="pricing_filter" id="pricing_filter" class="filter_dropdown" style="width: 180px; margin: 0px 0px 0px 15px;" onchange="javascript: update_grid('pricing');">
+						<option value="printer" <?php if($this->pricing_filter == 'printer') { echo "selected"; } ?>>Printer Costs</option>
+						<option value="toner" <?php if($this->pricing_filter == 'toner') { echo "selected"; } ?>>Toner Costs</option>
+					</select>
+				</div>
+					
+				<div id="filter_buttons" style="display: none; float: right; padding: 5px 10px 0px 0px;">
+					<a href="javascript: void(0);" id="btnImport" onclick="javascript: do_action('file');">Update from file...</a>
+				</div>
+			</div>
+    		
+			<div id="filter_container">
+				<div id="criteria_container" style="display: inline; padding: 0px 0px 0px 0px;">
+					<label for="criteria_filter" class="label">Filter:</label>
+					<select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 26px;">
+						<option value="manufacturer_name" <?php if($this->search_filter == 'manufacturer_name') { echo "selected"; } ?>>Manufacturer</option>
+						<option value="printer_model" <?php if($this->search_filter == 'printer_model') { echo "selected"; } ?>>Printer Model</option>
+					</select>
+					<label for="txtCriteria" class="label" style="padding: 0px 0px 0px 10px;">for</label>
+					
+    				<span id="text_criteria"><input type="text" name="txtCriteria" style="width: 152px;" id="txtCriteria" <?php if($this->search_criteria != '') { echo 'value="' . $this->search_criteria . '"'; } ?> /></span>
+    				<span id="list_criteria" style="display: none;"><select name="cboCriteria" id="cboCriteria" style="width: 160px;"></select></span>
+    				
+					<input type="button" name="btnSearch" id="btnSearch" value="Search" />
+					<input type="button" name="btnClearSearch" id="btnClearSearch" value="Clear" />
+				</div>
+			</div>
+			
+			<div class="results_container">
+				<div class="list_container">
+					<div class="bold margined" style="display: inline;">
+						<span class="forms_label">Update selected by:</span>
+						<select name="cboSign" id="cboSign">
+							<option value="+">+</option>
+							<option value="-">-</option>
+						</select>
+						<input type="text" name="txtUpdate" id="txtUpdate" size="3" maxlength="3" style="text-align: right;" onkeypress="javascript: return numbersonly(this, event);" />%
+						<input type="button" name="btnApply" id="btnApply" value="Preview" onclick="javascript: apply_percentage();" />
+					</div>
+					<div id="default_price" class="details_label margined" style="display: none; float: right; margin-right: 5px;">Default Price: $<?php echo $this->default_price; ?></div>
+					
+					<div id="devices_table">
+						<table id="devices_list"></table>
+						<div id="devices_pager"></div>
+					</div>
+					
+					<div id="toners_table">
+						<table id="toners_list"></table>
+						<div id="toners_pager"></div>
+					</div>
+					
+					<br/>			
+					<div class="submitBar">				
+						<div id="submitBtns">
+							<div class="savebtn">
+								<input type="button" name="btnUpdate" id="btnUpdate" value="Update" onclick="javascript: do_update();" />
+							</div>
+							<div class="backbtn">
+								<input type="button" name="btnDone" id="btnDone" value="Done" onClick="javascript:  document.location.href='<?php echo $this->baseUrl()."/admin"?>';" />
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</dt>
+	</dl>
+</form>
+

@@ -1,0 +1,198 @@
+<?php
+/**
+ * bulkpartspricing
+ * 
+ * @author	John Sadler
+ * @version	v1.0 
+ */
+?>
+
+<?php $this->headScript()->captureStart('append','text/javascript') ?>   
+
+    $(document).ready(function() {
+		
+		var device_lists = new Array();
+		<?php foreach($this->parts_list as $key) {
+			$min = 4;
+			$pieces = explode(";", $this->devices[$key['toner_id']]); ?>
+			device_lists[<?php echo $key['toner_id'] ?>] = '<?php echo $this->devices[$key['toner_id']]; ?>';
+		<?php } ?>
+		
+		//find center screen for modal popup
+		var sTop = ($(window).height()/2)-100;
+		var sLeft = ($(window).width()/2)-200;
+		
+		jQuery("#toners_list").jqGrid({
+			url:'<?php echo $this->baseUrl(); ?>/admin/tonerslist',
+			datatype:'json',
+			colNames:['Toner ID','SKU','Manufacturer','Type','Color','Yield','Price','New Price','Affected Printers','MasterID','Added'],
+			colModel:[
+        		{width:30, name:'toner_id', index:'toner_id', sorttype:'int', hidden:true, editable:true, editoptions:{readonly:true, size:12}},
+				{width:60, name:'toner_SKU', index:'toner_SKU', editable:true, editoptions:{size:12,maxlength:30}},
+				{width:120, name:'manufacturer_name', index:'manufacturer_name', editable:true, editoptions:{size:20,maxlength:30}},
+				{width:35, name:'part_type_id', index:'part_type_id', editable:true, editoptions:{size:20,maxlength:30}},
+				{width:45, name:'toner_color_name', index:'toner_color_name', editable:true, editoptions:{size:12,maxlength:30}},
+				{width:35, name:'toner_yield', index:'toner_yield', editable:true, editoptions:{size:10,maxlength:4}, align:'right'},
+				{width:60, name:'toner_price', index:'toner_price', editable:true, editoptions:{size:10,maxlength:8}, align:'right', formatter:'currency', align:'right', formatoptions:{prefix:"$", thousandsSeparator:","}},
+				{width:128, name:'new_price', index:'new_price', align:'right'},
+				{width:200, name:'device_list', index:'device_list', align:'right'},
+				{width:50, name:'master_device_id', index:'master_device_id', hidden:true, editable:true, editoptions:{size:12}},
+				{width:50, name:'is_added', index:'is_added', hidden:true, editable:true, editoptions:{size:12}}
+			],
+			hidegrid:false,
+			shrinkToFit:false,
+			width:765,
+			height:400,
+			multiselect:true,
+			gridComplete:function(){ 
+				var ids = jQuery("#toners_list").jqGrid('getDataIDs');
+				for(var i=0; i < ids.length; i++) { 
+					var cur_row = ids[i];
+					var cur_price = document.getElementById("toners_list").rows[i+1].cells[7].innerHTML.replace("$","").replace(/,/gi,"").replace(/ /gi,"");
+					hidden_price_element = "<input type='hidden' name='hdnPrice"+cur_row+"' id='hdnPrice"+cur_row+"' value='" + cur_price + "' size='8' maxlength='8' />"; 
+					new_price_element = "$ <input type='text' name='txtPrice"+cur_row+"' id='txtPrice"+cur_row+"' size='8' maxlength='8' style='text-align:right;' onkeypress='javascript: return numbersonly(this, event);' />";
+					jQuery("#toners_list").jqGrid('setRowData',ids[i],{new_price:hidden_price_element+new_price_element});
+					
+					var min = 4;
+					var output = '';
+					if(device_lists[ids[i]]) {
+						var device_list_array = device_lists[ids[i]];
+						var pieces = device_list_array.split(";");
+	
+						output += '<div style="text-align: left; width: 200px; height: 55px; overflow: auto;">';
+						for(var j=0; j < pieces.length; j++) {
+							output += pieces[j] + '<br />';
+						}
+						output += '</div>';
+						
+						jQuery("#toners_list").jqGrid('setRowData',ids[i],{device_list:output});
+					}
+				}
+			},
+			editurl:'dummy.php'
+		});
+		
+		jQuery("#toners_list").jqGrid('navGrid','#toners_pager',
+				{add:false, del:false, edit:true, refresh:false, search:false},
+				{closeAfterEdit:true, recreateForm:true, closeOnEscape:true, width:400, top:sTop, left:sLeft},
+				{closeAfterAdd:true, recreateForm:true, closeOnEscape:true, width:400, top:sTop, left:sLeft},
+				{},
+				{},
+				{}
+		);
+		
+		if($("#manufacturer_filter").val() > 0) {
+			setTimeout("update_grid()",100);
+		}
+		
+    });
+	
+	function update_grid(id) {
+		$('#toners_list').setGridParam({url:'<?php echo $this->baseUrl(); ?>/admin/tonerslist?manid='+$("#manufacturer_filter").val()});
+		$('#toners_list').trigger("reloadGrid");
+	}
+
+	function apply_percentage() {
+		var id = 0;
+		var old_price = 0;
+		var new_price = 0;
+		var sign = $("#cboSign").val();
+		var percentage = $("#txtUpdate").val();
+
+		if(percentage > 0) {
+			var ids = jQuery("#toners_list").jqGrid('getDataIDs');
+			for(var i=0; i < ids.length; i++) { 
+				var cur_row = ids[i];
+				if ($("#jqg_toners_list_"+cur_row).is(':checked')) {
+					if(sign == "-") {
+						old_price = $("#hdnPrice"+cur_row).val();
+						new_price = old_price - (old_price * (percentage/100));
+						$("#txtPrice"+cur_row).css('color','black');
+						$("#txtPrice"+cur_row).val(new_price.toFixed(2));
+					} else {
+						old_price = $("#hdnPrice"+cur_row).val();
+						new_price = (old_price * ((percentage/100)+1));
+						$("#txtPrice"+cur_row).css('color','black');
+						$("#txtPrice"+cur_row).val(new_price.toFixed(2));
+					}
+				}
+				
+			}
+		} else {
+			$("#message_container").html("Please enter a percentage.");
+		}
+	}
+	
+	function do_update() {
+		id = document.getElementById("manufacturer_filter").value;
+		document.getElementById("hdnMode").value = 'update';
+		document.getElementById("hdnTonerID").value = id;
+		document.getElementById("bulk").submit();
+	}
+	
+<?php $this->headScript()->captureEnd() ?>
+
+<h2><?php echo $this->title;?></h2>
+
+<form name="bulk" id="bulk" action="" method="post">
+<input type="hidden" name="hdnMode" id="hdnMode" value="" />
+<input type="hidden" name="hdnTonerID" id="hdnTonerID" value="" />
+<dl class="zend_form">
+	<dt class="botMenu">
+		
+		<div id="instruction_container">
+			<p>If you wish to remove a price, enter 0 as the new price and update.</p>
+		</div>
+		
+		<div id="message_container" class="message_container" style="height: 30px;">
+		    <?php echo $this->message; ?>
+		</div>
+	
+		<div id="filter_container">
+			<label for="manufacturer_filter" class="label">Filter Manufacturers:</label>
+			<select name="manufacturer_filter" id="manufacturer_filter" class="" onchange="javascript: update_grid(this.value);">
+			<option value="">Show All Manufacturers</option>
+			<?php
+			foreach($this->manufacturer_list as $key) {
+				echo "<option value='" . $key['manufacturer_id'] ."'";
+				if ($key['manufacturer_id'] == $this->manufacturer_id) {
+					echo " selected";
+				}
+				echo ">" . ucwords(strtolower($key['manufacturer_name'])) . "</option>";
+			}
+			?>
+			</select>
+		</div>
+		
+		<div class="results_container">
+			<div class="list_container">
+				<div class="bold margined">
+					Update selected by: 
+					<select name="cboSign" id=""cboSign"">
+						<option value="+">+</option>
+						<option value="-">-</option>
+					</select>
+					<input type="text" name="txtUpdate" id="txtUpdate" size="3" maxlength="3" style="text-align: right;" onkeypress="javascript: return numbersonly(this, event);" />%
+					<input type="button" name="btnApply" id="btnApply" value="Preview" onclick="javascript: apply_percentage();" />
+				</div>
+				
+				<table id="toners_list"></table>
+				
+				<br/>			
+				<div class="submitBar">				
+					<div id="submitBtns">
+						<div class="savebtn">
+							<input type="button" name="btnUpdate" id="btnUpdate" value="Update" onclick="javascript: do_update();" />
+						</div>
+						<div class="backbtn">
+							<input type="button" name="btnDone" id="btnDone" value="Done" onClick="javascript:  document.location.href='<?php echo $this->baseUrl()."/admin"?>';" />
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</dt>
+</dl>
+</form>
+

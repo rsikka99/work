@@ -1,0 +1,30 @@
+<?php 
+$elements["company_name"] = $this->element->company_name;
+$elements["company_address"] = $this->element->company_address;
+?>
+<form id="company" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>">
+    <table border="0" width="100%">
+    	<col width="30%" /><col width="70%" />
+    	<tr>
+    		<td valign="top"><?php echo $elements["company_name"]->renderLabel(); ?></td>
+    		<td valign="top"><?php echo $elements["company_name"]->renderViewHelper(); ?></td>
+    	</tr>
+    	<tr>
+    		<td></td>
+    		<td><?php echo $elements["company_name"]->renderErrors(); ?></td>
+    	</tr>
+    	<tr>
+    		<td valign="top"><?php echo $elements["company_address"]->renderLabel(); ?></td>
+    		<td valign="top"><?php echo $elements["company_address"]->renderViewHelper(); ?></td>
+    	</tr>
+    	<tr>
+    		<td></td>
+    		<td><?php echo $elements["company_address"]->renderErrors(); ?></td>
+    	</tr>
+    </table>
+	<br/>
+    <div id="submitBtns" class="submitBar">
+		<?php echo $this->element->save ?>
+	    <input type="button" name="btnBack" id="btnBack" value="Back" onclick="javascript: document.location.href='/';" />
+	</div>
+</form>

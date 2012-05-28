@@ -1,0 +1,311 @@
+<?php
+/*
+	To add a view partial anywhere, the syntax is as follows:
+	echo $this->partial('{folder}/somefile.phtml');
+	
+	NOTE: {folder} must be located under the views/scripts/ folder...
+	eg: echo $this->partial('forms/customizeAppearancePartial.phtml');
+ */
+ ?>
+<?php
+/*
+	The following link needs to be added somewhere for this form to work
+	<a href="javascript: void(0);" onclick="javascipt: do_action('customize');">Customize Report Appearance</a></td>
+*/
+?>
+
+
+<?php $this->headScript()->captureStart('append','text/javascript') ?>
+	var page = "<?php echo $this->page; ?>";
+	var repop = <?php echo ($this->repop == "" ? "false" : $this->repop); ?>;
+	var default_display = "<?php echo $default_display; ?>";
+	
+	function preview(img, selection) {
+		var scaleX = 375 / selection.width;
+		var scaleY = 150 / selection.height;
+		
+		$('#large_image + div > img').css({
+			width: Math.round(scaleX * $("#large_image").width()) + 'px',
+			height: Math.round(scaleY * $("#large_image").height()) + 'px',
+			marginLeft: '-' + Math.round(scaleX * selection.x1) + 'px',
+			marginTop: '-' + Math.round(scaleY * selection.y1) + 'px'
+		});
+		
+		$('#x1').val(selection.x1);
+		$('#y1').val(selection.y1);
+		$('#x2').val(selection.x2);
+		$('#y2').val(selection.y2);
+		$('#w').val(selection.width);
+		$('#h').val(selection.height);
+	}
+	
+    $(document).ready(function() {
+    	if(repop == true) {
+			//lock scrollbars
+			$("html, body").animate({scrollTop:0}, 'slow');
+			$("body").css("overflow", "hidden");
+			
+			$("#lightbox, #lightbox-panel").fadeIn(0);
+			repop = false;
+    	}
+			
+		$('#save_thumb').click(function() {
+			var x1 = $('#x1').val();
+			var y1 = $('#y1').val();
+			var x2 = $('#x2').val();
+			var y2 = $('#y2').val();
+			var w = $('#w').val();
+			var h = $('#h').val();
+			if(x1=="" || y1=="" || x2=="" || y2=="" || w=="" || h=="") {
+				alert("You must make a selection first");
+				return false;
+			} else {
+				return true;
+			}
+		});
+		
+		$('div#uploadfile').bind('dialogclose', function(event) {
+			alert('closed');
+ 		});
+		
+    });
+    
+	$(window).load(function() {
+		$('#large_image').imgAreaSelect({ aspectRatio: '5:2', onSelectChange: preview });
+		
+		//Update default image if it doesn't exist
+		var cur_image = <?php echo strlen($this->default_image_exists); ?>;
+		if(cur_image == 0) {
+			$("#default_logo").attr('src', '<?php echo $this->baseUrl(); ?>/images/pgen-common/noimage375x150.jpg');
+		}
+		
+		//hide recrop if current logo = default logo and not admin
+		var cur_image = <?php echo strlen($this->current_image_exists); ?>;
+		if(cur_image == 0) {
+			$("#btnCrop").hide();
+			$("#remove_link").hide();
+			$("#company_logo").attr('src', '<?php echo $this->baseUrl(); ?>/images/pgen-common/noimage375x150.jpg');
+		} else {
+			$("#btnCrop").show();
+			$("#remove_link").show();
+		}
+	});
+
+	function do_action(inAction) {
+		$('#message_container').html('');
+		$('#modal_message_container').html('');
+		$('#large_image').imgAreaSelect({
+			hide: true
+		});
+		
+		if(inAction == 'customize') {
+			//reset containers
+			hide_containers();
+			$("#" + default_display + "_container").show();
+			
+			//lock scrollbars
+			$("html, body").animate({scrollTop:0}, 'slow');
+			$("body").css("overflow", "hidden");
+			
+			$("#lightbox, #lightbox-panel").fadeIn(300);
+			
+		} else if(inAction == 'close') {
+			$("body").css("overflow", "auto");
+			$("#lightbox, #lightbox-panel").fadeOut(300);
+			
+		} else if(inAction == 'remove') {
+			if(confirm("Are you sure you want to remove this image and use the default image instead?")) {
+				url = '<?php echo $this->baseUrl(); ?>/data/removeimage?page='+page;
+				$.ajax ({
+					type: "POST",
+					contentType: "application/json; charset=utf-8",
+			        url: url,
+					error: function() {
+						$('#message_container').html("Error removing image.");
+					},
+					success: function(data) {
+						$("#message_container").html(data);
+						var timestamp = new Date().getTime();
+						$("#company_logo").attr('src', '<?php echo $this->baseUrl(); ?>/images/pgen-common/noimage375x150.jpg');
+						$("#btnCrop").hide();
+						$("#remove_link").hide();
+					}
+				});
+			}
+			
+		} else if(inAction == 'cancel') {
+			//show preview
+			hide_containers();
+			$("#current_container").show();
+		
+		} else if(inAction == 'crop') {
+			//show preview
+			hide_containers();
+			$("#preview_container").show();
+			
+		} else if(inAction == 'new') {
+			//show uploader
+			hide_containers();
+			$("#uploader_container").show();
+		}
+	}
+	
+	function hide_containers() {
+		$("#uploader_container").hide();
+		$("#preview_container").hide();
+		$("#current_container").hide();
+	}
+	
+	function getBase64Image(img) {
+	    // Create an empty canvas element
+	    var canvas = document.createElement("canvas");
+	    canvas.width = img.width;
+	    canvas.height = img.height;
+	
+	    // Copy the image contents to the canvas
+	    var ctx = canvas.getContext("2d");
+	    ctx.drawImage(img, 0, 0);
+	
+	    // Get the data-URL formatted image
+	    // Firefox supports PNG and JPEG. You could check img.src to
+	    // guess the original format, but be aware the using "image/jpg"
+	    // will re-encode the image.
+	    var dataURL = canvas.toDataURL("image/png");
+	
+	    return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+	}
+		
+	function compare_images() {
+		var default_image = new Image();
+		var current_image = new Image();
+		
+		default_image.src = $("#default_logo").attr("src");
+		current_image.src = $("#company_logo").attr("src");
+		
+		var default_base64 = getBase64Image(default_image);
+		var current_base64 = getBase64Image(current_image);
+		
+		if(default_base64 === current_base64) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+<?php $this->headScript()->captureEnd() ?>
+<?php
+//hide all containers
+$uploader_display = "none";
+$preview_display = "none";
+$current_display = "none";
+
+//set up default container to display
+$default_display = "current";
+$current_display = "block";
+
+//override defaults if images exist
+if(strlen($this->thumb_photo_exists) > 0) {
+	$default_display = "current";
+	$uploader_display = "none";
+	$preview_display = "none";
+	$current_display = "block";
+} else if(strlen($this->large_photo_exists) > 0) {
+	$default_display = "preview";
+	$uploader_display = "none";
+	$preview_display = "block";
+	$current_display = "none";
+}
+?>
+
+<div id="lightbox-panel" class="image_upload_container">
+	<input type="hidden" name="x1" value="" id="x1" />
+	<input type="hidden" name="y1" value="" id="y1" />
+	<input type="hidden" name="x2" value="" id="x2" />
+	<input type="hidden" name="y2" value="" id="y2" />
+	<input type="hidden" name="w" value="" id="w" />
+	<input type="hidden" name="h" value="" id="h" />
+	
+	<h2>Customize Report Appearance</h2>
+	<div id="modal_message_container" class="margined">
+	<?php
+        if(count($this->errMessages) > 0) {
+            //show the first error in the list of errors
+            foreach($this->errMessages as $key => $value) {
+                echo $value;
+                break;
+            }
+        } else {
+        	if(isset($this->message)) {
+            	echo $this->message;
+        	}
+        }
+    ?>
+	</div>
+	
+	<div id="uploader_container" class="clear" style="display: <?php echo $uploader_display; ?>">
+    	<p>Browse for your company logo and upload the file once selected. Optimal size is 375px by 150px with a white background.</p>
+    	<div id="upload_fields">
+    		<div id="upload_instructions">
+    			<p>Choose a <span style="color: red">.jpg</span> image file to upload. (1MB max):</p>
+    		</div>
+    		<div id="upload_element">
+    			<input type="file" name="uploadedfile" id="uploadedfile" size="60" class="upload_file" />
+    		</div>
+    	</div>
+	
+    	<div id="uploader_buttons_container" class="button_container_padding">
+	        <input type="submit" name="btnUpload" id="btnUpload" class="upload_file_button" value="Upload File" />
+	        <input type="button" name="btnCancel" id="btnCancel" class="" value="Cancel" onclick="javascript: do_action('cancel');" />
+       	</div>
+	</div>
+	
+	<div id="preview_container" class="clear" style="display: <?php echo $preview_display; ?>">
+		<p>Drag a box around an area of the large image to generate your company logo to be used in the report.</p>
+		<div id="preview_image" class="clear_center">
+			<img id="large_image" src="<?php echo $this->imageUrl; ?>/admin/showimage?page=<?php echo $this->page; ?>" alt="Create Thumbnail" class="outlined" />
+			<div id="thumb_image">
+				<img src="<?php echo $this->imageUrl; ?>/admin/showimage?page=<?php echo $this->page; ?>" width="375" style="position: relative;" alt="Thumbnail Preview" />
+			</div>
+		</div>
+	
+    	<div id="preview_buttons_container" class="clear_center button_container_padding">
+       		<input type="submit" name="save_thumb" id="save_thumb" value="Save Thumbnail" />
+	        <input type="button" name="btnCancel" id="btnCancel" class="" value="Cancel" onclick="javascript: do_action('cancel');" />
+       	</div>
+	</div>
+	
+	<div id="current_container" class="clear" style="display: <?php echo $current_display; ?>">
+		<?php if(!$this->admin) { ?>
+		<p>Below are the Default and Your Logos currently on file. If Your Logo is emtpy, the Default Logo will be used.</p>
+		<div id="default_image">
+			<p>Default Logo:</p>
+			<img id="default_logo" src="<?php echo $this->imageUrl; ?>/admin/showimage?size=thumb&page=<?php echo $this->page; ?>&default=true" class="outlined" alt="Default Logo" />
+		</div>
+		
+		<div id="current_image">
+			<p>Your Logo:</p>
+			<img id="company_logo" src="<?php echo $this->imageUrl; ?>/admin/showimage?size=thumb&page=<?php echo $this->page; ?>" class="outlined" alt="Company Logo" />
+			<?php if(!$this->admin) { ?>
+    		<div id="remove_link"><a href="javascript: void(0);" onclick="javascript: do_action('remove');" title="Remove Logo">X</a></div>
+    		<?php } ?>
+		</div>
+		
+		<div id="company_buttons" class="clear_center button_container_padding">
+        	<input type="button" name="btnCrop" id="btnCrop" class="" value="Re-Crop Current Logo" onclick="javascript: do_action('crop');" />
+        	<input type="button" name="btnNew" id="btnNew" class="" value="Upload New Logo" onclick="javascript: do_action('new');" />
+	        <input type="button" name="btnDone" id="btnDone" class="" value="Done" onclick="javascript: do_action('close');" />
+        </div>
+		<?php } else {?>
+		<p>Below is the Current Logo to be used as the default image in all reports.</p>
+		<div id="admin_current_image" class="clear_center">
+			<img id="company_logo" src="<?php echo $this->imageUrl; ?>/admin/showimage?size=thumb&page=<?php echo $this->page; ?>" class="outlined" alt="Company Logo" />
+			<div id="company_buttons" class="clear_center button_container_padding">
+	        	<input type="button" name="btnCrop" id="btnCrop" class="" value="Re-Crop Current Logo" onclick="javascript: do_action('crop');" />
+	        	<input type="button" name="btnNew" id="btnNew" class="" value="Upload New Logo" onclick="javascript: do_action('new');" />
+		        <input type="button" name="btnDone" id="btnDone" class="" value="Done" onclick="javascript: do_action('close');" />
+	        </div>
+		</div>
+		<?php } ?>
+	</div>
+	
+</div>

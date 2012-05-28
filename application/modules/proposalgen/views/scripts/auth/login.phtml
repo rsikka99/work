@@ -1,0 +1,39 @@
+<form id="loginForm" action="<?php echo $this->baseUrl() ?>/auth/login" method="post">
+    <table style="width: 300px" cellspacing="2" cellpadding="2" border="0">
+        <tbody>
+        	<tr>
+        		<td colspan="2">
+            		<div id="login_messages" style="height: 20px;">
+		        	<?php
+				        if(!empty($this->message)) {
+				            echo $this->message;
+				        } else {
+				        	echo "Please enter your username and password to login.";
+				        }
+			        ?>
+			        </div>
+			    </td>
+        	</tr>
+            <tr>
+				<td><label for="username">Username</label></td>
+				<td><input type="text" id="username" name="username" value="" /></td>
+            </tr>
+            <tr>
+				<td><label for="password">Password</label></td>
+				<td><input type="password" id="password" name="password" value="" /></td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+				<td colspan="2" style="text-align: center">
+					<input type="submit" name="login" value="Login" />
+				</td>
+            </tr>
+            <tr>
+            	<td colspan="2" style="text-align: center">
+            		<a href="<?php echo $this->baseUrl() ?>/auth/forgotpassword" class="login_link">Forgot Password</a>
+            	</td>
+            </tr>
+        </tfoot>
+    </table>
+</form>

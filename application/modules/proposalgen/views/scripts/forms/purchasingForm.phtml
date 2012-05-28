@@ -1,0 +1,92 @@
+<?php 
+$elements["numb_vendors"] = $this->element->numb_vendors;
+$elements["inkTonerOrderRadio"] = $this->element->inkTonerOrderRadio;
+$elements["numb_monthlyOrders"] = $this->element->numb_monthlyOrders;
+?>
+<?php $this->headScript()->captureStart('append','text/javascript') ?>
+	
+	$(document).ready(function() {
+	
+		//set default
+		if(!$("#purchasing-inkTonerOrderRadio-Timespermonth").is(':checked')) {
+    		$("#17").val('');
+    		$("#17").attr('disabled','disabled');
+    	}
+    	
+    	//add option click events
+    	$("#purchasing-inkTonerOrderRadio-Daily").click(function() {
+    		$("#17").val('');
+    		$("#17").attr('disabled','disabled');
+    	});
+    	$("#purchasing-inkTonerOrderRadio-Weekly").click(function() {
+    		$("#17").val('');
+    		$("#17").attr('disabled','disabled');
+    	});
+    	$("#purchasing-inkTonerOrderRadio-Timespermonth").click(function() {
+    		$("#17").removeAttr('disabled');
+    	});
+    	
+	});
+
+<?php $this->headScript()->captureEnd() ?>
+<form id="purchasing" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>">
+    <table border="0" width="100%">
+    	<col width="60%" /><col width="40%" />
+    	<tr>
+    		<td valign="top" style="padding-right: 10px;"><?php echo $elements["numb_vendors"]->renderLabel(); ?></td>
+    		<td valign="top"><?php echo $elements["numb_vendors"]->renderViewHelper(); ?></td>
+    	</tr>
+    	<tr>
+    		<td>&nbsp;</td>
+    		<td><?php echo $elements["numb_vendors"]->renderErrors(); ?></td>
+    	</tr>
+    	<tr>
+    		<td valign="top" colspan="2" style="padding-bottom: 10px;"><?php echo $elements["inkTonerOrderRadio"]->renderLabel(); ?></td>
+    	</tr>
+    	<tr>
+    		<td valign="top" style="padding-left: 30px;">
+    		    <?php 
+		            echo $this->formRadio(
+		                $this->element->inkTonerOrderRadio->getFullyQualifiedName(),
+		                $this->element->inkTonerOrderRadio->getValue(),
+		                null,
+		                array('Daily' => $this->element->inkTonerOrderRadio->getMultiOption('Daily')));
+		        ?>
+		    </td>
+    		<td>&nbsp;</td>
+		</tr>
+    	<tr>
+    		<td valign="top" style="padding-left: 30px;">
+    		    <?php 
+		            echo $this->formRadio(
+		                $this->element->inkTonerOrderRadio->getFullyQualifiedName(),
+		                $this->element->inkTonerOrderRadio->getValue(),
+		                null,
+		                array('Weekly' => $this->element->inkTonerOrderRadio->getMultiOption('Weekly')));
+		        ?>
+		    </td>
+    		<td>&nbsp;</td>
+		</tr>
+    	<tr>
+    		<td style="padding-left: 30px;">
+    		    <?php 
+		            echo $this->formRadio(
+		                $this->element->inkTonerOrderRadio->getFullyQualifiedName(),
+		                $this->element->inkTonerOrderRadio->getValue(),
+		                null,
+		                array('Times per month' => $this->element->inkTonerOrderRadio->getMultiOption('Times per month')));
+		        ?>
+		        <?php echo $elements["numb_monthlyOrders"]->renderViewHelper() . ' ' . $elements["numb_monthlyOrders"]->renderDescription(); ?>
+		    </td>
+    		<td>&nbsp;</td>
+		</tr>
+    	<tr>
+    		<td colspan="2" style="padding-left: 30px;"><?php echo $elements["numb_monthlyOrders"]->renderErrors(); ?></td>
+    	</tr>
+    </table>
+	<br/>
+    <div id="submitBtns" class="submitBar">
+		<?php echo $this->element->save ?>
+	    <?php echo $this->element->back_button ?>
+	</div>
+</form>

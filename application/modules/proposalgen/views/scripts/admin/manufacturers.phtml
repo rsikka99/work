@@ -1,0 +1,93 @@
+<?php
+/**
+ * manufacturers.phtml
+ * 
+ * @author	John Sadler
+ * @version	v1.0 
+ */
+?>
+
+<?php 
+	//Capture the following jquery javascript code, and append it to the headscript variable in the main layout.	
+	$this->headScript()->captureStart('append','text/javascript') 
+	/*
+	* This script is used to repopulate the contents of a form upon the user
+    * changing the selected item in a drop box.  An ajax call is made to a retrieve
+    * new json formatted user data from a dedicated data page (this page queries
+    * the database).  
+    *
+    * @requires: jquery javascript library must be included in the html
+    *            head section BEFORE this script is included.
+    *
+    * http://jquery.com/
+    */
+	?>
+	$(document).ready(function() {
+		
+		var manufacturername = $("#select_manufacturer option:selected").text();
+        				
+		//Handle updating form content on the edit user page (admin/edituser)
+		$("#select_manufacturer").change(function(event) {
+		    var manufacturerid = $("#select_manufacturer").val();
+		    var manufacturername = $("#select_manufacturer option:selected").text();
+		   		
+		    $.ajax({
+		        beforeSend: function() {
+		            //disable form elements while loading new info
+		            $("#manufacturer_name").attr('disabled', 'disabled');
+		        },
+		        url: '<?php echo $this->baseUrl(); ?>/admin/manufacturerdetails?manufacturerid='+manufacturerid,
+		        success: function(data) {
+		            var obj = jQuery.parseJSON(data);
+		            $("#manufacturer_name").val(obj.manufacturer_name);
+		        },
+		        error: function() {
+		            //Display an error if the selected user can not
+		            //be found.
+		            alert("ERROR");
+		
+		            //$('.errors').text("Error:  Device not found");
+		            //$('.errors').show();
+		        },
+		        complete: function() {
+		            //enable form elements after they are filled
+		            $("#manufacturer_name").removeAttr('disabled');
+		        }
+		    });
+		    
+			if($("#select_manufacturer").val() == "0") {
+				$("#delete_manufacturer").attr('disabled','disabled');
+			} else {		
+			    //empty and hide the error message box
+			    $('.errors').empty();
+			    $('#message_container').html('');
+				$("#delete_manufacturer").removeAttr('disabled');
+			}
+			
+		});
+		
+		<?php if($this->action == 'ticket') { ?>
+			document.getElementById("manufacturers_form").enctype = "";
+			document.getElementById("manufacturers_form").action = "<?php echo $this->baseUrl(); ?>/managedevices/manageticketdevices";
+			document.getElementById("manufacturers_form").submit();
+		<?php }?> 
+		<?php if ($this->action == 'mapping') { ?>
+			document.getElementById("manufacturers_form").enctype = "";
+			document.getElementById("manufacturers_form").action = "<?php echo $this->baseUrl(); ?>/managedevices/managemappingdevices";
+			document.getElementById("manufacturers_form").submit();
+		<?php }?>
+		
+	});
+	
+<?php $this->headScript()->captureEnd() ?>
+
+<h2><?php echo $this->title;?></h2>
+
+<div id="message_container" class="margined">
+	<?php if($this->message) echo ($this->message); ?>
+</div>
+
+<div id="manufacturer_container" class="margined">
+	<?php echo $this->manufacturersForm; ?>
+</div>
+

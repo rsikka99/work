@@ -1,0 +1,34 @@
+<?php
+echo '<?xml version="1.0" encoding="UTF-8" ?>';
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title><?php echo $this->title; ?></title>
+        <link rel="stylesheet" href="<?php echo $this->theme("proposalgenerator/error.css") ?>" type="text/css" media="all" />
+    </head>
+
+    <body>
+        <p class='userErrorMessage'><?php echo $this->userFriendlyMessage; ?></p>
+        <p><strong>Oops! We are sorry, it looks like something broke.</strong></p>
+        <p>Please try again and if the problem continues please contact your system administrator.</p>
+        <h2>Exception Trace</h2>
+        <?php if (isset($this->exceptions)) : ?>
+        	<?php for ($i = count($this->exceptions) - 1; $i >= 0; $i--) :?>
+        	<?php $currentException = $this->exceptions[$i];?>
+            <p class='errormessage'>
+            <?php
+                echo nl2br("\n\n#$i = " . get_class($currentException) . ": " . str_replace(APPLICATION_PATH, "", $currentException->getFile()) . " @ Line " . $currentException->getLine() . ":\n" . $currentException->getMessage());
+            ?>
+            </p>
+            <h3>Stack Trace</h3>
+            <pre class="stackTrace"><?php echo $currentException->getTraceAsString(); ?></pre>
+            <?php endfor; ?>
+        <?php endif; ?>
+
+
+    </body>
+
+</html>

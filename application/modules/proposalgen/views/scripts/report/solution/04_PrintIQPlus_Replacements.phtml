@@ -1,0 +1,322 @@
+<?php
+/**
+	REPLACEMENT DEVICE VARIABLES
+ */
+$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACMENT_BW] = 'MONOCHROME';
+$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACMENT_BWMFP] = 'MONOCHROME MFP';
+$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACMENT_COLOR] = 'COLOR';
+$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACMENT_COLORMFP] = 'COLOR MFP';
+
+$printerTypes[Proposalgen_Model_ReplacementDevice::REPLACMENT_BW] = 'Monochrome printer(s)';
+$printerTypes[Proposalgen_Model_ReplacementDevice::REPLACMENT_BWMFP] = 'Monochrome MFP(s)';
+$printerTypes[Proposalgen_Model_ReplacementDevice::REPLACMENT_COLOR] = 'Color printer(s)';
+$printerTypes[Proposalgen_Model_ReplacementDevice::REPLACMENT_COLORMFP] = 'Color MFP(s)';
+
+$replacementDevices = $this->proposal->getReplacementDevices();
+
+$devicesToBeReplaced[Proposalgen_Model_ReplacementDevice::REPLACMENT_BW] = $this->proposal->getDevicesToBeReplaced()->BlackAndWhite;
+$devicesToBeReplaced[Proposalgen_Model_ReplacementDevice::REPLACMENT_BWMFP] = $this->proposal->getDevicesToBeReplaced()->BlackAndWhiteMFP;
+$devicesToBeReplaced[Proposalgen_Model_ReplacementDevice::REPLACMENT_COLOR] = $this->proposal->getDevicesToBeReplaced()->Color;
+$devicesToBeReplaced[Proposalgen_Model_ReplacementDevice::REPLACMENT_COLORMFP] = $this->proposal->getDevicesToBeReplaced()->ColorMFP;
+
+$reportHasDevicesToReplace = false;
+foreach ($devicesToBeReplaced as $deviceList)
+{
+    if (count($deviceList) > 0)
+    {
+        $reportHasDevicesToReplace = true;
+        break;
+    }
+}
+if ($reportHasDevicesToReplace) : // See "endif; // $reportHasDevicesToReplace"  for the end
+
+echo $this->pageEnd;
+echo $this->pageStart;
+?>
+	<?php echo $this->noBreakStart; ?>
+		<div class="h1">Solution 2: Hybrid Program of PrintIQ&reg; and PrintIQ Plus&reg;</div>
+		<p style="margin-bottom: 10pt;">There is no need to invest in expensive printing hardware. Our PrintIQ Plus program provides you with an economical flat-rate
+		option to replace your old, expensive hardware with equipment that has the features and functionality you need. Remaining devices can be managed under our PrintIQ program.</p>
+		
+		<div class="pheader">Program Components</div>
+		<p style="margin-bottom: 8pt;">Get new printing equipment on a flat monthly rate with the PrintIQ&reg; Plus program:</p>
+		<ul class="bold">
+			<li>Starting at $99/month</li>
+			<li>Includes hardware and all related supplies and service</li>
+			<li>Equipment you are keeping can be transferred to PrintIQ&reg;</li>
+		</ul>
+		
+		<div class="pheader">Recommended Hardware Replacements</div>
+		<p>Based on our assessment of your printing environment, we have determined which devices are costing
+		you the most on a monthly basis. The following recommendations maintain your current levels of copy,
+		scan and fax functionality, but you may choose to upgrade your hardware to add more of these
+		productivity-enhancing features.</p>
+	<?php echo $this->noBreakEnd; ?>
+
+<?php foreach ($replacementDevices as $ctr => $replacementDevice) :
+	$printIQCost = 0; $replacementSavings = 0; $currentCost = 0;?>
+	<?php if (count($devicesToBeReplaced[$ctr]) > 0) :?>
+        <?php echo $this->noBreakStart; ?>
+			<p style="margin-bottom: 10pt;">We recommend replacing the following <strong><?php echo count($devicesToBeReplaced[$ctr]); ?></strong> <?php echo $printerTypes[$ctr]?> listed below with the <strong><?php echo $replacementDevice->MasterDevice->Manufacturer->ManufacturerName; ?> <?php echo $replacementDevice->MasterDevice->PrinterModel; ?></strong>,which offers the following benefits:</p>
+    		<ul>
+    			<li><strong>Flat monthly rate of $<?php echo number_format($replacementDevice->MonthlyRate)?> for up to 10,000 pages</strong></li>
+    			<li>Prints up to <?php echo $replacementDevice->PrintSpeed; ?> pages per minute in monochrome</li>
+    			<li>Up to <?php echo $replacementDevice->Resolution; ?> resolution</li>
+    			<?php if($replacementDevice->MasterDevice->IsDuplex) :?>
+    					<li>Standard duplexing</li>
+    			<?php endif; ?>
+    			<li>ENERGY STAR qualified</li>
+    		</ul>
+        <?php echo $this->noBreakEnd; ?>
+        <?php echo $this->noBreakStart; ?>
+    		<table class="genericTable">
+    			<thead>
+    				<tr class="center">
+    					<th width="160">Device Name</th>
+    					<th width="120">Serial No.</th>
+    					<th width="70">Monthly <br />Volume</th>
+    					<th width="60">Current <br/>Annual <br/>Cost*</th>
+    					<th width="60">PrintIQ&reg; Plus <br/>Annual Cost</th>
+    					<th width="70">Annual <br/>Replacement <br/>Savings</th>
+    				</tr>
+    			</thead>
+    			<tbody>
+    
+    				<?php foreach ($devicesToBeReplaced[$ctr] as $device) :?>
+    				<?php $SerialNo = ($device->SerialNumber=="") ? 'Unknown' : $device->SerialNumber; ?>
+    				<?php $modelName = str_replace("Hewlett-Packard", "HP", $device->getUploadDataCollector()->getModelName()) ?>
+    				<tr class="center">
+    					<td class="left"><?php echo $modelName ?></td>
+    					<td><?php echo $SerialNo ?></td>
+    					<td><?php echo number_format($device->getAverageMonthlyPageCount()); ?></td>
+    					<td>$<?php echo number_format($device->getMonthlyRate() * 12); ?></td>
+    					<td>$<?php echo number_format($replacementDevice->getMonthlyRate() * 12); ?></td>
+    					<td class="red">$<?php echo number_format(($device->getMonthlyRate() * 12) - ($replacementDevice->getMonthlyRate() * 12)); ?></td>
+    				</tr>
+    				<?php
+    				// TODO: This should not have caclulations in a view script. Leaving it in because it works for now.
+                            $replacementSavings += ($device->getMonthlyRate() * 12) - ($replacementDevice->getMonthlyRate() * 12);
+    					    $currentCost += $device->getMonthlyRate() * 12;
+    					    $printIQCost += $replacementDevice->getMonthlyRate() * 12;
+    				endforeach; ?>
+    				<tr class="bold center">
+    					<td colspan="3" class="right">TOTAL</td>
+    					<td>$<?php echo number_format($currentCost); ?></td>
+    					<td>$<?php echo number_format($printIQCost); ?></td>
+    					<td class="red">$<?php echo number_format($replacementSavings); ?></td>
+    				</tr>
+    			</tbody>
+    		</table>
+    		<em>* Monthly cost includes both toner and non-toner expenses such as service, hardware and administration.</em>
+        <?php echo $this->noBreakEnd; ?>
+    	<br />
+    	<br />
+    <?php endif; ?>
+<?php endforeach; ?>
+		
+	<?php echo $this->noBreakStart; ?>
+		<?php if ($this->proposal->getDevicesToBeReplaced()->LeftOver > 0) : ?>
+			<p>We recommend transferring the remaining <strong><?php echo count($this->proposal->getDevicesToBeReplaced()->LeftOver); ?></strong> printing devices to the PrintIQ&reg; program:</p>
+			<table style="font-size: 10.5pt;">
+				<tbody>
+					<tr>
+						<td style="width: 575px;">Monochrome cost per page</td>
+						<td class="right">$<?php echo number_format($this->proposal->MPSBlackAndWhiteCPP,3); ?></td>
+					</tr>
+					<tr>
+						<td>Color cost per page</td>
+						<td class="right">$<?php echo number_format($this->proposal->MPSColorCPP,3); ?></td>
+					</tr>
+					<tr>
+						<td>Estimated monochrome pages</td>
+						<td class="right"><?php echo number_format($this->proposal->getLeftOverBlackAndWhitePageCount()); ?></td>
+					</tr>
+					<tr>
+						<td>Estimated color pages</td>
+						<td class="right"><?php echo number_format($this->proposal->getLeftOverColorPageCount()); ?></td>
+					</tr>
+					<tr>
+						<td>Estimated cost of monochrome pages</td>
+						<td class="right">$<?php echo number_format(($this->proposal->LeftOverBlackAndWhitePageCount * $this->proposal->MPSBlackAndWhiteCPP),0);?></td>
+					</tr>
+					<tr>
+						<td>Estimated cost of color pages</td>
+						<td class="right">$<?php echo number_format(($this->proposal->LeftOverColorPageCount * $this->proposal->MPSColorCPP),0)?></td>
+					</tr>
+					<tr>
+						<td>Processing 1 invoice/month @ $<?php echo $this->proposal->CostOfExecutingSuppliesOrder?></td>
+						<td class="right">$<?php echo number_format($this->proposal->InternalAdminCost); ?></td>
+					</tr>
+					<tr>
+						<td>External service</td>
+						<td class="right">Included</td>
+					</tr>
+					<tr>
+						<td>Internal IT support for printers</td>
+						<td class="right">$<?php echo number_format($this->proposal->AnnualITCost * 0.5); ?></td>
+					</tr>
+					<tr>
+						<td>Additional hardware purchases</td>
+						<td class="right">$0</td>
+					</tr>
+					<tr>
+						<td style="width: 575px;"><em>With our recommended replacements, you are unlikely to require other new hardware this year. If you do, it can be obtained through Office Depot and may result in additional savings.</em></td>
+						<td class="right"></td>
+					</tr>
+					<tr class="bold">
+						<td>Total annual cost under PrintIQ&reg;</td>
+						<td class="right">$<?php echo number_format($this->proposal->LeftOverPrintIQCost); ?></td>
+					</tr>
+					<tr class="bold">
+						<td>Current annual cost of these devices</td>
+						<td class="right">$<?php echo number_format($this->proposal->CostOfRemainingDevices); ?></td>
+					</tr>
+					<tr class="bold red">
+						<td>Total annual savings for PrintIQ&reg;</td>
+						<td class="right">$<?php echo number_format($this->proposal->CostOfRemainingDevices - $this->proposal->LeftOverPrintIQCost); ?></td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+		<?php endif; ?>
+		<table class="genericTable right" style="line-height: 11pt;">
+			<thead>
+				<tr>
+					<th width="340" class="left">Summary</th>
+					<th width="80">Current <br/>Annual Cost</th>
+					<th>Proposed Annual <br/>Cost</th>
+					<th>Estimated <br/>Annual Savings</th>
+				</tr>
+			</thead>
+				<tbody>
+				    <?php if (count($this->proposal->DevicesToBeReplaced->BlackAndWhite) > 0) : ?>
+					<tr>
+						<td class="left">PrintIQ&reg; Plus&reg; - Monochrome Devices </td>
+						<td>$<?php echo number_format($this->proposal->CurrentCostOfReplacedBlackAndWhitePrinters); ?></td>
+						<td>$<?php echo number_format($this->proposal->ProposedCostOfReplacedBlackAndWhitePrinters); ?></td>
+						<td class="red">$<?php echo number_format($this->proposal->CurrentCostOfReplacedBlackAndWhitePrinters - $this->proposal->ProposedCostOfReplacedBlackAndWhitePrinters); ?></td>
+					</tr>
+					<?php endif; ?>
+					<?php if (count($this->proposal->DevicesToBeReplaced->BlackAndWhiteMFP) > 0) : ?>
+					<tr>
+						<td class="left">PrintIQ&reg; Plus&reg; - Monochrome MFP Devices </td>
+						<td>$<?php echo number_format($this->proposal->CurrentCostOfReplacedBlackAndWhiteMFPPrinters); ?></td>
+						<td>$<?php echo number_format($this->proposal->ProposedCostOfReplacedBlackAndWhiteMFPPrinters); ?></td>
+						<td class="red">$<?php echo number_format($this->proposal->CurrentCostOfReplacedBlackAndWhiteMFPPrinters - $this->proposal->ProposedCostOfReplacedBlackAndWhiteMFPPrinters); ?></td>
+					</tr>
+					<?php endif; ?>
+					<?php if (count($this->proposal->DevicesToBeReplaced->Color) > 0) : ?>
+					<tr>
+						<td class="left">PrintIQ&reg; Plus&reg; - Color Devices </td>
+						<td>$<?php echo number_format($this->proposal->CurrentCostOfReplacedColorPrinters); ?></td>
+						<td>$<?php echo number_format($this->proposal->ProposedCostOfReplacedColorPrinters); ?></td>
+						<td class="red">$<?php echo number_format($this->proposal->CurrentCostOfReplacedColorPrinters - $this->proposal->ProposedCostOfReplacedColorPrinters); ?></td>
+					</tr>
+					<?php endif; ?>
+					<?php if (count($this->proposal->DevicesToBeReplaced->ColorMFP) > 0) : ?>
+					<tr>
+						<td class="left">PrintIQ&reg; Plus&reg; - Color MFP Devices </td>
+						<td>$<?php echo number_format($this->proposal->CurrentCostOfReplacedColorMFPPrinters); ?></td>
+						<td>$<?php echo number_format($this->proposal->ProposedCostOfReplacedColorMFPPrinters); ?></td>
+						<td class="red">$<?php echo number_format($this->proposal->CurrentCostOfReplacedColorMFPPrinters - $this->proposal->ProposedCostOfReplacedColorMFPPrinters); ?></td>
+					</tr>
+					<?php endif; ?>
+					
+					<?php if (count($this->proposal->DevicesToBeReplaced->LeftOver) > 0) : ?>
+					<tr>
+						<td class="left">PrintIQ&reg; - Remaining print devices</td>
+						<td>$<?php echo number_format($this->proposal->CostOfRemainingDevices); ?></td>
+						<td>$<?php echo number_format($this->proposal->LeftOverPrintIQCost); ?></td>
+						<td class="red">$<?php echo number_format($this->proposal->CostOfRemainingDevices - $this->proposal->LeftOverPrintIQCost); ?></td>
+					</tr>
+					<?php endif; ?>
+					<tr class="bold">
+						<td>TOTAL</td>
+						<td>$<?php echo number_format($this->proposal->TotalPurchasedAnnualCost); ?></td>
+						<td>$<?php echo number_format($this->proposal->TotalProposedAnnualCost); ?></td>
+						<td class="red">$<?php echo number_format($this->proposal->TotalAnnualSavings); ?></td>
+					</tr>
+				</tbody>
+		</table>
+		<br /> <br />
+		<div class="annualSavings">
+			<table>
+				<tbody>
+					<tr>
+						<td width="500" class="left"><strong>Total annual savings with PrintIQ&reg;</strong></td>
+						<td width="125" class="right"><strong>$<?php echo number_format($this->proposal->TotalAnnualSavings); ?></strong></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<br />
+		
+		<?php else : echo $this->noBreakStart; ?>
+		<?php endif; // end if($reportHasDevicesToReplace) ?>
+		<p>This quote is valid for 7 days from the date on the cover of this document. Depending on your requirements, you may be subject to additional charges for installation, insurance, and documentation fees. Please review the contract for details.</p>
+	<?php echo $this->noBreakEnd; ?>
+	
+	<?php echo $this->noBreakStart; ?>
+	
+	<?php if (count($this->proposal->DevicesToBeReplaced->OverMaxLeasedCapacity) > 0) : ?>
+	<br/><br/>
+	<div class="pheader">Additional Replacement Suggestions</div>
+	<p>The following devices should also be considered for replacement because they print more than 7,000 pages per month and require further discussion to determine the best replacement device.</p>
+    		<table class="genericTable">
+    			<thead>
+    				<tr class="center">
+    					<th width="160">Device Name</th>
+    					<th width="120">Serial No.</th>
+    					<th width="140">Monthly Volume</th>
+    					<th width="120">Current Annual Cost*</th>
+    				</tr>
+    			</thead>
+    			<tbody>
+    				<?php foreach ($this->proposal->DevicesToBeReplaced->OverMaxLeasedCapacity as $device) :?>
+    				<?php $SerialNo = ($device->SerialNumber=="") ? 'Unknown' : $device->SerialNumber; ?>
+    				<?php $modelName = str_replace("Hewlett-Packard", "HP", $device->getUploadDataCollector()->getModelName()) ?>
+    				<tr class="center">
+    					<td class="left"><?php echo $modelName ?></td>
+    					<td><?php echo $SerialNo ?></td>
+    					<td><?php echo number_format($device->getAverageMonthlyPageCount()); ?></td>
+    					<td>$<?php echo number_format($device->getMonthlyRate() * 12); ?></td>
+    				</tr>
+    				<?php endforeach; ?>
+    			</tbody>
+    		</table>
+    		<em>* Monthly cost includes both toner and non-toner expenses such as service, hardware and administration.</em>
+	<?php endif; ?>
+	
+	
+	<?php if (count($this->proposal->DevicesToBeReplaced->NoTonerLevels) > 0) : ?>
+	<br/><br/>
+	<p>The following devices should also be considered for replacement because they do not report toner levels and cannot be accommodated by a just-in-time supplies fulfillment program.</p>
+    		<table class="genericTable">
+    			<thead>
+    				<tr class="center">
+    					<th width="160">Device Name</th>
+    					<th width="120">Serial No.</th>
+    					<th width="140">Monthly Volume</th>
+    					<th width="120">Current Annual Cost*</th>
+    				</tr>
+    			</thead>
+    			<tbody>
+    				<?php foreach ($this->proposal->DevicesToBeReplaced->NoTonerLevels as $device) :?>
+    				<?php $SerialNo = ($device->SerialNumber=="") ? 'Unknown' : $device->SerialNumber; ?>
+    				<?php $modelName = str_replace("Hewlett-Packard", "HP", $device->getUploadDataCollector()->getModelName()) ?>
+    				<tr class="center">
+    					<td class="left"><?php echo $modelName ?></td>
+    					<td><?php echo $SerialNo ?></td>
+    					<td><?php echo number_format($device->getAverageMonthlyPageCount()); ?></td>
+    					<td>$<?php echo number_format($device->getMonthlyRate() * 12); ?></td>
+    				</tr>
+    				<?php endforeach; ?>
+    			</tbody>
+    		</table>
+    		<em>* Monthly cost includes both toner and non-toner expenses such as service, hardware and administration.</em>
+		
+	<?php endif; ?>
+	<?php echo $this->noBreakEnd; ?>
+<?php
+    echo $this->pageEnd;
+ ?>
