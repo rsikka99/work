@@ -72,6 +72,22 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         
         // Initialize the twitter bootstrap menu plugin
         $view->registerHelper(new My_View_Helper_Navigation_Menu(), 'menu');
+        
+        // Setup default styles
+        $view->headLink()->prependStylesheet($view->theme("/css/styles.css"));
+        $view->headLink()->prependStylesheet($view->baseUrl("/css/styles.css"));
+        $view->headLink()->prependStylesheet($view->theme("/jquery/ui/grid/ui.jqgrid.css"));
+        $view->headLink()->prependStylesheet($view->theme("/jquery/ui/jquery-ui-1.8.20.custom.css"));
+        $view->headLink()->prependStylesheet($view->baseUrl("/css/bootstrap.min.css"));
+        
+        
+        // Add default scripts
+        $view->headScript()->prependFile($view->baseUrl("/js/script.js"));
+        $view->headScript()->prependFile($view->baseUrl("/js/plugins.js"));
+        $view->headScript()->prependFile($view->baseUrl("/js/libs/bootstrap.min.js"));
+        $view->headScript()->prependFile($view->baseUrl("/js/libs/jqgrid/jquery.jqGrid.min.js"));
+        $view->headScript()->prependFile($view->baseUrl("/js/libs/jqgrid/i18n/grid.locale-en.js"));
+        $view->headScript()->prependFile($view->baseUrl("/js/libs/jquery-ui-1.8.20.custom.min.js"));
     }
 
     /**
