@@ -1,22 +1,18 @@
 <?php
 /**
  * View Script for survey/start
+ *
  */
 ?>
 <h2><?php echo $this->title?></h2>
 <form>
-	<dl class="survey_form">
-		<dt class="botMenu">
-			<p class="margined">The following questionnaire will collect....blah
-				blah, insert emily description here.</p>
-			<p class="margined">
-				<button type="button"
-					onclick="window.location='<?php echo $this->baseUrl();?>/survey/general';"
-					id="start_survey" name="start_survey">Start Questionnaire</button>
-				<button type="button"
-					onclick="window.location='<?php echo $this->baseUrl();?>/';"
-					id="back" name="back">Back</button>
-			</p>
-		</dt>
-	</dl>
+<dl class="survey_form">
+	<dt class="botMenu">
+		<p class="margined">The following questionnaire will collect....blah blah, insert emily description here.</p>
+		<p class="margined">
+			<button type="button" onclick="window.location='<?php echo $this->baseUrl();?>/survey/general';" id="start_survey" name="start_survey">Start Questionnaire</button>
+			<button type="button" onclick="window.location='<?php echo $this->baseUrl();?>/';" id="back" name="back">Back</button>
+		</p>
+	</dt>
+</dl>
 </form>

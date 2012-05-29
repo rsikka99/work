@@ -2,7 +2,6 @@
 
 /**
  * Class Proposalgen_Model_UploadDataCollector
- *
  * @author "John Sadler"
  */
 class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
@@ -67,12 +66,12 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
 
     /**
      * Constructor that takes a csv row and populates the model
-     *
-     * @param array $csvRow            
+     * @param array $csvRow
      */
     public function UploadDataCollector ($csvRow)
     {
-        $manufacturerName = strtolower($csvRow ['manufacturer']);
+        $manufacturerName = strtolower($csvRow['manufacturer']);
+        
     }
 
     /**
@@ -82,12 +81,12 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     {
         $valid = false;
         
+        
         $this->setInvalidData($valid);
         return $valid;
     }
 
     /**
-     *
      * @return the $UploadDataCollectorId
      */
     public function getUploadDataCollectorId ()
@@ -101,8 +100,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UploadDataCollectorId            
+     * @param field_type $UploadDataCollectorId
      */
     public function setUploadDataCollectorId ($UploadDataCollectorId)
     {
@@ -111,7 +109,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportId
      */
     public function getReportId ()
@@ -125,8 +122,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportId            
+     * @param field_type $ReportId
      */
     public function setReportId ($ReportId)
     {
@@ -135,7 +131,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DevicesPfId
      */
     public function getDevicesPfId ()
@@ -149,8 +144,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DevicesPfId            
+     * @param field_type $DevicesPfId
      */
     public function setDevicesPfId ($DevicesPfId)
     {
@@ -159,7 +153,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $Startdate
      */
     public function getStartdate ()
@@ -173,8 +166,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $Startdate            
+     * @param field_type $Startdate
      */
     public function setStartdate ($Startdate)
     {
@@ -183,7 +175,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $Enddate
      */
     public function getEnddate ()
@@ -197,8 +188,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $Enddate            
+     * @param field_type $Enddate
      */
     public function setEnddate ($Enddate)
     {
@@ -207,7 +197,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $PrinterModelid
      */
     public function getPrinterModelid ()
@@ -221,8 +210,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $PrinterModelid            
+     * @param field_type $PrinterModelid
      */
     public function setPrinterModelid ($PrinterModelid)
     {
@@ -231,7 +219,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IpAddress
      */
     public function getIpAddress ()
@@ -244,8 +231,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IpAddress            
+     * @param field_type $IpAddress
      */
     public function setIpAddress ($IpAddress)
     {
@@ -254,7 +240,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $SerialNumber
      */
     public function getSerialNumber ()
@@ -268,8 +253,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $SerialNumber            
+     * @param field_type $SerialNumber
      */
     public function setSerialNumber ($SerialNumber)
     {
@@ -278,7 +262,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ModelName
      */
     public function getModelName ()
@@ -292,8 +275,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ModelName            
+     * @param field_type $ModelName
      */
     public function setModelName ($ModelName)
     {
@@ -302,7 +284,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $Manufacturer
      */
     public function getManufacturer ()
@@ -316,8 +297,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $Manufacturer            
+     * @param field_type $Manufacturer
      */
     public function setManufacturer ($Manufacturer)
     {
@@ -326,7 +306,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IsColor
      */
     public function getIsColor ()
@@ -340,8 +319,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IsColor            
+     * @param field_type $IsColor
      */
     public function setIsColor ($IsColor)
     {
@@ -350,7 +328,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IsCopier
      */
     public function getIsCopier ()
@@ -364,8 +341,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IsCopier            
+     * @param field_type $IsCopier
      */
     public function setIsCopier ($IsCopier)
     {
@@ -374,7 +350,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IsScanner
      */
     public function getIsScanner ()
@@ -388,8 +363,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IsScanner            
+     * @param field_type $IsScanner
      */
     public function setIsScanner ($IsScanner)
     {
@@ -398,7 +372,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IsFax
      */
     public function getIsFax ()
@@ -412,8 +385,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IsFax            
+     * @param field_type $IsFax
      */
     public function setIsFax ($IsFax)
     {
@@ -422,7 +394,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $PpmBlack
      */
     public function getPpmBlack ()
@@ -436,8 +407,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $PpmBlack            
+     * @param field_type $PpmBlack
      */
     public function setPpmBlack ($PpmBlack)
     {
@@ -446,7 +416,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $PpmColor
      */
     public function getPpmColor ()
@@ -460,8 +429,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $PpmColor            
+     * @param field_type $PpmColor
      */
     public function setPpmColor ($PpmColor)
     {
@@ -470,7 +438,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DateIntroduction
      */
     public function getDateIntroduction ()
@@ -484,8 +451,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DateIntroduction            
+     * @param field_type $DateIntroduction
      */
     public function setDateIntroduction ($DateIntroduction)
     {
@@ -494,7 +460,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DateAdoption
      */
     public function getDateAdoption ()
@@ -508,8 +473,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DateAdoption            
+     * @param field_type $DateAdoption
      */
     public function setDateAdoption ($DateAdoption)
     {
@@ -518,7 +482,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DiscoveryDate
      */
     public function getDiscoveryDate ()
@@ -532,8 +495,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DiscoveryDate            
+     * @param field_type $DiscoveryDate
      */
     public function setDiscoveryDate ($DiscoveryDate)
     {
@@ -542,7 +504,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $BlackProdCodeOem
      */
     public function getBlackProdCodeOem ()
@@ -556,8 +517,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $BlackProdCodeOem            
+     * @param field_type $BlackProdCodeOem
      */
     public function setBlackProdCodeOem ($BlackProdCodeOem)
     {
@@ -566,7 +526,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $BlackYield
      */
     public function getBlackYield ()
@@ -580,8 +539,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $BlackYield            
+     * @param field_type $BlackYield
      */
     public function setBlackYield ($BlackYield)
     {
@@ -590,7 +548,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $BlackProdCostOem
      */
     public function getBlackProdCostOem ()
@@ -604,8 +561,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $BlackProdCostOem            
+     * @param field_type $BlackProdCostOem
      */
     public function setBlackProdCostOem ($BlackProdCostOem)
     {
@@ -614,7 +570,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $CyanProdCodeOem
      */
     public function getCyanProdCodeOem ()
@@ -628,8 +583,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $CyanProdCodeOem            
+     * @param field_type $CyanProdCodeOem
      */
     public function setCyanProdCodeOem ($CyanProdCodeOem)
     {
@@ -638,7 +592,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $CyanYield
      */
     public function getCyanYield ()
@@ -652,8 +605,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $CyanYield            
+     * @param field_type $CyanYield
      */
     public function setCyanYield ($CyanYield)
     {
@@ -662,7 +614,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $CyanProdCostOem
      */
     public function getCyanProdCostOem ()
@@ -676,8 +627,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $CyanProdCostOem            
+     * @param field_type $CyanProdCostOem
      */
     public function setCyanProdCostOem ($CyanProdCostOem)
     {
@@ -686,7 +636,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $MagentaProdCodeOem
      */
     public function getMagentaProdCodeOem ()
@@ -700,8 +649,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MagentaProdCodeOem            
+     * @param field_type $MagentaProdCodeOem
      */
     public function setMagentaProdCodeOem ($MagentaProdCodeOem)
     {
@@ -710,7 +658,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $MagentaYield
      */
     public function getMagentaYield ()
@@ -724,8 +671,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MagentaYield            
+     * @param field_type $MagentaYield
      */
     public function setMagentaYield ($MagentaYield)
     {
@@ -734,7 +680,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $MagentaProdCostOem
      */
     public function getMagentaProdCostOem ()
@@ -748,8 +693,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MagentaProdCostOem            
+     * @param field_type $MagentaProdCostOem
      */
     public function setMagentaProdCostOem ($MagentaProdCostOem)
     {
@@ -758,7 +702,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $YellowProdCodeOem
      */
     public function getYellowProdCodeOem ()
@@ -772,8 +715,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $YellowProdCodeOem            
+     * @param field_type $YellowProdCodeOem
      */
     public function setYellowProdCodeOem ($YellowProdCodeOem)
     {
@@ -782,7 +724,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $YellowYield
      */
     public function getYellowYield ()
@@ -796,8 +737,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $YellowYield            
+     * @param field_type $YellowYield
      */
     public function setYellowYield ($YellowYield)
     {
@@ -806,7 +746,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $YellowProdCostOem
      */
     public function getYellowProdCostOem ()
@@ -820,8 +759,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $YellowProdCostOem            
+     * @param field_type $YellowProdCostOem
      */
     public function setYellowProdCostOem ($YellowProdCostOem)
     {
@@ -830,7 +768,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DutyCycle
      */
     public function getDutyCycle ()
@@ -844,8 +781,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DutyCycle            
+     * @param field_type $DutyCycle
      */
     public function setDutyCycle ($DutyCycle)
     {
@@ -854,7 +790,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $WattsPowerNormal
      */
     public function getWattsPowerNormal ()
@@ -868,8 +803,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $WattsPowerNormal            
+     * @param field_type $WattsPowerNormal
      */
     public function setWattsPowerNormal ($WattsPowerNormal)
     {
@@ -878,7 +812,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $WattsPowerIdle
      */
     public function getWattsPowerIdle ()
@@ -892,8 +825,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $WattsPowerIdle            
+     * @param field_type $WattsPowerIdle
      */
     public function setWattsPowerIdle ($WattsPowerIdle)
     {
@@ -902,7 +834,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $StartMeterLife
      */
     public function getStartMeterLife ()
@@ -916,8 +847,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $StartMeterLife            
+     * @param field_type $StartMeterLife
      */
     public function setStartMeterLife ($StartMeterLife)
     {
@@ -926,7 +856,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $EndMeterLife
      */
     public function getEndMeterLife ()
@@ -940,8 +869,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $EndMeterLife            
+     * @param field_type $EndMeterLife
      */
     public function setEndMeterLife ($EndMeterLife)
     {
@@ -950,7 +878,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $StartMeterBlack
      */
     public function getStartMeterBlack ()
@@ -964,8 +891,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $StartMeterBlack            
+     * @param field_type $StartMeterBlack
      */
     public function setStartMeterBlack ($StartMeterBlack)
     {
@@ -974,7 +900,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $EndMeterBlack
      */
     public function getEndMeterBlack ()
@@ -988,8 +913,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $EndMeterBlack            
+     * @param field_type $EndMeterBlack
      */
     public function setEndMeterBlack ($EndMeterBlack)
     {
@@ -998,7 +922,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $StartMeterColor
      */
     public function getStartMeterColor ()
@@ -1012,8 +935,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $StartMeterColor            
+     * @param field_type $StartMeterColor
      */
     public function setStartMeterColor ($StartMeterColor)
     {
@@ -1022,7 +944,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $EndMeterColor
      */
     public function getEndMeterColor ()
@@ -1036,8 +957,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $EndMeterColor            
+     * @param field_type $EndMeterColor
      */
     public function setEndMeterColor ($EndMeterColor)
     {
@@ -1046,7 +966,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $StartMeterPrintblack
      */
     public function getStartMeterPrintblack ()
@@ -1060,8 +979,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $StartMeterPrintblack            
+     * @param field_type $StartMeterPrintblack
      */
     public function setStartMeterPrintblack ($StartMeterPrintblack)
     {
@@ -1070,7 +988,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $EndMeterPrintblack
      */
     public function getEndMeterPrintblack ()
@@ -1084,8 +1001,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $EndMeterPrintblack            
+     * @param field_type $EndMeterPrintblack
      */
     public function setEndMeterPrintblack ($EndMeterPrintblack)
     {
@@ -1094,7 +1010,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $StartMeterPrintcolor
      */
     public function getStartMeterPrintcolor ()
@@ -1108,8 +1023,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $StartMeterPrintcolor            
+     * @param field_type $StartMeterPrintcolor
      */
     public function setStartMeterPrintcolor ($StartMeterPrintcolor)
     {
@@ -1118,7 +1032,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $EndMeterPrintcolor
      */
     public function getEndMeterPrintcolor ()
@@ -1132,8 +1045,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $EndMeterPrintcolor            
+     * @param field_type $EndMeterPrintcolor
      */
     public function setEndMeterPrintcolor ($EndMeterPrintcolor)
     {
@@ -1142,7 +1054,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $StartMeterCopyblack
      */
     public function getStartMeterCopyblack ()
@@ -1156,8 +1067,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $StartMeterCopyblack            
+     * @param field_type $StartMeterCopyblack
      */
     public function setStartMeterCopyblack ($StartMeterCopyblack)
     {
@@ -1166,7 +1076,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $EndMeterCopyblack
      */
     public function getEndMeterCopyblack ()
@@ -1180,8 +1089,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $EndMeterCopyblack            
+     * @param field_type $EndMeterCopyblack
      */
     public function setEndMeterCopyblack ($EndMeterCopyblack)
     {
@@ -1190,7 +1098,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $StartMeterCopycolor
      */
     public function getStartMeterCopycolor ()
@@ -1204,8 +1111,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $StartMeterCopycolor            
+     * @param field_type $StartMeterCopycolor
      */
     public function setStartMeterCopycolor ($StartMeterCopycolor)
     {
@@ -1214,7 +1120,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $EndMeterCopycolor
      */
     public function getEndMeterCopycolor ()
@@ -1228,8 +1133,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $EndMeterCopycolor            
+     * @param field_type $EndMeterCopycolor
      */
     public function setEndMeterCopycolor ($EndMeterCopycolor)
     {
@@ -1238,7 +1142,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $StartMeterScan
      */
     public function getStartMeterScan ()
@@ -1252,8 +1155,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $StartMeterScan            
+     * @param field_type $StartMeterScan
      */
     public function setStartMeterScan ($StartMeterScan)
     {
@@ -1262,7 +1164,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $EndMeterScan
      */
     public function getEndMeterScan ()
@@ -1276,8 +1177,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $EndMeterScan            
+     * @param field_type $EndMeterScan
      */
     public function setEndMeterScan ($EndMeterScan)
     {
@@ -1286,7 +1186,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $StartMeterFax
      */
     public function getStartMeterFax ()
@@ -1300,8 +1199,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $StartMeterFax            
+     * @param field_type $StartMeterFax
      */
     public function setStartMeterFax ($StartMeterFax)
     {
@@ -1310,7 +1208,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $EndMeterFax
      */
     public function getEndMeterFax ()
@@ -1324,8 +1221,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $EndMeterFax            
+     * @param field_type $EndMeterFax
      */
     public function setEndMeterFax ($EndMeterFax)
     {
@@ -1334,7 +1230,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $InvalidData
      */
     public function getInvalidData ()
@@ -1348,8 +1243,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $InvalidData            
+     * @param field_type $InvalidData
      */
     public function setInvalidData ($InvalidData)
     {
@@ -1358,7 +1252,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IsExcluded
      */
     public function getIsExcluded ()
@@ -1372,8 +1265,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IsExcluded            
+     * @param field_type $IsExcluded
      */
     public function setIsExcluded ($IsExcluded)
     {
@@ -1382,7 +1274,6 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ErrorMessage
      */
     public function getErrorMessage ()
@@ -1396,12 +1287,12 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ErrorMessage            
+     * @param field_type $ErrorMessage
      */
     public function setErrorMessage ($ErrorMessage)
     {
         $this->ErrorMessage = $ErrorMessage;
         return $this;
     }
+
 }

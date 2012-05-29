@@ -2,7 +2,6 @@
 
 /**
  * Class Proposalgen_Model_Meter
- *
  * @author "Lee Robert"
  */
 class Proposalgen_Model_Meter extends Tangent_Model_Abstract
@@ -28,7 +27,6 @@ class Proposalgen_Model_Meter extends Tangent_Model_Abstract
     protected $GeneratedBySystem;
 
     /**
-     *
      * @return the $MeterId
      */
     public function getMeterId ()
@@ -42,8 +40,7 @@ class Proposalgen_Model_Meter extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MeterId            
+     * @param field_type $MeterId
      */
     public function setMeterId ($MeterId)
     {
@@ -52,7 +49,6 @@ class Proposalgen_Model_Meter extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DeviceInstanceId
      */
     public function getDeviceInstanceId ()
@@ -66,8 +62,7 @@ class Proposalgen_Model_Meter extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DeviceInstanceId            
+     * @param field_type $DeviceInstanceId
      */
     public function setDeviceInstanceId ($DeviceInstanceId)
     {
@@ -76,7 +71,6 @@ class Proposalgen_Model_Meter extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $MeterType
      */
     public function getMeterType ()
@@ -90,8 +84,7 @@ class Proposalgen_Model_Meter extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MeterType            
+     * @param field_type $MeterType
      */
     public function setMeterType ($MeterType)
     {
@@ -100,7 +93,6 @@ class Proposalgen_Model_Meter extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $StartMeter
      */
     public function getStartMeter ()
@@ -114,8 +106,7 @@ class Proposalgen_Model_Meter extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $StartMeter            
+     * @param field_type $StartMeter
      */
     public function setStartMeter ($StartMeter)
     {
@@ -124,7 +115,6 @@ class Proposalgen_Model_Meter extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $EndMeter
      */
     public function getEndMeter ()
@@ -138,8 +128,7 @@ class Proposalgen_Model_Meter extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $EndMeter            
+     * @param field_type $EndMeter
      */
     public function setEndMeter ($EndMeter)
     {
@@ -148,7 +137,6 @@ class Proposalgen_Model_Meter extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $GeneratedBySystem
      */
     public function getGeneratedBySystem ()
@@ -161,12 +149,12 @@ class Proposalgen_Model_Meter extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $GeneratedBySystem            
+     * @param field_type $GeneratedBySystem
      */
     public function setGeneratedBySystem ($GeneratedBySystem)
     {
         $this->GeneratedBySystem = $GeneratedBySystem;
         return $this;
     }
+
 }

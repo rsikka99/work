@@ -2,7 +2,6 @@
 
 /**
  * Class Proposalgen_Model_TicketPFRequest
- *
  * @author "John Sadler"
  */
 class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
@@ -28,7 +27,6 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     protected $WattsPowerIdle;
 
     /**
-     *
      * @return the $TicketId
      */
     public function getTicketId ()
@@ -42,8 +40,7 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $TicketId            
+     * @param field_type $TicketId
      */
     public function setTicketId ($TicketId)
     {
@@ -51,23 +48,22 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
         return $this;
     }
 
-    /**
-     *
+	/**
      * @return the $UserId
      */
+    
     public function getUserId ()
     {
-        if (! isset($this->UserId))
+        if (!isset($this->UserId))
         {
-            
-            $this->UserId = null;
-        }
+        	
+        	$this->UserId = null;
+        }	
         return $this->UserId;
     }
 
-    /**
-     *
-     * @param field_type $UserId            
+	/**
+     * @param field_type $UserId
      */
     public function setUserId ($UserId)
     {
@@ -76,7 +72,6 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DevicePfId
      */
     public function getDevicePfId ()
@@ -90,8 +85,7 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DevicePfId            
+     * @param field_type $DevicePfId
      */
     public function setDevicePfId ($DevicePfId)
     {
@@ -100,7 +94,6 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DevicePf
      */
     public function getDevicePf ()
@@ -117,8 +110,7 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DevicePf            
+     * @param field_type $DevicePf
      */
     public function setDevicePf ($DevicePf)
     {
@@ -127,7 +119,6 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DeviceManufacturer
      */
     public function getDeviceManufacturer ()
@@ -141,8 +132,7 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DeviceManufacturer            
+     * @param field_type $DeviceManufacturer
      */
     public function setDeviceManufacturer ($DeviceManufacturer)
     {
@@ -151,7 +141,6 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $PrinterModel
      */
     public function getPrinterModel ()
@@ -165,8 +154,7 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $PrinterModel            
+     * @param field_type $PrinterModel
      */
     public function setPrinterModel ($PrinterModel)
     {
@@ -175,7 +163,6 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $LaunchDate
      */
     public function getLaunchDate ()
@@ -189,8 +176,7 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $LaunchDate            
+     * @param field_type $LaunchDate
      */
     public function setLaunchDate ($LaunchDate)
     {
@@ -199,7 +185,6 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DevicePrice
      */
     public function getDevicePrice ()
@@ -213,8 +198,7 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DevicePrice            
+     * @param field_type $DevicePrice
      */
     public function setDevicePrice ($DevicePrice)
     {
@@ -223,7 +207,6 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $TonerConfig
      */
     public function getTonerConfig ()
@@ -237,8 +220,7 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $TonerConfig            
+     * @param field_type $TonerConfig
      */
     public function setTonerConfig ($TonerConfig)
     {
@@ -247,7 +229,6 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IsCopier
      */
     public function getIsCopier ()
@@ -261,8 +242,7 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IsCopier            
+     * @param field_type $IsCopier
      */
     public function setIsCopier ($IsCopier)
     {
@@ -271,7 +251,6 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IsFax
      */
     public function getIsFax ()
@@ -285,8 +264,7 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IsFax            
+     * @param field_type $IsFax
      */
     public function setIsFax ($IsFax)
     {
@@ -295,7 +273,6 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IsDuplex
      */
     public function getIsDuplex ()
@@ -309,8 +286,7 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IsDuplex            
+     * @param field_type $IsDuplex
      */
     public function setIsDuplex ($IsDuplex)
     {
@@ -319,7 +295,6 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IsScanner
      */
     public function getIsScanner ()
@@ -333,8 +308,7 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IsScanner            
+     * @param field_type $IsScanner
      */
     public function setIsScanner ($IsScanner)
     {
@@ -343,7 +317,6 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $PpmBlack
      */
     public function getPpmBlack ()
@@ -357,8 +330,7 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $PpmBlack            
+     * @param field_type $PpmBlack
      */
     public function setPpmBlack ($PpmBlack)
     {
@@ -367,7 +339,6 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $PpmColor
      */
     public function getPpmColor ()
@@ -381,8 +352,7 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $PpmColor            
+     * @param field_type $PpmColor
      */
     public function setPpmColor ($PpmColor)
     {
@@ -391,7 +361,6 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DutyCycle
      */
     public function getDutyCycle ()
@@ -405,8 +374,7 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DutyCycle            
+     * @param field_type $DutyCycle
      */
     public function setDutyCycle ($DutyCycle)
     {
@@ -415,7 +383,6 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $WattsPowerNormal
      */
     public function getWattsPowerNormal ()
@@ -429,8 +396,7 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $WattsPowerNormal            
+     * @param field_type $WattsPowerNormal
      */
     public function setWattsPowerNormal ($WattsPowerNormal)
     {
@@ -439,7 +405,6 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $WattsPowerIdle
      */
     public function getWattsPowerIdle ()
@@ -453,36 +418,34 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $WattsPowerIdle            
+     * @param field_type $WattsPowerIdle
      */
     public function setWattsPowerIdle ($WattsPowerIdle)
     {
         $this->WattsPowerIdle = $WattsPowerIdle;
         return $this;
     }
-
-    /**
-     *
+	/**
      * @return the $ServiceCostPerPage
      */
     public function getServiceCostPerPage ()
     {
-        if (! isset($this->ServiceCostPerPage))
+        if (!isset($this->ServiceCostPerPage))
         {
-            
-            $this->ServiceCostPerPage = null;
-        }
+        	
+        	$this->ServiceCostPerPage = null;
+        }	
         return $this->ServiceCostPerPage;
     }
 
-    /**
-     *
-     * @param field_type $ServiceCostPerPage            
+	/**
+     * @param field_type $ServiceCostPerPage
      */
     public function setServiceCostPerPage ($ServiceCostPerPage)
     {
         $this->ServiceCostPerPage = $ServiceCostPerPage;
         return $this;
     }
+
+
 }

@@ -2,7 +2,6 @@
 
 /**
  * Class Proposalgen_Model_UnknownDeviceInstance
- *
  * @author "Lee Robert"
  */
 class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
@@ -48,6 +47,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     protected $FourColorTonerSKU;
     protected $FourColorTonerPrice;
     protected $FourColorTonerYield;
+    
     protected $BlackCompSKU;
     protected $BlackCompPrice;
     protected $BlackCompYield;
@@ -66,6 +66,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     protected $FourColorCompSKU;
     protected $FourColorCompPrice;
     protected $FourColorCompYield;
+    
     protected $StartMeterLife;
     protected $EndMeterLife;
     protected $StartMeterBlack;
@@ -90,7 +91,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     protected $ServiceCostPerPage;
 
     /**
-     *
      * @return the $UnknownDeviceInstanceId
      */
     public function getUnknownDeviceInstanceId ()
@@ -104,8 +104,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UnknownDeviceInstanceId            
+     * @param field_type $UnknownDeviceInstanceId
      */
     public function setUnknownDeviceInstanceId ($UnknownDeviceInstanceId)
     {
@@ -114,7 +113,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserId
      */
     public function getUserId ()
@@ -128,8 +126,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserId            
+     * @param field_type $UserId
      */
     public function setUserId ($UserId)
     {
@@ -138,7 +135,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportId
      */
     public function getReportId ()
@@ -152,8 +148,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportId            
+     * @param field_type $ReportId
      */
     public function setReportId ($ReportId)
     {
@@ -162,7 +157,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UploadDataCollectorId
      */
     public function getUploadDataCollectorId ()
@@ -176,8 +170,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UploadDataCollectorId            
+     * @param field_type $UploadDataCollectorId
      */
     public function setUploadDataCollectorId ($UploadDataCollectorId)
     {
@@ -186,7 +179,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $PrinterModelid
      */
     public function getPrinterModelid ()
@@ -200,8 +192,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $PrinterModelid            
+     * @param field_type $PrinterModelid
      */
     public function setPrinterModelid ($PrinterModelid)
     {
@@ -210,7 +201,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $MpsMonitorStartdate
      */
     public function getMpsMonitorStartdate ()
@@ -224,8 +214,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MpsMonitorStartdate            
+     * @param field_type $MpsMonitorStartdate
      */
     public function setMpsMonitorStartdate ($MpsMonitorStartdate)
     {
@@ -234,7 +223,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $MpsMonitorEnddate
      */
     public function getMpsMonitorEnddate ()
@@ -248,8 +236,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MpsMonitorEnddate            
+     * @param field_type $MpsMonitorEnddate
      */
     public function setMpsMonitorEnddate ($MpsMonitorEnddate)
     {
@@ -258,7 +245,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $MpsDiscoveryDate
      */
     public function getMpsDiscoveryDate ()
@@ -272,8 +258,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MpsDiscoveryDate            
+     * @param field_type $MpsDiscoveryDate
      */
     public function setMpsDiscoveryDate ($MpsDiscoveryDate)
     {
@@ -282,7 +267,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $InstallDate
      */
     public function getInstallDate ()
@@ -296,8 +280,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $InstallDate            
+     * @param field_type $InstallDate
      */
     public function setInstallDate ($InstallDate)
     {
@@ -306,7 +289,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DeviceManufacturer
      */
     public function getDeviceManufacturer ()
@@ -320,8 +302,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DeviceManufacturer            
+     * @param field_type $DeviceManufacturer
      */
     public function setDeviceManufacturer ($DeviceManufacturer)
     {
@@ -330,7 +311,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $PrinterModel
      */
     public function getPrinterModel ()
@@ -344,8 +324,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $PrinterModel            
+     * @param field_type $PrinterModel
      */
     public function setPrinterModel ($PrinterModel)
     {
@@ -354,7 +333,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $PrinterSerialNumber
      */
     public function getPrinterSerialNumber ()
@@ -368,8 +346,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $PrinterSerialNumber            
+     * @param field_type $PrinterSerialNumber
      */
     public function setPrinterSerialNumber ($PrinterSerialNumber)
     {
@@ -378,7 +355,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $TonerConfig
      */
     public function getTonerConfig ()
@@ -392,8 +368,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $TonerConfig            
+     * @param field_type $TonerConfig
      */
     public function setTonerConfig ($TonerConfig)
     {
@@ -402,7 +377,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IsCopier
      */
     public function getIsCopier ()
@@ -416,8 +390,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IsCopier            
+     * @param field_type $IsCopier
      */
     public function setIsCopier ($IsCopier)
     {
@@ -426,7 +399,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IsFax
      */
     public function getIsFax ()
@@ -440,8 +412,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IsFax            
+     * @param field_type $IsFax
      */
     public function setIsFax ($IsFax)
     {
@@ -450,7 +421,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IsDuplex
      */
     public function getIsDuplex ()
@@ -464,8 +434,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IsDuplex            
+     * @param field_type $IsDuplex
      */
     public function setIsDuplex ($IsDuplex)
     {
@@ -474,7 +443,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IsScanner
      */
     public function getIsScanner ()
@@ -488,8 +456,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IsScanner            
+     * @param field_type $IsScanner
      */
     public function setIsScanner ($IsScanner)
     {
@@ -498,7 +465,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $JitSuppliesSupported
      */
     public function getJitSuppliesSupported ()
@@ -512,8 +478,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $JitSuppliesSupported            
+     * @param field_type $JitSuppliesSupported
      */
     public function setJitSuppliesSupported ($JitSuppliesSupported)
     {
@@ -522,7 +487,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $WattsPowerNormal
      */
     public function getWattsPowerNormal ()
@@ -536,8 +500,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $WattsPowerNormal            
+     * @param field_type $WattsPowerNormal
      */
     public function setWattsPowerNormal ($WattsPowerNormal)
     {
@@ -546,7 +509,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $WattsPowerIdle
      */
     public function getWattsPowerIdle ()
@@ -560,8 +522,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $WattsPowerIdle            
+     * @param field_type $WattsPowerIdle
      */
     public function setWattsPowerIdle ($WattsPowerIdle)
     {
@@ -570,7 +531,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DevicePrice
      */
     public function getDevicePrice ()
@@ -584,8 +544,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DevicePrice            
+     * @param field_type $DevicePrice
      */
     public function setDevicePrice ($DevicePrice)
     {
@@ -594,7 +553,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $LaunchDate
      */
     public function getLaunchDate ()
@@ -608,8 +566,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $LaunchDate            
+     * @param field_type $LaunchDate
      */
     public function setLaunchDate ($LaunchDate)
     {
@@ -618,7 +575,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DateCreated
      */
     public function getDateCreated ()
@@ -632,8 +588,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DateCreated            
+     * @param field_type $DateCreated
      */
     public function setDateCreated ($DateCreated)
     {
@@ -642,7 +597,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $BlackTonerSKU
      */
     public function getBlackTonerSKU ()
@@ -656,8 +610,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $BlackTonerSKU            
+     * @param field_type $BlackTonerSKU
      */
     public function setBlackTonerSKU ($BlackTonerSKU)
     {
@@ -666,7 +619,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $BlackTonerPrice
      */
     public function getBlackTonerPrice ()
@@ -680,8 +632,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $BlackTonerPrice            
+     * @param field_type $BlackTonerPrice
      */
     public function setBlackTonerPrice ($BlackTonerPrice)
     {
@@ -690,7 +641,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $BlackTonerYield
      */
     public function getBlackTonerYield ()
@@ -704,8 +654,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $BlackTonerYield            
+     * @param field_type $BlackTonerYield
      */
     public function setBlackTonerYield ($BlackTonerYield)
     {
@@ -714,7 +663,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $CyanTonerSKU
      */
     public function getCyanTonerSKU ()
@@ -728,8 +676,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $CyanTonerSKU            
+     * @param field_type $CyanTonerSKU
      */
     public function setCyanTonerSKU ($CyanTonerSKU)
     {
@@ -738,7 +685,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $CyanTonerPrice
      */
     public function getCyanTonerPrice ()
@@ -752,8 +698,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $CyanTonerPrice            
+     * @param field_type $CyanTonerPrice
      */
     public function setCyanTonerPrice ($CyanTonerPrice)
     {
@@ -762,7 +707,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $CyanTonerYield
      */
     public function getCyanTonerYield ()
@@ -776,8 +720,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $CyanTonerYield            
+     * @param field_type $CyanTonerYield
      */
     public function setCyanTonerYield ($CyanTonerYield)
     {
@@ -786,7 +729,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $MagentaTonerSKU
      */
     public function getMagentaTonerSKU ()
@@ -800,8 +742,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MagentaTonerSKU            
+     * @param field_type $MagentaTonerSKU
      */
     public function setMagentaTonerSKU ($MagentaTonerSKU)
     {
@@ -810,7 +751,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $MagentaTonerPrice
      */
     public function getMagentaTonerPrice ()
@@ -824,8 +764,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MagentaTonerPrice            
+     * @param field_type $MagentaTonerPrice
      */
     public function setMagentaTonerPrice ($MagentaTonerPrice)
     {
@@ -834,7 +773,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $MagentaTonerYield
      */
     public function getMagentaTonerYield ()
@@ -848,8 +786,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MagentaTonerYield            
+     * @param field_type $MagentaTonerYield
      */
     public function setMagentaTonerYield ($MagentaTonerYield)
     {
@@ -858,7 +795,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $YellowTonerSKU
      */
     public function getYellowTonerSKU ()
@@ -872,8 +808,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $YellowTonerSKU            
+     * @param field_type $YellowTonerSKU
      */
     public function setYellowTonerSKU ($YellowTonerSKU)
     {
@@ -882,7 +817,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $YellowTonerPrice
      */
     public function getYellowTonerPrice ()
@@ -896,8 +830,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $YellowTonerPrice            
+     * @param field_type $YellowTonerPrice
      */
     public function setYellowTonerPrice ($YellowTonerPrice)
     {
@@ -906,7 +839,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $YellowTonerYield
      */
     public function getYellowTonerYield ()
@@ -920,8 +852,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $YellowTonerYield            
+     * @param field_type $YellowTonerYield
      */
     public function setYellowTonerYield ($YellowTonerYield)
     {
@@ -930,7 +861,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ThreeColorTonerSKU
      */
     public function getThreeColorTonerSKU ()
@@ -944,8 +874,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ThreeColorTonerSKU            
+     * @param field_type $ThreeColorTonerSKU
      */
     public function setThreeColorTonerSKU ($ThreeColorTonerSKU)
     {
@@ -954,7 +883,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ThreeColorTonerPrice
      */
     public function getThreeColorTonerPrice ()
@@ -968,8 +896,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ThreeColorTonerPrice            
+     * @param field_type $ThreeColorTonerPrice
      */
     public function setThreeColorTonerPrice ($ThreeColorTonerPrice)
     {
@@ -978,7 +905,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ThreeColorTonerYield
      */
     public function getThreeColorTonerYield ()
@@ -992,8 +918,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ThreeColorTonerYield            
+     * @param field_type $ThreeColorTonerYield
      */
     public function setThreeColorTonerYield ($ThreeColorTonerYield)
     {
@@ -1002,7 +927,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $FourColorTonerSKU
      */
     public function getFourColorTonerSKU ()
@@ -1016,8 +940,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $FourColorTonerSKU            
+     * @param field_type $FourColorTonerSKU
      */
     public function setFourColorTonerSKU ($FourColorTonerSKU)
     {
@@ -1026,7 +949,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $FourColorTonerPrice
      */
     public function getFourColorTonerPrice ()
@@ -1040,8 +962,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $FourColorTonerPrice            
+     * @param field_type $FourColorTonerPrice
      */
     public function setFourColorTonerPrice ($FourColorTonerPrice)
     {
@@ -1050,7 +971,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $FourColorTonerYield
      */
     public function getFourColorTonerYield ()
@@ -1064,17 +984,15 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $FourColorTonerYield            
+     * @param field_type $FourColorTonerYield
      */
     public function setFourColorTonerYield ($FourColorTonerYield)
     {
         $this->FourColorTonerYield = $FourColorTonerYield;
         return $this;
     }
-
+    
     /**
-     *
      * @return the $BlackCompSKU
      */
     public function getBlackCompSKU ()
@@ -1088,8 +1006,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $BlackCompSKU            
+     * @param field_type $BlackCompSKU
      */
     public function setBlackCompSKU ($BlackCompSKU)
     {
@@ -1098,7 +1015,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $BlackCompPrice
      */
     public function getBlackCompPrice ()
@@ -1112,8 +1028,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $BlackCompPrice            
+     * @param field_type $BlackCompPrice
      */
     public function setBlackCompPrice ($BlackCompPrice)
     {
@@ -1122,7 +1037,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $BlackCompYield
      */
     public function getBlackCompYield ()
@@ -1136,8 +1050,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $BlackCompYield            
+     * @param field_type $BlackCompYield
      */
     public function setBlackCompYield ($BlackCompYield)
     {
@@ -1146,7 +1059,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $CyanCompSKU
      */
     public function getCyanCompSKU ()
@@ -1160,8 +1072,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $CyanCompSKU            
+     * @param field_type $CyanCompSKU
      */
     public function setCyanCompSKU ($CyanCompSKU)
     {
@@ -1170,7 +1081,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $CyanCompPrice
      */
     public function getCyanCompPrice ()
@@ -1184,8 +1094,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $CyanCompPrice            
+     * @param field_type $CyanCompPrice
      */
     public function setCyanCompPrice ($CyanCompPrice)
     {
@@ -1194,7 +1103,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $CyanCompYield
      */
     public function getCyanCompYield ()
@@ -1208,8 +1116,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $CyanCompYield            
+     * @param field_type $CyanCompYield
      */
     public function setCyanCompYield ($CyanCompYield)
     {
@@ -1218,7 +1125,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $MagentaCompSKU
      */
     public function getMagentaCompSKU ()
@@ -1232,8 +1138,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MagentaCompSKU            
+     * @param field_type $MagentaCompSKU
      */
     public function setMagentaCompSKU ($MagentaCompSKU)
     {
@@ -1242,7 +1147,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $MagentaCompPrice
      */
     public function getMagentaCompPrice ()
@@ -1256,8 +1160,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MagentaCompPrice            
+     * @param field_type $MagentaCompPrice
      */
     public function setMagentaCompPrice ($MagentaCompPrice)
     {
@@ -1266,7 +1169,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $MagentaCompYield
      */
     public function getMagentaCompYield ()
@@ -1280,8 +1182,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MagentaCompYield            
+     * @param field_type $MagentaCompYield
      */
     public function setMagentaCompYield ($MagentaCompYield)
     {
@@ -1290,7 +1191,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $YellowCompSKU
      */
     public function getYellowCompSKU ()
@@ -1304,8 +1204,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $YellowCompSKU            
+     * @param field_type $YellowCompSKU
      */
     public function setYellowCompSKU ($YellowCompSKU)
     {
@@ -1314,7 +1213,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $YellowCompPrice
      */
     public function getYellowCompPrice ()
@@ -1328,8 +1226,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $YellowCompPrice            
+     * @param field_type $YellowCompPrice
      */
     public function setYellowCompPrice ($YellowCompPrice)
     {
@@ -1338,7 +1235,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $YellowCompYield
      */
     public function getYellowCompYield ()
@@ -1352,8 +1248,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $YellowCompYield            
+     * @param field_type $YellowCompYield
      */
     public function setYellowCompYield ($YellowCompYield)
     {
@@ -1362,7 +1257,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ThreeColorCompSKU
      */
     public function getThreeColorCompSKU ()
@@ -1376,8 +1270,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ThreeColorCompSKU            
+     * @param field_type $ThreeColorCompSKU
      */
     public function setThreeColorCompSKU ($ThreeColorCompSKU)
     {
@@ -1386,7 +1279,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ThreeColorCompPrice
      */
     public function getThreeColorCompPrice ()
@@ -1400,8 +1292,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ThreeColorCompPrice            
+     * @param field_type $ThreeColorCompPrice
      */
     public function setThreeColorCompPrice ($ThreeColorCompPrice)
     {
@@ -1410,7 +1301,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ThreeColorCompYield
      */
     public function getThreeColorCompYield ()
@@ -1424,8 +1314,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ThreeColorCompYield            
+     * @param field_type $ThreeColorCompYield
      */
     public function setThreeColorCompYield ($ThreeColorCompYield)
     {
@@ -1434,7 +1323,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $FourColorCompSKU
      */
     public function getFourColorCompSKU ()
@@ -1448,8 +1336,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $FourColorCompSKU            
+     * @param field_type $FourColorCompSKU
      */
     public function setFourColorCompSKU ($FourColorCompSKU)
     {
@@ -1458,7 +1345,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $FourColorCompPrice
      */
     public function getFourColorCompPrice ()
@@ -1472,8 +1358,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $FourColorCompPrice            
+     * @param field_type $FourColorCompPrice
      */
     public function setFourColorCompPrice ($FourColorCompPrice)
     {
@@ -1482,7 +1367,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $FourColorCompYield
      */
     public function getFourColorCompYield ()
@@ -1496,8 +1380,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $FourColorCompYield            
+     * @param field_type $FourColorCompYield
      */
     public function setFourColorCompYield ($FourColorCompYield)
     {
@@ -1506,7 +1389,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $StartMeterLife
      */
     public function getStartMeterLife ()
@@ -1520,8 +1402,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $StartMeterLife            
+     * @param field_type $StartMeterLife
      */
     public function setStartMeterLife ($StartMeterLife)
     {
@@ -1530,7 +1411,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $EndMeterLife
      */
     public function getEndMeterLife ()
@@ -1544,8 +1424,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $EndMeterLife            
+     * @param field_type $EndMeterLife
      */
     public function setEndMeterLife ($EndMeterLife)
     {
@@ -1554,7 +1433,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $StartMeterBlack
      */
     public function getStartMeterBlack ()
@@ -1568,8 +1446,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $StartMeterBlack            
+     * @param field_type $StartMeterBlack
      */
     public function setStartMeterBlack ($StartMeterBlack)
     {
@@ -1578,7 +1455,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $EndMeterBlack
      */
     public function getEndMeterBlack ()
@@ -1592,8 +1468,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $EndMeterBlack            
+     * @param field_type $EndMeterBlack
      */
     public function setEndMeterBlack ($EndMeterBlack)
     {
@@ -1602,7 +1477,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $StartMeterColor
      */
     public function getStartMeterColor ()
@@ -1616,8 +1490,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $StartMeterColor            
+     * @param field_type $StartMeterColor
      */
     public function setStartMeterColor ($StartMeterColor)
     {
@@ -1626,7 +1499,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $EndMeterColor
      */
     public function getEndMeterColor ()
@@ -1640,8 +1512,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $EndMeterColor            
+     * @param field_type $EndMeterColor
      */
     public function setEndMeterColor ($EndMeterColor)
     {
@@ -1650,7 +1521,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $StartMeterPrintblack
      */
     public function getStartMeterPrintblack ()
@@ -1664,8 +1534,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $StartMeterPrintblack            
+     * @param field_type $StartMeterPrintblack
      */
     public function setStartMeterPrintblack ($StartMeterPrintblack)
     {
@@ -1674,7 +1543,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $EndMeterPrintblack
      */
     public function getEndMeterPrintblack ()
@@ -1688,8 +1556,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $EndMeterPrintblack            
+     * @param field_type $EndMeterPrintblack
      */
     public function setEndMeterPrintblack ($EndMeterPrintblack)
     {
@@ -1698,7 +1565,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $StartMeterPrintcolor
      */
     public function getStartMeterPrintcolor ()
@@ -1712,8 +1578,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $StartMeterPrintcolor            
+     * @param field_type $StartMeterPrintcolor
      */
     public function setStartMeterPrintcolor ($StartMeterPrintcolor)
     {
@@ -1722,7 +1587,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $EndMeterPrintcolor
      */
     public function getEndMeterPrintcolor ()
@@ -1736,8 +1600,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $EndMeterPrintcolor            
+     * @param field_type $EndMeterPrintcolor
      */
     public function setEndMeterPrintcolor ($EndMeterPrintcolor)
     {
@@ -1746,7 +1609,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $StartMeterCopyblack
      */
     public function getStartMeterCopyblack ()
@@ -1760,8 +1622,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $StartMeterCopyblack            
+     * @param field_type $StartMeterCopyblack
      */
     public function setStartMeterCopyblack ($StartMeterCopyblack)
     {
@@ -1770,7 +1631,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $EndMeterCopyblack
      */
     public function getEndMeterCopyblack ()
@@ -1784,8 +1644,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $EndMeterCopyblack            
+     * @param field_type $EndMeterCopyblack
      */
     public function setEndMeterCopyblack ($EndMeterCopyblack)
     {
@@ -1794,7 +1653,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $StartMeterCopycolor
      */
     public function getStartMeterCopycolor ()
@@ -1808,8 +1666,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $StartMeterCopycolor            
+     * @param field_type $StartMeterCopycolor
      */
     public function setStartMeterCopycolor ($StartMeterCopycolor)
     {
@@ -1818,7 +1675,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $EndMeterCopycolor
      */
     public function getEndMeterCopycolor ()
@@ -1832,8 +1688,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $EndMeterCopycolor            
+     * @param field_type $EndMeterCopycolor
      */
     public function setEndMeterCopycolor ($EndMeterCopycolor)
     {
@@ -1842,7 +1697,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $StartMeterFax
      */
     public function getStartMeterFax ()
@@ -1856,8 +1710,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $StartMeterFax            
+     * @param field_type $StartMeterFax
      */
     public function setStartMeterFax ($StartMeterFax)
     {
@@ -1866,7 +1719,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $EndMeterFax
      */
     public function getEndMeterFax ()
@@ -1880,8 +1732,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $EndMeterFax            
+     * @param field_type $EndMeterFax
      */
     public function setEndMeterFax ($EndMeterFax)
     {
@@ -1890,7 +1741,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $StartMeterScan
      */
     public function getStartMeterScan ()
@@ -1904,8 +1754,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $StartMeterScan            
+     * @param field_type $StartMeterScan
      */
     public function setStartMeterScan ($StartMeterScan)
     {
@@ -1914,7 +1763,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $EndMeterScan
      */
     public function getEndMeterScan ()
@@ -1928,8 +1776,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $EndMeterScan            
+     * @param field_type $EndMeterScan
      */
     public function setEndMeterScan ($EndMeterScan)
     {
@@ -1938,7 +1785,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IsExcluded
      */
     public function getIsExcluded ()
@@ -1952,8 +1798,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IsExcluded            
+     * @param field_type $IsExcluded
      */
     public function setIsExcluded ($IsExcluded)
     {
@@ -1962,7 +1807,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IsLeased
      */
     public function getIsLeased ()
@@ -1976,8 +1820,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IsLeased            
+     * @param field_type $IsLeased
      */
     public function setIsLeased ($IsLeased)
     {
@@ -1986,7 +1829,6 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IpAddress
      */
     public function getIpAddress ()
@@ -1999,36 +1841,37 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IpAddress            
+     * @param field_type $IpAddress
      */
     public function setIpAddress ($IpAddress)
     {
         $this->IpAddress = $IpAddress;
         return $this;
     }
-
-    /**
-     *
+    
+	/**
      * @return the $ServiceCostPerPage
      */
     public function getServiceCostPerPage ()
     {
-        if (! isset($this->ServiceCostPerPage))
+        if (!isset($this->ServiceCostPerPage))
         {
-            
-            $this->ServiceCostPerPage = null;
-        }
+        	
+        	$this->ServiceCostPerPage = null;
+        }	
         return $this->ServiceCostPerPage;
     }
 
-    /**
-     *
-     * @param field_type $ServiceCostPerPage            
+	/**
+     * @param field_type $ServiceCostPerPage
      */
     public function setServiceCostPerPage ($ServiceCostPerPage)
     {
         $this->ServiceCostPerPage = $ServiceCostPerPage;
         return $this;
     }
+
+
+
+
 }

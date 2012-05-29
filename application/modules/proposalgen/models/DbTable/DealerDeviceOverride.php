@@ -8,6 +8,7 @@ class Proposalgen_Model_DbTable_DealerDeviceOverride extends Zend_Db_Table_Abstr
             'dealer_company_id', 
             'master_device_id' 
     );
+    
     protected $_referenceMap = array (
             'MasterDevice' => array (
                     'columns' => 'master_device_id', 

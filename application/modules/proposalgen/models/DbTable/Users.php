@@ -13,6 +13,7 @@ class Proposalgen_Model_DbTable_Users extends Zend_Db_Table_Abstract
             'UserSessions', 
             'User_PasswordResetRequests' 
     );
+    
     protected $_referenceMap = array (
             'Users' => array (
                     'columns' => 'user_id', 

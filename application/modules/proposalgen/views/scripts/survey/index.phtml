@@ -1,12 +1,20 @@
 <?php
 /**
  * View Script for survey/index
+ *
  */
 ?>
-
+<h2><?php echo $this->MPSProgramName . "<span class='registration'>&reg;</span> Questionnaire";?></h2>
+<table style="width: 100%;border-collapse: collapse; table-layout: fixed">
+	<tr>
+		<td class = "Title"><u><?php echo $this->formTitle?></u></td>
+		<?php if ($this->companyName) :?>
+		<td class = "PreparedFor"><i>Prepared For:</i></td>
+		<td class = "PreparedForText"><i><?php echo $this->companyName; ?></i></td>
+		<?php endif?>
+	</tr>
+</table>
 <br />
-
-<div id="form_container" class="survey_form margined">
-	<?php echo $this->form?>
+<div id="form_container" class="well">
+	<?php echo $this->form ?>
 </div>
-

@@ -7,6 +7,7 @@ class Proposalgen_Model_DbTable_QuestionSetQuestions extends Zend_Db_Table_Abstr
             'question_id', 
             'questionset_id' 
     );
+    
     protected $_referenceMap = array (
             'Questions' => array (
                     'columns' => 'question_id', 

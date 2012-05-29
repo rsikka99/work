@@ -2,7 +2,6 @@
 
 /**
  * Class Proposalgen_Model_UserPrivileges
- *
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_UserPrivilege extends Tangent_Model_Abstract
@@ -12,7 +11,6 @@ class Proposalgen_Model_UserPrivilege extends Tangent_Model_Abstract
     protected $UserId;
 
     /**
-     *
      * @return the $PrivId
      */
     public function getPrivId ()
@@ -26,8 +24,7 @@ class Proposalgen_Model_UserPrivilege extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $PrivId            
+     * @param field_type $PrivId
      */
     public function setPrivId ($PrivId)
     {
@@ -36,7 +33,6 @@ class Proposalgen_Model_UserPrivilege extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserId
      */
     public function getUserId ()
@@ -50,12 +46,12 @@ class Proposalgen_Model_UserPrivilege extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserId            
+     * @param field_type $UserId
      */
     public function setUserId ($UserId)
     {
         $this->UserId = $UserId;
         return $this;
     }
+
 }

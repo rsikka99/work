@@ -2,7 +2,6 @@
 
 /**
  * Class Proposalgen_Model_PricingConfig
- *
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_PricingConfig extends Tangent_Model_Abstract
@@ -12,13 +11,15 @@ class Proposalgen_Model_PricingConfig extends Tangent_Model_Abstract
     const COMP = 3;
     const OEMMONO_COMPCOLOR = 4;
     const COMPMONO_OEMCOLOR = 5;
+    
     public static $ConfigNames = array (
-            1 => "No Preference", 
-            2 => "OEM Only", 
-            3 => "Compatible Only", 
-            4 => "OEM Mono and Compatible Color", 
-            5 => "Compatible Mono and OEM Color" 
+            1 => "No Preference",
+            2 => "OEM Only",
+            3 => "Compatible Only",
+            4 => "OEM Mono and Compatible Color",
+            5 => "Compatible Mono and OEM Color"
     );
+    
     protected $PricingConfigId;
     protected $ConfigName;
     protected $ColorTonerPartTypeId;
@@ -34,7 +35,6 @@ class Proposalgen_Model_PricingConfig extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $PricingConfigId
      */
     public function getPricingConfigId ()
@@ -48,8 +48,7 @@ class Proposalgen_Model_PricingConfig extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $PricingConfigId            
+     * @param field_type $PricingConfigId
      */
     public function setPricingConfigId ($PricingConfigId)
     {
@@ -58,7 +57,6 @@ class Proposalgen_Model_PricingConfig extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ConfigName
      */
     public function getConfigName ()
@@ -72,8 +70,7 @@ class Proposalgen_Model_PricingConfig extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ConfigName            
+     * @param field_type $ConfigName
      */
     public function setConfigName ($ConfigName)
     {
@@ -82,7 +79,6 @@ class Proposalgen_Model_PricingConfig extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ColorTonerPartTypeId
      */
     public function getColorTonerPartTypeId ()
@@ -96,8 +92,7 @@ class Proposalgen_Model_PricingConfig extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ColorTonerPartTypeId            
+     * @param field_type $ColorTonerPartTypeId
      */
     public function setColorTonerPartTypeId ($ColorTonerPartTypeId)
     {
@@ -106,7 +101,6 @@ class Proposalgen_Model_PricingConfig extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $MonoTonerPartTypeId
      */
     public function getMonoTonerPartTypeId ()
@@ -120,8 +114,7 @@ class Proposalgen_Model_PricingConfig extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MonoTonerPartTypeId            
+     * @param field_type $MonoTonerPartTypeId
      */
     public function setMonoTonerPartTypeId ($MonoTonerPartTypeId)
     {
@@ -130,7 +123,6 @@ class Proposalgen_Model_PricingConfig extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ColorTonerPartType
      */
     public function getColorTonerPartType ()
@@ -146,8 +138,7 @@ class Proposalgen_Model_PricingConfig extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ColorTonerPartType            
+     * @param field_type $ColorTonerPartType
      */
     public function setColorTonerPartType ($ColorTonerPartType)
     {
@@ -156,7 +147,6 @@ class Proposalgen_Model_PricingConfig extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $MonoTonerPartType
      */
     public function getMonoTonerPartType ()
@@ -172,12 +162,12 @@ class Proposalgen_Model_PricingConfig extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MonoTonerPartType            
+     * @param field_type $MonoTonerPartType
      */
     public function setMonoTonerPartType ($MonoTonerPartType)
     {
         $this->MonoTonerPartType = $MonoTonerPartType;
         return $this;
     }
+
 }

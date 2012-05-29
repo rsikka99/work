@@ -1,11 +1,12 @@
-<?php
+<?php 
 /*
- * bulkfilepricing - exporting/importing bulk csv files to update pricing @author	John Sadler
+ * bulkfilepricing - exporting/importing bulk csv files to update pricing
+ * @author	John Sadler
  */
 ?>
 
-<?php $this->headScript()->captureStart('append','text/javascript')?>
-	var grid_width = 625;
+<?php $this->headScript()->captureStart('append','text/javascript') ?>
+	var grid_width = 940;
 	
 	$(document).ready(function() {
 		tableToGrid("#results_list", {
@@ -16,22 +17,13 @@
 		});
 		
 		<?php if(in_array("System Admin", $this->privilege)) { ?>
-		$("#confirm_container").html('
-<p class="warning">You are about to update all pricing for Office Depot.
-	Click "Confirm Import" to continue.</p>
-');
+		$("#confirm_container").html('<p class="warning">You are about to update all pricing for Office Depot. Click "Confirm Import" to continue.</p>');
 		
 		<?php } else if(in_array("Dealer Admin", $this->privilege)) { ?>
-		$("#confirm_container").html('
-<p class="warning">You are about to update all default pricing for
-	Office Depot. Click "Confirm Import" to continue?</p>
-');
+		$("#confirm_container").html('<p class="warning">You are about to update all default pricing for Office Depot. Click "Confirm Import" to continue?</p>');
 		
 		<?php } else  { ?>
-		$("#confirm_container").html('
-<p class="warning">Your import will override the default pricing for
-	Office Depot. Click "Confirm Import" to continue?</p>
-');
+		$("#confirm_container").html('<p class="warning">Your import will override the default pricing for Office Depot. Click "Confirm Import" to continue?</p>');
 		
 		<?php } ?>
 		
@@ -65,9 +57,7 @@
 		
 		} else if(action == 'upload') {
 			if($("#uploadedfile").val() == '') {
-				$("#message_container").html('
-<p>You must select a file to import. Please try again.</p>
-');
+				$("#message_container").html('<p>You must select a file to import. Please try again.</p>');
 				
 			} else {
 				$("#hdnAction").val('upload');
@@ -78,107 +68,79 @@
 		}
 	}
 	
-<?php $this->headScript()->captureEnd()?>
+<?php $this->headScript()->captureEnd() ?>
 
 <h2><?php echo $this->title;?></h2>
 
-<form name="bulk" id="bulk" action="" method="post"
-	enctype="multipart/form-data">
-	<input type="hidden" name="hdnRole" id="hdnRole"
-		value="<?php echo $this->hdnRole; ?>" /> <input type="hidden"
-		name="hdnAction" id="hdnAction" value="" />
-
+<form name="bulk" id="bulk" action="" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="hdnRole" id="hdnRole" value="<?php echo $this->hdnRole; ?>" />
+	<input type="hidden" name="hdnAction" id="hdnAction" value="" />
+	
 	<dl class="zend_form">
 		<dt class="botMenu">
-
+			
 			<div id="message_container" class="message_container">
 	        <?php
-        if (isset($this->errMessages))
-        {
-            //show the first error in the list of errors
-            foreach ( $this->errMessages as $key => $value )
-            {
-                echo $value;
-                break;
-            }
-        }
-        else
-        {
-            if (isset($this->message))
-            {
-                echo $this->message;
-            }
-        }
-        ?>
+	        if(isset($this->errMessages)) {
+	            //show the first error in the list of errors
+	            foreach($this->errMessages as $key => $value) {
+	                echo $value;
+	                break;
+	            }
+	        } else {
+	            if(isset($this->message)) {
+	                echo $this->message;
+	            }
+	        }
+	        ?>
 			</div>
-
+			
 			<div id="instruction_container">
 				<p>
-					To update your pricing: <br>
-					<br> 1) Download current pricing template by clicking the
-					appropriate link below. <br> 2) Modify the pricing columns in the
-					template. You may edit <span style="color: red">pricing columns
-						only.</span> <br> 3) Import the modified pricing template bank
-					into the system.
-				</p>
+			       To update your pricing: <br><br>
+			       1) Download current pricing template by clicking the appropriate link below. <br>
+			       2) Modify the pricing columns in the template. You may edit <span style="color: red">pricing columns only.</span> <br>
+			       3) Import the modified pricing template bank into the system. 
+			    </p>
 			</div>
-
+			
 			<div id="filtered_container" style="height: 26px;">
 				<?php if(in_array("System Admin", $this->privilege)) { ?>
 				<!-- div id="filter_company" style="float: left; padding: 0px 20px 0px 0px;">
 					<label for="company_filter" class="label">Company:</label>
 					<select name="company_filter" id="company_filter" class="filter_dropdown" style="width: 200px;">
 						<?php
-        foreach ( $this->company_list as $key )
-        {
-            echo "<option value='" . $key ['dealer_company_id'] . "'";
-            if ($key ['dealer_company_id'] == $this->company_filter)
-            {
-                echo " selected";
-            }
-            echo ">" . ucwords(strtolower($key ['company_name'])) . "</option>";
-        }
-        ?>
+						foreach($this->company_list as $key) {
+							echo "<option value='" . $key['dealer_company_id'] ."'";
+							if ($key['dealer_company_id'] == $this->company_filter) {
+								echo " selected";
+							}
+							echo ">" . ucwords(strtolower($key['company_name'])) . "</option>";
+						}
+						?>
 					</select>
 				</div -->
-				<input type="hidden" name="company_filter" id="company_filter"
-					value="1" />
+				<input type="hidden" name="company_filter" id="company_filter" value="1" />
 				
 				<?php } else { ?>
-				<div id="filter_company"
-					style="float: left; padding: 5px 20px 0px 0px;">
+				<div id="filter_company" style="float: left; padding: 5px 20px 0px 0px;">
 					<label for="company_filter" class="label">Company:</label> <?php echo $this->company_name; ?>
-					<input type="hidden" name="company_filter" id="company_filter"
-						value="<?php echo $this->company_filter; ?>" />
+					<input type="hidden" name="company_filter" id="company_filter" value="<?php echo $this->company_filter; ?>" />
 				</div>
 				<?php } ?>
 				
-				<div id="export_container"
-					style="float: right; padding: 5px 5px 0px 0px;">
-					<span style="padding: 0px 10px 0px 0px;"><a
-						href="javascript: void(0);"
-						onclick="javascript: do_action('export_printer');">Export Printer
-							Pricing</a></span> | <span style="padding: 0px 0px 0px 10px;"><a
-						href="javascript: void(0);"
-						onclick="javascript: do_action('export_toner');">Export Toner
-							Pricing</a></span>
+				<div id="export_container" style="float: right; padding: 5px 5px 0px 0px;">
+					<span style="padding: 0px 10px 0px 0px;"><a href="javascript: void(0);" onclick="javascript: do_action('export_printer');">Export Printer Pricing</a></span> | 
+					<span style="padding: 0px 0px 0px 10px;"><a href="javascript: void(0);" onclick="javascript: do_action('export_toner');">Export Toner Pricing</a></span>
 				</div>
 			</div>
-
-			<div id="upload_container" class="top-margined clear">
-				<div>
-					Choose a <span style="color: red">.CSV</span> file to upload: <input
-						type="file" name="uploadedfile" id="uploadedfile"
-						accept="application/csv, text/csv" size="60" class="upload_file" />
-				</div>
-				<div>
-					<input type="button" name="btnUpload" id="btnUpload"
-						value="Import Pricing" onclick="javascript: do_action('upload');" />
-				</div>
-			</div>
-
-			<div class="results_container" class="top-margined clear"
-				style="margin-top: 20px;">
+			
+            <div id="upload_container" class="well">
+                <div>Choose a <span style="color: red">.CSV</span> file to upload: <input type="file" name="uploadedfile" id="uploadedfile" accept="application/csv, text/csv" size="60" class="upload_file" /></div>
+                <div><input type="button" name="btnUpload" id="btnUpload" value="Import Pricing" onclick="javascript: do_action('upload');" class="btn" /></div>
+            </div>
+			
+		    <div class="results_container" class="top-margined clear" style="margin-top: 20px;">
 		    <?php if (isset($this->columnsArray) && isset($this->resultsArray)) { ?>
 				<h3>Results to be Imported:</h3>
 				<div id="confirm_container"></div>
@@ -189,10 +151,8 @@
 					<?php } ?>
 					</tr>
 					<?php
-        //loop through the array and build the preview
-        foreach ( $this->resultsArray as $key => $value )
-        {
-            ?>
+					//loop through the array and build the preview
+					foreach ($this->resultsArray as $key => $value) { ?>
 						<tr>
 						<?php foreach ($value as $key2) { ?>
 							<td nowrap="nowrap"><?=$key2?></td>
@@ -203,31 +163,23 @@
 				<br />
 	            <?php if(count($this->resultsArray) <= 1) { ?>
 				<div id="no_results_container">
-					<p>The file contains no valid data. Please correct your file and
-						try again.</p>
+					<p>The file contains no valid data. Please correct your file and try again.</p>
 				</div>
 				<br />
 				<?php } ?>
 			<?php } ?>
 			
-			<div id="buttons_container"
-					class="top-margined margined clear_center">
+			<div id="buttons_container" class="top-margined margined clear_center">
 				<?php if(count($this->resultsArray) > 0) { ?>
-               		<input type="button" class="" name="btnNext"
-						id="btnNext" value="Confirm Import"
-						onclick="javascript: do_action('confirm');" /> <input
-						type="button" name="btnCancel" id="btnCancel" value="Cancel"
-						onclick="javascript: do_action('cancel');" />
+               		<input type="button" name="btnNext" id="btnNext" value="Confirm Import" onclick="javascript: do_action('confirm');" class="btn btn-primary" />
+					<input type="button" name="btnCancel" id="btnCancel" value="Cancel" onclick="javascript: do_action('cancel');" class="btn" />
                	<?php } else { ?>
-               		<input type="button" class="" name="btnNext"
-						id="btnNext" value="Confirm Import" disabled="disabled" /> <input
-						type="button" name="btnCancel" id="btnCancel" value="Cancel"
-						disabled="disabled" />
+               		<input type="button" name="btnNext" id="btnNext" value="Confirm Import" class="btn btn-primary disabled" />
+					<input type="button" name="btnCancel" id="btnCancel" value="Cancel" class="btn disabled" />
            		<?php } ?>
-				<input type="button" name="btnBack" id="btnBack" value="Done"
-						onclick="javascript: do_action('back');" />
-				</div>
-		
+				<input type="button" name="btnBack" id="btnBack" value="Done" onclick="javascript: do_action('back');" class="btn" />
+			</div>
+			
 		</dt>
 	</dl>
 </form>

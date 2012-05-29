@@ -32,12 +32,176 @@ class Proposalgen_AuthController extends Zend_Controller_Action
     }
 
     /**
+     * Instantiates an authentication adapter
+     * @return Zend_Auth_Adapter_DbTable
+     */
+    protected function getAuthAdapter()
+    {
+        $adapter = new Zend_Auth_Adapter_DbTable();
+        $adapter->setTableName('users');
+        $adapter->setIdentityColumn('username');
+        $adapter->setCredentialColumn('password');
+        $adapter->setCredentialTreatment("MD5(?)");
+        
+        return $adapter;
+    }
+    
+    /**
+     * The login action authenticates a user with our system.
+     * After a successful authentication we should send them back to the page
+     * that they were trying to access.
+     *
+     * TODO: Make a redirect back to the page they came from.
+     */
+    public function loginAction ()
+    {
+        $this->_helper->layout->setLayout('auth');
+        $request = $this->getRequest();
+        $form = new Proposalgen_Form_Login();
+        
+        if ($this->getRequest()->isPost())
+        {
+            if ($form->isValid($request->getPost()))
+            {
+                $auth = Zend_Auth::getInstance();
+                $authAdapter = $this->getAuthAdapter();
+                $authAdapter->setIdentity($form->getValue("username"));
+                
+                $password = $form->getValue("password");
+                //$password = $this->cryptPassword($form->getValue("password"));
+                
+
+                $authAdapter->setCredential($password);
+                
+                // Authenticate against the database
+                $result = $auth->authenticate($authAdapter);
+                
+                // If the value is valid, store the information
+                if ($result->isValid())
+                {
+                    // Get all the user information and only omit the password
+                    // since we don't want to store it in the session.
+                    $userInfo = $authAdapter->getResultRowObject(null, 'password');
+                    $currentSessionId = session_id();
+                    $config = Zend_Registry::get('config');
+                    $userSessionMapper = Proposalgen_Model_Mapper_UserSession::getInstance();
+                    
+                    $userSessionMapper = Proposalgen_Model_Mapper_UserSession::getInstance();
+                    $sessions = $userSessionMapper->fetchAll(array (
+                            "user_id = ?" => $userInfo->user_id 
+                    ));
+                    foreach ( $sessions as $session )
+                    {
+                        if ($session->SessionId != $currentSessionId)
+                        {
+                            @unlink($config->resources->session->save_path . '/sess_' . $session->SessionId);
+                        }
+                    }
+                    $userSessionMapper->Delete(array (
+                            "user_id = ?" => $userInfo->user_id, 
+                            "session_id != ?" => $currentSessionId 
+                    ));
+                    
+                    $userSession = new Proposalgen_Model_UserSession();
+                    $userSession->setUserId($userInfo->user_id)->setSessionId($currentSessionId);
+                    $userSessionMapper->save($userSession);
+                    $db = Zend_Db_Table::getDefaultAdapter();
+                    try
+                    {
+                        $select = $db->select()
+                            ->from(array (
+                                'u' => 'user_privileges' 
+                        ), array ())
+                            ->join(array (
+                                'p' => 'privileges' 
+                        ), 'p.priv_id = u.priv_id', array (
+                                'priv_type' 
+                        ))
+                            ->where('u.user_id = ?', $userInfo->user_id);
+                        $stmt = $select->query();
+                        $stmt->setFetchMode(Zend_Db::FETCH_OBJ);
+                        $result = $stmt->fetchall();
+                        
+                        foreach ( $result as $key => $value )
+                        {
+                            $privs [$key] = $value->priv_type;
+                        } // end foreach
+                        
+
+                        // Add an array of privileges to the authentication token
+                        $userInfo->privileges = $privs;
+                    
+                    }
+                    catch ( Exception $e )
+                    {
+                        // TODO insert error handling for failure to grab
+                        // privledges
+                    }
+                    
+                    $authStorage = $auth->getStorage();
+                    $authStorage->write($userInfo);
+                    
+                    $session = new Zend_Session_Namespace("authRedirect");
+                    if (isset($session->module))
+                    {
+                        $module = $session->module;
+                        $controller = $session->controller;
+                        $action = $session->action;
+                        $params = $session->params;
+                        $session->unsetAll();
+                        $this->_helper->redirector($action, $controller, $module, $params);
+                    }
+                    else
+                    {
+                        $this->_redirect('/');
+                    }
+                
+                }
+                else
+                {
+                    switch ($result->getCode())
+                    {
+                        case Zend_Auth_Result::FAILURE_UNCATEGORIZED :
+                            // I'm using this in the custom adapter, so messages will be user friendly coming out of it.
+                            foreach ( $result->getMessages() as $message )
+                            {
+                                $this->_helper->flashMessenger(array (
+                                        'danger' => $message 
+                                ));
+                            }
+                            break;
+                        default :
+                            // Put a generic invalid credential message
+                            $this->_helper->flashMessenger(array (
+                                    'danger' => 'The username/password combination you entered was invalid.' 
+                            ));
+                            
+                            break;
+                    }
+                    
+                    // Build the bootstrap error decorator
+                    $form->buildBootstrapErrorDecorators();
+                }
+            }
+            else
+            {
+                // Build the bootstrap error decorator
+                $form->buildBootstrapErrorDecorators();
+            }
+        
+        }
+        
+        $this->view->form = $form;
+    
+    } // end loginAction
+
+    
+    /**
      * Action to handle requests to log into the system
      */
-    function loginAction ()
+    function oldloginAction ()
     {
-        // Disable the default layout
-        $this->_helper->layout->setLayout('auth');
+        
         $this->view->loggedIn = false;
         $this->view->message = ''; // reset the error message box
         
@@ -83,12 +247,14 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                         if ($session->SessionId != $currentSessionId)
                         {
                             @unlink($config->resources->session->save_path . '/sess_' . $session->SessionId);
-                            $userSessionMapper->Delete(array (
-                                    "user_id = ?" => $data->user_id, 
-                                    "session_id != ?" => $currentSessionId 
-                            ));
+                        
                         }
                     }
+                    
+                    $userSessionMapper->Delete(array (
+                            "user_id = ?" => $data->user_id, 
+                            "session_id != ?" => $currentSessionId 
+                    ));
                     
                     $userSession = new Proposalgen_Model_UserSession();
                     $userSession->setUserId($data->user_id)->setSessionId($currentSessionId);
@@ -116,9 +282,9 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                         } // end foreach
                         
 
-                        // Add an array of privileges to the authentication
-                        // token
+                        // Add an array of privileges to the authentication token
                         $data->privileges = $privs;
+                    
                     }
                     catch ( Exception $e )
                     {
@@ -133,6 +299,7 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                     // this time user with have the authenication token,
                     // and be allowed to access
                     $this->_redirect('/');
+                
                 }
                 else
                 {
@@ -212,6 +379,7 @@ class Proposalgen_AuthController extends Zend_Controller_Action
         $captcha->generate();
         
         return $captcha->getId();
+    
     }
 
     /**
@@ -245,6 +413,7 @@ class Proposalgen_AuthController extends Zend_Controller_Action
 
     function forgotpasswordAction ()
     {
+        
         $db = Zend_Db_Table::getDefaultAdapter();
         $this->_helper->layout->setLayout('auth');
         $this->view->message = '';
@@ -335,6 +504,7 @@ class Proposalgen_AuthController extends Zend_Controller_Action
 
                                 // save to database
                                 $db->commit();
+                            
                             }
                             catch ( Exception $e )
                             {
@@ -343,6 +513,7 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                                 // prepare error message stating user not found
                                 $this->view->message = "An error has occurred updating the database. The password was not reset and no email was sent.";
                             }
+                        
                         }
                         else
                         {
@@ -402,6 +573,7 @@ class Proposalgen_AuthController extends Zend_Controller_Action
             {
                 $passwordresetrequest = false;
             }
+        
         }
         return $passwordresetrequest;
     }
@@ -453,6 +625,7 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                     }
                 }
             }
+        
         }
         
         // TODO: We should probably make this page display an error if it is not valid instead of sending them on their way
@@ -525,6 +698,7 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                             $this->view->message = "Your password and confirmation password do not match. Please try again.";
                         else
                             $this->view->message = "Your password cannot be empty.";
+                    
                     }
                 }
                 
@@ -548,6 +722,7 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                 }
             }
         }
+    
     }
 
     function accepteulaAction ()
@@ -600,19 +775,30 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                         $db->rollback();
                         $this->view->message = "An error has occurred and the EULA was not accepted. Please go back and try again. ";
                         $this->view->message .= "If you continue to have problems please contact your administrator.";
+                    
                     } // end catch
+                
+
                 }
                 else
                 {
                     $this->view->message = "You <strong>must</strong> accept the EULA to continue.";
+                
                 } // end else
+            
+
             }
             else
             {
                 // Log the user out
                 $this->_redirect('/auth/logout');
+            
             }
         } // endif
+    
+
     } // end accept eula Action
+
+
 } // end auth controller
 

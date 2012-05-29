@@ -1,0 +1,93 @@
+<?php
+/**
+ * Assessment - Analysis: Printing Hardware Usage
+ */
+
+/* @var $phpword PHPWord */
+$phpword = $this->phpword;
+
+/* @var $section PHPWord_Section */
+$section = $this->section;
+$section->addPageBreak();
+
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
+
+$section->addTitle($this->translate("Analysis: Printing Hardware Usage"), 1);
+$gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
+$gradeTable->addRow();
+$gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($proposal->Ranking->PrintingHardwareUsage->RankingText);
+$gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number_format($proposal->Ranking->PrintingHardwareUsage->Rank, 1), "gradeFont", "gradeParagraph");
+
+$section->addTextBreak();
+$section->addTitle($this->translate('Print Volume and Number of Printing Devices'), 2);
+$section->addText(sprintf($this->translate('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.'), number_format(count($this->proposal->getDevices())), number_format(($this->proposal->getPageCounts()->Total->Combined->Monthly / $this->proposal->DeviceCount)), number_format($this->proposal->getPageCounts()->Total->Combined->Monthly)));
+
+$imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
+$imageTable->addRow();
+$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell1)->addImage($proposal->Graphs [4]);
+$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell2)->addImage($proposal->Graphs [5]);
+$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell3)->addImage($proposal->Graphs [6]);
+
+$section->addTextBreak();
+$section->addTitle($this->translate('Underused and Overused Printing Devices'), 2);
+$section->addText(sprintf($this->translate('Currently, %1$s%% of your printing devices are printing less than one quarter of our recommended monthly print volume, and %2$s%% are printing above our recommended monthly print volume. Our recommended monthly print volumes are equal to the manufacturer\'s stated yield for a single print cartridge (for monochrome devices, the black cartridge, and for color devices, a single color cartridge unless the device is not being used for color).'), number_format($this->proposal->PercentDevicesUnderused), number_format($this->proposal->PercentDevicesOverused)));
+$section->addText($this->translate('Underused printing devices can be consolidated or retired to free up floor and desk space, reduce the amount of cash held in unused supplies inventory, and reduce the energy costs associated with powering underused machines. Overused printing devices risk having increased breakdowns and should have a portion of their print volumes moved to underused printers or be replaced with higher-capacity machines.'));
+$section->addPageBreak();
+$cellWidths = array (
+    3611, 
+    1805, 
+    1805, 
+    1805 
+);
+$lowestUtilizationTable = $section->addTable($this->styles->tables->utilization->tablestyle);
+$lowestUtilizationTable->addRow();
+$lowestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($this->translate('Lowest Utilization'), 'bold_text', 'nospacing_centeralign');
+$lowestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText($this->translate('Serial No.'), 'bold_text', 'nospacing_centeralign');
+$lowestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText($this->translate('Avg. Monthly Volume'), 'bold_text', 'nospacing_centeralign');
+$lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->translate('Recommended Max. Volume'), 'bold_text', 'nospacing_centeralign');
+/* @var $device Proposalgen_Model_DeviceInstance */
+foreach ( $this->proposal->getLeastUsedDevices() as $device )
+{
+    $lowestUtilizationTable->addRow($this->styles->tables->utilization->rowheight);
+    $lowestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($device->getDeviceName(), null, 'nospacing');
+    $lowestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText(($device->SerialNumber) ?  : "Unknown", null, 'nospacing');
+    $lowestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText(number_format($device->AverageMonthlyPageCount), null, 'nospacing');
+    $lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->MasterDevice->MaximumMonthlyPageVolume), null, 'nospacing');
+}
+
+$section->addText($this->translate('Only takes into account devices for which expected cartridge yields are known.'), 'small_italic_text', 'nospacing');
+$section->addTextBreak();
+
+$highestUtilizationTable = $section->addTable($this->styles->tables->utilization->tablestyle);
+$highestUtilizationTable->addRow($this->styles->tables->utilization->rowheight);
+$highestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($this->translate('Highest Utilization'), 'bold_text', 'nospacing_centeralign');
+$highestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText($this->translate('Serial No.'), 'bold_text', 'nospacing_centeralign');
+$highestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText($this->translate('Avg. Monthly Volume'), 'bold_text', 'nospacing_centeralign');
+$highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->translate('Recommended Max. Volume'), 'bold_text', 'nospacing_centeralign');
+
+/* @var $device Proposalgen_Model_DeviceInstance */
+foreach ( $this->proposal->getMostUsedDevices() as $device )
+{
+    $highestUtilizationTable->addRow();
+    $highestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($device->getDeviceName(), null, 'nospacing');
+    $highestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText(($device->SerialNumber) ?  : "Unknown", null, 'nospacing');
+    $highestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText(number_format($device->AverageMonthlyPageCount), null, 'nospacing');
+    $highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->MasterDevice->MaximumMonthlyPageVolume), null, 'nospacing');
+}
+$section->addText($this->translate('Only takes into account devices for which expected cartridge yields are known.'), 'small_italic_text', 'nospacing');
+$section->addTextBreak();
+
+$section->addTitle($this->translate('Color Usage'), 2);
+
+$section->addText(sprintf($this->translate('You currently have %1$s color printing devices that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.'), number_format($this->proposal->NumberOfColorCapableDevices), number_format($this->proposal->getPageCounts()->Total->Color->Monthly), number_format(($this->proposal->getPercentages()->TotalColorPercentage * 100), 2)));
+
+$section->addTextBreak();
+$imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
+$imageTable->addRow();
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($proposal->Graphs [7]);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($proposal->Graphs [8]);
+$section->addTextBreak();
+
+$section->addText($this->translate('Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your company\'s professional image, improve comprehension and increase readership.'));
+$section->addText($this->translate('Office Depot can help you track your color printing and provide low-cost color hardware options.'));

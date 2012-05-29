@@ -4,6 +4,7 @@ class Proposalgen_Model_DbTable_NumericAnswers extends Zend_Db_Table_Abstract
 {
     protected $_name = 'answers_numeric';
     protected $_primary = 'answer_numeric_id';
+    
     protected $_referenceMap = array (
             'Reports' => array (
                     'columns' => 'report_id', 

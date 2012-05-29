@@ -2,7 +2,6 @@
 
 /**
  * Class Proposalgen_Model_DeviceToner
- *
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_DeviceToner extends Tangent_Model_Abstract
@@ -11,7 +10,6 @@ class Proposalgen_Model_DeviceToner extends Tangent_Model_Abstract
     protected $MasterDeviceId;
 
     /**
-     *
      * @return the $TonerId
      */
     public function getTonerId ()
@@ -25,8 +23,7 @@ class Proposalgen_Model_DeviceToner extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $TonerId            
+     * @param field_type $TonerId
      */
     public function setTonerId ($TonerId)
     {
@@ -35,7 +32,6 @@ class Proposalgen_Model_DeviceToner extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $MasterDeviceId
      */
     public function getMasterDeviceId ()
@@ -49,12 +45,12 @@ class Proposalgen_Model_DeviceToner extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MasterDeviceId            
+     * @param field_type $MasterDeviceId
      */
     public function setMasterDeviceId ($MasterDeviceId)
     {
         $this->MasterDeviceId = $MasterDeviceId;
         return $this;
     }
+
 }

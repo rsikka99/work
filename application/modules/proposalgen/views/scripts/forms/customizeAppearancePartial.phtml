@@ -1,19 +1,21 @@
 <?php
 /*
- * To add a view partial anywhere, the syntax is as follows: echo $this->partial('{folder}/somefile.phtml'); NOTE:
- * {folder} must be located under the views/scripts/ folder... eg: echo
- * $this->partial('forms/customizeAppearancePartial.phtml');
+	To add a view partial anywhere, the syntax is as follows:
+	echo $this->partial('{folder}/somefile.phtml');
+	
+	NOTE: {folder} must be located under the views/scripts/ folder...
+	eg: echo $this->partial('forms/customizeAppearancePartial.phtml');
  */
-?>
+ ?>
 <?php
 /*
- * The following link needs to be added somewhere for this form to work <a href="javascript: void(0);"
- * onclick="javascipt: do_action('customize');">Customize Report Appearance</a></td>
- */
+	The following link needs to be added somewhere for this form to work
+	<a href="javascript: void(0);" onclick="javascipt: do_action('customize');">Customize Report Appearance</a></td>
+*/
 ?>
 
 
-<?php $this->headScript()->captureStart('append','text/javascript')?>
+<?php $this->headScript()->captureStart('append','text/javascript') ?>
 	var page = "<?php echo $this->page; ?>";
 	var repop = <?php echo ($this->repop == "" ? "false" : $this->repop); ?>;
 	var default_display = "<?php echo $default_display; ?>";
@@ -190,7 +192,7 @@
 		}
 	}
 
-<?php $this->headScript()->captureEnd()?>
+<?php $this->headScript()->captureEnd() ?>
 <?php
 //hide all containers
 $uploader_display = "none";
@@ -202,151 +204,108 @@ $default_display = "current";
 $current_display = "block";
 
 //override defaults if images exist
-if (strlen($this->thumb_photo_exists) > 0)
-{
-    $default_display = "current";
-    $uploader_display = "none";
-    $preview_display = "none";
-    $current_display = "block";
-}
-else if (strlen($this->large_photo_exists) > 0)
-{
-    $default_display = "preview";
-    $uploader_display = "none";
-    $preview_display = "block";
-    $current_display = "none";
+if(strlen($this->thumb_photo_exists) > 0) {
+	$default_display = "current";
+	$uploader_display = "none";
+	$preview_display = "none";
+	$current_display = "block";
+} else if(strlen($this->large_photo_exists) > 0) {
+	$default_display = "preview";
+	$uploader_display = "none";
+	$preview_display = "block";
+	$current_display = "none";
 }
 ?>
 
 <div id="lightbox-panel" class="image_upload_container">
-	<input type="hidden" name="x1" value="" id="x1" /> <input type="hidden"
-		name="y1" value="" id="y1" /> <input type="hidden" name="x2" value=""
-		id="x2" /> <input type="hidden" name="y2" value="" id="y2" /> <input
-		type="hidden" name="w" value="" id="w" /> <input type="hidden"
-		name="h" value="" id="h" />
-
+	<input type="hidden" name="x1" value="" id="x1" />
+	<input type="hidden" name="y1" value="" id="y1" />
+	<input type="hidden" name="x2" value="" id="x2" />
+	<input type="hidden" name="y2" value="" id="y2" />
+	<input type="hidden" name="w" value="" id="w" />
+	<input type="hidden" name="h" value="" id="h" />
+	
 	<h2>Customize Report Appearance</h2>
 	<div id="modal_message_container" class="margined">
 	<?php
-if (count($this->errMessages) > 0)
-{
-    //show the first error in the list of errors
-    foreach ( $this->errMessages as $key => $value )
-    {
-        echo $value;
-        break;
-    }
-}
-else
-{
-    if (isset($this->message))
-    {
-        echo $this->message;
-    }
-}
-?>
+        if(count($this->errMessages) > 0) {
+            //show the first error in the list of errors
+            foreach($this->errMessages as $key => $value) {
+                echo $value;
+                break;
+            }
+        } else {
+        	if(isset($this->message)) {
+            	echo $this->message;
+        	}
+        }
+    ?>
 	</div>
-
+	
 	<div id="uploader_container" class="clear" style="display: <?php echo $uploader_display; ?>">
-		<p>Browse for your company logo and upload the file once selected.
-			Optimal size is 375px by 150px with a white background.</p>
-		<div id="upload_fields">
-			<div id="upload_instructions">
-				<p>
-					Choose a <span style="color: red">.jpg</span> image file to upload.
-					(1MB max):
-				</p>
-			</div>
-			<div id="upload_element">
-				<input type="file" name="uploadedfile" id="uploadedfile" size="60"
-					class="upload_file" />
-			</div>
-		</div>
-
-		<div id="uploader_buttons_container" class="button_container_padding">
-			<input type="submit" name="btnUpload" id="btnUpload"
-				class="upload_file_button" value="Upload File" /> <input
-				type="button" name="btnCancel" id="btnCancel" class=""
-				value="Cancel" onclick="javascript: do_action('cancel');" />
-		</div>
+    	<p>Browse for your company logo and upload the file once selected. Optimal size is 375px by 150px with a white background.</p>
+    	<div id="upload_fields">
+    		<div id="upload_instructions">
+    			<p>Choose a <span style="color: red">.jpg</span> image file to upload. (1MB max):</p>
+    		</div>
+    		<div id="upload_element">
+    			<input type="file" name="uploadedfile" id="uploadedfile" size="60" class="upload_file" />
+    		</div>
+    	</div>
+	
+    	<div id="uploader_buttons_container" class="button_container_padding">
+	        <input type="submit" name="btnUpload" id="btnUpload" class="upload_file_button" value="Upload File" />
+	        <input type="button" name="btnCancel" id="btnCancel" class="" value="Cancel" onclick="javascript: do_action('cancel');" />
+       	</div>
 	</div>
-
+	
 	<div id="preview_container" class="clear" style="display: <?php echo $preview_display; ?>">
-		<p>Drag a box around an area of the large image to generate your
-			company logo to be used in the report.</p>
+		<p>Drag a box around an area of the large image to generate your company logo to be used in the report.</p>
 		<div id="preview_image" class="clear_center">
-			<img id="large_image"
-				src="<?php echo $this->imageUrl; ?>/admin/showimage?page=<?php echo $this->page; ?>"
-				alt="Create Thumbnail" class="outlined" />
+			<img id="large_image" src="<?php echo $this->imageUrl; ?>/admin/showimage?page=<?php echo $this->page; ?>" alt="Create Thumbnail" class="outlined" />
 			<div id="thumb_image">
-				<img
-					src="<?php echo $this->imageUrl; ?>/admin/showimage?page=<?php echo $this->page; ?>"
-					width="375" style="position: relative;" alt="Thumbnail Preview" />
+				<img src="<?php echo $this->imageUrl; ?>/admin/showimage?page=<?php echo $this->page; ?>" width="375" style="position: relative;" alt="Thumbnail Preview" />
 			</div>
 		</div>
-
-		<div id="preview_buttons_container"
-			class="clear_center button_container_padding">
-			<input type="submit" name="save_thumb" id="save_thumb"
-				value="Save Thumbnail" /> <input type="button" name="btnCancel"
-				id="btnCancel" class="" value="Cancel"
-				onclick="javascript: do_action('cancel');" />
-		</div>
+	
+    	<div id="preview_buttons_container" class="clear_center button_container_padding">
+       		<input type="submit" name="save_thumb" id="save_thumb" value="Save Thumbnail" />
+	        <input type="button" name="btnCancel" id="btnCancel" class="" value="Cancel" onclick="javascript: do_action('cancel');" />
+       	</div>
 	</div>
-
+	
 	<div id="current_container" class="clear" style="display: <?php echo $current_display; ?>">
 		<?php if(!$this->admin) { ?>
-		<p>Below are the Default and Your Logos currently on file. If Your
-			Logo is emtpy, the Default Logo will be used.</p>
+		<p>Below are the Default and Your Logos currently on file. If Your Logo is emtpy, the Default Logo will be used.</p>
 		<div id="default_image">
 			<p>Default Logo:</p>
-			<img id="default_logo"
-				src="<?php echo $this->imageUrl; ?>/admin/showimage?size=thumb&page=<?php echo $this->page; ?>&default=true"
-				class="outlined" alt="Default Logo" />
+			<img id="default_logo" src="<?php echo $this->imageUrl; ?>/admin/showimage?size=thumb&page=<?php echo $this->page; ?>&default=true" class="outlined" alt="Default Logo" />
 		</div>
-
+		
 		<div id="current_image">
 			<p>Your Logo:</p>
-			<img id="company_logo"
-				src="<?php echo $this->imageUrl; ?>/admin/showimage?size=thumb&page=<?php echo $this->page; ?>"
-				class="outlined" alt="Company Logo" />
+			<img id="company_logo" src="<?php echo $this->imageUrl; ?>/admin/showimage?size=thumb&page=<?php echo $this->page; ?>" class="outlined" alt="Company Logo" />
 			<?php if(!$this->admin) { ?>
-    		<div id="remove_link">
-				<a href="javascript: void(0);"
-					onclick="javascript: do_action('remove');" title="Remove Logo">X</a>
-			</div>
+    		<div id="remove_link"><a href="javascript: void(0);" onclick="javascript: do_action('remove');" title="Remove Logo">X</a></div>
     		<?php } ?>
 		</div>
-
-		<div id="company_buttons"
-			class="clear_center button_container_padding">
-			<input type="button" name="btnCrop" id="btnCrop" class=""
-				value="Re-Crop Current Logo"
-				onclick="javascript: do_action('crop');" /> <input type="button"
-				name="btnNew" id="btnNew" class="" value="Upload New Logo"
-				onclick="javascript: do_action('new');" /> <input type="button"
-				name="btnDone" id="btnDone" class="" value="Done"
-				onclick="javascript: do_action('close');" />
-		</div>
+		
+		<div id="company_buttons" class="clear_center button_container_padding">
+        	<input type="button" name="btnCrop" id="btnCrop" class="" value="Re-Crop Current Logo" onclick="javascript: do_action('crop');" />
+        	<input type="button" name="btnNew" id="btnNew" class="" value="Upload New Logo" onclick="javascript: do_action('new');" />
+	        <input type="button" name="btnDone" id="btnDone" class="" value="Done" onclick="javascript: do_action('close');" />
+        </div>
 		<?php } else {?>
-		<p>Below is the Current Logo to be used as the default image in all
-			reports.</p>
+		<p>Below is the Current Logo to be used as the default image in all reports.</p>
 		<div id="admin_current_image" class="clear_center">
-			<img id="company_logo"
-				src="<?php echo $this->imageUrl; ?>/admin/showimage?size=thumb&page=<?php echo $this->page; ?>"
-				class="outlined" alt="Company Logo" />
-			<div id="company_buttons"
-				class="clear_center button_container_padding">
-				<input type="button" name="btnCrop" id="btnCrop" class=""
-					value="Re-Crop Current Logo"
-					onclick="javascript: do_action('crop');" /> <input type="button"
-					name="btnNew" id="btnNew" class="" value="Upload New Logo"
-					onclick="javascript: do_action('new');" /> <input type="button"
-					name="btnDone" id="btnDone" class="" value="Done"
-					onclick="javascript: do_action('close');" />
-			</div>
+			<img id="company_logo" src="<?php echo $this->imageUrl; ?>/admin/showimage?size=thumb&page=<?php echo $this->page; ?>" class="outlined" alt="Company Logo" />
+			<div id="company_buttons" class="clear_center button_container_padding">
+	        	<input type="button" name="btnCrop" id="btnCrop" class="" value="Re-Crop Current Logo" onclick="javascript: do_action('crop');" />
+	        	<input type="button" name="btnNew" id="btnNew" class="" value="Upload New Logo" onclick="javascript: do_action('new');" />
+		        <input type="button" name="btnDone" id="btnDone" class="" value="Done" onclick="javascript: do_action('close');" />
+	        </div>
 		</div>
 		<?php } ?>
 	</div>
-
+	
 </div>

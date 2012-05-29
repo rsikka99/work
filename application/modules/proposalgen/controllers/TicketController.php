@@ -2,7 +2,7 @@
 
 /**
  * TicketController - Controller to manage all ticket actions
- *
+ * 
  * @author Lee Robert
  * @version 1.0
  */
@@ -26,7 +26,7 @@ class Proposalgen_TicketController extends Zend_Controller_Action
     function indexAction ()
     {
         // Should implement ajax to work with all the actions here, but we
-        // should be able to access those actions via html too
+    // should be able to access those actions via html too
     }
 
     public function manageticketsAction ()
@@ -50,30 +50,30 @@ class Proposalgen_TicketController extends Zend_Controller_Action
             $db->beginTransaction();
             try
             {
-                if ($formData ['form_mode'] == 'delete')
-                {
-                    $response = 1;
-                    foreach ( $formData as $key => $value )
-                    {
-                        if (strstr($key, "jqg_requests_list_"))
-                        {
-                            $ticket_id = str_replace("jqg_requests_list_", "", $key);
-                            $response = $this->deleteTicket($ticket_id);
-                            if ($response == 0)
-                            {
-                                $this->view->message = "There was an error while trying to delete the ticket " . $ticket_id . ". Please contact your administrator.";
-                                exit();
-                            }
-                        }
-                    }
-                    if ($response == 1)
-                    {
-                        $db->commit();
-                        $this->view->message = "The ticket(s) were successfully deleted.";
-                    }
-                }
+		        if ($formData ['form_mode'] == 'delete')
+		        {
+		            $response = 1;
+		            foreach ( $formData as $key => $value )
+		            {
+		                if (strstr($key, "jqg_requests_list_"))
+		                {
+		                    $ticket_id = str_replace("jqg_requests_list_", "", $key);
+		                    $response = $this->deleteTicket($ticket_id);
+		                    if ($response == 0)
+		                    {
+		                        $this->view->message = "There was an error while trying to delete the ticket " . $ticket_id . ". Please contact your administrator.";
+		                        exit();
+		                    }
+		                }
+		            }
+		            if ($response == 1)
+		            {
+		                $db->commit();
+		                $this->view->message = "The ticket(s) were successfully deleted.";
+		            }
+		        }
             }
-            catch ( Exception $e )
+            catch (Exception $e)
             {
                 $db->rollback();
                 $this->view->message = "An error has occurred and none of the selected tickets were deleted.";
@@ -125,7 +125,7 @@ class Proposalgen_TicketController extends Zend_Controller_Action
                     }
                 }
             }
-            catch ( Exception $e )
+            catch (Exception $e)
             {
                 $db->rollback();
                 $this->view->message = "An error has occurred and none of the selected tickets were deleted.";
@@ -164,7 +164,6 @@ class Proposalgen_TicketController extends Zend_Controller_Action
                 $formData = $this->_request->getPost();
                 // print_r($formData); die;
                 
-
                 // if not system admin and status > 2 then reset status to new
                 if (! in_array("System Admin", $this->privilege) && $formData ['cboStatus'] > 2)
                 {
@@ -195,6 +194,7 @@ class Proposalgen_TicketController extends Zend_Controller_Action
                             'comment_text' => $formData ['txtComment'] 
                     );
                     $ticket_commentsTable->insert($ticket_commentsData);
+                
                 }
                 
                 // return message
@@ -206,6 +206,7 @@ class Proposalgen_TicketController extends Zend_Controller_Action
                 $db->rollback();
                 $this->view->message = "An error has occurred and the ticket was not saved.";
             }
+        
         }
         
         if ($ticket_id > 0)
@@ -269,7 +270,9 @@ class Proposalgen_TicketController extends Zend_Controller_Action
                 $this->view->is_mapped = true;
                 $this->view->mapped_to_device = ucwords(strtolower($row ['manufacturer_name'] . ' ' . $row ['printer_model']));
             }
+        
         }
+    
     }
 
     public function ticketlistAction ()
@@ -355,14 +358,15 @@ class Proposalgen_TicketController extends Zend_Controller_Action
             {
                 $formdata = array ();
             }
+        
         }
         catch ( Exception $e )
         {
             // critical exception
             Throw new exception("Critical Error: Unable to find requests.", 0, $e);
-        } // end catch
         
-
+        } // end catch
+          
         // encode user data to return to the client:
         $json = Zend_Json::encode($formdata);
         $this->view->data = $json;
@@ -446,35 +450,35 @@ class Proposalgen_TicketController extends Zend_Controller_Action
             {
                 $formdata = array ();
             }
+        
         }
         catch ( Exception $e )
         {
             // critical exception
             Throw new exception("Critical Error: Unable to find requests.", 0, $e);
-        } // end catch
         
-
+        } // end catch
+          
         // encode user data to return to the client:
         $json = Zend_Json::encode($formdata);
         $this->view->data = $json;
     }
-
-    public function deleteTicket ($ticket_id)
+    
+    public function deleteTicket($ticket_id)
     {
         $db = Zend_Db_Table::getDefaultAdapter();
         
         // delete related records and ticket
         $db->beginTransaction();
-        try
-        {
-            $ticketsViewedMapper = Proposalgen_Model_Mapper_TicketViewed::getInstance()->delete('ticket_id = ' . $ticket_id);
-            $ticketCommentsMapper = Proposalgen_Model_Mapper_TicketComment::getInstance()->delete('ticket_id = ' . $ticket_id);
-            $ticketPFRequestsMapper = Proposalgen_Model_Mapper_TicketPFRequest::getInstance()->delete('ticket_id = ' . $ticket_id);
-            $ticketsMapper = Proposalgen_Model_Mapper_Ticket::getInstance()->delete('ticket_id = ' . $ticket_id);
+        try {
+			$ticketsViewedMapper = Proposalgen_Model_Mapper_TicketViewed::getInstance()->delete('ticket_id = ' . $ticket_id);
+			$ticketCommentsMapper = Proposalgen_Model_Mapper_TicketComment::getInstance()->delete('ticket_id = ' . $ticket_id);
+			$ticketPFRequestsMapper = Proposalgen_Model_Mapper_TicketPFRequest::getInstance()->delete('ticket_id = ' . $ticket_id);
+	        $ticketsMapper = Proposalgen_Model_Mapper_Ticket::getInstance()->delete('ticket_id = ' . $ticket_id);
             $db->commit();
-            return 1;
+	        return 1;
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
             $db->rollback();
             return 0;
@@ -492,5 +496,6 @@ class Proposalgen_TicketController extends Zend_Controller_Action
             return " ";
         }
     }
+
 } // end ticket controller
 

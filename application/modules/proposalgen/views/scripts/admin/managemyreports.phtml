@@ -1,12 +1,12 @@
 <?php
 /**
  * managemyreports.phtml
- *
- * @author Mike Christie
- * @version v1.0
+ * 
+ * @author	Mike Christie
+ * @version	v1.0 
  */
 ?>
-<?php $this->headScript()->captureStart('append','text/javascript')?>
+<?php $this->headScript()->captureStart('append','text/javascript') ?>
 
 	$(document).ready(function() {
     
@@ -27,7 +27,7 @@
 				{width:60, name:'is_finished', index:'is_finished', align:'center', edittype:'checkbox'},
 				{width:40, name:'view_link', index:'view_link', align:'center'}
 			],
-			width:625,
+			width:940,
 			height:'auto',
 			multiselect:true,
 			pager:'#reports_pager',
@@ -43,15 +43,13 @@
 					var cur_row = ids[i];
 					var is_finished = document.getElementById("reports_list").rows[i+1].cells[6].innerHTML;
 					report_id = document.getElementById("reports_list").rows[i+1].cells[1].innerHTML;
-					view_link = "
-<a href='javascript: view_report("+report_id+");'>View</a>
-"; 
+					view_link = "<a href='javascript: view_report("+report_id+");'>View</a>"; 
 					if(is_finished == "Yes") {
 						jQuery("#reports_list").jqGrid('setRowData',ids[i],{view_link:view_link});
 					}
 				}
 				
-    			$('#reports_list').setGridWidth(625);
+    			$('#reports_list').setGridWidth(940);
 			}
 		});
 		
@@ -68,7 +66,7 @@
 	
 	function update_grid() {
 		$('#reports_list').setGridParam({url:'<?php echo $this->baseUrl(); ?>/admin/myreportslist?filter='+$("#reports_fitler").val()});
-    	$('#reports_list').setGridWidth(625);
+    	$('#reports_list').setGridWidth(940);
 		$('#reports_list').trigger("reloadGrid");
 	}
 	
@@ -99,65 +97,51 @@
 		$("#requests").submit();
 	}
     
-<?php $this->headScript()->captureEnd()?>
-
+<?php $this->headScript()->captureEnd() ?>
+	
 <h2 id="page_title"><?php echo $this->title;?></h2>
 
-<?php echo $this->form?>
+<?php echo $this->form ?>
 
-<form name="requests" id="requests"
-	action="<?php echo $this->baseUrl(); ?>/admin/managemyreports"
-	method="POST">
+<form name="requests" id="requests" action="<?php echo $this->baseUrl(); ?>/admin/managemyreports" method="POST">
 	<input type="hidden" name="form_mode" id="form_mode" value="request" />
-	<input type="hidden" name="request_id" id="request_id" value="" /> <input
-		type="hidden" name="devices_pf_id" id="devices_pf_id" value="" /> <input
-		type="hidden" name="report_id" id="report_id" value="" />
-
+	<input type="hidden" name="request_id" id="request_id" value="" />
+	<input type="hidden" name="devices_pf_id" id="devices_pf_id" value="" />
+	<input type="hidden" name="report_id" id="report_id" value="" />	
+			
 	<div id="instruction_container">
-		<p>Select the rows you wish to delete, and press the delete button to
-			confirm.</p>
+		<p>Select the rows you wish to delete, and press the delete button to confirm.</p>
 	</div>
-
+	
 	<div id="message_container" class="margined">
 		<?php echo $this->message; ?>
 	</div>
-
-	<div id="filter_container">
-		<label for="reports_fitler" class="forms_label">Filter Reports:</label>
-		<select name="reports_fitler" id="reports_fitler" class=""
-			onchange="javascript: update_grid(this.value);">
+	
+	<div id="filter_container" class="well">
+		<label for="reports_fitler" class="forms_label" style="display: inline; margin: 0px 10px 0px 0px;">Filter Reports:</label>
+		<select name="reports_fitler" id="reports_fitler" class="" style="margin: 0px 0px 0px 0px;" onchange="javascript: update_grid(this.value);">
 		<?php
-foreach ( $this->filter as $key => $value )
-{
-    echo "<option value='" . $key . "'";
-    if ($key == $this->cur_fitler)
-    {
-        echo " selected";
-    }
-    echo ">" . ucwords(strtolower($value)) . "</option>";
-}
-?>
+		foreach($this->filter as $key => $value) {
+			echo "<option value='" . $key ."'";
+			if ($key == $this->cur_fitler) {
+				echo " selected";
+			}
+			echo ">" . ucwords(strtolower($value)) . "</option>";
+		}
+		?>
 		</select>
 		<div style="float: right; margin: 5px 10px 0px 0px;">
-			<a href="transferreports">Transfer Reports</a>
+		    <a href="transferreports">Transfer Reports</a>
 		</div>
 	</div>
-
+	
 	<div id="request_container" class="margined">
 		<table id="reports_list"></table>
 		<div id="reports_pager"></div>
 	</div>
-
+	
 	<div class="submitBar">
-		<div id="submitBtns">
-			<div class="savebtn">
-				<input type="button" name="btnDelete" id="btnDelete" value="Delete"
-					onclick="javascript: confirm_delete();" />
-			</div>
-			<div class="backbtn">
-				<input type="button" name="btnDone" id="btnDone" value="Done"
-					onclick="javascript: document.location.href='<?php echo $this->baseUrl()."/admin"?>';" />
-			</div>
-		</div>
-	</div>
+		<input type="button" name="btnDelete" id="btnDelete" value="Delete" onclick="javascript: confirm_delete();" class="btn btn-primary" />
+		<input type="button" name="btnDone" id="btnDone" value="Done" onclick="javascript: document.location.href='<?php echo $this->baseUrl()."/admin"?>';" class="btn" />
+	</div>		
 </form>

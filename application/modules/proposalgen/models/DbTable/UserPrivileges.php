@@ -7,6 +7,7 @@ class Proposalgen_Model_DbTable_UserPrivileges extends Zend_Db_Table_Abstract
             'user_id', 
             'priv_id' 
     );
+    
     protected $_referenceMap = array (
             'ACL_Users' => array (
                     'columns' => 'user_id', 

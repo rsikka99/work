@@ -2,7 +2,6 @@
 
 /**
  * Class Proposalgen_Model_Report
- *
  * @author "Lee Robert"
  */
 class Proposalgen_Model_Report extends Tangent_Model_Abstract
@@ -30,6 +29,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     protected $ReportKilowattsPerHour;
     protected $ReportPricingConfigId;
     protected $ReportGrossMarginPricingConfigId;
+    
     protected $ReportDefaultBWTonerCost;
     protected $ReportDefaultBWTonerYield;
     protected $ReportDefaultColorTonerCost;
@@ -38,19 +38,22 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     protected $ReportDefaultThreeColorTonerYield;
     protected $ReportDefaultFourColorTonerCost;
     protected $ReportDefaultFourColorTonerYield;
+    
     protected $PricingConfig;
     protected $GrossMarginPricingConfig;
+    
     protected $ReportActualPageCoverageMono;
     protected $ReportActualPageCoverageColor;
     protected $ReportEstimatedPageCoverageMono;
     protected $ReportEstimatedPageCoverageColor;
+    
     protected $ReportDate;
     protected $DevicesModified;
+    
     protected $Settings;
     protected $ReportSettings;
 
     /**
-     *
      * @return the $PricingConfig
      */
     public function getPricingConfig ()
@@ -63,17 +66,16 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $PricingConfig            
+     * @param field_type $PricingConfig
      */
     public function setPricingConfig ($PricingConfig)
     {
         $this->PricingConfig = $PricingConfig;
         return $this;
     }
-
-    /**
-     *
+    
+    
+ /**
      * @return the $GrossMarginPricingConfig
      */
     public function getGrossMarginPricingConfig ()
@@ -86,8 +88,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $GrossMarginPricingConfig            
+     * @param field_type $GrossMarginPricingConfig
      */
     public function setGrossMarginPricingConfig ($GrossMarginPricingConfig)
     {
@@ -96,7 +97,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportId
      */
     public function getReportId ()
@@ -110,8 +110,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportId            
+     * @param field_type $ReportId
      */
     public function setReportId ($ReportId)
     {
@@ -120,7 +119,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserId
      */
     public function getUserId ()
@@ -134,8 +132,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserId            
+     * @param field_type $UserId
      */
     public function setUserId ($UserId)
     {
@@ -144,7 +141,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $CustomerCompanyName
      */
     public function getCustomerCompanyName ()
@@ -158,8 +154,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $CustomerCompanyName            
+     * @param field_type $CustomerCompanyName
      */
     public function setCustomerCompanyName ($CustomerCompanyName)
     {
@@ -168,7 +163,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $CompanyImageOverride
      */
     public function getCompanyImageOverride ()
@@ -182,8 +176,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $CompanyImageOverride            
+     * @param field_type $CompanyImageOverride
      */
     public function setCompanyImageOverride ($CompanyImageOverride)
     {
@@ -192,7 +185,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $CompanyReportColorOverride
      */
     public function getCompanyReportColorOverride ()
@@ -206,8 +198,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $CompanyReportColorOverride            
+     * @param field_type $CompanyReportColorOverride
      */
     public function setCompanyReportColorOverride ($CompanyReportColorOverride)
     {
@@ -216,7 +207,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserPricingOverride
      */
     public function getUserPricingOverride ()
@@ -230,8 +220,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserPricingOverride            
+     * @param field_type $UserPricingOverride
      */
     public function setUserPricingOverride ($UserPricingOverride)
     {
@@ -240,7 +229,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportStage
      */
     public function getReportStage ()
@@ -254,8 +242,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportStage            
+     * @param field_type $ReportStage
      */
     public function setReportStage ($ReportStage)
     {
@@ -264,7 +251,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $QuestionsetId
      */
     public function getQuestionsetId ()
@@ -278,8 +264,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $QuestionsetId            
+     * @param field_type $QuestionsetId
      */
     public function setQuestionsetId ($QuestionsetId)
     {
@@ -288,7 +273,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IsDeleted
      */
     public function getIsDeleted ()
@@ -302,8 +286,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IsDeleted            
+     * @param field_type $IsDeleted
      */
     public function setIsDeleted ($IsDeleted)
     {
@@ -312,7 +295,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DateCreated
      */
     public function getDateCreated ()
@@ -326,8 +308,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DateCreated            
+     * @param field_type $DateCreated
      */
     public function setDateCreated ($DateCreated)
     {
@@ -336,7 +317,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $LastModified
      */
     public function getLastModified ()
@@ -350,8 +330,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $LastModified            
+     * @param field_type $LastModified
      */
     public function setLastModified ($LastModified)
     {
@@ -360,7 +339,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportAdminChargePerPage
      */
     public function getReportAdminChargePerPage ()
@@ -374,8 +352,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportAdminChargePerPage            
+     * @param field_type $ReportAdminChargePerPage
      */
     public function setReportAdminChargePerPage ($ReportAdminChargePerPage)
     {
@@ -384,7 +361,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportPricingMargin
      */
     public function getReportPricingMargin ()
@@ -398,8 +374,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportPricingMargin            
+     * @param field_type $ReportPricingMargin
      */
     public function setReportPricingMargin ($ReportPricingMargin)
     {
@@ -408,7 +383,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportAverageNonLeasePrinterCost
      */
     public function getReportAverageNonLeasePrinterCost ()
@@ -422,8 +396,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportAverageNonLeasePrinterCost            
+     * @param field_type $ReportAverageNonLeasePrinterCost
      */
     public function setReportAverageNonLeasePrinterCost ($ReportAverageNonLeasePrinterCost)
     {
@@ -432,7 +405,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportLeasedBWPerPage
      */
     public function getReportLeasedBWPerPage ()
@@ -446,8 +418,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportLeasedBWPerPage            
+     * @param field_type $ReportLeasedBWPerPage
      */
     public function setReportLeasedBWPerPage ($ReportLeasedBWPerPage)
     {
@@ -456,7 +427,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportLeasedColorPerPage
      */
     public function getReportLeasedColorPerPage ()
@@ -470,8 +440,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportLeasedColorPerPage            
+     * @param field_type $ReportLeasedColorPerPage
      */
     public function setReportLeasedColorPerPage ($ReportLeasedColorPerPage)
     {
@@ -480,7 +449,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportMPSBWPerPage
      */
     public function getReportMPSBWPerPage ()
@@ -494,8 +462,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportMPSBWPerPage            
+     * @param field_type $ReportMPSBWPerPage
      */
     public function setReportMPSBWPerPage ($ReportMPSBWPerPage)
     {
@@ -504,7 +471,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportMPSColorPerPage
      */
     public function getReportMPSColorPerPage ()
@@ -518,8 +484,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportMPSColorPerPage            
+     * @param field_type $ReportMPSColorPerPage
      */
     public function setReportMPSColorPerPage ($ReportMPSColorPerPage)
     {
@@ -528,7 +493,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportMonthlyLeasePayment
      */
     public function getReportMonthlyLeasePayment ()
@@ -542,8 +506,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportMonthlyLeasePayment            
+     * @param field_type $ReportMonthlyLeasePayment
      */
     public function setReportMonthlyLeasePayment ($ReportMonthlyLeasePayment)
     {
@@ -552,7 +515,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportKilowattsPerHour
      */
     public function getReportKilowattsPerHour ()
@@ -566,8 +528,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportKilowattsPerHour            
+     * @param field_type $ReportKilowattsPerHour
      */
     public function setReportKilowattsPerHour ($ReportKilowattsPerHour)
     {
@@ -576,7 +537,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportPricingConfigId
      */
     public function getReportPricingConfigId ()
@@ -590,8 +550,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportPricingConfigId            
+     * @param field_type $ReportPricingConfigId
      */
     public function setReportPricingConfigId ($ReportPricingConfigId)
     {
@@ -600,7 +559,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportDefaultBWTonerCost
      */
     public function getReportDefaultBWTonerCost ()
@@ -614,8 +572,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportDefaultBWTonerCost            
+     * @param field_type $ReportDefaultBWTonerCost
      */
     public function setReportDefaultBWTonerCost ($ReportDefaultBWTonerCost)
     {
@@ -624,7 +581,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportDefaultBWTonerYield
      */
     public function getReportDefaultBWTonerYield ()
@@ -638,8 +594,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportDefaultBWTonerYield            
+     * @param field_type $ReportDefaultBWTonerYield
      */
     public function setReportDefaultBWTonerYield ($ReportDefaultBWTonerYield)
     {
@@ -648,7 +603,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportDefaultColorTonerCost
      */
     public function getReportDefaultColorTonerCost ()
@@ -662,8 +616,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportDefaultColorTonerCost            
+     * @param field_type $ReportDefaultColorTonerCost
      */
     public function setReportDefaultColorTonerCost ($ReportDefaultColorTonerCost)
     {
@@ -672,7 +625,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportDefaultColorTonerYield
      */
     public function getReportDefaultColorTonerYield ()
@@ -686,8 +638,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportDefaultColorTonerYield            
+     * @param field_type $ReportDefaultColorTonerYield
      */
     public function setReportDefaultColorTonerYield ($ReportDefaultColorTonerYield)
     {
@@ -696,7 +647,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportDefaultThreeColorTonerCost
      */
     public function getReportDefaultThreeColorTonerCost ()
@@ -710,8 +660,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportDefaultThreeColorTonerCost            
+     * @param field_type $ReportDefaultThreeColorTonerCost
      */
     public function setReportDefaultThreeColorTonerCost ($ReportDefaultThreeColorTonerCost)
     {
@@ -720,7 +669,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportDefaultThreeColorTonerYield
      */
     public function getReportDefaultThreeColorTonerYield ()
@@ -734,8 +682,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportDefaultThreeColorTonerYield            
+     * @param field_type $ReportDefaultThreeColorTonerYield
      */
     public function setReportDefaultThreeColorTonerYield ($ReportDefaultThreeColorTonerYield)
     {
@@ -744,7 +691,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportDefaultFourColorTonerCost
      */
     public function getReportDefaultFourColorTonerCost ()
@@ -758,8 +704,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportDefaultFourColorTonerCost            
+     * @param field_type $ReportDefaultFourColorTonerCost
      */
     public function setReportDefaultFourColorTonerCost ($ReportDefaultFourColorTonerCost)
     {
@@ -768,7 +713,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportDefaultFourColorTonerYield
      */
     public function getReportDefaultFourColorTonerYield ()
@@ -782,8 +726,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportDefaultFourColorTonerYield            
+     * @param field_type $ReportDefaultFourColorTonerYield
      */
     public function setReportDefaultFourColorTonerYield ($ReportDefaultFourColorTonerYield)
     {
@@ -792,7 +735,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $FullCompanyImageOverride
      */
     public function getFullCompanyImageOverride ()
@@ -806,8 +748,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $FullCompanyImageOverride            
+     * @param field_type $FullCompanyImageOverride
      */
     public function setFullCompanyImageOverride ($FullCompanyImageOverride)
     {
@@ -816,7 +757,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportServiceCostPerPage
      */
     public function getReportServiceCostPerPage ()
@@ -830,8 +770,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportServiceCostPerPage            
+     * @param field_type $ReportServiceCostPerPage
      */
     public function setReportServiceCostPerPage ($ReportServiceCostPerPage)
     {
@@ -840,7 +779,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportActualPageCoverageMono
      */
     public function getReportActualPageCoverageMono ()
@@ -854,7 +792,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportActualPageCoverageColor
      */
     public function getReportActualPageCoverageColor ()
@@ -868,8 +805,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportActualPageCoverageMono            
+     * @param field_type $ReportActualPageCoverageMono
      */
     public function setReportActualPageCoverageMono ($ReportActualPageCoverageMono)
     {
@@ -878,8 +814,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportActualPageCoverageColor            
+     * @param field_type $ReportActualPageCoverageColor
      */
     public function setReportActualPageCoverageColor ($ReportActualPageCoverageColor)
     {
@@ -888,7 +823,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportEstimatedPageCoverageMono
      */
     public function getReportEstimatedPageCoverageMono ()
@@ -902,8 +836,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportEstimatedPageCoverageMono            
+     * @param field_type $ReportEstimatedPageCoverageMono
      */
     public function setReportEstimatedPageCoverageMono ($ReportEstimatedPageCoverageMono)
     {
@@ -912,7 +845,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportEstimatedPageCoverageColor
      */
     public function getReportEstimatedPageCoverageColor ()
@@ -926,8 +858,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportEstimatedPageCoverageColor            
+     * @param field_type $ReportEstimatedPageCoverageColor
      */
     public function setReportEstimatedPageCoverageColor ($ReportEstimatedPageCoverageColor)
     {
@@ -936,7 +867,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportDate
      */
     public function getReportDate ()
@@ -950,8 +880,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportDate            
+     * @param field_type $ReportDate
      */
     public function setReportDate ($ReportDate)
     {
@@ -960,7 +889,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportSettings
      */
     public function getReportSettings ($getOverrides = true)
@@ -972,24 +900,24 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
             $report_date = new Zend_Date($this->getReportDate(), "yyyy-MM-dd HH:ss");
             
             $reportsettings = array (
-                    "estimated_page_coverage_mono" => $this->getReportEstimatedPageCoverageMono(), 
-                    "estimated_page_coverage_color" => $this->getReportEstimatedPageCoverageColor(), 
-                    "actual_page_coverage_mono" => $this->getReportActualPageCoverageMono(), 
-                    "actual_page_coverage_color" => $this->getReportActualPageCoverageColor(), 
-                    "service_cost_per_page" => $this->getReportServiceCostPerPage(), 
-                    "admin_charge_per_page" => $this->getReportAdminChargePerPage(), 
-                    "pricing_margin" => $this->getReportPricingMargin(), 
-                    "monthly_lease_payment" => $this->getReportMonthlyLeasePayment(), 
-                    "default_printer_cost" => $this->getReportAverageNonLeasePrinterCost(), 
-                    "leased_bw_per_page" => $this->getReportLeasedBwPerPage(), 
-                    "leased_color_per_page" => $this->getReportLeasedColorPerPage(), 
-                    "mps_bw_per_page" => $this->getReportMpsBwPerPage(), 
-                    "mps_color_per_page" => $this->getReportMpsColorPerPage(), 
-                    "kilowatts_per_hour" => $this->getReportKilowattsPerHour(), 
-                    "pricing_config_id" => $this->getReportPricingConfigId(), 
-                    "gross_margin_pricing_config_id" => $this->getReportGrossMarginPricingConfigId(), 
-                    "pricing_margin" => $this->getReportPricingMargin(), 
-                    "report_date" => ($report_date->toString('M/d/yyyy') > '01/31/1999' ? $report_date->toString('M/d/yyyy') : date("m/d/Y")) 
+                    "estimated_page_coverage_mono" => $this->getReportEstimatedPageCoverageMono(),
+                    "estimated_page_coverage_color" => $this->getReportEstimatedPageCoverageColor(),
+                    "actual_page_coverage_mono" => $this->getReportActualPageCoverageMono(),
+                    "actual_page_coverage_color" => $this->getReportActualPageCoverageColor(),
+                    "service_cost_per_page" => $this->getReportServiceCostPerPage(),
+                    "admin_charge_per_page" => $this->getReportAdminChargePerPage(),
+                    "pricing_margin" => $this->getReportPricingMargin(),
+                    "monthly_lease_payment" => $this->getReportMonthlyLeasePayment(),
+                    "default_printer_cost" => $this->getReportAverageNonLeasePrinterCost(),
+                    "leased_bw_per_page" => $this->getReportLeasedBwPerPage(),
+                    "leased_color_per_page" => $this->getReportLeasedColorPerPage(),
+                    "mps_bw_per_page" => $this->getReportMpsBwPerPage(),
+                    "mps_color_per_page" => $this->getReportMpsColorPerPage(),
+                    "kilowatts_per_hour" => $this->getReportKilowattsPerHour(),
+                    "pricing_config_id" => $this->getReportPricingConfigId(),
+            		"gross_margin_pricing_config_id" => $this->getReportGrossMarginPricingConfigId(),
+                    "pricing_margin" => $this->getReportPricingMargin(),
+                    "report_date" => ($report_date->toString('M/d/yyyy') > '01/31/1999' ? $report_date->toString('M/d/yyyy') : date("m/d/Y")),
             );
             
             if ($getOverrides)
@@ -1012,8 +940,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportSettings            
+     * @param field_type $ReportSettings
      */
     public function setReportSettings ($ReportSettings)
     {
@@ -1022,7 +949,6 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportGrossMarginPricingConfigId
      */
     public function getReportGrossMarginPricingConfigId ()
@@ -1036,28 +962,29 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportGrossMarginPricingConfigId            
+     * @param field_type $ReportGrossMarginPricingConfigId
      */
     public function setReportGrossMarginPricingConfigId ($ReportGrossMarginPricingConfigId)
     {
         $this->ReportGrossMarginPricingConfigId = $ReportGrossMarginPricingConfigId;
         return $this;
     }
-
-    public function getDevicesModified ()
+    
+	public function getDevicesModified ()
     {
-        if (! isset($this->DevicesModified))
-        {
-            
-            $this->DevicesModified = null;
-        }
+        if (!isset($this->DevicesModified)) 
+        { 
+              
+             $this->DevicesModified = null;
+        }     
         return $this->DevicesModified;
     }
 
-    public function setDevicesModified ($DevicesModified)
+	public function setDevicesModified ($DevicesModified)
     {
         $this->DevicesModified = $DevicesModified;
         return $this;
     }
+
+
 }

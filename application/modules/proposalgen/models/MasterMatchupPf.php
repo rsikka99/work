@@ -2,7 +2,6 @@
 
 /**
  * Class Proposalgen_Model_MasterMatchupPf
- *
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_MasterMatchupPf extends Tangent_Model_Abstract
@@ -11,7 +10,6 @@ class Proposalgen_Model_MasterMatchupPf extends Tangent_Model_Abstract
     protected $DevicesPfId;
 
     /**
-     *
      * @return the $MasterDeviceId
      */
     public function getMasterDeviceId ()
@@ -25,8 +23,7 @@ class Proposalgen_Model_MasterMatchupPf extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MasterDeviceId            
+     * @param field_type $MasterDeviceId
      */
     public function setMasterDeviceId ($MasterDeviceId)
     {
@@ -35,7 +32,6 @@ class Proposalgen_Model_MasterMatchupPf extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DevicesPfId
      */
     public function getDevicesPfId ()
@@ -49,12 +45,12 @@ class Proposalgen_Model_MasterMatchupPf extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DevicesPfId            
+     * @param field_type $DevicesPfId
      */
     public function setDevicesPfId ($DevicesPfId)
     {
         $this->DevicesPfId = $DevicesPfId;
         return $this;
     }
+
 }

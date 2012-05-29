@@ -14,7 +14,6 @@ class Proposalgen_Model_User_PasswordResetRequest extends Tangent_Model_Abstract
     protected $ResetUsed;
 
     /**
-     *
      * @return the $Id
      */
     public function getId ()
@@ -28,8 +27,7 @@ class Proposalgen_Model_User_PasswordResetRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $Id            
+     * @param field_type $Id
      */
     public function setId ($Id)
     {
@@ -38,7 +36,6 @@ class Proposalgen_Model_User_PasswordResetRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DateRequested
      */
     public function getDateRequested ()
@@ -52,8 +49,7 @@ class Proposalgen_Model_User_PasswordResetRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DateRequested            
+     * @param field_type $DateRequested
      */
     public function setDateRequested ($DateRequested)
     {
@@ -62,7 +58,6 @@ class Proposalgen_Model_User_PasswordResetRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ResetToken
      */
     public function getResetToken ()
@@ -76,8 +71,7 @@ class Proposalgen_Model_User_PasswordResetRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ResetToken            
+     * @param field_type $ResetToken
      */
     public function setResetToken ($ResetToken)
     {
@@ -86,7 +80,6 @@ class Proposalgen_Model_User_PasswordResetRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IpAddress
      */
     public function getIpAddress ()
@@ -100,8 +93,7 @@ class Proposalgen_Model_User_PasswordResetRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IpAddress            
+     * @param field_type $IpAddress
      */
     public function setIpAddress ($IpAddress)
     {
@@ -110,7 +102,6 @@ class Proposalgen_Model_User_PasswordResetRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ResetVerified
      */
     public function getResetVerified ()
@@ -124,8 +115,7 @@ class Proposalgen_Model_User_PasswordResetRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ResetVerified            
+     * @param field_type $ResetVerified
      */
     public function setResetVerified ($ResetVerified)
     {
@@ -134,7 +124,6 @@ class Proposalgen_Model_User_PasswordResetRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserId
      */
     public function getUserId ()
@@ -148,8 +137,7 @@ class Proposalgen_Model_User_PasswordResetRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserId            
+     * @param field_type $UserId
      */
     public function setUserId ($UserId)
     {
@@ -158,7 +146,6 @@ class Proposalgen_Model_User_PasswordResetRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ResetUsed
      */
     public function getResetUsed ()
@@ -172,12 +159,12 @@ class Proposalgen_Model_User_PasswordResetRequest extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ResetUsed            
+     * @param field_type $ResetUsed
      */
     public function setResetUsed ($ResetUsed)
     {
         $this->ResetUsed = $ResetUsed;
         return $this;
     }
+
 }

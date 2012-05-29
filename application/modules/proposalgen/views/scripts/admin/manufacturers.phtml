@@ -1,15 +1,15 @@
 <?php
 /**
  * manufacturers.phtml
- *
- * @author John Sadler
- * @version v1.0
+ * 
+ * @author	John Sadler
+ * @version	v1.0 
  */
 ?>
 
-<?php
-//Capture the following jquery javascript code, and append it to the headscript variable in the main layout.	
-$this->headScript()->captureStart('append', 'text/javascript') 
+<?php 
+	//Capture the following jquery javascript code, and append it to the headscript variable in the main layout.	
+	$this->headScript()->captureStart('append','text/javascript') 
 	/*
 	* This script is used to repopulate the contents of a form upon the user
     * changing the selected item in a drop box.  An ajax call is made to a retrieve
@@ -79,7 +79,7 @@ $this->headScript()->captureStart('append', 'text/javascript')
 		
 	});
 	
-<?php $this->headScript()->captureEnd()?>
+<?php $this->headScript()->captureEnd() ?>
 
 <h2><?php echo $this->title;?></h2>
 
@@ -87,7 +87,7 @@ $this->headScript()->captureStart('append', 'text/javascript')
 	<?php if($this->message) echo ($this->message); ?>
 </div>
 
-<div id="manufacturer_container" class="margined">
-	<?php echo $this->manufacturersForm; ?>
+<div class="well">
+<?php echo $this->manufacturersForm; ?>
 </div>
 

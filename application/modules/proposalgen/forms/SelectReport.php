@@ -8,7 +8,7 @@ class Proposalgen_Form_SelectReport extends EasyBib_Form
      * The constructor of the form
      *
      * @param array $reports
-     *            An array of Application_Model_Report to show in the dropdown
+     *            An array of Proposalgen_Model_Report to show in the dropdown
      * @param mixed $options            
      */
     public function __construct (array $reports, $options = null)
@@ -39,7 +39,7 @@ class Proposalgen_Form_SelectReport extends EasyBib_Form
         
         $select = new Zend_Form_Element_Select('select_proposal');
         //$select->setLabel("Please select a report:");
-        /* @var $report Application_Model_Report */
+        /* @var $report Proposalgen_Model_Report */
         foreach ( $this->_reports as $report )
         {
             

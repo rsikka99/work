@@ -6,11 +6,11 @@ class Proposalgen_Model_Mapper_User_PasswordResetRequest extends Tangent_Model_M
     static $_instance;
 
     /**
-     *
      * @return Proposalgen_Model_Mapper_User_PasswordResetRequest
      */
     public static function getInstance ()
     {
+        
         if (! isset(self::$_instance))
         {
             $className = get_class();
@@ -20,9 +20,8 @@ class Proposalgen_Model_Mapper_User_PasswordResetRequest extends Tangent_Model_M
     }
 
     /**
-     * Maps a database row object to an Application_Model
-     *
-     * @param Zend_Db_Table_Row $row            
+     * Maps a database row object to an Proposalgen_Model
+     * @param Zend_Db_Table_Row $row
      * @return Proposalgen_Model_Mapper_User_PasswordResetRequest
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
@@ -49,8 +48,7 @@ class Proposalgen_Model_Mapper_User_PasswordResetRequest extends Tangent_Model_M
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     *
-     * @param unknown_type $object            
+     * @param unknown_type $object
      */
     public function save (Proposalgen_Model_User_PasswordResetRequest $object)
     {
@@ -66,6 +64,7 @@ class Proposalgen_Model_Mapper_User_PasswordResetRequest extends Tangent_Model_M
             $data ["reset_used"] = $object->getResetUsed();
             
             $primaryKey = $this->saveRow($data);
+        
         }
         catch ( Exception $e )
         {

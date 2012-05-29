@@ -1,11 +1,10 @@
 <?php
 /**
  * uploadpricing.phtml - upload dealer pricing file
- * must be .
- * csv or .xls format.
+ * must be .csv or .xls format.
  *
- * @author : John Sadler
- * @version : v1.0
+ * @author: John Sadler
+ * @version: v1.0
  */
 ?>
 <script type="text/javascript">
@@ -30,98 +29,82 @@
 
 <H2>Upload Dealer Pricing List:</H2>
 
-<form id="fileinput" class="fileinput" enctype="multipart/form-data"
-	action="<?php echo $this->baseUrl(); ?>/admin/uploadpricing"
-	method="POST">
+<form id="fileinput" class="fileinput" enctype="multipart/form-data" action="<?php echo $this->baseUrl(); ?>/admin/uploadpricing" method="POST">
 	<dl class="zend_form">
 		<dt class="botMenu">
 	    <?php
-    if (isset($this->headerArray) == false && isset($this->resultsArray) == false)
-    {
-        ?>
+	    if (isset($this->headerArray) == false && isset($this->resultsArray) == false) {
+	        ?>
 	            <div class="upload_container">
-				Choose a file to upload: <input name="uploadedfile" type="file" />
-				<p class="margined">
-					<input type="submit" name="csv_submit" value="Upload File" /> <input
-						type="button" name="back_button" value="Done"
-						onclick="javascript: history.back();" />
-				</p>
-			</div>
+	                Choose a file to upload: <input name="uploadedfile" type="file" />
+	                <p class="margined">
+	                <input type="submit" name="csv_submit" value="Upload File" />
+	                <input type="button" name="back_button" value="Done" onclick="javascript: history.back();" />
+	                </p>
+	            </div>
 	        <?php
-    }
-    ?>
+	    }
+	    ?>
 	    
 	    <div class="inputErrorMessages">
 	        <?php
-        if (isset($this->errMessages))
-        {
-            //show the first error in the list of errors
-            foreach ( $this->errMessages as $key => $value )
-            {
-                echo $value;
-                break;
-            } //end foreach
-        }
-        else
-        {
-            if (isset($this->message))
-            {
-                echo $this->message;
-            }
-            //echo "File Successfully Uploaded!";
-        } //end else
-        ?>
+	        if (isset($this->errMessages)){
+	            //show the first error in the list of errors
+	            foreach ($this->errMessages as $key => $value) {
+	                echo $value;
+	                break;
+	            } //end foreach
+	        } else {
+	            if (isset($this->message)){
+	                echo $this->message;
+	            }
+	            //echo "File Successfully Uploaded!";
+	        } //end else
+	        ?>
 	    </div>
 	
 	    <?php
-    if (isset($this->headerArray) && isset($this->resultsArray))
-    {
-        ?>
+	    if (isset($this->headerArray) && isset($this->resultsArray)) {
+	        ?>
 	        <div class="results_container">
-				<div class="fixer_container">
-					<table class="fixer">
-						<tr class="fixed">
+	            <div class="fixer_container">
+	                <table class="fixer">
+	                    <tr class="fixed">
 	                        <?php
-        //loop through array and add header columns
-        for($colname = 0; $colname < count($this->headerArray); $colname ++)
-        {
-            ?><th><?=$this->headerArray[$colname]?></th><?php
-        } //end for
-        ?>
+	                        //loop through array and add header columns
+	                        for ($colname=0; $colname<count($this->headerArray); $colname++) {
+	                            ?><th><?=$this->headerArray[$colname]?></th><?php
+	                        } //end for
+	                        ?>
 	                    </tr>
 	                    <?php
-        //loop through the array and build the preview
-        //gotta be a better way to do this...
-        foreach ( $this->resultsArray as $key => $value )
-        {
-            if ($key > 0)
-            {
-                ?>
+	                    //loop through the array and build the preview
+	                    //gotta be a better way to do this...
+	                    foreach ($this->resultsArray as $key => $value) {
+	                        if ($key > 0) {
+	                        ?>
 	                        <tr>
 	                            <?php
-                $devices [$key] = str_getcsv($value);
-                foreach ( $devices [$key] as $value )
-                {
-                    ?><td><?=$value?></td><?php
-                } //end foreach
-                ?>
+	                            $devices[$key] = str_getcsv($value);
+	                            foreach ($devices[$key] as $value) {
+	                                ?><td><?=$value?></td><?php
+	                            } //end foreach
+	                            ?>
 	                        </tr>
 	                        <?php
-            } //end if
-        } //end foreach
-        ?>
+	                        } //end if
+	                    } //end foreach
+	                    ?>
 	                </table>
-				</div>
-				<div class="button_container">
-					<input type="button" name="btnConfirm" id="btnConfirm"
-						value="Confirm" onClick="javascript: doAction('confirm');" /> <input
-						type="button" name="btnCancel" id="btnCancel" value="Cancel"
-						onClick="javascript: doAction('cancel');" />
-				</div>
-			</div>
+	            </div>
+	            <div class="button_container">
+	                <input type="button" name="btnConfirm" id="btnConfirm" value="Confirm" onClick="javascript: doAction('confirm');" />
+	                <input type="button" name="btnCancel" id="btnCancel" value="Cancel" onClick="javascript: doAction('cancel');" />
+	            </div>
+	        </div>
 	        <?php
-    }
-    ?>
+	    }
+	    ?>
 		</dt>
-	</dl>
+    </dl>
 </form>

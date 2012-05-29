@@ -1,11 +1,11 @@
-<?php
-$elements ["toner_cost"] = $this->element->toner_cost;
-$elements ["labor_cost"] = $this->element->labor_cost;
-$elements ["avg_purchase"] = $this->element->avg_purchase;
-$elements ["it_hourlyRate"] = $this->element->it_hourlyRate;
-$elements ["labor_cost_radio"] = $this->element->labor_cost_radio;
+<?php 
+$elements["toner_cost"] = $this->element->toner_cost;
+$elements["labor_cost"] = $this->element->labor_cost;
+$elements["avg_purchase"] = $this->element->avg_purchase;
+$elements["it_hourlyRate"] = $this->element->it_hourlyRate;
+$elements["labor_cost_radio"] = $this->element->labor_cost_radio;
 ?>
-<?php $this->headScript()->captureStart('append','text/javascript')?>
+<?php $this->headScript()->captureStart('append','text/javascript') ?>
 	
 	$(document).ready(function() {
 		
@@ -39,86 +39,92 @@ $elements ["labor_cost_radio"] = $this->element->labor_cost_radio;
 		
 	});
 
-<?php $this->headScript()->captureEnd()?>
-<form id="finance" action="<?php echo $this->element->getAction() ?>"
-	method="<?php echo $this->element->getMethod() ?>">
-	<table border="0" width="100%">
-		<col width="60%" />
-		<col width="40%" />
-		<tr>
-			<td valign="top" colspan="2" style="padding-bottom: 10px;"><?php echo $elements["toner_cost"]->renderLabel(); ?></td>
-		</tr>
-		<tr>
-			<td valign="top" style="padding-left: 30px;">
-    		    <?php
-        echo $this->formRadio($this->element->toner_cost_radio->getFullyQualifiedName(), $this->element->toner_cost_radio->getValue(), null, array (
-                'I know the exact amount' => $this->element->toner_cost_radio->getMultiOption('I know the exact amount') 
-        ));
-        ?>
+<?php $this->headScript()->captureEnd() ?>
+<form id="finance" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>">
+    <table border="0" width="100%">
+    	<col width="60%" /><col width="40%" />
+    	<tr>
+    		<td valign="top" colspan="2" style="padding-bottom: 10px;"><?php echo $elements["toner_cost"]->renderLabel(); ?></td>
+    	</tr>
+    	<tr>
+    		<td valign="top" style="padding-left: 30px;">
+    		    <?php 
+		            echo $this->formRadio(
+		                $this->element->toner_cost_radio->getFullyQualifiedName(),
+		                $this->element->toner_cost_radio->getValue(),
+		                null,
+		                array('I know the exact amount' => $this->element->toner_cost_radio->getMultiOption('I know the exact amount')));
+		        ?>
     		</td>
-			<td valign="top"><?php echo $elements["toner_cost"]->renderViewHelper(); ?></td>
-		</tr>
-		<tr>
-			<td valign="top" style="padding-left: 30px;">
-    		    <?php
-        echo $this->formRadio($this->element->toner_cost_radio->getFullyQualifiedName(), $this->element->toner_cost_radio->getValue(), null, array (
-                'guess' => $this->element->toner_cost_radio->getMultiOption('guess') 
-        ));
-        ?>
+    		<td valign="top"><?php echo $elements["toner_cost"]->renderViewHelper(); ?></td>
+    	</tr>
+    	<tr>
+    		<td valign="top" style="padding-left: 30px;">
+    		    <?php 
+		            echo $this->formRadio(
+		                $this->element->toner_cost_radio->getFullyQualifiedName(),
+		                $this->element->toner_cost_radio->getValue(),
+		                null,
+		                array('guess' => $this->element->toner_cost_radio->getMultiOption('guess')));
+		        ?>
 		    </td>
-			<td>&nbsp;</td>
+    		<td>&nbsp;</td>
 		</tr>
-		<tr>
-			<td>&nbsp;</td>
-			<td><?php echo $elements["toner_cost"]->renderErrors(); ?></td>
-		</tr>
-		<tr>
-			<td valign="top" colspan="2" style="padding-bottom: 10px;"><?php echo $elements["labor_cost"]->renderLabel(); ?></td>
-		</tr>
-		<tr>
-			<td valign="top" style="padding-left: 30px;">
-    		    <?php
-        echo $this->formRadio($this->element->labor_cost_radio->getFullyQualifiedName(), $this->element->labor_cost_radio->getValue(), null, array (
-                'I know the exact amount' => $this->element->labor_cost_radio->getMultiOption('I know the exact amount') 
-        ));
-        ?>
+    	<tr>
+    		<td>&nbsp;</td>
+    		<td><?php echo $elements["toner_cost"]->renderErrors(); ?></td>
+    	</tr>
+    	<tr>
+    		<td valign="top" colspan="2" style="padding-bottom: 10px;"><?php echo $elements["labor_cost"]->renderLabel(); ?></td>
+    	</tr>
+    	<tr>
+    		<td valign="top" style="padding-left: 30px;">
+    		    <?php 
+		            echo $this->formRadio(
+		                $this->element->labor_cost_radio->getFullyQualifiedName(),
+		                $this->element->labor_cost_radio->getValue(),
+		                null,
+		                array('I know the exact amount' => $this->element->labor_cost_radio->getMultiOption('I know the exact amount')));
+		        ?>
 		    </td>
-			<td valign="top"><?php echo $elements["labor_cost"]->renderViewHelper(); ?></td>
-		</tr>
-		<tr>
-			<td valign="top" style="padding-left: 30px;">
-    		    <?php
-        echo $this->formRadio($this->element->labor_cost_radio->getFullyQualifiedName(), $this->element->labor_cost_radio->getValue(), null, array (
-                'guess' => $this->element->labor_cost_radio->getMultiOption('guess') 
-        ));
-        ?>
+    		<td valign="top"><?php echo $elements["labor_cost"]->renderViewHelper(); ?></td>
+    	</tr>
+    	<tr>
+    		<td valign="top" style="padding-left: 30px;">
+    		    <?php 
+		            echo $this->formRadio(
+		                $this->element->labor_cost_radio->getFullyQualifiedName(),
+		                $this->element->labor_cost_radio->getValue(),
+		                null,
+		                array('guess' => $this->element->labor_cost_radio->getMultiOption('guess')));
+		        ?>
 		    </td>
-			<td>&nbsp;</td>
+    		<td>&nbsp;</td>
 		</tr>
-		<tr>
-			<td>&nbsp;</td>
-			<td><?php echo $elements["labor_cost"]->renderErrors(); ?></td>
-		</tr>
-		<tr>
-			<td valign="top" style="padding-right: 10px;"><?php echo $elements["avg_purchase"]->renderLabel(); ?></td>
-			<td valign="top"><?php echo $elements["avg_purchase"]->renderViewHelper(); ?></td>
-		</tr>
-		<tr>
-			<td>&nbsp;</td>
-			<td><?php echo $elements["avg_purchase"]->renderErrors(); ?></td>
-		</tr>
-		<tr>
-			<td valign="top" style="padding-right: 10px;"><?php echo $elements["it_hourlyRate"]->renderLabel(); ?></td>
-			<td valign="top"><?php echo $elements["it_hourlyRate"]->renderViewHelper(); ?></td>
-		</tr>
-		<tr>
-			<td>&nbsp;</td>
-			<td><?php echo $elements["it_hourlyRate"]->renderErrors(); ?></td>
-		</tr>
-	</table>
-	<br />
-	<div id="submitBtns" class="submitBar">
-		<?php echo $this->element->save?>
-	    <?php echo $this->element->back_button?>
+    	<tr>
+    		<td>&nbsp;</td>
+    		<td><?php echo $elements["labor_cost"]->renderErrors(); ?></td>
+    	</tr>
+    	<tr>
+    		<td valign="top" style="padding-right: 10px;"><?php echo $elements["avg_purchase"]->renderLabel(); ?></td>
+    		<td valign="top"><?php echo $elements["avg_purchase"]->renderViewHelper(); ?></td>
+    	</tr>
+    	<tr>
+    		<td>&nbsp;</td>
+    		<td><?php echo $elements["avg_purchase"]->renderErrors(); ?></td>
+    	</tr>
+    	<tr>
+    		<td valign="top" style="padding-right: 10px;"><?php echo $elements["it_hourlyRate"]->renderLabel(); ?></td>
+    		<td valign="top"><?php echo $elements["it_hourlyRate"]->renderViewHelper(); ?></td>
+    	</tr>
+    	<tr>
+    		<td>&nbsp;</td>
+    		<td><?php echo $elements["it_hourlyRate"]->renderErrors(); ?></td>
+    	</tr>
+    </table>
+	<br/>
+    <div id="submitBtns" class="submitBar">
+		<?php echo $this->element->save ?>
+	    <?php echo $this->element->back_button ?>
 	</div>
 </form>

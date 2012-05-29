@@ -33,6 +33,7 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
         $this->view->uploadFileForm = $uploadFileForm;
     } // end indexAction
 
+    
     public function confirmAction ()
     {
         $piSession = new Zend_Session_Namespace('pricingImport');
@@ -47,6 +48,7 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
         {
             $this->_redirect('/pricingimport/index');
         }
+    
     }
 
     public function dumpvalidimportAction ()
@@ -92,6 +94,7 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
             $this->view->csvRows = $csvRows;
             Tangent_Functions::setHeadersForDownload("NEW PRICING IMPORT.csv");
             $this->view->Layout()->disableLayout();
+        
         }
         else
         {
@@ -216,6 +219,7 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                                     else
                                     {
                                         $tonerMfgId = $manufacturerId;
+                                    
                                     }
                                     
                                     // Create and cache the toner if it doenst
@@ -346,6 +350,7 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
         {
             $this->_redirect('/pricingimport/index');
         }
+    
     }
 
     public function addreplacementsAction ()

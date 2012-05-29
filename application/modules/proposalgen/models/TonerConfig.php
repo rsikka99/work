@@ -2,7 +2,6 @@
 
 /**
  * Class Proposalgen_Model_TonerConfig
- *
  * @author "Lee Robert"
  */
 class Proposalgen_Model_TonerConfig extends Tangent_Model_Abstract
@@ -11,20 +10,20 @@ class Proposalgen_Model_TonerConfig extends Tangent_Model_Abstract
     const THREE_COLOR_SEPARATED = 2;
     const THREE_COLOR_COMBINED = 3;
     const FOUR_COLOR_COMBINED = 4;
+    
     static $TonerConfigNames = array (
-            self::BLACK_ONLY => "Black Only", 
-            self::THREE_COLOR_SEPARATED => "3 Color Separated", 
-            self::THREE_COLOR_COMBINED => "3 Color Combined", 
-            self::FOUR_COLOR_COMBINED => "4 Color Combined" 
+            self::BLACK_ONLY => "Black Only",
+            self::THREE_COLOR_SEPARATED => "3 Color Separated",
+            self::THREE_COLOR_COMBINED => "3 Color Combined",
+            self::FOUR_COLOR_COMBINED => "4 Color Combined"
     );
+    
     protected $TonerConfigId;
     protected $TonerConfigName;
 
     /**
      * Gets an array of toner colors associated with a specific toner config.
-     *
-     * @param $$tonerConfigId The
-     *            toner config id to use
+     * @param $$tonerConfigId The toner config id to use
      * @return array An array of TonerColorId's associated with a specified toner config
      */
     public static function getRequiredTonersForTonerConfig ($tonerConfigId)
@@ -58,7 +57,6 @@ class Proposalgen_Model_TonerConfig extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $TonerConfigId
      */
     public function getTonerConfigId ()
@@ -72,8 +70,7 @@ class Proposalgen_Model_TonerConfig extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $TonerConfigId            
+     * @param field_type $TonerConfigId
      */
     public function setTonerConfigId ($TonerConfigId)
     {
@@ -82,7 +79,6 @@ class Proposalgen_Model_TonerConfig extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $TonerConfigName
      */
     public function getTonerConfigName ()
@@ -96,12 +92,12 @@ class Proposalgen_Model_TonerConfig extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $TonerConfigName            
+     * @param field_type $TonerConfigName
      */
     public function setTonerConfigName ($TonerConfigName)
     {
         $this->TonerConfigName = $TonerConfigName;
         return $this;
     }
+
 }

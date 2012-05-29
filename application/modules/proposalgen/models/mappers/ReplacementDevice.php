@@ -6,11 +6,11 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends Tangent_Model_Mapper_Ab
     static $_instance;
 
     /**
-     *
      * @return Tangent_Model_Mapper_Abstract
      */
     public static function getInstance ()
     {
+        
         if (! isset(self::$_instance))
         {
             $className = get_class();
@@ -20,10 +20,9 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends Tangent_Model_Mapper_Ab
     }
 
     /**
-     * Maps a database row object to an Application_Model
-     *
-     * @param Zend_Db_Table_Row $row            
-     * @return The appropriate Application_Model
+     * Maps a database row object to an Proposalgen_Model
+     * @param Zend_Db_Table_Row $row
+     * @return The appropriate Proposalgen_Model
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
     {
@@ -46,8 +45,7 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends Tangent_Model_Mapper_Ab
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     *
-     * @param unknown_type $object            
+     * @param unknown_type $object
      */
     public function save (Proposalgen_Model_ReplacementDevice $object)
     {
@@ -76,24 +74,24 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends Tangent_Model_Mapper_Ab
     {
         $replacementDevices = array ();
         $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACMENT_BW] = $this->fetchRow(array (
-                'replacement_category = ?' => Proposalgen_Model_ReplacementDevice::REPLACMENT_BW 
+                'replacement_category = ?' => Proposalgen_Model_ReplacementDevice::REPLACMENT_BW
         ), array (
-                'monthly_rate ASC' 
+                'monthly_rate ASC'
         ));
         $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACMENT_BWMFP] = $this->fetchRow(array (
-                'replacement_category = ?' => Proposalgen_Model_ReplacementDevice::REPLACMENT_BWMFP 
+                'replacement_category = ?' => Proposalgen_Model_ReplacementDevice::REPLACMENT_BWMFP
         ), array (
-                'monthly_rate ASC' 
+                'monthly_rate ASC'
         ));
         $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACMENT_COLOR] = $this->fetchRow(array (
-                'replacement_category = ?' => Proposalgen_Model_ReplacementDevice::REPLACMENT_COLOR 
+                'replacement_category = ?' => Proposalgen_Model_ReplacementDevice::REPLACMENT_COLOR
         ), array (
-                'monthly_rate ASC' 
+                'monthly_rate ASC'
         ));
         $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACMENT_COLORMFP] = $this->fetchRow(array (
-                'replacement_category = ?' => Proposalgen_Model_ReplacementDevice::REPLACMENT_COLORMFP 
+                'replacement_category = ?' => Proposalgen_Model_ReplacementDevice::REPLACMENT_COLORMFP
         ), array (
-                'monthly_rate ASC' 
+                'monthly_rate ASC'
         ));
         return $replacementDevices;
     }

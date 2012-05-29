@@ -2,7 +2,6 @@
 
 /**
  * Class Proposalgen_Model_TextualAnswer
- *
  * @author "Lee Robert"
  */
 class Proposalgen_Model_TextualAnswer extends Tangent_Model_Abstract
@@ -13,7 +12,6 @@ class Proposalgen_Model_TextualAnswer extends Tangent_Model_Abstract
     protected $Answer;
 
     /**
-     *
      * @return the $AnswerId
      */
     public function getAnswerId ()
@@ -27,8 +25,7 @@ class Proposalgen_Model_TextualAnswer extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $AnswerId            
+     * @param field_type $AnswerId
      */
     public function setAnswerId ($AnswerId)
     {
@@ -37,7 +34,6 @@ class Proposalgen_Model_TextualAnswer extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $QuestionId
      */
     public function getQuestionId ()
@@ -51,8 +47,7 @@ class Proposalgen_Model_TextualAnswer extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $QuestionId            
+     * @param field_type $QuestionId
      */
     public function setQuestionId ($QuestionId)
     {
@@ -61,7 +56,6 @@ class Proposalgen_Model_TextualAnswer extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportId
      */
     public function getReportId ()
@@ -75,8 +69,7 @@ class Proposalgen_Model_TextualAnswer extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportId            
+     * @param field_type $ReportId
      */
     public function setReportId ($ReportId)
     {
@@ -85,7 +78,6 @@ class Proposalgen_Model_TextualAnswer extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $Answer
      */
     public function getAnswer ()
@@ -99,12 +91,12 @@ class Proposalgen_Model_TextualAnswer extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $Answer            
+     * @param field_type $Answer
      */
     public function setAnswer ($Answer)
     {
         $this->Answer = $Answer;
         return $this;
     }
+
 }

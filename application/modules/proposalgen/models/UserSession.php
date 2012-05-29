@@ -2,7 +2,6 @@
 
 /**
  * Class Proposalgen_Model_UserSession
- *
  * @author "Lee Robert"
  */
 class Proposalgen_Model_UserSession extends Tangent_Model_Abstract
@@ -11,7 +10,6 @@ class Proposalgen_Model_UserSession extends Tangent_Model_Abstract
     protected $SessionId;
 
     /**
-     *
      * @return the $UserId
      */
     public function getUserId ()
@@ -25,8 +23,7 @@ class Proposalgen_Model_UserSession extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserId            
+     * @param field_type $UserId
      */
     public function setUserId ($UserId)
     {
@@ -35,7 +32,6 @@ class Proposalgen_Model_UserSession extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $SessionId
      */
     public function getSessionId ()
@@ -49,8 +45,7 @@ class Proposalgen_Model_UserSession extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $SessionId            
+     * @param field_type $SessionId
      */
     public function setSessionId ($SessionId)
     {

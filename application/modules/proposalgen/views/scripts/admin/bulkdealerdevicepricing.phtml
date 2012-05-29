@@ -1,16 +1,15 @@
 <?php
 /**
  * bulkdevicepricing.phtml
- *
- * @author : John Sadler
- * @version : v1.0
- *         
- *          Change: August 16, 2011 - modified so all bulk pricing updates are done from this page. Migrated toners into
- *          page.
+ * 
+ * @author: John Sadler
+ * @version: v1.0
+ * 
+ * Change: August 16, 2011 - modified so all bulk pricing updates are done from this page. Migrated toners into page.
  */
 ?>
 
-<?php $this->headScript()->captureStart('append','text/javascript')?>
+<?php $this->headScript()->captureStart('append','text/javascript') ?>
 	var repop = '<?php echo isset($this->pricing_filter); ?>';
 	var refilter = '<?php echo isset($this->search_criteria); ?>';
 	var default_price = <?php echo $this->default_price; ?>;
@@ -59,16 +58,8 @@
 						document.getElementById("devices_list").rows[i+1].cells[4].innerHTML = "$ " + override_price;
 					}
 					
-					hidden_price_element = "
-<input type='hidden' name='hdnDevicePrice"+cur_row+"'
-	id='hdnDevicePrice"+cur_row+"' value='" + hidden_price + "' size='8'
-	maxlength='8' />
-"; new_price_element = "$
-<input type='text' name='txtDevicePrice"+cur_row+"'
-	id='txtDevicePrice"+cur_row+"' size='8' maxlength='12'
-	style='text-align: right;'
-	onkeypress='javascript: return numbersonly(this, event);' />
-"; 
+					hidden_price_element = "<input type='hidden' name='hdnDevicePrice"+cur_row+"' id='hdnDevicePrice"+cur_row+"' value='" + hidden_price + "' size='8' maxlength='8' />"; 
+					new_price_element = "$ <input type='text' name='txtDevicePrice"+cur_row+"' id='txtDevicePrice"+cur_row+"' size='8' maxlength='12' style='text-align:right;' onkeypress='javascript: return numbersonly(this, event);' />"; 
 					jQuery("#devices_list").jqGrid('setRowData',ids[i],{new_device_price: hidden_price_element + new_price_element});
 				}
 			},
@@ -131,58 +122,56 @@
 						document.getElementById("toners_list").rows[i+1].cells[9].innerHTML = "$ " + override_price;
 					}
 					
-					hidden_price_element = "
-<input type='hidden' name='hdnTonerPrice"+cur_row+"'
-	id='hdnTonerPrice"+cur_row+"' value='" + hidden_price + "' size='8'
-	maxlength='8' />
-"; new_price_element = "$
-<input type='text' name='txtTonerPrice"+cur_row+"'
-	id='txtTonerPrice"+cur_row+"' size='8' maxlength='8'
-	style='text-align: right;'
-	onkeypress='javascript: return numbersonly(this, event);' />
-";
-jQuery("#toners_list").jqGrid('setRowData',ids[i],{new_toner_price:hidden_price_element+new_price_element});
-
-var min = 4; var max = 2; var output = ''; device_list =
-document.getElementById("toners_list").rows[i+1].cells[7].innerHTML; var
-pieces = device_list.split("; "); output += '
-<div id="outer_'+ids[i]+'" style="text-align: left; width: 200px;">
-	'; for(var j=0; j < pieces.length; j++) { device = pieces[j]; if(j ==
-	max) { output += '
-	<div id="inner_'+ids[i]+'" style="display: none;">
-		'; } output += device + '<br />'; if(j > max && j == pieces.length -
-		1) { output += '
-	</div>
-	'; output += '<a id="view_link_'+ids[i]+'" href="javascript: void(0);"
-		class="blue_link" onclick="javascript: view_device_list('+ids[i]+');">View
-		All...</a>'; } } output += '
-</div>
-';
-jQuery("#toners_list").jqGrid('setRowData',ids[i],{device_list:output});
-
-} }, editurl:'dummy.php' });
-
-jQuery("#toners_list").jqGrid('navGrid','#toners_pager',
-{add:false,del:false,edit:false,refresh:false,search:false},
-{closeAfterEdit:true,recreateForm:true,closeOnEscape:true,width:400,top:sTop,left:sLeft},
-{closeAfterAdd:true,recreateForm:true,closeOnEscape:true,width:400,top:sTop,left:sLeft},
-{}, {}, {} ); $("#pricing_filter").change(function() { //remove all
-options $("#criteria_filter >option").remove(); //add new options
-depending on selection if($('#pricing_filter').val() == 'toner') {
-$("#criteria_filter").append($('
-<option></option>
-').val('machine_compatibility').html('Machine Compatibility'));
-$("#criteria_filter").append($('
-<option></option>
-').val('toner_sku').html('SKU')); $("#criteria_filter").append($('
-<option></option>
-').val('manufacturer_name').html('Manufacturer')); } else {
-$("#criteria_filter").append($('
-<option></option>
-').val('manufacturer_name').html('Manufacturer'));
-$("#criteria_filter").append($('
-<option></option>
-').val('printer_model').html('Printer Model'));
+					hidden_price_element = "<input type='hidden' name='hdnTonerPrice"+cur_row+"' id='hdnTonerPrice"+cur_row+"' value='" + hidden_price + "' size='8' maxlength='8' />"; 
+					new_price_element = "$ <input type='text' name='txtTonerPrice"+cur_row+"' id='txtTonerPrice"+cur_row+"' size='8' maxlength='8' style='text-align:right;' onkeypress='javascript: return numbersonly(this, event);' />"; 
+					jQuery("#toners_list").jqGrid('setRowData',ids[i],{new_toner_price:hidden_price_element+new_price_element});
+					
+					var min = 4;
+					var max = 2;
+					var output = '';
+					device_list = document.getElementById("toners_list").rows[i+1].cells[7].innerHTML;
+					var pieces = device_list.split("; ");
+					output += '<div id="outer_'+ids[i]+'" style="text-align: left; width: 200px;">';
+					for(var j=0; j < pieces.length; j++) {
+						device = pieces[j];
+						if(j == max) {
+							output += '<div id="inner_'+ids[i]+'" style="display: none;">';
+						}
+						output += device + '<br />';
+						if(j > max && j == pieces.length - 1) {
+							output += '</div>';
+							output += '<a id="view_link_'+ids[i]+'" href="javascript: void(0);" class="blue_link" onclick="javascript: view_device_list('+ids[i]+');">View All...</a>';
+						}
+					}
+					output += '</div>';
+					jQuery("#toners_list").jqGrid('setRowData',ids[i],{device_list:output});
+					
+				}
+			},
+			editurl:'dummy.php'
+		});
+		
+		jQuery("#toners_list").jqGrid('navGrid','#toners_pager',
+				{add:false,del:false,edit:false,refresh:false,search:false},
+				{closeAfterEdit:true,recreateForm:true,closeOnEscape:true,width:400,top:sTop,left:sLeft},
+				{closeAfterAdd:true,recreateForm:true,closeOnEscape:true,width:400,top:sTop,left:sLeft},
+				{},
+				{},
+				{}
+		);
+		
+		$("#pricing_filter").change(function() {
+			//remove all options
+			$("#criteria_filter >option").remove();
+			
+			//add new options depending on selection
+			if($('#pricing_filter').val() == 'toner') {
+				$("#criteria_filter").append($('<option></option>').val('machine_compatibility').html('Machine Compatibility'));
+				$("#criteria_filter").append($('<option></option>').val('toner_sku').html('SKU'));
+				$("#criteria_filter").append($('<option></option>').val('manufacturer_name').html('Manufacturer'));
+			} else {
+				$("#criteria_filter").append($('<option></option>').val('manufacturer_name').html('Manufacturer'));
+				$("#criteria_filter").append($('<option></option>').val('printer_model').html('Printer Model'));
 			}
 		});
 				
@@ -218,9 +207,7 @@ $("#criteria_filter").append($('
     		            var options = '';
     		            for (var i = 0; i < data.rows.length; i++) {
     		            	list = (data.rows[i].cell);
-        					options += '
-<option value="' + list[0] + '">' + list[1] + '</option>
-';
+        					options += '<option value="' + list[0] + '">' + list[1] + '</option>';
       					}
       					$("#cboCriteria").html(options);
     		        },
@@ -405,118 +392,94 @@ $("#criteria_filter").append($('
 		}
 	}
 
-<?php $this->headScript()->captureEnd()?>
+<?php $this->headScript()->captureEnd() ?>
 
 <h2><?php echo $this->title;?></h2>
 
 <form name="bulk" id="bulk" action="" method="post">
-	<input type="hidden" name="hdnRole" id="hdnRole" value="dealer" /> <input
-		type="hidden" name="hdnMode" id="hdnMode" value="" /> <input
-		type="hidden" name="hdnManufacturerID" id="hdnManufacturerID" value="" />
-
+	<input type="hidden" name="hdnRole" id="hdnRole" value="dealer" />
+	<input type="hidden" name="hdnMode" id="hdnMode" value="" />
+	<input type="hidden" name="hdnManufacturerID" id="hdnManufacturerID" value="" />
+	
 	<dl class="zend_form">
 		<dt class="botMenu">
-
+			
 			<div id="instruction_container">
-				<p>If you wish to remove a price, enter 0 as the new price and
-					update.</p>
+				<p>If you wish to remove a price, enter 0 as the new price and update.</p>
 			</div>
-
-			<div id="message_container" class="message_container"
-				style="height: 30px;">
+	
+			<div id="message_container" class="message_container" style="height: 30px;">
 			    <?php echo $this->message; ?>
 			</div>
-
+			
 			<div id="options_container" style="margin: 0px 0px 10px 5px;">
-				<div id="filter_pricing"
-					style="display: inline; padding: 0px 0px 0px 0px;">
-					<label for="pricing_filter" class="label">Property:</label> <select
-						name="pricing_filter" id="pricing_filter" class="filter_dropdown"
-						style="width: 160px;"
-						onchange="javascript: update_grid('pricing');">
-						<option value="printer"
-							<?php if($this->pricing_filter == 'printer') { echo "selected"; } ?>>Printer
-							Costs</option>
-						<option value="toner"
-							<?php if($this->pricing_filter == 'toner') { echo "selected"; } ?>>Toner
-							Costs</option>
+				<div id="filter_pricing" style="display: inline; padding: 0px 0px 0px 0px;">
+					<label for="pricing_filter" class="label">Property:</label>
+					<select name="pricing_filter" id="pricing_filter" class="filter_dropdown" style="width: 160px;" onchange="javascript: update_grid('pricing');">
+						<option value="printer" <?php if($this->pricing_filter == 'printer') { echo "selected"; } ?>>Printer Costs</option>
+						<option value="toner" <?php if($this->pricing_filter == 'toner') { echo "selected"; } ?>>Toner Costs</option>
 						<!-- option value="parts" <?php if($this->pricing_filter == 'parts') { echo "selected"; } ?>>Parts Cost Per Page</option -->
 						<!-- option value="labor" <?php if($this->pricing_filter == 'labor') { echo "selected"; } ?>>Labor Cost Per Page</option -->
 					</select>
 				</div>
-
-				<div id="filter_buttons"
-					style="float: right; padding: 5px 10px 0px 0px;">
-					<a href="javascript: void(0);" id="btnImport"
-						onclick="javascript: do_action('file');">Update from file...</a>
+					
+				<div id="filter_buttons" style="float: right; padding: 5px 10px 0px 0px;">
+					<a href="javascript: void(0);" id="btnImport" onclick="javascript: do_action('file');">Update from file...</a>
 				</div>
 			</div>
-
+    		
 			<div id="filter_container">
-				<div id="criteria_container"
-					style="display: inline; padding: 0px 0px 0px 0px;">
-					<label for="criteria_filter" class="label">Filter:</label> <select
-						name="criteria_filter" id="criteria_filter"
-						class="filter_dropdown"
-						style="width: 160px; margin: 0px 0px 0px 26px;">
-						<option value="manufacturer_name"
-							<?php if($this->search_filter == 'manufacturer_name') { echo "selected"; } ?>>Manufacturer</option>
-						<option value="printer_model"
-							<?php if($this->search_filter == 'printer_model') { echo "selected"; } ?>>Printer
-							Model</option>
-					</select> <label for="txtCriteria" class="label"
-						style="padding: 0px 0px 0px 10px;">for</label> <span
-						id="text_criteria"><input type="text" name="txtCriteria"
-						style="width: 152px;" id="txtCriteria"
-						<?php if($this->search_criteria != '') { echo 'value="' . $this->search_criteria . '"'; } ?> /></span>
-					<span id="list_criteria" style="display: none;"><select
-						name="cboCriteria" id="cboCriteria" style="width: 160px;"></select></span>
-
+				<div id="criteria_container" style="display: inline; padding: 0px 0px 0px 0px;">
+					<label for="criteria_filter" class="label">Filter:</label>
+					<select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 26px;">
+						<option value="manufacturer_name" <?php if($this->search_filter == 'manufacturer_name') { echo "selected"; } ?>>Manufacturer</option>
+						<option value="printer_model" <?php if($this->search_filter == 'printer_model') { echo "selected"; } ?>>Printer Model</option>
+					</select>
+					<label for="txtCriteria" class="label" style="padding: 0px 0px 0px 10px;">for</label>
+					
+    				<span id="text_criteria"><input type="text" name="txtCriteria" style="width: 152px;" id="txtCriteria" <?php if($this->search_criteria != '') { echo 'value="' . $this->search_criteria . '"'; } ?> /></span>
+    				<span id="list_criteria" style="display: none;"><select name="cboCriteria" id="cboCriteria" style="width: 160px;"></select></span>
+    				
 					<input type="button" name="btnSearch" id="btnSearch" value="Search" />
-					<input type="button" name="btnClearSearch" id="btnClearSearch"
-						value="Clear" />
+					<input type="button" name="btnClearSearch" id="btnClearSearch" value="Clear" />
 				</div>
 			</div>
-
+			
 			<div class="results_container">
 				<div class="list_container">
 					<div class="bold margined" style="display: inline;">
-						Update selected by: <select name="cboSign" id="cboSign">
+						Update selected by:
+						<select name="cboSign" id="cboSign">
 							<option value="+">+</option>
 							<option value="-">-</option>
-						</select> <input type="text" name="txtUpdate" id="txtUpdate"
-							size="3" maxlength="3" style="text-align: right;"
-							onkeypress="javascript: return numbersonly(this, event);" />% <input
-							type="button" name="btnApply" id="btnApply" value="Preview"
-							onclick="javascript: apply_percentage();" />
+						</select>
+						<input type="text" name="txtUpdate" id="txtUpdate" size="3" maxlength="3" style="text-align: right;" onkeypress="javascript: return numbersonly(this, event);" />%
+						<input type="button" name="btnApply" id="btnApply" value="Preview" onclick="javascript: apply_percentage();" />
 					</div>
-					<div id="default_price" class="bold margined"
-						style="float: right; margin-right: 5px;">Default Price: $<?php echo $this->default_price; ?></div>
-
+					<div id="default_price" class="bold margined" style="float: right; margin-right: 5px;">Default Price: $<?php echo $this->default_price; ?></div>
+					
 					<div id="devices_table">
 						<table id="devices_list"></table>
 						<div id="devices_pager"></div>
 					</div>
-
+					
 					<div id="toners_table">
 						<table id="toners_list"></table>
 						<div id="toners_pager"></div>
 					</div>
-
-					<br />
-					<div class="submitBar">
+					
+					<br/>			
+					<div class="submitBar">				
 						<div id="submitBtns">
 							<div class="savebtn">
-								<input type="button" name="btnUpdate" id="btnUpdate"
-									value="Update" onclick="javascript: do_update();" />
+								<input type="button" name="btnUpdate" id="btnUpdate" value="Update" onclick="javascript: do_update();" />
 							</div>
 							<div class="backbtn">
-								<input type="button" name="btnDone" id="btnDone" value="Done"
-									onClick="javascript:  document.location.href='<?php echo $this->baseUrl()."/admin"?>';" />
+								<input type="button" name="btnDone" id="btnDone" value="Done" onClick="javascript:  document.location.href='<?php echo $this->baseUrl()."/admin"?>';" />
 							</div>
 						</div>
 					</div>
-
+					
 				</div>
 			</div>
 		</dt>

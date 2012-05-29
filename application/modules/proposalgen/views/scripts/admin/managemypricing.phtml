@@ -2,13 +2,13 @@
 /**
  * managemypricing.phtml
  * Allows the user to manage their own specific pricing which overrides the master pricing
- *
- * @author John Sadler
- * @version v1.0
+ * 
+ * @author	John Sadler
+ * @version	v1.0 
  */
 ?>
 
-<?php $this->headScript()->captureStart('append','text/javascript')?>
+<?php $this->headScript()->captureStart('append','text/javascript') ?>
 	var repop = '<?php echo $this->repop; ?>';
 	
 	(function( $ ) {
@@ -18,35 +18,65 @@
 					select = this.element.hide(),
 					selected = select.children( ":selected" ),
 					value = selected.val() ? selected.text() : "";
-				var input = this.input = $( "
-<input size='26'>
-" ) .insertAfter( select ) .val( value ) .autocomplete({ delay: 0,
-minLength: 0, source: function( request, response ) { var matcher = new
-RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" ); response(
-select.children( "option" ).map(function() { var text = $( this
-).text(); if ( this.value && ( !request.term || matcher.test(text) ) )
-return { label: text.replace( new RegExp( "(?![^&;]+;)(?!<[^<>]*)(" +
-$.ui.autocomplete.escapeRegex(request.term) + ")(?![^<>]*>)(?![^&;]+;)",
-"gi" ), "
-<strong>$1</strong>
-" ), value: text, option: this }; }) ); }, select: function( event, ui )
-{ ui.item.option.selected = true; self._trigger( "selected", event, {
-item: ui.item.option }); }, change: function( event, ui ) { if (
-!ui.item ) { var matcher = new RegExp( "^" +
-$.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ), valid =
-false; select.children( "option" ).each(function() { if ( $( this
-).text().match( matcher ) ) { this.selected = valid = true; return
-false; } }); if ( !valid ) { // remove invalid value, as it didn't match
-anything $( this ).val( "" ); select.val( "" ); input.data(
-"autocomplete" ).term = ""; return false; } } } }) .addClass( "ui-widget
-ui-widget-content ui-corner-left" ); input.data( "autocomplete"
-)._renderItem = function( ul, item ) { return $( "
-<li></li>
-" ) .data( "item.autocomplete", item ) .append( "
-<a>" + item.label + "</a>
-" ) .appendTo( ul ); }; this.button = $( "
-<button type='button'>&nbsp;</button>
-" )
+				var input = this.input = $( "<input size='26'>" )
+					.insertAfter( select )
+					.val( value )
+					.autocomplete({
+						delay: 0,
+						minLength: 0,
+						source: function( request, response ) {
+							var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
+							response( select.children( "option" ).map(function() {
+								var text = $( this ).text();
+								if ( this.value && ( !request.term || matcher.test(text) ) )
+									return {
+										label: text.replace(
+											new RegExp(
+												"(?![^&;]+;)(?!<[^<>]*)(" +
+												$.ui.autocomplete.escapeRegex(request.term) +
+												")(?![^<>]*>)(?![^&;]+;)", "gi"
+											), "<strong>$1</strong>" ),
+										value: text,
+										option: this
+									};
+							}) );
+						},
+						select: function( event, ui ) {
+							ui.item.option.selected = true;
+							self._trigger( "selected", event, {
+								item: ui.item.option
+							});
+						},
+						change: function( event, ui ) {
+							if ( !ui.item ) {
+								var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+									valid = false;
+								select.children( "option" ).each(function() {
+									if ( $( this ).text().match( matcher ) ) {
+										this.selected = valid = true;
+										return false;
+									}
+								});
+								if ( !valid ) {
+									// remove invalid value, as it didn't match anything
+									$( this ).val( "" );
+									select.val( "" );
+									input.data( "autocomplete" ).term = "";
+									return false;
+								}
+							}
+						}
+					})
+					.addClass( "ui-widget ui-widget-content ui-corner-left" );
+
+				input.data( "autocomplete" )._renderItem = function( ul, item ) {
+					return $( "<li></li>" )
+						.data( "item.autocomplete", item )
+						.append( "<a>" + item.label + "</a>" )
+						.appendTo( ul );
+				};
+
+				this.button = $( "<button type='button'>&nbsp;</button>" )
 					.attr( "tabIndex", -1 )
 					.attr( "title", "Show All Items" )
 					.insertAfter( input )
@@ -126,16 +156,8 @@ ui-widget-content ui-corner-left" ); input.data( "autocomplete"
 					}
 					toner_array = toner_array + "'" + toner_id + ":" + override_price + "'";
 					
-					hidden_price_element = "
-<input type='hidden' name='hdnPrice"+cur_row+"' id='hdnPrice"+cur_row+"'
-	value='"+override_price+"' size='4' />
-"; override_price_element = "$
-<input type='text' name='txtPrice"+cur_row+"' id='txtPrice"+cur_row+"'
-	size='8' maxlength='12' value='"+override_price+"'
-	style='text-align: right;'
-	onkeypress='javascript: return numbersonly(this, event);'
-	onblur='javascript: update_toner_arary("+cur_row+","+toner_id+",this.value);' />
-";
+					hidden_price_element = "<input type='hidden' name='hdnPrice"+cur_row+"' id='hdnPrice"+cur_row+"' value='"+override_price+"' size='4' />"; 
+					override_price_element = "$ <input type='text' name='txtPrice"+cur_row+"' id='txtPrice"+cur_row+"' size='8' maxlength='12' value='"+override_price+"' style='text-align:right;' onkeypress='javascript: return numbersonly(this, event);' onblur='javascript: update_toner_arary("+cur_row+","+toner_id+",this.value);' />";
 					jQuery("#partslist").jqGrid('setRowData',ids[i],{override_price:hidden_price_element + override_price_element}); 
 				}
 				$("#toner_array").val(toner_array);
@@ -189,10 +211,7 @@ ui-widget-content ui-corner-left" ); input.data( "autocomplete"
 						if(selected && selected == models.rows[i].cell[0]) {
 							selected_code = " selected ";
 						}
-						listItems+= "
-<option value='" + models.rows[i].cell[0] + "'" + selected_code + ">" +
-	models.rows[i].cell[1] + "</option>
-";
+						listItems+= "<option value='" + models.rows[i].cell[0] + "'" + selected_code + ">" + models.rows[i].cell[1] + "</option>";
 					}
 					$("#printer_model").html(listItems);
 					$("#printer_model").combobox("destroy");
@@ -298,41 +317,36 @@ ui-widget-content ui-corner-left" ); input.data( "autocomplete"
 		$("#hdnPrice"+row).val(value);
 	}
 		
-<?php $this->headScript()->captureEnd()?>
+<?php $this->headScript()->captureEnd() ?>
 
 <h2><?php echo $this->title;?></h2>
 
 <div id="form_container">
-
+	
 	<div id="message_container" class="margined">
 		<?php if($this->message) echo $this->escape($this->message); ?>
 	</div>
-
+			
 	<div id="device_container" class="margined">
 		<h3 style="display: inline;">Printers:</h3>
 		<?php echo $this->deviceform; ?>
 	</div>
-
-	<div id="parts_container" class="margined"
-		style="width: 550px; display: none;">
-		<h3 class="margined">
-			Toners for <span id="devicename">Printer</span>:
-		</h3>
+	
+	<div id="parts_container" class="margined" style="width: 550px; display: none;">
+		<h3 class="margined">Toners for <span id="devicename">Printer</span>:</h3>
 		<table id="partslist"></table>
 		<div id="partspager"></div>
 	</div>
-
+	
 	<div class="submitBar">
 		<div id="submitBtns">
 			<div class="savebtn">
-				<input type="button" name="btnUpdate" id="btnUpdate" value="Update"
-					onclick="javascript: do_action('save');" />
+				<input type="button" name="btnUpdate" id="btnUpdate" value="Update" onclick="javascript: do_action('save');" />
 			</div>
 			<div class="backbtn">
-				<input type="button" name="btnDone" id="btnDone" value="Done"
-					onClick="javascript: do_action('done');" />
+				<input type="button" name="btnDone" id="btnDone" value="Done" onClick="javascript: do_action('done');" />
 			</div>
 		</div>
 	</div>
-
+	
 </div>

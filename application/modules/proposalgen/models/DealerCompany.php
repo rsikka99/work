@@ -2,13 +2,13 @@
 
 /**
  * Class Proposalgen_Model_DealerCompany
- *
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
 {
     static $CurrentUserCompany;
     static $MasterCompany;
+    
     protected $DealerCompanyId;
     protected $CompanyName;
     protected $CompanyLogo;
@@ -37,13 +37,15 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     protected $DcDefaultFourColorTonerCost;
     protected $DcDefaultFourColorTonerYield;
     protected $DcServiceCostPerPage;
+    
     protected $DcActualPageCoverageMono;
     protected $DcActualPageCoverageColor;
+    
     protected $IsMasterCompany;
+    
     protected $ReportSettings;
 
     /**
-     *
      * @return Proposalgen_Model_DealerCompany $CurrentUserCompany
      */
     public static function getCurrentUserCompany ()
@@ -56,8 +58,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param Proposalgen_Model_DealerCompany $CurrentUserCompany            
+     * @param Proposalgen_Model_DealerCompany $CurrentUserCompany
      */
     public static function setCurrentUserCompany ($CurrentUserCompany)
     {
@@ -65,7 +66,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return Proposalgen_Model_DealerCompany $MasterCompany
      */
     public static function getMasterCompany ()
@@ -79,8 +79,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param Proposalgen_Model_DealerCompany $MasterCompany            
+     * @param Proposalgen_Model_DealerCompany $MasterCompany
      */
     public static function setMasterCompany ($MasterCompany)
     {
@@ -89,7 +88,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DealerCompanyId
      */
     public function getDealerCompanyId ()
@@ -103,8 +101,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DealerCompanyId            
+     * @param field_type $DealerCompanyId
      */
     public function setDealerCompanyId ($DealerCompanyId)
     {
@@ -113,7 +110,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $CompanyName
      */
     public function getCompanyName ()
@@ -127,8 +123,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $CompanyName            
+     * @param field_type $CompanyName
      */
     public function setCompanyName ($CompanyName)
     {
@@ -137,7 +132,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $CompanyLogo
      */
     public function getCompanyLogo ()
@@ -151,8 +145,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $CompanyLogo            
+     * @param field_type $CompanyLogo
      */
     public function setCompanyLogo ($CompanyLogo)
     {
@@ -161,7 +154,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $CompanyReportColor
      */
     public function getCompanyReportColor ()
@@ -175,8 +167,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $CompanyReportColor            
+     * @param field_type $CompanyReportColor
      */
     public function setCompanyReportColor ($CompanyReportColor)
     {
@@ -185,7 +176,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IsDeleted
      */
     public function getIsDeleted ()
@@ -199,8 +189,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IsDeleted            
+     * @param field_type $IsDeleted
      */
     public function setIsDeleted ($IsDeleted)
     {
@@ -209,7 +198,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcEstimatedPageCoverageMono
      */
     public function getDcEstimatedPageCoverageMono ()
@@ -223,8 +211,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcEstimatedPageCoverageMono            
+     * @param field_type $DcEstimatedPageCoverageMono
      */
     public function setDcEstimatedPageCoverageMono ($DcEstimatedPageCoverageMono)
     {
@@ -233,7 +220,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcEstimatedPageCoverageColor
      */
     public function getDcEstimatedPageCoverageColor ()
@@ -247,8 +233,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcEstimatedPageCoverageColor            
+     * @param field_type $DcEstimatedPageCoverageColor
      */
     public function setDcEstimatedPageCoverageColor ($DcEstimatedPageCoverageColor)
     {
@@ -257,7 +242,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcAdminChargePerPage
      */
     public function getDcAdminChargePerPage ()
@@ -271,8 +255,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcAdminChargePerPage            
+     * @param field_type $DcAdminChargePerPage
      */
     public function setDcAdminChargePerPage ($DcAdminChargePerPage)
     {
@@ -281,7 +264,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcPricingMargin
      */
     public function getDcPricingMargin ()
@@ -295,8 +277,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcPricingMargin            
+     * @param field_type $DcPricingMargin
      */
     public function setDcPricingMargin ($DcPricingMargin)
     {
@@ -305,7 +286,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcMonthlyLeasePayment
      */
     public function getDcMonthlyLeasePayment ()
@@ -319,8 +299,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcMonthlyLeasePayment            
+     * @param field_type $DcMonthlyLeasePayment
      */
     public function setDcMonthlyLeasePayment ($DcMonthlyLeasePayment)
     {
@@ -329,7 +308,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcDefaultPrinterCost
      */
     public function getDcDefaultPrinterCost ()
@@ -343,8 +321,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcDefaultPrinterCost            
+     * @param field_type $DcDefaultPrinterCost
      */
     public function setDcDefaultPrinterCost ($DcDefaultPrinterCost)
     {
@@ -353,7 +330,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcLeasedBwPerPage
      */
     public function getDcLeasedBwPerPage ()
@@ -367,8 +343,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcLeasedBwPerPage            
+     * @param field_type $DcLeasedBwPerPage
      */
     public function setDcLeasedBwPerPage ($DcLeasedBwPerPage)
     {
@@ -377,7 +352,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcLeasedColorPerPage
      */
     public function getDcLeasedColorPerPage ()
@@ -391,8 +365,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcLeasedColorPerPage            
+     * @param field_type $DcLeasedColorPerPage
      */
     public function setDcLeasedColorPerPage ($DcLeasedColorPerPage)
     {
@@ -401,7 +374,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcMpsBwPerPage
      */
     public function getDcMpsBwPerPage ()
@@ -415,8 +387,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcMpsBwPerPage            
+     * @param field_type $DcMpsBwPerPage
      */
     public function setDcMpsBwPerPage ($DcMpsBwPerPage)
     {
@@ -425,7 +396,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcMpsColorPerPage
      */
     public function getDcMpsColorPerPage ()
@@ -439,8 +409,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcMpsColorPerPage            
+     * @param field_type $DcMpsColorPerPage
      */
     public function setDcMpsColorPerPage ($DcMpsColorPerPage)
     {
@@ -449,7 +418,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcKilowattsPerHour
      */
     public function getDcKilowattsPerHour ()
@@ -463,8 +431,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcKilowattsPerHour            
+     * @param field_type $DcKilowattsPerHour
      */
     public function setDcKilowattsPerHour ($DcKilowattsPerHour)
     {
@@ -473,7 +440,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $PricingConfigId
      */
     public function getPricingConfigId ()
@@ -487,8 +453,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $PricingConfigId            
+     * @param field_type $PricingConfigId
      */
     public function setPricingConfigId ($PricingConfigId)
     {
@@ -497,7 +462,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcDefaultBWTonerCost
      */
     public function getDcDefaultBWTonerCost ()
@@ -511,8 +475,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcDefaultBWTonerCost            
+     * @param field_type $DcDefaultBWTonerCost
      */
     public function setDcDefaultBWTonerCost ($DcDefaultBWTonerCost)
     {
@@ -521,7 +484,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcDefaultBWTonerYield
      */
     public function getDcDefaultBWTonerYield ()
@@ -535,8 +497,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcDefaultBWTonerYield            
+     * @param field_type $DcDefaultBWTonerYield
      */
     public function setDcDefaultBWTonerYield ($DcDefaultBWTonerYield)
     {
@@ -545,7 +506,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcDefaultColorTonerCost
      */
     public function getDcDefaultColorTonerCost ()
@@ -559,8 +519,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcDefaultColorTonerCost            
+     * @param field_type $DcDefaultColorTonerCost
      */
     public function setDcDefaultColorTonerCost ($DcDefaultColorTonerCost)
     {
@@ -569,7 +528,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcDefaultColorTonerYield
      */
     public function getDcDefaultColorTonerYield ()
@@ -583,8 +541,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcDefaultColorTonerYield            
+     * @param field_type $DcDefaultColorTonerYield
      */
     public function setDcDefaultColorTonerYield ($DcDefaultColorTonerYield)
     {
@@ -593,7 +550,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcDefaultThreeColorTonerCost
      */
     public function getDcDefaultThreeColorTonerCost ()
@@ -607,8 +563,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcDefaultThreeColorTonerCost            
+     * @param field_type $DcDefaultThreeColorTonerCost
      */
     public function setDcDefaultThreeColorTonerCost ($DcDefaultThreeColorTonerCost)
     {
@@ -617,7 +572,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcDefaultThreeColorTonerYield
      */
     public function getDcDefaultThreeColorTonerYield ()
@@ -631,8 +585,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcDefaultThreeColorTonerYield            
+     * @param field_type $DcDefaultThreeColorTonerYield
      */
     public function setDcDefaultThreeColorTonerYield ($DcDefaultThreeColorTonerYield)
     {
@@ -641,7 +594,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcDefaultFourColorTonerCost
      */
     public function getDcDefaultFourColorTonerCost ()
@@ -655,8 +607,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcDefaultFourColorTonerCost            
+     * @param field_type $DcDefaultFourColorTonerCost
      */
     public function setDcDefaultFourColorTonerCost ($DcDefaultFourColorTonerCost)
     {
@@ -665,7 +616,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcDefaultFourColorTonerYield
      */
     public function getDcDefaultFourColorTonerYield ()
@@ -679,8 +629,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcDefaultFourColorTonerYield            
+     * @param field_type $DcDefaultFourColorTonerYield
      */
     public function setDcDefaultFourColorTonerYield ($DcDefaultFourColorTonerYield)
     {
@@ -689,7 +638,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $FullCompanyLogo
      */
     public function getFullCompanyLogo ()
@@ -703,8 +651,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $FullCompanyLogo            
+     * @param field_type $FullCompanyLogo
      */
     public function setFullCompanyLogo ($FullCompanyLogo)
     {
@@ -713,7 +660,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcServiceCostPerPage
      */
     public function getDcServiceCostPerPage ()
@@ -727,8 +673,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcServiceCostPerPage            
+     * @param field_type $DcServiceCostPerPage
      */
     public function setDcServiceCostPerPage ($DcServiceCostPerPage)
     {
@@ -737,7 +682,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcActualPageCoverageMono
      */
     public function getDcActualPageCoverageMono ()
@@ -751,7 +695,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DcActualPageCoverageColor
      */
     public function getDcActualPageCoverageColor ()
@@ -765,8 +708,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcActualPageCoverageMono            
+     * @param field_type $DcActualPageCoverageMono
      */
     public function setDcActualPageCoverageMono ($DcActualPageCoverageMono)
     {
@@ -775,8 +717,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DcActualPageCoverageColor            
+     * @param field_type $DcActualPageCoverageColor
      */
     public function setDcActualPageCoverageColor ($DcActualPageCoverageColor)
     {
@@ -785,7 +726,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IsMasterCompany
      */
     public function getIsMasterCompany ()
@@ -798,8 +738,7 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IsMasterCompany            
+     * @param field_type $IsMasterCompany
      */
     public function setIsMasterCompany ($IsMasterCompany)
     {
@@ -808,7 +747,6 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportSettings
      */
     public function getReportSettings ($getOverrides = true)
@@ -818,21 +756,21 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
             $settings = null;
             
             $dealersettings = array (
-                    "estimated_page_coverage_mono" => $this->getDcEstimatedPageCoverageMono(), 
-                    "estimated_page_coverage_color" => $this->getDcEstimatedPageCoverageColor(), 
-                    "actual_page_coverage_mono" => $this->getDcActualPageCoverageMono(), 
-                    "actual_page_coverage_color" => $this->getDcActualPageCoverageColor(), 
-                    "service_cost_per_page" => $this->getDcServiceCostPerPage(), 
-                    "admin_charge_per_page" => $this->getDcAdminChargePerPage(), 
-                    "pricing_margin" => $this->getDcReportMargin(), 
-                    "monthly_lease_payment" => $this->getDcMonthlyLeasePayment(), 
-                    "default_printer_cost" => $this->getDcDefaultPrinterCost(), 
-                    "leased_bw_per_page" => $this->getDcLeasedBwPerPage(), 
-                    "leased_color_per_page" => $this->getDcLeasedColorPerPage(), 
-                    "mps_bw_per_page" => $this->getDcMpsBwPerPage(), 
-                    "mps_color_per_page" => $this->getDcMpsColorPerPage(), 
-                    "kilowatts_per_hour" => $this->getDcKilowattsPerHour(), 
-                    "pricing_config_id" => $this->getPricingConfigId() 
+                    "estimated_page_coverage_mono" => $this->getDcEstimatedPageCoverageMono(),
+                    "estimated_page_coverage_color" => $this->getDcEstimatedPageCoverageColor(),
+                    "actual_page_coverage_mono" => $this->getDcActualPageCoverageMono(),
+                    "actual_page_coverage_color" => $this->getDcActualPageCoverageColor(),
+                    "service_cost_per_page" => $this->getDcServiceCostPerPage(),
+                    "admin_charge_per_page" => $this->getDcAdminChargePerPage(),
+                    "pricing_margin" => $this->getDcReportMargin(),
+                    "monthly_lease_payment" => $this->getDcMonthlyLeasePayment(),
+                    "default_printer_cost" => $this->getDcDefaultPrinterCost(),
+                    "leased_bw_per_page" => $this->getDcLeasedBwPerPage(),
+                    "leased_color_per_page" => $this->getDcLeasedColorPerPage(),
+                    "mps_bw_per_page" => $this->getDcMpsBwPerPage(),
+                    "mps_color_per_page" => $this->getDcMpsColorPerPage(),
+                    "kilowatts_per_hour" => $this->getDcKilowattsPerHour(),
+                    "pricing_config_id" => $this->getPricingConfigId()
             );
             
             if (! $this->getIsMasterCompany())
@@ -866,36 +804,34 @@ class Proposalgen_Model_DealerCompany extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportSettings            
+     * @param field_type $ReportSettings
      */
     public function setReportSettings ($ReportSettings)
     {
         $this->ReportSettings = $ReportSettings;
         return $this;
     }
-
-    /**
-     *
+	/**
      * @return the $DcReportMargin
      */
     public function getDcReportMargin ()
     {
-        if (! isset($this->DcReportMargin))
+        if (!isset($this->DcReportMargin))
         {
-            
-            $this->DcReportMargin = null;
+        	
+        	$this->DcReportMargin = null;
         }
         return $this->DcReportMargin;
     }
 
-    /**
-     *
-     * @param field_type $DcReportMargin            
+	/**
+     * @param field_type $DcReportMargin
      */
     public function setDcReportMargin ($DcReportMargin)
     {
         $this->DcReportMargin = $DcReportMargin;
         return $this;
     }
+
+
 }

@@ -9,6 +9,7 @@ class Proposalgen_Model_DbTable_PricingConfig extends Zend_Db_Table_Abstract
             'Users', 
             'DealerCompany' 
     );
+    
     protected $_referenceMap = array (
             'ColorTonerPartTypeId' => array (
                     'columns' => 'color_toner_part_type_id', 

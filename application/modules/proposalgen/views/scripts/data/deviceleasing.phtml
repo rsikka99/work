@@ -4,7 +4,7 @@
  */
 ?>
 
-<?php $this->headScript()->captureStart('append','text/javascript')?>
+<?php $this->headScript()->captureStart('append','text/javascript') ?>
 	var show_mapped = false;
 	
     $(document).ready(function() {
@@ -27,7 +27,7 @@
 				{width:50, name:'master_device_id', index:'master_device_id', hidden:true}
 			],
 			height: 110,
-			width: 600,
+			width: 940,
 			beforeProcessing:function() {
 				
 			},
@@ -58,7 +58,7 @@
 				{tag:6, width: 60, name:'is_excluded', index:'is_excluded', align:'center', title:false, sortable:false},
 				{tag:7, width: 50, name:'master_device_id', index:'master_device_id', hidden:true, title:false, sortable:false}
 			],
-			width:615,
+			width:940,
 			height:400,
 			rowNum:100,
 			rowList:[100,200,400],
@@ -81,21 +81,14 @@
 					jQuery("#results_list").jqGrid('setRowData',ids[i],{is_leased: leased_checkbox});
 					
 					if(is_excluded == 1) {
-						excluded_checkbox = '
-<input type="checkbox" name="chkExclude'+cur_row+'"
-	id="chkExclude'+cur_row+'"
-	onclick="javascript: set_excluded('+cur_row+');" checked="checked" />
-'; } else { excluded_checkbox = '
-<input type="checkbox" name="chkExclude'+cur_row+'"
-	id="chkExclude'+cur_row+'"
-	onclick="javascript: set_excluded('+cur_row+');" />
-'; } jQuery("#results_list").jqGrid('setRowData',ids[i],{is_excluded:
-excluded_checkbox}); //update master printer column to be a link to
-details master_printer_column = '
-<a href="javascript: void(0);"
-	onclick="javascript: toggle_request(true,\''+master_printer_id+'\');"
-	class="">'+master_printer+'</a>
-';
+						excluded_checkbox = '<input type="checkbox" name="chkExclude'+cur_row+'" id="chkExclude'+cur_row+'" onclick="javascript: set_excluded('+cur_row+');" checked="checked" />';
+					} else {
+						excluded_checkbox = '<input type="checkbox" name="chkExclude'+cur_row+'" id="chkExclude'+cur_row+'" onclick="javascript: set_excluded('+cur_row+');" />';
+					}
+					jQuery("#results_list").jqGrid('setRowData',ids[i],{is_excluded: excluded_checkbox});
+					
+					//update master printer column to be a link to details
+					master_printer_column = '<a href="javascript: void(0);" onclick="javascript: toggle_request(true,\''+master_printer_id+'\');" class="">'+master_printer+'</a>';
 					jQuery("#results_list").jqGrid('setRowData',ids[i],{master_device: master_printer_column});
 				}
 			},
@@ -121,7 +114,7 @@ details master_printer_column = '
 				{tag:2, width: 300, name:'imported_devicename', index:'imported_devicename', title:false, sortable:false},
 				{tag:3, width: 100, name:'reaason', index:'reaason', title:false, sortable:false}
 			],
-			width:615,
+			width:940,
 			height:200,
 			rowNum:25,
 			rowList:[25,50,100],
@@ -254,14 +247,8 @@ details master_printer_column = '
 		        url: url,
 		        success: function(data) {
 		            var obj = jQuery.parseJSON(data);
-		            var yes_image = '
-<img
-	src="<?php echo $this->theme("statusicons/checkmark_32_32x32.png"); ?>"
-	alt="yes" width="18" height="18" border="0" />
-'; var no_image = '
-<img src="<?php echo $this->theme("statusicons/error_32_32x32.png"); ?>"
-	alt="no" width="18" height="18" border="0" />
-';
+		            var yes_image = '<img src="<?php echo $this->theme("statusicons/checkmark_32_32x32.png"); ?>" alt="yes" width="18" height="18" border="0" />';
+		            var no_image = '<img src="<?php echo $this->theme("statusicons/error_32_32x32.png"); ?>" alt="no" width="18" height="18" border="0" />';
 		            
 		            $('#details_manufacturer').html(obj.manufacturer);
 		            $('#details_printer_model').html(obj.printer_model);
@@ -334,23 +321,31 @@ details master_printer_column = '
 		}
 	}
 	
-<?php $this->headScript()->captureEnd()?>
+<?php $this->headScript()->captureEnd() ?>
 
 <style>
 /* THIS WILL WRAP CELL DATA IN GRID */
 .ui-jqgrid tr.jqgrow td {
-    white-space: normal !important;
+	white-space: normal !important;
 }
 </style>
 
+<table style="width: 100%;border-collapse: collapse; table-layout: fixed">
+	<tr>
+		<td class = "Title"><u><?php echo $this->formTitle?></u></td>
+		<?php if ($this->companyName) :?>
+		<td class = "PreparedFor"><i>Prepared For:</i></td>
+		<td class = "PreparedForText"><i><?php echo $this->companyName; ?></i></td>
+		<?php endif?>
+	</tr>
+</table>
 
-<form name="leasing" id="leasing" class="fileinput" action=""
-	method="POST">
-	<input type="hidden" name="hdnID" id="hdnID" value="" />
-	<dl class="zend_form">
-		<dt class="botMenu">
-
-			<div class="message_container margined">
+<form name="leasing" id="leasing" class="fileinput" action="" method="POST">
+<input type="hidden" name="hdnID" id="hdnID" value="" />
+<dl class="zend_form">
+	<dt class="botMenu">
+	
+		<div class="message_container margined">
 		    <?php echo $this->message; ?>
 		</div>
 		
@@ -362,129 +357,110 @@ details master_printer_column = '
 				
 		<?php if(isset($this->mappingArray)) { ?>
 		<div class="results_container">
-
-				<div class="results_list_container">
-					<table id="results_list"></table>
-					<div id="results_pager"></div>
-				</div>
-				<div class="legend_note">
-					<strong>AMPV</strong> = Average Monthly Page Volume
-				</div>
+		
+			<div class="results_list_container">
+				<table id="results_list"></table>
+				<div id="results_pager"></div>
+			</div>
+			<div class="legend_note"><strong>AMPV</strong> = Average Monthly Page Volume</div>
 			
 			<?php if($this->exclude_count > 0) { ?>
-			<p>
-					<a id="toggle_mapped_link" href="javascript: void(0);"
-						onclick="javascript: toggle_mapped();"
-						style="text-decoration: none;">[+] Show Excluded Printers</a>
-				</p>
-				<div id="excluded_results_list_container" style="display: none;">
-					<h3>Excluded Printers:</h3>
-					<p></p>
-					<table id="excluded_results_list"></table>
-					<div id="excluded_results_pager"></div>
-				</div>
+			<p><a id="toggle_mapped_link" href="javascript: void(0);" onclick="javascript: toggle_mapped();" style="text-decoration: none;">[+] Show Excluded Printers</a></p>
+			<div id="excluded_results_list_container" style="display: none;">
+				<h3>Excluded Printers:</h3>
+				<p></p>
+				<table id="excluded_results_list"></table>
+				<div id="excluded_results_pager"></div>
+			</div>
 			<?php } ?>
 			
-			<br />
-
-				<div id="submitBtns" class="submitBar">
-					<div class="savebtn">
-						<input type="submit" name="btnNext" id="btnNext"
-							value="Save and continue" />
-					</div>
-					<div class="backbtn">
-						<input type="button" name="btnBack" id="btnBack" value="Back"
-							onClick="javascript: doAction('cancel');" />
-					</div>
-				</div>
-
+			<br/>
+			
+			<div id="submitBtns" class="submitBar">
+				<input type="submit" name="btnNext" id="btnNext" value="Save and continue" class="btn btn-primary" />
+				<input type="button" name="btnBack" id="btnBack" value="Back" onClick="javascript: doAction('cancel');" class="btn" />
 			</div>
+			
+		</div>
 		<?php } ?>
 		
     	<div id="lightbox-panel" class="device_details_container">
-				<h3>
-					<span class="details_sub_header" id="details_manufacturer">Manufacturer</span>
-					<span class="details_sub_header" id="details_printer_model">Model</span>
-				</h3>
-
-				<div id="details_error"></div>
-				<div class="details_container">
-					<table width="100%" class="details_table" cellpadding="0"
-						cellspacing="0">
-						<col width="30%" />
-						<col width="70%" />
-						<tr class="details_alt">
-							<td><span class="details_label">Launch Date:</span></td>
-							<td><span id="details_launch_date"></span></td>
-						</tr>
-						<tr>
-							<td><span class="details_label">Copier:</span></td>
-							<td><span id="details_copier"></span></td>
-						</tr>
-						<tr class="details_alt">
-							<td><span class="details_label">Scanner:</span></td>
-							<td><span id="details_scanner"></span></td>
-						</tr>
-						<tr>
-							<td><span class="details_label">Fax:</span></td>
-							<td><span id="details_fax"></span></td>
-						</tr>
-						<tr class="details_alt">
-							<td><span class="details_label">Duplex:</span></td>
-							<td><span id="details_duplex"></span></td>
-						</tr>
-						<tr>
-							<td><span class="details_label">PPM Black:</span></td>
-							<td><span id="details_ppm_black"></span></td>
-						</tr>
-						<tr class="details_alt">
-							<td><span class="details_label">PPM Color:</span></td>
-							<td><span id="details_ppm_color"></span></td>
-						</tr>
-						<tr>
-							<td><span class="details_label">Duty Cycle:</span></td>
-							<td><span id="details_duty_cycle"></span></td>
-						</tr>
-						<tr class="details_alt">
-							<td><span class="details_label">Watts Power Normal:</span></td>
-							<td><span id="details_watts_power_normal"></span></td>
-						</tr>
-						<tr>
-							<td><span class="details_label">Watts Power Idle:</span></td>
-							<td><span id="details_watts_power_idle"></span></td>
-						</tr>
-						<tr class="details_alt">
-							<td><span class="details_label">Printer Price:</span></td>
-							<td><span id="details_printer_price"></span></td>
-						</tr>
-						<tr>
-							<td><span class="details_label">Toner Config:</span></td>
-							<td><span id="details_toner_config"></span></td>
-						</tr>
-						<tr class="details_alt">
-							<td><span class="details_label">Is Leased:</span></td>
-							<td><span id="details_is_leased"></span></td>
-						</tr>
-						<tr id="leased_toner_yield_row">
-							<td><span class="details_label">Leased Toner Yield:</span></td>
-							<td><span id="details_leased_toner_yield"></span></td>
-						</tr>
-					</table>
-				</div>
-
-				<div class="details_toners_container">
-					<h4>Toners:</h4>
-					<table id="details_toners"></table>
-				</div>
-
-				<div id="submitBtns" class="submitBar">
-					<input type="button" value="Done"
-						onclick="javascript: toggle_request(false);" />
-				</div>
-
-			</div>
-
-		</dt>
-	</dl>
+        	<h3><span class="details_sub_header" id="details_manufacturer">Manufacturer</span> <span class="details_sub_header" id="details_printer_model">Model</span></h3>
+        	
+        	<div id="details_error"></div>
+        	<div class="details_container">
+        		<table width="100%" class="details_table" cellpadding="0" cellspacing="0">
+        			<col width="30%" /><col width="70%" />
+        			<tr class="details_alt">
+        				<td><span class="details_label">Launch Date:</span></td>
+        				<td><span id="details_launch_date"></span></td>
+        			</tr>
+        			<tr>
+        				<td><span class="details_label">Copier:</span></td>
+        				<td><span id="details_copier"></span></td>
+        			</tr>
+        			<tr class="details_alt">
+        				<td><span class="details_label">Scanner:</span></td>
+        				<td><span id="details_scanner"></span></td>
+        			</tr>
+        			<tr>
+        				<td><span class="details_label">Fax:</span></td>
+        				<td><span id="details_fax"></span></td>
+        			</tr>
+        			<tr class="details_alt">
+        				<td><span class="details_label">Duplex:</span></td>
+        				<td><span id="details_duplex"></span></td>
+        			</tr>
+        			<tr>
+        				<td><span class="details_label">PPM Black:</span></td>
+        				<td><span id="details_ppm_black"></span></td>
+        			</tr>
+        			<tr class="details_alt">
+        				<td><span class="details_label">PPM Color:</span></td>
+        				<td><span id="details_ppm_color"></span></td>
+        			</tr>
+        			<tr>
+        				<td><span class="details_label">Duty Cycle:</span></td>
+        				<td><span id="details_duty_cycle"></span></td>
+        			</tr>
+        			<tr class="details_alt">
+        				<td><span class="details_label">Watts Power Normal:</span></td>
+        				<td><span id="details_watts_power_normal"></span></td>
+        			</tr>
+        			<tr>
+        				<td><span class="details_label">Watts Power Idle:</span></td>
+        				<td><span id="details_watts_power_idle"></span></td>
+        			</tr>
+        			<tr class="details_alt">
+        				<td><span class="details_label">Printer Price:</span></td>
+        				<td><span id="details_printer_price"></span></td>
+        			</tr>
+        			<tr>
+        				<td><span class="details_label">Toner Config:</span></td>
+        				<td><span id="details_toner_config"></span></td>
+        			</tr>
+        			<tr class="details_alt">
+        				<td><span class="details_label">Is Leased:</span></td>
+        				<td><span id="details_is_leased"></span></td>
+        			</tr>
+        			<tr id="leased_toner_yield_row">
+        				<td><span class="details_label">Leased Toner Yield:</span></td>
+        				<td><span id="details_leased_toner_yield"></span></td>
+        			</tr>
+        		</table>
+            </div>
+            
+            <div class="details_toners_container">
+            	<h4>Toners:</h4>
+				<table id="details_toners"></table>
+            </div>
+    		
+    		<div id="submitBtns" class="submitBar">	
+				<input type="button" value="Done" onclick="javascript: toggle_request(false);" class="btn" />
+    	    </div>
+    	    
+    	</div>
+    	
+	</dt>
+</dl>
 </form>
-

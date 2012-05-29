@@ -4,6 +4,7 @@ class Proposalgen_Model_DbTable_DateAnswers extends Zend_Db_Table_Abstract
 {
     protected $_name = 'answers_dates';
     protected $_primary = 'answer_date_id';
+    
     protected $_referenceMap = array (
             'Reports' => array (
                     'columns' => 'report_id', 

@@ -7,6 +7,7 @@ class Proposalgen_Model_DbTable_PartsDevice extends Zend_Db_Table_Abstract
             'part_id', 
             'master_device_id' 
     );
+    
     protected $_referenceMap = array (
             'Parts' => array (
                     'columns' => 'part_id', 

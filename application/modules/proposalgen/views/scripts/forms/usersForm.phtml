@@ -1,57 +1,54 @@
-<?php
-$elements ["pageCoverage"] = $this->element->pageCoverage;
-$elements ["pageCoverage_BW"] = $this->element->pageCoverage_BW;
-$elements ["pageCoverage_Colour"] = $this->element->pageCoverage_Colour;
-$elements ["printVolume"] = $this->element->printVolume;
-$elements ["repairTime"] = $this->element->repairTime;
+<?php 
+$elements["pageCoverage"] = $this->element->pageCoverage;
+$elements["pageCoverage_BW"] = $this->element->pageCoverage_BW;
+$elements["pageCoverage_Colour"] = $this->element->pageCoverage_Colour;
+$elements["printVolume"] = $this->element->printVolume;
+$elements["repairTime"] = $this->element->repairTime;
 ?>
-<form id="users" action="<?php echo $this->element->getAction() ?>"
-	method="<?php echo $this->element->getMethod() ?>">
-	<table border="0" width="100%">
-		<col width="50%" />
-		<col width="50%" />
-		<tr>
-			<td colspan="2"><?php echo $elements["pageCoverage"]->renderDescription(); ?><br />
-			<br /></td>
-		</tr>
-		<tr>
-			<td valign="top" style="padding-left: 30px;"><?php echo $elements["pageCoverage_BW"]->renderLabel(); ?></td>
-			<td valign="top"><?php echo $elements["pageCoverage_BW"]->renderViewHelper(); ?></td>
-		</tr>
-		<tr>
-			<td>&nbsp;</td>
-			<td><?php echo $elements["pageCoverage_BW"]->renderErrors(); ?></td>
-		</tr>
-		<tr>
-			<td valign="top" style="padding-left: 30px;"><?php echo $elements["pageCoverage_Colour"]->renderLabel(); ?></td>
-			<td valign="top"><?php echo $elements["pageCoverage_Colour"]->renderViewHelper(); ?></td>
-		</tr>
-		<tr>
-			<td>&nbsp;</td>
-			<td><?php echo $elements["pageCoverage_Colour"]->renderErrors(); ?></td>
-		</tr>
-		<tr>
-			<td valign="top" colspan="2" style="padding-bottom: 10px;"><?php echo $elements["printVolume"]->renderLabel(); ?></td>
-		</tr>
-		<tr>
-			<td valign="top" colspan="2" style="padding-left: 30px;"><?php echo $elements["printVolume"]->renderViewHelper(); ?></td>
-		</tr>
-		<tr>
-			<td colspan="2" style="padding-left: 30px;"><?php echo $elements["printVolume"]->renderErrors(); ?></td>
-		</tr>
-		<tr>
-			<td valign="top" colspan="2" style="padding-bottom: 10px;"><?php echo $elements["repairTime"]->renderLabel(); ?></td>
-		</tr>
-		<tr>
-			<td valign="top" colspan="2" style="padding-left: 30px;"><?php echo $elements["repairTime"]->renderViewHelper(); ?></td>
-		</tr>
-		<tr>
-			<td colspan="2" style="padding-left: 30px;"><?php echo $elements["repairTime"]->renderErrors(); ?></td>
-		</tr>
-	</table>
-	<br />
-	<div id="submitBtns" class="submitBar">
-		<?php echo $this->element->save?>
-	    <?php echo $this->element->back_button?>
+<form id="users" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>">
+    <table border="0" width="100%">
+    	<col width="50%" /><col width="50%" />
+    	<tr>
+    		<td colspan="2"><?php echo $elements["pageCoverage"]->renderDescription(); ?><br /><br /></td>
+    	</tr>
+    	<tr>
+    		<td valign="top" style="padding-left: 30px;"><?php echo $elements["pageCoverage_BW"]->renderLabel(); ?></td>
+    		<td valign="top"><?php echo $elements["pageCoverage_BW"]->renderViewHelper(); ?></td>
+    	</tr>
+    	<tr>
+    		<td>&nbsp;</td>
+    		<td><?php echo $elements["pageCoverage_BW"]->renderErrors(); ?></td>
+    	</tr>
+    	<tr>
+    		<td valign="top" style="padding-left: 30px;"><?php echo $elements["pageCoverage_Colour"]->renderLabel(); ?></td>
+    		<td valign="top"><?php echo $elements["pageCoverage_Colour"]->renderViewHelper(); ?></td>
+    	</tr>
+    	<tr>
+    		<td>&nbsp;</td>
+    		<td><?php echo $elements["pageCoverage_Colour"]->renderErrors(); ?></td>
+    	</tr>
+    	<tr>
+    		<td valign="top" colspan="2" style="padding-bottom: 10px;"><?php echo $elements["printVolume"]->renderLabel(); ?></td>
+    	</tr>
+    	<tr>
+    		<td valign="top" colspan="2" style="padding-left: 30px;"><?php echo $elements["printVolume"]->renderViewHelper(); ?></td>
+    	</tr>
+    	<tr>
+    		<td colspan="2" style="padding-left: 30px;"><?php echo $elements["printVolume"]->renderErrors(); ?></td>
+    	</tr>
+    	<tr>
+    		<td valign="top" colspan="2" style="padding-bottom: 10px;"><?php echo $elements["repairTime"]->renderLabel(); ?></td>
+    	</tr>
+    	<tr>
+    		<td valign="top" colspan="2" style="padding-left: 30px;"><?php echo $elements["repairTime"]->renderViewHelper(); ?></td>
+    	</tr>
+    	<tr>
+    		<td colspan="2" style="padding-left: 30px;"><?php echo $elements["repairTime"]->renderErrors(); ?></td>
+    	</tr>
+    </table>
+	<br/>
+    <div id="submitBtns" class="submitBar">
+		<?php echo $this->element->save ?>
+	    <?php echo $this->element->back_button ?>
 	</div>
 </form>

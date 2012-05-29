@@ -6,11 +6,10 @@ class Proposalgen_Model_Mapper_TicketStatus extends Tangent_Model_Mapper_Abstrac
     static $_instance;
 
     /**
-     *
      * @return Tangent_Model_Mapper_Abstract
      */
     public static function getInstance ()
-    {
+    { 
         if (! isset(self::$_instance))
         {
             $className = get_class();
@@ -20,10 +19,9 @@ class Proposalgen_Model_Mapper_TicketStatus extends Tangent_Model_Mapper_Abstrac
     }
 
     /**
-     * Maps a database row object to an Application_Model
-     *
-     * @param Zend_Db_Table_Row $row            
-     * @return The appropriate Application_Model
+     * Maps a database row object to an Proposalgen_Model
+     * @param Zend_Db_Table_Row $row
+     * @return The appropriate Proposalgen_Model
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
     {
@@ -31,7 +29,8 @@ class Proposalgen_Model_Mapper_TicketStatus extends Tangent_Model_Mapper_Abstrac
         try
         {
             $object = new Proposalgen_Model_TicketStatus();
-            $object->setStatusId($row->status_id)->setStatusName($row->status_name);
+            $object->setStatusId($row->status_id)
+            	->setStatusName($row->status_name);
         }
         catch ( Exception $e )
         {
@@ -39,11 +38,10 @@ class Proposalgen_Model_Mapper_TicketStatus extends Tangent_Model_Mapper_Abstrac
         }
         return $object;
     }
-
+	
     /**
      * Saved an Proposalgen_Model_ object to the database
-     *
-     * @param unknown_type $object            
+     * @param unknown_type $object
      */
     public function save (Proposalgen_Model_TicketStatus $object)
     {

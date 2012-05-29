@@ -2,7 +2,6 @@
 
 /**
  * Class Proposalgen_Model_User
- *
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_User extends Tangent_Model_Abstract
@@ -54,12 +53,13 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     protected $FullCompanyLogo;
     protected $CompanyLogo;
     protected $CompanyReportColor;
+    
     protected $UserActualPageCoverageMono;
     protected $UserActualPageCoverageColor;
+    
     protected $ReportSettings;
 
     /**
-     *
      * @return Proposalgen_Model_User $CurrentUser
      */
     public static function getCurrentUser ()
@@ -72,8 +72,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param Proposalgen_Model_User $CurrentUser            
+     * @param Proposalgen_Model_User $CurrentUser
      */
     public static function setCurrentUser ($CurrentUser)
     {
@@ -81,7 +80,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return Integer $CurrentUserId
      */
     public static function getCurrentUserId ()
@@ -94,8 +92,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param Integer $CurrentUserId            
+     * @param Integer $CurrentUserId
      */
     public static function setCurrentUserId ($CurrentUserId)
     {
@@ -103,7 +100,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return Proposalgen_Model_User $MasterUser
      */
     public static function getMasterUser ()
@@ -116,8 +112,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param Proposalgen_Model_User $MasterUser            
+     * @param Proposalgen_Model_User $MasterUser
      */
     public static function setMasterUser ($MasterUser)
     {
@@ -125,7 +120,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return Integer $MasterUserId
      */
     public static function getMasterUserId ()
@@ -139,8 +133,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param Integer $MasterUserId            
+     * @param Integer $MasterUserId
      */
     public static function setMasterUserId ($MasterUserId)
     {
@@ -149,7 +142,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserId
      */
     public function getUserId ()
@@ -163,8 +155,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserId            
+     * @param field_type $UserId
      */
     public function setUserId ($UserId)
     {
@@ -173,7 +164,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DealerCompanyId
      */
     public function getDealerCompanyId ()
@@ -187,8 +177,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DealerCompanyId            
+     * @param field_type $DealerCompanyId
      */
     public function setDealerCompanyId ($DealerCompanyId)
     {
@@ -197,7 +186,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $FirstName
      */
     public function getFirstName ()
@@ -211,8 +199,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $FirstName            
+     * @param field_type $FirstName
      */
     public function setFirstName ($FirstName)
     {
@@ -221,7 +208,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $LastName
      */
     public function getLastName ()
@@ -235,8 +221,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $LastName            
+     * @param field_type $LastName
      */
     public function setLastName ($LastName)
     {
@@ -245,7 +230,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserName
      */
     public function getUserName ()
@@ -259,8 +243,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserName            
+     * @param field_type $UserName
      */
     public function setUserName ($UserName)
     {
@@ -269,7 +252,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $Password
      */
     public function getPassword ()
@@ -283,8 +265,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $Password            
+     * @param field_type $Password
      */
     public function setPassword ($Password)
     {
@@ -293,7 +274,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $Email
      */
     public function getEmail ()
@@ -307,8 +287,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $Email            
+     * @param field_type $Email
      */
     public function setEmail ($Email)
     {
@@ -317,7 +296,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $Telephone
      */
     public function getTelephone ()
@@ -331,8 +309,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $Telephone            
+     * @param field_type $Telephone
      */
     public function setTelephone ($Telephone)
     {
@@ -341,7 +318,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $IsActivated
      */
     public function getIsActivated ()
@@ -355,8 +331,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $IsActivated            
+     * @param field_type $IsActivated
      */
     public function setIsActivated ($IsActivated)
     {
@@ -365,7 +340,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UpdatePassword
      */
     public function getUpdatePassword ()
@@ -379,8 +353,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UpdatePassword            
+     * @param field_type $UpdatePassword
      */
     public function setUpdatePassword ($UpdatePassword)
     {
@@ -389,7 +362,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DateCreated
      */
     public function getDateCreated ()
@@ -403,8 +375,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DateCreated            
+     * @param field_type $DateCreated
      */
     public function setDateCreated ($DateCreated)
     {
@@ -413,7 +384,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $TempPassword
      */
     public function getTempPassword ()
@@ -427,8 +397,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $TempPassword            
+     * @param field_type $TempPassword
      */
     public function setTempPassword ($TempPassword)
     {
@@ -437,7 +406,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $PasswordResetRequested
      */
     public function getPasswordResetRequested ()
@@ -451,8 +419,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $PasswordResetRequested            
+     * @param field_type $PasswordResetRequested
      */
     public function setPasswordResetRequested ($PasswordResetRequested)
     {
@@ -461,7 +428,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $LastLogin
      */
     public function getLastLogin ()
@@ -475,8 +441,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $LastLogin            
+     * @param field_type $LastLogin
      */
     public function setLastLogin ($LastLogin)
     {
@@ -485,7 +450,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $EulaAccepted
      */
     public function getEulaAccepted ()
@@ -499,8 +463,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $EulaAccepted            
+     * @param field_type $EulaAccepted
      */
     public function setEulaAccepted ($EulaAccepted)
     {
@@ -509,7 +472,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserEstimatedPageCoverageMono
      */
     public function getUserEstimatedPageCoverageMono ()
@@ -523,8 +485,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserEstimatedPageCoverageMono            
+     * @param field_type $UserEstimatedPageCoverageMono
      */
     public function setUserEstimatedPageCoverageMono ($UserEstimatedPageCoverageMono)
     {
@@ -533,7 +494,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserEstimatedPageCoverageColor
      */
     public function getUserEstimatedPageCoverageColor ()
@@ -547,8 +507,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserEstimatedPageCoverageColor            
+     * @param field_type $UserEstimatedPageCoverageColor
      */
     public function setUserEstimatedPageCoverageColor ($UserEstimatedPageCoverageColor)
     {
@@ -557,7 +516,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserAdminChargePerPage
      */
     public function getUserAdminChargePerPage ()
@@ -571,8 +529,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserAdminChargePerPage            
+     * @param field_type $UserAdminChargePerPage
      */
     public function setUserAdminChargePerPage ($UserAdminChargePerPage)
     {
@@ -581,7 +538,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserPricingMargin
      */
     public function getUserPricingMargin ()
@@ -595,8 +551,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserPricingMargin            
+     * @param field_type $UserPricingMargin
      */
     public function setUserPricingMargin ($UserPricingMargin)
     {
@@ -605,7 +560,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserMonthlyLeasePayment
      */
     public function getUserMonthlyLeasePayment ()
@@ -619,8 +573,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserMonthlyLeasePayment            
+     * @param field_type $UserMonthlyLeasePayment
      */
     public function setUserMonthlyLeasePayment ($UserMonthlyLeasePayment)
     {
@@ -629,7 +582,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserDefaultPrinterCost
      */
     public function getUserDefaultPrinterCost ()
@@ -643,8 +595,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserDefaultPrinterCost            
+     * @param field_type $UserDefaultPrinterCost
      */
     public function setUserDefaultPrinterCost ($UserDefaultPrinterCost)
     {
@@ -653,7 +604,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserLeasedBwPerPage
      */
     public function getUserLeasedBwPerPage ()
@@ -667,8 +617,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserLeasedBwPerPage            
+     * @param field_type $UserLeasedBwPerPage
      */
     public function setUserLeasedBwPerPage ($UserLeasedBwPerPage)
     {
@@ -677,7 +626,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserLeasedColorPerPage
      */
     public function getUserLeasedColorPerPage ()
@@ -691,8 +639,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserLeasedColorPerPage            
+     * @param field_type $UserLeasedColorPerPage
      */
     public function setUserLeasedColorPerPage ($UserLeasedColorPerPage)
     {
@@ -701,7 +648,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserMpsBwPerPage
      */
     public function getUserMpsBwPerPage ()
@@ -715,8 +661,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserMpsBwPerPage            
+     * @param field_type $UserMpsBwPerPage
      */
     public function setUserMpsBwPerPage ($UserMpsBwPerPage)
     {
@@ -725,7 +670,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserMpsColorPerPage
      */
     public function getUserMpsColorPerPage ()
@@ -739,8 +683,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserMpsColorPerPage            
+     * @param field_type $UserMpsColorPerPage
      */
     public function setUserMpsColorPerPage ($UserMpsColorPerPage)
     {
@@ -749,7 +692,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserKilowattsPerHour
      */
     public function getUserKilowattsPerHour ()
@@ -763,8 +705,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserKilowattsPerHour            
+     * @param field_type $UserKilowattsPerHour
      */
     public function setUserKilowattsPerHour ($UserKilowattsPerHour)
     {
@@ -773,7 +714,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $PricingConfigId
      */
     public function getPricingConfigId ()
@@ -787,8 +727,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $PricingConfigId            
+     * @param field_type $PricingConfigId
      */
     public function setPricingConfigId ($PricingConfigId)
     {
@@ -797,7 +736,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $FailedLoginAttempts
      */
     public function getFailedLoginAttempts ()
@@ -811,8 +749,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $FailedLoginAttempts            
+     * @param field_type $FailedLoginAttempts
      */
     public function setFailedLoginAttempts ($FailedLoginAttempts)
     {
@@ -821,7 +758,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $LoginRestrictedUntilDate
      */
     public function getLoginRestrictedUntilDate ()
@@ -835,8 +771,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $LoginRestrictedUntilDate            
+     * @param field_type $LoginRestrictedUntilDate
      */
     public function setLoginRestrictedUntilDate ($LoginRestrictedUntilDate)
     {
@@ -845,7 +780,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserDefaultBWTonerCost
      */
     public function getUserDefaultBWTonerCost ()
@@ -859,8 +793,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserDefaultBWTonerCost            
+     * @param field_type $UserDefaultBWTonerCost
      */
     public function setUserDefaultBWTonerCost ($UserDefaultBWTonerCost)
     {
@@ -869,7 +802,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserDefaultBWTonerYield
      */
     public function getUserDefaultBWTonerYield ()
@@ -883,8 +815,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserDefaultBWTonerYield            
+     * @param field_type $UserDefaultBWTonerYield
      */
     public function setUserDefaultBWTonerYield ($UserDefaultBWTonerYield)
     {
@@ -893,7 +824,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserDefaultColorTonerCost
      */
     public function getUserDefaultColorTonerCost ()
@@ -907,8 +837,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserDefaultColorTonerCost            
+     * @param field_type $UserDefaultColorTonerCost
      */
     public function setUserDefaultColorTonerCost ($UserDefaultColorTonerCost)
     {
@@ -917,7 +846,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserDefaultColorTonerYield
      */
     public function getUserDefaultColorTonerYield ()
@@ -931,8 +859,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserDefaultColorTonerYield            
+     * @param field_type $UserDefaultColorTonerYield
      */
     public function setUserDefaultColorTonerYield ($UserDefaultColorTonerYield)
     {
@@ -941,7 +868,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserDefaultThreeColorTonerCost
      */
     public function getUserDefaultThreeColorTonerCost ()
@@ -955,8 +881,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserDefaultThreeColorTonerCost            
+     * @param field_type $UserDefaultThreeColorTonerCost
      */
     public function setUserDefaultThreeColorTonerCost ($UserDefaultThreeColorTonerCost)
     {
@@ -965,7 +890,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserDefaultThreeColorTonerYield
      */
     public function getUserDefaultThreeColorTonerYield ()
@@ -979,8 +903,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserDefaultThreeColorTonerYield            
+     * @param field_type $UserDefaultThreeColorTonerYield
      */
     public function setUserDefaultThreeColorTonerYield ($UserDefaultThreeColorTonerYield)
     {
@@ -989,7 +912,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserDefaultFourColorTonerCost
      */
     public function getUserDefaultFourColorTonerCost ()
@@ -1003,8 +925,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserDefaultFourColorTonerCost            
+     * @param field_type $UserDefaultFourColorTonerCost
      */
     public function setUserDefaultFourColorTonerCost ($UserDefaultFourColorTonerCost)
     {
@@ -1013,7 +934,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserDefaultFourColorTonerYield
      */
     public function getUserDefaultFourColorTonerYield ()
@@ -1027,8 +947,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserDefaultFourColorTonerYield            
+     * @param field_type $UserDefaultFourColorTonerYield
      */
     public function setUserDefaultFourColorTonerYield ($UserDefaultFourColorTonerYield)
     {
@@ -1037,7 +956,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $FullCompanyLogo
      */
     public function getFullCompanyLogo ()
@@ -1051,8 +969,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $FullCompanyLogo            
+     * @param field_type $FullCompanyLogo
      */
     public function setFullCompanyLogo ($FullCompanyLogo)
     {
@@ -1061,7 +978,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $CompanyLogo
      */
     public function getCompanyLogo ()
@@ -1075,8 +991,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $CompanyLogo            
+     * @param field_type $CompanyLogo
      */
     public function setCompanyLogo ($CompanyLogo)
     {
@@ -1085,7 +1000,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $CompanyReportColor
      */
     public function getCompanyReportColor ()
@@ -1099,8 +1013,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $CompanyReportColor            
+     * @param field_type $CompanyReportColor
      */
     public function setCompanyReportColor ($CompanyReportColor)
     {
@@ -1109,7 +1022,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserServiceCostPerPage
      */
     public function getUserServiceCostPerPage ()
@@ -1123,8 +1035,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserServiceCostPerPage            
+     * @param field_type $UserServiceCostPerPage
      */
     public function setUserServiceCostPerPage ($UserServiceCostPerPage)
     {
@@ -1133,7 +1044,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserActualPageCoverageMono
      */
     public function getUserActualPageCoverageMono ()
@@ -1147,7 +1057,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserActualPageCoverageColor
      */
     public function getUserActualPageCoverageColor ()
@@ -1161,8 +1070,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserActualPageCoverageMono            
+     * @param field_type $UserActualPageCoverageMono
      */
     public function setUserActualPageCoverageMono ($UserActualPageCoverageMono)
     {
@@ -1171,8 +1079,7 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserActualPageCoverageColor            
+     * @param field_type $UserActualPageCoverageColor
      */
     public function setUserActualPageCoverageColor ($UserActualPageCoverageColor)
     {
@@ -1181,7 +1088,6 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReportSettings
      */
     public function getReportSettings ($getOverrides = true)
@@ -1199,22 +1105,22 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
             }
             
             $usersettings = array (
-                    "estimated_page_coverage_mono" => $this->getUserEstimatedPageCoverageMono(), 
-                    "estimated_page_coverage_color" => $this->getUserEstimatedPageCoverageColor(), 
-                    "actual_page_coverage_mono" => $this->getUserActualPageCoverageMono(), 
-                    "actual_page_coverage_color" => $this->getUserActualPageCoverageColor(), 
-                    "service_cost_per_page" => $this->getUserServiceCostPerPage(), 
-                    "admin_charge_per_page" => $this->getUserAdminChargePerPage(), 
-                    "pricing_margin" => $this->getUserPricingMargin(), 
-                    "monthly_lease_payment" => $this->getUserMonthlyLeasePayment(), 
-                    "default_printer_cost" => $this->getUserDefaultPrinterCost(), 
-                    "leased_bw_per_page" => $this->getUserLeasedBwPerPage(), 
-                    "leased_color_per_page" => $this->getUserLeasedColorPerPage(), 
-                    "mps_bw_per_page" => $this->getUserMpsBwPerPage(), 
-                    "mps_color_per_page" => $this->getUserMpsColorPerPage(), 
-                    "kilowatts_per_hour" => $this->getUserKilowattsPerHour(), 
-                    "pricing_config_id" => $this->getPricingConfigId(), 
-                    "pricing_margin" => $this->getUserPricingMargin() 
+                    "estimated_page_coverage_mono" => $this->getUserEstimatedPageCoverageMono(),
+                    "estimated_page_coverage_color" => $this->getUserEstimatedPageCoverageColor(),
+                    "actual_page_coverage_mono" => $this->getUserActualPageCoverageMono(),
+                    "actual_page_coverage_color" => $this->getUserActualPageCoverageColor(),
+                    "service_cost_per_page" => $this->getUserServiceCostPerPage(),
+                    "admin_charge_per_page" => $this->getUserAdminChargePerPage(),
+                    "pricing_margin" => $this->getUserPricingMargin(),
+                    "monthly_lease_payment" => $this->getUserMonthlyLeasePayment(),
+                    "default_printer_cost" => $this->getUserDefaultPrinterCost(),
+                    "leased_bw_per_page" => $this->getUserLeasedBwPerPage(),
+                    "leased_color_per_page" => $this->getUserLeasedColorPerPage(),
+                    "mps_bw_per_page" => $this->getUserMpsBwPerPage(),
+                    "mps_color_per_page" => $this->getUserMpsColorPerPage(),
+                    "kilowatts_per_hour" => $this->getUserKilowattsPerHour(),
+                    "pricing_config_id" => $this->getPricingConfigId(),
+                    "pricing_margin" => $this->getUserPricingMargin()
             );
             
             if ($getOverrides)
@@ -1241,12 +1147,12 @@ class Proposalgen_Model_User extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReportSettings            
+     * @param field_type $ReportSettings
      */
     public function setReportSettings ($ReportSettings)
     {
         $this->ReportSettings = $ReportSettings;
         return $this;
     }
+
 }

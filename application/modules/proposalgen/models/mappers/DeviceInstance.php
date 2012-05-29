@@ -6,11 +6,11 @@ class Proposalgen_Model_Mapper_DeviceInstance extends Tangent_Model_Mapper_Abstr
     static $_instance;
 
     /**
-     *
      * @return Tangent_Model_Mapper_Abstract
      */
     public static function getInstance ()
     {
+        
         if (! isset(self::$_instance))
         {
             $className = get_class();
@@ -20,10 +20,9 @@ class Proposalgen_Model_Mapper_DeviceInstance extends Tangent_Model_Mapper_Abstr
     }
 
     /**
-     * Maps a database row object to an Application_Model
-     *
-     * @param Zend_Db_Table_Row $row            
-     * @return The appropriate Application_Model
+     * Maps a database row object to an Proposalgen_Model
+     * @param Zend_Db_Table_Row $row
+     * @return The appropriate Proposalgen_Model
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
     {
@@ -42,6 +41,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends Tangent_Model_Mapper_Abstr
                 ->setIsExcluded($row->is_excluded)
                 ->setIpAddress($row->ip_address)
                 ->setJITSuppliesSupported($row->jit_supplies_supported);
+        
         }
         catch ( Exception $e )
         {
@@ -52,8 +52,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends Tangent_Model_Mapper_Abstr
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     *
-     * @param unknown_type $object            
+     * @param unknown_type $object
      */
     public function save (Proposalgen_Model_DeviceInstance $object)
     {
@@ -89,9 +88,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends Tangent_Model_Mapper_Abstr
         {
             $db = $this->getDbTable();
             $select = $db->select(Zend_Db_Table::SELECT_WITH_FROM_PART);
-            $select->joinLeft(array (
-                    'md' => 'master_device' 
-            ), 'device_instance.master_device_id = md.master_device_id', '*')
+            $select->joinLeft(array ( 'md' => 'master_device' ), 'device_instance.master_device_id = md.master_device_id', '*')
                 ->where('device_instance.is_excluded = ?', $isExcluded)
                 ->where('device_instance.report_id = ?', $reportId)
                 ->setIntegrityCheck(false)

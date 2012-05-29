@@ -1,9 +1,9 @@
 <?php
 
 /**
- * proposal form: used for selecting / creating a proposal
- *
- * @author Chris Garrah
+ * proposal form:  used for selecting / creating a proposal
+ * 
+ * @author	Chris Garrah
  * @version v1.0
  */
 class Proposalgen_Form_Proposal extends Zend_Form
@@ -66,8 +66,9 @@ class Proposalgen_Form_Proposal extends Zend_Form
         
         // Add all defined elements to the form     
         $this->addElements($elements);
+    
     } // end function __construct
+    
 } // end class forms_locationForm
-
 
 ?>

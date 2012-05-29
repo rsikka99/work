@@ -1,15 +1,14 @@
 <?php
 /**
  * importpricing.phtml - upload bulk pricing updates
- * must be .
- * csv format.
+ * must be .csv format.
  *
- * @author : John Sadler
- * @version : v1.0
+ * @author: John Sadler
+ * @version: v1.0
  */
 ?>
 
-<?php $this->headScript()->captureStart('append','text/javascript')?>
+<?php $this->headScript()->captureStart('append','text/javascript') ?>
 
     $(document).ready(function() {
     });
@@ -22,26 +21,23 @@
     	}
     }
     
-<?php $this->headScript()->captureEnd()?>
+<?php $this->headScript()->captureEnd() ?>
 
 <h2><?php echo $this->title;?></h2>
 
 <form name="bulk" id="bulk" action="" method="post">
 	<dl class="zend_form">
 		<dt class="botMenu">
-
+			
 			<div id="message_container" class="message_container">
 				<p><?php echo  $this->message; ?></p>
 			</div>
-
+			
 			<div id="buttons_container" class="top-margined margined">
-				<input type="button" name="btnImport" id="btnImport"
-					value="Import Another File"
-					onclick="javascript: do_action('import');" /> <input type="button"
-					name="btnBack" id="btnBack" value="Done"
-					onclick="javascript: do_action('back');" />
+				<input type="button" name="btnImport" id="btnImport" value="Import Another File" onclick="javascript: do_action('import');" />
+				<input type="button" name="btnBack" id="btnBack" value="Done" onclick="javascript: do_action('back');" />
 			</div>
-
+			
 		</dt>
 	</dl>
 </form>

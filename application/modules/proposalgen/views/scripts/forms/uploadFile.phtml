@@ -1,14 +1,12 @@
 <?php $form = $this->element; ?>
-<form id="<?= $form->getName(); ?>" name="<?= $form->getName(); ?>"
-	action="<?= $form->getAction() ?>" method="<?= $form->getMethod() ?>"
-	enctype="<?= $form->getEncType(); ?>">
-	<table>
-		<tr>
-			<td><?= $form->upload_file; ?></td>
-			<td><?= $form->Upload->renderViewHelper(); ?></td>
-		</tr>
-		<tr>
-			<td colspan="2"><?= $form->upload_file->renderErrors(); ?></td>
-		</tr>
-	</table>
+<form id="<?= $form->getName(); ?>" name="<?= $form->getName(); ?>" action="<?= $form->getAction() ?>" method="<?= $form->getMethod() ?>" enctype="<?= $form->getEncType(); ?>">
+<table>
+	<tr>
+		<td><?= $form->upload_file; ?></td>
+		<td><?= $form->Upload->renderViewHelper(); ?></td>
+	</tr>
+	<tr>
+		<td colspan="2"><?= $form->upload_file->renderErrors(); ?></td>
+	</tr>
+</table>
 </form>

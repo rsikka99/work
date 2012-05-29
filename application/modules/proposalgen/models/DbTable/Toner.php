@@ -6,6 +6,7 @@ class Proposalgen_Model_DbTable_Toner extends Zend_Db_Table_Abstract
     protected $_primary = array (
             'toner_id' 
     );
+    
     protected $_referenceMap = array (
             'Parts' => array (
                     'columns' => 'part_id', 

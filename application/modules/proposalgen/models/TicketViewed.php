@@ -2,7 +2,6 @@
 
 /**
  * Class Proposalgen_Model_TicketViewed
- *
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_TicketViewed extends Tangent_Model_Abstract
@@ -12,7 +11,6 @@ class Proposalgen_Model_TicketViewed extends Tangent_Model_Abstract
     protected $DateViewed;
 
     /**
-     *
      * @return the $TicketId
      */
     public function getTicketId ()
@@ -26,8 +24,7 @@ class Proposalgen_Model_TicketViewed extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $TicketId            
+     * @param field_type $TicketId
      */
     public function setTicketId ($TicketId)
     {
@@ -36,7 +33,6 @@ class Proposalgen_Model_TicketViewed extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $UserId
      */
     public function getUserId ()
@@ -50,8 +46,7 @@ class Proposalgen_Model_TicketViewed extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $UserId            
+     * @param field_type $UserId
      */
     public function setUserId ($UserId)
     {
@@ -60,7 +55,6 @@ class Proposalgen_Model_TicketViewed extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $DateViewed
      */
     public function getDateViewed ()
@@ -74,12 +68,12 @@ class Proposalgen_Model_TicketViewed extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DateViewed            
+     * @param field_type $DateViewed
      */
     public function setDateViewed ($DateViewed)
     {
         $this->DateViewed = $DateViewed;
         return $this;
     }
+
 }

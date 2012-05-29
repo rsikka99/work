@@ -6,11 +6,11 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
     static $_instance;
 
     /**
-     *
      * @return Tangent_Model_Mapper_Abstract
      */
     public static function getInstance ()
     {
+        
         if (! isset(self::$_instance))
         {
             $className = get_class();
@@ -20,10 +20,9 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
     }
 
     /**
-     * Maps a database row object to an Application_Model
-     *
-     * @param Zend_Db_Table_Row $row            
-     * @return The appropriate Application_Model
+     * Maps a database row object to an Proposalgen_Model
+     * @param Zend_Db_Table_Row $row
+     * @return The appropriate Proposalgen_Model
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
     {
@@ -122,8 +121,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
 
     /**
      * Fetches all unknown devices and puts them in the same format as normal devices
-     *
-     * @param unknown_type $reportId            
+     * @param unknown_type $reportId
      */
     public function fetchAllUnknownDevicesAsKnownDevices ($reportId, $whereClause)
     {
@@ -149,15 +147,15 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                     $meters = array ();
                     // Form a list of meters
                     $meterColumns = array (
-                            "life" => Proposalgen_Model_Meter::METER_TYPE_LIFE, 
-                            "color" => Proposalgen_Model_Meter::METER_TYPE_COLOR, 
-                            "copycolor" => Proposalgen_Model_Meter::METER_TYPE_COPY_COLOR, 
-                            "printcolor" => Proposalgen_Model_Meter::METER_TYPE_PRINT_COLOR, 
-                            "black" => Proposalgen_Model_Meter::METER_TYPE_BLACK, 
-                            "copyblack" => Proposalgen_Model_Meter::METER_TYPE_COPY_BLACK, 
-                            "printblack" => Proposalgen_Model_Meter::METER_TYPE_PRINT_BLACK, 
-                            "scan" => Proposalgen_Model_Meter::METER_TYPE_SCAN, 
-                            "fax" => Proposalgen_Model_Meter::METER_TYPE_FAX 
+                        "life" => Proposalgen_Model_Meter::METER_TYPE_LIFE,
+                        "color" => Proposalgen_Model_Meter::METER_TYPE_COLOR,
+                        "copycolor" => Proposalgen_Model_Meter::METER_TYPE_COPY_COLOR,
+                        "printcolor" => Proposalgen_Model_Meter::METER_TYPE_PRINT_COLOR,
+                        "black" => Proposalgen_Model_Meter::METER_TYPE_BLACK,
+                        "copyblack" => Proposalgen_Model_Meter::METER_TYPE_COPY_BLACK,
+                        "printblack" => Proposalgen_Model_Meter::METER_TYPE_PRINT_BLACK,
+                        "scan" => Proposalgen_Model_Meter::METER_TYPE_SCAN,
+                        "fax" => Proposalgen_Model_Meter::METER_TYPE_FAX
                     );
                     foreach ( $meterColumns as $meterColumn => $meterType )
                     {
@@ -188,14 +186,15 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                         ->setIsLeased($row->is_leased)
                         ->setToners($toners);
                     
+                    
                     if ($masterdevice->getIsLeased())
                     {
                         $smallestYield = null;
-                        foreach ( $toners as $tonersbytype )
+                        foreach ($toners as $tonersbytype)
                         {
-                            foreach ( $tonersbytype as $tonersbycolor )
+                            foreach ($tonersbytype as $tonersbycolor)
                             {
-                                foreach ( $tonersbycolor as $toner )
+                                foreach ($tonersbycolor as $toner)
                                 {
                                     // Ensure toner yield > 0 and pick the smallest possible yield
                                     if (($toner->getTonerYield() > 0 && $toner->getTonerYield() < $smallestYield) || is_null($smallestYield))
@@ -311,7 +310,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
         return $toners;
     }
 
-    public function validateCOMPTonerFields ($row, $rowName)
+    public function validateCOMPTonerFields($row, $rowName)
     {
         $valid = false;
         if (! is_null($row [$rowName . "_SKU"]) && ! is_null($row [$rowName . "_price"]) && ! is_null($row [$rowName . "_yield"]))
@@ -320,13 +319,14 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
             {
                 $valid = true;
             }
+            
         }
         
         return $valid;
     }
-
     public function mapUnknownDeviceToner ($row, $color, $manufacturer, $partType, $colorSuffix = "") //$tonerSKU, $tonerPrice, $tonerYield, $partTypeId, $manufacturerId, $tonerColorId)
     {
+        
         switch ($color)
         {
             case Proposalgen_Model_TonerColor::BLACK :
@@ -379,8 +379,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     *
-     * @param unknown_type $object            
+     * @param unknown_type $object
      */
     public function save (Proposalgen_Model_UnknownDeviceInstance $object)
     {

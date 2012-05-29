@@ -500,6 +500,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
                     "report_id = ?" => $this->ReportId, 
                     "is_excluded = ?" => 1 
             ));
+            
             $unknowndeviceMapper = Proposalgen_Model_Mapper_UnknownDeviceInstance::getInstance();
             $unknownDevices = $unknowndeviceMapper->fetchAllUnknownDevicesAsKnownDevices($this->ReportId, array (
                     "report_id = ?" => $this->ReportId, 

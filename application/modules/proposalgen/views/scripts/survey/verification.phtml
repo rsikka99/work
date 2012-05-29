@@ -1,95 +1,65 @@
 <?php
 /**
  * View Script for survey/verification
+ *
  */
 ?>
-<?php
-
-
-$goalArray = array (
-        'Ensure hardware matches print volume needs' => $this->goals_hardware, 
-        'Increasing uptime and productivity' => $this->goals_employee, 
-        'Streamline logistics for supplies, service and hardware acquisition' => $this->goals_logistics, 
-        'Reduce environmental impact' => $this->goals_enviroment, 
-        'Reduce costs' => $this->goals_costs 
-);
-asort($goalArray);
-$ctr = 1;
-?>
-<form>
-	<br />
-	<div class="verification margined">
-		<dl>
-			<p class="margined">Please confirm the information provided in the
-				questionnaire:</p>
-
-			<h4>Company Information</h4>
-			<dl>
-				<dt>Company Name:</dt>
-				<dd><?php echo $this->company_name;?></dd>
-				<dt>Address:</dt>
-				<dd><?php echo nl2br($this->company_address);?></dd>
-			</dl>
-
-			<h4>General</h4>
-			<dl>
-				<dt>Number of Employees:</dt>
-				<dd><?php echo $this->numb_employees;?></dd>
-				<dt>MPS Goal Priority:</dt>
-				<dd>
-					<ol>
-	        	<?php
-        foreach ( $goalArray as $key => $value )
-        {
-            echo "<li>" . $key . "</li>";
-            $ctr ++;
-        } // end foreach
-        ?>
-	          </ol>
-				
-				
-				</dt>
-			</dl>
-
-			<h4>Finance</h4>
-			<dl>
-				<dt>Toner Costs:</dt>
-				<dd><?php echo money_format('$%i',$this->toner_cost)." per year";?></dd>
-				<dt>Service Costs:</dt>
-				<dd><?php echo ($this->labor_cost == 0 ? "I Don't Know" : money_format('$%i',$this->labor_cost)." per year"); ?></dd>
-				<dt>Average Purchase Order Costs:</dt>
-				<dd><?php echo money_format('$%i',$this->avg_purchase)." per order";?></dd>
-				<dt>Average IT Wage:</dt>
-				<dd><?php echo money_format('$%i',$this->it_hourlyRate);?> per hour</dd>
-			</dl>
-
-			<h4>Purchasing</h4>
-			<dl>
-				<dt>Number of Supply Vendors:</dt>
-				<dd><?php echo $this->numb_vendors;?></dd>
-				<dt>Number of Orders:</dt>
-				<dd><?php echo ($this->inkTonerOrderRadio != "Times per month" ? $this->inkTonerOrderRadio : $this->numb_monthlyOrders) . " per month"; ?></dd>
-			</dl>
-
-			<h4>IT</h4>
-			<dl>
-				<dt>IT Service Hours:</dt>
-				<dd><?php echo ($this->itHours == 0 ? "I Don't Know" : $this->itHours." per week");?></dd>
-				<dt>Average Printer Breakdowns:</dt>
-				<dd><?php echo ($this->monthlyBreakdown == 0 ? "I Don't Know" : $this->monthlyBreakdown. " per month");?></dd>
-				<dt>IP Printer Location Tracking:</dt>
-	       <?php
-        
-if (strtoupper($this->location_tracking) == "Y")
-        {
-            echo "<dd>Yes</dd>";
-        }
-        else if (strtoupper($this->location_tracking) == "N")
-        {
-            echo "<dd>No</dd>";
-        }
-        ?> 
-	    </dl>
+<?php $goalArray = array ('Ensure hardware matches print volume needs' => $this->goals_hardware, 
+						  'Increasing uptime and productivity' => $this->goals_employee, 
+						  'Streamline logistics for supplies, service and hardware acquisition' => $this->goals_logistics, 
+						  'Reduce environmental impact' => $this->goals_enviroment, 
+						  'Reduce costs' => $this->goals_costs); asort($goalArray); $ctr = 1;?>
+						  
+<table style="width: 100%;border-collapse: collapse; table-layout: fixed">
+	<tr>
+		<td class = "Title"><u><?php echo $this->formTitle?></u></td>
+		<?php if ($this->companyName) :?>
+		<td class = "PreparedFor"><i>Prepared For:</i></td>
+		<td class = "PreparedForText"><i><?php echo $this->companyName; ?></i></td>
+		<?php endif?>
+	</tr>
+</table>
+<br/>
+<p class="margined">Please confirm the information provided in the questionnaire:</p>
+<div class="verification margined">
+	<div>
+		<h4>Company Information</h4>
+	    <div class="well">
+	        <div class="verification_row"><label class="verification_label">Company Name:</label><?php echo $this->company_name;?></div>
+	        <div class="verification_row"><label class="verification_label">Address:</label><?php echo nl2br($this->company_address);?></div> 
+	    </div>
+		
+	    <h4>General</h4>
+	    <div class="well">
+	        <div class="verification_row"><label class="verification_label">Number of Employees:</label><?php echo $this->numb_employees;?></div>
+	        <div class="verification_row"><label class="verification_label">MPS Goal Priority:</label><ol>
+	        	<?php 
+	        		foreach ($goalArray as $key=>$value){
+	        			echo "<li>".$key."</li>"; $ctr++;
+	        	    } // end foreach
+	        	?></ol></div>
+	    </div>
+	
+	    <h4>Finance</h4>
+	    <div class="well">
+	        <div class="verification_row"><label class="verification_label">Toner Costs:</label><?php echo money_format('$%i',$this->toner_cost)." per year";?></div>
+	        <div class="verification_row"><label class="verification_label">Service Costs:</label><?php echo ($this->labor_cost == 0 ? "I Don't Know" : money_format('$%i',$this->labor_cost)." per year"); ?></div>
+	        <div class="verification_row"><label class="verification_label">Average Purchase Order Costs:</label><?php echo money_format('$%i',$this->avg_purchase)." per order";?></div>
+	        <div class="verification_row"><label class="verification_label">Average IT Wage:</label><?php echo money_format('$%i',$this->it_hourlyRate);?> per hour</div>
+	    </div>
+	
+	    <h4>Purchasing</h4>
+	    <div class="well">
+	       <div class="verification_row"><label class="verification_label">Number of Supply Vendors:</label><?php echo $this->numb_vendors;?></div>
+	       <div class="verification_row"><label class="verification_label">Number of Orders:</label><?php echo ($this->inkTonerOrderRadio != "Times per month" ? $this->inkTonerOrderRadio : $this->numb_monthlyOrders) . " per month"; ?></div>
+	    </div>
+	
+	    <h4>IT</h4>
+	    <div class="well">
+	       <div class="verification_row"><label class="verification_label">IT Service Hours:</label><?php echo ($this->itHours == 0 ? "I Don't Know" : $this->itHours." per week");?></div>
+	       <div class="verification_row"><label class="verification_label">Average Printer Breakdowns:</label><?php echo ($this->monthlyBreakdown == 0 ? "I Don't Know" : $this->monthlyBreakdown. " per month");?></div>
+	       <div class="verification_row"><label class="verification_label">IP Printer Location Tracking:</label><?php echo (strtoupper($this->location_tracking) == "Y" ? "Yes" : "No");?></div>
+	    </div>
 	
         <?php
         $inkjetString = "Less than 10%";
@@ -107,28 +77,20 @@ if (strtoupper($this->location_tracking) == "Y")
         }
         ?>
 	    <h4>Users</h4>
-			<dl>
-				<dt>Monochrome Page Coverage:</dt>
-				<dd><?php echo $this->pageCoverage_BW."%";?></dd>
-				<dt>Color Page Coverage:</dt>
-				<dd><?php echo $this->pageCoverage_Colour."%";?></dd>
-				<dt>Inkjet/Desktop Print Volume:</dt>
-				<dd><?php echo $inkjetString;?></dd>
-				<dt>Average Repair Time:</dt>
-				<dd><?php echo $this->repairTime." days";?></dd>
-			</dl>
-		</dl>
-
-		<div id="submitBtns" class="submitBar">
-			<button type="button"
-				onclick="window.location='<?php echo $this->baseUrl();?>/data/';"
-				name="survey_confirm" id="survey_confirm">Confirm</button>
-			<button type="button"
-				onclick="window.location='<?php echo $this->baseUrl();?>/survey/<?php echo $this->previousPage ?>';"
-				name="verification-back_button" id="verification-back_button">Back</button>
-		</div>
-	</div>
-</form>
+	    <div class="well">	       
+	       <div class="verification_row"><label class="verification_label">Monochrome Page Coverage:</label><?php echo $this->pageCoverage_BW."%";?></div>
+	       <div class="verification_row"><label class="verification_label">Color Page Coverage:</label><?php echo $this->pageCoverage_Colour."%";?></div>
+	       <div class="verification_row"><label class="verification_label">Inkjet/Desktop Print Volume:</label><?php echo $inkjetString;?></div>
+	       <div class="verification_row"><label class="verification_label">Average Repair Time:</label><?php echo $this->repairTime." days";?></div>
+	    </div>
+	    
+	  </div>
+	  
+	  <div id="submitBtns" class="submitBar">
+          <button type="button" onclick="window.location='<?php echo $this->baseUrl();?>/data/';" name="survey_confirm" id="survey_confirm" class="btn btn-primary">Confirm</button>
+          <button type="button" onclick="window.location='<?php echo $this->baseUrl();?>/survey/<?php echo $this->previousPage ?>';" name="verification-back_button" id="verification-back_button" class="btn">Back</button>
+	  </div>	
+</div>
 
 <?php
 
@@ -140,13 +102,13 @@ foreach ($this->info as $info):
 <h4><?php echo ucfirst($form) ?>:</h4>
 <dl>
     <?php foreach ($data as $key => $value): ?>
-    <dt><?php echo ucfirst($key) ?></dt>
+    <label><?php echo ucfirst($key) ?></label>
     <?php if (is_array($value)):
         foreach ($value as $label => $val): ?>
-    <dd><?php echo $val ?></dd>
+    <div><?php echo $val ?></div>
         <?php endforeach;
        else: ?>
-    <dd><?php echo $this->escape($value) ?></dd>
+    <div><?php echo $this->escape($value) ?></div>
     <?php endif;
     endforeach; ?>
 </dl>
@@ -154,21 +116,9 @@ foreach ($this->info as $info):
 endforeach
 ?>
 
-<?php/*
- * // THIS IS HOW YOU PRINT ALL OF THE INFO STORED IN THE SESSION foreach ($this->info as $info): foreach ($info as
- * $form => $data): ?> <h4><?php echo ucfirst($form) ?>:</h4> <dl> <?php foreach ($data as $key => $value): ?> <dt><?php
- * echo ucfirst($key) ?></dt> <?php if (is_array($value)): foreach ($value as $label => $val): ?> <dd><?php echo $val
- * ?></dd> <?php endforeach; else: ?> <dd><?php echo $this->escape($value) ?></dd> <?php endif; endforeach; ?> </dl>
- * <?php endforeach; endforeach ?> <?php echo $this->testform; ?>
- */
-
-
-
-
-
-
-
-
-
+<?php
+echo $this->testform;
+?>
+*/
 
 ?>

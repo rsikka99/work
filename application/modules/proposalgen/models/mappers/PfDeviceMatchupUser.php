@@ -6,11 +6,11 @@ class Proposalgen_Model_Mapper_PfDeviceMatchupUser extends Tangent_Model_Mapper_
     static $_instance;
 
     /**
-     *
      * @return Tangent_Model_Mapper_Abstract
      */
     public static function getInstance ()
     {
+        
         if (! isset(self::$_instance))
         {
             $className = get_class();
@@ -20,10 +20,9 @@ class Proposalgen_Model_Mapper_PfDeviceMatchupUser extends Tangent_Model_Mapper_
     }
 
     /**
-     * Maps a database row object to an Application_Model
-     *
-     * @param Zend_Db_Table_Row $row            
-     * @return The appropriate Application_Model
+     * Maps a database row object to an Proposalgen_Model
+     * @param Zend_Db_Table_Row $row
+     * @return The appropriate Proposalgen_Model
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
     {
@@ -59,5 +58,6 @@ class Proposalgen_Model_Mapper_PfDeviceMatchupUser extends Tangent_Model_Mapper_
         }
         return $primaryKey;
     }
+
 }
 ?>

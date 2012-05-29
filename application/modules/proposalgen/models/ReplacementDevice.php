@@ -2,7 +2,6 @@
 
 /**
  * Class Proposalgen_Model_ReplacementDevices
- *
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_ReplacementDevice extends Tangent_Model_Abstract
@@ -12,10 +11,10 @@ class Proposalgen_Model_ReplacementDevice extends Tangent_Model_Abstract
     const REPLACMENT_COLOR = 3;
     const REPLACMENT_COLORMFP = 4;
     public static $replacementTypes = array (
-            self::REPLACMENT_BW => 'BLACK & WHITE', 
-            self::REPLACMENT_BWMFP => 'BLACK & WHITE MFP', 
-            self::REPLACMENT_COLOR => 'COLOR', 
-            self::REPLACMENT_COLORMFP => 'COLOR MFP' 
+            self::REPLACMENT_BW => 'BLACK & WHITE',
+            self::REPLACMENT_BWMFP => 'BLACK & WHITE MFP',
+            self::REPLACMENT_COLOR => 'COLOR',
+            self::REPLACMENT_COLORMFP => 'COLOR MFP'
     );
     // Database Fields
     protected $MasterDeviceId;
@@ -23,10 +22,10 @@ class Proposalgen_Model_ReplacementDevice extends Tangent_Model_Abstract
     protected $PrintSpeed;
     protected $Resolution;
     protected $MonthlyRate;
+    
     protected $MasterDevice;
 
     /**
-     *
      * @return the $MasterDeviceId
      */
     public function getMasterDeviceId ()
@@ -40,8 +39,7 @@ class Proposalgen_Model_ReplacementDevice extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MasterDeviceId            
+     * @param field_type $MasterDeviceId
      */
     public function setMasterDeviceId ($MasterDeviceId)
     {
@@ -50,7 +48,6 @@ class Proposalgen_Model_ReplacementDevice extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $ReplacementCategory
      */
     public function getReplacementCategory ()
@@ -64,8 +61,7 @@ class Proposalgen_Model_ReplacementDevice extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $ReplacementCategory            
+     * @param field_type $ReplacementCategory
      */
     public function setReplacementCategory ($ReplacementCategory)
     {
@@ -74,7 +70,6 @@ class Proposalgen_Model_ReplacementDevice extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $PrintSpeed
      */
     public function getPrintSpeed ()
@@ -88,8 +83,7 @@ class Proposalgen_Model_ReplacementDevice extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $PrintSpeed            
+     * @param field_type $PrintSpeed
      */
     public function setPrintSpeed ($PrintSpeed)
     {
@@ -98,7 +92,6 @@ class Proposalgen_Model_ReplacementDevice extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $Resolution
      */
     public function getResolution ()
@@ -112,8 +105,7 @@ class Proposalgen_Model_ReplacementDevice extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $Resolution            
+     * @param field_type $Resolution
      */
     public function setResolution ($Resolution)
     {
@@ -122,7 +114,6 @@ class Proposalgen_Model_ReplacementDevice extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $MonthlyRate
      */
     public function getMonthlyRate ()
@@ -136,8 +127,7 @@ class Proposalgen_Model_ReplacementDevice extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MonthlyRate            
+     * @param field_type $MonthlyRate
      */
     public function setMonthlyRate ($MonthlyRate)
     {
@@ -146,7 +136,6 @@ class Proposalgen_Model_ReplacementDevice extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return the $MasterDevice
      */
     public function getMasterDevice ()
@@ -160,12 +149,12 @@ class Proposalgen_Model_ReplacementDevice extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $MasterDevice            
+     * @param field_type $MasterDevice
      */
     public function setMasterDevice ($MasterDevice)
     {
         $this->MasterDevice = $MasterDevice;
         return $this;
     }
+
 }
