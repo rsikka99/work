@@ -1,16 +1,17 @@
 <?php
-$html = array('<ul class="breadcrumb">',
-        );
-$html[] = "<li><a href='" .
-        $this->pages[0]->getHref() . "'>" . $this->pages[0]->getLabel() .
-        "</a></li>";
-
-for ($i = 1; $i < count($this->pages); $i ++) {
-    $html[] = "<li><span class='divider'>/</span><a href='" .
-             $this->pages[$i]->getHref() . "'>" . $this->pages[$i]->getLabel() .
-             "</a></li>";
+if (count($this->pages) > 0)
+{
+    $html = array (
+            '<ul class="breadcrumb">' 
+    );
+    $html [] = "<li><a href='" . $this->pages [0]->getHref() . "'>" . $this->pages [0]->getLabel() . "</a></li>";
+    
+    for($i = 1; $i < count($this->pages); $i ++)
+    {
+        $html [] = "<li><span class='divider'>/</span><a href='" . $this->pages [$i]->getHref() . "'>" . $this->pages [$i]->getLabel() . "</a></li>";
+    }
+    
+    $html [] = '</ul>';
+    
+    echo join(PHP_EOL, $html);
 }
-
-$html[] = '</ul>';
-
-echo join(PHP_EOL, $html);

@@ -20,6 +20,22 @@ class My_Log
      * @var Zend_Log
      */
     private static $logger;
+    
+    /**
+     * Gets the unique id for this session of logs
+     *
+     * @var unknown_type
+     */
+    private static $_uniqueId;
+
+    public static function getUniqueId ()
+    {
+        if (! isset(self::$_uniqueId))
+        {
+            self::$_uniqueId = uniqid();
+        }
+        return self::$_uniqueId;
+    }
 
     static function log ($message, $level = null, $source = null)
     {
@@ -124,5 +140,4 @@ class My_Log
         }
         return self::$firebugLogger;
     }
-
 }

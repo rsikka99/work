@@ -2,7 +2,7 @@
 
 /**
  * Class Proposalgen_Model_Report
- * 
+ *
  * @author "Lee Robert"
  */
 class Proposalgen_Model_Report extends Tangent_Model_Abstract

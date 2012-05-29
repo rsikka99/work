@@ -2,7 +2,7 @@
 
 /**
  * Class Proposalgen_Model_DevicePf
- * 
+ *
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_DevicePf extends Tangent_Model_Abstract

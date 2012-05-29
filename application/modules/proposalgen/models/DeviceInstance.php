@@ -2,7 +2,7 @@
 
 /**
  * Class Proposalgen_Model_DeviceInstance
- * 
+ *
  * @author "Lee Robert"
  */
 class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract

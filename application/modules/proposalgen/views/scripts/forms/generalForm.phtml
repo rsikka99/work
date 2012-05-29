@@ -1,14 +1,14 @@
-<?php 
-$elements["numb_employees"] = $this->element->numb_employees;
-$elements["textScale"] = $this->element->textScale;
-$elements["goals_hardware"] = $this->element->goals_hardware;
-$elements["goals_employee"] = $this->element->goals_employee;
-$elements["goals_logistics"] = $this->element->goals_logistics;
-$elements["goals_enviroment"] = $this->element->goals_enviroment;
-$elements["goals_costs"] = $this->element->goals_costs;
+<?php
+$elements ["numb_employees"] = $this->element->numb_employees;
+$elements ["textScale"] = $this->element->textScale;
+$elements ["goals_hardware"] = $this->element->goals_hardware;
+$elements ["goals_employee"] = $this->element->goals_employee;
+$elements ["goals_logistics"] = $this->element->goals_logistics;
+$elements ["goals_enviroment"] = $this->element->goals_enviroment;
+$elements ["goals_costs"] = $this->element->goals_costs;
 ?>
 
-<?php $this->headScript()->captureStart('append','text/javascript') ?>
+<?php $this->headScript()->captureStart('append','text/javascript')?>
 	
 	$(document).ready(function() {
 
@@ -32,7 +32,11 @@ $elements["goals_costs"] = $this->element->goals_costs;
 			}
 			
 			if(in_array($('input[name="general['+general_array[i-6]+']"]:checked', '#general').val(), answer_array)) {
-				$("#" + general_array[i-6] + "_error").html("<ul class=\"errors\"><li>Duplicate value selected.</li></ul>");
+				$("#" + general_array[i-6] + "_error").html("
+<ul class=\"errors\">
+	<li>Duplicate value selected.</li>
+</ul>
+");
 			}
 		}
 			
@@ -47,66 +51,68 @@ $elements["goals_costs"] = $this->element->goals_costs;
 		
 	});
 
-<?php $this->headScript()->captureEnd() ?>
+<?php $this->headScript()->captureEnd()?>
 
-<form id="general" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>">
-    <table border="0" width="100%">
-    	<col width="60%" /><col width="40%" />
-    	<tr>
-    		<td valign="top"><?php echo $elements["numb_employees"]->renderLabel(); ?></td>
-    		<td valign="top"><?php echo $elements["numb_employees"]->renderViewHelper(); ?></td>
-    	</tr>
-    	<tr>
-    		<td>&nbsp;</td>
-    		<td id="numb_employees_error"><?php echo $elements["numb_employees"]->renderErrors(); ?></td>
-    	</tr>
-    	<tr>
-    		<td colspan="2" style="padding: 0px 0px 10px 0px;"><?php echo $elements["textScale"]->renderDescription(); ?></td>
-    	</tr>
-    	<tr>
-    		<td valign="top" style="padding: 0px 10px 0px 30px;"><?php echo $elements["goals_hardware"]->renderLabel(); ?></td>
-    		<td valign="top"><?php echo $elements["goals_hardware"]->renderViewHelper(); ?></td>
-    	</tr>
-    	<tr>
-    		<td>&nbsp;</td>
-    		<td id="goals_hardware_error"><?php echo $elements["goals_hardware"]->renderErrors(); ?></td>
-    	</tr>
-    	<tr>
-    		<td valign="top" style="padding: 0px 10px 0px 30px;"><?php echo $elements["goals_employee"]->renderLabel(); ?></td>
-    		<td valign="top"><?php echo $elements["goals_employee"]->renderViewHelper(); ?></td>
-    	</tr>
-    	<tr>
-    		<td>&nbsp;</td>
-    		<td id="goals_employee_error"><?php echo $elements["goals_employee"]->renderErrors(); ?></td>
-    	</tr>
-    	<tr>
-    		<td valign="top" style="padding: 0px 10px 0px 30px;"><?php echo $elements["goals_logistics"]->renderLabel(); ?></td>
-    		<td valign="top"><?php echo $elements["goals_logistics"]->renderViewHelper(); ?></td>
-    	</tr>
-    	<tr>
-    		<td>&nbsp;</td>
-    		<td id="goals_logistics_error"><?php echo $elements["goals_logistics"]->renderErrors(); ?></td>
-    	</tr>
-    	<tr>
-    		<td valign="top" style="padding: 0px 10px 0px 30px;"><?php echo $elements["goals_enviroment"]->renderLabel(); ?></td>
-    		<td valign="top"><?php echo $elements["goals_enviroment"]->renderViewHelper(); ?></td>
-    	</tr>
-    	<tr>
-    		<td>&nbsp;</td>
-    		<td id="goals_enviroment_error"><?php echo $elements["goals_enviroment"]->renderErrors(); ?></td>
-    	</tr>
-    	<tr>
-    		<td valign="top" style="padding: 0px 10px 0px 30px;"><?php echo $elements["goals_costs"]->renderLabel(); ?></td>
-    		<td valign="top"><?php echo $elements["goals_costs"]->renderViewHelper(); ?></td>
-    	</tr>
-    	<tr>
-    		<td>&nbsp;</td>
-    		<td id="goals_costs_error"><?php echo $elements["goals_costs"]->renderErrors(); ?></td>
-    	</tr>
-    </table>
-	<br/>
-    <div id="submitBtns" class="submitBar">
-		<?php echo $this->element->save ?>
-	    <?php echo $this->element->back_button ?>
+<form id="general" action="<?php echo $this->element->getAction() ?>"
+	method="<?php echo $this->element->getMethod() ?>">
+	<table border="0" width="100%">
+		<col width="60%" />
+		<col width="40%" />
+		<tr>
+			<td valign="top"><?php echo $elements["numb_employees"]->renderLabel(); ?></td>
+			<td valign="top"><?php echo $elements["numb_employees"]->renderViewHelper(); ?></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td id="numb_employees_error"><?php echo $elements["numb_employees"]->renderErrors(); ?></td>
+		</tr>
+		<tr>
+			<td colspan="2" style="padding: 0px 0px 10px 0px;"><?php echo $elements["textScale"]->renderDescription(); ?></td>
+		</tr>
+		<tr>
+			<td valign="top" style="padding: 0px 10px 0px 30px;"><?php echo $elements["goals_hardware"]->renderLabel(); ?></td>
+			<td valign="top"><?php echo $elements["goals_hardware"]->renderViewHelper(); ?></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td id="goals_hardware_error"><?php echo $elements["goals_hardware"]->renderErrors(); ?></td>
+		</tr>
+		<tr>
+			<td valign="top" style="padding: 0px 10px 0px 30px;"><?php echo $elements["goals_employee"]->renderLabel(); ?></td>
+			<td valign="top"><?php echo $elements["goals_employee"]->renderViewHelper(); ?></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td id="goals_employee_error"><?php echo $elements["goals_employee"]->renderErrors(); ?></td>
+		</tr>
+		<tr>
+			<td valign="top" style="padding: 0px 10px 0px 30px;"><?php echo $elements["goals_logistics"]->renderLabel(); ?></td>
+			<td valign="top"><?php echo $elements["goals_logistics"]->renderViewHelper(); ?></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td id="goals_logistics_error"><?php echo $elements["goals_logistics"]->renderErrors(); ?></td>
+		</tr>
+		<tr>
+			<td valign="top" style="padding: 0px 10px 0px 30px;"><?php echo $elements["goals_enviroment"]->renderLabel(); ?></td>
+			<td valign="top"><?php echo $elements["goals_enviroment"]->renderViewHelper(); ?></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td id="goals_enviroment_error"><?php echo $elements["goals_enviroment"]->renderErrors(); ?></td>
+		</tr>
+		<tr>
+			<td valign="top" style="padding: 0px 10px 0px 30px;"><?php echo $elements["goals_costs"]->renderLabel(); ?></td>
+			<td valign="top"><?php echo $elements["goals_costs"]->renderViewHelper(); ?></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td id="goals_costs_error"><?php echo $elements["goals_costs"]->renderErrors(); ?></td>
+		</tr>
+	</table>
+	<br />
+	<div id="submitBtns" class="submitBar">
+		<?php echo $this->element->save?>
+	    <?php echo $this->element->back_button?>
 	</div>
 </form>

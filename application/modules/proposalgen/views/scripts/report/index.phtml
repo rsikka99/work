@@ -1,4 +1,4 @@
-<?php 
+<?php
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
 ?>
@@ -6,17 +6,20 @@ $proposal = $this->proposal;
 <br>
 <br>
 <p style="text-align: left">
-<em>Please select a report from the list below.  After verifying the contents of your reports, you may download <br>
-a copy by selecting your desired output format from top right corner of each report. </em>
+	<em>Please select a report from the list below. After verifying the
+		contents of your reports, you may download <br> a copy by selecting
+		your desired output format from top right corner of each report.
+	</em>
 </p>
 
-<br/>
+<br />
 
 <div style='margin-left: 145px;'>
-<select id="availableReports" style='margin-top: 5px;'>
+	<select id="availableReports" style='margin-top: 5px;'>
     <?php foreach ($this->availableReports as $report) : ?>
-    <option value='<?php echo $report->url; ?>' <?php echo ($report->active) ? "selected='selected'" : "";?>><?php echo $report->pagetitle; ?></option>
+    <option value='<?php echo $report->url; ?>'
+			<?php echo ($report->active) ? "selected='selected'" : "";?>><?php echo $report->pagetitle; ?></option>
     <?php endforeach; ?>
 </select>
-<button id='viewReportButton'>View Report</button>
+	<button id='viewReportButton'>View Report</button>
 </div>

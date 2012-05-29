@@ -2,7 +2,7 @@
 
 /**
  * Proposalgen_Model_Proposal_Ranking
- * 
+ *
  * @author Lee Robert
  * @version v1.0
  */

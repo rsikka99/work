@@ -2,7 +2,7 @@
 
 /**
  * Class Proposalgen_Model_TonerConfig
- * 
+ *
  * @author "Lee Robert"
  */
 class Proposalgen_Model_TonerConfig extends Tangent_Model_Abstract
@@ -22,7 +22,7 @@ class Proposalgen_Model_TonerConfig extends Tangent_Model_Abstract
 
     /**
      * Gets an array of toner colors associated with a specific toner config.
-     * 
+     *
      * @param $$tonerConfigId The
      *            toner config id to use
      * @return array An array of TonerColorId's associated with a specified toner config

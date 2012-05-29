@@ -1,15 +1,15 @@
 <?php
 /**
  * manageusers.phtml
- * 
- * @author	John Sadler
- * @version	v1.0 
+ *
+ * @author John Sadler
+ * @version v1.0
  */
 ?>
 
-<?php 
-	//Capture the following jquery javascript code, and append it to the headscript variable in the main layout.	
-	$this->headScript()->captureStart('append','text/javascript') 
+<?php
+//Capture the following jquery javascript code, and append it to the headscript variable in the main layout.	
+$this->headScript()->captureStart('append', 'text/javascript') 
 	/*
 	* This script is used to repopulate the contents of a form upon the user
     * changing the selected item in a drop box.  An ajax call is made to a retrieve
@@ -28,7 +28,9 @@
 			$("#privileges").change(function(event) {
 				if($("#privileges option:selected").text() == "System Admin") {
 					//set company to MASTER by default
-					$("#select_company").append($('<option></option>').val('1').html('Master'));
+					$("#select_company").append($('
+<option></option>
+').val('1').html('Master'));
 					$("#select_company").val('1');
 					$("#select_company").attr('disabled', 'disabled');
 				} else {
@@ -51,10 +53,13 @@
 					    //empty out printer_model
 					    $("#select_user").html('');
 					    
-						var listItems= "<option value='0'>Add New User</option>";
-						for (var i = 0; i < data.rows.length; i++){
-							if(data.rows[i].cell[0] > 0) {
-								listItems+= "<option value='" + data.rows[i].cell[0] + "'>" + data.rows[i].cell[1] + "</option>";
+						var listItems= "
+<option value='0'>Add New User</option>
+"; for (var i = 0; i < data.rows.length; i++){ if(data.rows[i].cell[0] >
+0) { listItems+= "
+<option value='" + data.rows[i].cell[0] + "'>" + data.rows[i].cell[1] +
+	"</option>
+";
 							}
 						}
 						$("#select_user").html(listItems);
@@ -293,7 +298,7 @@
 			$("#is_activated").attr('checked','checked');
 		}
 			
-<?php $this->headScript()->captureEnd() ?>
+<?php $this->headScript()->captureEnd()?>
 
 <h2 id="page_title"><?php echo $this->title;?></h2>
 
@@ -304,14 +309,15 @@
 <div id="filter_container" class="top-margined">
 	<label for="company_filter" class="details_label">Filter Users: </label>
 	<select name="company_filter" id="company_filter" class="">
-	<option value="">Show All Users</option>
-	<option value="1">System Administrators</option>
+		<option value="">Show All Users</option>
+		<option value="1">System Administrators</option>
 	<?php
-	foreach($this->companyList as $key => $value) {
-		echo "<option value='" . $key ."'>" . ucwords(strtolower($value)) . "</option>";
-	}
-	?>
+foreach ( $this->companyList as $key => $value )
+{
+    echo "<option value='" . $key . "'>" . ucwords(strtolower($value)) . "</option>";
+}
+?>
 	</select>
 </div>
-<br/>
+<br />
 <?php echo $this->form; ?>

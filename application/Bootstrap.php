@@ -33,6 +33,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     }
 
     /**
+     * Registers the error handler with php
+     */
+    protected function _initMyErrorHandler ()
+    {
+        My_Error_Handler::set();
+    }
+
+    /**
      * Registers the logger with Zend_Registry.
      * Under no circumstances should this be renamed to _initLog as it will
      * override ini settings
@@ -79,7 +87,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view->headLink()->prependStylesheet($view->theme("/jquery/ui/grid/ui.jqgrid.css"));
         $view->headLink()->prependStylesheet($view->theme("/jquery/ui/jquery-ui-1.8.20.custom.css"));
         $view->headLink()->prependStylesheet($view->baseUrl("/css/bootstrap.min.css"));
-        
         
         // Add default scripts
         $view->headScript()->prependFile($view->baseUrl("/js/script.js"));

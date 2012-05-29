@@ -2,7 +2,7 @@
 
 /**
  * Class Proposalgen_Model_Device
- * 
+ *
  * @author "Lee Robert"
  */
 class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
@@ -50,7 +50,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
      * The maximum monthly page volume is calculated using the smallest toner yield
      * given the current pricing configuration
      * SPECIAL: Leased devices have a yield set, so we use that
-     * 
+     *
      * @return the $MaximumMonthlyPageVolume
      */
     public function getMaximumMonthlyPageVolume ()
@@ -133,7 +133,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
      * Gets the cheapest toner from a group of the same color.
      * Can specify a preferred part type to get.
      * Will return a default toner value if it does not find an appropriate toner
-     * 
+     *
      * @param integer $tonerColor
      *            (Constant value in Proposalgen_Model_TonerColor)
      * @param integer $preferredPartType
@@ -222,7 +222,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     /**
      * Calculates the cost per page for a device based on a pricing config.
      * Once calculated if you pass a new pricing config, it will recalculate the value
-     * 
+     *
      * @param stdClass $pricingConfig            
      */
     public function getCostPerPage ()

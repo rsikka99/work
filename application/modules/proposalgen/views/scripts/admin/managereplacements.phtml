@@ -2,12 +2,12 @@
 /**
  * managereplacements.phtml
  *
- * @author	John Sadler
- * @version	v1.0
+ * @author John Sadler
+ * @version v1.0
  */
 ?>
 	
-<?php $this->headScript()->captureStart('append','text/javascript') ?>
+<?php $this->headScript()->captureStart('append','text/javascript')?>
 	var repop = <?php echo (empty($this->repop) == true ? "false" : $this->repop); ?>;
 	var form_mode = '<?php echo $this->mode; ?>';
 	if(form_mode == '') {form_mode = 'edit';}
@@ -25,65 +25,35 @@
 						select = this.element.hide(),
 						selected = select.children( ":selected" ),
 						value = selected.val() ? selected.text() : "";
-					var input = this.input = $( "<input size='25'>" )
-						.insertAfter( select )
-						.val( value )
-						.autocomplete({
-							delay: 0,
-							minLength: 0,
-							source: function( request, response ) {
-								var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
-								response( select.children( "option" ).map(function() {
-									var text = $( this ).text();
-									if ( this.value && ( !request.term || matcher.test(text) ) )
-										return {
-											label: text.replace(
-												new RegExp(
-													"(?![^&;]+;)(?!<[^<>]*)(" +
-													$.ui.autocomplete.escapeRegex(request.term) +
-													")(?![^<>]*>)(?![^&;]+;)", "gi"
-												), "<strong>$1</strong>" ),
-											value: text,
-											option: this
-										};
-								}) );
-							},
-							select: function( event, ui ) {
-								ui.item.option.selected = true;
-								self._trigger( "selected", event, {
-									item: ui.item.option
-								});
-							},
-							change: function( event, ui ) {
-								if ( !ui.item ) {
-									var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
-										valid = false;
-									select.children( "option" ).each(function() {
-										if ( $( this ).text().match( matcher ) ) {
-											this.selected = valid = true;
-											return false;
-										}
-									});
-									if ( !valid ) {
-										// remove invalid value, as it didn't match anything
-										$( this ).val( "" );
-										select.val( "" );
-										input.data( "autocomplete" ).term = "";
-										return false;
-									}
-								}
-							}
-						})
-						.addClass( "ui-widget ui-widget-content ui-corner-left" );
-	
-					input.data( "autocomplete" )._renderItem = function( ul, item ) {
-						return $( "<li></li>" )
-							.data( "item.autocomplete", item )
-							.append( "<a>" + item.label + "</a>" )
-							.appendTo( ul );
-					};
-	
-					this.button = $( "<button type='button'>&nbsp;</button>" )
+					var input = this.input = $( "
+<input size='25'>
+" ) .insertAfter( select ) .val( value ) .autocomplete({ delay: 0,
+minLength: 0, source: function( request, response ) { var matcher = new
+RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" ); response(
+select.children( "option" ).map(function() { var text = $( this
+).text(); if ( this.value && ( !request.term || matcher.test(text) ) )
+return { label: text.replace( new RegExp( "(?![^&;]+;)(?!<[^<>]*)(" +
+$.ui.autocomplete.escapeRegex(request.term) + ")(?![^<>]*>)(?![^&;]+;)",
+"gi" ), "
+<strong>$1</strong>
+" ), value: text, option: this }; }) ); }, select: function( event, ui )
+{ ui.item.option.selected = true; self._trigger( "selected", event, {
+item: ui.item.option }); }, change: function( event, ui ) { if (
+!ui.item ) { var matcher = new RegExp( "^" +
+$.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ), valid =
+false; select.children( "option" ).each(function() { if ( $( this
+).text().match( matcher ) ) { this.selected = valid = true; return
+false; } }); if ( !valid ) { // remove invalid value, as it didn't match
+anything $( this ).val( "" ); select.val( "" ); input.data(
+"autocomplete" ).term = ""; return false; } } } }) .addClass( "ui-widget
+ui-widget-content ui-corner-left" ); input.data( "autocomplete"
+)._renderItem = function( ul, item ) { return $( "
+<li></li>
+" ) .data( "item.autocomplete", item ) .append( "
+<a>" + item.label + "</a>
+" ) .appendTo( ul ); }; this.button = $( "
+<button type='button'>&nbsp;</button>
+" )
 						.attr( "tabIndex", -1 )
 						.attr( "title", "Show All Items" )
 						.insertAfter( input )
@@ -141,13 +111,20 @@
 					
 					//add hidden replacement category fields
 					var replacement_category = document.getElementById("grid_list").rows[i+1].cells[4].innerHTML;
-					replacement_category_field = '<input type="hidden" name="replacement_category_'+cur_row+'" id="replacement_category_'+cur_row+'" value="'+replacement_category+'" />';
-					jQuery("#grid_list").jqGrid('setRowData',ids[i],{replacement_category:replacement_category + replacement_category_field});
-					
-					//add edit button
-					var manufacturer_id = document.getElementById("grid_list").rows[i+1].cells[1].innerHTML;
-					var master_device_id = document.getElementById("grid_list").rows[i+1].cells[2].innerHTML;
-					edit_button = '<input type="button" name="btnEdit'+cur_row+'" id="btnEdit'+cur_row+'" tag="Edit" value="Edit" style="width:35px;" onclick="javascript: do_action(\'edit\','+manufacturer_id+','+master_device_id+');" />';
+					replacement_category_field = '
+<input type="hidden" name="replacement_category_'+cur_row+'"
+	id="replacement_category_'+cur_row+'" value="'+replacement_category+'" />
+';
+jQuery("#grid_list").jqGrid('setRowData',ids[i],{replacement_category:replacement_category
++ replacement_category_field}); //add edit button var manufacturer_id =
+document.getElementById("grid_list").rows[i+1].cells[1].innerHTML; var
+master_device_id =
+document.getElementById("grid_list").rows[i+1].cells[2].innerHTML;
+edit_button = '
+<input type="button" name="btnEdit'+cur_row+'" id="btnEdit'+cur_row+'"
+	tag="Edit" value="Edit" style="width: 35px;"
+	onclick="javascript: do_action(\'edit\','+manufacturer_id+','+master_device_id+');" />
+';
 					jQuery("#grid_list").jqGrid('setRowData',ids[i],{action:edit_button});
 				}
 				$("#hdnIds").val(ids);
@@ -185,7 +162,10 @@
 						if(selected && selected == models.rows[i].cell[0]) {
 							selected_code = " selected ";
 						}
-						listItems+= "<option value='" + models.rows[i].cell[0] + "'" + selected_code + ">" + models.rows[i].cell[1] + "</option>";
+						listItems+= "
+<option value='" + models.rows[i].cell[0] + "'" + selected_code + ">" +
+	models.rows[i].cell[1] + "</option>
+";
 					}
 					$("#printer_model").html(listItems);
 					$("#printer_model").combobox("destroy");
@@ -410,8 +390,13 @@
 					if(temp.length == 1) {
 						$("#modal_message_container").html(temp[0]);
 					} else {
-						$("#modal_message_container").html('<p>Please review the error below.</p>');
-						$("#"+temp[0]+"-element").html($("#"+temp[0]+"-element").html()+"<ul id='"+temp[0]+"-error' class='error'><li>"+temp[1]+"</li></ul>");
+						$("#modal_message_container").html('
+<p>Please review the error below.</p>
+'); $("#"+temp[0]+"-element").html($("#"+temp[0]+"-element").html()+"
+<ul id='"+temp[0]+"-error' class='error'>
+	<li>"+temp[1]+"</li>
+</ul>
+");
 					}
 					$('#grid_list').trigger("reloadGrid");
 					//$("#lightbox, #lightbox-panel").fadeOut(300);
@@ -423,60 +408,67 @@
 		}
 	}
 	
-<?php $this->headScript()->captureEnd() ?>
+<?php $this->headScript()->captureEnd()?>
 
 <h2><?php echo $this->title;?></h2>
-	
+
 <form name="replacements" id="replacements" action="" method="post">
-	<input type="hidden" name="hdnIds" id="hdnIds" />
-	<input type="hidden" name="hdnManId" id="hdnManId" />
-	<input type="hidden" name="hdnMasId" id="hdnMasId" />
-	<input type="hidden" name="hdnOriginalCategory" id="hdnOriginalCategory" />
-	
+	<input type="hidden" name="hdnIds" id="hdnIds" /> <input type="hidden"
+		name="hdnManId" id="hdnManId" /> <input type="hidden" name="hdnMasId"
+		id="hdnMasId" /> <input type="hidden" name="hdnOriginalCategory"
+		id="hdnOriginalCategory" />
+
 	<dl class="zend_form">
 		<dt class="botMenu">
 			<div id="instruction_container" class="margined">
+				<p></p>
 				<p>
+					<strong>Note:</strong> there must be at least one replacement
+					printer for each of the four replacement categories.
 				</p>
-				<p><strong>Note:</strong> there must be at least one replacement printer for each of the four replacement categories.</p>
 			</div>
-			
+
 			<div id="message_container" class="margined">
 			    <?php echo $this->message; ?>
 			</div>
-			
+
 			<div id="grid_container" class="margined">
 				<table id="grid_list"></table>
 			</div>
-			
+
 			<div id="submitBtns" class="submitBar">
-				<input type="button" name="btnAdd" id="btnAdd" value="Add New" onclick="javascript: do_action('add');" />
-				<input type="button" name="btnDelete" id="btnDelete" value="Delete Selected" onclick="javascript: do_action('delete');" />
-				<input type="button" name="btnDone" id="btnDone" value="Done" onClick="javascript: do_action('done');" />
+				<input type="button" name="btnAdd" id="btnAdd" value="Add New"
+					onclick="javascript: do_action('add');" /> <input type="button"
+					name="btnDelete" id="btnDelete" value="Delete Selected"
+					onclick="javascript: do_action('delete');" /> <input type="button"
+					name="btnDone" id="btnDone" value="Done"
+					onClick="javascript: do_action('done');" />
 			</div>
-			
+
 			<div id="lightbox-panel" class="replacement_printer_container">
 				<h3 id="modal_title">Add New Replacement Device</h3>
-				
+
 				<div id="modal_instruction">
 					<p class="instruction margined">All fields are required.</p>
 				</div>
-				
+
 				<div id="modal_message_container" class="margined">
 				    <?php echo $this->message; ?>
 				</div>
-				
+
 				<div id="modal_form">
 					<?php echo $this->replacement_form; ?>
 				</div>
-				
+
 				<div id="submitBtns" class="submitBar">
-					<input type="button" name="btnSave" id="btnSave" value="Save" onclick="javascript: do_action('save');" />
-					<input type="button" name="btnDone" id="btnDone" value="Close" onClick="javascript: do_action('close');" />
+					<input type="button" name="btnSave" id="btnSave" value="Save"
+						onclick="javascript: do_action('save');" /> <input type="button"
+						name="btnDone" id="btnDone" value="Close"
+						onClick="javascript: do_action('close');" />
 				</div>
 			</div>
-			
+
 		</dt>
 	</dl>
-	
+
 </form>

@@ -2,7 +2,7 @@
 
 /**
  * Class Proposalgen_Model_User
- * 
+ *
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_User extends Tangent_Model_Abstract

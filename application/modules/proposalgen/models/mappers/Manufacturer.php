@@ -31,7 +31,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends Tangent_Model_Mapper_Abstrac
 
     /**
      * Maps a database row object to an Application_Model
-     * 
+     *
      * @param Zend_Db_Table_Row $row            
      * @return The appropriate Application_Model
      */
@@ -54,7 +54,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends Tangent_Model_Mapper_Abstrac
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     * 
+     *
      * @param unknown_type $object            
      */
     public function save (Proposalgen_Model_Manufacturer $object)

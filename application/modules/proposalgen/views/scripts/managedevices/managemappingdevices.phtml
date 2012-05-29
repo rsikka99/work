@@ -3,14 +3,14 @@
  * managemappingdevices.phtml
  * opened from report mapping page
  * allows user to add or edit devices and toners
- * 
- * @author: John Sadler
- * @version: v1.0
- *  
+ *
+ * @author : John Sadler
+ * @version : v1.0
+ *         
  */
 ?>
 
-<?php $this->headScript()->captureStart('append','text/javascript') ?>
+<?php $this->headScript()->captureStart('append','text/javascript')?>
 	var colorList = "<?php echo $this->tonerColorList; ?>";
 	var repop = '<?php echo $this->repop; ?>';
 	var form_mode = '<?php echo $this->form_mode; ?>';
@@ -23,65 +23,35 @@
 					select = this.element.hide(),
 					selected = select.children( ":selected" ),
 					value = selected.val() ? selected.text() : "";
-				var input = this.input = $( "<input size='23'>" )
-					.insertAfter( select )
-					.val( value )
-					.autocomplete({
-						delay: 0,
-						minLength: 0,
-						source: function( request, response ) {
-							var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
-							response( select.children( "option" ).map(function() {
-								var text = $( this ).text();
-								if ( this.value && ( !request.term || matcher.test(text) ) )
-									return {
-										label: text.replace(
-											new RegExp(
-												"(?![^&;]+;)(?!<[^<>]*)(" +
-												$.ui.autocomplete.escapeRegex(request.term) +
-												")(?![^<>]*>)(?![^&;]+;)", "gi"
-											), "<strong>$1</strong>" ),
-										value: text,
-										option: this
-									};
-							}) );
-						},
-						select: function( event, ui ) {
-							ui.item.option.selected = true;
-							self._trigger( "selected", event, {
-								item: ui.item.option
-							});
-						},
-						change: function( event, ui ) {
-							if ( !ui.item ) {
-								var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
-									valid = false;
-								select.children( "option" ).each(function() {
-									if ( $( this ).text().match( matcher ) ) {
-										this.selected = valid = true;
-										return false;
-									}
-								});
-								if ( !valid ) {
-									// remove invalid value, as it didn't match anything
-									$( this ).val( "" );
-									select.val( "" );
-									input.data( "autocomplete" ).term = "";
-									return false;
-								}
-							}
-						}
-					})
-					.addClass( "ui-widget ui-widget-content ui-corner-left" );
-
-				input.data( "autocomplete" )._renderItem = function( ul, item ) {
-					return $( "<li></li>" )
-						.data( "item.autocomplete", item )
-						.append( "<a>" + item.label + "</a>" )
-						.appendTo( ul );
-				};
-
-				this.button = $( "<button type='button'>&nbsp;</button>" )
+				var input = this.input = $( "
+<input size='23'>
+" ) .insertAfter( select ) .val( value ) .autocomplete({ delay: 0,
+minLength: 0, source: function( request, response ) { var matcher = new
+RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" ); response(
+select.children( "option" ).map(function() { var text = $( this
+).text(); if ( this.value && ( !request.term || matcher.test(text) ) )
+return { label: text.replace( new RegExp( "(?![^&;]+;)(?!<[^<>]*)(" +
+$.ui.autocomplete.escapeRegex(request.term) + ")(?![^<>]*>)(?![^&;]+;)",
+"gi" ), "
+<strong>$1</strong>
+" ), value: text, option: this }; }) ); }, select: function( event, ui )
+{ ui.item.option.selected = true; self._trigger( "selected", event, {
+item: ui.item.option }); }, change: function( event, ui ) { if (
+!ui.item ) { var matcher = new RegExp( "^" +
+$.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ), valid =
+false; select.children( "option" ).each(function() { if ( $( this
+).text().match( matcher ) ) { this.selected = valid = true; return
+false; } }); if ( !valid ) { // remove invalid value, as it didn't match
+anything $( this ).val( "" ); select.val( "" ); input.data(
+"autocomplete" ).term = ""; return false; } } } }) .addClass( "ui-widget
+ui-widget-content ui-corner-left" ); input.data( "autocomplete"
+)._renderItem = function( ul, item ) { return $( "
+<li></li>
+" ) .data( "item.autocomplete", item ) .append( "
+<a>" + item.label + "</a>
+" ) .appendTo( ul ); }; this.button = $( "
+<button type='button'>&nbsp;</button>
+" )
 					.attr( "tabIndex", -1 )
 					.attr( "title", "Show All Items" )
 					.insertAfter( input )
@@ -148,7 +118,11 @@
 				for(var i=0; i < ids.length; i++) { 
 					var cur_row = ids[i];
 					var is_added = document.getElementById("applied_toners_list").rows[i+1].cells[8].innerHTML;
-					remove_button = '<input type="button" name="btnRemove'+cur_row+'" id="btnRemove'+cur_row+'" tag="Remove" value="Remove" style="width:55px;" onclick="javascript: do_remove('+cur_row+');" />';
+					remove_button = '
+<input type="button" name="btnRemove'+cur_row+'"
+	id="btnRemove'+cur_row+'" tag="Remove" value="Remove"
+	style="width: 55px;" onclick="javascript: do_remove('+cur_row+');" />
+';
 					jQuery("#applied_toners_list").jqGrid('setRowData',ids[i],{action:remove_button});
 				}
 			}
@@ -212,8 +186,15 @@
 					var cur_row = ids[i];
 					var is_added = document.getElementById("available_toners_list").rows[i+1].cells[8].innerHTML;
 					
-					add_button = '<input type="button" name="btnAdd'+cur_row+'" id="btnAdd'+cur_row+'" tag="Add" value="Assign" style="width:50px;" onclick="javascript: do_add('+cur_row+');" />'; 
-					disabled_button = '<input type="button" name="btnAdd'+cur_row+'" id="btnAdd'+cur_row+'" tag="Add" value="Assign" style="width:50px;" onclick="javascript: do_add('+cur_row+');" disabled="disabled" />';
+					add_button = '
+<input type="button" name="btnAdd'+cur_row+'" id="btnAdd'+cur_row+'"
+	tag="Add" value="Assign" style="width: 50px;"
+	onclick="javascript: do_add('+cur_row+');" />
+'; disabled_button = '
+<input type="button" name="btnAdd'+cur_row+'" id="btnAdd'+cur_row+'"
+	tag="Add" value="Assign" style="width: 50px;"
+	onclick="javascript: do_add('+cur_row+');" disabled="disabled" />
+';
 					
 					if(toner_array.indexOf("'"+cur_row+"'") != -1) {
 						jQuery("#available_toners_list").jqGrid('setRowData',ids[i],{action:disabled_button});
@@ -509,7 +490,9 @@
     		            var options = '';
     		            for (var i = 0; i < data.rows.length; i++) {
     		            	list = (data.rows[i].cell);
-        					options += '<option value="' + list[0] + '">' + list[1] + '</option>';
+        					options += '
+<option value="' + list[0] + '">' + list[1] + '</option>
+';
       					}
       					$("#cboCriteria").html(options);
     		        },
@@ -561,7 +544,9 @@
     		            var options = '';
     		            for (var i = 0; i < data.rows.length; i++) {
     		            	list = (data.rows[i].cell);
-        					options += '<option value="' + list[0] + '">' + list[1] + '</option>';
+        					options += '
+<option value="' + list[0] + '">' + list[1] + '</option>
+';
       					}
       					$("#replacement_cboCriteria").html(options);
     		        },
@@ -918,162 +903,214 @@
 		}
 	}
 	
-<?php $this->headScript()->captureEnd() ?>
+<?php $this->headScript()->captureEnd()?>
 
 <h2><?php echo $this->title;?></h2>
 
 <div id="form_container">
-	
-		<div id="lightbox-panel" class="new_manufacturer_container">
-		
-			<div id="manufacturers_form">
-    			<form name="frmManufacturer" id="frmManufacturer" action="<?php echo $this->baseUrl(); ?>/admin/manufacturers" method="post">
-    				<input type="hidden" name="hdnID" id="hdnID" value="<?php echo $this->hdnID; ?>" />
-    				<input type="hidden" name="hdnItem" id="hdnItem" value="" />
-    				<input type="hidden" name="ticket_id" id="ticket_id" value="0" />
-    				<input type="hidden" name="devices_pf_id" id="devices_pf_id" value="<?php echo $this->devices_pf_id; ?>" />
-    				
-    				<h2>Manufacturer Not Found</h2>
-        			<p>The manufacturer &quot;<?php echo ucwords(trim($this->manufacturer)); ?>&quot; does not exist. Please add it now or select an existing manufacturer.</p>
-        			<div id="manufacturer_message" class="warning" style="display: none;"></div>
-        			<div style="padding: 10px 0px 10px 0px;">
-        				<label form="cboManufacturers" class="label"><input type="radio" name="options" id="optExisting" value="existing" /> Existing Manufacturers: </label>
-        				<select name="cboManufacturers" id="cboManufacturers" onfocus="javascript: document.getElementById('optExisting').checked = true;">
-        					<option value="">Select Existing Manufacturer</option>
+
+	<div id="lightbox-panel" class="new_manufacturer_container">
+
+		<div id="manufacturers_form">
+			<form name="frmManufacturer" id="frmManufacturer"
+				action="<?php echo $this->baseUrl(); ?>/admin/manufacturers"
+				method="post">
+				<input type="hidden" name="hdnID" id="hdnID"
+					value="<?php echo $this->hdnID; ?>" /> <input type="hidden"
+					name="hdnItem" id="hdnItem" value="" /> <input type="hidden"
+					name="ticket_id" id="ticket_id" value="0" /> <input type="hidden"
+					name="devices_pf_id" id="devices_pf_id"
+					value="<?php echo $this->devices_pf_id; ?>" />
+
+				<h2>Manufacturer Not Found</h2>
+				<p>The manufacturer &quot;<?php echo ucwords(trim($this->manufacturer)); ?>&quot; does not exist. Please add it now or select an existing manufacturer.</p>
+				<div id="manufacturer_message" class="warning"
+					style="display: none;"></div>
+				<div style="padding: 10px 0px 10px 0px;">
+					<label form="cboManufacturers" class="label"><input type="radio"
+						name="options" id="optExisting" value="existing" /> Existing
+						Manufacturers: </label> <select name="cboManufacturers"
+						id="cboManufacturers"
+						onfocus="javascript: document.getElementById('optExisting').checked = true;">
+						<option value="">Select Existing Manufacturer</option>
         					<?php foreach($this->manufacturer_list as $key) { ?>
         					<option value="<?php echo $key['manufacturer_id']; ?>"><?php echo ucwords(strtolower($key['manufacturer_name'])); ?></option>
         					<?php } ?>
         				</select>
-        			</div>
-        			<div style="padding: 10px 0px 10px 0px;">
-        				<label form="txtManufacturer" class="label"><input type="radio" name="options" id="optNew" value="new" checked="checked" /> Add New Manufacturer: </label>
-        				<input type="text" name="manufacturer_name" id="manufacturer_name" value="<?php echo $this->manufacturer; ?>" onfocus="javascript: document.getElementById('optNew').checked = true;" />
-        			</div>
-        			<br />
-        			<div id="submitBtns" class="submitBar">	
-            			<input type="button" name="btnAddManufacturer" id="btnAddManufacturer" value="Submit" onclick="javascript: do_action('new_manufacturer');" />
-            			<input type="button" name="btnClose" id="btnClose" value="Cancel" onclick="javascript: lightbox('hide');" />
-        			</div>
-    			</form>
-			</div>
-			
-			<div id="toners_form" style="display: none;">
-    			<form name="frmToners" id="frmToners" action="" method="post">
-    				<input type="hidden" name="replace_mode" id="replace_mode" value="" />
-    				<input type="hidden" name="replace_toner_id" id="replace_toner_id" value="" />
-    				<input type="hidden" name="with_toner_id" id="with_toner_id" value="" />
-    				
-    				<h3 id="replacement_title" style="display: inline;"></h3>
-    				<p id="replacement_toners_statement" style="margin: 20px 0px 10px 0px;"></p>
-    				<div id="replacement_message" class="warning"></div>
-    				
-    				<div id="replacement_toners_container">
-        				<div style="text-align: center; margin: 20px 0px 10px 0px;">
-        				
-                			<div id="replacement_filter_container">
-                				<div id="replacement_criteria_container" style="display: inline; padding: 0px 0px 0px 0px;">
-                					<label for="replacement_criteria_filter" class="details_label">Filter:</label>
-                					<select name="replacement_criteria_filter" id="replacement_criteria_filter" class="filter_dropdown" style="width: 100px; margin: 0px 0px 0px 10px;">
-                						<option value="toner_SKU">SKU</option>
-                						<option value="manufacturer_name">Manufacturer</option>
-                						<option value="type_name">Type</option>
-                						<option value="toner_color_name">Color</option>
-                						<option value="toner_yield">Yield</option>
-                					</select>
-                					<label for="replacement_txtCriteria" class="details_label" style="padding: 0px 3px 0px 5px;">for</label>
-                					<span id="replacement_text_criteria"><input type="text" name="replacement_txtCriteria" id="replacement_txtCriteria" style="width: 100px;" /></span>
-                					<span id="replacement_list_criteria" style="display: none;"><select name="replacement_cboCriteria" id="replacement_cboCriteria" style="width: 100px;"></select></span>
-                					<input type="button" name="replacement_btnSearch" id="replacement_btnSearch" value="Search" onclick="javascript: update_replacement('search');" />
-                					<input type="button" name="replacement_btnClearSearch" id="replacement_btnClearSearch" value="Clear" onclick="javascript: update_replacement('clear');" />
-                				</div>
-                			</div>
-            			
-                			<table id="replacement_toners_list"></table>
-                			<div id="replacement_toners_pager"></div>
-        				</div>
-        				<div id="replace_all_container" style="text-align: center; margin: 10px 0px 10px 0px;">
-        					<input type="checkbox" name="chkAllToners" id="chkAllToners" value="1" />
-        					<label for="chkAllToners">Apply to all devices using this toner.</label>
-        				</div>
-        			</div>
-        			
-    				<div style="text-align: center; margin: 20px 0px 0px 0px;">
-            			<input type="button" name="btnReplaceToner" id="btnReplaceToner" value="Submit" onclick="javascript: do_action('replace_toner');" />
-            			<input type="button" name="btnClose" id="btnClose" value="Cancel" onclick="javascript: $('#replacement_toners_statement').html(''); lightbox('hide');" />
-    				</div>
-    			</form>
-			</div>
-			
-		</div>
-		
-		<div id="message_container" style="margin: 10px 0px 20px 0px;">
-			<p><?php echo $this->message; ?></p>
-		</div>
-		
-		<div id="device_container">
-			<h3 style="display: inline;">Printer:</h3>
-			<br/><br/>
-			<p><strong>* indicates a required field</strong><p>
-			<?php echo $this->deviceform; ?>
-		</div>
-			
-		<div id="applied_toners_container">
-			<h3 class="margined"><span id="devicename">Toner Assignment:</span></h3>
-			<p id="toner_instruction" style="display: none;">
-				You may only have <span id="toner_instruction_config"></span> assigned to this device.
-			</p>
-			<table id="applied_toners_list"></table>
-			<div id="applied_toners_pager"></div>
-		</div>
-			
-		<br/>
-		
-		<div id="available_toners_container" style="margin-top: 20px;">
-			<h3 class="margined">Available Toners:</h3>
-			
-			<div id="filter_container">
-				<div id="criteria_container" style="display: inline; padding: 0px 0px 0px 0px;">
-					<label for="criteria_filter" class="details_label">Filter:</label>
-					<select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 180px; margin: 0px 0px 0px 26px;">
-						<option value="toner_SKU">SKU</option>
-						<option value="manufacturer_name">Manufacturer</option>
-						<option value="type_name">Type</option>
-						<option value="toner_color_name">Color</option>
-						<option value="toner_yield">Yield</option>
-					</select>
-					<label for="txtCriteria" class="details_label" style="padding: 0px 0px 0px 10px;">for</label>
-					<span id="text_criteria"><input type="text" name="txtCriteria" id="txtCriteria" style="width: 180px;" /></span>
-					<span id="list_criteria" style="display: none;"><select name="cboCriteria" id="cboCriteria" style="width: 180px;"></select></span>
-					<input type="button" name="btnSearch" id="btnSearch" value="Search" onclick="javascript: update_available('search');" />
-					<input type="button" name="btnClearSearch" id="btnClearSearch" value="Clear" onclick="javascript: update_available('clear');" />
 				</div>
+				<div style="padding: 10px 0px 10px 0px;">
+					<label form="txtManufacturer" class="label"><input type="radio"
+						name="options" id="optNew" value="new" checked="checked" /> Add
+						New Manufacturer: </label> <input type="text"
+						name="manufacturer_name" id="manufacturer_name"
+						value="<?php echo $this->manufacturer; ?>"
+						onfocus="javascript: document.getElementById('optNew').checked = true;" />
+				</div>
+				<br />
+				<div id="submitBtns" class="submitBar">
+					<input type="button" name="btnAddManufacturer"
+						id="btnAddManufacturer" value="Submit"
+						onclick="javascript: do_action('new_manufacturer');" /> <input
+						type="button" name="btnClose" id="btnClose" value="Cancel"
+						onclick="javascript: lightbox('hide');" />
+				</div>
+			</form>
+		</div>
+
+		<div id="toners_form" style="display: none;">
+			<form name="frmToners" id="frmToners" action="" method="post">
+				<input type="hidden" name="replace_mode" id="replace_mode" value="" />
+				<input type="hidden" name="replace_toner_id" id="replace_toner_id"
+					value="" /> <input type="hidden" name="with_toner_id"
+					id="with_toner_id" value="" />
+
+				<h3 id="replacement_title" style="display: inline;"></h3>
+				<p id="replacement_toners_statement"
+					style="margin: 20px 0px 10px 0px;"></p>
+				<div id="replacement_message" class="warning"></div>
+
+				<div id="replacement_toners_container">
+					<div style="text-align: center; margin: 20px 0px 10px 0px;">
+
+						<div id="replacement_filter_container">
+							<div id="replacement_criteria_container"
+								style="display: inline; padding: 0px 0px 0px 0px;">
+								<label for="replacement_criteria_filter" class="details_label">Filter:</label>
+								<select name="replacement_criteria_filter"
+									id="replacement_criteria_filter" class="filter_dropdown"
+									style="width: 100px; margin: 0px 0px 0px 10px;">
+									<option value="toner_SKU">SKU</option>
+									<option value="manufacturer_name">Manufacturer</option>
+									<option value="type_name">Type</option>
+									<option value="toner_color_name">Color</option>
+									<option value="toner_yield">Yield</option>
+								</select> <label for="replacement_txtCriteria"
+									class="details_label" style="padding: 0px 3px 0px 5px;">for</label>
+								<span id="replacement_text_criteria"><input type="text"
+									name="replacement_txtCriteria" id="replacement_txtCriteria"
+									style="width: 100px;" /></span> <span
+									id="replacement_list_criteria" style="display: none;"><select
+									name="replacement_cboCriteria" id="replacement_cboCriteria"
+									style="width: 100px;"></select></span> <input type="button"
+									name="replacement_btnSearch" id="replacement_btnSearch"
+									value="Search"
+									onclick="javascript: update_replacement('search');" /> <input
+									type="button" name="replacement_btnClearSearch"
+									id="replacement_btnClearSearch" value="Clear"
+									onclick="javascript: update_replacement('clear');" />
+							</div>
+						</div>
+
+						<table id="replacement_toners_list"></table>
+						<div id="replacement_toners_pager"></div>
+					</div>
+					<div id="replace_all_container"
+						style="text-align: center; margin: 10px 0px 10px 0px;">
+						<input type="checkbox" name="chkAllToners" id="chkAllToners"
+							value="1" /> <label for="chkAllToners">Apply to all devices using
+							this toner.</label>
+					</div>
+				</div>
+
+				<div style="text-align: center; margin: 20px 0px 0px 0px;">
+					<input type="button" name="btnReplaceToner" id="btnReplaceToner"
+						value="Submit" onclick="javascript: do_action('replace_toner');" />
+					<input type="button" name="btnClose" id="btnClose" value="Cancel"
+						onclick="javascript: $('#replacement_toners_statement').html(''); lightbox('hide');" />
+				</div>
+			</form>
+		</div>
+
+	</div>
+
+	<div id="message_container" style="margin: 10px 0px 20px 0px;">
+		<p><?php echo $this->message; ?></p>
+	</div>
+
+	<div id="device_container">
+		<h3 style="display: inline;">Printer:</h3>
+		<br />
+		<br />
+		<p>
+			<strong>* indicates a required field</strong>
+		
+		
+		<p>
+			<?php echo $this->deviceform; ?>
+		
+	
+	</div>
+
+	<div id="applied_toners_container">
+		<h3 class="margined">
+			<span id="devicename">Toner Assignment:</span>
+		</h3>
+		<p id="toner_instruction" style="display: none;">
+			You may only have <span id="toner_instruction_config"></span>
+			assigned to this device.
+		</p>
+		<table id="applied_toners_list"></table>
+		<div id="applied_toners_pager"></div>
+	</div>
+
+	<br />
+
+	<div id="available_toners_container" style="margin-top: 20px;">
+		<h3 class="margined">Available Toners:</h3>
+
+		<div id="filter_container">
+			<div id="criteria_container"
+				style="display: inline; padding: 0px 0px 0px 0px;">
+				<label for="criteria_filter" class="details_label">Filter:</label> <select
+					name="criteria_filter" id="criteria_filter" class="filter_dropdown"
+					style="width: 180px; margin: 0px 0px 0px 26px;">
+					<option value="toner_SKU">SKU</option>
+					<option value="manufacturer_name">Manufacturer</option>
+					<option value="type_name">Type</option>
+					<option value="toner_color_name">Color</option>
+					<option value="toner_yield">Yield</option>
+				</select> <label for="txtCriteria" class="details_label"
+					style="padding: 0px 0px 0px 10px;">for</label> <span
+					id="text_criteria"><input type="text" name="txtCriteria"
+					id="txtCriteria" style="width: 180px;" /></span> <span
+					id="list_criteria" style="display: none;"><select
+					name="cboCriteria" id="cboCriteria" style="width: 180px;"></select></span>
+				<input type="button" name="btnSearch" id="btnSearch" value="Search"
+					onclick="javascript: update_available('search');" /> <input
+					type="button" name="btnClearSearch" id="btnClearSearch"
+					value="Clear" onclick="javascript: update_available('clear');" />
 			</div>
-			
-			<div id="modal_message_container" style="margin: 10px 0px 20px 0px;">
+		</div>
+
+		<div id="modal_message_container" style="margin: 10px 0px 20px 0px;">
 				<?php echo $this->message; ?>
 			</div>
-			
-			<table id="available_toners_list"></table>
-			<div id="available_toners_pager"></div>
-			
-		</div>	
-		
-		<br/>
-		
-		<div id="submitBtns" class="submitBar">
-			<input type="button" name="btnSave" id="btnSave" value="Save" onclick="javascript: do_action('save');" />
-			<div class="refreshbtn" style="display: none;">
-				<input type="button" name="btnRefresh" id="btnRefresh" value="Refresh" onclick="javascript: update_applied();" />
-			</div>
+
+		<table id="available_toners_list"></table>
+		<div id="available_toners_pager"></div>
+
+	</div>
+
+	<br />
+
+	<div id="submitBtns" class="submitBar">
+		<input type="button" name="btnSave" id="btnSave" value="Save"
+			onclick="javascript: do_action('save');" />
+		<div class="refreshbtn" style="display: none;">
+			<input type="button" name="btnRefresh" id="btnRefresh"
+				value="Refresh" onclick="javascript: update_applied();" />
+		</div>
 			<?php if($this->done_action == '') { ?>
-			<input type="button" name="btnDone" id="btnDone" value="Done" onclick="javascript: do_action('done');" />
+			<input type="button" name="btnDone" id="btnDone" value="Done"
+			onclick="javascript: do_action('done');" />
 			<?php } else { ?>
-			<input type="button" name="btnDone" id="btnDone" value="Done" onclick="<?php echo $this->done_action; ?>" />
+			<input type="button" name="btnDone" id="btnDone" value="Done"
+			onclick="<?php echo $this->done_action; ?>" />
 			<?php } ?>
 		</div>
-		
+
 	<br />
-	
+
 </div>
 
 

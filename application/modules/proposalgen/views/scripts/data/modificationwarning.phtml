@@ -1,14 +1,14 @@
 <?php
 /**
  * modificationwarning.phtml
- * 
- * @author: John Sadler
- * @version: v1.0
- * 
+ *
+ * @author : John Sadler
+ * @version : v1.0
+ *         
  */
 ?>
 
-<?php $this->headScript()->captureStart('append','text/javascript') ?>
+<?php $this->headScript()->captureStart('append','text/javascript')?>
 	
 	$(document).ready(function() {
 		$("#btnOk").attr("disabled", "disabled");
@@ -22,7 +22,7 @@
 		});
 	});
 	
-<?php $this->headScript()->captureEnd() ?>
+<?php $this->headScript()->captureEnd()?>
 
 <h3 style="display: inline;"><?php echo $this->title;?></h3>
 
@@ -32,17 +32,19 @@
 	<div class="message_container margined warning">
 	    <?php echo $this->message; ?>
 	</div>
-		
-	<div class="margined">
-		The master record for one or more of the printers assigned to your report have been removed by the system administrator. 
-		Before regenerating this report, please verify that all printers have been mapped correctly.
-	</div>
-	
+
+	<div class="margined">The master record for one or more of the printers
+		assigned to your report have been removed by the system administrator.
+		Before regenerating this report, please verify that all printers have
+		been mapped correctly.</div>
+
 	<div style="text-align: center; margin: 20px 0px 20px 0px;">
-    	<input type="checkbox" name="chkUnderstand" id="chkUnderstand" value="1" />
-    	<label for="chkUnderstand">I understand this warning.</label>
-    </div>
-    
-    <div style="text-align: center;"><input type="submit" name="btnOk" id="btnOk" value="Continue" /></div>
-    
+		<input type="checkbox" name="chkUnderstand" id="chkUnderstand"
+			value="1" /> <label for="chkUnderstand">I understand this warning.</label>
+	</div>
+
+	<div style="text-align: center;">
+		<input type="submit" name="btnOk" id="btnOk" value="Continue" />
+	</div>
+
 </form>

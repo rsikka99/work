@@ -1,13 +1,12 @@
 <?php
 /**
  * Default view: index.phtml
- *  
  */
 $session = new Zend_Session_Namespace('report');
 $session->url = $this->baseUrl();
-$session->surveyurl = $this->baseUrl()."/survey";
-$session->PNsurveyurl = $this->baseUrl()."/partsnow";
-$session->generalurl = $this->baseUrl()."/survey/general";
+$session->surveyurl = $this->baseUrl() . "/survey";
+$session->PNsurveyurl = $this->baseUrl() . "/partsnow";
+$session->generalurl = $this->baseUrl() . "/survey/general";
 ?>
 
 <h2><?php echo $this->title?></h2>
@@ -17,15 +16,15 @@ $session->generalurl = $this->baseUrl()."/survey/general";
 <div id="message_container" class="margined">
 	<?php if($this->message) echo $this->escape($this->message); ?>
 </div>
-<?php echo $this->form ?>
-<?php echo $this->finishedForm ?>
+<?php echo $this->form?>
+<?php echo $this->finishedForm?>
 <form>
-<dl class="zend_form">
-	<dt class="botMenu">
-		<p class="margined"></p>
-		<p class="margined">
-			<!-- <button type="button" onclick="window.location='<?php //echo $this->baseUrl();?>/survey';" id="start_new" name="start_new">Start New Proposal</button> -->
-		</p>
-	</dt>
-</dl>
+	<dl class="zend_form">
+		<dt class="botMenu">
+			<p class="margined"></p>
+			<p class="margined">
+				<!-- <button type="button" onclick="window.location='<?php //echo $this->baseUrl();?>/survey';" id="start_new" name="start_new">Start New Proposal</button> -->
+			</p>
+		</dt>
+	</dl>
 </form>

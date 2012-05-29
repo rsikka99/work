@@ -1,12 +1,12 @@
 <?php
 /**
  * transferreports.phtml
- * 
- * @author	John Sadler
- * @version	v1.0 
+ *
+ * @author John Sadler
+ * @version v1.0
  */
 ?>
-<?php $this->headScript()->captureStart('append','text/javascript') ?>
+<?php $this->headScript()->captureStart('append','text/javascript')?>
 
 	$(document).ready(function() {
 		$( "#start_date" ).datepicker({ dateFormat: 'mm/dd/yy', changeMonth: true, changeYear: true});
@@ -58,23 +58,18 @@
     	        filter_reports_list();
     	        
     	    } else if ( StartDate != "Invalid Date" && EndDate != "Invalid Date" ) {
-    	        $("#message_container").html('<div class="error">Invalid Date Range</div>');
-    	    }
-	    });
-	    
-	    $("#end_date").change( function(event) {
-	        var EndDate = new Date(this.value);
-	        var StartDate = new Date( $("#start_date").val() );
-	        
-	        $("#message_container").html('');
-	        
-    	    // validate end date is greater then or equal to start date
-    	    if (  StartDate != "Invalid Date" && EndDate != "Invalid Date" && StartDate <= EndDate ) {
-    	        // update reports list
-    	        filter_reports_list();
-    	        
-    	    } else if ( StartDate != "Invalid Date" && EndDate != "Invalid Date" ) {
-    	        $("#message_container").html('<div class="error">Invalid Date Range</div>');
+    	        $("#message_container").html('
+<div class="error">Invalid Date Range</div>
+'); } }); $("#end_date").change( function(event) { var EndDate = new
+Date(this.value); var StartDate = new Date( $("#start_date").val() );
+
+$("#message_container").html(''); // validate end date is greater then
+or equal to start date if ( StartDate != "Invalid Date" && EndDate !=
+"Invalid Date" && StartDate <= EndDate ) { // update reports list
+filter_reports_list(); } else if ( StartDate != "Invalid Date" &&
+EndDate != "Invalid Date" ) { $("#message_container").html('
+<div class="error">Invalid Date Range</div>
+');
     	    }
 	    });
     		
@@ -100,14 +95,15 @@
 			    $("#filtervalue").html('');
 			    
 			    if ( data != '' ) {
-			        listItems = "<option value=''>All "+default_option_text+"</option>";
-    				for (var i = 0; i < data.rows.length; i++){
-    					if(data.rows[i].cell[0] > 0) {
-    						listItems += "<option value='" + data.rows[i].cell[0] + "'>" + data.rows[i].cell[1] + "</option>";
-    					}
-    				}
-				} else {
-    				listItems = "<option value=''> -- No "+default_option_text+" Found -- </option>";
+			        listItems = "
+<option value=''>All "+default_option_text+"</option>
+"; for (var i = 0; i < data.rows.length; i++){ if(data.rows[i].cell[0] >
+0) { listItems += "
+<option value='" + data.rows[i].cell[0] + "'>" + data.rows[i].cell[1] +
+	"</option>
+"; } } } else { listItems = "
+<option value=''>-- No "+default_option_text+" Found --</option>
+";
 				}
     			$("#filtervalue").html(listItems);
 			},
@@ -138,137 +134,60 @@
 			    $("#reportlist").html('');
 			    
 			    if ( data != '' ) {
-    				var listItems = "<option value=''> -- Select A Report -- </option>";
-    				for (var i = 0; i < data.rows.length; i++){
-    					if(data.rows[i].cell[0] > 0) {
-    						listItems += "<option value='" + data.rows[i].cell[0] + "'>" + data.rows[i].cell[1] + "</option>";
-    					}
-    				}
-				} else {
-    				var listItems = "<option value=''> -- No Reports Found -- </option>";
-				}
-    			$("#reportlist").html(listItems);
-			},
-			error: function() {
-				alert("ERROR IN FILTER REPORTS");
-			},
-			complete: function() {
-			}
-		});
-    }
-    
-    function transfer_user( type ) {
-        var selectValues = new Array();
-        
-        if ( type == 'add' ) {
-            // get selected id's
-            var ids = $('#userlist').val();
-            
-            if ( ids ) {
-                for ( var i = 0; i < ids.length; i++ ) {
-                    selectValues[ ids[i] ] = $("#userlist option[value="+ids[i]+"]").text();
-                }
-                
-                for (var i in selectValues) {
-                    id_exists = false;
-                    //check to see if id exists
-                    $('#transferlist option').each(function(){
-                        if (this.value == i) {
-                            id_exists = true;
-                            return false;
-                        }
-                    });
-                                        
-                    //add ids to transfer list
-                    if (id_exists == false) { 
-                        $('#transferlist')
-                            .append( $('<option></option>')
-                            .attr( "value", i )
-                            .text( selectValues[i] ) );
-                    }
-                        
-                    //remove id's from users
-                    $("#userlist option[value="+i+"]").remove();
-                }
-            }
-            
-        } else {
-            // get selected id's
-            var ids = $('#transferlist').val();
-            
-            if ( ids ) {
-                for ( var i = 0; i < ids.length; i++ ) {
-                    selectValues[ ids[i] ] = $("#transferlist option[value="+ids[i]+"]").text();
-                }
-                
-                for ( var i in selectValues ) {
-                    id_exists = false;
-                    //check to see if id exists
-                    $('#userlist option').each(function(){
-                        if (this.value == i) {
-                            id_exists = true;
-                            return false;
-                        }
-                    });
-                    
-                    //add ids to users list 
-                    if (id_exists == false) { 
-                        $('#userlist')
-                            .append( $('<option></option>')
-                            .attr( "value", i )
-                            .text( selectValues[i] ) );
-                    }
-                            
-                    //remove id's from transfers
-                    $("#transferlist option[value="+i+"]").remove();
-                }
-            }
-        }
-        
-        //sort lists
-        sortlist( 'userlist' );
-        sortlist( 'transferlist' );
-    }
-    
-    function sortlist( list ) {
-        var $r = $("#"+list+" option");
-        $r.sort( function( a, b ) {
-            if ( a.text < b.text ) return -1;
-            if ( a.text == b.text ) return 0;
-            return 1;
-        });
-        $($r).remove();
-        $("#"+list).append( $($r) );
-    }
-    
-	function toggle_select( list ) {
-	    if ( list == 'transfer' ) {
-	        $('#newuser').css('display','inline-block');
-	        $('#multi_select').css('display','none');
-	    } else {
-	        $('#newuser').css('display','none');
-	        $('#multi_select').css('display','inline-block');
-	    }
-	}
-	
-	function confirm_transfer() {
-		var isvalid = true;
-		var msg = '';
-		
-		//clear current messages
-		$("#message_container").html('');
-		
-		//validate fields
-		if ( $('#reportlist').val() == '' ) {
-		    isvalid = false;
-		    msg = "<div class='error'>You must select a report. Please try again.</div>";
-		    
-		} else if ( $('#transfertype').val() == 'clone' && $('#transferlist').find('option').length <= 0 ) {
-	        isvalid = false;
-	        msg = "<div class='error'>You must select at least one user. Please try again.</div>";
-		} else if ( $('#transfertype').val() == 'transfer' && $('#newuser').val() == '' ) {
-	        isvalid = false;
-	        msg = "<div class='error'>You must select a user. Please try again.</div>";
+    				var listItems = "
+<option value=''>-- Select A Report --</option>
+"; for (var i = 0; i < data.rows.length; i++){ if(data.rows[i].cell[0] >
+0) { listItems += "
+<option value='" + data.rows[i].cell[0] + "'>" + data.rows[i].cell[1] +
+	"</option>
+"; } } } else { var listItems = "
+<option value=''>-- No Reports Found --</option>
+"; } $("#reportlist").html(listItems); }, error: function() {
+alert("ERROR IN FILTER REPORTS"); }, complete: function() { } }); }
+
+function transfer_user( type ) { var selectValues = new Array(); if (
+type == 'add' ) { // get selected id's var ids = $('#userlist').val();
+
+if ( ids ) { for ( var i = 0; i < ids.length; i++ ) { selectValues[
+ids[i] ] = $("#userlist option[value="+ids[i]+"]").text(); } for (var i
+in selectValues) { id_exists = false; //check to see if id exists
+$('#transferlist option').each(function(){ if (this.value == i) {
+id_exists = true; return false; } }); //add ids to transfer list if
+(id_exists == false) { $('#transferlist') .append( $('
+<option></option>
+') .attr( "value", i ) .text( selectValues[i] ) ); } //remove id's from
+users $("#userlist option[value="+i+"]").remove(); } } } else { // get
+selected id's var ids = $('#transferlist').val(); if ( ids ) { for ( var
+i = 0; i < ids.length; i++ ) { selectValues[ ids[i] ] = $("#transferlist
+option[value="+ids[i]+"]").text(); } for ( var i in selectValues ) {
+id_exists = false; //check to see if id exists $('#userlist
+option').each(function(){ if (this.value == i) { id_exists = true;
+return false; } }); //add ids to users list if (id_exists == false) {
+$('#userlist') .append( $('
+<option></option>
+') .attr( "value", i ) .text( selectValues[i] ) ); } //remove id's from
+transfers $("#transferlist option[value="+i+"]").remove(); } } } //sort
+lists sortlist( 'userlist' ); sortlist( 'transferlist' ); } function
+sortlist( list ) { var $r = $("#"+list+" option"); $r.sort( function( a,
+b ) { if ( a.text < b.text ) return -1; if ( a.text == b.text ) return
+0; return 1; }); $($r).remove(); $("#"+list).append( $($r) ); } function
+toggle_select( list ) { if ( list == 'transfer' ) {
+$('#newuser').css('display','inline-block');
+$('#multi_select').css('display','none'); } else {
+$('#newuser').css('display','none');
+$('#multi_select').css('display','inline-block'); } } function
+confirm_transfer() { var isvalid = true; var msg = ''; //clear current
+messages $("#message_container").html(''); //validate fields if (
+$('#reportlist').val() == '' ) { isvalid = false; msg = "
+<div class='error'>You must select a report. Please try again.</div>
+"; } else if ( $('#transfertype').val() == 'clone' &&
+$('#transferlist').find('option').length <= 0 ) { isvalid = false; msg =
+"
+<div class='error'>You must select at least one user. Please try again.</div>
+"; } else if ( $('#transfertype').val() == 'transfer' &&
+$('#newuser').val() == '' ) { isvalid = false; msg = "
+<div class='error'>You must select a user. Please try again.</div>
+";
 		}
 		
 		if( isvalid ) {
@@ -288,24 +207,24 @@
 		}
 	}
     
-<?php $this->headScript()->captureEnd() ?>
+<?php $this->headScript()->captureEnd()?>
 
 <style>
 #transfter_container {
-	margin: 20px 0px 0px 0px;
+    margin: 20px 0px 0px 0px;
 }
 
 .form_label {
-	width: 100px;
-	display: inline-block;
-	font-weight: bold;
+    width: 100px;
+    display: inline-block;
+    font-weight: bold;
 }
 
 .multibox {
-	width: 200px;
-	height: 200px;
-	border: 1px solid #cccccc;
-	border-radius: .5em;
+    width: 200px;
+    height: 200px;
+    border: 1px solid #cccccc;
+    border-radius: .5em;
 }
 
 .multilabel {
@@ -313,15 +232,15 @@
 }
 
 .transferbutton {
-	width: 32px;
-	height: 32px;
-    opacity:0.6;
-    filter:alpha(opacity=60); /* For IE8 and earlier */
+    width: 32px;
+    height: 32px;
+    opacity: 0.6;
+    filter: alpha(opacity = 60); /* For IE8 and earlier */
 }
 
 .transferbutton:hover {
-    opacity:1.0;
-    filter:alpha(opacity=100); /* For IE8 and earlier */	
+    opacity: 1.0;
+    filter: alpha(opacity = 100); /* For IE8 and earlier */
 }
 
 .hidden {
@@ -329,129 +248,165 @@
 }
 
 #reportlist {
-	max-width: 400px;
+    max-width: 400px;
 }
 
 .twohundred {
-	width: 200px;
+    width: 200px;
 }
-
 </style>
 
 <h2 id="page_title"><?php echo $this->title;?></h2>
 
 <br />
 
-<form name="transfer" id="transfer" action="" method="POST" class="_outlined" style="display: block; margin: 0px 0px 20px 0px;">
+<form name="transfer" id="transfer" action="" method="POST"
+	class="_outlined" style="display: block; margin: 0px 0px 20px 0px;">
 
     <?php echo $this->FlashMessenger(); ?>
     
     <div id="message_container"><?php if ( $this->message ) { echo $this->message; } ?></div>
-    
+
 	<div id="instruction_container" class="notice">
-		<strong>Warning:</strong> If you transfer/clone reports to another user, that users pricing overrides will be applied to the report. 
-		This may cause discrepancies in pricing between the report that you see and the report that the new user will see.
+		<strong>Warning:</strong> If you transfer/clone reports to another
+		user, that users pricing overrides will be applied to the report. This
+		may cause discrepancies in pricing between the report that you see and
+		the report that the new user will see.
 	</div>
-	
+
 	<div id="transfter_container">
-	    
-	    <p>
-    	    <label for="filterfield" class="form_label">Filter Reports:</label>
-	        <span id="filterlabel0" style="display: inline-block; width: 36px;">Where</span>
+
+		<p>
+			<label for="filterfield" class="form_label">Filter Reports:</label> <span
+				id="filterlabel0" style="display: inline-block; width: 36px;">Where</span>
 	        
 	        <?php if (! in_array("Standard User", $this->privilege) ) { ?>
-	        <select name="filterfield" id="filterfield" style="display: inline-block;">
-	            <option value="user_id">User</option>
-	            <option value="date_created">Date</option>
-	        </select>
+	        <select name="filterfield" id="filterfield"
+				style="display: inline-block;">
+				<option value="user_id">User</option>
+				<option value="date_created">Date</option>
+			</select>
 	        <?php } else { ?>
-	        <input type="hidden" name="filterfield" id="filterfield" value="date_created" />
+	        <input type="hidden" name="filterfield" id="filterfield"
+				value="date_created" />
 	        <?php } ?>
 	        
-	        <?php if (! in_array("Standard User", $this->privilege ) ) { 
-    	        $filtervalueDisplay = "inline-block"; 
-    	        $dateRangeContainerDisplay = "none"; ?>
-    	        <span id="filterlabel1" style="display: inline-block; width: 50px; text-align: center;">equals</span>
-	        <?php } else {
-    	        $filtervalueDisplay = "none"; 
-    	        $dateRangeContainerDisplay = "inline-block"; ?>
-    	        <span id="filterlabel1" style="display: inline-block; width: 90px; text-align: center;">Date is between</span>
+	        <?php
+        
+if (! in_array("Standard User", $this->privilege))
+        {
+            $filtervalueDisplay = "inline-block";
+            $dateRangeContainerDisplay = "none";
+            ?>
+    	        <span id="filterlabel1"
+				style="display: inline-block; width: 50px; text-align: center;">equals</span>
+	        <?php
+        
+}
+        else
+        {
+            $filtervalueDisplay = "none";
+            $dateRangeContainerDisplay = "inline-block";
+            ?>
+    	        <span id="filterlabel1"
+				style="display: inline-block; width: 90px; text-align: center;">Date
+				is between</span>
 	        <?php } ?>
 	        
 	        <select name="filtervalue" id="filtervalue" style="display: <?php echo $filtervalueDisplay; ?>;">
-	            <option value="all">All Users</option>
+				<option value="all">All Users</option>
 				<?php
-				foreach($this->users_list as $key) {
-					echo "<option value='" . $key['user_id'] ."'>" . (strtolower($key['username'])) . "</option>";
-				}
-				?>
-	        </select>
-	        <span id="date_range_container" style="display: <?php echo $dateRangeContainerDisplay; ?>;">
-    	        <input type="text" name="start_date" id="start_date" value="" style="width: 60px;" />
-    	        <span id="filterlabel2" style="display: inline-block; width: 30px; text-align: center;">and</span>
-    	        <input type="text" name="end_date" id="end_date" value="" style="width: 60px;" />
-	        </span>
-    	</p>
-    	
-	    <p>
-    	    <label for="reportlist" class="form_label">Reports:</label>
-    	    <select name="reportlist" id="reportlist">
-    	        <option value=""> -- Select A Report -- </option>
+    foreach ( $this->users_list as $key )
+    {
+        echo "<option value='" . $key ['user_id'] . "'>" . (strtolower($key ['username'])) . "</option>";
+    }
+    ?>
+	        </select> <span id="date_range_container" style="display: <?php echo $dateRangeContainerDisplay; ?>;">
+				<input type="text" name="start_date" id="start_date" value=""
+				style="width: 60px;" /> <span id="filterlabel2"
+				style="display: inline-block; width: 30px; text-align: center;">and</span>
+				<input type="text" name="end_date" id="end_date" value=""
+				style="width: 60px;" />
+			</span>
+		</p>
+
+		<p>
+			<label for="reportlist" class="form_label">Reports:</label> <select
+				name="reportlist" id="reportlist">
+				<option value="">-- Select A Report --</option>
 				<?php
-				foreach($this->reports_list as $key) {
-					echo "<option value='" . $key['report_id'] ."'>" . ($key['customer_company_name']) . ' (' . Proposalgen_Model_Mapper_User::getInstance()->find( $key['user_id'] )->getUsername() . ' on ' . date("m-d-Y", strtotime($key['date_created'])) . ')' . "</option>";
-				}
-				?>
+    foreach ( $this->reports_list as $key )
+    {
+        echo "<option value='" . $key ['report_id'] . "'>" . ($key ['customer_company_name']) . ' (' . Proposalgen_Model_Mapper_User::getInstance()->find($key ['user_id'])->getUsername() . ' on ' . date("m-d-Y", strtotime($key ['date_created'])) . ')' . "</option>";
+    }
+    ?>
     	    </select>
-    	</p>
-    	
-	    <p>
-	        <label for="transfertype" class="form_label">Transfer Type:</label>	
-    	    <select name="transfertype" id="transfertype" class="" onchange="javascript: toggle_select(this.value);">
-    	        <option value="transfer">Transfer Report Ownership</option>
-    	        <option value="clone">Clone Report</option>
-    	    </select>        
-	    </p>
-	    
-	    <p>
-	        <p style="display: inline-block; height: 24px;"><label for="newuser" class="form_label">Transfer To:</label></p>
-    	    <select name="newuser" id="newuser" class="twohundred">
-    	        <option value=""> -- Select A User -- </option>
+		</p>
+
+		<p>
+			<label for="transfertype" class="form_label">Transfer Type:</label> <select
+				name="transfertype" id="transfertype" class=""
+				onchange="javascript: toggle_select(this.value);">
+				<option value="transfer">Transfer Report Ownership</option>
+				<option value="clone">Clone Report</option>
+			</select>
+		</p>
+
+		<p>
+		
+		
+		<p style="display: inline-block; height: 24px;">
+			<label for="newuser" class="form_label">Transfer To:</label>
+		</p>
+		<select name="newuser" id="newuser" class="twohundred">
+			<option value="">-- Select A User --</option>
 				<?php
-				foreach($this->to_users_list as $key) {
-					echo "<option value='" . $key['user_id'] ."'>" . (strtolower($key['username'])) . "</option>";
-				}
-				?>
+    foreach ( $this->to_users_list as $key )
+    {
+        echo "<option value='" . $key ['user_id'] . "'>" . (strtolower($key ['username'])) . "</option>";
+    }
+    ?>
     	    </select>
-    	    
-    	    <p id="multi_select" class="hidden">
-	            <label for="userlist" class="form_label" style="position: relative;">&nbsp;</label>	
-        	    <span style="position: relative; vertical-align: top; display: inline-block; width: 200px;">
-        	        <label for="userlist" class="multilabel">Available Users:</label><br />
-            	    <select name="userlist" id="userlist" class="multibox" multiple="multiple" ondblclick="javascript: transfer_user('add');">
+
+		<p id="multi_select" class="hidden">
+			<label for="userlist" class="form_label" style="position: relative;">&nbsp;</label>
+			<span
+				style="position: relative; vertical-align: top; display: inline-block; width: 200px;">
+				<label for="userlist" class="multilabel">Available Users:</label><br />
+				<select name="userlist" id="userlist" class="multibox"
+				multiple="multiple" ondblclick="javascript: transfer_user('add');">
     				<?php
-    				foreach($this->to_users_list as $key) {
-    					echo "<option value='" . $key['user_id'] ."'>" . (strtolower($key['username'])) . "</option>";
-    				}
-    				?>
+        foreach ( $this->to_users_list as $key )
+        {
+            echo "<option value='" . $key ['user_id'] . "'>" . (strtolower($key ['username'])) . "</option>";
+        }
+        ?>
             	    </select>
-            	</span>
-        	    <span style="position: relative; vertical-align: top; display: inline-block; width: 40px; margin: 50px 0px 0px 12px;">
-            	    <img name="adduers" id="addusers" class="transferbutton" src="<?php echo $this->theme("proposalgenerator/images/knobs/green_forward.png"); ?>" alt="Add" title="Add" onclick="javascript: transfer_user('add');" />
-            	    <img name="subusers" id="subusers" class="transferbutton" src="<?php echo $this->theme("proposalgenerator/images/knobs/green_left.png"); ?>" alt="Remove" title="Remove" onclick="javascript: transfer_user('sub');" />
-        	    </span>    
-        	    <span style="position: relative; vertical-align: top; display: inline-block; width: 200px;">
-        	        <label for="transferlist" class="multilabel">Transfer To User(s):</label><br />
-                    <select name="transferlist" id="transferlist" class="multibox" multiple="multiple" ondblclick="javascript: transfer_user('sub');">
-                    </select>
-                    <input type="hidden" name="hdntransferlist" id="hdntransferlist" />
-                </span>
-    	    </p>
-    	</p>
+			</span> <span
+				style="position: relative; vertical-align: top; display: inline-block; width: 40px; margin: 50px 0px 0px 12px;">
+				<img name="adduers" id="addusers" class="transferbutton"
+				src="<?php echo $this->theme("proposalgenerator/images/knobs/green_forward.png"); ?>"
+				alt="Add" title="Add" onclick="javascript: transfer_user('add');" />
+				<img name="subusers" id="subusers" class="transferbutton"
+				src="<?php echo $this->theme("proposalgenerator/images/knobs/green_left.png"); ?>"
+				alt="Remove" title="Remove"
+				onclick="javascript: transfer_user('sub');" />
+			</span> <span
+				style="position: relative; vertical-align: top; display: inline-block; width: 200px;">
+				<label for="transferlist" class="multilabel">Transfer To User(s):</label><br />
+				<select name="transferlist" id="transferlist" class="multibox"
+				multiple="multiple" ondblclick="javascript: transfer_user('sub');">
+			</select> <input type="hidden" name="hdntransferlist"
+				id="hdntransferlist" />
+			</span>
+		</p>
+		</p>
 	</div>
-	
-	<div class="submitBar" id="submitBtns">	 
-		<input type="button" name="btnTransfer" id="btnTransfer" value="Complete Transfer" onclick="javascript: confirm_transfer();" />
-		<input type="button" name="btnDone" id="btnDone" value="Done" onclick="javascript: document.location.href='<?php echo $this->baseUrl()."/admin/managemyreports"?>';" />
-	</div>		
+
+	<div class="submitBar" id="submitBtns">
+		<input type="button" name="btnTransfer" id="btnTransfer"
+			value="Complete Transfer" onclick="javascript: confirm_transfer();" />
+		<input type="button" name="btnDone" id="btnDone" value="Done"
+			onclick="javascript: document.location.href='<?php echo $this->baseUrl()."/admin/managemyreports"?>';" />
+	</div>
 </form>

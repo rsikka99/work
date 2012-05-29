@@ -1,9 +1,7 @@
 -- scripts/sql/schema.mysql.sql
 --
 -- You will need load your database schema with this SQL.
-DROP DATABASE IF EXISTS tmtwdev_hwgen;
-CREATE DATABASE tmtwdev_hwgen;
-USE tmtwdev_hwgen;
+SET storage_engine=InnoDB;
 
 CREATE TABLE `users` (
     `id`                	INTEGER         NOT NULL AUTO_INCREMENT,

@@ -1,10 +1,10 @@
 <?php
 
-    $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
-	$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
-    $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/solution/solution_html.css"));
-    // Title page image
-    echo '<style type="text/css">
+$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
+$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
+$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/solution/solution_html.css"));
+// Title page image
+echo '<style type="text/css">
 			div.titlepage {
 				height: 500px;
 				padding-left: 300px;
@@ -15,20 +15,20 @@
 		 </style>';
 
 $data = array (
-        "proposal" => $this->proposal,
-        "isPDF" => $this->isPDF,
-        "backleft" => $this->backleft,
-        "backright" => $this->backright,
-        "backtop" => $this->backtop,
-        "backbottom" => $this->backbottom,
-        "footer" => $this->footer,
-        "pagestyle" => $this->pagestyle,
-        "titlePageStart" => $this->titlePageStart,
-        "pageStart" => $this->pageStart,
-        "pageEnd" => $this->pageEnd,
-        "noBreakStart" => $this->noBreakStart,
-        "noBreakEnd" => $this->noBreakEnd,
-        "orientation" => $this->orientation
+        "proposal" => $this->proposal, 
+        "isPDF" => $this->isPDF, 
+        "backleft" => $this->backleft, 
+        "backright" => $this->backright, 
+        "backtop" => $this->backtop, 
+        "backbottom" => $this->backbottom, 
+        "footer" => $this->footer, 
+        "pagestyle" => $this->pagestyle, 
+        "titlePageStart" => $this->titlePageStart, 
+        "pageStart" => $this->pageStart, 
+        "pageEnd" => $this->pageEnd, 
+        "noBreakStart" => $this->noBreakStart, 
+        "noBreakEnd" => $this->noBreakEnd, 
+        "orientation" => $this->orientation 
 );
 
 echo $this->partial('report/solution/07_Appendix.phtml', $data);

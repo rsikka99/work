@@ -1,37 +1,46 @@
 <?php
-	/**
-	 * This is the Terms and Conditions view script which will be responsible
-	 * for displaying the company End User License Agreement.
-	 * 
-	 * @author Kevin Jervis
-	 * @version 1.0
-	 */
-	$auth = Zend_Auth::getInstance();
+/**
+ * This is the Terms and Conditions view script which will be responsible
+ * for displaying the company End User License Agreement.
+ *
+ * @author Kevin Jervis
+ * @version 1.0
+ */
+$auth = Zend_Auth::getInstance();
 ?>
 
 <h2>Terms &amp; Conditions</h2>
-<textarea readonly="readonly" style="width: 98%; resize: none; margin-top: 10px; margin-bottom: 20px; height: 500px; padding: 5px;">
-<?php 
-	$CurrentEULA = fopen($this->EulaPath,"r"); // Open EULA text file for read only
-	
-	/* Certain characters do not display correctly under our page encoding, there characters like commas and dashes appear as question marks
-	in the browser. The 1st array represents those original invalid characters and the 2nd array has the valid equivalent. Both arrays must maintain the same length 
-	for this to function correctly.
-	*/
-	$oldchars = array("’");
-	$newchars = array("'");
-	
-	while (!feof($CurrentEULA)) {
-		$lineOfText = fgets($CurrentEULA);
-		$lineOfText = str_replace($oldchars,$newchars,$lineOfText);
-		print $lineOfText;
-	}
-	fclose($CurrentEULA);
+<textarea readonly="readonly"
+	style="width: 98%; resize: none; margin-top: 10px; margin-bottom: 20px; height: 500px; padding: 5px;">
+<?php
+$CurrentEULA = fopen($this->EulaPath, "r"); // Open EULA text file for read only
+
+
+/*
+ * Certain characters do not display correctly under our page encoding, there characters like commas and dashes appear
+ * as question marks in the browser. The 1st array represents those original invalid characters and the 2nd array has
+ * the valid equivalent. Both arrays must maintain the same length for this to function correctly.
+ */
+$oldchars = array (
+        "’" 
+);
+$newchars = array (
+        "'" 
+);
+
+while ( ! feof($CurrentEULA) )
+{
+    $lineOfText = fgets($CurrentEULA);
+    $lineOfText = str_replace($oldchars, $newchars, $lineOfText);
+    print $lineOfText;
+}
+fclose($CurrentEULA);
 ?>
 </textarea>
 
 <?php
-	if($this->message) {
-		echo "<div id=\"error\">$this->message</div>";
-	}
+if ($this->message)
+{
+    echo "<div id=\"error\">$this->message</div>";
+}
 ?>

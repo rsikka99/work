@@ -2,7 +2,7 @@
 
 /**
  * Class Proposalgen_Model_DealerTonerOverride
- * 
+ *
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_DealerTonerOverride extends Tangent_Model_Abstract

@@ -1,13 +1,13 @@
 <?php
 /**
  * ticketdetails.phtml
- * 
- * @author	John Sadler
- * @version	v1.0 
+ *
+ * @author John Sadler
+ * @version v1.0
  */
 ?>
 
-<?php $this->headScript()->captureStart('append','text/javascript') ?>
+<?php $this->headScript()->captureStart('append','text/javascript')?>
 	
     $(document).ready(function() {
 		
@@ -45,45 +45,56 @@
 		}
 	}
 	
-<?php $this->headScript()->captureEnd() ?>
+<?php $this->headScript()->captureEnd()?>
 
 <h2><?php echo $this->title;?></h2>
 
 <form name="requests" id="requests" action="" method="post">
 	<input type="hidden" name="form_mode" id="form_mode" value="ticket" />
-	<input type="hidden" name="ticket_id" id="ticket_id" value="<?php echo $this->ticket_number; ?>" />
-	<input type="hidden" name="devices_pf_id" id="devices_pf_id" value="<?php echo $this->devices_pf_id; ?>" />
-	<input type="hidden" name="unknown_device_instance_id" id="unknown_device_instance_id" value="<?php echo $this->unknown_device_instance_id; ?>" />
-	
+	<input type="hidden" name="ticket_id" id="ticket_id"
+		value="<?php echo $this->ticket_number; ?>" /> <input type="hidden"
+		name="devices_pf_id" id="devices_pf_id"
+		value="<?php echo $this->devices_pf_id; ?>" /> <input type="hidden"
+		name="unknown_device_instance_id" id="unknown_device_instance_id"
+		value="<?php echo $this->unknown_device_instance_id; ?>" />
+
 	<dl class="zend_form">
 		<dt class="botMenu">
-		
+
 			<div id="message_container" class="margined">
 			    <?php echo $this->message; ?>
 			</div>
-			
-			<div id="instruction_container" class="margined">
-			</div>
-			
+
+			<div id="instruction_container" class="margined"></div>
+
 			<div id="details_container" class="margined">
 				<div class="ticket_header">Ticket #<?php echo $this->ticket_number; ?></div>
 				<div id="ticket_container">
 					<div class="ticket_title"><?php echo $this->ticket_title; ?></div>
 					<hr />
-					<div class="ticket_item"><div class="ticket_label">Reported By:</div> <?php echo $this->reported_by; ?></div>
-					<div class="ticket_item"><div class="ticket_label">Type:</div> <?php echo $this->ticket_type; ?></div>
-					<div class="ticket_item"><div class="ticket_label">Device PF ID:</div> <?php echo $this->devices_pf_id; ?></div>
-					<div class="ticket_item"><div class="ticket_label">Device PF Name:</div> <?php echo $this->device_pf_name; ?></div>
-					<div class="ticket_item"><div class="ticket_label">User Suggested Name:</div> <?php echo $this->user_suggested_name; ?></div>
+					<div class="ticket_item">
+						<div class="ticket_label">Reported By:</div> <?php echo $this->reported_by; ?></div>
+					<div class="ticket_item">
+						<div class="ticket_label">Type:</div> <?php echo $this->ticket_type; ?></div>
+					<div class="ticket_item">
+						<div class="ticket_label">Device PF ID:</div> <?php echo $this->devices_pf_id; ?></div>
+					<div class="ticket_item">
+						<div class="ticket_label">Device PF Name:</div> <?php echo $this->device_pf_name; ?></div>
+					<div class="ticket_item">
+						<div class="ticket_label">User Suggested Name:</div> <?php echo $this->user_suggested_name; ?></div>
 					<?php if(in_array("System Admin", $this->privilege)) { ?>
 					<div class="ticket_item_tall">
 						<div class="ticket_label">Action:</div>
 						<div class="ticket_links">
 							<?php if($this->is_mapped == true) { ?>
-							Mapped to <?php echo $this->mapped_to_device; ?> (<a href="javascript: void(0);" onclick="javascript: do_action('map');">Edit Mapping</a>)<br />
+							Mapped to <?php echo $this->mapped_to_device; ?> (<a
+								href="javascript: void(0);"
+								onclick="javascript: do_action('map');">Edit Mapping</a>)<br />
 							<?php } else { ?>
-							<a href="javascript: void(0);" onclick="javascript: do_action('add');">Add as Master Printer</a><br />
-							<a href="javascript: void(0);" onclick="javascript: do_action('map');">Map to Master Printer</a><br />
+							<a href="javascript: void(0);"
+								onclick="javascript: do_action('add');">Add as Master Printer</a><br />
+							<a href="javascript: void(0);"
+								onclick="javascript: do_action('map');">Map to Master Printer</a><br />
 							<?php } ?>
 						</div>
 					</div>
@@ -92,7 +103,8 @@
 						<div class="ticket_links">
 							<select name="cboStatus" id="cboStatus">
 							<?php foreach($this->statuslist as $key => $value) { ?>
-								<option value="<?php echo $key ?>" <?php if($this->ticket_status == ucwords(strtolower($value))) {echo "selected";} ?>><?php echo ucwords(strtolower($value)) ?></option>
+								<option value="<?php echo $key ?>"
+									<?php if($this->ticket_status == ucwords(strtolower($value))) {echo "selected";} ?>><?php echo ucwords(strtolower($value)) ?></option>
 							<?php } ?>
 							</select>
 						</div>
@@ -101,8 +113,9 @@
 					<div class="ticket_item">
 						<div class="ticket_label">Status:</div>
 						<div class="ticket_links">
-							<?php echo $this->ticket_status ?>
-							<input type="hidden" name="cboStatus" id="cboStatus" value="<?php echo $this->ticket_status_id ?>" />
+							<?php echo $this->ticket_status?>
+							<input type="hidden" name="cboStatus" id="cboStatus"
+								value="<?php echo $this->ticket_status_id ?>" />
 						</div>
 					</div>
 					<?php } ?>
@@ -115,7 +128,10 @@
 			
 			<?php if(count($this->ticket_comments) > 0) { ?>
 			<div id="comments_history_container">
-				<div class="ticket_comments_label" onclick="javascript: toggle_history();"><span id="view_marker">[+]</span> View History</div>
+				<div class="ticket_comments_label"
+					onclick="javascript: toggle_history();">
+					<span id="view_marker">[+]</span> View History
+				</div>
 				<div id="ticket_comment_history" class="ticket_comment_history">
 				<?php foreach($this->ticket_comments as $key => $value) { ?>
 					<div id="comment_user" class="ticket_comment_user"><?php echo $value['username']; ?></div>
@@ -129,19 +145,25 @@
 			
 			<div id="comments_container" style="clear: both;">
 				<div class="ticket_comments_label">Add a Comment</div>
-				<div class=""><textarea name="txtComment" id="txtComment" style="width: 620px;" rows="6"></textarea></div>
+				<div class="">
+					<textarea name="txtComment" id="txtComment" style="width: 620px;"
+						rows="6"></textarea>
+				</div>
 			</div>
-			
-			<div id="submitBtns" class="submitBar">		
-				<input type="button" name="btnSave" id="btnSave" value="Save" onclick="javascript: do_action('save');" />
+
+			<div id="submitBtns" class="submitBar">
+				<input type="button" name="btnSave" id="btnSave" value="Save"
+					onclick="javascript: do_action('save');" />
 				<?php if(in_array("System Admin",$this->privilege)) { ?>
-				<input type="button" value="Done" onclick="javascript: document.location.href='<?php echo $this->baseUrl()."/ticket/managetickets"?>';" />
+				<input type="button" value="Done"
+					onclick="javascript: document.location.href='<?php echo $this->baseUrl()."/ticket/managetickets"?>';" />
 				<?php } else { ?>
-				<input type="button" value="Done" onclick="javascript: document.location.href='<?php echo $this->baseUrl()."/ticket/managemytickets"?>';" />
+				<input type="button" value="Done"
+					onclick="javascript: document.location.href='<?php echo $this->baseUrl()."/ticket/managemytickets"?>';" />
 				<?php } ?>
 		    </div>
-		    
-		    
+
+
 		</dt>
 	</dl>
 </form>

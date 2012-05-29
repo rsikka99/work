@@ -2,7 +2,7 @@
 
 /**
  * Class Proposalgen_Model_TicketViewed
- * 
+ *
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_TicketViewed extends Tangent_Model_Abstract

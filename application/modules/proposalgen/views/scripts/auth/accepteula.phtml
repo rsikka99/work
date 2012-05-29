@@ -1,43 +1,54 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Office Depot - Accept EULA</title>
-        <link href="<?php echo $this->theme("proposalgenerator/eula.css")?>" rel="stylesheet" type="text/css" media="all" />
-        <script src="<?php echo $this->baseUrl("scripts/jquery.js"); ?>" type="text/javascript"></script> <!-- Javascript Library -->
-    </head>
-    <body>
-    <div id="test"></div>
-        <div id="wrapper">
-	        <div id="login">
-				<div id="form">
-			        <form id="eulaForm" action="" method="post">
-			        	<textarea id='eulatext' readonly="readonly" style="resize: none;">
-			        	<?php 
-						$CurrentEULA = fopen($this->EulaPath,"r");
-						$oldchars = array("’"); 
-						$newchars = array("'");
-						
-						while (!feof($CurrentEULA)) 
-						{
-							$lineOfText = fgets($CurrentEULA);
-							$lineOfText = str_replace($oldchars,$newchars,$lineOfText);
-							print $lineOfText;
-						}
-						fclose($CurrentEULA);
-						?>
-			        	</textarea>
-			        	<br/><br/>
-			        	<input type="checkbox" name="eulaAccepted" />I have read and accept the terms of the agreement. <br/><br/>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Office Depot - Accept EULA</title>
+<link href="<?php echo $this->theme("proposalgenerator/eula.css")?>"
+	rel="stylesheet" type="text/css" media="all" />
+<script src="<?php echo $this->baseUrl("scripts/jquery.js"); ?>"
+	type="text/javascript"></script>
+<!-- Javascript Library -->
+</head>
+<body>
+	<div id="test"></div>
+	<div id="wrapper">
+		<div id="login">
+			<div id="form">
+				<form id="eulaForm" action="" method="post">
+					<textarea id='eulatext' readonly="readonly" style="resize: none;">
 			        	<?php
-    			        if($this->message) {
-    			            echo "<div id=\"error\">$this->message</div>";
-    			        }
-		                ?>
-			        	<input type="submit" name="accepteula" value="I Accept" /><input type="submit" name="refuseeula" value="Go Back" />
-			        </form>
-		       	</div>
+            $CurrentEULA = fopen($this->EulaPath, "r");
+            $oldchars = array (
+                    "’" 
+            );
+            $newchars = array (
+                    "'" 
+            );
+            
+            while ( ! feof($CurrentEULA) )
+            {
+                $lineOfText = fgets($CurrentEULA);
+                $lineOfText = str_replace($oldchars, $newchars, $lineOfText);
+                print $lineOfText;
+            }
+            fclose($CurrentEULA);
+            ?>
+			        	</textarea>
+					<br />
+					<br /> <input type="checkbox" name="eulaAccepted" />I have read and
+					accept the terms of the agreement. <br />
+					<br />
+			        	<?php
+            if ($this->message)
+            {
+                echo "<div id=\"error\">$this->message</div>";
+            }
+            ?>
+			        	<input type="submit" name="accepteula" value="I Accept" /><input
+						type="submit" name="refuseeula" value="Go Back" />
+				</form>
 			</div>
 		</div>
-    </body>
+	</div>
+</body>
 </html>

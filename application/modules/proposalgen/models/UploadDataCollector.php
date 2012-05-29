@@ -2,7 +2,7 @@
 
 /**
  * Class Proposalgen_Model_UploadDataCollector
- * 
+ *
  * @author "John Sadler"
  */
 class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
@@ -67,7 +67,7 @@ class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
 
     /**
      * Constructor that takes a csv row and populates the model
-     * 
+     *
      * @param array $csvRow            
      */
     public function UploadDataCollector ($csvRow)

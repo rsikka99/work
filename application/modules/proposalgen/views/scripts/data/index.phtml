@@ -4,7 +4,7 @@
  */
 ?>
 
-<?php $this->headScript()->captureStart('append','text/javascript') ?>
+<?php $this->headScript()->captureStart('append','text/javascript')?>
 	var has_data = '<?php echo $this->has_data; ?>';
 	
 	$(document).ready(function() {
@@ -194,7 +194,9 @@
             
         } else if(inAction == 'upload') {
         	if($('#uploadedfile').val() == '') {
-        		$('#message_container').html('<p>Please select a file to upload.</p>');
+        		$('#message_container').html('
+<p>Please select a file to upload.</p>
+');
         		
         	} else {
         		if(has_data == 'true') {
@@ -214,65 +216,85 @@
         }
     }
     
-<?php $this->headScript()->captureEnd() ?>
+<?php $this->headScript()->captureEnd()?>
 
-<form id="fileinput" class="fileinput" enctype="multipart/form-data" action="<?php echo $this->baseUrl(); ?>/data" method="POST">
+<form id="fileinput" class="fileinput" enctype="multipart/form-data"
+	action="<?php echo $this->baseUrl(); ?>/data" method="POST">
 	<dl class="zend_form">
 		<dt class="botMenu">
-		
-		    <div id="message_container" class="margined">
+
+			<div id="message_container" class="margined">
 	        <?php
-	        if(isset($this->errMessages)) {
-	            //show the first error in the list of errors
-	            foreach($this->errMessages as $key => $value) {
-	                echo $value;
-	                break;
-	            }
-	        } else {
-	            if(isset($this->message)) {
-	                echo $this->message;
-	            }
-	        }
-	        ?>
+        if (isset($this->errMessages))
+        {
+            //show the first error in the list of errors
+            foreach ( $this->errMessages as $key => $value )
+            {
+                echo $value;
+                break;
+            }
+        }
+        else
+        {
+            if (isset($this->message))
+            {
+                echo $this->message;
+            }
+        }
+        ?>
 		    </div>
-		    
-            <div id="upload_container">
-                <div>Choose a <span style="color: red">.CSV</span> file to upload: <input name="uploadedfile" id="uploadedfile" accept="application/csv, text/csv" type="file" size="60" class="upload_file" /></div>
-                <div><input type="button" name="csv_submit" id="csv_submit" value="Upload File" onclick="javascript: doAction('upload');" /></div>
-            </div>
-			
-		    <div class="results_container">
+
+			<div id="upload_container">
+				<div>
+					Choose a <span style="color: red">.CSV</span> file to upload: <input
+						name="uploadedfile" id="uploadedfile"
+						accept="application/csv, text/csv" type="file" size="60"
+						class="upload_file" />
+				</div>
+				<div>
+					<input type="button" name="csv_submit" id="csv_submit"
+						value="Upload File" onclick="javascript: doAction('upload');" />
+				</div>
+			</div>
+
+			<div class="results_container">
 		    <?php if($this->has_data > 0) { ?>
-				<h3>Imported Results:</h3><br />
+				<h3>Imported Results:</h3>
+				<br />
 				<table id="results_list"></table>
 				<div id="results_pager"></div>
-                <br />
+				<br />
 			<?php } ?>
 			
 			<?php if($this->bad_data > 0) { ?>
 				<h3>Excluded Results:</h3>
-	        	<p>Records below have been excluded because they are missing data in required fields.</p>
-                <table id="excluded_results_list"></table>
-                <div id="excluded_results_pager"></div>
-                <br />
+				<p>Records below have been excluded because they are missing data in
+					required fields.</p>
+				<table id="excluded_results_list"></table>
+				<div id="excluded_results_pager"></div>
+				<br />
 	        <?php } ?>
 	       	</div>
-	        
-	        <div class="submitBar">
+
+			<div class="submitBar">
 				<div id="submitBtns">
 					<div class="savebtn">
 						<?php if($this->has_data > 0) { ?>
-                			<input type="button" class="" name="btnNext" id="btnNext" value="Continue" onClick="javascript: doAction('confirm');" />
+                			<input type="button" class="" name="btnNext"
+							id="btnNext" value="Continue"
+							onClick="javascript: doAction('confirm');" />
                 		<?php } else { ?>
-                			<input type="button" class="" name="btnNext" id="btnNext" value="Continue" disabled="disabled" />
+                			<input type="button" class="" name="btnNext"
+							id="btnNext" value="Continue" disabled="disabled" />
             			<?php } ?>
 					</div>
 					<div class="backbtn">
-						<input type="button" class="" name="btnBack" id="btnBack" value="Back" onClick="javascript: doAction('back');" />
+						<input type="button" class="" name="btnBack" id="btnBack"
+							value="Back" onClick="javascript: doAction('back');" />
 					</div>
 				</div>
 			</div>
-			
+
 		</dt>
 	</dl>
 </form>

@@ -3,49 +3,67 @@
 class Default_ErrorController extends Zend_Controller_Action
 {
 
+    public function init ()
+    {
+    }
+
     public function errorAction ()
     {
         $errors = $this->_getParam('error_handler');
         
-        if (! $errors || ! $errors instanceof ArrayObject)
-        {
-            $this->view->message = 'You have reached the error page';
-            return;
-        }
-        
-        $showProgrammerError = false;
-        
+        $priority = Zend_Log::NOTICE;
+        $forwardToAction = 'page-not-found';
         switch ($errors->type)
         {
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE :
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER :
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION :
                 // 404 error -- controller or action not found
-                $this->getResponse()->setHttpResponseCode(404);
                 $priority = Zend_Log::NOTICE;
-                $this->view->message = '404 - Page not found';
-                $this->_helper->viewRenderer('404');
+                
                 break;
             default :
                 switch ($errors->exception->getCode())
                 {
                     case 403 :
                         // Access Denied!
-                        $this->getResponse()->setHttpResponseCode(403);
-                        $this->_helper->viewRenderer('403');
+                        $forwardToAction = 'not-authorized';
                         break;
                     default :
                         // Application Error
-                        $this->getResponse()->setHttpResponseCode(500);
                         $priority = Zend_Log::CRIT;
-                        $this->view->message = 'Application error';
-                        $this->_helper->viewRenderer('500');
-                        $showProgrammerError = true;
+                        $forwardToAction = 'application-error';
                         break;
                 }
                 break;
         }
         
+        $this->logAndPrepareExceptions($errors, $priority);
+        $this->_forward($forwardToAction);
+    }
+
+    /**
+     * Gets the appropriate Zend_Log facility, or false if none are registered.
+     *
+     * @return boolean Zend_Log
+     */
+    public function getLog ()
+    {
+        if (! Zend_Registry::isRegistered("Zend_Log"))
+        {
+            return false;
+        }
+        return Zend_Registry::get("Zend_Log");
+    }
+
+    /**
+     * Logs the error and prepares the view with the appropriate information
+     *
+     * @param unknown_type $errors            
+     * @param unknown_type $priority            
+     */
+    public function logAndPrepareExceptions ($errors, $priority)
+    {
         /*
          * Generate a uid just in case two exceptions happen at the exact same time on different threads and we end up
          * getting mixed lines of a different exception
@@ -53,7 +71,6 @@ class Default_ErrorController extends Zend_Controller_Action
         $uid = uniqid();
         $this->view->uid = $uid;
         $exceptions = array ();
-        $priority = Zend_Log::CRIT;
         
         $ex = $errors->exception;
         
@@ -75,27 +92,23 @@ class Default_ErrorController extends Zend_Controller_Action
         My_Log::crit("[$uid] - --------Finished Trace--------.");
         
         // Conditionally display exceptions
-        if ($this->getInvokeArg('displayExceptions') == true && $showProgrammerError)
+        if ($this->getInvokeArg('displayExceptions') == true)
         {
             $this->view->exceptions = $exceptions;
-            $this->_helper->viewRenderer('error');
+            //$this->_helper->viewRenderer('error');
         }
         
         $this->view->request = $errors->request;
     }
 
-    /**
-     * Gets the appropriate Zend_Log facility, or false if none are registered.
-     *
-     * @return boolean Zend_Log
-     */
-    public function getLog ()
+    public function applicationErrorAction ()
     {
-        if (! Zend_Registry::isRegistered("Zend_Log"))
-        {
-            return false;
-        }
-        return Zend_Registry::get("Zend_Log");
+        $this->getResponse()->setHttpResponseCode(500);
+    }
+
+    public function pageNotFoundAction ()
+    {
+        $this->getResponse()->setHttpResponseCode(404);
     }
 }
 

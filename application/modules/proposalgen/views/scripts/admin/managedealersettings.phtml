@@ -1,22 +1,22 @@
 <?php
 /**
  * managedealersettings.phtml
- * 
- * @author	John Sadler
- * @version	v1.0 
+ *
+ * @author John Sadler
+ * @version v1.0
  */
 ?>
 
-<?php $this->headScript()->captureStart('append','text/javascript') ?>
-<?php $this->headScript()->captureEnd() ?>
+<?php $this->headScript()->captureStart('append','text/javascript')?>
+<?php $this->headScript()->captureEnd()?>
 
 <h2><?php echo $this->title;?></h2>
 
 <dl class="zend_form">
-	<dt class="botMenu">		
+	<dt class="botMenu">
 		<div id="form_container" class="margined">
 			<?php if($this->message) echo $this->escape($this->message); ?>
 			<?php echo $this->settingsForm; ?>
-		</div>		
+		</div>
 	</dt>
 </dl>

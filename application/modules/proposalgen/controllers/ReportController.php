@@ -11,7 +11,6 @@
  *
  * @author Chris Garrah
  */
-
 class Proposalgen_ReportController extends My_Controller_Report
 {
 
@@ -20,31 +19,29 @@ class Proposalgen_ReportController extends My_Controller_Report
         parent::init();
         // This is a list of reports that we can view.
         $this->view->availableReports = (object)array (
-            "Assessment" => (object)array (
-                "pagetitle" => "Assessment", 
-                "active" => false, 
-                "url" => $this->view->baseUrl('/report/assessment') 
-            ), 
-            "Solution" => (object)array (
-                "pagetitle" => "Solution", 
-                "active" => false, 
-                "url" => $this->view->baseUrl('/report/solution') 
-            ), 
-            "GrossMargin" => (object)array (
-                "pagetitle" => "Gross Margin", 
-                "active" => false, 
-                "url" => $this->view->baseUrl('/report/grossmargin') 
-            ), 
-            "PrintingDeviceList" => (object)array (
-                "pagetitle" => "Printing Device List", 
-                "active" => false, 
-                "url" => $this->view->baseUrl('/report/printingdevicelist') 
-            ) 
+                "Assessment" => (object)array (
+                        "pagetitle" => "Assessment", 
+                        "active" => false, 
+                        "url" => $this->view->baseUrl('/report/assessment') 
+                ), 
+                "Solution" => (object)array (
+                        "pagetitle" => "Solution", 
+                        "active" => false, 
+                        "url" => $this->view->baseUrl('/report/solution') 
+                ), 
+                "GrossMargin" => (object)array (
+                        "pagetitle" => "Gross Margin", 
+                        "active" => false, 
+                        "url" => $this->view->baseUrl('/report/grossmargin') 
+                ), 
+                "PrintingDeviceList" => (object)array (
+                        "pagetitle" => "Printing Device List", 
+                        "active" => false, 
+                        "url" => $this->view->baseUrl('/report/printingdevicelist') 
+                ) 
         );
-    
     } // end init
 
-    
     function preDispatch ()
     {
         $this->view->ErrorMessages = array ();
@@ -67,7 +64,6 @@ class Proposalgen_ReportController extends My_Controller_Report
         $this->view->isPDF = ($pdf !== FALSE) ? true : false;
     } // end preDispatch
 
-    
     function postDispatch ()
     {
         $this->verifyReplacementDevices();
@@ -99,30 +95,30 @@ class Proposalgen_ReportController extends My_Controller_Report
                 {
                     $this->view->cachePath = "/cache/reports/" . $this->ReportId;
                     $this->view->downloadFileName = str_replace(array (
-                        " ", 
-                        "/", 
-                        "\\", 
-                        ";", 
-                        "?", 
-                        "\"", 
-                        "'", 
-                        ",", 
-                        "%", 
-                        "&", 
-                        "#", 
-                        "@", 
-                        "!", 
-                        ">", 
-                        "<", 
-                        "+", 
-                        "=", 
-                        "{", 
-                        "}", 
-                        "[", 
-                        "]", 
-                        "|", 
-                        "~", 
-                        "`" 
+                            " ", 
+                            "/", 
+                            "\\", 
+                            ";", 
+                            "?", 
+                            "\"", 
+                            "'", 
+                            ",", 
+                            "%", 
+                            "&", 
+                            "#", 
+                            "@", 
+                            "!", 
+                            ">", 
+                            "<", 
+                            "+", 
+                            "=", 
+                            "{", 
+                            "}", 
+                            "[", 
+                            "]", 
+                            "|", 
+                            "~", 
+                            "`" 
                     ), "_", $this->view->downloadFileName);
                     $this->view->downloadPDF = true;
                 }
@@ -150,7 +146,6 @@ class Proposalgen_ReportController extends My_Controller_Report
         $this->view->companyName = $this->getReportCompanyName(); // Set company
         // name
         $this->view->reportName = $this->getReportCompanyName();
-    
     } // end indexAction
 
     
@@ -164,8 +159,8 @@ class Proposalgen_ReportController extends My_Controller_Report
         $this->view->availableReports->Assessment->active = true;
         
         $this->view->formats = array (
-            
-            "/proposal/assessment/generate/format/docx" => $this->wordFormat 
+                
+                "/proposal/assessment/generate/format/docx" => $this->wordFormat 
         );
         $this->view->reportTitle = "Assessment";
         
@@ -239,7 +234,7 @@ class Proposalgen_ReportController extends My_Controller_Report
         $this->view->availableReports->Solution->active = true;
         
         $this->view->formats = array (
-            "/proposal/solution/generate/format/docx" => $this->wordFormat 
+                "/proposal/solution/generate/format/docx" => $this->wordFormat 
         );
         
         try
@@ -274,7 +269,6 @@ class Proposalgen_ReportController extends My_Controller_Report
         {
             $this->_helper->layout->setLayout('htmlreport');
         }
-    
     } // end function solutionAction
 
     
@@ -285,8 +279,8 @@ class Proposalgen_ReportController extends My_Controller_Report
     {
         $this->view->availableReports->GrossMargin->active = true;
         $this->view->formats = array (
-            "/proposal/grossmargin/generate/format/csv" => $this->csvFormat, 
-            "/proposal/grossmargin/generate/format/docx" => $this->wordFormat 
+                "/proposal/grossmargin/generate/format/csv" => $this->csvFormat, 
+                "/proposal/grossmargin/generate/format/docx" => $this->wordFormat 
         );
         
         try
@@ -321,17 +315,15 @@ class Proposalgen_ReportController extends My_Controller_Report
         {
             $this->_helper->layout->setLayout('htmlreport');
         }
-    
     } // end function solutionAction
 
-    
     public function printingdevicelistAction ()
     {
         $this->view->availableReports->PrintingDeviceList->active = true;
         $this->view->reportTitle = "Printing Device List";
         $this->view->formats = array (
-            "/proposal/printingdevicelist/generate/format/csv" => $this->csvFormat, 
-            "/proposal/printingdevicelist/generate/format/docx" => $this->wordFormat 
+                "/proposal/printingdevicelist/generate/format/csv" => $this->csvFormat, 
+                "/proposal/printingdevicelist/generate/format/docx" => $this->wordFormat 
         );
         
         try
@@ -389,10 +381,9 @@ class Proposalgen_ReportController extends My_Controller_Report
     public function showdevicesAction ()
     {
         $device = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchAll(array (
-            "report_id = ?" => $this->ReportId 
+                "report_id = ?" => $this->ReportId 
         ));
         $this->view->devices = $device;
         $this->_helper->layout->setLayout('blueprint');
     }
-
 } //end report controller

@@ -21,7 +21,7 @@ class Proposalgen_Model_Mapper_UserSession extends Tangent_Model_Mapper_Abstract
 
     /**
      * Maps a database row object to an Application_Model
-     * 
+     *
      * @param Zend_Db_Table_Row $row            
      * @return The appropriate Application_Model
      */

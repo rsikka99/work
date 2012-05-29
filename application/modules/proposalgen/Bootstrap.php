@@ -11,8 +11,8 @@ class Proposalgen_Bootstrap extends Zend_Application_Module_Bootstrap
         $container = $view->navigation()->getContainer();
         $container->addPages($config);
     }
-    
-    protected function _initAutoloader()
+
+    protected function _initAutoloader ()
     {
         $autoloader = Zend_Loader_Autoloader::getInstance();
         $autoloader->registerNamespace('Custom_');

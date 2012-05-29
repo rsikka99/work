@@ -7,7 +7,6 @@
  */
 class Proposalgen_AdminController extends Zend_Controller_Action
 {
-    
     protected $_redirector = null;
 
     function init ()
@@ -43,6 +42,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $this->view->dealer = $dealer_company->company_name;
         return;
     } // end indexAction
+
     
     /**
      * The managecompaniesAction provides a list of active companies for the
@@ -105,7 +105,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             $where = $dealer_companyTable->getAdapter()->quoteInto('dealer_company_id = ?', $dealer_company_id, 'INTEGER');
                             $dealer_companyTable->update($companyData, $where);
                             $this->view->message = 'Company "' . $dealer_company_name . '" has been updated';
-                        
                         }
                         else
                         {
@@ -115,17 +114,13 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             if (count($dealer_company) > 0)
                             {
                                 $this->view->message = 'Company "' . $dealer_company_name . '" already exists.';
-                            
                             }
                             else
                             {
                                 $dealer_companyTable->insert($companyData);
                                 $this->view->message = 'Company "' . $dealer_company_name . '" Added.';
-                            
                             }
-                        
                         }
-                    
                     }
                     else if (array_key_exists('delete_company', $formData) && $formData ['delete_company'] == "Delete")
                     {
@@ -188,22 +183,18 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     // reset form
                     $form->getElement('company_name')->setValue('');
                     $form->getElement('pricing_margin')->setValue('25');
-                
                 }
                 catch ( Zend_Db_Exception $e )
                 {
                     $db->rollback();
                     $this->view->message = 'Database Error: Company "' . $formData ["company_name"] . '" could not be saved.';
-                
                 }
                 catch ( Exception $e )
                 {
                     // CRITICAL UPDATE EXCEPTION
                     $db->rollback();
                     Throw new exception("Critical Company Update Error.", 0, $e);
-                
                 } // end catch
-            
             }
             else
             {
@@ -252,26 +243,22 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         'pricing_margin' => $row ['dc_pricing_margin'], 
                         'is_deleted' => $row ['is_deleted'] 
                 );
-            
             }
             else
             {
                 $formdata = array ();
-            
             }
-        
         }
         catch ( Exception $e )
         {
             // CRITICAL EXCEPTION
             Throw new exception("Critical Error: Unable to find company.", 0, $e);
-        
         } // end catch
-          
+        
+
         // Encode company data to return to the client:
         $json = Zend_Json::encode($formdata);
         $this->view->data = $json;
-    
     }
 
     /**
@@ -295,7 +282,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $wherePriv = "priv_type <> 'System Admin'";
             $whereUsers = "dealer_company_id = " . $dealer_company_id;
             $whereCompany = " AND dealer_company_id = " . $dealer_company_id;
-        
         }
         else
         {
@@ -303,7 +289,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $whereUsers = null;
             $wherePriv = null;
             $whereCompany = null;
-        
         }
         $dealer_company_name = '';
         $company_list_array = array ();
@@ -367,7 +352,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         if ($type == 'dealer')
         {
             $form->getElement('select_company')->setValue($dealer_company_name);
-        
         }
         else
         {
@@ -501,7 +485,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             $privilegedata ['user_id'] = $selUserID;
                             $where = $privilegeTable->getAdapter()->quoteInto('user_id = ?', $selUserID);
                             $user_privilegesTable->update($privilegedata, $where);
-                        
                         }
                         else
                         {
@@ -517,7 +500,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             {
                                 $isvalid = false;
                                 $this->view->message = 'Username "' . $formData ["username"] . '" already exists. Please enter a different username and try again.';
-                            
                             }
                             else
                             {
@@ -585,7 +567,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         {
                             $this->view->message = 'User "' . $formData ["userFirstName"] . " " . $formData ["userLastName"] . '" Saved.';
                         }
-                    
                     }
                     else if (array_key_exists('delete_user', $formData) && $formData ['delete_user'] == "Delete")
                     {
@@ -731,30 +712,24 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         $form->getElement('userPhone')->setValue('');
                         $form->getElement('userEmail')->setValue('');
                     }
-                
                 }
                 catch ( Zend_Db_Exception $e )
                 {
                     $this->view->message = 'A database error has occurred and user "' . $formData ["userFirstName"] . " " . $formData ["userLastName"] . '" could not be saved. If the problem persists, please contact your administrator.';
-                
                 }
                 catch ( Exception $e )
                 {
                     $db->rollback();
                     // CRITICAL UPDATE EXCEPTION
                     throw new exception("A database error has occurred and the user cound not be saved.", 0, $e);
-                
                 }
-            
             }
             else
             {
                 // if formdata was not valid, repopulate form(error messages
                 // from validations are automatically added)
                 $form->populate($formData);
-            
             } // end else
-        
         }
         else
         {
@@ -764,10 +739,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $currElement = $form->getElement('auto_password');
             $currElement->setValue($pword);
         } // end if
-          
+        
+
         // Send form to the view script
         $this->view->form = $form;
-    
     }
 
     public function deleteUser ($selUserID)
@@ -821,14 +796,12 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $user->delete($where);
             
             return true;
-        
         }
         catch ( Exception $e )
         {
             $db->rollback();
             return false;
         }
-    
     }
 
     /**
@@ -934,15 +907,14 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         'priv_type' => '' 
                 );
             }
-        
         }
         catch ( Exception $e )
         {
             // CRITICAL EXCEPTION
             Throw new exception("Critical Error:Unable to find user.", 0, $e);
-        
         } // end catch
-          
+        
+
         // Encode user data to return to the client:
         $json = Zend_Json::encode($formdata);
         $this->view->data = $json;
@@ -1049,10 +1021,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $formdata = array (
                         'launch_date' => $launch_date->toString('mm/dd/yyyy'), 
                         'toner_config_id' => $row [0] ['toner_config_id'], 
-                        'is_copier' => $row [0] ['is_copier'] ? true : false,
-                        'is_scanner' => $row [0] ['is_scanner'] ? true : false,
-                        'is_fax' => $row [0] ['is_fax'] ? true : false,
-                        'is_duplex' => $row [0] ['is_duplex'] ? true : false,
+                        'is_copier' => $row [0] ['is_copier'] ? true : false, 
+                        'is_scanner' => $row [0] ['is_scanner'] ? true : false, 
+                        'is_fax' => $row [0] ['is_fax'] ? true : false, 
+                        'is_duplex' => $row [0] ['is_duplex'] ? true : false, 
                         'is_replacement_device' => $row [0] ['is_replacement_device'], 
                         'watts_power_normal' => $row [0] ['watts_power_normal'], 
                         'watts_power_idle' => $row [0] ['watts_power_idle'], 
@@ -1076,15 +1048,14 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 // empty form values
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             Throw new exception("Critical Error: Unable to find device.", 0, $e);
-        
         } // end catch
-          
+        
+
         // encode user data to return to the client:
         $json = Zend_Json::encode($formdata);
         $this->view->data = $json;
@@ -1113,7 +1084,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             // critical exception
             Throw new exception("Critical Error: Unable to get report count.", 0, $e);
         } // end catch
-          
+        
+
         // encode user data to return to the client:
         $json = Zend_Json::encode($formdata);
         $this->view->data = $json;
@@ -1225,7 +1197,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     }
                     break;
             }
-        
         }
         catch ( Exception $e )
         {
@@ -1355,13 +1326,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 // empty form values
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             Throw new exception("Critical Error: Unable to find device parts.", 0, $e);
-        
         }
         
         // encode user data to return to the client:
@@ -1529,13 +1498,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 // empty form values
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             Throw new exception("Critical Error: Unable to find device parts.", 0, $e);
-        
         }
         
         // encode user data to return to the client:
@@ -1591,13 +1558,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     'total_count' => $total_devices_count, 
                     'device_count' => $num_devices_count 
             );
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             Throw new exception("Critical Error: Unable to find device count.", 0, $e);
-        
         }
         
         // encode user data to return to the client:
@@ -1624,6 +1589,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         // />Man=".$manufacturer_id."<br />Color=".$toner_color_id."<br
         // />Yield=".$toner_yield."<br />Price=".$toner_price."<br />"; die;
         
+
         // validate
         $message = '';
         if ($toner_id == 0 && (empty($toner_sku) || empty($part_type_id) || empty($manufacturer_id) || empty($toner_color_id) || empty($toner_yield) || empty($toner_price)))
@@ -1658,7 +1624,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     {
                         $message = "This toner is already a part for the device.";
                     }
-                
                 }
                 else
                 {
@@ -1692,19 +1657,15 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     );
                     $device_tonerTable->insert($device_tonerData);
                     $message = "The toner has been added.";
-                
                 }
                 
                 $db->commit();
-            
             }
             catch ( Exception $e )
             {
                 $db->rollback();
                 $message = "An error has occurred and the toner was not saved.";
-            
             }
-        
         }
         
         // encode user data to return to the client:
@@ -1740,18 +1701,14 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $message = '';
         
         /*
-         * if($id > 0) { if($toner_sku) { $field = 'toner_sku'; $value =
-         * $toner_sku; if(empty($value)) { $message = "The SKU is not valid.
-         * Please try again."; } } else if($part_type_id) { $field =
-         * 'part_type_id'; $value = $part_type_id; } else if($manufacturer_name)
-         * { $field = 'manufacturer_name'; $value = $manufacturer_name; } else
-         * if($toner_color_id) { $field = 'toner_color_id'; $value =
-         * $toner_color_id; } else if($toner_yield) { $field = 'toner_yield';
-         * $value = $toner_yield; if(!is_numeric($value)) { $message = "The
-         * Yield is not valid. Please try again."; } } else if($toner_price) {
-         * $field = 'toner_price'; $value = str_replace("$","",$toner_price);
-         * if(!is_numeric($value)) { $message = "The price is not valid. Please
-         * try again."; } }
+         * if($id > 0) { if($toner_sku) { $field = 'toner_sku'; $value = $toner_sku; if(empty($value)) { $message = "The
+         * SKU is not valid. Please try again."; } } else if($part_type_id) { $field = 'part_type_id'; $value =
+         * $part_type_id; } else if($manufacturer_name) { $field = 'manufacturer_name'; $value = $manufacturer_name; }
+         * else if($toner_color_id) { $field = 'toner_color_id'; $value = $toner_color_id; } else if($toner_yield) {
+         * $field = 'toner_yield'; $value = $toner_yield; if(!is_numeric($value)) { $message = "The Yield is not valid.
+         * Please try again."; } } else if($toner_price) { $field = 'toner_price'; $value =
+         * str_replace("$","",$toner_price); if(!is_numeric($value)) { $message = "The price is not valid. Please try
+         * again."; } }
          */
         
         if ($oper == "del")
@@ -1770,7 +1727,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $tonerTable->delete($where);
                 $message = "The toner has been deleted.";
             }
-        
         }
         else
         {
@@ -1830,7 +1786,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         }
                     }
                     $db->commit();
-                
                 }
                 catch ( Exception $e )
                 {
@@ -1867,9 +1822,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $apply_all = $this->_getParam('chkAllToners', 0);
         
         /*
-         * / DEBUG echo "replace_mode=" . $replace_mode . "<br />"; echo
-         * "replace_id=" . $replace_id . "<br />"; echo "with_id=" . $with_id .
-         * "<br />"; echo "apply_all=" . $apply_all . "<br />"; die; //
+         * / DEBUG echo "replace_mode=" . $replace_mode . "<br />"; echo "replace_id=" . $replace_id . "<br />"; echo
+         * "with_id=" . $with_id . "<br />"; echo "apply_all=" . $apply_all . "<br />"; die; //
          */
         
         // GET TONER
@@ -1963,6 +1917,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             // ALL MODES END UP DELETING TONER
             // *****************************************************************
             
+
             // REMOVE DEALER TONER OVERRIDES
             $dealer_toner_OverrideTable = new Proposalgen_Model_DbTable_DealerTonerOverride();
             $where = $dealer_toner_OverrideTable->getAdapter()->quoteInto('toner_id = ?', $replace_id, 'INTEGER');
@@ -2014,13 +1969,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $device_tonerTable->delete($where);
             }
             $db->commit();
-        
         }
         catch ( Exception $e )
         {
             $db->rollback();
             $message [] = "An error has occurred and the toner was not removed.";
-        
         }
         
         // encode user data to return to the client:
@@ -2090,25 +2043,22 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     );
                     $i ++;
                 }
-            
             }
             else
             {
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             Throw new exception("Critical Error: Unable to find toners.", 0, $e);
-        
         } // end catch
-          
+        
+
         // encode user data to return to the client:
         $json = Zend_Json::encode($formdata);
         $this->view->data = $json;
-    
     }
 
     /**
@@ -2145,6 +2095,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $formData = $this->_request->getPost();
             // print_r($formData); die;
             
+
             if (isset($formData ['form_mode']) && $formData ['form_mode'] == 'manufacturer')
             {
                 $form->getElement('form_mode')->setValue('manufacturer');
@@ -2160,13 +2111,13 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 
                 if ($ticket_id > 0)
                 {
-                	$this->view->action = "ticket";
+                    $this->view->action = "ticket";
                     $form->getElement('form_mode')->setValue("ticket");
                     $form->getElement('ticket_id')->setValue($ticket_id);
                 }
                 else
                 {
-                	$this->view->action = "mapping";
+                    $this->view->action = "mapping";
                     $form->getElement('form_mode')->setValue("mapping");
                     $form->getElement('hdnID')->setValue($hdnID);
                     $form->getElement('hdnItem')->setValue($hdnItem);
@@ -2200,14 +2151,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         }
                     }
                     $db->commit();
-                
                 }
                 catch ( Exception $e )
                 {
                     $db->rollback();
-                
                 }
-            
             }
             else if (isset($formData ['manufacturer_name']) && $form->isValid($formData))
             {
@@ -2229,7 +2177,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             $where = $manufacturersTable->getAdapter()->quoteInto('manufacturer_id = ?', $manufacturer_id, 'INTEGER');
                             $manufacturersTable->update($manufacturerData, $where);
                             $this->view->message = 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Updated';
-                        
                         }
                         else
                         {
@@ -2258,7 +2205,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 $this->view->message = 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Added.';
                             }
                         }
-                    
                     }
                     else if (array_key_exists('delete_manufacturer', $formData) && $formData ['delete_manufacturer'] == "Delete")
                     {
@@ -2320,19 +2266,15 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     // reset form
                     $currElement->setValue('');
                     $form->getElement('manufacturer_name')->setValue('');
-                
                 }
                 catch ( Exception $e )
                 {
                     $db->rollback();
                     Throw new exception("Critical Manufacturer Update Error.", 0, $e);
-                
                 }
-            
             }
         }
         $this->view->manufacturersForm = $form;
-    
     }
 
     /**
@@ -2375,9 +2317,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         {
             // critical exception
             Throw new exception("Critical Error: Unable to find manufacturer.", 0, $e);
-        
         } // end catch
-          
+        
+
         // encode user data to return to the client:
         $json = Zend_Json::encode($formdata);
         $this->view->data = $json;
@@ -2385,6 +2327,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
     /**
      * The uploadpricingAction allows the system admin or dealer to select a .
+     *
      * csv file with pricing
      * to upload into the database for a specific report. The file must be
      * formatted and contain
@@ -2506,25 +2449,20 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         $results = new Zend_Session_Namespace('results_array');
                         $results->array = $finalDevices;
                     }
-                
                 }
                 catch ( Exception $e )
                 {
                     $this->view->message = "<p><span class=\"warning\">*</span> Error: File could not be uploaded.</p>";
-                
                 }
                 
                 // delete the uploaded file
                 unlink($upload->getFileName());
-            
             }
             else
             {
                 // if upload fails, print error message message
                 $this->view->errMessages = $upload->getMessages();
-            
             }
-        
         }
         
         return;
@@ -2583,7 +2521,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     if ($devicename == '' || $manufacturername == '')
                     {
                         // skip record
-                    
                     }
                     else
                     {
@@ -2714,27 +2651,21 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             }
                         }
                     }
-                
                 }
                 $db->commit();
                 $this->_redirect('/admin/confirmation');
-            
             }
             catch ( Zend_Db_Exception $e )
             {
                 $db->rollBack();
                 $this->view->message = "Unknown Error.";
-            
             }
             catch ( Exception $e )
             {
                 $db->rollBack();
                 $this->view->message = "Error: Your file was not saved. Please double check the file and try again. If you continue to experience problems saving, contact your administrator.<br /><br />";
-            
             }
-        
         }
-    
     }
 
     function resizeImage ($image, $width, $height, $scale)
@@ -2882,7 +2813,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         $image = base64_decode($dealer_company [$field]);
                     }
                 }
-            
             }
             else if (in_array("Dealer Admin", $this->privilege))
             {
@@ -2896,7 +2826,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $dealer_company = $dealer_companyTable->fetchRow($where);
                     $image = base64_decode($dealer_company [$field]);
                 }
-            
             }
             else if (in_array("System Admin", $this->privilege))
             {
@@ -2907,13 +2836,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             
             $this->view->data = $image;
             $db->commit();
-        
         }
         catch ( Exception $e )
         {
             $db->rollback();
             echo $e;
-        
         }
     }
 
@@ -2927,37 +2854,37 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         try
         {
             $upload_dir = $this->config->app->uploadPath; // The directory for
-                                                          // the images to be
-                                                          // saved in
+            // the images to be
+            // saved in
             $upload_path = $upload_dir . "/"; // The path to where the image
-                                              // will be saved
+            // will be saved
             $large_image_prefix = "resize_"; // The prefix name to large image
             $thumb_image_prefix = "thumbnail_"; // The prefix name to the thumb
-                                                // image
+            // image
             $large_image_name = $large_image_prefix . $_SESSION ['random_key']; // New
-                                                                                // name
-                                                                                // of
-                                                                                // the
-                                                                                // large
-                                                                                // image
-                                                                                // (append
-                                                                                // the
-                                                                                // timestamp
-                                                                                // to
-                                                                                // the
-                                                                                // filename)
+            // name
+            // of
+            // the
+            // large
+            // image
+            // (append
+            // the
+            // timestamp
+            // to
+            // the
+            // filename)
             $thumb_image_name = $thumb_image_prefix . $_SESSION ['random_key']; // New
-                                                                                // name
-                                                                                // of
-                                                                                // the
-                                                                                // thumbnail
-                                                                                // image
-                                                                                // (append
-                                                                                // the
-                                                                                // timestamp
-                                                                                // to
-                                                                                // the
-                                                                                // filename)
+            // name
+            // of
+            // the
+            // thumbnail
+            // image
+            // (append
+            // the
+            // timestamp
+            // to
+            // the
+            // filename)
             $large_image_location = $upload_path . $large_image_name . $_SESSION ['user_file_ext'];
             $thumb_image_location = $upload_path . $thumb_image_name . $_SESSION ['user_file_ext'];
             
@@ -2969,14 +2896,12 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 // table is users table
                 $table = new Proposalgen_Model_DbTable_Users();
                 $where = $table->getAdapter()->quoteInto("user_id = ?", $this->user_id, 'INTEGER');
-            
             }
             else
             {
                 // table is dealer_company table
                 $table = new Proposalgen_Model_DbTable_DealerCompany();
                 $where = $table->getAdapter()->quoteInto("dealer_company_id = ?", $this->dealer_company_id, 'INTEGER');
-            
             }
             
             $dealer_company = $table->update($data, $where);
@@ -2993,12 +2918,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             }
             
             $db->commit();
-        
         }
         catch ( Exception $e )
         {
             $db->rollback();
-        
         }
     }
 
@@ -3016,59 +2939,60 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         if (! isset($_SESSION ['random_key']) || strlen($_SESSION ['random_key']) == 0)
         {
             $_SESSION ['random_key'] = strtotime(date('Y-m-d H:i:s')); // assign
-                                                                       // the
-                                                                       // timestamp
-                                                                       // to the
-                                                                       // session
-                                                                       // variable
+            // the
+            // timestamp
+            // to the
+            // session
+            // variable
             $_SESSION ['user_file_ext'] = "";
         }
         
         $this->upload_dir = $this->config->app->uploadPath; // The directory for
-                                                            // the images to be
-                                                            // saved in
+        // the images to be
+        // saved in
         $this->upload_path = $this->upload_dir . "/"; // The path to where the
-                                                      // image will be saved
+        // image will be saved
         $large_image_prefix = "resize_"; // The prefix name to large image
         $thumb_image_prefix = "thumbnail_"; // The prefix name to the thumb
-                                            // image
+        // image
         $this->large_image_name = $large_image_prefix . $_SESSION ['random_key']; // New
-                                                                                  // name
-                                                                                  // of
-                                                                                  // the
-                                                                                  // large
-                                                                                  // image
-                                                                                  // (append
-                                                                                  // the
-                                                                                  // timestamp
-                                                                                  // to
-                                                                                  // the
-                                                                                  // filename)
+        // name
+        // of
+        // the
+        // large
+        // image
+        // (append
+        // the
+        // timestamp
+        // to
+        // the
+        // filename)
         $this->thumb_image_name = $thumb_image_prefix . $_SESSION ['random_key']; // New
-                                                                                  // name
-                                                                                  // of
-                                                                                  // the
-                                                                                  // thumbnail
-                                                                                  // image
-                                                                                  // (append
-                                                                                  // the
-                                                                                  // timestamp
-                                                                                  // to
-                                                                                  // the
-                                                                                  // filename)
-                                                                                  
+        // name
+        // of
+        // the
+        // thumbnail
+        // image
+        // (append
+        // the
+        // timestamp
+        // to
+        // the
+        // filename)
+        
+
         // Only one of these image types should be allowed for upload
-                                                                                  // $allowed_image_types
-                                                                                  // =
-                                                                                  // array('image/pjpeg'=>"jpg",'image/jpeg'=>"jpg",'image/jpg'=>"jpg",'image/png'=>"png",'image/x-png'=>"png",'image/gif'=>"gif");
+        // $allowed_image_types
+        // =
+        // array('image/pjpeg'=>"jpg",'image/jpeg'=>"jpg",'image/jpg'=>"jpg",'image/png'=>"png",'image/x-png'=>"png",'image/gif'=>"gif");
         $this->allowed_image_types = array (
                 'image/pjpeg' => "jpg", 
                 'image/jpeg' => "jpg", 
                 'image/jpg' => "jpg" 
         );
         $allowed_image_ext = array_unique($this->allowed_image_types); // do not
-                                                                       // change
-                                                                       // this
+        // change
+        // this
         $image_ext = ""; // initialise variable, do not change this.
         foreach ( $allowed_image_ext as $mime_type => $ext )
         {
@@ -3153,9 +3077,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         }
         catch ( Exception $e )
         {
-        
         }
-    
     }
 
     public function scale_image ($height, $width)
@@ -3186,11 +3108,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $scale = 1;
                 $uploaded = $this->resizeImage($this->large_image_location, $width, $height, $scale);
             }
-        
         }
         catch ( Exception $e )
         {
-        
         }
     }
 
@@ -3206,14 +3126,15 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         // Get Override Settings
         $dealerCompany = Proposalgen_Model_DealerCompany::getMasterCompany();
         $dealerSettings = $dealerCompany->getReportSettings(false); // Get the
-                                                                    // settings
-                                                                    // without
-                                                                    // any
-                                                                    // overrides
-                                                                    // for the
-                                                                    // values on
-                                                                    // the form
-                                                                    
+        // settings
+        // without
+        // any
+        // overrides
+        // for the
+        // values on
+        // the form
+        
+
         // Grab the settings form
         $form = new Proposalgen_Form_Settings_SystemAdmin();
         
@@ -3239,6 +3160,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $formData = $this->_request->getPost();
             //print_r($formData); die;
             
+
             if ($form->isValid($formData))
             {
                 if (isset($formData ['save_settings']))
@@ -3283,7 +3205,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 "success" => "Your settings have been updated." 
                         ));
                         $db->commit();
-                    
                     }
                     catch ( Zend_Db_Exception $e )
                     {
@@ -3344,9 +3265,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         
         $user = Proposalgen_Model_User::getCurrentUser();
         $userSettings = $user->getReportSettings(false); // Get the user
-                                                         // settings with no
-                                                         // overrides
-                                                         
+        // settings with no
+        // overrides
+        
+
         // Grab the settings form
         $form = new Proposalgen_Form_Settings_User();
         
@@ -3412,7 +3334,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 "success" => "Your settings have been updated." 
                         ));
                         $db->commit();
-                    
                     }
                     catch ( Zend_Db_Exception $e )
                     {
@@ -3420,7 +3341,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         $this->_helper->flashMessenger(array (
                                 "error" => "An error occured while saving your settings." 
                         ));
-                    
                     }
                     catch ( Exception $e )
                     {
@@ -3551,17 +3471,14 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 if ($formData ["manufacturer_id"] == 0)
                 {
                     $this->view->message = 'Error: You must select a manufacturer.';
-                
                 }
                 else if ($formData ["printer_model"] == 0)
                 {
                     $this->view->message = 'Error: You must select a printer model.';
-                
                 }
                 else if ($formData ["override_price"] != '' && $formData ["override_price"] <= 0)
                 {
                     $this->view->message = 'Error: You must blank our the value to delete it or enter a number greater then zero.';
-                
                 }
                 else
                 {
@@ -3601,12 +3518,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 if (empty($formData ["override_price"]))
                                 {
                                     $dealer_device_overrideTable->delete($where);
-                                
                                 }
                                 else if (count($dealer_device_override) > 0)
                                 {
                                     $dealer_device_overrideTable->update($dealer_device_overrideData, $where);
-                                
                                 }
                                 else
                                 {
@@ -3615,12 +3530,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                     $dealer_device_overrideTable->insert($dealer_device_overrideData);
                                 }
                                 $this->view->message = 'The Printer has been updated.';
-                            
                             }
                             else
                             {
                                 $this->view->message = 'Database Error: Printer Model could not be found.';
-                            
                             }
                             
                             $toner_array = array ();
@@ -3642,12 +3555,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                     if ($override_price != '' && ! is_numeric($override_price))
                                     {
                                         $message = "Please enter a valid price greater then zero.";
-                                    
                                     }
                                     else if ($override_price != '' && $override_price <= 0)
                                     {
                                         $message = "Please blank out price to remove it or enter a price greater then zero.";
-                                    
                                     }
                                     
                                     if (empty($message))
@@ -3676,12 +3587,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                                 if (empty($override_price))
                                                 {
                                                     $dealer_toner_overrideTable->delete($where);
-                                                
                                                 }
                                                 else if (count($dealer_toner_override) > 0)
                                                 {
                                                     $dealer_toner_overrideTable->update($dealer_toner_overrideData, $where);
-                                                
                                                 }
                                                 else
                                                 {
@@ -3690,32 +3599,24 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                                     $dealer_toner_overrideTable->insert($dealer_toner_overrideData);
                                                 }
                                                 $this->view->message = 'The Printer has been updated.';
-                                            
                                             }
                                             else
                                             {
                                                 $message = "Toner was not found.";
-                                            
                                             }
-                                        
                                         }
                                         catch ( Exception $e )
                                         {
                                             $db->rollback();
                                             $this->view->message = "An error has occurred and the toner price override was not saved.";
-                                        
                                         }
-                                    
                                     }
                                     else
                                     {
                                         $db->rollback();
                                         $this->view->message = $message;
-                                    
                                     }
-                                
                                 }
-                            
                             }
                             $db->commit();
                             
@@ -3724,41 +3625,33 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             
                             // destroying the request session.
                             Zend_Session::namespaceUnset('request');
-                        
                         }
                         catch ( Zend_Db_Exception $e )
                         {
                             $db->rollback();
                             $this->view->message = 'Database Error: Override price for "' . $printer_model . '" could not be set.';
-                        
                         }
                         catch ( Exception $e )
                         {
                             // CRITICAL UPDATE EXCEPTION
                             $db->rollback();
                             Throw new exception("Critical Override Price Error.", 0, $e);
-                        
                         } // end catch
-                    
                     } // end elseif
-                
                 }
-            
             }
             else
             {
                 // if formdata was not valid, repopulate form(error messages
                 // from validations are automatically added)
                 $form->populate($formData);
-            
             } // end else
-        
         } // end if
         
+
         $this->view->deviceform = $form;
         
         // ********************************************************************/
-    
     }
 
     /**
@@ -3819,37 +3712,31 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             'device_price' => $devicePrice, 
                             'override_price' => $deviceOverride 
                     );
-                
                 }
                 else
                 {
                     // empty form values
                     $formdata = array ();
-                
                 }
-            
             }
             else
             {
                 // empty form values
                 $formdata = array ();
-            
             }
-        
         }
         catch ( Zend_Db_Exception $e )
         {
             $db->rollback();
             $this->view->message = 'Database Error: Device not found.';
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             Throw new exception("Critical Error: Unable to find device.", 0, $e);
-        
         } // end catch
-          
+        
+
         // encode user data to return to the client:
         $json = Zend_Json::encode($formdata);
         $this->view->data = $json;
@@ -3958,15 +3845,14 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         0 
                 );
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             Throw new exception("Critical Error: Unable to find device parts.", 0, $e);
-        
         } // end catch
-          
+        
+
         // encode user data to return to the client:
         $json = Zend_Json::encode($formdata);
         $this->view->data = $json;
@@ -3987,12 +3873,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         if ($toner_price != '' && ! is_numeric($toner_price))
         {
             $message = "Please enter a valid price greater then zero.";
-        
         }
         else if ($toner_price != '' && $toner_price <= 0)
         {
             $message = "Please blank out price to remove it or enter a price greater then zero.";
-        
         }
         
         if (empty($message))
@@ -4022,13 +3906,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     {
                         $dealer_toner_overrideTable->delete($where);
                         $message = "Toner price override has been removed.";
-                    
                     }
                     else if (count($dealer_toner_override) > 0)
                     {
                         $dealer_toner_overrideTable->update($dealer_toner_overrideData, $where);
                         $message = "Toner price override has been updated.";
-                    
                     }
                     else
                     {
@@ -4037,22 +3919,18 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         $dealer_toner_overrideTable->insert($dealer_toner_overrideData);
                         $message = "Toner price override has been set.";
                     }
-                
                 }
                 else
                 {
                     $message = "Toner was not found.";
-                
                 }
                 
                 $db->commit();
-            
             }
             catch ( Exception $e )
             {
                 $db->rollback();
                 $this->view->message = "An error has occurred and the toner price override was not saved.";
-            
             }
         }
         
@@ -4145,17 +4023,14 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 if ($formData ["manufacturer_id"] == 0)
                 {
                     $this->view->message = 'Error: You must select a manufacturer.';
-                
                 }
                 else if ($formData ["printer_model"] == 0)
                 {
                     $this->view->message = 'Error: You must select a printer model.';
-                
                 }
                 else if ($formData ["override_price"] != '' && $formData ["override_price"] <= 0)
                 {
                     $this->view->message = 'Error: You must blank out the value to delete it or enter a number greater then zero.';
-                
                 }
                 else
                 {
@@ -4195,27 +4070,22 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 if (empty($formData ["override_price"]))
                                 {
                                     $user_device_overrideTable->delete($where);
-                                
                                 }
                                 else if (count($user_device_override) > 0)
                                 {
                                     $user_device_overrideTable->update($user_device_overrideData, $where);
-                                
                                 }
                                 else
                                 {
                                     $user_device_overrideData ['user_id'] = $this->user_id;
                                     $user_device_overrideData ['master_device_id'] = $master_device_id;
                                     $user_device_overrideTable->insert($user_device_overrideData);
-                                
                                 }
                                 $this->view->message = 'The Printer has been updated.';
-                            
                             }
                             else
                             {
                                 $this->view->message = 'Database Error: Printer Model could not be found.';
-                            
                             }
                             
                             $toner_array = array ();
@@ -4237,12 +4107,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                     if ($override_price != '' && ! is_numeric($override_price))
                                     {
                                         $message = "Please enter a valid price greater then zero.";
-                                    
                                     }
                                     else if ($override_price != '' && $override_price <= 0)
                                     {
                                         $message = "Please blank out price to remove it or enter a price greater then zero.";
-                                    
                                     }
                                     
                                     if (empty($message))
@@ -4271,47 +4139,36 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                                 if (empty($override_price))
                                                 {
                                                     $user_toner_overrideTable->delete($where);
-                                                
                                                 }
                                                 else if (count($user_toner_override) > 0)
                                                 {
                                                     $user_toner_overrideTable->update($user_toner_overrideData, $where);
-                                                
                                                 }
                                                 else
                                                 {
                                                     $user_toner_overrideData ['toner_id'] = $toner_id;
                                                     $user_toner_overrideData ['user_id'] = $this->user_id;
                                                     $user_toner_overrideTable->insert($user_toner_overrideData);
-                                                
                                                 }
                                                 $this->view->message = 'The Printer has been updated.';
-                                            
                                             }
                                             else
                                             {
                                                 $message = "Toner was not found.";
-                                            
                                             }
-                                        
                                         }
                                         catch ( Exception $e )
                                         {
                                             $db->rollback();
                                             $message = "<p>An error has occurred and the toner price override was not saved.</p>";
-                                        
                                         }
-                                    
                                     }
                                     else
                                     {
                                         $db->rollback();
                                         $this->view->message = $message;
-                                    
                                     }
-                                
                                 }
-                            
                             }
                             $db->commit();
                             
@@ -4320,14 +4177,12 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             
                             // destroying the request session.
                             Zend_Session::namespaceUnset('request');
-                        
                         }
                         catch ( Zend_Db_Exception $e )
                         {
                             $db->rollback();
                             $this->view->message = 'Database Error: Override price for "' . $printer_model . '" could not be set.';
                             echo $e;
-                        
                         }
                         catch ( Exception $e )
                         {
@@ -4335,28 +4190,22 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             $db->rollback();
                             Throw new exception("Critical Override Price Error.", 0, $e);
                             echo $e;
-                        
                         } // end catch
-                    
                     } // end elseif
-                
                 }
-            
             }
             else
             {
                 // if formdata was not valid, repopulate form(error messages
                 // from validations are automatically added)
                 $form->populate($formData);
-            
             } // end else
-        
         } // end if
         
+
         $this->view->deviceform = $form;
         
         // ********************************************************************/
-    
     }
 
     /**
@@ -4426,37 +4275,31 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             'device_price' => $devicePrice, 
                             'override_price' => money_format('%i', ($result [0] ['user_device_price'] > 0 ? $result [0] ['user_device_price'] : null)) 
                     );
-                
                 }
                 else
                 {
                     // empty form values
                     $formdata = array ();
-                
                 }
-            
             }
             else
             {
                 // empty form values
                 $formdata = array ();
-            
             }
-        
         }
         catch ( Zend_Db_Exception $e )
         {
             $db->rollback();
             $this->view->message = 'Database Error: Device not found.';
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             Throw new exception("Critical Error: Unable to find device.", 0, $e);
-        
         } // end catch
-          
+        
+
         // encode user data to return to the client:
         $json = Zend_Json::encode($formdata);
         $this->view->data = $json;
@@ -4579,15 +4422,14 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         0 
                 );
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             Throw new exception("Critical Error: Unable to find device parts.", 0, $e);
-        
         } // end catch
-          
+        
+
         // encode user data to return to the client:
         $json = Zend_Json::encode($formdata);
         $this->view->data = $json;
@@ -4608,12 +4450,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         if ($toner_price != '' && ! is_numeric($toner_price))
         {
             $message = "Please enter a valid price greater then zero.";
-        
         }
         else if ($toner_price != '' && $toner_price <= 0)
         {
             $message = "Please blank out price to remove it or enter a price greater then zero.";
-        
         }
         
         if (empty($message))
@@ -4643,13 +4483,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     {
                         $user_toner_overrideTable->delete($where);
                         $message = "Toner price override has been removed.";
-                    
                     }
                     else if (count($user_toner_override) > 0)
                     {
                         $user_toner_overrideTable->update($user_toner_overrideData, $where);
                         $message = "Toner price override has been updated.";
-                    
                     }
                     else
                     {
@@ -4658,22 +4496,18 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         $user_toner_overrideTable->insert($user_toner_overrideData);
                         $message = "Toner price override has been set.";
                     }
-                
                 }
                 else
                 {
                     $message = "Toner was not found.";
-                
                 }
                 
                 $db->commit();
-            
             }
             catch ( Exception $e )
             {
                 $db->rollback();
                 $message = "<p>An error has occurred and the toner price override was not saved.</p><div>" . $e . "</div>";
-            
             }
         }
         
@@ -4712,12 +4546,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $db->commit();
             foreach ( $allRequests as $key )
                 $userRows [] = $key;
-        
         }
         catch ( Zend_Db_Exception $e )
         {
             $db->rollback();
-        
         }
         catch ( Exception $e )
         {
@@ -4725,6 +4557,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $db->rollback();
         } // end catch
         
+
         $this->view->headerArray = $headers;
         $this->view->requestRows = $userRows;
     }
@@ -4746,20 +4579,17 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $where = $removeRequest->getAdapter()->quoteInto('request_id = ?', $request_id, 'INTEGER');
             $removeRequest->delete($where);
             $db->commit();
-        
         }
         catch ( Zend_Db_Exception $e )
         {
             $db->rollback();
             $this->view->message = 'Database Error: Request could not be removed.';
-        
         }
         catch ( Exception $e )
         {
             // CRITICAL UPDATE EXCEPTION
             $db->rollback();
             Throw new exception("Critical Device Update Error.", 0, $e);
-        
         } // end catch
     }
 
@@ -4927,7 +4757,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $session = new Zend_Session_Namespace('report');
                     $session->report_id = $formData ["report_id"];
                     $this->_redirect('/report');
-                
                 }
                 else if ($formData ['form_mode'] == 'delete')
                 {
@@ -4949,10 +4778,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     {
                         $this->view->message = "The report(s) were successfully deleted.";
                     }
-                
                 }
                 $db->commit();
-            
             }
             catch ( Exception $e )
             {
@@ -4960,7 +4787,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $this->view->message = "There was an error while trying to delete the reports. Please contact your administrator.";
             }
         }
-    
     }
 
     public function myreportslistAction ()
@@ -5000,12 +4826,12 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $select = $db->select()
                 ->from(array (
                     'r' => 'reports' 
-            	))
+            ))
                 ->joinLeft(array (
                     'u' => 'users' 
-            	), 'u.user_id = r.user_id', array (
+            ), 'u.user_id = r.user_id', array (
                     'username' 
-            	))
+            ))
                 ->where($where);
             $stmt = $db->query($select);
             $result = $stmt->fetchAll();
@@ -5039,7 +4865,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         {
             // critical exception
             echo $e->getMessage();
-        
         }
         
         // encode user data to return to the client:
@@ -5101,7 +4926,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $reportsTable->delete($where);
                 $db->commit();
                 return 1;
-            
             }
             catch ( Zend_Db_Exception $e )
             {
@@ -5110,7 +4934,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 die();
                 throw new Exception("Unknown Database Error.", 0, $e);
                 return 0;
-            
             }
             catch ( Exception $e )
             {
@@ -5197,12 +5020,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                             $passvalid = 1;
                                             $this->view->message = "Value must be numeric. Please correct it and try again.";
                                             break;
-                                        
                                         }
                                         else if ($price == "0")
                                         {
                                             $dealer_toner_overrideTable->delete($where);
-                                        
                                         }
                                         else if ($price > 0)
                                         {
@@ -5235,7 +5056,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             {
                                 $this->view->message = "<p>The toner pricing updates have been applied successfully.</p>";
                             }
-                        
                         }
                         else
                         {
@@ -5258,12 +5078,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                             $passvalid = 1;
                                             $this->view->message = "Value must be numeric. Please correct it and try again.";
                                             break;
-                                        
                                         }
                                         else if ($price == "0")
                                         {
                                             $dealer_device_overrideTable->delete($where);
-                                        
                                         }
                                         else if ($price > 0)
                                         {
@@ -5296,9 +5114,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             {
                                 $this->view->message = "<p>The printer pricing updates have been applied successfully.</p>";
                             }
-                        
                         }
-                    
                     }
                     else
                     {
@@ -5382,7 +5198,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         $passvalid = 1;
                                         $this->view->message = "All values must be numeric. Please correct it and try again.";
                                         break;
-                                    
                                     }
                                     else if ($price != '')
                                     {
@@ -5456,21 +5271,17 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     }
                 }
                 $db->commit();
-            
             }
             catch ( Exception $e )
             {
                 $db->rollback();
                 $this->view->message = "Error: The updates were not saved.";
-            
             }
         }
-    
     }
 
     public function bulkpartspricingAction ()
     {
-        
         $this->view->title = "Bulk Toner Pricing Update";
         $this->view->parts_list = array ();
         $db = Zend_Db_Table::getDefaultAdapter();
@@ -5575,7 +5386,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 $passvalid = 1;
                                 $this->view->message = "Value must be numeric. Please correct it and try again.";
                                 break;
-                            
                             }
                             else if ($price != '')
                             {
@@ -5591,7 +5401,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 $tonerTable->update($tonerData, $where);
                                 $summary .= "Updated part from " . $key ['toner_price'] . " to " . $price . "<br />";
                             }
-                        
                         }
                     }
                     
@@ -5602,13 +5411,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $this->view->manufacturer_id = $formData ['manufacturer_filter'];
                 }
                 $db->commit();
-            
             }
             catch ( Exception $e )
             {
                 $db->rollback();
                 $this->view->message = "Error: The updates were not saved.";
-            
             }
         }
         
@@ -5699,12 +5506,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         $passvalid = 1;
                                         $this->view->message = "Value must be numeric. Please correct it and try again.";
                                         break;
-                                    
                                     }
                                     else if ($price == "0")
                                     {
                                         $dealer_toner_overrideTable->delete($where);
-                                    
                                     }
                                     else if ($price > 0)
                                     {
@@ -5760,12 +5565,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         $passvalid = 1;
                                         $this->view->message = "Value must be numeric. Please correct it and try again.";
                                         break;
-                                    
                                     }
                                     else if ($price == "0")
                                     {
                                         $dealer_laborCPP_overrideTable->delete($where);
-                                    
                                     }
                                     else if ($price > 0)
                                     {
@@ -5821,12 +5624,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         $passvalid = 1;
                                         $this->view->message = "Value must be numeric. Please correct it and try again.";
                                         break;
-                                    
                                     }
                                     else if ($price == "0")
                                     {
                                         $dealer_partsCPP_overrideTable->delete($where);
-                                    
                                     }
                                     else if ($price > 0)
                                     {
@@ -5882,12 +5683,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         $passvalid = 1;
                                         $this->view->message = "Value must be numeric. Please correct it and try again.";
                                         break;
-                                    
                                     }
                                     else if ($price == "0")
                                     {
                                         $dealer_device_overrideTable->delete($where);
-                                    
                                     }
                                     else if ($price > 0)
                                     {
@@ -5920,20 +5719,16 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         {
                             $this->view->message = "<p>The printer pricing updates have been applied successfully.</p>";
                         }
-                    
                     }
                 }
                 $db->commit();
-            
             }
             catch ( Exception $e )
             {
                 $db->rollback();
                 $this->view->message = "Error: The updates were not saved.";
-            
             }
         }
-    
     }
 
     public function bulkdealerpartspricingAction ()
@@ -6052,12 +5847,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                     $passvalid = 1;
                                     $this->view->message = "Value must be numeric. Please correct it and try again.";
                                     break;
-                                
                                 }
                                 else if ($price == "0")
                                 {
                                     $dealer_toner_overrideTable->delete($where);
-                                
                                 }
                                 else if ($price > 0)
                                 {
@@ -6092,13 +5885,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $this->view->manufacturer_id = $formData ['manufacturer_filter'];
                 }
                 $db->commit();
-            
             }
             catch ( Exception $e )
             {
                 $db->rollback();
                 $this->view->message = "Error: The updates were not saved.";
-            
             }
         }
         
@@ -6187,12 +5978,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         $passvalid = 1;
                                         $this->view->message = "Value must be numeric. Please correct it and try again.";
                                         break;
-                                    
                                     }
                                     else if ($price == "0")
                                     {
                                         $user_toner_overrideTable->delete($where);
-                                    
                                     }
                                     else if ($price > 0)
                                     {
@@ -6248,7 +6037,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             }
                             $this->view->repop_array = $repop_array;
                         }
-                    
                     }
                     else
                     {
@@ -6272,12 +6060,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         $passvalid = 1;
                                         $this->view->message = "Value must be numeric. Please correct it and try again.";
                                         break;
-                                    
                                     }
                                     else if ($price == "0")
                                     {
                                         $user_device_overrideTable->delete($where);
-                                    
                                     }
                                     else if ($price > 0)
                                     {
@@ -6333,20 +6119,16 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             }
                             $this->view->repop_array = $repop_array;
                         }
-                    
                     }
                 }
                 $db->commit();
-            
             }
             catch ( Exception $e )
             {
                 $db->rollback();
                 $this->view->message = "Error: The updates were not saved.";
-            
             }
         }
-    
     }
 
     public function bulkfilepricingAction ()
@@ -6395,7 +6177,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 // ************************************************************/
                 // * Initial Page Load
                 // ************************************************************/
-            
             }
             else if ($formData ['hdnAction'] == "import")
             {
@@ -6403,6 +6184,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 // * Save Imported File To Database
                 // ************************************************************/
                 
+
                 // get arrays from indexAction
                 $headers = new Zend_Session_Namespace('import_headers_array');
                 $results = new Zend_Session_Namespace('import_results_array');
@@ -6466,9 +6248,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                     {
                                         $update = true;
                                     }
-                                
                                 }
-                            
                             }
                             else if ($hdnRole != "user" && (! in_array("Standard User", $this->privilege) && $company > 1))
                             {
@@ -6510,13 +6290,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         if ($device_price == 0 || empty($device_price))
                                         {
                                             $delete = true;
-                                        
                                         }
                                         else if ($check [0] ['device_price'] != $device_price)
                                         {
                                             $update = true;
                                         }
-                                    
                                     }
                                     else
                                     {
@@ -6530,7 +6308,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         }
                                     }
                                 }
-                            
                             }
                             else if (in_array("Standard User", $this->privilege) || $hdnRole == "user")
                             {
@@ -6572,13 +6349,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         if ($device_price == 0 || empty($device_price))
                                         {
                                             $delete = true;
-                                        
                                         }
                                         else if ($check [0] ['device_price'] != $device_price)
                                         {
                                             $update = true;
                                         }
-                                    
                                     }
                                     else
                                     {
@@ -6593,7 +6368,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                     }
                                 }
                             }
-                        
                         }
                         else
                         {
@@ -6624,9 +6398,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                     {
                                         $update = true;
                                     }
-                                
                                 }
-                            
                             }
                             else if ($hdnRole != "user" && (! in_array("Standard User", $this->privilege) && $company > 1))
                             {
@@ -6668,13 +6440,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         if ($toner_price == 0 || empty($toner_price))
                                         {
                                             $delete = true;
-                                        
                                         }
                                         else if ($check [0] ['toner_price'] != $toner_price)
                                         {
                                             $update = true;
                                         }
-                                    
                                     }
                                     else
                                     {
@@ -6688,7 +6458,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         }
                                     }
                                 }
-                            
                             }
                             else if (in_array("Standard User", $this->privilege) || $hdnRole == "user")
                             {
@@ -6730,13 +6499,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         if ($toner_price == 0 || empty($toner_price))
                                         {
                                             $delete = true;
-                                        
                                         }
                                         else if ($check [0] ['toner_price'] != $toner_price)
                                         {
                                             $update = true;
                                         }
-                                    
                                     }
                                     else
                                     {
@@ -6750,9 +6517,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         }
                                     }
                                 }
-                            
                             }
-                        
                         }
                         
                         // update database
@@ -6771,19 +6536,15 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         {
                             $table->insert($data);
                         }
-                    
                     }
                     $this->view->message = "Your pricing updates have been applied successfully.";
                     $db->commit();
-                
                 }
                 catch ( Exception $e )
                 {
                     $db->rollback();
                     $this->view->message = "<span class=\"warning\">*</span> An error has occurred during the update and your changes were not applied. Please review your file and try again.";
-                
                 }
-            
             }
             else
             {
@@ -6845,48 +6606,39 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             {
                                 $import_type = "toner";
                                 $key_toner_id = $array_key;
-                            
                             }
                             else if (strtolower($value) == "manufacturer")
                             {
                                 $key_manufacturer = $array_key;
-                            
                             }
                             else if (strtolower($value) == "type")
                             {
                                 $key_part_type = $array_key;
-                            
                             }
                             else if (strtolower($value) == "sku")
                             {
                                 $key_sku = $array_key;
-                            
                             }
                             else if (strtolower($value) == "color")
                             {
                                 $key_color = $array_key;
-                            
                             }
                             else if (strtolower($value) == "yield")
                             {
                                 $key_yield = $array_key;
-                            
                             }
                             else if (strtolower($value) == "price")
                             {
                                 $key_new_price = $array_key;
-                            
                             }
                             else if (strtolower($value) == "master printer id")
                             {
                                 $import_type = "printer";
                                 $key_master_printer_id = $array_key;
-                            
                             }
                             else if (strtolower($value) == "printer model")
                             {
                                 $key_printer_model = $array_key;
-                            
                             }
                             $array_key += 1;
                         }
@@ -6932,7 +6684,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                                 $final_devices [3] = $current_device_price;
                                                 $final_devices [4] = $devices [$key] [$key_new_price];
                                             }
-                                        
                                         }
                                         else if ($this->view->hdnRole != "user" && (! in_array("Standard User", $this->privilege) && $company > 1))
                                         {
@@ -6973,7 +6724,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                                 $final_devices [4] = $current_override_price;
                                                 $final_devices [5] = $devices [$key] [$key_new_price];
                                             }
-                                        
                                         }
                                         else if (in_array("Standard User", $this->privilege) || $this->view->hdnRole == "user")
                                         {
@@ -7015,7 +6765,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                                 $final_devices [5] = $devices [$key] [$key_new_price];
                                             }
                                         }
-                                    
                                     }
                                     else
                                     {
@@ -7052,7 +6801,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                                 $final_devices [6] = $current_toner_price;
                                                 $final_devices [7] = $devices [$key] [$key_new_price];
                                             }
-                                        
                                         }
                                         else if ($this->view->hdnRole != "user" && (! in_array("Standard User", $this->privilege) && $company > 1))
                                         {
@@ -7099,7 +6847,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                                 $final_devices [7] = $current_override_price;
                                                 $final_devices [8] = $devices [$key] [$key_new_price];
                                             }
-                                        
                                         }
                                         else if (in_array("Standard User", $this->privilege) || $this->view->hdnRole == "user")
                                         {
@@ -7170,30 +6917,24 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             
                             $results_session = new Zend_Session_Namespace('import_results_array');
                             $results_session->array = $finalDevices;
-                        
                         }
-                    
                     }
                     catch ( Exception $e )
                     {
                         $db->rollback();
                         $this->view->message = "<span class=\"warning\">*</span> An error has occurred during the update and your changes were not applied. Please review your file and try again.";
-                    
                     }
                     
                     // delete the file we just uploaded
                     unlink($upload->getFileName());
-                
                 }
                 else
                 {
                     // if upload fails, print error message message
                     $this->view->errMessages = $upload->getMessages();
-                
                 }
             }
             $this->view->hdnRole = $formData ['hdnRole'];
-        
         }
         return;
     }
@@ -7262,7 +7003,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     ));
                     $stmt = $db->query($select);
                     $result = $stmt->fetchAll();
-                
                 }
                 else if ($hdnRole != "user" && (! in_array("Standard User", $this->privilege) && $company > 1))
                 {
@@ -7293,7 +7033,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     ));
                     $stmt = $db->query($select);
                     $result = $stmt->fetchAll();
-                
                 }
                 else if (in_array("Standard User", $this->privilege || $hdnRole == "user"))
                 {
@@ -7324,7 +7063,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     ));
                     $stmt = $db->query($select);
                     $result = $stmt->fetchAll();
-                
                 }
                 
                 foreach ( $result as $key => $value )
@@ -7347,9 +7085,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             $value ['printer_model'], 
                             $price 
                     );
-                
                 }
-            
             }
             else
             {
@@ -7394,7 +7130,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     ));
                     $stmt = $db->query($select);
                     $result = $stmt->fetchAll();
-                
                 }
                 else if ($hdnRole != "user" && (! in_array("Standard User", $this->privilege) && $company > 1))
                 {
@@ -7434,7 +7169,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     ));
                     $stmt = $db->query($select);
                     $result = $stmt->fetchAll();
-                
                 }
                 else if (in_array("Standard User", $this->privilege || $hdnRole == "user"))
                 {
@@ -7474,7 +7208,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     ));
                     $stmt = $db->query($select);
                     $result = $stmt->fetchAll();
-                
                 }
                 
                 foreach ( $result as $key => $value )
@@ -7501,14 +7234,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             $price 
                     );
                 }
-            
             }
-        
         }
         catch ( Exception $e )
         {
             throw new Exception("CSV File could not be opened/written for export.", 0, $e);
-        
         }
         
         $this->view->fieldTitles = implode(",", $fieldTitles);
@@ -7521,7 +7251,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $this->view->fieldList = $newFieldList;
         
         Tangent_Functions::setHeadersForDownload($filename);
-    
     }
 
     public function importpricingAction ()
@@ -7531,13 +7260,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         
         if ($this->_request->isPost())
         {
-        
         }
         else
         {
-        
         }
-    
     }
 
     public function masterdeviceslistAction ()
@@ -7657,13 +7383,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             echo $e->getMessage();
-        
         }
         
         // encode user data to return to the client:
@@ -7823,13 +7547,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             echo $e->getMessage();
-        
         }
         
         // encode user data to return to the client:
@@ -7966,13 +7688,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             echo $e->getMessage();
-        
         }
         
         // encode user data to return to the client:
@@ -8182,13 +7902,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             echo $e->getMessage();
-        
         }
         
         // encode user data to return to the client:
@@ -8391,13 +8109,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             echo $e->getMessage();
-        
         }
         
         // encode user data to return to the client:
@@ -8597,19 +8313,16 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     );
                     $i ++;
                 }
-            
             }
             else
             {
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             echo $e->getMessage();
-        
         }
         
         // encode user data to return to the client:
@@ -8668,6 +8381,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $formData = $this->_request->getPost();
             // print_r($formData); die;
             
+
             if (isset($formData ['ticket_id']))
             {
                 $this->view->form_mode = $formData ['form_mode'];
@@ -8700,29 +8414,23 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             if (count($matchup) > 0)
                             {
                                 $master_matchup_pfTable->update($master_matchup_pfData, $where);
-                            
                             }
                             else
                             {
                                 $master_matchup_pfData ['devices_pf_id'] = $devices_pf_id;
                                 $master_matchup_pfTable->insert($master_matchup_pfData);
-                            
                             }
-                        
                         }
                         else if ($devices_pf_id > 0)
                         {
                             // no matchup set so remove any records for device
                             $where = $master_matchup_pfTable->getAdapter()->quoteInto('devices_pf_id = ?', $devices_pf_id, 'INTEGER');
                             $master_matchup_pfTable->delete($where);
-                        
                         }
                         unset($master_matchup_pfData);
-                    
                     }
                     $db->commit();
                     $this->view->message = "<p>The matchups have been saved.</p>";
-                
                 }
                 else
                 {
@@ -8734,9 +8442,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     {
                         $this->view->pf_model_id = $device_pf ['pf_model_id'];
                     }
-                
                 }
-            
             }
             catch ( Exception $e )
             {
@@ -8769,7 +8475,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             if ($devices_pf_id > 0)
             {
                 $where = 'dpf.devices_pf_id = ' . $devices_pf_id;
-            
             }
             else if (! empty($filter) && ! empty($criteria))
             {
@@ -8923,20 +8628,16 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     );
                     $i ++;
                 }
-            
             }
             else
             {
                 $formdata = array ();
-            
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             echo $e->getMessage();
-        
         }
         
         // encode user data to return to the client:
@@ -9016,13 +8717,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $db->rollback();
                     $this->view->message = $message;
                 }
-            
             }
             catch ( Exception $e )
             {
                 $db->rollback();
                 Throw new exception("An error has occurred deleting replacement printers.", 0, $e);
-            
             }
         }
     }
@@ -9106,7 +8805,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         $replacement_devicesTable->insert($replacement_devicesData);
                         $this->view->message = "<p>The replacement printer has been added.</p>";
                     }
-                
                 }
                 else if ($form_mode == "edit")
                 {
@@ -9133,7 +8831,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         $replacement_devicesTable->update($replacement_devicesData, $where);
                         $this->view->message = "<p>The replacement printer has been updated.</p>";
                     }
-                
                 }
                 
                 if ($message == "")
@@ -9145,22 +8842,18 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $db->rollback();
                     $this->view->message = $message;
                 }
-            
             }
             catch ( Exception $e )
             {
                 $db->rollback();
                 Throw new exception("Error: error in manage replacements.", 0, $e);
-            
             }
-        
         }
         else
         {
             // if formdata was not valid, repopulate form(error messages from
             // validations are automatically added)
             $this->view->message = $validation;
-        
         }
         $this->view->data = $this->view->message;
     }
@@ -9221,12 +8914,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
             Throw new exception("Error: Unable to find replacement device.", 0, $e);
-        
         }
         
         // encode user data to return to the client:
@@ -9267,15 +8958,14 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 // empty form values
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             Throw new exception("Error: Unable to find replacement device.", 0, $e);
-        
         } // end catch
-          
+        
+
         // encode user data to return to the client:
         $json = Zend_Json::encode($formdata);
         $this->view->data = $json;
@@ -9289,7 +8979,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             return " ";
     }
 
-    public function transferreportsAction()
+    public function transferreportsAction ()
     {
         $db = Zend_Db_Table::getDefaultAdapter();
         $this->view->title = 'Transfer Reports';
@@ -9298,60 +8988,63 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $count = null;
         $offset = null;
         $id_list = null;
-    
+        
         $User = Proposalgen_Model_Mapper_User::getInstance();
-    
+        
         //*************************************************
         // postback
         //*************************************************
-    
+        
+
         if ($this->_request->isPost())
         {
             $reportTable = new Proposalgen_Model_DbTable_Reports();
             $formData = $this->_request->getPost();
             // print_r($formData); die;
-    
+            
+
             $db->beginTransaction();
             try
             {
                 $reportMapper = Proposalgen_Model_Mapper_Report::getInstance();
-                $report_id = $formData['reportlist'];
-    
+                $report_id = $formData ['reportlist'];
+                
                 // check transfer type
-                if ( $formData['transfertype'] == 'transfer' )
+                if ($formData ['transfertype'] == 'transfer')
                 {
-                    $new_user_id = $formData['newuser'];
+                    $new_user_id = $formData ['newuser'];
                     
                     // update report
+                    
 
                     $reportMapper = Proposalgen_Model_Mapper_Report::getInstance();
-                    $report = Proposalgen_Model_Mapper_Report::getInstance()->find( $report_id );
-                    $report->setReportId( $report_id );
-                    $report->setUserId( $new_user_id );
-                    $reportMapper->save( $report );
-                                        
+                    $report = Proposalgen_Model_Mapper_Report::getInstance()->find($report_id);
+                    $report->setReportId($report_id);
+                    $report->setUserId($new_user_id);
+                    $reportMapper->save($report);
+                    
                     // update unknown_device_instance records
                     // FIXME: Move this into mapper
                     $udiTable = new Proposalgen_Model_DbTable_UnknownDeviceInstance();
-                    $data['user_id'] = $new_user_id;
-                    $where = $udiTable->getAdapter()->quoteInto( 'report_id = ?', $report_id, 'INTEGER' );
-                    $udi = $udiTable->fetchAll( $where );
-    
+                    $data ['user_id'] = $new_user_id;
+                    $where = $udiTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
+                    $udi = $udiTable->fetchAll($where);
+                    
                     foreach ( $udi as $row )
                     {
-                        $udiTable->update( $data, $where );
+                        $udiTable->update($data, $where);
                     }
-    
+                    
                     $this->_helper->flashMessenger(array (
-                            "success" => "Report Transfer Complete."
+                            "success" => "Report Transfer Complete." 
                     ));
                 }
-                else if ( $formData['transfertype'] == 'clone' )
+                else if ($formData ['transfertype'] == 'clone')
                 {
-                    $reportMapper->cloneReport( $report_id, $formData['hdntransferlist'] );
-    
+                    $reportMapper->cloneReport($report_id, $formData ['hdntransferlist']);
+                    
                     $this->_helper->flashMessenger(array (
-                            "success" => "Report Cloning Complete."
+                            "success" => "Report Cloning Complete." 
                     ));
                 }
                 $db->commit();
@@ -9360,105 +9053,108 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 $db->rollback();
                 $this->_helper->flashMessenger(array (
-                        "error" => "There was an error while trying to transfer the report. Please contact your administrator."
+                        "error" => "There was an error while trying to transfer the report. Please contact your administrator." 
                 ));
             }
         }
-    
+        
         //*************************************************
         // get users
         //*************************************************
-    
+        
+
         // if system admin (all users) else if dealer admin or standard user (company users only)
         $where = null;
-        if ( in_array("Standard User", $this->privilege ) )
+        if (in_array("Standard User", $this->privilege))
         {
             $where = 'u.user_id = ' . $this->user_id;
         }
-        else if ( in_array( "Dealer Admin", $this->privilege ) )
+        else if (in_array("Dealer Admin", $this->privilege))
         {
             $where = 'dealer_company_id = ' . $this->dealer_company_id;
         }
-        else if ( in_array( "System Admin", $this->privilege ) )
+        else if (in_array("System Admin", $this->privilege))
         {
             // nothing else
         }
-    
-        $select = new Zend_Db_Select($db);
-        $select = $db->select()
-        ->from(array (
-                'u' => 'users'
-        ))
-        ->joinLeft(array (
-                'up' => 'user_privileges'
-        ), 'u.user_id = up.user_id');
-        if ( $where )
-        {
-            $select->where($where);
-        }
-        $select->order( 'username ASC' );
-        $stmt = $db->query($select);
-        $users = $stmt->fetchAll();
-        $this->view->users_list = $users;
-    
-    
-        //*************************************************
-        // get to users
-        //*************************************************
-    
-        // if system admin (all users) else if dealer admin or standard user (company users only)
-        $where = null;
-        if ( ! in_array( "System Admin", $this->privilege ) )
-        {
-            $where = 'dealer_company_id=' . $this->dealer_company_id;
-        }
-    
+        
         $select = new Zend_Db_Select($db);
         $select = $db->select()
             ->from(array (
-                'u' => 'users'
-            ))
+                'u' => 'users' 
+        ))
             ->joinLeft(array (
-                'up' => 'user_privileges'
-            ), 'u.user_id = up.user_id');
-        if ( $where )
+                'up' => 'user_privileges' 
+        ), 'u.user_id = up.user_id');
+        if ($where)
         {
             $select->where($where);
         }
-        $select->order( 'username ASC' );
+        $select->order('username ASC');
+        $stmt = $db->query($select);
+        $users = $stmt->fetchAll();
+        $this->view->users_list = $users;
+        
+        //*************************************************
+        // get to users
+        //*************************************************
+        
+
+        // if system admin (all users) else if dealer admin or standard user (company users only)
+        $where = null;
+        if (! in_array("System Admin", $this->privilege))
+        {
+            $where = 'dealer_company_id=' . $this->dealer_company_id;
+        }
+        
+        $select = new Zend_Db_Select($db);
+        $select = $db->select()
+            ->from(array (
+                'u' => 'users' 
+        ))
+            ->joinLeft(array (
+                'up' => 'user_privileges' 
+        ), 'u.user_id = up.user_id');
+        if ($where)
+        {
+            $select->where($where);
+        }
+        $select->order('username ASC');
         $stmt = $db->query($select);
         $users = $stmt->fetchAll();
         $this->view->to_users_list = $users;
-    
-    
+        
         //*************************************************
         // get companies
         //*************************************************
-    
+        
+
         // if system admin (show all reports) else if dealer admin (above users reports only) else if standard user (show only users reports)
         $where = 'dealer_company_id > 1 ';
-        if ( ! in_array( "System Admin", $this->privilege ) )
+        if (! in_array("System Admin", $this->privilege))
         {
             $where .= 'AND dealer_company_id = ' . $this->dealer_company_id;
         }
         $order = 'company_name ASC';
-    
+        
         $companiesTable = new Proposalgen_Model_DbTable_DealerCompany();
         $companies = $companiesTable->fetchAll($where, $order, $count, $offset);
         $this->view->company_list = $companies;
-    
-    
+        
         //*************************************************
         // get reports
         //*************************************************
-    
+        
+
         // if system admin (show all reports) else if dealer admin (above users reports only) else if standard user (show only users reports)
         $where = null;
-        if ( ! in_array( "Standard User", $this->privilege ) )
+        if (! in_array("Standard User", $this->privilege))
         {
             //build id string
-            foreach ( $this->view->users_list as $key ) {
-                if ( $id_list ) {
+            foreach ( $this->view->users_list as $key )
+            {
+                if ($id_list)
+                {
                     $id_list .= ',';
                 }
                 $id_list .= $key ['user_id'];
@@ -9470,12 +9166,12 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $where = 'user_id=' . $this->user_id;
         }
         $order = 'date_created DESC';
-    
+        
         $reportsTable = new Proposalgen_Model_DbTable_Reports();
         $reports = $reportsTable->fetchAll($where, $order, $count, $offset);
         $this->view->reports_list = $reports;
     }
-    
+
     public function filterreportslistAction ()
     {
         // disable the default layout
@@ -9485,44 +9181,51 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $filtervalue = $this->_getParam('filtervalue', null);
         $startdate = $this->_getParam('startdate', null);
         $enddate = $this->_getParam('enddate', null);
-    
+        
         try
         {
             $where = null;
-            if ( $filterfield == 'date_created' && $startdate && $enddate )
+            if ($filterfield == 'date_created' && $startdate && $enddate)
             {
                 $where = 'r.date_created BETWEEN "' . date("Y-m-d", strtotime($startdate)) . '" AND "' . date("Y-m-d", strtotime($enddate)) . '"';
-            } else if ( $filterfield && $filtervalue ) {
-                if ( $filterfield == 'user_id' )
+            }
+            else if ($filterfield && $filtervalue)
+            {
+                if ($filterfield == 'user_id')
                 {
                     $filterfield = 'r.user_id';
                 }
                 $where = $filterfield . ' = ' . $filtervalue;
             }
-    
-            if ( in_array("Standard User", $this->privilege )  )
+            
+            if (in_array("Standard User", $this->privilege))
             {
                 $where = 'r.user_id = ' . $this->user_id;
             }
-    
+            
             // select reports
             $select = new Zend_Db_Select($db);
             $select = $db->select()
                 ->from(array (
-                    'r' => 'reports'
-                ))
+                    'r' => 'reports' 
+            ))
                 ->joinLeft(array (
-                    'u' => 'users'
-                ), 'u.user_id = r.user_id', array ('username'));
-            if ( $where )
+                    'u' => 'users' 
+            ), 'u.user_id = r.user_id', array (
+                    'username' 
+            ));
+            if ($where)
             {
-                $select->where( $where );
+                $select->where($where);
             }
-            $select->order( array ( 'date_created DESC', 'customer_company_name ASC' ) );
+            $select->order(array (
+                    'date_created DESC', 
+                    'customer_company_name ASC' 
+            ));
             //echo $select; die;
             $stmt = $db->query($select);
             $result = $stmt->fetchAll();
-    
+            
             if (count($result) > 0)
             {
                 $i = 0;
@@ -9530,8 +9233,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 {
                     $formdata->rows [$i] ['id'] = $row ['report_id'];
                     $formdata->rows [$i] ['cell'] = array (
-                            $row ['report_id'],
-                            $row ['customer_company_name'] . ' (' . $row ['username'] . ' on ' . date("m-d-Y", strtotime($row ['date_created'])) . ')'
+                            $row ['report_id'], 
+                            $row ['customer_company_name'] . ' (' . $row ['username'] . ' on ' . date("m-d-Y", strtotime($row ['date_created'])) . ')' 
                     );
                     $i ++;
                 }
@@ -9551,14 +9254,14 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $json = Zend_Json::encode($formdata);
         $this->view->data = $json;
     }
-    
+
     public function filteruserslistAction ()
     {
         // disable the default layout
         $this->_helper->layout->disableLayout();
         $db = Zend_Db_Table::getDefaultAdapter();
         $filter = $this->_getParam('filter', 'all');
-    
+        
         try
         {
             $where = null;
@@ -9574,24 +9277,24 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 $where = 'dealer_company_id = ' . $filter;
             }
-    
+            
             // select users
             $select = new Zend_Db_Select($db);
             $select = $db->select()
                 ->from(array (
-                    'u' => 'users'
-                ))
+                    'u' => 'users' 
+            ))
                 ->joinLeft(array (
-                    'up' => 'user_privileges'
-                ), 'u.user_id = up.user_id');
-            if ( $where )
+                    'up' => 'user_privileges' 
+            ), 'u.user_id = up.user_id');
+            if ($where)
             {
-                $select->where( $where );
+                $select->where($where);
             }
-            $select->order( 'username ASC' );
+            $select->order('username ASC');
             $stmt = $db->query($select);
             $result = $stmt->fetchAll();
-    
+            
             if (count($result) > 0)
             {
                 $i = 0;
@@ -9599,8 +9302,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 {
                     $formdata->rows [$i] ['id'] = $row ['user_id'];
                     $formdata->rows [$i] ['cell'] = array (
-                            $row ['user_id'],
-                            strtolower($row ['username'])
+                            $row ['user_id'], 
+                            strtolower($row ['username']) 
                     );
                     $i ++;
                 }
@@ -9620,44 +9323,43 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $json = Zend_Json::encode($formdata);
         $this->view->data = $json;
     }
-    
+
     public function filtercompanieslistAction ()
     {
         // disable the default layout
         $this->_helper->layout->disableLayout();
         $db = Zend_Db_Table::getDefaultAdapter();
-    
+        
         try
         {
             $where = 'dealer_company_id > 1 ';
-            if (! in_array( "System Admin", $this->privilege ) )
+            if (! in_array("System Admin", $this->privilege))
             {
                 $where .= 'AND dealer_company_id = ' . $this->dealer_company_id;
             }
-    
+            
             // select users
             $select = new Zend_Db_Select($db);
-            $select = $db->select()
-                ->from(array (
-                    'dc' => 'dealer_company'
-                ));
-            if ( $where )
+            $select = $db->select()->from(array (
+                    'dc' => 'dealer_company' 
+            ));
+            if ($where)
             {
-                $select->where( $where );
+                $select->where($where);
             }
-            $select->order( 'company_name ASC' );
+            $select->order('company_name ASC');
             $stmt = $db->query($select);
             $result = $stmt->fetchAll();
-    
-            if ( count($result) > 0 )
+            
+            if (count($result) > 0)
             {
                 $i = 0;
                 foreach ( $result as $row )
                 {
                     $formdata->rows [$i] ['id'] = $row ['dealer_company_id'];
                     $formdata->rows [$i] ['cell'] = array (
-                            $row ['dealer_company_id'],
-                            $row ['company_name']
+                            $row ['dealer_company_id'], 
+                            $row ['company_name'] 
                     );
                     $i ++;
                 }
@@ -9677,5 +9379,4 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $json = Zend_Json::encode($formdata);
         $this->view->data = $json;
     }
-    
 } //end class AdminController

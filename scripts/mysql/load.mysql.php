@@ -1,4 +1,5 @@
 <?php
+include ('includes/functions.php');
 /**
  * Script for creating and loading database
  */
@@ -79,58 +80,26 @@ try
         $conn->query('CREATE DATABASE `' . $options ['db'] ['params'] ['dbname'] . '`;');
         $conn->select_db($options ['db'] ['params'] ['dbname']);
         
-        $sql = file_get_contents(dirname(__FILE__) . '/schema.mysql.sql');
-        if ($conn->multi_query($sql))
+        runSQLFile(dirname(__FILE__) . '/schema.base.sql', $conn);
+        runSQLFile(dirname(__FILE__) . '/schema.proposalgenerator.sql', $conn);
+        
+        if ('testing' != APPLICATION_ENV)
         {
-            // We have to close all the results before we can insert data
-            do
-            {
-                if (FALSE !== ($result = $conn->store_result()))
-                {
-                    $result->close();
-                }
-            }
-            while ( $conn->next_result() );
+            echo PHP_EOL;
+            echo 'Database Created';
+            echo PHP_EOL;
+        }
+        if ($withData)
+        {
+            
+            runSQLFile(dirname(__FILE__) . '/data.base.sql', $conn);
+            runSQLFile(dirname(__FILE__) . '/data.proposalgenerator.sql', $conn);
             
             if ('testing' != APPLICATION_ENV)
             {
-                echo PHP_EOL;
-                echo 'Database Created';
+                echo 'Data Loaded.';
                 echo PHP_EOL;
             }
-            
-            if ($withData)
-            {
-                $dataSql = file_get_contents(dirname(__FILE__) . '/data.mysql.sql');
-                
-                // use the connection directly to load sql in batches
-                if ($conn->multi_query($dataSql))
-                {
-                    // Close all the results
-                    do
-                    {
-                        if (FALSE !== ($result = $conn->store_result()))
-                        {
-                            $result->close();
-                        }
-                    }
-                    while ( $conn->next_result() );
-                    
-                    if ('testing' != APPLICATION_ENV)
-                    {
-                        echo 'Data Loaded.';
-                        echo PHP_EOL;
-                    }
-                }
-                else
-                {
-                    throw new Exception($conn->error);
-                }
-            }
-        }
-        else
-        {
-            throw new Exception($conn->error);
         }
     }
     else

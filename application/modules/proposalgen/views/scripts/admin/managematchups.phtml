@@ -1,13 +1,13 @@
 <?php
 /**
  * managematchups.phtml
- * 
- * @author	John Sadler
- * @version	v1.0 
+ *
+ * @author John Sadler
+ * @version v1.0
  */
 ?>
 	
-<?php $this->headScript()->captureStart('append','text/javascript') ?>
+<?php $this->headScript()->captureStart('append','text/javascript')?>
 
     $(document).ready(function() {
 		//find center screen for modal popup
@@ -43,20 +43,37 @@
 					var devices_pf_id = document.getElementById("grid_list").rows[i+1].cells[0].innerHTML;
 					var master_device_id = document.getElementById("grid_list").rows[i+1].cells[1].innerHTML;
 					
-					hidden_devices_pf_id = "<input type='hidden' name='hdnDevicesPFID"+ids[i]+"' id='hdnDevicesPFID"+ids[i]+"' value='" + devices_pf_id + "' />";
-					hidden_master_device_id = "<input type='hidden' name='hdnMasterDeviceID"+ids[i]+"' id='hdnMasterDeviceID"+ids[i]+"' value='" + master_device_id + "' />";
-					
-					var mapped_to = document.getElementById("grid_list").rows[i+1].cells[5].innerHTML;
-					var mapped_to_id = document.getElementById("grid_list").rows[i+1].cells[6].innerHTML;
-					var mapped_to_manufacturer = document.getElementById("grid_list").rows[i+1].cells[7].innerHTML;
-					var mapped_to_deviceName = mapped_to_manufacturer + " " + mapped_to;
-					mapped_to_deviceName = mapped_to_deviceName.replace("&nbsp; &nbsp;", "");
-					
-					master_device_dropdown = '';
-					master_device_dropdown += '<input type="hidden" name="hdnMasterDevicesValue'+cur_row+'" id="hdnMasterDevicesValue'+cur_row+'" class="masterDeviceId" value="'+mapped_to_id+'" />';
-					master_device_dropdown += '<input type="hidden" name="hdnMasterDevicesText'+cur_row+'" id="hdnMasterDevicesText'+cur_row+'" class="masterDeviceName" value="'+mapped_to_deviceName+'" />';
-					master_device_dropdown += '<input type="hidden" name="hdnMasterDevicesText'+cur_row+'" id="hdnMasterDevicesManufacturer'+cur_row+'" class="manufacturerName" value="'+mapped_to_manufacturer+'" />';
-					master_device_dropdown += '<input type="text" name="txtMasterDevices'+cur_row+'" id="txtMasterDevices'+cur_row+'" size="40" class="autoCompleteDeviceName" value="'+mapped_to_deviceName+'" />';
+					hidden_devices_pf_id = "
+<input type='hidden' name='hdnDevicesPFID"+ids[i]+"'
+	id='hdnDevicesPFID"+ids[i]+"' value='" + devices_pf_id + "' />
+"; hidden_master_device_id = "
+<input type='hidden' name='hdnMasterDeviceID"+ids[i]+"'
+	id='hdnMasterDeviceID"+ids[i]+"' value='" + master_device_id + "' />
+"; var mapped_to =
+document.getElementById("grid_list").rows[i+1].cells[5].innerHTML; var
+mapped_to_id =
+document.getElementById("grid_list").rows[i+1].cells[6].innerHTML; var
+mapped_to_manufacturer =
+document.getElementById("grid_list").rows[i+1].cells[7].innerHTML; var
+mapped_to_deviceName = mapped_to_manufacturer + " " + mapped_to;
+mapped_to_deviceName = mapped_to_deviceName.replace("&nbsp; &nbsp;",
+""); master_device_dropdown = ''; master_device_dropdown += '
+<input type="hidden" name="hdnMasterDevicesValue'+cur_row+'"
+	id="hdnMasterDevicesValue'+cur_row+'" class="masterDeviceId"
+	value="'+mapped_to_id+'" />
+'; master_device_dropdown += '
+<input type="hidden" name="hdnMasterDevicesText'+cur_row+'"
+	id="hdnMasterDevicesText'+cur_row+'" class="masterDeviceName"
+	value="'+mapped_to_deviceName+'" />
+'; master_device_dropdown += '
+<input type="hidden" name="hdnMasterDevicesText'+cur_row+'"
+	id="hdnMasterDevicesManufacturer'+cur_row+'" class="manufacturerName"
+	value="'+mapped_to_manufacturer+'" />
+'; master_device_dropdown += '
+<input type="text" name="txtMasterDevices'+cur_row+'"
+	id="txtMasterDevices'+cur_row+'" size="40"
+	class="autoCompleteDeviceName" value="'+mapped_to_deviceName+'" />
+';
 					
 					//add fields to grid
 					jQuery("#grid_list").jqGrid('setRowData',ids[i],{devices_pf_id: devices_pf_id + hidden_devices_pf_id});
@@ -87,7 +104,9 @@
             				$(this).parent().find("input.manufacturerName")[0].value = ui.item.manufacturer;
             			},
             			open: function( event, ui ) {
-                			var termTemplate = '<strong>%s</strong>';
+                			var termTemplate = '
+<strong>%s</strong>
+';
                 			var autocompleteData = $(this).data('autocomplete');
                 			autocompleteData.menu.element.find('a').each(function() {
                     			var label = $(this);
@@ -170,49 +189,60 @@
 		}
 	}
 	
-<?php $this->headScript()->captureEnd() ?>
+<?php $this->headScript()->captureEnd()?>
 
 <h2><?php echo $this->title;?></h2>
 
 <form name="matchups" id="matchups" action="" method="post">
-<input type="hidden" name="ticket_id" id="ticket_id" value="<?php echo $this->ticket_id; ?>" />
-<input type="hidden" name="devices_pf_id" id="devices_pf_id" value="<?php echo $this->devices_pf_id; ?>" />
-<input type="hidden" name="form_mode" id="form_mode" value="<?php echo $this->form_mode; ?>" />
-<input type="hidden" name="hdnIdArray" id="hdnIdArray" value="" />
+	<input type="hidden" name="ticket_id" id="ticket_id"
+		value="<?php echo $this->ticket_id; ?>" /> <input type="hidden"
+		name="devices_pf_id" id="devices_pf_id"
+		value="<?php echo $this->devices_pf_id; ?>" /> <input type="hidden"
+		name="form_mode" id="form_mode"
+		value="<?php echo $this->form_mode; ?>" /> <input type="hidden"
+		name="hdnIdArray" id="hdnIdArray" value="" />
 
 	<dl class="zend_form">
 		<dt class="botMenu">
 			<div id="instruction_container" class="margined">
 				<p>Please map the following <?php echo $this->source; ?> printers to a master printer.</p>
 			</div>
-			
+
 			<div id="message_container" class="margined">
 			    <?php echo $this->message; ?>
 			</div>
-			
+
 			<div id="filter_container">
-				<div id="criteria_container" style="display: inline; padding: 0px 0px 0px 0px;">
+				<div id="criteria_container"
+					style="display: inline; padding: 0px 0px 0px 0px;">
 					<label for="criteria_filter" class="details_label">Filter:</label>
-					<select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 180px; margin: 0px 0px 0px 26px;">
+					<select name="criteria_filter" id="criteria_filter"
+						class="filter_dropdown"
+						style="width: 180px; margin: 0px 0px 0px 26px;">
 						<option value="model">PF Model Id</option>
 						<option value="printer">PrintFleet Model Name</option>
-					</select>
-					<label for="txtCriteria" class="details_label" style="padding: 0px 0px 0px 10px;">for</label>
-					<input type="text" name="txtCriteria" style="width: 180px;" id="txtCriteria" value="<?php echo $this->pf_model_id; ?>" />
-					<input type="button" name="btnSearch" id="btnSearch" value="Search" onclick="javascript: update_grid('search');" />
-					<input type="button" name="btnClearSearch" id="btnClearSearch" value="Clear" onclick="javascript: update_grid('clear');" />
+					</select> <label for="txtCriteria" class="details_label"
+						style="padding: 0px 0px 0px 10px;">for</label> <input type="text"
+						name="txtCriteria" style="width: 180px;" id="txtCriteria"
+						value="<?php echo $this->pf_model_id; ?>" /> <input type="button"
+						name="btnSearch" id="btnSearch" value="Search"
+						onclick="javascript: update_grid('search');" /> <input
+						type="button" name="btnClearSearch" id="btnClearSearch"
+						value="Clear" onclick="javascript: update_grid('clear');" />
 				</div>
 			</div>
-			
+
 			<div id="grid_container" class="margined">
 				<table id="grid_list"></table>
 				<div id="grid_pager"></div>
 			</div>
-			
-			<br/>
+
+			<br />
 			<div id="submitBtns" class="submitBar">
-				<input type="button" name="btnUpdate" id="btnUpdate" value="Update" onclick="javascript: do_action('save');" />
-				<input type="button" name="btnDone" id="btnDone" value="Done" onClick="javascript: do_action('done');" />
+				<input type="button" name="btnUpdate" id="btnUpdate" value="Update"
+					onclick="javascript: do_action('save');" /> <input type="button"
+					name="btnDone" id="btnDone" value="Done"
+					onClick="javascript: do_action('done');" />
 			</div>
 		</dt>
 	</dl>

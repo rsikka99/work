@@ -1,11 +1,11 @@
-<?php 
-$elements["itHours"] = $this->element->itHours;
-$elements["itHoursRadio"] = $this->element->itHoursRadio;
-$elements["monthlyBreakdown"] = $this->element->monthlyBreakdown;
-$elements["monthlyBreakdownRadio"] = $this->element->monthlyBreakdownRadio;
-$elements["location_tracking"] = $this->element->location_tracking;
+<?php
+$elements ["itHours"] = $this->element->itHours;
+$elements ["itHoursRadio"] = $this->element->itHoursRadio;
+$elements ["monthlyBreakdown"] = $this->element->monthlyBreakdown;
+$elements ["monthlyBreakdownRadio"] = $this->element->monthlyBreakdownRadio;
+$elements ["location_tracking"] = $this->element->location_tracking;
 ?>
-<?php $this->headScript()->captureStart('append','text/javascript') ?>
+<?php $this->headScript()->captureStart('append','text/javascript')?>
 	
 	$(document).ready(function() {
 	
@@ -39,86 +39,80 @@ $elements["location_tracking"] = $this->element->location_tracking;
 		
 	});
 
-<?php $this->headScript()->captureEnd() ?>
-<form id="it" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>">
-    <table border="0" width="100%">
-    	<col width="60%" /><col width="40%" />
-    	<tr>
-    		<td valign="top" colspan="2" style="padding-bottom: 10px;"><?php echo $elements["itHours"]->renderLabel(); ?></td>
-    	</tr>
-    	<tr>
-    		<td valign="top" style="padding-left: 30px;">
-    		    <?php 
-		            echo $this->formRadio(
-		                $this->element->itHoursRadio->getFullyQualifiedName(),
-		                $this->element->itHoursRadio->getValue(),
-		                null,
-		                array('I know the exact amount' => $this->element->itHoursRadio->getMultiOption('I know the exact amount')));
-		        ?>
-		    </td>
-    		<td><?php echo $elements["itHours"]->renderViewHelper(); ?></td>
-    	</tr>
-    	<tr>
-    		<td valign="top" style="padding-left: 30px;">
-    		    <?php 
-		            echo $this->formRadio(
-		                $this->element->itHoursRadio->getFullyQualifiedName(),
-		                $this->element->itHoursRadio->getValue(),
-		                null,
-		                array('guess' => $this->element->itHoursRadio->getMultiOption('guess')));
-		        ?>
-		    </td>
-    		<td>&nbsp;</td>
+<?php $this->headScript()->captureEnd()?>
+<form id="it" action="<?php echo $this->element->getAction() ?>"
+	method="<?php echo $this->element->getMethod() ?>">
+	<table border="0" width="100%">
+		<col width="60%" />
+		<col width="40%" />
+		<tr>
+			<td valign="top" colspan="2" style="padding-bottom: 10px;"><?php echo $elements["itHours"]->renderLabel(); ?></td>
 		</tr>
-    	<tr>
-    		<td>&nbsp;</td>
-    		<td><?php echo $elements["itHours"]->renderErrors(); ?></td>
-    	</tr>
-    	
-    	<tr>
-    		<td valign="top" colspan="2" style="padding-bottom: 10px;"><?php echo $elements["monthlyBreakdown"]->renderLabel(); ?></td>
-    	</tr>
-    	<tr>
-    		<td valign="top" style="padding-left: 30px;">
-    		    <?php 
-		            echo $this->formRadio(
-		                $this->element->monthlyBreakdownRadio->getFullyQualifiedName(),
-		                $this->element->monthlyBreakdownRadio->getValue(),
-		                null,
-		                array('I know the exact amount' => $this->element->monthlyBreakdownRadio->getMultiOption('I know the exact amount')));
-		        ?>
+		<tr>
+			<td valign="top" style="padding-left: 30px;">
+    		    <?php
+        echo $this->formRadio($this->element->itHoursRadio->getFullyQualifiedName(), $this->element->itHoursRadio->getValue(), null, array (
+                'I know the exact amount' => $this->element->itHoursRadio->getMultiOption('I know the exact amount') 
+        ));
+        ?>
 		    </td>
-    		<td><?php echo $elements["monthlyBreakdown"]->renderViewHelper(); ?></td>
-    	</tr>
-    	<tr>
-    		<td valign="top" style="padding-left: 30px;">
-    		    <?php 
-		            echo $this->formRadio(
-		                $this->element->monthlyBreakdownRadio->getFullyQualifiedName(),
-		                $this->element->monthlyBreakdownRadio->getValue(),
-		                null,
-		                array('guess' => $this->element->monthlyBreakdownRadio->getMultiOption('guess')));
-		        ?>
-		    </td>
-    		<td>&nbsp;</td>
+			<td><?php echo $elements["itHours"]->renderViewHelper(); ?></td>
 		</tr>
-    	<tr>
-    		<td>&nbsp;</td>
-    		<td><?php echo $elements["monthlyBreakdown"]->renderErrors(); ?></td>
-    	</tr>
-    	
-    	<tr>
-    		<td valign="top" style="padding-right: 10px;"><?php echo $elements["location_tracking"]->renderLabel(); ?></td>
-    		<td valign="top"><?php echo $elements["location_tracking"]->renderViewHelper(); ?></td>
-    	</tr>
-    	<tr>
-    		<td>&nbsp;</td>
-    		<td><?php echo $elements["location_tracking"]->renderErrors(); ?></td>
-    	</tr>
-    </table>
-	<br/>
-    <div id="submitBtns" class="submitBar">
-		<?php echo $this->element->save ?>
-	    <?php echo $this->element->back_button ?>
+		<tr>
+			<td valign="top" style="padding-left: 30px;">
+    		    <?php
+        echo $this->formRadio($this->element->itHoursRadio->getFullyQualifiedName(), $this->element->itHoursRadio->getValue(), null, array (
+                'guess' => $this->element->itHoursRadio->getMultiOption('guess') 
+        ));
+        ?>
+		    </td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><?php echo $elements["itHours"]->renderErrors(); ?></td>
+		</tr>
+
+		<tr>
+			<td valign="top" colspan="2" style="padding-bottom: 10px;"><?php echo $elements["monthlyBreakdown"]->renderLabel(); ?></td>
+		</tr>
+		<tr>
+			<td valign="top" style="padding-left: 30px;">
+    		    <?php
+        echo $this->formRadio($this->element->monthlyBreakdownRadio->getFullyQualifiedName(), $this->element->monthlyBreakdownRadio->getValue(), null, array (
+                'I know the exact amount' => $this->element->monthlyBreakdownRadio->getMultiOption('I know the exact amount') 
+        ));
+        ?>
+		    </td>
+			<td><?php echo $elements["monthlyBreakdown"]->renderViewHelper(); ?></td>
+		</tr>
+		<tr>
+			<td valign="top" style="padding-left: 30px;">
+    		    <?php
+        echo $this->formRadio($this->element->monthlyBreakdownRadio->getFullyQualifiedName(), $this->element->monthlyBreakdownRadio->getValue(), null, array (
+                'guess' => $this->element->monthlyBreakdownRadio->getMultiOption('guess') 
+        ));
+        ?>
+		    </td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><?php echo $elements["monthlyBreakdown"]->renderErrors(); ?></td>
+		</tr>
+
+		<tr>
+			<td valign="top" style="padding-right: 10px;"><?php echo $elements["location_tracking"]->renderLabel(); ?></td>
+			<td valign="top"><?php echo $elements["location_tracking"]->renderViewHelper(); ?></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><?php echo $elements["location_tracking"]->renderErrors(); ?></td>
+		</tr>
+	</table>
+	<br />
+	<div id="submitBtns" class="submitBar">
+		<?php echo $this->element->save?>
+	    <?php echo $this->element->back_button?>
 	</div>
 </form>

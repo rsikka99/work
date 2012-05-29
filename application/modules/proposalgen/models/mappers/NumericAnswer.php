@@ -21,7 +21,7 @@ class Proposalgen_Model_Mapper_NumericAnswer extends Tangent_Model_Mapper_Abstra
 
     /**
      * Maps a database row object to an Application_Model
-     * 
+     *
      * @param Zend_Db_Table_Row $row            
      * @return The appropriate Application_Model
      */
@@ -45,7 +45,7 @@ class Proposalgen_Model_Mapper_NumericAnswer extends Tangent_Model_Mapper_Abstra
 
     /**
      * Finds an answer to a related question
-     * 
+     *
      * @param unknown_type $questionId            
      */
     public function getQuestionAnswer ($questionId, $reportId)
@@ -64,7 +64,7 @@ class Proposalgen_Model_Mapper_NumericAnswer extends Tangent_Model_Mapper_Abstra
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     * 
+     *
      * @param unknown_type $object            
      */
     public function save (Proposalgen_Model_NumericAnswer $object)

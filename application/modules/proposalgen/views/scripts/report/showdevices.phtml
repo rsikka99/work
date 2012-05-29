@@ -1,25 +1,26 @@
 <div class="span-24">
-<h2>Device Instance List</h2>
-<em>Only shows devices that were mapped to a master device.</em>
-<table>
-	<thead>
-		<tr>
-			<th>Device Instance ID</th>
-			<th>Device Name</th>
-			<th>Serial</th>
-			<th>IP Address</th>
-		</tr>
-	</thead>
-	<tbody>
+	<h2>Device Instance List</h2>
+	<em>Only shows devices that were mapped to a master device.</em>
+	<table>
+		<thead>
+			<tr>
+				<th>Device Instance ID</th>
+				<th>Device Name</th>
+				<th>Serial</th>
+				<th>IP Address</th>
+			</tr>
+		</thead>
+		<tbody>
 <?php foreach($this->devices as $device) : ?>
 
 		<tr>
-			<td><?php echo $device->DeviceInstanceId;?></td>
-			<td><a href="<?php echo $this->baseUrl("report/devicedetails/id/" . $device->DeviceInstanceId); ?>"><?php echo $device->DeviceName; ?></a></td>
-			<td><?php echo $device->SerialNumber; ?></td>
-			<td><?php echo $device->IpAddress; ?></td>
-		</tr>
+				<td><?php echo $device->DeviceInstanceId;?></td>
+				<td><a
+					href="<?php echo $this->baseUrl("report/devicedetails/id/" . $device->DeviceInstanceId); ?>"><?php echo $device->DeviceName; ?></a></td>
+				<td><?php echo $device->SerialNumber; ?></td>
+				<td><?php echo $device->IpAddress; ?></td>
+			</tr>
 <?php endforeach; ?>
 	</tbody>
-</table>
+	</table>
 </div>

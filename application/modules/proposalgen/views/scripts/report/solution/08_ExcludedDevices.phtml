@@ -1,36 +1,42 @@
 <?php
-    //echo $this->pageStart;
+//echo $this->pageStart;
 ?>
 <?php echo $this->noBreakStart; ?>
-	<h4 class="paraHeader">Other Printing Devices Not Included in Assessment:</h4>
-	<?php if (count($this->proposal->getExcludedDevices()) > 0) :?>
-    	<table class="genericTable" id="ExcludedDevicesTable" style="font-size: 9pt;">
-    		<thead>
-    			<tr>
-    				<th class="column1 left">Device Name</th>
-    				<th class="column2 center">Serial Number</th>
-    				<th class="column3 center">IP Address</th>
-    				<th class="column4 center">Exclusion Reason</th>
-    			</tr>
-    		</thead>
-    		<tbody>
+<h4 class="paraHeader">Other Printing Devices Not Included in
+	Assessment:</h4>
+<?php if (count($this->proposal->getExcludedDevices()) > 0) :?>
+<table class="genericTable" id="ExcludedDevicesTable"
+	style="font-size: 9pt;">
+	<thead>
+		<tr>
+			<th class="column1 left">Device Name</th>
+			<th class="column2 center">Serial Number</th>
+			<th class="column3 center">IP Address</th>
+			<th class="column4 center">Exclusion Reason</th>
+		</tr>
+	</thead>
+	<tbody>
     		<?php foreach($this->proposal->getExcludedDevices() as $device): ?>
     			<?php $SerialNumber = (strlen($device->SerialNumber) == 0) ? 'Unknown Serial' : $device->SerialNumber; ?>
     				<tr>
-    					<td class="column1"><div class=" left"><?php echo $device->DeviceName; ?></div></td>
-    					<td class="column2"><div class=" center"><?php echo $SerialNumber; ?></div></td>
-    					<td class="column3"><div class=" left"><?php if ($device->IpAddress) echo $device->IpAddress; else echo 'Unknown IP';?></div></td>
-    					<td class="column4"><div class=" left"><?php echo $device->ExclusionReason; ?></div></td>
-    				</tr>
+			<td class="column1"><div class=" left"><?php echo $device->DeviceName; ?></div></td>
+			<td class="column2"><div class=" center"><?php echo $SerialNumber; ?></div></td>
+			<td class="column3"><div class=" left"><?php if ($device->IpAddress) echo $device->IpAddress; else echo 'Unknown IP';?></div></td>
+			<td class="column4"><div class=" left"><?php echo $device->ExclusionReason; ?></div></td>
+		</tr>
     		<?php endforeach; ?>
     		</tbody>
-    	</table>
-	<?php else: ?>
-		<br/><p><em>No devices were excluded from this report.</em></p>
-	<?php endif?>
-
+</table>
+<?php else: ?>
+<br />
+<p>
+	<em>No devices were excluded from this report.</em>
+</p>
+<?php
+endif;
 	
 <?php echo $this->noBreakEnd; ?>
 <?php
-    echo $this->pageEnd;
+
+echo $this->pageEnd;
 ?>

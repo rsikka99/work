@@ -2,7 +2,7 @@
 
 /**
  * AuthController - Controller to handle user authentication.
- * 
+ *
  * @author Chris Garrah
  * @version 1.0
  */
@@ -119,7 +119,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                         // Add an array of privileges to the authentication
                         // token
                         $data->privileges = $privs;
-                    
                     }
                     catch ( Exception $e )
                     {
@@ -134,7 +133,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                     // this time user with have the authenication token,
                     // and be allowed to access
                     $this->_redirect('/');
-                
                 }
                 else
                 {
@@ -214,13 +212,15 @@ class Proposalgen_AuthController extends Zend_Controller_Action
         $captcha->generate();
         
         return $captcha->getId();
-    
     }
 
     /**
      * Gets a random number from /dev/urandom
-     * @param int $min The minimum number generated
-     * @param int $max The maximum number generated
+     * 
+     * @param int $min
+     *            The minimum number generated
+     * @param int $max
+     *            The maximum number generated
      */
     function getRandom ($min, $max)
     {
@@ -245,7 +245,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
 
     function forgotpasswordAction ()
     {
-        
         $db = Zend_Db_Table::getDefaultAdapter();
         $this->_helper->layout->setLayout('auth');
         $this->view->message = '';
@@ -336,7 +335,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
 
                                 // save to database
                                 $db->commit();
-                            
                             }
                             catch ( Exception $e )
                             {
@@ -345,7 +343,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                                 // prepare error message stating user not found
                                 $this->view->message = "An error has occurred updating the database. The password was not reset and no email was sent.";
                             }
-                        
                         }
                         else
                         {
@@ -365,7 +362,8 @@ class Proposalgen_AuthController extends Zend_Controller_Action
 
     /**
      * Checks the validity of a password reset hash uid
-     * @param string $resetUid
+     * 
+     * @param string $resetUid            
      * @return Proposalgen_Model_User_PasswordResetRequest
      */
     function verifyPasswordReset ($resetUid)
@@ -383,8 +381,7 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                 if ($passwordresetrequest->getResetUsed() == false)
                 {
                     /*
-                     * Check the timeframe of the password reset. 
-                     * This should be within 24 hours of the request
+                     * Check the timeframe of the password reset. This should be within 24 hours of the request
                      */
                     $timeRequested = new DateTime();
                     $timeRequested->setTimestamp($passwordresetrequest->getDateRequested());
@@ -405,13 +402,12 @@ class Proposalgen_AuthController extends Zend_Controller_Action
             {
                 $passwordresetrequest = false;
             }
-        
         }
         return $passwordresetrequest;
     }
 
     /**
-     * This function takes care of verifying the users reset token and 
+     * This function takes care of verifying the users reset token and
      * providing them with a form to reset their password.
      */
     function resetpasswordAction ()
@@ -457,7 +453,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                     }
                 }
             }
-        
         }
         
         // TODO: We should probably make this page display an error if it is not valid instead of sending them on their way
@@ -530,7 +525,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                             $this->view->message = "Your password and confirmation password do not match. Please try again.";
                         else
                             $this->view->message = "Your password cannot be empty.";
-                    
                     }
                 }
                 
@@ -554,7 +548,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                 }
             }
         }
-    
     }
 
     function accepteulaAction ()
@@ -607,30 +600,19 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                         $db->rollback();
                         $this->view->message = "An error has occurred and the EULA was not accepted. Please go back and try again. ";
                         $this->view->message .= "If you continue to have problems please contact your administrator.";
-                    
                     } // end catch
-                
-
                 }
                 else
                 {
                     $this->view->message = "You <strong>must</strong> accept the EULA to continue.";
-                
                 } // end else
-            
-
             }
             else
             {
                 // Log the user out
                 $this->_redirect('/auth/logout');
-            
             }
         } // endif
-    
-
     } // end accept eula Action
-
-
 } // end auth controller
 

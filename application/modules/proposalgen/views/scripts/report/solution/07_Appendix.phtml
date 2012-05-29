@@ -1,40 +1,47 @@
 <?php
-    echo $this->pageStart;
+echo $this->pageStart;
 ?>
 	<?php echo $this->noBreakStart; ?>
-		<div class="h1">Printing Device List</div>
-		<p>Below is a list of your printing device models and whether or not they are qualified for just-in-time supplies fulfillment. For devices not qualified for just-in-time supplies 
-		fulfillment, you can call into our office to order supplies for next-day delivery. Consider upgrading these devices to be on a 100% just-in-time supplies fulfillment model. 
-		Devices not included in the report are listed in a subsequent table. These devices are typically older models that are not compatible with remote monitoring software or do not 
-		qualify for the PrintIQ&reg; program.</p>
-		<br />
-	<?php echo $this->noBreakEnd; ?>
-	<table class="genericTable" id="AppendixDeviceTable">
-		<thead>
-			<tr class="center">
-				<th class="left">Manufacturer</th>
-				<th class="left">Model</th>
-				<th>Serial No.</th>
-				<th>Purchased <br/>or Leased</th>
-				<th>AMPV</th>
-				<th>JIT <br/>Compatible</th>
-			</tr>
-		</thead>
-		<tbody>
+<div class="h1">Printing Device List</div>
+<p>Below is a list of your printing device models and whether or not
+	they are qualified for just-in-time supplies fulfillment. For devices
+	not qualified for just-in-time supplies fulfillment, you can call into
+	our office to order supplies for next-day delivery. Consider upgrading
+	these devices to be on a 100% just-in-time supplies fulfillment model.
+	Devices not included in the report are listed in a subsequent table.
+	These devices are typically older models that are not compatible with
+	remote monitoring software or do not qualify for the PrintIQ&reg;
+	program.</p>
+<br />
+<?php echo $this->noBreakEnd; ?>
+<table class="genericTable" id="AppendixDeviceTable">
+	<thead>
+		<tr class="center">
+			<th class="left">Manufacturer</th>
+			<th class="left">Model</th>
+			<th>Serial No.</th>
+			<th>Purchased <br />or Leased
+			</th>
+			<th>AMPV</th>
+			<th>JIT <br />Compatible
+			</th>
+		</tr>
+	</thead>
+	<tbody>
 		<?php foreach($this->proposal->getDevices() as $device) { ?>
 			<tr>
-				<td class="column1"><div ><?php echo $device->getMasterDevice()->getManufacturer()->getManufacturerName(); ?></div></td>
-				<td class="column2"><div ><?php echo $device->getMasterDevice()->getPrinterModel(); ?></div></td>
-				<td class="column3"><div ><?php echo ($device->getSerialNumber()) ? $device->getSerialNumber() : "Unknown"; ?></div></td>
-				<td class="column4"><div class="center"><?php echo ($device->MasterDevice->IsLeased) ? "Leased" : "Purchased"; ?></div></td>
-				<td class="column5"><div class="right"><?php echo number_format($device->AverageMonthlyPageCount); ?></div></td>
-				<td class="column6"><div class="center"><?php echo ($device->getJITSuppliesSupported()) ? "Yes" : "No"; ?></div></td>
-			</tr>
+			<td class="column1"><div><?php echo $device->getMasterDevice()->getManufacturer()->getManufacturerName(); ?></div></td>
+			<td class="column2"><div><?php echo $device->getMasterDevice()->getPrinterModel(); ?></div></td>
+			<td class="column3"><div><?php echo ($device->getSerialNumber()) ? $device->getSerialNumber() : "Unknown"; ?></div></td>
+			<td class="column4"><div class="center"><?php echo ($device->MasterDevice->IsLeased) ? "Leased" : "Purchased"; ?></div></td>
+			<td class="column5"><div class="right"><?php echo number_format($device->AverageMonthlyPageCount); ?></div></td>
+			<td class="column6"><div class="center"><?php echo ($device->getJITSuppliesSupported()) ? "Yes" : "No"; ?></div></td>
+		</tr>
 		<?php } ?>
 		</tbody>
-	</table>
-	<br/>
-	<br/>
+</table>
+<br />
+<br />
 <?php
-    //echo $this->pageEnd;
+//echo $this->pageEnd;
 ?>

@@ -21,7 +21,7 @@ class Proposalgen_Model_Mapper_User extends Tangent_Model_Mapper_Abstract
 
     /**
      * Maps a database row object to an Application_Model
-     * 
+     *
      * @param Zend_Db_Table_Row $row            
      * @return The appropriate Application_Model
      */
@@ -84,7 +84,7 @@ class Proposalgen_Model_Mapper_User extends Tangent_Model_Mapper_Abstract
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     * 
+     *
      * @param unknown_type $object            
      */
     public function save (Proposalgen_Model_User $object)

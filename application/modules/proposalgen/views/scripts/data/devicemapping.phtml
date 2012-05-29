@@ -4,7 +4,7 @@
  */
 ?>
 
-<?php $this->headScript()->captureStart('append','text/javascript') ?>
+<?php $this->headScript()->captureStart('append','text/javascript')?>
 	var show_mapped = false;
 	var grid_display = '<?php echo $this->grid; ?>';
 
@@ -45,20 +45,44 @@
 					var mapped_to_deviceName = mapped_to_manufacturer + " " + mapped_to_modelname;
 					mapped_to_deviceName = mapped_to_deviceName.replace("&nbsp; &nbsp;", "");
 					
-					edit_button = '<input style="width:35px;" title="Edit Printer" type="button" name="btnEdit'+devices_pf_id+'" id="btnEdit'+devices_pf_id+'" onclick="javascript: add_device('+upload_data_collector_id+');" value="Edit" />';
-					add_button = '<input style="width:35px;" title="Add New Printer" type="button" name="btnAdd'+devices_pf_id+'" id="btnAdd'+devices_pf_id+'" onclick="javascript: add_device('+upload_data_collector_id+');" value="Add" />';
-					
-					if(is_added > -1) {
-						//display message instead of dropdown
-						master_device_dropdown = "New Printer Added (<a href=\"javascript: void(0);\" onclick=\"javascript: remove_device("+devices_pf_id+",'results');\">Click to Remove</a>)";
-						jQuery("#results_list").jqGrid('setRowData',ids[i],{action: edit_button});
-					} else {
-						master_device_dropdown = '';
-						master_device_dropdown += '<input type="hidden" name="hdnDevicesPfId'+devices_pf_id+'" id="hdnDevicesPfId'+devices_pf_id+'" class="devicesPfId" value="'+devices_pf_id+'" />';
-						master_device_dropdown += '<input type="hidden" name="hdnMasterDevicesValue'+devices_pf_id+'" id="hdnMasterDevicesValue'+devices_pf_id+'" class="masterDeviceId" value="'+mapped_to_id+'" />';
-						master_device_dropdown += '<input type="hidden" name="hdnMasterDevicesText'+devices_pf_id+'" id="hdnMasterDevicesText'+devices_pf_id+'" class="masterDeviceName" value="'+mapped_to_deviceName+'" />';
-						master_device_dropdown += '<input type="hidden" name="hdnMasterDevicesManufacturer'+devices_pf_id+'" id="hdnMasterDevicesManufacturer'+devices_pf_id+'" class="manufacturerName" value="'+mapped_to_manufacturer+'" />';
-						master_device_dropdown += '<input type="text" name="txtMasterDevices'+devices_pf_id+'" id="txtMasterDevices'+devices_pf_id+'" size="40" class="autoCompleteDeviceName" value="'+mapped_to_deviceName+'" />';
+					edit_button = '
+<input style="width: 35px;" title="Edit Printer" type="button"
+	name="btnEdit'+devices_pf_id+'" id="btnEdit'+devices_pf_id+'"
+	onclick="javascript: add_device('+upload_data_collector_id+');"
+	value="Edit" />
+'; add_button = '
+<input style="width: 35px;" title="Add New Printer" type="button"
+	name="btnAdd'+devices_pf_id+'" id="btnAdd'+devices_pf_id+'"
+	onclick="javascript: add_device('+upload_data_collector_id+');"
+	value="Add" />
+'; if(is_added > -1) { //display message instead of dropdown
+master_device_dropdown = "New Printer Added (
+<a href=\ "javascript: void(0);\" onclick=\ "javascript:remove_device("+devices_pf_id+",'results');\">Click
+	to Remove</a>
+)"; jQuery("#results_list").jqGrid('setRowData',ids[i],{action:
+edit_button}); } else { master_device_dropdown = '';
+master_device_dropdown += '
+<input type="hidden" name="hdnDevicesPfId'+devices_pf_id+'"
+	id="hdnDevicesPfId'+devices_pf_id+'" class="devicesPfId"
+	value="'+devices_pf_id+'" />
+'; master_device_dropdown += '
+<input type="hidden" name="hdnMasterDevicesValue'+devices_pf_id+'"
+	id="hdnMasterDevicesValue'+devices_pf_id+'" class="masterDeviceId"
+	value="'+mapped_to_id+'" />
+'; master_device_dropdown += '
+<input type="hidden" name="hdnMasterDevicesText'+devices_pf_id+'"
+	id="hdnMasterDevicesText'+devices_pf_id+'" class="masterDeviceName"
+	value="'+mapped_to_deviceName+'" />
+'; master_device_dropdown += '
+<input type="hidden"
+	name="hdnMasterDevicesManufacturer'+devices_pf_id+'"
+	id="hdnMasterDevicesManufacturer'+devices_pf_id+'"
+	class="manufacturerName" value="'+mapped_to_manufacturer+'" />
+'; master_device_dropdown += '
+<input type="text" name="txtMasterDevices'+devices_pf_id+'"
+	id="txtMasterDevices'+devices_pf_id+'" size="40"
+	class="autoCompleteDeviceName" value="'+mapped_to_deviceName+'" />
+';
 						jQuery("#results_list").jqGrid('setRowData',ids[i],{action: add_button});
 					}
 					jQuery("#results_list").jqGrid('setRowData',ids[i],{master_device_id: master_device_dropdown});
@@ -110,7 +134,9 @@
             				set_mapped(row_id);
             			},
             			open: function( event, ui ) {
-                			var termTemplate = '<strong>%s</strong>';
+                			var termTemplate = '
+<strong>%s</strong>
+';
                 			var autocompleteData = $(this).data('autocomplete');
                 			autocompleteData.menu.element.find('a').each(function() {
                     			var label = $(this);
@@ -196,24 +222,58 @@
 						disable = 'disabled="disabled"';
 					}
 					<?php if(in_array("System Admin", $this->privilege)) { ?>
-    					edit_button = '<input style="width:35px;" title="Edit Printer" type="button" name="btnEdit'+devices_pf_id+'" id="btnEdit'+devices_pf_id+'" onclick="javascript: edit_device('+devices_pf_id+');" value="Edit" '+disable+' />';
-    					add_button = '<input style="width:35px;" title="Edit Printer" type="button" name="btnAdd'+devices_pf_id+'" id="btnAdd'+devices_pf_id+'" onclick="javascript: edit_device('+devices_pf_id+');" value="Edit" '+disable+' />';
+    					edit_button = '
+<input style="width: 35px;" title="Edit Printer" type="button"
+	name="btnEdit'+devices_pf_id+'" id="btnEdit'+devices_pf_id+'"
+	onclick="javascript: edit_device('+devices_pf_id+');" value="Edit" '+disable+' />
+'; add_button = '
+<input style="width: 35px;" title="Edit Printer" type="button"
+	name="btnAdd'+devices_pf_id+'" id="btnAdd'+devices_pf_id+'"
+	onclick="javascript: edit_device('+devices_pf_id+');" value="Edit" '+disable+' />
+';
                     <?php } else { ?>
-    					edit_button = '<input style="width:35px;" title="Edit Printer" type="button" name="btnEdit'+devices_pf_id+'" id="btnEdit'+devices_pf_id+'" onclick="javascript: add_device('+upload_data_collector_id+');" value="Edit" '+disable+' />';
-    					add_button = '<input style="width:35px;" title="Add New Printer" type="button" name="btnAdd'+devices_pf_id+'" id="btnAdd'+devices_pf_id+'" onclick="javascript: add_device('+upload_data_collector_id+');" value="Add" '+disable+' />';
+    					edit_button = '
+<input style="width: 35px;" title="Edit Printer" type="button"
+	name="btnEdit'+devices_pf_id+'" id="btnEdit'+devices_pf_id+'"
+	onclick="javascript: add_device('+upload_data_collector_id+');"
+	value="Edit" '+disable+' />
+'; add_button = '
+<input style="width: 35px;" title="Add New Printer" type="button"
+	name="btnAdd'+devices_pf_id+'" id="btnAdd'+devices_pf_id+'"
+	onclick="javascript: add_device('+upload_data_collector_id+');"
+	value="Add" '+disable+' />
+';
                     <?php } ?>
                     
 					if(is_added > -1) {
 						//display message instead of dropdown
-						master_device_dropdown = "New Printer Added (<a href=\"javascript: void(0);\" onclick=\"javascript: remove_device("+devices_pf_id+",'mapped');\">Click to Remove</a>)";
-						jQuery("#mapped_list").jqGrid('setRowData',ids[i],{action: edit_button});
-					} else {
-						master_device_dropdown = '';
-						master_device_dropdown += '<input type="hidden" name="hdnDevicesPfId'+devices_pf_id+'" id="hdnDevicesPfId'+devices_pf_id+'" class="devicesPfId" value="'+devices_pf_id+'" />';
-						master_device_dropdown += '<input type="hidden" name="hdnMasterDevicesValue'+devices_pf_id+'" id="hdnMasterDevicesValue'+devices_pf_id+'" class="masterDeviceId" value="'+mapped_to_id+'" />';
-						master_device_dropdown += '<input type="hidden" name="hdnMasterDevicesText'+devices_pf_id+'" id="hdnMasterDevicesText'+devices_pf_id+'" class="masterDeviceName" value="'+mapped_to_deviceName+'" />';
-						master_device_dropdown += '<input type="hidden" name="hdnMasterDevicesManufacturer'+devices_pf_id+'" id="hdnMasterDevicesManufacturer'+devices_pf_id+'" class="manufacturerName" value="'+mapped_to_manufacturer+'" />';
-						master_device_dropdown += '<input type="text" name="txtMasterDevices'+devices_pf_id+'" id="txtMasterDevices'+devices_pf_id+'" size="40" class="autoCompleteDeviceName" value="'+mapped_to_deviceName+'" />';
+						master_device_dropdown = "New Printer Added (
+<a href=\ "javascript: void(0);\" onclick=\ "javascript:remove_device("+devices_pf_id+",'mapped');\">Click
+	to Remove</a>
+)"; jQuery("#mapped_list").jqGrid('setRowData',ids[i],{action:
+edit_button}); } else { master_device_dropdown = '';
+master_device_dropdown += '
+<input type="hidden" name="hdnDevicesPfId'+devices_pf_id+'"
+	id="hdnDevicesPfId'+devices_pf_id+'" class="devicesPfId"
+	value="'+devices_pf_id+'" />
+'; master_device_dropdown += '
+<input type="hidden" name="hdnMasterDevicesValue'+devices_pf_id+'"
+	id="hdnMasterDevicesValue'+devices_pf_id+'" class="masterDeviceId"
+	value="'+mapped_to_id+'" />
+'; master_device_dropdown += '
+<input type="hidden" name="hdnMasterDevicesText'+devices_pf_id+'"
+	id="hdnMasterDevicesText'+devices_pf_id+'" class="masterDeviceName"
+	value="'+mapped_to_deviceName+'" />
+'; master_device_dropdown += '
+<input type="hidden"
+	name="hdnMasterDevicesManufacturer'+devices_pf_id+'"
+	id="hdnMasterDevicesManufacturer'+devices_pf_id+'"
+	class="manufacturerName" value="'+mapped_to_manufacturer+'" />
+'; master_device_dropdown += '
+<input type="text" name="txtMasterDevices'+devices_pf_id+'"
+	id="txtMasterDevices'+devices_pf_id+'" size="40"
+	class="autoCompleteDeviceName" value="'+mapped_to_deviceName+'" />
+';
 						jQuery("#mapped_list").jqGrid('setRowData',ids[i],{action: add_button});
 					}
 					jQuery("#mapped_list").jqGrid('setRowData',ids[i],{master_device_id: master_device_dropdown});
@@ -265,7 +325,9 @@
             				set_mapped(row_id);
             			},
             			open: function( event, ui ) {
-                			var termTemplate = '<strong>%s</strong>';
+                			var termTemplate = '
+<strong>%s</strong>
+';
                 			var autocompleteData = $(this).data('autocomplete');
                 			autocompleteData.menu.element.find('a').each(function() {
                     			var label = $(this);
@@ -413,26 +475,27 @@
 		}
 	}
 	
-<?php $this->headScript()->captureEnd() ?>
+<?php $this->headScript()->captureEnd()?>
 
 <style>
 /* THIS WILL WRAP CELL DATA IN GRID */
 .ui-jqgrid tr.jqgrow td {
-	white-space: normal !important;
+    white-space: normal !important;
 }
 </style>
 
 
-<form name="mapping" id="mapping" class="fileinput" action="<?php echo $this->baseUrl(); ?>/data/savemapping" method="POST">
-    <input type="hidden" name="hdnID" id="hdnID" value="" />
-    <input type="hidden" name="hdnItem" id="hdnItem" value="" />
-    <input type="hidden" name="hdnGrid" id="hdnGrid" value="" />
-	<input type="hidden" name="form_mode" id="form_mode" value="mapping" />
-	
-    <dl class="zend_form">
-    	<dt class="botMenu">
-    	
-    		<div class="message_container margined">
+<form name="mapping" id="mapping" class="fileinput"
+	action="<?php echo $this->baseUrl(); ?>/data/savemapping" method="POST">
+	<input type="hidden" name="hdnID" id="hdnID" value="" /> <input
+		type="hidden" name="hdnItem" id="hdnItem" value="" /> <input
+		type="hidden" name="hdnGrid" id="hdnGrid" value="" /> <input
+		type="hidden" name="form_mode" id="form_mode" value="mapping" />
+
+	<dl class="zend_form">
+		<dt class="botMenu">
+
+			<div class="message_container margined">
     		    <?php echo $this->message; ?>
     		</div>
     		
@@ -445,30 +508,36 @@
     		<div class="results_container">
     			<?php if($this->unmapped_count > 0) { ?>
     			<div id="results_list_container">
-    				<table id="results_list"></table>
-    			</div>
-    			<br />
-    			<p><?php echo $this->mapped_count; ?> printer model(s) have been automatically mapped.</p>
+					<table id="results_list"></table>
+				</div>
+				<br />
+				<p><?php echo $this->mapped_count; ?> printer model(s) have been automatically mapped.</p>
     			<?php } ?>
-    			<p><a id="toggle_mapped_link" href="javascript: void(0);" onclick="javascript: toggle_mapped();" style="text-decoration: none;">[+] Show Mapped Printers</a></p>
-    			<div id="mapped_list_container" style="display: none;">		
-    				<table id="mapped_list"></table>
-    			</div>
-    			<br/>
-    			
-    			<div class="submitBar">
-    				<div id="submitBtns">
-    					<div class="savebtn">
-    						<input type="submit" name="btnNext" id="btnNext" value="Save and continue" />
-    					</div>
-    					<div class="backbtn">
-    						<input type="button" name="btnBack" id="btnBack" value="Back" onClick="javascript: doAction('cancel');" />
-    					</div>
-    				</div>
-    			</div>
-    			
-    		</div>
-    	</dt>
-    </dl>
+    			<p>
+					<a id="toggle_mapped_link" href="javascript: void(0);"
+						onclick="javascript: toggle_mapped();"
+						style="text-decoration: none;">[+] Show Mapped Printers</a>
+				</p>
+				<div id="mapped_list_container" style="display: none;">
+					<table id="mapped_list"></table>
+				</div>
+				<br />
+
+				<div class="submitBar">
+					<div id="submitBtns">
+						<div class="savebtn">
+							<input type="submit" name="btnNext" id="btnNext"
+								value="Save and continue" />
+						</div>
+						<div class="backbtn">
+							<input type="button" name="btnBack" id="btnBack" value="Back"
+								onClick="javascript: doAction('cancel');" />
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</dt>
+	</dl>
 </form>
 

@@ -1,24 +1,25 @@
 <?php
-    echo $this->titlePageStart;
+echo $this->titlePageStart;
 ?>
     <?php echo $this->noBreakStart; ?>
-        <div class="titlepage">
-            <div class="header">
-            	<h3>Prepared for:
+<div class="titlepage">
+	<div class="header">
+		<h3>Prepared for:
             	<?php
-            		if(strlen($this->proposal->Report->CustomerCompanyName) > 26)
-            			echo "<br/>";
-            		
-            		echo $this->proposal->Report->CustomerCompanyName;
-            	?>
+            if (strlen($this->proposal->Report->CustomerCompanyName) > 26)
+                echo "<br/>";
+            
+            echo $this->proposal->Report->CustomerCompanyName;
+            ?>
             	</h3>
-            	<h3><?php echo $this->proposal->DateReportPrepared; ?></h3>
-            </div>
-            <div class="customerdetails">
-                <p><?php echo nl2br($this->proposal->CustomerAddress); ?></p>
-            </div>
-        </div>
-    <?php echo $this->noBreakEnd; ?>
+		<h3><?php echo $this->proposal->DateReportPrepared; ?></h3>
+	</div>
+	<div class="customerdetails">
+		<p><?php echo nl2br($this->proposal->CustomerAddress); ?></p>
+	</div>
+</div>
+<?php echo $this->noBreakEnd; ?>
 <?php
-    echo $this->pageEnd;
+
+echo $this->pageEnd;
 ?>

@@ -21,7 +21,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
 
     /**
      * Maps a database row object to an Application_Model
-     * 
+     *
      * @param Zend_Db_Table_Row $row            
      * @return The appropriate Application_Model
      */
@@ -122,7 +122,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
 
     /**
      * Fetches all unknown devices and puts them in the same format as normal devices
-     * 
+     *
      * @param unknown_type $reportId            
      */
     public function fetchAllUnknownDevicesAsKnownDevices ($reportId, $whereClause)
@@ -379,7 +379,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     * 
+     *
      * @param unknown_type $object            
      */
     public function save (Proposalgen_Model_UnknownDeviceInstance $object)

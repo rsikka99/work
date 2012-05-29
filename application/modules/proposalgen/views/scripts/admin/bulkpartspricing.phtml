@@ -1,9 +1,9 @@
 <?php
 /**
  * bulkpartspricing
- * 
- * @author	John Sadler
- * @version	v1.0 
+ *
+ * @author John Sadler
+ * @version v1.0
  */
 ?>
 
@@ -12,9 +12,13 @@
     $(document).ready(function() {
 		
 		var device_lists = new Array();
-		<?php foreach($this->parts_list as $key) {
-			$min = 4;
-			$pieces = explode(";", $this->devices[$key['toner_id']]); ?>
+		<?php
+
+foreach ( $this->parts_list as $key )
+{
+    $min = 4;
+    $pieces = explode(";", $this->devices [$key ['toner_id']]);
+    ?>
 			device_lists[<?php echo $key['toner_id'] ?>] = '<?php echo $this->devices[$key['toner_id']]; ?>';
 		<?php } ?>
 		
@@ -49,21 +53,25 @@
 				for(var i=0; i < ids.length; i++) { 
 					var cur_row = ids[i];
 					var cur_price = document.getElementById("toners_list").rows[i+1].cells[7].innerHTML.replace("$","").replace(/,/gi,"").replace(/ /gi,"");
-					hidden_price_element = "<input type='hidden' name='hdnPrice"+cur_row+"' id='hdnPrice"+cur_row+"' value='" + cur_price + "' size='8' maxlength='8' />"; 
-					new_price_element = "$ <input type='text' name='txtPrice"+cur_row+"' id='txtPrice"+cur_row+"' size='8' maxlength='8' style='text-align:right;' onkeypress='javascript: return numbersonly(this, event);' />";
-					jQuery("#toners_list").jqGrid('setRowData',ids[i],{new_price:hidden_price_element+new_price_element});
-					
-					var min = 4;
-					var output = '';
-					if(device_lists[ids[i]]) {
-						var device_list_array = device_lists[ids[i]];
-						var pieces = device_list_array.split(";");
-	
-						output += '<div style="text-align: left; width: 200px; height: 55px; overflow: auto;">';
-						for(var j=0; j < pieces.length; j++) {
-							output += pieces[j] + '<br />';
-						}
-						output += '</div>';
+					hidden_price_element = "
+<input type='hidden' name='hdnPrice"+cur_row+"' id='hdnPrice"+cur_row+"'
+	value='" + cur_price + "' size='8' maxlength='8' />
+"; new_price_element = "$
+<input type='text' name='txtPrice"+cur_row+"' id='txtPrice"+cur_row+"'
+	size='8' maxlength='8' style='text-align: right;'
+	onkeypress='javascript: return numbersonly(this, event);' />
+";
+jQuery("#toners_list").jqGrid('setRowData',ids[i],{new_price:hidden_price_element+new_price_element});
+
+var min = 4; var output = ''; if(device_lists[ids[i]]) { var
+device_list_array = device_lists[ids[i]]; var pieces =
+device_list_array.split(";"); output += '
+<div
+	style="text-align: left; width: 200px; height: 55px; overflow: auto;">
+	'; for(var j=0; j < pieces.length; j++) { output += pieces[j] + '<br />';
+	} output += '
+</div>
+';
 						
 						jQuery("#toners_list").jqGrid('setRowData',ids[i],{device_list:output});
 					}
@@ -130,69 +138,77 @@
 		document.getElementById("bulk").submit();
 	}
 	
-<?php $this->headScript()->captureEnd() ?>
+<?php $this->headScript()->captureEnd()?>
 
 <h2><?php echo $this->title;?></h2>
 
 <form name="bulk" id="bulk" action="" method="post">
-<input type="hidden" name="hdnMode" id="hdnMode" value="" />
-<input type="hidden" name="hdnTonerID" id="hdnTonerID" value="" />
-<dl class="zend_form">
-	<dt class="botMenu">
-		
-		<div id="instruction_container">
-			<p>If you wish to remove a price, enter 0 as the new price and update.</p>
-		</div>
-		
-		<div id="message_container" class="message_container" style="height: 30px;">
+	<input type="hidden" name="hdnMode" id="hdnMode" value="" /> <input
+		type="hidden" name="hdnTonerID" id="hdnTonerID" value="" />
+	<dl class="zend_form">
+		<dt class="botMenu">
+
+			<div id="instruction_container">
+				<p>If you wish to remove a price, enter 0 as the new price and
+					update.</p>
+			</div>
+
+			<div id="message_container" class="message_container"
+				style="height: 30px;">
 		    <?php echo $this->message; ?>
 		</div>
-	
-		<div id="filter_container">
-			<label for="manufacturer_filter" class="label">Filter Manufacturers:</label>
-			<select name="manufacturer_filter" id="manufacturer_filter" class="" onchange="javascript: update_grid(this.value);">
-			<option value="">Show All Manufacturers</option>
+
+			<div id="filter_container">
+				<label for="manufacturer_filter" class="label">Filter Manufacturers:</label>
+				<select name="manufacturer_filter" id="manufacturer_filter" class=""
+					onchange="javascript: update_grid(this.value);">
+					<option value="">Show All Manufacturers</option>
 			<?php
-			foreach($this->manufacturer_list as $key) {
-				echo "<option value='" . $key['manufacturer_id'] ."'";
-				if ($key['manufacturer_id'] == $this->manufacturer_id) {
-					echo " selected";
-				}
-				echo ">" . ucwords(strtolower($key['manufacturer_name'])) . "</option>";
-			}
-			?>
+foreach ( $this->manufacturer_list as $key )
+{
+    echo "<option value='" . $key ['manufacturer_id'] . "'";
+    if ($key ['manufacturer_id'] == $this->manufacturer_id)
+    {
+        echo " selected";
+    }
+    echo ">" . ucwords(strtolower($key ['manufacturer_name'])) . "</option>";
+}
+?>
 			</select>
-		</div>
-		
-		<div class="results_container">
-			<div class="list_container">
-				<div class="bold margined">
-					Update selected by: 
-					<select name="cboSign" id=""cboSign"">
-						<option value="+">+</option>
-						<option value="-">-</option>
-					</select>
-					<input type="text" name="txtUpdate" id="txtUpdate" size="3" maxlength="3" style="text-align: right;" onkeypress="javascript: return numbersonly(this, event);" />%
-					<input type="button" name="btnApply" id="btnApply" value="Preview" onclick="javascript: apply_percentage();" />
-				</div>
-				
-				<table id="toners_list"></table>
-				
-				<br/>			
-				<div class="submitBar">				
-					<div id="submitBtns">
-						<div class="savebtn">
-							<input type="button" name="btnUpdate" id="btnUpdate" value="Update" onclick="javascript: do_update();" />
-						</div>
-						<div class="backbtn">
-							<input type="button" name="btnDone" id="btnDone" value="Done" onClick="javascript:  document.location.href='<?php echo $this->baseUrl()."/admin"?>';" />
+			</div>
+
+			<div class="results_container">
+				<div class="list_container">
+					<div class="bold margined">
+						Update selected by: <select name="cboSign" id=""cboSign"">
+							<option value="+">+</option>
+							<option value="-">-</option>
+						</select> <input type="text" name="txtUpdate" id="txtUpdate"
+							size="3" maxlength="3" style="text-align: right;"
+							onkeypress="javascript: return numbersonly(this, event);" />% <input
+							type="button" name="btnApply" id="btnApply" value="Preview"
+							onclick="javascript: apply_percentage();" />
+					</div>
+
+					<table id="toners_list"></table>
+
+					<br />
+					<div class="submitBar">
+						<div id="submitBtns">
+							<div class="savebtn">
+								<input type="button" name="btnUpdate" id="btnUpdate"
+									value="Update" onclick="javascript: do_update();" />
+							</div>
+							<div class="backbtn">
+								<input type="button" name="btnDone" id="btnDone" value="Done"
+									onClick="javascript:  document.location.href='<?php echo $this->baseUrl()."/admin"?>';" />
+							</div>
 						</div>
 					</div>
+
 				</div>
-				
 			</div>
-		</div>
-	</dt>
-</dl>
+		</dt>
+	</dl>
 </form>
 

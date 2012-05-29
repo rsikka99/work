@@ -2,7 +2,7 @@
 
 /**
  * Class Proposalgen_Model_PfDeviceMatchupUsers
- * 
+ *
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_PfDeviceMatchupUser extends Tangent_Model_Abstract

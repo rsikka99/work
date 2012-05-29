@@ -1,13 +1,13 @@
 <?php
 /**
  * managecompanies.phtml
- * 
- * @author	John Sadler
- * @version	v1.0 
+ *
+ * @author John Sadler
+ * @version v1.0
  */
 ?>
 
-<?php $this->headScript()->captureStart('append','text/javascript') ?>
+<?php $this->headScript()->captureStart('append','text/javascript')?>
 var repop = <?php echo (empty($this->repop) == true ? "false" : $this->repop); ?>;
 
 $(document).ready(function() {
@@ -61,7 +61,7 @@ $(document).ready(function() {
 	
 });
 
-<?php $this->headScript()->captureEnd() ?>
+<?php $this->headScript()->captureEnd()?>
 
 <h2><?php echo $this->title;?></h2>
 
