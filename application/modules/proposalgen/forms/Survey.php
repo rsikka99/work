@@ -13,6 +13,8 @@ class Proposalgen_Form_Survey extends Zend_Form
 {
     public function init ()
     {
+        $currency = new Zend_Currency();
+        
         $session = new Zend_Session_Namespace('report');
         $currencyRegex = '/^\d+(?:\.\d{0,2})?$/';
         $currencyValidator = new Zend_Validate_Regex($currencyRegex);
@@ -325,7 +327,7 @@ class Proposalgen_Form_Survey extends Zend_Form
             ))
             ->setAttrib('tmtw', 'numeric')
             ->setAttrib('id', '13')
-            ->setValue(money_format('%i', 1000))
+            ->setValue($currency->toCurrency(1000))
             ->setDescription('$')
             ->addValidator('greaterThan', true, array ( 'min' => 0 ))
             ->setDecorators(array (
@@ -351,7 +353,7 @@ class Proposalgen_Form_Survey extends Zend_Form
             ))
             ->setAttrib('tmtw', 'numeric')
             ->setAttrib('id', '14')
-            ->setValue(money_format('%i', 50))
+            ->setValue($currency->toCurrency(50))
             ->setDescription('$')
             ->addValidator('greaterThan', true, array ( 'min' => 0 ))
             ->setDecorators(array (
@@ -376,7 +378,7 @@ class Proposalgen_Form_Survey extends Zend_Form
             ))
             ->setAttrib('tmtw', 'numeric')
             ->setAttrib('id', '15')
-            ->setValue(money_format('%i', 40))
+            ->setValue($currency->toCurrency(40))
             ->setDescription('$')
             ->addValidator('greaterThan', true, array ( 'min' => 0 ))
             ->setDecorators(array (
@@ -765,7 +767,7 @@ class Proposalgen_Form_Survey extends Zend_Form
         
         }
         
-        $this->setSubFormDecorators($subForm)
+        $this->setCustomSubFormDecorators($subForm)
             ->addSubmitButton($subForm)
             ->addSubFormActions($subForm);
         return $subForm;
@@ -777,7 +779,7 @@ class Proposalgen_Form_Survey extends Zend_Form
      * @param  Zend_Form_SubForm $subForm
      * @return My_Form_Registration
      */
-    public function setSubFormDecorators (Zend_Form_SubForm $subForm)
+    public function setCustomSubFormDecorators (Zend_Form_SubForm $subForm)
     {
         $subForm->setDecorators(array (
             'FormElements', 

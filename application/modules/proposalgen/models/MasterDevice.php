@@ -2,6 +2,7 @@
 
 /**
  * Class Proposalgen_Model_Device
+ * 
  * @author "Lee Robert"
  */
 class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
@@ -9,7 +10,6 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     private static $ReportMargin;
     private static $PricingConfig;
     private static $GrossMarginPricingConfig;
-    
     protected $MasterDeviceId;
     protected $ManufacturerId;
     protected $PrinterModel;
@@ -28,10 +28,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     protected $DutyCycle;
     protected $PPMBlack;
     protected $PPMColor;
-    
     protected $IsLeased;
     protected $LeasedTonerYield;
-    
     protected $Toners;
     protected $Manufacturer;
     protected $TonerConfig;
@@ -41,9 +39,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     protected $CostPerPage;
     protected $UsingIncompleteBlackTonerData;
     protected $UsingIncompleteColorTonerData;
-    
     protected $MaximumMonthlyPageVolume;
-    
     protected $HasValidMonoGrossMarginToners;
     protected $HasValidColorGrossMarginToners;
     protected $TonersForAssessment;
@@ -54,6 +50,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
      * The maximum monthly page volume is calculated using the smallest toner yield
      * given the current pricing configuration
      * SPECIAL: Leased devices have a yield set, so we use that
+     * 
      * @return the $MaximumMonthlyPageVolume
      */
     public function getMaximumMonthlyPageVolume ()
@@ -83,6 +80,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $PricingConfig
      */
     public static function getPricingConfig ()
@@ -96,7 +94,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $PricingConfig
+     *
+     * @param field_type $PricingConfig            
      */
     public static function setPricingConfig ($PricingConfig)
     {
@@ -104,6 +103,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $ReportMargin
      */
     public static function getReportMargin ()
@@ -116,7 +116,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $ReportMargin
+     *
+     * @param field_type $ReportMargin            
      */
     public static function setReportMargin ($ReportMargin)
     {
@@ -129,10 +130,14 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * Gets the cheapest toner from a group of the same color. Can specify a preferred part type to get.
+     * Gets the cheapest toner from a group of the same color.
+     * Can specify a preferred part type to get.
      * Will return a default toner value if it does not find an appropriate toner
-     * @param integer $tonerColor (Constant value in Proposalgen_Model_TonerColor)
-     * @param integer $preferredPartType (Constant value in Proposalgen_Model_PartType)
+     * 
+     * @param integer $tonerColor
+     *            (Constant value in Proposalgen_Model_TonerColor)
+     * @param integer $preferredPartType
+     *            (Constant value in Proposalgen_Model_PartType)
      * @return Proposalgen_Model_Toner
      */
     public function getCheapestToner ($tonerColor, $pricingConfig)
@@ -173,9 +178,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
                 {
                     $cheapestToner = $toner;
                 }
-            
             }
-        
         }
         else
         {
@@ -219,7 +222,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     /**
      * Calculates the cost per page for a device based on a pricing config.
      * Once calculated if you pass a new pricing config, it will recalculate the value
-     * @param stdClass $pricingConfig
+     * 
+     * @param stdClass $pricingConfig            
      */
     public function getCostPerPage ()
     {
@@ -291,7 +295,6 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
                 $costPerPage->Estimated->Base->BlackAndWhite += $tonerCPP->Estimated->BlackAndWhite;
                 $costPerPage->Estimated->Base->Color += $tonerCPP->Estimated->BlackAndWhite;
                 $costPerPage->Estimated->Base->Color += $tonerCPP->Estimated->Color;
-            
             }
             
             /* Actual Cost Per Page */
@@ -338,7 +341,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $CostPerPage
+     *
+     * @param field_type $CostPerPage            
      */
     public function setCostPerPage ($CostPerPage)
     {
@@ -347,6 +351,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $MasterDeviceId
      */
     public function getMasterDeviceId ()
@@ -360,7 +365,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $MasterDeviceId
+     *
+     * @param field_type $MasterDeviceId            
      */
     public function setMasterDeviceId ($MasterDeviceId)
     {
@@ -369,6 +375,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return Proposalgen_Model_Manufacturer
      */
     public function getManufacturer ()
@@ -382,7 +389,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $Manufacturer
+     *
+     * @param field_type $Manufacturer            
      */
     public function setManufacturer ($Manufacturer)
     {
@@ -391,6 +399,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $PrinterModel
      */
     public function getPrinterModel ()
@@ -404,7 +413,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $PrinterModel
+     *
+     * @param field_type $PrinterModel            
      */
     public function setPrinterModel ($PrinterModel)
     {
@@ -413,6 +423,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $TonerConfig
      */
     public function getTonerConfig ()
@@ -426,7 +437,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $TonerConfig
+     *
+     * @param field_type $TonerConfig            
      */
     public function setTonerConfig ($TonerConfig)
     {
@@ -435,6 +447,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $IsCopier
      */
     public function getIsCopier ()
@@ -448,7 +461,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $IsCopier
+     *
+     * @param field_type $IsCopier            
      */
     public function setIsCopier ($IsCopier)
     {
@@ -457,6 +471,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $IsFax
      */
     public function getIsFax ()
@@ -470,7 +485,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $IsFax
+     *
+     * @param field_type $IsFax            
      */
     public function setIsFax ($IsFax)
     {
@@ -479,6 +495,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $IsScanner
      */
     public function getIsScanner ()
@@ -492,7 +509,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $IsScanner
+     *
+     * @param field_type $IsScanner            
      */
     public function setIsScanner ($IsScanner)
     {
@@ -501,6 +519,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $IsDuplex
      */
     public function getIsDuplex ()
@@ -514,7 +533,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $IsDuplex
+     *
+     * @param field_type $IsDuplex            
      */
     public function setIsDuplex ($IsDuplex)
     {
@@ -523,6 +543,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $IsReplacementDevice
      */
     public function getIsReplacementDevice ()
@@ -536,7 +557,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $IsReplacementDevice
+     *
+     * @param field_type $IsReplacementDevice            
      */
     public function setIsReplacementDevice ($IsReplacementDevice)
     {
@@ -545,6 +567,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $WattsPowerNormal
      */
     public function getWattsPowerNormal ()
@@ -557,7 +580,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $WattsPowerNormal
+     *
+     * @param field_type $WattsPowerNormal            
      */
     public function setWattsPowerNormal ($WattsPowerNormal)
     {
@@ -566,6 +590,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $WattsPowerIdle
      */
     public function getWattsPowerIdle ()
@@ -578,7 +603,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $WattsPowerIdle
+     *
+     * @param field_type $WattsPowerIdle            
      */
     public function setWattsPowerIdle ($WattsPowerIdle)
     {
@@ -587,6 +613,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $DevicePrice
      */
     public function getDevicePrice ()
@@ -600,7 +627,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $DevicePrice
+     *
+     * @param field_type $DevicePrice            
      */
     public function setDevicePrice ($DevicePrice)
     {
@@ -609,6 +637,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $LaunchDate
      */
     public function getLaunchDate ()
@@ -622,7 +651,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $LaunchDate
+     *
+     * @param field_type $LaunchDate            
      */
     public function setLaunchDate ($LaunchDate)
     {
@@ -631,6 +661,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $DateCreated
      */
     public function getDateCreated ()
@@ -644,7 +675,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $DateCreated
+     *
+     * @param field_type $DateCreated            
      */
     public function setDateCreated ($DateCreated)
     {
@@ -653,6 +685,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $Toners
      */
     public function getToners ()
@@ -660,27 +693,21 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
         if (! isset($this->Toners))
         {
             // Get the toners for the device
-            /* $toners = array ();
-            $deviceTonerMapper = Proposalgen_Model_Mapper_DeviceToner::getInstance();
-            $tonerMapper = Proposalgen_Model_Mapper_Toner::getInstance();
-            $tonerRows = $deviceTonerMapper->fetchAll(array (
-                    "master_device_id = ?" => $this->MasterDeviceId ));
-            if ($tonerRows)
-            {
-                foreach ( $tonerRows as $tonerRow )
-                {
-                    $toner = $tonerMapper->find($tonerRow->getTonerId());
-                    $toners [$toner->getPartType()->getPartTypeId()] [$toner->getTonerColor()->getTonerColorId()] [] = $toner;
-                }
-            }
-            */
+            /*
+             * $toners = array (); $deviceTonerMapper = Proposalgen_Model_Mapper_DeviceToner::getInstance();
+             * $tonerMapper = Proposalgen_Model_Mapper_Toner::getInstance(); $tonerRows =
+             * $deviceTonerMapper->fetchAll(array ( "master_device_id = ?" => $this->MasterDeviceId )); if ($tonerRows)
+             * { foreach ( $tonerRows as $tonerRow ) { $toner = $tonerMapper->find($tonerRow->getTonerId()); $toners
+             * [$toner->getPartType()->getPartTypeId()] [$toner->getTonerColor()->getTonerColorId()] [] = $toner; } }
+             */
             $this->Toners = Proposalgen_Model_Mapper_Toner::getInstance()->getTonersForDevice($this->getMasterDeviceId());
         }
         return $this->Toners;
     }
 
     /**
-     * @param field_type $Toners
+     *
+     * @param field_type $Toners            
      */
     public function setToners ($Toners)
     {
@@ -689,6 +716,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $ManufacturerId
      */
     public function getManufacturerId ()
@@ -702,7 +730,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $ManufacturerId
+     *
+     * @param field_type $ManufacturerId            
      */
     public function setManufacturerId ($ManufacturerId)
     {
@@ -711,6 +740,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $TonerConfigId
      */
     public function getTonerConfigId ()
@@ -724,7 +754,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $TonerConfigId
+     *
+     * @param field_type $TonerConfigId            
      */
     public function setTonerConfigId ($TonerConfigId)
     {
@@ -733,6 +764,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $AdminCostPerPage
      */
     public function getAdminCostPerPage ()
@@ -745,7 +777,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $AdminCostPerPage
+     *
+     * @param field_type $AdminCostPerPage            
      */
     public function setAdminCostPerPage ($AdminCostPerPage)
     {
@@ -754,7 +787,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $UsingIncompleteTonerData
+     *
+     * @param field_type $UsingIncompleteTonerData            
      */
     public function setUsingIncompleteTonerData ($tonerColor, $incomplete)
     {
@@ -778,6 +812,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $UsingIncompleteBlackTonerData
      */
     public function isUsingIncompleteBlackTonerData ()
@@ -791,6 +826,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $DutyCycle
      */
     public function getDutyCycle ()
@@ -804,7 +840,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $DutyCycle
+     *
+     * @param field_type $DutyCycle            
      */
     public function setDutyCycle ($DutyCycle)
     {
@@ -813,6 +850,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $PPMBlack
      */
     public function getPPMBlack ()
@@ -826,7 +864,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $PPMBlack
+     *
+     * @param field_type $PPMBlack            
      */
     public function setPPMBlack ($PPMBlack)
     {
@@ -835,6 +874,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $PPMColor
      */
     public function getPPMColor ()
@@ -848,7 +888,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $PPMColor
+     *
+     * @param field_type $PPMColor            
      */
     public function setPPMColor ($PPMColor)
     {
@@ -857,6 +898,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $ServiceCostPerPage
      */
     public function getServiceCostPerPage ()
@@ -870,7 +912,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $ServiceCostPerPage
+     *
+     * @param field_type $ServiceCostPerPage            
      */
     public function setServiceCostPerPage ($ServiceCostPerPage)
     {
@@ -879,6 +922,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $GrossMarginPricingConfig
      */
     public static function getGrossMarginPricingConfig ()
@@ -892,7 +936,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $GrossMarginPricingConfig
+     *
+     * @param field_type $GrossMarginPricingConfig            
      */
     public static function setGrossMarginPricingConfig ($GrossMarginPricingConfig)
     {
@@ -900,6 +945,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $IsLeased
      */
     public function getIsLeased ()
@@ -913,7 +959,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $IsLeased
+     *
+     * @param field_type $IsLeased            
      */
     public function setIsLeased ($IsLeased)
     {
@@ -922,6 +969,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $LeasedTonerYield
      */
     public function getLeasedTonerYield ()
@@ -934,7 +982,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $LeasedTonerYield
+     *
+     * @param field_type $LeasedTonerYield            
      */
     public function setLeasedTonerYield ($LeasedTonerYield)
     {
@@ -943,6 +992,7 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $HasValidMonoGrossMarginToners
      */
     public function getHasValidMonoGrossMarginToners ()
@@ -965,7 +1015,6 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
                     //$usesAllValidToners = false;
                     //break;
                 }
-            
             }
             
             $this->HasValidMonoGrossMarginToners = $usesAllValidToners;
@@ -974,16 +1023,17 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $HasValidMonoGrossMarginToners
+     *
+     * @param field_type $HasValidMonoGrossMarginToners            
      */
     public function setHasValidMonoGrossMarginToners ($HasValidMonoGrossMarginToners)
     {
         $this->HasValidMonoGrossMarginToners = $HasValidMonoGrossMarginToners;
         return $this;
     }
-    
-    
-/**
+
+    /**
+     *
      * @return the $HasValidColorGrossMarginToners
      */
     public function getHasValidColorGrossMarginToners ()
@@ -1006,7 +1056,6 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
                     $usesAllValidToners = false;
                     break;
                 }
-            
             }
             
             $this->HasValidColorGrossMarginToners = $usesAllValidToners;
@@ -1015,7 +1064,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $HasValidColorGrossMarginToners
+     *
+     * @param field_type $HasValidColorGrossMarginToners            
      */
     public function setHasValidColorGrossMarginToners ($HasValidColorGrossMarginToners)
     {
@@ -1024,16 +1074,17 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $TonersForAssessment
      */
     public function getTonersForAssessment ()
     {
         if (! isset($this->TonersForAssessment))
         {
-            $toners = array();
-            foreach ($this->getRequiredTonerColors() as $tonerColor)
+            $toners = array ();
+            foreach ( $this->getRequiredTonerColors() as $tonerColor )
             {
-                $toners[$tonerColor] = $this->getCheapestToner($tonerColor, self::getPricingConfig());
+                $toners [$tonerColor] = $this->getCheapestToner($tonerColor, self::getPricingConfig());
             }
             $this->TonersForAssessment = $toners;
         }
@@ -1041,16 +1092,17 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $TonersForGrossMargin
      */
     public function getTonersForGrossMargin ()
     {
         if (! isset($this->TonersForGrossMargin))
         {
-            $toners = array();
-            foreach ($this->getRequiredTonerColors() as $tonerColor)
+            $toners = array ();
+            foreach ( $this->getRequiredTonerColors() as $tonerColor )
             {
-                $toners[$tonerColor] = $this->getCheapestToner($tonerColor, self::getGrossMarginPricingConfig());
+                $toners [$tonerColor] = $this->getCheapestToner($tonerColor, self::getGrossMarginPricingConfig());
             }
             $this->TonersForGrossMargin = $toners;
         }
@@ -1058,7 +1110,8 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $TonersForAssessment
+     *
+     * @param field_type $TonersForAssessment            
      */
     public function setTonersForAssessment ($TonersForAssessment)
     {
@@ -1067,33 +1120,35 @@ class Proposalgen_Model_MasterDevice extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $TonersForGrossMargin
+     *
+     * @param field_type $TonersForGrossMargin            
      */
     public function setTonersForGrossMargin ($TonersForGrossMargin)
     {
         $this->TonersForGrossMargin = $TonersForGrossMargin;
         return $this;
     }
-	/**
+
+    /**
+     *
      * @return the $RequiredTonerColors
      */
     public function getRequiredTonerColors ()
     {
-        if (!isset($this->RequiredTonerColors))
+        if (! isset($this->RequiredTonerColors))
         {
-        	$this->RequiredTonerColors = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($this->getTonerConfigId());
+            $this->RequiredTonerColors = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($this->getTonerConfigId());
         }
         return $this->RequiredTonerColors;
     }
 
-	/**
-     * @param field_type $RequiredTonerColors
+    /**
+     *
+     * @param field_type $RequiredTonerColors            
      */
     public function setRequiredTonerColors ($RequiredTonerColors)
     {
         $this->RequiredTonerColors = $RequiredTonerColors;
         return $this;
     }
-
-
 }

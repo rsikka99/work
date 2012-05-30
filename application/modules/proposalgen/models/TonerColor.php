@@ -2,6 +2,7 @@
 
 /**
  * Class Proposalgen_Model_TonerColor
+ * 
  * @author "Lee Robert"
  */
 class Proposalgen_Model_TonerColor extends Tangent_Model_Abstract
@@ -12,7 +13,6 @@ class Proposalgen_Model_TonerColor extends Tangent_Model_Abstract
     const YELLOW = 4;
     const THREE_COLOR = 5;
     const FOUR_COLOR = 6;
-    
     static $ColorNames = array (
             self::BLACK => "Black", 
             self::CYAN => "Cyan", 
@@ -21,11 +21,11 @@ class Proposalgen_Model_TonerColor extends Tangent_Model_Abstract
             self::THREE_COLOR => "Three Color", 
             self::FOUR_COLOR => "Four Color" 
     );
-    
     protected $TonerColorId;
     protected $TonerColorName;
 
     /**
+     *
      * @return the $TonerColorId
      */
     public function getTonerColorId ()
@@ -39,7 +39,8 @@ class Proposalgen_Model_TonerColor extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $TonerColorId
+     *
+     * @param field_type $TonerColorId            
      */
     public function setTonerColorId ($TonerColorId)
     {
@@ -48,6 +49,7 @@ class Proposalgen_Model_TonerColor extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $TonerColorName
      */
     public function getTonerColorName ()
@@ -61,12 +63,12 @@ class Proposalgen_Model_TonerColor extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $TonerColorName
+     *
+     * @param field_type $TonerColorName            
      */
     public function setTonerColorName ($TonerColorName)
     {
         $this->TonerColorName = $TonerColorName;
         return $this;
     }
-
 }

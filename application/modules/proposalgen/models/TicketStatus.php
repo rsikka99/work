@@ -2,33 +2,35 @@
 
 /**
  * Class Proposalgen_Model_TicketStatus
+ * 
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_TicketStatus extends Tangent_Model_Abstract
-{    
+{
     const STATUS_NEW = 1;
     const STATUS_OPEN = 2;
     const STATUS_CLOSED = 3;
     const STATUS_REJECTED = 4;
-    
     protected $StatusId;
     protected $StatusName;
-    
-	/**
+
+    /**
+     *
      * @return the $StatusId
      */
     public function getStatusId ()
     {
-        if (!isset($this->StatusId))
+        if (! isset($this->StatusId))
         {
-        	
-        	$this->StatusId = null;
-        }	
+            
+            $this->StatusId = null;
+        }
         return $this->StatusId;
     }
 
-	/**
-     * @param field_type $StatusId
+    /**
+     *
+     * @param field_type $StatusId            
      */
     public function setStatusId ($StatusId)
     {
@@ -36,28 +38,27 @@ class Proposalgen_Model_TicketStatus extends Tangent_Model_Abstract
         return $this;
     }
 
-	/**
+    /**
+     *
      * @return the $StatusName
      */
     public function getStatusName ()
     {
-        if (!isset($this->StatusName))
+        if (! isset($this->StatusName))
         {
-        	
-        	$this->StatusName = null;
-        }	
+            
+            $this->StatusName = null;
+        }
         return $this->StatusName;
     }
 
-	/**
-     * @param field_type $StatusName
+    /**
+     *
+     * @param field_type $StatusName            
      */
     public function setStatusName ($StatusName)
     {
         $this->StatusName = $StatusName;
         return $this;
     }
-
-    
-    
 }

@@ -6,11 +6,11 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
     static $_instance;
 
     /**
+     *
      * @return Tangent_Model_Mapper_Abstract
      */
     public static function getInstance ()
     {
-        
         if (! isset(self::$_instance))
         {
             $className = get_class();
@@ -21,7 +21,8 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
 
     /**
      * Maps a database row object to an Proposalgen_Model
-     * @param Zend_Db_Table_Row $row
+     * 
+     * @param Zend_Db_Table_Row $row            
      * @return The appropriate Proposalgen_Model
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
@@ -93,7 +94,8 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     * @param unknown_type $object
+     * 
+     * @param unknown_type $object            
      */
     public function save (Proposalgen_Model_UploadDataCollectorRow $object)
     {
@@ -162,45 +164,48 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
         }
         return $primaryKey;
     }
-    
-    public function getExcludedAsDeviceInstance($reportId)
+
+    public function getExcludedAsDeviceInstance ($reportId)
     {
-    	$devices = array();
-    	$results = $this->fetchAll(array('is_excluded = 1 OR invalid_data = 1', "report_id = ?" => $reportId));
-    	foreach ($results as $result)
-    	{
-			//device must be at least 4 days old
-			$days = 5;
-			$startDate = new DateTime($result->StartDate);
-			$endDate = new DateTime($result->EndDate);
-			$discoveryDate = new DateTime($result->DiscoveryDate);
-			
-			$interval1 = $startDate->diff($endDate);
-			$interval2 = $discoveryDate->diff($endDate);
-			
-			$days = $interval1;
-			if ($interval1->days > $interval2->days && ! $interval2->invert)
-			{
-				$days = $interval2;
-			}
-                    
-    		$device = new Proposalgen_Model_DeviceInstance();
-    		$masterDevice = new Proposalgen_Model_MasterDevice();
-    		$manufacturer = new Proposalgen_Model_Manufacturer();
-    		
-    		$manufacturer->setManufacturerName($result->Manufacturer);
-    		$masterDevice->setPrinterModel(trim(str_replace($manufacturer->getManufacturerName(), '', $result->ModelName)));
-    		$masterDevice->setManufacturer($manufacturer);
-    		$device->setMasterDevice($masterDevice);
-    		
-    		$device->setDeviceName($result->ModelName);
-    		$device->setIpAddress($result->IpAddress);
-    		$device->setSerialNumber($result->SerialNumber);
-    		if ($days->days < 4)
-    		{
+        $devices = array ();
+        $results = $this->fetchAll(array (
+                'is_excluded = 1 OR invalid_data = 1', 
+                "report_id = ?" => $reportId 
+        ));
+        foreach ( $results as $result )
+        {
+            //device must be at least 4 days old
+            $days = 5;
+            $startDate = new DateTime($result->StartDate);
+            $endDate = new DateTime($result->EndDate);
+            $discoveryDate = new DateTime($result->DiscoveryDate);
+            
+            $interval1 = $startDate->diff($endDate);
+            $interval2 = $discoveryDate->diff($endDate);
+            
+            $days = $interval1;
+            if ($interval1->days > $interval2->days && ! $interval2->invert)
+            {
+                $days = $interval2;
+            }
+            
+            $device = new Proposalgen_Model_DeviceInstance();
+            $masterDevice = new Proposalgen_Model_MasterDevice();
+            $manufacturer = new Proposalgen_Model_Manufacturer();
+            
+            $manufacturer->setManufacturerName($result->Manufacturer);
+            $masterDevice->setPrinterModel(trim(str_replace($manufacturer->getManufacturerName(), '', $result->ModelName)));
+            $masterDevice->setManufacturer($manufacturer);
+            $device->setMasterDevice($masterDevice);
+            
+            $device->setDeviceName($result->ModelName);
+            $device->setIpAddress($result->IpAddress);
+            $device->setSerialNumber($result->SerialNumber);
+            if ($days->days < 4)
+            {
                 $device->setExclusionReason('Insufficient Monitor Data');
-    		}
-    	    else if ($result->IsExcluded == true)
+            }
+            else if ($result->IsExcluded == true)
             {
                 $device->setIsExcluded(true);
             }
@@ -216,8 +221,8 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
             {
                 $device->setExclusionReason('Incompatible with PrintIQ ');
             }
-    		$devices[] = $device;
-    	}
-    	return $devices;
+            $devices [] = $device;
+        }
+        return $devices;
     }
 }

@@ -18,34 +18,32 @@ CREATE TABLE `proposalgenerator_pricing_configs` (
 
 CREATE TABLE `proposalgenerator_report_settings` (
     `id`                                    INTEGER            NOT NULL AUTO_INCREMENT,
-    `estimated_page_coverage_mono`          DOUBLE                      DEFAULT NULL,
-    `estimated_page_coverage_color`         DOUBLE                      DEFAULT NULL,
     `actual_page_coverage_mono`             DOUBLE                      DEFAULT NULL,
     `actual_page_coverage_color`            DOUBLE                      DEFAULT NULL,
     `service_cost_per_page`                 DOUBLE                      DEFAULT NULL,
-    `admin_charge_per_page`                 DOUBLE                      DEFAULT NULL,
+    `admin_cost_per_page`                   DOUBLE                      DEFAULT NULL,
     `assessment_report_margin`              DOUBLE                      DEFAULT NULL,
     `gross_margin_report_margin`            DOUBLE                      DEFAULT NULL,
     `monthly_lease_payment`                 DOUBLE                      DEFAULT NULL,
     `default_printer_cost`                  DOUBLE                      DEFAULT NULL,
-    `leased_bw_per_page`                    DOUBLE                      DEFAULT NULL,
-    `leased_color_per_page`                 DOUBLE                      DEFAULT NULL,
-    `mps_bw_per_page`                       DOUBLE                      DEFAULT NULL,
-    `mps_color_per_page`                    DOUBLE                      DEFAULT NULL,
+    `leased_bw_cost_per_page`               DOUBLE                      DEFAULT NULL,
+    `leased_color_cost_per_page`            DOUBLE                      DEFAULT NULL,
+    `mps_bw_cost_per_page`                  DOUBLE                      DEFAULT NULL,
+    `mps_color_cost_per_page`               DOUBLE                      DEFAULT NULL,
     `kilowatts_per_hour`                    DOUBLE                      DEFAULT NULL,
-    `default_bw_toner_cost`                 DOUBLE                      DEFAULT NULL,
-    `default_bw_toner_yield`                INTEGER                     DEFAULT NULL,
-    `default_color_toner_cost`              DOUBLE                      DEFAULT NULL,
-    `default_color_toner_yield`             INTEGER                     DEFAULT NULL,
-    `default_three_color_toner_cost`        DOUBLE                      DEFAULT NULL,
-    `default_three_color_toner_yield`       INTEGER                     DEFAULT NULL,
-    `default_four_color_toner_cost`         DOUBLE                      DEFAULT NULL,
-    `default_four_color_toner_yield`        INTEGER                     DEFAULT NULL,
-    `asessment_pricing_config_id`           INTEGER                     DEFAULT NULL,
+    `assessment_pricing_config_id`          INTEGER                     DEFAULT NULL,
     `gross_margin_pricing_config_id`        INTEGER                     DEFAULT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`asessment_pricing_config_id`)  REFERENCES `proposalgenerator_pricing_configs` (`id`),
+    FOREIGN KEY (`assessment_pricing_config_id`)  REFERENCES `proposalgenerator_pricing_configs` (`id`),
     FOREIGN KEY (`gross_margin_pricing_config_id`)  REFERENCES `proposalgenerator_pricing_configs` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `proposalgenerator_survey_settings` (
+    `id`                                    INTEGER            NOT NULL AUTO_INCREMENT,
+    `page_coverage_mono`                    DOUBLE                      DEFAULT NULL,
+    `page_coverage_color`                   DOUBLE                      DEFAULT NULL,
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `proposalgenerator_question_sets` (
@@ -600,4 +598,22 @@ CREATE TABLE `proposalgenerator_report_report_settings` (
     PRIMARY KEY (`report_id`, `report_setting_id`),
     FOREIGN KEY (`report_id`) REFERENCES `proposalgenerator_reports` (`id`),
     FOREIGN KEY (`report_setting_id`) REFERENCES `proposalgenerator_report_settings` (`id`)   
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+-- User Survey Settings
+CREATE TABLE `proposalgenerator_user_survey_settings` (
+    `user_id`                                   INTEGER         NOT NULL,
+    `survey_setting_id`                         INTEGER         NOT NULL,
+    PRIMARY KEY (`user_id`, `survey_setting_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+    FOREIGN KEY (`survey_setting_id`) REFERENCES `proposalgenerator_survey_settings` (`id`)   
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+-- Report Survey Settings
+CREATE TABLE `proposalgenerator_report_survey_settings` (
+    `report_id`                                 INTEGER         NOT NULL,
+    `survey_setting_id`                         INTEGER         NOT NULL,
+    PRIMARY KEY (`report_id`, `survey_setting_id`),
+    FOREIGN KEY (`report_id`) REFERENCES `proposalgenerator_reports` (`id`),
+    FOREIGN KEY (`survey_setting_id`) REFERENCES `proposalgenerator_survey_settings` (`id`)   
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

@@ -2,6 +2,7 @@
 
 /**
  * Class Proposalgen_Model_TicketComment
+ * 
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_TicketComment extends Tangent_Model_Abstract
@@ -11,10 +12,10 @@ class Proposalgen_Model_TicketComment extends Tangent_Model_Abstract
     protected $UserId;
     protected $CommentText;
     protected $CommentDate;
-    
     protected $User;
 
     /**
+     *
      * @return the $CommentId
      */
     public function getCommentId ()
@@ -28,7 +29,8 @@ class Proposalgen_Model_TicketComment extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $CommentId
+     *
+     * @param field_type $CommentId            
      */
     public function setCommentId ($CommentId)
     {
@@ -37,6 +39,7 @@ class Proposalgen_Model_TicketComment extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $TicketId
      */
     public function getTicketId ()
@@ -50,7 +53,8 @@ class Proposalgen_Model_TicketComment extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $TicketId
+     *
+     * @param field_type $TicketId            
      */
     public function setTicketId ($TicketId)
     {
@@ -59,6 +63,7 @@ class Proposalgen_Model_TicketComment extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $UserId
      */
     public function getUserId ()
@@ -72,7 +77,8 @@ class Proposalgen_Model_TicketComment extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $UserId
+     *
+     * @param field_type $UserId            
      */
     public function setUserId ($UserId)
     {
@@ -81,6 +87,7 @@ class Proposalgen_Model_TicketComment extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $CommentDate
      */
     public function getCommentDate ()
@@ -94,7 +101,8 @@ class Proposalgen_Model_TicketComment extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $CommentDate
+     *
+     * @param field_type $CommentDate            
      */
     public function setCommentDate ($CommentDate)
     {
@@ -103,6 +111,7 @@ class Proposalgen_Model_TicketComment extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $CommentText
      */
     public function getCommentText ()
@@ -116,7 +125,8 @@ class Proposalgen_Model_TicketComment extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $CommentText
+     *
+     * @param field_type $CommentText            
      */
     public function setCommentText ($CommentText)
     {
@@ -125,6 +135,7 @@ class Proposalgen_Model_TicketComment extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $User
      */
     public function getUser ()
@@ -141,7 +152,8 @@ class Proposalgen_Model_TicketComment extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $User
+     *
+     * @param field_type $User            
      */
     public function setUser ($User)
     {

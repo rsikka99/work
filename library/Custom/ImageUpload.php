@@ -50,7 +50,7 @@ class Custom_ImageUpload {
     }
     
     public function rebuildImage($large_image_location, $thumb_image_location) {
-		$dealer_companyTable = new Application_Model_DbTable_DealerCompany();
+		$dealer_companyTable = new Proposalgen_Model_DbTable_DealerCompany();
 		$dealer_company = $dealer_companyTable->fetchRow('company_name = "MASTER"');
 		
 		//try to rebuild large image from database

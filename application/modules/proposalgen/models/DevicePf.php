@@ -2,6 +2,7 @@
 
 /**
  * Class Proposalgen_Model_DevicePf
+ * 
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_DevicePf extends Tangent_Model_Abstract
@@ -14,6 +15,7 @@ class Proposalgen_Model_DevicePf extends Tangent_Model_Abstract
     protected $CreatedBy;
 
     /**
+     *
      * @return the $DevicesPfId
      */
     public function getDevicesPfId ()
@@ -27,7 +29,8 @@ class Proposalgen_Model_DevicePf extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $DevicesPfId
+     *
+     * @param field_type $DevicesPfId            
      */
     public function setDevicesPfId ($DevicesPfId)
     {
@@ -36,6 +39,7 @@ class Proposalgen_Model_DevicePf extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $PfModelId
      */
     public function getPfModelId ()
@@ -49,7 +53,8 @@ class Proposalgen_Model_DevicePf extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $PfModelId
+     *
+     * @param field_type $PfModelId            
      */
     public function setPfModelId ($PfModelId)
     {
@@ -58,6 +63,7 @@ class Proposalgen_Model_DevicePf extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $PfDbDeviceName
      */
     public function getPfDbDeviceName ()
@@ -71,7 +77,8 @@ class Proposalgen_Model_DevicePf extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $PfDbDeviceName
+     *
+     * @param field_type $PfDbDeviceName            
      */
     public function setPfDbDeviceName ($PfDbDeviceName)
     {
@@ -80,6 +87,7 @@ class Proposalgen_Model_DevicePf extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $PfDbManufacturer
      */
     public function getPfDbManufacturer ()
@@ -93,7 +101,8 @@ class Proposalgen_Model_DevicePf extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $PfDbManufacturer
+     *
+     * @param field_type $PfDbManufacturer            
      */
     public function setPfDbManufacturer ($PfDbManufacturer)
     {
@@ -102,6 +111,7 @@ class Proposalgen_Model_DevicePf extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $DateCreated
      */
     public function getDateCreated ()
@@ -115,7 +125,8 @@ class Proposalgen_Model_DevicePf extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $DateCreated
+     *
+     * @param field_type $DateCreated            
      */
     public function setDateCreated ($DateCreated)
     {
@@ -124,6 +135,7 @@ class Proposalgen_Model_DevicePf extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $CreatedBy
      */
     public function getCreatedBy ()
@@ -137,12 +149,12 @@ class Proposalgen_Model_DevicePf extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $CreatedBy
+     *
+     * @param field_type $CreatedBy            
      */
     public function setCreatedBy ($CreatedBy)
     {
         $this->CreatedBy = $CreatedBy;
         return $this;
     }
-
 }

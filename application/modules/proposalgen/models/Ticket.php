@@ -2,6 +2,7 @@
 
 /**
  * Class Proposalgen_Model_Ticket
+ * 
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
@@ -21,6 +22,7 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     protected $Status;
 
     /**
+     *
      * @return the $TicketId
      */
     public function getTicketId ()
@@ -34,7 +36,8 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $TicketId
+     *
+     * @param field_type $TicketId            
      */
     public function setTicketId ($TicketId)
     {
@@ -43,6 +46,7 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $UserId
      */
     public function getUserId ()
@@ -56,7 +60,8 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $UserId
+     *
+     * @param field_type $UserId            
      */
     public function setUserId ($UserId)
     {
@@ -65,6 +70,7 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $CategoryId
      */
     public function getCategoryId ()
@@ -78,7 +84,8 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $CategoryId
+     *
+     * @param field_type $CategoryId            
      */
     public function setCategoryId ($CategoryId)
     {
@@ -87,6 +94,7 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $StatusId
      */
     public function getStatusId ()
@@ -100,7 +108,8 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $StatusId
+     *
+     * @param field_type $StatusId            
      */
     public function setStatusId ($StatusId)
     {
@@ -109,6 +118,7 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $Title
      */
     public function getTitle ()
@@ -122,7 +132,8 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $Title
+     *
+     * @param field_type $Title            
      */
     public function setTitle ($Title)
     {
@@ -131,6 +142,7 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $Description
      */
     public function getDescription ()
@@ -144,7 +156,8 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $Description
+     *
+     * @param field_type $Description            
      */
     public function setDescription ($Description)
     {
@@ -153,6 +166,7 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $DateCreated
      */
     public function getDateCreated ()
@@ -166,7 +180,8 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $DateCreated
+     *
+     * @param field_type $DateCreated            
      */
     public function setDateCreated ($DateCreated)
     {
@@ -175,6 +190,7 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $DateUpdated
      */
     public function getDateUpdated ()
@@ -188,7 +204,8 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $DateUpdated
+     *
+     * @param field_type $DateUpdated            
      */
     public function setDateUpdated ($DateUpdated)
     {
@@ -197,6 +214,7 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $User
      */
     public function getUser ()
@@ -213,7 +231,8 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $User
+     *
+     * @param field_type $User            
      */
     public function setUser ($User)
     {
@@ -222,6 +241,7 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $Category
      */
     public function getCategory ()
@@ -238,7 +258,8 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $Category
+     *
+     * @param field_type $Category            
      */
     public function setCategory ($Category)
     {
@@ -247,6 +268,7 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $Status
      */
     public function getStatus ()
@@ -263,12 +285,12 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $Status
+     *
+     * @param field_type $Status            
      */
     public function setStatus ($Status)
     {
         $this->Status = $Status;
         return $this;
     }
-
 }

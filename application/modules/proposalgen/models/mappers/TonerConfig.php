@@ -6,11 +6,11 @@ class Proposalgen_Model_Mapper_TonerConfig extends Tangent_Model_Mapper_Abstract
     static $_instance;
 
     /**
+     *
      * @return Tangent_Model_Mapper_Abstract
      */
     public static function getInstance ()
     {
-        
         if (! isset(self::$_instance))
         {
             $className = get_class();
@@ -18,20 +18,21 @@ class Proposalgen_Model_Mapper_TonerConfig extends Tangent_Model_Mapper_Abstract
         }
         return self::$_instance;
     }
+    static $_tonerConfigs = array ();
 
-    static $_tonerConfigs = array();
-    public function find($id)
+    public function find ($id)
     {
-        if (!array_key_exists($id, self::$_tonerConfigs))
+        if (! array_key_exists($id, self::$_tonerConfigs))
         {
-            self::$_tonerConfigs[$id] = parent::find($id);
+            self::$_tonerConfigs [$id] = parent::find($id);
         }
-        return self::$_tonerConfigs[$id];
+        return self::$_tonerConfigs [$id];
     }
-    
+
     /**
      * Maps a database row object to an Proposalgen_Model
-     * @param Zend_Db_Table_Row $row
+     * 
+     * @param Zend_Db_Table_Row $row            
      * @return The appropriate Proposalgen_Model
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
@@ -51,7 +52,8 @@ class Proposalgen_Model_Mapper_TonerConfig extends Tangent_Model_Mapper_Abstract
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     * @param unknown_type $object
+     * 
+     * @param unknown_type $object            
      */
     public function save (Proposalgen_Model_TonerConfig $object)
     {

@@ -2,6 +2,7 @@
 
 /**
  * Class Proposalgen_Model_PfDeviceMatchupUsers
+ * 
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_PfDeviceMatchupUser extends Tangent_Model_Abstract
@@ -11,6 +12,7 @@ class Proposalgen_Model_PfDeviceMatchupUser extends Tangent_Model_Abstract
     protected $UserId;
 
     /**
+     *
      * @return the $DevicesPfId
      */
     public function getDevicesPfId ()
@@ -19,7 +21,8 @@ class Proposalgen_Model_PfDeviceMatchupUser extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $DevicesPfId
+     *
+     * @param field_type $DevicesPfId            
      */
     public function setDevicesPfId ($DevicesPfId)
     {
@@ -27,6 +30,7 @@ class Proposalgen_Model_PfDeviceMatchupUser extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $MasterDeviceId
      */
     public function getMasterDeviceId ()
@@ -35,7 +39,8 @@ class Proposalgen_Model_PfDeviceMatchupUser extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $MasterDeviceId
+     *
+     * @param field_type $MasterDeviceId            
      */
     public function setMasterDeviceId ($MasterDeviceId)
     {
@@ -43,6 +48,7 @@ class Proposalgen_Model_PfDeviceMatchupUser extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $UserId
      */
     public function getUserId ()
@@ -51,11 +57,11 @@ class Proposalgen_Model_PfDeviceMatchupUser extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $UserId
+     *
+     * @param field_type $UserId            
      */
     public function setUserId ($UserId)
     {
         $this->UserId = $UserId;
     }
-
 }

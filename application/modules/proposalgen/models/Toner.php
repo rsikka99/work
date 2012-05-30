@@ -2,19 +2,17 @@
 
 /**
  * Class Proposalgen_Model_Toner
+ * 
  * @author "Lee Robert"
  */
 class Proposalgen_Model_Toner extends Tangent_Model_Abstract
 {
     const EMILY_RANDOM_NUMBER = 0.05;
-    
     static $ACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE;
     static $ACTUAL_PAGE_COVERAGE_COLOR;
     static $ESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE;
     static $ESTIMATED_PAGE_COVERAGE_COLOR;
-    
     static $DefaultToners;
-    
     protected $TonerId;
     protected $TonerSKU;
     protected $TonerPrice;
@@ -32,6 +30,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     protected $CostPerPage;
 
     /**
+     *
      * @return the $DefaultToners
      */
     public static function getDefaultToners ()
@@ -40,20 +39,20 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
         {
             $testarray = array ();
             $tonerOverrides ["BW"] = array (
-                    "Cost" => 0,
-                    "Yield" => 0
+                    "Cost" => 0, 
+                    "Yield" => 0 
             );
             $tonerOverrides ["Color"] = array (
-                    "Cost" => 0,
-                    "Yield" => 0
+                    "Cost" => 0, 
+                    "Yield" => 0 
             );
             $tonerOverrides ["ThreeColor"] = array (
-                    "Cost" => 0,
-                    "Yield" => 0
+                    "Cost" => 0, 
+                    "Yield" => 0 
             );
             $tonerOverrides ["FourColor"] = array (
-                    "Cost" => 0,
-                    "Yield" => 0
+                    "Cost" => 0, 
+                    "Yield" => 0 
             );
             
             $overrideLocation ["User"] = Proposalgen_Model_User::getCurrentUser();
@@ -143,7 +142,8 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $DefaultToners
+     *
+     * @param field_type $DefaultToners            
      */
     public static function setDefaultToners ($DefaultToners)
     {
@@ -152,6 +152,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $CostPerPage
      */
     public function getCostPerPage ()
@@ -231,7 +232,8 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $CostPerPage
+     *
+     * @param field_type $CostPerPage            
      */
     public function setCostPerPage ($CostPerPage)
     {
@@ -240,6 +242,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $TonerId
      */
     public function getTonerId ()
@@ -253,7 +256,8 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $TonerId
+     *
+     * @param field_type $TonerId            
      */
     public function setTonerId ($TonerId)
     {
@@ -262,6 +266,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $TonerSKU
      */
     public function getTonerSKU ()
@@ -274,7 +279,8 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $TonerSKU
+     *
+     * @param field_type $TonerSKU            
      */
     public function setTonerSKU ($TonerSKU)
     {
@@ -283,6 +289,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $TonerPrice
      */
     public function getTonerPrice ()
@@ -296,7 +303,8 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $TonerPrice
+     *
+     * @param field_type $TonerPrice            
      */
     public function setTonerPrice ($TonerPrice)
     {
@@ -305,6 +313,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $TonerYield
      */
     public function getTonerYield ()
@@ -318,7 +327,8 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $TonerYield
+     *
+     * @param field_type $TonerYield            
      */
     public function setTonerYield ($TonerYield)
     {
@@ -327,6 +337,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $PartTypeId
      */
     public function getPartTypeId ()
@@ -339,7 +350,8 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $PartTypeId
+     *
+     * @param field_type $PartTypeId            
      */
     public function setPartTypeId ($PartTypeId)
     {
@@ -348,6 +360,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $ManufacturerId
      */
     public function getManufacturerId ()
@@ -361,7 +374,8 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $ManufacturerId
+     *
+     * @param field_type $ManufacturerId            
      */
     public function setManufacturerId ($ManufacturerId)
     {
@@ -370,6 +384,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $TonerColorId
      */
     public function getTonerColorId ()
@@ -383,7 +398,8 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $TonerColorId
+     *
+     * @param field_type $TonerColorId            
      */
     public function setTonerColorId ($TonerColorId)
     {
@@ -392,6 +408,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $PartType
      */
     public function getPartType ()
@@ -405,7 +422,8 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $PartType
+     *
+     * @param field_type $PartType            
      */
     public function setPartType ($PartType)
     {
@@ -414,6 +432,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $Manufacturer
      */
     public function getManufacturer ()
@@ -426,7 +445,8 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $Manufacturer
+     *
+     * @param field_type $Manufacturer            
      */
     public function setManufacturer ($Manufacturer)
     {
@@ -435,6 +455,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $TonerColor
      */
     public function getTonerColor ()
@@ -448,7 +469,8 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $TonerColor
+     *
+     * @param field_type $TonerColor            
      */
     public function setTonerColor ($TonerColor)
     {
@@ -457,6 +479,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $ACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE
      */
     public static function getACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE ()
@@ -469,7 +492,8 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $ACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE
+     *
+     * @param field_type $ACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE            
      */
     public static function setACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE ($ACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE)
     {
@@ -477,6 +501,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $ACTUAL_PAGE_COVERAGE_COLOR
      */
     public static function getACTUAL_PAGE_COVERAGE_COLOR ()
@@ -489,7 +514,8 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $ACTUAL_PAGE_COVERAGE_COLOR
+     *
+     * @param field_type $ACTUAL_PAGE_COVERAGE_COLOR            
      */
     public static function setACTUAL_PAGE_COVERAGE_COLOR ($ACTUAL_PAGE_COVERAGE_COLOR)
     {
@@ -497,6 +523,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $ESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE
      */
     public static function getESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE ()
@@ -509,7 +536,8 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $ESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE
+     *
+     * @param field_type $ESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE            
      */
     public static function setESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE ($ESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE)
     {
@@ -517,6 +545,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $ESTIMATED_PAGE_COVERAGE_COLOR
      */
     public static function getESTIMATED_PAGE_COVERAGE_COLOR ()
@@ -529,11 +558,11 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $ESTIMATED_PAGE_COVERAGE_COLOR
+     *
+     * @param field_type $ESTIMATED_PAGE_COVERAGE_COLOR            
      */
     public static function setESTIMATED_PAGE_COVERAGE_COLOR ($ESTIMATED_PAGE_COVERAGE_COLOR)
     {
         Proposalgen_Model_Toner::$ESTIMATED_PAGE_COVERAGE_COLOR = $ESTIMATED_PAGE_COVERAGE_COLOR;
     }
-
 }

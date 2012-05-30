@@ -6,7 +6,6 @@ class Proposalgen_Model_CSV_PricingImport_OfficeDepot extends Proposalgen_Model_
             "errors" => array (), 
             "rows" => array () 
     );
-    
     public $validHeaders = array (
             "printermodelid" => self::FIELD_NOTREQUIRED, 
             "modelname" => self::FIELD_REQUIRED, 
@@ -74,7 +73,6 @@ class Proposalgen_Model_CSV_PricingImport_OfficeDepot extends Proposalgen_Model_
             "dateintroduction" => self::FIELD_REQUIRED, 
             "is_duplex" => self::FIELD_NOTREQUIRED 
     );
-    
     public static $validToners = array (
             Proposalgen_Model_PartType::OEM => array (
                     Proposalgen_Model_TonerColor::BLACK => array (
@@ -117,18 +115,15 @@ class Proposalgen_Model_CSV_PricingImport_OfficeDepot extends Proposalgen_Model_
                     ) 
             ) 
     );
-    
     public static $threeColorSeperatedToners = array (
             Proposalgen_Model_TonerColor::CYAN => "cyan", 
             Proposalgen_Model_TonerColor::MAGENTA => "magenta", 
             Proposalgen_Model_TonerColor::YELLOW => "yellow" 
     );
-    
     public static $validPartTypes = array (
             Proposalgen_Model_PartType::OEM => "oem", 
             Proposalgen_Model_PartType::COMP => "compatible" 
     );
-    
     public static $thresholds = array (
             Proposalgen_Model_PartType::OEM => array (
                     "min_cost" => 10, 
@@ -143,7 +138,6 @@ class Proposalgen_Model_CSV_PricingImport_OfficeDepot extends Proposalgen_Model_
                     "max_yield" => 100000 
             ) 
     );
-    
     public static $skuList = array ();
     public static $modelNameList = array ();
 
@@ -177,7 +171,7 @@ class Proposalgen_Model_CSV_PricingImport_OfficeDepot extends Proposalgen_Model_
                 if (is_null($row [$header]) && $required === self::FIELD_REQUIRED)
                 {
                     
-                    $errorMessage = "Required column $header was not provided." . var_export($row[$header], true);
+                    $errorMessage = "Required column $header was not provided." . var_export($row [$header], true);
                     break;
                 }
             }

@@ -2,16 +2,15 @@
 
 class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
 {
-    
     protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_Report";
     static $_instance;
 
     /**
+     *
      * @return Tangent_Model_Mapper_Abstract
      */
     public static function getInstance ()
     {
-        
         if (! isset(self::$_instance))
         {
             $className = get_class();
@@ -22,7 +21,8 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
 
     /**
      * Maps a database row object to an Proposalgen_Model
-     * @param Zend_Db_Table_Row $row
+     * 
+     * @param Zend_Db_Table_Row $row            
      * @return The appropriate Proposalgen_Model
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
@@ -78,7 +78,8 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     * @param unknown_type $object
+     * 
+     * @param unknown_type $object            
      */
     public function save (Proposalgen_Model_Report $object)
     {
@@ -131,26 +132,27 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
         return $primaryKey;
     }
 
-
     /**
      * Clones a report and all related records
      *
-     * @param $report_id Integer
-     * @param $user_list Array of user ids
+     * @param $report_id Integer            
+     * @param $user_list Array
+     *            of user ids
      * @return $message Return status message
      */
-    public function cloneReport ( $report_id, $user_list )
+    public function cloneReport ($report_id, $user_list)
     {
         $db = Zend_Db_Table::getDefaultAdapter();
         $sql = "";
         $message = "";
-    
-        $report = Proposalgen_Model_Mapper_Report::getInstance()->find( $report_id );
-    
+        
+        $report = Proposalgen_Model_Mapper_Report::getInstance()->find($report_id);
+        
         $db->beginTransaction();
-        try {
+        try
+        {
             // Get Reports
-            $curReports = Proposalgen_Model_Mapper_Report::getInstance()->find( $report_id );
+            $curReports = Proposalgen_Model_Mapper_Report::getInstance()->find($report_id);
             $reportsCustomerCompanyName = $curReports->CustomerCompanyName ? $curReports->CustomerCompanyName : 'null';
             $reportsFullCompanyImageOverride = $curReports->FullCompanyImageOverride ? $curReports->FullCompanyImageOverride : 'null';
             $reportsCompanyImageOverride = $curReports->CompanyImageOverride ? $curReports->CompanyImageOverride : 'null';
@@ -189,8 +191,9 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
             
             // Get new users array
             $users = explode(",", str_replace("'", "", $user_list));
-    
-            foreach ( $users as $user ) {
+            
+            foreach ( $users as $user )
+            {
                 // get current user_id
                 $newUserId = $user;
                 
@@ -233,7 +236,7 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
                 $sql .= "devices_modified";
                 $sql .= ") VALUES (";
                 $sql .= $newUserId . ", ";
-                $sql .= "'" . str_replace("'","\'",$reportsCustomerCompanyName) . "', ";
+                $sql .= "'" . str_replace("'", "\'", $reportsCustomerCompanyName) . "', ";
                 $sql .= "'" . $reportsCompanyReportColorOverride . "', ";
                 $sql .= $reportsUserPricingOverride . ", ";
                 $sql .= "'" . $reportsReportStage . "', ";
@@ -269,7 +272,7 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
                 $newReport = $reportsTable->getAdapter()->prepare($sql);
                 $newReport->execute();
                 $newReportId = $reportsTable->getAdapter()->lastInsertId();
-
+                
                 // update report images
                 // FIXME: The above copy breaks when images reach a certain size. This method below of updating seems to work though
                 //        Need to correct the above method and get rid of this update
@@ -296,7 +299,7 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
                 $sql .= "WHERE report_id = " . $report_id . ";";
                 $newAnswerDate = $answerDatesTable->getAdapter()->prepare($sql);
                 $newAnswerDate->execute();
-    
+                
                 // copy answers_numeric
                 $answerNumericTable = new Proposalgen_Model_DbTable_NumericAnswers();
                 $sql = "INSERT INTO answers_numeric (";
@@ -311,7 +314,7 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
                 $sql .= "WHERE report_id = " . $report_id . ";";
                 $newAnswerNumeric = $answerNumericTable->getAdapter()->prepare($sql);
                 $newAnswerNumeric->execute();
-    
+                
                 // copy answers_textual
                 $answerTextualTable = new Proposalgen_Model_DbTable_TextAnswers();
                 $sql = "INSERT INTO answers_textual (";
@@ -326,12 +329,13 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
                 $sql .= "WHERE report_id = " . $report_id . ";";
                 $newAnswerTextual = $answerTextualTable->getAdapter()->prepare($sql);
                 $newAnswerTextual->execute();
-    
+                
                 // copy upload_data_collector records
-                $upload_data_collector = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->fetchAll( 'report_id=' . $report_id );
-                foreach ( $upload_data_collector as $udc ) {
+                $upload_data_collector = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->fetchAll('report_id=' . $report_id);
+                foreach ( $upload_data_collector as $udc )
+                {
                     $udc_id = $udc->UploadDataCollectorId;
-    
+                    
                     $udcTable = new Proposalgen_Model_DbTable_UploadDataCollector();
                     $sql = "INSERT INTO upload_data_collector (";
                     $sql .= "report_id, ";
@@ -454,12 +458,13 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
                     $newUdc = $udcTable->getAdapter()->prepare($sql);
                     $newUdc->execute();
                     $newUdcId = $udcTable->getAdapter()->lastInsertId();
-    
+                    
                     // copy unknown_device_instance records
-                    $unknown_device_instance = Proposalgen_Model_Mapper_UnknownDeviceInstance::getInstance()->fetchRow( 'upload_data_collector_id = ' . $udc_id );
-                    if ( $unknown_device_instance ) {
+                    $unknown_device_instance = Proposalgen_Model_Mapper_UnknownDeviceInstance::getInstance()->fetchRow('upload_data_collector_id = ' . $udc_id);
+                    if ($unknown_device_instance)
+                    {
                         $udi_id = $unknown_device_instance->UnknownDeviceInstanceId;
-    
+                        
                         $udiTable = new Proposalgen_Model_DbTable_UnknownDeviceInstance();
                         $sql = "INSERT INTO unknown_device_instance (";
                         $sql .= "user_id, ";
@@ -637,12 +642,13 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
                         $new_udi->execute();
                         $new_udi_id = $udiTable->getAdapter()->lastInsertId();
                     }
-    
+                    
                     // copy device_instance records
-                    $device_instance = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchRow( 'upload_data_collector_id = ' . $udc_id );
-                    if ( $device_instance ) {
+                    $device_instance = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchRow('upload_data_collector_id = ' . $udc_id);
+                    if ($device_instance)
+                    {
                         $di_id = $device_instance->DeviceInstanceId;
-    
+                        
                         $diTable = new Proposalgen_Model_DbTable_DeviceInstance();
                         $sql = "INSERT INTO device_instance (";
                         $sql .= "report_id, ";
@@ -671,7 +677,7 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
                         $newDi = $diTable->getAdapter()->prepare($sql);
                         $newDi->execute();
                         $newDiId = $diTable->getAdapter()->lastInsertId();
-    
+                        
                         // copy meters
                         $meterTable = new Proposalgen_Model_DbTable_Meters();
                         $sql = "INSERT INTO meters (";
@@ -689,9 +695,7 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
                         $new_meter = $meterTable->getAdapter()->prepare($sql);
                         $new_meter->execute();
                     }
-    
                 } // end foreach upload_data_collector
-    
             } // end loop though $user_list
             $db->commit();
         }

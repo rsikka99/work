@@ -34,9 +34,12 @@ INSERT INTO `proposalgenerator_ticket_categories` (`id`, `name`) VALUES
 (2, 'FM Audit'     );
 
 /* Default System Report Settings */
-INSERT INTO `proposalgenerator_report_settings` (`id`, `estimated_page_coverage_mono`, `estimated_page_coverage_color`, `actual_page_coverage_mono`, `actual_page_coverage_color`, `service_cost_per_page`, `admin_charge_per_page`, `assessment_report_margin`, `gross_margin_report_margin`, `monthly_lease_payment`, `default_printer_cost`, `leased_bw_per_page`, `leased_color_per_page`, `mps_bw_per_page`, `mps_color_per_page`, `kilowatts_per_hour`, `default_bw_toner_yield`, `default_bw_toner_cost`, `default_color_toner_yield`, `default_color_toner_cost`, `default_three_color_toner_cost`, `default_three_color_toner_yield`, `default_four_color_toner_cost`, `default_four_color_toner_yield`, `asessment_pricing_config_id`, `gross_margin_pricing_config_id`) VALUES
-(1,6,24,6,24,0.0035,0.0006,20,20,250,1000,0.015,0.08,0.02,0.09,0.1,1500,49.99,800,58.99,2000,109.99,2300,121.99,2,3);
+INSERT INTO `proposalgenerator_report_settings` (`id`, `actual_page_coverage_mono`, `actual_page_coverage_color`, `service_cost_per_page`, `admin_cost_per_page`, `assessment_report_margin`, `gross_margin_report_margin`, `monthly_lease_payment`, `default_printer_cost`, `leased_bw_cost_per_page`, `leased_color_cost_per_page`, `mps_bw_cost_per_page`, `mps_color_cost_per_page`, `kilowatts_per_hour`, `assessment_pricing_config_id`, `gross_margin_pricing_config_id`) VALUES
+(1,6,24,0.0035,0.0006,20,20,250,1000,0.015,0.08,0.02,0.09,0.1,2,3);
 
+/* Default System Survey Settings */
+INSERT INTO `proposalgenerator_survey_settings` (`id`, `page_coverage_mono`, `page_coverage_color`) VALUES
+(1,6,24);
 
 /*
 Question Set data

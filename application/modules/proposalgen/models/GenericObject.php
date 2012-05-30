@@ -19,6 +19,5 @@ class GenericObject extends stdClass
         }
         return $this;
     }
-
 }
 

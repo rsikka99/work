@@ -2,16 +2,15 @@
 
 class Proposalgen_Model_Mapper_MasterDevice extends Tangent_Model_Mapper_Abstract
 {
-    
     protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_MasterDevice";
     static $_instance;
 
     /**
+     *
      * @return Tangent_Model_Mapper_Abstract
      */
     public static function getInstance ()
     {
-        
         if (! isset(self::$_instance))
         {
             $className = get_class();
@@ -19,20 +18,21 @@ class Proposalgen_Model_Mapper_MasterDevice extends Tangent_Model_Mapper_Abstrac
         }
         return self::$_instance;
     }
+    static $_masterDevices = array ();
 
-    static $_masterDevices = array();
-    public function find($id)
+    public function find ($id)
     {
-        if (!array_key_exists($id, self::$_masterDevices))
+        if (! array_key_exists($id, self::$_masterDevices))
         {
-            self::$_masterDevices[$id] = parent::find($id);
+            self::$_masterDevices [$id] = parent::find($id);
         }
-        return self::$_masterDevices[$id];
+        return self::$_masterDevices [$id];
     }
-    
+
     /**
      * Maps a database row object to an Proposalgen_Model
-     * @param Zend_Db_Table_Row $row
+     * 
+     * @param Zend_Db_Table_Row $row            
      * @return The appropriate Proposalgen_Model
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
@@ -71,7 +71,8 @@ class Proposalgen_Model_Mapper_MasterDevice extends Tangent_Model_Mapper_Abstrac
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     * @param unknown_type $object
+     * 
+     * @param unknown_type $object            
      */
     public function save (Proposalgen_Model_MasterDevice $object)
     {
@@ -93,11 +94,11 @@ class Proposalgen_Model_Mapper_MasterDevice extends Tangent_Model_Mapper_Abstrac
             $data ["service_cost_per_page"] = $object->getServiceCostPerPage();
             $data ["launch_date"] = $object->getLaunchDate();
             $data ["date_created"] = $object->getDateCreated();
-            $data["duty_cycle"] = $object->getDutyCycle();
-            $data["PPM_black"] = $object->getPPMBlack();
-            $data["PPM_color"] = $object->getPPMColor();    
-            $data["is_leased"] = $object->getIsLeased();
-            $data["leased_toner_yield"] = $object->getLeasedTonerYield();          
+            $data ["duty_cycle"] = $object->getDutyCycle();
+            $data ["PPM_black"] = $object->getPPMBlack();
+            $data ["PPM_color"] = $object->getPPMColor();
+            $data ["is_leased"] = $object->getIsLeased();
+            $data ["leased_toner_yield"] = $object->getLeasedTonerYield();
             
             $primaryKey = $this->saveRow($data);
         }

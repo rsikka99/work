@@ -2,8 +2,9 @@
 
 /**
  * Proposalgen_Model_Proposal_Ranking
- * @author	Lee Robert
- * @version	v1.0
+ * 
+ * @author Lee Robert
+ * @version v1.0
  */
 class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
 {
@@ -16,12 +17,12 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
     protected $EnvironmentalFriendliness;
     protected $Expense;
     protected $RankingCriteria;
-    
+
     /**
      * The constructor for proposal rankings.
      * Requires a reference to a proposal object
      *
-     * @param $proposal Proposalgen_Model_Proposal_Abstract
+     * @param $proposal Proposalgen_Model_Proposal_Abstract            
      */
     public function __construct (Proposalgen_Model_Proposal_OfficeDepot $proposal)
     {
@@ -311,8 +312,8 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
     /**
      * Gets the overal paragraph
      *
-     * @param $rank float           
-     * @param $sectionname string           
+     * @param $rank float            
+     * @param $sectionname string            
      * @return string Returns the overall paragraph
      */
     public function getOverallRankingText ($rank, $sectionname)
@@ -637,12 +638,11 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $RankingCriteria field_type           
+     * @param $RankingCriteria field_type            
      */
     public function setRankingCriteria ($RankingCriteria)
     {
         $this->RankingCriteria = $RankingCriteria;
         return $this;
     }
-
 }

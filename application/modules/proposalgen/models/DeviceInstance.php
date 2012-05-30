@@ -2,6 +2,7 @@
 
 /**
  * Class Proposalgen_Model_DeviceInstance
+ * 
  * @author "Lee Robert"
  */
 class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
@@ -13,7 +14,6 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
             100 => 4, 
             0 => 2 
     );
-    
     static $KWH_Cost = 0;
     static $ITCPP = 0;
     
@@ -40,7 +40,6 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
     protected $MPSMonitorInterval;
     protected $AverageDailyPowerConsumption;
     protected $AverageMonthlyPowerConsumption;
-    
     protected $LifePageCount;
     protected $LifeBlackAndWhitePageCount;
     protected $LifeColorPageCount;
@@ -53,22 +52,16 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
     protected $AverageYearlyBlackAndWhitePageCount;
     protected $AverageYearlyColorPageCount;
     protected $AverageYearlyPageCount;
-    
     protected $CostOfInkAndToner;
     protected $CostOfBlackAndWhiteInkAndToner;
     protected $CostOfColorInkAndToner;
-    
     protected $Usage;
     protected $LifeUsage;
-    
     protected $DeviceName;
-    
     protected $GrossMarginMonthlyBlackAndWhiteCost;
     protected $GrossMarginMonthlyColorCost;
     protected $MonthlyRate;
-    
     protected $AverageMonthlyPowerCost;
-    
     protected $AverageDailyPowerCost;
     
     // Non calculated fields
@@ -76,11 +69,8 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
     protected $LifeUsageRank;
     protected $RiskRank;
     protected $UploadDataCollector;
-    
     protected $ReplacementDevice;
-    
     protected $ExclusionReason;
-    
     static $uniqueTonerArray = array ();
 
     static function processOverrides ($device, $report, $reportMargin, $companyMargin)
@@ -165,7 +155,8 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
                 } // endforeach
             } // endforeach
         } // endforeach
-          
+        
+
         // Service Cost Per Page Cost
         if ($device->getMasterDevice()->getServiceCostPerPage() <= 0)
         {
@@ -379,7 +370,6 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
                 {
                     $avgPageCount = $pagecount / $this->getMPSMonitorInterval()->days;
                 }
-            
             }
             $this->AverageDailyColorPageCount = $avgPageCount;
         }
@@ -429,7 +419,6 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
             {
                 trigger_error("Device was discovered on the after or on the monitor end date.");
             }
-        
         }
         return $this->MPSMonitorInterval;
     }
@@ -463,7 +452,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $DeviceInstanceId field_type           
+     * @param $DeviceInstanceId field_type            
      */
     public function setDeviceInstanceId ($DeviceInstanceId)
     {
@@ -482,7 +471,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $ReportId field_type           
+     * @param $ReportId field_type            
      */
     public function setReportId ($ReportId)
     {
@@ -506,7 +495,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $MasterDevice field_type           
+     * @param $MasterDevice field_type            
      */
     public function setMasterDevice ($MasterDevice)
     {
@@ -525,7 +514,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $UploadDataCollectorId field_type           
+     * @param $UploadDataCollectorId field_type            
      */
     public function setUploadDataCollectorId ($UploadDataCollectorId)
     {
@@ -548,7 +537,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $SerialNumber field_type           
+     * @param $SerialNumber field_type            
      */
     public function setSerialNumber ($SerialNumber)
     {
@@ -567,7 +556,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $MPSMonitorStartDate field_type           
+     * @param $MPSMonitorStartDate field_type            
      */
     public function setMPSMonitorStartDate ($MPSMonitorStartDate)
     {
@@ -586,7 +575,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $MPSMonitorEndDate field_type           
+     * @param $MPSMonitorEndDate field_type            
      */
     public function setMPSMonitorEndDate ($MPSMonitorEndDate)
     {
@@ -605,7 +594,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $IsExcluded field_type           
+     * @param $IsExcluded field_type            
      */
     public function setIsExcluded ($IsExcluded)
     {
@@ -628,7 +617,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $IpAddress field_type           
+     * @param $IpAddress field_type            
      */
     public function setIpAddress ($IpAddress)
     {
@@ -679,7 +668,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $Meters field_type           
+     * @param $Meters field_type            
      */
     public function setMeters ($Meters)
     {
@@ -702,7 +691,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $MasterDeviceId field_type           
+     * @param $MasterDeviceId field_type            
      */
     public function setMasterDeviceId ($MasterDeviceId)
     {
@@ -725,7 +714,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $AverageMonthlyPowerCost field_type           
+     * @param $AverageMonthlyPowerCost field_type            
      */
     public function setAverageMonthlyPowerCost ($AverageMonthlyPowerCost)
     {
@@ -748,7 +737,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $AverageDailyPowerCost field_type           
+     * @param $AverageDailyPowerCost field_type            
      */
     public function setAverageDailyPowerCost ($AverageDailyPowerCost)
     {
@@ -812,7 +801,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $DeviceName field_type           
+     * @param $DeviceName field_type            
      */
     public function setDeviceName ($DeviceName)
     {
@@ -837,7 +826,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $Usage field_type           
+     * @param $Usage field_type            
      */
     public function setUsage ($Usage)
     {
@@ -863,7 +852,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $LifeUsage field_type           
+     * @param $LifeUsage field_type            
      */
     public function setLifeUsage ($LifeUsage)
     {
@@ -887,7 +876,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $AgeRank field_type           
+     * @param $AgeRank field_type            
      */
     public function setAgeRank ($AgeRank)
     {
@@ -911,7 +900,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $LifeUsageRank field_type           
+     * @param $LifeUsageRank field_type            
      */
     public function setLifeUsageRank ($LifeUsageRank)
     {
@@ -935,7 +924,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $RiskRank field_type           
+     * @param $RiskRank field_type            
      */
     public function setRiskRank ($RiskRank)
     {
@@ -959,7 +948,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $KWH_Cost field_type           
+     * @param $KWH_Cost field_type            
      */
     public static function setKWH_Cost ($KWH_Cost)
     {
@@ -982,7 +971,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $JITSuppliesSupported field_type           
+     * @param $JITSuppliesSupported field_type            
      */
     public function setJITSuppliesSupported ($JITSuppliesSupported)
     {
@@ -1005,7 +994,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $IsUnknown field_type           
+     * @param $IsUnknown field_type            
      */
     public function setIsUnknown ($IsUnknown)
     {
@@ -1029,7 +1018,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $MPSDiscoveryDate field_type           
+     * @param $MPSDiscoveryDate field_type            
      */
     public function setMPSDiscoveryDate ($MPSDiscoveryDate)
     {
@@ -1052,7 +1041,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $UploadDataCollector field_type           
+     * @param $UploadDataCollector field_type            
      */
     public function setUploadDataCollector ($UploadDataCollector)
     {
@@ -1075,7 +1064,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $AverageYearlyBlackAndWhitePageCount field_type           
+     * @param $AverageYearlyBlackAndWhitePageCount field_type            
      */
     public function setAverageYearlyBlackAndWhitePageCount ($AverageYearlyBlackAndWhitePageCount)
     {
@@ -1098,7 +1087,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $AverageYearlyColorPageCount field_type           
+     * @param $AverageYearlyColorPageCount field_type            
      */
     public function setAverageYearlyColorPageCount ($AverageYearlyColorPageCount)
     {
@@ -1121,7 +1110,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $AverageYearlyPageCount field_type           
+     * @param $AverageYearlyPageCount field_type            
      */
     public function setAverageYearlyPageCount ($AverageYearlyPageCount)
     {
@@ -1145,7 +1134,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $ReplacementDevice field_type           
+     * @param $ReplacementDevice field_type            
      */
     public function setReplacementDevice ($ReplacementDevice)
     {
@@ -1168,7 +1157,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $GrossMarginMonthlyBlackAndWhiteCost field_type           
+     * @param $GrossMarginMonthlyBlackAndWhiteCost field_type            
      */
     public function setGrossMarginMonthlyBlackAndWhiteCost ($GrossMarginMonthlyBlackAndWhiteCost)
     {
@@ -1191,7 +1180,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $GrossMarginMonthlyColorCost field_type           
+     * @param $GrossMarginMonthlyColorCost field_type            
      */
     public function setGrossMarginMonthlyColorCost ($GrossMarginMonthlyColorCost)
     {
@@ -1219,7 +1208,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $MonthlyRate field_type           
+     * @param $MonthlyRate field_type            
      */
     public function setMonthlyRate ($MonthlyRate)
     {
@@ -1242,7 +1231,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $ITCPP field_type           
+     * @param $ITCPP field_type            
      */
     public static function setITCPP ($ITCPP)
     {
@@ -1264,12 +1253,11 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $ExclusionReason field_type           
+     * @param $ExclusionReason field_type            
      */
     public function setExclusionReason ($ExclusionReason)
     {
         $this->ExclusionReason = $ExclusionReason;
         return $this;
     }
-
 }

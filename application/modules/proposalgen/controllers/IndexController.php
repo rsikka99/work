@@ -18,9 +18,7 @@ class Proposalgen_IndexController extends Zend_Controller_Action
         if ($auth->hasIdentity())
         {
             $this->view->user = $auth->getIdentity();
-            $this->user_id = $auth->getIdentity()->user_id;
-            $this->dealer_company_id = $auth->getIdentity()->dealer_company_id;
-            $this->view->privilege = $auth->getIdentity()->privileges;
+            $this->userId = $auth->getIdentity()->id;
             $this->MPSProgramName = $config->app->MPSProgramName;
         }
     } // end init
@@ -31,31 +29,14 @@ class Proposalgen_IndexController extends Zend_Controller_Action
      */
     public function startNewProposal ($session)
     {
-        $dealerTable = new Proposalgen_Model_DbTable_DealerCompany();
-        $userTable = new Proposalgen_Model_DbTable_Users();
-        // getting the pricing config from the user first, then the
-        // dealer, then the master
-        if ($userTable->fetchRow('user_id =' . $this->user_id)->pricing_config_id)
-        {
-            $pricingConfig = $userTable->fetchRow('user_id =' . $this->user_id)->pricing_config_id;
-        }
-        else if ($dealerTable->fetchRow('dealer_company_id =' . $this->dealer_company_id)->pricing_config_id)
-        {
-            $pricingConfig = $dealerTable->fetchRow('dealer_company_id =' . $this->dealer_company_id)->pricing_config_id;
-        }
-        else
-        {
-            $pricingConfig = $dealerTable->fetchRow('company_name = "MASTER"')->pricing_config_id;
-        }
+        $pricingConfig = 1;
         
         // get form values from post
         $formData = $this->_request->getPost();
         
         $reportData = array (
                 'user_id' => $this->user_id, 
-                'questionset_id' => 1, 
-                'report_pricing_config_id' => $pricingConfig, 
-                'report_gross_margin_pricing_config_id' => Proposalgen_Model_PricingConfig::COMP, 
+                'questionset_id' => 1,  
                 'date_created' => date('Y-m-d H:i:s'), 
                 'last_modified' => date('Y-m-d H:i:s'), 
                 'report_stage' => 'company' 
@@ -63,8 +44,8 @@ class Proposalgen_IndexController extends Zend_Controller_Action
         $session->reportData = $reportData;
         $session->report_id = null;
         
-        // TODO: Where does this get set?
-        header('Location: ' . $this->view->baseUrl('/survey'));
+        // Redirect to the survey controller of our current module
+        $this->_helper->redirector('index', 'survey');
     }
 
     /**
@@ -87,7 +68,6 @@ class Proposalgen_IndexController extends Zend_Controller_Action
                 if ($reportId === 0)
                 {
                     $this->startNewProposal($session);
-                    
                 }
                 else
                 {
@@ -113,7 +93,7 @@ class Proposalgen_IndexController extends Zend_Controller_Action
         if (strcmp($proposalOptions, 'ViewUnfinishedStartNewProposal') === 0)
         {
             $reports = Proposalgen_Model_Mapper_Report::getInstance()->fetchAll(array (
-                    "(user_id = ? AND questionset_id = 1" => Proposalgen_Model_User::getCurrentUserId(), 
+                    "(user_id = ? AND questionset_id = 1" => $this->userId, 
                     "report_stage != ?) OR report_stage IS NULL" => "finished" 
             ), array (
                     "date_created DESC" 
@@ -127,19 +107,17 @@ class Proposalgen_IndexController extends Zend_Controller_Action
         else
         {
             $reports = Proposalgen_Model_Mapper_Report::getInstance()->fetchAll(array (
-                    "user_id = ? AND questionset_id = 1" => Proposalgen_Model_User::getCurrentUserId(), 
+                    "user_id = ? AND questionset_id = 1" => $this->userId, 
                     "report_stage = ?" => "finished" 
             ), array (
                     "date_created DESC" 
             ));
-        
         }
         
         $this->view->selectReportForm = new Proposalgen_Form_SelectReport($reports);
-    
     } // end indexAction
 
-
+    
     /**
      * This action deals with setting/removing a session variable called emulateUserId
      *
@@ -176,7 +154,6 @@ class Proposalgen_IndexController extends Zend_Controller_Action
 
     public function oldindexAction ()
     {
-        
         $this->user_id = Proposalgen_Model_User::getCurrentUserId();
         $this->dealer_company_id = Proposalgen_Model_User::getCurrentUser()->getDealerCompanyId();
         // Tangent_Log::message("emerg", "emerg");
@@ -410,7 +387,6 @@ class Proposalgen_IndexController extends Zend_Controller_Action
                     $formData = $this->_request->getPost();
                     $session->report_id = $formData ["select_complete_proposal"];
                     header('Location: ' . $session->url . "/report");
-                
                 }
                 else
                 {
@@ -468,26 +444,20 @@ class Proposalgen_IndexController extends Zend_Controller_Action
                         $db->commit();
                         
                         header('Location: ' . $session->surveyurl);
-                    
                     }
                     catch ( Zend_Db_Exception $e )
                     {
                         $db->rollback();
                         throw new Exception("Error saving new report", 0, $e);
-                    
                     }
                     catch ( Exception $e )
                     {
                         $db->rollback();
                         throw new Exception("Error saving new report", 0, $e);
-                    
                     }
                 }
             }
         }
-    
     } // end oldindexAction
-
-
 } // end index controller
 

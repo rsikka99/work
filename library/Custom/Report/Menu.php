@@ -71,7 +71,7 @@ class Custom_Report_Menu
 
     /**
      *
-     * @param $report Application_Model_Report           
+     * @param $report Proposalgen_Model_Report           
      */
     public function __construct ($report)
     {

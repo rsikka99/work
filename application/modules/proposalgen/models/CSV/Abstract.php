@@ -10,7 +10,6 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
     protected $data;
     protected $errors = array ();
     protected $baddata;
-    
     const FIELD_NOTREQUIRED = 0;
     const FIELD_REQUIRED = 1;
     const FIELD_REQUIRED_DEPENDS = 2;
@@ -83,7 +82,6 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
                             }
                         }
                     }
-                
                 }
                 fclose($handle);
             }
@@ -160,7 +158,7 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $validHeaders field_type           
+     * @param $validHeaders field_type            
      */
     public function setValidHeaders ($validHeaders)
     {
@@ -183,7 +181,7 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $headers field_type           
+     * @param $headers field_type            
      */
     public function setHeaders ($headers)
     {
@@ -206,7 +204,7 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $validateCSV field_type           
+     * @param $validateCSV field_type            
      */
     public function setValidateCSV ($validateCSV)
     {
@@ -229,7 +227,7 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $data field_type           
+     * @param $data field_type            
      */
     public function setData ($data)
     {
@@ -252,12 +250,11 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $baddata field_type           
+     * @param $baddata field_type            
      */
     public function setBaddata ($baddata)
     {
         $this->baddata = $baddata;
         return $this;
     }
-
 }

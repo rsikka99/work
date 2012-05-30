@@ -2,6 +2,7 @@
 
 /**
  * Class Proposalgen_Model_UserTonerOverride
+ * 
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_UserTonerOverride extends Tangent_Model_Abstract
@@ -12,6 +13,7 @@ class Proposalgen_Model_UserTonerOverride extends Tangent_Model_Abstract
     protected $OverrideTonerPrice;
 
     /**
+     *
      * @return the $UserId
      */
     public function getUserId ()
@@ -25,7 +27,8 @@ class Proposalgen_Model_UserTonerOverride extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $UserId
+     *
+     * @param field_type $UserId            
      */
     public function setUserId ($UserId)
     {
@@ -34,6 +37,7 @@ class Proposalgen_Model_UserTonerOverride extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $TonerId
      */
     public function getTonerId ()
@@ -47,7 +51,8 @@ class Proposalgen_Model_UserTonerOverride extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $TonerId
+     *
+     * @param field_type $TonerId            
      */
     public function setTonerId ($TonerId)
     {
@@ -56,6 +61,7 @@ class Proposalgen_Model_UserTonerOverride extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $OverrideTonerPrice
      */
     public function getOverrideTonerPrice ()
@@ -69,12 +75,12 @@ class Proposalgen_Model_UserTonerOverride extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $OverrideTonerPrice
+     *
+     * @param field_type $OverrideTonerPrice            
      */
     public function setOverrideTonerPrice ($OverrideTonerPrice)
     {
         $this->OverrideTonerPrice = $OverrideTonerPrice;
         return $this;
     }
-
 }

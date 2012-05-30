@@ -2,22 +2,22 @@
 
 /**
  * Class Proposalgen_Model_PartType
+ * 
  * @author "Lee Robert"
  */
 class Proposalgen_Model_PartType extends Tangent_Model_Abstract
 {
     const OEM = 1;
     const COMP = 2;
-    
     static $PartTypeNames = array (
             self::OEM => "OEM", 
             self::COMP => "Compatible" 
     );
-    
     protected $PartTypeId;
     protected $TypeName;
 
     /**
+     *
      * @return the $PartTypeId
      */
     public function getPartTypeId ()
@@ -31,7 +31,8 @@ class Proposalgen_Model_PartType extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $PartTypeId
+     *
+     * @param field_type $PartTypeId            
      */
     public function setPartTypeId ($PartTypeId)
     {
@@ -40,6 +41,7 @@ class Proposalgen_Model_PartType extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $TypeName
      */
     public function getTypeName ()
@@ -53,12 +55,12 @@ class Proposalgen_Model_PartType extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $TypeName
+     *
+     * @param field_type $TypeName            
      */
     public function setTypeName ($TypeName)
     {
         $this->TypeName = $TypeName;
         return $this;
     }
-
 }

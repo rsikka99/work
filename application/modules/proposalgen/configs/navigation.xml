@@ -1,32 +1,217 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<nav>
-		<menu>
-			<label>Proposal Generator</label>
-			<class>dropdown</class>
-			<module>proposalgen</module>
-			<controller>index</controller>
-			<action>index</action>
-			<resource>proposalgen_index_index</resource>
-			<pages>
-				<quotebuilder>
-					<label>Build a quote</label>
-					<class>dropdown</class>
-					<module>proposalgen</module>
-					<controller>build</controller>
-					<action>index</action>
-					<resource>proposalgen_build_index</resource>
-					<pages>
-						<buildnew>
-							<label>New Quote</label>
-							<module>proposalgen</module>
-							<controller>build</controller>
-							<action>index</action>
-							<resource>proposalgen_build_index</resource>
-						</buildnew>
-					</pages>
-				</quotebuilder>
-			</pages>
-		</menu>
-	</nav>
+    <nav>
+        <menu>
+            <label>Proposal Generator</label>
+            <class>dropdown</class>
+            <module>proposalgen</module>
+            <controller>index</controller>
+            <action>index</action>
+            <resource>proposalgen_index_index</resource>
+            <pages>
+                <proposal>
+                    <label>Proposal</label>
+                    <class>dropdown</class>
+                    <module>default</module>
+                    <controller>index</controller>
+                    <action>index</action>
+                    <pages>
+                        <survey>
+                            <label>Survey</label>
+                            <module>proposalgen</module>
+                            <controller>survey</controller>
+                            <action>index</action>
+                            <class>dropdown subdropdown</class>
+                            <pages>
+                                <company>
+                                    <label>Company</label>
+                                    <module>proposalgen</module>
+                                    <controller>survey</controller>
+                                    <action>company</action>
+                                </company>
+                                <finance>
+                                    <label>Finance</label>
+                                    <module>proposalgen</module>
+                                    <controller>survey</controller>
+                                    <action>finance</action>
+                                </finance>
+                                <purchasing>
+                                    <label>Purchasing</label>
+                                    <module>proposalgen</module>
+                                    <controller>survey</controller>
+                                    <action>purchasing</action>
+                                </purchasing>
+                                <it>
+                                    <label>It</label>
+                                    <module>proposalgen</module>
+                                    <controller>survey</controller>
+                                    <action>it</action>
+                                </it>
+                                <users>
+                                    <label>Users</label>
+                                    <module>proposalgen</module>
+                                    <controller>survey</controller>
+                                    <action>users</action>
+                                </users>
+                                <verify>
+                                    <label>Verify</label>
+                                    <module>proposalgen</module>
+                                    <controller>survey</controller>
+                                    <action>verify</action>
+                                </verify>
+                            </pages>
+                        </survey>
+                        <fleetdata>
+                            <label>Upload Fleet Data</label>
+                            <module>proposalgen</module>
+                            <controller>data</controller>
+                            <action>index</action>
+                            <class>dropdown subdropdown</class>
+                            <pages>
+                                <upload>
+                                    <label>Upload</label>
+                                    <module>proposalgen</module>
+                                    <controller>data</controller>
+                                    <action>index</action>
+                                </upload>
+                                <devicemapping>
+                                    <label>Map Devices</label>
+                                    <module>proposalgen</module>
+                                    <controller>data</controller>
+                                    <action>devicemapping</action>
+                                </devicemapping>
+                                <deviceleasing>
+                                    <label>Summary</label>
+                                    <module>proposalgen</module>
+                                    <controller>data</controller>
+                                    <action>deviceleasing</action>
+                                </deviceleasing>
+                            </pages>
+                        </fleetdata>
+                        <reportsettings>
+                            <label>Report Settings</label>
+                            <module>proposalgen</module>
+                            <controller>data</controller>
+                            <action>reportsettings</action>
+                        </reportsettings>
+                        <reports>
+                            <label>Available Reports</label>
+                            <module>proposalgen</module>
+                            <controller>report</controller>
+                            <action>index</action>
+                            <class>dropdown subdropdown</class>
+                            <pages>
+                                <assessment>
+                                    <label>Assessment</label>
+                                    <module>proposalgen</module>
+                                    <controller>report</controller>
+                                    <action>assessment</action>
+                                </assessment>
+                                <grossmargin>
+                                    <label>Gross Margin</label>
+                                    <module>proposalgen</module>
+                                    <controller>report</controller>
+                                    <action>grossmargin</action>
+                                </grossmargin>
+                                <solution>
+                                    <label>Solution</label>
+                                    <module>proposalgen</module>
+                                    <controller>report</controller>
+                                    <action>solution</action>
+                                </solution>
+                                <printingdevicelist>
+                                    <label>Printing Device List</label>
+                                    <module>proposalgen</module>
+                                    <controller>report</controller>
+                                    <action>printingdevicelist</action>
+                                </printingdevicelist>
+                            </pages>
+                        </reports>
+                    </pages>
+                </proposal>
+                <systemadmin>
+                    <label>System Administration</label>
+                    <class>dropdown</class>
+                    <module>default</module>
+                    <controller>admin</controller>
+                    <action>index</action>
+                    <pages>
+                        <manageusers>
+                            <label>Manage Users</label>
+                            <module>default</module>
+                            <controller>admin</controller>
+                            <action>manageusers</action>
+                        </manageusers>
+                        <managemanufacturers>
+                            <label>Manage Manufacturers</label>
+                            <module>default</module>
+                            <controller>admin</controller>
+                            <action>manufacturers</action>
+                        </managemanufacturers>
+                        <manageprinterandtoner>
+                            <label>Manage Master Printer And Toner Properties</label>
+                            <module>default</module>
+                            <controller>managedevices</controller>
+                            <action>managedevices</action>
+                        </manageprinterandtoner>
+                        <updatepricing>
+                            <label>Update Pricing</label>
+                            <module>default</module>
+                            <controller>admin</controller>
+                            <action>bulkdevicepricing</action>
+                        </updatepricing>
+                        <supporttickets>
+                            <label>Support Tickets</label>
+                            <module>default</module>
+                            <controller>ticket</controller>
+                            <action>managetickets</action>
+                        </supporttickets>
+                        <managereplacements>
+                            <label>Manage Replacement Printers</label>
+                            <module>default</module>
+                            <controller>admin</controller>
+                            <action>managereplacements</action>
+                        </managereplacements>
+                        <managematchups>
+                            <label>Manage Printer Matchups</label>
+                            <module>default</module>
+                            <controller>admin</controller>
+                            <action>managematchups</action>
+                        </managematchups>
+                        <defaultreportsettings>
+                            <label>Default Report Settings</label>
+                            <module>default</module>
+                            <controller>admin</controller>
+                            <action>managesettings</action>
+                        </defaultreportsettings>
+                    </pages>
+                </systemadmin>
+                <myadmin>
+                    <label>My Admin</label>
+                    <module>default</module>
+                    <controller>admin</controller>
+                    <action>index</action>
+                    <class>dropdown></class>
+                    <pages>
+                        <myreportsettings>
+                            <label>My Report Settings</label>
+                            <module>default</module>
+                            <controller>admin</controller>
+                            <action>managemysettings</action>
+                        </myreportsettings>
+                        <managemyreports>
+                            <label>Manage My Reports</label>
+                            <module>default</module>
+                            <controller>admin</controller>
+                            <action>managemyreports</action>
+                        </managemyreports>
+                        <changepassword>
+                            <label>Change Password</label>
+                            <route>resetpassword</route>
+                        </changepassword>
+                    </pages>
+                </myadmin>
+            </pages>
+        </menu>
+    </nav>
 </config>

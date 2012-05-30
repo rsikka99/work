@@ -2,12 +2,14 @@
 
 /**
  * Description of SurveyController:
- * This controller handles the survey/questionaire.  User should
+ * This controller handles the survey/questionaire.
+ * User should
  * be quided through a series of forms where they are asked to answer
  * questions about their existing fleet of printers.
  *
  * @author Chris Garrah
  */
+
 class Proposalgen_SurveyController extends Zend_Controller_Action
 {
     public $_form;
@@ -37,8 +39,7 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
         $this->initView();
         // $this->view->app = $this->config->app;
         $this->view->user = Zend_Auth::getInstance()->getIdentity();
-        $this->user_id = Zend_Auth::getInstance()->getIdentity()->user_id;
-        $this->view->privilege = Zend_Auth::getInstance()->getIdentity()->privileges;
+        $this->userId = Zend_Auth::getInstance()->getIdentity()->id;
         $this->view->MPSProgramName = $this->config->app->MPSProgramName;
         
         // set the namespace for storing which pages have been visited
@@ -46,8 +47,8 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
         {
             $this->_pgenSession = new Zend_Session_Namespace($this->_pgenNamespace);
         } // end if
-    
     } // end init
+
     
     /**
      * Checks to see if the user can view a particular sub form page.
@@ -59,9 +60,9 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
     {
         $formComplete = true;
         $db = Zend_Db_Table::getDefaultAdapter();
-        $textAnswersTable = new Proposalgen_Model_DbTable_TextAnswers();
-        $numericAnswersTable = new Proposalgen_Model_DbTable_NumericAnswers();
-        $dateAnswersTable = new Proposalgen_Model_DbTable_DateAnswers();
+        $textAnswersTable = new Proposalgen_Model_DbTable_TextAnswer();
+        $numericAnswersTable = new Proposalgen_Model_DbTable_NumericAnswer();
+        $dateAnswersTable = new Proposalgen_Model_DbTable_DateAnswer();
         $session = new Zend_Session_Namespace('report');
         $reportId = $session->report_id;
         $subform = (strtolower($subform));
@@ -112,12 +113,10 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
                 catch ( Zend_Db_Exception $e )
                 {
                     $db->rollback();
-                
                 }
                 catch ( Exception $e )
                 {
                     $db->rollback();
-                
                 }
             }
         }
@@ -139,14 +138,16 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
         $baseURL = "http://" . $serverUrlHelper->getHost() . $baseUrlHelper->getBaseUrl();
         $formComplete = true;
         $db = Zend_Db_Table::getDefaultAdapter();
-        $textAnswersTable = new Proposalgen_Model_DbTable_TextAnswers();
-        $numericAnswersTable = new Proposalgen_Model_DbTable_NumericAnswers();
-        $dateAnswersTable = new Proposalgen_Model_DbTable_DateAnswers();
+        $textAnswersTable = new Proposalgen_Model_DbTable_TextAnswer();
+        $numericAnswersTable = new Proposalgen_Model_DbTable_NumericAnswer();
+        $dateAnswersTable = new Proposalgen_Model_DbTable_DateAnswer();
         $form = $this->getForm();
         $session = new Zend_Session_Namespace('report');
         $reportId = $session->report_id;
         $allForms = $this->getPotentialForms();
-        $session->currentPage = $this->view->baseUrl() . '/company';
+        $session->currentPage = $this->view->url(array (
+                'action' => 'company' 
+        ));
         
         if ($reportId)
         {
@@ -156,7 +157,7 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
             if ($report->getDevicesModified())
             {
                 // redirect to warning page
-                $this->_redirect('/data/modificationwarning');
+                $this->_helper->redirector('modificationwarning', 'data');
                 break;
             }
         }
@@ -206,17 +207,14 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
                             $formComplete = false;
                             $session->verify = false;
                         }
-                    
                     }
                     catch ( Zend_Db_Exception $e )
                     {
                         $db->rollback();
-                    
                     }
                     catch ( Exception $e )
                     {
                         $db->rollback();
-                    
                     }
                 }
             }
@@ -225,16 +223,24 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
             if ($formComplete)
             {
                 $this->_pgenSession->surveyPages [$subform] = Array (
-                        'url' => $baseURL . '/survey/' . $subform 
+                        'url' => $this->view->url(array (
+                                'action' => $subform 
+                        )) 
                 );
-                $session->currentPage = $this->view->url() . '/' . $subform;
+                $session->currentPage = $this->view->url(array (
+                        'action' => $subform 
+                ));
             }
             else
             {
                 $this->_pgenSession->surveyPages [$subform] = Array (
-                        'url' => $baseURL . '/survey/' . $subform 
+                        'url' => $this->view->url(array (
+                                'action' => $subform 
+                        )) 
                 );
-                $session->currentPage = $this->view->url() . '/' . $subform;
+                $session->currentPage = $this->view->url(array (
+                        'action' => $subform 
+                ));
                 break;
             }
         }
@@ -245,10 +251,14 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
         if ($formComplete)
         {
             $this->_pgenSession->surveyPages ['verify'] = array (
-                    'url' => $this->view->url() . '/verify' 
+                    'url' => $this->view->url(array (
+                            'action' => 'verify' 
+                    )) 
             );
             $session->verify = true;
-            $session->currentPage = $this->view->url() . '/verify';
+            $session->currentPage = $this->view->url(array (
+                    'action' => 'verify' 
+            ));
         }
         $this->view->visitedPages = $this->_pgenSession->surveyPages;
     }
@@ -299,17 +309,14 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
                 ->where('question_id = ?', $questionID);
             $row = $table->fetchRow($select);
             $db->commit();
-        
         }
         catch ( Zend_Db_Exception $e )
         {
             $db->rollback();
-        
         }
         catch ( Exception $e )
         {
             $db->rollback();
-        
         }
         
         if ($row == null)
@@ -409,14 +416,14 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
     /**
      * Is the sub form valid?
      *
-     * @param $subForm Zend_Form_SubForm           
-     * @param $data array           
+     * @param $subForm Zend_Form_SubForm            
+     * @param $data array            
      * @return bool
      */
     public function subFormIsValid (Zend_Form_SubForm $subForm, array $data, $range)
     {
         $session = new Zend_Session_Namespace('report');
-        $reportsTable = new Proposalgen_Model_DbTable_Reports();
+        $reportsTable = new Proposalgen_Model_DbTable_Report();
         $reportData = $session->reportData;
         $db = Zend_Db_Table::getDefaultAdapter();
         $name = $subForm->getName();
@@ -429,16 +436,17 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
                 $session->report_id = $reportsTable->insert($reportData);
             }
             $this->getSessionNamespace()->$name = $subForm->getValues(); // VERY
-                                                                         // KEY
-                                                                         // POINT!!!!!
-                                                                         
+            // KEY
+            // POINT!!!!!
+            
+
             // getting the report id from the session.
             $reportID = $session->report_id;
             
-            $reportTable = new Proposalgen_Model_DbTable_Reports();
-            $textAnswersTable = new Proposalgen_Model_DbTable_TextAnswers();
-            $numericAnswersTable = new Proposalgen_Model_DbTable_NumericAnswers();
-            $dateAnswersTable = new Proposalgen_Model_DbTable_DateAnswers();
+            $reportTable = new Proposalgen_Model_DbTable_Report();
+            $textAnswersTable = new Proposalgen_Model_DbTable_TextAnswer();
+            $numericAnswersTable = new Proposalgen_Model_DbTable_NumericAnswer();
+            $dateAnswersTable = new Proposalgen_Model_DbTable_DateAnswer();
             
             $values = $subForm->getValues();
             $new_array = reset($values);
@@ -533,17 +541,14 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
                     }
                 }
                 $db->commit();
-            
             }
             catch ( Zend_Db_Exception $e )
             {
                 $db->rollback();
-            
             }
             catch ( Exception $e )
             {
                 $db->rollback();
-            
             }
             
             if ($subForm->getName() == 'hardware')
@@ -582,7 +587,8 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
         
         return $subformData;
     } // end getSubFormDataFromNameSpace
-      
+
+    
     // return true if form exists, false if it doesn't
     public function doesSubFormExist ($subFormName)
     {
@@ -606,6 +612,7 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
             return false;
         } // end if
         
+
         foreach ( $this->getPotentialForms() as $name )
         {
             if ($data = $request->getPost($name, false))
@@ -618,9 +625,10 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
             } // end if
         } // end foreach
         
+
         return false;
     } // end getCurrentSubForm
-    
+
     public function allowedToVisitForm ($subFormName)
     {
         $subFormName = strtolower($subFormName);
@@ -681,7 +689,6 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
         // Necessary because otherwise a user could get to the verification page
         // of one report, then start a new report
         // and the link to the verification page will still be visible.
-        
         $this->_pgenSession->surveyPages = null;
         $this->getCompletedForms();
         
@@ -731,6 +738,7 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
             throw new Exception("YOU CANT VIEW THIS FORM!");
         } // end if
         
+
         if (! isset($this->_pgenSession->surveyPages ['company']))
         {
             $this->_pgenSession->surveyPages ['company'] = array (
@@ -742,6 +750,7 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
         
         return $this->processForm('company', 'company', 'index');
     } // end company action
+
     
     /**
      * The general action is responsible for asking the first set of questions
@@ -758,10 +767,9 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
         $this->view->companyName = $this->getReportCompanyName();
         
         /*
-         * if (!$this->allowedToVisitForm($this->view->formTitle)){ //INSERT
-         * CODE TO REDIRECT TO THE LAST VIEWABLE FORM
-         * //****************************************************** throw new
-         * Exception("YOU CANT VIEW THIS FORM!"); } // end if
+         * if (!$this->allowedToVisitForm($this->view->formTitle)){ //INSERT CODE TO REDIRECT TO THE LAST VIEWABLE FORM
+         * //****************************************************** throw new Exception("YOU CANT VIEW THIS FORM!"); }
+         * // end if
          */
         
         if (! $this->canViewForm($this->getPrevSubForm($this->view->formTitle)))
@@ -781,6 +789,7 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
         
         return $this->processForm('general', 'general', 'index');
     } // end general action
+
     
     /**
      * The finance action will present a form with questions regarding the
@@ -795,9 +804,8 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
         $this->view->companyName = $this->getReportCompanyName();
         
         /*
-         * if (!$this->allowedToVisitForm($this->view->formTitle)){ //INSERT
-         * CODE TO REDIRECT TO THE LAST VIEWABLE FORM throw new Exception("YOU
-         * CANT VIEW THIS FORM!"); }
+         * if (!$this->allowedToVisitForm($this->view->formTitle)){ //INSERT CODE TO REDIRECT TO THE LAST VIEWABLE FORM
+         * throw new Exception("YOU CANT VIEW THIS FORM!"); }
          */
         
         if (! $this->canViewForm($this->getPrevSubForm($this->view->formTitle)))
@@ -835,6 +843,7 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
         // throw new Exception("YOU CANT VIEW THIS FORM!");
         // }
         
+
         if (! $this->canViewForm($this->getPrevSubForm($this->view->formTitle)))
         {
             // INSERT CODE TO REDIRECT TO THE LAST VIEWABLE FORM
@@ -852,6 +861,7 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
         
         return $this->processForm('purchasing', 'purchasing', 'index');
     } // end purchasing action
+
     
     /**
      * The it action will present a form with questions regarding the
@@ -870,6 +880,7 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
         // throw new Exception("YOU CANT VIEW THIS FORM!");
         // }
         
+
         if (! $this->canViewForm($this->getPrevSubForm($this->view->formTitle)))
         {
             // INSERT CODE TO REDIRECT TO THE LAST VIEWABLE FORM
@@ -887,6 +898,7 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
         
         return $this->processForm('it', 'it', 'index');
     } // end it action
+
     
     /**
      * The users action will present a form with the final set of questions in
@@ -905,6 +917,7 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
         // throw new Exception("YOU CANT VIEW THIS FORM!");
         // }
         
+
         if (! $this->canViewForm($this->getPrevSubForm($this->view->formTitle)))
         {
             // INSERT CODE TO REDIRECT TO THE LAST VIEWABLE FORM
@@ -922,6 +935,7 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
         
         return $this->processForm('users', 'users', 'index');
     } // end users action
+
     
     /**
      * THe verify action will display all of the information that the users
@@ -943,6 +957,7 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
         // throw new Exception("YOU CANT VIEW THIS FORM!");
         // }
         
+
         $session = new Zend_Session_Namespace('report');
         if (! $this->canViewForm($this->getPrevSubForm($this->view->formTitle)))
         {
@@ -968,9 +983,9 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
         // get the current report id.
         $session = new Zend_Session_Namespace('report');
         $questionTable = new Proposalgen_Model_DbTable_Questions();
-        $textAnswersTable = new Proposalgen_Model_DbTable_TextAnswers();
-        $numericAnswersTable = new Proposalgen_Model_DbTable_NumericAnswers();
-        $dateAnswersTable = new Proposalgen_Model_DbTable_DateAnswers();
+        $textAnswersTable = new Proposalgen_Model_DbTable_TextAnswer();
+        $numericAnswersTable = new Proposalgen_Model_DbTable_NumericAnswer();
+        $dateAnswersTable = new Proposalgen_Model_DbTable_DateAnswer();
         $questionSetQuestionsTable = new Proposalgen_Model_DbTable_QuestionSetQuestions();
         $form = $this->getForm();
         $subforms = $form->getSubforms();
@@ -1055,13 +1070,13 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
         );
         
         $session = new Zend_Session_Namespace('report');
-        $reportsTable = new Proposalgen_Model_DbTable_Reports();
+        $reportsTable = new Proposalgen_Model_DbTable_Report();
         $db = Zend_Db_Table::getDefaultAdapter();
         $prevForm = $this->getPrevSubForm($subFormName);
         $request = $this->getRequest();
-        $textAnswersTable = new Proposalgen_Model_DbTable_TextAnswers();
-        $numericAnswersTable = new Proposalgen_Model_DbTable_NumericAnswers();
-        $dateAnswersTable = new Proposalgen_Model_DbTable_DateAnswers();
+        $textAnswersTable = new Proposalgen_Model_DbTable_TextAnswer();
+        $numericAnswersTable = new Proposalgen_Model_DbTable_NumericAnswer();
+        $dateAnswersTable = new Proposalgen_Model_DbTable_DateAnswer();
         
         $form = $this->getForm();
         $subForm = $form->getSubForm($subFormName);
@@ -1070,6 +1085,7 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
         {
             // No post, form requested from URL, display the desired form
             
+
             // IF DATA for this form is found, display it
             // $data = $this->getSubFormDataFromNameSpace($subFormName,
             // $this->getSessionNamespace());
@@ -1089,6 +1105,7 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
                 // determine the
                 // answer table to use.
                 
+
                 for($counter = 0; $counter < sizeof($arrayKeys); $counter ++)
                 {
                     $questionId = $subForm->getElement($arrayKeys [$counter])->getAttrib('id');
@@ -1097,19 +1114,16 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
                     {
                         $table = $numericAnswersTable;
                         $dataType = 'numeric_answer';
-                    
                     }
                     else if ($subForm->getElement($arrayKeys [$counter])->getAttrib('tmtw') == 'date')
                     {
                         $table = $dateAnswersTable;
                         $dataType = 'date_answer';
-                    
                     }
                     else
                     {
                         $table = $textAnswersTable;
                         $dataType = 'textual_answer';
-                    
                     }
                     
                     // fetching the answer text from the database.
@@ -1124,12 +1138,10 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
                     catch ( Zend_Db_Exception $e )
                     {
                         $db->rollback();
-                    
                     }
                     catch ( Exception $e )
                     {
                         $db->rollback();
-                    
                     }
                     
                     if ($row [$dataType] != null)
@@ -1140,28 +1152,27 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
                         // value, then the output is set to currency format
                         if (in_array($subForm->getElement($arrayKeys [$counter])->getAttrib('id'), $financeArray) && $subForm->getElement($arrayKeys [$counter])->getAttrib('id') != "11a" && $subForm->getElement($arrayKeys [$counter])->getAttrib('id') != "12a")
                         {
-                            $arrayValues [$counter] = money_format('%i', $row [$dataType]);
+                            // Money format is not supported in windows!
+                            //money_format('%i', $row [$dataType]);
+                            $currency = new Zend_Currency();
+                            $arrayValues [$counter] = $currency->toCurrency($row [$dataType]);
                         }
                         else
                         {
                             $arrayValues [$counter] = ($row [$dataType]);
                         }
-                    
                     }
-                
                 }
                 // building the array of data to save to the database this data
                 // array is later used to populate the form elements.
                 $data = array_combine($arrayKeys, $arrayValues);
-            
             }
             else
             {
                 $data = null;
-            
             }
             
-            $subForm->setAction($session->url . '/survey/' . $controllerName)->setMethod('post');
+            $subForm->setAction($this->view->url(array('action' => $controllerName)))->setMethod('post');
             
             $form = $this->getForm()->prepareSubForm($subForm);
             
@@ -1175,7 +1186,7 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
                 }
                 else
                 {
-                    $backbtn->setAttrib('ONCLICK', 'window.location=\'' . $this->view->baseUrl() . '/survey/' . $prevForm . '\';');
+                    $backbtn->setAttrib('ONCLICK', 'window.location=\'' . $this->view->url(array('action' => $prevForm)) . '\';');
                 }
             }
             
@@ -1197,7 +1208,6 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
                     ) 
             ));
             return $this->render($viewScript);
-        
         }
         else
         {
@@ -1234,7 +1244,6 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
                     // NOTE: do not move to verification screen unless we are
                     // currently showing the last form.
                     $this->_redirect('survey/verify');
-                
                 }
                 else
                 {
@@ -1244,24 +1253,23 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
                     {
                         $var = $session->verify;
                         throw new Exception("Form Error: Could not find the next form to display.");
-                    
                     }
                     else
                     {
                         $this->_redirect('survey/' . $nextSubForm->getName());
-                    
                     }
                 }
-            
             }
             else
             { // PUT IF STATEMENT HERE TO CHECK IF ENTIRE FORM IS VALID!!
-              // subform is not valid, redisplay the invalid form
-              
+                // subform is not valid, redisplay the invalid form
+                
+
                 $submittedSubForm->setAction($session->url . '/survey/' . $subFormName)->setMethod('post');
                 $this->view->form = $this->getForm()->prepareSubForm($submittedSubForm);
                 // set the url for the back button
                 
+
                 $backbtn = $this->view->form->getElement('back_button');
                 if ($backbtn != null)
                 {
@@ -1287,12 +1295,10 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
                         ) 
                 ));
                 return $this->render($viewScript);
-            
             } // end else
-        
         } // end else
-    
     } // end function processForm
+
     
     /**
      * Setting the defualt value of the page coverage in the survey to be the
@@ -1333,7 +1339,6 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
             $row = $dealerTable->fetchRow('company_name = "MASTER"');
             $session->pageCoverageColor = $row->dc_estimated_page_coverage_color;
         }
-    
     }
 
     /**
@@ -1343,7 +1348,7 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
     {
         $session = new Zend_Session_Namespace('report');
         $report_id = $session->report_id;
-        $questionTable = new Proposalgen_Model_DbTable_TextAnswers();
+        $questionTable = new Proposalgen_Model_DbTable_TextAnswer();
         $where = $questionTable->getAdapter()->quoteInto('report_id = ? AND question_id = 4', $report_id, 'INTEGER');
         $row = $questionTable->fetchRow($where);
         
@@ -1364,8 +1369,8 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
      * EG:
      * $this->regenerateMenu('hardware', 'verify');
      *
-     * @param $previousstage string           
-     * @param $newstage string           
+     * @param $previousstage string            
+     * @param $newstage string            
      */
     public function regenerateMenu ($previousstage, $newstage)
     {
@@ -1383,8 +1388,6 @@ class Proposalgen_SurveyController extends Zend_Controller_Action
             }
             $menu = new Custom_Report_Menu($report);
             $this->view->reportMenu = $menu;
-        
         }
     }
-
 } // end class ProfileController
