@@ -18,8 +18,6 @@ class Default_AuthController extends Zend_Controller_Action
         $this->_redirect('/auth/login');
     }
 
-    
-
     /**
      * Gets the auth adapter to use for authenticaiton
      *
@@ -52,7 +50,9 @@ class Default_AuthController extends Zend_Controller_Action
         {
             if ($request->getParam('forgotpassword', false))
             {
-                $this->_helper->getHelper('Redirector')->gotoRoute(array('username' => $request->getParam('username', '')), 'forgotpassword');
+                $this->_helper->getHelper('Redirector')->gotoRoute(array (
+                        'username' => $request->getParam('username', '') 
+                ), 'forgotpassword');
             }
             if ($form->isValid($request->getPost()))
             {
@@ -61,10 +61,10 @@ class Default_AuthController extends Zend_Controller_Action
                 $authAdapter->setIdentity($form->getValue("username"));
                 
                 $password = $form->getValue("password");
+                $authAdapter->setCredential($password);
                 //$password = $this->cryptPassword($form->getValue("password"));
                 
-                $authAdapter->setCredential($password);
-                
+
                 // Authenticate against the database
                 $result = $auth->authenticate($authAdapter);
                 
@@ -92,7 +92,6 @@ class Default_AuthController extends Zend_Controller_Action
                     {
                         $this->_redirect('/');
                     }
-                    
                 }
                 else
                 {
@@ -103,14 +102,14 @@ class Default_AuthController extends Zend_Controller_Action
                             foreach ( $result->getMessages() as $message )
                             {
                                 $this->_helper->flashMessenger(array (
-                                    'danger' => $message 
+                                        'danger' => $message 
                                 ));
                             }
                             break;
                         default :
                             // Put a generic invalid credential message
                             $this->_helper->flashMessenger(array (
-                                'danger' => 'The username/password combination you entered was invalid.' 
+                                    'danger' => 'The username/password combination you entered was invalid.' 
                             ));
                             
                             break;
@@ -125,11 +124,9 @@ class Default_AuthController extends Zend_Controller_Action
                 // Build the bootstrap error decorator
                 $form->buildBootstrapErrorDecorators();
             }
-        
         }
         
         $this->view->form = $form;
-    
     } // end loginAction
 
     
@@ -141,34 +138,91 @@ class Default_AuthController extends Zend_Controller_Action
      */
     public function logoutAction ()
     {
-        // Destroy only information that is part of a user being logged in.
-        Zend_Auth::getInstance()->clearIdentity();
-        $this->_redirect('/');
+        $this->logout();
+        $this->_helper->redirector('login');
     } // end logoutAction
 
-    
+    /**
+     * This function handles logging a user out of the system and destroying any
+     * sensitive session information.
+     * We should persist all other session data as it can help keep a user
+     * friendly experience
+     */
+    public function logout ()
+    {
+        // Destroy only information that is part of a user being logged in.
+        Zend_Auth::getInstance()->clearIdentity();
+    }
+
     public function registerAction ()
     {
-    
-    }
-    
-    public function forgotpasswordAction()
-    {
-        
     }
 
-    public function cryptAction ()
+    public function forgotpasswordAction ()
     {
-        // Only do this if we posted
-        if ($this->getRequest()->isPost())
+    }
+
+    public function changepasswordAction ()
+    {
+        $this->view->layout()->setLayout('auth');
+        $form = new Default_Form_ChangePassword();
+        $request = $this->getRequest();
+        
+        if ($request->isPost())
         {
-            $password = $this->getRequest()->getPost('password');
-            if ($password !== null)
+            $values = $request->getPost();
+            if (isset($values ['submit']))
             {
-                $this->view->result = $this->cryptPassword($password);
+                if ($form->isValid($values))
+                {
+                    $auth = Zend_Auth::getInstance();
+                    $identity = $auth->getIdentity();
+                    $userMapper = new Application_Model_UserMapper();
+                    
+                    $user = $userMapper->find($identity->id);
+                    $password = crypt($form->getValue("current_password"), $user->getPassword());
+                    
+                    // Check that the user has entered in the correct password
+                    if (strcmp($password, $user->getPassword()) === 0)
+                    {
+                        
+                        // Process password change and remove change flag
+                        $user->setPassword(crypt($form->getValue("password"), $user->getPassword()));
+                        $user->setResetPasswordOnNextLogin(0);
+                        $userMapper->save($user);
+                        
+                        // Remove flag on session
+                        $identity->resetPasswordOnNextLogin = false;
+                        $auth->getStorage()->write($identity);
+                        
+                        $this->_helper->flashMessenger(array (
+                                'success' => 'Password Changed Successfully' 
+                        ));
+                        
+                        // Redirects user to logout screen to login again
+                        $r = new Zend_Controller_Action_Helper_Redirector();
+                        $r->gotoSimple('index', 'index', 'default');
+                    }
+                    else
+                    {
+                        $this->_helper->flashMessenger(array (
+                                'danger' => 'You entered the incorrect current password!' 
+                        ));
+                    }
+                }
+                else
+                {
+                    $form->buildBootstrapErrorDecorators();
+                }
+            }
+            else // is $values ['cancel'] is set 
+            {
+                $this->logout();
+                $this->_helper->redirector('login');
             }
         }
+        
+        $this->view->form = $form;
     }
-
 } // end auth controller
 

@@ -43,7 +43,7 @@ class Default_Form_Login extends EasyBib_Form
                 ) 
         ));
         
-        // Add the comment element
+        // Add the password element
         $this->addElement('password', 'password', array (
                 'label' => 'Password:', 
                 'required' => true, 

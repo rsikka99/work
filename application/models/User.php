@@ -84,7 +84,7 @@ class Application_Model_User extends My_Model_Abstract
      *
      * @var int
      */
-    protected $_resetPassword = 0;
+    protected $_resetPasswordOnNextLogin = 0;
 
     public function isFrozen ()
     {
@@ -132,8 +132,8 @@ class Application_Model_User extends My_Model_Abstract
         if (isset($params->eulaAccepted) && ! is_null($params->eulaAccepted))
             $this->setEulaAccepted($params->eulaAccepted);
         
-        if (isset($params->resetPassword) && ! is_null($params->resetPassword))
-            $this->setResetPassword($params->resetPassword);
+        if (isset($params->resetPasswordOnNextLogin) && ! is_null($params->resetPasswordOnNextLogin))
+            $this->setResetPasswordOnNextLogin($params->resetPasswordOnNextLogin);
     }
     
     /*
@@ -149,7 +149,8 @@ class Application_Model_User extends My_Model_Abstract
                 'lastname' => $this->getLastname(), 
                 'email' => $this->getEmail(), 
                 'frozenUntil' => $this->getFrozenUntil(), 
-                'loginAttempts' => $this->getLoginAttempts(), 
+                'loginAttempts' => $this->getLoginAttempts(),
+                'resetPasswordOnNextLogin' => $this->getResetPasswordOnNextLogin(),
                 'locked' => $this->getLocked() 
         );
     }
@@ -336,19 +337,19 @@ class Application_Model_User extends My_Model_Abstract
 
     /**
      *
-     * @return the $_resetPassword
+     * @return the $_resetPasswordOnNextLogin
      */
-    public function getResetPassword ()
+    public function getResetPasswordOnNextLogin ()
     {
-        return $this->_resetPassword;
+        return $this->_resetPasswordOnNextLogin;
     }
 
     /**
      *
-     * @param number $_resetPassword            
+     * @param number $_resetPasswordOnNextLogin            
      */
-    public function setResetPassword ($_resetPassword)
+    public function setResetPasswordOnNextLogin ($_resetPasswordOnNextLogin)
     {
-        $this->_resetPassword = $_resetPassword;
+        $this->_resetPasswordOnNextLogin = $_resetPasswordOnNextLogin;
     }
 }
