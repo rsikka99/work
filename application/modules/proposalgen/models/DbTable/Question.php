@@ -1,9 +1,9 @@
 <?php
 
-class Proposalgen_Model_DbTable_Questions extends Zend_Db_Table_Abstract
+class Proposalgen_Model_DbTable_Question extends Zend_Db_Table_Abstract
 {
     protected $_name = 'questions';
-    protected $_primary = 'question_id';
+    protected $_primary = 'id';
     protected $_dependentTables = array (
             'DateAnswers', 
             'TextAnswers', 
@@ -14,13 +14,13 @@ class Proposalgen_Model_DbTable_Questions extends Zend_Db_Table_Abstract
     function fetchAllQuestionsWithAnswers ($reportID)
     {
         $query = $this->select(Zend_Db_Table::SELECT_WITH_FROM_PART)
-            ->joinLeft('answers_dates', 'questions.question_id = answers_dates.question_id', array (
+            ->joinLeft('proposalgenerator_date_answers', 'questions.id = answers_dates.question_id', array (
                 'date_answer' 
         ))
-            ->joinLeft('answers_numeric', 'questions.question_id = answers_numeric.question_id', array (
+            ->joinLeft('proposalgenerator_numeric_answers', 'questions.id = answers_numeric.question_id', array (
                 'numeric_answer' 
         ))
-            ->joinLeft('answers_textual', 'questions.question_id = answers_textual.question_id', array (
+            ->joinLeft('proposalgenerator_textual_answers', 'questions.id = answers_textual.question_id', array (
                 'textual_answer' 
         ))
             ->where('answers_dates.report_id = ?', $reportID)
@@ -31,4 +31,3 @@ class Proposalgen_Model_DbTable_Questions extends Zend_Db_Table_Abstract
         return $questionsWithAnswers;
     }
 }
-?>

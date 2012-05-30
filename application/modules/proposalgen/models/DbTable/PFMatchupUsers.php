@@ -1,8 +1,8 @@
 <?php
 
-class Proposalgen_Model_DbTable_PFMatchupUsers extends Zend_Db_Table_Abstract
+class Proposalgen_Model_DbTable_PFMatchupUser extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'pf_device_matchup_users';
+    protected $_name = 'proposalgenerator_user_pf_device_matchups';
     protected $_primary = array (
             'user_id', 
             'devices_pf_id', 
@@ -17,14 +17,12 @@ class Proposalgen_Model_DbTable_PFMatchupUsers extends Zend_Db_Table_Abstract
             'PFDevices' => array (
                     'columns' => 'pf_device_id', 
                     'refTableClass' => 'Proposalgen_Model_DbTable_PFDevices', 
-                    'refColumns' => 'pf_device_id' 
+                    'refColumns' => 'id' 
             ), 
             'Users' => array (
                     'columns' => 'user_id', 
-                    'refTableClass' => 'Proposalgen_Model_DbTable_Users', 
-                    'refColumns' => 'user_id' 
+                    'refTableClass' => 'Application_Model_DbTable_User', 
+                    'refColumns' => 'id' 
             ) 
     );
 }
-
-?>

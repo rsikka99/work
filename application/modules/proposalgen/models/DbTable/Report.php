@@ -1,10 +1,9 @@
 <?php
 
-class Proposalgen_Model_DbTable_Reports extends Zend_Db_Table_Abstract
+class Proposalgen_Model_DbTable_Report extends Zend_Db_Table_Abstract
 {
-    //put your code here
-    protected $_name = 'reports';
-    protected $_primary = 'report_id';
+    protected $_name = 'proposalgenerator_reports';
+    protected $_primary = 'id';
     protected $_dependentTables = array (
             'TextAnswers', 
             'NumericAnswers', 
@@ -13,4 +12,3 @@ class Proposalgen_Model_DbTable_Reports extends Zend_Db_Table_Abstract
             'UserReports' 
     );
 }
-?>

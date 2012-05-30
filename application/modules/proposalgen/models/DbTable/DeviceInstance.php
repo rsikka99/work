@@ -2,30 +2,28 @@
 
 class Proposalgen_Model_DbTable_DeviceInstance extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'device_instance';
+    protected $_name = 'proposalgenerator_device_instances';
     protected $_primary = array (
-            'device_instance_id' 
+            'id' 
     );
     protected $_dependentTables = array (
-            'device_meter_instance' 
+            'proposalgenerator_device_instance_meters' 
     );
     protected $_referenceMap = array (
-            'Upload_Data_Collector' => array (
-                    'columns' => 'upload_data_collector_id', 
+            'UploadDataCollector' => array (
+                    'columns' => 'upload_data_collector_row_id', 
                     'refTableClass' => 'Proposalgen_Model_DbTable_UploadDataCollector', 
-                    'refColumns' => 'upload_data_collector_id' 
+                    'refColumns' => 'id' 
             ), 
             'Reports' => array (
                     'columns' => 'report_id', 
                     'refTableClass' => 'Proposalgen_Model_DbTable_Reports', 
-                    'refColumns' => 'report_id' 
+                    'refColumns' => 'id' 
             ), 
             'MasterDevice' => array (
                     'columns' => 'master_device_id', 
                     'refTableClass' => 'Proposalgen_Model_DbTable_MasterDevice', 
-                    'refColumns' => 'master_device_id' 
+                    'refColumns' => 'id' 
             ) 
     );
 }
-
-?>
