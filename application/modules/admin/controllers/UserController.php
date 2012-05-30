@@ -67,6 +67,7 @@ class Admin_UserController extends Zend_Controller_Action
                     $mapper = new Application_Model_UserMapper();
                     $user = new Application_Model_User();
                     $user->populate($values);
+                    $user->setPassword($this->cryptPassword($user->getPassword()));
                     
                     // Save to the database
                     $userId = $mapper->insert($user);
