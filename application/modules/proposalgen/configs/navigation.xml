@@ -12,7 +12,7 @@
                 <proposal>
                     <label>Proposal</label>
                     <class>dropdown</class>
-                    <module>default</module>
+                    <module>proposalgen</module>
                     <controller>index</controller>
                     <action>index</action>
                     <pages>
