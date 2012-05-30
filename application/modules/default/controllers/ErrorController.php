@@ -11,7 +11,6 @@ class Default_ErrorController extends Zend_Controller_Action
     {
         $errors = $this->_getParam('error_handler');
         
-        $priority = Zend_Log::NOTICE;
         $forwardToAction = 'page-not-found';
         switch ($errors->type)
         {
@@ -19,8 +18,7 @@ class Default_ErrorController extends Zend_Controller_Action
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER :
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION :
                 // 404 error -- controller or action not found
-                $priority = Zend_Log::NOTICE;
-                
+                $this->logAndPrepareExceptions($errors, Zend_Log::NOTICE);
                 break;
             default :
                 switch ($errors->exception->getCode())
@@ -31,9 +29,8 @@ class Default_ErrorController extends Zend_Controller_Action
                         break;
                     default :
                         // Application Error
-                        $priority = Zend_Log::CRIT;
                         $forwardToAction = 'application-error';
-                        $this->logAndPrepareExceptions($errors, $priority);
+                        $this->logAndPrepareExceptions($errors, Zend_Log::CRIT);
                         break;
                 }
                 break;
