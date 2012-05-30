@@ -110,5 +110,10 @@ class Default_ErrorController extends Zend_Controller_Action
     {
         $this->getResponse()->setHttpResponseCode(404);
     }
+
+    public function notAuthorizedAction ()
+    {
+        $this->getResponse()->setHttpResponseCode(403);
+    }
 }
 
