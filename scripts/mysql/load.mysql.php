@@ -55,6 +55,10 @@ $dbAdapter = $bootstrap->getResource('db');
 
 // let the user know whats going on (we are actually creating a
 // database here)
+
+echo '<pre>';
+echo 'Database Script running. Timestamp:' . date('Y-m-d H:i:s') . PHP_EOL;
+
 // if ('testing' != APPLICATION_ENV)
 // {
 //     echo 'Writing Database in (control-c to cancel): ' . PHP_EOL;
