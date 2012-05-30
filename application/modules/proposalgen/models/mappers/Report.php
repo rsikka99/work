@@ -3,7 +3,7 @@
 class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
 {
     
-    protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_Reports";
+    protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_Report";
     static $_instance;
 
     /**
@@ -328,7 +328,7 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
                 $newAnswerTextual->execute();
     
                 // copy upload_data_collector records
-                $upload_data_collector = Proposalgen_Model_Mapper_UploadDataCollector::getInstance()->fetchAll( 'report_id=' . $report_id );
+                $upload_data_collector = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->fetchAll( 'report_id=' . $report_id );
                 foreach ( $upload_data_collector as $udc ) {
                     $udc_id = $udc->UploadDataCollectorId;
     
@@ -703,4 +703,3 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
         return $message;
     }
 }
-?>

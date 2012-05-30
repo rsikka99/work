@@ -69,4 +69,3 @@ class Proposalgen_Model_Mapper_PartType extends Tangent_Model_Mapper_Abstract
         return $primaryKey;
     }
 }
-?>

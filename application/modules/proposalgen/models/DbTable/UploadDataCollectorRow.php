@@ -1,6 +1,6 @@
 <?php
 
-class Proposalgen_Model_DbTable_UploadDataCollector extends Zend_Db_Table_Abstract
+class Proposalgen_Model_DbTable_UploadDataCollectorRow extends Zend_Db_Table_Abstract
 {
     protected $_name = 'upload_data_collector_rows';
     protected $_primary = 'id';

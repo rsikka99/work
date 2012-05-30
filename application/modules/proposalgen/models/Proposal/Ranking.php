@@ -646,4 +646,3 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
     }
 
 }
-?>

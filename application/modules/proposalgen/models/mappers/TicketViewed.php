@@ -63,4 +63,3 @@ class Proposalgen_Model_Mapper_TicketViewed extends Tangent_Model_Mapper_Abstrac
         return $primaryKey;
     }
 }
-?>

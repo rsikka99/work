@@ -2,7 +2,7 @@
 
 class Proposalgen_Model_Mapper_QuestionSetQuestion extends Tangent_Model_Mapper_Abstract
 {
-    protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_QuestionSetQuestions";
+    protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_QuestionSetQuestion";
     static $_instance;
 
     /**
@@ -60,4 +60,3 @@ class Proposalgen_Model_Mapper_QuestionSetQuestion extends Tangent_Model_Mapper_
         return $primaryKey;
     }
 }
-?>

@@ -2,7 +2,7 @@
 
 class Proposalgen_Model_Mapper_TextualAnswer extends Tangent_Model_Mapper_Abstract
 {
-    protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_TextAnswers";
+    protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_TextAnswer";
     static $_instance;
 
     /**
@@ -82,4 +82,3 @@ class Proposalgen_Model_Mapper_TextualAnswer extends Tangent_Model_Mapper_Abstra
         return $primaryKey;
     }
 }
-?>

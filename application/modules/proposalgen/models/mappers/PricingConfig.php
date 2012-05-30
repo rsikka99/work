@@ -60,4 +60,3 @@ class Proposalgen_Model_Mapper_PricingConfig extends Tangent_Model_Mapper_Abstra
         return $primaryKey;
     }
 }
-?>

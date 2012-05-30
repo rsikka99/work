@@ -2,7 +2,7 @@
 
 class Proposalgen_Model_Mapper_TicketCategory extends Tangent_Model_Mapper_Abstract
 {
-    protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_TicketCategories";
+    protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_TicketCategory";
     static $_instance;
 
     /**
@@ -61,4 +61,3 @@ class Proposalgen_Model_Mapper_TicketCategory extends Tangent_Model_Mapper_Abstr
         return $primaryKey;
     }
 }
-?>

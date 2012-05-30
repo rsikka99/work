@@ -1045,7 +1045,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
     {
         if (! isset($this->UploadDataCollector))
         {
-            $this->UploadDataCollector = Proposalgen_Model_Mapper_UploadDataCollector::getInstance()->find($this->getUploadDataCollectorId());
+            $this->UploadDataCollector = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($this->getUploadDataCollectorId());
         }
         return $this->UploadDataCollector;
     }

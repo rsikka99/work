@@ -116,4 +116,3 @@ class Proposalgen_Model_Mapper_DeviceInstance extends Tangent_Model_Mapper_Abstr
         return $devices;
     }
 }
-?>

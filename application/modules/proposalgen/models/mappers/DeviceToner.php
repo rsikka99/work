@@ -56,4 +56,3 @@ class Proposalgen_Model_Mapper_DeviceToner extends Tangent_Model_Mapper_Abstract
         return $primaryKey;
     }
 }
-?>

@@ -480,4 +480,3 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
         return $primaryKey;
     }
 }
-?>

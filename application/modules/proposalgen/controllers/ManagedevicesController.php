@@ -1558,7 +1558,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                     $this->view->hdnID = $upload_data_collector_id;
                     
                     // get device info
-                    $upload_data_collectorMapper = Proposalgen_Model_Mapper_UploadDataCollector::getInstance();
+                    $upload_data_collectorMapper = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance();
                     $result = $upload_data_collectorMapper->find($upload_data_collector_id);
                     
                     if ($result)

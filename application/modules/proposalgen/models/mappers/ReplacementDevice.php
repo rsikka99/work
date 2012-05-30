@@ -2,7 +2,7 @@
 
 class Proposalgen_Model_Mapper_ReplacementDevice extends Tangent_Model_Mapper_Abstract
 {
-    protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_ReplacementDevices";
+    protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_ReplacementDevice";
     static $_instance;
 
     /**
@@ -96,4 +96,3 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends Tangent_Model_Mapper_Ab
         return $replacementDevices;
     }
 }
-?>
