@@ -33,12 +33,12 @@ class Default_ErrorController extends Zend_Controller_Action
                         // Application Error
                         $priority = Zend_Log::CRIT;
                         $forwardToAction = 'application-error';
+                        $this->logAndPrepareExceptions($errors, $priority);
                         break;
                 }
                 break;
         }
         
-        $this->logAndPrepareExceptions($errors, $priority);
         $this->_forward($forwardToAction);
     }
 
