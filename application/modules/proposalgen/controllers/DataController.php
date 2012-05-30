@@ -473,7 +473,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
                         }
                         
                         // calling the function that actually adds the rows
-                        $msg = Proposalgen_Model_Mapper_UploadDataCollector::getInstance()->saveRows($upload_data_collectorDataArray);
+                        $msg = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->saveRows($upload_data_collectorDataArray);
                         if ($msg)
                         {
                             $this->view->message = "Your file was not saved. Please double check the file and try again. If you continue to experience problems saving, contact your administrator.<br /><br />";
@@ -1521,7 +1521,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
                     }
                 }
                 $devicesMsg = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->saveRows($deviceArray);
-                $ucdMsg = Proposalgen_Model_Mapper_UploadDataCollector::getInstance()->saveRows($udcUpdateArray);
+                $ucdMsg = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->saveRows($udcUpdateArray);
                 
                 // *************************************************************
                 // save meters
@@ -3187,7 +3187,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
                             );
                             $udcUpdateArray [] = $upload_data_collectorData;
                         }
-                        $ucdMsg = Proposalgen_Model_Mapper_UploadDataCollector::getInstance()->saveRows($udcUpdateArray);
+                        $ucdMsg = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->saveRows($udcUpdateArray);
                         
                         // check for ticket for user/device_pf_id
                         $ticket_pf_requestTable = new Proposalgen_Model_DbTable_TicketPFRequests();

@@ -1,8 +1,8 @@
 <?php
 
-class Proposalgen_Model_Mapper_UploadDataCollector extends Tangent_Model_Mapper_Abstract
+class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapper_Abstract
 {
-    protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_UploadDataCollector";
+    protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_UploadDataCollectorRow";
     static $_instance;
 
     /**
@@ -29,7 +29,7 @@ class Proposalgen_Model_Mapper_UploadDataCollector extends Tangent_Model_Mapper_
         $object = null;
         try
         {
-            $object = new Proposalgen_Model_UploadDataCollector();
+            $object = new Proposalgen_Model_UploadDataCollectorRow();
             $object->setUploadDataCollectorId($row->upload_data_collector_id)
                 ->setReportId($row->report_id)
                 ->setDevicesPfId($row->devices_pf_id)
@@ -95,7 +95,7 @@ class Proposalgen_Model_Mapper_UploadDataCollector extends Tangent_Model_Mapper_
      * Saved an Proposalgen_Model_ object to the database
      * @param unknown_type $object
      */
-    public function save (Proposalgen_Model_UploadDataCollector $object)
+    public function save (Proposalgen_Model_UploadDataCollectorRow $object)
     {
         $primaryKey = 0;
         try
@@ -221,4 +221,3 @@ class Proposalgen_Model_Mapper_UploadDataCollector extends Tangent_Model_Mapper_
     	return $devices;
     }
 }
-?>

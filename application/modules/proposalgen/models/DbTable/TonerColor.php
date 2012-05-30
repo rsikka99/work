@@ -8,4 +8,4 @@ class Proposalgen_Model_DbTable_TonerColor extends Zend_Db_Table_Abstract
             'Toner' 
     );
 }
-?>
+

@@ -2,7 +2,7 @@
 
 class Proposalgen_Model_Mapper_TicketComment extends Tangent_Model_Mapper_Abstract
 {
-    protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_TicketComments";
+    protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_TicketComment";
     static $_instance;
 
     /**
@@ -67,4 +67,3 @@ class Proposalgen_Model_Mapper_TicketComment extends Tangent_Model_Mapper_Abstra
         return $primaryKey;
     }
 }
-?>

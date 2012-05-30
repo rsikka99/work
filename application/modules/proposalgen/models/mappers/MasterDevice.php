@@ -108,4 +108,3 @@ class Proposalgen_Model_Mapper_MasterDevice extends Tangent_Model_Mapper_Abstrac
         return $primaryKey;
     }
 }
-?>

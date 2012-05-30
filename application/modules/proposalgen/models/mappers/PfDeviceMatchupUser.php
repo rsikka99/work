@@ -2,7 +2,7 @@
 
 class Proposalgen_Model_Mapper_PfDeviceMatchupUser extends Tangent_Model_Mapper_Abstract
 {
-    protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_PFMatchupUsers";
+    protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_PFMatchupUser";
     static $_instance;
 
     /**
@@ -60,4 +60,3 @@ class Proposalgen_Model_Mapper_PfDeviceMatchupUser extends Tangent_Model_Mapper_
     }
 
 }
-?>

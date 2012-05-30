@@ -107,4 +107,3 @@ class Proposalgen_Model_Mapper_Toner extends Tangent_Model_Mapper_Abstract
         return $toners;
     }
 }
-?>

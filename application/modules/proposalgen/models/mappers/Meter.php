@@ -2,7 +2,7 @@
 
 class Proposalgen_Model_Mapper_Meter extends Tangent_Model_Mapper_Abstract
 {
-    protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_Meters";
+    protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_Meter";
     static $_instance;
 
     /**
@@ -85,4 +85,3 @@ class Proposalgen_Model_Mapper_Meter extends Tangent_Model_Mapper_Abstract
         return $primaryKey;
     }
 }
-?>

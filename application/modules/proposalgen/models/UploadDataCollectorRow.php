@@ -4,7 +4,7 @@
  * Class Proposalgen_Model_UploadDataCollector
  * @author "John Sadler"
  */
-class Proposalgen_Model_UploadDataCollector extends Tangent_Model_Abstract
+class Proposalgen_Model_UploadDataCollectorRow extends Tangent_Model_Abstract
 {
     protected $UploadDataCollectorId;
     protected $ReportId;
