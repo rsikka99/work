@@ -1,51 +1,140 @@
 <?php
 
 /**
- * Class Application_Model_Survey_Setting
+ * Class Proposalgen_Model_Survey_Setting
  */
-class Proposalgen_Model_Survey_Setting extends Proposalgen_Model_DbModel_Survey_Setting
+class Proposalgen_Model_Survey_Setting extends My_Model_Abstract
 {
+    /**
+     * The id of the setting
+     *
+     * @var int
+     */
+    protected $_id;
+    
+    /**
+     * The monochrome page coverage
+     *
+     * @var int
+     */
+    protected $_pageCoverageMono;
+    
+    /**
+     * The color page coverage
+     *
+     * @var int
+     */
+    protected $_pageCoverageColor;
 
-    public function getSettingsAsArray ()
-    {
-        $settings = array (
-                "page_coverage_color" => $this->getPageCoverageColor(), 
-                "page_coverage_mono" => $this->getPageCoverageMono() 
-        );
-        return $settings;
-    }
-
+    /**
+     * Overrides all the settings.
+     * Null values will be excluded.
+     *
+     * @param Proposalgen_Model_Survey_Setting $settings
+     *            These can be either a Proposalgen_Model_Survey_Setting or an array of settings
+     */
     public function ApplyOverride ($settings)
     {
-        $OverrideSettings = array ();
         if ($settings instanceof Proposalgen_Model_Survey_Setting)
         {
-            $OverrideSettings = $settings->getSettingsAsArray();
-        }
-        else
-        {
-            if (is_array($settings))
-            {
-                $OverrideSettings = $settings;
-            }
-            else
-            {
-                throw new Exception("You must pass an array or instance of " . get_class($this));
-            }
+            $settings = $settings->toArray();
         }
         
-        $newSettings = array ();
-        foreach ( $OverrideSettings as $key => $setting )
+        $this->populate($settings);
+    }
+    
+    /*
+     * (non-PHPdoc) @see My_Model_Abstract::populate()
+     */
+    public function populate ($params)
+    {
+        // Convert the array into an object
+        if (is_array($params))
         {
-            if (! is_null($setting))
-            {
-                $newSettings [$key] = $setting;
-            }
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
         
-        // A bit of a hack, taking advantage that we use the db column names to
-        // identify
-        // settings within a form. This way we can override settings with it
-        $this->setOptionsFromDb($newSettings);
+        // Set the fields if they were passed in
+        if (isset($params->id))
+            $this->setId($params->id);
+        if (isset($params->pageCoverageMono))
+            $this->setPageCoverageMono($params->pageCoverageMono);
+        if (isset($params->pageCoverageColor))
+            $this->setPageCoverageColor($params->pageCoverageColor);
+    }
+    
+    /*
+     * (non-PHPdoc) @see My_Model_Abstract::toArray()
+     */
+    public function toArray ()
+    {
+        return array (
+                "pageCoverageColor" => $this->getPageCoverageColor(), 
+                "pageCoverageMono" => $this->getPageCoverageMono() 
+        );
+    }
+
+    /**
+     * Gets the id of the survey setting
+     *
+     * @return number
+     */
+    public function getId ()
+    {
+        return $this->_id;
+    }
+
+    /**
+     * Sets the id of the survey setting
+     *
+     * @param number $_id
+     *            The new id to set
+     */
+    public function setId ($_id)
+    {
+        $this->_id = $_id;
+        return $this;
+    }
+
+    /**
+     * Gets the monochrome page coverage of the survey setting
+     *
+     * @return number
+     */
+    public function getPageCoverageMono ()
+    {
+        return $this->_pageCoverageMono;
+    }
+
+    /**
+     * Sets the monochrome page coverage of the survey setting
+     *
+     * @param number $_pageCoverageMono            
+     */
+    public function setPageCoverageMono ($_pageCoverageMono)
+    {
+        $this->_pageCoverageMono = $_pageCoverageMono;
+        return $this;
+    }
+
+    /**
+     * Gets the color page coverage of the survey setting
+     *
+     * @return number
+     */
+    public function getPageCoverageColor ()
+    {
+        return $this->_pageCoverageColor;
+    }
+
+    /**
+     * Sets the color page coverage of the survey setting
+     *
+     * @param number $_pageCoverageColor            
+     */
+    public function setPageCoverageColor ($_pageCoverageColor)
+    {
+        $this->_pageCoverageColor = $_pageCoverageColor;
+        return $this;
     }
 }

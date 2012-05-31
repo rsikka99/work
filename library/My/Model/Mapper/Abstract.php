@@ -21,6 +21,36 @@ abstract class My_Model_Mapper_Abstract
      * @var String
      */
     protected $_defaultDbTable;
+    
+    /**
+     * A hash table to store copies of mappers as singletons.
+     *
+     * @var array
+     */
+    private static $_mapperHashTable = array ();
+
+    /**
+     * Gets an instance of a mapper or class.
+     *
+     * @return multitype:
+     */
+    protected static function getCachedInstance ($class = null)
+    {
+        // By default we get the class that this was called from.
+        if ($class === null)
+        {
+            $class = get_called_class();
+        }
+        
+        // If we don't have a stored copy yet, instantiate and store.
+        if (! array_key_exists($class, self::$_mapperHashTable))
+        {
+            self::$_mapperHashTable [$class] = new $class();
+        }
+        
+        // Return the cached copy.
+        return self::$_mapperHashTable [$class];
+    }
 
     /**
      * Sets the dbtable class to be used

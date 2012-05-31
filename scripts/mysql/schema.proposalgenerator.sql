@@ -18,24 +18,24 @@ CREATE TABLE `proposalgenerator_pricing_configs` (
 
 CREATE TABLE `proposalgenerator_report_settings` (
     `id`                                    INTEGER            NOT NULL AUTO_INCREMENT,
-    `actual_page_coverage_mono`             DOUBLE                      DEFAULT NULL,
-    `actual_page_coverage_color`            DOUBLE                      DEFAULT NULL,
-    `service_cost_per_page`                 DOUBLE                      DEFAULT NULL,
-    `admin_cost_per_page`                   DOUBLE                      DEFAULT NULL,
-    `assessment_report_margin`              DOUBLE                      DEFAULT NULL,
-    `gross_margin_report_margin`            DOUBLE                      DEFAULT NULL,
-    `monthly_lease_payment`                 DOUBLE                      DEFAULT NULL,
-    `default_printer_cost`                  DOUBLE                      DEFAULT NULL,
-    `leased_bw_cost_per_page`               DOUBLE                      DEFAULT NULL,
-    `leased_color_cost_per_page`            DOUBLE                      DEFAULT NULL,
-    `mps_bw_cost_per_page`                  DOUBLE                      DEFAULT NULL,
-    `mps_color_cost_per_page`               DOUBLE                      DEFAULT NULL,
-    `kilowatts_per_hour`                    DOUBLE                      DEFAULT NULL,
-    `assessment_pricing_config_id`          INTEGER                     DEFAULT NULL,
-    `gross_margin_pricing_config_id`        INTEGER                     DEFAULT NULL,
+    `actualPageCoverageMono`                DOUBLE                      DEFAULT NULL,
+    `actualPageCoverageColor`               DOUBLE                      DEFAULT NULL,
+    `serviceCostPerPage`                    DOUBLE                      DEFAULT NULL,
+    `adminChargePerPage`                    DOUBLE                      DEFAULT NULL,
+    `assessmentReportMargin`                DOUBLE                      DEFAULT NULL,
+    `grossMarginReportMargin`               DOUBLE                      DEFAULT NULL,
+    `monthlyLeasePayment`                   DOUBLE                      DEFAULT NULL,
+    `defaultPrinterCost`                    DOUBLE                      DEFAULT NULL,
+    `leasedBwPerPage`                       DOUBLE                      DEFAULT NULL,
+    `leasedColorPerPage`                    DOUBLE                      DEFAULT NULL,
+    `mpsBwPerPage`                          DOUBLE                      DEFAULT NULL,
+    `mpsColorPerPage`                       DOUBLE                      DEFAULT NULL,
+    `kilowattsPerHour`                      DOUBLE                      DEFAULT NULL,
+    `assessmentPricingConfigId`             INTEGER                     DEFAULT NULL,
+    `grossMarginPricingConfigId`            INTEGER                     DEFAULT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`assessment_pricing_config_id`)  REFERENCES `proposalgenerator_pricing_configs` (`id`),
-    FOREIGN KEY (`gross_margin_pricing_config_id`)  REFERENCES `proposalgenerator_pricing_configs` (`id`)
+    FOREIGN KEY (`assessmentPricingConfigId`)  REFERENCES `proposalgenerator_pricing_configs` (`id`),
+    FOREIGN KEY (`grossMarginPricingConfigId`)  REFERENCES `proposalgenerator_pricing_configs` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
