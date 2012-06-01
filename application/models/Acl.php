@@ -17,7 +17,8 @@ class Application_Model_Acl extends Zend_Acl
                     'auth' => array (
                             'login', 
                             'logout', 
-                            'forgotpassword' 
+                            'forgotpassword',
+                            'changepassword'
                     ) 
             ) 
     );

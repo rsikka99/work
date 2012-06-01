@@ -270,7 +270,7 @@ class Admin_Form_User extends EasyBib_Form
                 'required' => false 
         ));
         
-        $this->addElement('checkbox', 'resetPassword', array (
+        $this->addElement('checkbox', 'resetPasswordOnNextLogin', array (
                 'label' => 'Require Password Change On Next Login:', 
                 'required' => true 
         ));

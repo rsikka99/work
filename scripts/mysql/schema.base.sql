@@ -4,18 +4,18 @@
 SET storage_engine=InnoDB;
 
 CREATE TABLE `users` (
-    `id`                	INTEGER         NOT NULL AUTO_INCREMENT,
-    `username`          	VARCHAR(255)    NOT NULL,
-    `password`          	VARCHAR(255)    NOT NULL,
-    `firstname`         	VARCHAR(255)    NOT NULL,
-    `lastname`          	VARCHAR(255)    NOT NULL,
-    `email`             	VARCHAR(255)    NOT NULL,
-    `loginAttempts`     	INTEGER         NOT NULL DEFAULT 0,
-    `frozenUntil`       	DATETIME        		 DEFAULT NULL,
-    `locked`            	TINYINT        	NOT NULL DEFAULT FALSE,
-    `eulaAccepted`      	DATETIME        		 DEFAULT NULL,
-    `resetPassword`     	TINYINT        	NOT NULL DEFAULT FALSE,
-    `passwordResetRequest`  DATETIME        		 DEFAULT NULL,
+    `id`                	   INTEGER         NOT NULL AUTO_INCREMENT,
+    `username`          	   VARCHAR(255)    NOT NULL,
+    `password`          	   VARCHAR(255)    NOT NULL,
+    `firstname`         	   VARCHAR(255)    NOT NULL,
+    `lastname`          	   VARCHAR(255)    NOT NULL,
+    `email`             	   VARCHAR(255)    NOT NULL,
+    `loginAttempts`     	   INTEGER         NOT NULL    DEFAULT 0,
+    `frozenUntil`       	   DATETIME                    DEFAULT NULL,
+    `locked`            	   TINYINT         NOT NULL    DEFAULT FALSE,
+    `eulaAccepted`      	   DATETIME                    DEFAULT NULL,
+    `resetPasswordOnNextLogin` TINYINT         NOT NULL    DEFAULT FALSE,
+    `passwordResetRequest`     DATETIME                    DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
