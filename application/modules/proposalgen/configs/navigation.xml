@@ -29,6 +29,12 @@
                                     <controller>survey</controller>
                                     <action>company</action>
                                 </company>
+                                <general>
+                                    <label>General</label>
+                                    <module>proposalgen</module>
+                                    <controller>survey</controller>
+                                    <action>general</action>
+                                </general>
                                 <finance>
                                     <label>Finance</label>
                                     <module>proposalgen</module>
@@ -132,55 +138,55 @@
                 <systemadmin>
                     <label>System Administration</label>
                     <class>dropdown</class>
-                    <module>default</module>
+                    <module>proposalgen</module>
                     <controller>admin</controller>
                     <action>index</action>
                     <pages>
                         <manageusers>
                             <label>Manage Users</label>
-                            <module>default</module>
+                            <module>proposalgen</module>
                             <controller>admin</controller>
                             <action>manageusers</action>
                         </manageusers>
                         <managemanufacturers>
                             <label>Manage Manufacturers</label>
-                            <module>default</module>
+                            <module>proposalgen</module>
                             <controller>admin</controller>
                             <action>manufacturers</action>
                         </managemanufacturers>
                         <manageprinterandtoner>
                             <label>Manage Master Printer And Toner Properties</label>
-                            <module>default</module>
+                            <module>proposalgen</module>
                             <controller>managedevices</controller>
                             <action>managedevices</action>
                         </manageprinterandtoner>
                         <updatepricing>
                             <label>Update Pricing</label>
-                            <module>default</module>
+                            <module>proposalgen</module>
                             <controller>admin</controller>
                             <action>bulkdevicepricing</action>
                         </updatepricing>
                         <supporttickets>
                             <label>Support Tickets</label>
-                            <module>default</module>
+                            <module>proposalgen</module>
                             <controller>ticket</controller>
                             <action>managetickets</action>
                         </supporttickets>
                         <managereplacements>
                             <label>Manage Replacement Printers</label>
-                            <module>default</module>
+                            <module>proposalgen</module>
                             <controller>admin</controller>
                             <action>managereplacements</action>
                         </managereplacements>
                         <managematchups>
                             <label>Manage Printer Matchups</label>
-                            <module>default</module>
+                            <module>proposalgen</module>
                             <controller>admin</controller>
                             <action>managematchups</action>
                         </managematchups>
                         <defaultreportsettings>
                             <label>Default Report Settings</label>
-                            <module>default</module>
+                            <module>proposalgen</module>
                             <controller>admin</controller>
                             <action>managesettings</action>
                         </defaultreportsettings>
@@ -188,27 +194,23 @@
                 </systemadmin>
                 <myadmin>
                     <label>My Admin</label>
-                    <module>default</module>
+                    <module>proposalgen</module>
                     <controller>admin</controller>
                     <action>index</action>
                     <class>dropdown></class>
                     <pages>
                         <myreportsettings>
                             <label>My Report Settings</label>
-                            <module>default</module>
+                            <module>proposalgen</module>
                             <controller>admin</controller>
                             <action>managemysettings</action>
                         </myreportsettings>
                         <managemyreports>
                             <label>Manage My Reports</label>
-                            <module>default</module>
+                            <module>proposalgen</module>
                             <controller>admin</controller>
                             <action>managemyreports</action>
                         </managemyreports>
-                        <changepassword>
-                            <label>Change Password</label>
-                            <route>resetpassword</route>
-                        </changepassword>
                     </pages>
                 </myadmin>
             </pages>
