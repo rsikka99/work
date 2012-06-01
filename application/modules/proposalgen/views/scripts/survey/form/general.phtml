@@ -1,0 +1,65 @@
+<?php 
+/* @var $form Proposalgen_Form_Survey_General */
+$form = $this->element;
+
+$this->headScript()->captureStart(); ?>
+$(document).ready(function() {
+    $(':radio').click(function() {
+        $(this).parent().siblings().children(':radio').attr('checked', false);
+    });
+});
+<?php $this->headScript()->captureEnd(); ?>
+
+<form id="general" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+<?php echo $form->getElement('numb_employees'); ?>
+
+<table class="table table-bordered table-striped table-condensed" style="width: 600px;">
+    <tr>
+        <td style="width: 450px;"><strong>Please rank the following:</strong></td>
+        <td style="width: 15px;">1</td>
+        <td style="width: 15px;">2</td>
+        <td style="width: 15px;">3</td>
+        <td style="width: 15px;">4</td>
+        <td style="width: 15px;">5</td>
+    </tr><tr>
+        <td>Ensure your printing hardware matches your print volume needs.</td>
+        <td><input type="radio" name="rank1" value="1" id="1_1" /></td>
+        <td><input type="radio" name="rank2" value="1" id="1_2" /></td>
+        <td><input type="radio" name="rank3" value="1" id="1_3" /></td>
+        <td><input type="radio" name="rank4" value="1" id="1_4" /></td>
+        <td><input type="radio" name="rank5" value="1" id="1_5" /></td>
+    </tr><tr>
+        <td>Increase uptime and productivity for your employees.</td>
+        <td><input type="radio" name="rank1" value="2" id="2_1" /></td>
+        <td><input type="radio" name="rank2" value="2" id="2_2" /></td>
+        <td><input type="radio" name="rank3" value="2" id="2_3" /></td>
+        <td><input type="radio" name="rank4" value="2" id="2_4" /></td>
+        <td><input type="radio" name="rank5" value="2" id="2_5" /></td>
+    </tr><tr>
+        <td>Streamline logistics for supplies, service and hardware acquisition.</td>
+        <td><input type="radio" name="rank1" value="3" id="3_1" /></td>
+        <td><input type="radio" name="rank2" value="3" id="3_2" /></td>
+        <td><input type="radio" name="rank3" value="3" id="3_3" /></td>
+        <td><input type="radio" name="rank4" value="3" id="3_4" /></td>
+        <td><input type="radio" name="rank5" value="3" id="3_5" /></td>
+    </tr><tr>
+        <td>Reduce environmental impact.</td>
+        <td><input type="radio" name="rank1" value="4" id="4_1" /></td>
+        <td><input type="radio" name="rank2" value="4" id="4_2" /></td>
+        <td><input type="radio" name="rank3" value="4" id="4_3" /></td>
+        <td><input type="radio" name="rank4" value="4" id="4_4" /></td>
+        <td><input type="radio" name="rank5" value="4" id="4_5" /></td>
+    </tr><tr>
+        <td>Reduce costs.</td>
+        <td><input type="radio" name="rank1" value="5" id="5_1" /></td>
+        <td><input type="radio" name="rank2" value="5" id="5_2" /></td>
+        <td><input type="radio" name="rank3" value="5" id="5_3" /></td>
+        <td><input type="radio" name="rank4" value="5" id="5_4" /></td>
+        <td><input type="radio" name="rank5" value="5" id="5_5" /></td>
+    </tr>
+</table>
+
+<?php echo $form->getElement('submit');?>
+<?php echo $form->getElement('cancel');?>
+
+</form>

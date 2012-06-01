@@ -19,5 +19,10 @@ class Proposalgen_Bootstrap extends Zend_Application_Module_Bootstrap
         $autoloader->registerNamespace('Tangent_');
         $autoloader->registerNamespace('gchart');
     }
+
+    protected function _initLibraryAutoloader ()
+    {
+        return $this->getResourceLoader()->addResourceType('library', 'library', 'library');
+    }
 }
 

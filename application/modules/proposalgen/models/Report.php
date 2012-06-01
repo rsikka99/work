@@ -2,11 +2,12 @@
 
 /**
  * Class Proposalgen_Model_Report
- * 
+ *
  * @author "Lee Robert"
  */
 class Proposalgen_Model_Report extends Tangent_Model_Abstract
 {
+    protected $ReportSteps;
     protected $ReportId;
     protected $UserId;
     protected $CustomerCompanyName;
@@ -1058,6 +1059,44 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
     public function setDevicesModified ($DevicesModified)
     {
         $this->DevicesModified = $DevicesModified;
+        return $this;
+    }
+
+    /**
+     * Gets the report steps for this report
+     *
+     * @return Proposalgen_Model_Report_Step
+     */
+    public function getReportSteps ()
+    {
+        if (! isset($this->ReportSteps))
+        {
+            $stage = ($this->getReportStage()) ?  : Proposalgen_Model_Report_Step::STEP_SURVEY_COMPANY;
+            
+            $this->ReportSteps = Proposalgen_Model_Report_Step::getSteps();
+            
+            /* @var $step Proposalgen_Model_Report_Step */
+            foreach ( $this->ReportSteps as $step )
+            {
+                $step->setCanAccess(true);
+                
+                if (strcasecmp($step->getName(), stage) === 0)
+                {
+                    break;
+                }
+            }
+        }
+        return $this->ReportSteps;
+    }
+
+    /**
+     * Sets the report steps for this report
+     *
+     * @param field_type $ReportSteps            
+     */
+    public function setReportSteps ($ReportSteps)
+    {
+        $this->ReportSteps = $ReportSteps;
         return $this;
     }
 }
