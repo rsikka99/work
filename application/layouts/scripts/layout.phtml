@@ -30,22 +30,21 @@
         <!-- Start of Navbar -->
         <div class="navbar">
             <div class="navbar-inner">
-            <div class="sidebar pull-right">
-                <div class="pull-right">
-                    <?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
-                    <div class="btn-group">
-                        <a class="btn btn-primary" href="#"><i class="icon-user icon-white"></i> <?php echo $this->Username(); ?></a>
-                        <a class="pull-right btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="<?php echo $this->url(array(), 'logout');?>">Logout</a></li>
-                        </ul>
+                <div class="sidebar pull-right">
+                    <div class="pull-right">
+                        <?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
+                        <div class="btn-group">
+                            <a class="btn btn-primary" href="#"><i class="icon-user icon-white"></i> <?php echo $this->Username(); ?></a>
+                            <a class="pull-right btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="<?php echo $this->url(array(), 'logout');?>">Logout</a></li>
+                            </ul>
+                        </div>
+                        <?php else : ?>
+                            <a class="btn btn-danger" href="<?php echo $this->url(array(), 'login');?>"><i class="icon-user icon-white"></i> Login</a>
+                        <?php endif; ?>
                     </div>
-                    <?php else : ?>
-                        <a class="btn btn-danger" href="<?php echo $this->url(array(), 'login');?>"><i class="icon-user icon-white"></i> Login</a>
-                    <?php endif; ?>
                 </div>
-            </div>
-            <div class="sidebar"><a class="brand" href="<?php echo $this->baseUrl("/"); ?>"><?php echo $this->App()->title; ?></a></div>
                 <div class="container">
                     <?php echo $this->navigation()->menu()->setUlClass('nav nav-pills')->setMinDepth(0)->setMaxDepth(0)->render(); ?>
                 </div>
