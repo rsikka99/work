@@ -1,29 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<nav>
-		<menu>
-			<label>Home</label>
-			<class>dropdown</class>
-			<module>default</module>
-			<controller>index</controller>
-			<action>index</action>
-			<resource>default_index_index</resource>
-			<order>-2400</order>
-			<login>
-				<label>Login</label>
-				<route>login</route>
-				<visible>0</visible>
-			</login>
-			<changepassword>
-				<label>Reset Password</label>
-				<route>resetpassword</route>
-				<visible>0</visible>
-			</changepassword>
-			<forgotpassword>
-				<label>Forgot Password</label>
-				<route>forgotpassword</route>
-				<visible>0</visible>
-			</forgotpassword>
-		</menu>
-	</nav>
+    <nav>
+        <menu>
+            <label>Home</label>
+            <class>dropdown</class>
+            <module>default</module>
+            <controller>index</controller>
+            <action>index</action>
+            <resource>default_index_index</resource>
+            <order>-2400</order>
+            <login>
+                <label>Login</label>
+                <module>default</module>
+                <controller>auth</controller>
+                <action>login</action>
+                <resource>default_auth_login</resource>
+                <visible>0</visible>
+            </login>
+            <changepassword>
+                <label>Reset Password</label>
+                <module>default</module>
+                <controller>auth</controller>
+                <action>changepassword</action>
+                <resource>default_auth_changepassword</resource>
+                <visible>0</visible>
+            </changepassword>
+            <forgotpassword>
+                <label>Forgot Password</label>s
+                <module>default</module>
+                <controller>auth</controller>
+                <action>forgotpassword</action>
+                <resource>default_auth_forgotpassword</resource>
+                <visible>0</visible>
+            </forgotpassword>
+        </menu>
+    </nav>
 </config>
