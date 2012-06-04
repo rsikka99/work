@@ -42,7 +42,7 @@ class My_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
                     
                     // Redirect to the login page
                     $r = new Zend_Controller_Action_Helper_Redirector();
-                    $r->gotoRoute(array (), 'login');
+                    $r->gotoSimple('login','auth','default');
                     break;
                 default :
                     

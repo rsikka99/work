@@ -37,7 +37,7 @@
                             <a class="btn btn-primary" href="#"><i class="icon-user icon-white"></i> <?php echo $this->Username(); ?></a>
                             <a class="pull-right btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="<?php echo $this->url(array(), 'logout');?>">Logout</a></li>
+                                <li><a href="<?php echo $this->url(array( 'module' => 'default', 'controller' => 'auth', 'action' => 'logout'));?>">Logout</a></li>
                             </ul>
                         </div>
                         <?php else : ?>
