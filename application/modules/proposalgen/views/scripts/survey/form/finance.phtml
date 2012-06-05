@@ -1,0 +1,66 @@
+<?php 
+/* @var $form Proposalgen_Form_Survey_Finance */
+$form = $this->element;
+
+$tonerCostRadio = $form->getElement('toner_cost_radio');
+$tonerCost = $form->getElement('toner_cost');
+
+$laborCostRadio = $form->getElement('labor_cost_radio');
+$laborCost = $form->getElement('labor_cost');
+
+$averagePurchase = $form->getElement('avg_purchase');
+$itHourlyRate =  $form->getElement('it_hourlyRate');
+
+?>
+<form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+<?php echo $form->getElement('numb_employees'); ?>
+
+<div class="control-group <?php echo ($tonerCostRadio->hasErrors() || $tonerCost->hasErrors()) ? 'error' : '' ?>">
+    <?php echo $tonerCost->renderLabel(); ?>
+    <div class="controls">
+    <?php echo $tonerCostRadio->renderViewHelper(); ?>
+    <?php echo $tonerCostRadio->renderErrors(); ?>
+    </div>
+    <div class="controls">
+        <div class="input-prepend">
+            <span class="add-on"><?php echo $tonerCost->getDescription(); ?></span><?php echo str_replace(PHP_EOL, '', $tonerCost->renderViewHelper()); ?><?php echo $tonerCost->renderErrors(); ?>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="control-group <?php echo ($laborCostRadio->hasErrors() || $laborCost->hasErrors()) ? 'error' : '' ?>">
+    <?php echo $laborCost->renderLabel(); ?>
+    <div class="controls">
+    <?php echo $laborCostRadio->renderViewHelper(); ?>
+    <?php echo $laborCostRadio->renderErrors(); ?>
+    </div>
+    <div class="controls">
+        <div class="input-prepend">
+            <span class="add-on"><?php echo $laborCost->getDescription(); ?></span><?php echo str_replace(PHP_EOL, '', $laborCost->renderViewHelper()); ?><?php echo $laborCost->renderErrors(); ?>
+        </div>
+    </div>
+</div>
+<hr>
+
+<div class="control-group <?php echo ($averagePurchase->hasErrors()) ? 'error' : '' ?>">
+    <?php echo $averagePurchase->renderLabel(); ?>
+    <div class="controls">
+        
+        <div class="input-prepend">
+            <span class="add-on"><?php echo $averagePurchase->getDescription(); ?></span><?php echo str_replace(PHP_EOL, '', $averagePurchase->renderViewHelper()); ?><?php echo $averagePurchase->renderErrors(); ?>
+        </div>
+    </div>
+</div>
+<hr>
+
+<div class="control-group <?php echo ($itHourlyRate->hasErrors()) ? 'error' : '' ?>">
+    <?php echo $itHourlyRate->renderLabel(); ?>
+    <div class="controls">
+        <div class="input-prepend">
+            <span class="add-on"><?php echo $itHourlyRate->getDescription(); ?></span><?php echo str_replace(PHP_EOL, '', $itHourlyRate->renderViewHelper()); ?><?php echo $itHourlyRate->renderErrors(); ?>
+        </div>
+    </div>
+</div>
+<hr>
+<?php echo $this->partial('survey/form/form-actions.phtml', array('canGoBack' => true)); ?>
+</form>

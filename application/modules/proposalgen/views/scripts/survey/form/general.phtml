@@ -10,7 +10,7 @@ $(document).ready(function() {
 });
 <?php $this->headScript()->captureEnd(); ?>
 
-<form id="general" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+<form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
 <?php echo $form->getElement('numb_employees'); ?>
 
 <table class="table table-bordered table-striped table-condensed" style="width: 600px;">
@@ -59,7 +59,5 @@ $(document).ready(function() {
     </tr>
 </table>
 
-<?php echo $form->getElement('submit');?>
-<?php echo $form->getElement('cancel');?>
-
+<?php echo $this->partial('survey/form/form-actions.phtml', array('canGoBack' => true)); ?>
 </form>

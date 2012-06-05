@@ -10,28 +10,17 @@ class Proposalgen_Form_Survey_BaseSurveyForm extends EasyBib_Form
 
     public function __construct ($options = null)
     {
-        parent::__construct($options);
-        
         $this->currency = new Zend_Currency();
         $this->currencyRegex = '/^\d+(?:\.\d{0,2})?$/';
+        
+        // This runs, among other things, the init functions. Therefore it must come before anything that affects the form.
+        parent::__construct($options);
         
         $this->addPrefixPath('Tangent_Form_Element', 'Tangent/Form/Element/', 'element');
     }
 
     public function init ()
     {
-        // Add the submit button
-        $this->addElement('submit', 'submit', array (
-                'ignore' => true, 
-                'label' => 'Save' 
-        ));
-        
-        // Add the cancel button
-        $this->addElement('submit', 'cancel', array (
-                'ignore' => true, 
-                'label' => 'Cancel' 
-        ));
-        
-        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
+        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP);
     }
 }

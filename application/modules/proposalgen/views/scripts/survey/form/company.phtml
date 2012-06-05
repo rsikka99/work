@@ -1,0 +1,14 @@
+<?php 
+/* @var $form Proposalgen_Form_Survey_General */
+$form = $this->element;
+?>
+<form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+<?php 
+    foreach ($form->getElements() as $element)
+    {
+        echo $element;
+    } 
+?>
+
+<?php echo $this->partial('survey/form/form-actions.phtml', array('canGoBack' => false)); ?>
+</form>

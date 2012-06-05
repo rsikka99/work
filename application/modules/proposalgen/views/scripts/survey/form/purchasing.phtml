@@ -1,0 +1,27 @@
+<?php 
+/* @var $form Proposalgen_Form_Survey_Purchasing */
+$form = $this->element;
+
+$numberOfMonthlyOrdersRadio = $form->getElement('inkTonerOrderRadio');
+$numberOfMonthlyOrders = $form->getElement('numb_monthlyOrders');
+$numberOfVendors = $form->getElement('numb_vendors');
+
+?>
+<form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+
+<?php echo $numberOfVendors; ?>
+<hr>
+<div class="control-group <?php echo ($numberOfMonthlyOrdersRadio->hasErrors() || $numberOfMonthlyOrders->hasErrors()) ? 'error' : '' ?>">
+    <?php echo $numberOfMonthlyOrdersRadio->renderLabel(); ?>
+    <div class="controls">
+    <?php echo $numberOfMonthlyOrdersRadio->renderViewHelper(); ?>
+    <?php echo $numberOfMonthlyOrdersRadio->renderErrors(); ?>
+    </div>
+    <div class="controls">
+        <div class="input-append">
+            <?php echo str_replace(PHP_EOL, '', $numberOfMonthlyOrders->renderViewHelper()); ?><span class="add-on"><?php echo $numberOfMonthlyOrders->getDescription(); ?></span><?php echo $numberOfMonthlyOrders->renderErrors(); ?>
+        </div>
+    </div>
+</div>
+<?php echo $this->partial('survey/form/form-actions.phtml', array('canGoBack' => true)); ?>
+</form>

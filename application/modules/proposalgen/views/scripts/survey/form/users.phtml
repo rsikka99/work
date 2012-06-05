@@ -1,0 +1,38 @@
+<?php 
+/* @var $form Proposalgen_Form_Survey_Finance */
+$form = $this->element;
+
+$pageCoverageQuestion = $form->getElement('pageCoverageQuestion');
+$pageCoverageMonochrome = $form->getElement('pageCoverage_BW');
+$pageCoverageColor = $form->getElement('pageCoverage_Color');
+$printVolume = $form->getElement('printVolume');
+$repairTime = $form->getElement('repairTime');
+
+?>
+<form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+<p>Page coverages range from 5% to 10% for monochrome and 15% to 25% for color. Estimate your own average page coverages.</p>
+<div class="control-group <?php echo ($pageCoverageMonochrome->hasErrors()) ? 'error' : '' ?>">
+    <?php echo $pageCoverageMonochrome->renderLabel(); ?>
+    <div class="controls">
+        <div class="input-append">
+            <?php echo str_replace(PHP_EOL, '', $pageCoverageMonochrome->renderViewHelper()); ?><span class="add-on"><?php echo $pageCoverageMonochrome->getDescription(); ?></span>
+        </div>
+        <?php echo $pageCoverageMonochrome->renderErrors(); ?>
+    </div>
+</div>
+<div class="control-group <?php echo ($pageCoverageColor->hasErrors()) ? 'error' : '' ?>">
+    <?php echo $pageCoverageColor->renderLabel(); ?>
+    <div class="controls">
+        <div class="input-append">
+            <?php echo str_replace(PHP_EOL, '', $pageCoverageColor->renderViewHelper()); ?><span class="add-on"><?php echo $pageCoverageColor->getDescription(); ?></span>
+        </div>
+        <?php echo $pageCoverageColor->renderErrors(); ?>
+    </div>
+</div>
+<hr>
+<?php echo $printVolume; ?>
+<?php echo $repairTime; ?>
+
+
+<?php echo $this->partial('survey/form/form-actions.phtml', array('canGoBack' => true)); ?>
+</form>

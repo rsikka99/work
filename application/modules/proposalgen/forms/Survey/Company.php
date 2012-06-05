@@ -20,7 +20,7 @@ class Proposalgen_Form_Survey_Company extends Proposalgen_Form_Survey_BaseSurvey
          *
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
-        $this->setAttrib('class', 'form-horizontal');
+        $this->setAttrib('class', 'surveyForm form-horizontal');
         
         $company_name = new Zend_Form_Element_Text('company_name');
         $company_name->setAttrib('maxlength', 40)
@@ -38,12 +38,23 @@ class Proposalgen_Form_Survey_Company extends Proposalgen_Form_Survey_BaseSurvey
             ->setAttrib('id', '30')
             ->setAttrib('cols', '40')
             ->setAttrib('rows', '5')
-            ->setAttrib('style', 'resize: none;')
-            ;
+            ->setAttrib('style', 'resize: none;');
         $companyAddressQst = "Address:";
         $company_address->setLabel($companyAddressQst);
         $this->addElement($company_address);
         
         parent::init();
+    }
+
+    public function loadDefaultDecorators ()
+    {
+        $this->setDecorators(array (
+                array (
+                        'ViewScript', 
+                        array (
+                                'viewScript' => 'survey/form/company.phtml' 
+                        ) 
+                ) 
+        ));
     }
 }

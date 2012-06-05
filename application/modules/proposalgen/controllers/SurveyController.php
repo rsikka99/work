@@ -28,7 +28,28 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         // Mark the step we're on as active
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_COMPANY);
         
+        $request = $this->getRequest();
         $form = new Proposalgen_Form_Survey_Company();
+        
+        if ($request->isPost())
+        {
+            try
+            {
+                $values = $request->getPost();
+                if ($form->isValid($values))
+                {
+                }
+                else
+                {
+                    throw new Zend_Validate_Exception("Form Validation Failed");
+                }
+            }
+            catch ( Zend_Validate_Exception $e )
+            {
+                $form->buildBootstrapErrorDecorators();
+            }
+        }
+        
         $this->view->form = $form;
     }
 
@@ -40,7 +61,28 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         // Mark the step we're on as active
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_GENERAL);
         
+        $request = $this->getRequest();
         $form = new Proposalgen_Form_Survey_General();
+        
+        if ($request->isPost())
+        {
+            try
+            {
+                $values = $request->getPost();
+                if ($form->isValid($values))
+                {
+                }
+                else
+                {
+                    throw new Zend_Validate_Exception("Form Validation Failed");
+                }
+            }
+            catch ( Zend_Validate_Exception $e )
+            {
+                $form->buildBootstrapErrorDecorators();
+            }
+        }
+        
         $this->view->form = $form;
     }
 
@@ -50,6 +92,30 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
     public function financeAction ()
     {
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_FINANCE);
+        
+        $request = $this->getRequest();
+        $form = new Proposalgen_Form_Survey_Finance();
+        
+        if ($request->isPost())
+        {
+            try
+            {
+                $values = $request->getPost();
+                if ($form->isValid($values))
+                {
+                }
+                else
+                {
+                    throw new Zend_Validate_Exception("Form Validation Failed");
+                }
+            }
+            catch ( Zend_Validate_Exception $e )
+            {
+                $form->buildBootstrapErrorDecorators();
+            }
+        }
+        
+        $this->view->form = $form;
     }
 
     /**
@@ -58,6 +124,30 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
     public function purchasingAction ()
     {
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_PURCHASING);
+        
+        $request = $this->getRequest();
+        $form = new Proposalgen_Form_Survey_Purchasing();
+        
+        if ($request->isPost())
+        {
+            try
+            {
+                $values = $request->getPost();
+                if ($form->isValid($values))
+                {
+                }
+                else
+                {
+                    throw new Zend_Validate_Exception("Form Validation Failed");
+                }
+            }
+            catch ( Zend_Validate_Exception $e )
+            {
+                $form->buildBootstrapErrorDecorators();
+            }
+        }
+        
+        $this->view->form = $form;
     }
 
     /**
@@ -66,6 +156,30 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
     public function itAction ()
     {
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_IT);
+        
+        $request = $this->getRequest();
+        $form = new Proposalgen_Form_Survey_It();
+        
+        if ($request->isPost())
+        {
+            try
+            {
+                $values = $request->getPost();
+                if ($form->isValid($values))
+                {
+                }
+                else
+                {
+                    throw new Zend_Validate_Exception("Form Validation Failed");
+                }
+            }
+            catch ( Zend_Validate_Exception $e )
+            {
+                $form->buildBootstrapErrorDecorators();
+            }
+        }
+        
+        $this->view->form = $form;
     }
 
     /**
@@ -74,6 +188,30 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
     public function usersAction ()
     {
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_USERS);
+        
+        $request = $this->getRequest();
+        $form = new Proposalgen_Form_Survey_Users();
+        
+        if ($request->isPost())
+        {
+            try
+            {
+                $values = $request->getPost();
+                if ($form->isValid($values))
+                {
+                }
+                else
+                {
+                    throw new Zend_Validate_Exception("Form Validation Failed");
+                }
+            }
+            catch ( Zend_Validate_Exception $e )
+            {
+                $form->buildBootstrapErrorDecorators();
+            }
+        }
+        
+        $this->view->form = $form;
     }
 
     /**
