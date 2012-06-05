@@ -2,14 +2,11 @@
 
 class Application_Model_Acl extends Zend_Acl
 {
-    const ROLE_GUEST = 'guest';
-    const ROLE_USER = 'user';
-    const ROLE_ADMINISTRATOR = 'admin';
-    const ROLE_ROOT = 'root';
+
     protected static $_instance;
     protected static $UnrestrictedPages = array (
-            'error' => array (
-                    '%' => array (
+            'default' => array (
+                    'error' => array (
                             '%' 
                     ) 
             ), 
