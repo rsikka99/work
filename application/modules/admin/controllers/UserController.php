@@ -64,20 +64,48 @@ class Admin_UserController extends Zend_Controller_Action
                 
                 if ($form->isValid($values))
                 {
-                    $mapper = new Application_Model_UserMapper();
-                    $user = new Application_Model_User();
-                    $user->populate($values);
-                    $user->setPassword($this->cryptPassword($user->getPassword()));
-                    
                     // Save to the database
-                    $userId = $mapper->insert($user);
-                    
-                    $this->_helper->flashMessenger(array (
-                            'success' => "User '" . $this->view->escape($values ["username"]) . "' saved sucessfully." 
-                    ));
-                    
-                    // Reset the form after everything is saved successfully
-                    $form->reset();
+                    try
+                    {
+                        $mapper = new Application_Model_UserMapper();
+                        $user = new Application_Model_User();
+                        $user->populate($values);
+                        $user->setPassword($this->cryptPassword($user->getPassword()));
+                        $userId = $mapper->insert($user);
+                        
+                        $this->_helper->flashMessenger(array (
+                                'success' => "User '" . $this->view->escape($values ["username"]) . "' saved sucessfully." 
+                        ));
+                        
+                        // Reset the form after everything is saved successfully
+                        $form->reset();
+                    }
+                    catch ( Zend_Db_Statement_Mysqli_Exception $e )
+                    {
+                        // Check to see what error code was thrown
+						switch ($e->getCode()){
+						    // Duplicate column
+							case 1062:
+							    $this->_helper->flashMessenger(array (
+							            'danger' => 'Username already exists.'
+							    ));
+							    break;
+							default:
+							    $this->_helper->flashMessenger(array (
+							            'danger' => 'Error saving to database.  Please try again.'
+							    ));
+							    break;
+						}
+                        
+                        $form->populate($request->getPost());
+                    }
+                    catch ( Exception $e) 
+                    {
+                        $this->_helper->flashMessenger(array (
+                                'danger' => 'There was an error processing this request.  Please try again.'
+                        ));
+                        $form->populate($request->getPost());
+                    }
                 }
                 else
                 {
@@ -89,7 +117,8 @@ class Admin_UserController extends Zend_Controller_Action
             }
             else
             {
-                // User has cancelled. We could do a redirect here if we wanted.
+            // TODO handle cancel request
+            // User has cancelled. We could do a redirect here if we wanted.
             }
         }
         
