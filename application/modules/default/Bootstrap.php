@@ -10,13 +10,5 @@ class Default_Bootstrap extends Zend_Application_Module_Bootstrap
         $container = $view->navigation()->getContainer();
         $container->addPages($config);
     }
-    
-    protected function _initRouter ()
-    {
-        $config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/routes.ini', 'production');
-        $router = Zend_Controller_Front::getInstance()->getRouter();
-        $router->addConfig($config, 'routes');
-        return $router;
-    }
 }
 
