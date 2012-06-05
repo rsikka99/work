@@ -146,552 +146,125 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
         $sql = "";
         $message = "";
         
-        $report = Proposalgen_Model_Mapper_Report::getInstance()->find($report_id);
+        /* @var $report Proposalgen_Model_Report */
+        $currentReport = $this->find($report_id);
+        $report = clone $currentReport;
         
         $db->beginTransaction();
         try
         {
-            // Get Reports
-            $curReports = Proposalgen_Model_Mapper_Report::getInstance()->find($report_id);
-            $reportsCustomerCompanyName = $curReports->CustomerCompanyName ? $curReports->CustomerCompanyName : 'null';
-            $reportsFullCompanyImageOverride = $curReports->FullCompanyImageOverride ? $curReports->FullCompanyImageOverride : 'null';
-            $reportsCompanyImageOverride = $curReports->CompanyImageOverride ? $curReports->CompanyImageOverride : 'null';
-            $reportsCompanyReportColorOverride = $curReports->CompanyReportColorOverride ? $curReports->CompanyReportColorOverride : 'null';
-            $reportsUserPricingOverride = $curReports->UserPricingOverride ? $curReports->UserPricingOverride : 'null';
-            $reportsReportStage = $curReports->ReportStage ? $curReports->ReportStage : 'null';
-            $reportsQuestionsetId = $curReports->QuestionsetId ? $curReports->QuestionsetId : 'null';
-            $reportsDateCreated = $curReports->DateCreated ? $curReports->DateCreated : 'null';
-            $reportsLastModified = $curReports->LastModified ? $curReports->LastModified : 'null';
-            $reportsReportServiceCostPerPage = $curReports->ReportServiceCostPerPage ? $curReports->ReportServiceCostPerPage : 'null';
-            $reportsReportAdminChargePerPage = $curReports->ReportAdminChargePerPage ? $curReports->ReportAdminChargePerPage : 'null';
-            $reportsReportPricingMargin = $curReports->ReportPricingMargin ? $curReports->ReportPricingMargin : 'null';
-            $reportsReportAverageNonLeasePrinterCost = $curReports->ReportAverageNonLeasePrinterCost ? $curReports->ReportAverageNonLeasePrinterCost : 'null';
-            $reportsReportLeasedBwPerPage = $curReports->ReportLeasedBwPerPage ? $curReports->ReportLeasedBwPerPage : 'null';
-            $reportsReportLeasedColorPerPage = $curReports->ReportLeasedColorPerPage ? $curReports->ReportLeasedColorPerPage : 'null';
-            $reportsReportMpsBwPerPage = $curReports->ReportMpsBwPerPage ? $curReports->ReportMpsBwPerPage : 'null';
-            $reportsReportMpsColorPerPage = $curReports->ReportMpsColorPerPage ? $curReports->ReportMpsColorPerPage : 'null';
-            $reportsReportMonthlyLeasePayment = $curReports->ReportMonthlyLeasePayment ? $curReports->ReportMonthlyLeasePayment : 'null';
-            $reportsReportKilowattsPerHour = $curReports->ReportKilowattsPerHour ? $curReports->ReportKilowattsPerHour : 'null';
-            $reportsReportPricingConfigId = $curReports->ReportPricingConfigId ? $curReports->ReportPricingConfigId : 'null';
-            $reportsReportGrossMarginPricingConfigId = $curReports->ReportGrossMarginPricingConfigId ? $curReports->ReportGrossMarginPricingConfigId : 'null';
-            $reportsReportDefaultBwTonerCost = $curReports->ReportDefaultBwTonerCost ? $curReports->ReportDefaultBwTonerCost : 'null';
-            $reportsReportDefaultBwTonerYield = $curReports->ReportDefaultBwTonerYield ? $curReports->ReportDefaultBwTonerYield : 'null';
-            $reportsReportDefaultColorTonerCost = $curReports->ReportDefaultColorTonerCost ? $curReports->ReportDefaultColorTonerCost : 'null';
-            $reportsReportDefaultColorTonerYield = $curReports->ReportDefaultColorTonerYield ? $curReports->ReportDefaultColorTonerYield : 'null';
-            $reportsReportDefaultThreeColorTonerCost = $curReports->ReportDefaultThreeColorTonerCost ? $curReports->ReportDefaultThreeColorTonerCost : 'null';
-            $reportsReportDefaultThreeColorTonerYield = $curReports->ReportDefaultThreeColorTonerYield ? $curReports->ReportDefaultThreeColorTonerYield : 'null';
-            $reportsReportDefaultFourColorTonerCost = $curReports->ReportDefaultFourColorTonerCost ? $curReports->ReportDefaultFourColorTonerCost : 'null';
-            $reportsReportDefaultFourColorTonerYield = $curReports->ReportDefaultFourColorTonerYield ? $curReports->ReportDefaultFourColorTonerYield : 'null';
-            $reportsReportActualPageCoverageMono = $curReports->ReportActualPageCoverageMono ? $curReports->ReportActualPageCoverageMono : 'null';
-            $reportsReportActualPageCoverageColor = $curReports->ReportActualPageCoverageColor ? $curReports->ReportActualPageCoverageColor : 'null';
-            $reportsReportEstimatedPageCoverageMono = $curReports->ReportEstimatedPageCoverageMono ? $curReports->ReportEstimatedPageCoverageMono : 'null';
-            $reportsReportEstimatedPageCoverageColor = $curReports->ReportEstimatedPageCoverageColor ? $curReports->ReportEstimatedPageCoverageColor : 'null';
-            $reportsReportDate = $curReports->ReportDate ? $curReports->ReportDate : 'null';
-            $reportsDevicesModified = $curReports->DevicesModified ? $curReports->DevicesModified : 'null';
-            
             // Get new users array
             $users = explode(",", str_replace("'", "", $user_list));
             
-            foreach ( $users as $user )
+            foreach ( $users as $newUserId )
             {
-                // get current user_id
-                $newUserId = $user;
+                /*
+                 * Copy the report to the new user. Note that we only need to clear the report id and set the new user
+                 * id since we already selected the data.
+                 */
+                $report->setReportId(null);
+                $report->setUserId($newUserId);
+                $newReportId = $this->save($report);
+                $report->setReportId($newReportId);
                 
-                // copy report
-                $reportsTable = new Proposalgen_Model_DbTable_Reports();
-                $sql = "INSERT INTO reports (";
-                $sql .= "user_id, ";
-                $sql .= "customer_company_name, ";
-                $sql .= "company_report_color_override, ";
-                $sql .= "user_pricing_override, ";
-                $sql .= "report_stage, ";
-                $sql .= "questionset_id, ";
-                $sql .= "date_created, ";
-                $sql .= "last_modified, ";
-                $sql .= "report_service_cost_per_page, ";
-                $sql .= "report_admin_charge_per_page, ";
-                $sql .= "report_pricing_margin, ";
-                $sql .= "report_avg_nonlease_printer_cost, ";
-                $sql .= "report_leased_bw_per_page, ";
-                $sql .= "report_leased_color_per_page, ";
-                $sql .= "report_mps_bw_per_page, ";
-                $sql .= "report_mps_color_per_page, ";
-                $sql .= "report_monthly_lease_payment, ";
-                $sql .= "report_kilowatts_per_hour, ";
-                $sql .= "report_pricing_config_id, ";
-                $sql .= "report_gross_margin_pricing_config_id, ";
-                $sql .= "report_default_bw_toner_cost, ";
-                $sql .= "report_default_bw_toner_yield, ";
-                $sql .= "report_default_color_toner_cost, ";
-                $sql .= "report_default_color_toner_yield, ";
-                $sql .= "report_default_three_color_toner_cost, ";
-                $sql .= "report_default_three_color_toner_yield, ";
-                $sql .= "report_default_four_color_toner_cost, ";
-                $sql .= "report_default_four_color_toner_yield, ";
-                $sql .= "report_actual_page_coverage_mono, ";
-                $sql .= "report_actual_page_coverage_color, ";
-                $sql .= "report_estimated_page_coverage_mono, ";
-                $sql .= "report_estimated_page_coverage_color, ";
-                $sql .= "report_date, ";
-                $sql .= "devices_modified";
-                $sql .= ") VALUES (";
-                $sql .= $newUserId . ", ";
-                $sql .= "'" . str_replace("'", "\'", $reportsCustomerCompanyName) . "', ";
-                $sql .= "'" . $reportsCompanyReportColorOverride . "', ";
-                $sql .= $reportsUserPricingOverride . ", ";
-                $sql .= "'" . $reportsReportStage . "', ";
-                $sql .= $reportsQuestionsetId . ", ";
-                $sql .= "'" . $reportsDateCreated . "', ";
-                $sql .= "'" . $reportsLastModified . "', ";
-                $sql .= $reportsReportServiceCostPerPage . ", ";
-                $sql .= $reportsReportAdminChargePerPage . ", ";
-                $sql .= $reportsReportPricingMargin . ", ";
-                $sql .= $reportsReportAverageNonLeasePrinterCost . ", ";
-                $sql .= $reportsReportLeasedBwPerPage . ", ";
-                $sql .= $reportsReportLeasedColorPerPage . ", ";
-                $sql .= $reportsReportMpsBwPerPage . ", ";
-                $sql .= $reportsReportMpsColorPerPage . ", ";
-                $sql .= $reportsReportMonthlyLeasePayment . ", ";
-                $sql .= $reportsReportKilowattsPerHour . ", ";
-                $sql .= $reportsReportPricingConfigId . ", ";
-                $sql .= $reportsReportGrossMarginPricingConfigId . ", ";
-                $sql .= $reportsReportDefaultBwTonerCost . ", ";
-                $sql .= $reportsReportDefaultBwTonerYield . ", ";
-                $sql .= $reportsReportDefaultColorTonerCost . ", ";
-                $sql .= $reportsReportDefaultColorTonerYield . ", ";
-                $sql .= $reportsReportDefaultThreeColorTonerCost . ", ";
-                $sql .= $reportsReportDefaultThreeColorTonerYield . ", ";
-                $sql .= $reportsReportDefaultFourColorTonerCost . ", ";
-                $sql .= $reportsReportDefaultFourColorTonerYield . ", ";
-                $sql .= $reportsReportActualPageCoverageMono . ", ";
-                $sql .= $reportsReportActualPageCoverageColor . ", ";
-                $sql .= $reportsReportEstimatedPageCoverageMono . ", ";
-                $sql .= $reportsReportEstimatedPageCoverageColor . ", ";
-                $sql .= "'" . $reportsReportDate . "', ";
-                $sql .= $reportsDevicesModified . ")";
-                $newReport = $reportsTable->getAdapter()->prepare($sql);
-                $newReport->execute();
-                $newReportId = $reportsTable->getAdapter()->lastInsertId();
+                /*
+                 * Note the following SQL Statements. The big change is putting them all in double quotes. Using {}
+                 * around inserted variables instead of adding strings together. With the Zend Formatter configured
+                 * properly it won't rejoin strings so you can keep a whole string on multiple lines.
+                 */
                 
-                // update report images
-                // FIXME: The above copy breaks when images reach a certain size. This method below of updating seems to work though
-                //        Need to correct the above method and get rid of this update
-                $reportsTable = new Proposalgen_Model_DbTable_Reports();
-                $sql = "UPDATE reports r1 JOIN reports r2 SET ";
-                $sql .= "r1.full_company_image_override = r2.full_company_image_override, ";
-                $sql .= "r1.company_image_override = r2.company_image_override ";
-                $sql .= "WHERE r1.report_id = " . $newReportId . " ";
-                $sql .= "AND r2.report_id = " . $report_id . ";";
-                $updateReport = $reportsTable->getAdapter()->prepare($sql);
-                $updateReport->execute();
-                
-                // copy answers_dates
-                $answerDatesTable = new Proposalgen_Model_DbTable_DateAnswers();
-                $sql = "INSERT INTO answers_dates (";
-                $sql .= "question_id, ";
-                $sql .= "report_id, ";
-                $sql .= "date_answer";
-                $sql .= ") SELECT ";
-                $sql .= "question_id, ";
-                $sql .= $newReportId . ", ";
-                $sql .= "date_answer ";
-                $sql .= "FROM answers_dates ";
-                $sql .= "WHERE report_id = " . $report_id . ";";
+                // Copy Date Answers
+                $answerDatesTable = new Proposalgen_Model_DbTable_DateAnswer();
+                $sql = "INSERT INTO date_answers (question_id, report_id, date_answer) 
+                        SELECT question_id, {$newReportId}, date_answer FROM answers_dates 
+                        WHERE report_id = {$report_id};";
                 $newAnswerDate = $answerDatesTable->getAdapter()->prepare($sql);
                 $newAnswerDate->execute();
                 
-                // copy answers_numeric
-                $answerNumericTable = new Proposalgen_Model_DbTable_NumericAnswers();
-                $sql = "INSERT INTO answers_numeric (";
-                $sql .= "question_id, ";
-                $sql .= "report_id, ";
-                $sql .= "numeric_answer";
-                $sql .= ") SELECT ";
-                $sql .= "question_id, ";
-                $sql .= $newReportId . ", ";
-                $sql .= "numeric_answer ";
-                $sql .= "FROM answers_numeric ";
-                $sql .= "WHERE report_id = " . $report_id . ";";
+                // Copy Numeric Answers
+                $answerNumericTable = new Proposalgen_Model_DbTable_NumericAnswer();
+                $sql = "INSERT INTO numeric_answers (question_id, report_id, numierc_answer)
+                SELECT question_id, {$newReportId}, numierc_answer FROM numeric_answers
+                WHERE report_id = {$report_id};";
                 $newAnswerNumeric = $answerNumericTable->getAdapter()->prepare($sql);
                 $newAnswerNumeric->execute();
                 
-                // copy answers_textual
-                $answerTextualTable = new Proposalgen_Model_DbTable_TextAnswers();
-                $sql = "INSERT INTO answers_textual (";
-                $sql .= "question_id, ";
-                $sql .= "report_id, ";
-                $sql .= "textual_answer";
-                $sql .= ") SELECT ";
-                $sql .= "question_id, ";
-                $sql .= $newReportId . ", ";
-                $sql .= "textual_answer ";
-                $sql .= "FROM answers_textual ";
-                $sql .= "WHERE report_id = " . $report_id . ";";
+                // Copy Textual Answers
+                $answerTextualTable = new Proposalgen_Model_DbTable_TextAnswer();
+                $sql = "INSERT INTO textual_answers (question_id, report_id, textual_answer)
+                SELECT question_id, {$newReportId}, textual_answer FROM textual_answers
+                WHERE report_id = {$report_id};";
+                
                 $newAnswerTextual = $answerTextualTable->getAdapter()->prepare($sql);
                 $newAnswerTextual->execute();
                 
-                // copy upload_data_collector records
-                $upload_data_collector = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->fetchAll('report_id=' . $report_id);
-                foreach ( $upload_data_collector as $udc )
+                // Copy all the upload data collector rows
+                $uploadDataCollectorRows = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->fetchAll(array (
+                        'report_id = ?', 
+                        $report_id 
+                ));
+                /* @var $uploadDataCollectorRow Proposalgen_Model_UploadDataCollectorRow */
+                foreach ( $uploadDataCollectorRows as $uploadDataCollectorRow )
                 {
-                    $udc_id = $udc->UploadDataCollectorId;
+                    $oldUploadDataCollectorRowId = $uploadDataCollectorRow->UploadDataCollectorId;
                     
-                    $udcTable = new Proposalgen_Model_DbTable_UploadDataCollector();
-                    $sql = "INSERT INTO upload_data_collector (";
-                    $sql .= "report_id, ";
-                    $sql .= "devices_pf_id, ";
-                    $sql .= "startdate, ";
-                    $sql .= "enddate, ";
-                    $sql .= "printermodelid, ";
-                    $sql .= "ipaddress, ";
-                    $sql .= "serialnumber, ";
-                    $sql .= "modelname, ";
-                    $sql .= "manufacturer, ";
-                    $sql .= "is_color, ";
-                    $sql .= "is_copier, ";
-                    $sql .= "is_scanner, ";
-                    $sql .= "is_fax, ";
-                    $sql .= "ppm_black, ";
-                    $sql .= "ppm_color, ";
-                    $sql .= "date_introduction, ";
-                    $sql .= "date_adoption, ";
-                    $sql .= "discovery_date, ";
-                    $sql .= "black_prodcodeoem, ";
-                    $sql .= "black_yield, ";
-                    $sql .= "black_prodcostoem, ";
-                    $sql .= "cyan_prodcodeoem, ";
-                    $sql .= "cyan_yield, ";
-                    $sql .= "cyan_prodcostoem, ";
-                    $sql .= "magenta_prodcodeoem, ";
-                    $sql .= "magenta_yield, ";
-                    $sql .= "magenta_prodcostoem, ";
-                    $sql .= "yellow_prodcodeoem, ";
-                    $sql .= "yellow_yield, ";
-                    $sql .= "yellow_prodcostoem, ";
-                    $sql .= "duty_cycle, ";
-                    $sql .= "wattspowernormal, ";
-                    $sql .= "wattspoweridle, ";
-                    $sql .= "startmeterlife, ";
-                    $sql .= "endmeterlife, ";
-                    $sql .= "startmeterblack, ";
-                    $sql .= "endmeterblack, ";
-                    $sql .= "startmetercolor, ";
-                    $sql .= "endmetercolor, ";
-                    $sql .= "startmeterprintblack, ";
-                    $sql .= "endmeterprintblack, ";
-                    $sql .= "startmeterprintcolor, ";
-                    $sql .= "endmeterprintcolor, ";
-                    $sql .= "startmetercopyblack, ";
-                    $sql .= "endmetercopyblack, ";
-                    $sql .= "startmetercopycolor, ";
-                    $sql .= "endmetercopycolor, ";
-                    $sql .= "startmeterscan, ";
-                    $sql .= "endmeterscan, ";
-                    $sql .= "startmeterfax, ";
-                    $sql .= "endmeterfax, ";
-                    $sql .= "tonerlevel_black, ";
-                    $sql .= "tonerlevel_cyan, ";
-                    $sql .= "tonerlevel_magenta, ";
-                    $sql .= "tonerlevel_yellow, ";
-                    $sql .= "invalid_data, ";
-                    $sql .= "is_excluded";
-                    $sql .= ") SELECT ";
-                    $sql .= $newReportId . ", ";
-                    $sql .= "devices_pf_id, ";
-                    $sql .= "startdate, ";
-                    $sql .= "enddate, ";
-                    $sql .= "printermodelid, ";
-                    $sql .= "ipaddress, ";
-                    $sql .= "serialnumber, ";
-                    $sql .= "modelname, ";
-                    $sql .= "manufacturer, ";
-                    $sql .= "is_color, ";
-                    $sql .= "is_copier, ";
-                    $sql .= "is_scanner, ";
-                    $sql .= "is_fax, ";
-                    $sql .= "ppm_black, ";
-                    $sql .= "ppm_color, ";
-                    $sql .= "date_introduction, ";
-                    $sql .= "date_adoption, ";
-                    $sql .= "discovery_date, ";
-                    $sql .= "black_prodcodeoem, ";
-                    $sql .= "black_yield, ";
-                    $sql .= "black_prodcostoem, ";
-                    $sql .= "cyan_prodcodeoem, ";
-                    $sql .= "cyan_yield, ";
-                    $sql .= "cyan_prodcostoem, ";
-                    $sql .= "magenta_prodcodeoem, ";
-                    $sql .= "magenta_yield, ";
-                    $sql .= "magenta_prodcostoem, ";
-                    $sql .= "yellow_prodcodeoem, ";
-                    $sql .= "yellow_yield, ";
-                    $sql .= "yellow_prodcostoem, ";
-                    $sql .= "duty_cycle, ";
-                    $sql .= "wattspowernormal, ";
-                    $sql .= "wattspoweridle, ";
-                    $sql .= "startmeterlife, ";
-                    $sql .= "endmeterlife, ";
-                    $sql .= "startmeterblack, ";
-                    $sql .= "endmeterblack, ";
-                    $sql .= "startmetercolor, ";
-                    $sql .= "endmetercolor, ";
-                    $sql .= "startmeterprintblack, ";
-                    $sql .= "endmeterprintblack, ";
-                    $sql .= "startmeterprintcolor, ";
-                    $sql .= "endmeterprintcolor, ";
-                    $sql .= "startmetercopyblack, ";
-                    $sql .= "endmetercopyblack, ";
-                    $sql .= "startmetercopycolor, ";
-                    $sql .= "endmetercopycolor, ";
-                    $sql .= "startmeterscan, ";
-                    $sql .= "endmeterscan, ";
-                    $sql .= "startmeterfax, ";
-                    $sql .= "endmeterfax, ";
-                    $sql .= "tonerlevel_black, ";
-                    $sql .= "tonerlevel_cyan, ";
-                    $sql .= "tonerlevel_magenta, ";
-                    $sql .= "tonerlevel_yellow, ";
-                    $sql .= "invalid_data, ";
-                    $sql .= "is_excluded ";
-                    $sql .= "FROM upload_data_collector ";
-                    $sql .= "WHERE upload_data_collector_id = " . $udc_id . ";";
-                    $newUdc = $udcTable->getAdapter()->prepare($sql);
-                    $newUdc->execute();
-                    $newUdcId = $udcTable->getAdapter()->lastInsertId();
+                    /*
+                     * Note here that we've already fetched the row. Since we already have an object, we can just change
+                     * whats needed and perform the change.
+                     */
+                    $uploadDataCollectorRow->setUploadDataCollectorId(null);
+                    $uploadDataCollectorRow->setReportId($newReportId);
+                    $newUploadDataCollectorId = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->save($uploadDataCollectorRow);
                     
-                    // copy unknown_device_instance records
-                    $unknown_device_instance = Proposalgen_Model_Mapper_UnknownDeviceInstance::getInstance()->fetchRow('upload_data_collector_id = ' . $udc_id);
-                    if ($unknown_device_instance)
+                    // Copy the unknown device record
+                    /*
+                     * Note here that we've already fetched the row. Since we already have an object, we can just change
+                     * whats needed and perform the change.
+                     */
+                    
+                    /* @var $unknownDeviceInstance Proposalgen_Model_UnknownDeviceInstance */
+                    $unknownDeviceInstance = Proposalgen_Model_Mapper_UnknownDeviceInstance::getInstance()->fetchRow(array (
+                            'upload_data_collector_row_id = ?' => $oldUploadDataCollectorRowId 
+                    ));
+                    
+                    if ($unknownDeviceInstance)
                     {
-                        $udi_id = $unknown_device_instance->UnknownDeviceInstanceId;
+                        $oldUnknownDeviceInstanceId = $unknownDeviceInstance->getUnknownDeviceInstanceId();
                         
-                        $udiTable = new Proposalgen_Model_DbTable_UnknownDeviceInstance();
-                        $sql = "INSERT INTO unknown_device_instance (";
-                        $sql .= "user_id, ";
-                        $sql .= "report_id, ";
-                        $sql .= "upload_data_collector_id, ";
-                        $sql .= "printermodelid, ";
-                        $sql .= "mps_monitor_startdate, ";
-                        $sql .= "mps_monitor_enddate, ";
-                        $sql .= "mps_discovery_date, ";
-                        $sql .= "install_date, ";
-                        $sql .= "device_manufacturer, ";
-                        $sql .= "printer_model, ";
-                        $sql .= "printer_serial_number, ";
-                        $sql .= "toner_config_id, ";
-                        $sql .= "part_type_id, ";
-                        $sql .= "is_copier, ";
-                        $sql .= "is_fax, ";
-                        $sql .= "is_duplex, ";
-                        $sql .= "is_scanner, ";
-                        $sql .= "watts_power_normal, ";
-                        $sql .= "watts_power_idle, ";
-                        $sql .= "device_price, ";
-                        $sql .= "launch_date, ";
-                        $sql .= "date_created, ";
-                        $sql .= "black_toner_SKU, ";
-                        $sql .= "black_toner_price, ";
-                        $sql .= "black_toner_yield, ";
-                        $sql .= "cyan_toner_SKU, ";
-                        $sql .= "cyan_toner_price, ";
-                        $sql .= "cyan_toner_yield, ";
-                        $sql .= "magenta_toner_SKU, ";
-                        $sql .= "magenta_toner_price, ";
-                        $sql .= "magenta_toner_yield, ";
-                        $sql .= "yellow_toner_SKU, ";
-                        $sql .= "yellow_toner_price, ";
-                        $sql .= "yellow_toner_yield, ";
-                        $sql .= "3color_toner_SKU, ";
-                        $sql .= "3color_toner_price, ";
-                        $sql .= "3color_toner_yield, ";
-                        $sql .= "4color_toner_SKU, ";
-                        $sql .= "4color_toner_price, ";
-                        $sql .= "4color_toner_yield, ";
-                        $sql .= "black_comp_SKU, ";
-                        $sql .= "black_comp_price, ";
-                        $sql .= "black_comp_yield, ";
-                        $sql .= "cyan_comp_SKU, ";
-                        $sql .= "cyan_comp_price, ";
-                        $sql .= "cyan_comp_yield, ";
-                        $sql .= "magenta_comp_SKU, ";
-                        $sql .= "magenta_comp_price, ";
-                        $sql .= "magenta_comp_yield, ";
-                        $sql .= "yellow_comp_SKU, ";
-                        $sql .= "yellow_comp_price, ";
-                        $sql .= "yellow_comp_yield, ";
-                        $sql .= "3color_comp_SKU, ";
-                        $sql .= "3color_comp_price, ";
-                        $sql .= "3color_comp_yield, ";
-                        $sql .= "4color_comp_SKU, ";
-                        $sql .= "4color_comp_price, ";
-                        $sql .= "4color_comp_yield, ";
-                        $sql .= "start_meter_life, ";
-                        $sql .= "end_meter_life, ";
-                        $sql .= "start_meter_black, ";
-                        $sql .= "end_meter_black, ";
-                        $sql .= "start_meter_color, ";
-                        $sql .= "end_meter_color, ";
-                        $sql .= "start_meter_printblack, ";
-                        $sql .= "end_meter_printblack, ";
-                        $sql .= "start_meter_printcolor, ";
-                        $sql .= "end_meter_printcolor, ";
-                        $sql .= "start_meter_copyblack, ";
-                        $sql .= "end_meter_copyblack, ";
-                        $sql .= "start_meter_copycolor, ";
-                        $sql .= "end_meter_copycolor, ";
-                        $sql .= "start_meter_fax, ";
-                        $sql .= "end_meter_fax, ";
-                        $sql .= "start_meter_scan, ";
-                        $sql .= "end_meter_scan, ";
-                        $sql .= "jit_supplies_supported, ";
-                        $sql .= "is_excluded, ";
-                        $sql .= "is_leased, ";
-                        $sql .= "ip_address, ";
-                        $sql .= "duty_cycle, ";
-                        $sql .= "PPM_black, ";
-                        $sql .= "PPM_color, ";
-                        $sql .= "service_cost_per_page";
-                        $sql .= ") SELECT ";
-                        $sql .= $newUserId . ", ";
-                        $sql .= $newReportId . ", ";
-                        $sql .= $newUdcId . ", ";
-                        $sql .= "printermodelid, ";
-                        $sql .= "mps_monitor_startdate, ";
-                        $sql .= "mps_monitor_enddate, ";
-                        $sql .= "mps_discovery_date, ";
-                        $sql .= "install_date, ";
-                        $sql .= "device_manufacturer, ";
-                        $sql .= "printer_model, ";
-                        $sql .= "printer_serial_number, ";
-                        $sql .= "toner_config_id, ";
-                        $sql .= "part_type_id, ";
-                        $sql .= "is_copier, ";
-                        $sql .= "is_fax, ";
-                        $sql .= "is_duplex, ";
-                        $sql .= "is_scanner, ";
-                        $sql .= "watts_power_normal, ";
-                        $sql .= "watts_power_idle, ";
-                        $sql .= "device_price, ";
-                        $sql .= "launch_date, ";
-                        $sql .= "date_created, ";
-                        $sql .= "black_toner_SKU, ";
-                        $sql .= "black_toner_price, ";
-                        $sql .= "black_toner_yield, ";
-                        $sql .= "cyan_toner_SKU, ";
-                        $sql .= "cyan_toner_price, ";
-                        $sql .= "cyan_toner_yield, ";
-                        $sql .= "magenta_toner_SKU, ";
-                        $sql .= "magenta_toner_price, ";
-                        $sql .= "magenta_toner_yield, ";
-                        $sql .= "yellow_toner_SKU, ";
-                        $sql .= "yellow_toner_price, ";
-                        $sql .= "yellow_toner_yield, ";
-                        $sql .= "3color_toner_SKU, ";
-                        $sql .= "3color_toner_price, ";
-                        $sql .= "3color_toner_yield, ";
-                        $sql .= "4color_toner_SKU, ";
-                        $sql .= "4color_toner_price, ";
-                        $sql .= "4color_toner_yield, ";
-                        $sql .= "black_comp_SKU, ";
-                        $sql .= "black_comp_price, ";
-                        $sql .= "black_comp_yield, ";
-                        $sql .= "cyan_comp_SKU, ";
-                        $sql .= "cyan_comp_price, ";
-                        $sql .= "cyan_comp_yield, ";
-                        $sql .= "magenta_comp_SKU, ";
-                        $sql .= "magenta_comp_price, ";
-                        $sql .= "magenta_comp_yield, ";
-                        $sql .= "yellow_comp_SKU, ";
-                        $sql .= "yellow_comp_price, ";
-                        $sql .= "yellow_comp_yield, ";
-                        $sql .= "3color_comp_SKU, ";
-                        $sql .= "3color_comp_price, ";
-                        $sql .= "3color_comp_yield, ";
-                        $sql .= "4color_comp_SKU, ";
-                        $sql .= "4color_comp_price, ";
-                        $sql .= "4color_comp_yield, ";
-                        $sql .= "start_meter_life, ";
-                        $sql .= "end_meter_life, ";
-                        $sql .= "start_meter_black, ";
-                        $sql .= "end_meter_black, ";
-                        $sql .= "start_meter_color, ";
-                        $sql .= "end_meter_color, ";
-                        $sql .= "start_meter_printblack, ";
-                        $sql .= "end_meter_printblack, ";
-                        $sql .= "start_meter_printcolor, ";
-                        $sql .= "end_meter_printcolor, ";
-                        $sql .= "start_meter_copyblack, ";
-                        $sql .= "end_meter_copyblack, ";
-                        $sql .= "start_meter_copycolor, ";
-                        $sql .= "end_meter_copycolor, ";
-                        $sql .= "start_meter_fax, ";
-                        $sql .= "end_meter_fax, ";
-                        $sql .= "start_meter_scan, ";
-                        $sql .= "end_meter_scan, ";
-                        $sql .= "jit_supplies_supported, ";
-                        $sql .= "is_excluded, ";
-                        $sql .= "is_leased, ";
-                        $sql .= "ip_address, ";
-                        $sql .= "duty_cycle, ";
-                        $sql .= "PPM_black, ";
-                        $sql .= "PPM_color, ";
-                        $sql .= "service_cost_per_page ";
-                        $sql .= "FROM unknown_device_instance ";
-                        $sql .= "WHERE upload_data_collector_id = " . $udc_id . ";";
-                        $new_udi = $udiTable->getAdapter()->prepare($sql);
-                        $new_udi->execute();
-                        $new_udi_id = $udiTable->getAdapter()->lastInsertId();
+                        $unknownDeviceInstance->setUnknownDeviceInstanceId(null);
+                        
+                        $unknownDeviceInstance->setUserId($newUserId);
+                        $unknownDeviceInstance->setReportId($newReportId);
+                        $unknownDeviceInstance->setUploadDataCollectorId($newUploadDataCollectorId);
+                        $newUnknownDeviceInstanceId = Proposalgen_Model_Mapper_UnknownDeviceInstance::getInstance()->save($unknownDeviceInstance);
                     }
                     
-                    // copy device_instance records
-                    $device_instance = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchRow('upload_data_collector_id = ' . $udc_id);
-                    if ($device_instance)
+                    // Copy Device Instance
+                    /*
+                     * Note here that we've already fetched the row. Since we already have an object, we can just change
+                     * whats needed and perform the change.
+                     */
+                    /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
+                    $deviceInstance = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchRow(array (
+                            'upload_data_collector_row_id = ?' => $oldUploadDataCollectorRowId 
+                    ));
+                    if ($deviceInstance)
                     {
-                        $di_id = $device_instance->DeviceInstanceId;
+                        $oldDeviceInstanceId = $deviceInstance->getDeviceInstanceId();
                         
-                        $diTable = new Proposalgen_Model_DbTable_DeviceInstance();
-                        $sql = "INSERT INTO device_instance (";
-                        $sql .= "report_id, ";
-                        $sql .= "master_device_id, ";
-                        $sql .= "upload_data_collector_id, ";
-                        $sql .= "serial_number, ";
-                        $sql .= "mps_monitor_startdate, ";
-                        $sql .= "mps_monitor_enddate, ";
-                        $sql .= "mps_discovery_date, ";
-                        $sql .= "jit_supplies_supported, ";
-                        $sql .= "ip_address, ";
-                        $sql .= "is_excluded";
-                        $sql .= ") SELECT ";
-                        $sql .= $newReportId . ", ";
-                        $sql .= "master_device_id, ";
-                        $sql .= $newUdcId . ", ";
-                        $sql .= "serial_number, ";
-                        $sql .= "mps_monitor_startdate, ";
-                        $sql .= "mps_monitor_enddate, ";
-                        $sql .= "mps_discovery_date, ";
-                        $sql .= "jit_supplies_supported, ";
-                        $sql .= "ip_address, ";
-                        $sql .= "is_excluded ";
-                        $sql .= "FROM device_instance ";
-                        $sql .= "WHERE upload_data_collector_id = " . $udc_id . ";";
-                        $newDi = $diTable->getAdapter()->prepare($sql);
-                        $newDi->execute();
-                        $newDiId = $diTable->getAdapter()->lastInsertId();
+                        $deviceInstance->setDeviceInstanceId(null);
+                        $deviceInstance->setReportId($newReportId);
+                        $deviceInstance->setUploadDataCollectorId($newUploadDataCollectorId);
+                        $newDeviceInstanceId = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->save($deviceInstance);
                         
-                        // copy meters
-                        $meterTable = new Proposalgen_Model_DbTable_Meters();
-                        $sql = "INSERT INTO meters (";
-                        $sql .= "device_instance_id, ";
-                        $sql .= "meter_type, ";
-                        $sql .= "start_meter, ";
-                        $sql .= "end_meter";
-                        $sql .= ") SELECT ";
-                        $sql .= $newDiId . ", ";
-                        $sql .= "meter_type, ";
-                        $sql .= "start_meter, ";
-                        $sql .= "end_meter ";
-                        $sql .= "FROM meters ";
-                        $sql .= "WHERE device_instance_id = " . $di_id . ";";
+                        // Copy Meters
+                        /*
+                         * Note. This is a good user of the sql as it selects multiple meters
+                         */
+                        $meterTable = new Proposalgen_Model_DbTable_Meter();
+                        $sql = "INSERT INTO meters (device_instance_id, meter_type, start_meter, end_meter)
+                                    SELECT {$newDeviceInstanceId}, meter_type, start_meter, end_meter FROM meters
+                                WHERE device_instance_id = {$oldDeviceInstanceId};";
                         $new_meter = $meterTable->getAdapter()->prepare($sql);
                         $new_meter->execute();
                     }
