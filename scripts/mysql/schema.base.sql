@@ -4,16 +4,16 @@
 SET storage_engine=InnoDB;
 
 CREATE TABLE `users` (
-    `id`                	   INTEGER         NOT NULL AUTO_INCREMENT,
-    `username`             	   VARCHAR(255)    NOT NULL,
-    `password`          	   VARCHAR(255)    NOT NULL,
-    `firstname`         	   VARCHAR(255)    NOT NULL,
-    `lastname`          	   VARCHAR(255)    NOT NULL,
-    `email`             	   VARCHAR(255)    NOT NULL,
-    `loginAttempts`     	   INTEGER         NOT NULL    DEFAULT 0,
-    `frozenUntil`       	   DATETIME                    DEFAULT NULL,
-    `locked`            	   TINYINT         NOT NULL    DEFAULT FALSE,
-    `eulaAccepted`      	   DATETIME                    DEFAULT NULL,
+    `id`                       INTEGER         NOT NULL AUTO_INCREMENT,
+    `username`                 VARCHAR(255)    NOT NULL,
+    `password`                 VARCHAR(255)    NOT NULL,
+    `firstname`                VARCHAR(255)    NOT NULL,
+    `lastname`                 VARCHAR(255)    NOT NULL,
+    `email`                    VARCHAR(255)    NOT NULL,
+    `loginAttempts`            INTEGER         NOT NULL    DEFAULT 0,
+    `frozenUntil`              DATETIME                    DEFAULT NULL,
+    `locked`                   TINYINT         NOT NULL    DEFAULT FALSE,
+    `eulaAccepted`             DATETIME                    DEFAULT NULL,
     `resetPasswordOnNextLogin` TINYINT         NOT NULL    DEFAULT FALSE,
     `passwordResetRequest`     DATETIME                    DEFAULT NULL,
     PRIMARY KEY (`id`),
@@ -55,18 +55,18 @@ CREATE TABLE `user_roles` (
 
 
 CREATE TABLE `log_types` (
-	`id`                INTEGER         NOT NULL AUTO_INCREMENT,
+    `id`                INTEGER         NOT NULL AUTO_INCREMENT,
     `name`              VARCHAR(255)    NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE `logs` (
-	`id`                INTEGER         NOT NULL AUTO_INCREMENT,
-    `logTypeId`         INTEGER 	    NOT NULL DEFAULT 1,
-    `priority`          INTEGER 	    NOT NULL DEFAULT 6,
-    `message`           TEXT   	 		NOT NULL,
-    `timestamp`         TIMESTAMP		NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `userId`         	INTEGER					 DEFAULT NULL,
+    `id`                INTEGER         NOT NULL AUTO_INCREMENT,
+    `logTypeId`         INTEGER         NOT NULL DEFAULT 1,
+    `priority`          INTEGER         NOT NULL DEFAULT 6,
+    `message`           TEXT                NOT NULL,
+    `timestamp`         TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `userId`             INTEGER                     DEFAULT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`logTypeId`) REFERENCES `log_types` (`id`) ON DELETE RESTRICT
 ) ENGINE=InnoDB;
