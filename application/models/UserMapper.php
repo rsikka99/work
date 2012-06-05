@@ -30,8 +30,11 @@ class Application_Model_UserMapper extends My_Model_Mapper_Abstract
      */
     public function insert (Application_Model_User &$user)
     {
+        $user->setUsername(strtolower($user->getUsername()));
         $data = $user->toArray();
         unset($data ['id']);
+        
+        // lower case the username  	 
         $id = $this->getDbTable()->insert($data);
         
         // Since the user is set properly, set the id in the appropriate places
@@ -51,6 +54,7 @@ class Application_Model_UserMapper extends My_Model_Mapper_Abstract
      */
     public function save (Application_Model_User $user, $primaryKey = null)
     {
+        $user->setUsername(strtolower($user->getUsername()));
         $data = $this->unsetNullValues($user->toArray());
         
         if ($primaryKey === null)

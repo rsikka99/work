@@ -105,6 +105,7 @@ class Application_Model_User extends My_Model_Abstract
         }
         if (isset($params->id) && ! is_null($params->id))
             $this->setId($params->id);
+        
         if (isset($params->username) && ! is_null($params->username))
             $this->setUsername($params->username);
         
