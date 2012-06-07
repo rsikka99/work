@@ -361,6 +361,37 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $request = $this->getRequest();
         $form = new Proposalgen_Form_Survey_Purchasing();
         
+        // Defaults
+        $dailyValue = 22;
+        $weeklyValue = 4;
+        
+        // Get any saved answers
+        $formDataFromAnswers = array (
+                "numb_vendors" => (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(16, $this->getReport()
+                    ->getReportId())) ?  : "" 
+        );
+        
+        $numberOfMonthlyOrders = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(17, $this->getReport()
+            ->getReportId())) ?  : FALSE;
+        if ($numberOfMonthlyOrders !== FALSE)
+        {
+            switch ($numberOfMonthlyOrders)
+            {
+                case $dailyValue :
+                    $formDataFromAnswers ["inkTonerOrderRadio"] = "Daily";
+                    break;
+                case $weeklyValue :
+                    $formDataFromAnswers ["inkTonerOrderRadio"] = "Weekly";
+                    break;
+                default :
+                    $formDataFromAnswers ["inkTonerOrderRadio"] = "Times per month";
+                    $formDataFromAnswers ["numb_monthlyOrders"] = $numberOfMonthlyOrders;
+                    break;
+            }
+        }
+        
+        $form->populate($formDataFromAnswers);
+        
         if ($request->isPost())
         {
             $values = $request->getPost();
@@ -375,6 +406,27 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                     
                     if ($form->isValid($values))
                     {
+                        // Question 16
+                        $this->saveNumericQuestionAnswer(16, $form->getValue('numb_vendors'));
+                        
+                        $numberOfOrdersRadio = $form->getValue('inkTonerOrderRadio');
+                        
+                        switch ($numberOfOrdersRadio)
+                        {
+                            case "Daily" :
+                                $ordersPerMonth = $dailyValue;
+                                break;
+                            case "Weekly" :
+                                $ordersPerMonth = $weeklyValue;
+                                break;
+                            default :
+                                $ordersPerMonth = $form->getValue('numb_monthlyOrders');
+                                break;
+                        }
+                        
+                        // Question 16
+                        $this->saveNumericQuestionAnswer(17, $ordersPerMonth);
+                        
                         // Everytime we save anything related to a report, we should save it (updates the modification date)
                         $this->saveReport();
                         
@@ -415,6 +467,53 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $request = $this->getRequest();
         $form = new Proposalgen_Form_Survey_It();
         
+        // Populate the form with saved answers if we have them.
+        
+
+        $formDataFromAnswers = array ();
+        
+        $itHoursRadio = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(18, $this->getReport()
+            ->getReportId())) ?  : FALSE;
+        
+        if ($itHoursRadio !== FALSE)
+        {
+            $formDataFromAnswers ["itHoursRadio"] = $itHoursRadio;
+        }
+        
+        $itHours = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(18, $this->getReport()
+            ->getReportId())) ?  : FALSE;
+        
+        if ($itHours !== FALSE)
+        {
+            $formDataFromAnswers ["itHours"] = $itHours;
+        }
+        
+        $monthlyBreakdownsRadio = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(20, $this->getReport()
+            ->getReportId())) ?  : FALSE;
+        
+        if ($monthlyBreakdownsRadio !== FALSE)
+        {
+            $formDataFromAnswers ["monthlyBreakdownRadio"] = $monthlyBreakdownsRadio;
+        }
+        
+        $monthlyBreakdowns = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(20, $this->getReport()
+            ->getReportId())) ?  : FALSE;
+        
+        if ($monthlyBreakdowns !== FALSE)
+        {
+            $formDataFromAnswers ["monthlyBreakdown"] = $monthlyBreakdowns;
+        }
+        
+        $locationTracking = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(19, $this->getReport()
+            ->getReportId())) ?  : FALSE;
+        
+        if ($locationTracking !== FALSE)
+        {
+            $formDataFromAnswers ["location_tracking"] = $locationTracking;
+        }
+        
+        $form->populate($formDataFromAnswers);
+        
         if ($request->isPost())
         {
             $values = $request->getPost();
@@ -426,9 +525,25 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
             {
                 try
                 {
-                    
                     if ($form->isValid($values))
                     {
+                        // Question 18 (It Hours per month)
+                        $this->saveTextualQuestionAnswer(18, $form->getValue('itHoursRadio'));
+                        if ($form->getValue('itHours'))
+                        {
+                            $this->saveNumericQuestionAnswer(18, $form->getValue('itHours'));
+                        }
+                        
+                        // Quesiton 20 (Monthly Breakdowns)
+                        $this->saveTextualQuestionAnswer(20, $form->getValue('monthlyBreakdownRadio'));
+                        if ($form->getValue('monthlyBreakdown'))
+                        {
+                            $this->saveNumericQuestionAnswer(20, $form->getValue('monthlyBreakdown'));
+                        }
+                        
+                        // Question 19 (IP Based Location Tracking)
+                        $this->saveTextualQuestionAnswer(19, $form->getValue('location_tracking'));
+                        
                         // Everytime we save anything related to a report, we should save it (updates the modification date)
                         $this->saveReport();
                         
@@ -469,6 +584,30 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $request = $this->getRequest();
         $form = new Proposalgen_Form_Survey_Users();
         
+        // Get any saved answers
+        $formDataFromAnswers = array (
+                "pageCoverage_BW" => (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(21, $this->getReport()
+                    ->getReportId())) ?  : "", 
+                "pageCoverage_Color" => (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(22, $this->getReport()
+                    ->getReportId())) ?  : "" 
+        );
+        
+        $percentPrintVolume = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(23, $this->getReport()
+            ->getReportId())) ?  : FALSE;
+        if ($percentPrintVolume !== FALSE)
+        {
+            $formDataFromAnswers ["printVolume"] = $percentPrintVolume;
+        }
+        
+        $averagePrinterDowntime = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(24, $this->getReport()
+            ->getReportId())) ?  : FALSE;
+        if ($averagePrinterDowntime !== FALSE)
+        {
+            $formDataFromAnswers ["repairTime"] = $averagePrinterDowntime;
+        }
+        
+        $form->populate($formDataFromAnswers);
+        
         if ($request->isPost())
         {
             $values = $request->getPost();
@@ -480,9 +619,20 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
             {
                 try
                 {
-                    
                     if ($form->isValid($values))
                     {
+                        // Question 21 (Page Coverage BW)
+                        $this->saveNumericQuestionAnswer(21, $form->getValue('pageCoverage_BW'));
+                        
+                        // Question 22 (Page Coverage Color)
+                        $this->saveNumericQuestionAnswer(22, $form->getValue('pageCoverage_Color'));
+                        
+                        // Question 23 (Percent Inkjet Printing)
+                        $this->saveNumericQuestionAnswer(23, $form->getValue('printVolume'));
+                        
+                        // Question 24 (Average Printer downtime)
+                        $this->saveNumericQuestionAnswer(24, $form->getValue('repairTime'));
+                        
                         // Everytime we save anything related to a report, we should save it (updates the modification date)
                         $this->saveReport();
                         

@@ -8,9 +8,39 @@ $ithours = $form->getElement('itHours');
 $monthlyBreakdownRadio = $form->getElement('monthlyBreakdownRadio');
 $monthlyBreakdown = $form->getElement('monthlyBreakdown');
 
+$this->headScript()->captureStart('append','text/javascript') ?>
 
-
-?>
+$(document).ready(function() {
+	//set default
+	if($("#itHoursRadio-guess").is(':checked')) {
+		$("#itHours").attr('disabled','disabled');
+	}
+	
+	$("#itHoursRadio-guess").click(function() {
+		$("#itHours").attr('disabled','disabled');
+		$("#itHours").val('');
+	});
+	
+	$("#itHoursRadio-Iknowtheexactamount").click(function() {
+		$("#itHours").removeAttr('disabled');
+	});
+	
+	//set default
+	if($("#monthlyBreakdownRadio-guess").is(':checked')) {
+		$("#monthlyBreakdown").attr('disabled','disabled');
+	}
+	
+	$("#monthlyBreakdownRadio-guess").click(function() {
+		$("#monthlyBreakdown").attr('disabled','disabled');
+		$("#monthlyBreakdown").val('');
+	});
+	
+	$("#monthlyBreakdownRadio-Iknowtheexactamount").click(function() {
+		$("#monthlyBreakdown").removeAttr('disabled');
+	});
+	
+});
+<?php $this->headScript()->captureEnd() ?>
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
 
 <div class="control-group <?php echo ($itHoursRadio->hasErrors() || $ithours->hasErrors()) ? 'error' : '' ?>">

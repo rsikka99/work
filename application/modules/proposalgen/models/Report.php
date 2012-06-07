@@ -327,17 +327,7 @@ class Proposalgen_Model_Report extends Tangent_Model_Abstract
             $stage = ($this->getReportStage()) ?  : Proposalgen_Model_Report_Step::STEP_SURVEY_COMPANY;
             
             $this->ReportSteps = Proposalgen_Model_Report_Step::getSteps();
-            
-            /* @var $step Proposalgen_Model_Report_Step */
-            foreach ( $this->ReportSteps as $step )
-            {
-                $step->setCanAccess(true);
-                
-                if (strcasecmp($step->getName(), $stage) === 0)
-                {
-                    break;
-                }
-            }
+            Proposalgen_Model_Report_Step::updateAccessibleSteps($this->ReportSteps, $stage);
         }
         return $this->ReportSteps;
     }

@@ -245,6 +245,27 @@ class Proposalgen_Model_Report_Step extends My_Model_Abstract
     }
 
     /**
+     * Sets which steps are accessible
+     *
+     * @param array $steps            
+     * @param string $stepName            
+     */
+    public static function updateAccessibleSteps ($steps, $stepName)
+    {
+        $canAccess = true;
+        /* @var $step Proposalgen_Model_Report_Step */
+        foreach ( $steps as $step )
+        {
+            $step->setCanAccess($canAccess);
+            
+            if (strcasecmp($step->getName(), $stepName) === 0)
+            {
+                $canAccess = false;
+            }
+        }
+    }
+
+    /**
      *
      * @return Proposalgen_Model_Report_Step
      */

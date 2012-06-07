@@ -98,6 +98,9 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
         if ($newStep !== FALSE)
         {
             $this->_report->setReportStage($newStep->getEnumValue());
+            
+            // We need to adjust the menu just in case we're not redirecting
+            Proposalgen_Model_Report_Step::updateAccessibleSteps($this->getReportSteps(), $newStep->getEnumValue());
         }
         
         $id = $reportMapper->save($this->_report);
@@ -139,7 +142,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
         $nextStep = $step->getNextStep();
         if ($nextStep !== null)
         {
-            if (!$nextStep->getCanAccess())
+            if (! $nextStep->getCanAccess())
             {
                 return $nextStep;
             }
