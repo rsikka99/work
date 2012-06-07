@@ -694,7 +694,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $this->view->companyAddress = Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(30, $reportId);
         
         // GENERAL
-        $this->view->numberOfEmployees = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(5, $reportId);
+        $this->view->numberOfEmployees = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(5, $reportId) . ' employees';
         
         $goalArray = array (
                 1 => 'Ensure hardware matches print volume needs', 
