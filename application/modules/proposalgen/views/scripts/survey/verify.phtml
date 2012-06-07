@@ -1,4 +1,105 @@
-<h2>Verify</h2>
+<div class="page-header">
+  <h1>Survey <small>- Verification</small></h1>
+</div>
 <div class="well">
-	<?php echo $this->form ?>
+    <table class="table  proposalVerificationTable">
+    <!-- -------------------- COMPANY SECTION -------------------- -->
+        <tr>
+            <th colspan="2"><h3>Company</h3></th>
+        </tr>
+        <tr>
+            <td class="key">Company name:</td>
+            <td class="value"><?php echo $this->companyName; ?></td>
+        </tr>
+        <tr>
+            <td class="key">Address:</td>
+            <td class="value"><?php echo nl2br($this->companyAddress); ?></td>
+        </tr>
+    <!-- -------------------- GENERAL SECTION -------------------- -->
+        <tr>
+            <th colspan="2"><h3>General</h3></th>
+        </tr>
+        <tr>
+            <td class="key">Number of employees:</td>
+            <td class="value"><?php echo $this->numberOfEmployees; ?></td>
+        </tr>
+        <tr>
+            <td class="key">MPS goal Priority:</td>
+            <td class="value"><?php echo nl2br($this->mpsGoalPriority); ?></td>
+        </tr>
+    <!-- -------------------- FINANCE SECTION -------------------- -->
+        <tr>
+            <th colspan="2"><h3>Finance</h3></th>
+        </tr>
+        <tr>
+            <td class="key">Toner costs:</td>
+            <td class="value"><?php echo $this->tonerCosts; ?></td>
+        </tr>
+        <tr>
+            <td class="key">Service costs:</td>
+            <td class="value"><?php echo $this->serviceCosts; ?></td>
+        </tr>
+        <tr>
+            <td class="key">Average purchase order cost:</td>
+            <td class="value"><?php echo $this->averagePurchaseOrderCost; ?></td>
+        </tr>
+        <tr>
+            <td class="key">Average IT wage:</td>
+            <td class="value"><?php echo $this->averageItWage; ?></td>
+        </tr>
+    <!-- -------------------- PURCHASING SECTION -------------------- -->
+        <tr>
+            <th colspan="2"><h3>Purchasing</h3></th>
+        </tr>
+        <tr>
+            <td class="key">Number of supply vendors:</td>
+            <td class="value"><?php echo $this->numberOfSupplyVendors; ?></td>
+        </tr>
+        <tr>
+            <td class="key">Number of orders:</td>
+            <td class="value"><?php echo $this->numberOfSupplyOrders; ?></td>
+        </tr>
+    <!-- -------------------- IT SECTION -------------------- -->
+        <tr>
+            <th colspan="2"><h3>IT</h3></th>
+        </tr>
+        <tr>
+            <td class="key">IT service hours:</td>
+            <td class="value"><?php echo $this->itServiceHours; ?></td>
+        </tr>
+        <tr>
+            <td class="key">Average printer breakdowns:</td>
+            <td class="value"><?php echo $this->averageMonthlyPrinterBreakdowns; ?></td>
+        </tr>
+        <tr>
+            <td class="key">IP printer location tracking:</td>
+            <td class="value"><?php echo $this->ipPrinterLocationTracking; ?></td>
+        </tr>
+    <!-- -------------------- USERS SECTION -------------------- -->
+        <tr>
+            <th colspan="2"><h3>Users</h3></th>
+        </tr>
+        <tr>
+            <td class="key">Page coverage (monochrome):</td>
+            <td class="value"><?php echo $this->pageCoverageMonochrome; ?></td>
+        </tr>
+        <tr>
+            <td class="key">Page coverage (color):</td>
+            <td class="value"><?php echo $this->pageCoverageColor; ?></td>
+        </tr>
+        <tr>
+            <td class="key">Inkjet/Desktop print volume:</td>
+            <td class="value"><?php echo $this->inkjentPrintPercentage; ?></td>
+        </tr>
+        <tr>
+            <td class="key">Average repair time:</td>
+            <td class="value"><?php echo $this->averageRepairTime; ?></td>
+        </tr>
+    </table>
+    <form class="proposalForm form-horizontal">
+    	<div class="form-actions">
+            <input type="submit" name="continue" id="continue" value="Continue" class="btn btn-primary">
+            <input type="submit" name="goBack" id="cancel" value="Go Back" class="btn">
+        </div>
+    </form>
 </div>

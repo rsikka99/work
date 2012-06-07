@@ -20,7 +20,7 @@ class Proposalgen_Form_Survey_General extends Proposalgen_Form_Survey_BaseSurvey
          *
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
-        $this->setAttrib('class', 'surveyForm form-vertical');
+        $this->setAttrib('class', 'proposalForm form-vertical');
         
         $numb_employees = new Zend_Form_Element_Text('numb_employees');
         $numb_employees->setAttrib('maxlength', 4)

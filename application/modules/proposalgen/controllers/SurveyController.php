@@ -669,6 +669,115 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
     public function verifyAction ()
     {
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_VERIFY);
+        $request = $this->getRequest();
+        
+        if ($request->isPost())
+        {
+            $values = $request->getPost();
+            if (isset($values ["goBack"]))
+            {
+                $this->gotoPreviousStep();
+            }
+            else
+            {
+                $this->saveReport();
+                $this->gotoNextStep();
+            }
+        }
+        
+        $reportId = $this->getReport()->getReportId();
+        // Populate all our view variables
+        $currency = new Zend_Currency();
+        
+        // COMPANY
+        $this->view->companyName = $this->getReport()->getCustomerCompanyName();
+        $this->view->companyAddress = Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(30, $reportId);
+        
+        // GENERAL
+        $this->view->numberOfEmployees = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(5, $reportId);
+        
+        $goalArray = array (
+                1 => 'Ensure hardware matches print volume needs', 
+                2 => 'Increasing uptime and productivity', 
+                3 => 'Streamline logistics for supplies, service and hardware acquisition', 
+                4 => 'Reduce environmental impact', 
+                5 => 'Reduce costs' 
+        );
+        
+        $mpsGoalRankings [1] = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(6, $reportId);
+        $mpsGoalRankings [2] = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(7, $reportId);
+        $mpsGoalRankings [3] = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(8, $reportId);
+        $mpsGoalRankings [4] = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(9, $reportId);
+        $mpsGoalRankings [5] = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(10, $reportId);
+        
+        // Sort the goal rankings
+        asort($mpsGoalRankings);
+        
+        $mpsGoalPriority = array ();
+        for($i = 1; $i <= 5; $i ++)
+        {
+            
+            $mpsGoalPriority [] = "{$i}. " . $goalArray [$mpsGoalRankings [$i]];
+        }
+        
+        $this->view->mpsGoalPriority = implode("\n", $mpsGoalPriority);
+        
+        // FINANCE
+        $tonerCostsRadio = Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(11, $reportId);
+        if ($tonerCostsRadio !== "I know the exact amount")
+        {
+            $this->view->tonerCosts = "I don't know";
+        }
+        else
+        {
+            $this->view->tonerCosts = $currency->toCurrency(Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(11, $reportId));
+        }
+        
+        $laborCostsRadio = Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(12, $reportId);
+        if ($laborCostsRadio !== "I know the exact amount")
+        {
+            $this->view->serviceCosts = "I don't know";
+        }
+        else
+        {
+            $this->view->serviceCosts = $currency->toCurrency(Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(12, $reportId));
+        }
+        
+        $this->view->averagePurchaseOrderCost = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(14, $reportId) . ' per order';
+        $this->view->averageItWage = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(15, $reportId) . ' per hour';
+        
+        // PURCHASING
+        $this->view->numberOfSupplyVendors = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(16, $reportId) . ' vendor(s)';
+        $this->view->numberOfSupplyOrders = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(17, $reportId) . ' order(s) per month';
+        
+        // IT
+        $itServiceHoursRadio = Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(18, $reportId);
+        if ($itServiceHoursRadio !== "I know the exact amount")
+        {
+            $this->view->itServiceHours = "I don't know";
+        }
+        else
+        {
+            $this->view->itServiceHours = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(18, $reportId) . ' hour(s)';
+        }
+        
+        $averageMonthlyPrinterBreakdowns = Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(20, $reportId);
+        if ($averageMonthlyPrinterBreakdowns !== "I know the exact amount")
+        {
+            $this->view->averageMonthlyPrinterBreakdowns = "I don't know";
+        }
+        else
+        {
+            $this->view->averageMonthlyPrinterBreakdowns = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(20, $reportId) . ' breakdown(s) per month';
+        }
+        
+        $this->view->ipPrinterLocationTracking = (strcasecmp(Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(19, $reportId), "Y") === 0) ? 'Yes' : 'No';
+        
+        // USERS
+        $this->view->pageCoverageMonochrome = Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(21, $reportId) . '%';
+        $this->view->pageCoverageColor = Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(22, $reportId) . '%';
+        $this->view->inkjentPrintPercentage = Proposalgen_Form_Survey_Users::$volumeOptions [Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(23, $reportId)];
+        $this->view->averageRepairTime = Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(24, $reportId) . ' Days';
     }
 
     /**

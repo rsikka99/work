@@ -2,6 +2,19 @@
 
 class Proposalgen_Form_Survey_Users extends Proposalgen_Form_Survey_BaseSurveyForm
 {
+    public static $repairTimeOptions = array (
+            '0.5' => 'Less than a day', 
+            '1' => 'One day', 
+            '2' => 'Two days', 
+            '3' => 'Three to five days', 
+            '5' => 'More than five days' 
+    );
+    public static $volumeOptions = array (
+            '5' => 'Less than 10%', 
+            '18' => '10% to 25%', 
+            '38' => '26% to 50%', 
+            '75' => 'More than 50%' 
+    );
 
     public function init ()
     {
@@ -20,7 +33,7 @@ class Proposalgen_Form_Survey_Users extends Proposalgen_Form_Survey_BaseSurveyFo
          *
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
-        $this->setAttrib('class', 'surveyForm form-horizontal');
+        $this->setAttrib('class', 'proposalForm form-horizontal');
         
         /**
          * The raw text is now located within the view partial
@@ -30,6 +43,7 @@ class Proposalgen_Form_Survey_Users extends Proposalgen_Form_Survey_BaseSurveyFo
 //         $pageCoverageQuestion->setLabel($pageCoverageQuestion);
 //         $this->addElement($pageCoverageQuestion);
         
+
         $pageCoverage_BW = new Zend_Form_Element_Text('pageCoverage_BW');
         $pageCoverage_BW->setRequired(true)
             ->setLabel('Monochrome Coverage:')
@@ -53,41 +67,27 @@ class Proposalgen_Form_Survey_Users extends Proposalgen_Form_Survey_BaseSurveyFo
         $pageCoverage_Colour->getValidator('Between')->setMessage('Must be between 1 and 100');
         $this->addElement($pageCoverage_Colour);
         
-        $volumeOptions = array (
-                5 => 'Less than 10%', 
-                18 => '10% to 25%', 
-                38 => '26% to 50%', 
-                75 => 'More than 50%' 
-        );
-        
         $volumeQuestion = "What percent of your print volume is done on inkjet and other desktop printers?";
         
         $printVolumeRadio = new Zend_Form_Element_Radio('printVolume');
         $printVolumeRadio->setLabel($volumeQuestion)
-            ->setMultiOptions($volumeOptions)
+            ->setMultiOptions(self::$volumeOptions)
             ->setRequired(true)
             ->addFilter('StringTrim')
             ->addValidator('InArray', false, array (
-                array_keys($volumeOptions) 
+                array_keys(self::$volumeOptions) 
         ));
         $this->addElement($printVolumeRadio);
         
-        $repairTimeOptions = array (
-                '0.5' => 'Less than a day', 
-                1 => 'One day', 
-                2 => 'Two days', 
-                3 => 'Three to five days', 
-                5 => 'More than five days' 
-        );
         $repairTimeQuestion = "How long does it take, on average, for a printer to be fixed after it has broken down?";
         
         $repairTimeRadio = new Zend_Form_Element_Radio('repairTime');
         $repairTimeRadio->setLabel($repairTimeQuestion)
-            ->setMultiOptions($repairTimeOptions)
+            ->setMultiOptions(self::$repairTimeOptions)
             ->setRequired(true)
             ->addFilter('StringTrim')
             ->addValidator('InArray', false, array (
-                array_keys($repairTimeOptions) 
+                array_keys(self::$repairTimeOptions) 
         ));
         $this->addElement($repairTimeRadio);
         

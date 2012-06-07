@@ -20,7 +20,7 @@ class Proposalgen_Form_Survey_Company extends Proposalgen_Form_Survey_BaseSurvey
          *
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
-        $this->setAttrib('class', 'surveyForm form-horizontal');
+        $this->setAttrib('class', 'proposalForm form-horizontal');
         
         $company_name = new Zend_Form_Element_Text('company_name');
         $company_name->setAttrib('maxlength', 40)

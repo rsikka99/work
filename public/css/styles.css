@@ -240,13 +240,25 @@ tr.ui-search-toolbar select {
   margin: 0em;
   width: 50px;
 }
-.surveyForm .form-actions {
+.proposalVerificationTable td.key {
+  font-weight: bold;
+  text-align: right;
+  width: 250px;
+}
+.proposalVerificationTable td,
+.proposalVerificationTable th {
+  border: 0;
+}
+.proposalVerificationTable th {
+  padding-top: 20px;
+}
+.proposalForm .form-actions {
   padding-left: 300px;
 }
-.surveyForm .controls {
+.proposalForm .controls {
   padding-left: 36px;
 }
-.surveyForm.form-horizontal .controls {
+.proposalForm.form-horizontal .controls {
   padding-left: 0;
 }
 html {

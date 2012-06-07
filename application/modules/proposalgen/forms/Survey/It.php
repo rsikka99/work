@@ -20,7 +20,7 @@ class Proposalgen_Form_Survey_It extends Proposalgen_Form_Survey_BaseSurveyForm
          *
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
-        $this->setAttrib('class', 'surveyForm form-vertical');
+        $this->setAttrib('class', 'proposalForm form-vertical');
         $this->setAttrib('id', 'itSurveyForm');
         
         $multiOptions = array (

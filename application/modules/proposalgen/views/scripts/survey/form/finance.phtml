@@ -19,6 +19,7 @@ $this->headScript()->captureStart('append','text/javascript') ?>
 		//set default
 		if($("#toner_cost_radio-guess").is(':checked')) {
     		$("#toner_cost").attr('disabled','disabled');
+    		$("#toner_cost").val('');
     	}
     	
 		$("#toner_cost_radio-guess").click(function() {
@@ -33,6 +34,7 @@ $this->headScript()->captureStart('append','text/javascript') ?>
 		//set default
 		if($("#labor_cost_radio-guess").is(':checked')) {
     		$("#labor_cost").attr('disabled','disabled');
+    		$("#labor_cost").val('');
     	}
     	
 		$("#labor_cost_radio-guess").click(function() {

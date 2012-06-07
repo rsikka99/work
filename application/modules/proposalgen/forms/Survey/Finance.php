@@ -20,7 +20,7 @@ class Proposalgen_Form_Survey_Finance extends Proposalgen_Form_Survey_BaseSurvey
          *
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
-        $this->setAttrib('class', 'surveyForm form-vertical');
+        $this->setAttrib('class', 'proposalForm form-vertical');
         
         $multiOptions = array (
                 'guess' => 'I don\'t know', 

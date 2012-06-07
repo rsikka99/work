@@ -20,7 +20,7 @@ class Proposalgen_Form_Survey_Purchasing extends Proposalgen_Form_Survey_BaseSur
          *
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
-        $this->setAttrib('class', 'surveyForm form-vertical');
+        $this->setAttrib('class', 'proposalForm form-vertical');
         
 
         $numb_vendors = new Zend_Form_Element_Text('numb_vendors');
