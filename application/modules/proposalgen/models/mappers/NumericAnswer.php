@@ -31,7 +31,7 @@ class Proposalgen_Model_Mapper_NumericAnswer extends Tangent_Model_Mapper_Abstra
         try
         {
             $object = new Proposalgen_Model_NumericAnswer();
-            $object->setAnswerId($row->answer_numeric_id)
+            $object->setAnswerId($row->id)
                 ->setQuestionId($row->question_id)
                 ->setReportId($row->report_id)
                 ->setAnswer($row->numeric_answer);
@@ -72,7 +72,7 @@ class Proposalgen_Model_Mapper_NumericAnswer extends Tangent_Model_Mapper_Abstra
         $primaryKey = 0;
         try
         {
-            $data ["answer_numeric_id"] = $object->getAnswerId();
+            $data ["id"] = $object->getAnswerId();
             $data ["question_id"] = $object->getQuestionId();
             $data ["report_id"] = $object->getReportId();
             $data ["numeric_answer"] = $object->getAnswer();

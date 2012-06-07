@@ -243,6 +243,12 @@ tr.ui-search-toolbar select {
 .surveyForm .form-actions {
   padding-left: 300px;
 }
+.surveyForm .controls {
+  padding-left: 36px;
+}
+.surveyForm.form-horizontal .controls {
+  padding-left: 0;
+}
 html {
   overflow-y: scroll;
 }

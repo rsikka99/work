@@ -2,13 +2,13 @@
 <config>
 	<nav>
 		<menu>
-			<label>Admin Module</label>
+			<label>System Administration</label>
 			<class>dropdown</class>
 			<module>admin</module>
 			<controller>index</controller>
 			<action>index</action>
 			<resource>admin_index_index</resource>
-			<order>-260</order>
+			<order>10000</order>
 			<pages>
 				<UserManagement>
 					<label>User Management</label>

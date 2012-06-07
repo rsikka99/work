@@ -14,10 +14,38 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
 
     /**
      * The index action.
-     * Not used for anything yet.
+     * Redirects the user to the latest report page. Will send the user back to the index controller if the session was
+     * not set properly.
      */
     public function indexAction ()
     {
+        if (isset($this->_reportSession->reportId))
+        {
+            if ($this->_reportSession->reportId === 0)
+            {
+                $this->_helper->redirector('company');
+            }
+            else
+            {
+                $reportSteps = $this->getReportSteps();
+                $lastStep = null;
+                /* @var $step Proposalgen_Model_Report_Step */
+                foreach ( $reportSteps as $step )
+                {
+                    if (! $step->getCanAccess())
+                    {
+                        $lastStep = $step->getPreviousStep();
+                        break;
+                    }
+                }
+                // Send to latest page
+                $this->_helper->redirector($lastStep->getAction(), $lastStep->getController());
+            }
+        }
+        else
+        {
+            $this->_helper->redirector('index', 'index');
+        }
     }
 
     /**
@@ -31,6 +59,16 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $request = $this->getRequest();
         $form = new Proposalgen_Form_Survey_Company();
         
+        // Get any saved answers
+        $formDataFromAnswers = array (
+                "company_name" => $this->getReport()->getCustomerCompanyName() 
+        );
+        
+        $formDataFromAnswers ["company_address"] = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(30, $this->getReport()
+            ->getReportId())) ?  : "";
+        
+        $form->populate($formDataFromAnswers);
+        
         if ($request->isPost())
         {
             try
@@ -38,6 +76,16 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                 $values = $request->getPost();
                 if ($form->isValid($values))
                 {
+                    $this->getReport()->setCustomerCompanyName($form->getValue('company_name'));
+                    
+                    // Everytime we save anything related to a report, we should save it (updates the modification date)
+                    $this->saveReport();
+                    
+                    $this->saveTextualQuestionAnswer(4, $form->getValue('company_name'));
+                    $this->saveTextualQuestionAnswer(30, $form->getValue('company_address'));
+                    
+                    // Call the base controller to send us to the next logical step in the proposal.
+                    $this->gotoNextStep();
                 }
                 else
                 {
@@ -64,6 +112,41 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $request = $this->getRequest();
         $form = new Proposalgen_Form_Survey_General();
         
+        $mpsGoalRankings [1] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(6, $this->getReport()
+            ->getReportId())) ?  : false;
+        $mpsGoalRankings [2] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(7, $this->getReport()
+            ->getReportId())) ?  : false;
+        $mpsGoalRankings [3] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(8, $this->getReport()
+            ->getReportId())) ?  : false;
+        $mpsGoalRankings [4] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(9, $this->getReport()
+            ->getReportId())) ?  : false;
+        $mpsGoalRankings [5] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(10, $this->getReport()
+            ->getReportId())) ?  : false;
+        
+        /*
+         * Get saved answers.
+         */
+        $formDataFromAnswers = array (
+                "numb_employees" => (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(5, $this->getReport()
+                    ->getReportId())) ?  : "" 
+        );
+        
+        /*
+         * Note we use rank$rankNumber because the answer is the rank number. The questions 6-10 are translated to
+         * values of 1-5. We must only set values for radio boxes that are set. $questionNumber is the way we map the
+         * question to the values of each rank.
+         */
+        foreach ( $mpsGoalRankings as $questionNumber => $rankNumber )
+        {
+            // Only set it if it's a real number.
+            if ($rankNumber !== FALSE)
+            {
+                $formDataFromAnswers ["rank{$rankNumber}"] = $questionNumber;
+            }
+        }
+        
+        $form->populate($formDataFromAnswers);
+        
         if ($request->isPost())
         {
             try
@@ -71,6 +154,27 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                 $values = $request->getPost();
                 if ($form->isValid($values))
                 {
+                    $this->saveNumericQuestionAnswer(5, $form->getValue('numb_employees'));
+                    
+                    // Map the rank numbers to the question numbers.
+                    $rank [1] = $form->getValue('rank1');
+                    $rank [2] = $form->getValue('rank2');
+                    $rank [3] = $form->getValue('rank3');
+                    $rank [4] = $form->getValue('rank4');
+                    $rank [5] = $form->getValue('rank5');
+                    
+                    foreach ( $rank as $rankNumber => $questionNumber )
+                    {
+                        // Right now it happens that the real question numbers are 5 above the 1-5.
+                        $realQuestionNumber = $questionNumber + 5;
+                        $this->saveNumericQuestionAnswer($realQuestionNumber, $rankNumber);
+                    }
+                    
+                    // Everytime we save anything related to a report, we should save it (updates the modification date)
+                    $this->saveReport();
+                    
+                    // Call the base controller to send us to the next logical step in the proposal.
+                    $this->gotoNextStep();
                 }
                 else
                 {
@@ -103,6 +207,8 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                 $values = $request->getPost();
                 if ($form->isValid($values))
                 {
+                    // Everytime we save anything related to a report, we should save it (updates the modification date)
+                    $this->saveReport();
                 }
                 else
                 {
@@ -135,6 +241,8 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                 $values = $request->getPost();
                 if ($form->isValid($values))
                 {
+                    // Everytime we save anything related to a report, we should save it (updates the modification date)
+                    $this->saveReport();
                 }
                 else
                 {
@@ -167,6 +275,8 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                 $values = $request->getPost();
                 if ($form->isValid($values))
                 {
+                    // Everytime we save anything related to a report, we should save it (updates the modification date)
+                    $this->saveReport();
                 }
                 else
                 {
@@ -199,6 +309,8 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                 $values = $request->getPost();
                 if ($form->isValid($values))
                 {
+                    // Everytime we save anything related to a report, we should save it (updates the modification date)
+                    $this->saveReport();
                 }
                 else
                 {
@@ -220,5 +332,56 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
     public function verifyAction ()
     {
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_VERIFY);
+    }
+
+    /**
+     * Saves a textual answer for a report
+     *
+     * @param int $questionId            
+     * @param String $answer            
+     */
+    protected function saveTextualQuestionAnswer ($questionId, $answer)
+    {
+        $mapper = Proposalgen_Model_Mapper_TextualAnswer::getInstance();
+        $textualAnswer = new Proposalgen_Model_TextualAnswer();
+        $textualAnswer->setQuestionId($questionId);
+        $textualAnswer->setAnswer($answer);
+        $textualAnswer->setReportId($this->getReport()
+            ->getReportId());
+        $mapper->save($textualAnswer);
+    }
+
+    /**
+     * Saves a numeric answer for a report
+     *
+     * @param int $questionId            
+     * @param number $answer            
+     */
+    protected function saveNumericQuestionAnswer ($questionId, $answer)
+    {
+        $mapper = Proposalgen_Model_Mapper_NumericAnswer::getInstance();
+        $numericAnswer = new Proposalgen_Model_NumericAnswer();
+        $numericAnswer->setQuestionId($questionId);
+        $numericAnswer->setAnswer($answer);
+        $numericAnswer->setReportId($this->getReport()
+            ->getReportId());
+        $mapper->save($numericAnswer);
+    }
+
+    /**
+     * Saves a date answer for a report
+     *
+     * @param int $questionId            
+     * @param String $answer            
+     */
+    protected function saveDateQuestionAnswer ($questionId, $answer)
+    {
+        $mapper = Proposalgen_Model_Mapper_DateAnswer::getInstance();
+        $dateAnswer = new Proposalgen_Model_DateAnswer();
+        $dateAnswer->setQuestionId($questionId);
+        $dateAnswer->setAnswer($answer);
+        $dateAnswer->setReportId($this->getReport()
+            ->getReportId());
+        $mapper->save($dateAnswer);
     }
 }

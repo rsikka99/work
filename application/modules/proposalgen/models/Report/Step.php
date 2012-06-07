@@ -30,15 +30,15 @@ class Proposalgen_Model_Report_Step extends My_Model_Abstract
                     'name' => 'Company', 
                     'group' => self::GROUP_SURVEY, 
                     'controller' => 'survey', 
-                    'action' => 'company',
-                    'canAccess' => true
+                    'action' => 'company', 
+                    'canAccess' => true 
             ), 
             self::STEP_SURVEY_GENERAL => array (
-                    'name' => 'General',
-                    'group' => self::GROUP_SURVEY,
-                    'controller' => 'survey',
-                    'action' => 'general',
-            ),
+                    'name' => 'General', 
+                    'group' => self::GROUP_SURVEY, 
+                    'controller' => 'survey', 
+                    'action' => 'general' 
+            ), 
             self::STEP_SURVEY_FINANCE => array (
                     'name' => 'Finance', 
                     'group' => self::GROUP_SURVEY, 
@@ -110,13 +110,14 @@ class Proposalgen_Model_Report_Step extends My_Model_Abstract
             $currentStep = null;
             
             // Add Steps: WARNING, logic here will mess with your head.
-            foreach ( self::$stepNames as $step )
+            foreach ( self::$stepNames as $stepName => $step )
             {
                 // Move the old current step to be the previous step.
                 $previousStep = $currentStep;
                 
                 // Create our new step
                 $currentStep = new Proposalgen_Model_Report_Step($step);
+                $currentStep->setEnumValue($stepName);
                 
                 // Set the previous step of our current step
                 if ($previousStep !== null)
@@ -189,6 +190,13 @@ class Proposalgen_Model_Report_Step extends My_Model_Abstract
      */
     protected $_canAccess = false;
     
+    /**
+     * The value of the step in the database
+     *
+     * @var string
+     */
+    protected $_enumValue;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -238,7 +246,7 @@ class Proposalgen_Model_Report_Step extends My_Model_Abstract
 
     /**
      *
-     * @return the $_previousStep
+     * @return Proposalgen_Model_Report_Step
      */
     public function getPreviousStep ()
     {
@@ -257,7 +265,7 @@ class Proposalgen_Model_Report_Step extends My_Model_Abstract
 
     /**
      *
-     * @return the $_nextStep
+     * @return Proposalgen_Model_Report_Step
      */
     public function getNextStep ()
     {
@@ -385,6 +393,25 @@ class Proposalgen_Model_Report_Step extends My_Model_Abstract
     public function setCanAccess ($_canAccess)
     {
         $this->_canAccess = $_canAccess;
+        return $this;
+    }
+
+    /**
+     *
+     * @return the $_enumValue
+     */
+    public function getEnumValue ()
+    {
+        return $this->_enumValue;
+    }
+
+    /**
+     *
+     * @param string $_enumValue            
+     */
+    public function setEnumValue ($_enumValue)
+    {
+        $this->_enumValue = $_enumValue;
         return $this;
     }
 }

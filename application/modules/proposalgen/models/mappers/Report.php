@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_Report
      */
     public static function getInstance ()
     {
@@ -21,7 +21,7 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
 
     /**
      * Maps a database row object to an Proposalgen_Model
-     * 
+     *
      * @param Zend_Db_Table_Row $row            
      * @return The appropriate Proposalgen_Model
      */
@@ -31,41 +31,14 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
         try
         {
             $object = new Proposalgen_Model_Report();
-            $object->setReportId($row->report_id)
+            $object->setReportId($row->id)
                 ->setUserId($row->user_id)
                 ->setCustomerCompanyName($row->customer_company_name)
-                ->setCompanyImageOverride($row->company_image_override)
-                ->setFullCompanyImageOverride($row->full_company_image_override)
-                ->setCompanyReportColorOverride($row->company_report_color_override)
                 ->setUserPricingOverride($row->user_pricing_override)
                 ->setReportStage($row->report_stage)
                 ->setQuestionSetId($row->questionset_id)
                 ->setDateCreated($row->date_created)
                 ->setLastModified($row->last_modified)
-                ->setReportServiceCostPerPage($row->report_service_cost_per_page)
-                ->setReportAdminChargePerPage($row->report_admin_charge_per_page)
-                ->setReportPricingMargin($row->report_pricing_margin)
-                ->setReportAverageNonLeasePrinterCost($row->report_avg_nonlease_printer_cost)
-                ->setReportLeasedBWPerPage($row->report_leased_bw_per_page)
-                ->setReportLeasedColorPerPage($row->report_leased_color_per_page)
-                ->setReportMPSBWPerPage($row->report_mps_bw_per_page)
-                ->setReportMPSColorPerPage($row->report_mps_color_per_page)
-                ->setReportMonthlyLeasePayment($row->report_monthly_lease_payment)
-                ->setReportKilowattsPerHour($row->report_kilowatts_per_hour)
-                ->setReportPricingConfigId($row->report_pricing_config_id)
-                ->setReportGrossMarginPricingConfigId($row->report_gross_margin_pricing_config_id)
-                ->setReportDefaultBWTonerCost($row->report_default_BW_toner_cost)
-                ->setReportDefaultBWTonerYield($row->report_default_BW_toner_yield)
-                ->setReportDefaultColorTonerCost($row->report_default_color_toner_cost)
-                ->setReportDefaultColorTonerYield($row->report_default_color_toner_yield)
-                ->setReportDefaultThreeColorTonerCost($row->report_default_three_color_toner_cost)
-                ->setReportDefaultThreeColorTonerYield($row->report_default_three_color_toner_yield)
-                ->setReportDefaultFourColorTonerCost($row->report_default_four_color_toner_cost)
-                ->setReportDefaultFourColorTonerYield($row->report_default_four_color_toner_yield)
-                ->setReportActualPageCoverageMono($row->report_actual_page_coverage_mono)
-                ->setReportActualPageCoverageColor($row->report_actual_page_coverage_color)
-                ->setReportEstimatedPageCoverageMono($row->report_estimated_page_coverage_mono)
-                ->setReportEstimatedPageCoverageColor($row->report_estimated_page_coverage_color)
                 ->setReportDate($row->report_date)
                 ->setDevicesModified($row->devices_modified);
         }
@@ -78,7 +51,7 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     * 
+     *
      * @param unknown_type $object            
      */
     public function save (Proposalgen_Model_Report $object)
@@ -86,40 +59,14 @@ class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
         $primaryKey = 0;
         try
         {
-            $data ["report_id"] = $object->getReportId();
+            $data ["id"] = $object->getReportId();
             $data ["user_id"] = $object->getUserId();
             $data ["customer_company_name"] = $object->getCustomerCompanyName();
-            $data ["company_image_override"] = $object->getCompanyImageOverride();
             $data ["user_pricing_override"] = $object->getUserPricingOverride();
             $data ["report_stage"] = $object->getReportStage();
             $data ["questionset_id"] = $object->getQuestionSetId();
             $data ["date_created"] = $object->getDateCreated();
             $data ["last_modified"] = $object->getLastModified();
-            $data ["report_service_cost_per_page"] = $object->getReportServiceCostPerPage();
-            $data ["report_admin_charge_per_page"] = $object->getReportAdminChargePerPage();
-            $data ["report_pricing_margin"] = $object->getReportPricingMargin();
-            $data ["report_avg_nonlease_printer_cost"] = $object->getReportAverageNonLeasePrinterCost();
-            $data ["report_leased_bw_per_page"] = $object->getReportLeasedBWPerPage();
-            $data ["report_leased_color_per_page"] = $object->getReportLeasedColorPerPage();
-            $data ["report_mps_bw_per_page"] = $object->getReportMPSBWPerPage();
-            $data ["report_mps_color_per_page"] = $object->getReportMPSColorPerPage();
-            $data ["report_monthly_lease_payment"] = $object->getReportMonthlyLeasePayment();
-            $data ["report_kilowatts_per_hour"] = $object->getReportKilowattsPerHour();
-            $data ["report_pricing_config_id"] = $object->getReportPricingConfigId();
-            $data ["report_gross_margin_pricing_config_id"] = $object->getReportGrossMarginPricingConfigId();
-            $data ["report_default_BW_toner_cost"] = $object->getReportDefaultBWTonerCost();
-            $data ["report_default_BW_toner_yield"] = $object->getReportDefaultBWTonerYield();
-            $data ["report_default_color_toner_cost"] = $object->getReportDefaultColorTonerCost();
-            $data ["report_default_color_toner_yield"] = $object->getReportDefaultColorTonerYield();
-            $data ["report_default_three_color_toner_cost"] = $object->getReportDefaultThreeColorTonerCost();
-            $data ["report_default_three_color_toner_yield"] = $object->getReportDefaultThreeColorTonerYield();
-            $data ["report_default_four_color_toner_cost"] = $object->getReportDefaultFourColorTonerCost();
-            $data ["report_default_four_color_toner_yield"] = $object->getReportDefaultFourColorTonerYield();
-            $data ["report_default_four_color_toner_cost"] = $object->getReportDefaultFourColorTonerCost();
-            $data ["report_actual_page_coverage_mono"] = $object->getReportActualPageCoverageMono();
-            $data ["report_actual_page_coverage_color"] = $object->getReportActualPageCoverageColor();
-            $data ["report_estimated_page_coverage_mono"] = $object->getReportEstimatedPageCoverageMono();
-            $data ["report_estimated_page_coverage_color"] = $object->getReportEstimatedPageCoverageColor();
             $data ["report_date"] = $object->getReportDate();
             $data ["devices_modified"] = $object->getDevicesModified();
             

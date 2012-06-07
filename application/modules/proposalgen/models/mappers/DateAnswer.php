@@ -31,7 +31,7 @@ class Proposalgen_Model_Mapper_DateAnswer extends Tangent_Model_Mapper_Abstract
         try
         {
             $object = new Proposalgen_Model_DateAnswer();
-            $object->setAnswerId($row->answer_date_id)
+            $object->setAnswerId($row->id)
                 ->setQuestionId($row->question_id)
                 ->setReportId($row->report_id)
                 ->setAnswer($row->date_answer);
@@ -72,7 +72,7 @@ class Proposalgen_Model_Mapper_DateAnswer extends Tangent_Model_Mapper_Abstract
         $primaryKey = 0;
         try
         {
-            $data ["answer_date_id"] = $object->getAnswerId();
+            $data ["id"] = $object->getAnswerId();
             $data ["question_id"] = $object->getQuestionId();
             $data ["report_id"] = $object->getReportId();
             $data ["date_answer"] = $object->getAnswer();

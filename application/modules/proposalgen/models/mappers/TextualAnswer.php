@@ -31,7 +31,7 @@ class Proposalgen_Model_Mapper_TextualAnswer extends Tangent_Model_Mapper_Abstra
         try
         {
             $object = new Proposalgen_Model_TextualAnswer();
-            $object->setAnswerId($row->answer_textual_id)
+            $object->setAnswerId($row->id)
                 ->setQuestionId($row->question_id)
                 ->setReportId($row->report_id)
                 ->setAnswer($row->textual_answer);
@@ -72,7 +72,7 @@ class Proposalgen_Model_Mapper_TextualAnswer extends Tangent_Model_Mapper_Abstra
         $primaryKey = 0;
         try
         {
-            $data ["answer_textual_id"] = $object->getAnswerId();
+            $data ["id"] = $object->getAnswerId();
             $data ["question_id"] = $object->getQuestionId();
             $data ["report_id"] = $object->getReportId();
             $data ["textual_answer"] = $object->getAnswer();
