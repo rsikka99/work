@@ -39,8 +39,8 @@ class Proposalgen_View_Helper_ProposalMenu extends Zend_View_Helper_Abstract
                 }
                 else
                 {
-                    $html [] = "<a href='{$url}'>{$name}</a>";
-                    //$html [] = "<p>{$name}</p>";
+                    //$html [] = "<a href='{$url}'>{$name}</a>";
+                    $html [] = "<p>{$name}</p>";
                 }
                 
                 

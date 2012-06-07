@@ -198,12 +198,10 @@ CREATE TABLE `proposalgenerator_questionset_questions` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `proposalgenerator_date_answers` (
-    `id`                                    INTEGER         NOT NULL AUTO_INCREMENT,
     question_id                             INTEGER         NOT NULL,
     report_id                               INTEGER         NOT NULL,
     date_answer                             DATETIME        NOT NULL,
-    UNIQUE (`question_id`, `report_id`),
-    PRIMARY KEY (`id`),
+    PRIMARY KEY (`question_id`, `report_id`),
     FOREIGN KEY (`report_id`) REFERENCES `proposalgenerator_reports` (`id`)
             ON DELETE RESTRICT,
     FOREIGN KEY (`question_id`) REFERENCES `proposalgenerator_questions` (`id`)
@@ -211,12 +209,10 @@ CREATE TABLE `proposalgenerator_date_answers` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `proposalgenerator_numeric_answers` (
-    `id`                                    INTEGER         NOT NULL AUTO_INCREMENT,
     question_id                             INTEGER         NOT NULL,
     report_id                               INTEGER         NOT NULL,
     numeric_answer                          DOUBLE          NOT NULL,
-    UNIQUE (`question_id`, `report_id`),
-    PRIMARY KEY (`id`),
+    PRIMARY KEY (`question_id`, `report_id`),
     FOREIGN KEY (`report_id`) REFERENCES `proposalgenerator_reports` (`id`)
             ON DELETE RESTRICT,
     FOREIGN KEY (`question_id`) REFERENCES `proposalgenerator_questions` (`id`)
@@ -225,12 +221,10 @@ CREATE TABLE `proposalgenerator_numeric_answers` (
 
 
 CREATE TABLE `proposalgenerator_textual_answers` (
-    `id`                                    INTEGER         NOT NULL AUTO_INCREMENT,
     question_id                             INTEGER         NOT NULL,
     report_id                               INTEGER         NOT NULL,
     textual_answer                          TEXT            NOT NULL,
-    UNIQUE (`question_id`, `report_id`),
-    PRIMARY KEY (`id`),
+    PRIMARY KEY (`question_id`, `report_id`),
     FOREIGN KEY (`report_id`) REFERENCES `proposalgenerator_reports` (`id`)
             ON DELETE RESTRICT,
     FOREIGN KEY (`question_id`) REFERENCES `proposalgenerator_questions` (`id`)

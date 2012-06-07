@@ -7,34 +7,9 @@
  */
 class Proposalgen_Model_TextualAnswer extends Tangent_Model_Abstract
 {
-    protected $AnswerId;
     protected $QuestionId;
     protected $ReportId;
     protected $Answer;
-
-    /**
-     *
-     * @return the $AnswerId
-     */
-    public function getAnswerId ()
-    {
-        if (! isset($this->AnswerId))
-        {
-            
-            $this->AnswerId = null;
-        }
-        return $this->AnswerId;
-    }
-
-    /**
-     *
-     * @param field_type $AnswerId            
-     */
-    public function setAnswerId ($AnswerId)
-    {
-        $this->AnswerId = $AnswerId;
-        return $this;
-    }
 
     /**
      *

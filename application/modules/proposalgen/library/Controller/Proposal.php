@@ -94,7 +94,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
         $this->_report->setLastModified(date('Y-m-d H:i:s'));
         
         // This updates the reports progress
-        $newStep = $this->checkIfNextStepIsNew($this->_activeStep->getName());
+        $newStep = $this->checkIfNextStepIsNew($this->_activeStep);
         if ($newStep !== FALSE)
         {
             $this->_report->setReportStage($newStep->getEnumValue());
@@ -131,27 +131,21 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     /**
      * Checks to see if the next step is a new step.
      *
-     * @param string $currentStepName            
+     * @param Proposalgen_Model_Report_Step $currentStepName            
      * @return Proposalgen_Model_Report_Step Step Name. Returns FALSE if the step is not new.
      */
-    protected function checkIfNextStepIsNew ($currentStepName)
+    protected function checkIfNextStepIsNew (Proposalgen_Model_Report_Step $step)
     {
-        $isNew = false;
-        $latestStep = $this->getLatestAvailableReportStep();
-        
-        /* @var $step Proposalgen_Model_Report_Step */
-        foreach ( $this->getReportSteps() as $step )
+        $nextStep = $step->getNextStep();
+        if ($nextStep !== null)
         {
-            if (strcasecmp($step->getName(), $currentStepName) === 0)
+            if (!$nextStep->getCanAccess())
             {
-                if ($step->getNextStep() !== null && ! $step->getNextStep()->getCanAccess())
-                {
-                    $isNew = $step;
-                }
+                return $nextStep;
             }
         }
         
-        return $isNew;
+        return false;
     }
 
     /**

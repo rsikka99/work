@@ -21,7 +21,7 @@ class Proposalgen_Model_Mapper_TextualAnswer extends Tangent_Model_Mapper_Abstra
 
     /**
      * Maps a database row object to an Proposalgen_Model
-     * 
+     *
      * @param Zend_Db_Table_Row $row            
      * @return The appropriate Proposalgen_Model
      */
@@ -31,8 +31,7 @@ class Proposalgen_Model_Mapper_TextualAnswer extends Tangent_Model_Mapper_Abstra
         try
         {
             $object = new Proposalgen_Model_TextualAnswer();
-            $object->setAnswerId($row->id)
-                ->setQuestionId($row->question_id)
+            $object->setQuestionId($row->question_id)
                 ->setReportId($row->report_id)
                 ->setAnswer($row->textual_answer);
         }
@@ -45,11 +44,20 @@ class Proposalgen_Model_Mapper_TextualAnswer extends Tangent_Model_Mapper_Abstra
 
     /**
      * Finds an answer to a related question
-     * 
+     *
      * @param unknown_type $questionId            
      */
     public function getQuestionAnswer ($questionId, $reportId)
     {
+        if ($questionId === null)
+        {
+            throw new InvalidArgumentException("You must supply a question id.");
+        }
+        if ($reportId === null)
+        {
+            return null;
+        }
+        
         $answer = null;
         $result = $this->getDbTable()->fetchAll(array (
                 "question_id = ?" => $questionId, 
@@ -59,12 +67,13 @@ class Proposalgen_Model_Mapper_TextualAnswer extends Tangent_Model_Mapper_Abstra
         {
             $answer = $result->current()->textual_answer;
         }
+        
         return $answer;
     }
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     * 
+     *
      * @param unknown_type $object            
      */
     public function save (Proposalgen_Model_TextualAnswer $object)
@@ -72,7 +81,6 @@ class Proposalgen_Model_Mapper_TextualAnswer extends Tangent_Model_Mapper_Abstra
         $primaryKey = 0;
         try
         {
-            $data ["id"] = $object->getAnswerId();
             $data ["question_id"] = $object->getQuestionId();
             $data ["report_id"] = $object->getReportId();
             $data ["textual_answer"] = $object->getAnswer();

@@ -21,7 +21,7 @@ class Proposalgen_Model_Mapper_DateAnswer extends Tangent_Model_Mapper_Abstract
 
     /**
      * Maps a database row object to an Proposalgen_Model
-     * 
+     *
      * @param Zend_Db_Table_Row $row            
      * @return The appropriate Proposalgen_Model
      */
@@ -31,8 +31,7 @@ class Proposalgen_Model_Mapper_DateAnswer extends Tangent_Model_Mapper_Abstract
         try
         {
             $object = new Proposalgen_Model_DateAnswer();
-            $object->setAnswerId($row->id)
-                ->setQuestionId($row->question_id)
+            $object->setQuestionId($row->question_id)
                 ->setReportId($row->report_id)
                 ->setAnswer($row->date_answer);
         }
@@ -45,11 +44,19 @@ class Proposalgen_Model_Mapper_DateAnswer extends Tangent_Model_Mapper_Abstract
 
     /**
      * Finds an answer to a related question
-     * 
+     *
      * @param unknown_type $questionId            
      */
     public function getQuestionAnswer ($questionId, $reportId)
     {
+        if ($questionId === null)
+        {
+            throw new InvalidArgumentException("You must supply a question id.");
+        }
+        if ($reportId === null)
+        {
+            return null;
+        }
         $answer = null;
         $result = $this->getDbTable()->fetchAll(array (
                 "question_id = ?" => $questionId, 
@@ -64,7 +71,7 @@ class Proposalgen_Model_Mapper_DateAnswer extends Tangent_Model_Mapper_Abstract
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     * 
+     *
      * @param unknown_type $object            
      */
     public function save (Proposalgen_Model_DateAnswer $object)
@@ -72,7 +79,6 @@ class Proposalgen_Model_Mapper_DateAnswer extends Tangent_Model_Mapper_Abstract
         $primaryKey = 0;
         try
         {
-            $data ["id"] = $object->getAnswerId();
             $data ["question_id"] = $object->getQuestionId();
             $data ["report_id"] = $object->getReportId();
             $data ["date_answer"] = $object->getAnswer();

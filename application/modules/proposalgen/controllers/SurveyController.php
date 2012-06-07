@@ -80,7 +80,6 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
             {
                 try
                 {
-                    
                     if ($form->isValid($values))
                     {
                         $this->getReport()->setCustomerCompanyName($form->getValue('company_name'));
@@ -234,6 +233,61 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $request = $this->getRequest();
         $form = new Proposalgen_Form_Survey_Finance();
         
+        // Populate the form with saved answers if we have them.
+        
+
+        $formDataFromAnswers = array ();
+        
+        $tonerCostRadio = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(11, $this->getReport()
+            ->getReportId())) ?  : FALSE;
+        
+        if ($tonerCostRadio !== FALSE)
+        {
+            $formDataFromAnswers ["toner_cost_radio"] = $tonerCostRadio;
+        }
+        
+        $tonerCost = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(11, $this->getReport()
+            ->getReportId())) ?  : FALSE;
+        
+        if ($tonerCost !== FALSE)
+        {
+            $formDataFromAnswers ["toner_cost"] = $tonerCost;
+        }
+        
+        $laborCostRadio = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(12, $this->getReport()
+            ->getReportId())) ?  : FALSE;
+        
+        if ($laborCostRadio !== FALSE)
+        {
+            $formDataFromAnswers ["labor_cost_radio"] = $laborCostRadio;
+        }
+        
+        $laborCost = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(12, $this->getReport()
+            ->getReportId())) ?  : FALSE;
+        
+        if ($laborCost !== FALSE)
+        {
+            $formDataFromAnswers ["labor_cost"] = $laborCost;
+        }
+        
+        $avgPurchase = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(14, $this->getReport()
+            ->getReportId())) ?  : FALSE;
+        
+        if ($avgPurchase !== FALSE)
+        {
+            $formDataFromAnswers ["avg_purchase"] = $avgPurchase;
+        }
+        
+        $itHourlyRate = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(15, $this->getReport()
+            ->getReportId())) ?  : FALSE;
+        
+        if ($itHourlyRate !== FALSE)
+        {
+            $formDataFromAnswers ["it_hourlyRate"] = $itHourlyRate;
+        }
+        
+        $form->populate($formDataFromAnswers);
+        
         if ($request->isPost())
         {
             $values = $request->getPost();
@@ -245,9 +299,28 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
             {
                 try
                 {
-                    
                     if ($form->isValid($values))
                     {
+                        // Question 11 (Ink and Toner costs
+                        $this->saveTextualQuestionAnswer(11, $form->getValue('toner_cost_radio'));
+                        if ($form->getValue('toner_cost'))
+                        {
+                            $this->saveNumericQuestionAnswer(11, $form->getValue('toner_cost'));
+                        }
+                        
+                        // Quesiton 12 (Service costs)
+                        $this->saveTextualQuestionAnswer(12, $form->getValue('labor_cost_radio'));
+                        if ($form->getValue('labor_cost'))
+                        {
+                            $this->saveNumericQuestionAnswer(12, $form->getValue('labor_cost'));
+                        }
+                        
+                        // Question 14
+                        $this->saveNumericQuestionAnswer(14, $form->getValue('avg_purchase'));
+                        
+                        // Question 15
+                        $this->saveNumericQuestionAnswer(15, $form->getValue('it_hourlyRate'));
+                        
                         // Everytime we save anything related to a report, we should save it (updates the modification date)
                         $this->saveReport();
                         

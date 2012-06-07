@@ -3,7 +3,10 @@
 class Proposalgen_Model_DbTable_DateAnswer extends Zend_Db_Table_Abstract
 {
     protected $_name = 'proposalgenerator_date_answers';
-    protected $_primary = 'id';
+    protected $_primary = array (
+            'question_id', 
+            'report_id' 
+    );
     protected $_referenceMap = array (
             'Reports' => array (
                     'columns' => 'report_id', 

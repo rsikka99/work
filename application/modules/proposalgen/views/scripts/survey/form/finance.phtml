@@ -11,7 +11,42 @@ $laborCost = $form->getElement('labor_cost');
 $averagePurchase = $form->getElement('avg_purchase');
 $itHourlyRate =  $form->getElement('it_hourlyRate');
 
-?>
+
+$this->headScript()->captureStart('append','text/javascript') ?>
+	
+	$(document).ready(function() {
+		
+		//set default
+		if($("#toner_cost_radio-guess").is(':checked')) {
+    		$("#toner_cost").attr('disabled','disabled');
+    	}
+    	
+		$("#toner_cost_radio-guess").click(function() {
+    		$("#toner_cost").attr('disabled','disabled');
+			$("#toner_cost").val('');
+		});
+		
+		$("#toner_cost_radio-Iknowtheexactamount").click(function() {
+    		$("#toner_cost").removeAttr('disabled');
+		});
+		
+		//set default
+		if($("#labor_cost_radio-guess").is(':checked')) {
+    		$("#labor_cost").attr('disabled','disabled');
+    	}
+    	
+		$("#labor_cost_radio-guess").click(function() {
+    		$("#labor_cost").attr('disabled','disabled');
+			$("#labor_cost").val('');
+		});
+		
+		$("#labor_cost_radio-Iknowtheexactamount").click(function() {
+    		$("#labor_cost").removeAttr('disabled');
+		});
+		
+	});
+
+<?php $this->headScript()->captureEnd() ?>
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
 <?php echo $form->getElement('numb_employees'); ?>
 

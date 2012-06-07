@@ -3,7 +3,10 @@
 class Proposalgen_Model_DbTable_TextAnswer extends Zend_Db_Table_Abstract
 {
     protected $_name = 'proposalgenerator_textual_answers';
-    protected $_primary = 'id';
+    protected $_primary = array (
+            'question_id', 
+            'report_id' 
+    );
     protected $_referenceMap = array (
             'Reports' => array (
                     'columns' => 'report_id', 
