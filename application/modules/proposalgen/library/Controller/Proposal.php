@@ -209,4 +209,18 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
                 $this->_helper->redirector($nextStep->getAction(), $nextStep->getController());
         }
     }
+
+    /**
+     * Takes the user to the previous step in the survey in order.
+     * So company always goes to general
+     */
+    protected function gotoPreviousStep ()
+    {
+        if (isset($this->_activeStep))
+        {
+            $prevStep = $this->_activeStep->getPreviousStep();
+            if ($prevStep)
+                $this->_helper->redirector($prevStep->getAction(), $prevStep->getController());
+        }
+    }
 }

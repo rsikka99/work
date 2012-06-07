@@ -71,30 +71,38 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         
         if ($request->isPost())
         {
-            try
+            $values = $request->getPost();
+            if (isset($values ["goBack"]))
             {
-                $values = $request->getPost();
-                if ($form->isValid($values))
-                {
-                    $this->getReport()->setCustomerCompanyName($form->getValue('company_name'));
-                    
-                    // Everytime we save anything related to a report, we should save it (updates the modification date)
-                    $this->saveReport();
-                    
-                    $this->saveTextualQuestionAnswer(4, $form->getValue('company_name'));
-                    $this->saveTextualQuestionAnswer(30, $form->getValue('company_address'));
-                    
-                    // Call the base controller to send us to the next logical step in the proposal.
-                    $this->gotoNextStep();
-                }
-                else
-                {
-                    throw new Zend_Validate_Exception("Form Validation Failed");
-                }
+                $this->gotoPreviousStep();
             }
-            catch ( Zend_Validate_Exception $e )
+            else
             {
-                $form->buildBootstrapErrorDecorators();
+                try
+                {
+                    
+                    if ($form->isValid($values))
+                    {
+                        $this->getReport()->setCustomerCompanyName($form->getValue('company_name'));
+                        
+                        // Everytime we save anything related to a report, we should save it (updates the modification date)
+                        $this->saveReport();
+                        
+                        $this->saveTextualQuestionAnswer(4, $form->getValue('company_name'));
+                        $this->saveTextualQuestionAnswer(30, $form->getValue('company_address'));
+                        
+                        // Call the base controller to send us to the next logical step in the proposal.
+                        $this->gotoNextStep();
+                    }
+                    else
+                    {
+                        throw new Zend_Validate_Exception("Form Validation Failed");
+                    }
+                }
+                catch ( Zend_Validate_Exception $e )
+                {
+                    $form->buildBootstrapErrorDecorators();
+                }
             }
         }
         
@@ -149,41 +157,49 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         
         if ($request->isPost())
         {
-            try
+            $values = $request->getPost();
+            if (isset($values ["goBack"]))
             {
-                $values = $request->getPost();
-                if ($form->isValid($values))
-                {
-                    $this->saveNumericQuestionAnswer(5, $form->getValue('numb_employees'));
-                    
-                    // Map the rank numbers to the question numbers.
-                    $rank [1] = $form->getValue('rank1');
-                    $rank [2] = $form->getValue('rank2');
-                    $rank [3] = $form->getValue('rank3');
-                    $rank [4] = $form->getValue('rank4');
-                    $rank [5] = $form->getValue('rank5');
-                    
-                    foreach ( $rank as $rankNumber => $questionNumber )
-                    {
-                        // Right now it happens that the real question numbers are 5 above the 1-5.
-                        $realQuestionNumber = $questionNumber + 5;
-                        $this->saveNumericQuestionAnswer($realQuestionNumber, $rankNumber);
-                    }
-                    
-                    // Everytime we save anything related to a report, we should save it (updates the modification date)
-                    $this->saveReport();
-                    
-                    // Call the base controller to send us to the next logical step in the proposal.
-                    $this->gotoNextStep();
-                }
-                else
-                {
-                    throw new Zend_Validate_Exception("Form Validation Failed");
-                }
+                $this->gotoPreviousStep();
             }
-            catch ( Zend_Validate_Exception $e )
+            else
             {
-                $form->buildBootstrapErrorDecorators();
+                try
+                {
+                    
+                    if ($form->isValid($values))
+                    {
+                        $this->saveNumericQuestionAnswer(5, $form->getValue('numb_employees'));
+                        
+                        // Map the rank numbers to the question numbers.
+                        $rank [1] = $form->getValue('rank1');
+                        $rank [2] = $form->getValue('rank2');
+                        $rank [3] = $form->getValue('rank3');
+                        $rank [4] = $form->getValue('rank4');
+                        $rank [5] = $form->getValue('rank5');
+                        
+                        foreach ( $rank as $rankNumber => $questionNumber )
+                        {
+                            // Right now it happens that the real question numbers are 5 above the 1-5.
+                            $realQuestionNumber = $questionNumber + 5;
+                            $this->saveNumericQuestionAnswer($realQuestionNumber, $rankNumber);
+                        }
+                        
+                        // Everytime we save anything related to a report, we should save it (updates the modification date)
+                        $this->saveReport();
+                        
+                        // Call the base controller to send us to the next logical step in the proposal.
+                        $this->gotoNextStep();
+                    }
+                    else
+                    {
+                        throw new Zend_Validate_Exception("Form Validation Failed");
+                    }
+                }
+                catch ( Zend_Validate_Exception $e )
+                {
+                    $form->buildBootstrapErrorDecorators();
+                }
             }
         }
         
@@ -202,22 +218,30 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         
         if ($request->isPost())
         {
-            try
+            $values = $request->getPost();
+            if (isset($values ["goBack"]))
             {
-                $values = $request->getPost();
-                if ($form->isValid($values))
-                {
-                    // Everytime we save anything related to a report, we should save it (updates the modification date)
-                    $this->saveReport();
-                }
-                else
-                {
-                    throw new Zend_Validate_Exception("Form Validation Failed");
-                }
+                $this->gotoPreviousStep();
             }
-            catch ( Zend_Validate_Exception $e )
+            else
             {
-                $form->buildBootstrapErrorDecorators();
+                try
+                {
+                    
+                    if ($form->isValid($values))
+                    {
+                        // Everytime we save anything related to a report, we should save it (updates the modification date)
+                        $this->saveReport();
+                    }
+                    else
+                    {
+                        throw new Zend_Validate_Exception("Form Validation Failed");
+                    }
+                }
+                catch ( Zend_Validate_Exception $e )
+                {
+                    $form->buildBootstrapErrorDecorators();
+                }
             }
         }
         
@@ -236,22 +260,30 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         
         if ($request->isPost())
         {
-            try
+            $values = $request->getPost();
+            if (isset($values ["goBack"]))
             {
-                $values = $request->getPost();
-                if ($form->isValid($values))
-                {
-                    // Everytime we save anything related to a report, we should save it (updates the modification date)
-                    $this->saveReport();
-                }
-                else
-                {
-                    throw new Zend_Validate_Exception("Form Validation Failed");
-                }
+                $this->gotoPreviousStep();
             }
-            catch ( Zend_Validate_Exception $e )
+            else
             {
-                $form->buildBootstrapErrorDecorators();
+                try
+                {
+                    
+                    if ($form->isValid($values))
+                    {
+                        // Everytime we save anything related to a report, we should save it (updates the modification date)
+                        $this->saveReport();
+                    }
+                    else
+                    {
+                        throw new Zend_Validate_Exception("Form Validation Failed");
+                    }
+                }
+                catch ( Zend_Validate_Exception $e )
+                {
+                    $form->buildBootstrapErrorDecorators();
+                }
             }
         }
         
@@ -270,22 +302,30 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         
         if ($request->isPost())
         {
-            try
+            $values = $request->getPost();
+            if (isset($values ["goBack"]))
             {
-                $values = $request->getPost();
-                if ($form->isValid($values))
-                {
-                    // Everytime we save anything related to a report, we should save it (updates the modification date)
-                    $this->saveReport();
-                }
-                else
-                {
-                    throw new Zend_Validate_Exception("Form Validation Failed");
-                }
+                $this->gotoPreviousStep();
             }
-            catch ( Zend_Validate_Exception $e )
+            else
             {
-                $form->buildBootstrapErrorDecorators();
+                try
+                {
+                    
+                    if ($form->isValid($values))
+                    {
+                        // Everytime we save anything related to a report, we should save it (updates the modification date)
+                        $this->saveReport();
+                    }
+                    else
+                    {
+                        throw new Zend_Validate_Exception("Form Validation Failed");
+                    }
+                }
+                catch ( Zend_Validate_Exception $e )
+                {
+                    $form->buildBootstrapErrorDecorators();
+                }
             }
         }
         
@@ -304,22 +344,30 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         
         if ($request->isPost())
         {
-            try
+            $values = $request->getPost();
+            if (isset($values ["goBack"]))
             {
-                $values = $request->getPost();
-                if ($form->isValid($values))
-                {
-                    // Everytime we save anything related to a report, we should save it (updates the modification date)
-                    $this->saveReport();
-                }
-                else
-                {
-                    throw new Zend_Validate_Exception("Form Validation Failed");
-                }
+                $this->gotoPreviousStep();
             }
-            catch ( Zend_Validate_Exception $e )
+            else
             {
-                $form->buildBootstrapErrorDecorators();
+                try
+                {
+                    
+                    if ($form->isValid($values))
+                    {
+                        // Everytime we save anything related to a report, we should save it (updates the modification date)
+                        $this->saveReport();
+                    }
+                    else
+                    {
+                        throw new Zend_Validate_Exception("Form Validation Failed");
+                    }
+                }
+                catch ( Zend_Validate_Exception $e )
+                {
+                    $form->buildBootstrapErrorDecorators();
+                }
             }
         }
         
