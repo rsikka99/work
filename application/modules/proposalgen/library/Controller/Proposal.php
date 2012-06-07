@@ -42,6 +42,17 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     }
 
     /**
+     * (non-PHPdoc)
+     *
+     * @see Zend_Controller_Action::postDispatch()
+     */
+    public function postDispatch ()
+    {
+        // Render our survey menu
+        $this->view->placeholder('ProgressionNav')->set($this->view->ProposalMenu($this->getReportSteps()));
+    }
+
+    /**
      * Gets the report object that we are working with
      *
      * @return Proposalgen_Model_Report

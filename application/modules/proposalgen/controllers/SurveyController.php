@@ -91,8 +91,17 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         $this->saveTextualQuestionAnswer(4, $form->getValue('company_name'));
                         $this->saveTextualQuestionAnswer(30, $form->getValue('company_address'));
                         
-                        // Call the base controller to send us to the next logical step in the proposal.
-                        $this->gotoNextStep();
+                        if (isset($values ["saveAndContinue"]))
+                        {
+                            // Call the base controller to send us to the next logical step in the proposal.
+                            $this->gotoNextStep();
+                        }
+                        else
+                        {
+                            $this->_helper->flashMessenger(array (
+                                    'success' => "Your changes were saved sucessfully." 
+                            ));
+                        }
                     }
                     else
                     {
@@ -188,8 +197,17 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         // Everytime we save anything related to a report, we should save it (updates the modification date)
                         $this->saveReport();
                         
-                        // Call the base controller to send us to the next logical step in the proposal.
-                        $this->gotoNextStep();
+                        if (isset($values ["saveAndContinue"]))
+                        {
+                            // Call the base controller to send us to the next logical step in the proposal.
+                            $this->gotoNextStep();
+                        }
+                        else
+                        {
+                            $this->_helper->flashMessenger(array (
+                                    'success' => "Your changes were saved sucessfully." 
+                            ));
+                        }
                     }
                     else
                     {
@@ -232,6 +250,18 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                     {
                         // Everytime we save anything related to a report, we should save it (updates the modification date)
                         $this->saveReport();
+                        
+                        if (isset($values ["saveAndContinue"]))
+                        {
+                            // Call the base controller to send us to the next logical step in the proposal.
+                            $this->gotoNextStep();
+                        }
+                        else
+                        {
+                            $this->_helper->flashMessenger(array (
+                                    'success' => "Your changes were saved sucessfully." 
+                            ));
+                        }
                     }
                     else
                     {
@@ -274,6 +304,18 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                     {
                         // Everytime we save anything related to a report, we should save it (updates the modification date)
                         $this->saveReport();
+                        
+                        if (isset($values ["saveAndContinue"]))
+                        {
+                            // Call the base controller to send us to the next logical step in the proposal.
+                            $this->gotoNextStep();
+                        }
+                        else
+                        {
+                            $this->_helper->flashMessenger(array (
+                                    'success' => "Your changes were saved sucessfully." 
+                            ));
+                        }
                     }
                     else
                     {
@@ -316,6 +358,18 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                     {
                         // Everytime we save anything related to a report, we should save it (updates the modification date)
                         $this->saveReport();
+                        
+                        if (isset($values ["saveAndContinue"]))
+                        {
+                            // Call the base controller to send us to the next logical step in the proposal.
+                            $this->gotoNextStep();
+                        }
+                        else
+                        {
+                            $this->_helper->flashMessenger(array (
+                                    'success' => "Your changes were saved sucessfully." 
+                            ));
+                        }
                     }
                     else
                     {
@@ -358,6 +412,18 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                     {
                         // Everytime we save anything related to a report, we should save it (updates the modification date)
                         $this->saveReport();
+                        
+                        if (isset($values ["saveAndContinue"]))
+                        {
+                            // Call the base controller to send us to the next logical step in the proposal.
+                            $this->gotoNextStep();
+                        }
+                        else
+                        {
+                            $this->_helper->flashMessenger(array (
+                                    'success' => "Your changes were saved sucessfully." 
+                            ));
+                        }
                     }
                     else
                     {
