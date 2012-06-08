@@ -774,10 +774,10 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $this->view->ipPrinterLocationTracking = (strcasecmp(Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(19, $reportId), "Y") === 0) ? 'Yes' : 'No';
         
         // USERS
-        $this->view->pageCoverageMonochrome = Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(21, $reportId) . '%';
-        $this->view->pageCoverageColor = Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(22, $reportId) . '%';
-        $this->view->inkjentPrintPercentage = Proposalgen_Form_Survey_Users::$volumeOptions [Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(23, $reportId)];
-        $this->view->averageRepairTime = Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(24, $reportId) . ' Days';
+        $this->view->pageCoverageMonochrome = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(21, $reportId) . '%';
+        $this->view->pageCoverageColor = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(22, $reportId) . '%';
+        $this->view->inkjentPrintPercentage = Proposalgen_Form_Survey_Users::$volumeOptions [Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(23, $reportId)];
+        $this->view->averageRepairTime = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(24, $reportId) . ' Days';
     }
 
     /**
