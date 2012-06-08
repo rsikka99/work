@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_TonerConfig extends Tangent_Model_Mapper_Abstract
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_TonerConfig
      */
     public static function getInstance ()
     {
@@ -33,7 +33,7 @@ class Proposalgen_Model_Mapper_TonerConfig extends Tangent_Model_Mapper_Abstract
      * Maps a database row object to an Proposalgen_Model
      * 
      * @param Zend_Db_Table_Row $row            
-     * @return The appropriate Proposalgen_Model
+     * @return Proposalgen_Model_TonerConfig
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
     {
@@ -41,7 +41,7 @@ class Proposalgen_Model_Mapper_TonerConfig extends Tangent_Model_Mapper_Abstract
         try
         {
             $object = new Proposalgen_Model_TonerConfig();
-            $object->setTonerConfigId($row->toner_config_id)->setTonerConfigName($row->toner_config_name);
+            $object->setTonerConfigId($row->id)->setTonerConfigName($row->name);
         }
         catch ( Exception $e )
         {
@@ -60,8 +60,8 @@ class Proposalgen_Model_Mapper_TonerConfig extends Tangent_Model_Mapper_Abstract
         $primaryKey = 0;
         try
         {
-            $data ["toner_config_id"] = $object->getTonerConfigId();
-            $data ["toner_config_name"] = $object->getTonerConfigName();
+            $data ["id"] = $object->getTonerConfigId();
+            $data ["name"] = $object->getTonerConfigName();
             
             $primaryKey = $this->saveRow($data);
         }

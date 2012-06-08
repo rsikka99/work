@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_QuestionSetQuestion extends Tangent_Model_Mapper_
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_QuestionSetQuestion
      */
     public static function getInstance ()
     {

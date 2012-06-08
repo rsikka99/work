@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_TextualAnswer extends Tangent_Model_Mapper_Abstra
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_TextualAnswer
      */
     public static function getInstance ()
     {

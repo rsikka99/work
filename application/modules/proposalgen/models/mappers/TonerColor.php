@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_TonerColor extends Tangent_Model_Mapper_Abstract
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_TonerColor
      */
     public static function getInstance ()
     {
@@ -33,7 +33,7 @@ class Proposalgen_Model_Mapper_TonerColor extends Tangent_Model_Mapper_Abstract
      * Maps a database row object to an Proposalgen_Model
      * 
      * @param Zend_Db_Table_Row $row            
-     * @return The appropriate Proposalgen_Model
+     * @return Proposalgen_Model_TonerColor
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
     {
@@ -41,7 +41,7 @@ class Proposalgen_Model_Mapper_TonerColor extends Tangent_Model_Mapper_Abstract
         try
         {
             $object = new Proposalgen_Model_TonerColor();
-            $object->setTonerColorId($row->toner_color_id)->setTonerColorName($row->toner_color_name);
+            $object->setTonerColorId($row->id)->setTonerColorName($row->name);
         }
         catch ( Exception $e )
         {
@@ -60,8 +60,8 @@ class Proposalgen_Model_Mapper_TonerColor extends Tangent_Model_Mapper_Abstract
         $primaryKey = 0;
         try
         {
-            $data ["toner_color_id"] = $object->getTonerColorId();
-            $data ["toner_color_name"] = $object->getTonerColorName();
+            $data ["id"] = $object->getTonerColorId();
+            $data ["name"] = $object->getTonerColorName();
             
             $primaryKey = $this->saveRow($data);
         }

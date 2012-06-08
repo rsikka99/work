@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_PartType extends Tangent_Model_Mapper_Abstract
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_PartType
      */
     public static function getInstance ()
     {
@@ -19,7 +19,12 @@ class Proposalgen_Model_Mapper_PartType extends Tangent_Model_Mapper_Abstract
         return self::$_instance;
     }
     static $_partTypes = array ();
-
+    
+	/**
+	 * (non-PHPdoc)
+	 * @see Tangent_Model_Mapper_Abstract::find() 
+	 * @return Proposalgen_Model_PartType
+	 */
     public function find ($id)
     {
         if (! array_key_exists($id, self::$_partTypes))
@@ -33,7 +38,7 @@ class Proposalgen_Model_Mapper_PartType extends Tangent_Model_Mapper_Abstract
      * Maps a database row object to an Proposalgen_Model
      * 
      * @param Zend_Db_Table_Row $row            
-     * @return The appropriate Proposalgen_Model
+     * @return Proposalgen_Model_PartType
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
     {
@@ -41,7 +46,7 @@ class Proposalgen_Model_Mapper_PartType extends Tangent_Model_Mapper_Abstract
         try
         {
             $object = new Proposalgen_Model_PartType();
-            $object->setPartTypeId($row->part_type_id)->setTypeName($row->type_name);
+            $object->setPartTypeId($row->id)->setTypeName($row->name);
         }
         catch ( Exception $e )
         {
@@ -60,8 +65,8 @@ class Proposalgen_Model_Mapper_PartType extends Tangent_Model_Mapper_Abstract
         $primaryKey = 0;
         try
         {
-            $data ["part_type_id"] = $object->getPartTypeId();
-            $data ["type_name"] = $object->getTypeName();
+            $data ["id"] = $object->getPartTypeId();
+            $data ["name"] = $object->getTypeName();
             
             $primaryKey = $this->saveRow($data);
         }

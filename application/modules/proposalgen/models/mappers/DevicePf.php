@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_DevicePf extends Tangent_Model_Mapper_Abstract
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_DevicePf
      */
     public static function getInstance ()
     {
@@ -31,7 +31,7 @@ class Proposalgen_Model_Mapper_DevicePf extends Tangent_Model_Mapper_Abstract
         try
         {
             $object = new Proposalgen_Model_DevicePf();
-            $object->setDevicesPfId($row->devices_pf_id)
+            $object->setDevicesPfId($row->id)
                 ->setPfModelId($row->pf_model_id)
                 ->setPfDbDeviceName($row->pf_db_devicename)
                 ->setPfDbManufacturer($row->pf_db_manufacturer)
@@ -55,7 +55,7 @@ class Proposalgen_Model_Mapper_DevicePf extends Tangent_Model_Mapper_Abstract
         $primaryKey = 0;
         try
         {
-            $data ["devices_pf_id"] = $object->getDevicesPfId();
+            $data ["id"] = $object->getDevicesPfId();
             $data ["pf_model_id"] = $object->getPfModelId();
             $data ["pf_db_devicename"] = $object->getPfDbDeviceName();
             $data ["pf_db_manufacturer"] = $object->getPfDbManufacturer();

@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_Ticket extends Tangent_Model_Mapper_Abstract
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_Ticket
      */
     public static function getInstance ()
     {
@@ -31,7 +31,7 @@ class Proposalgen_Model_Mapper_Ticket extends Tangent_Model_Mapper_Abstract
         try
         {
             $object = new Proposalgen_Model_Ticket();
-            $object->setTicketId($row->ticket_id)
+            $object->setTicketId($row->id)
                 ->setUserId($row->user_id)
                 ->setCategoryId($row->category_id)
                 ->setStatusId($row->status_id)
@@ -57,7 +57,7 @@ class Proposalgen_Model_Mapper_Ticket extends Tangent_Model_Mapper_Abstract
         $primaryKey = 0;
         try
         {
-            $data ["ticket_id"] = $object->getTicketId();
+            $data ["id"] = $object->getTicketId();
             $data ["user_id"] = $object->getUserId();
             $data ["user_id"] = $object->getUserId();
             $data ["category_id"] = $object->getCategoryId();

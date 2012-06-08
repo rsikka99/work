@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_TicketCategory extends Tangent_Model_Mapper_Abstr
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_TicketCategory
      */
     public static function getInstance ()
     {
@@ -23,7 +23,7 @@ class Proposalgen_Model_Mapper_TicketCategory extends Tangent_Model_Mapper_Abstr
      * Maps a database row object to an Proposalgen_Model
      * 
      * @param Zend_Db_Table_Row $row            
-     * @return The appropriate Proposalgen_Model
+     * @return Proposalgen_Model_TicketCategory
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
     {
@@ -31,7 +31,7 @@ class Proposalgen_Model_Mapper_TicketCategory extends Tangent_Model_Mapper_Abstr
         try
         {
             $object = new Proposalgen_Model_TicketCategory();
-            $object->setCategoryId($row->category_id)->setCategoryName($row->category_name);
+            $object->setCategoryId($row->id)->setCategoryName($row->name);
         }
         catch ( Exception $e )
         {
@@ -50,8 +50,8 @@ class Proposalgen_Model_Mapper_TicketCategory extends Tangent_Model_Mapper_Abstr
         $primaryKey = 0;
         try
         {
-            $data ["category_id"] = $object->getCategoryId();
-            $data ["category_name"] = $object->getCategoryName();
+            $data ["id"] = $object->getCategoryId();
+            $data ["name"] = $object->getCategoryName();
             
             $primaryKey = $this->saveRow($data);
         }

@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends Tangent_Model_Mapper_Abstrac
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_Manufacturer
      */
     public static function getInstance ()
     {
@@ -41,7 +41,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends Tangent_Model_Mapper_Abstrac
         try
         {
             $object = new Proposalgen_Model_Manufacturer();
-            $object->setManufacturerId($row->manufacturer_id)
+            $object->setManufacturerId($row->id)
                 ->setManufacturerName($row->manufacturer_name)
                 ->setIsDeleted($row->is_deleted);
         }
@@ -62,7 +62,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends Tangent_Model_Mapper_Abstrac
         $primaryKey = 0;
         try
         {
-            $data ["manufacturer_id"] = $object->getManufacturerId();
+            $data ["id"] = $object->getManufacturerId();
             $data ["manufacturer_name"] = $object->getManufacturerName();
             $data ["is_deleted"] = $object->getIsDeleted();
             

@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_QuestionSet extends Tangent_Model_Mapper_Abstract
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_QuestionSet
      */
     public static function getInstance ()
     {
@@ -21,9 +21,9 @@ class Proposalgen_Model_Mapper_QuestionSet extends Tangent_Model_Mapper_Abstract
 
     /**
      * Maps a database row object to an Proposalgen_Model
-     * 
+     *
      * @param Zend_Db_Table_Row $row            
-     * @return The appropriate Proposalgen_Model
+     * @return Proposalgen_Model_QuestionSet
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
     {
@@ -31,7 +31,7 @@ class Proposalgen_Model_Mapper_QuestionSet extends Tangent_Model_Mapper_Abstract
         try
         {
             $object = new Proposalgen_Model_QuestionSet();
-            $object->setQuestionId($row->questionset_id)->setQuestionDescription($row->questionset_name);
+            $object->setQuestionId($row->id)->setQuestionDescription($row->name);
         }
         catch ( Exception $e )
         {
@@ -40,8 +40,28 @@ class Proposalgen_Model_Mapper_QuestionSet extends Tangent_Model_Mapper_Abstract
         return $object;
     }
 
+    /**
+     * Gets all the questions for a given question set with the answers to them.
+     * The array keys are the question ids so that you may look up a question using it's id.
+     *
+     * @param int $questionSetId            
+     * @param int $reportId            
+     * @return array An array of Proposalgen_Model_Question with answers already fetched.
+     */
     function getQuestionSetQuestions ($questionSetId, $reportId)
     {
+        // In case we get a model, turn it into the id we want. MAGIC!
+        if ($questionSetId instanceof Proposalgen_Model_QuestionSet)
+        {
+            $questionSetId = $questionSetId->getQuestionId();
+        }
+        
+        // Same deal with a report model.
+        if ($reportId instanceof Proposalgen_Model_Report)
+        {
+            $reportId = $reportId->getReportId();
+        }
+        
         $questions = array ();
         $questionSetQuestionMapper = Proposalgen_Model_Mapper_QuestionSetQuestion::getInstance();
         $questionMapper = Proposalgen_Model_Mapper_Question::getInstance();
@@ -49,27 +69,38 @@ class Proposalgen_Model_Mapper_QuestionSet extends Tangent_Model_Mapper_Abstract
         $numericAnswerMapper = Proposalgen_Model_Mapper_NumericAnswer::getInstance();
         $texualAnswerMapper = Proposalgen_Model_Mapper_TextualAnswer::getInstance();
         
+        // Get all the questions for the question set
         $results = $questionSetQuestionMapper->fetchAll(array (
-                "questionset_id" => $questionSetId 
+                "id = ?" => $questionSetId 
         ));
+        
+        // Did we find them? Let's hope we did because otherwise it would be bad.
         if ($results)
         {
+            // Loop through each question and get the answer for each one.
+            /* @var $question Proposalgen_Model_QuestionSetQuestion */
             foreach ( $results as $question )
             {
-                $tempQuestion = $questionMapper->find($question->QuestionId);
+                // Get the question
+                $tempQuestion = $questionMapper->find($question->getQuestionId());
+                
                 // Get the answers
-                $tempQuestion->setDateAnswer($dateAnswerMapper->getQuestionAnswer($question->QuestionId, $reportId))
-                    ->setNumericAnswer($numericAnswerMapper->getQuestionAnswer($question->QuestionId, $reportId))
-                    ->setTextualAnswer($texualAnswerMapper->getQuestionAnswer($question->QuestionId, $reportId));
-                $questions [$question->QuestionId] = $tempQuestion;
+                $tempQuestion->setDateAnswer($dateAnswerMapper->getQuestionAnswer($question->getQuestionId(), $reportId))
+                    ->setNumericAnswer($numericAnswerMapper->getQuestionAnswer($question->getQuestionId(), $reportId))
+                    ->setTextualAnswer($texualAnswerMapper->getQuestionAnswer($question->getQuestionId(), $reportId));
+                
+                // Create an array with the complete question models (key is the question id for easy references elsewhere.
+                $questions [$question->getQuestionId()] = $tempQuestion;
             }
         }
+        
+        // Back to you bob!
         return $questions;
     }
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     * 
+     *
      * @param unknown_type $object            
      */
     public function save (Proposalgen_Model_QuestionSet $object)
@@ -77,8 +108,8 @@ class Proposalgen_Model_Mapper_QuestionSet extends Tangent_Model_Mapper_Abstract
         $primaryKey = 0;
         try
         {
-            $data ["questionset_id"] = $object->getQuestionId();
-            $data ["questionset_name"] = $object->getQuestionSetName();
+            $data ["id"] = $object->getQuestionId();
+            $data ["name"] = $object->getQuestionSetName();
             
             $primaryKey = $this->saveRow($data);
         }

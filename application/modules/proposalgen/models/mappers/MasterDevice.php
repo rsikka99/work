@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_MasterDevice extends Tangent_Model_Mapper_Abstrac
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_MasterDevice
      */
     public static function getInstance ()
     {
@@ -41,7 +41,7 @@ class Proposalgen_Model_Mapper_MasterDevice extends Tangent_Model_Mapper_Abstrac
         try
         {
             $object = new Proposalgen_Model_MasterDevice();
-            $object->setMasterDeviceId($row->master_device_id)
+            $object->setMasterDeviceId($row->id)
                 ->setManufacturerId($row->mastdevice_manufacturer)
                 ->setPrinterModel($row->printer_model)
                 ->setTonerConfigId($row->toner_config_id)
@@ -79,7 +79,7 @@ class Proposalgen_Model_Mapper_MasterDevice extends Tangent_Model_Mapper_Abstrac
         $primaryKey = 0;
         try
         {
-            $data ["master_device_id"] = $object->getMasterDeviceId();
+            $data ["id"] = $object->getMasterDeviceId();
             $data ["mastdevice_manufacturer"] = $object->getManufacturerId();
             $data ["printer_model"] = $object->getPrinterModel();
             $data ["toner_config_id"] = $object->getTonerConfigId();
