@@ -2,7 +2,7 @@
 
 class Proposalgen_Model_DbTable_UploadDataCollectorRow extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'upload_data_collector_rows';
+    protected $_name = 'proposalgenerator_upload_data_collector_rows';
     protected $_primary = 'id';
     protected $_referenceMap = array (
             'Reports' => array (

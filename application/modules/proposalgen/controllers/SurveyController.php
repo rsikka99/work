@@ -2,12 +2,11 @@
 
 /**
  * Description of SurveyController:
- * This controller handles the survey/questionaire.
- * User should
- * be quided through a series of forms where they are asked to answer
+ * This controller handles the survey/questionnaire.
+ * User should be guided through a series of forms where they are asked to answer
  * questions about their existing fleet of printers.
  *
- * @author Chris Garrah
+ * @author Lee robert
  */
 class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Proposal
 {

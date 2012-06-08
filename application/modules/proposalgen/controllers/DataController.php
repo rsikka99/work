@@ -43,11 +43,11 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $this->view->companyName = $this->getReportCompanyName();
         
         // make sure report stage has been set
-        $reportTable = new Proposalgen_Model_DbTable_Reports();
+        $reportTable = new Proposalgen_Model_DbTable_Report();
         $reportData = array (
                 'report_stage' => 'upload' 
         );
-        $where = $reportTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
+        $where = $reportTable->getAdapter()->quoteInto('id = ?', $report_id, 'INTEGER');
         $report = $reportTable->fetchRow($where);
         if (count($report) > 0)
         {
@@ -63,7 +63,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $this->view->has_data = false;
         $select = $db->select()
             ->from(array (
-                'udc' => 'upload_data_collector' 
+                'udc' => 'proposalgenerator_upload_data_collector_rows' 
         ))
             ->where('udc.report_id = ' . $report_id);
         $stmt = $db->query($select);
@@ -84,7 +84,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $this->view->bad_data = false;
         $select = $db->select()
             ->from(array (
-                'udc' => 'upload_data_collector' 
+                'udc' => 'proposalgenerator_upload_data_collector_rows' 
         ))
             ->where('invalid_data = 1 AND udc.report_id = ' . $report_id);
         $stmt = $db->query($select);
@@ -104,8 +104,8 @@ class Proposalgen_DataController extends Zend_Controller_Action
             $upload = new Zend_File_Transfer_Adapter_Http();
             $upload->setDestination($this->config->app->uploadPath);
             
-            $reportTable = new Proposalgen_Model_DbTable_Reports();
-            $where = $reportTable->getAdapter()->quoteInto('report_id = ?', $report_id);
+            $reportTable = new Proposalgen_Model_DbTable_Report();
+            $where = $reportTable->getAdapter()->quoteInto('id = ?', $report_id);
             $report = $reportTable->fetchRow($where);
             
             if (count($report) > 0)
@@ -247,11 +247,11 @@ class Proposalgen_DataController extends Zend_Controller_Action
                         $this->delete_data();
                         
                         // reset report stage flag to upload
-                        $reportTable = new Proposalgen_Model_DbTable_Reports();
+                        $reportTable = new Proposalgen_Model_DbTable_Report();
                         $reportData = array (
                                 'report_stage' => 'upload' 
                         );
-                        $where = $reportTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
+                        $where = $reportTable->getAdapter()->quoteInto('id = ?', $report_id, 'INTEGER');
                         $reportTable->update($reportData, $where);
                         
                         // create an associative array of the csv infomation
@@ -586,7 +586,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
             $select = new Zend_Db_Select($db);
             $select = $db->select()
                 ->from(array (
-                    'udc' => 'upload_data_collector' 
+                    'udc' => 'proposalgenerator_upload_data_collector_rows' 
             ))
                 ->where('invalid_data = ' . $invalid_data . ' AND report_id = ' . $report_id);
             $stmt = $db->query($select);
@@ -610,7 +610,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
             $select = new Zend_Db_Select($db);
             $select = $db->select()
                 ->from(array (
-                    'udc' => 'upload_data_collector' 
+                    'udc' => 'proposalgenerator_upload_data_collector_rows' 
             ))
                 ->where('invalid_data = ' . $invalid_data . ' AND report_id = ' . $report_id)
                 ->order($sidx . ' ' . $sord)
@@ -722,11 +722,11 @@ class Proposalgen_DataController extends Zend_Controller_Action
             try
             {
                 // reset report stage flag
-                $reportTable = new Proposalgen_Model_DbTable_Reports();
+                $reportTable = new Proposalgen_Model_DbTable_Report();
                 $reportData = array (
                         'report_stage' => 'mapping' 
                 );
-                $where = $reportTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
+                $where = $reportTable->getAdapter()->quoteInto('id = ?', $report_id, 'INTEGER');
                 $report = $reportTable->fetchRow($where);
                 if ($report ['report_stage'] != 'finished')
                 {
@@ -772,7 +772,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $select = new Zend_Db_Select($db);
         $select = $db->select()
             ->from(array (
-                'udc' => 'upload_data_collector' 
+                'udc' => 'proposalgenerator_upload_data_collector_rows' 
         ))
             ->joinLeft(array (
                 'mmpf' => 'master_matchup_pf' 
@@ -816,7 +816,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $select = new Zend_Db_Select($db);
         $select = $db->select()
             ->from(array (
-                'udc' => 'upload_data_collector' 
+                'udc' => 'proposalgenerator_upload_data_collector_rows' 
         ))
             ->joinLeft(array (
                 'pfdmu' => 'pf_device_matchup_users' 
@@ -853,7 +853,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $notes = '';
         $select = $db->select()
             ->from(array (
-                'udc' => 'upload_data_collector' 
+                'udc' => 'proposalgenerator_upload_data_collector_rows' 
         ))
             ->where('udc.report_id = ' . $report_id);
         $stmt = $db->query($select);
@@ -877,7 +877,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $select = new Zend_Db_Select($db);
         $select = $db->select()
             ->from(array (
-                'udc' => 'upload_data_collector' 
+                'udc' => 'proposalgenerator_upload_data_collector_rows' 
         ), array (
                 'upload_data_collector_id', 
                 'report_id', 
@@ -939,7 +939,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
                     
                     // check to see if device has been added
                     $unknown_device_instanceTable = new Proposalgen_Model_DbTable_UnknownDeviceInstance();
-                    $where = $unknown_device_instanceTable->getAdapter()->quoteInto('report_id = ' . $report_id . ' AND upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
+                    $where = $unknown_device_instanceTable->getAdapter()->quoteInto('id = ' . $report_id . ' AND upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
                     $unknown_device_instance = $unknown_device_instanceTable->fetchRow($where);
                     
                     if (count($unknown_device_instance) > 0)
@@ -949,7 +949,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
                     else
                     {
                         $device_instanceTable = new Proposalgen_Model_DbTable_DeviceInstance();
-                        $where = $device_instanceTable->getAdapter()->quoteInto('report_id = ' . $report_id . ' AND upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
+                        $where = $device_instanceTable->getAdapter()->quoteInto('id = ' . $report_id . ' AND upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
                         $device_instance = $device_instanceTable->fetchRow($where);
                         
                         if (count($device_instance) > 0)
@@ -1005,7 +1005,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $select = new Zend_Db_Select($db);
         $select = $db->select()
             ->from(array (
-                'udc' => 'upload_data_collector' 
+                'udc' => 'proposalgenerator_upload_data_collector_rows' 
         ), array (
                 'upload_data_collector_id', 
                 'report_id', 
@@ -1094,7 +1094,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
                     
                     // check to see if device has been added
                     $unknown_device_instanceTable = new Proposalgen_Model_DbTable_UnknownDeviceInstance();
-                    $where = $unknown_device_instanceTable->getAdapter()->quoteInto('report_id = ' . $report_id . ' AND upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
+                    $where = $unknown_device_instanceTable->getAdapter()->quoteInto('id = ' . $report_id . ' AND upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
                     $unknown_device_instance = $unknown_device_instanceTable->fetchRow($where);
                     
                     if (count($unknown_device_instance) > 0)
@@ -1104,7 +1104,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
                     else
                     {
                         $device_instanceTable = new Proposalgen_Model_DbTable_DeviceInstance();
-                        $where = $device_instanceTable->getAdapter()->quoteInto('report_id = ' . $report_id . ' AND upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
+                        $where = $device_instanceTable->getAdapter()->quoteInto('id = ' . $report_id . ' AND upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
                         $device_instance = $device_instanceTable->fetchRow($where);
                         
                         if (count($device_instance) > 0)
@@ -1229,7 +1229,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
             $unknown_device_instanceTable = new Proposalgen_Model_DbTable_UnknownDeviceInstance();
             
             // get upload_data_collector rows for report and device_pf
-            $where = $upload_data_collectorTable->getAdapter()->quoteInto('report_id = ' . $report_id . ' AND devices_pf_id = ?', $devices_pf_id, 'INTEGER');
+            $where = $upload_data_collectorTable->getAdapter()->quoteInto('id = ' . $report_id . ' AND devices_pf_id = ?', $devices_pf_id, 'INTEGER');
             $upload_data_collector = $upload_data_collectorTable->fetchAll($where);
             
             foreach ( $upload_data_collector as $key => $value )
@@ -1237,7 +1237,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
                 $upload_data_collector_id = $upload_data_collector [$key] ['upload_data_collector_id'];
                 
                 // check if saved as device_instance
-                $where = $device_instanceTable->getAdapter()->quoteInto('report_id = ' . $report_id . ' AND upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
+                $where = $device_instanceTable->getAdapter()->quoteInto('id = ' . $report_id . ' AND upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
                 $device_instance = $device_instanceTable->fetchRow($where);
                 
                 if (count($device_instance) > 0)
@@ -1247,7 +1247,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
                 else
                 {
                     // check if saved as unknown_device_instance
-                    $where = $unknown_device_instanceTable->getAdapter()->quoteInto('report_id = ' . $report_id . ' AND upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
+                    $where = $unknown_device_instanceTable->getAdapter()->quoteInto('id = ' . $report_id . ' AND upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
                     $unknown_device_instance = $unknown_device_instanceTable->fetchRow($where);
                     
                     if (count($unknown_device_instance) > 0)
@@ -1257,7 +1257,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
                     else
                     {
                         // if neither, update upload record
-                        $where = $upload_data_collectorTable->getAdapter()->quoteInto('report_id = ' . $report_id . ' AND upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
+                        $where = $upload_data_collectorTable->getAdapter()->quoteInto('id = ' . $report_id . ' AND upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
                         $upload_data_collectorTable->update($updateData, $where);
                     }
                 }
@@ -1399,7 +1399,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
                 $select = new Zend_Db_Select($db);
                 $select = $db->select()
                     ->from(array (
-                        'udc' => 'upload_data_collector' 
+                        'udc' => 'proposalgenerator_upload_data_collector_rows' 
                 ))
                     ->joinLeft(array (
                         'di' => 'device_instance' 
@@ -1530,7 +1530,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
                 $select = new Zend_Db_Select($db);
                 $select = $db->select()
                     ->from(array (
-                        'udc' => 'upload_data_collector' 
+                        'udc' => 'proposalgenerator_upload_data_collector_rows' 
                 ))
                     ->joinLeft(array (
                         'di' => 'device_instance' 
@@ -1610,11 +1610,11 @@ class Proposalgen_DataController extends Zend_Controller_Action
                 $metersMsg = Proposalgen_Model_Mapper_Meter::getInstance()->saveRows($metersDataArray);
                 
                 // reset report stage flag
-                $reportTable = new Proposalgen_Model_DbTable_Reports();
+                $reportTable = new Proposalgen_Model_DbTable_Report();
                 $reportData = array (
                         'report_stage' => 'leasing' 
                 );
-                $where = $reportTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
+                $where = $reportTable->getAdapter()->quoteInto('id = ?', $report_id, 'INTEGER');
                 $report = $reportTable->fetchRow($where);
                 if ($report ['report_stage'] != 'finished')
                 {
@@ -1649,7 +1649,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $report_id = $session->report_id;
         
         $upload_data_collectorTable = new Proposalgen_Model_DbTable_UploadDataCollector();
-        $where = $upload_data_collectorTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
+        $where = $upload_data_collectorTable->getAdapter()->quoteInto('id = ?', $report_id, 'INTEGER');
         $result = $upload_data_collectorTable->fetchAll($where);
         $this->view->mappingArray = $result;
         
@@ -1658,7 +1658,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $notes = '';
         $select = $db->select()
             ->from(array (
-                'udc' => 'upload_data_collector' 
+                'udc' => 'proposalgenerator_upload_data_collector_rows' 
         ))
             ->where('udc.report_id = ' . $report_id);
         $stmt = $db->query($select);
@@ -1668,9 +1668,9 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $select = new Zend_Db_Select($db);
         $select = $db->select()
             ->from(array (
-                'udc' => 'upload_data_collector' 
+                'udc' => 'proposalgenerator_upload_data_collector_rows' 
         ))
-            ->where('report_id = ' . $report_id);
+            ->where('id = ' . $report_id);
         $stmt = $db->query($select);
         $result = $stmt->fetchAll();
         $this->view->upload_count = count($result);
@@ -1679,7 +1679,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $select = new Zend_Db_Select($db);
         $select = $db->select()
             ->from(array (
-                'udc' => 'upload_data_collector' 
+                'udc' => 'proposalgenerator_upload_data_collector_rows' 
         ))
             ->where('(invalid_data = 1 OR is_excluded = 1) AND report_id = ' . $report_id);
         $stmt = $db->query($select);
@@ -1699,7 +1699,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
             $select = new Zend_Db_Select($db);
             $select = $db->select()
                 ->from(array (
-                    'udc' => 'upload_data_collector' 
+                    'udc' => 'proposalgenerator_upload_data_collector_rows' 
             ))
                 ->joinLeft(array (
                     'di' => 'device_instance' 
@@ -1719,11 +1719,11 @@ class Proposalgen_DataController extends Zend_Controller_Action
             if (count($result) > 0)
             {
                 // reset report stage flag
-                $reportTable = new Proposalgen_Model_DbTable_Reports();
+                $reportTable = new Proposalgen_Model_DbTable_Report();
                 $reportData = array (
                         'report_stage' => 'settings' 
                 );
-                $where = $reportTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
+                $where = $reportTable->getAdapter()->quoteInto('id = ?', $report_id, 'INTEGER');
                 $report = $reportTable->fetchRow($where);
                 if ($report ['report_stage'] != 'finished')
                 {
@@ -1764,7 +1764,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $select = new Zend_Db_Select($db);
         $select = $db->select()
             ->from(array (
-                'udc' => 'upload_data_collector' 
+                'udc' => 'proposalgenerator_upload_data_collector_rows' 
         ))
             ->joinLeft(array (
                 'di' => 'device_instance' 
@@ -1822,7 +1822,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $select = new Zend_Db_Select($db);
         $select = $db->select()
             ->from(array (
-                'udc' => 'upload_data_collector' 
+                'udc' => 'proposalgenerator_upload_data_collector_rows' 
         ))
             ->joinLeft(array (
                 'di' => 'device_instance' 
@@ -1965,7 +1965,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $select = new Zend_Db_Select($db);
         $select = $db->select()
             ->from(array (
-                'udc' => 'upload_data_collector' 
+                'udc' => 'proposalgenerator_upload_data_collector_rows' 
         ))
             ->where('(invalid_data = 1 OR is_excluded = 1) AND report_id = ' . $report_id);
         $stmt = $db->query($select);
@@ -1995,7 +1995,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $select = new Zend_Db_Select($db);
         $select = $db->select()
             ->from(array (
-                'udc' => 'upload_data_collector' 
+                'udc' => 'proposalgenerator_upload_data_collector_rows' 
         ))
             ->where('(invalid_data = 1 OR is_excluded = 1) AND report_id = ' . $report_id)
             ->order($sidx . ' ' . $sord)
@@ -2580,9 +2580,9 @@ class Proposalgen_DataController extends Zend_Controller_Action
                         $select = new Zend_Db_Select($db);
                         $select = $db->select()
                             ->from(array (
-                                'udc' => 'upload_data_collector' 
+                                'udc' => 'proposalgenerator_upload_data_collector_rows' 
                         ))
-                            ->where('report_id = ' . $report_id . ' AND devices_pf_id = ?', $devices_pf_id, 'INTEGER');
+                            ->where('id = ' . $report_id . ' AND devices_pf_id = ?', $devices_pf_id, 'INTEGER');
                         $stmt = $db->query($select);
                         $result = $stmt->fetchAll();
                         
@@ -3046,7 +3046,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
                         $select = new Zend_Db_Select($db);
                         $select = $db->select()
                             ->from(array (
-                                'udc' => 'upload_data_collector' 
+                                'udc' => 'proposalgenerator_upload_data_collector_rows' 
                         ))
                             ->where('udc.report_id = ' . $report_id . ' AND udc.devices_pf_id = ?', $devices_pf_id, 'INTEGER');
                         $stmt = $db->query($select);
@@ -3153,7 +3153,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
                             // save instances
                             if ($unknown_device_instance_id > 0)
                             {
-                                $where = $unknown_device_instanceTable->getAdapter()->quoteInto('report_id = ' . $report_id . ' AND unknown_device_instance_id = ?', $unknown_device_instance_id, 'INTEGER');
+                                $where = $unknown_device_instanceTable->getAdapter()->quoteInto('id = ' . $report_id . ' AND unknown_device_instance_id = ?', $unknown_device_instance_id, 'INTEGER');
                                 $unknown_device_instanceTable->update($unknown_device_instanceData, $where);
                             
                             }
@@ -3276,7 +3276,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
                         'udi' => 'unknown_device_instance' 
                 ))
                     ->joinLeft(array (
-                        'udc' => 'upload_data_collector' 
+                        'udc' => 'proposalgenerator_upload_data_collector_rows' 
                 ), 'udc.upload_data_collector_id = udi.upload_data_collector_id', array (
                         'devices_pf_id', 
                         'is_color' 
@@ -3357,9 +3357,9 @@ class Proposalgen_DataController extends Zend_Controller_Action
                     $select = new Zend_Db_Select($db);
                     $select = $db->select()
                         ->from(array (
-                            'udc' => 'upload_data_collector' 
+                            'udc' => 'proposalgenerator_upload_data_collector_rows' 
                     ))
-                        ->where('report_id = ' . $report_id . ' AND upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
+                        ->where('id = ' . $report_id . ' AND upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
                     $stmt = $db->query($select);
                     $result = $stmt->fetchAll();
                     
@@ -3721,7 +3721,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
                 $metersTable = new Proposalgen_Model_DbTable_Meters();
                 $device_instanceTable = new Proposalgen_Model_DbTable_DeviceInstance();
                 
-                $where = $device_instanceTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
+                $where = $device_instanceTable->getAdapter()->quoteInto('id = ?', $report_id, 'INTEGER');
                 $device_instances = $device_instanceTable->fetchAll($where);
                 foreach ( $device_instances as $key => $value )
                 {
@@ -3734,20 +3734,20 @@ class Proposalgen_DataController extends Zend_Controller_Action
                 
                 // delete unknown_device_instances for report_id
                 $unknown_device_instanceTable = new Proposalgen_Model_DbTable_UnknownDeviceInstance();
-                $where = $unknown_device_instanceTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
+                $where = $unknown_device_instanceTable->getAdapter()->quoteInto('id = ?', $report_id, 'INTEGER');
                 $unknown_device_instanceTable->delete($where);
                 
                 // delete any upload data
                 $upload_data_collectorTable = new Proposalgen_Model_DbTable_UploadDataCollector();
-                $where = $upload_data_collectorTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
+                $where = $upload_data_collectorTable->getAdapter()->quoteInto('id = ?', $report_id, 'INTEGER');
                 $upload_data_collectorTable->delete($where);
                 
                 // reset report back to upload
-                $reportTable = new Proposalgen_Model_DbTable_Reports();
+                $reportTable = new Proposalgen_Model_DbTable_Report();
                 $reportData = array (
                         'report_stage' => 'upload' 
                 );
-                $where = $reportTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
+                $where = $reportTable->getAdapter()->quoteInto('id = ?', $report_id, 'INTEGER');
                 $report = $reportTable->fetchRow($where);
                 if ($report ['report_stage'] != 'finished')
                 {
@@ -3939,7 +3939,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
     {
         $session = new Zend_Session_Namespace('report');
         $report_id = $session->report_id;
-        $questionTable = new Proposalgen_Model_DbTable_TextAnswers();
+        $questionTable = new Proposalgen_Model_DbTable_TextAnswer();
         $where = $questionTable->getAdapter()->quoteInto('question_id = 4 AND report_id = ?', $report_id, 'INTEGER');
         $row = $questionTable->fetchRow($where);
         if ($row ['textual_answer'])
@@ -4083,11 +4083,11 @@ class Proposalgen_DataController extends Zend_Controller_Action
         try
         {
             // check report table first
-            $reportTable = new Proposalgen_Model_DbTable_Reports();
+            $reportTable = new Proposalgen_Model_DbTable_Report();
             $userTable = new Proposalgen_Model_DbTable_Users();
             $dealer_companyTable = new Proposalgen_Model_DbTable_DealerCompany();
             
-            $where = $reportTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
+            $where = $reportTable->getAdapter()->quoteInto('id = ?', $report_id, 'INTEGER');
             $report = $reportTable->fetchRow($where);
             
             if (count($report) > 0 && $page == "reportsettings")
@@ -4222,8 +4222,8 @@ class Proposalgen_DataController extends Zend_Controller_Action
             $data ["company_image_override"] = null;
             
             // table is dealer_company table
-            $table = new Proposalgen_Model_DbTable_Reports();
-            $where = $table->getAdapter()->quoteInto("report_id = ?", $report_id, 'INTEGER');
+            $table = new Proposalgen_Model_DbTable_Report();
+            $where = $table->getAdapter()->quoteInto("id = ?", $report_id, 'INTEGER');
             $table->update($data, $where);
             $this->view->data = "<p>The image has been removed and the default image is being used.</p>";
             
@@ -4353,8 +4353,8 @@ class Proposalgen_DataController extends Zend_Controller_Action
                 $report_id = $session->report_id;
                 if ($report_id > 0)
                 {
-                    $table = new Proposalgen_Model_DbTable_Reports();
-                    $where = $table->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
+                    $table = new Proposalgen_Model_DbTable_Report();
+                    $where = $table->getAdapter()->quoteInto('id = ?', $report_id, 'INTEGER');
                     $result = $table->fetchRow($where);
                     
                     // update fields being used

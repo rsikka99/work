@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_UploadDataCollectorRow
      */
     public static function getInstance ()
     {
@@ -20,8 +20,39 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
     }
 
     /**
+     * Counts how many csv rows have been uploaded for a given report
+     *
+     * @param int $reportId
+     *            The report id to check
+     * @param boolean $checkForBadData
+     *            If set to true it will check to see if a report has bad uploaded
+     *            data
+     * @return int Returns the number of upload data collector rows for a given report
+     */
+    public function countUploadDataCollectorRowsForReport ($reportId, $checkForBadData = false)
+    {
+        if ($reportId instanceof Proposalgen_Model_Report)
+        {
+            $reportId = $reportId->getReportId();
+        }
+        
+        $dbTable = $this->getDbTable();
+        $db = $dbTable->getAdapter();
+        $tableName = $dbTable->info('name');
+        $result = 0;
+        if ($checkForBadData)
+        {
+            $result = $db->fetchOne("SELECT COUNT(*) AS count FROM {$tableName} WHERE report_id = ? AND invalid_data = 1", $reportId);
+        }
+        else
+        {
+            $result = $db->fetchOne("SELECT COUNT(*) AS count FROM {$tableName} WHERE report_id = ?", $reportId);
+        }
+    }
+
+    /**
      * Maps a database row object to an Proposalgen_Model
-     * 
+     *
      * @param Zend_Db_Table_Row $row            
      * @return The appropriate Proposalgen_Model
      */
@@ -94,7 +125,7 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     * 
+     *
      * @param unknown_type $object            
      */
     public function save (Proposalgen_Model_UploadDataCollectorRow $object)

@@ -88,19 +88,22 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
      * Saves the current report.
      * This keeps the updated modification date in the same location at all times.
      */
-    protected function saveReport ()
+    protected function saveReport ($updateReportStage = true)
     {
         $reportMapper = Proposalgen_Model_Mapper_Report::getInstance();
         $this->_report->setLastModified(date('Y-m-d H:i:s'));
         
-        // This updates the reports progress
-        $newStep = $this->checkIfNextStepIsNew($this->_activeStep);
-        if ($newStep !== FALSE)
+        if ($updateReportStage)
         {
-            $this->_report->setReportStage($newStep->getEnumValue());
-            
-            // We need to adjust the menu just in case we're not redirecting
-            Proposalgen_Model_Report_Step::updateAccessibleSteps($this->getReportSteps(), $newStep->getEnumValue());
+            // This updates the reports progress
+            $newStep = $this->checkIfNextStepIsNew($this->_activeStep);
+            if ($newStep !== FALSE)
+            {
+                $this->_report->setReportStage($newStep->getEnumValue());
+                
+                // We need to adjust the menu just in case we're not redirecting
+                Proposalgen_Model_Report_Step::updateAccessibleSteps($this->getReportSteps(), $newStep->getEnumValue());
+            }
         }
         
         $id = $reportMapper->save($this->_report);
