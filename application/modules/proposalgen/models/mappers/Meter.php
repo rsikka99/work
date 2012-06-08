@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_Meter extends Tangent_Model_Mapper_Abstract
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_Meter
      */
     public static function getInstance ()
     {
@@ -31,7 +31,7 @@ class Proposalgen_Model_Mapper_Meter extends Tangent_Model_Mapper_Abstract
         try
         {
             $object = new Proposalgen_Model_Meter();
-            $object->setMeterId($row->meter_id)
+            $object->setMeterId($row->id)
                 ->setMeterType($row->meter_type)
                 ->setStartMeter($row->start_meter)
                 ->setEndMeter($row->end_meter);
@@ -73,7 +73,7 @@ class Proposalgen_Model_Mapper_Meter extends Tangent_Model_Mapper_Abstract
         $primaryKey = 0;
         try
         {
-            $data ["meter_id"] = $object->getMeterId();
+            $data ["id"] = $object->getMeterId();
             $data ["device_instance_id"] = $object->getDeviceInstanceId();
             $data ["meter_type"] = $object->getMeterType();
             $data ["start_meter"] = $object->getStartMeter();

@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_TicketComment extends Tangent_Model_Mapper_Abstra
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_TicketComment
      */
     public static function getInstance ()
     {
@@ -23,7 +23,7 @@ class Proposalgen_Model_Mapper_TicketComment extends Tangent_Model_Mapper_Abstra
      * Maps a database row object to an Proposalgen_Model
      * 
      * @param Zend_Db_Table_Row $row            
-     * @return The appropriate Proposalgen_Model
+     * @return Proposalgen_Model_Mapper_TicketComment
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
     {
@@ -31,7 +31,7 @@ class Proposalgen_Model_Mapper_TicketComment extends Tangent_Model_Mapper_Abstra
         try
         {
             $object = new Proposalgen_Model_TicketComment();
-            $object->setCommentId($row->comment_id)
+            $object->setCommentId($row->id)
                 ->setTicketId($row->ticket_id)
                 ->setUserId($row->user_id)
                 ->setCommentText($row->comment_text)
@@ -54,7 +54,7 @@ class Proposalgen_Model_Mapper_TicketComment extends Tangent_Model_Mapper_Abstra
         $primaryKey = 0;
         try
         {
-            $data ["comment_id"] = $object->getCommentId();
+            $data ["id"] = $object->getCommentId();
             $data ["ticket_id"] = $object->getTicketId();
             $data ["user_id"] = $object->getUserId();
             $data ["comment_text"] = $object->getCommentText();

@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_TicketStatus extends Tangent_Model_Mapper_Abstrac
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_TicketStatus
      */
     public static function getInstance ()
     {
@@ -31,7 +31,7 @@ class Proposalgen_Model_Mapper_TicketStatus extends Tangent_Model_Mapper_Abstrac
         try
         {
             $object = new Proposalgen_Model_TicketStatus();
-            $object->setStatusId($row->status_id)->setStatusName($row->status_name);
+            $object->setStatusId($row->id)->setStatusName($row->name);
         }
         catch ( Exception $e )
         {
@@ -50,8 +50,8 @@ class Proposalgen_Model_Mapper_TicketStatus extends Tangent_Model_Mapper_Abstrac
         $primaryKey = 0;
         try
         {
-            $data ["status_id"] = $object->getStatusId();
-            $data ["status_name"] = $object->getStatusName();
+            $data ["id"] = $object->getStatusId();
+            $data ["name"] = $object->getStatusName();
             
             $primaryKey = $this->saveRow($data);
         }

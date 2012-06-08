@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_UserTonerOverride extends Tangent_Model_Mapper_Ab
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_UserTonerOverride
      */
     public static function getInstance ()
     {
@@ -23,7 +23,7 @@ class Proposalgen_Model_Mapper_UserTonerOverride extends Tangent_Model_Mapper_Ab
      * Maps a database row object to an Proposalgen_Model
      * 
      * @param Zend_Db_Table_Row $row            
-     * @return The appropriate Proposalgen_Model
+     * @return Proposalgen_Model_UserTonerOverride
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
     {

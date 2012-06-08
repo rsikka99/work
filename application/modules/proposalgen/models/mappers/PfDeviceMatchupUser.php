@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_PfDeviceMatchupUser extends Tangent_Model_Mapper_
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_PfDeviceMatchupUser
      */
     public static function getInstance ()
     {
@@ -23,7 +23,7 @@ class Proposalgen_Model_Mapper_PfDeviceMatchupUser extends Tangent_Model_Mapper_
      * Maps a database row object to an Proposalgen_Model
      * 
      * @param Zend_Db_Table_Row $row            
-     * @return The appropriate Proposalgen_Model
+     * @return Proposalgen_Model_PfDeviceMatchupUser
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
     {
@@ -31,7 +31,7 @@ class Proposalgen_Model_Mapper_PfDeviceMatchupUser extends Tangent_Model_Mapper_
         try
         {
             $object = new Proposalgen_Model_PfDeviceMatchupUser();
-            $object->setDevicesPfId($row->devices_pf_id)
+            $object->setDevicesPfId($row->pf_device_id)
                 ->setMasterDeviceId($row->master_device_id)
                 ->setUserId($row->user_id);
         }
@@ -47,7 +47,7 @@ class Proposalgen_Model_Mapper_PfDeviceMatchupUser extends Tangent_Model_Mapper_
         $primaryKey = false;
         try
         {
-            $data ["devices_pf_id"] = $object->getDevicesPfId();
+            $data ["pf_device_id"] = $object->getDevicesPfId();
             $data ["master_device_id"] = $object->getMasterDeviceId();
             $data ["user_id"] = $object->getUserId();
             

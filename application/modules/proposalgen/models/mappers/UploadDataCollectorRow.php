@@ -54,7 +54,7 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
      * Maps a database row object to an Proposalgen_Model
      *
      * @param Zend_Db_Table_Row $row            
-     * @return The appropriate Proposalgen_Model
+     * @return Proposalgen_Model_UploadDataCollectorRow
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
     {
@@ -62,7 +62,7 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
         try
         {
             $object = new Proposalgen_Model_UploadDataCollectorRow();
-            $object->setUploadDataCollectorId($row->upload_data_collector_id)
+            $object->setUploadDataCollectorId($row->id)
                 ->setReportId($row->report_id)
                 ->setDevicesPfId($row->devices_pf_id)
                 ->setStartDate($row->startdate)
@@ -133,7 +133,7 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
         $primaryKey = 0;
         try
         {
-            $data ["upload_data_collector_id"] = $object->getUploadDataCollectorId();
+            $data ["id"] = $object->getUploadDataCollectorId();
             $data ["report_id"] = $object->getReportId();
             $data ["devices_pf_id"] = $object->getDevicesPfId();
             $data ["startdate"] = $object->getStartdate();
@@ -205,8 +205,7 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
         ));
         foreach ( $results as $result )
         {
-            //device must be at least 4 days old
-            $days = 5;
+            
             $startDate = new DateTime($result->StartDate);
             $endDate = new DateTime($result->EndDate);
             $discoveryDate = new DateTime($result->DiscoveryDate);
@@ -232,6 +231,8 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
             $device->setDeviceName($result->ModelName);
             $device->setIpAddress($result->IpAddress);
             $device->setSerialNumber($result->SerialNumber);
+            
+            //device must be at least 4 days old
             if ($days->days < 4)
             {
                 $device->setExclusionReason('Insufficient Monitor Data');

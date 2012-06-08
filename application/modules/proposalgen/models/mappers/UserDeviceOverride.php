@@ -33,7 +33,7 @@ class Proposalgen_Model_Mapper_UserDeviceOverride extends Tangent_Model_Mapper_A
             $object = new Proposalgen_Model_UserDeviceOverride();
             $object->setUserId($row->user_id)
                 ->setMasterDeviceId($row->master_device_id)
-                ->setOverrideDevicePrice($row->override_device_price)
+                ->setOverrideDevicePrice($row->price)
                 ->setIsLeased($row->is_leased);
         }
         catch ( Exception $e )
@@ -50,7 +50,7 @@ class Proposalgen_Model_Mapper_UserDeviceOverride extends Tangent_Model_Mapper_A
         {
             $data ["user_id"] = $object->getUserId();
             $data ["master_device_id"] = $object->getMasterDeviceId();
-            $data ["override_device_price"] = $object->getOverrideDevicePrice();
+            $data ["price"] = $object->getOverrideDevicePrice();
             $data ["is_leased"] = $object->getIsLeased();
             
             $primaryKey = $this->saveRow($data);

@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_UnknownDeviceInstance
      */
     public static function getInstance ()
     {
@@ -23,7 +23,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
      * Maps a database row object to an Proposalgen_Model
      * 
      * @param Zend_Db_Table_Row $row            
-     * @return The appropriate Proposalgen_Model
+     * @return Proposalgen_Model_UnknownDeviceInstance
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
     {
@@ -31,7 +31,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
         try
         {
             $object = new Proposalgen_Model_UnknownDeviceInstance();
-            $object->setUnknownDeviceInstanceId($row->unknown_device_instance_id)
+            $object->setUnknownDeviceInstanceId($row->id)
                 ->setUserId($row->user_id)
                 ->setReportId($row->report_id)
                 ->setUploadDataCollectorId($row->upload_data_collector_id)
@@ -387,7 +387,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
         $primaryKey = 0;
         try
         {
-            $data ["unknown_device_instance_id"] = $object->getUnknownDeviceInstanceId();
+            $data ["id"] = $object->getUnknownDeviceInstanceId();
             $data ["user_id"] = $object->getUserId();
             $data ["report_id"] = $object->getReportId();
             $data ["upload_data_collector_id"] = $object->getUploadDataCollectorId();

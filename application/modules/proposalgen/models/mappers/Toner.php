@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_Toner extends Tangent_Model_Mapper_Abstract
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_Toner
      */
     public static function getInstance ()
     {
@@ -41,10 +41,10 @@ class Proposalgen_Model_Mapper_Toner extends Tangent_Model_Mapper_Abstract
         try
         {
             $object = new Proposalgen_Model_Toner();
-            $object->setTonerId($row->toner_id)
-                ->setTonerSKU($row->toner_SKU)
-                ->setTonerPrice($row->toner_price)
-                ->setTonerYield($row->toner_yield)
+            $object->setTonerId($row->id)
+                ->setTonerSKU($row->sku)
+                ->setTonerPrice($row->price)
+                ->setTonerYield($row->yield)
                 ->setPartTypeId($row->part_type_id)
                 ->setManufacturerId($row->manufacturer_id)
                 ->setTonerColorId($row->toner_color_id);
@@ -66,10 +66,10 @@ class Proposalgen_Model_Mapper_Toner extends Tangent_Model_Mapper_Abstract
         $primaryKey = 0;
         try
         {
-            $data ["toner_id"] = $object->getTonerId();
-            $data ["toner_SKU"] = $object->getTonerSKU();
-            $data ["toner_price"] = $object->getTonerPrice();
-            $data ["toner_yield"] = $object->getTonerYield();
+            $data ["id"] = $object->getTonerId();
+            $data ["sku"] = $object->getTonerSKU();
+            $data ["price"] = $object->getTonerPrice();
+            $data ["yield"] = $object->getTonerYield();
             $data ["manufacturer_id"] = $object->getManufacturerId();
             $data ["part_type_id"] = $object->getPartTypeId();
             $data ["toner_color_id"] = $object->getTonerColorId();

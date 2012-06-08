@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_MasterMatchupPf extends Tangent_Model_Mapper_Abst
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_MasterMatchupPf
      */
     public static function getInstance ()
     {

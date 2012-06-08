@@ -23,7 +23,7 @@ class Proposalgen_Model_Mapper_TicketPFRequest extends Tangent_Model_Mapper_Abst
      * Maps a database row object to an Proposalgen_Model
      * 
      * @param Zend_Db_Table_Row $row            
-     * @return The appropriate Proposalgen_Model
+     * @return Proposalgen_Model_TicketPFRequest
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
     {

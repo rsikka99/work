@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_PricingConfig extends Tangent_Model_Mapper_Abstra
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_PricingConfig
      */
     public static function getInstance ()
     {
@@ -23,7 +23,7 @@ class Proposalgen_Model_Mapper_PricingConfig extends Tangent_Model_Mapper_Abstra
      * Maps a database row object to an Proposalgen_Model
      * 
      * @param Zend_Db_Table_Row $row            
-     * @return The appropriate Proposalgen_Model
+     * @return Proposalgen_Model_PricingConfig
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
     {
@@ -31,8 +31,8 @@ class Proposalgen_Model_Mapper_PricingConfig extends Tangent_Model_Mapper_Abstra
         try
         {
             $object = new Proposalgen_Model_PricingConfig();
-            $object->setPricingConfigId($row->pricing_config_id)
-                ->setConfigName($row->config_name)
+            $object->setPricingConfigId($row->id)
+                ->setConfigName($row->name)
                 ->setColorTonerPartTypeId($row->color_toner_part_type_id)
                 ->setMonoTonerPartTypeId($row->mono_toner_part_type_id);
         }
@@ -53,8 +53,8 @@ class Proposalgen_Model_Mapper_PricingConfig extends Tangent_Model_Mapper_Abstra
         $primaryKey = 0;
         try
         {
-            $data ["pricing_config_id"] = $object->getPricingConfigId();
-            $data ["config_name"] = $object->getConfigName();
+            $data ["id"] = $object->getPricingConfigId();
+            $data ["name"] = $object->getConfigName();
             
             $primaryKey = $this->saveRow($data);
         }

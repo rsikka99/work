@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends Tangent_Model_Mapper_Abstr
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_DeviceInstance
      */
     public static function getInstance ()
     {
@@ -31,7 +31,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends Tangent_Model_Mapper_Abstr
         try
         {
             $object = new Proposalgen_Model_DeviceInstance();
-            $object->setDeviceInstanceId($row->device_instance_id)
+            $object->setDeviceInstanceId($row->id)
                 ->setReportId($row->report_id)
                 ->setMasterDeviceId($row->master_device_id)
                 ->setUploadDataCollectorId($row->upload_data_collector_id)
@@ -60,7 +60,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends Tangent_Model_Mapper_Abstr
         $primaryKey = 0;
         try
         {
-            $data ["device_instance_id"] = $object->getTonerColorId();
+            $data ["id"] = $object->getDeviceInstanceId();
             $data ["report_id"] = $object->getReportId();
             $data ["master_device_id"] = $object->getMasterDeviceId();
             $data ["upload_data_collector_id"] = $object->getUploadDataCollectorId();
@@ -90,10 +90,10 @@ class Proposalgen_Model_Mapper_DeviceInstance extends Tangent_Model_Mapper_Abstr
             $db = $this->getDbTable();
             $select = $db->select(Zend_Db_Table::SELECT_WITH_FROM_PART);
             $select->joinLeft(array (
-                    'md' => 'master_device' 
-            ), 'device_instance.master_device_id = md.master_device_id', '*')
-                ->where('device_instance.is_excluded = ?', $isExcluded)
-                ->where('device_instance.report_id = ?', $reportId)
+                    'md' => 'proposalgenerator_master_devices' 
+            ), 'proposalgenerator_device_instances.master_device_id = md.id', '*')
+                ->where('proposalgenerator_device_instances.is_excluded = ?', $isExcluded)
+                ->where('proposalgenerator_device_instances.report_id = ?', $reportId)
                 ->setIntegrityCheck(false)
                 ->limit(9000);
             $rows = $db->fetchAll($select);
@@ -103,8 +103,6 @@ class Proposalgen_Model_Mapper_DeviceInstance extends Tangent_Model_Mapper_Abstr
             }
             else
             {
-                echo count($rows);
-                die();
                 $masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
                 foreach ( $rows as $row )
                 {
