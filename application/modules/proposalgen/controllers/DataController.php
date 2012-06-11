@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Data Controller:  This controller handles data imports into the system
+ * Data Controller: This controller handles data imports into the system
+ *
  * @author Chris Garrah
  */
 class Proposalgen_DataController extends Zend_Controller_Action
 {
-    
     public $config;
     protected $_redirector = null;
 
@@ -23,6 +23,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $this->MPSProgramName = $this->config->app->MPSProgramName;
         $this->view->MPSProgramName = $this->config->app->MPSProgramName;
     } // end init
+
     
     /**
      * * The default action - Upload the fleet data file into the database
@@ -305,7 +306,6 @@ class Proposalgen_DataController extends Zend_Controller_Action
                                         if (count($devices_pf) > 0)
                                         {
                                             $devices_pf_id = $devices_pf->devices_pf_id;
-                                        
                                         }
                                         else
                                         {
@@ -489,26 +489,21 @@ class Proposalgen_DataController extends Zend_Controller_Action
                         }
                     }
                     $db->commit();
-                
                 }
                 catch ( Exception $e )
                 {
                     // $db->rollBack();
                     echo $e . "<br /><br />";
                     $this->view->message = "Your file was not saved. Please double check the file and try again. If you continue to experience problems saving, contact your administrator.<br /><br />";
-                
                 }
                 
                 unlink($upload->getFileName());
-            
             }
             else
             {
                 // if upload fails, print error message message
                 $this->view->errMessages = $upload->getMessages();
-            
             }
-        
         }
         
         if (! empty($notes) && ! isset($finalDevices))
@@ -517,7 +512,6 @@ class Proposalgen_DataController extends Zend_Controller_Action
         }
         
         return;
-    
     }
 
     /**
@@ -526,7 +520,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
      *            A switch indicating color ( 1 ) or b/w ( 0 ).
      * @param $tonerLevels array
      *            - An associative array of device toner levels
-     *           
+     *            
      * @return boolean JIT Support
      *        
      * @author Kevin Jervis
@@ -562,7 +556,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
         } // end else
         return $JITCompatible;
     } // end function determineJITSupport
-    
+
     public function previewlistAction ()
     {
         // disable the default layout
@@ -686,18 +680,15 @@ class Proposalgen_DataController extends Zend_Controller_Action
                     );
                     $i ++;
                 }
-            
             }
             else
             {
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
-        
         }
         
         // encode user data to return to the client:
@@ -737,23 +728,18 @@ class Proposalgen_DataController extends Zend_Controller_Action
                 
                 // redirect to mapping page
                 $this->_redirect('/data/devicemapping');
-            
             }
             catch ( Zend_Db_Exception $e )
             {
                 $this->view->message = "Unknown Error.";
                 throw new Exception("Unknown Database Error.", 0, $e);
-            
             }
             catch ( Exception $e )
             {
                 $db->rollBack();
                 $this->view->message = "There was an error updating the report stage. Please contact your administrator.";
-            
             }
-        
         }
-    
     }
 
     public function devicemappingAction ()
@@ -973,18 +959,15 @@ class Proposalgen_DataController extends Zend_Controller_Action
                     );
                     $i ++;
                 }
-            
             }
             else
             {
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
-        
         }
         
         // encode user data to return to the client:
@@ -1128,18 +1111,15 @@ class Proposalgen_DataController extends Zend_Controller_Action
                     );
                     $i ++;
                 }
-            
             }
             else
             {
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
-        
         }
         
         // encode user data to return to the client:
@@ -1176,31 +1156,25 @@ class Proposalgen_DataController extends Zend_Controller_Action
                     if ($master_device_id > 0)
                     {
                         $pf_device_matchup_usersTable->update($pf_device_matchup_usersData, $where);
-                    
                     }
                     else
                     {
                         $pf_device_matchup_usersTable->delete($where);
-                    
                     }
-                
                 }
                 else
                 {
                     $pf_device_matchup_usersData ['devices_pf_id'] = $devices_pf_id;
                     $pf_device_matchup_usersData ['user_id'] = $this->user_id;
                     $pf_device_matchup_usersTable->insert($pf_device_matchup_usersData);
-                
                 }
             }
             $db->commit();
-        
         }
         catch ( Exception $e )
         {
             $db->rollback();
             throw new Exception("An Error occured mapping the device ' . $master_device_id . '.", 0, $e);
-        
         }
     }
 
@@ -1293,7 +1267,6 @@ class Proposalgen_DataController extends Zend_Controller_Action
             if (count($device_instance) > 0)
             {
                 $device_instanceTable->update($updateData, $where);
-            
             }
             else
             {
@@ -1312,11 +1285,9 @@ class Proposalgen_DataController extends Zend_Controller_Action
                     $upload_data_collectorTable = new Proposalgen_Model_DbTable_UploadDataCollector();
                     $where = $upload_data_collectorTable->getAdapter()->quoteInto('upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
                     $upload_data_collectorTable->update($updateData, $where);
-                
                 }
             }
             $db->commit();
-        
         }
         catch ( Exception $e )
         {
@@ -1360,16 +1331,13 @@ class Proposalgen_DataController extends Zend_Controller_Action
                 }
             }
             $db->commit();
-        
         }
         catch ( Exception $e )
         {
             $db->rollback();
             echo $e . "<br />";
             $this->view->message = "Error removing device.";
-        
         }
-    
     }
 
     public function savemappingAction ()
@@ -1625,15 +1593,12 @@ class Proposalgen_DataController extends Zend_Controller_Action
                 
                 // redirect back to mapping page
                 $this->_redirect('data/deviceleasing');
-            
             }
             catch ( Exception $e )
             {
                 $db->rollback();
                 throw new Exception("An error occurred saving mapping.", 0, $e);
-            
             }
-        
         }
     }
 
@@ -1732,7 +1697,6 @@ class Proposalgen_DataController extends Zend_Controller_Action
                 
                 // redirect back to mapping page
                 $this->_redirect('data/reportsettings');
-            
             }
             else
             {
@@ -1931,7 +1895,6 @@ class Proposalgen_DataController extends Zend_Controller_Action
             {
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
@@ -2060,13 +2023,11 @@ class Proposalgen_DataController extends Zend_Controller_Action
                     );
                     $i ++;
                 }
-            
             }
             else
             {
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
@@ -2183,15 +2144,14 @@ class Proposalgen_DataController extends Zend_Controller_Action
                 // empty form values
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             Throw new exception("Critical Error: Unable to find device.", 0, $e);
-        
         } // end catch
-          
+        
+
         // encode user data to return to the client:
         $json = Zend_Json::encode($formdata);
         $this->view->data = $json;
@@ -2275,15 +2235,14 @@ class Proposalgen_DataController extends Zend_Controller_Action
                 // empty form values
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             Throw new exception("Critical Error: Unable to find device.", 0, $e);
-        
         } // end catch
-          
+        
+
         // encode user data to return to the client:
         $json = Zend_Json::encode($formdata);
         $this->view->data = $json;
@@ -2376,13 +2335,11 @@ class Proposalgen_DataController extends Zend_Controller_Action
                 // empty form values
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             Throw new exception("Critical Error: Unable to find device parts.", 0, $e);
-        
         }
         
         // encode user data to return to the client:
@@ -2447,13 +2404,11 @@ class Proposalgen_DataController extends Zend_Controller_Action
                 // empty form values
                 $formdata = array ();
             }
-        
         }
         catch ( Exception $e )
         {
             // critical exception
             Throw new exception("Critical Error: Unable to find device parts.", 0, $e);
-        
         }
         
         // encode user data to return to the client:
@@ -2510,7 +2465,6 @@ class Proposalgen_DataController extends Zend_Controller_Action
             if (isset($formData ["hdnID"]))
             {
                 $upload_data_collector_id = $formData ["hdnID"];
-            
             }
             else if (isset($formData ['btnSubmitRequest']))
             {
@@ -2557,7 +2511,6 @@ class Proposalgen_DataController extends Zend_Controller_Action
                         {
                             $this->view->message = "You must enter a description for your ticket.";
                         }
-                    
                     }
                     else
                     {
@@ -2634,7 +2587,6 @@ class Proposalgen_DataController extends Zend_Controller_Action
                         $db->commit();
                         $this->view->message = "Support Request Submitted.";
                     }
-                
                 }
                 catch ( Exception $e )
                 {
@@ -2643,7 +2595,6 @@ class Proposalgen_DataController extends Zend_Controller_Action
                     die();
                     $this->view->message = "There was an error saving your support request.";
                 }
-            
             }
             else if ($form->isValid($formData))
             {
@@ -2738,21 +2689,21 @@ class Proposalgen_DataController extends Zend_Controller_Action
                         // validate black comp fields
                         if (! $formData ['is_leased'])
                         {
-	                        $black_comp_array = array (
-	                                $formData ['black_comp_SKU'], 
-	                                $formData ['black_comp_price'], 
-	                                $formData ['black_comp_yield'] 
-	                        );
-	                        if (! empty($formData ['black_comp_SKU']) || ! empty($formData ['black_comp_price']) || ! empty($formData ['black_comp_yield']))
-	                        {
-	                            if (empty($formData ['black_comp_SKU']) || empty($formData ['black_comp_price']) || empty($formData ['black_comp_yield']))
-	                            {
-	                                $valid_toners = false;
-	                                $this->view->field = "black_comp";
-	                                $this->view->message = "Incomplete compatible black toner data supplied.<br />Please fill out all fields.";
-	                                break;
-	                            }
-	                        }
+                            $black_comp_array = array (
+                                    $formData ['black_comp_SKU'], 
+                                    $formData ['black_comp_price'], 
+                                    $formData ['black_comp_yield'] 
+                            );
+                            if (! empty($formData ['black_comp_SKU']) || ! empty($formData ['black_comp_price']) || ! empty($formData ['black_comp_yield']))
+                            {
+                                if (empty($formData ['black_comp_SKU']) || empty($formData ['black_comp_price']) || empty($formData ['black_comp_yield']))
+                                {
+                                    $valid_toners = false;
+                                    $this->view->field = "black_comp";
+                                    $this->view->message = "Incomplete compatible black toner data supplied.<br />Please fill out all fields.";
+                                    break;
+                                }
+                            }
                         }
                         
                         break;
@@ -2810,66 +2761,66 @@ class Proposalgen_DataController extends Zend_Controller_Action
                         // COMP 3 color - separated - sku / price / yield
                         if (! $formData ['is_leased'])
                         {
-	                        $black_comp_array = array (
-	                                $formData ['black_comp_SKU'], 
-	                                $formData ['black_comp_price'], 
-	                                $formData ['black_comp_yield'] 
-	                        );
-	                        $cyan_comp_array = array (
-	                                $formData ['cyan_comp_SKU'], 
-	                                $formData ['cyan_comp_price'], 
-	                                $formData ['cyan_comp_yield'] 
-	                        );
-	                        $magenta_comp_array = array (
-	                                $formData ['magenta_comp_SKU'], 
-	                                $formData ['magenta_comp_price'], 
-	                                $formData ['magenta_comp_yield'] 
-	                        );
-	                        $yellow_comp_array = array (
-	                                $formData ['yellow_comp_SKU'], 
-	                                $formData ['yellow_comp_price'], 
-	                                $formData ['yellow_comp_yield'] 
-	                        );
-	                        if (! empty($formData ['black_comp_SKU']) || ! empty($formData ['black_comp_price']) || ! empty($formData ['black_comp_yield']))
-	                        {
-	                            if (empty($formData ['black_comp_SKU']) || empty($formData ['black_comp_price']) || empty($formData ['black_comp_yield']))
-	                            {
-	                                $valid_comps = false;
-	                                $this->view->field = "black_comp";
-	                                $this->view->message = "Incomplete compatible black toner data supplied.<br />Please fill out all fields.";
-	                                break;
-	                            }
-	                        }
-	                        if (! empty($formData ['cyan_comp_SKU']) || ! empty($formData ['cyan_comp_price']) || ! empty($formData ['cyan_comp_yield']))
-	                        {
-	                            if (empty($formData ['cyan_comp_SKU']) || empty($formData ['cyan_comp_price']) || empty($formData ['cyan_comp_yield']))
-	                            {
-	                                $valid_comps = false;
-	                                $this->view->field = "cyan_comp";
-	                                $this->view->message = "Incomplete compatible cyan toner data supplied.<br />Please fill out all fields.";
-	                                break;
-	                            }
-	                        }
-	                        if (! empty($formData ['magenta_comp_SKU']) || ! empty($formData ['magenta_comp_price']) || ! empty($formData ['magenta_comp_yield']))
-	                        {
-	                            if (empty($formData ['magenta_comp_SKU']) || empty($formData ['magenta_comp_price']) || empty($formData ['magenta_comp_yield']))
-	                            {
-	                                $valid_comps = false;
-	                                $this->view->field = "magenta_comp";
-	                                $this->view->message = "Incomplete compatible magenta toner data supplied.<br />Please fill out all fields.";
-	                                break;
-	                            }
-	                        }
-	                        if (! empty($formData ['yellow_comp_SKU']) || ! empty($formData ['yellow_comp_price']) || ! empty($formData ['yellow_comp_yield']))
-	                        {
-	                            if (empty($formData ['yellow_comp_SKU']) || empty($formData ['yellow_comp_price']) || empty($formData ['yellow_comp_yield']))
-	                            {
-	                                $valid_comps = false;
-	                                $this->view->field = "yellow_comp";
-	                                $this->view->message = "Incomplete compatible yellow toner data supplied.<br />Please fill out all fields.";
-	                                break;
-	                            }
-	                        }
+                            $black_comp_array = array (
+                                    $formData ['black_comp_SKU'], 
+                                    $formData ['black_comp_price'], 
+                                    $formData ['black_comp_yield'] 
+                            );
+                            $cyan_comp_array = array (
+                                    $formData ['cyan_comp_SKU'], 
+                                    $formData ['cyan_comp_price'], 
+                                    $formData ['cyan_comp_yield'] 
+                            );
+                            $magenta_comp_array = array (
+                                    $formData ['magenta_comp_SKU'], 
+                                    $formData ['magenta_comp_price'], 
+                                    $formData ['magenta_comp_yield'] 
+                            );
+                            $yellow_comp_array = array (
+                                    $formData ['yellow_comp_SKU'], 
+                                    $formData ['yellow_comp_price'], 
+                                    $formData ['yellow_comp_yield'] 
+                            );
+                            if (! empty($formData ['black_comp_SKU']) || ! empty($formData ['black_comp_price']) || ! empty($formData ['black_comp_yield']))
+                            {
+                                if (empty($formData ['black_comp_SKU']) || empty($formData ['black_comp_price']) || empty($formData ['black_comp_yield']))
+                                {
+                                    $valid_comps = false;
+                                    $this->view->field = "black_comp";
+                                    $this->view->message = "Incomplete compatible black toner data supplied.<br />Please fill out all fields.";
+                                    break;
+                                }
+                            }
+                            if (! empty($formData ['cyan_comp_SKU']) || ! empty($formData ['cyan_comp_price']) || ! empty($formData ['cyan_comp_yield']))
+                            {
+                                if (empty($formData ['cyan_comp_SKU']) || empty($formData ['cyan_comp_price']) || empty($formData ['cyan_comp_yield']))
+                                {
+                                    $valid_comps = false;
+                                    $this->view->field = "cyan_comp";
+                                    $this->view->message = "Incomplete compatible cyan toner data supplied.<br />Please fill out all fields.";
+                                    break;
+                                }
+                            }
+                            if (! empty($formData ['magenta_comp_SKU']) || ! empty($formData ['magenta_comp_price']) || ! empty($formData ['magenta_comp_yield']))
+                            {
+                                if (empty($formData ['magenta_comp_SKU']) || empty($formData ['magenta_comp_price']) || empty($formData ['magenta_comp_yield']))
+                                {
+                                    $valid_comps = false;
+                                    $this->view->field = "magenta_comp";
+                                    $this->view->message = "Incomplete compatible magenta toner data supplied.<br />Please fill out all fields.";
+                                    break;
+                                }
+                            }
+                            if (! empty($formData ['yellow_comp_SKU']) || ! empty($formData ['yellow_comp_price']) || ! empty($formData ['yellow_comp_yield']))
+                            {
+                                if (empty($formData ['yellow_comp_SKU']) || empty($formData ['yellow_comp_price']) || empty($formData ['yellow_comp_yield']))
+                                {
+                                    $valid_comps = false;
+                                    $this->view->field = "yellow_comp";
+                                    $this->view->message = "Incomplete compatible yellow toner data supplied.<br />Please fill out all fields.";
+                                    break;
+                                }
+                            }
                         }
                         break;
                     case "3" :
@@ -2902,37 +2853,37 @@ class Proposalgen_DataController extends Zend_Controller_Action
                         // COMP 3 color - combined - sku / price / yield
                         if (! $formData ['is_leased'])
                         {
-	                        $black_comp_array = array (
-	                                $formData ['black_comp_SKU'], 
-	                                $formData ['black_comp_price'], 
-	                                $formData ['black_comp_yield'] 
-	                        );
-	                        $three_color_comp_array = array (
-	                                $formData ['3color_comp_SKU'], 
-	                                $formData ['3color_comp_price'], 
-	                                $formData ['3color_comp_yield'] 
-	                        );
-	                        
-	                        if (! empty($formData ['black_comp_SKU']) || ! empty($formData ['black_comp_price']) || ! empty($formData ['black_comp_yield']))
-	                        {
-	                            if (empty($formData ['black_comp_SKU']) || empty($formData ['black_comp_price']) || empty($formData ['black_comp_yield']))
-	                            {
-	                                $valid_comps = false;
-	                                $this->view->field = "black_comp";
-	                                $this->view->message = "Incomplete compatible black toner data supplied.<br />Please fill out all fields.";
-	                                break;
-	                            }
-	                        }
-	                        if (! empty($formData ['3color_comp_SKU']) || ! empty($formData ['3color_comp_price']) || ! empty($formData ['3color_comp_yield']))
-	                        {
-	                            if (empty($formData ['3color_comp_SKU']) || empty($formData ['3color_comp_price']) || empty($formData ['3color_comp_yield']))
-	                            {
-	                                $valid_comps = false;
-	                                $this->view->field = "3color_comp";
-	                                $this->view->message = "Incomplete compatible 3 color toner data supplied.<br />Please fill out all fields.";
-	                                break;
-	                            }
-	                        }
+                            $black_comp_array = array (
+                                    $formData ['black_comp_SKU'], 
+                                    $formData ['black_comp_price'], 
+                                    $formData ['black_comp_yield'] 
+                            );
+                            $three_color_comp_array = array (
+                                    $formData ['3color_comp_SKU'], 
+                                    $formData ['3color_comp_price'], 
+                                    $formData ['3color_comp_yield'] 
+                            );
+                            
+                            if (! empty($formData ['black_comp_SKU']) || ! empty($formData ['black_comp_price']) || ! empty($formData ['black_comp_yield']))
+                            {
+                                if (empty($formData ['black_comp_SKU']) || empty($formData ['black_comp_price']) || empty($formData ['black_comp_yield']))
+                                {
+                                    $valid_comps = false;
+                                    $this->view->field = "black_comp";
+                                    $this->view->message = "Incomplete compatible black toner data supplied.<br />Please fill out all fields.";
+                                    break;
+                                }
+                            }
+                            if (! empty($formData ['3color_comp_SKU']) || ! empty($formData ['3color_comp_price']) || ! empty($formData ['3color_comp_yield']))
+                            {
+                                if (empty($formData ['3color_comp_SKU']) || empty($formData ['3color_comp_price']) || empty($formData ['3color_comp_yield']))
+                                {
+                                    $valid_comps = false;
+                                    $this->view->field = "3color_comp";
+                                    $this->view->message = "Incomplete compatible 3 color toner data supplied.<br />Please fill out all fields.";
+                                    break;
+                                }
+                            }
                         }
                         break;
                     case "4" :
@@ -2953,21 +2904,21 @@ class Proposalgen_DataController extends Zend_Controller_Action
                         // COMP 4 color - combined - sku / price / yield
                         if (! $formData ['is_leased'])
                         {
-	                        $four_color_comp_array = array (
-	                                $formData ['4color_comp_SKU'], 
-	                                $formData ['4color_comp_price'], 
-	                                $formData ['4color_comp_yield'] 
-	                        );
-	                        if (! empty($formData ['4color_comp_SKU']) || ! empty($formData ['4color_comp_price']) || ! empty($formData ['4color_comp_yield']))
-	                        {
-	                            if (empty($formData ['4color_comp_SKU']) || empty($formData ['4color_comp_price']) || empty($formData ['4color_comp_yield']))
-	                            {
-	                                $valid_comps = false;
-	                                $this->view->field = "4color";
-	                                $this->view->message = "Incomplete compatible 4 color toner data supplied.<br />Please fill out all fields.";
-	                                break;
-	                            }
-	                        }
+                            $four_color_comp_array = array (
+                                    $formData ['4color_comp_SKU'], 
+                                    $formData ['4color_comp_price'], 
+                                    $formData ['4color_comp_yield'] 
+                            );
+                            if (! empty($formData ['4color_comp_SKU']) || ! empty($formData ['4color_comp_price']) || ! empty($formData ['4color_comp_yield']))
+                            {
+                                if (empty($formData ['4color_comp_SKU']) || empty($formData ['4color_comp_price']) || empty($formData ['4color_comp_yield']))
+                                {
+                                    $valid_comps = false;
+                                    $this->view->field = "4color";
+                                    $this->view->message = "Incomplete compatible 4 color toner data supplied.<br />Please fill out all fields.";
+                                    break;
+                                }
+                            }
                         }
                         break;
                     default :
@@ -3155,7 +3106,6 @@ class Proposalgen_DataController extends Zend_Controller_Action
                             {
                                 $where = $unknown_device_instanceTable->getAdapter()->quoteInto('id = ' . $report_id . ' AND unknown_device_instance_id = ?', $unknown_device_instance_id, 'INTEGER');
                                 $unknown_device_instanceTable->update($unknown_device_instanceData, $where);
-                            
                             }
                             else
                             {
@@ -3163,7 +3113,6 @@ class Proposalgen_DataController extends Zend_Controller_Action
                                 $unknown_device_instanceData ['report_id'] = $report_id;
                                 
                                 $unknown_device_instance_id = $unknown_device_instanceTable->insert($unknown_device_instanceData);
-                            
                             }
                             
                             // check for device_instance (match on
@@ -3241,17 +3190,14 @@ class Proposalgen_DataController extends Zend_Controller_Action
                         
                         // redirect back to mapping page
                         $this->_redirect('data/devicemapping?grid=' . $grid);
-                    
                     }
                     catch ( Exception $e )
                     {
                         $db->rollback();
                         $this->view->message = "There was an error saving your unknown device.";
                         // echo $e;
-                    
                     }
                 }
-            
             }
             else
             {
@@ -3259,9 +3205,9 @@ class Proposalgen_DataController extends Zend_Controller_Action
                 // from validations are automatically added)
                 $this->view->message = "Form not valid. Please fill out all required fields.";
                 $form->populate($formData);
-            
             } // end else
             
+
             if ($upload_data_collector_id > 0)
             {
                 // set default
@@ -3441,13 +3387,11 @@ class Proposalgen_DataController extends Zend_Controller_Action
                         $is_fax = $result [0] ['is_fax'];
                         $is_duplex = 0;
                         $is_leased = 0;
-                    
                     }
                     else
                     {
                         $this->view->message = "Device Not Found.";
                     }
-                
                 }
                 
                 // populate form with values
@@ -3612,7 +3556,6 @@ class Proposalgen_DataController extends Zend_Controller_Action
                         // ticket exists, update ticket label
                         $form->getElement('request_support')->setLabel("View Support Ticket");
                     }
-                
                 }
                 
                 $mapped_to_id = 0;
@@ -3686,12 +3629,9 @@ class Proposalgen_DataController extends Zend_Controller_Action
                 {
                     $this->view->mapped = "This printer is currently mapped to the " . $mapped_to_manufacturer . " " . $mapped_to_modelname . " by the System Administrator.";
                 }
-            
             }
-        
         } // end if
         $this->view->deviceform = $form;
-    
     }
 
     public function cancelimportAction ()
@@ -3756,14 +3696,12 @@ class Proposalgen_DataController extends Zend_Controller_Action
                 
                 $this->view->message = "The devices for the current report have been removed.";
                 $db->commit();
-            
             }
             catch ( Exception $e )
             {
                 $db->rollBack();
                 $this->view->message = "An Error occured and the devices for report " . $report_id . " were not removed.";
                 throw new Exception("An Error occured and the devices for report " . $report_id . " were not removed.", 0, $e);
-            
             }
         }
     }
@@ -3906,14 +3844,11 @@ class Proposalgen_DataController extends Zend_Controller_Action
             
             // throw new exception("Error Creating report. Division by zero");
             return $totalDeviceCost;
-        
         }
         else
         {
             return $totalDeviceCost / $numOfDevice;
-        
         }
-    
     }
 
     public function getTotalDevicesIncluded ($reportId)
@@ -4114,7 +4049,6 @@ class Proposalgen_DataController extends Zend_Controller_Action
                         }
                     }
                 }
-            
             }
             else if (in_array("Standard User", $this->privilege) || $page == "managemysettings")
             {
@@ -4135,7 +4069,6 @@ class Proposalgen_DataController extends Zend_Controller_Action
                         $image = base64_decode($dealer_company [$field]);
                     }
                 }
-            
             }
             else if (in_array("Dealer Admin", $this->privilege))
             {
@@ -4149,7 +4082,6 @@ class Proposalgen_DataController extends Zend_Controller_Action
                     $dealer_company = $dealer_companyTable->fetchRow($where);
                     $image = base64_decode($dealer_company [$field]);
                 }
-            
             }
             else if (in_array("System Admin", $this->privilege))
             {
@@ -4160,13 +4092,11 @@ class Proposalgen_DataController extends Zend_Controller_Action
             
             $this->view->data = $image;
             $db->commit();
-        
         }
         catch ( Exception $e )
         {
             $db->rollback();
             echo $e;
-        
         }
     }
 
@@ -4184,37 +4114,37 @@ class Proposalgen_DataController extends Zend_Controller_Action
         try
         {
             $upload_dir = $this->config->app->uploadPath; // The directory for
-                                                          // the images to be
-                                                          // saved in
+            // the images to be
+            // saved in
             $upload_path = $upload_dir . "/"; // The path to where the image
-                                              // will be saved
+            // will be saved
             $large_image_prefix = "resize_"; // The prefix name to large image
             $thumb_image_prefix = "thumbnail_"; // The prefix name to the thumb
-                                                // image
+            // image
             $large_image_name = $large_image_prefix . $_SESSION ['random_key']; // New
-                                                                                // name
-                                                                                // of
-                                                                                // the
-                                                                                // large
-                                                                                // image
-                                                                                // (append
-                                                                                // the
-                                                                                // timestamp
-                                                                                // to
-                                                                                // the
-                                                                                // filename)
+            // name
+            // of
+            // the
+            // large
+            // image
+            // (append
+            // the
+            // timestamp
+            // to
+            // the
+            // filename)
             $thumb_image_name = $thumb_image_prefix . $_SESSION ['random_key']; // New
-                                                                                // name
-                                                                                // of
-                                                                                // the
-                                                                                // thumbnail
-                                                                                // image
-                                                                                // (append
-                                                                                // the
-                                                                                // timestamp
-                                                                                // to
-                                                                                // the
-                                                                                // filename)
+            // name
+            // of
+            // the
+            // thumbnail
+            // image
+            // (append
+            // the
+            // timestamp
+            // to
+            // the
+            // filename)
             $large_image_location = $upload_path . $large_image_name . $_SESSION ['user_file_ext'];
             $thumb_image_location = $upload_path . $thumb_image_name . $_SESSION ['user_file_ext'];
             
@@ -4238,12 +4168,10 @@ class Proposalgen_DataController extends Zend_Controller_Action
             }
             
             $db->commit();
-        
         }
         catch ( Exception $e )
         {
             $db->rollback();
-        
         }
     }
 
@@ -4261,59 +4189,60 @@ class Proposalgen_DataController extends Zend_Controller_Action
         if (! isset($_SESSION ['random_key']) || strlen($_SESSION ['random_key']) == 0)
         {
             $_SESSION ['random_key'] = strtotime(date('Y-m-d H:i:s')); // assign
-                                                                       // the
-                                                                       // timestamp
-                                                                       // to the
-                                                                       // session
-                                                                       // variable
+            // the
+            // timestamp
+            // to the
+            // session
+            // variable
             $_SESSION ['user_file_ext'] = "";
         }
         
         $this->upload_dir = $this->config->app->uploadPath; // The directory for
-                                                            // the images to be
-                                                            // saved in
+        // the images to be
+        // saved in
         $this->upload_path = $this->upload_dir . "/"; // The path to where the
-                                                      // image will be saved
+        // image will be saved
         $large_image_prefix = "resize_"; // The prefix name to large image
         $thumb_image_prefix = "thumbnail_"; // The prefix name to the thumb
-                                            // image
+        // image
         $this->large_image_name = $large_image_prefix . $_SESSION ['random_key']; // New
-                                                                                  // name
-                                                                                  // of
-                                                                                  // the
-                                                                                  // large
-                                                                                  // image
-                                                                                  // (append
-                                                                                  // the
-                                                                                  // timestamp
-                                                                                  // to
-                                                                                  // the
-                                                                                  // filename)
+        // name
+        // of
+        // the
+        // large
+        // image
+        // (append
+        // the
+        // timestamp
+        // to
+        // the
+        // filename)
         $this->thumb_image_name = $thumb_image_prefix . $_SESSION ['random_key']; // New
-                                                                                  // name
-                                                                                  // of
-                                                                                  // the
-                                                                                  // thumbnail
-                                                                                  // image
-                                                                                  // (append
-                                                                                  // the
-                                                                                  // timestamp
-                                                                                  // to
-                                                                                  // the
-                                                                                  // filename)
-                                                                                  
+        // name
+        // of
+        // the
+        // thumbnail
+        // image
+        // (append
+        // the
+        // timestamp
+        // to
+        // the
+        // filename)
+        
+
         // Only one of these image types should be allowed for upload
-                                                                                  // $allowed_image_types
-                                                                                  // =
-                                                                                  // array('image/pjpeg'=>"jpg",'image/jpeg'=>"jpg",'image/jpg'=>"jpg",'image/png'=>"png",'image/x-png'=>"png",'image/gif'=>"gif");
+        // $allowed_image_types
+        // =
+        // array('image/pjpeg'=>"jpg",'image/jpeg'=>"jpg",'image/jpg'=>"jpg",'image/png'=>"png",'image/x-png'=>"png",'image/gif'=>"gif");
         $this->allowed_image_types = array (
                 'image/pjpeg' => "jpg", 
                 'image/jpeg' => "jpg", 
                 'image/jpg' => "jpg" 
         );
         $allowed_image_ext = array_unique($this->allowed_image_types); // do not
-                                                                       // change
-                                                                       // this
+        // change
+        // this
         $image_ext = ""; // initialise variable, do not change this.
         foreach ( $allowed_image_ext as $mime_type => $ext )
         {
@@ -4415,11 +4344,9 @@ class Proposalgen_DataController extends Zend_Controller_Action
                     }
                 }
             }
-        
         }
         catch ( Exception $e )
         {
-        
         }
     }
 
@@ -4451,11 +4378,9 @@ class Proposalgen_DataController extends Zend_Controller_Action
                 $scale = 1;
                 $uploaded = $this->resizeImage($this->large_image_location, $width, $height, $scale);
             }
-        
         }
         catch ( Exception $e )
         {
-        
         }
     }
 
@@ -4565,7 +4490,6 @@ class Proposalgen_DataController extends Zend_Controller_Action
                         $this->_helper->flashMessenger(array (
                                 "error" => "An error occured while saving your settings." 
                         ));
-                    
                     }
                     catch ( Exception $e )
                     {
@@ -4758,8 +4682,8 @@ class Proposalgen_DataController extends Zend_Controller_Action
      * EG:
      * $this->regenerateMenu('hardware', 'verify');
      *
-     * @param $previousstage string           
-     * @param $newstage string           
+     * @param $previousstage string            
+     * @param $newstage string            
      */
     public function regenerateMenu ($previousstage, $newstage)
     {
@@ -4777,7 +4701,6 @@ class Proposalgen_DataController extends Zend_Controller_Action
             }
             $menu = new Custom_Report_Menu($report);
             $this->view->reportMenu = $menu;
-        
         }
     }
 }

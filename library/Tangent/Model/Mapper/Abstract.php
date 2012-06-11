@@ -12,7 +12,7 @@ abstract class Tangent_Model_Mapper_Abstract
     protected $_defaultDbTableClassName;
 
     // Methods that MUST be defined in child classes
-    abstract protected function mapRowToObject (Zend_Db_Table_Row $row);
+    //abstract protected function mapRowToObject ($row);
 
     //abstract public function save (Application_Model_Abstract $object);
     
@@ -37,7 +37,7 @@ abstract class Tangent_Model_Mapper_Abstract
 
     /**
      * Returns the DbTable. If none is assigned yet, it will assign a default
-     * @return Applicaiton_Model_DbTable_Abstract
+     * @return Zend_Db_Table_Abstract
      */
     protected function getDbTable ()
     {

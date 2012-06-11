@@ -20,6 +20,29 @@ class Proposalgen_Model_Mapper_DevicePf extends Tangent_Model_Mapper_Abstract
     }
 
     /**
+     * Searches the database for a printfleet device that matches the device name or model id
+     *
+     * @param string $deviceName
+     *            The device name
+     * @param string $modelId
+     *            The printfleet model id
+     * @return Proposalgen_Model_DevicePf
+     */
+    public function fetchByDeviceNameOrModelId ($deviceName, $modelId)
+    {
+        $select = $this->getDbTable()->select(true);
+        $select->where('pf_db_devicename = ?', $deviceName);
+        $select->orWhere('pf_model_id = ?', $modelId);
+        $where = implode(' ', $select->getPart(Zend_Db_Table_Select::WHERE));
+        $result = $this->fetchRow(array($where));
+        if (! $result)
+        {
+            return FALSE;
+        }
+        return $result;
+    }
+
+    /**
      * Maps a database row object to an Proposalgen_Model
      *
      * @param Zend_Db_Table_Row $row            

@@ -2,7 +2,7 @@
 
 /**
  * Class Proposalgen_Model_UploadDataCollector
- * 
+ *
  * @author "John Sadler"
  */
 class Proposalgen_Model_UploadDataCollectorRow extends Tangent_Model_Abstract
@@ -67,7 +67,7 @@ class Proposalgen_Model_UploadDataCollectorRow extends Tangent_Model_Abstract
 
     /**
      * Constructor that takes a csv row and populates the model
-     * 
+     *
      * @param array $csvRow            
      */
     public function UploadDataCollector ($csvRow)
@@ -78,12 +78,100 @@ class Proposalgen_Model_UploadDataCollectorRow extends Tangent_Model_Abstract
     /**
      * Validates the model
      */
-    public function ValidateData ()
+    /**
+     * Validates the information set in the model (assumed to be freshly populated from a CSV file.) The return value is
+     * to be used with the
+     *
+     * @return boolean
+     */
+    public function IsValid ()
     {
-        $valid = false;
+        // Variables
+        $minDeviceAgeInDays = 4;
         
-        $this->setInvalidData($valid);
-        return $valid;
+        if (! $this->getModelName())
+        {
+            return false;
+        }
+        
+        if (! $this->getManufacturer())
+        {
+            return false;
+        }
+        
+        // Check Meters
+        if (! $this->validateMeters())
+        {
+            return false;
+        }
+        
+        // Device Age
+        $startDate = new Zend_Date($this->getStartdate());
+        $endDate = new Zend_Date($this->getEnddate());
+        $discoveryDate = new Zend_Date($this->getDiscoveryDate());
+        
+        $interval1 = $startDate->diff($endDate);
+        $interval2 = $discoveryDate->diff($endDate);
+        
+        $deviceAge = $interval1;
+        
+        // Use the smallest age that we have available
+        if ($interval1->days > $interval2->days && ! $interval2->invert)
+        {
+            $deviceAge = $interval2;
+        }
+        
+        if ($deviceAge->invert || $deviceAge->days < $minDeviceAgeInDays)
+        {
+            return false;
+        }
+        
+        // If we get here, all is valid.
+        return true;
+    }
+
+    /**
+     * Validates all the meter values
+     *
+     * @return boolean
+     */
+    protected function validateMeters ()
+    {
+        // Get all the meters ready
+        $StartMeter ["Black"] = $this->getStartMeterBlack();
+        $StartMeter ["Color"] = $this->getStartMeterColor();
+        $StartMeter ["Life"] = $this->getStartMeterLife();
+        $StartMeter ["Printblack"] = $this->getStartMeterPrintblack();
+        $StartMeter ["Printcolor"] = $this->getStartMeterPrintcolor();
+        $StartMeter ["Copyblack"] = $this->getStartMeterCopyblack();
+        $StartMeter ["Copycolor"] = $this->getStartMeterCopycolor();
+        $StartMeter ["Fax"] = $this->getStartMeterFax();
+        $StartMeter ["Scan"] = $this->getStartMeterScan();
+        
+        $EndMeter ["Black"] = $this->getEndMeterBlack();
+        $EndMeter ["Color"] = $this->getEndMeterColor();
+        $EndMeter ["Life"] = $this->getEndMeterLife();
+        $EndMeter ["Printblack"] = $this->getEndMeterPrintblack();
+        $EndMeter ["Printcolor"] = $this->getEndMeterPrintcolor();
+        $EndMeter ["Copyblack"] = $this->getEndMeterCopyblack();
+        $EndMeter ["Copycolor"] = $this->getEndMeterCopycolor();
+        $EndMeter ["Fax"] = $this->getEndMeterFax();
+        $EndMeter ["Scan"] = $this->getEndMeterScan();
+        
+        // If end meter black is empty, but has startmeterlife and startmetercolor then allow it
+        if (empty($EndMeter ["Black"]) && (empty($StartMeter ["Life"]) || empty($StartMeter ["Color"])))
+            return false;
+            
+            // Make sure that the end meter is greater than or equal to the end meter and that both meters are >= 0
+        foreach ( $StartMeter as $meterType => $startValue )
+        {
+            if ($StartMeter < 0 || $EndMeter [$meterType] < 0 || $StartMeter > $EndMeter [$meterType])
+            {
+                return false;
+            }
+        }
+        // If we get here, all our meters were valid
+        return true;
     }
 
     /**

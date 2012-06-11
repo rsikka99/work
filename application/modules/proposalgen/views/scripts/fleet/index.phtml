@@ -13,7 +13,7 @@
 		var sLeft = ($(window).width()/2)-200;
 		
 		jQuery("#results_list").jqGrid({
-			url:'<?php echo $this->baseUrl('/data/previewlist?filter=0'); ?>',
+			url:'<?php echo $this->url(array('action' => 'previewlist', 'filter' => '0')); ?>',
 			datatype:'json',
 			colNames:[
 				'id','devices_pf_id','printermodelid','manufacturer','modelname','serialnumber','ipaddress',
@@ -99,7 +99,7 @@
 		);
 		
 		jQuery("#excluded_results_list").jqGrid({
-			url:'<?php echo $this->baseUrl('/data/previewlist?filter=1'); ?>',
+			url:'<?php echo $this->url(array('action' => 'previewlist', 'filter' => '1')); ?>',
 			datatype:'json',
 			colNames:[
 				'id','devices_pf_id','printermodelid','manufacturer','modelname','serialnumber','ipaddress',
@@ -186,88 +186,30 @@
 
     });
 
-    function doAction(inAction) {
-        if (inAction == 'confirm') {
-            //change form action to confirmUpload and submit
-            document.getElementById('fileinput').action = '<?php echo $this->baseUrl('/data/confirmation'); ?>';
-            document.getElementById('fileinput').submit();
-            
-        } else if(inAction == 'upload') {
-        	if($('#uploadedfile').val() == '') {
-        		$('#message_container').html('<p>Please select a file to upload.</p>');
-        		
-        	} else {
-        		if(has_data == 'true') {
-        			if(confirm('This report already contains previously uploaded data. If you continue, all existing data will be deleted. Do you wish to continue?')) {
-						$('#fileinput').submit();
-        			}
-        		} else {
-					$('#fileinput').submit();
-        		}
-            }
-        
-        } else if(inAction == 'continue') {
-            document.location.href = "<?php echo $this->baseUrl('/data/devicemapping'); ?>";
-            
-        } else if(inAction == 'back') {
-            document.location.href = "<?php echo $this->baseUrl('/survey/verify'); ?>";
-        }
-    }
     
 <?php $this->headScript()->captureEnd() ?>
-<table style="width: 100%; border-collapse: collapse; table-layout: fixed">
-	<tr>
-		<td class = "Title"><u><?php echo $this->formTitle?></u></td>
-		<?php if ($this->companyName) :?>
-		<td class = "PreparedFor"><i>Prepared For:</i></td>
-		<td class = "PreparedForText"><i><?php echo $this->companyName; ?></i></td>
-		<?php endif?>
-	</tr>
-</table>
-
-<form id="fileinput" class="fileinput" enctype="multipart/form-data" action="<?php echo $this->baseUrl(); ?>/data" method="POST">
-	<dl class="zend_form">
-		<dt class="botMenu">
-		
-		    <div id="message_container" class="margined">
-	        <?php
-	        if(isset($this->errMessages)) {
-	            //show the first error in the list of errors
-	            foreach($this->errMessages as $key => $value) {
-	                echo $value;
-	                break;
-	            }
-	        } else {
-	            if(isset($this->message)) {
-	                echo $this->message;
-	            }
-	        }
-	        ?>
-		    </div>
-		    
-            <div id="upload_container" class="well">
-                <div>Choose a <span style="color: red">.CSV</span> file to upload: <input name="uploadedfile" id="uploadedfile" accept="application/csv, text/csv" type="file" size="60" class="upload_file" /></div>
-                <div><input type="button" name="csv_submit" id="csv_submit" value="Upload File" onclick="javascript: doAction('upload');" class="btn" /></div>
-            </div>
-			
-		    <div class="results_container">
-		    <?php if($this->has_data > 0) { ?>
-				<h3>Imported Results:</h3><br />
-				<table id="results_list"></table>
-				<div id="results_pager"></div>
-                <br />
-			<?php } ?>
-			
-			<?php if($this->bad_data > 0) { ?>
-				<h3>Excluded Results:</h3>
-	        	<p>Records below have been excluded because they are missing data in required fields.</p>
-                <table id="excluded_results_list"></table>
-                <div id="excluded_results_pager"></div>
-                <br />
-	        <?php } ?>
-	       	</div>
-		</dt>
-	</dl>
+<form id="fileinput" class="fileinput" enctype="multipart/form-data" method="POST">
+    <div id="upload_container" class="well">
+        <div>Choose a <span style="color: red">.CSV</span> file to upload: <input name="uploadedfile" id="uploadedfile" accept="application/csv, text/csv" type="file" size="60" class="upload_file" /></div>
+        <div><input type="submit" name="uploadData" id="csv_submit" value="Upload File" class="btn" /></div>
+    </div>
+    
+    <div class="results_container">
+    <?php if($this->has_data > 0) { ?>
+    	<h3>Imported Results:</h3><br />
+    	<table id="results_list"></table>
+    	<div id="results_pager"></div>
+        <br />
+    <?php } ?>
+    
+    <?php if($this->bad_data > 0) { ?>
+    	<h3>Excluded Results:</h3>
+    	<p>Records below have been excluded because they are missing data in required fields.</p>
+        <table id="excluded_results_list"></table>
+        <div id="excluded_results_pager"></div>
+        <br />
+    <?php } ?>
+    </div>
 </form>
     <form class="proposalForm form-horizontal" method="POST">
     	<div class="form-actions">

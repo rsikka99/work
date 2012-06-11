@@ -49,6 +49,15 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
             $result = $db->fetchOne("SELECT COUNT(*) AS count FROM {$tableName} WHERE report_id = ?", $reportId);
         }
     }
+    
+    /**
+     * Deletes all upload data collector rows for a report
+     * @param number $reportId
+     */
+    public function deleteAllRowsForReport($reportId)
+    {
+        return $this->delete(array('report_id = ?' => $reportId));
+    }
 
     /**
      * Maps a database row object to an Proposalgen_Model
@@ -56,13 +65,18 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
      * @param Zend_Db_Table_Row $row            
      * @return Proposalgen_Model_UploadDataCollectorRow
      */
-    public function mapRowToObject (Zend_Db_Table_Row $row)
+    public function mapRowToObject ($row)
     {
+        if (is_array($row))
+        {
+            $row = new ArrayObject($row, ArrayObject::ARRAY_AS_PROPS);
+        }
+        
         $object = null;
         try
         {
             $object = new Proposalgen_Model_UploadDataCollectorRow();
-            $object->setUploadDataCollectorId($row->id)
+            @$object->setUploadDataCollectorId($row->id)
                 ->setReportId($row->report_id)
                 ->setDevicesPfId($row->devices_pf_id)
                 ->setStartDate($row->startdate)
@@ -133,60 +147,7 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
         $primaryKey = 0;
         try
         {
-            $data ["id"] = $object->getUploadDataCollectorId();
-            $data ["report_id"] = $object->getReportId();
-            $data ["devices_pf_id"] = $object->getDevicesPfId();
-            $data ["startdate"] = $object->getStartdate();
-            $data ["enddate"] = $object->getEnddate();
-            $data ["printermodelid"] = $object->getPrinterModelid();
-            $data ["ipaddress"] = $object->getIpAddress();
-            $data ["serialnumber"] = $object->getSerialNumber();
-            $data ["modelname"] = $object->getModelName();
-            $data ["manufacturer"] = $object->getManufacturer();
-            $data ["is_color"] = $object->getIsColor();
-            $data ["is_copier"] = $object->getIsCopier();
-            $data ["is_scanner"] = $object->getIsScanner();
-            $data ["is_fax"] = $object->getIsFax();
-            $data ["ppm_black"] = $object->getPpmBlack();
-            $data ["ppm_color"] = $object->getPpmColor();
-            $data ["date_introduction"] = $object->getDateIntroduction();
-            $data ["discovery_date"] = $object->getDiscoveryDate();
-            $data ["black_prodcodeoem"] = $object->getBlackProdCodeOem();
-            $data ["black_yield"] = $object->getBlackYield();
-            $data ["black_prodcostoem"] = $object->getBlackProdCostOem();
-            $data ["cyan_prodcodeoem"] = $object->getCyanProdCodeOem();
-            $data ["cyan_yield"] = $object->getCyanYield();
-            $data ["cyan_prodcostoem"] = $object->getCyanProdCostOem();
-            $data ["magenta_prodcodeoem"] = $object->getMagentaProdCodeOem();
-            $data ["magenta_yield"] = $object->getMagentaYield();
-            $data ["magenta_prodcostoem"] = $object->getMagentaProdCostOem();
-            $data ["yellow_prodcodeoem"] = $object->getYellowProdCodeOem();
-            $data ["yellow_yield"] = $object->getYellowYield();
-            $data ["yellow_prodcostoem"] = $object->getYellowProdCostOem();
-            $data ["duty_cycle"] = $object->getDutyCycle();
-            $data ["watts_power_normal"] = $object->getWattsPowerNormal();
-            $data ["watts_power_idle"] = $object->getWattsPowerIdle();
-            $data ["startmeterlife"] = $object->getStartMeterLife();
-            $data ["endmeterlife"] = $object->getEndMeterLife();
-            $data ["startmeterblack"] = $object->getStartMeterBlack();
-            $data ["endmeterblack"] = $object->getEndMeterBlack();
-            $data ["startmetercolor"] = $object->getStartMeterColor();
-            $data ["endmetercolor"] = $object->getEndMeterColor();
-            $data ["startmeterprintblack"] = $object->getStartMeterBlack();
-            $data ["endmeterprintblack"] = $object->getEndMeterBlack();
-            $data ["startmeterprintcolor"] = $object->getStartMeterPrintcolor();
-            $data ["endmeterprintcolor"] = $object->getEndtMeterPrintcolor();
-            $data ["startmetercopyblack"] = $object->getStartMeterCopyblack();
-            $data ["endmetercopyblack"] = $object->getEndMeterCopyblack();
-            $data ["startmetercopycolor"] = $object->getStartMeterCopycolor();
-            $data ["startmetercopycolor"] = $object->getEndMeterCopycolor();
-            $data ["startmeterscan"] = $object->getStartMeterScan();
-            $data ["endmeterscan"] = $object->getEndMeterScan();
-            $data ["startmeterfax"] = $object->getStartMeterFax();
-            $data ["endmeterfax"] = $object->getEndMeterFax();
-            $data ["invalid_data"] = $object->getInvalidData();
-            $data ["is_excluded"] = $object->getIsExcluded();
-            
+            $data = $this->mapObjectToRow($object);
             $primaryKey = $this->saveRow($data);
         }
         catch ( Exception $e )
@@ -194,6 +155,72 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
             throw new Exception("Error saving " . get_class($this) . " to the database.", 0, $e);
         }
         return $primaryKey;
+    }
+
+    /**
+     * Maps an object into an array for the database
+     *
+     * @param Proposalgen_Model_UploadDataCollectorRow $object            
+     * @return multitype:NULL the Ambigous <the, NULL, field_type> Ambigous <the, string, field_type>
+     */
+    public function mapObjectToRow (Proposalgen_Model_UploadDataCollectorRow $object)
+    {
+        $data = array ();
+        $data ["id"] = $object->getUploadDataCollectorId();
+        $data ["report_id"] = $object->getReportId();
+        $data ["devices_pf_id"] = $object->getDevicesPfId();
+        $data ["startdate"] = $object->getStartdate();
+        $data ["enddate"] = $object->getEnddate();
+        $data ["printermodelid"] = $object->getPrinterModelid();
+        $data ["ipaddress"] = $object->getIpAddress();
+        $data ["serialnumber"] = $object->getSerialNumber();
+        $data ["modelname"] = $object->getModelName();
+        $data ["manufacturer"] = $object->getManufacturer();
+        $data ["is_color"] = $object->getIsColor();
+        $data ["is_copier"] = $object->getIsCopier();
+        $data ["is_scanner"] = $object->getIsScanner();
+        $data ["is_fax"] = $object->getIsFax();
+        $data ["ppm_black"] = $object->getPpmBlack();
+        $data ["ppm_color"] = $object->getPpmColor();
+        $data ["date_introduction"] = $object->getDateIntroduction();
+        $data ["discovery_date"] = $object->getDiscoveryDate();
+        $data ["black_prodcodeoem"] = $object->getBlackProdCodeOem();
+        $data ["black_yield"] = $object->getBlackYield();
+        $data ["black_prodcostoem"] = $object->getBlackProdCostOem();
+        $data ["cyan_prodcodeoem"] = $object->getCyanProdCodeOem();
+        $data ["cyan_yield"] = $object->getCyanYield();
+        $data ["cyan_prodcostoem"] = $object->getCyanProdCostOem();
+        $data ["magenta_prodcodeoem"] = $object->getMagentaProdCodeOem();
+        $data ["magenta_yield"] = $object->getMagentaYield();
+        $data ["magenta_prodcostoem"] = $object->getMagentaProdCostOem();
+        $data ["yellow_prodcodeoem"] = $object->getYellowProdCodeOem();
+        $data ["yellow_yield"] = $object->getYellowYield();
+        $data ["yellow_prodcostoem"] = $object->getYellowProdCostOem();
+        $data ["duty_cycle"] = $object->getDutyCycle();
+        $data ["wattspowernormal"] = $object->getWattsPowerNormal();
+        $data ["wattspoweridle"] = $object->getWattsPowerIdle();
+        $data ["startmeterlife"] = $object->getStartMeterLife();
+        $data ["endmeterlife"] = $object->getEndMeterLife();
+        $data ["startmeterblack"] = $object->getStartMeterBlack();
+        $data ["endmeterblack"] = $object->getEndMeterBlack();
+        $data ["startmetercolor"] = $object->getStartMeterColor();
+        $data ["endmetercolor"] = $object->getEndMeterColor();
+        $data ["startmeterprintblack"] = $object->getStartMeterBlack();
+        $data ["endmeterprintblack"] = $object->getEndMeterBlack();
+        $data ["startmeterprintcolor"] = $object->getStartMeterPrintcolor();
+        $data ["endmeterprintcolor"] = $object->getEndMeterPrintcolor();
+        $data ["startmetercopyblack"] = $object->getStartMeterCopyblack();
+        $data ["endmetercopyblack"] = $object->getEndMeterCopyblack();
+        $data ["startmetercopycolor"] = $object->getStartMeterCopycolor();
+        $data ["startmetercopycolor"] = $object->getEndMeterCopycolor();
+        $data ["startmeterscan"] = $object->getStartMeterScan();
+        $data ["endmeterscan"] = $object->getEndMeterScan();
+        $data ["startmeterfax"] = $object->getStartMeterFax();
+        $data ["endmeterfax"] = $object->getEndMeterFax();
+        $data ["invalid_data"] = (int)$object->getInvalidData();
+        $data ["is_excluded"] = (int)$object->getIsExcluded();
+        
+        return $data;
     }
 
     public function getExcludedAsDeviceInstance ($reportId)
