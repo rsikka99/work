@@ -21,7 +21,7 @@ class Quotegen_Form_QuoteSettings extends EasyBib_Form {
 		$this->setAttrib ( 'class', 'form-horizontal' );
 		
 		$this->addElement ( 'text', 'pageCoverageMonochrome', array (
-				'label' => 'Page Coverage Monochrome:',
+				'label' => 'Page Coverage Mono:',
 				'required' => true,
 				'class' => 'span1',
 				'filters' => array (

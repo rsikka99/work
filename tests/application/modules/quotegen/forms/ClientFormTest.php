@@ -75,7 +75,7 @@ class Quotegen_Form_ClientFormTest extends PHPUnit_Framework_TestCase {
 				'address' => $address,
 				'phoneNumber' => $phoneNumber 
 		);
-		$this->assertFalse ( $this->_form->isValid ( $data ), "User form accepted bad data!" );
+		$this->assertFalse ( $this->_form->isValid ( $data ), "Client form accepted bad data!" );
 	}
 
 }
