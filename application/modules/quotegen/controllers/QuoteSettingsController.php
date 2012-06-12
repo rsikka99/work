@@ -8,7 +8,7 @@ class Quotegen_QuoteSettingsController extends Zend_Controller_Action {
 	
 	public function indexAction() {
 		// Display all of the quote settings
-		$this->view->quotesettings = Quotegen_Model_Mapper_QuoteSettings::getInstance ()->fetchAll ();
+		$this->view->form = new Quotegen_Form_QuoteSettings();
 	}
 
 }
