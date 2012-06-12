@@ -27,6 +27,11 @@ class Quotegen_Form_ClientFormTest extends PHPUnit_Framework_TestCase {
 						'lrobert',
 						'tmtwdev',
 						'6135551234' 
+				),
+				array (
+						'Help',
+						'address1',
+						'1234567890' 
 				)
 		);
 	}
@@ -52,7 +57,12 @@ class Quotegen_Form_ClientFormTest extends PHPUnit_Framework_TestCase {
 						'lee',
 						'tmtwdev',
 						 '',
-				) 
+				),
+				array (
+						'pappa-!aljdflkja',
+						'123!@#(Test Address<html>',
+						'123' 
+				)
 		);
 	}
 	
