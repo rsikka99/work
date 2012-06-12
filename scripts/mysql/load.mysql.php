@@ -86,6 +86,7 @@ try
         
         runSQLFile(dirname(__FILE__) . '/schema.base.sql', $conn);
         runSQLFile(dirname(__FILE__) . '/schema.proposalgenerator.sql', $conn);
+        runSQLFile(dirname(__FILE__) . '/schema.quotegen.sql', $conn);
         
         if ('testing' != APPLICATION_ENV)
         {
