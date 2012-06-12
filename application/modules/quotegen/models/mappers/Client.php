@@ -160,34 +160,8 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Counts all the clients
      *
-     * @param $where Array
-     *            OPTIONAL An SQL WHERE clause as an array
-     * @return Ambigous <string, boolean, mixed>
      */
-    public function count ($where = null)
-    {
-        $dbTable = $this->getDbTable();
-        $db = $dbTable->getAdapter();
-        
-        $select = $dbTable->select();
-        $select->from($dbTable, array (
-                'COUNT(*) as count' 
-        ));
-        
-        // If we have a where, apply all the where bindings.
-        if ($where !== null)
-        {
-            foreach ( $where as $whereStatement => $whereValue )
-            {
-                $select->where($whereStatement, $whereValue);
-            }
-        }
-        $result = $dbTable->fetchRow($select);
-        
-        return ($result) ? $result->count : 0;
-    }
 
     public function getWhereUserId ($userId)
     {
