@@ -57,7 +57,7 @@ class Quotegen_Form_QuoteSettingsFormTest extends PHPUnit_Framework_TestCase {
 						24,
 						15,
 						10,
-						0 
+						5 
 				)
 		);
 	}
