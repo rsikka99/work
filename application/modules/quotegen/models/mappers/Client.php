@@ -160,13 +160,15 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
     }
 
     /**
+     * Gets a where clause for filtering by id
      *
+     * @param unknown_type $id            
+     * @return array
      */
-
-    public function getWhereUserId ($userId)
+    public function getWhereId ($id)
     {
         return array (
-                'id = ?' => $userId 
+                'id = ?' => $id 
         );
     }
 }
