@@ -86,6 +86,13 @@ abstract class My_Model_Mapper_Abstract
         return $this->_dbTable;
     }
 
+    /**
+     * Unsets all null values within an array.
+     * If you want to set a field to null use new Zend_Db_Expr("NULL")
+     *
+     * @param unknown_type $array            
+     * @return multitype: boolean
+     */
     protected function unsetNullValues ($array)
     {
         return array_filter($array, function  ($value)
@@ -93,5 +100,45 @@ abstract class My_Model_Mapper_Abstract
             return (! ($value === null));
         });
     }
+
+    /**
+     * Counts how many rows in a table
+     *
+     * @param $where Array
+     *            OPTIONAL An SQL WHERE clause as an array
+     * @return Ambigous <string, boolean, mixed>
+     */
+    public function count ($where = null)
+    {
+        $dbTable = $this->getDbTable();
+        $db = $dbTable->getAdapter();
+        
+        $select = $dbTable->select();
+        $select->from($dbTable, array (
+                'COUNT(*) as count' 
+        ));
+        
+        // If we have a where, apply all the where bindings.
+        if ($where !== null)
+        {
+            foreach ( $where as $whereStatement => $whereValue )
+            {
+                $select->where($whereStatement, $whereValue);
+            }
+        }
+        $result = $dbTable->fetchRow($select);
+        
+        return ($result) ? $result->count : 0;
+    }
+
+    abstract public function insert ($data);
+
+    abstract public function save ($data, $primaryKey);
+
+    abstract public function delete ($primaryKey);
+
+    abstract public function fetch ($where = null, $order = null, $offset = null);
+
+    abstract public function fetchAll ($where = null, $order = null, $count = 25, $offset = null);
 }
 ?>
