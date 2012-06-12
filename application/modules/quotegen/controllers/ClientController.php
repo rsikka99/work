@@ -12,7 +12,7 @@ class Quotegen_ClientController extends Zend_Controller_Action
     {
         // Display all of the clients
         $mapper = Quotegen_Model_Mapper_Client::getInstance();
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper, $mapper->getWhereUserId(2)));
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper, $mapper->getWhereId(2)));
         
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
