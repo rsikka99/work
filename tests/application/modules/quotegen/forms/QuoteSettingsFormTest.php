@@ -39,7 +39,7 @@ class Quotegen_Form_QuoteSettingsFormTest extends PHPUnit_Framework_TestCase {
 	public function testFormAcceptsValidData($pageCoverageMonochrome, $pageCoverageColor, $deviceMargin, $pageMargin, $tonerPreference) {
 		$data = array (
 				'pageCoverageMonochrome' => $pageCoverageMonochrome,
-				'address' => $pageCoverageColor,
+				'pageCoverageColor' => $pageCoverageColor,
 				'deviceMargin' => $deviceMargin, 
 				'pageMargin' => $pageMargin, 
 				'tonerPreference' => $tonerPreference
@@ -53,11 +53,11 @@ class Quotegen_Form_QuoteSettingsFormTest extends PHPUnit_Framework_TestCase {
 	public function badCreateData() {
 		return array (
 				array (
-						'1',
-						'2',
-						'3',
 						'a',
-						'b'
+						24,
+						15,
+						10,
+						0 
 				)
 		);
 	}
@@ -68,7 +68,7 @@ class Quotegen_Form_QuoteSettingsFormTest extends PHPUnit_Framework_TestCase {
 	public function testFormRejectsBadData($pageCoverageMonochrome, $pageCoverageColor, $deviceMargin, $pageMargin, $tonerPreference) {
 		$data = array (
 				'pageCoverageMonochrome' => $pageCoverageMonochrome,
-				'address' => $pageCoverageColor,
+				'pageCoverageColor' => $pageCoverageColor,
 				'deviceMargin' => $deviceMargin, 
 				'pageMargin' => $pageMargin, 
 				'tonerPreference' => $tonerPreference
