@@ -89,7 +89,7 @@ abstract class My_Model_Mapper_Abstract
     /**
      * Unsets all null values within an array.
      * If you want to set a field to null use new Zend_Db_Expr("NULL")
-     * 
+     *
      * @param unknown_type $array            
      * @return multitype: boolean
      */
@@ -130,13 +130,12 @@ abstract class My_Model_Mapper_Abstract
         
         return ($result) ? $result->count : 0;
     }
+
     abstract public function insert ($data);
 
     abstract public function save ($data, $primaryKey);
 
     abstract public function delete ($primaryKey);
-
-    abstract public function count ();
 
     abstract public function fetch ($where = null, $order = null, $offset = null);
 
