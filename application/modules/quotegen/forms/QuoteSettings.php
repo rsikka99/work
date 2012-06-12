@@ -20,9 +20,10 @@ class Quotegen_Form_QuoteSettings extends EasyBib_Form {
 		 */
 		$this->setAttrib ( 'class', 'form-horizontal' );
 		
-		$this->addElement ( 'text', 'name', array (
-				'label' => 'Company Name:',
+		$this->addElement ( 'text', 'pageCoverageMonochrome', array (
+				'label' => 'Page Coverage Monochrome:',
 				'required' => true,
+				'class' => 'span1',
 				'filters' => array (
 						'StringTrim',
 						'StripTags' 
@@ -32,16 +33,16 @@ class Quotegen_Form_QuoteSettings extends EasyBib_Form {
 								'validator' => 'StringLength',
 								'options' => array (
 										1,
-										255 
+										100 
 								) 
 						) 
 				) 
 		) );
 		
-		$this->addElement ( 'textarea', 'address', array (
-				'label' => 'Address:',
-				'style' => 'height: 100px',
+		$this->addElement ( 'text', 'pageCoverageColor', array (
+				'label' => 'Page Coverage Color:',
 				'required' => true,
+				'class' => 'span1',
 				'filters' => array (
 						'StringTrim',
 						'StripTags' 
@@ -51,15 +52,16 @@ class Quotegen_Form_QuoteSettings extends EasyBib_Form {
 								'validator' => 'StringLength',
 								'options' => array (
 										1,
-										255 
+										100 
 								) 
 						) 
 				) 
 		) );
 		
-		$this->addElement ( 'text', 'phoneNumber', array (
-				'label' => 'Phone Number',
+		$this->addElement ( 'text', 'deviceMargin', array (
+				'label' => 'Device Margin:',
 				'required' => true,
+				'class' => 'span1',
 				'filters' => array (
 						'StringTrim',
 						'StripTags' 
@@ -68,12 +70,51 @@ class Quotegen_Form_QuoteSettings extends EasyBib_Form {
 						array (
 								'validator' => 'StringLength',
 								'options' => array (
-										7,
-										15 
+										1,
+										100 
 								) 
 						) 
 				) 
 		) );
+		
+		$this->addElement ( 'text', 'pageMargin', array (
+				'label' => 'Page Margin:',
+				'required' => true,
+				'class' => 'span1',
+				'filters' => array (
+						'StringTrim',
+						'StripTags' 
+				),
+				'validators' => array (
+						array (
+								'validator' => 'StringLength',
+								'options' => array (
+										1,
+										100 
+								) 
+						) 
+				) 
+		) );
+		
+		$this->addElement ( 'text', 'tonerPreference', array (
+				'label' => 'Toner Preference:',
+				'required' => true,
+				'class' => 'span1',
+				'filters' => array (
+						'StringTrim',
+						'StripTags' 
+				),
+				'validators' => array (
+						array (
+								'validator' => 'StringLength',
+								'options' => array (
+										1,
+										100 
+								) 
+						) 
+				) 
+		) );
+		
 		
 		// Add the submit button
 		$this->addElement ( 'submit', 'submit', array (
