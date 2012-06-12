@@ -26,6 +26,54 @@
 						</buildnew>
 					</pages>
 				</quotebuilder>
+				<clients>
+					<label>Manage Clients</label>
+					<class>dropdown</class>
+					<module>quotegen</module>
+					<controller>client</controller>
+					<action>index</action>
+					<resource>quotegen_client_index</resource>
+					<pages>
+						<viewall>
+							<label>View all</label>
+							<module>quotegen</module>
+							<controller>client</controller>
+							<action>index</action>
+							<resource>quotegen_client_index</resource>
+						</viewall>
+						<view>
+							<label> View </label>
+							<module>quotegen</module>
+							<controller>client</controller>
+							<action>view</action>
+							<resource>quotegen_client_view</resource>
+							<visible>0</visible>
+						</view>
+						<delete>
+							<label>Delete</label>
+							<module>quotegen</module>
+							<controller>client</controller>
+							<action>delete</action>
+							<resource>quotegen_client_delete</resource>
+							<visible>0</visible>
+						</delete>
+						<create>
+							<label>Create</label>
+							<module>quotegen</module>
+							<controller>client</controller>
+							<action>create</action>
+							<resource>quotegen_client_create</resource>
+						</create>
+						<update>
+							<label>Edit</label>
+							<module>quotegen</module>
+							<controller>client</controller>
+							<action>edit</action>
+							<resource>quotegen_client_edit</resource>
+							<visible>0</visible>
+						</update>
+					</pages>
+				</clients>
 			</pages>
 		</menu>
 	</nav>
