@@ -1,0 +1,33 @@
+<?php if (isset($this->clients) && count($this->clients) > 0) : ?>
+<h1>All Clients</h1>
+<table class="table table-striped table-condensed table-bordered">
+    <thead>
+        <tr>
+            <th style="width: 30px;">ID</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Phone number</th>
+            <th style="width: 80px;">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->clients as $client) : /* @var $client Quotegen_Model_Client */ ?>
+        <tr>
+            <td><?php echo $client->getId(); ?></td>
+            <td><?php echo $client->getName(); ?></td>
+            <td><?php echo $client->getAddress(); ?></td>
+            <td><?php echo $client->getPhoneNumber(); ?></td>
+            <td>
+                <div class="btn-group">
+                    <a class="btn btn-warning" title="Edit Client" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $client->getId())); ?>"><i class="icon-pencil"></i></a>
+                    <a class="btn btn-danger" title="Delete Client" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $client->getId())); ?>"><i class="icon-trash"></i></a>
+                </div>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<?php else : ?>
+    <h1>There are no clients</h1>
+<?php endif; ?>
+
