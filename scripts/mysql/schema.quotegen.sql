@@ -14,6 +14,7 @@ CREATE  TABLE IF NOT EXISTS `quotegen_categories` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+
 -- -----------------------------------------------------
 -- Table `quotegen_clients`
 -- -----------------------------------------------------
@@ -22,14 +23,7 @@ CREATE  TABLE IF NOT EXISTS `quotegen_clients` (
   `name` VARCHAR(255) NOT NULL ,
   `address` VARCHAR(255) NOT NULL ,
   `phoneNumber` VARCHAR(255) NOT NULL ,
-  `userId` VARCHAR(45) NOT NULL ,
-  PRIMARY KEY (`id`) ,
-  INDEX `userId` (`id` ASC) ,
-  CONSTRAINT `userId`
-    FOREIGN KEY (`id` )
-    REFERENCES `users` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`id`) )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -194,7 +188,6 @@ CREATE  TABLE IF NOT EXISTS `quotegen_option_categories` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-
 -- -----------------------------------------------------
 -- Table `quotegen_quotes`
 -- -----------------------------------------------------
@@ -205,11 +198,18 @@ CREATE  TABLE IF NOT EXISTS `quotegen_quotes` (
   `dateModified` DATETIME NOT NULL ,
   `quoteDate` DATETIME NOT NULL ,
   `isLeased` TINYINT NOT NULL DEFAULT 0 ,
+  `userId` INT(11) NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `clientId` (`clientId` ASC) ,
+  INDEX `quotegen_quotes_ibfk_2` (`userId` ASC) ,
   CONSTRAINT `quotegen_quotes_ibfk_1`
     FOREIGN KEY (`clientId` )
-    REFERENCES `quotegen_clients` (`id` ))
+    REFERENCES `quotegen_clients` (`id` ),
+  CONSTRAINT `quotegen_quotes_ibfk_2`
+    FOREIGN KEY (`userId` )
+    REFERENCES `users` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8, 
 COMMENT = 'Primary table for a quote. Stores basic information' ;
