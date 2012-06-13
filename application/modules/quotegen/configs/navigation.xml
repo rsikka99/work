@@ -9,6 +9,13 @@
 			<action>index</action>
 			<resource>quotegen_index_index</resource>
 			<pages>
+				<quotesettings>
+					<label>Quote Settings</label>
+					<module>quotegen</module>
+					<controller>quotesettings</controller>
+					<action>index</action>
+					<resource>quotegen_quotesettings_index</resource>
+				</quotesettings>
 				<quotebuilder>
 					<label>Build a quote</label>
 					<class>dropdown</class>
