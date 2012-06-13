@@ -16,6 +16,13 @@
 					<action>index</action>
 					<resource>quotegen_quotesettings_index</resource>
 				</quotesettings>
+				<leasingSchemas>
+					<label>Leasing Schemas</label>
+					<module>quotegen</module>
+					<controller>leasingschemas</controller>
+					<action>index</action>
+					<resource>quotegen_leasingschemas_index</resource>
+				</leasingSchemas>
 				<quotebuilder>
 					<label>Build a quote</label>
 					<class>dropdown</class>
