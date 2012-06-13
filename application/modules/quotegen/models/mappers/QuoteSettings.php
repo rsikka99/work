@@ -26,15 +26,18 @@ class Quotegen_Model_Mapper_QuoteSettings extends My_Model_Mapper_Abstract {
 	 *        	The object to insert
 	 * @return mixed The primary key of the new row
 	 */
-	public function insert(Quotegen_Model_QuoteSettings &$quoteSetting) {
-		$data = $quoteSetting->toArray ();
-		unset ( $data ['id'] );		
-		$id = $this->getDbTable ()->insert ( $data );
-		
-		// Since the quoteSetting is set properly, set the id in the appropriate places
-		$quoteSetting->setId ( $id );
-		
-		return $id;
+	public function insert($data) {
+        if ($data instanceof Quotegen_Model_QuoteSettings)
+        {
+            $data = $data->toArray();
+        }
+        
+        unset($data ['id']);
+        
+        // lower case the clientname
+        $id = $this->getDbTable()->insert($data);
+        
+        return $id;
 	}
 	
 	/**
@@ -46,19 +49,20 @@ class Quotegen_Model_Mapper_QuoteSettings extends My_Model_Mapper_Abstract {
 	 *        	Optional: The original primary key, in case we're changing it
 	 * @return int The number of rows affected
 	 */
-	public function save(Quotegen_Model_QuoteSettings $quoteSetting, $primaryKey = null) {
-		$data = $this->unsetNullValues ( $quoteSetting->toArray () );
-		
-		if ($primaryKey === null) {
-			$primaryKey = $data ['id'];
-		}
-		
-		// Update the row
-		$rowsAffected = $this->getDbTable ()->update ( $data, array (
-				'id = ?' => $primaryKey 
-		) );
-		
-		return $rowsAffected;
+	public function save($quoteSetting, $primaryKey = null) {
+        $data = $this->unsetNullValues($quoteSetting->toArray());
+        
+        if ($primaryKey === null)
+        {
+            $primaryKey = $data ['id'];
+        }
+        
+        // Update the row
+        $rowsAffected = $this->getDbTable()->update($data, array (
+                'id = ?' => $primaryKey 
+        ));
+        
+        return $rowsAffected;
 	}
 	
 	/**
