@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Application_Model_User is a model that represents a user row in the database.
+ * Application_Model_LeasingSchemaRanges is a model that represents a user row in the database.
  *
- * @author Lee Robert
+ * @author John Sadler
  *        
  */
-class Quotegen_Model_Client extends My_Model_Abstract {
+class Quotegen_Model_LeasingSchemaRanges extends My_Model_Abstract {
 	
 	/**
 	 * The id assigned by the database
@@ -14,31 +14,19 @@ class Quotegen_Model_Client extends My_Model_Abstract {
 	 * @var int
 	 */
 	protected $_id = 0;
-
 	/**
-	 * The userid of the user
+	 * The related leasing schema id
 	 *
 	 * @var int
 	 */
-	protected $_userId = 0;
+	protected $_leasingSchemaId = 0;
 	/**
-	 * Represents the client name
+	 * The minimum value in the range
 	 *
-	 * @var string
+	 * @var double
 	 */
-	protected $_name;
-	/**
-	 * The address of the client
-	 *
-	 * @var string
-	 */
-	protected $_address;
-	/**
-	 * The phone number of the client
-	 *
-	 * @var string
-	 */
-	protected $_phoneNumber;
+	protected $_startRange = 0;
+
 	
 	/*
 	 * (non-PHPdoc) @see My_Model_Abstract::populate()
@@ -49,14 +37,10 @@ class Quotegen_Model_Client extends My_Model_Abstract {
 		}
 		if (isset ( $params->id ) && ! is_null ( $params->id ))
 			$this->setId ( $params->id );
-		if (isset ( $params->userId ) && ! is_null ( $params->userId ))
-			$this->setUserId ( $params->userId );
-		if (isset ( $params->name) && ! is_null ( $params->name ))
-			$this->setName( $params->name );
-		if (isset ( $params->address ) && ! is_null ( $params->address ))
-			$this->setAddress ( $params->address );
-		if (isset ( $params->phoneNumber ) && ! is_null ( $params->phoneNumber ))
-			$this->setPhoneNumber ( $params->phoneNumber );
+		if (isset ( $params->leasingSchemaId ) && ! is_null ( $params->leasingSchemaId ))
+			$this->setLeasingSchemaId ( $params->leasingSchemaId );
+		if (isset ( $params->startRange ) && ! is_null ( $params->startRange ))
+			$this->setStartRange ( $params->startRange );
 	}
 	
 	/*
@@ -65,102 +49,55 @@ class Quotegen_Model_Client extends My_Model_Abstract {
 	public function toArray() {
 		return array (
 				'id' => $this->getId(),
-				'userId' => $this->getUserId(),
-				'name' => $this->getName(),
-				'address' => $this->getAddress(),
-				'phoneNumber' => $this->getPhoneNumber()				
+				'leasingSchemaId' => $this->getLeasingSchemaId(),
+				'startRange' => $this->getStartRange()
 		);
 	}
 	
 	/**
-	 * Gets the id of the object
-	 *
-	 * @return number The id of the object
+	 * @return the $_id
 	 */
 	public function getId() {
 		return $this->_id;
 	}
 
 	/**
-	 * Sets the id of the object
-	 *
 	 * @param number $_id
-	 *        	the new id
 	 */
 	public function setId($_id) {
 		$this->_id = $_id;
-	}
-	
-	/**
-	 * @return the $_userId
-	 */
-	public function getUserId() {
-		return $this->_userId;
-	}
-
-	/**
-	 * @param number $_userId
-	 */
-	public function setUserId($_userId) {
-		$this->_userId = $_userId;
-		return $this;
-	}
-	
-	/**
-	 * Gets the name of the object
-	 * 
-	 * @return the $_name
-	 */
-	public function getName() {
-		return $this->_name;
-	}
-	
-	/**
-	 *
-	 * @param string $_name
-	 *        	the new name
-	 */
-	public function setName($_name) {
-		$this->_name = $_name;
-		return $this;
-	}
-	
-	/**
-	 * Gets the address of the object
-	 * 
-	 * @return the $_address
-	 */
-	public function getAddress() {
-		return $this->_address;
-	}
-	
-	/**
-	 *
-	 * @param string $_address
-	 *        	the new adress
-	 */
-	public function setAddress($_address) {
-		$this->_address = $_address;
-		return $this;
-	}
-	
-	/**
-	 * Gets the phone number of the object
-	 * 
-	 * @return the $_phoneNumber
-	 */
-	public function getPhoneNumber() {
-		return $this->_phoneNumber;
-	}
-	
-	/**
-	 *
-	 * @param string $_phoneNumber
-	 *        	the new phone number
-	 */
-	public function setPhoneNumber($_phoneNumber) {
-		$this->_phoneNumber = $_phoneNumber;
 		return $this;
 	}
 
+	/**
+	 * @return the $_leasingSchemaId
+	 */
+	public function getLeasingSchemaId() {
+		return $this->_leasingSchemaId;
+	}
+
+	/**
+	 * @param number $_leasingSchemaId
+	 */
+	public function setLeasingSchemaId($_leasingSchemaId) {
+		$this->_leasingSchemaId = $_leasingSchemaId;
+		return $this;
+	}
+
+	/**
+	 * @return the $_startRange
+	 */
+	public function getStartRange() {
+		return $this->_startRange;
+	}
+
+	/**
+	 * @param number $_startRange
+	 */
+	public function setStartRange($_startRange) {
+		$this->_startRange = $_startRange;
+		return $this;
+	}
+
+	
 }
