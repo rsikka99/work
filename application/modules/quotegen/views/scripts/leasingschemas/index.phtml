@@ -13,7 +13,7 @@
 		    </thead>
 		    <tbody>
 		      <tr>
-		        <th>12</th>
+		        <td>12 months</td>
 		        <td>$0 - $100</td>
 		        <td>.0990</td>
 		        <td>
@@ -23,7 +23,7 @@
 		        </td>
 		      </tr>
 		      <tr>
-		        <th>12</th>
+		        <td>12 months</td>
 		        <td>$101 - $1000</td>
 		        <td>.0965</td>
 		        <td>
@@ -33,7 +33,7 @@
 		        </td>
 		      </tr>
 		      <tr>
-		        <th>24</th>
+		        <td>24 months</td>
 		        <td>$0 - $100</td>
 		        <td>.0529</td>
 		        <td>
@@ -43,9 +43,24 @@
 		        </td>
 		      </tr>
 		      <tr>
-		        <td><input type="text" name="new-term" id="new-term" class="span1" style="margin: 0px;" value="" /></td>
-		        <td><input type="text" name="new-term-cost1-rate" id="new-term-cost1-rate" class="span1" style="margin: 0px;" value="" /></td>
-		        <td><input type="text" name="new-term-cost2-rate" id="new-term-cost2-rate" class="span1" style="margin: 0px;" value="" /></td>
+		        <td>
+            	  	<div class="input-append">
+		              	<input type="text" name="new-term" id="new-term" class="span1" value="" /><span class="add-on">months</span>
+	              	</div>
+		        </td>
+		        <td>
+            	  	<div class="input-prepend">
+		              	<span class="add-on">$</span><input type="text" name="new-range-min" id="new-range-min" class="span1" value="" style="text-align: right;" />
+	              	</div> - 
+            	  	<div class="input-prepend">
+		              	<span class="add-on">$</span><input type="text" name="new-range-max" id="new-range-max" class="span1" value="" style="text-align: right;" />
+	              	</div>
+		       	</td>
+		        <td>
+            	  	<div class="input-prepend">
+		              	<span class="add-on">.</span><input type="text" name="new-rate" id="new-rate" class="span1" value="" style="text-align: right;" />
+	              	</div>
+		       	</td>
 		        <td>
 		          <a id="add-new-term" class="btn pull-right">
 		            <i class="icon-plus-sign"></i> Add
