@@ -4,7 +4,7 @@ class Quotegen_Model_DbTable_DeviceConfigurationOptions extends Zend_Db_Table_Ab
 {
     protected $_name = 'quotegen_device_configuration_options';
     protected $_primary = array (
-            'deviceConfigurationId',
+            'deviceConfigurationId', 
             'optionId' 
-    );  
+    );
 }

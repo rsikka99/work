@@ -6,5 +6,5 @@ class Quotegen_Model_DbTable_DeviceOptions extends Zend_Db_Table_Abstract
     protected $_primary = array (
             'masterDeviceId', 
             'optionId' 
-    );  
+    );
 }

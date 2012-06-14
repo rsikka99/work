@@ -6,5 +6,5 @@ class Quotegen_Model_DbTable_QuoteDeviceConfigurations extends Zend_Db_Table_Abs
     protected $_primary = array (
             'quoteDeviceId', 
             'deviceConfigurationId' 
-    );  
+    );
 }
