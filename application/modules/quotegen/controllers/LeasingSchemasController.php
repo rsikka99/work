@@ -27,6 +27,6 @@ class Quotegen_LeasingSchemasController extends Zend_Controller_Action
         // TODO: This could be moved to a bootstrap file in the module.
         Zend_View_Helper_PaginationControl::setDefaultViewPartial('client/paginator.phtml');
     }
-    
+
 }
 
