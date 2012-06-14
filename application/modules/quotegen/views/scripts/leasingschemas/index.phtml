@@ -1,3 +1,61 @@
 <div class="well">
-    <?php echo $this->form; ?>
+
+	<form name="leasingSchemas" id="leasingSchemas" class="form-horizontal" action="" method="post" enctype="application/x-www-form-urlencoded">
+		
+		<div id="lease-terms-container">
+		  <table class="table table-striped table-bordered">
+		    <thead>
+		      <!-- get all max-cost fields and loop through to display -->
+		      <th width="30%">Term (months) </th>
+		      <th width="30%">Range</th>
+		      <th width="30%">Rate</th>
+		      <th width="10%">Action</th>
+		    </thead>
+		    <tbody>
+		      <tr>
+		        <th>12</th>
+		        <td>$0 - $100</td>
+		        <td>.0990</td>
+		        <td>
+		          <a id="add-new-term" class="btn pull-right">
+		            <i class="icon-pencil"></i> Edit
+		          </a>
+		        </td>
+		      </tr>
+		      <tr>
+		        <th>12</th>
+		        <td>$101 - $1000</td>
+		        <td>.0965</td>
+		        <td>
+		          <a id="add-new-term" class="btn pull-right">
+		            <i class="icon-pencil"></i> Edit
+		          </a>
+		        </td>
+		      </tr>
+		      <tr>
+		        <th>24</th>
+		        <td>$0 - $100</td>
+		        <td>.0529</td>
+		        <td>
+		          <a id="add-new-term" class="btn pull-right">
+		            <i class="icon-pencil"></i> Edit
+		          </a>
+		        </td>
+		      </tr>
+		      <tr>
+		        <td><input type="text" name="new-term" id="new-term" class="span1" style="margin: 0px;" value="" /></td>
+		        <td><input type="text" name="new-term-cost1-rate" id="new-term-cost1-rate" class="span1" style="margin: 0px;" value="" /></td>
+		        <td><input type="text" name="new-term-cost2-rate" id="new-term-cost2-rate" class="span1" style="margin: 0px;" value="" /></td>
+		        <td>
+		          <a id="add-new-term" class="btn pull-right">
+		            <i class="icon-plus-sign"></i> Add
+		          </a>
+		        </td>
+		      </tr>
+		    </tbody>
+		  </table>
+		</div>
+		  
+	</form>
+	
 </div>
