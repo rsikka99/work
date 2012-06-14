@@ -258,7 +258,7 @@ class Proposalgen_Model_Report_Step extends My_Model_Abstract
         {
             $step->setCanAccess($canAccess);
             
-            if (strcasecmp($step->getName(), $stepName) === 0)
+            if (strcasecmp($step->getEnumValue(), $stepName) === 0)
             {
                 $canAccess = false;
             }

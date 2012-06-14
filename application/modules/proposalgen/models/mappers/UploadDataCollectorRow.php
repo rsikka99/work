@@ -40,6 +40,7 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
         $db = $dbTable->getAdapter();
         $tableName = $dbTable->info('name');
         $result = 0;
+        
         if ($checkForBadData)
         {
             $result = $db->fetchOne("SELECT COUNT(*) AS count FROM {$tableName} WHERE report_id = ? AND invalid_data = 1", $reportId);
@@ -48,15 +49,19 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
         {
             $result = $db->fetchOne("SELECT COUNT(*) AS count FROM {$tableName} WHERE report_id = ?", $reportId);
         }
+        return $result;
     }
-    
+
     /**
      * Deletes all upload data collector rows for a report
-     * @param number $reportId
+     * 
+     * @param number $reportId            
      */
-    public function deleteAllRowsForReport($reportId)
+    public function deleteAllRowsForReport ($reportId)
     {
-        return $this->delete(array('report_id = ?' => $reportId));
+        return $this->delete(array (
+                'report_id = ?' => $reportId 
+        ));
     }
 
     /**
