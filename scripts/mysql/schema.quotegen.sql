@@ -16,25 +16,18 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `quotegen_clients`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `quotegen_clients` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `name` VARCHAR(255) NOT NULL ,
-  `address` VARCHAR(255) NOT NULL ,
-  `phoneNumber` VARCHAR(255) NOT NULL ,
-  PRIMARY KEY (`id`) )
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
 -- Table `quotegen_devices`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `quotegen_devices` (
   `masterDeviceId` INT(11) NOT NULL ,
   `sku` VARCHAR(255) NOT NULL ,
-  PRIMARY KEY (`masterDeviceId`) )
+  PRIMARY KEY (`masterDeviceId`) ,
+  INDEX `quotegen_devices_ibfk_1` (`masterDeviceId` ASC) ,
+  CONSTRAINT `quotegen_devices_ibfk_1`
+    FOREIGN KEY (`masterDeviceId` )
+    REFERENCES `proposalgenerator_master_devices` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -188,6 +181,7 @@ CREATE  TABLE IF NOT EXISTS `quotegen_option_categories` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+
 -- -----------------------------------------------------
 -- Table `quotegen_quotes`
 -- -----------------------------------------------------
@@ -199,12 +193,13 @@ CREATE  TABLE IF NOT EXISTS `quotegen_quotes` (
   `quoteDate` DATETIME NOT NULL ,
   `isLeased` TINYINT NOT NULL DEFAULT 0 ,
   `userId` INT(11) NOT NULL ,
+  `clientDisplayName` VARCHAR(45) NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `clientId` (`clientId` ASC) ,
   INDEX `quotegen_quotes_ibfk_2` (`userId` ASC) ,
   CONSTRAINT `quotegen_quotes_ibfk_1`
     FOREIGN KEY (`clientId` )
-    REFERENCES `quotegen_clients` (`id` ),
+    REFERENCES `clients` (`id` ),
   CONSTRAINT `quotegen_quotes_ibfk_2`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
@@ -339,7 +334,13 @@ CREATE  TABLE IF NOT EXISTS `quotegen_quote_settings` (
   `deviceMargin` DOUBLE NOT NULL ,
   `pageMargin` DOUBLE NOT NULL ,
   `tonerPreference` INT(11) NOT NULL ,
-  PRIMARY KEY (`id`) )
+  PRIMARY KEY (`id`) ,
+  INDEX `quotegen_quote_settings_ibfk1` (`tonerPreference` ASC) ,
+  CONSTRAINT `quotegen_quote_settings_ibfk1`
+    FOREIGN KEY (`tonerPreference` )
+    REFERENCES `proposalgenerator_pricing_configs` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -370,7 +371,7 @@ DEFAULT CHARACTER SET = utf8;
 CREATE  TABLE IF NOT EXISTS `quotegen_user_quote_settings` (
   `userId` INT(11) NOT NULL ,
   `quoteSettingId` INT(11) NOT NULL ,
-  PRIMARY KEY (`userId`, `quoteSettingId`) ,
+  PRIMARY KEY (`userId`) ,
   INDEX `quoteSettingId` (`quoteSettingId` ASC) ,
   CONSTRAINT `quotegen_user_quote_settings_ibfk_1`
     FOREIGN KEY (`userId` )

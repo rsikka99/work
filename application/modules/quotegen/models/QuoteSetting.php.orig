@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD:application/modules/quotegen/models/QuoteSetting.php
+ * Application_Model_QuoteSetting is a model that represents a quoteSetting row in the database.
+=======
  * Quotegen_Model_QuoteSetting
+>>>>>>> master:application/modules/quotegen/models/QuoteSetting.php
  *
  * @author John Sadler
  *        

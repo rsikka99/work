@@ -1,6 +1,12 @@
 <?php
 
-class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
+/**
+ * Quotegen_Model_Mapper_Device
+ *
+ * @author Lee Robert
+ *        
+ */
+class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
 {
     /**
      * The default db table class to use
@@ -8,12 +14,12 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Quotegen_Model_DbTable_Client';
+    protected $_defaultDbTable = 'Quotegen_Model_DbTable_Device';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Quotegen_Model_Mapper_Client
+     * @return Quotegen_Model_Mapper_Device
      */
     public static function getInstance ()
     {
@@ -21,10 +27,10 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves an instance of Quotegen_Model_Client to the database.
+     * Saves an instance of Quotegen_Model_Device to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Quotegen_Model_Client
+     * @param $object Quotegen_Model_Device
      *            The object to insert
      * @return mixed The primary key of the new row
      */
@@ -34,7 +40,7 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
         $data = $object->toArray();
         
         // Remove the id
-        unset($data ['id']);
+        unset($data ['masterDeviceId']);
         
         // Insert the data
         $id = $this->getDbTable()->insert($data);
@@ -48,10 +54,10 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves (updates) an instance of Quotegen_Model_Client to the database.
+     * Saves (updates) an instance of Quotegen_Model_Device to the database.
      *
-     * @param $object Quotegen_Model_Client
-     *            The client model to save to the database
+     * @param $object Quotegen_Model_Device
+     *            The device model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
      * @return int The number of rows affected
@@ -62,12 +68,12 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
         
         if ($primaryKey === null)
         {
-            $primaryKey = $data ['id'];
+            $primaryKey = $data ['masterDeviceId'];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'id = ?' => $primaryKey 
+                'masterDeviceId = ?' => $primaryKey 
         ));
         
         // Save the object into the cache
@@ -80,22 +86,22 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
      * Deletes rows from the database.
      *
      * @param $object mixed
-     *            This can either be an instance of Quotegen_Model_Client or the
+     *            This can either be an instance of Quotegen_Model_Device or the
      *            primary key to delete
      * @return mixed The number of rows deleted
      */
     public function delete ($object)
     {
-        if ($object instanceof Quotegen_Model_Client)
+        if ($object instanceof Quotegen_Model_Device)
         {
             $whereClause = array (
-                    'id = ?' => $object->getId() 
+                    'masterDeviceId = ?' => $object->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'id = ?' => $object 
+                    'masterDeviceId = ?' => $object 
             );
         }
         
@@ -104,17 +110,17 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Finds a client based on it's primaryKey
+     * Finds a device based on it's primaryKey
      *
      * @param $id int
-     *            The id of the client to find
-     * @return void Quotegen_Model_Client
+     *            The id of the device to find
+     * @return void Quotegen_Model_Device
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Quotegen_Model_Client)
+        if ($result instanceof Quotegen_Model_Device)
         {
             return $result;
         }
@@ -126,7 +132,7 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
             return;
         }
         $row = $result->current();
-        $object = new Quotegen_Model_Client($row->toArray());
+        $object = new Quotegen_Model_Device($row->toArray());
         
         // Save the object into the cache
         $this->saveItemToCache($object, $id);
@@ -135,7 +141,7 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches a client
+     * Fetches a device
      *
      * @param $where string|array|Zend_Db_Table_Select
      *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -143,7 +149,7 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL ORDER clause.
      * @param $offset int
      *            OPTIONAL An SQL OFFSET value.
-     * @return void Quotegen_Model_Client
+     * @return void Quotegen_Model_Device
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -153,7 +159,7 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
             return;
         }
         
-        $object = new Quotegen_Model_Client($row->toArray());
+        $object = new Quotegen_Model_Device($row->toArray());
         
         // Save the object into the cache
         $this->saveItemToCache($object, $object->getId());
@@ -162,7 +168,7 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches all clients
+     * Fetches all devices
      *
      * @param $where string|array|Zend_Db_Table_Select
      *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -172,7 +178,7 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL LIMIT count. (Defaults to 25)
      * @param $offset int
      *            OPTIONAL An SQL LIMIT offset.
-     * @return multitype:Quotegen_Model_Client
+     * @return multitype:Quotegen_Model_Device
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -180,7 +186,7 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-            $object = new Quotegen_Model_Client($row->toArray());
+            $object = new Quotegen_Model_Device($row->toArray());
             
             // Save the object into the cache
             $this->saveItemToCache($object, $object->getId());
@@ -199,7 +205,7 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array (
-                'id = ?' => $id 
+                'masterDeviceId = ?' => $id 
         );
     }
 }

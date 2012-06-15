@@ -13,7 +13,11 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action
         // Get the users quote settings
         $quoteSettingsId = 1;
         
+<<<<<<< HEAD:application/modules/quotegen/controllers/QuoteSettingController.php
+		$mapper = new Quotegen_Model_Mapper_QuoteSetting();
+=======
         $mapper = new Quotegen_Model_Mapper_QuoteSetting();
+>>>>>>> master:application/modules/quotegen/controllers/QuoteSettingsController.php
         $quoteSetting = $mapper->find($quoteSettingsId);
         
         // If the quote setting record doesn't exist, send them back
@@ -46,8 +50,13 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action
                     // Validate the form
                     if ($form->isValid($values)) 
                     {
+<<<<<<< HEAD:application/modules/quotegen/controllers/QuoteSettingController.php
+						$mapper = new Quotegen_Model_Mapper_QuoteSetting ();
+						$quoteSetting = new Quotegen_Model_QuoteSetting ();
+=======
                         $mapper = new Quotegen_Model_Mapper_QuoteSetting();
                         $quoteSetting = new Quotegen_Model_QuoteSetting();
+>>>>>>> master:application/modules/quotegen/controllers/QuoteSettingsController.php
                         $quoteSetting->populate($values);
                         $quoteSetting->setId($quoteSettingsId);
                         

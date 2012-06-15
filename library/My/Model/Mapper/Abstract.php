@@ -203,7 +203,7 @@ abstract class My_Model_Mapper_Abstract
 
     abstract public function save ($object, $primaryKey);
 
-    abstract public function delete ($primaryKey);
+    abstract public function delete ($object);
 
     abstract public function fetch ($where = null, $order = null, $offset = null);
 

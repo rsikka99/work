@@ -24,19 +24,19 @@
 					<resource>quotegen_leasingschema_index</resource>
 				</leasingSchemas>
 				<quotebuilder>
-					<label>Build a quote</label>
+					<label>Quotes</label>
 					<class>dropdown</class>
 					<module>quotegen</module>
-					<controller>build</controller>
+					<controller>quote</controller>
 					<action>index</action>
-					<resource>quotegen_build_index</resource>
+					<resource>quotegen_quote_index</resource>
 					<pages>
 						<buildnew>
-							<label>New Quote</label>
+							<label>View All Quotes</label>
 							<module>quotegen</module>
-							<controller>build</controller>
+							<controller>quote</controller>
 							<action>index</action>
-							<resource>quotegen_build_index</resource>
+							<resource>quotegen_quote_index</resource>
 						</buildnew>
 					</pages>
 				</quotebuilder>

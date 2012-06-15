@@ -1,0 +1,46 @@
+<?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
+<h1>All Quotes</h1>
+<table class="table table-striped table-condensed table-bordered">
+    <thead>
+        <tr>
+            <th style="width: 30px;">ID</th>
+            <th>Client Name</th>
+            <th>Client Display Name</th>
+            <th>Address</th>
+            <th>Date Created</th>
+            <th>Date Modified</th>
+            <th>Quote Date</th>
+            <th>Type Of Quote</th>
+            <th>User Id</th>
+            <th style="width: 80px;">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    	
+        <?php foreach ($this->paginator->getCurrentItems() as $quote) : /* @var $quote Quotegen_Model_Quote */ ?>
+        <tr>
+        <td><?php echo $quote->getId(); ?></td>
+            <td><?php echo $quote->getClient()->getName(); ?></td>
+            <td><?php echo $quote->getClientDisplayName(); ?></td>
+            <td><?php echo nl2br($quote->getClient()->getAddress()); ?></td>
+            <td><?php echo $quote->getDateCreated(); ?></td>
+            <td><?php echo $quote->getDateModified(); ?></td>
+            <td><?php echo $quote->getQuoteDate(); ?></td>
+            <td><?php echo ($quote->getIsLeased()) ? 'Leased' : 'Purchased'; ?></td>
+            <td><?php echo $quote->getUserId(); ?></td>
+            
+            <td>
+                <div class="btn-group">
+                    <a class="btn btn-warning" title="Edit Quote" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $quote->getId())); ?>"><i class="icon-pencil"></i></a>
+                    <a class="btn btn-danger" title="Delete Quote" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $quote->getId())); ?>"><i class="icon-trash"></i></a>
+                </div>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<?php echo $this->paginationControl($this->paginator); ?>
+<?php else : ?>
+    <h1>There are no quotes</h1>
+<?php endif; ?>
+
