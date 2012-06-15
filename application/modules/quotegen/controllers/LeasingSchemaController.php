@@ -26,6 +26,13 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
         // Set the default viewscript
         // TODO: This could be moved to a bootstrap file in the module.
         Zend_View_Helper_PaginationControl::setDefaultViewPartial('client/paginator.phtml');
+
+        $request = $this->getRequest();
+        if ($request->isPost())
+        {
+            $values = $request->getPost();
+            print_r($values);
+        }
     }
 
 }

@@ -15,11 +15,11 @@
 			if (i == 0) {
 				new_row_html += '<td style="text-align: center;">';
 				new_row_html += '<span class="pull-left"><a class="btn btn-danger btn-mini" title="Delete Term" onclick="javascript: cancel_term('+num_rows+');" href="#"><i class="icon-remove"></i></a></span>';
-				new_row_html += '<input type="text" name="term-'+num_rows+'" id="term-'+num_rows+'" class="span1" value="" />';
+				new_row_html += '<input type="text" name="new-term-'+num_rows+'" id="new-term-'+num_rows+'" class="span1" value="" />';
 				new_row_html += '</td>';
 			} else {
 				new_row_html += '<td style="text-align: center;">';
-				new_row_html += '<input type="text" name="term-'+num_rows+'-range-'+i+'" id="term-'+num_rows+'-range-'+i+'" class="span1" value="" />';
+				new_row_html += '<input type="text" name="new-term-'+num_rows+'-range-'+i+'" id="new-term-'+num_rows+'-range-'+i+'" class="span1" value="" />';
 				new_row_html += '</td>';
 			}
 		}
@@ -40,24 +40,28 @@
 		var num_columns = $("#leasingSchemaTable").find('tr')[0].cells.length;
 		var num_rows = $('#leasingSchemaTable tr').length;
 		
-		$('#leasingSchemaTable').find('tr').each(function(i) {
-			
-		    if (i == 0) {
-				var new_col_header = '';
-				new_col_header += '<th name="col-range-'+(num_columns+1)+'" width="50px" style="text-align: center;">';
-				new_col_header += '<input type="text" name="range-'+(num_columns+1)+'" id="range-'+(num_columns+1)+'" class="span1" value="" />';
-				new_col_header += '<span class="pull-right"><a class="btn btn-danger btn-mini" title="Delete Range" onclick="javascript: cancel_range(\'col-range-'+(num_columns+1)+'\');" href="#"><i class="icon-remove"></i></a></span>';
-				new_col_header += '</th>';
-		       	$(this).append(new_col_header);  
-		    }
-		    else {
-				var new_col_html = '';
-				new_col_html += '<td name="col-range-'+(num_columns+1)+'" style="text-align: center;">';
-				new_col_html += '<input type="text" name="term-'+i+'-range-'+(num_columns+1)+'" id="term-'+i+'-range-'+(num_columns+1)+'" class="span1" value="" />';
-				new_col_html += '</td>';
-		        $(this).append(new_col_html);
-		    }
-		});
+		if (num_columns < 8 ) {
+			$('#leasingSchemaTable').find('tr').each(function(i) {
+				
+			    if (i == 0) {
+					var new_col_header = '';
+					new_col_header += '<th width="10%" range="col-'+(num_columns)+'" style="text-align: center;">';
+					new_col_header += '<input type="text" name="new-range-'+(num_columns)+'" id="new-range-'+(num_columns)+'" class="span1" value="" />';
+					new_col_header += '<span class="pull-right" style="position: relative; top: 3px;"><a class="btn btn-danger btn-mini" title="Delete Range" onclick="javascript: cancel_range(\'col-'+(num_columns)+'\');" href="#"><i class="icon-remove"></i></a></span>';
+					new_col_header += '</th>';
+			       	$(this).append(new_col_header);  
+			    }
+			    else {
+					var new_col_html = '';
+					new_col_html += '<td range="col-'+(num_columns)+'" style="text-align: center;">';
+					new_col_html += '<input type="text" name="new-term-'+i+'-range-'+(num_columns)+'" id="new-term-'+i+'-range-'+(num_columns)+'" class="span1" value="" />';
+					new_col_html += '</td>';
+			        $(this).append(new_col_html);
+			    }
+			});
+		} else {
+			// update warning message stating max number of ranges exceeded
+		}
 				
 	}
 	
@@ -65,7 +69,7 @@
 	}
 	
 	function cancel_range(id) {
-		$('th[name='+id+'], td[name='+id+']').remove();
+		$('th[range='+id+'], td[range='+id+']').remove();
 	}
 	
 <?php $this->headScript()->captureEnd() ?>
@@ -79,11 +83,11 @@
 		  <table id="leasingSchemaTable" class="table table-striped table-bordered">
 		    <thead id="leadingSchemaHeaders">
 				<tr>
-					<th width="" nowrap="nowrap" style="text-align: center;">Term (months) </th>
-					<th width="" style="text-align: center;">$0 </th>
-					<th width="" style="text-align: center;">$100 <span class="pull-right"><a class="btn btn-danger btn-mini" title="Delete Interval" onclick="javascript: delete_range(1);" href="#"><i class="icon-trash"></i></a></span> </th>
-					<th width="" style="text-align: center;">$1,000 <span class="pull-right"><a class="btn btn-danger btn-mini" title="Delete Interval" onclick="javascript: delete_range(2);" href="#"><i class="icon-trash"></i></a></span> </th>
-					<th width="" style="text-align: center;">$10,000+ <span class="pull-right"><a class="btn btn-danger btn-mini" title="Delete Interval" onclick="javascript: delete_range(3);" href="#"><i class="icon-trash"></i></a></span> </th>
+					<th width="10%" nowrap="nowrap" style="text-align: center;">Term (months) </th>
+					<th width="10%" style="text-align: center;">$0 </th>
+					<th width="10%" style="text-align: center;">$100 <span class="pull-right" style="position: relative; top: -3px;"><a class="btn btn-danger btn-mini" title="Delete Interval" onclick="javascript: delete_range(1);" href="#"><i class="icon-trash"></i></a></span> </th>
+					<th width="10%" style="text-align: center;">$1,000 <span class="pull-right" style="position: relative; top: -3px;"><a class="btn btn-danger btn-mini" title="Delete Interval" onclick="javascript: delete_range(2);" href="#"><i class="icon-trash"></i></a></span> </th>
+					<th width="10%" style="text-align: center;">$10,000+ <span class="pull-right" style="position: relative; top: -3px;"><a class="btn btn-danger btn-mini" title="Delete Interval" onclick="javascript: delete_range(3);" href="#"><i class="icon-trash"></i></a></span> </th>
 				</tr>
 		    </thead>
 		    <tbody id="leasingSchemaData">
@@ -93,16 +97,16 @@
 		        	<span class="pull-left"><a class="btn btn-danger btn-mini" title="Delete Term" onclick="javascript: delete_term(1);" href="#"><i class="icon-trash"></i></a></span> 12 months 
 		        </td>
 		        <td style="text-align: center;">
-		        	<input type="text" name="term1-range1" id="term1-range1" class="span1" value="0.0990" />
+		        	<input type="text" name="rate[1][1]" id="rate[1][1]" class="span1" value="0.0990" />
 		        </td>
 		        <td style="text-align: center;">
-	        		<input type="text" name="term1-range2" id="term1-range2" class="span1" value="0.0965" />
+	        		<input type="text" name="rate[1][2]" id="rate[1][2]" class="span1" value="0.0965" />
 		        </td>
 		        <td style="text-align: center;">
-	        		<input type="text" name="term1-range3" id="term1-range3" class="span1" value="0.0954" />
+	        		<input type="text" name="rate[1][3]" id="rate[1][3]" class="span1" value="0.0954" />
 		        </td>
 		        <td style="text-align: center;">
-	        		<input type="text" name="term1-range4" id="term1-range4" class="span1" value="0.0944" />
+	        		<input type="text" name="rate[1][4]" id="rate[1][4]" class="span1" value="0.0944" />
 		        </td>
 		      </tr>
 		      <!-- END LOOP THROUGH TERMS AND DISPLAY ROWS -->
@@ -120,7 +124,7 @@
 				</a>
 			</span>
 			<span class="pull-right">
-	      		<a class="btn btn-primary" title="Save" href="#">
+	      		<a class="btn btn-primary" title="Save" onclick="javascript: $('#leasingSchemas').submit();" href="#">
 					<i class="icon-ok icon-white"></i> Save
 				</a>
 			</span>
