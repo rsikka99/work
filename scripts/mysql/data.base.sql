@@ -5,7 +5,7 @@
 
 
 INSERT INTO `users` (`id`, `username`, `password`, `firstname`, `lastname`, `email`) VALUES
-(1, 'systemadmin', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Root', 'User', 'lrobert@tangentmtw.com'),
+(1, 'root', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Root', 'User', 'lrobert@tangentmtw.com'),
 (2, 'lrobert', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Lee', 'Robert', 'lrobert@tangentmtw.com'),
 (3, 'cgarrah', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Chris', 'Garrah', 'cgarrah@tangentmtw.com'),
 (4, 'swilder', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Shawn', 'Wilder', 'swilder@tangentmtw.com'),
@@ -52,3 +52,9 @@ INSERT INTO `log_types` (`id`, `name`) VALUES
 (3, 'Proposal'),
 (4, 'Email'),
 (5, 'Security');
+
+INSERT INTO `clients` (`id`, `name`, `address`, `phoneNumber`) VALUES
+(1, 'Test Company', "123 Fake Street\nSuite 456\nFake City\nA1A 2B2", '123-456-7890'),
+(2, 'NotReal Solutions', "123 Fake Street\nSuite 9876\nFake City\nA1A 2B2", '1-123-456-7890'),
+(3, 'Company ABC', "123 Fake Street\nSuite 132\nFake City\nA1A 2B2", '01-123-456-7890'),
+(4, 'Company XYZ', "123 Fake Street\nSuite 004-84\nFake City\nA1A 2B2", '+1 123-456-7890');
