@@ -49,6 +49,9 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     public function postDispatch ()
     {
         // Render our survey menu
+        $stage = ($this->getReport()->getReportStage()) ?  : Proposalgen_Model_Report_Step::STEP_SURVEY_COMPANY;
+        Proposalgen_Model_Report_Step::updateAccessibleSteps($this->getReportSteps(), $stage);
+        
         $this->view->placeholder('ProgressionNav')->set($this->view->ProposalMenu($this->getReportSteps()));
     }
 

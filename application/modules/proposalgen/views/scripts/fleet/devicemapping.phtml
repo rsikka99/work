@@ -14,7 +14,7 @@
 		var sLeft = ($(window).width()/2)-200;
 		
 		jQuery("#results_list").jqGrid({
-			url:'<?php echo $this->baseUrl(); ?>/data/devicemappinglist',
+			url:'<?php echo $this->url(array('action' => 'devicemappinglist')); ?>',
 			datatype:'json',
 			colNames:['UDCID','Devices PF ID','Count','Import Printer Name','Mapped To ID','Mapped To Modelname','Mapped To Manufacturer','Master Printer Name','Is Added','Action'],
 			colModel:[
@@ -66,7 +66,7 @@
 					$(".autoCompleteDeviceName").autocomplete({
             			source: function (request, response) {
                         	$.ajax({
-                            	url: "<?=$this->baseUrl();?>/data/getmodels", dataType: "json",
+                            	url: "<?php echo $this->url(array('action' => 'getmodels')); ?>", dataType: "json",
                                 data: { searchText: request.term },
                                 success: function (data) {
                                 	response($.map(data, function (item) {
@@ -160,7 +160,7 @@
 		);
 		
 		jQuery("#mapped_list").jqGrid({
-			url:"<?php echo $this->baseUrl('/data/mastermappinglist'); ?>",
+			url:"<?php echo $this->url(array('action' => 'mastermappinglist')); ?>",
 			datatype:'local',
 			colNames:['UDCID','Devices PF ID','Count','Import Printer Name','Mapped To ID','Mapped To Modelname','Mapped To Manufacturer','Master Printer Name','Is Added','Action'],
 			colModel:[
@@ -195,7 +195,7 @@
 					if (mapped_to_deviceName == '') {
 						disable = 'disabled="disabled"';
 					}
-					<?php if(in_array("System Admin", $this->privilege)) { ?>
+					<?php if(isset($this->privilege) && in_array("System Admin", $this->privilege)) { ?>
     					edit_button = '<input title="Edit Printer" type="button" name="btnEdit'+devices_pf_id+'" id="btnEdit'+devices_pf_id+'" onclick="javascript: edit_device('+devices_pf_id+');" value="Edit" '+disable+' class="btn" />';
     					add_button = '<input title="Edit Printer" type="button" name="btnAdd'+devices_pf_id+'" id="btnAdd'+devices_pf_id+'" onclick="javascript: edit_device('+devices_pf_id+');" value="Edit" '+disable+' class="btn" />';
                     <?php } else { ?>
@@ -321,7 +321,7 @@
 			toggle_mapped();
 		}
 		
-        <?php if(in_array("System Admin", $this->privilege)) { ?>
+        <?php if(isset($this->privilege) && in_array("System Admin", $this->privilege)) { ?>
         //hide action column
    		//jQuery("#mapped_list").hideCol("action");
    		//jQuery("#mapped_list").setGridWidth(615);
@@ -340,7 +340,7 @@
     	document.getElementById('hdnID').value = hdnId;
     	document.getElementById('hdnItem').value = 'master';
     	document.getElementById('hdnGrid').value = document.getElementById("mapped_list_container").style.display;
-		document.getElementById('mapping').action = "<?php echo $this->baseUrl()."/managedevices/managemappingdevices"?>";
+		document.getElementById('mapping').action = "<?php echo $this->url(array('action' => 'managemappingdevices', 'controller' => 'managedevices')); ?>";
     	document.getElementById('mapping').submit();
     }
 	
@@ -349,10 +349,10 @@
     	document.getElementById('hdnItem').value = '';
     	document.getElementById('hdnGrid').value = document.getElementById("mapped_list_container").style.display;
     	
-	    <?php if(in_array("System Admin", $this->privilege)) { ?>
-			document.getElementById('mapping').action = "<?php echo $this->baseUrl()."/managedevices/managemappingdevices"?>";
+	    <?php if(isset($this->privilege) && in_array("System Admin", $this->privilege)) { ?>
+			document.getElementById('mapping').action = "<?php echo $this->url(array('action' => 'managemappingdevices', 'controller' => 'managedevices')); ?>";
 	    <?php } else { ?>
-    		document.getElementById('mapping').action = "<?php echo $this->baseUrl(); ?>/data/adddevice";
+    		document.getElementById('mapping').action = "<?php echo $this->url(array('action' => 'adddevice')); ?>";
     	<?php } ?>
     	
     	document.getElementById('mapping').submit();
@@ -366,7 +366,7 @@
 			devices_pf_id = document.mapping.elements['hdnDevicesPfId'+id].value;
 			master_device_id = document.mapping.elements['hdnMasterDevicesValue'+id].value;
 		}
-		url = '<?php echo $this->baseUrl(); ?>/data/setmappedto?master_device_id='+master_device_id+'&devices_pf_id='+devices_pf_id;
+		url = '<?php echo $this->url(array('action' => 'setmappedto')); ?>?master_device_id='+master_device_id+'&devices_pf_id='+devices_pf_id;
 		$.ajax ({
 			type: "POST",
 			contentType: "application/json; charset=utf-8",
@@ -381,7 +381,7 @@
 	
 	function remove_device(id, list) {
 		//if(confirm("Are you sure you want to remove this device?")) {
-			url = '<?php echo $this->baseUrl(); ?>/data/removedevice?key='+id;
+			url = '<?php echo $this->url(array('action' => 'removedevice')); ?>?key='+id;
 			$.ajax ({
 				type: "POST",
 				contentType: "application/json; charset=utf-8",

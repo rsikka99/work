@@ -37,8 +37,15 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         break;
                     }
                 }
-                // Send to latest page
-                $this->_helper->redirector($lastStep->getAction(), $lastStep->getController());
+                if ($lastStep !== null)
+                {
+                    // Send to latest page
+                    $this->_helper->redirector($lastStep->getAction(), $lastStep->getController());
+                }
+                else
+                {
+                    $this->_helper->redirector('company');
+                }
             }
         }
         else

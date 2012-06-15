@@ -1,9 +1,6 @@
-<?php
-/**
- * Default view: index.phtml
- */
-?>
-
+<div class="page-header">
+    <h1>Fleet<small> - Upload Data</small></h1>
+</div>
 <?php $this->headScript()->captureStart('append','text/javascript') ?>
 	var has_data = '<?php echo $this->has_data; ?>';
 	
@@ -194,26 +191,23 @@
         <div><input type="submit" name="uploadData" id="csv_submit" value="Upload File" class="btn" /></div>
     </div>
     
-    <div class="results_container">
-    <?php if($this->has_data > 0) { ?>
-    	<h3>Imported Results:</h3><br />
+    <h3>Imported Results:</h3>
+    <?php if($this->has_data) : ?>
     	<table id="results_list"></table>
     	<div id="results_pager"></div>
-        <br />
-    <?php } ?>
+    <?php endif; ?>
     
-    <?php if($this->bad_data > 0) { ?>
+    <?php if($this->bad_data) : ?>
     	<h3>Excluded Results:</h3>
     	<p>Records below have been excluded because they are missing data in required fields.</p>
         <table id="excluded_results_list"></table>
         <div id="excluded_results_pager"></div>
-        <br />
-    <?php } ?>
-    </div>
+    <?php endif; ?>
+
 </form>
     <form class="proposalForm form-horizontal" method="POST">
     	<div class="form-actions">
-            <input type="submit" name="continue" id="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary">
+            <input type="submit" name="saveAndContinue" id="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary">
             <input type="submit" name="goBack" id="goBack" value="Go Back" class="btn">
         </div>
     </form>
