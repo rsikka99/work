@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Application_Model_User is a model that represents a user row in the database.
+ * Quotegen_Model_Client
  *
  * @author Lee Robert
  *        
