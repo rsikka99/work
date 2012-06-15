@@ -72,6 +72,16 @@
 		$('th[range='+id+'], td[range='+id+']').remove();
 	}
 	
+	function validate() {
+		var valid = true;
+		
+		// make sure every field has a value greater than 0
+		
+		if ( valid == true ) {
+			$("#leasingSchemas").submit();
+		}
+	}
+	
 <?php $this->headScript()->captureEnd() ?>
 
 <div class="well">
@@ -84,10 +94,12 @@
 		    <thead id="leadingSchemaHeaders">
 				<tr>
 					<th width="10%" nowrap="nowrap" style="text-align: center;">Term (months) </th>
+					<?php if ($this->ranges ) { ?>
 					<th width="10%" style="text-align: center;">$0 </th>
 					<th width="10%" style="text-align: center;">$100 <span class="pull-right" style="position: relative; top: -3px;"><a class="btn btn-danger btn-mini" title="Delete Interval" onclick="javascript: delete_range(1);" href="#"><i class="icon-trash"></i></a></span> </th>
 					<th width="10%" style="text-align: center;">$1,000 <span class="pull-right" style="position: relative; top: -3px;"><a class="btn btn-danger btn-mini" title="Delete Interval" onclick="javascript: delete_range(2);" href="#"><i class="icon-trash"></i></a></span> </th>
 					<th width="10%" style="text-align: center;">$10,000+ <span class="pull-right" style="position: relative; top: -3px;"><a class="btn btn-danger btn-mini" title="Delete Interval" onclick="javascript: delete_range(3);" href="#"><i class="icon-trash"></i></a></span> </th>
+					<?php } ?>
 				</tr>
 		    </thead>
 		    <tbody id="leasingSchemaData">
@@ -124,7 +136,7 @@
 				</a>
 			</span>
 			<span class="pull-right">
-	      		<a class="btn btn-primary" title="Save" onclick="javascript: $('#leasingSchemas').submit();" href="#">
+	      		<a class="btn btn-primary" title="Save" onclick="javascript: validate();" href="#">
 					<i class="icon-ok icon-white"></i> Save
 				</a>
 			</span>

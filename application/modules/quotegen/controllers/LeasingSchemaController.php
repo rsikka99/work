@@ -11,21 +11,31 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
     public function indexAction ()
     {
         // Display all of the clients
-        $mapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper));
+        $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
+        $leasingSchemaRangeMapper = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance();
+        $leasingSchemaTermMapper = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance();
+        $leasingSchemaRateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
+
+        // Get default leasing schema
+        $leasingSchema = $leasingSchemaMapper->find(1);
         
-        // Set the current page we're on
-        $paginator->setCurrentPageNumber($this->_getParam('page', 1));
+        // Get list of ranges
+        $leasingSchemaRanges = $leasingSchemaRangeMapper->find('leasingSchemaId = 1');
+
+        // Get list of terms
+        $leasingSchemaTerms = $leasingSchemaTermMapper->find('leasingSchemaId = 1');
         
-        // Set how many items to show
-        $paginator->setItemCountPerPage(15);
-        
-        // Pass the view the paginator
-        $this->view->paginator = $paginator;
-        
-        // Set the default viewscript
-        // TODO: This could be moved to a bootstrap file in the module.
-        Zend_View_Helper_PaginationControl::setDefaultViewPartial('client/paginator.phtml');
+        // Build array to pass to view
+        // Loop through Terms
+        foreach ( $leasingSchemaTerms as $leasingSchemaTerm ) {
+	        // Get list of rates for term
+	        $leasingSchemaRates = $leasingSchemaRateMapper->find('leasingSchemaTermId = ' . $leasingSchemaTerm->getId());
+	        
+	        // Loop through Rates
+	        foreach ( $leasingSchemaRates as $leasingSchemaRate ) {
+	        	// Loop through Ranges
+	        }
+        }
 
         $request = $this->getRequest();
         if ($request->isPost())
