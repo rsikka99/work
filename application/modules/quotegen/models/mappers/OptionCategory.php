@@ -24,7 +24,7 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_OptionCategory to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $optionCategory Quotegen_Model_OptionCategory
+     * @param $object Quotegen_Model_OptionCategory
      *            The object to insert
      * @return mixed The primary key of the new row
      */
@@ -45,7 +45,7 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Quotegen_Model_OptionCategory to the database.
      *
-     * @param $optionCategory Quotegen_Model_OptionCategory
+     * @param $object Quotegen_Model_OptionCategory
      *            The optionCategory model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
@@ -74,33 +74,32 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves an instance of Quotegen_Model_OptionCategory to the database.
-     * If the id is null then it will insert a new row
+     * Deletes rows from the database.
      *
-     * @param $optionCategory mixed
+     * @param $object mixed
      *            This can either be an instance of Quotegen_Model_OptionCategory or the
      *            primary key to delete
-     * @return mixed The primary key of the new row
+     * @return mixed The number of rows deleted
      */
-    public function delete ($optionCategory)
+    public function delete ($object)
     {
-        if ($optionCategory instanceof Quotegen_Model_OptionCategory)
+        if ($object instanceof Quotegen_Model_OptionCategory)
         {
             $whereClause = array (
-                    'categoryId = ?' => $optionCategory->getCategoryId(), 
-                    'optionId = ?' => $optionCategory->getOptionId() 
+                    'categoryId = ?' => $object->getCategoryId(), 
+                    'optionId = ?' => $object->getOptionId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'categoryId = ?' => $optionCategory [0], 
-                    'optionId = ?' => $optionCategory [1] 
+                    'categoryId = ?' => $object [0], 
+                    'optionId = ?' => $object [1] 
             );
         }
         
-        $result = $this->getDbTable()->delete($whereClause);
-        return $result;
+        $rowsAffected = $this->getDbTable()->delete($whereClause);
+        return $rowsAffected;
     }
 
     /**

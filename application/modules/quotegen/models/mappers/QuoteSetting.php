@@ -24,7 +24,7 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_QuoteSettings to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $quoteSetting Quotegen_Model_QuoteSetting
+     * @param $object Quotegen_Model_QuoteSetting
      *            The object to insert
      * @return mixed The primary key of the new row
      */
@@ -51,7 +51,7 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Quotegen_Model_QuoteSettings to the database.
      *
-     * @param $quoteSettings Quotegen_Model_QuoteSetting
+     * @param $objects Quotegen_Model_QuoteSetting
      *            The quote settings model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
@@ -78,31 +78,30 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves an instance of Quotegen_Model_QuoteSettings to the database.
-     * If the id is null then it will insert a new row
+     * Deletes rows from the database.
      *
-     * @param $quoteSetting mixed
+     * @param $object mixed
      *            This can either be an instance of Quotegen_Model_QuoteSetting or the
      *            primary key to delete
-     * @return mixed The primary key of the new row
+     * @return mixed The number of rows deleted
      */
-    public function delete ($quoteSetting)
+    public function delete ($object)
     {
-        if ($quoteSetting instanceof Quotegen_Model_QuoteSetting)
+        if ($object instanceof Quotegen_Model_QuoteSetting)
         {
             $whereClause = array (
-                    'id = ?' => $quoteSetting->getId() 
+                    'id = ?' => $object->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'id = ?' => $quoteSetting 
+                    'id = ?' => $object 
             );
         }
         
-        $result = $this->getDbTable()->delete($whereClause);
-        return $result;
+        $rowsAffected = $this->getDbTable()->delete($whereClause);
+        return $rowsAffected;
     }
 
     /**
@@ -129,7 +128,7 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
         {
             return;
         }
-		
+        
         // Go to first row of result and set $row
         $row = $result->current();
         $object = new Quotegen_Model_QuoteSetting($row->toArray());
@@ -163,7 +162,7 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
         
         // Save the object into the cache
         $this->saveItemToCache($object, $object->getId());
-         
+        
         return $object;
     }
 

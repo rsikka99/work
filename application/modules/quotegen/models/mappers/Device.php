@@ -30,7 +30,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_Device to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $device Quotegen_Model_Device
+     * @param $object Quotegen_Model_Device
      *            The object to insert
      * @return mixed The primary key of the new row
      */
@@ -56,7 +56,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Quotegen_Model_Device to the database.
      *
-     * @param $device Quotegen_Model_Device
+     * @param $object Quotegen_Model_Device
      *            The device model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
@@ -83,31 +83,30 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves an instance of Quotegen_Model_Device to the database.
-     * If the id is null then it will insert a new row
+     * Deletes rows from the database.
      *
-     * @param $device mixed
+     * @param $object mixed
      *            This can either be an instance of Quotegen_Model_Device or the
      *            primary key to delete
-     * @return mixed The primary key of the new row
+     * @return mixed The number of rows deleted
      */
-    public function delete ($device)
+    public function delete ($object)
     {
-        if ($device instanceof Quotegen_Model_Device)
+        if ($object instanceof Quotegen_Model_Device)
         {
             $whereClause = array (
-                    'masterDeviceId = ?' => $device->getId() 
+                    'masterDeviceId = ?' => $object->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'masterDeviceId = ?' => $device 
+                    'masterDeviceId = ?' => $object 
             );
         }
         
-        $result = $this->getDbTable()->delete($whereClause);
-        return $result;
+        $rowsAffected = $this->getDbTable()->delete($whereClause);
+        return $rowsAffected;
     }
 
     /**

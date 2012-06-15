@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
+class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
 {
     /**
      * The default db table class to use
@@ -8,12 +8,12 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Quotegen_Model_DbTable_DeviceOption';
+    protected $_defaultDbTable = 'Quotegen_Model_DbTable_DeviceConfiguration';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Quotegen_Model_Mapper_DeviceOption
+     * @return Quotegen_Model_Mapper_DeviceConfiguration
      */
     public static function getInstance ()
     {
@@ -21,10 +21,10 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves an instance of Quotegen_Model_DeviceOption to the database.
+     * Saves an instance of Quotegen_Model_DeviceConfiguration to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Quotegen_Model_DeviceOption
+     * @param $object Quotegen_Model_DeviceConfiguration
      *            The object to insert
      * @return mixed The primary key of the new row
      */
@@ -33,8 +33,13 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
         // Get an array of data to save
         $data = $object->toArray();
         
+        // Remove the id
+        unset($data ['masterDeviceId']);
+        
         // Insert the data
         $id = $this->getDbTable()->insert($data);
+        
+        $object->setId($id);
         
         // Save the object into the cache
         $this->saveItemToCache($object, $id);
@@ -43,10 +48,10 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves (updates) an instance of Quotegen_Model_DeviceOption to the database.
+     * Saves (updates) an instance of Quotegen_Model_DeviceConfiguration to the database.
      *
-     * @param $object Quotegen_Model_DeviceOption
-     *            The deviceOption model to save to the database
+     * @param $object Quotegen_Model_DeviceConfiguration
+     *            The deviceConfiguration model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
      * @return int The number of rows affected
@@ -57,14 +62,12 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
         
         if ($primaryKey === null)
         {
-            $primaryKey [] = $data ['masterDeviceId'];
-            $primaryKey [] = $data ['optionId'];
+            $primaryKey = $data ['masterDeviceId'];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'masterDeviceId = ?' => $primaryKey [0], 
-                'optionId = ?' => $primaryKey [1] 
+                'masterDeviceId = ?' => $primaryKey 
         ));
         
         // Save the object into the cache
@@ -77,24 +80,22 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
      * Deletes rows from the database.
      *
      * @param $object mixed
-     *            This can either be an instance of Quotegen_Model_DeviceOption or the
+     *            This can either be an instance of Quotegen_Model_DeviceConfiguration or the
      *            primary key to delete
      * @return mixed The number of rows deleted
      */
     public function delete ($object)
     {
-        if ($object instanceof Quotegen_Model_DeviceOption)
+        if ($object instanceof Quotegen_Model_DeviceConfiguration)
         {
             $whereClause = array (
-                    'masterDeviceId = ?' => $object->getCategoryId(), 
-                    'optionId = ?' => $object->getOptionId() 
+                    'masterDeviceId = ?' => $object->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'masterDeviceId = ?' => $object [0], 
-                    'optionId = ?' => $object [1] 
+                    'masterDeviceId = ?' => $object 
             );
         }
         
@@ -103,17 +104,17 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Finds a deviceOption based on it's primaryKey
+     * Finds a deviceConfiguration based on it's primaryKey
      *
      * @param $id int
-     *            The id of the deviceOption to find
-     * @return void Quotegen_Model_DeviceOption
+     *            The id of the deviceConfiguration to find
+     * @return void Quotegen_Model_DeviceConfiguration
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Quotegen_Model_DeviceOption)
+        if ($result instanceof Quotegen_Model_DeviceConfiguration)
         {
             return $result;
         }
@@ -125,7 +126,7 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
             return;
         }
         $row = $result->current();
-        $object = new Quotegen_Model_DeviceOption($row->toArray());
+        $object = new Quotegen_Model_DeviceConfiguration($row->toArray());
         
         // Save the object into the cache
         $this->saveItemToCache($object, $id);
@@ -134,7 +135,7 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches a deviceOption
+     * Fetches a deviceConfiguration
      *
      * @param $where string|array|Zend_Db_Table_Select
      *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -142,7 +143,7 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL ORDER clause.
      * @param $offset int
      *            OPTIONAL An SQL OFFSET value.
-     * @return void Quotegen_Model_DeviceOption
+     * @return void Quotegen_Model_DeviceConfiguration
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -152,7 +153,7 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
             return;
         }
         
-        $object = new Quotegen_Model_DeviceOption($row->toArray());
+        $object = new Quotegen_Model_DeviceConfiguration($row->toArray());
         
         // Save the object into the cache
         $this->saveItemToCache($object, $object->getId());
@@ -161,7 +162,7 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches all deviceOptions
+     * Fetches all deviceConfigurations
      *
      * @param $where string|array|Zend_Db_Table_Select
      *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -171,7 +172,7 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL LIMIT count. (Defaults to 25)
      * @param $offset int
      *            OPTIONAL An SQL LIMIT offset.
-     * @return multitype:Quotegen_Model_DeviceOption
+     * @return multitype:Quotegen_Model_DeviceConfiguration
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -179,7 +180,7 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-            $object = new Quotegen_Model_DeviceOption($row->toArray());
+            $object = new Quotegen_Model_DeviceConfiguration($row->toArray());
             
             // Save the object into the cache
             $this->saveItemToCache($object, $object->getId());
@@ -198,8 +199,7 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array (
-                'masterDeviceId = ?' => $id [0], 
-                'optionId = ?' => $id [1] 
+                'masterDeviceId = ?' => $id 
         );
     }
 }
