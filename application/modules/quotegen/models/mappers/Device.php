@@ -1,9 +1,10 @@
 <?php
+
 /**
  * Quotegen_Model_Mapper_Device
  *
  * @author Lee Robert
- *
+ *        
  */
 class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
 {
@@ -39,7 +40,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         $data = $object->toArray();
         
         // Remove the id
-        unset($data ['id']);
+        unset($data ['masterDeviceId']);
         
         // Insert the data
         $id = $this->getDbTable()->insert($data);
@@ -67,12 +68,12 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         
         if ($primaryKey === null)
         {
-            $primaryKey = $data ['id'];
+            $primaryKey = $data ['masterDeviceId'];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'id = ?' => $primaryKey 
+                'masterDeviceId = ?' => $primaryKey 
         ));
         
         // Save the object into the cache
@@ -95,13 +96,13 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         if ($device instanceof Quotegen_Model_Device)
         {
             $whereClause = array (
-                    'id = ?' => $device->getId() 
+                    'masterDeviceId = ?' => $device->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'id = ?' => $device 
+                    'masterDeviceId = ?' => $device 
             );
         }
         
@@ -205,7 +206,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array (
-                'id = ?' => $id 
+                'masterDeviceId = ?' => $id 
         );
     }
 }
