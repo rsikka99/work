@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_Model_Mapper_QuoteSettings extends My_Model_Mapper_Abstract
+class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
 {
     /**
      * The default db table class to use
@@ -8,12 +8,12 @@ class Quotegen_Model_Mapper_QuoteSettings extends My_Model_Mapper_Abstract
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Quotegen_Model_DbTable_QuoteSettings';
+    protected $_defaultDbTable = 'Quotegen_Model_DbTable_QuoteSetting';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Quotegen_Model_Mapper_QuoteSettings
+     * @return Quotegen_Model_Mapper_QuoteSetting
      */
     public static function getInstance ()
     {
@@ -24,13 +24,13 @@ class Quotegen_Model_Mapper_QuoteSettings extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_QuoteSettings to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $quoteSetting Quotegen_Model_QuoteSettings
+     * @param $quoteSetting Quotegen_Model_QuoteSetting
      *            The object to insert
      * @return mixed The primary key of the new row
      */
     public function insert ($data)
     {
-        if ($data instanceof Quotegen_Model_QuoteSettings)
+        if ($data instanceof Quotegen_Model_QuoteSetting)
         {
             $data = $data->toArray();
         }
@@ -46,7 +46,7 @@ class Quotegen_Model_Mapper_QuoteSettings extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Quotegen_Model_QuoteSettings to the database.
      *
-     * @param $quoteSettings Quotegen_Model_QuoteSettings
+     * @param $quoteSettings Quotegen_Model_QuoteSetting
      *            The quote settings model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
@@ -80,7 +80,7 @@ class Quotegen_Model_Mapper_QuoteSettings extends My_Model_Mapper_Abstract
      */
     public function delete ($quoteSetting)
     {
-        if ($quoteSetting instanceof Quotegen_Model_QuoteSettings)
+        if ($quoteSetting instanceof Quotegen_Model_QuoteSetting)
         {
             $whereClause = array (
                     'id = ?' => $quoteSetting->getId() 
@@ -111,7 +111,7 @@ class Quotegen_Model_Mapper_QuoteSettings extends My_Model_Mapper_Abstract
             return;
         }
         $row = $result->current();
-        return new Quotegen_Model_QuoteSettings($row->toArray());
+        return new Quotegen_Model_QuoteSetting($row->toArray());
     }
 
     /**
@@ -132,7 +132,7 @@ class Quotegen_Model_Mapper_QuoteSettings extends My_Model_Mapper_Abstract
         {
             return;
         }
-        return new Quotegen_Model_QuoteSettings($row->toArray());
+        return new Quotegen_Model_QuoteSetting($row->toArray());
     }
 
     /**
@@ -154,7 +154,7 @@ class Quotegen_Model_Mapper_QuoteSettings extends My_Model_Mapper_Abstract
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-            $entries [] = new Quotegen_Model_QuoteSettings($row->toArray());
+            $entries [] = new Quotegen_Model_QuoteSetting($row->toArray());
         }
         return $entries;
     }

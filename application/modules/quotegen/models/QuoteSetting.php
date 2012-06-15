@@ -6,7 +6,7 @@
  * @author John Sadler
  *        
  */
-class Quotegen_Model_QuoteSettings extends My_Model_Abstract
+class Quotegen_Model_QuoteSetting extends My_Model_Abstract
 {
     
     /**
