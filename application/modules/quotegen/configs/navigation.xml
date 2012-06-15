@@ -12,16 +12,16 @@
 				<quotesettings>
 					<label>Quote Settings</label>
 					<module>quotegen</module>
-					<controller>quotesettings</controller>
+					<controller>quotesetting</controller>
 					<action>index</action>
-					<resource>quotegen_quotesettings_index</resource>
+					<resource>quotegen_quotesetting_index</resource>
 				</quotesettings>
 				<leasingSchemas>
 					<label>Leasing Schemas</label>
 					<module>quotegen</module>
-					<controller>leasingschemas</controller>
+					<controller>leasingschema</controller>
 					<action>index</action>
-					<resource>quotegen_leasingschemas_index</resource>
+					<resource>quotegen_leasingschema_index</resource>
 				</leasingSchemas>
 				<quotebuilder>
 					<label>Build a quote</label>
