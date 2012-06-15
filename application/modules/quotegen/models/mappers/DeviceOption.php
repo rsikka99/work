@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Quotegen_Model_Mapper_DeviceOption
- *
- * @author Lee Robert
- *        
- */
 class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
 {
     /**
@@ -39,13 +33,8 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
         // Get an array of data to save
         $data = $object->toArray();
         
-        // Remove the id
-        unset($data ['id']);
-        
         // Insert the data
         $id = $this->getDbTable()->insert($data);
-        
-        $object->setId($id);
         
         // Save the object into the cache
         $this->saveItemToCache($object, $id);
@@ -68,12 +57,14 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
         
         if ($primaryKey === null)
         {
-            $primaryKey = $data ['id'];
+            $primaryKey [] = $data ['masterDeviceId'];
+            $primaryKey [] = $data ['optionId'];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'id = ?' => $primaryKey 
+                'masterDeviceId = ?' => $primaryKey [0], 
+                'optionId = ?' => $primaryKey [1] 
         ));
         
         // Save the object into the cache
@@ -96,13 +87,15 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
         if ($deviceOption instanceof Quotegen_Model_DeviceOption)
         {
             $whereClause = array (
-                    'id = ?' => $deviceOption->getId() 
+                    'masterDeviceId = ?' => $deviceOption->getCategoryId(), 
+                    'optionId = ?' => $deviceOption->getOptionId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'id = ?' => $deviceOption 
+                    'masterDeviceId = ?' => $deviceOption [0], 
+                    'optionId = ?' => $deviceOption [1] 
             );
         }
         
@@ -206,7 +199,8 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array (
-                'id = ?' => $id 
+                'masterDeviceId = ?' => $id [0], 
+                'optionId = ?' => $id [1] 
         );
     }
 }
