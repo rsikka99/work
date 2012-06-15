@@ -33,9 +33,6 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
         // Get an array of data to save
         $data = $object->toArray();
         
-        // Remove the id
-        unset($data ['masterDeviceId']);
-        
         // Insert the data
         $id = $this->getDbTable()->insert($data);
         
