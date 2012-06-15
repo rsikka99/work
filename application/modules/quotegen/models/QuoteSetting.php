@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Application_Model_QuoteSettings is a model that represents a quoteSetting row in the database.
+ * Application_Model_QuoteSetting is a model that represents a quoteSetting row in the database.
  *
  * @author John Sadler
  *        
  */
-class Quotegen_Model_QuoteSettings extends My_Model_Abstract {
+class Quotegen_Model_QuoteSetting extends My_Model_Abstract {
 
 	/**
 	 * The id assigned by the database

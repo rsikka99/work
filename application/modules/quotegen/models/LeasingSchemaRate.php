@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Application_Model_LeasingSchemaRates is a model that represents a user row in the database.
+ * Application_Model_LeasingSchemaRate is a model that represents a user row in the database.
  *
  * @author John Sadler
  *        
  */
-class Quotegen_Model_LeasingSchemaRates extends My_Model_Abstract {
+class Quotegen_Model_LeasingSchemaRate extends My_Model_Abstract {
 	
 	/**
 	 * The related leasing schema term

@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Application_Model_LeasingSchemaRanges is a model that represents a user row in the database.
+ * Application_Model_LeasingSchemaRange is a model that represents a user row in the database.
  *
  * @author John Sadler
  *        
  */
-class Quotegen_Model_LeasingSchemaRanges extends My_Model_Abstract
+class Quotegen_Model_LeasingSchemaRange extends My_Model_Abstract
 {
     
     /**

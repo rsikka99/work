@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_LeasingSchemasController extends Zend_Controller_Action
+class Quotegen_LeasingSchemaController extends Zend_Controller_Action
 {
 
     public function init ()
@@ -11,7 +11,7 @@ class Quotegen_LeasingSchemasController extends Zend_Controller_Action
     public function indexAction ()
     {
         // Display all of the clients
-        $mapper = Quotegen_Model_Mapper_LeasingSchemas::getInstance();
+        $mapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper));
         
         // Set the current page we're on

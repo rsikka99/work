@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_QuoteSettingsController extends Zend_Controller_Action {
+class Quotegen_QuoteSettingController extends Zend_Controller_Action {
 	
 	public function init() {
 		/* Initialize action controller here */
@@ -10,7 +10,7 @@ class Quotegen_QuoteSettingsController extends Zend_Controller_Action {
 		// Get the users quote settings
 		$quoteSettingsId = 1;
 		
-		$mapper = new Quotegen_Model_Mapper_QuoteSettings();
+		$mapper = new Quotegen_Model_Mapper_QuoteSetting();
 		$quoteSetting = $mapper->find ( $quoteSettingsId );
 		
 		// If the quote setting record doesn't exist, send them back
@@ -22,7 +22,7 @@ class Quotegen_QuoteSettingsController extends Zend_Controller_Action {
 		}
 		
 		// Create a new form with the mode and roles set
-		$form = new Quotegen_Form_QuoteSettings();
+		$form = new Quotegen_Form_QuoteSetting();
 		
 		// Prepare the data for the form
 		$request = $this->getRequest ();
@@ -38,8 +38,8 @@ class Quotegen_QuoteSettingsController extends Zend_Controller_Action {
 				try {
 					// Validate the form
 					if ($form->isValid ( $values )) {
-						$mapper = new Quotegen_Model_Mapper_QuoteSettings ();
-						$quoteSetting = new Quotegen_Model_QuoteSettings ();
+						$mapper = new Quotegen_Model_Mapper_QuoteSetting ();
+						$quoteSetting = new Quotegen_Model_QuoteSetting ();
 						$quoteSetting->populate ( $values );
 						$quoteSetting->setId ( $quoteSettingsId );
 						

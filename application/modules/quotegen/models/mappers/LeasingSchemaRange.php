@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_Model_Mapper_LeasingSchemaRanges extends My_Model_Mapper_Abstract
+class Quotegen_Model_Mapper_LeasingSchemaRange extends My_Model_Mapper_Abstract
 {
     /**
      * The default db table class to use
@@ -13,7 +13,7 @@ class Quotegen_Model_Mapper_LeasingSchemaRanges extends My_Model_Mapper_Abstract
     /**
      * Gets an instance of the mapper
      *
-     * @return Quotegen_Model_Mapper_LeasingSchemaRanges
+     * @return Quotegen_Model_Mapper_LeasingSchemaRange
      */
     public static function getInstance ()
     {
@@ -21,16 +21,16 @@ class Quotegen_Model_Mapper_LeasingSchemaRanges extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves an instance of Quotegen_Model_LeasingSchemaRanges to the database.
+     * Saves an instance of Quotegen_Model_LeasingSchemaRange to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $leasingSchema Quotegen_Model_LeasingSchemaRanges
+     * @param $leasingSchema Quotegen_Model_LeasingSchemaRange
      *            The object to insert
      * @return mixed The primary key of the new row
      */
     public function insert ($data)
     {
-        if ($data instanceof Quotegen_Model_LeasingSchemaRanges)
+        if ($data instanceof Quotegen_Model_LeasingSchemaRange)
         {
             $data = $data->toArray();
         }
@@ -43,10 +43,10 @@ class Quotegen_Model_Mapper_LeasingSchemaRanges extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves (updates) an instance of Quotegen_Model_LeasingSchemaRanges to the database.
+     * Saves (updates) an instance of Quotegen_Model_LeasingSchemaRange to the database.
      *
-     * @param $client Quotegen_Model_LeasingSchemaRanges
-     *            The leasingSchema model to save to the database
+     * @param $client Quotegen_Model_LeasingSchemaRange
+     *            The leasingSchemaRange model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
      * @return int The number of rows affected
@@ -69,17 +69,17 @@ class Quotegen_Model_Mapper_LeasingSchemaRanges extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves an instance of Quotegen_Model_LeasingSchemaRanges to the database.
+     * Saves an instance of Quotegen_Model_LeasingSchemaRange to the database.
      * If the id is null then it will insert a new row
      *
      * @param $client mixed
-     *            This can either be an instance of Quotegen_Model_LeasingSchemaRanges or the
+     *            This can either be an instance of Quotegen_Model_LeasingSchemaRange or the
      *            primary key to delete
      * @return mixed The primary key of the new row
      */
     public function delete ($leasingSchemaRange)
     {
-        if ($leasingSchemaRange instanceof Quotegen_Model_LeasingSchemaRanges)
+        if ($leasingSchemaRange instanceof Quotegen_Model_LeasingSchemaRange)
         {
             $whereClause = array (
                     'id = ?' => $leasingSchemaRange->getId() 
@@ -100,7 +100,7 @@ class Quotegen_Model_Mapper_LeasingSchemaRanges extends My_Model_Mapper_Abstract
      *
      * @param $id int
      *            The id of the leasingSchemaRange to find
-     * @return void Quotegen_Model_LeasingSchemaRanges
+     * @return void Quotegen_Model_LeasingSchemaRange
      */
     public function find ($id)
     {
@@ -110,7 +110,7 @@ class Quotegen_Model_Mapper_LeasingSchemaRanges extends My_Model_Mapper_Abstract
             return;
         }
         $row = $result->current();
-        return new Quotegen_Model_LeasingSchemaRanges($row->toArray());
+        return new Quotegen_Model_LeasingSchemaRange($row->toArray());
     }
 
     /**
@@ -122,7 +122,7 @@ class Quotegen_Model_Mapper_LeasingSchemaRanges extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL ORDER clause.
      * @param $offset int
      *            OPTIONAL An SQL OFFSET value.
-     * @return void Quotegen_Model_LeasingSchemaRanges
+     * @return void Quotegen_Model_LeasingSchemaRange
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -131,11 +131,11 @@ class Quotegen_Model_Mapper_LeasingSchemaRanges extends My_Model_Mapper_Abstract
         {
             return;
         }
-        return new Quotegen_Model_LeasingSchemaRanges($row->toArray());
+        return new Quotegen_Model_LeasingSchemaRange($row->toArray());
     }
 
     /**
-     * Fetches all leasingSchemaRanges
+     * Fetches all leasingSchemaRange
      *
      * @param $where string|array|Zend_Db_Table_Select
      *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -145,7 +145,7 @@ class Quotegen_Model_Mapper_LeasingSchemaRanges extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL LIMIT count. (Defaults to 25)
      * @param $offset int
      *            OPTIONAL An SQL LIMIT offset.
-     * @return multitype:Quotegen_Model_LeasingSchemaRanges
+     * @return multitype:Quotegen_Model_LeasingSchemaRange
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -153,7 +153,7 @@ class Quotegen_Model_Mapper_LeasingSchemaRanges extends My_Model_Mapper_Abstract
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-            $entries [] = new Quotegen_Model_LeasingSchemaRanges($row->toArray());
+            $entries [] = new Quotegen_Model_LeasingSchemaRange($row->toArray());
         }
         return $entries;
     }

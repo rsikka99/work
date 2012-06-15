@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_Model_Mapper_LeasingSchemaRates extends My_Model_Mapper_Abstract
+class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
 {
     /**
      * The default db table class to use
@@ -8,12 +8,12 @@ class Quotegen_Model_Mapper_LeasingSchemaRates extends My_Model_Mapper_Abstract
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Quotegen_Model_DbTable_LeasingSchemaRates';
+    protected $_defaultDbTable = 'Quotegen_Model_DbTable_LeasingSchemaRate';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Quotegen_Model_Mapper_LeasingSchemaRates
+     * @return Quotegen_Model_Mapper_LeasingSchemaRate
      */
     public static function getInstance ()
     {
@@ -21,16 +21,16 @@ class Quotegen_Model_Mapper_LeasingSchemaRates extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves an instance of Quotegen_Model_LeasingSchemaRates to the database.
+     * Saves an instance of Quotegen_Model_LeasingSchemaRate to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $leasingSchemaRate Quotegen_Model_LeasingSchemaRates
+     * @param $leasingSchemaRate Quotegen_Model_LeasingSchemaRate
      *            The object to insert
      * @return mixed The primary key of the new row
      */
     public function insert ($data)
     {
-        if ($data instanceof Quotegen_Model_LeasingSchemaRates)
+        if ($data instanceof Quotegen_Model_LeasingSchemaRate)
         {
             $data = $data->toArray();
         }
@@ -43,9 +43,9 @@ class Quotegen_Model_Mapper_LeasingSchemaRates extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves (updates) an instance of Quotegen_Model_LeasingSchemaRates to the database.
+     * Saves (updates) an instance of Quotegen_Model_LeasingSchemaRate to the database.
      *
-     * @param $client Quotegen_Model_LeasingSchemaRates
+     * @param $client Quotegen_Model_LeasingSchemaRate
      *            The leasingSchemaRate model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
@@ -69,17 +69,17 @@ class Quotegen_Model_Mapper_LeasingSchemaRates extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves an instance of Quotegen_Model_LeasingSchemaRates to the database.
+     * Saves an instance of Quotegen_Model_LeasingSchemaRate to the database.
      * If the id is null then it will insert a new row
      *
      * @param $client mixed
-     *            This can either be an instance of Quotegen_Model_LeasingSchemaRates or the
+     *            This can either be an instance of Quotegen_Model_LeasingSchemaRate or the
      *            primary key to delete
      * @return mixed The primary key of the new row
      */
     public function delete ($leasingSchemaRate)
     {
-        if ($leasingSchemaRate instanceof Quotegen_Model_LeasingSchemaRates)
+        if ($leasingSchemaRate instanceof Quotegen_Model_LeasingSchemaRate)
         {
             $whereClause = array (
                     'id = ?' => $leasingSchemaRate->getId() 
@@ -100,7 +100,7 @@ class Quotegen_Model_Mapper_LeasingSchemaRates extends My_Model_Mapper_Abstract
      *
      * @param $id int
      *            The id of the leasingSchemaRate to find
-     * @return void Quotegen_Model_LeasingSchemaRates
+     * @return void Quotegen_Model_LeasingSchemaRate
      */
     public function find ($id)
     {
@@ -110,7 +110,7 @@ class Quotegen_Model_Mapper_LeasingSchemaRates extends My_Model_Mapper_Abstract
             return;
         }
         $row = $result->current();
-        return new Quotegen_Model_LeasingSchemaRates($row->toArray());
+        return new Quotegen_Model_LeasingSchemaRate($row->toArray());
     }
 
     /**
@@ -122,7 +122,7 @@ class Quotegen_Model_Mapper_LeasingSchemaRates extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL ORDER clause.
      * @param $offset int
      *            OPTIONAL An SQL OFFSET value.
-     * @return void Quotegen_Model_LeasingSchemaRates
+     * @return void Quotegen_Model_LeasingSchemaRate
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -131,11 +131,11 @@ class Quotegen_Model_Mapper_LeasingSchemaRates extends My_Model_Mapper_Abstract
         {
             return;
         }
-        return new Quotegen_Model_LeasingSchemaRates($row->toArray());
+        return new Quotegen_Model_LeasingSchemaRate($row->toArray());
     }
 
     /**
-     * Fetches all leasingSchemaRates
+     * Fetches all leasingSchemaRate
      *
      * @param $where string|array|Zend_Db_Table_Select
      *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -145,7 +145,7 @@ class Quotegen_Model_Mapper_LeasingSchemaRates extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL LIMIT count. (Defaults to 25)
      * @param $offset int
      *            OPTIONAL An SQL LIMIT offset.
-     * @return multitype:Quotegen_Model_LeasingSchemaRates
+     * @return multitype:Quotegen_Model_LeasingSchemaRate
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -153,7 +153,7 @@ class Quotegen_Model_Mapper_LeasingSchemaRates extends My_Model_Mapper_Abstract
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-            $entries [] = new Quotegen_Model_LeasingSchemaRates($row->toArray());
+            $entries [] = new Quotegen_Model_LeasingSchemaRate($row->toArray());
         }
         return $entries;
     }

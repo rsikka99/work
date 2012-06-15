@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Application_Model_LeasingSchemaTerms is a model that represents a user row in the database.
+ * Application_Model_LeasingSchemaTerm is a model that represents a user row in the database.
  *
  * @author John Sadler
  *        
  */
-class Quotegen_Model_LeasingSchemaTerms extends My_Model_Abstract {
+class Quotegen_Model_LeasingSchemaTerm extends My_Model_Abstract {
 	
 	/**
 	 * The id assigned by the database
