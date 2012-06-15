@@ -23,6 +23,14 @@ abstract class My_Model_Mapper_Abstract
     protected $_defaultDbTable;
     
     /**
+     * The hash table database objects once retrieved, cached in memory so that we don't try to fetch the same id more
+     * than once.
+     *
+     * @var array
+     */
+    protected $_rowHashTable = array ();
+    
+    /**
      * A hash table to store copies of mappers as singletons.
      *
      * @var array
@@ -131,9 +139,69 @@ abstract class My_Model_Mapper_Abstract
         return ($result) ? $result->count : 0;
     }
 
-    abstract public function insert ($data);
+    /**
+     * Gets an item from the cache based on its key.
+     *
+     * @param multitype:array|string $key
+     *            The key to search the cache with.
+     * @return multitype:My_Model_Abstract boolean
+     */
+    protected function getItemFromCache ($key)
+    {
+        // Convert the key from an array to a string
+        if (is_array($key))
+            $key = implode('_', $key);
+            
+            // If the item exists, return it.
+        if (array_key_exists($key, $this->_rowHashTable))
+        {
+            return $this->_rowHashTable [$key];
+        }
+        return false;
+    }
 
-    abstract public function save ($data, $primaryKey);
+    /**
+     * Saves a completed model into the database
+     *
+     * @param My_Model_Abstract $object
+     *            Any object that extends My_Model_Abstract
+     * @param mixed $key
+     *            The key to save the model as. This can be an array, it will be imploded into a single string using _'s
+     *            as delimiters.
+     */
+    protected function saveItemToCache (My_Model_Abstract $object, $key)
+    {
+        // Convert the key from an array to a string
+        if (is_array($key))
+            $key = implode('_', $key);
+            
+            // Save the item into the cache
+        $this->_rowHashTable [$key] = $object;
+    }
+
+    /**
+     * Deletes an item from the cache.
+     *
+     * @param mixed $key
+     *            The key of the model that we are deleting. This can be an array, it will be imploded into a single
+     *            string using _'s as delimiters.
+     */
+    protected function deleteItemFromCache ($key)
+    {
+        // Convert the key from an array to a string
+        if (is_array($key))
+            $key = implode('_', $key);
+            
+            // Remove the item from the cache if it exists.
+        if (array_key_exists($key, $this->_rowHashTable))
+        {
+            unset($this->_rowHashTable [$key]);
+        }
+    }
+
+    abstract public function insert (&$object);
+
+    abstract public function save ($object, $primaryKey);
 
     abstract public function delete ($primaryKey);
 
