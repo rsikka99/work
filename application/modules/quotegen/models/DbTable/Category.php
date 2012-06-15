@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_Model_DbTable_Categories extends Zend_Db_Table_Abstract
+class Quotegen_Model_DbTable_Category extends Zend_Db_Table_Abstract
 {
     protected $_name = 'quotegen_categories';
     protected $_primary = array (
