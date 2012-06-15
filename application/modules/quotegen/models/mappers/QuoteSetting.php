@@ -78,13 +78,12 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves an instance of Quotegen_Model_QuoteSettings to the database.
-     * If the id is null then it will insert a new row
+     * Deletes rows from the database.
      *
      * @param $object mixed
      *            This can either be an instance of Quotegen_Model_QuoteSetting or the
      *            primary key to delete
-     * @return mixed The primary key of the new row
+     * @return mixed The number of rows deleted
      */
     public function delete ($object)
     {
@@ -101,8 +100,8 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
             );
         }
         
-        $result = $this->getDbTable()->delete($whereClause);
-        return $result;
+        $rowsAffected = $this->getDbTable()->delete($whereClause);
+        return $rowsAffected;
     }
 
     /**
