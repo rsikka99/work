@@ -65,6 +65,13 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     protected $_clientDisplayName;
     
+    /**
+     * The client associated with the quote
+     *
+     * @var Quotegen_Model_Client
+     */
+    protected $_client;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -268,6 +275,36 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function setClientDisplayName ($_clientDisplayName)
     {
         $this->_clientDisplayName = $_clientDisplayName;
+        return $this;
+    }
+
+    /**
+     * Gets the client for the report
+     *
+     * @return Quotegen_Model_Client
+     */
+    public function getClient ()
+    {
+        if (! isset($this->_client) && isset($this->_clientId))
+        {
+            $this->_client = Quotegen_Model_Mapper_Client::getInstance()->find($this->getClientId());
+        }
+        return $this->_client;
+    }
+
+    /**
+     * Sets the client for the report (Also sets the client id of the report if the client has one.
+     *
+     * @param Quotegen_Model_Client $_client
+     *            The new client
+     */
+    public function setClient (Quotegen_Model_Client $_client)
+    {
+        $this->_client = $_client;
+        if ($_client->getId() !== null)
+        {
+            $this->setClientId($_client->getId());
+        }
         return $this;
     }
 }

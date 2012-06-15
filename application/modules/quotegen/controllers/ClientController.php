@@ -22,10 +22,6 @@ class Quotegen_ClientController extends Zend_Controller_Action
         
         // Pass the view the paginator
         $this->view->paginator = $paginator;
-        
-        // Set the default viewscript
-        // TODO: This could be moved to a bootstrap file in the module.
-        Zend_View_Helper_PaginationControl::setDefaultViewPartial('client/paginator.phtml');
     }
 
     public function deleteAction ()
