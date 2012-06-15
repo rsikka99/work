@@ -24,7 +24,7 @@ class Quotegen_Model_Mapper_Category extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_Category to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $category Quotegen_Model_Category
+     * @param $object Quotegen_Model_Category
      *            The object to insert
      * @return mixed The primary key of the new row
      */
@@ -50,7 +50,7 @@ class Quotegen_Model_Mapper_Category extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Quotegen_Model_Category to the database.
      *
-     * @param $category Quotegen_Model_Category
+     * @param $object Quotegen_Model_Category
      *            The category model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
@@ -80,23 +80,23 @@ class Quotegen_Model_Mapper_Category extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_Category to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $category mixed
+     * @param $object mixed
      *            This can either be an instance of Quotegen_Model_Category or the
      *            primary key to delete
      * @return mixed The primary key of the new row
      */
-    public function delete ($category)
+    public function delete ($object)
     {
-        if ($category instanceof Quotegen_Model_Category)
+        if ($object instanceof Quotegen_Model_Category)
         {
             $whereClause = array (
-                    'id = ?' => $category->getId() 
+                    'id = ?' => $object->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'id = ?' => $category 
+                    'id = ?' => $object 
             );
         }
         

@@ -24,7 +24,7 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_DeviceOption to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $deviceOption Quotegen_Model_DeviceOption
+     * @param $object Quotegen_Model_DeviceOption
      *            The object to insert
      * @return mixed The primary key of the new row
      */
@@ -45,7 +45,7 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Quotegen_Model_DeviceOption to the database.
      *
-     * @param $deviceOption Quotegen_Model_DeviceOption
+     * @param $object Quotegen_Model_DeviceOption
      *            The deviceOption model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
@@ -77,25 +77,25 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_DeviceOption to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $deviceOption mixed
+     * @param $object mixed
      *            This can either be an instance of Quotegen_Model_DeviceOption or the
      *            primary key to delete
      * @return mixed The primary key of the new row
      */
-    public function delete ($deviceOption)
+    public function delete ($object)
     {
-        if ($deviceOption instanceof Quotegen_Model_DeviceOption)
+        if ($object instanceof Quotegen_Model_DeviceOption)
         {
             $whereClause = array (
-                    'masterDeviceId = ?' => $deviceOption->getCategoryId(), 
-                    'optionId = ?' => $deviceOption->getOptionId() 
+                    'masterDeviceId = ?' => $object->getCategoryId(), 
+                    'optionId = ?' => $object->getOptionId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'masterDeviceId = ?' => $deviceOption [0], 
-                    'optionId = ?' => $deviceOption [1] 
+                    'masterDeviceId = ?' => $object [0], 
+                    'optionId = ?' => $object [1] 
             );
         }
         

@@ -24,7 +24,7 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_DeviceConfiguration to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $deviceConfiguration Quotegen_Model_DeviceConfiguration
+     * @param $object Quotegen_Model_DeviceConfiguration
      *            The object to insert
      * @return mixed The primary key of the new row
      */
@@ -50,7 +50,7 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Quotegen_Model_DeviceConfiguration to the database.
      *
-     * @param $deviceConfiguration Quotegen_Model_DeviceConfiguration
+     * @param $object Quotegen_Model_DeviceConfiguration
      *            The deviceConfiguration model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
@@ -80,23 +80,23 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_DeviceConfiguration to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $deviceConfiguration mixed
+     * @param $object mixed
      *            This can either be an instance of Quotegen_Model_DeviceConfiguration or the
      *            primary key to delete
      * @return mixed The primary key of the new row
      */
-    public function delete ($deviceConfiguration)
+    public function delete ($object)
     {
-        if ($deviceConfiguration instanceof Quotegen_Model_DeviceConfiguration)
+        if ($object instanceof Quotegen_Model_DeviceConfiguration)
         {
             $whereClause = array (
-                    'masterDeviceId = ?' => $deviceConfiguration->getId() 
+                    'masterDeviceId = ?' => $object->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'masterDeviceId = ?' => $deviceConfiguration 
+                    'masterDeviceId = ?' => $object 
             );
         }
         

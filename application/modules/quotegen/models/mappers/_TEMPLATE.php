@@ -24,7 +24,7 @@ class Quotegen_Model_Mapper_Template extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_Template to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $template Quotegen_Model_Template
+     * @param $object Quotegen_Model_Template
      *            The object to insert
      * @return mixed The primary key of the new row
      */
@@ -50,7 +50,7 @@ class Quotegen_Model_Mapper_Template extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Quotegen_Model_Template to the database.
      *
-     * @param $template Quotegen_Model_Template
+     * @param $object Quotegen_Model_Template
      *            The template model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
@@ -80,23 +80,23 @@ class Quotegen_Model_Mapper_Template extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_Template to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $template mixed
+     * @param $object mixed
      *            This can either be an instance of Quotegen_Model_Template or the
      *            primary key to delete
      * @return mixed The primary key of the new row
      */
-    public function delete ($template)
+    public function delete ($object)
     {
-        if ($template instanceof Quotegen_Model_Template)
+        if ($object instanceof Quotegen_Model_Template)
         {
             $whereClause = array (
-                    'id = ?' => $template->getId() 
+                    'id = ?' => $object->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'id = ?' => $template 
+                    'id = ?' => $object 
             );
         }
         

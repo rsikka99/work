@@ -24,7 +24,7 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_Option to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $option Quotegen_Model_Option
+     * @param $object Quotegen_Model_Option
      *            The object to insert
      * @return mixed The primary key of the new row
      */
@@ -50,7 +50,7 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Quotegen_Model_Option to the database.
      *
-     * @param $option Quotegen_Model_Option
+     * @param $object Quotegen_Model_Option
      *            The option model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
@@ -80,23 +80,23 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_Option to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $option mixed
+     * @param $object mixed
      *            This can either be an instance of Quotegen_Model_Option or the
      *            primary key to delete
      * @return mixed The primary key of the new row
      */
-    public function delete ($option)
+    public function delete ($object)
     {
-        if ($option instanceof Quotegen_Model_Option)
+        if ($object instanceof Quotegen_Model_Option)
         {
             $whereClause = array (
-                    'id = ?' => $option->getId() 
+                    'id = ?' => $object->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'id = ?' => $option 
+                    'id = ?' => $object 
             );
         }
         
