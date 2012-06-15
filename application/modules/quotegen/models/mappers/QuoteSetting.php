@@ -8,12 +8,12 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
      * @var String
      *
      */
-	protected $_defaultDbTable = 'Quotegen_Model_DbTable_QuoteSetting';
+    protected $_defaultDbTable = 'Quotegen_Model_DbTable_QuoteSetting';
 
     /**
      * Gets an instance of the mapper
      *
-	 * @return Quotegen_Model_Mapper_QuoteSetting
+     * @return Quotegen_Model_Mapper_QuoteSetting
      */
     public static function getInstance ()
     {
@@ -21,40 +21,44 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
     }
 
     /**
-	 * Saves an instance of Quotegen_Model_QuoteSetting to the database.
+     * Saves an instance of Quotegen_Model_QuoteSetting to the database.
      * If the id is null then it will insert a new row
      *
-	 * @param $quoteSetting Quotegen_Model_QuoteSetting
+     * @param $quoteSetting Quotegen_Model_QuoteSetting
      *            The object to insert
      * @return mixed The primary key of the new row
      */
-    public function insert ($data)
+    public function insert (&$object)
     {
-        if ($data instanceof Quotegen_Model_QuoteSetting)
-        {
-            $data = $data->toArray();
-        }
+        // Get an array of data to save
+        $data = $object->toArray();
         
+        // Remove the id
         unset($data ['id']);
         
-        // lower case the clientname
+        // Insert the data
         $id = $this->getDbTable()->insert($data);
+        
+        $object->setId($id);
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object, $id);
         
         return $id;
     }
 
     /**
-	 * Saves (updates) an instance of Quotegen_Model_QuoteSetting to the database.
+     * Saves (updates) an instance of Quotegen_Model_QuoteSetting to the database.
      *
-	 * @param $quoteSettings Quotegen_Model_QuoteSetting
-     *            The quote settings model to save to the database
+     * @param $quoteSetting Quotegen_Model_QuoteSetting
+     *            The quoteSetting model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
      * @return int The number of rows affected
      */
-    public function save ($quoteSetting, $primaryKey = null)
+    public function save ($object, $primaryKey = null)
     {
-        $data = $this->unsetNullValues($quoteSetting->toArray());
+        $data = $this->unsetNullValues($object->toArray());
         
         if ($primaryKey === null)
         {
@@ -66,11 +70,14 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
                 'id = ?' => $primaryKey 
         ));
         
+        // Save the object into the cache
+        $this->saveItemToCache($object, $primaryKey);
+        
         return $rowsAffected;
     }
 
     /**
-	 * Saves an instance of Quotegen_Model_QuoteSetting to the database.
+     * Saves an instance of Quotegen_Model_QuoteSetting to the database.
      * If the id is null then it will insert a new row
      *
      * @param $quoteSetting mixed
@@ -80,7 +87,7 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
      */
     public function delete ($quoteSetting)
     {
-		if ($quoteSetting instanceof Quotegen_Model_QuoteSetting)
+        if ($quoteSetting instanceof Quotegen_Model_QuoteSetting)
         {
             $whereClause = array (
                     'id = ?' => $quoteSetting->getId() 
@@ -93,7 +100,8 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
             );
         }
         
-        return $this->getDbTable()->delete($whereClause);
+        $result = $this->getDbTable()->delete($whereClause);
+        return $result;
     }
 
     /**
@@ -101,7 +109,7 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
      *
      * @param $id int
      *            The id of the quoteSetting to find
-	 * @return void Quotegen_Model_QuoteSetting
+     * @return void Quotegen_Model_QuoteSetting
      */
     public function find ($id)
     {
@@ -111,11 +119,16 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
             return;
         }
         $row = $result->current();
-		return new Quotegen_Model_QuoteSetting ( $row->toArray () );
+        $object = new Quotegen_Model_QuoteSetting($row->toArray());
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object, $id);
+        
+        return $object;
     }
 
     /**
-     * Fetches a quote setting
+     * Fetches a quoteSetting
      *
      * @param $where string|array|Zend_Db_Table_Select
      *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -123,7 +136,7 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL ORDER clause.
      * @param $offset int
      *            OPTIONAL An SQL OFFSET value.
-	 * @return void Quotegen_Model_QuoteSetting
+     * @return void Quotegen_Model_QuoteSetting
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -132,11 +145,17 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
         {
             return;
         }
-		return new Quotegen_Model_QuoteSetting ( $row->toArray () );
+        
+        $object = new Quotegen_Model_QuoteSetting($row->toArray());
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object, $object->getId());
+        
+        return $object;
     }
 
     /**
-     * Fetches all quote settings
+     * Fetches all quoteSettings
      *
      * @param $where string|array|Zend_Db_Table_Select
      *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -146,7 +165,7 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL LIMIT count. (Defaults to 25)
      * @param $offset int
      *            OPTIONAL An SQL LIMIT offset.
-	 * @return multitype:Quotegen_Model_QuoteSetting
+     * @return multitype:Quotegen_Model_QuoteSetting
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -154,9 +173,27 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-			$entries [] = new Quotegen_Model_QuoteSetting ( $row->toArray () );
+            $object = new Quotegen_Model_QuoteSetting($row->toArray());
+            
+            // Save the object into the cache
+            $this->saveItemToCache($object, $object->getId());
+            
+            $entries [] = $object;
         }
         return $entries;
+    }
+
+    /**
+     * Gets a where clause for filtering by id
+     *
+     * @param unknown_type $id            
+     * @return array
+     */
+    public function getWhereId ($id)
+    {
+        return array (
+                'id = ?' => $id 
+        );
     }
 }
 
