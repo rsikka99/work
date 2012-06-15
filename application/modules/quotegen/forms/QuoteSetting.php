@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_Form_QuoteSetting extends EasyBib_Form {
+class Quotegen_Form_QuoteSetting extends EasyBib_Form
 {
 
     public function init ()

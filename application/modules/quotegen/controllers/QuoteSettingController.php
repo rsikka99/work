@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_QuoteSettingController extends Zend_Controller_Action {
+class Quotegen_QuoteSettingController extends Zend_Controller_Action
 {
 
     public function init ()
@@ -44,7 +44,8 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action {
                 try
                 {
                     // Validate the form
-                    if ($form->isValid($values))
+                    if ($form->isValid($values)) 
+                    {
 						$mapper = new Quotegen_Model_Mapper_QuoteSetting ();
 						$quoteSetting = new Quotegen_Model_QuoteSetting ();
                         $quoteSetting->populate($values);
