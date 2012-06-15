@@ -28,17 +28,22 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
      *            The object to insert
      * @return mixed The primary key of the new row
      */
-    public function insert ($data)
+    public function insert (&$object)
     {
-        if ($data instanceof Quotegen_Model_QuoteSetting)
-        {
-            $data = $data->toArray();
-        }
+        // Get an array of data to save
+        $data = $object->toArray();
         
+        // Remove the id
         unset($data ['id']);
         
-        // lower case the clientname
+        // Insert the data 
         $id = $this->getDbTable()->insert($data);
+        
+        // Sets the object id
+        $object->setId($id);
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object, $id);
         
         return $id;
     }
@@ -52,9 +57,9 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
      *            Optional: The original primary key, in case we're changing it
      * @return int The number of rows affected
      */
-    public function save ($quoteSetting, $primaryKey = null)
+    public function save ($object, $primaryKey = null)
     {
-        $data = $this->unsetNullValues($quoteSetting->toArray());
+        $data = $this->unsetNullValues($object->toArray());
         
         if ($primaryKey === null)
         {
@@ -65,6 +70,9 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
         $rowsAffected = $this->getDbTable()->update($data, array (
                 'id = ?' => $primaryKey 
         ));
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object, $primaryKey);
         
         return $rowsAffected;
     }
@@ -93,7 +101,8 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
             );
         }
         
-        return $this->getDbTable()->delete($whereClause);
+        $result = $this->getDbTable()->delete($whereClause);
+        return $result;
     }
 
     /**
@@ -105,13 +114,30 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
      */
     public function find ($id)
     {
+        $result = $this->getItemFromCache($id);
+        
+        // If item is in cache return that objet
+        if ($result instanceof Quotegen_Model_QuoteSetting)
+        {
+            return $result;
+        }
+        
         $result = $this->getDbTable()->find($id);
+        
+        // If item not found return to the caller
         if (0 == count($result))
         {
             return;
         }
+		
+        // Go to first row of result and set $row
         $row = $result->current();
-        return new Quotegen_Model_QuoteSetting($row->toArray());
+        $object = new Quotegen_Model_QuoteSetting($row->toArray());
+        
+        // Save item to cache
+        $this->saveItemToCache($object, $id);
+        
+        return $object;
     }
 
     /**
@@ -132,7 +158,13 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
         {
             return;
         }
-        return new Quotegen_Model_QuoteSetting($row->toArray());
+        
+        $object = new Quotegen_Model_QuoteSetting($row->toArray());
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object, $object->getId());
+         
+        return $object;
     }
 
     /**
