@@ -6,10 +6,8 @@
 	
 	});
 	
-	function manage_term(mode, id) {
-	}
-	
-	function manage_range(mode, id) {
+	function do_action(mode, id) {
+		alert(mode + '\n' + id);
 	}
 	
 <?php $this->headScript()->captureEnd() ?>
@@ -56,10 +54,10 @@
 		        <td style="text-align: center;"><?php echo $rates[$termid][$rangeid]->getRate(); ?></td>
 		        <?php } ?>
 		        <td style="text-align: center;">
-			      	<a class="btn btn-warning btn-mini" title="Edit Term" onclick="javascript: manage_term('edit', <?php echo $termid; ?>);">
+			      	<a class="btn btn-warning btn-mini" title="Edit Term" onclick="javascript: do_action('edit term', <?php echo $termid; ?>);">
 						<i class="icon-pencil icon-white"></i> Edit
 					</a>
-			      	<a class="btn btn-danger btn-mini" title="Delete Term" onclick="javascript: manage_term('delete', <?php echo $termid; ?>);">
+			      	<a class="btn btn-danger btn-mini" title="Delete Term" onclick="javascript: do_action('delete term', <?php echo $termid; ?>);">
 						<i class="icon-trash icon-white"></i>
 					</a>
 		        </td>
@@ -73,13 +71,17 @@
 					$startRange = $range->getStartRange();
 
 					if ($startRange == 0) { ?>
-		      			<td>&nbsp;</td>
-					<?php } else { ?>
-				        <td style="text-align: center;">
-					      	<a class="btn btn-warning btn-mini" title="Edit Range" onclick="javascript: manage_range('edit', <?php echo $rangeid; ?>);">
+		      			<td style="text-align: center;">
+					      	<a class="btn btn-warning btn-mini" title="Edit Range" onclick="javascript: do_action('edit range', <?php echo $rangeid; ?>);">
 								<i class="icon-pencil icon-white"></i> Edit
 							</a>
-					      	<a class="btn btn-danger btn-mini" title="Delete Range" onclick="javascript: manage_range('delete', <?php echo $rangeid; ?>);">
+						</td>
+					<?php } else { ?>
+				        <td style="text-align: center;">
+					      	<a class="btn btn-warning btn-mini" title="Edit Range" onclick="javascript: do_action('edit range', <?php echo $rangeid; ?>);">
+								<i class="icon-pencil icon-white"></i> Edit
+							</a>
+					      	<a class="btn btn-danger btn-mini" title="Delete Range" onclick="javascript: do_action('delete range', <?php echo $rangeid; ?>);">
 								<i class="icon-trash icon-white"></i>
 							</a>
 				        </td>
@@ -93,10 +95,10 @@
 		
 		<div id="buttons_container">
 			<span class="pull-right">
-		      	<a class="btn btn-success" title="Add Term" onclick="javascript: manage_term('add', 0);" href="#">
+		      	<a class="btn btn-success" title="Add Term" onclick="javascript: do_action('add term', 0);" href="#">
 					<i class="icon-plus icon-white"></i> Add Term
 				</a>
-		      	<a class="btn btn-success" title="Add Range" onclick="javascript: manage_range('add', 0);" href="#">
+		      	<a class="btn btn-success" title="Add Range" onclick="javascript: do_action('add range', 0);" href="#">
 					<i class="icon-plus icon-white"></i> Add Range
 				</a>
 			</span>
