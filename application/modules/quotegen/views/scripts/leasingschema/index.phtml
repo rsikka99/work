@@ -1,3 +1,4 @@
+<?php $leasingSchema = $this->leasingSchema; /* @var $leasingSchema Quotegen_Model_LeasingSchema */ ?>
 
 <?php $this->headScript()->captureStart('append','text/javascript') ?>
 	
@@ -5,81 +6,10 @@
 	
 	});
 	
-	function add_term() {
-		var num_columns = $("#leasingSchemaTable").find('tr')[0].cells.length;
-		var num_rows = $('#leasingSchemaTable tr').length;
-		
-		var new_row_html = '';
-		new_row_html += '<tr id="term-'+num_rows+'">';
-		for (i=0; i < num_columns; i++) {
-			if (i == 0) {
-				new_row_html += '<td style="text-align: center;">';
-				new_row_html += '<span class="pull-left"><a class="btn btn-danger btn-mini" title="Delete Term" onclick="javascript: cancel_term('+num_rows+');" href="#"><i class="icon-remove"></i></a></span>';
-				new_row_html += '<input type="text" name="new-term-'+num_rows+'" id="new-term-'+num_rows+'" class="span1" value="" />';
-				new_row_html += '</td>';
-			} else {
-				new_row_html += '<td style="text-align: center;">';
-				new_row_html += '<input type="text" name="new-term-'+num_rows+'-range-'+i+'" id="new-term-'+num_rows+'-range-'+i+'" class="span1" value="" />';
-				new_row_html += '</td>';
-			}
-		}
-		new_row_html += '</tr>';
-		
-		$('#leasingSchemaTable tbody:last').append(new_row_html);
+	function manage_term(mode, id) {
 	}
 	
-	function remove_term(id) {
-	}
-	
-	function cancel_term(id) {
-		var row = document.getElementById('term-'+id);
-		row.parentElement.removeChild(row);
-	}
-	
-	function add_range() {
-		var num_columns = $("#leasingSchemaTable").find('tr')[0].cells.length;
-		var num_rows = $('#leasingSchemaTable tr').length;
-		
-		if (num_columns < 8 ) {
-			$('#leasingSchemaTable').find('tr').each(function(i) {
-				
-			    if (i == 0) {
-					var new_col_header = '';
-					new_col_header += '<th width="10%" range="col-'+(num_columns)+'" style="text-align: center;">';
-					new_col_header += '<input type="text" name="new-range-'+(num_columns)+'" id="new-range-'+(num_columns)+'" class="span1" value="" />';
-					new_col_header += '<span class="pull-right" style="position: relative; top: 3px;"><a class="btn btn-danger btn-mini" title="Delete Range" onclick="javascript: cancel_range(\'col-'+(num_columns)+'\');" href="#"><i class="icon-remove"></i></a></span>';
-					new_col_header += '</th>';
-			       	$(this).append(new_col_header);  
-			    }
-			    else {
-					var new_col_html = '';
-					new_col_html += '<td range="col-'+(num_columns)+'" style="text-align: center;">';
-					new_col_html += '<input type="text" name="new-term-'+i+'-range-'+(num_columns)+'" id="new-term-'+i+'-range-'+(num_columns)+'" class="span1" value="" />';
-					new_col_html += '</td>';
-			        $(this).append(new_col_html);
-			    }
-			});
-		} else {
-			// update warning message stating max number of ranges exceeded
-		}
-				
-	}
-	
-	function remove_range(id) {
-	}
-	
-	function cancel_range(id) {
-		$('th[range='+id+'], td[range='+id+']').remove();
-	}
-	
-	function validate() {
-		var valid = true;
-		
-		// make sure every field has a value greater than 0
-		
-		if ( valid == true ) {
-			$("#leasingSchemas").submit();
-		}
+	function manage_range(mode, id) {
 	}
 	
 <?php $this->headScript()->captureEnd() ?>
@@ -87,62 +17,87 @@
 <div class="well">
 
 	<form name="leasingSchemas" id="leasingSchemas" class="form-horizontal" action="" method="post" enctype="application/x-www-form-urlencoded">
-		<p>Click on a value to edit it.</p>
+		<p>Insert any instructional text here.</p>
 		
 		<div id="lease-terms-container" style="overflow: auto; overflow-y: hidden; -ms-overflow-y: hidden;">
 		  <table id="leasingSchemaTable" class="table table-striped table-bordered">
 		    <thead id="leadingSchemaHeaders">
 				<tr>
 					<th width="10%" nowrap="nowrap" style="text-align: center;">Term (months) </th>
-					<?php foreach ($this->ranges as $range ) {
+					<?php foreach ($leasingSchema->getRanges() as $range ) {
 					    $rangeid = $range->getId();
 					    $startRange = $range->getStartRange();
 					
 						if ($startRange == 0) { ?>
-						<th width="10%" style="text-align: center;">$0 </th>
+							<th width="10%" style="text-align: center;">$0 </th>
 						<?php } else { ?>
-						<th width="10%" style="text-align: center;"><?php echo "$" . $startRange; ?> <span class="pull-right" style="position: relative; top: -3px;"><a class="btn btn-danger btn-mini" title="Delete Interval" onclick="javascript: delete_range(<?php echo $rangeid; ?>);" href="#"><i class="icon-trash"></i></a></span> </th>
+							<th width="10%" style="text-align: center;"><?php echo $this->currency($startRange); ?> </th>
 						<?php } ?>
 					<?php } ?>
+					<th width="10%" nowrap="nowrap" style="text-align: center;">Action</th>
 				</tr>
 		    </thead>
 		    <tbody id="leasingSchemaData">
 		      <!-- LOOP THROUGH TERMS AND DISPLAY ROWS -->
-		      <?php foreach ( $this->terms as $term ) {
-		          $termid = $term ['termid'];
-		          $month = $term ['term'];
+		      <?php $colcount = 1; ?>
+		      <?php $rates = $leasingSchema->getRates(); ?>
+		      <?php foreach ( $leasingSchema->getTerms() as $term ) {
+		          $termid = $term->getId();
+		          $month = $term->getMonths();
 		      ?>
 		      <tr id="term-<?php echo $termid; ?>">
 		        <td style="text-align: center;">
-		        	<span class="pull-left"><a class="btn btn-danger btn-mini" title="Delete Term" onclick="javascript: delete_term(<?php echo $termid; ?>);" href="#"><i class="icon-trash"></i></a></span> <?php echo $month; ?> months
+		        	<?php echo $month; ?> months
 		        </td>
-		        <?php foreach ( $term ['rates'] as $rate ) {
-	            	$rangeid = $rate ['rangeid'];
-	            	$rate = $rate ['rate'];
+		        <?php foreach ( $leasingSchema->getRanges() as $range ) {
+		            $colcount += 1;
+	            	$rangeid = $range->getId();
 		        ?>
-		        <td style="text-align: center;">
-		        	<input type="text" name="rate[<?php echo $termid; ?>][<?php echo $rangeid; ?>]" id="rate[<?php echo $termid; ?>][<?php echo $rangeid; ?>]" class="span1" value="<?php echo $rate; ?>" />
-		        </td>
+		        <td style="text-align: center;"><?php echo $rates[$termid][$rangeid]->getRate(); ?></td>
 		        <?php } ?>
+		        <td style="text-align: center;">
+			      	<a class="btn btn-warning btn-mini" title="Edit Term" onclick="javascript: manage_term('edit', <?php echo $termid; ?>);">
+						<i class="icon-pencil icon-white"></i> Edit
+					</a>
+			      	<a class="btn btn-danger btn-mini" title="Delete Term" onclick="javascript: manage_term('delete', <?php echo $termid; ?>);">
+						<i class="icon-trash icon-white"></i>
+					</a>
+		        </td>
 		      </tr>
 		      <?php } ?>
 		      <!-- END LOOP THROUGH TERMS AND DISPLAY ROWS -->
+		      <tr>
+		      	<td>&nbsp;</td>
+				<?php foreach ($leasingSchema->getRanges() as $range ) { 
+					$rangeid = $range->getId();
+					$startRange = $range->getStartRange();
+
+					if ($startRange == 0) { ?>
+		      			<td>&nbsp;</td>
+					<?php } else { ?>
+				        <td style="text-align: center;">
+					      	<a class="btn btn-warning btn-mini" title="Edit Range" onclick="javascript: manage_range('edit', <?php echo $rangeid; ?>);">
+								<i class="icon-pencil icon-white"></i> Edit
+							</a>
+					      	<a class="btn btn-danger btn-mini" title="Delete Range" onclick="javascript: manage_range('delete', <?php echo $rangeid; ?>);">
+								<i class="icon-trash icon-white"></i>
+							</a>
+				        </td>
+					<?php } ?>
+		        <?php } ?>
+		      	<td>&nbsp;</td>
+		      </tr>
 		    </tbody>
 		  </table>
 		</div>
 		
 		<div id="buttons_container">
-			<span class="pull-left">
-		      	<a class="btn btn-success" title="Add Term" onclick="javascript: add_term();" href="#">
+			<span class="pull-right">
+		      	<a class="btn btn-success" title="Add Term" onclick="javascript: manage_term('add', 0);" href="#">
 					<i class="icon-plus icon-white"></i> Add Term
 				</a>
-		      	<a class="btn btn-success" title="Add Range" onclick="javascript: add_range();" href="#">
+		      	<a class="btn btn-success" title="Add Range" onclick="javascript: manage_range('add', 0);" href="#">
 					<i class="icon-plus icon-white"></i> Add Range
-				</a>
-			</span>
-			<span class="pull-right">
-	      		<a class="btn btn-primary" title="Save" onclick="javascript: validate();" href="#">
-					<i class="icon-ok icon-white"></i> Save
 				</a>
 			</span>
 		</div>

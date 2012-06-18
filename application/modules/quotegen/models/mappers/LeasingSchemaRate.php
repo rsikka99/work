@@ -54,7 +54,7 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
     public function save ($object, $primaryKey = null)
     {
         $data = $this->unsetNullValues($object->toArray());
-
+        
         if ($primaryKey === null)
         {
             $primaryKey [] = $data ['leasingSchemaTermId'];
@@ -87,15 +87,15 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_LeasingSchemaRate)
         {
             $whereClause = array (
-                'leasingSchemaTermId = ?' => $object->getLeasingSchemaTermId(), 
-                'leasingSchemaRangeId = ?' =>$object->getLeasingSchemaRangeId()
+                    'leasingSchemaTermId = ?' => $object->getLeasingSchemaTermId(), 
+                    'leasingSchemaRangeId = ?' => $object->getLeasingSchemaRangeId() 
             );
         }
         else
         {
             $whereClause = array (
-                'leasingSchemaTermId = ?' => $object [0], 
-                'leasingSchemaRangeId = ?' => $object [1] 
+                    'leasingSchemaTermId = ?' => $object [0], 
+                    'leasingSchemaRangeId = ?' => $object [1] 
             );
         }
         
@@ -146,7 +146,7 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
         }
         
         $object = new Quotegen_Model_LeasingSchemaRate($row->toArray());
-
+        
         $primaryKey [] = $object->getLeasingSchemaTermId();
         $primaryKey [] = $object->getLeasingSchemaRangeId();
         
@@ -176,7 +176,7 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
         foreach ( $resultSet as $row )
         {
             $object = new Quotegen_Model_LeasingSchemaRate($row->toArray());
-
+            
             $primaryKey [] = $object->getLeasingSchemaTermId();
             $primaryKey [] = $object->getLeasingSchemaRangeId();
             
@@ -200,6 +200,60 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
                 'leasingSchemaTermId = ?' => $id [0], 
                 'leasingSchemaRangeId = ?' => $id [1] 
         );
+    }
+
+    /**
+     * Fetches all the rates for a leasing schema
+     *
+     * @param $leasingSchemaId The
+     *            id of the leasing schema
+     * @return multitype:Quotegen_Model_LeasingSchemaRate
+     */
+    public function fetchAllForLeasingSchema ($leasingSchemaId)
+    {
+        $rates = array ();
+        
+        // Get the table names for convieniece
+        $termTableName = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->getTableName();
+        $rangeTableName = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance()->getTableName();
+        $schemaTableName = Quotegen_Model_Mapper_LeasingSchema::getInstance()->getTableName();
+        $rateTableName = $this->getTableName();
+        
+        // Create a select statement
+        $select = Quotegen_Model_Mapper_LeasingSchema::getInstance()->getDbTable()->select(true);
+        $select->joinRight(array (
+                'terms' => $termTableName 
+        ), "terms.leasingSchemaId = {$schemaTableName}.id");
+        $select->join(array (
+                'rates' => $rateTableName 
+        ), "terms.id = rates.leasingSchemaTermId");
+        $select->joinRight(array (
+                'ranges' => $rangeTableName 
+        ), "ranges.id = rates.leasingSchemaRangeId");
+        
+        $select->where("{$schemaTableName}.id = ?", $leasingSchemaId);
+        $select->setIntegrityCheck(false);
+        
+        $result = $select->query()->fetchAll();
+        
+        if ($result && count($result) > 0)
+        {
+            foreach ( $result as $row )
+            {
+                $rate = new Quotegen_Model_LeasingSchemaRate($row);
+                
+                $primaryKey [] = $rate->getLeasingSchemaTermId();
+                $primaryKey [] = $rate->getLeasingSchemaRangeId();
+                
+                // Save the object into the cache
+                $this->saveItemToCache($rate, $primaryKey);
+                
+                $rates [$rate->getLeasingSchemaTermId()] [$rate->getLeasingSchemaRangeId()] = $rate;
+            
+            }
+        }
+        
+        return $rates;
     }
 }
 

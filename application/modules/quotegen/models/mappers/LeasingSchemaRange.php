@@ -195,5 +195,19 @@ class Quotegen_Model_Mapper_LeasingSchemaRange extends My_Model_Mapper_Abstract
                 'id = ?' => $id 
         );
     }
+
+    /**
+     * Fetches all the ranges for a leasing schema
+     *
+     * @param $leasingSchemaId The
+     *            id of the leasing schema
+     * @return multitype:Quotegen_Model_LeasingSchemaRange
+     */
+    public function fetchAllForLeasingSchema ($leasingSchemaId)
+    {
+        return $this->fetchAll(array (
+                'leasingSchemaId = ?' => $leasingSchemaId 
+        ), 'startRange ASC');
+    }
 }
 

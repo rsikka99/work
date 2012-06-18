@@ -195,5 +195,19 @@ class Quotegen_Model_Mapper_LeasingSchemaTerm extends My_Model_Mapper_Abstract
                 'id = ?' => $id 
         );
     }
+
+    /**
+     * Fetches all the terms for a leasing schema
+     * 
+     * @param $leasingSchemaId The
+     *            id of the leasing schema
+     * @return multitype:Quotegen_Model_LeasingSchemaTerm
+     */
+    public function fetchAllForLeasingSchema ($leasingSchemaId)
+    {
+        return $this->fetchAll(array (
+                'leasingSchemaId = ?' => $leasingSchemaId 
+        ), 'months ASC');
+    }
 }
 

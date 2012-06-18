@@ -195,5 +195,6 @@ class Quotegen_Model_Mapper_LeasingSchema extends My_Model_Mapper_Abstract
                 'id = ?' => $id 
         );
     }
+
 }
 

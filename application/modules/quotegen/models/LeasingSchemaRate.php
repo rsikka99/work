@@ -26,7 +26,19 @@ class Quotegen_Model_LeasingSchemaRate extends My_Model_Abstract {
 	 * @var double
 	 */
 	protected $_rate = 0;
-
+	/**
+	 * The term for the leasing schema rate
+	 *
+	 * @var Quotegen_Model_LeasingSchemaTerm
+	 */
+	protected $_term;
+	/**
+	 * The range for the leasing schema rate
+	 *
+	 * @var Quotegen_Model_LeasingSchemaRange
+	 */
+	protected $_range;
+	
 	
 	/*
 	 * (non-PHPdoc) @see My_Model_Abstract::populate()
@@ -98,5 +110,55 @@ class Quotegen_Model_LeasingSchemaRate extends My_Model_Abstract {
 		$this->_rate = $_rate;
 		return $this;
 	}
+	/**
+	 * Gets the term for the leasing schema rate
+	 * 
+     * @return the $_term
+     */
+    public function getTerm ()
+    {
+        if (! isset($this->_term))
+        {
+            $this->_term = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->find($this->getLeasingSchemaTermId());
+        }
+        return $this->_term;
+    }
+
+	/**
+	 * Sets the term for the leasing schema rate
+	 * 
+     * @param Quotegen_Model_LeasingSchemaTerm $_term
+     */
+    public function setTerm ($_term)
+    {
+        $this->_term = $_term;
+        return $this;
+    }
+
+	/**
+	 * Gets the range for the leasing schema rate
+	 * 
+     * @return the $_range
+     */
+    public function getRange ()
+    {
+        if (! isset($this->_range))
+        {
+            $this->_range = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance()->find($this->getLeasingSchemaRangeId());
+        }
+        return $this->_range;
+    }
+
+	/**
+	 * Sets the range for the leasing schema rate
+	 * 
+     * @param Quotegen_Model_LeasingSchemaRange $_range
+     */
+    public function setRange ($_range)
+    {
+        $this->_range = $_range;
+        return $this;
+    }
+
 
 }

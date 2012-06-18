@@ -65,7 +65,7 @@ abstract class My_Model_Mapper_Abstract
      *
      * @param $dbTable mixed            
      */
-    protected function setDbTable ($dbTable)
+    public function setDbTable ($dbTable)
     {
         if (is_string($dbTable))
         {
@@ -85,7 +85,7 @@ abstract class My_Model_Mapper_Abstract
      *
      * @return Zend_Db_Table_Abstract
      */
-    protected function getDbTable ()
+    public function getDbTable ()
     {
         if (null === $this->_dbTable)
         {
@@ -197,6 +197,14 @@ abstract class My_Model_Mapper_Abstract
         {
             unset($this->_rowHashTable [$key]);
         }
+    }
+
+    /**
+     * Gets the database table name for use in mapper functions
+     */
+    public function getTableName ()
+    {
+        return $this->getDbTable()->info('name');
     }
 
     abstract public function insert (&$object);
