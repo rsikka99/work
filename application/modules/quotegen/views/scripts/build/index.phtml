@@ -1,0 +1,75 @@
+<?php echo $this->render('_partials/quoteHeading.phtml'); ?>
+<div class="page-header">
+    <h1>Quote <small>- Build</small></h1>
+</div>
+<div class="row">
+    <div class="span3">
+        <div class="well">
+            <p>Span 3</p>
+        </div>
+    </div>
+    <div class="span3">
+        <div class="well">
+            <p>Span 3</p>
+        </div>
+    </div>
+    <div class="span3">
+        <div class="well">
+            <p>Span 3</p>
+        </div>
+    </div>
+    <div class="span3">
+        <div class="well">
+            <p>Span 3</p>
+        </div>
+    </div>
+</div>
+<h1>Summary (TODO: Make Dynamic List)</h1>
+<div class="well">
+    <form class="form-inline" method="POST">
+        <div class="control-group">
+            <div class="controls">
+                <select name="deviceConfigurationId">
+                    <option value="-1">Add New Configuration</option>
+                    <option value="1">Favorite 1</option>
+                    <option value="2">Favorite 2</option>
+                    <option value="3">Favorite 3</option>
+                </select>
+                <button type="submit" name="submit" class="btn">Add</button>
+            </div>
+        </div>
+    </form>
+    <div class="accordion" id="accordion2">
+        <?php for ($i = 1; $i <= 10; $i++) : ?>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <div class="accordion-buttons pull-right">
+                    <a href="editConfiguration.php" title="Edit Configuration" class="btn btn-mini btn-warning "><i class="icon-pencil"></i> Edit</a>
+                    <a href="#" title="Remove Configuration" class="btn btn-mini btn-danger "><i class="icon-trash"></i></a>
+                </div>
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $i; ?>">Brother 2344 dtn - (Quantity: 1) - (Price: $500.23)</a>
+            </div>
+            <div id="collapse<?php echo $i; ?>" class="accordion-body collapse">
+                <div class="accordion-inner">
+                    <h4>Selected Options</h4>
+                    <table class="table table-condensed table-bordered">
+                        <tr><th>Option</th><th style='width: 50px'>Incl. Qty</th><th style='width: 50px'>Extra Qty</th><th style='width: 50px'>Price</th></tr>
+                        <tr><td>Option 1</td><td>1</td><td>2</td><td>$20 ea</td></tr>
+                        <tr><td>Option 1</td><td>1</td><td>2</td><td>$20 ea</td></tr>
+                        <tr><td>Option 1</td><td>1</td><td>2</td><td>$20 ea</td></tr>
+                        <tr><td>Option 1</td><td>1</td><td>2</td><td>$20 ea</td></tr>
+                    </table>
+                    <ul>
+                        <li>10,000 Monochrome Pages Per Month for $300</li>
+                        <li>Monochrome Overage $0.02/page</li>
+                        <li>10,000 Color Pages Per Month for $20</li>
+                        <li>Color Overage $0.02/page</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <?php endfor; ?>
+    </div>
+</div>
+<h2>Quote Var Dump (DEBUG DATA!!!!)</h2>
+<pre><?php var_dump($this->quote); ?></pre>
