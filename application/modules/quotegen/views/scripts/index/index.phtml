@@ -1,7 +1,21 @@
-<div class="row">
-	<div class="span12">
-	    <div class="well">
-	        <p>This is the index page of the quote generator</p>
-	    </div>
-	</div>
+<div class="tabbable tabs-left well">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab1" data-toggle="tab">Select an existing quote</a></li>
+        <li><a href="#tab2" data-toggle="tab">Create a new quote</a></li>
+        <li><a href="#tab3" data-toggle="tab">Create a new client</a></li>
+    </ul>
+    <div class="tab-content ">
+        <div class="tab-pane active" id="tab1">
+            <p>Select an existing quote from the list below to work on it.</p>
+            <?php echo $this->existingQuoteForm; ?>
+        </div>
+        <div class="tab-pane" id="tab2">
+            <p>Filling out the information below will allow you to create a new quote for a client. If you need to make one for a client that is not listed, please  go to the new client tab and create the client before creating a quote.</p>
+            <?php echo $this->newQuoteForm; ?>
+        </div>
+         <div class="tab-pane" id="tab3">
+             <p>Please fill out the details below to create a new client.</p>
+            <?php echo $this->newClientForm; ?>
+        </div>
+    </div>
 </div>

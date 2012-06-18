@@ -8,6 +8,7 @@
  */
 class Quotegen_Model_Quote extends My_Model_Abstract
 {
+    const QUOTE_SESSION_NAMESPACE = 'quotegen';
     
     /**
      * The id assigned by the database
@@ -89,6 +90,10 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             $this->setDateCreated($params->dateCreated);
         if (isset($params->dateModified) && ! is_null($params->dateModified))
             $this->setDateModified($params->dateModified);
+        if (isset($params->quoteDate) && ! is_null($params->quoteDate))
+            $this->setQuoteDate($params->quoteDate);
+        if (isset($params->isLeased) && ! is_null($params->isLeased))
+            $this->setIsLeased($params->isLeased);
         if (isset($params->userId) && ! is_null($params->userId))
             $this->setUserId($params->userId);
         if (isset($params->clientDisplayName) && ! is_null($params->clientDisplayName))
@@ -101,7 +106,14 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function toArray ()
     {
         return array (
-                'id' => $this->getId() 
+                'id' => $this->getId(), 
+                'clientId' => $this->getClientId(), 
+                'dateCreated' => $this->getDateCreated(), 
+                'dateModified' => $this->getDateModified(), 
+                'quoteDate' => $this->getQuoteDate(), 
+                'isLeased' => $this->getIsLeased(), 
+                'userId' => $this->getUserId(), 
+                'clientDisplayName' => $this->getClientDisplayName() 
         );
     }
 
