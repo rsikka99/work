@@ -129,7 +129,7 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
         
         // Save the object into the cache
         $this->saveItemToCache($object, $id);
-        
+
         return $object;
     }
 
@@ -155,7 +155,9 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
         $object = new Quotegen_Model_DeviceConfigurationOption($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $object->getId());
+        $primaryKey [0] = $object->getDeviceConfigurationId();
+        $primaryKey [1] = $object->getOptionId();
+        $this->saveItemToCache($object, $primaryKey);
         
         return $object;
     }
@@ -182,7 +184,9 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
             $object = new Quotegen_Model_DeviceConfigurationOption($row->toArray());
             
             // Save the object into the cache
-            $this->saveItemToCache($object, $object->getId());
+            $primaryKey [0] = $object->getDeviceConfigurationId();
+            $primaryKey [1] = $object->getOptionId();
+            $this->saveItemToCache($object, $primaryKey);
             
             $entries [] = $object;
         }
@@ -203,4 +207,5 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
         );
     }
 }
+
 

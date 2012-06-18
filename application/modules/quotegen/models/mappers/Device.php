@@ -39,13 +39,9 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         // Get an array of data to save
         $data = $object->toArray();
         
-        // Remove the id
-        unset($data ['masterDeviceId']);
         
         // Insert the data
         $id = $this->getDbTable()->insert($data);
-        
-        $object->setId($id);
         
         // Save the object into the cache
         $this->saveItemToCache($object, $id);
@@ -95,7 +91,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_Device)
         {
             $whereClause = array (
-                    'masterDeviceId = ?' => $object->getId() 
+                    'masterDeviceId = ?' => $object->getMasterDeviceId()
             );
         }
         else
@@ -162,7 +158,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_Device($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $object->getId());
+        $this->saveItemToCache($object, $object->getMasterDeviceId());
         
         return $object;
     }
@@ -189,7 +185,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
             $object = new Quotegen_Model_Device($row->toArray());
             
             // Save the object into the cache
-            $this->saveItemToCache($object, $object->getId());
+            $this->saveItemToCache($object, $object->getMasterDeviceId());
             
             $entries [] = $object;
         }

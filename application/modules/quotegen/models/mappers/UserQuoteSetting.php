@@ -155,10 +155,9 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_UserQuoteSetting($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, array (
-                $object->getUserId(), 
-                $object->getUserQuoteSettingId() 
-        ));
+        $primaryKey [0] = $object->getUserId();
+        $primaryKey [1] = $object->getQuoteSettingId();
+        $this->saveItemToCache($object, $primaryKey);
         
         return $object;
     }
@@ -185,7 +184,9 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
             $object = new Quotegen_Model_UserQuoteSetting($row->toArray());
             
             // Save the object into the cache
-            $this->saveItemToCache($object, $object->getId());
+            $primaryKey [0] = $object->getUserId();
+            $primaryKey [1] = $object->getQuoteSettingId();
+            $this->saveItemToCache($object, $primaryKey);
             
             $entries [] = $object;
         }
@@ -206,4 +207,5 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
         );
     }
 }
+
 

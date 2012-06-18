@@ -86,7 +86,7 @@ class Quotegen_Model_Mapper_QuoteDeviceResidual extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_QuoteDeviceResidual)
         {
             $whereClause = array (
-                    'quoteDeviceId = ?' => $object->getId() 
+                    'quoteDeviceId = ?' => $object->getQuoteDeviceId() 
             );
         }
         else
@@ -153,7 +153,7 @@ class Quotegen_Model_Mapper_QuoteDeviceResidual extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_QuoteDeviceResidual($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $object->getId());
+        $this->saveItemToCache($object, $object->getQuoteDeviceId());
         
         return $object;
     }
@@ -180,7 +180,7 @@ class Quotegen_Model_Mapper_QuoteDeviceResidual extends My_Model_Mapper_Abstract
             $object = new Quotegen_Model_QuoteDeviceResidual($row->toArray());
             
             // Save the object into the cache
-            $this->saveItemToCache($object, $object->getId());
+            $this->saveItemToCache($object, $object->getQuoteDeviceId());
             
             $entries [] = $object;
         }

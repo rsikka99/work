@@ -155,7 +155,9 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_OptionCategory($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $object->getId());
+        $primaryKey [0] = $object->getCategoryId();
+        $primaryKey [1] = $object->getOptionId();
+        $this->saveItemToCache($object, $primaryKey);
         
         return $object;
     }
@@ -182,8 +184,10 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
             $object = new Quotegen_Model_OptionCategory($row->toArray());
             
             // Save the object into the cache
-            $this->saveItemToCache($object, $object->getId());
-            
+	        $primaryKey [0] = $object->getCategoryId();
+	        $primaryKey [1] = $object->getOptionId();
+	        $this->saveItemToCache($object, $primaryKey);
+	            
             $entries [] = $object;
         }
         return $entries;
