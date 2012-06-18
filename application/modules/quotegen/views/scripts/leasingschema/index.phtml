@@ -94,33 +94,38 @@
 		    <thead id="leadingSchemaHeaders">
 				<tr>
 					<th width="10%" nowrap="nowrap" style="text-align: center;">Term (months) </th>
-					<?php if ($this->ranges ) { ?>
-					<th width="10%" style="text-align: center;">$0 </th>
-					<th width="10%" style="text-align: center;">$100 <span class="pull-right" style="position: relative; top: -3px;"><a class="btn btn-danger btn-mini" title="Delete Interval" onclick="javascript: delete_range(1);" href="#"><i class="icon-trash"></i></a></span> </th>
-					<th width="10%" style="text-align: center;">$1,000 <span class="pull-right" style="position: relative; top: -3px;"><a class="btn btn-danger btn-mini" title="Delete Interval" onclick="javascript: delete_range(2);" href="#"><i class="icon-trash"></i></a></span> </th>
-					<th width="10%" style="text-align: center;">$10,000+ <span class="pull-right" style="position: relative; top: -3px;"><a class="btn btn-danger btn-mini" title="Delete Interval" onclick="javascript: delete_range(3);" href="#"><i class="icon-trash"></i></a></span> </th>
+					<?php foreach ($this->ranges as $range ) {
+					    $rangeid = $range->getId();
+					    $startRange = $range->getStartRange();
+					
+						if ($startRange == 0) { ?>
+						<th width="10%" style="text-align: center;">$0 </th>
+						<?php } else { ?>
+						<th width="10%" style="text-align: center;"><?php echo "$" . $startRange; ?> <span class="pull-right" style="position: relative; top: -3px;"><a class="btn btn-danger btn-mini" title="Delete Interval" onclick="javascript: delete_range(<?php echo $rangeid; ?>);" href="#"><i class="icon-trash"></i></a></span> </th>
+						<?php } ?>
 					<?php } ?>
 				</tr>
 		    </thead>
 		    <tbody id="leasingSchemaData">
 		      <!-- LOOP THROUGH TERMS AND DISPLAY ROWS -->
-		      <tr id="term-1">
+		      <?php foreach ( $this->terms as $term ) {
+		          $termid = $term ['termid'];
+		          $month = $term ['term'];
+		      ?>
+		      <tr id="term-<?php echo $termid; ?>">
 		        <td style="text-align: center;">
-		        	<span class="pull-left"><a class="btn btn-danger btn-mini" title="Delete Term" onclick="javascript: delete_term(1);" href="#"><i class="icon-trash"></i></a></span> 12 months 
+		        	<span class="pull-left"><a class="btn btn-danger btn-mini" title="Delete Term" onclick="javascript: delete_term(<?php echo $termid; ?>);" href="#"><i class="icon-trash"></i></a></span> <?php echo $month; ?> months
 		        </td>
+		        <?php foreach ( $term ['rates'] as $rate ) {
+	            	$rangeid = $rate ['rangeid'];
+	            	$rate = $rate ['rate'];
+		        ?>
 		        <td style="text-align: center;">
-		        	<input type="text" name="rate[1][1]" id="rate[1][1]" class="span1" value="0.0990" />
+		        	<input type="text" name="rate[<?php echo $termid; ?>][<?php echo $rangeid; ?>]" id="rate[<?php echo $termid; ?>][<?php echo $rangeid; ?>]" class="span1" value="<?php echo $rate; ?>" />
 		        </td>
-		        <td style="text-align: center;">
-	        		<input type="text" name="rate[1][2]" id="rate[1][2]" class="span1" value="0.0965" />
-		        </td>
-		        <td style="text-align: center;">
-	        		<input type="text" name="rate[1][3]" id="rate[1][3]" class="span1" value="0.0954" />
-		        </td>
-		        <td style="text-align: center;">
-	        		<input type="text" name="rate[1][4]" id="rate[1][4]" class="span1" value="0.0944" />
-		        </td>
+		        <?php } ?>
 		      </tr>
+		      <?php } ?>
 		      <!-- END LOOP THROUGH TERMS AND DISPLAY ROWS -->
 		    </tbody>
 		  </table>

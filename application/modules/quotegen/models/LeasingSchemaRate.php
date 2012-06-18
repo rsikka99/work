@@ -38,7 +38,7 @@ class Quotegen_Model_LeasingSchemaRate extends My_Model_Abstract {
 		if (isset ( $params->leasingSchemaTermId ) && ! is_null ( $params->leasingSchemaTermId ))
 			$this->setLeasingSchemaTermId( $params->leasingSchemaTermId );
 		if (isset ( $params->leasingSchemaRangeId ) && ! is_null ( $params->leasingSchemaRangeId ))
-			$this->setLeaseingSchemaRangeId( $params->leasingSchemaRangeId );
+			$this->setLeasingSchemaRangeId( $params->leasingSchemaRangeId );
 		if (isset ( $params->rate ) && ! is_null ( $params->rate ))
 			$this->setRate ( $params->rate );
 	}

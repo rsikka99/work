@@ -33,13 +33,8 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
         // Get an array of data to save
         $data = $object->toArray();
         
-        // Remove the id
-        unset($data ['id']);
-        
         // Insert the data
         $id = $this->getDbTable()->insert($data);
-        
-        $object->setId($id);
         
         // Save the object into the cache
         $this->saveItemToCache($object, $id);
@@ -59,15 +54,17 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
     public function save ($object, $primaryKey = null)
     {
         $data = $this->unsetNullValues($object->toArray());
-        
+
         if ($primaryKey === null)
         {
-            $primaryKey = $data ['id'];
+            $primaryKey [] = $data ['leasingSchemaTermId'];
+            $primaryKey [] = $data ['leasingSchemaRangeId'];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'id = ?' => $primaryKey 
+                'leasingSchemaTermId = ?' => $primaryKey [0], 
+                'leasingSchemaRangeId = ?' => $primaryKey [1] 
         ));
         
         // Save the object into the cache
@@ -80,23 +77,25 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_LeasingSchemaRate to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $leasingSchemaRate mixed
+     * @param $object mixed
      *            This can either be an instance of Quotegen_Model_LeasingSchemaRate or the
      *            primary key to delete
      * @return mixed The primary key of the new row
      */
-    public function delete ($leasingSchemaRate)
+    public function delete ($object)
     {
-        if ($leasingSchemaRate instanceof Quotegen_Model_LeasingSchemaRate)
+        if ($object instanceof Quotegen_Model_LeasingSchemaRate)
         {
             $whereClause = array (
-                    'id = ?' => $leasingSchemaRate->getId() 
+                'leasingSchemaTermId = ?' => $object->getLeasingSchemaTermId(), 
+                'leasingSchemaRangeId = ?' =>$object->getLeasingSchemaRangeId()
             );
         }
         else
         {
             $whereClause = array (
-                    'id = ?' => $leasingSchemaRate 
+                'leasingSchemaTermId = ?' => $object [0], 
+                'leasingSchemaRangeId = ?' => $object [1] 
             );
         }
         
@@ -147,9 +146,12 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
         }
         
         $object = new Quotegen_Model_LeasingSchemaRate($row->toArray());
+
+        $primaryKey [] = $object->getLeasingSchemaTermId();
+        $primaryKey [] = $object->getLeasingSchemaRangeId();
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $object->getId());
+        $this->saveItemToCache($object, $primaryKey);
         
         return $object;
     }
@@ -174,9 +176,12 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
         foreach ( $resultSet as $row )
         {
             $object = new Quotegen_Model_LeasingSchemaRate($row->toArray());
+
+            $primaryKey [] = $object->getLeasingSchemaTermId();
+            $primaryKey [] = $object->getLeasingSchemaRangeId();
             
             // Save the object into the cache
-            $this->saveItemToCache($object, $object->getId());
+            $this->saveItemToCache($object, $primaryKey);
             
             $entries [] = $object;
         }
@@ -192,7 +197,8 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array (
-                'id = ?' => $id 
+                'leasingSchemaTermId = ?' => $id [0], 
+                'leasingSchemaRangeId = ?' => $id [1] 
         );
     }
 }
