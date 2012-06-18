@@ -7,7 +7,35 @@
 	});
 	
 	function do_action(mode, id) {
-		alert(mode + '\n' + id);
+		switch (mode) {
+			case "add term":
+				$("#hdnId").val(id);
+				$("#leasingSchemas").action = "";
+				break;
+			case "edit term":
+				$("#hdnId").val(id);
+				$("#leasingSchemas").action = "";
+				break;
+			case "delete term":
+				$("#hdnId").val(id);
+				$("#leasingSchemas").action = "";
+				break;
+			case "add range":
+				$("#hdnId").val(id);
+				$("#leasingSchemas").action = "";
+				break;
+			case "edit range":
+				$("#hdnId").val(id);
+				$("#leasingSchemas").action = "";
+				break;
+			case "delete range":
+				$("#hdnId").val(id);
+				$("#leasingSchemas").action = "";
+				break;
+			default:
+				alert("Error: please try again.");
+				break;
+		}
 	}
 	
 <?php $this->headScript()->captureEnd() ?>
@@ -15,6 +43,8 @@
 <div class="well">
 
 	<form name="leasingSchemas" id="leasingSchemas" class="form-horizontal" action="" method="post" enctype="application/x-www-form-urlencoded">
+		<input type="hidden" name="hdnId" id="hdnId" value="" />
+		
 		<p>Insert any instructional text here.</p>
 		
 		<div id="lease-terms-container" style="overflow: auto; overflow-y: hidden; -ms-overflow-y: hidden;">
@@ -35,6 +65,7 @@
 					<th width="10%" nowrap="nowrap" style="text-align: center;">Action</th>
 				</tr>
 		    </thead>
+		    
 		    <tbody id="leasingSchemaData">
 		      <!-- LOOP THROUGH TERMS AND DISPLAY ROWS -->
 		      <?php $colcount = 1; ?>
