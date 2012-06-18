@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Quotegen_Model_Template
+ * Quotegen_Model_QuoteDeviceMonthlyPage
  *
  * @author Lee Robert
  *        
  */
-class Quotegen_Model_Template extends My_Model_Abstract
+class Quotegen_Model_QuoteDeviceMonthlyPage extends My_Model_Abstract
 {
     /**
      * id from quoteDeivce
