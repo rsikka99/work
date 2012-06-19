@@ -1,6 +1,8 @@
 <?php /* @var $client Quotegen_Model_Client */ $client = $this->client; ?>
 <div class="well">
-   <?php echo $client->getName()?>
-   <?php echo $client->getAddress()?>
-   <?php echo $client->getPhoneNumber()?>
+    <dl class="dl-horizontal">
+        <dt>Name</dt><dd><?php echo $client->getName(); ?></dd>
+        <dt>Phone Number</dt><dd><?php echo $client->getPhoneNumber(); ?></dd>
+        <dt>Address</dt><dd><?php echo nl2br($client->getAddress()); ?></dd>
+    </dl>
 </div>
