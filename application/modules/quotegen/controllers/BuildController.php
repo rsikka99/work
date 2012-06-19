@@ -63,12 +63,39 @@ class Quotegen_BuildController extends Zend_Controller_Action
      */
     public function indexAction ()
     {
+        $request = $this->getRequest();
+        
+        if ($request->isPost())
+        {
+            $values = $request->getPost();
+            if (isset($values ['deviceConfigurationId']))
+            {
+                $deviceConfigurationId = (int)$values ['deviceConfigurationId'];
+                if ($deviceConfigurationId === - 1)
+                {
+                    $this->_helper->redirector('newconfiguration');
+                }
+                else
+                {
+                    $this->_helper->redirector('editconfiguration', null, null, array (
+                            'id' => $deviceConfigurationId 
+                    ));
+                }
+            }
+        }
     }
 
     /**
-     * This handles creating a new quote only.
+     * This adding a new device configuration
      */
-    public function newAction ()
+    public function newconfigurationAction ()
+    {
+    }
+
+    /**
+     * This adding a new device configuration
+     */
+    public function editconfigurationAction ()
     {
     }
 }
