@@ -112,6 +112,54 @@
                         </update>
                     </pages>
                 </clients>
+                <devices>
+                    <label>Manage Devices</label>
+                    <class>dropdown</class>
+                    <module>quotegen</module>
+                    <controller>device</controller>
+                    <action>index</action>
+                    <resource>quotegen_device_index</resource>
+                    <pages>
+                        <viewall>
+                            <label>View all</label>
+                            <module>quotegen</module>
+                            <controller>device</controller>
+                            <action>index</action>
+                            <resource>quotegen_device_index</resource>
+                        </viewall>
+                        <view>
+                            <label> View</label>
+                            <module>quotegen</module>
+                            <controller>device</controller>
+                            <action>view</action>
+                            <resource>quotegen_device_view</resource>
+                            <visible>0</visible>
+                        </view>
+                        <delete>
+                            <label>Delete</label>
+                            <module>quotegen</module>
+                            <controller>device</controller>
+                            <action>delete</action>
+                            <resource>quotegen_device_delete</resource>
+                            <visible>0</visible>
+                        </delete>
+                        <create>
+                            <label>Create</label>
+                            <module>quotegen</module>
+                            <controller>device</controller>
+                            <action>create</action>
+                            <resource>quotegen_device_create</resource>
+                        </create>
+                        <update>
+                            <label>Edit</label>
+                            <module>quotegen</module>
+                            <controller>device</controller>
+                            <action>edit</action>
+                            <resource>quotegen_device_edit</resource>
+                            <visible>0</visible>
+                        </update>
+                    </pages>
+                </devices>
             </pages>
         </menu>
     </nav>
