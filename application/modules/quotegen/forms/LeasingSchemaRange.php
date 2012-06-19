@@ -3,7 +3,7 @@
 class Quotegen_Form_LeasingSchemaRange extends EasyBib_Form
 {
 
-    public function __construct ($leasingSchema = Quotegen_Model_Mapper_LeasingSchema)
+    public function __construct ($leasingSchemaTerms = null)
     {
         /**
          * Add class to form for label alignment
@@ -28,6 +28,7 @@ class Quotegen_Form_LeasingSchemaRange extends EasyBib_Form
         $this->addElement('text', 'range', array (
                 'label' => 'New Range:', 
                 'required' => true, 
+                'class' => 'span1',
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -43,32 +44,38 @@ class Quotegen_Form_LeasingSchemaRange extends EasyBib_Form
                 ) 
         ));
         
-        $this->addElement('text', 'term', array (
-                'label' => 'Term:', 
-                'required' => true, 
-                'filters' => array (
-                        'StringTrim', 
-                        'StripTags' 
-                ), 
-                'validators' => array (
-                        array (
-                                'validator' => 'StringLength', 
-                                'options' => array (
-                                        1, 
-                                        3 
-                                ) 
-                        ) 
-                ) 
-        ));
+        foreach ( $leasingSchemaTerms as $term )
+        {
+            $termid = $term->getId();
+            
+	        $this->addElement('text', "term{$termid}", array (
+	                'label' => 'Term:', 
+	                'required' => true, 
+	                'filters' => array (
+	                        'StringTrim', 
+	                        'StripTags' 
+	                ),
+	                'class' => 'span1',
+	                'validators' => array (
+	                        array (
+	                                'validator' => 'StringLength', 
+	                                'options' => array (
+	                                        1, 
+	                                        3 
+	                                ) 
+	                        ) 
+	                ) 
+	        ));
+        }
         
         // Add the submit button
         $this->addElement('submit', 'submit', array (
                 'ignore' => true, 
-                'label' => 'Save' 
+                'label' => 'Save'
         ));
         
         // Add the cancel button
-        $this->addElement('submit', 'cancel', array (
+        $this->addElement('button', 'cancel', array (
                 'ignore' => true, 
                 'label' => 'Cancel' 
         ));

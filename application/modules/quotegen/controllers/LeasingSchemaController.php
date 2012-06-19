@@ -39,7 +39,9 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
             $values = $request->getPost();
             $id = $values ['hdnId'];
             $mode = $values ['hdnMode'];
-			$form = new Quotegen_Form_LeasingSchemaTerm($leasingSchema);
+            
+			$form = new Quotegen_Form_LeasingSchemaTerm($leasingSchema->getRanges());
+			$form->getElement('cancel')->setAttrib('onclick', 'javascript: document.location.href="/quotegen/leasingschema";');
 			
             // Do mode specific actions
             switch ($mode) {
@@ -54,7 +56,8 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
                     array (
                             'ViewScript',
                             array (
-                                    'viewScript' => 'forms/leasingSchemaTerm.phtml'
+                                    'viewScript' => 'forms/leasingSchemaTerm.phtml',
+                                    'leasingSchemaRanges' => $leasingSchema->getRanges()
                             )
                     )
             ));
@@ -73,7 +76,9 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
             $values = $request->getPost();
             $id = $values ['hdnId'];
             $mode = $values ['hdnMode'];
-			$form = new Quotegen_Form_LeasingSchemaRange($leasingSchema);
+            
+			$form = new Quotegen_Form_LeasingSchemaRange($leasingSchema->getTerms());
+			$form->getElement('cancel')->setAttrib('onclick', 'javascript: document.location.href="/quotegen/leasingschema";');
             
             // Do mode specific actions
             switch ($mode) {
@@ -88,7 +93,8 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
                     array (
                             'ViewScript',
                             array (
-                                    'viewScript' => 'forms/leasingSchemaRange.phtml'
+                                    'viewScript' => 'forms/leasingSchemaRange.phtml',
+                                    'leasingSchemaTerms' => $leasingSchema->getTerms()
                             )
                     )
             ));

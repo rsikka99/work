@@ -3,7 +3,7 @@
 class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
 {
 
-    public function __construct ($leasingSchema = Quotegen_Model_Mapper_LeasingSchema)
+    public function __construct ($leasingSchemaRanges = null)
     {
         /**
          * Add class to form for label alignment
@@ -28,6 +28,7 @@ class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
         $this->addElement('text', 'term', array (
                 'label' => 'New Term:', 
                 'required' => true, 
+                'class' => 'span1',
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -43,23 +44,29 @@ class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
                 ) 
         ));
         
-        $this->addElement('text', 'range', array (
-                'label' => 'Range:', 
-                'required' => true, 
-                'filters' => array (
-                        'StringTrim', 
-                        'StripTags' 
-                ), 
-                'validators' => array (
-                        array (
-                                'validator' => 'StringLength', 
-                                'options' => array (
-                                        1, 
-                                        6 
-                                ) 
-                        ) 
-                ) 
-        ));
+        foreach ( $leasingSchemaRanges as $range )
+        {
+            $rangeid = $range->getId();
+            
+	        $this->addElement('text', "range{$rangeid}", array (
+	                'label' => 'Range:', 
+	                'required' => true, 
+	                'filters' => array (
+	                        'StringTrim', 
+	                        'StripTags' 
+	                ),
+	                'class' => 'span1',
+	                'validators' => array (
+	                        array (
+	                                'validator' => 'StringLength', 
+	                                'options' => array (
+	                                        1, 
+	                                        6 
+	                                ) 
+	                        ) 
+	                ) 
+	        ));
+        }
         
         // Add the submit button
         $this->addElement('submit', 'submit', array (
@@ -68,7 +75,7 @@ class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
         ));
         
         // Add the cancel button
-        $this->addElement('submit', 'cancel', array (
+        $this->addElement('button', 'cancel', array (
                 'ignore' => true, 
                 'label' => 'Cancel' 
         ));
