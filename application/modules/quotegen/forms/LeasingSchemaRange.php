@@ -5,6 +5,10 @@ class Quotegen_Form_LeasingSchemaRange extends EasyBib_Form
 
     public function __construct ($leasingSchemaTerms = null)
     {
+        
+        // Set the method for the display form to POST
+        $this->setMethod('POST');
+        
         /**
          * Add class to form for label alignment
          *
@@ -22,11 +26,7 @@ class Quotegen_Form_LeasingSchemaRange extends EasyBib_Form
         $this->setName('leasingSchemaRange');
         $this->setAttrib('id', 'leasingSchemaRange');
         
-        // Set the method for the display form to POST
-        $this->setMethod('POST');
-        
-        $this->addElement('hidden', 'hdnId');
-        $this->addElement('hidden', 'hdnMode');
+        $this->addElement('hidden', 'hdnId', array());
         
         $this->addElement('text', 'range', array (
                 'label' => 'New Range:', 

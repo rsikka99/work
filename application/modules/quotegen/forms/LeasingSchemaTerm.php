@@ -5,6 +5,7 @@ class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
 
     public function __construct ($leasingSchemaRanges = null)
     {
+        
         // Set the method for the display form to POST
         $this->setMethod('POST');
         
@@ -26,8 +27,6 @@ class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
         $this->setAttrib('id', 'leasingSchemaTerm');
         
         $this->addElement('hidden', 'hdnId', array());
-        
-        $this->addElement('hidden', 'hdnMode', array());
         
         $this->addElement('text', 'term', array (
                 'label' => 'New Term:', 

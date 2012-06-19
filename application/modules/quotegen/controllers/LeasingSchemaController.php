@@ -31,41 +31,33 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
     public function edittermAction ()
     {
         $id = $this->_getParam('id', false);
-        $mode = $this->_getParam('mode', false);
         
         // Get leasing schema
         $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
         $leasingSchema = $leasingSchemaMapper->find(1);
 
-        // If id > 0 then find term to edit
-        $leasingSchemaTermMapper = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance();
-        $leasingSchemaTerm = $leasingSchemaTermMapper->find($id);
-        
         // Get form and pass ranges for this schema
         $form = new Quotegen_Form_LeasingSchemaTerm($leasingSchema->getRanges());
         
         // Set default values and attributes
         $form->getElement('hdnId')->setValue($id);
-        $form->getElement('hdnMode')->setValue($mode);
         $form->getElement('cancel')->setAttrib('onclick', 'javascript: document.location.href="/quotegen/leasingschema";');
         
         // Postback
         $request = $this->getRequest();
-        if ($request->isPost())
+        if ( $request->isPost() )
         {
             $values = $request->getPost();
-            print_r($values);
-
             try
             {
-	            if ($form->isValid($values))
+	            if ( $form->isValid( $values ) )
 	            {
-					// Do mode specific actions
-					switch ($mode) {
-						case "add term":
-						    break;
-						case "edit term":
-						    break;
+					if ($id) {
+					    // Edit
+					    echo "Edit<br />";
+					} else {
+					    // Add
+					    echo "Add<br />";
 					}
 	            }
                 else
@@ -78,6 +70,31 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
             	$form->buildBootstrapErrorDecorators();
             }
         }
+        else
+        {
+	        // Populate form for Editing
+	        if ( $id > 0 )
+	        {
+	            // Get Term
+	        	$leasingSchemaTermMapper = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance();
+	        	$leasingSchemaTerm = $leasingSchemaTermMapper->find($id);
+	        	$form->getElement('term')->setValue($leasingSchemaTerm->getMonths());
+	        	
+	        	// Get Rates for Term
+	        	$leasingSchemaRatesMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
+	        	$leasingSchemaRate = $leasingSchemaRatesMapper->fetchAll('leasingSchemaTermId = ' . $id);
+	        	foreach ( $leasingSchemaRate as $rate ) 
+	        	{
+	        	    $rangeid = $rate->getLeasingSchemaRangeId();
+	        	    $amount = $rate->getRate();
+	        	    
+	        	    if ( $form->getElement("rate{$rangeid}") ) 
+	        	    {
+	        	    	$form->getElement("rate{$rangeid}")->setValue($amount);
+	        	    }
+	        	}
+	        }
+	    }
 
         // Add form to page
         $form->setDecorators(array (
@@ -95,7 +112,6 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
     public function editrangeAction ()
     {
         $id = $this->_getParam('id', false);
-        $mode = $this->_getParam('mode', false);
         
         $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
         $leasingSchema = $leasingSchemaMapper->find(1);
@@ -103,24 +119,32 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
         $form = new Quotegen_Form_LeasingSchemaRange($leasingSchema->getTerms());
         
         $form->getElement('hdnId')->setValue($id);
-        $form->getElement('hdnMode')->setValue($mode);
         $form->getElement('cancel')->setAttrib('onclick', 'javascript: document.location.href="/quotegen/leasingschema";');
         
         $request = $this->getRequest();
         if ($request->isPost())
         {
             $values = $request->getPost();
-            print_r($values);
-            
-            if ($form->isValid($values))
+            try
             {
-				// Do mode specific actions
-				switch ($mode) {
-					case "add range":
-					    break;
-					case "edit range":
-					    break;
-				}
+                if ($form->isValid($values))
+                {
+                    if ($id) {
+                        // Edit
+                        echo "Edit<br />";
+                    } else {
+                        // Add
+                        echo "Add<br />";
+                    }
+                }
+                else
+                {
+                    throw new Zend_Validate_Exception("Form Validation Failed");
+                }
+            }
+            catch ( Zend_Validate_Exception $e )
+            {
+                $form->buildBootstrapErrorDecorators();
             }
         }
 
@@ -144,7 +168,6 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
         {
             $values = $request->getPost();
             $id = $values ['hdnId'];
-            $mode = $values ['hdnMode'];
             
             // Validate id
             
@@ -161,7 +184,6 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
         {
             $values = $request->getPost();
             $id = $values ['hdnId'];
-            $mode = $values ['hdnMode'];
             
             // Validate id
             
