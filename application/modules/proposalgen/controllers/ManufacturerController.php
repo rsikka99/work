@@ -171,7 +171,7 @@ class Proposalgen_ManufacturerController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a manufacturer to edit first.' 
             ));
-            $this->_redirect('/gen/manufacturer');
+            $this->_helper->redirector('index');
         }
         
         // Get the manufacturer
@@ -183,7 +183,7 @@ class Proposalgen_ManufacturerController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error selecting the manufacturer to edit.' 
             ));
-            $this->_redirect('/gen/manufacturer');
+            $this->_helper->redirector('index');
         }
         
         // Create a new form with the mode and roles set

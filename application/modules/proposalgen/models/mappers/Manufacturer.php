@@ -202,5 +202,19 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
                 'id = ?' => $id 
         );
     }
+
+    /**
+     * Gets all the manufacturers that are not "deleted"
+     * 
+     * @return Ambigous <multitype:Proposalgen_Model_Manufacturer, multitype:Proposalgen_Model_Manufacturer >
+     */
+    public function fetchAllAvailableManufacturers ()
+    {
+        return $this->fetchAll(array (
+                'isDeleted = 0' 
+        ), array (
+                'fullname ASC' 
+        ));
+    }
 }
 
