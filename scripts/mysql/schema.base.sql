@@ -10,7 +10,7 @@ CREATE  TABLE IF NOT EXISTS `manufacturers` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
   `fullname` VARCHAR(255) NOT NULL ,
   `displayname` VARCHAR(255) NOT NULL ,
-  `is_deleted` TINYINT(4) NULL DEFAULT '0' ,
+  `isDeleted` TINYINT(4) NULL DEFAULT '0' ,
   PRIMARY KEY (`id`) ,
   UNIQUE INDEX `fullname` (`fullname` ASC) )
 ENGINE = InnoDB

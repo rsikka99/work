@@ -9,6 +9,54 @@
             <action>index</action>
             <resource>proposalgen_index_index</resource>
             <pages>
+                <manufacturers>
+                    <label>Manage Manufacturers</label>
+                    <class>dropdown</class>
+                    <module>proposalgen</module>
+                    <controller>manufacturer</controller>
+                    <action>index</action>
+                    <resource>proposalgen_manufacturer_index</resource>
+                    <pages>
+                        <viewall>
+                            <label>View all</label>
+                            <module>proposalgen</module>
+                            <controller>manufacturer</controller>
+                            <action>index</action>
+                            <resource>proposalgen_manufacturer_index</resource>
+                        </viewall>
+                        <view>
+                            <label> View</label>
+                            <module>proposalgen</module>
+                            <controller>manufacturer</controller>
+                            <action>view</action>
+                            <resource>proposalgen_manufacturer_view</resource>
+                            <visible>0</visible>
+                        </view>
+                        <delete>
+                            <label>Delete</label>
+                            <module>proposalgen</module>
+                            <controller>manufacturer</controller>
+                            <action>delete</action>
+                            <resource>proposalgen_manufacturer_delete</resource>
+                            <visible>0</visible>
+                        </delete>
+                        <create>
+                            <label>Create</label>
+                            <module>proposalgen</module>
+                            <controller>manufacturer</controller>
+                            <action>create</action>
+                            <resource>proposalgen_manufacturer_create</resource>
+                        </create>
+                        <update>
+                            <label>Edit</label>
+                            <module>proposalgen</module>
+                            <controller>manufacturer</controller>
+                            <action>edit</action>
+                            <resource>proposalgen_manufacturer_edit</resource>
+                            <visible>0</visible>
+                        </update>
+                    </pages>
+                </manufacturers>
                 <proposal>
                     <label>Proposal</label>
                     <class>dropdown</class>
