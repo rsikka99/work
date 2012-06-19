@@ -51,7 +51,7 @@ class Quotegen_Form_LeasingSchemaRange extends EasyBib_Form
         {
             $termid = $term->getId();
             
-	        $this->addElement('text', "term{$termid}", array (
+	        $this->addElement('text', "rate{$termid}", array (
 	                'label' => 'Rate:', 
 	                'required' => true, 
 	                'filters' => array (

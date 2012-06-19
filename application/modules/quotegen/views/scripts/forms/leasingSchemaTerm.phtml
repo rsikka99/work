@@ -4,8 +4,6 @@ $leasingSchemaRanges = $this->leasingSchemaRanges;
 <form name="leasingSchemaTerm" id="leasingSchemaTerm" class="form-horizontal" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>">
 	<?php echo $this->element->getElement("hdnId")->renderViewHelper(); ?>
 	<?php echo $this->element->getElement("hdnMode")->renderViewHelper(); ?>
-
-	<div id="messages"></div>
 	
 	<div class="control-group">
 		<label class="control-label pull-left" for="term">Term Value: </label>
@@ -32,10 +30,10 @@ $leasingSchemaRanges = $this->leasingSchemaRanges;
 					<th>Rate</th>
 					<?php foreach ( $leasingSchemaRanges as $range ) { ?>
 					<td style="text-align: center;">
-						<?php if ( $this->element->getElement("range{$range->getId()}")->hasErrors() ) { 
-							$this->element->getElement("range{$range->getId()}")->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+						<?php if ( $this->element->getElement("rate{$range->getId()}")->hasErrors() ) { 
+							$this->element->getElement("rate{$range->getId()}")->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 						} ?> 
-						<?php echo $this->element->getElement("range{$range->getId()}")->renderViewHelper(); ?>
+						<?php echo $this->element->getElement("rate{$range->getId()}")->renderViewHelper(); ?>
 					</td>
 					<?php } ?>
 				</tr>
