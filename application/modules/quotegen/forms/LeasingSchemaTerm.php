@@ -3,13 +3,8 @@
 class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
 {
 
-    public function __construct ($options = null, $type = null)
+    public function __construct ($leasingSchema = Quotegen_Model_Mapper_LeasingSchema)
     {
-        //call parent contsructor
-        parent::__construct($options);
-        $elements = array ();
-        $elementCounter = 0;
-        
         /**
          * Add class to form for label alignment
          *
@@ -26,12 +21,12 @@ class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
         $this->setAttrib('class', 'form-horizontal');
         $this->setName('leasingSchemaTerm');
         $this->setAttrib('id', 'leasingSchemaTerm');
-
+        
         // Set the method for the display form to POST
         $this->setMethod('POST');
         
-        $this->addElement('text', 'name', array (
-                'label' => 'Company Name:', 
+        $this->addElement('text', 'term', array (
+                'label' => 'New Term:', 
                 'required' => true, 
                 'filters' => array (
                         'StringTrim', 
@@ -42,7 +37,25 @@ class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
                                 'validator' => 'StringLength', 
                                 'options' => array (
                                         1, 
-                                        255 
+                                        3 
+                                ) 
+                        ) 
+                ) 
+        ));
+        
+        $this->addElement('text', 'range', array (
+                'label' => 'Range:', 
+                'required' => true, 
+                'filters' => array (
+                        'StringTrim', 
+                        'StripTags' 
+                ), 
+                'validators' => array (
+                        array (
+                                'validator' => 'StringLength', 
+                                'options' => array (
+                                        1, 
+                                        6 
                                 ) 
                         ) 
                 ) 

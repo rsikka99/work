@@ -7,35 +7,26 @@
 	});
 	
 	function do_action(mode, id) {
+		$("#hdnId").val(id);
+		$("#hdnMode").val(mode);
+		
 		switch (mode) {
 			case "add term":
-				$("#hdnId").val(id);
-				$("#leasingSchemas").action = "";
-				break;
 			case "edit term":
-				$("#hdnId").val(id);
-				$("#leasingSchemas").action = "";
-				break;
-			case "delete term":
-				$("#hdnId").val(id);
-				$("#leasingSchemas").action = "";
+				$("#leasingSchemas").attr("action", "leasingschema/editterm");
 				break;
 			case "add range":
-				$("#hdnId").val(id);
-				$("#leasingSchemas").action = "";
-				break;
 			case "edit range":
-				$("#hdnId").val(id);
-				$("#leasingSchemas").action = "";
+				$("#leasingSchemas").attr("action", "leasingschema/editrange");
+				break;
+			case "delete term":
+				$("#leasingSchemas").attr("action", "leasingschema/deleteterm");
 				break;
 			case "delete range":
-				$("#hdnId").val(id);
-				$("#leasingSchemas").action = "";
-				break;
-			default:
-				alert("Error: please try again.");
+				$("#leasingSchemas").attr("action", "leasingschema/deleterange");
 				break;
 		}
+		$("#leasingSchemas").submit();
 	}
 	
 <?php $this->headScript()->captureEnd() ?>
@@ -44,6 +35,7 @@
 
 	<form name="leasingSchemas" id="leasingSchemas" class="form-horizontal" action="" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="hdnId" id="hdnId" value="" />
+		<input type="hidden" name="hdnMode" id="hdnMode" value="" />
 		
 		<p>Insert any instructional text here.</p>
 		

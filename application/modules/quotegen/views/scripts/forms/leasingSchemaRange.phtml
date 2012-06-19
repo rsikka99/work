@@ -1,0 +1,40 @@
+<?php 
+?>
+<form name="leasingSchemaRange" id="leasingSchemaRange" class="form-horizontal" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>">
+
+	<div class="control-group">
+		<label class="control-label pull-left" for="range">Range Value: </label>
+		<div class="controls">
+			<input type="text" name="range" id="range" class="span1 focused" value="">
+		</div>
+	</div>
+	
+	<div class="controls">
+		<table class="table table-stripped table-bordered" style="width: auto;">
+			<thead>
+				<tr>
+					<th style="text-align: left;">Term</th>
+					<th style="text-align: center;">Rate</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php // loop through terms ?>
+				<tr>
+					<td style="text-align: left;">12</td>
+					<td style="text-align: center;"><input type="text" name="term1-rate" id="term1-rate" class="span1" value="" /></td>
+				</tr>
+				<?php // } ?>
+				<tr>
+					<td style="text-align: left;">24</td>
+					<td style="text-align: center;"><input type="text" name="term1-rate" id="term1-rate" class="span1" value="" /></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div>
+		<?php echo $this->element->submit ?>
+		<?php echo $this->element->cancel ?>
+	</div>
+
+</form>

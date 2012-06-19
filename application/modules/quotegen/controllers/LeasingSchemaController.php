@@ -28,22 +28,104 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
         }
     }
     
-    public function editAction ()
+    public function edittermAction ()
+    {
+        $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
+        $leasingSchema = $leasingSchemaMapper->find(1);
+        
+        $request = $this->getRequest();
+        if ($request->isPost())
+        {
+            $values = $request->getPost();
+            $id = $values ['hdnId'];
+            $mode = $values ['hdnMode'];
+			$form = new Quotegen_Form_LeasingSchemaTerm($leasingSchema);
+			
+            // Do mode specific actions
+            switch ($mode) {
+            	case "add term":
+            	    break;
+            	case "edit term":
+            	    break;
+            }
+
+            // add form to page
+            $form->setDecorators(array (
+                    array (
+                            'ViewScript',
+                            array (
+                                    'viewScript' => 'forms/leasingSchemaTerm.phtml'
+                            )
+                    )
+            ));
+        	$this->view->leasingSchemaTerm = $form;
+        }
+    }
+    
+    public function editrangeAction ()
+    {
+        $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
+        $leasingSchema = $leasingSchemaMapper->find(1);
+        
+        $request = $this->getRequest();
+        if ($request->isPost())
+        {
+            $values = $request->getPost();
+            $id = $values ['hdnId'];
+            $mode = $values ['hdnMode'];
+			$form = new Quotegen_Form_LeasingSchemaRange($leasingSchema);
+            
+            // Do mode specific actions
+            switch ($mode) {
+            	case "add range":
+            	    break;
+            	case "edit range":
+            	    break;
+            }
+
+            // add form to page
+            $form->setDecorators(array (
+                    array (
+                            'ViewScript',
+                            array (
+                                    'viewScript' => 'forms/leasingSchemaRange.phtml'
+                            )
+                    )
+            ));
+        	$this->view->leasingSchemaRange = $form;
+        }
+    }
+    
+    public function deletetermAction ()
     {
         $request = $this->getRequest();
         if ($request->isPost())
         {
             $values = $request->getPost();
+            $id = $values ['hdnId'];
+            $mode = $values ['hdnMode'];
+            
+            // Validate id
+            
+            // Confirm delete
+            
             print_r($values);
         }
     }
     
-    public function deleteAction ()
+    public function deleterangeAction ()
     {
         $request = $this->getRequest();
         if ($request->isPost())
         {
             $values = $request->getPost();
+            $id = $values ['hdnId'];
+            $mode = $values ['hdnMode'];
+            
+            // Validate id
+            
+            // Confirm delete
+            
             print_r($values);
         }
     }
