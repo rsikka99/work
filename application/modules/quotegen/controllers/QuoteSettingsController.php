@@ -10,35 +10,163 @@ class Quotegen_QuoteSettingsController extends Zend_Controller_Action
 
     public function indexAction ()
     {
-        // Get the users quote settings
-        $quoteSettingsId = 1;
-        
+        // Set up a quote setting mapper
         $mapper = new Quotegen_Model_Mapper_QuoteSetting();
-        $quoteSetting = $mapper->find($quoteSettingsId);
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper));
         
-        // If the quote setting record doesn't exist, send them back
+        // Set the current page that we are on
+        $paginator->setCurrentPageNumber($this->_getParam('page', 1));
+        
+        // Set how many display item
+        $paginator->setItemCountPerPage(25);
+        
+        // Get all current quote settings
+        // TODO:  Get user specific quote settings
+        $this->view->paginator = $paginator;
+    }
+
+    public function createAction ()
+    {
+        $form = new Quotegen_Form_QuoteSettings();
+        
+        $request = $this->getRequest();
+        
+        if ($request->isPost())
+        {
+            $values = $request->getPost();
+            if (! isset($values ['cancel']))
+            {
+                try
+                {
+                    if ($form->isValid($values))
+                    {
+                        // Save to the database
+                        $mapper = new Quotegen_Model_Mapper_QuoteSetting();
+                        $quoteSettings = new Quotegen_Model_Quotesetting();
+                        $quoteSettings->populate($values);
+                        $mapper->insert($quoteSettings);
+                        $this->_helper->redirector('index');
+                    }
+                    else
+                    {
+                        throw new InvalidArgumentException("Please correct the errors below.");
+                    }
+                }
+                catch ( InvalidArgumentException $e )
+                {
+                    $this->_helper->flashMessenger(array (
+                            'danger' => $e->getMessage() 
+                    ));
+                }
+            }
+            else
+            {
+                // Redirect back to the homepage
+                $this->_helper->redirector('index');
+            }
+        }
+        
+        $this->view->form = $form;
+    }
+
+    public function deleteAction ()
+    {
+        // Get the passed id
+        $quoteSettingId = $this->_getParam('id', false);
+        
+        // Redirect if now id exists
+        if (! $quoteSettingId)
+        {
+            $this->_helper->flashMessenger(array (
+                    'warning' => 'No quoteSetting was chosen to delete.' 
+            ));
+            $this->_helper->redirector('index');
+        }
+        
+        // Find quoteSetting
+        $quoteSettingMapper = new Quotegen_Model_Mapper_QuoteSetting();
+        $quoteSetting = $quoteSettingMapper->find($quoteSettingId);
+        
+        // Return to index if not found
         if (! $quoteSetting)
         {
             $this->_helper->flashMessenger(array (
-                    'danger' => 'There was an error selecting quote settings.' 
+                    'warning' => 'There was an error finding that quoteSetting. Please try again.' 
             ));
-            $this->_redirect('/quotegen');
+            $this->_helper->redirector('index');
         }
+    		               
+        // Show delete form
+        $form = new Application_Form_Delete('Are you sure you want to delete this quote setting ?');
         
-        // Create a new form with the mode and roles set
-        $form = new Quotegen_Form_QuoteSettings();
-        
-        // Prepare the data for the form
+        // If post and valid delete option
         $request = $this->getRequest();
-        $form->populate($quoteSetting->toArray());
-        
-        // Make sure we are posting data
         if ($request->isPost())
         {
-            // Get the post data
             $values = $request->getPost();
-            
-            // If we cancelled we don't need to validate anything
+            if (! isset($values ['cancel']))
+            {
+                try
+                {
+                    if ($form->isValid($values))
+                    {
+                        // Attempt to delete user 
+                        $quoteSettingMapper->delete($quoteSetting);
+                        
+                        // Redirect and show message
+                        $this->_helper->flashMessenger(array (
+                                'success' => 'Quote setting was deleted succesfully.' 
+                        ));
+                        $this->_helper->redirector('index');
+                    }
+                    else
+                    {
+                        // Shouldn't be here throw new execption
+                        throw new InvalidArgumentException('Please correct information');
+                    }
+                }
+                catch ( Exception $e )
+                {
+                    // Delete was unsuccesfull
+                    $this->_helper->flashMessenger(array (
+                            'danger' => $e->getMessage() 
+                    ));
+                }
+            }
+            else // if cancel is hit return to index
+            {
+                $this->_helper->redirector('index');
+            }
+        }
+        
+        $this->view->form = $form;
+    }
+
+    public function editAction ()
+    {
+        $quoteSettingId = $this->_getParam('id', false);
+        
+        // If not idea is set then back to index page
+        if (! $quoteSettingId)
+        {
+            $this->_helper->flashMessenger(array (
+                    'warning' => 'Please select a setting first' 
+            ));
+            // Redirect
+            $this->_helper->redirector('index');
+        }
+        
+        // Find client and pass form object
+        $form = new Quotegen_Form_QuoteSettings();
+        $mapper = new Quotegen_Model_Mapper_QuoteSetting();
+        $quoteSetting = $mapper->find($quoteSettingId);
+        
+        $form->populate($quoteSetting->toArray());
+        // update record if post
+        $request = $this->getRequest();
+        if ($request->isPost())
+        {
+            $values = $request->getPost();
             if (! isset($values ['cancel']))
             {
                 try
@@ -46,17 +174,18 @@ class Quotegen_QuoteSettingsController extends Zend_Controller_Action
                     // Validate the form
                     if ($form->isValid($values))
                     {
+                        // Update quotesetting and message to comfirm
                         $mapper = new Quotegen_Model_Mapper_QuoteSetting();
                         $quoteSetting = new Quotegen_Model_QuoteSetting();
                         $quoteSetting->populate($values);
-                        $quoteSetting->setId($quoteSettingsId);
+                        $quoteSetting->setId($quoteSettingId);
                         
-                        // Save to the database with cascade insert turned on
-                        $clientId = $mapper->save($quoteSetting, $quoteSettingsId);
-                        
+                        $mapper->save($quoteSetting, $quoteSettingId);
                         $this->_helper->flashMessenger(array (
-                                'success' => "Settings have been updated sucessfully." 
+                                'success' => "Quote setting was updated sucessfully." 
                         ));
+                        
+                        $this->_helper->redirector('index');
                     }
                     else
                     {
@@ -70,12 +199,13 @@ class Quotegen_QuoteSettingsController extends Zend_Controller_Action
                     ));
                 }
             }
-            else
+            else // Client hit cancel redicect
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_redirect('/quotegen');
+                $this->_helper->redirector('index');
             }
         }
+        
         $this->view->form = $form;
     }
 }

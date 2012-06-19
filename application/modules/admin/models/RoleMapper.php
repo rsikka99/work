@@ -1,6 +1,6 @@
 <?php
 
-class Admin_Model_RoleMapper extends My_Model_Mapper_Abstract
+class Admin_Model_Mapper_RoleMapper extends My_Model_Mapper_Abstract
 {
     /**
      * The default db table class to use
@@ -8,24 +8,41 @@ class Admin_Model_RoleMapper extends My_Model_Mapper_Abstract
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Admin_Model_DbTable_Role';
+    protected $_defaultDbTable = 'Admin_Model_DbTable_RoleMapper';
+
+    /**
+     * Gets an instance of the mapper
+     *
+     * @return Admin_Model_Mapper_RoleMapper
+     */
+    public static function getInstance ()
+    {
+        return self::getCachedInstance();
+    }
 
     /**
      * Saves an instance of Admin_Model_Role to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $role Admin_Model_Role
+     * @param $object Admin_Model_Role
      *            The object to insert
      * @return mixed The primary key of the new row
      */
-    public function insert (Admin_Model_Role &$role)
+    public function insert (&$object)
     {
-        $data = $role->toArray();
+        // Get an array of data to save
+        $data = $object->toArray();
+        
+        // Remove the id
         unset($data ['id']);
+        
+        // Insert the data
         $id = $this->getDbTable()->insert($data);
         
-        // Since the role is set properly, set the id in the appropriate places
-        $role->setId($id);
+        $object->setId($id);
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object, $id);
         
         return $id;
     }
@@ -33,15 +50,15 @@ class Admin_Model_RoleMapper extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Admin_Model_Role to the database.
      *
-     * @param $role Admin_Model_Role
-     *            The role model to save to the database
+     * @param $object Admin_Model_Role
+     *            The roleMapper model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
      * @return int The number of rows affected
      */
-    public function save (Admin_Model_Role $role, $primaryKey = null)
+    public function save ($object, $primaryKey = null)
     {
-        $data = $this->unsetNullValues($role->toArray());
+        $data = $this->unsetNullValues($object->toArray());
         
         if ($primaryKey === null)
         {
@@ -53,55 +70,72 @@ class Admin_Model_RoleMapper extends My_Model_Mapper_Abstract
                 'id = ?' => $primaryKey 
         ));
         
+        // Save the object into the cache
+        $this->saveItemToCache($object, $primaryKey);
+        
         return $rowsAffected;
     }
 
     /**
-     * Saves an instance of Admin_Model_Role to the database.
-     * If the id is null then it will insert a new row
+     * Deletes rows from the database.
      *
-     * @param $role mixed
-     *            This can either be an instance of Admin_Model_Role or the primary key to delete
-     * @return mixed The primary key of the new row
+     * @param $object mixed
+     *            This can either be an instance of Admin_Model_Role or the
+     *            primary key to delete
+     * @return mixed The number of rows deleted
      */
-    public function delete ($role)
+    public function delete ($object)
     {
-        if ($role instanceof Admin_Model_Role)
+        if ($object instanceof Admin_Model_Role)
         {
             $whereClause = array (
-                    'id = ?' => $role->getId() 
+                    'id = ?' => $object->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'id = ?' => $role 
+                    'id = ?' => $object 
             );
         }
         
-        return $this->getDbTable()->delete($whereClause);
+        $rowsAffected = $this->getDbTable()->delete($whereClause);
+        return $rowsAffected;
     }
 
     /**
-     * Finds a role based on it's primaryKey
+     * Finds a roleMapper based on it's primaryKey
      *
      * @param $id int
-     *            The id of the role to find
+     *            The id of the roleMapper to find
      * @return void Admin_Model_Role
      */
     public function find ($id)
     {
+        // Get the item from the cache and return it if we find it.
+        $result = $this->getItemFromCache($id);
+        if ($result instanceof Admin_Model_Role)
+        {
+            return $result;
+        }
+        
+        // Assuming we don't have a cached object, lets go get it.
         $result = $this->getDbTable()->find($id);
         if (0 == count($result))
         {
             return;
         }
         $row = $result->current();
-        return new Admin_Model_Role($row->toArray());
+        $object = new Admin_Model_Role($row->toArray());
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object, $id);
+        
+        return $object;
     }
 
     /**
-     * Fetches a role
+     * Fetches a roleMapper
      *
      * @param $where string|array|Zend_Db_Table_Select
      *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -118,11 +152,17 @@ class Admin_Model_RoleMapper extends My_Model_Mapper_Abstract
         {
             return;
         }
-        return new Admin_Model_Role($row->toArray());
+        
+        $object = new Admin_Model_Role($row->toArray());
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object, $object->getId());
+        
+        return $object;
     }
 
     /**
-     * Fetches all roles
+     * Fetches all roleMappers
      *
      * @param $where string|array|Zend_Db_Table_Select
      *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -140,9 +180,27 @@ class Admin_Model_RoleMapper extends My_Model_Mapper_Abstract
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-            $entries [] = new Admin_Model_Role($row->toArray());
+            $object = new Admin_Model_Role($row->toArray());
+            
+            // Save the object into the cache
+            $this->saveItemToCache($object, $object->getId());
+            
+            $entries [] = $object;
         }
         return $entries;
+    }
+
+    /**
+     * Gets a where clause for filtering by id
+     *
+     * @param unknown_type $id            
+     * @return array
+     */
+    public function getWhereId ($id)
+    {
+        return array (
+                'id = ?' => $id 
+        );
     }
 }
 

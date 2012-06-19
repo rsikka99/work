@@ -26,7 +26,6 @@ class Quotegen_ClientController extends Zend_Controller_Action
 
     public function deleteAction ()
     {
-        // TODO: deleteAction
         $clientId = $this->_getParam('id', false);
         
         if (! $clientId)
@@ -40,7 +39,7 @@ class Quotegen_ClientController extends Zend_Controller_Action
         $mapper = new Quotegen_Model_Mapper_Client();
         $client = $mapper->find($clientId);
         
-        if (! $clientId)
+        if (! $client)
         {
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error selecting the client to delete.' 

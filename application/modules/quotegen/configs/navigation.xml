@@ -11,10 +11,27 @@
             <pages>
                 <quotesettings>
                     <label>Quote Settings</label>
+                    <class>dropdown</class>
                     <module>quotegen</module>
                     <controller>quotesettings</controller>
                     <action>index</action>
                     <resource>quotegen_quotesettings_index</resource>
+                        <pages>
+                             <read>
+                                <label>View all</label>
+                                <module>quotegen</module>
+                                <controller>quotesettings</controller>
+                                <action>index</action>
+                                <resource>quotegen_quotesettings_index</resource>
+                            </read>
+                            <create>
+                                <label>Create</label>
+                                <module>quotegen</module>
+                                <controller>quotesettings</controller>
+                                <action>create</action>
+                                <resource>quotegen_quotesettings_create</resource>
+                            </create>
+                        </pages>
                 </quotesettings>
                 <quotebuilder>
                     <label>Quotes</label>
