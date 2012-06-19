@@ -30,76 +30,111 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
     
     public function edittermAction ()
     {
+        $id = $this->_getParam('id', false);
+        $mode = $this->_getParam('mode', false);
+        
+        // Get leasing schema
         $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
         $leasingSchema = $leasingSchemaMapper->find(1);
+
+        // If id > 0 then find term to edit
+        $leasingSchemaTermMapper = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance();
+        $leasingSchemaTerm = $leasingSchemaTermMapper->find($id);
         
+        // Get form and pass ranges for this schema
+        $form = new Quotegen_Form_LeasingSchemaTerm($leasingSchema->getRanges());
+        
+        // Set default values and attributes
+        $form->getElement('hdnId')->setValue($id);
+        $form->getElement('hdnMode')->setValue($mode);
+        $form->getElement('cancel')->setAttrib('onclick', 'javascript: document.location.href="/quotegen/leasingschema";');
+        
+        // Postback
         $request = $this->getRequest();
         if ($request->isPost())
         {
             $values = $request->getPost();
-            $id = $values ['hdnId'];
-            $mode = $values ['hdnMode'];
-            
-			$form = new Quotegen_Form_LeasingSchemaTerm($leasingSchema->getRanges());
-			$form->getElement('cancel')->setAttrib('onclick', 'javascript: document.location.href="/quotegen/leasingschema";');
-			
-            // Do mode specific actions
-            switch ($mode) {
-            	case "add term":
-            	    break;
-            	case "edit term":
-            	    break;
-            }
+            print_r($values);
 
-            // add form to page
-            $form->setDecorators(array (
-                    array (
-                            'ViewScript',
-                            array (
-                                    'viewScript' => 'forms/leasingSchemaTerm.phtml',
-                                    'leasingSchemaRanges' => $leasingSchema->getRanges()
-                            )
-                    )
-            ));
-        	$this->view->leasingSchemaTerm = $form;
+            try
+            {
+	            if ($form->isValid($values))
+	            {
+					// Do mode specific actions
+					switch ($mode) {
+						case "add term":
+						    break;
+						case "edit term":
+						    break;
+					}
+	            }
+                else
+                {
+                    throw new Zend_Validate_Exception("Form Validation Failed");
+                }
+            }
+            catch ( Zend_Validate_Exception $e )
+            {
+            	$form->buildBootstrapErrorDecorators();
+            }
         }
+
+        // Add form to page
+        $form->setDecorators(array (
+                array (
+                        'ViewScript',
+                        array (
+        	                    'viewScript' => 'forms/leasingSchemaTerm.phtml',
+                                'leasingSchemaRanges' => $leasingSchema->getRanges()
+                        )
+                )
+        ));
+        $this->view->leasingSchemaTerm = $form;
     }
     
     public function editrangeAction ()
     {
+        $id = $this->_getParam('id', false);
+        $mode = $this->_getParam('mode', false);
+        
         $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
         $leasingSchema = $leasingSchemaMapper->find(1);
+
+        $form = new Quotegen_Form_LeasingSchemaRange($leasingSchema->getTerms());
+        
+        $form->getElement('hdnId')->setValue($id);
+        $form->getElement('hdnMode')->setValue($mode);
+        $form->getElement('cancel')->setAttrib('onclick', 'javascript: document.location.href="/quotegen/leasingschema";');
         
         $request = $this->getRequest();
         if ($request->isPost())
         {
             $values = $request->getPost();
-            $id = $values ['hdnId'];
-            $mode = $values ['hdnMode'];
+            print_r($values);
             
-			$form = new Quotegen_Form_LeasingSchemaRange($leasingSchema->getTerms());
-			$form->getElement('cancel')->setAttrib('onclick', 'javascript: document.location.href="/quotegen/leasingschema";');
-            
-            // Do mode specific actions
-            switch ($mode) {
-            	case "add range":
-            	    break;
-            	case "edit range":
-            	    break;
+            if ($form->isValid($values))
+            {
+				// Do mode specific actions
+				switch ($mode) {
+					case "add range":
+					    break;
+					case "edit range":
+					    break;
+				}
             }
-
-            // add form to page
-            $form->setDecorators(array (
-                    array (
-                            'ViewScript',
-                            array (
-                                    'viewScript' => 'forms/leasingSchemaRange.phtml',
-                                    'leasingSchemaTerms' => $leasingSchema->getTerms()
-                            )
-                    )
-            ));
-        	$this->view->leasingSchemaRange = $form;
         }
+
+        // add form to page
+        $form->setDecorators(array (
+                array (
+                        'ViewScript',
+                        array (
+        	                    'viewScript' => 'forms/leasingSchemaRange.phtml',
+                                'leasingSchemaTerms' => $leasingSchema->getTerms()
+                        )
+                )
+        ));
+        $this->view->leasingSchemaRange = $form;
     }
     
     public function deletetermAction ()

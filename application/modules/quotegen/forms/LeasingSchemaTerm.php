@@ -5,6 +5,9 @@ class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
 
     public function __construct ($leasingSchemaRanges = null)
     {
+        // Set the method for the display form to POST
+        $this->setMethod('POST');
+        
         /**
          * Add class to form for label alignment
          *
@@ -22,8 +25,9 @@ class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
         $this->setName('leasingSchemaTerm');
         $this->setAttrib('id', 'leasingSchemaTerm');
         
-        // Set the method for the display form to POST
-        $this->setMethod('POST');
+        $this->addElement('hidden', 'hdnId', array());
+        
+        $this->addElement('hidden', 'hdnMode', array());
         
         $this->addElement('text', 'term', array (
                 'label' => 'New Term:', 
@@ -49,7 +53,7 @@ class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
             $rangeid = $range->getId();
             
 	        $this->addElement('text', "range{$rangeid}", array (
-	                'label' => 'Range:', 
+	                'label' => 'Rate:', 
 	                'required' => true, 
 	                'filters' => array (
 	                        'StringTrim', 
@@ -62,8 +66,15 @@ class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
 	                                'options' => array (
 	                                        1, 
 	                                        6 
-	                                ) 
-	                        ) 
+	                                )
+	                        ),
+	                        array (
+	                                'validator' => 'Between',
+	                                'options' => array (
+	                                        0.0001,
+	                                        1.0000
+	                                )
+	                        )
 	                ) 
 	        ));
         }

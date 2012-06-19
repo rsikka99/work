@@ -7,26 +7,22 @@
 	});
 	
 	function do_action(mode, id) {
-		$("#hdnId").val(id);
-		$("#hdnMode").val(mode);
-		
 		switch (mode) {
 			case "add term":
 			case "edit term":
-				$("#leasingSchemas").attr("action", "leasingschema/editterm");
+				document.location.href = 'leasingschema/editterm/id/'+id+'/mode/'+mode;
 				break;
 			case "add range":
 			case "edit range":
-				$("#leasingSchemas").attr("action", "leasingschema/editrange");
+				document.location.href = 'leasingschema/editrange/id/'+id+'/mode/'+mode;
 				break;
 			case "delete term":
-				$("#leasingSchemas").attr("action", "leasingschema/deleteterm");
+				document.location.href = 'leasingschema/deleteterm/id/'+id+'/mode/'+mode;
 				break;
 			case "delete range":
-				$("#leasingSchemas").attr("action", "leasingschema/deleterange");
+				document.location.href = 'leasingschema/deleterange/id/'+id+'/mode/'+mode;
 				break;
 		}
-		$("#leasingSchemas").submit();
 	}
 	
 <?php $this->headScript()->captureEnd() ?>
@@ -34,8 +30,6 @@
 <div class="well">
 
 	<form name="leasingSchemas" id="leasingSchemas" class="form-horizontal" action="" method="post" enctype="application/x-www-form-urlencoded">
-		<input type="hidden" name="hdnId" id="hdnId" value="" />
-		<input type="hidden" name="hdnMode" id="hdnMode" value="" />
 		
 		<p>Insert any instructional text here.</p>
 		

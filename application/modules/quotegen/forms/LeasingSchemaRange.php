@@ -25,6 +25,9 @@ class Quotegen_Form_LeasingSchemaRange extends EasyBib_Form
         // Set the method for the display form to POST
         $this->setMethod('POST');
         
+        $this->addElement('hidden', 'hdnId');
+        $this->addElement('hidden', 'hdnMode');
+        
         $this->addElement('text', 'range', array (
                 'label' => 'New Range:', 
                 'required' => true, 
@@ -49,7 +52,7 @@ class Quotegen_Form_LeasingSchemaRange extends EasyBib_Form
             $termid = $term->getId();
             
 	        $this->addElement('text', "term{$termid}", array (
-	                'label' => 'Term:', 
+	                'label' => 'Rate:', 
 	                'required' => true, 
 	                'filters' => array (
 	                        'StringTrim', 
@@ -61,9 +64,16 @@ class Quotegen_Form_LeasingSchemaRange extends EasyBib_Form
 	                                'validator' => 'StringLength', 
 	                                'options' => array (
 	                                        1, 
-	                                        3 
-	                                ) 
-	                        ) 
+	                                        6 
+	                                )
+	                        ),
+	                        array (
+	                                'validator' => 'Between',
+	                                'options' => array (
+	                                        0.0001,
+	                                        1.0000
+	                                )
+	                        )
 	                ) 
 	        ));
         }
