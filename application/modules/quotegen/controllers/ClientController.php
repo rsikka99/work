@@ -239,7 +239,12 @@ class Quotegen_ClientController extends Zend_Controller_Action
 
     public function viewAction ()
     {
-        // TODO: viewAction
+        $clientId = $this->_getParam('id', false);
+        
+        // Get the client
+        $mapper = new Quotegen_Model_Mapper_Client();
+        $client = $mapper->find($clientId);
+        $this->view->client = $client;
     }
 }
 

@@ -7,7 +7,7 @@
             <th>Name</th>
             <th>Address</th>
             <th>Phone number</th>
-            <th style="width: 80px;">Action</th>
+            <th style="width: 120px;">Action</th>
         </tr>
     </thead>
     <tbody>
@@ -20,6 +20,7 @@
             <td><?php echo $client->getPhoneNumber(); ?></td>
             <td>
                 <div class="btn-group">
+	                <a class="btn btn-warning" title="View Client" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $client->getId())); ?>"><i class="icon-info-sign"></i></a>
                     <a class="btn btn-warning" title="Edit Client" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $client->getId())); ?>"><i class="icon-pencil"></i></a>
                     <a class="btn btn-danger" title="Delete Client" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $client->getId())); ?>"><i class="icon-trash"></i></a>
                 </div>
