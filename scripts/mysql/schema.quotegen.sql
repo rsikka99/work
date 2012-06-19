@@ -55,6 +55,7 @@ CREATE  TABLE IF NOT EXISTS `quotegen_options` (
   `name` VARCHAR(255) NOT NULL ,
   `description` TEXT NOT NULL ,
   `price` DOUBLE NOT NULL ,
+  `sku` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
