@@ -27,24 +27,34 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
      * @var double
      */
     protected $_pageCoverageColor = 0;
+    
     /**
      * The default device margin value
      *
      * @var double
      */
     protected $_deviceMargin = 0;
+    
     /**
      * The default page margin value
      *
      * @var double
      */
     protected $_pageMargin = 0;
+    
     /**
-     * The default toner preference
+     * The default pricing config preference
      *
      * @var int
      */
-    protected $_tonerPreference = 0;
+    protected $_pricingConfigId = 0;
+    
+    /**
+     * A pricing config object
+     *
+     * @var Proposalgen_Model_PricingConfig
+     */
+    protected $_pricingConfig;
     
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
@@ -65,8 +75,8 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
             $this->setDeviceMargin($params->deviceMargin);
         if (isset($params->pageMargin) && ! is_null($params->pageMargin))
             $this->setPageMargin($params->pageMargin);
-        if (isset($params->tonerPreference) && ! is_null($params->tonerPreference))
-            $this->setTonerPreference($params->tonerPreference);
+        if (isset($params->pricingConfigId) && ! is_null($params->pricingConfigId))
+            $this->setPricingConfigId($params->pricingConfigId);
     }
     
     /*
@@ -80,7 +90,7 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
                 'pageCoverageColor' => $this->getPageCoverageColor(), 
                 'deviceMargin' => $this->getDeviceMargin(), 
                 'pageMargin' => $this->getPageMargin(), 
-                'tonerPreference' => $this->getTonerPreference() 
+                'pricingConfigId' => $this->getPricingConfigId() 
         );
     }
 
@@ -181,20 +191,46 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
 
     /**
      *
-     * @return the $_tonerPreference
+     * @return the $_pricingConfigId
      */
-    public function getTonerPreference ()
+    public function getPricingConfigId ()
     {
-        return $this->_tonerPreference;
+        return $this->_pricingConfigId;
     }
 
     /**
      *
-     * @param number $_tonerPreference            
+     * @param number $_pricingConfigId            
      */
-    public function setTonerPreference ($_tonerPreference)
+    public function setPricingConfigId ($_pricingConfigId)
     {
-        $this->_tonerPreference = $_tonerPreference;
+        $this->_pricingConfigId = $_pricingConfigId;
+        return $this;
+    }
+
+    /**
+     * Gets the pricing config object
+     *
+     * @return Proposalgen_Model_PricingConfig The pricing config object.
+     */
+    public function getPricingConfig ()
+    {
+        if (! isset($this->_pricingConfig))
+        {
+            $this->_pricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->getPricingConfigId());
+        }
+        return $this->_pricingConfig;
+    }
+
+    /**
+     * Sets the pricing config object
+     *
+     * @param Proposalgen_Model_PricingConfig $_pricingConfig
+     *            The new princing config.
+     */
+    public function setPricingConfig ($_pricingConfig)
+    {
+        $this->_pricingConfig = $_pricingConfig;
         return $this;
     }
 }
