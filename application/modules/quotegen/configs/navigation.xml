@@ -9,30 +9,6 @@
             <action>index</action>
             <resource>quotegen_index_index</resource>
             <pages>
-                <quotesettings>
-                    <label>Quote Settings</label>
-                    <class>dropdown</class>
-                    <module>quotegen</module>
-                    <controller>quotesettings</controller>
-                    <action>index</action>
-                    <resource>quotegen_quotesettings_index</resource>
-                    <pages>
-                        <read>
-                            <label>View all</label>
-                            <module>quotegen</module>
-                            <controller>quotesettings</controller>
-                            <action>index</action>
-                            <resource>quotegen_quotesettings_index</resource>
-                        </read>
-                        <create>
-                            <label>Create</label>
-                            <module>quotegen</module>
-                            <controller>quotesettings</controller>
-                            <action>create</action>
-                            <resource>quotegen_quotesettings_create</resource>
-                        </create>
-                    </pages>
-                </quotesettings>
                 <quotebuilder>
                     <label>Quotes</label>
                     <class>dropdown</class>
@@ -225,6 +201,120 @@
                         </update>
                     </pages>
                 </devices>
+                <settingManagement>
+                    <label>Manange Settings</label>
+                    <class>dropdown</class>
+                    <module>quotegen</module>
+                    <controller>index</controller>
+                    <action>index</action>
+                    <resource>quotegen_index_index</resource>
+                    <pages>
+                        <quotesetting>
+                            <label>Quote Settings</label>
+                            <class>dropdown subdropdown</class>
+                            <module>quotegen</module>
+                            <controller>quotesetting</controller>
+                            <action>index</action>
+                            <resource>quotegen_quotesetting_index</resource>
+                            <pages>
+                                <read>
+                                    <label>View all</label>
+                                    <module>quotegen</module>
+                                    <controller>quotesetting</controller>
+                                    <action>index</action>
+                                    <resource>quotegen_quotesetting_index</resource>
+                                </read>
+                                <create>
+                                    <label>Create</label>
+                                    <module>quotegen</module>
+                                    <controller>quotesetting</controller>
+                                    <action>create</action>
+                                    <resource>quotegen_quotesetting_create</resource>
+                                </create>
+                            </pages>
+                        </quotesetting>
+                        <category>
+                            <label>Category Settings</label>
+                            <class>dropdown subdropdown</class>
+                            <module>quotegen</module>
+                            <controller>category</controller>
+                            <action>index</action>
+                            <resource>quotegen_category_index</resource>
+                            <pages>
+                                <viewall>
+                                    <label>View all</label>
+                                    <module>quotegen</module>
+                                    <controller>category</controller>
+                                    <action>index</action>
+                                    <resource>quotegen_category_index</resource>
+                                </viewall>
+                                <create>
+                                    <label>Create</label>
+                                    <module>quotegen</module>
+                                    <controller>category</controller>
+                                    <action>create</action>
+                                    <resource>quotegen_category_create</resource>
+                                </create>
+                                <view>
+                                    <label>View</label>
+                                    <module>quotegen</module>
+                                    <controller>category</controller>
+                                    <action>view</action>
+                                    <resource>quotegen_category_view</resource>
+                                    <visible>0</visible>
+                                </view>
+                                <edit>
+                                    <label>Edit</label>
+                                    <module>quotegen</module>
+                                    <controller>category</controller>
+                                    <action>edit</action>
+                                    <resource>quotegen_category_edit</resource>
+                                    <visible>0</visible>
+                                </edit>
+                            </pages>
+                        </category>
+                        <option>
+                            <label> Option Settings</label>
+                            <class>dropdown subdropdown</class>
+                            <module>quotegen</module>
+                            <controller>option</controller>
+                            <action>index</action>
+                            <resource>quotegen_option_index</resource>
+                            <pages>
+                                <viewall>
+                                    <label>View all</label>
+                                    <module>quotegen</module>
+                                    <controller>option</controller>
+                                    <action>index</action>
+                                    <resource>quotegen_option_index</resource>
+                                </viewall>
+                                <create>
+                                    <label>Create</label>
+                                    <module>quotegen</module>
+                                    <controller>option</controller>
+                                    <action>create</action>
+                                    <resource>quotegen_option_create</resource>
+                                </create>
+                                <view>
+                                    <label>View</label>
+                                    <module>quotegen</module>
+                                    <controller>option</controller>
+                                    <action>view</action>
+                                    <resource>quotegen_option_view</resource>
+                                    <visible>0</visible>
+                                </view>
+                                <edit>
+                                    <label>Edit</label>
+                                    <module>quotegen</module>
+                                    <controller>option</controller>
+                                    <action>edit</action>
+                                    <resource>quotegen_option_edit</resource>
+                                    <visible>0</visible>
+                                </edit>
+                            </pages>
+                        </option>
+                    </pages>
+                </settingManagement>
             </pages>
         </menu>
     </nav>

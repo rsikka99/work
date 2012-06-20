@@ -184,10 +184,10 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
             $object = new Quotegen_Model_OptionCategory($row->toArray());
             
             // Save the object into the cache
-	        $primaryKey [0] = $object->getCategoryId();
-	        $primaryKey [1] = $object->getOptionId();
-	        $this->saveItemToCache($object, $primaryKey);
-	            
+            $primaryKey [0] = $object->getCategoryId();
+            $primaryKey [1] = $object->getOptionId();
+            $this->saveItemToCache($object, $primaryKey);
+            
             $entries [] = $object;
         }
         return $entries;
@@ -205,6 +205,29 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
                 'categoryId = ?' => $id [0], 
                 'optionId = ?' => $id [1] 
         );
+    }
+
+    public function fetchAllCategoriesForOption ($optionId)
+    {
+        $categories = array ();
+        try
+        {
+            
+            $categoryMapper = Quotegen_Model_Mapper_Category::getInstance();
+            $optionCategories = $this->fetchAll(array (
+                    'optionId = ?' => $optionId 
+            ));
+            
+            foreach ( $optionCategories as $optionCategory )
+            {
+                $categories [] = $categoryMapper->find($optionCategory->getCategoryId());
+            }
+        }
+        catch ( Exception $e )
+        {
+            $categories = false;
+        }
+        return $categories;
     }
 }
 
