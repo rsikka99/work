@@ -99,6 +99,7 @@ try
             
             runSQLFile(dirname(__FILE__) . '/data.base.sql', $conn);
             runSQLFile(dirname(__FILE__) . '/data.proposalgenerator.sql', $conn);
+            runSQLFile(dirname(__FILE__) . '/data.quotegen.sql', $conn);
             
             if ('testing' != APPLICATION_ENV)
             {
