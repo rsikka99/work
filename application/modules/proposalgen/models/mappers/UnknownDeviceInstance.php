@@ -169,7 +169,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                     }
                     
                     $masterdevice = new Proposalgen_Model_MasterDevice();
-                    $masterdevice->setMasterDeviceId(null)
+                    $masterdevice->setId(null)
                         ->setManufacturer($manufacturer)
                         ->setPrinterModel($row->printer_model)
                         ->setTonerConfig($tonerConfig)

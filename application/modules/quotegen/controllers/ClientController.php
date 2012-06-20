@@ -26,13 +26,12 @@ class Quotegen_ClientController extends Zend_Controller_Action
 
     public function deleteAction ()
     {
-        // TODO: deleteAction
         $clientId = $this->_getParam('id', false);
         
         if (! $clientId)
         {
             $this->_helper->flashMessenger(array (
-                    'warning' => 'Please select a user to delete first.' 
+                    'warning' => 'Please select a client to delete first.' 
             ));
             $this->_helper->redirector('index');
         }
@@ -40,10 +39,10 @@ class Quotegen_ClientController extends Zend_Controller_Action
         $mapper = new Quotegen_Model_Mapper_Client();
         $client = $mapper->find($clientId);
         
-        if (! $clientId)
+        if (! $client)
         {
             $this->_helper->flashMessenger(array (
-                    'danger' => 'There was an error selecting the user to delete.' 
+                    'danger' => 'There was an error selecting the client to delete.' 
             ));
             $this->_helper->redirector('index');
         }
@@ -98,12 +97,12 @@ class Quotegen_ClientController extends Zend_Controller_Action
                         {
                             $mapper = new Quotegen_Model_Mapper_Client();
                             $client = new Quotegen_Model_Client();
-                            $values ['userId'] = Zend_Auth::getInstance()->getIdentity()->id;
+                            $values ['clientId'] = Zend_Auth::getInstance()->getIdentity()->id;
                             $client->populate($values);
                             $clientId = $mapper->insert($client);
                             
                             $this->_helper->flashMessenger(array (
-                                    'success' => "Client " . $this->view->escape($values ["name"]) . " was added successfully." 
+                                    'success' => "Client " . $this->view->escape($client->getName()) . " was added successfully." 
                             ));
                             
                             // Reset the form after everything is saved
@@ -174,7 +173,7 @@ class Quotegen_ClientController extends Zend_Controller_Action
         // Get the client
         $mapper = new Quotegen_Model_Mapper_Client();
         $client = $mapper->find($clientId);
-        // If the user doesn't exist, send them back t the view all users page
+        // If the client doesn't exist, send them back t the view all clients page
         if (! $client)
         {
             $this->_helper->flashMessenger(array (
@@ -213,7 +212,7 @@ class Quotegen_ClientController extends Zend_Controller_Action
                         $clientId = $mapper->save($client, $clientId);
                         
                         $this->_helper->flashMessenger(array (
-                                'success' => "Client '" . $this->view->escape($values ["name"]) . "' was updated sucessfully." 
+                                'success' => "Client '" . $this->view->escape($client->getName()) . "' was updated sucessfully." 
                         ));
                     }
                     else
@@ -239,7 +238,7 @@ class Quotegen_ClientController extends Zend_Controller_Action
 
     public function viewAction ()
     {
-        // TODO: viewAction
+        $this->view->client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_getParam('id', false));
     }
 }
 

@@ -155,7 +155,9 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
         $object = new Quotegen_Model_QuoteDeviceConfiguration($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $object->getId());
+        $primaryKey [0] = $object->getQuoteDeviceId();
+        $primaryKey [1] = $object->getDeviceConfigurationId();
+        $this->saveItemToCache($object, $primaryKey);
         
         return $object;
     }
@@ -182,7 +184,9 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
             $object = new Quotegen_Model_QuoteDeviceConfiguration($row->toArray());
             
             // Save the object into the cache
-            $this->saveItemToCache($object, $object->getId());
+            $primaryKey [0] = $object->getQuoteDeviceId();
+            $primaryKey [1] = $object->getDeviceConfigurationId();
+            $this->saveItemToCache($object, $primaryKey);
             
             $entries [] = $object;
         }
@@ -198,8 +202,8 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
     public function getWhereId ($id)
     {
         return array (
-                'quoteDeviceId = ?' => $id [0],
-                'deviceConfigurationId = ?' => $id [1],
+                'quoteDeviceId = ?' => $id [0], 
+                'deviceConfigurationId = ?' => $id [1] 
         );
     }
 }

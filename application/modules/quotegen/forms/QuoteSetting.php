@@ -32,12 +32,13 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                 ), 
                 'validators' => array (
                         array (
-                                'validator' => 'StringLength', 
+                                'validator' => 'Between', 
                                 'options' => array (
-                                        1, 
-                                        100 
+                                        'min' => 0, 
+                                        'max' => 100 
                                 ) 
-                        ) 
+                        ), 
+                        'Int' 
                 ) 
         ));
         
@@ -51,12 +52,13 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                 ), 
                 'validators' => array (
                         array (
-                                'validator' => 'StringLength', 
+                                'validator' => 'Between', 
                                 'options' => array (
-                                        1, 
-                                        100 
+                                        'min' => 0, 
+                                        'max' => 100 
                                 ) 
-                        ) 
+                        ), 
+                        'Int' 
                 ) 
         ));
         
@@ -70,12 +72,13 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                 ), 
                 'validators' => array (
                         array (
-                                'validator' => 'StringLength', 
+                                'validator' => 'Between', 
                                 'options' => array (
-                                        1, 
-                                        100 
+                                        'min' => 0, 
+                                        'max' => 99 
                                 ) 
-                        ) 
+                        ), 
+                        'Int' 
                 ) 
         ));
         
@@ -89,33 +92,25 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                 ), 
                 'validators' => array (
                         array (
-                                'validator' => 'StringLength', 
+                                'validator' => 'Between', 
                                 'options' => array (
-                                        1, 
-                                        100 
+                                        'min' => 0, 
+                                        'max' => 99 
                                 ) 
-                        ) 
+                        ), 
+                        'Int' 
                 ) 
         ));
         
-        $this->addElement('text', 'tonerPreference', array (
-                'label' => 'Toner Preference:', 
-                'required' => true, 
-                'class' => 'span1', 
-                'filters' => array (
-                        'StringTrim', 
-                        'StripTags' 
-                ), 
-                'validators' => array (
-                        array (
-                                'validator' => 'StringLength', 
-                                'options' => array (
-                                        1, 
-                                        100 
-                                ) 
-                        ) 
-                ) 
-        ));
+        
+        $pricingConfigDropdown = new Zend_Form_Element_Select('pricingConfigId', array ( 'label' => 'Toner Preference:'));
+        
+        /* @var $princingConfig Proposalgen_Model_PricingConfig */
+        foreach ( Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll() as $pricingConfig )
+        {
+            $pricingConfigDropdown->addMultiOption($pricingConfig->getPricingConfigId(), $pricingConfig->getConfigName());
+        }
+        $this->addElement($pricingConfigDropdown);
         
         // Add the submit button
         $this->addElement('submit', 'submit', array (

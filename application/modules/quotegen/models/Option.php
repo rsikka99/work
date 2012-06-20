@@ -44,6 +44,13 @@ class Quotegen_Model_Option extends My_Model_Abstract
      */
     protected $_sku;
     
+    /**
+     * An array of Quotegen_Model_Category associated with the object
+     *
+     * @var array
+     */
+    protected $_categories;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -150,7 +157,7 @@ class Quotegen_Model_Option extends My_Model_Abstract
 
     /**
      * Gets the price of the option
-     * 
+     *
      * @return number The price of the option
      */
     public function getPrice ()
@@ -160,7 +167,7 @@ class Quotegen_Model_Option extends My_Model_Abstract
 
     /**
      * Sets a new price for the option
-     * 
+     *
      * @param number $_price
      *            The new price to set
      */
@@ -172,7 +179,7 @@ class Quotegen_Model_Option extends My_Model_Abstract
 
     /**
      * Gets the sku of the option
-     * 
+     *
      * @return string The sku
      */
     public function getSku ()
@@ -182,13 +189,39 @@ class Quotegen_Model_Option extends My_Model_Abstract
 
     /**
      * Sets a new sku for the option
-     * 
+     *
      * @param string $_sku
      *            The new sku
      */
     public function setSku ($_sku)
     {
         $this->_sku = $_sku;
+        return $this;
+    }
+
+    /**
+     * Gets all categories associated with this objects id
+     *
+     * @return Quotegen_Model_Category $_categories
+     */
+    public function getCategories ()
+    {
+        if (! isset($this->_categories))
+        {
+            $this->_categories = Quotegen_Model_Mapper_OptionCategory::getInstance()->fetchAllCategoriesForOption($this->getId());
+        }
+        return $this->_categories;
+    }
+
+    /**
+     * Set new categories for this object
+     *
+     * @param multitype: $_categories
+     *            The new array of categories
+     */
+    public function setCategories ($_categories)
+    {
+        $this->_categories = $_categories;
         return $this;
     }
 }

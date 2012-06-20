@@ -156,7 +156,7 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
         $object = new Quotegen_Model_GlobalDeviceConfiguration($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $object->getId());
+        $this->saveItemToCache($object, $object->getDeviceConfigurationId());
         
         return $object;
     }
@@ -183,7 +183,7 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
             $object = new Quotegen_Model_GlobalDeviceConfiguration($row->toArray());
             
             // Save the object into the cache
-            $this->saveItemToCache($object, $object->getId());
+            $this->saveItemToCache($object, $object->getDeviceConfigurationId());
             
             $entries [] = $object;
         }

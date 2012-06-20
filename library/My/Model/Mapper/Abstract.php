@@ -207,6 +207,16 @@ abstract class My_Model_Mapper_Abstract
         return $this->getDbTable()->info('name');
     }
 
+    /**
+     * Gets the name of the database table
+     * 
+     * @return string
+     */
+    public function getTableName ()
+    {
+        return $this->getDbTable()->info('name');
+    }
+
     abstract public function insert (&$object);
 
     abstract public function save ($object, $primaryKey);

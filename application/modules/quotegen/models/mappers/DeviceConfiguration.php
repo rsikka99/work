@@ -33,6 +33,9 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
         // Get an array of data to save
         $data = $object->toArray();
         
+        // Remove the id
+        unset($data ['id']);
+        
         // Insert the data
         $id = $this->getDbTable()->insert($data);
         
@@ -59,12 +62,12 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
         
         if ($primaryKey === null)
         {
-            $primaryKey = $data ['masterDeviceId'];
+            $primaryKey = $data ['id'];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'masterDeviceId = ?' => $primaryKey 
+                'id = ?' => $primaryKey 
         ));
         
         // Save the object into the cache
@@ -86,13 +89,13 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_DeviceConfiguration)
         {
             $whereClause = array (
-                    'masterDeviceId = ?' => $object->getId() 
+                    'id = ?' => $object->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'masterDeviceId = ?' => $object 
+                    'id = ?' => $object 
             );
         }
         
@@ -196,7 +199,7 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array (
-                'masterDeviceId = ?' => $id 
+                'id = ?' => $id 
         );
     }
 }

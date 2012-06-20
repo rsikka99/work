@@ -1,3 +1,41 @@
-<div class="well">
-    <?php echo $this->form; ?>
+<?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
+<h1>All Quote Settings </h1>
+<table class="table table-striped table-condensed table-bordered">
+    <thead>
+        <tr>
+            <!-- <th style="width: 30px;">ID</th> -->
+            <th>Page Coverage Monochrome</th>
+            <th>Page Coverage Color</th>
+            <th>Device Margin</th>
+            <th>Page Margin</th>
+            <th>Toner Preference </th>
+            <th style="width: 120px;">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    	
+        <?php foreach ($this->paginator->getCurrentItems() as $quoteSetting) : /* @var $quoteSetting Quotegen_Model_QuoteSetting */ ?>
+        <tr>
+            <td><?php echo Zend_Locale_Format::toNumber($quoteSetting->getPageCoverageMonochrome(), array ('precision' => 2)) . '%'; ?></td>
+            <td><?php echo Zend_Locale_Format::toNumber($quoteSetting->getPageCoverageColor(), array ('precision' => 2)) . '%'; ?></td>
+            <td><?php echo Zend_Locale_Format::toNumber($quoteSetting->getDeviceMargin(), array ('precision' => 2)) . '%'; ?></td>
+            <td><?php echo Zend_Locale_Format::toNumber($quoteSetting->getPageMargin(), array ('precision' => 2)) . '%'; ?></td>
+            <td><?php echo $quoteSetting->getPricingConfig()->getConfigName(); ?></td>
+            <td>
+                <div class="btn-group">
+                	<a class="btn btn-info" title="View Client" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $quoteSetting->getId())); ?>"><i class="icon-eye-open"></i></a>
+                    <a class="btn btn-warning" title="Edit Client" href="<?php echo $this->url(array ( 'action' => 'edit', 'id' => $quoteSetting->getId())); ?>"><i class="icon-pencil"></i></a>
+                    <a class="btn btn-danger" title="Delete Client" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $quoteSetting->getId())); ?>"><i class="icon-trash"></i></a>
+                </div>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<?php echo $this->paginationControl($this->paginator); ?>
+<?php else : ?>
+<div class='well'>
+    <h1>There are no quote settings</h1>
 </div>
+<?php endif; ?>
+

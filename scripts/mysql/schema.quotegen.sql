@@ -55,6 +55,7 @@ CREATE  TABLE IF NOT EXISTS `quotegen_options` (
   `name` VARCHAR(255) NOT NULL ,
   `description` TEXT NOT NULL ,
   `price` DOUBLE NOT NULL ,
+  `sku` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -333,11 +334,11 @@ CREATE  TABLE IF NOT EXISTS `quotegen_quote_settings` (
   `pageCoverageColor` DOUBLE NOT NULL ,
   `deviceMargin` DOUBLE NOT NULL ,
   `pageMargin` DOUBLE NOT NULL ,
-  `tonerPreference` INT(11) NOT NULL ,
+  `pricingConfigId` INT(11) NOT NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `quotegen_quote_settings_ibfk1` (`tonerPreference` ASC) ,
+  INDEX `quotegen_quote_settings_ibfk1` (`pricingConfigId` ASC) ,
   CONSTRAINT `quotegen_quote_settings_ibfk1`
-    FOREIGN KEY (`tonerPreference` )
+    FOREIGN KEY (`pricingConfigId` )
     REFERENCES `proposalgenerator_pricing_configs` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)

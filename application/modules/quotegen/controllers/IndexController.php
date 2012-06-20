@@ -10,7 +10,74 @@ class Quotegen_IndexController extends Zend_Controller_Action
 
     public function indexAction ()
     {
-        // action body
+        $request = $this->getRequest();
+        $existingQuoteForm = new Quotegen_Form_SelectQuote();
+        $newQuoteForm = new Quotegen_Form_Quote();
+        $newQuoteForm->setAttrib('class', 'form-vertical');
+        
+        $newClientForm = new Quotegen_Form_Client();
+        $newClientForm->setAttrib('class', 'form-vertical');
+        
+        if ($request->isPost())
+        {
+            $values = $request->getPost();
+            
+            if (isset($values ['quoteId']))
+            {
+                // Existing Quote
+                if ($existingQuoteForm->isValid($values))
+                {
+                    $quoteSession = new Zend_Session_Namespace(Quotegen_Model_Quote::QUOTE_SESSION_NAMESPACE);
+                    $quoteSession->unsetAll();
+                    $quoteSession->id = $values ['quoteId'];
+                    
+                    // Redirect to the build controller
+                    $this->_helper->redirector('index', 'build');
+                }
+                else
+                {
+                    $this->_helper->flashMessenger(array (
+                            'danger' => "There was an error selecting your quote. Please try again." 
+                    ));
+                }
+            }
+            else if (isset($values ['companyName']))
+            {
+                // New Client Form
+            }
+            else
+            {
+                // New Quote
+                if ($newQuoteForm->isValid($values))
+                {
+                    $currentDate = date('Y-m-d H:i:s');
+                    $quote = new Quotegen_Model_Quote($values);
+                    
+                    $quote->setUserId(Zend_Auth::getInstance()->getIdentity()->id);
+                    $quote->setDateCreated($currentDate);
+                    $quote->setDateModified($currentDate);
+                    $quote->setQuoteDate($currentDate);
+                    
+                    $quoteId = Quotegen_Model_Mapper_Quote::getInstance()->insert($quote);
+                    
+                    $quoteSession = new Zend_Session_Namespace(Quotegen_BuildController::QUOTE_SESSION_NAMESPACE);
+                    $quoteSession->unsetAll();
+                    $quoteSession->id = $quoteId;
+                    
+                    // Redirect to the build controller
+                    $this->_helper->redirector('index', 'build');
+                }
+                else
+                {
+                    $this->_helper->flashMessenger(array (
+                            'danger' => "There was an error creating your quote. Please try again." 
+                    ));
+                }
+            }
+        }
+        $this->view->existingQuoteForm = $existingQuoteForm;
+        $this->view->newQuoteForm = $newQuoteForm;
+        $this->view->newClientForm = $newClientForm;
     }
 }
 

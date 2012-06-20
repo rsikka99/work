@@ -1,0 +1,36 @@
+<?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
+<h1>All Manufacturers</h1>
+<table class="table table-striped table-condensed table-bordered">
+    <thead>
+        <tr>
+            <th style="width: 30px;">ID</th>
+            <th>Full Name</th>
+            <th>Display Name</th>
+            <th style="width: 80px;">Is Deleted</th>
+            <th style="width: 120px;">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    	
+        <?php foreach ($this->paginator->getCurrentItems() as $manufacturer) : /* @var $manufacturer Proposalgen_Model_Manufacturer */ ?>
+        <tr>
+            <td><?php echo $manufacturer->getId(); ?></td>
+            <td><?php echo $manufacturer->getFullname(); ?></td>
+            <td><?php echo $manufacturer->getDisplayname(); ?></td>
+            <td><?php echo ($manufacturer->getIsDeleted()) ? "Deleted" : ""; ?></td>
+            <td>
+                <div class="btn-group">
+	                <a class="btn btn-info" title="View Manufacturer" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $manufacturer->getId())); ?>"><i class="icon-eye-open"></i></a>
+                    <a class="btn btn-warning" title="Edit Manufacturer" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $manufacturer->getId())); ?>"><i class="icon-pencil"></i></a>
+                    <a class="btn btn-danger" title="Delete Manufacturer" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $manufacturer->getId())); ?>"><i class="icon-trash"></i></a>
+                </div>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<?php echo $this->paginationControl($this->paginator); ?>
+<?php else : ?>
+    <h1>There are no manufacturers</h1>
+<?php endif; ?>
+
