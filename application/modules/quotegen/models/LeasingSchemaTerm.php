@@ -19,7 +19,7 @@ class Quotegen_Model_LeasingSchemaTerm extends My_Model_Abstract {
 	 *
 	 * @var int
 	 */
-	protected $_leaseingSchemaId = 0;
+	protected $_leasingSchemaId = 0;
 	/**
 	 * The term value in months
 	 *
@@ -37,8 +37,8 @@ class Quotegen_Model_LeasingSchemaTerm extends My_Model_Abstract {
 		}
 		if (isset ( $params->id ) && ! is_null ( $params->id ))
 			$this->setId ( $params->id );
-		if (isset ( $params->leaseingSchemaId ) && ! is_null ( $params->leaseingSchemaId ))
-			$this->setLeaseingSchemaId( $params->leaseingSchemaId );
+		if (isset ( $params->leaseingSchemaId ) && ! is_null ( $params->leasingSchemaId ))
+			$this->setLeasingSchemaId( $params->leasingSchemaId );
 		if (isset ( $params->months ) && ! is_null ( $params->months ))
 			$this->setMonths ( $params->months );
 	}
@@ -49,7 +49,7 @@ class Quotegen_Model_LeasingSchemaTerm extends My_Model_Abstract {
 	public function toArray() {
 		return array (
 				'id' => $this->getId(),	
-				'leasingSchemaId' => $this->getLeaseingSchemaId(),	
+				'leasingSchemaId' => $this->getLeasingSchemaId(),	
 				'months' => $this->getMonths()
 		);
 	}
@@ -72,15 +72,15 @@ class Quotegen_Model_LeasingSchemaTerm extends My_Model_Abstract {
 	/**
 	 * @return the $_leaseingSchemaId
 	 */
-	public function getLeaseingSchemaId() {
-		return $this->_leaseingSchemaId;
+	public function getLeasingSchemaId() {
+		return $this->_leasingSchemaId;
 	}
 
 	/**
-	 * @param number $_leaseingSchemaId
+	 * @param number $_leasingSchemaId
 	 */
-	public function setLeaseingSchemaId($_leaseingSchemaId) {
-		$this->_leaseingSchemaId = $_leaseingSchemaId;
+	public function setLeasingSchemaId($_leasingSchemaId) {
+		$this->_leasingSchemaId = $_leasingSchemaId;
 		return $this;
 	}
 
