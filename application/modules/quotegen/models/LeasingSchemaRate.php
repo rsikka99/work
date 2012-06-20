@@ -60,9 +60,9 @@ class Quotegen_Model_LeasingSchemaRate extends My_Model_Abstract {
 	 */
 	public function toArray() {
 		return array (
-				'leasingSchemaTermId' => $this->getId(),	
-				'leasingSchemaRangeId' => $this->getLeaseingSchemasId(),	
-				'rate' => $this->getMonths()
+				'leasingSchemaTermId' => $this->getLeasingSchemaTermId(),	
+				'leasingSchemaRangeId' => $this->getLeasingSchemaRangeId(),	
+				'rate' => $this->getRate()
 		);
 	}
 	

@@ -32,10 +32,11 @@ class Quotegen_Form_LeasingSchemaRange extends EasyBib_Form
                 'label' => 'New Range:', 
                 'required' => true, 
                 'class' => 'span1',
+                'style' => 'position: relative; left: -4px;',
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
-                ), 
+                ),
                 'validators' => array (
                         array (
                                 'validator' => 'StringLength', 

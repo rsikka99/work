@@ -7,10 +7,12 @@ $leasingSchemaTerms = $this->leasingSchemaTerms;
 	<div class="control-group">
 		<label class="control-label pull-left" for="range">Range Value: </label>
 		<div class="controls">
-			<?php if ( $this->element->getElement("range")->hasErrors() ) { 
-				$this->element->getElement("range")->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?> 
-			<?php echo $this->element->getElement("range")->renderViewHelper(); ?>
+			<div class="input-prepend input-append">
+				<?php if ( $this->element->getElement("range")->hasErrors() ) { 
+					$this->element->getElement("range")->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+				} ?>
+				<span class="add-on">$</span><?php echo $this->element->getElement("range")->renderViewHelper(); ?>
+			</div>
 		</div>
 	</div>
 	
