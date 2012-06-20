@@ -474,7 +474,7 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
         }
         else
         {
-        $message = "Are you sure you want to delete the range \${$range->getStartRange()}?";
+        	$message = "Are you sure you want to delete the range \${$range->getStartRange()}?";
         }
         $form = new Application_Form_Delete($message);
         
