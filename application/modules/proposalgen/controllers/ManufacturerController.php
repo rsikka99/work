@@ -242,7 +242,7 @@ class Proposalgen_ManufacturerController extends Zend_Controller_Action
 
     public function viewAction ()
     {
-        // TODO: viewAction
+        $this->view->manufacturer = Proposalgen_Model_Mapper_Manufacturer::getInstance()->find($this->_getParam('id', false));
     }
 }
 

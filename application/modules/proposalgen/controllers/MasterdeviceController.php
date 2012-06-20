@@ -234,12 +234,7 @@ class Proposalgen_MasterdeviceController extends Zend_Controller_Action
 
     public function viewAction ()
     {
-        $id = $this->_getParam('id', false);
-        
-        // Get the client
-        $mapper = new Proposalgen_Model_Mapper_MasterDevice();
-        $masterDevice = $mapper->find($id);
-        $this->view->masterDevice = $masterDevice;
+        $this->view->masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($this->_getParam('id', false));
     }
 }
 
