@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_QuoteSettingsController extends Zend_Controller_Action
+class Quotegen_QuoteSettingController extends Zend_Controller_Action
 {
 
     public function init ()
