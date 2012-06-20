@@ -198,6 +198,56 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
         $this->view->leasingSchemaTerm = $form;
     }
 
+    public function deletetermAction ()
+    {
+        $termId = $this->_getParam('id', false);
+        
+        if (! $termId)
+        {
+            $this->_helper->flashMessenger(array (
+                    'warning' => 'Please select a term to delete first.' 
+            ));
+            $this->_helper->redirector('/quotegen/leasingschema');
+        }
+        
+        $mapper = new Quotegen_Model_Mapper_LeasingSchemaTerm();
+        $term = $mapper->find($termId);
+        
+        if (! $termId)
+        {
+            $this->_helper->flashMessenger(array (
+                    'danger' => 'There was an error selecting the term to delete.' 
+            ));
+            $this->_helper->redirector('/quotegen/leasingschema');
+        }
+        
+        $message = "Are you sure you want to delete {$term->getMonths()}?";
+        $form = new Application_Form_Delete($message);
+        
+        $request = $this->getRequest();
+        if ($request->isPost())
+        {
+            $values = $request->getPost();
+            if (! isset($values ['cancel']))
+            {
+                // delete client from database
+                if ( $form->isValid( $values ) )
+                {
+                    $mapper->delete($term);
+                    $this->_helper->flashMessenger(array (
+                            'success' => "The Term {$this->view->escape ( $term->getMonths() )} months was deleted successfully." 
+                    ));
+                    $this->_helper->redirector('/quotegen/leasingschema');
+                }
+            }
+            else // go back
+            {
+                $this->_helper->redirector('/quotegen/leasingschema');
+            }
+        }
+        $this->view->form = $form;
+    }
+
     public function editrangeAction ()
     {
         $leasingSchemaId = 1;
@@ -369,40 +419,54 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
         $this->view->leasingSchemaRange = $form;
     }
 
-    public function deletetermAction ()
-    {
-        $request = $this->getRequest();
-        if ($request->isPost())
-        {
-            $values = $request->getPost();
-            $id = $values ['hdnId'];
-            
-            // Validate id
-        
-
-            // Confirm delete
-            
-
-            print_r($values);
-        }
-    }
-
     public function deleterangeAction ()
     {
+        $rangeId = $this->_getParam('id', false);
+        
+        if (! $rangeId)
+        {
+            $this->_helper->flashMessenger(array (
+                    'warning' => 'Please select a range to delete first.' 
+            ));
+            $this->_helper->redirector('/quotegen/leasingschema');
+        }
+        
+        $mapper = new Quotegen_Model_Mapper_LeasingSchemaRange();
+        $range = $mapper->find($rangeId);
+        
+        if (! $rangeId)
+        {
+            $this->_helper->flashMessenger(array (
+                    'danger' => 'There was an error selecting the range to delete.' 
+            ));
+            $this->_helper->redirector('/quotegen/leasingschema');
+        }
+        
+        $message = "Are you sure you want to delete {$range->getStartRange()}?";
+        $form = new Application_Form_Delete($message);
+        
         $request = $this->getRequest();
         if ($request->isPost())
         {
             $values = $request->getPost();
-            $id = $values ['hdnId'];
-            
-            // Validate id
-        
-
-            // Confirm delete
-            
-
-            print_r($values);
+            if (! isset($values ['cancel']))
+            {
+                // delete client from database
+                if ( $form->isValid( $values ) )
+                {
+                    $mapper->delete($range);
+                    $this->_helper->flashMessenger(array (
+                            'success' => "The Range \${$this->view->escape ( $range->getStartRange() )} was deleted successfully." 
+                    ));
+                    $this->_helper->redirector('/quotegen/leasingschema');
+                }
+            }
+            else // go back
+            {
+                $this->_helper->redirector('/quotegen/leasingschema');
+            }
         }
+        $this->view->form = $form;
     }
 
 }
