@@ -202,5 +202,33 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
                 'id = ?' => $id 
         );
     }
+
+    /**
+     * Fetchs all master devices that are available to be used in the quote generator
+     */
+    public function fetchAllAvailableMasterDevices ()
+    {
+        $qdTableName = Quotegen_Model_Mapper_Device::getInstance()->getTableName();
+        
+        $sql = "SELECT * FROM {$this->getTableName()} as md
+        LEFT JOIN {$qdTableName} AS qd ON qd.masterDeviceId = md.id
+        WHERE qd.masterDeviceId is null
+        ORDER BY  md.manufacturer_id ASC, md.printer_model ASC
+        ";
+
+        $resultSet = $this->getDbTable()->getAdapter()->fetchAll($sql);
+        
+        $entries = array ();
+        foreach ( $resultSet as $row )
+        {
+            $object = new Proposalgen_Model_MasterDevice($row);
+        
+            // Save the object into the cache
+            $this->saveItemToCache($object, $object->getId());
+        
+            $entries [] = $object;
+        }
+        return $entries;
+    }
 }
 
