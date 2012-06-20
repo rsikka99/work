@@ -8,10 +8,13 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action
         /* Initialize action controller here */
     }
 
+    /**
+     * Displays all quoteSettings
+     */
     public function indexAction ()
     {
         // Set up a quote setting mapper
-        $mapper = new Quotegen_Model_Mapper_QuoteSetting();
+        $mapper = Quotegen_Model_Mapper_QuoteSetting::getInstance();
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper));
         
         // Set the current page that we are on
@@ -25,6 +28,9 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action
         $this->view->paginator = $paginator;
     }
 
+    /**
+     * Creates a quoteSetting
+     */
     public function createAction ()
     {
         $form = new Quotegen_Form_QuoteSettings();
@@ -41,7 +47,7 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action
                     if ($form->isValid($values))
                     {
                         // Save to the database
-                        $mapper = new Quotegen_Model_Mapper_QuoteSetting();
+                        $mapper = Quotegen_Model_Mapper_QuoteSetting::getInstance();
                         $quoteSettings = new Quotegen_Model_Quotesetting();
                         $quoteSettings->populate($values);
                         $mapper->insert($quoteSettings);
@@ -69,6 +75,9 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action
         $this->view->form = $form;
     }
 
+    /**
+     * Deletes a quoteSetting
+     */
     public function deleteAction ()
     {
         // Get the passed id
@@ -84,7 +93,7 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action
         }
         
         // Find quoteSetting
-        $quoteSettingMapper = new Quotegen_Model_Mapper_QuoteSetting();
+        $quoteSettingMapper = Quotegen_Model_Mapper_QuoteSetting::getInstance();
         $quoteSetting = $quoteSettingMapper->find($quoteSettingId);
         
         // Return to index if not found
@@ -95,7 +104,7 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action
             ));
             $this->_helper->redirector('index');
         }
-    		               
+        
         // Show delete form
         $form = new Application_Form_Delete('Are you sure you want to delete this quote setting ?');
         
@@ -142,6 +151,9 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action
         $this->view->form = $form;
     }
 
+    /**
+     * Edits a quoteSetting
+     */
     public function editAction ()
     {
         $quoteSettingId = $this->_getParam('id', false);
@@ -158,7 +170,7 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action
         
         // Find client and pass form object
         $form = new Quotegen_Form_QuoteSettings();
-        $mapper = new Quotegen_Model_Mapper_QuoteSetting();
+        $mapper = Quotegen_Model_Mapper_QuoteSetting::getInstance();
         $quoteSetting = $mapper->find($quoteSettingId);
         
         $form->populate($quoteSetting->toArray());
@@ -174,9 +186,76 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action
                     // Validate the form
                     if ($form->isValid($values))
                     {
-                        // Update quotesetting and message to comfirm
-                        $mapper = new Quotegen_Model_Mapper_QuoteSetting();
+                        // Update quoteSetting and message to comfirm
+                        $mapper = Quotegen_Model_Mapper_QuoteSetting::getInstance();
                         $quoteSetting = new Quotegen_Model_QuoteSetting();
+                        $quoteSetting->populate($values);
+                        $quoteSetting->setId($quoteSettingId);
+                        
+                        $mapper->save($quoteSetting, $quoteSettingId);
+                        $this->_helper->flashMessenger(array (
+                                'success' => "Quote setting was updated sucessfully." 
+                        ));
+                        
+                        $this->_helper->redirector('index');
+                    }
+                    else
+                    {
+                        throw new InvalidArgumentException("Please correct the errors below");
+                    }
+                }
+                catch ( InvalidArgumentException $e )
+                {
+                    $this->_helper->flashMessenger(array (
+                            'danger' => $e->getMessage() 
+                    ));
+                }
+            }
+            else // Client hit cancel redicect
+            {
+                // User has cancelled. We could do a redirect here if we wanted.
+                $this->_helper->redirector('index');
+            }
+        }
+        
+        $this->view->form = $form;
+    }
+
+    /**
+     * Edits a quoteSetting
+     */
+    public function editdefaultAction ()
+    {
+        $quoteSettingId = 1;
+        
+        // Find client and pass form object
+        $form = new Quotegen_Form_QuoteSettings();
+        $mapper = Quotegen_Model_Mapper_QuoteSetting::getInstance();
+        $quoteSetting = $mapper->find($quoteSettingId);
+        
+        $form->populate($quoteSetting->toArray());
+        // update record if post
+        $request = $this->getRequest();
+        if ($request->isPost())
+        {
+            $values = $request->getPost();
+            if (! isset($values ['cancel']))
+            {
+                try
+                {
+                    // Validate the form
+                    if ($form->isValid($values))
+                    {
+                        // Set nulls where needed.
+                        foreach ( $values as &$value )
+                        {
+                            if (empty($value) && $value !== 0)
+                            {
+                                $value = new Zend_Db_Expr('NULL');
+                            }
+                        }
+                        
+                        // Update quoteSetting and message to comfirm
                         $quoteSetting->populate($values);
                         $quoteSetting->setId($quoteSettingId);
                         

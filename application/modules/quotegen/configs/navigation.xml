@@ -246,13 +246,13 @@
                             <action>index</action>
                             <resource>quotegen_quotesetting_index</resource>
                             <pages>
-                                <view>
+                                <viewall>
                                     <label>View all</label>
                                     <module>quotegen</module>
                                     <controller>quotesetting</controller>
                                     <action>index</action>
                                     <resource>quotegen_quotesetting_index</resource>
-                                </view>
+                                </viewall>
                                 <create>
                                     <label>Create</label>
                                     <module>quotegen</module>
@@ -260,6 +260,13 @@
                                     <action>create</action>
                                     <resource>quotegen_quotesetting_create</resource>
                                 </create>
+                                <editdefault>
+                                    <label>Edit System Defaults</label>
+                                    <module>quotegen</module>
+                                    <controller>quotesetting</controller>
+                                    <action>editdefault</action>
+                                    <resource>quotegen_quotesetting_editdefault</resource>
+                                </editdefault>
                             </pages>
                         </quotesetting>
                     </pages>
