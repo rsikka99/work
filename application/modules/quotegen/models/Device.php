@@ -23,6 +23,13 @@ class Quotegen_Model_Device extends My_Model_Abstract
      */
     protected $_sku;
     
+    /**
+     * The master device object
+     *
+     * @var Proposalgen_Model_MasterDevice
+     */
+    protected $_masterDevice;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -90,6 +97,32 @@ class Quotegen_Model_Device extends My_Model_Abstract
     public function setSku ($_sku)
     {
         $this->_sku = $_sku;
+        return $this;
+    }
+
+    /**
+     * Gets the master device object associated with this device
+     *
+     * @return Proposalgen_Model_MasterDevice
+     */
+    public function getMasterDevice ()
+    {
+        if (! isset($this->_masterDevice))
+        {
+            $this->_masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($this->getMasterDeviceId());
+        }
+        return $this->_masterDevice;
+    }
+
+    /**
+     * Sets the master device object associated with this device
+     *
+     * @param Proposalgen_Model_MasterDevice $_masterDevice
+     *            The new master device
+     */
+    public function setMasterDevice ($_masterDevice)
+    {
+        $this->_masterDevice = $_masterDevice;
         return $this;
     }
 }

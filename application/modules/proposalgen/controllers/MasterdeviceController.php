@@ -1,6 +1,6 @@
 <?php
 
-class Proposalgen_ManufacturerController extends Zend_Controller_Action
+class Proposalgen_MasterdeviceController extends Zend_Controller_Action
 {
 
     public function init ()
@@ -10,8 +10,8 @@ class Proposalgen_ManufacturerController extends Zend_Controller_Action
 
     public function indexAction ()
     {
-        // Display all of the manufacturers
-        $mapper = Proposalgen_Model_Mapper_Manufacturer::getInstance();
+        // Display all of the masterDevices
+        $mapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper));
         
         // Set the current page we're on
@@ -27,28 +27,28 @@ class Proposalgen_ManufacturerController extends Zend_Controller_Action
     public function deleteAction ()
     {
         // TODO: deleteAction
-        $manufacturerId = $this->_getParam('id', false);
+        $masterDeviceId = $this->_getParam('id', false);
         
-        if (! $manufacturerId)
+        if (! $masterDeviceId)
         {
             $this->_helper->flashMessenger(array (
-                    'warning' => 'Please select a manufacturer to delete first.' 
+                    'warning' => 'Please select a master device to delete first.' 
             ));
             $this->_helper->redirector('index');
         }
         
-        $mapper = new Proposalgen_Model_Mapper_Manufacturer();
-        $manufacturer = $mapper->find($manufacturerId);
+        $mapper = new Proposalgen_Model_Mapper_MasterDevice();
+        $masterDevice = $mapper->find($masterDeviceId);
         
-        if (! $manufacturerId)
+        if (! $masterDeviceId)
         {
             $this->_helper->flashMessenger(array (
-                    'danger' => 'There was an error selecting the manufacturer to delete.' 
+                    'danger' => 'There was an error selecting the master device to delete.' 
             ));
             $this->_helper->redirector('index');
         }
         
-        $message = "Are you sure you want to delete {$manufacturer->getFullname()}? This is VERY DESTRUCTIVE! Please edit the manufacturer and mark it as deleted if you want to preserve anything that relies on the manufacturer instead.";
+        $message = "Are you sure you want to delete {$masterDevice->getFullDeviceName()}?";
         $form = new Application_Form_Delete($message);
         
         $request = $this->getRequest();
@@ -57,12 +57,12 @@ class Proposalgen_ManufacturerController extends Zend_Controller_Action
             $values = $request->getPost();
             if (! isset($values ['cancel']))
             {
-                // delete manufacturer from database
+                // delete masterDevice from database
                 if ($form->isValid($values))
                 {
-                    $mapper->delete($manufacturer);
+                    $mapper->delete($masterDevice);
                     $this->_helper->flashMessenger(array (
-                            'success' => "Manufacturer  {$this->view->escape ($manufacturer->getFullname() )} was deleted successfully." 
+                            'success' => "Master device  '{$masterDevice->getFullDeviceName()}' was deleted successfully." 
                     ));
                     $this->_helper->redirector('index');
                 }
@@ -79,7 +79,7 @@ class Proposalgen_ManufacturerController extends Zend_Controller_Action
     {
         // TODO: createAction
         $request = $this->getRequest();
-        $form = new Proposalgen_Form_Manufacturer();
+        $form = new Proposalgen_Form_MasterDevice();
         
         if ($request->isPost())
         {
@@ -96,45 +96,31 @@ class Proposalgen_ManufacturerController extends Zend_Controller_Action
                         // Save to the database
                         try
                         {
-                            $mapper = new Proposalgen_Model_Mapper_Manufacturer();
-                            $manufacturer = new Proposalgen_Model_Manufacturer();
-                            if (! isset($values ['displayname']) || empty($values ['displayname']))
+                            
+                            $mapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
+                            $masterDevice = new Proposalgen_Model_MasterDevice();
+                            $currentDate = date('Y-m-d H:i:s');
+                            $masterDevice->setDateCreated($currentDate);
+                            
+                            foreach ( $values as &$value )
                             {
-                                $values ['displayname'] = $values ['fullname'];
+                                if (strlen($value) < 1)
+                                    $value = null;
                             }
                             
-                            $manufacturer->populate($values);
-                            $manufacturerId = $mapper->insert($manufacturer);
+                            $masterDevice->populate($values);
+                            $masterDeviceId = $mapper->insert($masterDevice);
                             
                             $this->_helper->flashMessenger(array (
-                                    'success' => "Manufacturer " . $this->view->escape($manufacturer->getFullname()) . " was added successfully." 
+                                    'success' => "MasterDevice " . $this->view->escape($masterDevice->getFullDeviceName()) . " was added successfully." 
                             ));
                             
                             // Reset the form after everything is saved successfully
                             $form->reset();
                         }
-                        catch ( Zend_Db_Statement_Mysqli_Exception $e )
-                        {
-                            // Check to see what error code was thrown
-                            switch ($e->getCode())
-                            {
-                                // Duplicate column
-                                case 1062 :
-                                    $this->_helper->flashMessenger(array (
-                                            'danger' => 'Manufacturer already exists.' 
-                                    ));
-                                    break;
-                                default :
-                                    $this->_helper->flashMessenger(array (
-                                            'danger' => 'Error saving to database.  Please try again.' 
-                                    ));
-                                    break;
-                            }
-                            
-                            $form->populate($request->getPost());
-                        }
                         catch ( Exception $e )
                         {
+                            throw new Exception($e);
                             $this->_helper->flashMessenger(array (
                                     'danger' => 'There was an error processing this request.  Please try again.' 
                             ));
@@ -162,36 +148,37 @@ class Proposalgen_ManufacturerController extends Zend_Controller_Action
 
     public function editAction ()
     {
-        $manufacturerId = $this->_getParam('id', false);
+        $masterDeviceId = $this->_getParam('id', false);
         
-        // If they haven't provided an id, send them back to the view all manufacturer
+        // If they haven't provided an id, send them back to the view all masterDevice
         // page
-        if (! $manufacturerId)
+        if (! $masterDeviceId)
         {
             $this->_helper->flashMessenger(array (
-                    'warning' => 'Please select a manufacturer to edit first.' 
+                    'warning' => 'Please select a masterDevice to edit first.' 
             ));
             $this->_helper->redirector('index');
         }
         
-        // Get the manufacturer
-        $mapper = new Proposalgen_Model_Mapper_Manufacturer();
-        $manufacturer = $mapper->find($manufacturerId);
-        // If the manufacturer doesn't exist, send them back t the view all manufacturers page
-        if (! $manufacturer)
+        // Get the masterDevice
+        $mapper = new Proposalgen_Model_Mapper_MasterDevice();
+        $masterDevice = $mapper->find($masterDeviceId);
+        
+        // If the masterDevice doesn't exist, send them back t the view all masterDevices page
+        if (! $masterDevice)
         {
             $this->_helper->flashMessenger(array (
-                    'danger' => 'There was an error selecting the manufacturer to edit.' 
+                    'danger' => 'There was an error selecting the masterDevice to edit.' 
             ));
             $this->_helper->redirector('index');
         }
         
         // Create a new form with the mode and roles set
-        $form = new Proposalgen_Form_Manufacturer();
+        $form = new Proposalgen_Form_MasterDevice();
         
         // Prepare the data for the form
         $request = $this->getRequest();
-        $form->populate($manufacturer->toArray());
+        $form->populate($masterDevice->toArray());
         
         // Make sure we are posting data
         if ($request->isPost())
@@ -207,16 +194,21 @@ class Proposalgen_ManufacturerController extends Zend_Controller_Action
                     // Validate the form
                     if ($form->isValid($values))
                     {
-                        $mapper = new Proposalgen_Model_Mapper_Manufacturer();
-                        $manufacturer = new Proposalgen_Model_Manufacturer();
-                        $manufacturer->populate($values);
-                        $manufacturer->setId($manufacturerId);
+                        $mapper = new Proposalgen_Model_Mapper_MasterDevice();
+                        $masterDevice = new Proposalgen_Model_MasterDevice();
+                        foreach ( $values as &$value )
+                        {
+                            if (strlen($value) < 1)
+                                $value = null;
+                        }
+                        $masterDevice->populate($values);
+                        $masterDevice->setId($masterDeviceId);
                         
                         // Save to the database with cascade insert turned on
-                        $manufacturerId = $mapper->save($manufacturer, $manufacturerId);
+                        $masterDeviceId = $mapper->save($masterDevice, $masterDeviceId);
                         
                         $this->_helper->flashMessenger(array (
-                                'success' => "Manufacturer '" . $this->view->escape($manufacturer->getFullname()) . "' was updated sucessfully." 
+                                'success' => "MasterDevice '{$masterDevice->getFullDeviceName()}' was updated sucessfully." 
                         ));
                     }
                     else
@@ -242,7 +234,7 @@ class Proposalgen_ManufacturerController extends Zend_Controller_Action
 
     public function viewAction ()
     {
-        $this->view->manufacturer = Proposalgen_Model_Mapper_Manufacturer::getInstance()->find($this->_getParam('id', false));
+        $this->view->masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($this->_getParam('id', false));
     }
 }
 

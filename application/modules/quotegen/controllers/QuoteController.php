@@ -224,7 +224,7 @@ class Quotegen_QuoteController extends Zend_Controller_Action
 
     public function viewAction ()
     {
-        // TODO: viewAction
+        $this->view->quote = Quotegen_Model_Mapper_Quote::getInstance()->find($this->_getParam('id', false));
     }
 }
 

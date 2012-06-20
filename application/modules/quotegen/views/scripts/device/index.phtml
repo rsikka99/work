@@ -4,8 +4,8 @@
     <thead>
         <tr>
             <th style="width: 30px;">ID</th>
-            <th>Name</th>
-            <th>Phone number</th>
+            <th>Full Device Name</th>
+            <th>SKU</th>
             <th style="width: 120px;">Action</th>
         </tr>
     </thead>
@@ -13,14 +13,14 @@
     	
         <?php foreach ($this->paginator->getCurrentItems() as $device) : /* @var $device Quotegen_Model_Device */ ?>
         <tr>
-            <td><?php echo $device->getId(); ?></td>
-            <td><?php echo $device->getFullname(); ?></td>
-            <td><?php echo $device->getPhoneNumber(); ?></td>
+            <td><?php echo $device->getMasterDeviceId(); ?></td>
+            <td><?php echo $device->getMasterDevice()->getFullDeviceName(); ?></td>
+            <td><?php echo $device->getSku(); ?></td>
             <td>
                 <div class="btn-group">
-	                <a class="btn btn-info" title="View Device" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $device->getId())); ?>"><i class="icon-eye-open"></i></a>
-                    <a class="btn btn-warning" title="Edit Device" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $device->getId())); ?>"><i class="icon-pencil"></i></a>
-                    <a class="btn btn-danger" title="Delete Device" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $device->getId())); ?>"><i class="icon-trash"></i></a>
+	                <a class="btn btn-info" title="View Device" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $device->getMasterDeviceId())); ?>"><i class="icon-eye-open"></i></a>
+                    <a class="btn btn-warning" title="Edit Device" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $device->getMasterDeviceId())); ?>"><i class="icon-pencil"></i></a>
+                    <a class="btn btn-danger" title="Delete Device" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $device->getMasterDeviceId())); ?>"><i class="icon-trash"></i></a>
                 </div>
             </td>
         </tr>

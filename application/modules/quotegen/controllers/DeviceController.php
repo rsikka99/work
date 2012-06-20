@@ -48,7 +48,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        $message = "Are you sure you want to delete {$device->getName()}?";
+        $message = "Are you sure you want to delete {$device->getMasterDeviceId()}?";
         $form = new Application_Form_Delete($message);
         
         $request = $this->getRequest();
@@ -62,7 +62,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
                 {
                     $mapper->delete($device);
                     $this->_helper->flashMessenger(array (
-                            'success' => "Device  {$this->view->escape ( $device->getName() )} was deleted successfully." 
+                            'success' => "Device  {$this->view->escape ( $device->getMasterDeviceId() )} was deleted successfully." 
                     ));
                     $this->_helper->redirector('index');
                 }
@@ -103,7 +103,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
                             $deviceId = $mapper->insert($device);
                             
                             $this->_helper->flashMessenger(array (
-                                    'success' => "Device " . $this->view->escape($device->getName()) . " was added successfully." 
+                                    'success' => "Device " . $this->view->escape($device->getMasterDeviceId()) . " was added successfully." 
                             ));
                             
                             // Reset the form after everything is saved
@@ -239,7 +239,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
 
     public function viewAction ()
     {
-        // TODO: viewAction
+        $this->view->device = Quotegen_Model_Mapper_Device::getInstance()->find($this->_getParam('id', false));
     }
 }
 

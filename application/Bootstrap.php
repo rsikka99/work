@@ -119,7 +119,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $acl = Zend_Registry::get('Zend_Acl');
         $view->navigation()->setAcl($acl);
         
-        
         $auth = Zend_Auth::getInstance();
         if ($auth->hasIdentity())
         {
@@ -130,6 +129,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         {
             $view->navigation()->setRole(null);
         }
+    }
+
+    /**
+     * Loads our currency helper into the registry
+     */
+    protected function _initCurrency ()
+    {
+        $currency = new Zend_Currency('en_US');
+        Zend_Registry::set('Zend_Currency', $currency);
     }
 }
 
