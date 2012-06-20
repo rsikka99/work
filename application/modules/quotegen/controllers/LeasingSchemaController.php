@@ -239,8 +239,7 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
         
         if ( ! $valid )
         {
-            // Setting Style to None instead of removing the element as removing messed up the 
-            // forms layout
+            // Setting Style to None instead of removing the element as removing messed up the forms layout
             $form->getElement('submit')->setAttrib('style', 'display: none;');
         }
         
@@ -441,6 +440,7 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
 
     public function deleterangeAction ()
     {
+        $leasingSchemaId = 1;
         $rangeId = $this->_getParam('id', false);
         
         if (! $rangeId)
@@ -461,9 +461,28 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
             ));
             $this->_helper->redirector('index');
         }
+
+
+        // Make sure this isn't the last range for this schema
+        $valid = true;
         
+        $leasingSchemaRanges = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance()->fetchAll('leasingSchemaId = ' . $leasingSchemaId);
+        if ( count ( $leasingSchemaRanges ) >= 1 )
+        {
+            $valid = false;
+            $message = "You cannot delete the range \${$range->getStartRange()}  as it is the last range for this Leasing Schema.";
+        }
+        else
+        {
         $message = "Are you sure you want to delete the range \${$range->getStartRange()}?";
+        }
         $form = new Application_Form_Delete($message);
+        
+        if ( ! $valid )
+        {
+        	// Setting Style to None instead of removing the element as removing messed up the forms layout
+            $form->getElement('submit')->setAttrib('style', 'display: none;');
+        }
         
         $request = $this->getRequest();
         if ($request->isPost())
