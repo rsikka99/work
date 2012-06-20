@@ -88,7 +88,7 @@ class Quotegen_Form_LeasingSchemaRange extends EasyBib_Form
         // Add the cancel button
         $this->addElement('button', 'cancel', array (
                 'ignore' => true, 
-                'label' => 'Cancel' 
+                'label' => 'Back' 
         ));
         
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');

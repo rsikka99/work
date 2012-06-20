@@ -207,7 +207,7 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a term to delete first.' 
             ));
-            $this->_helper->redirector('/quotegen/leasingschema');
+            $this->_helper->redirector('index');
         }
         
         $mapper = new Quotegen_Model_Mapper_LeasingSchemaTerm();
@@ -218,7 +218,7 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error selecting the term to delete.' 
             ));
-            $this->_helper->redirector('/quotegen/leasingschema');
+            $this->_helper->redirector('index');
         }
         
         $message = "Are you sure you want to delete {$term->getMonths()}?";
@@ -237,12 +237,12 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
                     $this->_helper->flashMessenger(array (
                             'success' => "The Term {$this->view->escape ( $term->getMonths() )} months was deleted successfully." 
                     ));
-                    $this->_helper->redirector('/quotegen/leasingschema');
+                    $this->_helper->redirector('index');
                 }
             }
             else // go back
             {
-                $this->_helper->redirector('/quotegen/leasingschema');
+                $this->_helper->redirector('index');
             }
         }
         $this->view->form = $form;
@@ -428,7 +428,7 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a range to delete first.' 
             ));
-            $this->_helper->redirector('/quotegen/leasingschema');
+            $this->_helper->redirector('index');
         }
         
         $mapper = new Quotegen_Model_Mapper_LeasingSchemaRange();
@@ -439,10 +439,10 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error selecting the range to delete.' 
             ));
-            $this->_helper->redirector('/quotegen/leasingschema');
+            $this->_helper->redirector('index');
         }
         
-        $message = "Are you sure you want to delete {$range->getStartRange()}?";
+        $message = "Are you sure you want to delete the range \${$range->getStartRange()}?";
         $form = new Application_Form_Delete($message);
         
         $request = $this->getRequest();
@@ -458,12 +458,12 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
                     $this->_helper->flashMessenger(array (
                             'success' => "The Range \${$this->view->escape ( $range->getStartRange() )} was deleted successfully." 
                     ));
-                    $this->_helper->redirector('/quotegen/leasingschema');
+                    $this->_helper->redirector('index');
                 }
             }
             else // go back
             {
-                $this->_helper->redirector('/quotegen/leasingschema');
+                $this->_helper->redirector('index');
             }
         }
         $this->view->form = $form;
