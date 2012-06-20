@@ -200,6 +200,7 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
 
     public function deletetermAction ()
     {
+        $leasingSchemaId = 1;
         $termId = $this->_getParam('id', false);
         
         if (! $termId)
@@ -220,9 +221,28 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
             ));
             $this->_helper->redirector('index');
         }
+
+        // Make sure this isn't the last term for this schema
+        $valid = true;
         
-        $message = "Are you sure you want to delete {$term->getMonths()}?";
+        $leasingSchemaTerms = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->fetchAll('leasingSchemaId = ' . $leasingSchemaId);
+        if ( count ( $leasingSchemaTerms ) >= 1 )
+        {
+            $valid = false;
+        	$message = "You cannot delete term {$term->getMonths()} months as it is the last term for this Leasing Schema."; 
+        }
+        else
+        {
+        	$message = "Are you sure you want to delete {$term->getMonths()}?";
+        }
         $form = new Application_Form_Delete($message);
+        
+        if ( ! $valid )
+        {
+            // Setting Style to None instead of removing the element as removing messed up the 
+            // forms layout
+            $form->getElement('submit')->setAttrib('style', 'display: none;');
+        }
         
         $request = $this->getRequest();
         if ($request->isPost())
@@ -233,7 +253,6 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
                 // delete client from database
                 if ( $form->isValid( $values ) )
                 {
-                    // TODO: Need to make sure this isn't the last term for this schema
                     $mapper->delete($term);
                     $this->_helper->flashMessenger(array (
                             'success' => "The Term {$this->view->escape ( $term->getMonths() )} months was deleted successfully." 
