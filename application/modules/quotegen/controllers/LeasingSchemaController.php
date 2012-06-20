@@ -226,7 +226,7 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
         $valid = true;
         
         $leasingSchemaTerms = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->fetchAll('leasingSchemaId = ' . $leasingSchemaId);
-        if ( count ( $leasingSchemaTerms ) >= 1 )
+        if ( count ( $leasingSchemaTerms ) <= 1 )
         {
             $valid = false;
         	$message = "You cannot delete term {$term->getMonths()} months as it is the last term for this Leasing Schema."; 
@@ -467,7 +467,7 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
         $valid = true;
         
         $leasingSchemaRanges = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance()->fetchAll('leasingSchemaId = ' . $leasingSchemaId);
-        if ( count ( $leasingSchemaRanges ) >= 1 )
+        if ( count ( $leasingSchemaRanges ) <= 1 )
         {
             $valid = false;
             $message = "You cannot delete the range \${$range->getStartRange()}  as it is the last range for this Leasing Schema.";
