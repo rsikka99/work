@@ -130,13 +130,13 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
 	                            }
 	
 	                            $this->_helper->flashMessenger(array (
-	                                    'success' => "The term \${$months} was added successfully."
+	                                    'success' => "The term {$months} months was added successfully."
 	                            ));
                             }
                             else
                             {
                                 $this->_helper->flashMessenger(array (
-                                        'danger' => "The term \${$months} already exists." 
+                                        'danger' => "The term {$months} months already exists." 
                                 ));
                             }
                         }
