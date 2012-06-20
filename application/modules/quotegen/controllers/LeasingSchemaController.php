@@ -233,7 +233,7 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
         }
         else
         {
-        	$message = "Are you sure you want to delete {$term->getMonths()}?";
+        	$message = "Are you sure you want to delete term {$term->getMonths()} months?";
         }
         $form = new Application_Form_Delete($message);
         
