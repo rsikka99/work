@@ -200,14 +200,6 @@ abstract class My_Model_Mapper_Abstract
     }
 
     /**
-     * Gets the database table name for use in mapper functions
-     */
-    public function getTableName ()
-    {
-        return $this->getDbTable()->info('name');
-    }
-
-    /**
      * Gets the name of the database table
      * 
      * @return string

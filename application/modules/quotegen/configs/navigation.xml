@@ -260,6 +260,13 @@
                                 </create>
                             </pages>
                         </quotesetting>
+                        <leasingSchemas>
+							<label>Leasing Schemas</label>
+							<module>quotegen</module>
+							<controller>leasingschema</controller>
+							<action>index</action>
+							<resource>quotegen_leasingschema_index</resource>
+						</leasingSchemas>
                         
                         
                     </pages>
