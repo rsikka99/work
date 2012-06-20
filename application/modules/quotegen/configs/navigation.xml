@@ -261,7 +261,7 @@
                             </pages>
                         </quotesetting>
                         <leasingSchemas>
-							<label>Leasing Schemas</label>
+							<label>Leasing Schema Management</label>
 							<module>quotegen</module>
 							<controller>leasingschema</controller>
 							<action>index</action>

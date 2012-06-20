@@ -233,6 +233,7 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
                 // delete client from database
                 if ( $form->isValid( $values ) )
                 {
+                    // TODO: Need to make sure this isn't the last term for this schema
                     $mapper->delete($term);
                     $this->_helper->flashMessenger(array (
                             'success' => "The Term {$this->view->escape ( $term->getMonths() )} months was deleted successfully." 
