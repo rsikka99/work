@@ -22,6 +22,17 @@ class Quotegen_Form_Device extends EasyBib_Form
          */
         $this->setAttrib('class', 'form-horizontal');
         
+        $masterDeviceList = array ();
+        /* @var $masterDevice Proposalgen_Model_MasterDevice */
+        foreach ( Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllAvailableMasterDevices() as $masterDevice )
+        {
+            $masterDeviceList [$masterDevice->getId()] = $masterDevice->getFullDeviceName();
+        }
+        $this->addElement('select', 'masterDeviceId', array (
+                'label' => 'Master Device',
+                'multiOptions' => $masterDeviceList 
+        ));
+        
         $this->addElement('text', 'sku', array (
                 'label' => 'SKU:', 
                 'required' => true, 
@@ -40,42 +51,6 @@ class Quotegen_Form_Device extends EasyBib_Form
                 ) 
         ));
         
-        $this->addElement('textarea', 'address', array (
-                'label' => 'Address:', 
-                'style' => 'height: 100px', 
-                'required' => true, 
-                'filters' => array (
-                        'StringTrim', 
-                        'StripTags' 
-                ), 
-                'validators' => array (
-                        array (
-                                'validator' => 'StringLength', 
-                                'options' => array (
-                                        1, 
-                                        255 
-                                ) 
-                        ) 
-                ) 
-        ));
-        
-        $this->addElement('text', 'phoneNumber', array (
-                'label' => 'Phone Number', 
-                'required' => true, 
-                'filters' => array (
-                        'StringTrim', 
-                        'StripTags' 
-                ), 
-                'validators' => array (
-                        array (
-                                'validator' => 'StringLength', 
-                                'options' => array (
-                                        7, 
-                                        15 
-                                ) 
-                        ) 
-                ) 
-        ));
         
         // Add the submit button
         $this->addElement('submit', 'submit', array (

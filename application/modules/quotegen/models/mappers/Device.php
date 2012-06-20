@@ -39,7 +39,6 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         // Get an array of data to save
         $data = $object->toArray();
         
-        
         // Insert the data
         $id = $this->getDbTable()->insert($data);
         
@@ -91,7 +90,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_Device)
         {
             $whereClause = array (
-                    'masterDeviceId = ?' => $object->getMasterDeviceId()
+                    'masterDeviceId = ?' => $object->getMasterDeviceId() 
             );
         }
         else

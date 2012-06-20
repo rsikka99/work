@@ -1,8 +1,7 @@
-<?php /* @var $client Quotegen_Model_Client */ $client = $this->client; ?>
+<?php /* @var $device Quotegen_Model_Device */ $device = $this->device; ?>
 <div class="well">
     <dl class="dl-horizontal">
-        <dt>Name</dt><dd><?php echo $client->getName(); ?></dd>
-        <dt>Phone Number</dt><dd><?php echo $client->getPhoneNumber(); ?></dd>
-        <dt>Address</dt><dd><?php echo nl2br($client->getAddress()); ?></dd>
+        <dt>Device Name</dt><dd><?php echo $device->getMasterDevice()->getFullDeviceName(); ?></dd>
+        <dt>SKU</dt><dd><?php echo $device->getSku(); ?></dd>
     </dl>
 </div>
