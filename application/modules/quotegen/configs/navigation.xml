@@ -16,22 +16,22 @@
                     <controller>quotesettings</controller>
                     <action>index</action>
                     <resource>quotegen_quotesettings_index</resource>
-                        <pages>
-                             <read>
-                                <label>View all</label>
-                                <module>quotegen</module>
-                                <controller>quotesettings</controller>
-                                <action>index</action>
-                                <resource>quotegen_quotesettings_index</resource>
-                            </read>
-                            <create>
-                                <label>Create</label>
-                                <module>quotegen</module>
-                                <controller>quotesettings</controller>
-                                <action>create</action>
-                                <resource>quotegen_quotesettings_create</resource>
-                            </create>
-                        </pages>
+                    <pages>
+                        <read>
+                            <label>View all</label>
+                            <module>quotegen</module>
+                            <controller>quotesettings</controller>
+                            <action>index</action>
+                            <resource>quotegen_quotesettings_index</resource>
+                        </read>
+                        <create>
+                            <label>Create</label>
+                            <module>quotegen</module>
+                            <controller>quotesettings</controller>
+                            <action>create</action>
+                            <resource>quotegen_quotesettings_create</resource>
+                        </create>
+                    </pages>
                 </quotesettings>
                 <quotebuilder>
                     <label>Quotes</label>
@@ -129,6 +129,54 @@
                         </update>
                     </pages>
                 </clients>
+                <deviceconfiguration>
+                    <label>Manage Device Configurations</label>
+                    <class>dropdown</class>
+                    <module>quotegen</module>
+                    <controller>deviceconfiguration</controller>
+                    <action>index</action>
+                    <resource>quotegen_deviceconfiguration_index</resource>
+                    <pages>
+                        <viewall>
+                            <label>View all</label>
+                            <module>quotegen</module>
+                            <controller>deviceconfiguration</controller>
+                            <action>index</action>
+                            <resource>quotegen_deviceconfiguration_index</resource>
+                        </viewall>
+                        <view>
+                            <label>View</label>
+                            <module>quotegen</module>
+                            <controller>deviceconfiguration</controller>
+                            <action>view</action>
+                            <resource>quotegen_deviceconfiguration_view</resource>
+                            <visible>0</visible>
+                        </view>
+                        <delete>
+                            <label>Delete</label>
+                            <module>quotegen</module>
+                            <controller>deviceconfiguration</controller>
+                            <action>delete</action>
+                            <resource>quotegen_deviceconfiguration_delete</resource>
+                            <visible>0</visible>
+                        </delete>
+                        <create>
+                            <label>Create</label>
+                            <module>quotegen</module>
+                            <controller>deviceconfiguration</controller>
+                            <action>create</action>
+                            <resource>quotegen_deviceconfiguration_create</resource>
+                        </create>
+                        <update>
+                            <label>Edit</label>
+                            <module>quotegen</module>
+                            <controller>deviceconfiguration</controller>
+                            <action>edit</action>
+                            <resource>quotegen_deviceconfiguration_edit</resource>
+                            <visible>0</visible>
+                        </update>
+                    </pages>
+                </deviceconfiguration>
                 <devices>
                     <label>Manage Devices</label>
                     <class>dropdown</class>
