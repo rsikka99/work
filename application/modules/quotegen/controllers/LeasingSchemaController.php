@@ -151,7 +151,9 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
                 }
                 else
                 {
-                    throw new Zend_Validate_Exception("Form Validation Failed");
+                    $this->_helper->flashMessenger(array (
+                            'error' => "Please review and complete all required fields."
+                    ));
                 }
             }
             catch ( Zend_Validate_Exception $e )
@@ -391,7 +393,9 @@ class Quotegen_LeasingSchemaController extends Zend_Controller_Action
                 }
                 else
                 {
-                    throw new Zend_Validate_Exception("Form Validation Failed");
+                    $this->_helper->flashMessenger(array (
+                            'error' => "Please review and complete all required fields."
+                    ));
                 }
             }
             catch ( Zend_Validate_Exception $e )
