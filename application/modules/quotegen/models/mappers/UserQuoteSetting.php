@@ -206,6 +206,19 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
                 'userQuoteSettingId = ?' => $id [1] 
         );
     }
+
+    /**
+     * Takes in a usedid and returns a Quotgen_Model_UserQuoteSetting
+     *
+     * @param int $userId            
+     * @return Quotegen_Model_UserQuoteSetting
+     */
+    public function fetchUserQuoteSetting ($userId)
+    {
+        return $this->fetch(array (
+                'userId = ?' => $userId 
+        ));
+    }
 }
 
 
