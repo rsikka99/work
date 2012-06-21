@@ -236,7 +236,7 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
     /**
      * Gets all categories by id!
      *
-     * @param unknown_type $optionId            
+     * @param int $optionId            
      * @return Ambigous <boolean, multitype:Ambigous <void, Quotegen_Model_Category> > This returns a
      *         Quotenge_Model_Category on find, otherwise return false
      */
