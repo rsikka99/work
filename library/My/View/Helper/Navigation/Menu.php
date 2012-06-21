@@ -76,7 +76,7 @@ class My_View_Helper_Navigation_Menu extends Zend_View_Helper_Navigation_Menu
                 if (strpos($item->getAttribute('class'), 'subdropdown'))
                 {
                     $caret = $domDoc->createElement('b', '');
-                    $caret->setAttribute('class', 'icon-arrow-right');
+                    $caret->setAttribute('class', 'right-caret pull-right');
                 }
                 else
                 {
