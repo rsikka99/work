@@ -30,3 +30,16 @@ INSERT INTO `quotegen_quote_settings` (`id`) VALUES
 INSERT INTO `quotegen_user_quote_settings` (`userId`,`quoteSettingId`) VALUES
 (1,2),
 (2,3);
+
+
+INSERT INTO `quotegen_leasing_schemas` (`id`, `name`) VALUES
+(1,'default');
+
+INSERT INTO `quotegen_leasing_schema_ranges` (`id`, `leasingSchemaId`, `startRange`) VALUES
+(1, 1, '0');
+
+INSERT INTO `quotegen_leasing_schema_terms` (`id`, `leasingSchemaId`, `months`) VALUES
+(1, 1, 12);
+
+INSERT INTO `quotegen_leasing_schema_rates` (`leasingSchemaTermId`, `leasingSchemaRangeId`, `rate`) VALUES
+(1, 1, '0.0955');
