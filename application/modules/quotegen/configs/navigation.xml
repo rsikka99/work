@@ -12,10 +12,7 @@
                 <settingManagement>
                     <label>Admin functions</label>
                     <class>dropdown</class>
-                    <module>quotegen</module>
-                    <controller>index</controller>
-                    <action>index</action>
-                    <resource>quotegen_index_index</resource>
+                    <uri>#</uri>
                     <pages>
                         <category>
                             <label>Category Management</label>
@@ -56,148 +53,152 @@
                                     <visible>0</visible>
                                 </edit>
                             </pages>
-                        </category><clients>
-                    <label>Client Management</label>
-                    <class>dropdown subdropdown</class>
-                    <module>quotegen</module>
-                    <controller>client</controller>
-                    <action>index</action>
-                    <resource>quotegen_client_index</resource>
-                    <pages>
-                        <viewall>
-                            <label>View all</label>
+                        </category>
+                        <clients>
+                            <label>Client Management</label>
+                            <class>dropdown subdropdown</class>
                             <module>quotegen</module>
                             <controller>client</controller>
                             <action>index</action>
                             <resource>quotegen_client_index</resource>
-                        </viewall>
-                        <view>
-                            <label> View</label>
-                            <module>quotegen</module>
-                            <controller>client</controller>
-                            <action>view</action>
-                            <resource>quotegen_client_view</resource>
-                            <visible>0</visible>
-                        </view>
-                        <delete>
-                            <label>Delete</label>
-                            <module>quotegen</module>
-                            <controller>client</controller>
-                            <action>delete</action>
-                            <resource>quotegen_client_delete</resource>
-                            <visible>0</visible>
-                        </delete>
-                        <create>
-                            <label>Create</label>
-                            <module>quotegen</module>
-                            <controller>client</controller>
-                            <action>create</action>
-                            <resource>quotegen_client_create</resource>
-                        </create>
-                        <update>
-                            <label>Edit</label>
-                            <module>quotegen</module>
-                            <controller>client</controller>
-                            <action>edit</action>
-                            <resource>quotegen_client_edit</resource>
-                            <visible>0</visible>
-                        </update>
-                    </pages>
-                </clients><devices>
-                    <label>Device Management</label>
-                    <class>dropdown subdropdown</class>
-                    <module>quotegen</module>
-                    <controller>device</controller>
-                    <action>index</action>
-                    <resource>quotegen_device_index</resource>
-                    <pages>
-                        <viewall>
-                            <label>View all</label>
+                            <pages>
+                                <viewall>
+                                    <label>View all</label>
+                                    <module>quotegen</module>
+                                    <controller>client</controller>
+                                    <action>index</action>
+                                    <resource>quotegen_client_index</resource>
+                                </viewall>
+                                <view>
+                                    <label> View</label>
+                                    <module>quotegen</module>
+                                    <controller>client</controller>
+                                    <action>view</action>
+                                    <resource>quotegen_client_view</resource>
+                                    <visible>0</visible>
+                                </view>
+                                <delete>
+                                    <label>Delete</label>
+                                    <module>quotegen</module>
+                                    <controller>client</controller>
+                                    <action>delete</action>
+                                    <resource>quotegen_client_delete</resource>
+                                    <visible>0</visible>
+                                </delete>
+                                <create>
+                                    <label>Create</label>
+                                    <module>quotegen</module>
+                                    <controller>client</controller>
+                                    <action>create</action>
+                                    <resource>quotegen_client_create</resource>
+                                </create>
+                                <update>
+                                    <label>Edit</label>
+                                    <module>quotegen</module>
+                                    <controller>client</controller>
+                                    <action>edit</action>
+                                    <resource>quotegen_client_edit</resource>
+                                    <visible>0</visible>
+                                </update>
+                            </pages>
+                        </clients>
+                        <devices>
+                            <label>Device Management</label>
+                            <class>dropdown subdropdown</class>
                             <module>quotegen</module>
                             <controller>device</controller>
                             <action>index</action>
                             <resource>quotegen_device_index</resource>
-                        </viewall>
-                        <view>
-                            <label> View</label>
-                            <module>quotegen</module>
-                            <controller>device</controller>
-                            <action>view</action>
-                            <resource>quotegen_device_view</resource>
-                            <visible>0</visible>
-                        </view>
-                        <delete>
-                            <label>Delete</label>
-                            <module>quotegen</module>
-                            <controller>device</controller>
-                            <action>delete</action>
-                            <resource>quotegen_device_delete</resource>
-                            <visible>0</visible>
-                        </delete>
-                        <create>
-                            <label>Create</label>
-                            <module>quotegen</module>
-                            <controller>device</controller>
-                            <action>create</action>
-                            <resource>quotegen_device_create</resource>
-                        </create>
-                        <update>
-                            <label>Edit</label>
-                            <module>quotegen</module>
-                            <controller>device</controller>
-                            <action>edit</action>
-                            <resource>quotegen_device_edit</resource>
-                            <visible>0</visible>
-                        </update>
-                    </pages>
-                </devices><deviceconfiguration>
-                    <label>Device Configuration Management</label>
-                    <class>dropdown subdropdown</class>
-                    <module>quotegen</module>
-                    <controller>deviceconfiguration</controller>
-                    <action>index</action>
-                    <resource>quotegen_deviceconfiguration_index</resource>
-                    <pages>
-                        <viewall>
-                            <label>View all</label>
+                            <pages>
+                                <viewall>
+                                    <label>View all</label>
+                                    <module>quotegen</module>
+                                    <controller>device</controller>
+                                    <action>index</action>
+                                    <resource>quotegen_device_index</resource>
+                                </viewall>
+                                <view>
+                                    <label> View</label>
+                                    <module>quotegen</module>
+                                    <controller>device</controller>
+                                    <action>view</action>
+                                    <resource>quotegen_device_view</resource>
+                                    <visible>0</visible>
+                                </view>
+                                <delete>
+                                    <label>Delete</label>
+                                    <module>quotegen</module>
+                                    <controller>device</controller>
+                                    <action>delete</action>
+                                    <resource>quotegen_device_delete</resource>
+                                    <visible>0</visible>
+                                </delete>
+                                <create>
+                                    <label>Create</label>
+                                    <module>quotegen</module>
+                                    <controller>device</controller>
+                                    <action>create</action>
+                                    <resource>quotegen_device_create</resource>
+                                </create>
+                                <update>
+                                    <label>Edit</label>
+                                    <module>quotegen</module>
+                                    <controller>device</controller>
+                                    <action>edit</action>
+                                    <resource>quotegen_device_edit</resource>
+                                    <visible>0</visible>
+                                </update>
+                            </pages>
+                        </devices>
+                        <deviceconfiguration>
+                            <label>Device Configuration Management</label>
+                            <class>dropdown subdropdown</class>
                             <module>quotegen</module>
                             <controller>deviceconfiguration</controller>
                             <action>index</action>
                             <resource>quotegen_deviceconfiguration_index</resource>
-                        </viewall>
-                        <view>
-                            <label>View</label>
-                            <module>quotegen</module>
-                            <controller>deviceconfiguration</controller>
-                            <action>view</action>
-                            <resource>quotegen_deviceconfiguration_view</resource>
-                            <visible>0</visible>
-                        </view>
-                        <delete>
-                            <label>Delete</label>
-                            <module>quotegen</module>
-                            <controller>deviceconfiguration</controller>
-                            <action>delete</action>
-                            <resource>quotegen_deviceconfiguration_delete</resource>
-                            <visible>0</visible>
-                        </delete>
-                        <create>
-                            <label>Create</label>
-                            <module>quotegen</module>
-                            <controller>deviceconfiguration</controller>
-                            <action>create</action>
-                            <resource>quotegen_deviceconfiguration_create</resource>
-                        </create>
-                        <update>
-                            <label>Edit</label>
-                            <module>quotegen</module>
-                            <controller>deviceconfiguration</controller>
-                            <action>edit</action>
-                            <resource>quotegen_deviceconfiguration_edit</resource>
-                            <visible>0</visible>
-                        </update>
-                    </pages>
-                </deviceconfiguration><option>
+                            <pages>
+                                <viewall>
+                                    <label>View all</label>
+                                    <module>quotegen</module>
+                                    <controller>deviceconfiguration</controller>
+                                    <action>index</action>
+                                    <resource>quotegen_deviceconfiguration_index</resource>
+                                </viewall>
+                                <view>
+                                    <label>View</label>
+                                    <module>quotegen</module>
+                                    <controller>deviceconfiguration</controller>
+                                    <action>view</action>
+                                    <resource>quotegen_deviceconfiguration_view</resource>
+                                    <visible>0</visible>
+                                </view>
+                                <delete>
+                                    <label>Delete</label>
+                                    <module>quotegen</module>
+                                    <controller>deviceconfiguration</controller>
+                                    <action>delete</action>
+                                    <resource>quotegen_deviceconfiguration_delete</resource>
+                                    <visible>0</visible>
+                                </delete>
+                                <create>
+                                    <label>Create</label>
+                                    <module>quotegen</module>
+                                    <controller>deviceconfiguration</controller>
+                                    <action>create</action>
+                                    <resource>quotegen_deviceconfiguration_create</resource>
+                                </create>
+                                <update>
+                                    <label>Edit</label>
+                                    <module>quotegen</module>
+                                    <controller>deviceconfiguration</controller>
+                                    <action>edit</action>
+                                    <resource>quotegen_deviceconfiguration_edit</resource>
+                                    <visible>0</visible>
+                                </update>
+                            </pages>
+                        </deviceconfiguration>
+                        <option>
                             <label>Option Management</label>
                             <class>dropdown subdropdown</class>
                             <module>quotegen</module>
@@ -236,7 +237,8 @@
                                     <visible>0</visible>
                                 </edit>
                             </pages>
-                        </option><quotesetting>
+                        </option>
+                        <quotesetting>
                             <label>Quote Setting Management</label>
                             <class>dropdown subdropdown</class>
                             <module>quotegen</module>
@@ -244,13 +246,13 @@
                             <action>index</action>
                             <resource>quotegen_quotesetting_index</resource>
                             <pages>
-                                <read>
+                                <viewall>
                                     <label>View all</label>
                                     <module>quotegen</module>
                                     <controller>quotesetting</controller>
                                     <action>index</action>
                                     <resource>quotegen_quotesetting_index</resource>
-                                </read>
+                                </viewall>
                                 <create>
                                     <label>Create</label>
                                     <module>quotegen</module>
@@ -258,12 +260,18 @@
                                     <action>create</action>
                                     <resource>quotegen_quotesetting_create</resource>
                                 </create>
+                                <editdefault>
+                                    <label>Edit System Defaults</label>
+                                    <module>quotegen</module>
+                                    <controller>quotesetting</controller>
+                                    <action>editdefault</action>
+                                    <resource>quotegen_quotesetting_editdefault</resource>
+                                </editdefault>
                             </pages>
                         </quotesetting>
-                        
-                        
                     </pages>
-                </settingManagement><quotebuilder>
+                </settingManagement>
+                <quotebuilder>
                     <label>Quotes</label>
                     <class>dropdown</class>
                     <module>quotegen</module>
@@ -311,10 +319,6 @@
                         </view>
                     </pages>
                 </quotebuilder>
-                
-                
-                
-                
             </pages>
         </menu>
     </nav>

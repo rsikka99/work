@@ -8,6 +8,9 @@ class Quotegen_DeviceController extends Zend_Controller_Action
         /* Initialize action controller here */
     }
 
+    /**
+     * Displays all devices
+     */
     public function indexAction ()
     {
         // Display all of the devices
@@ -24,6 +27,9 @@ class Quotegen_DeviceController extends Zend_Controller_Action
         $this->view->paginator = $paginator;
     }
 
+    /**
+     * Deletes a device
+     */
     public function deleteAction ()
     {
         // TODO: deleteAction
@@ -75,6 +81,9 @@ class Quotegen_DeviceController extends Zend_Controller_Action
         $this->view->form = $form;
     }
 
+    /**
+     * Creates a new device
+     */
     public function createAction ()
     {
         // TODO: createAction
@@ -106,8 +115,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
                                     'success' => "Device " . $this->view->escape($device->getMasterDeviceId()) . " was added successfully." 
                             ));
                             
-                            // Reset the form after everything is saved
-        // successfully
+                            // Reset the form after everything is saved successfully
                             $form->reset();
                         }
                         catch ( Zend_Db_Statement_Mysqli_Exception $e )
@@ -157,6 +165,9 @@ class Quotegen_DeviceController extends Zend_Controller_Action
         $this->view->form = $form;
     }
 
+    /**
+     * Edits a device
+     */
     public function editAction ()
     {
         $deviceId = $this->_getParam('id', false);
@@ -168,7 +179,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a device to edit first.' 
             ));
-            $this->_redirect('/gen/device');
+            $this->_helper->redirector('index');
         }
         
         // Get the device
@@ -180,7 +191,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error selecting the device to edit.' 
             ));
-            $this->_redirect('/gen/device');
+            $this->_helper->redirector('index');
         }
         
         // Create a new form with the mode and roles set
@@ -235,8 +246,13 @@ class Quotegen_DeviceController extends Zend_Controller_Action
             }
         }
         $this->view->form = $form;
+        $form2 = new Quotegen_Form_SelectOptions();
+        $this->view->form2 = $form2;
     }
 
+    /**
+     * View a device
+     */
     public function viewAction ()
     {
         $this->view->device = Quotegen_Model_Mapper_Device::getInstance()->find($this->_getParam('id', false));

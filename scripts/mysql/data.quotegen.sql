@@ -19,3 +19,6 @@ INSERT INTO `quotegen_option_categories` (`optionId`, `categoryId`) VALUES
 (4,4),
 (6,3),
 (6,1);
+
+INSERT INTO `quotegen_quote_settings` (`id`, `pageCoverageMonochrome`, `pageCoverageColor`, `deviceMargin`, `pageMargin`, `pricingConfigId`) VALUES
+(1, 6.00, 24.00, 20, 20, 2);
