@@ -40,7 +40,7 @@ class Quotegen_CategoryController extends Zend_Controller_Action
         $mapper = new Quotegen_Model_Mapper_Category();
         $category = $mapper->find($categoryId);
         
-        if (! $categoryId)
+        if (! $category)
         {
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error selecting the category to delete.' 
