@@ -49,8 +49,8 @@
 			                <class></class>
 			                <module>quotegen</module>
 			                <controller>quotesetting</controller>
-			                <action>index</action>
-			                <resource>quotegen_quotesetting_index</resource>
+			                <action>edit</action>
+			                <resource>quotegen_quotesetting_edit</resource>
 		            	</preferences>
 	                </pages>
             	</settings>
