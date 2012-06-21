@@ -11,7 +11,7 @@
             <order>100</order>
             <pages>
             	<quotes>
-	                <label>My Quotes</label>
+	                <label>Quotes</label>
                     <class>dropdown</class>
 	                <module>quotegen</module>
 	                <controller>quote</controller>
