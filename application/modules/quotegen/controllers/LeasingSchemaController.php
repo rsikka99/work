@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_LeasingSchemaController extends Zend_Controller_Action
+class Quotegen_LeasingschemaController extends Zend_Controller_Action
 {
 
     public function init ()
