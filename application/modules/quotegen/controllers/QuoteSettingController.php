@@ -156,24 +156,16 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action
      */
     public function editAction ()
     {
-        $quoteSettingId = $this->_getParam('id', false);
-        
-        // If not idea is set then back to index page
-        if (! $quoteSettingId)
-        {
-            $this->_helper->flashMessenger(array (
-                    'warning' => 'Please select a setting first' 
-            ));
-            // Redirect
-            $this->_helper->redirector('index');
-        }
-        
         // Find client and pass form object
         $form = new Quotegen_Form_QuoteSettings();
-        $mapper = Quotegen_Model_Mapper_QuoteSetting::getInstance();
-        $quoteSetting = $mapper->find($quoteSettingId);
         
+        $quoteSettingId = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id)->getQuoteSettingId();
+        
+        $quoteSettingMapper = Quotegen_Model_Mapper_QuoteSetting::getInstance();
+        $quoteSetting = $quoteSettingMapper->find($quoteSettingId);
+
         $form->populate($quoteSetting->toArray());
+
         // update record if post
         $request = $this->getRequest();
         if ($request->isPost())
@@ -185,18 +177,16 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action
                 {
                     // Validate the form
                     if ($form->isValid($values))
-                    {
-                        // Update quoteSetting and message to comfirm
-                        $mapper = Quotegen_Model_Mapper_QuoteSetting::getInstance();
+                    {              
                         $quoteSetting = new Quotegen_Model_QuoteSetting();
                         $quoteSetting->populate($values);
-                        $quoteSetting->setId($quoteSettingId);
-                        
-                        $mapper->save($quoteSetting, $quoteSettingId);
+                        $quoteSetting->setId();
+		                $quoteSettingMapper->save($quoteSetting, $quoteSettingId);
+		                
+		                // Rediret user with message
                         $this->_helper->flashMessenger(array (
                                 'success' => "Quote setting was updated sucessfully." 
-                        ));
-                        
+                        ));   
                         $this->_helper->redirector('index');
                     }
                     else
@@ -217,7 +207,6 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action
                 $this->_helper->redirector('index');
             }
         }
-        
         $this->view->form = $form;
     }
 
