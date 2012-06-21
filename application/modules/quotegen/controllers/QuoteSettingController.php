@@ -33,7 +33,7 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action
      */
     public function createAction ()
     {
-        $form = new Quotegen_Form_QuoteSettings();
+        $form = new Quotegen_Form_QuoteSetting();
         
         $request = $this->getRequest();
         
@@ -157,7 +157,7 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action
     public function editAction ()
     {
         // Find client and pass form object
-        $form = new Quotegen_Form_QuoteSettings();
+        $form = new Quotegen_Form_QuoteSetting();
         
         $quoteSettingId = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id)->getQuoteSettingId();
         
@@ -180,14 +180,13 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action
                     {              
                         $quoteSetting = new Quotegen_Model_QuoteSetting();
                         $quoteSetting->populate($values);
-                        $quoteSetting->setId();
+                        $quoteSetting->setId($quoteSettingId);
 		                $quoteSettingMapper->save($quoteSetting, $quoteSettingId);
 		                
 		                // Rediret user with message
                         $this->_helper->flashMessenger(array (
                                 'success' => "Quote setting was updated sucessfully." 
                         ));   
-                        $this->_helper->redirector('index');
                     }
                     else
                     {
@@ -218,7 +217,7 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action
         $quoteSettingId = 1;
         
         // Find client and pass form object
-        $form = new Quotegen_Form_QuoteSettings();
+        $form = new Quotegen_Form_QuoteSetting();
         $mapper = Quotegen_Model_Mapper_QuoteSetting::getInstance();
         $quoteSetting = $mapper->find($quoteSettingId);
         
