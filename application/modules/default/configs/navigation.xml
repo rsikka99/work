@@ -8,7 +8,7 @@
             <controller>index</controller>
             <action>index</action>
             <resource>default_index_index</resource>
-            <order>-2400</order>
+            <order>000</order>
             <login>
                 <label>Login</label>
                 <module>default</module>

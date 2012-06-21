@@ -139,7 +139,7 @@ transparent;
 }
 /* Other Nav Stuff */
 .navbar .sidebar {
-  width: 170px;
+  width: auto;
 }
 .navbar .navbar-inner {
   background-color: #4b4b4b;

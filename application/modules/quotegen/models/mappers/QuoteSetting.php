@@ -185,7 +185,7 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-            $entries [] = new Quotegen_Model_QuoteSetting($row->toArray());
+            $object = new Quotegen_Model_QuoteSetting($row->toArray());
             
             // Save the object into the cache
             $this->saveItemToCache($object, $object->getId());
