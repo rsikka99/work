@@ -56,8 +56,14 @@ $dbAdapter = $bootstrap->getResource('db');
 // let the user know whats going on (we are actually creating a
 // database here)
 
-echo '<pre>';
-echo 'Database Script running. Timestamp:' . date('Y-m-d H:i:s') . PHP_EOL;
+
+echo 'Database Script running. Timestamp: ' . date('r') . PHP_EOL;
+echo 'This script will attempt to create the database';
+if ($withData)
+{
+    echo ' and load data';
+}
+echo '.' . PHP_EOL;
 
 // if ('testing' != APPLICATION_ENV)
 // {
@@ -84,26 +90,26 @@ try
         $conn->query('CREATE DATABASE `' . $options ['db'] ['params'] ['dbname'] . '`;');
         $conn->select_db($options ['db'] ['params'] ['dbname']);
         
+        echo "Loading Schema...";
         runSQLFile(dirname(__FILE__) . '/schema.base.sql', $conn);
         runSQLFile(dirname(__FILE__) . '/schema.proposalgenerator.sql', $conn);
         runSQLFile(dirname(__FILE__) . '/schema.quotegen.sql', $conn);
         
         if ('testing' != APPLICATION_ENV)
         {
-            echo PHP_EOL;
-            echo 'Database Created';
-            echo PHP_EOL;
+            echo 'DONE!' . PHP_EOL;
         }
+        
         if ($withData)
         {
-            
+            echo "Loading Data...";
             runSQLFile(dirname(__FILE__) . '/data.base.sql', $conn);
             runSQLFile(dirname(__FILE__) . '/data.proposalgenerator.sql', $conn);
             runSQLFile(dirname(__FILE__) . '/data.quotegen.sql', $conn);
             
             if ('testing' != APPLICATION_ENV)
             {
-                echo 'Data Loaded.';
+                echo 'DONE!';
                 echo PHP_EOL;
             }
         }

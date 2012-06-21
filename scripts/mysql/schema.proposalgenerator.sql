@@ -357,10 +357,7 @@ CREATE  TABLE IF NOT EXISTS `proposalgenerator_pf_devices` (
   `created_by` INT(11) NULL DEFAULT NULL ,
   PRIMARY KEY (`id`) ,
   UNIQUE INDEX `pf_model_id` (`pf_model_id` ASC) ,
-  INDEX `created_by` (`created_by` ASC) ,
-  CONSTRAINT `proposalgenerator_pf_devices_ibfk_1`
-    FOREIGN KEY (`created_by` )
-    REFERENCES `users` (`id` ))
+  INDEX `created_by` (`created_by` ASC) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 103
 DEFAULT CHARACTER SET = utf8;
@@ -878,8 +875,8 @@ CREATE  TABLE IF NOT EXISTS `proposalgenerator_user_toner_overrides` (
     FOREIGN KEY (`toner_id` )
     REFERENCES `proposalgenerator_toners` (`id` ),
   CONSTRAINT `proposalgenerator_user_toner_overrides_ibfk_2`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `users` (`id`)
+    FOREIGN KEY (`user_id` )
+    REFERENCES `users` (`id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB

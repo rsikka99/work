@@ -12,7 +12,8 @@ CREATE  TABLE IF NOT EXISTS `manufacturers` (
   `displayname` VARCHAR(255) NOT NULL ,
   `isDeleted` TINYINT(4) NULL DEFAULT '0' ,
   PRIMARY KEY (`id`) ,
-  UNIQUE INDEX `fullname` (`fullname` ASC) )
+  UNIQUE INDEX `fullname` (`fullname` ASC) ,
+  INDEX `displayname` (`displayname` ASC) )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
