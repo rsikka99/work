@@ -103,6 +103,32 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
     }
 
     /**
+     * Deletes rows by optionId
+     *
+     * @param $object mixed
+     *            This can either be a instance of Quotegen_Model_Option or the optionId
+     * @return mixed The number of rows deleted
+     */
+    public function deleteByOptionId ($object)
+    {
+        if ($object instanceof Quotegen_Model_Option)
+        {
+            $whereClause = array (
+                    'optionId = ?' => $object->getId() 
+            );
+        }
+        else
+        {
+            $whereClause = array (
+                    'optionId = ?' => $object 
+            );
+        }
+        
+        $rowsAffected = $this->getDbTable()->delete($whereClause);
+        return $rowsAffected;
+    }
+
+    /**
      * Finds a optionCategory based on it's primaryKey
      *
      * @param $id int
@@ -207,6 +233,13 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
         );
     }
 
+    /**
+     * Gets all categories by id!
+     *
+     * @param unknown_type $optionId            
+     * @return Ambigous <boolean, multitype:Ambigous <void, Quotegen_Model_Category> > This returns a
+     *         Quotenge_Model_Category on find, otherwise return false
+     */
     public function fetchAllCategoriesForOption ($optionId)
     {
         $categories = array ();
