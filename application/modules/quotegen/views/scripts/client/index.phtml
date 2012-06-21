@@ -18,9 +18,9 @@
             <td><?php echo $client->getPhoneNumber(); ?></td>
             <td>
                 <div class="btn-group">
-	                <a class="btn btn-info" title="View Client" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $client->getId())); ?>"><i class="icon-eye-open"></i></a>
-                    <a class="btn btn-warning" title="Edit Client" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $client->getId())); ?>"><i class="icon-pencil"></i></a>
-                    <a class="btn btn-danger" title="Delete Client" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $client->getId())); ?>"><i class="icon-trash"></i></a>
+	                <a class="btn btn-info" title="View" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $client->getId())); ?>"><i class="icon-eye-open"></i></a>
+                    <a class="btn btn-warning" title="Edit" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $client->getId())); ?>"><i class="icon-pencil"></i></a>
+                    <a class="btn btn-danger" title="Delete" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $client->getId())); ?>"><i class="icon-trash"></i></a>
                 </div>
             </td>
         </tr>
