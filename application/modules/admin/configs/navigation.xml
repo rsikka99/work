@@ -8,7 +8,8 @@
 			<controller>index</controller>
 			<action>index</action>
 			<resource>admin_index_index</resource>
-			<order>10000</order>
+			<order>500</order>
+			<visible>0</visible>
 			<pages>
 				<UserManagement>
 					<label>User Management</label>

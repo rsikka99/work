@@ -33,11 +33,24 @@
                 <div class="sidebar pull-right">
                     <div class="pull-right">
                         <?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
-                        <div class="btn-group">
+                        <div class="btn-group pull-left">
                             <a class="btn btn-primary" href="#"><i class="icon-user icon-white"></i> <?php echo $this->Username(); ?></a>
                             <a class="pull-right btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><b class="caret"></b></a>
                             <ul class="dropdown-menu">
+                                <li><a href="<?php echo $this->url(array( 'module' => 'default', 'controller' => 'auth', 'action' => 'changepassword'));?>">Change Password</a></li>
                                 <li><a href="<?php echo $this->url(array( 'module' => 'default', 'controller' => 'auth', 'action' => 'logout'));?>">Logout</a></li>
+                            </ul>
+                        </div>
+                        <div class="btn-group pull-right">
+                            <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" title="System Administration" href="#">
+								<span class="icon-cog icon-white"></span>
+								<span class="caret"></span>
+							</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="<?php echo $this->url(array( 'module' => 'quotegen', 'controller' => 'client', 'action' => 'index'));?>">Clients</a></li>
+                                <li><a href="<?php echo $this->url(array( 'module' => 'admin', 'controller' => 'roles', 'action' => 'index'));?>">Roles</a></li>
+                                <li><a href="<?php echo $this->url(array( 'module' => 'admin', 'controller' => 'user', 'action' => 'index'));?>">Users</a></li>
+                                <li><a href="<?php echo $this->url(array( 'module' => 'quotegen', 'controller' => 'device', 'action' => 'index'));?>">Devices</a></li>
                             </ul>
                         </div>
                         <?php else : ?>

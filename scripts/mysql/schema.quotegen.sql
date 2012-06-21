@@ -121,7 +121,9 @@ CREATE  TABLE IF NOT EXISTS `quotegen_leasing_schema_ranges` (
   INDEX `leasingSchemaId` (`leasingSchemaId` ASC) ,
   CONSTRAINT `quotegen_leasing_schema_ranges_ibfk_1`
     FOREIGN KEY (`leasingSchemaId` )
-    REFERENCES `quotegen_leasing_schemas` (`id` ))
+    REFERENCES `quotegen_leasing_schemas` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COMMENT = 'Stores the available value ranges (start range) for a leasin' /* comment truncated */ ;
@@ -138,7 +140,9 @@ CREATE  TABLE IF NOT EXISTS `quotegen_leasing_schema_terms` (
   INDEX `leasingSchemaId` (`leasingSchemaId` ASC) ,
   CONSTRAINT `quotegen_leasing_schema_terms_ibfk_1`
     FOREIGN KEY (`leasingSchemaId` )
-    REFERENCES `quotegen_leasing_schemas` (`id` ))
+    REFERENCES `quotegen_leasing_schemas` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8, 
 COMMENT = 'Holds the terms available for a leasing schema' ;
@@ -159,7 +163,9 @@ CREATE  TABLE IF NOT EXISTS `quotegen_leasing_schema_rates` (
     REFERENCES `quotegen_leasing_schema_terms` (`id` ),
   CONSTRAINT `quotegen_leasing_schema_rates_ibfk_3`
     FOREIGN KEY (`leasingSchemaRangeId` )
-    REFERENCES `quotegen_leasing_schema_ranges` (`id` ))
+    REFERENCES `quotegen_leasing_schema_ranges` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8, 
 COMMENT = 'Stores the rates that coincide with the terms and ranges for' /* comment truncated */ ;
@@ -330,11 +336,11 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `quotegen_quote_settings` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `pageCoverageMonochrome` DOUBLE NOT NULL ,
-  `pageCoverageColor` DOUBLE NOT NULL ,
-  `deviceMargin` DOUBLE NOT NULL ,
-  `pageMargin` DOUBLE NOT NULL ,
-  `pricingConfigId` INT(11) NOT NULL ,
+  `pageCoverageMonochrome` DOUBLE NULL ,
+  `pageCoverageColor` DOUBLE NULL ,
+  `deviceMargin` DOUBLE NULL ,
+  `pageMargin` DOUBLE NULL ,
+  `pricingConfigId` INT(11) NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `quotegen_quote_settings_ibfk1` (`pricingConfigId` ASC) ,
   CONSTRAINT `quotegen_quote_settings_ibfk1`
@@ -427,8 +433,8 @@ CREATE  TABLE IF NOT EXISTS `quotegen_global_leasing_schemas` (
   CONSTRAINT `quotegen_global_leasing_schemas_ibfk_1`
     FOREIGN KEY (`leasingSchemaId` )
     REFERENCES `quotegen_leasing_schemas` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8, 
 COMMENT = 'This table marks leasing schemas as global' ;

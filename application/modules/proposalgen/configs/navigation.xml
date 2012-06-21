@@ -8,6 +8,7 @@
             <controller>index</controller>
             <action>index</action>
             <resource>proposalgen_index_index</resource>
+			<order>200</order>
             <pages>
                 <admin>
                     <label>Admin Functions</label>
