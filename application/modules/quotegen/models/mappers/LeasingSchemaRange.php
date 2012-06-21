@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
+class Quotegen_Model_Mapper_LeasingSchemaRange extends My_Model_Mapper_Abstract
 {
     /**
      * The default db table class to use
@@ -8,12 +8,12 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Quotegen_Model_DbTable_QuoteSetting';
+    protected $_defaultDbTable = 'Quotegen_Model_DbTable_LeasingSchemaRange';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Quotegen_Model_Mapper_QuoteSetting
+     * @return Quotegen_Model_Mapper_LeasingSchemaRange
      */
     public static function getInstance ()
     {
@@ -21,10 +21,10 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves an instance of Quotegen_Model_QuoteSetting to the database.
+     * Saves an instance of Quotegen_Model_LeasingSchemaRange to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Quotegen_Model_QuoteSetting
+     * @param $leasingSchemaRange Quotegen_Model_LeasingSchemaRange
      *            The object to insert
      * @return mixed The primary key of the new row
      */
@@ -36,10 +36,9 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
         // Remove the id
         unset($data ['id']);
         
-        // Insert the data 
+        // Insert the data
         $id = $this->getDbTable()->insert($data);
         
-        // Sets the object id
         $object->setId($id);
         
         // Save the object into the cache
@@ -49,10 +48,10 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves (updates) an instance of Quotegen_Model_QuoteSetting to the database.
+     * Saves (updates) an instance of Quotegen_Model_LeasingSchemaRange to the database.
      *
-     * @param $objects Quotegen_Model_QuoteSetting
-     *            The quoteSetting model to save to the database
+     * @param $leasingSchemaRange Quotegen_Model_LeasingSchemaRange
+     *            The leasingSchemaRange model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
      * @return int The number of rows affected
@@ -78,69 +77,58 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Deletes rows from the database.
+     * Saves an instance of Quotegen_Model_LeasingSchemaRange to the database.
+     * If the id is null then it will insert a new row
      *
-     * @param $object mixed
-     *            This can either be an instance of Quotegen_Model_QuoteSetting or the
+     * @param $leasingSchemaRange mixed
+     *            This can either be an instance of Quotegen_Model_LeasingSchemaRange or the
      *            primary key to delete
-     * @return mixed The number of rows deleted
+     * @return mixed The primary key of the new row
      */
-    public function delete ($object)
+    public function delete ($leasingSchemaRange)
     {
-        if ($object instanceof Quotegen_Model_QuoteSetting)
+        if ($leasingSchemaRange instanceof Quotegen_Model_LeasingSchemaRange)
         {
             $whereClause = array (
-                    'id = ?' => $object->getId() 
+                    'id = ?' => $leasingSchemaRange->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'id = ?' => $object 
+                    'id = ?' => $leasingSchemaRange 
             );
         }
         
-        $rowsAffected = $this->getDbTable()->delete($whereClause);
-        return $rowsAffected;
+        $result = $this->getDbTable()->delete($whereClause);
+        return $result;
     }
 
     /**
-     * Finds a quoteSetting based on it's primaryKey
+     * Finds a leasingSchemaRange based on it's primaryKey
      *
      * @param $id int
-     *            The id of the quoteSetting to find
-     * @return void Quotegen_Model_QuoteSetting
+     *            The id of the leasingSchemaRange to find
+     * @return void Quotegen_Model_LeasingSchemaRange
      */
     public function find ($id)
     {
-        $result = $this->getItemFromCache($id);
-        
-        // If item is in cache return that objet
-        if ($result instanceof Quotegen_Model_QuoteSetting)
-        {
-            return $result;
-        }
-        
         $result = $this->getDbTable()->find($id);
-        
-        // If item not found return to the caller
         if (0 == count($result))
         {
             return;
         }
-        
-        // Go to first row of result and set $row
         $row = $result->current();
-        $object = new Quotegen_Model_QuoteSetting($row->toArray());
+        $object = new Quotegen_Model_LeasingSchemaRange($row->toArray());
         
-        // Save item to cache
+        // Save the object into the cache
         $this->saveItemToCache($object, $id);
         
         return $object;
     }
 
     /**
-     * Fetches a quoteSetting
+     * Fetches a leasingSchemaRange
      *
      * @param $where string|array|Zend_Db_Table_Select
      *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -148,7 +136,7 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL ORDER clause.
      * @param $offset int
      *            OPTIONAL An SQL OFFSET value.
-     * @return void Quotegen_Model_QuoteSetting
+     * @return void Quotegen_Model_LeasingSchemaRange
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -158,7 +146,7 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
             return;
         }
         
-        $object = new Quotegen_Model_QuoteSetting($row->toArray());
+        $object = new Quotegen_Model_LeasingSchemaRange($row->toArray());
         
         // Save the object into the cache
         $this->saveItemToCache($object, $object->getId());
@@ -167,7 +155,7 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches all quoteSettings
+     * Fetches all leasingSchemaRanges
      *
      * @param $where string|array|Zend_Db_Table_Select
      *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -177,7 +165,7 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL LIMIT count. (Defaults to 25)
      * @param $offset int
      *            OPTIONAL An SQL LIMIT offset.
-     * @return multitype:Quotegen_Model_QuoteSetting
+     * @return multitype:Quotegen_Model_LeasingSchemaRange
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -185,7 +173,7 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-            $entries [] = new Quotegen_Model_QuoteSetting($row->toArray());
+            $object = new Quotegen_Model_LeasingSchemaRange($row->toArray());
             
             // Save the object into the cache
             $this->saveItemToCache($object, $object->getId());
@@ -206,6 +194,20 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
         return array (
                 'id = ?' => $id 
         );
+    }
+
+    /**
+     * Fetches all the ranges for a leasing schema
+     *
+     * @param $leasingSchemaId The
+     *            id of the leasing schema
+     * @return multitype:Quotegen_Model_LeasingSchemaRange
+     */
+    public function fetchAllForLeasingSchema ($leasingSchemaId)
+    {
+        return $this->fetchAll(array (
+                'leasingSchemaId = ?' => $leasingSchemaId 
+        ), 'startRange ASC');
     }
 }
 

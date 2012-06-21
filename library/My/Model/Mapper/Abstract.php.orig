@@ -200,9 +200,13 @@ abstract class My_Model_Mapper_Abstract
     }
 
     /**
+<<<<<<< HEAD
+     * Gets the database table name for use in mapper functions
+=======
      * Gets the name of the database table
      * 
      * @return string
+>>>>>>> master
      */
     public function getTableName ()
     {
