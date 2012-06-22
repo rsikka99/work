@@ -266,7 +266,7 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
     /*
      * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
      */
-    public function getPrimaryKeyValueForObject (Quotegen_Model_OptionCategory $object)
+    public function getPrimaryKeyValueForObject ($object)
     {
         return array($object->getCategoryId(),$object->getOptionId());
     }

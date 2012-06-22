@@ -276,10 +276,11 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
         }
         return $entries;
     }
-    /*
+
+    /**
      * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
      */
-    public function getPrimaryKeyValueForObject (Quotegen_Model_Option $object)
+    public function getPrimaryKeyValueForObject ($object)
     {
         return $object->getId();
     }

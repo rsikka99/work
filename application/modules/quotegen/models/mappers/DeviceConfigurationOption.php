@@ -47,7 +47,7 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
      *
      * @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
      */
-    public function getPrimaryKeyValueForObject (Quotegen_Model_DeviceConfigurationOption $object)
+    public function getPrimaryKeyValueForObject ($object)
     {
         return array (
                 $object->getDeviceConfigurationId(), 

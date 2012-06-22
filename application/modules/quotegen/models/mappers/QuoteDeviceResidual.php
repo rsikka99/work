@@ -203,7 +203,7 @@ class Quotegen_Model_Mapper_QuoteDeviceResidual extends My_Model_Mapper_Abstract
     /*
      * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
     */
-    public function getPrimaryKeyValueForObject (Quotegen_Model_QuoteDeviceResidual $object)
+    public function getPrimaryKeyValueForObject ($object)
     {
         return $object->getQuoteDeviceId();
     }

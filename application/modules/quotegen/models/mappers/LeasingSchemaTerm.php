@@ -213,7 +213,7 @@ class Quotegen_Model_Mapper_LeasingSchemaTerm extends My_Model_Mapper_Abstract
     /*
      * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
     */
-    public function getPrimaryKeyValueForObject (Quotegen_Model_LeasingSchemaTerm $object)
+    public function getPrimaryKeyValueForObject ($object)
     {
         return $object->getLeasingSchemaId();
     }

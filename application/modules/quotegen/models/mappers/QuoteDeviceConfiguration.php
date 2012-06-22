@@ -210,7 +210,7 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
     /*
      * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
     */
-    public function getPrimaryKeyValueForObject (Quotegen_Model_QuoteDeviceConfiguration $object)
+    public function getPrimaryKeyValueForObject ($object)
     {
         return array ($object->getQuoteDeviceId(), $object->getDeviceConfigurationId());
     } 

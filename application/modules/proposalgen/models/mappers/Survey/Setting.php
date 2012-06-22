@@ -159,4 +159,12 @@ class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
         }
         return $entries;
     }
+
+    /**
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     */
+    public function getPrimaryKeyValueForObject ($object)
+    {
+        return $object->getId();
+    }
 }

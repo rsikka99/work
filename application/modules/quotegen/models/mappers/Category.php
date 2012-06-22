@@ -203,10 +203,10 @@ class Quotegen_Model_Mapper_Category extends My_Model_Mapper_Abstract
         );
     }
     
-    /*
+    /**
      * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
      */
-    public function getPrimaryKeyValueForObject (Quotegen_Model_Category $object)
+    public function getPrimaryKeyValueForObject ($object)
     {
         return $object->getId();
     }
