@@ -146,7 +146,7 @@ abstract class My_Model_Mapper_Abstract
      *            The key to search the cache with.
      * @return multitype:My_Model_Abstract boolean
      */
-    protected function getItemFromCache ($key)
+    public function getItemFromCache ($key)
     {
         // Convert the key from an array to a string
         if (is_array($key))
@@ -169,14 +169,10 @@ abstract class My_Model_Mapper_Abstract
      *            The key to save the model as. This can be an array, it will be imploded into a single string using _'s
      *            as delimiters.
      */
-    protected function saveItemToCache (My_Model_Abstract $object, $key)
+    public function saveItemToCache (My_Model_Abstract $object)
     {
-        // Convert the key from an array to a string
-        if (is_array($key))
-            $key = implode('_', $key);
-            
-            // Save the item into the cache
-        $this->_rowHashTable [$key] = $object;
+        // Save the item into the cache
+        $this->_rowHashTable [$this->getPrimaryKeyValueForObject($object)] = $object;
     }
 
     /**
@@ -201,7 +197,7 @@ abstract class My_Model_Mapper_Abstract
 
     /**
      * Gets the name of the database table
-     * 
+     *
      * @return string
      */
     public function getTableName ()
@@ -210,6 +206,13 @@ abstract class My_Model_Mapper_Abstract
     }
 
     abstract public function insert (&$object);
+
+    /**
+     * Takes an object and returns a proper value for the primary key
+     *
+     * @param My_Model_Abstract $object            
+     */
+    abstract public function getPrimaryKeyValueForObject ($object);
 
     abstract public function save ($object, $primaryKey);
 

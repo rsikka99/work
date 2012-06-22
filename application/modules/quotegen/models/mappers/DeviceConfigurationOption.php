@@ -43,6 +43,19 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
     }
 
     /**
+     * (non-PHPdoc)
+     * 
+     * @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     */
+    public function getPrimaryKeyValueForObject (Quotegen_Model_DeviceConfigurationOption $object)
+    {
+        return array (
+                $object->getDeviceConfigurationId(), 
+                $object->getOptionId() 
+        );
+    }
+
+    /**
      * Saves (updates) an instance of Quotegen_Model_DeviceConfigurationOption to the database.
      *
      * @param $object Quotegen_Model_DeviceConfigurationOption
@@ -129,7 +142,7 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
         
         // Save the object into the cache
         $this->saveItemToCache($object, $id);
-
+        
         return $object;
     }
 
