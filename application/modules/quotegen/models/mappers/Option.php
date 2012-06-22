@@ -202,5 +202,79 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
                 'id = ?' => $id 
         );
     }
+
+    /**
+     * Fetches all options that are available to be added to a device (Anything that is not already added).
+     *
+     * @param int $id
+     *            The primary key of a device
+     *            
+     * @return multitype:Quotegen_Model_Option The list of available options to add
+     */
+    public function fetchAllAvailableOptionsForDevice ($id)
+    {
+        $devOptTableName = Quotegen_Model_Mapper_DeviceOption::getInstance()->getTableName();
+        
+        $sql = "SELECT * FROM {$this->getTableName()} as opt
+                WHERE NOT EXISTS (
+                    SELECT * from {$devOptTableName} AS do
+                    WHERE do.masterDeviceId = ? AND do.optionId = opt.id
+                )
+                ORDER BY  opt.name ASC
+                ";
+        
+        $resultSet = $this->getDbTable()
+            ->getAdapter()
+            ->fetchAll($sql, $id);
+        
+        $entries = array ();
+        foreach ( $resultSet as $row )
+        {
+            $object = new Quotegen_Model_Option($row);
+            
+            // Save the object into the cache
+            $this->saveItemToCache($object, $object->getId());
+            
+            $entries [] = $object;
+        }
+        return $entries;
+    }
+    
+    /**
+     * Fetches all options for a device
+     *
+     * @param int $id
+     *            The primary key of a device
+     *
+     * @return multitype:Quotegen_Model_Option The list of options
+     */
+    public function fetchAllOptionsForDevice ($id)
+    {
+        $devOptTableName = Quotegen_Model_Mapper_DeviceOption::getInstance()->getTableName();
+    
+        $sql = "SELECT * FROM {$this->getTableName()} as opt
+        WHERE EXISTS (
+        SELECT * from {$devOptTableName} AS do
+        WHERE do.masterDeviceId = ? AND do.optionId = opt.id
+        )
+        ORDER BY  opt.name ASC
+        ";
+    
+        $resultSet = $this->getDbTable()
+        ->getAdapter()
+        ->fetchAll($sql, $id);
+    
+        $entries = array ();
+        foreach ( $resultSet as $row )
+        {
+        $object = new Quotegen_Model_Option($row);
+    
+        // Save the object into the cache
+        $this->saveItemToCache($object, $object->getId());
+    
+        $entries [] = $object;
+        }
+        return $entries;
+        }
 }
 

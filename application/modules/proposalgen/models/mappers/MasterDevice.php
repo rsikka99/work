@@ -204,7 +204,9 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetchs all master devices that are available to be used in the quote generator
+     * Fetches all master devices that are available to be used in the quote generator.
+     * 
+     * @return multitype:Proposalgen_Model_MasterDevice
      */
     public function fetchAllAvailableMasterDevices ()
     {
@@ -215,17 +217,19 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         WHERE qd.masterDeviceId is null
         ORDER BY  md.manufacturer_id ASC, md.printer_model ASC
         ";
-
-        $resultSet = $this->getDbTable()->getAdapter()->fetchAll($sql);
+        
+        $resultSet = $this->getDbTable()
+            ->getAdapter()
+            ->fetchAll($sql);
         
         $entries = array ();
         foreach ( $resultSet as $row )
         {
             $object = new Proposalgen_Model_MasterDevice($row);
-        
+            
             // Save the object into the cache
             $this->saveItemToCache($object, $object->getId());
-        
+            
             $entries [] = $object;
         }
         return $entries;

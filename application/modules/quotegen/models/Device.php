@@ -30,6 +30,13 @@ class Quotegen_Model_Device extends My_Model_Abstract
      */
     protected $_masterDevice;
     
+    /**
+     * The options added to the device
+     *
+     * @var multitype: Quotegen_Model_Option
+     */
+    protected $_options;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -123,6 +130,31 @@ class Quotegen_Model_Device extends My_Model_Abstract
     public function setMasterDevice ($_masterDevice)
     {
         $this->_masterDevice = $_masterDevice;
+        return $this;
+    }
+
+    /**
+     * Get the array of options for the device
+     *
+     * @return multitype:Quotegen_Model_Option The array of options
+     */
+    public function getOptions ()
+    {
+        if (! isset($this->_options))
+        {
+            $this->_options = Quotegen_Model_Mapper_Option::getInstance()->fetchAllOptionsForDevice($this->getMasterDeviceId());
+        }
+        return $this->_options;
+    }
+
+    /**
+     * Set a new array of options for the device
+     *
+     * @param multitype: $_options            
+     */
+    public function setOptions ($_options)
+    {
+        $this->_options = $_options;
         return $this;
     }
 }
