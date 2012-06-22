@@ -43,7 +43,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         $id = $this->getDbTable()->insert($data);
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $id;
     }
@@ -72,7 +72,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         ));
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $primaryKey);
+        $this->saveItemToCache($object);
         
         return $rowsAffected;
     }
@@ -130,7 +130,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_Device($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -157,7 +157,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_Device($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $object->getMasterDeviceId());
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -184,7 +184,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
             $object = new Quotegen_Model_Device($row->toArray());
             
             // Save the object into the cache
-            $this->saveItemToCache($object, $object->getMasterDeviceId());
+            $this->saveItemToCache($object);
             
             $entries [] = $object;
         }

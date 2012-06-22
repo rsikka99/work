@@ -39,7 +39,7 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
         $object->setId($id);
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $id;
     }
@@ -70,7 +70,7 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
         ));
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $primaryKey);
+        $this->saveItemToCache($object);
         
         return $rowsAffected;
     }
@@ -130,7 +130,7 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_QuoteQuoteSetting($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -159,7 +159,7 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
         // Save the object into the cache
         $primaryKey [0] = $object->getQuoteId();
         $primaryKey [1] = $object->getQuoteSettingId();
-        $this->saveItemToCache($object, $primaryKey);
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -188,7 +188,7 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
             // Save the object into the cache
             $primaryKey [0] = $object->getQuoteId();
             $primaryKey [1] = $object->getQuoteSettingId();
-            $this->saveItemToCache($object, $primaryKey);
+            $this->saveItemToCache($object);
             
             $entries [] = $object;
         }
