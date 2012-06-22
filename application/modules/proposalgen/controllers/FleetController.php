@@ -2121,7 +2121,9 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         'manufacturer_name' 
                 ))
                     ->where('pfdmu.devices_pf_id = ' . $devices_pf_id . ' AND pfdmu.user_id = ' . $this->user_id);
-                echo '<pre>'; echo($select); die;
+                echo '<pre>';
+                echo ($select);
+                die();
                 $stmt = $db->query($select);
                 $master_devices = $stmt->fetchAll();
                 

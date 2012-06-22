@@ -202,7 +202,7 @@ class Quotegen_Model_Mapper_Template extends My_Model_Mapper_Abstract
                 'id = ?' => $id 
         );
     }
-    
+
     /**
      * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
      */

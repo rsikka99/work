@@ -209,10 +209,13 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
     
     /*
      * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
-    */
+     */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array($object->getUserId(),$object->getDeviceConfigurationId());
+        return array (
+                $object->getUserId(), 
+                $object->getDeviceConfigurationId() 
+        );
     }
 }
 

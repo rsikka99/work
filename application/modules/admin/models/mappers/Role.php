@@ -1,6 +1,6 @@
 <?php
 
-class Admin_Model_Mapper_RoleMapper extends My_Model_Mapper_Abstract
+class Admin_Model_Mapper_Role extends My_Model_Mapper_Abstract
 {
     /**
      * The default db table class to use
@@ -8,12 +8,12 @@ class Admin_Model_Mapper_RoleMapper extends My_Model_Mapper_Abstract
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Admin_Model_DbTable_RoleMapper';
+    protected $_defaultDbTable = 'Admin_Model_DbTable_Role';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Admin_Model_Mapper_RoleMapper
+     * @return Admin_Model_Mapper_Role
      */
     public static function getInstance ()
     {
@@ -42,7 +42,7 @@ class Admin_Model_Mapper_RoleMapper extends My_Model_Mapper_Abstract
         $object->setId($id);
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $id;
     }
@@ -51,7 +51,7 @@ class Admin_Model_Mapper_RoleMapper extends My_Model_Mapper_Abstract
      * Saves (updates) an instance of Admin_Model_Role to the database.
      *
      * @param $object Admin_Model_Role
-     *            The roleMapper model to save to the database
+     *            The role model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
      * @return int The number of rows affected
@@ -71,7 +71,7 @@ class Admin_Model_Mapper_RoleMapper extends My_Model_Mapper_Abstract
         ));
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $primaryKey);
+        $this->saveItemToCache($object);
         
         return $rowsAffected;
     }
@@ -104,10 +104,10 @@ class Admin_Model_Mapper_RoleMapper extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Finds a roleMapper based on it's primaryKey
+     * Finds a role based on it's primaryKey
      *
      * @param $id int
-     *            The id of the roleMapper to find
+     *            The id of the role to find
      * @return void Admin_Model_Role
      */
     public function find ($id)
@@ -129,13 +129,13 @@ class Admin_Model_Mapper_RoleMapper extends My_Model_Mapper_Abstract
         $object = new Admin_Model_Role($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $object;
     }
 
     /**
-     * Fetches a roleMapper
+     * Fetches a role
      *
      * @param $where string|array|Zend_Db_Table_Select
      *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -156,13 +156,13 @@ class Admin_Model_Mapper_RoleMapper extends My_Model_Mapper_Abstract
         $object = new Admin_Model_Role($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $object->getId());
+        $this->saveItemToCache($object);
         
         return $object;
     }
 
     /**
-     * Fetches all roleMappers
+     * Fetches all roles
      *
      * @param $where string|array|Zend_Db_Table_Select
      *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -183,7 +183,7 @@ class Admin_Model_Mapper_RoleMapper extends My_Model_Mapper_Abstract
             $object = new Admin_Model_Role($row->toArray());
             
             // Save the object into the cache
-            $this->saveItemToCache($object, $object->getId());
+            $this->saveItemToCache($object);
             
             $entries [] = $object;
         }
@@ -201,6 +201,14 @@ class Admin_Model_Mapper_RoleMapper extends My_Model_Mapper_Abstract
         return array (
                 'id = ?' => $id 
         );
+    }
+
+    /**
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     */
+    public function getPrimaryKeyValueForObject ($object)
+    {
+        return $object->getId();
     }
 }
 

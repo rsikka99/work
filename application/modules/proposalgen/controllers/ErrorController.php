@@ -3,9 +3,8 @@
 /**
  * ErrorController - The default error controller class
  *
- * @author	Chris Garrah
+ * @author Chris Garrah
  */
-
 class Proposalgen_ErrorController extends Zend_Controller_Action
 {
 
@@ -22,7 +21,6 @@ class Proposalgen_ErrorController extends Zend_Controller_Action
         // $this->logger = Zend_Registry::get('logger');
     } // End function init()
 
-    
     public function getLog ()
     {
         if (! Zend_Registry::isRegistered("Zend_Log"))
@@ -72,14 +70,13 @@ class Proposalgen_ErrorController extends Zend_Controller_Action
                     {
                         $this->view->exceptions [] = $currentException;
                     }
-                
                 }
                 // Log exception, if logger available
                 if (FALSE !== ($log = $this->getLog()))
                 {
                     /*
-                     * Generate a uid just in case two exceptions happen at the exact same time on different threads 
-                     * and we end up getting mixed lines of a different exception
+                     * Generate a uid just in case two exceptions happen at the exact same time on different threads and
+                     * we end up getting mixed lines of a different exception
                      */
                     $uid = uniqid();
                     
@@ -96,19 +93,14 @@ class Proposalgen_ErrorController extends Zend_Controller_Action
                     $log->crit("[$uid] - Stack Trace finished.");
                 }
                 break;
-        
         } // end switch
-    
-
     } // End function errorAction()
 
-    
     public function accessdeniedAction ()
     {
         // Disable the default layout
         $this->_helper->layout->disableLayout();
         $this->view->title = "Access Denied - Proposal Generator";
-    
     } // End function accessdeniedAction()
 } // end error controller
 

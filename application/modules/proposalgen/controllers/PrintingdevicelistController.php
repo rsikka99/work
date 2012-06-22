@@ -106,7 +106,9 @@ class Proposal_PrintingdevicelistController extends My_Controller_Report
             foreach ( $this->view->proposal->getExcludedDevices() as $device )
             {
                 $row = array ();
-                $row [] = $device->getMasterDevice()->getManufacturer()->getManufacturerName();
+                $row [] = $device->getMasterDevice()
+                    ->getManufacturer()
+                    ->getManufacturerName();
                 $row [] = $device->getMasterDevice()->getPrinterModel();
                 $row [] = (strlen($device->getSerialNumber()) > 0) ? $device->getSerialNumber() : "Unknown";
                 $row [] = ($device->IpAddress) ? $device->IpAddress : "Unknown IP";
@@ -123,32 +125,31 @@ class Proposal_PrintingdevicelistController extends My_Controller_Report
         // Removes spaces from company name, otherwise CSV filename contains +
         // symbol
         $companyName = str_replace(array (
-            " ", 
-            "/", 
-            "\\", 
-            ";", 
-            "?", 
-            "\"", 
-            "'", 
-            ",", 
-            "%", 
-            "&", 
-            "#", 
-            "@", 
-            "!", 
-            ">", 
-            "<", 
-            "+", 
-            "=", 
-            "{", 
-            "}", 
-            "[", 
-            "]", 
-            "|", 
-            "~", 
-            "`" 
+                " ", 
+                "/", 
+                "\\", 
+                ";", 
+                "?", 
+                "\"", 
+                "'", 
+                ",", 
+                "%", 
+                "&", 
+                "#", 
+                "@", 
+                "!", 
+                ">", 
+                "<", 
+                "+", 
+                "=", 
+                "{", 
+                "}", 
+                "[", 
+                "]", 
+                "|", 
+                "~", 
+                "`" 
         ), "_", $this->view->proposal->Report->CustomerCompanyName);
     }
-
 } // end index controller
 

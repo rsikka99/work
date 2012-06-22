@@ -150,8 +150,8 @@ class Application_Model_User extends My_Model_Abstract
                 'lastname' => $this->getLastname(), 
                 'email' => $this->getEmail(), 
                 'frozenUntil' => $this->getFrozenUntil(), 
-                'loginAttempts' => $this->getLoginAttempts(),
-                'resetPasswordOnNextLogin' => $this->getResetPasswordOnNextLogin(),
+                'loginAttempts' => $this->getLoginAttempts(), 
+                'resetPasswordOnNextLogin' => $this->getResetPasswordOnNextLogin(), 
                 'locked' => $this->getLocked() 
         );
     }

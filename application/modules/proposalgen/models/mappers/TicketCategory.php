@@ -21,7 +21,7 @@ class Proposalgen_Model_Mapper_TicketCategory extends Tangent_Model_Mapper_Abstr
 
     /**
      * Maps a database row object to an Proposalgen_Model
-     * 
+     *
      * @param Zend_Db_Table_Row $row            
      * @return Proposalgen_Model_TicketCategory
      */
@@ -42,7 +42,7 @@ class Proposalgen_Model_Mapper_TicketCategory extends Tangent_Model_Mapper_Abstr
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     * 
+     *
      * @param unknown_type $object            
      */
     public function save (Proposalgen_Model_TicketCategory $object)

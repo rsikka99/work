@@ -210,7 +210,7 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
     
     /*
      * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
-    */
+     */
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->getId();

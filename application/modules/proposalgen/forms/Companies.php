@@ -3,18 +3,21 @@
 /**
  * Companies Form: Used for Adding / Editing Companies
  *
- * @author	John Sadler
+ * @author John Sadler
  * @version v1.0
  */
-
 class Proposalgen_Form_Companies extends Zend_Form
 {
 
     /**
      * Constructor builds the form
-     * @param $options - not used (required) 	
-     * @param $type - can be set to 'edit', or null. Differnt form elements are added for editing an instructor and adding a new instructor.
-     * @return HTML markup for the from is automatically returned by zend_form	 
+     * 
+     * @param $options -
+     *            not used (required)
+     * @param $type -
+     *            can be set to 'edit', or null. Differnt form elements are added for editing an instructor and adding a
+     *            new instructor.
+     * @return HTML markup for the from is automatically returned by zend_form
      */
     public function __construct ($options = null, $type = null)
     {
@@ -158,7 +161,6 @@ class Proposalgen_Form_Companies extends Zend_Form
         
         //add all defined elements to the form
         $this->addElements($elements);
-    	
     } //end function __construct
 }
 ?>

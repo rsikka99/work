@@ -34,7 +34,9 @@ class Proposalgen_Model_Mapper_DevicePf extends Tangent_Model_Mapper_Abstract
         $select->where('pf_db_devicename = ?', $deviceName);
         $select->orWhere('pf_model_id = ?', $modelId);
         $where = implode(' ', $select->getPart(Zend_Db_Table_Select::WHERE));
-        $result = $this->fetchRow(array($where));
+        $result = $this->fetchRow(array (
+                $where 
+        ));
         if (! $result)
         {
             return FALSE;

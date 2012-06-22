@@ -120,6 +120,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
             $repop_form = 0;
             $formData = $this->_request->getPost();
             // print_r($formData); die;
+            
 
             // conditional requirements
             $form->set_validation($formData);
@@ -134,37 +135,31 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
             {
                 $repop_form = 1;
                 $this->view->message = 'Error: You must select a manufacturer.';
-            
             }
             else if ($form_mode == "edit" && $formData ["printer_model"] == 0)
             {
                 $repop_form = 1;
                 $this->view->message = 'Error: You must select a printer model.';
-            
             }
             else if ($form_mode == "add" && trim($formData ["new_printer"]) == "")
             {
                 $repop_form = 1;
                 $this->view->message = 'Error: You must enter a printer model name.';
-            
             }
             else if ($formData ["toner_config_id"] == 0)
             {
                 $repop_form = 1;
                 $this->view->message = 'Error: Toner Config not selected. Please try again.';
-            
             }
             else if ($formData ["watts_power_normal"] < 1)
             {
                 $repop_form = 1;
                 $this->view->message = 'Error: Power Consumption Normal must be greater then zero.';
-            
             }
             else if ($formData ["watts_power_idle"] < 1)
             {
                 $repop_form = 1;
                 $this->view->message = 'Error: Power Consumption Idle must be greater then zero.';
-            
             }
             else
             {
@@ -175,9 +170,9 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                     try
                     {
                         $master_device_id = 0;
-                        if ($form_mode == "edit") 
+                        if ($form_mode == "edit")
                         {
-                        	$master_device_id = $formData ['printer_model'];
+                            $master_device_id = $formData ['printer_model'];
                         }
                         $master_deviceTable = new Proposalgen_Model_DbTable_MasterDevice();
                         
@@ -384,7 +379,6 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                     }
                                     break;
                             }
-                        
                         }
                         else
                         {
@@ -412,7 +406,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                     'is_copier' => $formData ["is_copier"], 
                                     'is_scanner' => $formData ["is_scanner"], 
                                     'is_fax' => $formData ["is_fax"], 
-                                    'is_duplex' => $formData ["is_duplex"],
+                                    'is_duplex' => $formData ["is_duplex"], 
                                     'watts_power_normal' => $formData ["watts_power_normal"], 
                                     'watts_power_idle' => $formData ["watts_power_idle"], 
                                     'device_price' => ($formData ["device_price"] == 0 ? null : $formData ["device_price"]), 
@@ -460,7 +454,6 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                 
                                 // set selected printer model to new printer model
                                 $this->view->printer_model = $master_device_id;
-                            
                             }
                             else
                             {
@@ -535,7 +528,6 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                     {
                         $db->rollback();
                         $this->view->message = 'Database Error: "' . $formData ["new_printer"] . '" could not be saved. Make sure the printer does not already exist.<br />';
-                    
                     }
                     catch ( Exception $e )
                     {
@@ -1363,7 +1355,6 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                 $form->getElement('ppm_color')->setValue($formData ['ppm_color']);
                 $form->getElement('duty_cycle')->setValue($formData ['duty_cycle']);
             }
-        
         } // end if
         $this->view->deviceform = $form;
     }
@@ -1463,6 +1454,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
             $formData = $this->_request->getPost();
             //print_r($formData); die;
             
+
             // conditional requirements
             $form->set_validation($formData);
             $itemtype = $formData ['hdnItem'];
@@ -1501,28 +1493,28 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                         $leased_toner_yield = $result->LeasedTonerYield;
                         $manufacturer_id = $result->ManufacturerId;
                         
-		                // get toners for device
-		                $select = new Zend_Db_Select($db);
-		                $select = $db->select()
-		                    ->from(array (
-		                        't' => 'toner' 
-		                ))
-		                    ->join(array (
-		                        'td' => 'device_toner' 
-		                ), 't.toner_id = td.toner_id')
-		                    ->where('td.master_device_id = ?', $master_device_id);
-		                $stmt = $db->query($select);
-		                $result = $stmt->fetchAll();
-		                
-		                $toner_array = '';
-		                foreach ( $result as $key )
-		                {
-		                    if (! empty($toner_array))
-		                    {
-		                        $toner_array .= ",";
-		                    }
-		                    $toner_array .= "'" . $key ['toner_id'] . "'";
-		                }
+                        // get toners for device
+                        $select = new Zend_Db_Select($db);
+                        $select = $db->select()
+                            ->from(array (
+                                't' => 'toner' 
+                        ))
+                            ->join(array (
+                                'td' => 'device_toner' 
+                        ), 't.toner_id = td.toner_id')
+                            ->where('td.master_device_id = ?', $master_device_id);
+                        $stmt = $db->query($select);
+                        $result = $stmt->fetchAll();
+                        
+                        $toner_array = '';
+                        foreach ( $result as $key )
+                        {
+                            if (! empty($toner_array))
+                            {
+                                $toner_array .= ",";
+                            }
+                            $toner_array .= "'" . $key ['toner_id'] . "'";
+                        }
                         
                         // populate form
                         $launch_date = new Zend_Date($launch_date, "yyyy-MM-dd HH:ii:ss");
@@ -2103,9 +2095,9 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                 
                 $form->getElement('manufacturer_id')->setValue($formData ['manufacturer_id']);
                 
-                if (isset($formData ['printer_model'])) 
+                if (isset($formData ['printer_model']))
                 {
-                	$form->getElement('printer_model')->setValue($formData ['printer_model']);
+                    $form->getElement('printer_model')->setValue($formData ['printer_model']);
                 }
                 $form->getElement('new_printer')->setValue($formData ['new_printer']);
                 
@@ -2129,5 +2121,4 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
         }
         $this->view->deviceform = $form;
     }
-
 }

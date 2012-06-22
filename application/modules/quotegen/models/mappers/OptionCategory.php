@@ -268,7 +268,10 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array($object->getCategoryId(),$object->getOptionId());
+        return array (
+                $object->getCategoryId(), 
+                $object->getOptionId() 
+        );
     }
 }
 

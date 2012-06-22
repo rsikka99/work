@@ -21,7 +21,7 @@ class Proposalgen_Model_Mapper_PfDeviceMatchupUser extends Tangent_Model_Mapper_
 
     /**
      * Maps a database row object to an Proposalgen_Model
-     * 
+     *
      * @param Zend_Db_Table_Row $row            
      * @return Proposalgen_Model_PfDeviceMatchupUser
      */

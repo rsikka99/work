@@ -2,7 +2,7 @@
 
 /**
  * Class Proposalgen_Model_Toner
- * 
+ *
  * @author "Lee Robert"
  */
 class Proposalgen_Model_Toner extends Tangent_Model_Abstract

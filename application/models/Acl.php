@@ -2,7 +2,6 @@
 
 class Application_Model_Acl extends Zend_Acl
 {
-
     protected static $_instance;
     protected static $UnrestrictedPages = array (
             'default' => array (
@@ -14,8 +13,8 @@ class Application_Model_Acl extends Zend_Acl
                     'auth' => array (
                             'login', 
                             'logout', 
-                            'forgotpassword',
-                            'changepassword'
+                            'forgotpassword', 
+                            'changepassword' 
                     ) 
             ) 
     );
@@ -107,8 +106,6 @@ class Application_Model_Acl extends Zend_Acl
      */
     public function isAllowed ($role = null, $request = null, $privilege = null)
     {
-        
-        
         $isAllowed = false;
         
         $resource ["moduleName"] = "";
@@ -224,9 +221,9 @@ class Application_Model_Acl extends Zend_Acl
 
     protected function isGlobalPage ($resource)
     {
-        $currentModule = $resource['moduleName'];
-        $currentController = $resource['controllerName'];
-        $currentAction = $resource['actionName'];
+        $currentModule = $resource ['moduleName'];
+        $currentController = $resource ['controllerName'];
+        $currentAction = $resource ['actionName'];
         foreach ( self::$UnrestrictedPages as $module => $controllers )
         {
             if (strcasecmp($module, $currentModule) === 0)
