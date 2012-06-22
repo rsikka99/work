@@ -76,6 +76,14 @@
                             <action>edit</action>
                             <resource>quotegen_quotesetting_edit</resource>
                         </preferences>
+                        <systempreferences>
+                            <label>System Preferences</label>
+                            <class></class>
+                            <module>quotegen</module>
+                            <controller>quotesetting</controller>
+                            <action>editdefault</action>
+                            <resource>quotegen_quotesetting_editdefault</resource>
+                        </systempreferences>
                     </pages>
                 </settings>
                 <administration>
@@ -207,8 +215,8 @@
                                     <class>dropdown subdropdown</class>
                                     <module>quotegen</module>
                                     <controller>deviceconfiguration</controller>
-                                    <action>index</action>
-                                    <resource>quotegen_deviceconfiguration_index</resource>
+                                    <action>viewglobal</action>
+                                    <resource>quotegen_deviceconfiguration_viewglobal</resource>
                                     <pages>
                                         <viewall>
                                             <label>View All</label>
