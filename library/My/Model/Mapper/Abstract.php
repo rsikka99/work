@@ -171,8 +171,13 @@ abstract class My_Model_Mapper_Abstract
      */
     public function saveItemToCache (My_Model_Abstract $object)
     {
+        $key = $this->getPrimaryKeyValueForObject($object);
+        if (is_array($key))
+        {
+            $key = implode('_', $key);
+        }
         // Save the item into the cache
-        $this->_rowHashTable [$this->getPrimaryKeyValueForObject($object)] = $object;
+        $this->_rowHashTable [$key] = $object;
     }
 
     /**
