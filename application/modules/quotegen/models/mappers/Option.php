@@ -42,7 +42,7 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
         $object->setId($id);
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $id;
     }
@@ -71,7 +71,7 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
         ));
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $primaryKey);
+        $this->saveItemToCache($object);
         
         return $rowsAffected;
     }
@@ -129,7 +129,7 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_Option($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -156,7 +156,7 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_Option($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $object->getId());
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -183,7 +183,7 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
             $object = new Quotegen_Model_Option($row->toArray());
             
             // Save the object into the cache
-            $this->saveItemToCache($object, $object->getId());
+            $this->saveItemToCache($object);
             
             $entries [] = $object;
         }
@@ -233,48 +233,90 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
             $object = new Quotegen_Model_Option($row);
             
             // Save the object into the cache
-            $this->saveItemToCache($object, $object->getId());
+            $this->saveItemToCache($object);
             
             $entries [] = $object;
         }
         return $entries;
     }
-    
+
     /**
      * Fetches all options for a device
      *
      * @param int $id
      *            The primary key of a device
-     *
+     *            
      * @return multitype:Quotegen_Model_Option The list of options
      */
     public function fetchAllOptionsForDevice ($id)
     {
         $devOptTableName = Quotegen_Model_Mapper_DeviceOption::getInstance()->getTableName();
-    
+        
         $sql = "SELECT * FROM {$this->getTableName()} as opt
-        WHERE EXISTS (
-        SELECT * from {$devOptTableName} AS do
-        WHERE do.masterDeviceId = ? AND do.optionId = opt.id
-        )
-        ORDER BY  opt.name ASC
+                WHERE EXISTS (
+                    SELECT * from {$devOptTableName} AS do
+                    WHERE do.masterDeviceId = ? AND do.optionId = opt.id
+                )
+                ORDER BY  opt.name ASC
         ";
-    
+        
         $resultSet = $this->getDbTable()
-        ->getAdapter()
-        ->fetchAll($sql, $id);
-    
+            ->getAdapter()
+            ->fetchAll($sql, $id);
+        
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-        $object = new Quotegen_Model_Option($row);
-    
-        // Save the object into the cache
-        $this->saveItemToCache($object, $object->getId());
-    
-        $entries [] = $object;
+            $object = new Quotegen_Model_Option($row);
+            
+            // Save the object into the cache
+            $this->saveItemToCache($object);
+            
+            $entries [] = $object;
         }
         return $entries;
+    }
+
+    /**
+     * Fetches all options for a device
+     *
+     * @param int $id
+     *            The primary key of a device
+     *            
+     * @return multitype:Quotegen_Model_Option The list of options
+     */
+    public function fetchAllOptionsForDeviceConfiguration ($id)
+    {
+        $devOptTableName = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->getTableName();
+        
+        $sql = "SELECT * FROM {$devOptTableName} as dco
+                JOIN {$this->getTableName()} as opt on dco.optionId = opt.id
+                WHERE dco.masterDeviceId = ?
+                ORDER BY opt.name ASC
+        ";
+        
+        $resultSet = $this->getDbTable()
+            ->getAdapter()
+            ->fetchAll($sql, $id);
+        
+        $entries = array ();
+        foreach ( $resultSet as $row )
+        {
+            $deviceConfigurationOption = new Quotegen_Model_DeviceConfigurationOption($row);
+            
+            $option = new Quotegen_Model_Option($row);
+            
+            $deviceConfigurationOption->setOption($option);
+            
+            // Save the device configuration option to cache
+            Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->saveItemToCache($deviceConfigurationOption);
+            
+            // Save the option into the cache
+            $this->saveItemToCache($option);
+            
+            $entries [] = $deviceConfigurationOption;
         }
+        return $entries;
+    }
 }
 
