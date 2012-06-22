@@ -276,8 +276,15 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
         }
         return $entries;
     }
+ /*
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     */
+    public function getPrimaryKeyValueForObject (Quotegen_Model_Option $object)
+    {
+     	return $object->getId();
+    }
 
-    /**
+     /**
      * Fetches all options for a device
      *
      * @param int $id
@@ -285,6 +292,7 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
      *            
      * @return multitype:Quotegen_Model_Option The list of options
      */
+
     public function fetchAllOptionsForDeviceConfiguration ($id)
     {
         $devOptTableName = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->getTableName();
