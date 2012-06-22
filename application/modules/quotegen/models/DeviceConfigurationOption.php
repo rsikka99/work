@@ -31,6 +31,13 @@ class Quotegen_Model_DeviceConfigurationOption extends My_Model_Abstract
      */
     protected $_quantity = 1;
     
+    /**
+     * The option associated with this configuration
+     *
+     * @var Quotegen_Model_Option
+     */
+    protected $_option;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -123,6 +130,27 @@ class Quotegen_Model_DeviceConfigurationOption extends My_Model_Abstract
     public function setQuantity ($_quantity)
     {
         $this->_quantity = $_quantity;
+        return $this;
+    }
+
+    /**
+     * Gets the option associated with the device configuration option
+     *
+     * @return Quotegen_Model_Option
+     */
+    public function getOption ()
+    {
+        return $this->_option;
+    }
+
+    /**
+     * Sets the option associated with the device configuration option
+     *
+     * @param Quotegen_Model_Option $_option            
+     */
+    public function setOption ($_option)
+    {
+        $this->_option = $_option;
         return $this;
     }
 }

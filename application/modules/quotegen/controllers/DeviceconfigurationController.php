@@ -42,7 +42,7 @@ class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        $mapper = new Quotegen_Model_Mapper_DeviceConfiguration();
+        $mapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
         $deviceConfiguration = $mapper->find($deviceConfigurationId);
         
         if (! $deviceConfiguration)
@@ -87,7 +87,7 @@ class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
     {
         // TODO: createAction
         $request = $this->getRequest();
-        $form = new Quotegen_Form_CreateDeviceConfiguration();
+        $form = new Quotegen_Form_DeviceConfiguration();
         
         if ($request->isPost())
         {
@@ -180,8 +180,9 @@ class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
         }
         
         // Get the deviceConfiguration
-        $mapper = new Quotegen_Model_Mapper_DeviceConfiguration();
-        $deviceConfiguration = $mapper->find($deviceConfigurationId);
+        $mapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
+        $deviceConfiguration = $mapper->find((int)$deviceConfigurationId);
+        
         // If the deviceConfiguration doesn't exist, send them back t the view all deviceConfigurations page
         if (! $deviceConfiguration)
         {
@@ -192,7 +193,9 @@ class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
         }
         
         // Create a new form with the mode and roles set
-        $form = new Quotegen_Form_CreateDeviceConfiguration();
+        $form = new Quotegen_Form_DeviceConfiguration($deviceConfiguration->getQuoteDevice()
+            ->getMasterDevice()
+            ->getFullDeviceName());
         
         // Prepare the data for the form
         $request = $this->getRequest();

@@ -53,6 +53,7 @@ class Quotegen_Form_Device extends EasyBib_Form
                     'multiOptions' => $masterDeviceList 
             ));
         }
+        
         $this->addElement('text', 'sku', array (
                 'label' => 'SKU:', 
                 'required' => true, 

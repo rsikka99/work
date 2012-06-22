@@ -1,7 +1,20 @@
 <?php
 
-class Quotegen_Form_CreateDeviceConfiguration extends EasyBib_Form
+class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
 {
+    
+    /**
+     * If this is set to false it the form will display a dropdown to select a device.
+     *
+     * @var string
+     */
+    protected $_deviceName;
+
+    public function __construct ($deviceName = false, $options = null)
+    {
+        $this->_deviceName = $deviceName;
+        parent::__construct($options);
+    }
 
     public function init ()
     {
@@ -22,16 +35,25 @@ class Quotegen_Form_CreateDeviceConfiguration extends EasyBib_Form
          */
         $this->setAttrib('class', 'form-horizontal');
         
-        $quoteDeviceList = array();
-        /* @var $device Quotegen_Model_Device */
-        foreach ( Quotegen_Model_Mapper_Device::getInstance()->fetchAll() as $device )
+        if ($this->_deviceName)
         {
-            $quoteDeviceList [$device->getMasterDeviceId()] = $device->getMasterDevice()->getFullDeviceName();
+            $deviceName = new My_Form_Element_Paragraph('deviceName');
+            $deviceName->setValue($this->_deviceName);
+            $this->addElement($deviceName);
         }
-        $this->addElement('select', 'masterDeviceId', array (
-                'label' => 'Available Devices:',
-                'multiOptions' => $quoteDeviceList 
-        ));
+        else
+        {
+            $quoteDeviceList = array ();
+            /* @var $device Quotegen_Model_Device */
+            foreach ( Quotegen_Model_Mapper_Device::getInstance()->fetchAll() as $device )
+            {
+                $quoteDeviceList [$device->getMasterDeviceId()] = $device->getMasterDevice()->getFullDeviceName();
+            }
+            $this->addElement('select', 'masterDeviceId', array (
+                    'label' => 'Available Devices:', 
+                    'multiOptions' => $quoteDeviceList 
+            ));
+        }
         
         // Add the submit button
         $this->addElement('submit', 'submit', array (

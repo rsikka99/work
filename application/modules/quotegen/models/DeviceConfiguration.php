@@ -23,6 +23,20 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
      */
     protected $_masterDeviceId = 0;
     
+    /**
+     * The quote device associated with this configuration
+     *
+     * @var Quotegen_Model_Device
+     */
+    protected $_quoteDevice;
+    
+    /**
+     * The options added to the configuraiton
+     *
+     * @var multitype: Quotegen_Model_DeviceOption
+     */
+    protected $_options;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -89,6 +103,56 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
     public function setMasterDeviceId ($_masterDeviceId)
     {
         $this->_masterDeviceId = $_masterDeviceId;
+        return $this;
+    }
+
+    /**
+     * Gets the quote device associated with this configuration
+     *
+     * @return Quotegen_Model_Device
+     */
+    public function getQuoteDevice ()
+    {
+        if (! isset($this->_quoteDevice))
+        {
+            $this->_quoteDevice = Quotegen_Model_Mapper_Device::getInstance()->find($this->getMasterDeviceId());
+        }
+        return $this->_quoteDevice;
+    }
+
+    /**
+     * Sets the quote device associated with this configuration
+     *
+     * @param Quotegen_Model_Device $_quoteDevice            
+     */
+    public function setQuoteDevice ($_quoteDevice)
+    {
+        $this->_quoteDevice = $_quoteDevice;
+        return $this;
+    }
+
+    /**
+     * Get the array of options for the device
+     *
+     * @return multitype:Quotegen_Model_DeviceOption The array of options
+     */
+    public function getOptions ()
+    {
+        if (! isset($this->_options))
+        {
+            $this->_options = Quotegen_Model_Mapper_Option::getInstance()->fetchAllOptionsForDeviceConfiguration($this->getMasterDeviceId());
+        }
+        return $this->_options;
+    }
+
+    /**
+     * Set a new array of options for the device
+     *
+     * @param multitype:Quotegen_Model_DeviceOption $_options            
+     */
+    public function setOptions ($_options)
+    {
+        $this->_options = $_options;
         return $this;
     }
 }
