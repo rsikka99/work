@@ -239,19 +239,19 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
         }
         return $entries;
     }
-    
+
     /**
      * Fetches all options for a device
      *
      * @param int $id
      *            The primary key of a device
-     *
+     *            
      * @return multitype:Quotegen_Model_Option The list of options
      */
     public function fetchAllOptionsForDevice ($id)
     {
         $devOptTableName = Quotegen_Model_Mapper_DeviceOption::getInstance()->getTableName();
-    
+        
         $sql = "SELECT * FROM {$this->getTableName()} as opt
         WHERE EXISTS (
         SELECT * from {$devOptTableName} AS do
@@ -259,22 +259,30 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
         )
         ORDER BY  opt.name ASC
         ";
-    
+        
         $resultSet = $this->getDbTable()
-        ->getAdapter()
-        ->fetchAll($sql, $id);
-    
+            ->getAdapter()
+            ->fetchAll($sql, $id);
+        
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-        $object = new Quotegen_Model_Option($row);
-    
-        // Save the object into the cache
-        $this->saveItemToCache($object, $object->getId());
-    
-        $entries [] = $object;
+            $object = new Quotegen_Model_Option($row);
+            
+            // Save the object into the cache
+            $this->saveItemToCache($object, $object->getId());
+            
+            $entries [] = $object;
         }
         return $entries;
-        }
+    }
+    
+    /*
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     */
+    public function getPrimaryKeyValueForObject (Quotegen_Model_Option $object)
+    {
+     	return $object->getId();
+    }
 }
 
