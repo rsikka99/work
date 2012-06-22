@@ -21,7 +21,7 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends Tangent_Model_Mapper_Ab
 
     /**
      * Maps a database row object to an Proposalgen_Model
-     * 
+     *
      * @param Zend_Db_Table_Row $row            
      * @return The appropriate Proposalgen_Model
      */
@@ -46,7 +46,7 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends Tangent_Model_Mapper_Ab
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     * 
+     *
      * @param unknown_type $object            
      */
     public function save (Proposalgen_Model_ReplacementDevice $object)

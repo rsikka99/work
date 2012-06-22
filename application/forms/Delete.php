@@ -50,5 +50,4 @@ class Application_Form_Delete extends EasyBib_Form
         
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }
-
 }

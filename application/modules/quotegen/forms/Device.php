@@ -2,6 +2,18 @@
 
 class Quotegen_Form_Device extends EasyBib_Form
 {
+    /**
+     * If this is set to false it the form will display a dropdown to select a device.
+     *
+     * @var string
+     */
+    protected $_deviceName;
+
+    public function __construct ($deviceName = false, $options = null)
+    {
+        $this->_deviceName = $deviceName;
+        parent::__construct($options);
+    }
 
     public function init ()
     {
@@ -22,16 +34,25 @@ class Quotegen_Form_Device extends EasyBib_Form
          */
         $this->setAttrib('class', 'form-horizontal');
         
-        $masterDeviceList = array ();
-        /* @var $masterDevice Proposalgen_Model_MasterDevice */
-        foreach ( Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllAvailableMasterDevices() as $masterDevice )
+        if ($this->_deviceName)
         {
-            $masterDeviceList [$masterDevice->getId()] = $masterDevice->getFullDeviceName();
+            $deviceName = new My_Form_Element_Paragraph('deviceName');
+            $deviceName->setValue($this->_deviceName);
+            $this->addElement($deviceName);
         }
-        $this->addElement('select', 'masterDeviceId', array (
-                'label' => 'Master Device',
-                'multiOptions' => $masterDeviceList 
-        ));
+        else
+        {
+            $masterDeviceList = array ();
+            /* @var $masterDevice Proposalgen_Model_MasterDevice */
+            foreach ( Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllAvailableMasterDevices() as $masterDevice )
+            {
+                $masterDeviceList [$masterDevice->getId()] = $masterDevice->getFullDeviceName();
+            }
+            $this->addElement('select', 'masterDeviceId', array (
+                    'label' => 'Master Device', 
+                    'multiOptions' => $masterDeviceList 
+            ));
+        }
         
         $this->addElement('text', 'sku', array (
                 'label' => 'SKU:', 
@@ -50,7 +71,6 @@ class Quotegen_Form_Device extends EasyBib_Form
                         ) 
                 ) 
         ));
-        
         
         // Add the submit button
         $this->addElement('submit', 'submit', array (

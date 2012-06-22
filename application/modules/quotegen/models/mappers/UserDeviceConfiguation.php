@@ -36,7 +36,7 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
         $id = $this->getDbTable()->insert($data);
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $id;
     }
@@ -67,7 +67,7 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
         ));
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $primaryKey);
+        $this->saveItemToCache($object);
         
         return $rowsAffected;
     }
@@ -127,7 +127,7 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
         $object = new Quotegen_Model_UserDeviceConfiguration($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -156,7 +156,7 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
         // Save the object into the cache
         $primaryKey [0] = $object->getDeviceConfigurationId();
         $primaryKey [1] = $object->getUserId();
-        $this->saveItemToCache($object, $primaryKey);
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -185,7 +185,7 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
             // Save the object into the cache          
             $primaryKey [0] = $object->getDeviceConfigurationId();
             $primaryKey [1] = $object->getUserId();
-            $this->saveItemToCache($object, $primaryKey);
+            $this->saveItemToCache($object);
             
             $entries [] = $object;
         }
@@ -195,14 +195,26 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
     /**
      * Gets a where clause for filtering by id
      *
-     * @param array mixed$id            
+     * @param
+     *            array mixed$id
      * @return array
      */
     public function getWhereId ($id)
     {
         return array (
-                'deviceConfigurationId = ?' => $id [0],
-                'userId = ?' => $id [1],
+                'deviceConfigurationId = ?' => $id [0], 
+                'userId = ?' => $id [1] 
+        );
+    }
+    
+    /*
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     */
+    public function getPrimaryKeyValueForObject ($object)
+    {
+        return array (
+                $object->getUserId(), 
+                $object->getDeviceConfigurationId() 
         );
     }
 }

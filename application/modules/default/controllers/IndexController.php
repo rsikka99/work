@@ -18,9 +18,7 @@ class Default_IndexController extends Zend_Controller_Action
         $logger->log('Candying that bacon.', Zend_Log::INFO);
         $logger->log('User is not authenticated!', Zend_Log::INFO);
         $logger->log('User has 4 login attempts left.', Zend_Log::INFO);
-        
     }
-
 }
 
 

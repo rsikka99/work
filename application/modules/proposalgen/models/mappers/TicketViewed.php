@@ -21,7 +21,7 @@ class Proposalgen_Model_Mapper_TicketViewed extends Tangent_Model_Mapper_Abstrac
 
     /**
      * Maps a database row object to an Proposalgen_Model
-     * 
+     *
      * @param Zend_Db_Table_Row $row            
      * @return Proposalgen_Model_TicketViewed
      */
@@ -44,7 +44,7 @@ class Proposalgen_Model_Mapper_TicketViewed extends Tangent_Model_Mapper_Abstrac
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     * 
+     *
      * @param unknown_type $object            
      */
     public function save (Proposalgen_Model_TicketViewed $object)

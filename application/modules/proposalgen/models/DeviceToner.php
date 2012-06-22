@@ -2,7 +2,7 @@
 
 /**
  * Class Proposalgen_Model_DeviceToner
- * 
+ *
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_DeviceToner extends Tangent_Model_Abstract

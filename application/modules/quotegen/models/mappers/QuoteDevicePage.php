@@ -31,13 +31,13 @@ class Quotegen_Model_Mapper_QuoteDevicePage extends My_Model_Mapper_Abstract
     public function insert (&$object)
     {
         // Get an array of data to save
-        $data = $object->toArray();        
+        $data = $object->toArray();
         
         // Insert the data
-        $id = $this->getDbTable()->insert($data);        
+        $id = $this->getDbTable()->insert($data);
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $id;
     }
@@ -66,7 +66,7 @@ class Quotegen_Model_Mapper_QuoteDevicePage extends My_Model_Mapper_Abstract
         ));
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $primaryKey);
+        $this->saveItemToCache($object);
         
         return $rowsAffected;
     }
@@ -124,7 +124,7 @@ class Quotegen_Model_Mapper_QuoteDevicePage extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_QuoteDevicePage($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -151,7 +151,7 @@ class Quotegen_Model_Mapper_QuoteDevicePage extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_QuoteDevicePage($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $object->getQuoteDeviceId());
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -178,7 +178,7 @@ class Quotegen_Model_Mapper_QuoteDevicePage extends My_Model_Mapper_Abstract
             $object = new Quotegen_Model_QuoteDevicePage($row->toArray());
             
             // Save the object into the cache
-            $this->saveItemToCache($object, $object->getQuoteDeviceId());
+            $this->saveItemToCache($object);
             
             $entries [] = $object;
         }
@@ -196,6 +196,14 @@ class Quotegen_Model_Mapper_QuoteDevicePage extends My_Model_Mapper_Abstract
         return array (
                 'quoteDeviceId = ?' => $id 
         );
+    }
+    
+    /*
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     */
+    public function getPrimaryKeyValueForObject ($object)
+    {
+        return $object->getQuoteDeviceId();
     }
 }
 

@@ -67,13 +67,12 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
                 'name' => $this->getName() 
         );
     }
-    
+
     /**
      * Validates the leasing schema
      */
     public function isValid ()
     {
-        
     }
 
     /**
@@ -194,5 +193,4 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
         $this->_rates = $_rates;
         return $this;
     }
-
 }

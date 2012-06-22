@@ -39,7 +39,7 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
         $object->setId($id);
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $id;
     }
@@ -65,12 +65,12 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'quoteId = ?' => $primaryKey [0],
-                'quoteSettingId = ?' => $primaryKey [1]
+                'quoteId = ?' => $primaryKey [0], 
+                'quoteSettingId = ?' => $primaryKey [1] 
         ));
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $primaryKey);
+        $this->saveItemToCache($object);
         
         return $rowsAffected;
     }
@@ -88,14 +88,14 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_QuoteQuoteSetting)
         {
             $whereClause = array (
-                    'quoteId = ?' => $object->getQuoteId(),
+                    'quoteId = ?' => $object->getQuoteId(), 
                     'quoteSettingId = ?' => $object->getQuoteSettingId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'quoteId = ?' => $object [0],
+                    'quoteId = ?' => $object [0], 
                     'quoteSettingId = ?' => $object [1] 
             );
         }
@@ -130,7 +130,7 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_QuoteQuoteSetting($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -159,7 +159,7 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
         // Save the object into the cache
         $primaryKey [0] = $object->getQuoteId();
         $primaryKey [1] = $object->getQuoteSettingId();
-        $this->saveItemToCache($object, $primaryKey);
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -188,7 +188,7 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
             // Save the object into the cache
             $primaryKey [0] = $object->getQuoteId();
             $primaryKey [1] = $object->getQuoteSettingId();
-            $this->saveItemToCache($object, $primaryKey);
+            $this->saveItemToCache($object);
             
             $entries [] = $object;
         }
@@ -205,6 +205,17 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
     {
         return array (
                 'id = ?' => $id 
+        );
+    }
+    
+    /*
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     */
+    public function getPrimaryKeyValueForObject ($object)
+    {
+        return array (
+                $object->getQuoteId(), 
+                $object->getQuoteSettingId() 
         );
     }
 }

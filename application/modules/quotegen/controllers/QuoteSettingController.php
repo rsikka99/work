@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_QuoteSettingController extends Zend_Controller_Action
+class Quotegen_QuotesettingController extends Zend_Controller_Action
 {
 
     public function init ()
@@ -159,13 +159,14 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action
         // Find client and pass form object
         $form = new Quotegen_Form_QuoteSetting();
         
-        $quoteSettingId = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id)->getQuoteSettingId();
+        $quoteSettingId = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id)
+            ->getQuoteSettingId();
         
         $quoteSettingMapper = Quotegen_Model_Mapper_QuoteSetting::getInstance();
         $quoteSetting = $quoteSettingMapper->find($quoteSettingId);
-
+        
         $form->populate($quoteSetting->toArray());
-
+        
         // update record if post
         $request = $this->getRequest();
         if ($request->isPost())
@@ -177,16 +178,16 @@ class Quotegen_QuoteSettingController extends Zend_Controller_Action
                 {
                     // Validate the form
                     if ($form->isValid($values))
-                    {              
+                    {
                         $quoteSetting = new Quotegen_Model_QuoteSetting();
                         $quoteSetting->populate($values);
                         $quoteSetting->setId($quoteSettingId);
-		                $quoteSettingMapper->save($quoteSetting, $quoteSettingId);
-		                
-		                // Rediret user with message
+                        $quoteSettingMapper->save($quoteSetting, $quoteSettingId);
+                        
+                        // Rediret user with message
                         $this->_helper->flashMessenger(array (
                                 'success' => "Quote setting was updated sucessfully." 
-                        ));   
+                        ));
                     }
                     else
                     {

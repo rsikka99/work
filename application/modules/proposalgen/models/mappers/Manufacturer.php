@@ -42,7 +42,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
         $object->setId($id);
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $id;
     }
@@ -71,7 +71,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
         ));
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $primaryKey);
+        $this->saveItemToCache($object);
         
         return $rowsAffected;
     }
@@ -129,7 +129,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
         $object = new Proposalgen_Model_Manufacturer($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -156,7 +156,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
         $object = new Proposalgen_Model_Manufacturer($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $object->getId());
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -183,7 +183,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
             $object = new Proposalgen_Model_Manufacturer($row->toArray());
             
             // Save the object into the cache
-            $this->saveItemToCache($object, $object->getId());
+            $this->saveItemToCache($object);
             
             $entries [] = $object;
         }
@@ -205,7 +205,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
 
     /**
      * Gets all the manufacturers that are not "deleted"
-     * 
+     *
      * @return Ambigous <multitype:Proposalgen_Model_Manufacturer, multitype:Proposalgen_Model_Manufacturer >
      */
     public function fetchAllAvailableManufacturers ()
@@ -215,6 +215,14 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
         ), array (
                 'fullname ASC' 
         ));
+    }
+
+    /**
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     */
+    public function getPrimaryKeyValueForObject ($object)
+    {
+        return $object->getId();
     }
 }
 

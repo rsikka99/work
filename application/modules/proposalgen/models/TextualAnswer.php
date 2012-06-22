@@ -2,7 +2,7 @@
 
 /**
  * Class Proposalgen_Model_TextualAnswer
- * 
+ *
  * @author "Lee Robert"
  */
 class Proposalgen_Model_TextualAnswer extends Tangent_Model_Abstract

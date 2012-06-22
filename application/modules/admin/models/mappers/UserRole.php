@@ -1,6 +1,6 @@
 <?php
 
-class Admin_Model_UserRoleMapper extends My_Model_Mapper_Abstract
+class Admin_Model_Mapper_UserRole extends My_Model_Mapper_Abstract
 {
     /**
      * The default db table class to use
@@ -11,17 +11,38 @@ class Admin_Model_UserRoleMapper extends My_Model_Mapper_Abstract
     protected $_defaultDbTable = 'Admin_Model_DbTable_UserRole';
 
     /**
+     * Gets an instance of the mapper
+     *
+     * @return Admin_Model_Mapper_UserRole
+     */
+    public static function getInstance ()
+    {
+        return self::getCachedInstance();
+    }
+
+    /**
      * Saves an instance of Admin_Model_UserRole to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $userRole Admin_Model_UserRole
+     * @param $object Admin_Model_UserRole
      *            The object to insert
      * @return mixed The primary key of the new row
      */
-    public function insert (Admin_Model_UserRole &$userRole)
+    public function insert (&$object)
     {
-        $data = $userRole->toArray();
+        // Get an array of data to save
+        $data = $object->toArray();
+        
+        // Remove the id
+        unset($data ['id']);
+        
+        // Insert the data
         $id = $this->getDbTable()->insert($data);
+        
+        $object->setId($id);
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object);
         
         return $id;
     }
@@ -29,22 +50,19 @@ class Admin_Model_UserRoleMapper extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Admin_Model_UserRole to the database.
      *
-     * @param $userRole Admin_Model_UserRole
+     * @param $object Admin_Model_UserRole
      *            The userRole model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
      * @return int The number of rows affected
      */
-    public function save (Admin_Model_UserRole $userRole, $primaryKey = null)
+    public function save ($object, $primaryKey = null)
     {
-        $data = $this->unsetNullValues($userRole->toArray());
+        $data = $this->unsetNullValues($object->toArray());
         
         if ($primaryKey === null)
         {
-            $primaryKey = array (
-                    $data ['roleId'], 
-                    $data ['userId'] 
-            );
+            $primaryKey = $data ['id'];
         }
         
         // Update the row
@@ -52,32 +70,37 @@ class Admin_Model_UserRoleMapper extends My_Model_Mapper_Abstract
                 'id = ?' => $primaryKey 
         ));
         
+        // Save the object into the cache
+        $this->saveItemToCache($object);
+        
         return $rowsAffected;
     }
 
     /**
-     * Saves an instance of Admin_Model_UserRole to the database.
-     * If the id is null then it will insert a new row
+     * Deletes rows from the database.
      *
-     * @param $userRole mixed
-     *            This can either be an instance of Admin_Model_UserRole or the primary key to delete
-     * @return mixed The primary key of the new row
+     * @param $object mixed
+     *            This can either be an instance of Admin_Model_UserRole or the
+     *            primary key to delete
+     * @return mixed The number of rows deleted
      */
-    public function delete ($userRole)
+    public function delete ($object)
     {
-        if ($userRole instanceof Admin_Model_UserRole)
+        if ($object instanceof Admin_Model_UserRole)
         {
             $whereClause = array (
-                    'roleId = ?' => $userRole->getRoleId(), 
-                    'userId = ?' => $userRole->getUserId() 
+                    'id = ?' => $object->getId() 
             );
         }
         else
         {
-            $whereClause = $userRole;
+            $whereClause = array (
+                    'id = ?' => $object 
+            );
         }
         
-        return $this->getDbTable()->delete($whereClause);
+        $rowsAffected = $this->getDbTable()->delete($whereClause);
+        return $rowsAffected;
     }
 
     /**
@@ -89,13 +112,26 @@ class Admin_Model_UserRoleMapper extends My_Model_Mapper_Abstract
      */
     public function find ($id)
     {
+        // Get the item from the cache and return it if we find it.
+        $result = $this->getItemFromCache($id);
+        if ($result instanceof Admin_Model_UserRole)
+        {
+            return $result;
+        }
+        
+        // Assuming we don't have a cached object, lets go get it.
         $result = $this->getDbTable()->find($id);
         if (0 == count($result))
         {
             return;
         }
         $row = $result->current();
-        return new Admin_Model_UserRole($row->toArray());
+        $object = new Admin_Model_UserRole($row->toArray());
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object);
+        
+        return $object;
     }
 
     /**
@@ -116,7 +152,13 @@ class Admin_Model_UserRoleMapper extends My_Model_Mapper_Abstract
         {
             return;
         }
-        return new Admin_Model_UserRole($row->toArray());
+        
+        $object = new Admin_Model_UserRole($row->toArray());
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object);
+        
+        return $object;
     }
 
     /**
@@ -138,9 +180,39 @@ class Admin_Model_UserRoleMapper extends My_Model_Mapper_Abstract
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-            $entries [] = new Admin_Model_UserRole($row->toArray());
+            $object = new Admin_Model_UserRole($row->toArray());
+            
+            // Save the object into the cache
+            $this->saveItemToCache($object);
+            
+            $entries [] = $object;
         }
         return $entries;
+    }
+
+    /**
+     * Gets a where clause for filtering by id
+     *
+     * @param unknown_type $id            
+     * @return array
+     */
+    public function getWhereId ($id)
+    {
+        return array (
+                'userId = ?' => $id [0], 
+                'roleId = ?' => $id [1] 
+        );
+    }
+
+    /**
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     */
+    public function getPrimaryKeyValueForObject ($object)
+    {
+        return array (
+                $object->getUserId(), 
+                $object->getRoleId() 
+        );
     }
 }
 

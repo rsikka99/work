@@ -54,7 +54,7 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
 
     /**
      * Deletes all upload data collector rows for a report
-     * 
+     *
      * @param number $reportId            
      */
     public function deleteAllRowsForReport ($reportId)

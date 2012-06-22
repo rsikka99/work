@@ -1,13 +1,12 @@
 <?php
 
 /**
- * Edit Price Form:  used editing the master price of devices and parts in
+ * Edit Price Form: used editing the master price of devices and parts in
  * the system.
  *
- * @author	Mike Christie
+ * @author Mike Christie
  * @version v1.0
  */
-
 class Proposalgen_Form_AddPart extends Zend_Form
 {
 
@@ -116,9 +115,9 @@ class Proposalgen_Form_AddPart extends Zend_Form
         
         array_push($elements, $back);
         $elementCounter ++;
-
-    // add all defined elements to the form
-    $this->addElements($elements);
+        
+        // add all defined elements to the form
+        $this->addElements($elements);
     }
 }
 ?>

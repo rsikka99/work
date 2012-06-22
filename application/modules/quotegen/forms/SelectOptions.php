@@ -2,6 +2,13 @@
 
 class Quotegen_Form_SelectOptions extends EasyBib_Form
 {
+    protected $_availableOptions;
+
+    public function __construct ($availableOptions, $options = null)
+    {
+        $this->_availableOptions = $availableOptions;
+        parent::__construct($options);
+    }
 
     public function init ()
     {
@@ -23,36 +30,31 @@ class Quotegen_Form_SelectOptions extends EasyBib_Form
         $this->setAttrib('class', 'form-horizontal');
         
         $optionList = array ();
-        
-        
-        $options = array ();
-        for($i = 1; $i < 20; $i ++)
+        /* @var $option Quotegen_Model_Option */
+        if (count($this->_availableOptions) > 0)
         {
-            $options [] = new Quotegen_Model_Option(array (
-                    'id' => $i, 
-                    'name' => 'Option Name ' . $i 
+            foreach ( $this->_availableOptions as $option )
+            {
+                $optionList [$option->getId()] = $option->getName();
+            }
+            
+            $this->addElement('multiCheckbox', 'options', array (
+                    'label' => 'Options', 
+                    'multiOptions' => $optionList 
+            ));
+            
+            // Add the submit button
+            $this->addElement('submit', 'submit', array (
+                    'ignore' => true, 
+                    'label' => 'Add' 
             ));
         }
-        
-        /* @var $option Quotegen_Model_Option */
-//         foreach ( Quotegen_Model_Mapper_Option::getInstance()->fetchAll() as $option )
-        foreach ( $options as $option )
+        else
         {
-            $optionList [$option->getId()] = $option->getName();
-            
+            $paragraph = new My_Form_Element_Paragraph('test');
+            $paragraph->setLabel('All available options have been added to the device already.');
+            $this->addElement($paragraph);
         }
-        
-        $this->addElement('multiCheckbox', 'optionId', array (
-                'label' => 'Options',
-                'multiOptions' => $optionList
-        ));
-        
-        // Add the submit button
-        $this->addElement('submit', 'submit', array (
-                'ignore' => true, 
-                'label' => 'Create' 
-        ));
-        
         // Add the cancel button
         $this->addElement('submit', 'cancel', array (
                 'ignore' => true, 

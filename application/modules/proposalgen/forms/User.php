@@ -1,9 +1,9 @@
 <?php
 
 /**
- * User Form:  used for adding/editing users in the sytem
- * 
- * @author	Chris Garrah
+ * User Form: used for adding/editing users in the sytem
+ *
+ * @author Chris Garrah
  * @version v1.0
  */
 class Proposalgen_Form_User extends Zend_Form
@@ -11,9 +11,13 @@ class Proposalgen_Form_User extends Zend_Form
 
     /**
      * Constructor builds the form
-     * @param $options - not used (required) 	
-     * @param $type - can be set to 'edit', or null.  Differnt form elements are added for editing an instructor and adding a new instructor.
-     * @return HTML markup for the from is automatically returned by zend_form	 
+     * 
+     * @param $options -
+     *            not used (required)
+     * @param $type -
+     *            can be set to 'edit', or null. Differnt form elements are added for editing an instructor and adding a
+     *            new instructor.
+     * @return HTML markup for the from is automatically returned by zend_form
      */
     public function __construct ($options = null, $type = null)
     {
@@ -25,6 +29,7 @@ class Proposalgen_Form_User extends Zend_Form
         $this->setName('user_form');
         //$this->setAttrib('class', 'outlined');
         
+
         //add location drop down
         $location = new Zend_Form_Element_Select('select_user');
         $location->setLabel('Select User:')
@@ -35,11 +40,29 @@ class Proposalgen_Form_User extends Zend_Form
             ->setAttrib('id', 'select_user')
             ->setDecorators(array (
                 'ViewHelper', 
-                array (  'Description', array ( 'escape' => false, 'tag' => false ) ), 
+                array (
+                        'Description', 
+                        array (
+                                'escape' => false, 
+                                'tag' => false 
+                        ) 
+                ), 
                 'Errors', 
-                array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'select_user-element' ) ), 
-                array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label' ) ) 
-            ));
+                array (
+                        'HtmlTag', 
+                        array (
+                                'tag' => 'dd', 
+                                'id' => 'select_user-element' 
+                        ) 
+                ), 
+                array (
+                        'Label', 
+                        array (
+                                'tag' => 'dt', 
+                                'class' => 'forms_label' 
+                        ) 
+                ) 
+        ));
         array_push($elements, $location);
         $elementCounter ++;
         
@@ -52,11 +75,29 @@ class Proposalgen_Form_User extends Zend_Form
             ->setOrder($elementCounter)
             ->setDecorators(array (
                 'ViewHelper', 
-                array (  'Description', array ( 'escape' => false, 'tag' => false ) ), 
+                array (
+                        'Description', 
+                        array (
+                                'escape' => false, 
+                                'tag' => false 
+                        ) 
+                ), 
                 'Errors', 
-                array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'privileges-element' ) ), 
-                array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label' ) ) 
-            ));
+                array (
+                        'HtmlTag', 
+                        array (
+                                'tag' => 'dd', 
+                                'id' => 'privileges-element' 
+                        ) 
+                ), 
+                array (
+                        'Label', 
+                        array (
+                                'tag' => 'dt', 
+                                'class' => 'forms_label' 
+                        ) 
+                ) 
+        ));
         array_push($elements, $privileges);
         $elementCounter ++;
         
@@ -71,11 +112,29 @@ class Proposalgen_Form_User extends Zend_Form
                 ->setOrder($elementCounter)
                 ->setDecorators(array (
                     'ViewHelper', 
-                    array (  'Description', array ( 'escape' => false, 'tag' => false ) ), 
+                    array (
+                            'Description', 
+                            array (
+                                    'escape' => false, 
+                                    'tag' => false 
+                            ) 
+                    ), 
                     'Errors', 
-                    array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'select_company-element' ) ), 
-                    array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label' ) ) 
-                ));
+                    array (
+                            'HtmlTag', 
+                            array (
+                                    'tag' => 'dd', 
+                                    'id' => 'select_company-element' 
+                            ) 
+                    ), 
+                    array (
+                            'Label', 
+                            array (
+                                    'tag' => 'dt', 
+                                    'class' => 'forms_label' 
+                            ) 
+                    ) 
+            ));
         }
         else
         {
@@ -87,11 +146,29 @@ class Proposalgen_Form_User extends Zend_Form
                 ->setAttrib('id', 'select_company')
                 ->setDecorators(array (
                     'ViewHelper', 
-                    array (  'Description', array ( 'escape' => false, 'tag' => false ) ), 
+                    array (
+                            'Description', 
+                            array (
+                                    'escape' => false, 
+                                    'tag' => false 
+                            ) 
+                    ), 
                     'Errors', 
-                    array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'select_company-element' ) ), 
-                    array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label' ) ) 
-                ));
+                    array (
+                            'HtmlTag', 
+                            array (
+                                    'tag' => 'dd', 
+                                    'id' => 'select_company-element' 
+                            ) 
+                    ), 
+                    array (
+                            'Label', 
+                            array (
+                                    'tag' => 'dt', 
+                                    'class' => 'forms_label' 
+                            ) 
+                    ) 
+            ));
         }
         array_push($elements, $company);
         $elementCounter ++;
@@ -105,11 +182,29 @@ class Proposalgen_Form_User extends Zend_Form
             ->addValidator('NotEmpty')
             ->setDecorators(array (
                 'ViewHelper', 
-                array (  'Description', array ( 'escape' => false, 'tag' => false ) ), 
+                array (
+                        'Description', 
+                        array (
+                                'escape' => false, 
+                                'tag' => false 
+                        ) 
+                ), 
                 'Errors', 
-                array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'username-element' ) ), 
-                array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label' ) ) 
-            ));
+                array (
+                        'HtmlTag', 
+                        array (
+                                'tag' => 'dd', 
+                                'id' => 'username-element' 
+                        ) 
+                ), 
+                array (
+                        'Label', 
+                        array (
+                                'tag' => 'dt', 
+                                'class' => 'forms_label' 
+                        ) 
+                ) 
+        ));
         array_push($elements, $userName);
         $elementCounter ++;
         
@@ -122,11 +217,29 @@ class Proposalgen_Form_User extends Zend_Form
             ->addValidator('NotEmpty')
             ->setDecorators(array (
                 'ViewHelper', 
-                array (  'Description', array ( 'escape' => false, 'tag' => false ) ), 
+                array (
+                        'Description', 
+                        array (
+                                'escape' => false, 
+                                'tag' => false 
+                        ) 
+                ), 
                 'Errors', 
-                array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'userFirstName-element' ) ), 
-                array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label' ) ) 
-            ));
+                array (
+                        'HtmlTag', 
+                        array (
+                                'tag' => 'dd', 
+                                'id' => 'userFirstName-element' 
+                        ) 
+                ), 
+                array (
+                        'Label', 
+                        array (
+                                'tag' => 'dt', 
+                                'class' => 'forms_label' 
+                        ) 
+                ) 
+        ));
         array_push($elements, $firstName);
         $elementCounter ++;
         
@@ -139,11 +252,29 @@ class Proposalgen_Form_User extends Zend_Form
             ->addValidator('NotEmpty')
             ->setDecorators(array (
                 'ViewHelper', 
-                array (  'Description', array ( 'escape' => false, 'tag' => false ) ), 
+                array (
+                        'Description', 
+                        array (
+                                'escape' => false, 
+                                'tag' => false 
+                        ) 
+                ), 
                 'Errors', 
-                array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'userLastName-element' ) ), 
-                array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label' ) ) 
-            ));
+                array (
+                        'HtmlTag', 
+                        array (
+                                'tag' => 'dd', 
+                                'id' => 'userLastName-element' 
+                        ) 
+                ), 
+                array (
+                        'Label', 
+                        array (
+                                'tag' => 'dt', 
+                                'class' => 'forms_label' 
+                        ) 
+                ) 
+        ));
         array_push($elements, $lastName);
         $elementCounter ++;
         
@@ -158,11 +289,29 @@ class Proposalgen_Form_User extends Zend_Form
             ->addValidator('Phone')
             ->setDecorators(array (
                 'ViewHelper', 
-                array (  'Description', array ( 'escape' => false, 'tag' => false ) ), 
+                array (
+                        'Description', 
+                        array (
+                                'escape' => false, 
+                                'tag' => false 
+                        ) 
+                ), 
                 'Errors', 
-                array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'userPhone-element' ) ), 
-                array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label' ) ) 
-            ));
+                array (
+                        'HtmlTag', 
+                        array (
+                                'tag' => 'dd', 
+                                'id' => 'userPhone-element' 
+                        ) 
+                ), 
+                array (
+                        'Label', 
+                        array (
+                                'tag' => 'dt', 
+                                'class' => 'forms_label' 
+                        ) 
+                ) 
+        ));
         array_push($elements, $phone);
         $elementCounter ++;
         
@@ -177,11 +326,29 @@ class Proposalgen_Form_User extends Zend_Form
             ->addValidator('EmailAddress', true)
             ->setDecorators(array (
                 'ViewHelper', 
-                array (  'Description', array ( 'escape' => false, 'tag' => false ) ), 
+                array (
+                        'Description', 
+                        array (
+                                'escape' => false, 
+                                'tag' => false 
+                        ) 
+                ), 
                 'Errors', 
-                array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'userEmail-element' ) ), 
-                array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label' ) ) 
-            ));
+                array (
+                        'HtmlTag', 
+                        array (
+                                'tag' => 'dd', 
+                                'id' => 'userEmail-element' 
+                        ) 
+                ), 
+                array (
+                        'Label', 
+                        array (
+                                'tag' => 'dt', 
+                                'class' => 'forms_label' 
+                        ) 
+                ) 
+        ));
         array_push($elements, $email);
         $elementCounter ++;
         
@@ -191,11 +358,29 @@ class Proposalgen_Form_User extends Zend_Form
             ->setOrder($elementCounter)
             ->setDecorators(array (
                 'ViewHelper', 
-                array (  'Description', array ( 'escape' => false, 'tag' => false ) ), 
+                array (
+                        'Description', 
+                        array (
+                                'escape' => false, 
+                                'tag' => false 
+                        ) 
+                ), 
                 'Errors', 
-                array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'update_password-element' ) ), 
-                array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label' ) ) 
-            ));
+                array (
+                        'HtmlTag', 
+                        array (
+                                'tag' => 'dd', 
+                                'id' => 'update_password-element' 
+                        ) 
+                ), 
+                array (
+                        'Label', 
+                        array (
+                                'tag' => 'dt', 
+                                'class' => 'forms_label' 
+                        ) 
+                ) 
+        ));
         array_push($elements, $update_password);
         $elementCounter ++;
         
@@ -210,11 +395,29 @@ class Proposalgen_Form_User extends Zend_Form
             ->setDescription('<a href="javascript: void(0);" onclick="javascript: toggle_password(false)">Generate Password</a>')
             ->setDecorators(array (
                 'ViewHelper', 
-                array (  'Description', array ( 'escape' => false, 'tag' => false ) ), 
+                array (
+                        'Description', 
+                        array (
+                                'escape' => false, 
+                                'tag' => false 
+                        ) 
+                ), 
                 'Errors', 
-                array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'password-element' ) ), 
-                array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label' ) ) 
-            ));
+                array (
+                        'HtmlTag', 
+                        array (
+                                'tag' => 'dd', 
+                                'id' => 'password-element' 
+                        ) 
+                ), 
+                array (
+                        'Label', 
+                        array (
+                                'tag' => 'dt', 
+                                'class' => 'forms_label' 
+                        ) 
+                ) 
+        ));
         array_push($elements, $password);
         $elementCounter ++;
         
@@ -226,11 +429,29 @@ class Proposalgen_Form_User extends Zend_Form
             ->setAttrib('autocomplete', 'off')
             ->setDecorators(array (
                 'ViewHelper', 
-                array (  'Description', array ( 'escape' => false, 'tag' => false ) ), 
+                array (
+                        'Description', 
+                        array (
+                                'escape' => false, 
+                                'tag' => false 
+                        ) 
+                ), 
                 'Errors', 
-                array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'passwordConfirm-element' ) ), 
-                array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label' ) ) 
-            ))
+                array (
+                        'HtmlTag', 
+                        array (
+                                'tag' => 'dd', 
+                                'id' => 'passwordConfirm-element' 
+                        ) 
+                ), 
+                array (
+                        'Label', 
+                        array (
+                                'tag' => 'dt', 
+                                'class' => 'forms_label' 
+                        ) 
+                ) 
+        ))
             ->setOrder($elementCounter)
             ->addValidator('NotEmpty', true)
             ->addValidator('identical', false, array (
@@ -251,11 +472,29 @@ class Proposalgen_Form_User extends Zend_Form
             ->setDescription('<a href="javascript: void(0);" onclick="javascript: toggle_password(true)">Change Password</a>')
             ->setDecorators(array (
                 'ViewHelper', 
-                array ( 'Description', array ( 'escape' => false, 'tag' => false ) ), 
+                array (
+                        'Description', 
+                        array (
+                                'escape' => false, 
+                                'tag' => false 
+                        ) 
+                ), 
                 'Errors', 
-                array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'auto_password-element' ) ), 
-                array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label' ) ) 
-            ));
+                array (
+                        'HtmlTag', 
+                        array (
+                                'tag' => 'dd', 
+                                'id' => 'auto_password-element' 
+                        ) 
+                ), 
+                array (
+                        'Label', 
+                        array (
+                                'tag' => 'dt', 
+                                'class' => 'forms_label' 
+                        ) 
+                ) 
+        ));
         array_push($elements, $autoPassword);
         $elementCounter ++;
         
@@ -272,14 +511,32 @@ class Proposalgen_Form_User extends Zend_Form
         $must_change->setLabel('Require password change on next sign in:')
             ->setOrder($elementCounter)
             ->setAttrib('checked', 'checked')
-            ->setAttrib('class','inline')
+            ->setAttrib('class', 'inline')
             ->setDecorators(array (
                 'ViewHelper', 
-                array (  'Description', array ( 'escape' => false, 'tag' => false ) ), 
+                array (
+                        'Description', 
+                        array (
+                                'escape' => false, 
+                                'tag' => false 
+                        ) 
+                ), 
                 'Errors', 
-                array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'must_change-element' ) ), 
-                array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label inline' ) ) 
-            ));
+                array (
+                        'HtmlTag', 
+                        array (
+                                'tag' => 'dd', 
+                                'id' => 'must_change-element' 
+                        ) 
+                ), 
+                array (
+                        'Label', 
+                        array (
+                                'tag' => 'dt', 
+                                'class' => 'forms_label inline' 
+                        ) 
+                ) 
+        ));
         array_push($elements, $must_change);
         $elementCounter ++;
         
@@ -293,11 +550,29 @@ class Proposalgen_Form_User extends Zend_Form
             ->setDescription('mm/dd/yyyy')
             ->setDecorators(array (
                 'ViewHelper', 
-                array ( 'Description', array ( 'escape' => false, 'tag' => false ) ), 
+                array (
+                        'Description', 
+                        array (
+                                'escape' => false, 
+                                'tag' => false 
+                        ) 
+                ), 
                 'Errors', 
-                array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'login_restricted_date-element' ) ), 
-                array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label' ) ) 
-            ))
+                array (
+                        'HtmlTag', 
+                        array (
+                                'tag' => 'dd', 
+                                'id' => 'login_restricted_date-element' 
+                        ) 
+                ), 
+                array (
+                        'Label', 
+                        array (
+                                'tag' => 'dt', 
+                                'class' => 'forms_label' 
+                        ) 
+                ) 
+        ))
             ->setOrder($elementCounter);
         //array_push($elements,$element);
         //$elementCounter++;
@@ -307,14 +582,32 @@ class Proposalgen_Form_User extends Zend_Form
         $is_activated = new Zend_Form_Element_Checkbox('is_activated');
         $is_activated->setLabel('Activated:')
             ->setOrder($elementCounter)
-            ->setAttrib('class','inline')
+            ->setAttrib('class', 'inline')
             ->setDecorators(array (
                 'ViewHelper', 
-                array ( 'Description', array ( 'escape' => false, 'tag' => false ) ), 
+                array (
+                        'Description', 
+                        array (
+                                'escape' => false, 
+                                'tag' => false 
+                        ) 
+                ), 
                 'Errors', 
-                array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'is_activated-element' ) ), 
-                array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label inline' ) ) 
-            ));
+                array (
+                        'HtmlTag', 
+                        array (
+                                'tag' => 'dd', 
+                                'id' => 'is_activated-element' 
+                        ) 
+                ), 
+                array (
+                        'Label', 
+                        array (
+                                'tag' => 'dt', 
+                                'class' => 'forms_label inline' 
+                        ) 
+                ) 
+        ));
         array_push($elements, $is_activated);
         $elementCounter ++;
         
@@ -329,9 +622,25 @@ class Proposalgen_Form_User extends Zend_Form
             ->setDecorators(array (
                 'ViewHelper', 
                 'Errors', 
-                array ( array ( 'data' => 'HtmlTag' ),  array ( 'tag' => 'td', 'class' => 'botMenu' ) ), 
-                array ( array ( 'row' => 'HtmlTag' ), array ( 'tag' => 'tr', 'openOnly' => true ) ) 
-            ));
+                array (
+                        array (
+                                'data' => 'HtmlTag' 
+                        ), 
+                        array (
+                                'tag' => 'td', 
+                                'class' => 'botMenu' 
+                        ) 
+                ), 
+                array (
+                        array (
+                                'row' => 'HtmlTag' 
+                        ), 
+                        array (
+                                'tag' => 'tr', 
+                                'openOnly' => true 
+                        ) 
+                ) 
+        ));
         array_push($elements, $update);
         $elementCounter ++;
         
@@ -346,8 +655,16 @@ class Proposalgen_Form_User extends Zend_Form
             ->setDecorators(array (
                 'ViewHelper', 
                 'Errors', 
-                array ( array ( 'data' => 'HtmlTag' ), array ( 'tag' => 'td', 'class' => 'botMenu' ) ) 
-            ));
+                array (
+                        array (
+                                'data' => 'HtmlTag' 
+                        ), 
+                        array (
+                                'tag' => 'td', 
+                                'class' => 'botMenu' 
+                        ) 
+                ) 
+        ));
         array_push($elements, $element);
         $elementCounter ++;
         
@@ -360,9 +677,25 @@ class Proposalgen_Form_User extends Zend_Form
             ->setDecorators(array (
                 'ViewHelper', 
                 'Errors', 
-                array ( array ( 'data' => 'HtmlTag' ), array ( 'tag' => 'td', 'class' => 'botMenu' ) ), 
-                array ( array ( 'row' => 'HtmlTag' ), array ( 'tag' => 'tr', 'closeOnly' => 'true' ) ) 
-            ));
+                array (
+                        array (
+                                'data' => 'HtmlTag' 
+                        ), 
+                        array (
+                                'tag' => 'td', 
+                                'class' => 'botMenu' 
+                        ) 
+                ), 
+                array (
+                        array (
+                                'row' => 'HtmlTag' 
+                        ), 
+                        array (
+                                'tag' => 'tr', 
+                                'closeOnly' => 'true' 
+                        ) 
+                ) 
+        ));
         array_push($elements, $back);
         $elementCounter ++;
         
@@ -371,12 +704,19 @@ class Proposalgen_Form_User extends Zend_Form
         
         $this->setDecorators(array (
                 'FormElements', 
-                array ( array ( 'data' => 'HtmlTag' ), array ( 'tag' => 'table', 'class' => 'button_menu' ) ), 
+                array (
+                        array (
+                                'data' => 'HtmlTag' 
+                        ), 
+                        array (
+                                'tag' => 'table', 
+                                'class' => 'button_menu' 
+                        ) 
+                ), 
                 'Form' 
         ));
     } // end function __construct
 
-    
     public function set_validation ($data)
     {
         if ($data ['password_mode'] == "false")
@@ -391,7 +731,7 @@ class Proposalgen_Form_User extends Zend_Form
         }
         return $data;
     }
-    
 } // end class forms_instructorForm
+
 
 ?>

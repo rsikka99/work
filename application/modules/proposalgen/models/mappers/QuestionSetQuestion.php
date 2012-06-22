@@ -21,7 +21,7 @@ class Proposalgen_Model_Mapper_QuestionSetQuestion extends Tangent_Model_Mapper_
 
     /**
      * Maps a database row object to an Proposalgen_Model
-     * 
+     *
      * @param Zend_Db_Table_Row $row            
      * @return The appropriate Proposalgen_Model
      */
@@ -42,7 +42,7 @@ class Proposalgen_Model_Mapper_QuestionSetQuestion extends Tangent_Model_Mapper_
 
     /**
      * Saved an Proposalgen_Model_ object to the database
-     * 
+     *
      * @param unknown_type $object            
      */
     public function save (Proposalgen_Model_QuestionSet $object)

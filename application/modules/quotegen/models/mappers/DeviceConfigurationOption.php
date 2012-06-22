@@ -37,9 +37,22 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
         $id = $this->getDbTable()->insert($data);
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $id;
+    }
+
+    /**
+     * (non-PHPdoc)
+     *
+     * @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     */
+    public function getPrimaryKeyValueForObject ($object)
+    {
+        return array (
+                $object->getDeviceConfigurationId(), 
+                $object->getOptionId() 
+        );
     }
 
     /**
@@ -68,7 +81,7 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
         ));
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $primaryKey);
+        $this->saveItemToCache($object);
         
         return $rowsAffected;
     }
@@ -128,8 +141,8 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
         $object = new Quotegen_Model_DeviceConfigurationOption($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
-
+        $this->saveItemToCache($object);
+        
         return $object;
     }
 
@@ -157,7 +170,7 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
         // Save the object into the cache
         $primaryKey [0] = $object->getDeviceConfigurationId();
         $primaryKey [1] = $object->getOptionId();
-        $this->saveItemToCache($object, $primaryKey);
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -186,7 +199,7 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
             // Save the object into the cache
             $primaryKey [0] = $object->getDeviceConfigurationId();
             $primaryKey [1] = $object->getOptionId();
-            $this->saveItemToCache($object, $primaryKey);
+            $this->saveItemToCache($object);
             
             $entries [] = $object;
         }

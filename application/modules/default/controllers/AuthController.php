@@ -142,6 +142,7 @@ class Default_AuthController extends Zend_Controller_Action
         $this->_helper->redirector('login');
     } // end logoutAction
 
+    
     /**
      * This function handles logging a user out of the system and destroying any
      * sensitive session information.

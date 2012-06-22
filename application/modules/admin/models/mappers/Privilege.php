@@ -1,6 +1,6 @@
 <?php
 
-class Admin_Model_PrivilegeMapper extends My_Model_Mapper_Abstract
+class Admin_Model_Mapper_Privilege extends My_Model_Mapper_Abstract
 {
     /**
      * The default db table class to use
@@ -11,21 +11,38 @@ class Admin_Model_PrivilegeMapper extends My_Model_Mapper_Abstract
     protected $_defaultDbTable = 'Admin_Model_DbTable_Privilege';
 
     /**
+     * Gets an instance of the mapper
+     *
+     * @return Admin_Model_Mapper_Privilege
+     */
+    public static function getInstance ()
+    {
+        return self::getCachedInstance();
+    }
+
+    /**
      * Saves an instance of Admin_Model_Privilege to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $privilege Admin_Model_Privilege
+     * @param $object Admin_Model_Privilege
      *            The object to insert
      * @return mixed The primary key of the new row
      */
-    public function insert (Admin_Model_Privilege &$privilege)
+    public function insert (&$object)
     {
-        $data = $privilege->toArray();
+        // Get an array of data to save
+        $data = $object->toArray();
+        
+        // Remove the id
         unset($data ['id']);
+        
+        // Insert the data
         $id = $this->getDbTable()->insert($data);
         
-        // Since the privilege is set properly, set the id in the appropriate places
-        $privilege->setId($id);
+        $object->setId($id);
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object);
         
         return $id;
     }
@@ -33,15 +50,15 @@ class Admin_Model_PrivilegeMapper extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Admin_Model_Privilege to the database.
      *
-     * @param $privilege Admin_Model_Privilege
+     * @param $object Admin_Model_Privilege
      *            The privilege model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
      * @return int The number of rows affected
      */
-    public function save (Admin_Model_Privilege $privilege, $primaryKey = null)
+    public function save ($object, $primaryKey = null)
     {
-        $data = $this->unsetNullValues($privilege->toArray());
+        $data = $this->unsetNullValues($object->toArray());
         
         if ($primaryKey === null)
         {
@@ -53,33 +70,37 @@ class Admin_Model_PrivilegeMapper extends My_Model_Mapper_Abstract
                 'id = ?' => $primaryKey 
         ));
         
+        // Save the object into the cache
+        $this->saveItemToCache($object);
+        
         return $rowsAffected;
     }
 
     /**
-     * Saves an instance of Admin_Model_Privilege to the database.
-     * If the id is null then it will insert a new row
+     * Deletes rows from the database.
      *
-     * @param $privilege mixed
-     *            This can either be an instance of Admin_Model_Privilege or the primary key to delete
-     * @return mixed The primary key of the new row
+     * @param $object mixed
+     *            This can either be an instance of Admin_Model_Privilege or the
+     *            primary key to delete
+     * @return mixed The number of rows deleted
      */
-    public function delete ($privilege)
+    public function delete ($object)
     {
-        if ($privilege instanceof Admin_Model_Privilege)
+        if ($object instanceof Admin_Model_Privilege)
         {
             $whereClause = array (
-                    'id = ?' => $privilege->getId() 
+                    'id = ?' => $object->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'id = ?' => $privilege 
+                    'id = ?' => $object 
             );
         }
         
-        return $this->getDbTable()->delete($whereClause);
+        $rowsAffected = $this->getDbTable()->delete($whereClause);
+        return $rowsAffected;
     }
 
     /**
@@ -91,13 +112,26 @@ class Admin_Model_PrivilegeMapper extends My_Model_Mapper_Abstract
      */
     public function find ($id)
     {
+        // Get the item from the cache and return it if we find it.
+        $result = $this->getItemFromCache($id);
+        if ($result instanceof Admin_Model_Privilege)
+        {
+            return $result;
+        }
+        
+        // Assuming we don't have a cached object, lets go get it.
         $result = $this->getDbTable()->find($id);
         if (0 == count($result))
         {
             return;
         }
         $row = $result->current();
-        return new Admin_Model_Privilege($row->toArray());
+        $object = new Admin_Model_Privilege($row->toArray());
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object);
+        
+        return $object;
     }
 
     /**
@@ -118,7 +152,13 @@ class Admin_Model_PrivilegeMapper extends My_Model_Mapper_Abstract
         {
             return;
         }
-        return new Admin_Model_Privilege($row->toArray());
+        
+        $object = new Admin_Model_Privilege($row->toArray());
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object);
+        
+        return $object;
     }
 
     /**
@@ -140,47 +180,35 @@ class Admin_Model_PrivilegeMapper extends My_Model_Mapper_Abstract
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-            $entries [] = new Admin_Model_Privilege($row->toArray());
+            $object = new Admin_Model_Privilege($row->toArray());
+            
+            // Save the object into the cache
+            $this->saveItemToCache($object);
+            
+            $entries [] = $object;
         }
         return $entries;
     }
 
     /**
+     * Gets a where clause for filtering by id
      *
-     * @see Zend_Db_Table
-     * @return array Returns a count of objects
+     * @param unknown_type $id            
+     * @return array
      */
-    public function count ($whereClause = null)
+    public function getWhereId ($id)
     {
-        $count = 0;
-        try
-        {
-            $sql = $this->getDbTable()
-                ->select(Zend_Db_Table::SELECT_WITHOUT_FROM_PART)
-                ->from($this->getDbTable()
-                ->info("name"), "count(*)");
-            if ($whereClause)
-            {
-                foreach ( $whereClause as $column => $value )
-                {
-                    $sql->where($this->getDbTable()
-                        ->getAdapter()
-                        ->quoteInto($column, $value));
-                }
-            }
-            $result = $this->getDbTable()
-                ->getAdapter()
-                ->fetchRow($sql);
-            if ($result)
-            {
-                $count = $result ["count(*)"];
-            }
-        }
-        catch ( Exception $e )
-        {
-            throw new Exception("Failed to count rows", 0, $e);
-        }
-        return $count;
+        return array (
+                'id = ?' => $id 
+        );
+    }
+
+    /**
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     */
+    public function getPrimaryKeyValueForObject ($object)
+    {
+        return $object->getId();
     }
 }
 

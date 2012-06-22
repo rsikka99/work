@@ -42,7 +42,7 @@ class Quotegen_Model_Mapper_LeasingSchemaTerm extends My_Model_Mapper_Abstract
         $object->setId($id);
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $id;
     }
@@ -71,7 +71,7 @@ class Quotegen_Model_Mapper_LeasingSchemaTerm extends My_Model_Mapper_Abstract
         ));
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $primaryKey);
+        $this->saveItemToCache($object);
         
         return $rowsAffected;
     }
@@ -122,7 +122,7 @@ class Quotegen_Model_Mapper_LeasingSchemaTerm extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_LeasingSchemaTerm($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -149,7 +149,7 @@ class Quotegen_Model_Mapper_LeasingSchemaTerm extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_LeasingSchemaTerm($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $object->getId());
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -176,7 +176,7 @@ class Quotegen_Model_Mapper_LeasingSchemaTerm extends My_Model_Mapper_Abstract
             $object = new Quotegen_Model_LeasingSchemaTerm($row->toArray());
             
             // Save the object into the cache
-            $this->saveItemToCache($object, $object->getId());
+            $this->saveItemToCache($object);
             
             $entries [] = $object;
         }
@@ -198,7 +198,7 @@ class Quotegen_Model_Mapper_LeasingSchemaTerm extends My_Model_Mapper_Abstract
 
     /**
      * Fetches all the terms for a leasing schema
-     * 
+     *
      * @param $leasingSchemaId The
      *            id of the leasing schema
      * @return multitype:Quotegen_Model_LeasingSchemaTerm
@@ -208,6 +208,14 @@ class Quotegen_Model_Mapper_LeasingSchemaTerm extends My_Model_Mapper_Abstract
         return $this->fetchAll(array (
                 'leasingSchemaId = ?' => $leasingSchemaId 
         ), 'months ASC');
+    }
+    
+    /*
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     */
+    public function getPrimaryKeyValueForObject ($object)
+    {
+        return $object->getLeasingSchemaId();
     }
 }
 

@@ -1,13 +1,12 @@
 <?php
 
 /**
- * Edit Price Form:  used editing the master price of devices and parts in
+ * Edit Price Form: used editing the master price of devices and parts in
  * the system.
  *
- * @author	Mike Christie
+ * @author Mike Christie
  * @version v1.0
  */
-
 class Proposalgen_Form_EditPrice extends Zend_Form
 {
 
@@ -106,10 +105,9 @@ class Proposalgen_Form_EditPrice extends Zend_Form
         $deviceID = new Zend_Form_Element_Hidden('tangent_id_model');
         $deviceID->setAttrib('maxlength', 10)->setOrder($elementCounter);
         array_push($elements, $deviceID);
-    
-
-    // add all defined elements to the form
-    $this->addElements($elements);
+        
+        // add all defined elements to the form
+        $this->addElements($elements);
     }
 }
 ?>

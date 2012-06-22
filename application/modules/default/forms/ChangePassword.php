@@ -56,10 +56,10 @@ class Default_Form_ChangePassword extends EasyBib_Form
                                         6, 
                                         80 
                                 ) 
-                        ), 
-                         
+                        ) 
                 ) 
-        ));
+        )
+        );
         $this->addElement($newPassword);
         
         $newPasswordConfirm = new Zend_Form_Element_Password('password_confirm', array (

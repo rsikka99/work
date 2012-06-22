@@ -7,17 +7,17 @@
  *        
  */
 class Quotegen_Model_QuoteDeviceResidual extends My_Model_Abstract
-{    
-    /** 
+{
+    /**
      * id of a quoteDevice
-     * 
+     *
      * @var int
      */
     protected $_quoteDeviceId;
     
     /**
      * residual amount
-     * 
+     *
      * @var double
      */
     protected $_amount;
@@ -43,12 +43,13 @@ class Quotegen_Model_QuoteDeviceResidual extends My_Model_Abstract
     public function toArray ()
     {
         return array (
-                'quoteDeviceId' => $this->getQuoteDeviceId(),
-                'amount' => $this->getAmount()
+                'quoteDeviceId' => $this->getQuoteDeviceId(), 
+                'amount' => $this->getAmount() 
         );
     }
-    
-	/**
+
+    /**
+     *
      * @return the $_quoteDeviceId
      */
     public function getQuoteDeviceId ()
@@ -56,15 +57,17 @@ class Quotegen_Model_QuoteDeviceResidual extends My_Model_Abstract
         return $this->_quoteDeviceId;
     }
 
-	/**
-     * @param number $_quoteDeviceId
+    /**
+     *
+     * @param number $_quoteDeviceId            
      */
     public function setQuoteDeviceId ($_quoteDeviceId)
     {
         $this->_quoteDeviceId = $_quoteDeviceId;
     }
 
-	/**
+    /**
+     *
      * @return the $_amount
      */
     public function getAmount ()
@@ -72,12 +75,12 @@ class Quotegen_Model_QuoteDeviceResidual extends My_Model_Abstract
         return $this->_amount;
     }
 
-	/**
-     * @param number $_amount
+    /**
+     *
+     * @param number $_amount            
      */
     public function setAmount ($_amount)
     {
         $this->_amount = $_amount;
     }
-
 }

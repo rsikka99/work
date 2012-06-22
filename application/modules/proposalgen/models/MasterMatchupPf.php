@@ -2,7 +2,7 @@
 
 /**
  * Class Proposalgen_Model_MasterMatchupPf
- * 
+ *
  * @author "Kevin Jervis"
  */
 class Proposalgen_Model_MasterMatchupPf extends Tangent_Model_Abstract

@@ -1,6 +1,6 @@
 <?php
 
-class Application_Model_UserMapper extends My_Model_Mapper_Abstract
+class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
 {
     /**
      * The default db table class to use
@@ -12,8 +12,8 @@ class Application_Model_UserMapper extends My_Model_Mapper_Abstract
 
     /**
      * Gets an instance of the mapper
-     * 
-     * @return Application_Model_UserMapper
+     *
+     * @return Application_Model_Mapper_User
      */
     public static function getInstance ()
     {
@@ -24,21 +24,25 @@ class Application_Model_UserMapper extends My_Model_Mapper_Abstract
      * Saves an instance of Application_Model_User to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $user Application_Model_User
+     * @param $object Application_Model_User
      *            The object to insert
      * @return mixed The primary key of the new row
      */
-    public function insert (Application_Model_User &$user)
+    public function insert (&$object)
     {
-        $user->setUsername(strtolower($user->getUsername()));
-        $data = $user->toArray();
+        // Get an array of data to save
+        $data = $object->toArray();
+        
+        // Remove the id
         unset($data ['id']);
         
-        // lower case the username  	 
+        // Insert the data
         $id = $this->getDbTable()->insert($data);
         
-        // Since the user is set properly, set the id in the appropriate places
-        $user->setId($id);
+        $object->setId($id);
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object);
         
         return $id;
     }
@@ -46,16 +50,15 @@ class Application_Model_UserMapper extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Application_Model_User to the database.
      *
-     * @param $user Application_Model_User
+     * @param $object Application_Model_User
      *            The user model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
      * @return int The number of rows affected
      */
-    public function save (Application_Model_User $user, $primaryKey = null)
+    public function save ($object, $primaryKey = null)
     {
-        $user->setUsername(strtolower($user->getUsername()));
-        $data = $this->unsetNullValues($user->toArray());
+        $data = $this->unsetNullValues($object->toArray());
         
         if ($primaryKey === null)
         {
@@ -67,33 +70,37 @@ class Application_Model_UserMapper extends My_Model_Mapper_Abstract
                 'id = ?' => $primaryKey 
         ));
         
+        // Save the object into the cache
+        $this->saveItemToCache($object);
+        
         return $rowsAffected;
     }
 
     /**
-     * Saves an instance of Application_Model_User to the database.
-     * If the id is null then it will insert a new row
+     * Deletes rows from the database.
      *
-     * @param $user mixed
-     *            This can either be an instance of Application_Model_User or the primary key to delete
-     * @return mixed The primary key of the new row
+     * @param $object mixed
+     *            This can either be an instance of Application_Model_User or the
+     *            primary key to delete
+     * @return mixed The number of rows deleted
      */
-    public function delete ($user)
+    public function delete ($object)
     {
-        if ($user instanceof Application_Model_User)
+        if ($object instanceof Application_Model_User)
         {
             $whereClause = array (
-                    'id = ?' => $user->getId() 
+                    'id = ?' => $object->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'id = ?' => $user 
+                    'id = ?' => $object 
             );
         }
         
-        return $this->getDbTable()->delete($whereClause);
+        $rowsAffected = $this->getDbTable()->delete($whereClause);
+        return $rowsAffected;
     }
 
     /**
@@ -105,13 +112,26 @@ class Application_Model_UserMapper extends My_Model_Mapper_Abstract
      */
     public function find ($id)
     {
+        // Get the item from the cache and return it if we find it.
+        $result = $this->getItemFromCache($id);
+        if ($result instanceof Application_Model_User)
+        {
+            return $result;
+        }
+        
+        // Assuming we don't have a cached object, lets go get it.
         $result = $this->getDbTable()->find($id);
         if (0 == count($result))
         {
             return;
         }
         $row = $result->current();
-        return new Application_Model_User($row->toArray());
+        $object = new Application_Model_User($row->toArray());
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object);
+        
+        return $object;
     }
 
     /**
@@ -132,7 +152,13 @@ class Application_Model_UserMapper extends My_Model_Mapper_Abstract
         {
             return;
         }
-        return new Application_Model_User($row->toArray());
+        
+        $object = new Application_Model_User($row->toArray());
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object);
+        
+        return $object;
     }
 
     /**
@@ -154,9 +180,35 @@ class Application_Model_UserMapper extends My_Model_Mapper_Abstract
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-            $entries [] = new Application_Model_User($row->toArray());
+            $object = new Application_Model_User($row->toArray());
+            
+            // Save the object into the cache
+            $this->saveItemToCache($object);
+            
+            $entries [] = $object;
         }
         return $entries;
+    }
+
+    /**
+     * Gets a where clause for filtering by id
+     *
+     * @param unknown_type $id            
+     * @return array
+     */
+    public function getWhereId ($id)
+    {
+        return array (
+                'id = ?' => $id 
+        );
+    }
+
+    /**
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     */
+    public function getPrimaryKeyValueForObject ($object)
+    {
+        return $object->getId();
     }
 }
 

@@ -50,7 +50,7 @@ class Proposal_GrossmarginController extends My_Controller_Report
 
     /**
      * Function to hold the old csv code for the gross margin report
-     * 
+     *
      * @throws Exception
      */
     public function initCSVGrossMargin ()
@@ -78,31 +78,31 @@ class Proposal_GrossmarginController extends My_Controller_Report
         
         // Define our field titles
         $fieldTitlesLvl1 = array (
-            'Device Name', 
-            'Black And White', 
-            '', 
-            '', 
-            '', 
-            '', 
-            'Color', 
-            '', 
-            '', 
-            '', 
-            '' 
+                'Device Name', 
+                'Black And White', 
+                '', 
+                '', 
+                '', 
+                '', 
+                'Color', 
+                '', 
+                '', 
+                '', 
+                '' 
         );
         
         $fieldTitlesLvl2 = array (
-            '(IP Address - Serial Number)', 
-            'AMPV', 
-            'Toner Cost', 
-            'Toner Yield', 
-            'CPP', 
-            'Total Printing Cost', 
-            'AMPV', 
-            'Toner Cost', 
-            'Toner Yield', 
-            'CPP', 
-            'Total Printing Cost' 
+                '(IP Address - Serial Number)', 
+                'AMPV', 
+                'Toner Cost', 
+                'Toner Yield', 
+                'CPP', 
+                'Total Printing Cost', 
+                'AMPV', 
+                'Toner Cost', 
+                'Toner Yield', 
+                'CPP', 
+                'Total Printing Cost' 
         );
         
         try
@@ -193,30 +193,30 @@ class Proposal_GrossmarginController extends My_Controller_Report
         
         // Removes spaces from company name, otherwise CSV filename contains + symbol
         $companyName = str_replace(array (
-            " ", 
-            "/", 
-            "\\", 
-            ";", 
-            "?", 
-            "\"", 
-            "'", 
-            ",", 
-            "%", 
-            "&", 
-            "#", 
-            "@", 
-            "!", 
-            ">", 
-            "<", 
-            "+", 
-            "=", 
-            "{", 
-            "}", 
-            "[", 
-            "]", 
-            "|", 
-            "~", 
-            "`" 
+                " ", 
+                "/", 
+                "\\", 
+                ";", 
+                "?", 
+                "\"", 
+                "'", 
+                ",", 
+                "%", 
+                "&", 
+                "#", 
+                "@", 
+                "!", 
+                ">", 
+                "<", 
+                "+", 
+                "=", 
+                "{", 
+                "}", 
+                "[", 
+                "]", 
+                "|", 
+                "~", 
+                "`" 
         ), "_", $proposal->Report->CustomerCompanyName);
     }
 } // end index controller

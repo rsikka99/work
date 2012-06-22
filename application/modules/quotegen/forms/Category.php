@@ -19,46 +19,43 @@ class Quotegen_Form_Category extends EasyBib_Form
          * - Horizontal .form-horizontal
          *
          * Use .form-horizontal to have same experience as with Bootstrap v1!
-        */
+         */
         $this->setAttrib('class', 'form-horizontal');
-
+        
         $this->addElement('text', 'name', array (
-                'label' => 'Name:',
-                'required' => true,
+                'label' => 'Name:', 
+                'required' => true, 
                 
                 'filters' => array (
-                        'StringTrim',
-                        'StripTags'
-                ),
+                        'StringTrim', 
+                        'StripTags' 
+                ) 
         ));
         
-
         $this->addElement('textArea', 'description', array (
-                'label' => 'Description:',
-                'required' => true,
-                'style' => 'height: 100px',
+                'label' => 'Description:', 
+                'required' => true, 
+                'style' => 'height: 100px', 
                 'filters' => array (
-                        'StringTrim',
-                        'StripTags'
-                )
+                        'StringTrim', 
+                        'StripTags' 
+                ) 
         ));
         
         // Add the submit button
         $this->addElement('submit', 'submit', array (
-                'ignore' => true,
-                'label' => 'Save'
+                'ignore' => true, 
+                'label' => 'Save' 
         ));
         
         // Add the cancel button
         $this->addElement('submit', 'cancel', array (
-                'ignore' => true,
-                'label' => 'Cancel'
+                'ignore' => true, 
+                'label' => 'Cancel' 
         ));
         
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
-        
     }
 }
-
 
 ?>

@@ -21,7 +21,7 @@ class Proposalgen_Model_Mapper_MasterMatchupPf extends Tangent_Model_Mapper_Abst
 
     /**
      * Maps a database row object to an Proposalgen_Model
-     * 
+     *
      * @param Zend_Db_Table_Row $row            
      * @return The appropriate Proposalgen_Model
      */

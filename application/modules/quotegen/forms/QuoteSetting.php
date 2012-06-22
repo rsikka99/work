@@ -102,8 +102,9 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                 ) 
         ));
         
-        
-        $pricingConfigDropdown = new Zend_Form_Element_Select('pricingConfigId', array ( 'label' => 'Toner Preference:'));
+        $pricingConfigDropdown = new Zend_Form_Element_Select('pricingConfigId', array (
+                'label' => 'Toner Preference:' 
+        ));
         
         /* @var $princingConfig Proposalgen_Model_PricingConfig */
         foreach ( Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll() as $pricingConfig )

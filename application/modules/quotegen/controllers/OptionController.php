@@ -92,12 +92,21 @@ class Quotegen_OptionController extends Zend_Controller_Action
                 {
                     if ($form->isValid($values))
                     {
-                        // Persist data to database
-                        $categoryMapper = new Quotegen_Model_Mapper_Category();
-                        $category = new Quotegen_Model_Category();
-                        $category->populate($values);
+                        $optionMapper = Quotegen_Model_Mapper_Option::getInstance();
                         
-                        $categoryMapper->insert($category);
+                        $option = new Quotegen_Model_Option();
+                        $option->populate($values);
+                        $optionId = $optionMapper->insert($option);
+                        
+                        // Create optionCategory with $optionId to save 
+                        $optionCategory = new Quotegen_Model_OptionCategory();
+                        $optionCategory->setOptionId($optionId);
+                        
+                        foreach ( $values ['categories'] as $categoryId )
+                        {
+                            $optionCategory->setCategoryId($categoryId);
+                            Quotegen_Model_Mapper_OptionCategory::getInstance()->insert($optionCategory);
+                        }
                         
                         // Redirect client back to index
                         $this->_helper->redirector('index');

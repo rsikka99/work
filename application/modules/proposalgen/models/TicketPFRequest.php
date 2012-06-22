@@ -2,7 +2,7 @@
 
 /**
  * Class Proposalgen_Model_TicketPFRequest
- * 
+ *
  * @author "John Sadler"
  */
 class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract

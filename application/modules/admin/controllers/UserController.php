@@ -83,26 +83,27 @@ class Admin_UserController extends Zend_Controller_Action
                     catch ( Zend_Db_Statement_Mysqli_Exception $e )
                     {
                         // Check to see what error code was thrown
-						switch ($e->getCode()){
-						    // Duplicate column
-							case 1062:
-							    $this->_helper->flashMessenger(array (
-							            'danger' => 'Username already exists.'
-							    ));
-							    break;
-							default:
-							    $this->_helper->flashMessenger(array (
-							            'danger' => 'Error saving to database.  Please try again.'
-							    ));
-							    break;
-						}
+                        switch ($e->getCode())
+                        {
+                            // Duplicate column
+                            case 1062 :
+                                $this->_helper->flashMessenger(array (
+                                        'danger' => 'Username already exists.' 
+                                ));
+                                break;
+                            default :
+                                $this->_helper->flashMessenger(array (
+                                        'danger' => 'Error saving to database.  Please try again.' 
+                                ));
+                                break;
+                        }
                         
                         $form->populate($request->getPost());
                     }
-                    catch ( Exception $e) 
+                    catch ( Exception $e )
                     {
                         $this->_helper->flashMessenger(array (
-                                'danger' => 'There was an error processing this request.  Please try again.'
+                                'danger' => 'There was an error processing this request.  Please try again.' 
                         ));
                         $form->populate($request->getPost());
                     }
@@ -117,7 +118,7 @@ class Admin_UserController extends Zend_Controller_Action
             }
             else
             {
-            // TODO handle cancel request
+                // TODO handle cancel request
             // User has cancelled. We could do a redirect here if we wanted.
             }
         }

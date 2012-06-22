@@ -166,4 +166,15 @@ class Proposalgen_Model_Mapper_User_Report_Setting extends My_Model_Mapper_Abstr
         }
         return $entries;
     }
+
+    /**
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     */
+    public function getPrimaryKeyValueForObject ($object)
+    {
+        return array (
+                $object->getUserId(), 
+                $object->getReportSettingId() 
+        );
+    }
 }

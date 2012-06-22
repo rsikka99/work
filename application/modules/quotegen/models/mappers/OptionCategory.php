@@ -37,7 +37,7 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
         $id = $this->getDbTable()->insert($data);
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $id;
     }
@@ -68,7 +68,7 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
         ));
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $primaryKey);
+        $this->saveItemToCache($object);
         
         return $rowsAffected;
     }
@@ -154,7 +154,7 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_OptionCategory($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -183,7 +183,7 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
         // Save the object into the cache
         $primaryKey [0] = $object->getCategoryId();
         $primaryKey [1] = $object->getOptionId();
-        $this->saveItemToCache($object, $primaryKey);
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -212,7 +212,7 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
             // Save the object into the cache
             $primaryKey [0] = $object->getCategoryId();
             $primaryKey [1] = $object->getOptionId();
-            $this->saveItemToCache($object, $primaryKey);
+            $this->saveItemToCache($object);
             
             $entries [] = $object;
         }
@@ -261,6 +261,17 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
             $categories = false;
         }
         return $categories;
+    }
+    
+    /*
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     */
+    public function getPrimaryKeyValueForObject ($object)
+    {
+        return array (
+                $object->getCategoryId(), 
+                $object->getOptionId() 
+        );
     }
 }
 

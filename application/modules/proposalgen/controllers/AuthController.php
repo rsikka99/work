@@ -33,9 +33,10 @@ class Proposalgen_AuthController extends Zend_Controller_Action
 
     /**
      * Instantiates an authentication adapter
+     * 
      * @return Zend_Auth_Adapter_DbTable
      */
-    protected function getAuthAdapter()
+    protected function getAuthAdapter ()
     {
         $adapter = new Zend_Auth_Adapter_DbTable();
         $adapter->setTableName('users');
@@ -45,7 +46,7 @@ class Proposalgen_AuthController extends Zend_Controller_Action
         
         return $adapter;
     }
-    
+
     /**
      * The login action authenticates a user with our system.
      * After a successful authentication we should send them back to the page
@@ -130,7 +131,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
 
                         // Add an array of privileges to the authentication token
                         $userInfo->privileges = $privs;
-                    
                     }
                     catch ( Exception $e )
                     {
@@ -155,7 +155,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                     {
                         $this->_redirect('/');
                     }
-                
                 }
                 else
                 {
@@ -188,11 +187,9 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                 // Build the bootstrap error decorator
                 $form->buildBootstrapErrorDecorators();
             }
-        
         }
         
         $this->view->form = $form;
-    
     } // end loginAction
 
     
@@ -201,7 +198,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
      */
     function oldloginAction ()
     {
-        
         $this->view->loggedIn = false;
         $this->view->message = ''; // reset the error message box
         
@@ -247,7 +243,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                         if ($session->SessionId != $currentSessionId)
                         {
                             @unlink($config->resources->session->save_path . '/sess_' . $session->SessionId);
-                        
                         }
                     }
                     
@@ -284,7 +279,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
 
                         // Add an array of privileges to the authentication token
                         $data->privileges = $privs;
-                    
                     }
                     catch ( Exception $e )
                     {
@@ -299,7 +293,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                     // this time user with have the authenication token,
                     // and be allowed to access
                     $this->_redirect('/');
-                
                 }
                 else
                 {
@@ -379,12 +372,11 @@ class Proposalgen_AuthController extends Zend_Controller_Action
         $captcha->generate();
         
         return $captcha->getId();
-    
     }
 
     /**
      * Gets a random number from /dev/urandom
-     * 
+     *
      * @param int $min
      *            The minimum number generated
      * @param int $max
@@ -413,7 +405,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
 
     function forgotpasswordAction ()
     {
-        
         $db = Zend_Db_Table::getDefaultAdapter();
         $this->_helper->layout->setLayout('auth');
         $this->view->message = '';
@@ -504,7 +495,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
 
                                 // save to database
                                 $db->commit();
-                            
                             }
                             catch ( Exception $e )
                             {
@@ -513,7 +503,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                                 // prepare error message stating user not found
                                 $this->view->message = "An error has occurred updating the database. The password was not reset and no email was sent.";
                             }
-                        
                         }
                         else
                         {
@@ -533,7 +522,7 @@ class Proposalgen_AuthController extends Zend_Controller_Action
 
     /**
      * Checks the validity of a password reset hash uid
-     * 
+     *
      * @param string $resetUid            
      * @return Proposalgen_Model_User_PasswordResetRequest
      */
@@ -573,7 +562,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
             {
                 $passwordresetrequest = false;
             }
-        
         }
         return $passwordresetrequest;
     }
@@ -625,7 +613,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                     }
                 }
             }
-        
         }
         
         // TODO: We should probably make this page display an error if it is not valid instead of sending them on their way
@@ -698,7 +685,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                             $this->view->message = "Your password and confirmation password do not match. Please try again.";
                         else
                             $this->view->message = "Your password cannot be empty.";
-                    
                     }
                 }
                 
@@ -722,7 +708,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                 }
             }
         }
-    
     }
 
     function accepteulaAction ()
@@ -775,30 +760,19 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                         $db->rollback();
                         $this->view->message = "An error has occurred and the EULA was not accepted. Please go back and try again. ";
                         $this->view->message .= "If you continue to have problems please contact your administrator.";
-                    
                     } // end catch
-                
-
                 }
                 else
                 {
                     $this->view->message = "You <strong>must</strong> accept the EULA to continue.";
-                
                 } // end else
-            
-
             }
             else
             {
                 // Log the user out
                 $this->_redirect('/auth/logout');
-            
             }
         } // endif
-    
-
     } // end accept eula Action
-
-
 } // end auth controller
 

@@ -37,7 +37,7 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
         $id = $this->getDbTable()->insert($data);
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $id;
     }
@@ -66,7 +66,7 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
         ));
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $primaryKey);
+        $this->saveItemToCache($object);
         
         return $rowsAffected;
     }
@@ -84,7 +84,7 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
         if ($object instanceof Quotegen_Model_QuoteDeviceMonthlyPage)
         {
             $whereClause = array (
-                    'quoteDeviceId = ?' => $object->getQuoteDeviceId()
+                    'quoteDeviceId = ?' => $object->getQuoteDeviceId() 
             );
         }
         else
@@ -124,7 +124,7 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
         $object = new Quotegen_Model_QuoteDeviceMonthlyPage($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $id);
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -151,7 +151,7 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
         $object = new Quotegen_Model_QuoteDeviceMonthlyPage($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object, $object->getQuoteDeviceId());
+        $this->saveItemToCache($object);
         
         return $object;
     }
@@ -178,7 +178,7 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
             $object = new Quotegen_Model_QuoteDeviceMonthlyPage($row->toArray());
             
             // Save the object into the cache
-            $this->saveItemToCache($object, $object->getQuoteDeviceId());
+            $this->saveItemToCache($object);
             
             $entries [] = $object;
         }
@@ -196,6 +196,14 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
         return array (
                 'quoteDeviceId = ?' => $id 
         );
+    }
+    
+    /*
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     */
+    public function getPrimaryKeyValueForObject ($object)
+    {
+        return $object->getQuoteDeviceId();
     }
 }
 

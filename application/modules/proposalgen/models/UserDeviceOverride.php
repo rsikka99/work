@@ -2,6 +2,7 @@
 
 /**
  * Class Application_Model_UserDeviceOverride
+ * 
  * @author "Kevin Jervis"
  */
 class Application_Model_UserDeviceOverride extends Tangent_Model_Abstract
@@ -13,6 +14,7 @@ class Application_Model_UserDeviceOverride extends Tangent_Model_Abstract
     protected $IsLeased;
 
     /**
+     *
      * @return the $UserId
      */
     public function getUserId ()
@@ -26,7 +28,8 @@ class Application_Model_UserDeviceOverride extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $UserId
+     *
+     * @param field_type $UserId            
      */
     public function setUserId ($UserId)
     {
@@ -35,6 +38,7 @@ class Application_Model_UserDeviceOverride extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $MasterDeviceId
      */
     public function getMasterDeviceId ()
@@ -48,7 +52,8 @@ class Application_Model_UserDeviceOverride extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $MasterDeviceId
+     *
+     * @param field_type $MasterDeviceId            
      */
     public function setMasterDeviceId ($MasterDeviceId)
     {
@@ -57,6 +62,7 @@ class Application_Model_UserDeviceOverride extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $OverrideDevicePrice
      */
     public function getOverrideDevicePrice ()
@@ -70,7 +76,8 @@ class Application_Model_UserDeviceOverride extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $OverrideDevicePrice
+     *
+     * @param field_type $OverrideDevicePrice            
      */
     public function setOverrideDevicePrice ($OverrideDevicePrice)
     {
@@ -79,6 +86,7 @@ class Application_Model_UserDeviceOverride extends Tangent_Model_Abstract
     }
 
     /**
+     *
      * @return the $IsLeased
      */
     public function getIsLeased ()
@@ -92,12 +100,12 @@ class Application_Model_UserDeviceOverride extends Tangent_Model_Abstract
     }
 
     /**
-     * @param field_type $IsLeased
+     *
+     * @param field_type $IsLeased            
      */
     public function setIsLeased ($IsLeased)
     {
         $this->IsLeased = $IsLeased;
         return $this;
     }
-
 }

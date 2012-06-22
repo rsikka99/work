@@ -32,5 +32,4 @@ class Proposalgen_Form_SelectReportType extends EasyBib_Form
         
         $this->addElement($radio);
     }
-
 }

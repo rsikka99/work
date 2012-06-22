@@ -22,7 +22,6 @@ class Proposalgen_Form_Survey_Purchasing extends Proposalgen_Form_Survey_BaseSur
          */
         $this->setAttrib('class', 'proposalForm form-vertical');
         
-
         $numb_vendors = new Zend_Form_Element_Text('numb_vendors');
         $numb_vendors->setRequired(true)
             ->setAttrib('maxlength', 3)
@@ -48,7 +47,7 @@ class Proposalgen_Form_Survey_Purchasing extends Proposalgen_Form_Survey_BaseSur
         
         $ink_toner_order = new Zend_Form_Element_Text('numb_monthlyOrders');
         $ink_toner_order->setAttrib('maxlength', 3)
-        ->setAttrib('class', 'span1')
+            ->setAttrib('class', 'span1')
             ->setAllowEmpty(false)
             ->addValidator(new Custom_Validate_FieldDependsOnValue('inkTonerOrderRadio', 'Times per month', array (
                 new Zend_Validate_NotEmpty(), 
