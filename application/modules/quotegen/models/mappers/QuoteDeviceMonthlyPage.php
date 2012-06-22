@@ -84,7 +84,7 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
         if ($object instanceof Quotegen_Model_QuoteDeviceMonthlyPage)
         {
             $whereClause = array (
-                    'quoteDeviceId = ?' => $object->getQuoteDeviceId()
+                    'quoteDeviceId = ?' => $object->getQuoteDeviceId() 
             );
         }
         else

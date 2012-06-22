@@ -369,7 +369,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
 
     /**
      * Sets the objects new quantity
-     * 
+     *
      * @param number $_quantity
      *            the new quanitty
      */

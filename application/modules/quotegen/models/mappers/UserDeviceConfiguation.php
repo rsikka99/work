@@ -195,14 +195,15 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
     /**
      * Gets a where clause for filtering by id
      *
-     * @param array mixed$id            
+     * @param
+     *            array mixed$id
      * @return array
      */
     public function getWhereId ($id)
     {
         return array (
-                'deviceConfigurationId = ?' => $id [0],
-                'userId = ?' => $id [1],
+                'deviceConfigurationId = ?' => $id [0], 
+                'userId = ?' => $id [1] 
         );
     }
 }

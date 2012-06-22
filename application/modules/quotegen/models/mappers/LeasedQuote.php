@@ -38,7 +38,7 @@ class Quotegen_Model_Mapper_LeasedQuote extends My_Model_Mapper_Abstract
         
         // Save the object into the cache
         $this->saveItemToCache($object);
-     
+        
         return $id;
     }
 

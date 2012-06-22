@@ -1,9 +1,9 @@
 <?php
+
 /**
- * 
- * 
- * @author swilder
  *
+ * @author swilder
+ *        
  */
 class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Abstract
 {
@@ -89,7 +89,7 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
         if ($object instanceof Quotegen_Model_GlobalDeviceConfiguration)
         {
             $whereClause = array (
-                    'deviceConfigurationId = ?' => $object->getDeviceConfigurationId()
+                    'deviceConfigurationId = ?' => $object->getDeviceConfigurationId() 
             );
         }
         else

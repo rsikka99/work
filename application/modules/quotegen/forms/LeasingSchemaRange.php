@@ -26,17 +26,17 @@ class Quotegen_Form_LeasingSchemaRange extends EasyBib_Form
         $this->setName('leasingSchemaRange');
         $this->setAttrib('id', 'leasingSchemaRange');
         
-        $this->addElement('hidden', 'hdnId', array());
+        $this->addElement('hidden', 'hdnId', array ());
         
         $this->addElement('text', 'range', array (
                 'label' => 'New Range:', 
                 'required' => true, 
-                'class' => 'span1',
-                'style' => 'position: relative; left: -4px;',
+                'class' => 'span1', 
+                'style' => 'position: relative; left: -4px;', 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
-                ),
+                ), 
                 'validators' => array (
                         array (
                                 'validator' => 'StringLength', 
@@ -52,37 +52,37 @@ class Quotegen_Form_LeasingSchemaRange extends EasyBib_Form
         {
             $termid = $term->getId();
             
-	        $this->addElement('text', "rate{$termid}", array (
-	                'label' => 'Rate:', 
-	                'required' => true, 
-	                'filters' => array (
-	                        'StringTrim', 
-	                        'StripTags' 
-	                ),
-	                'class' => 'span1',
-	                'validators' => array (
-	                        array (
-	                                'validator' => 'StringLength', 
-	                                'options' => array (
-	                                        1, 
-	                                        6 
-	                                )
-	                        ),
-	                        array (
-	                                'validator' => 'Between',
-	                                'options' => array (
-	                                        0.0001,
-	                                        1.0000
-	                                )
-	                        )
-	                ) 
-	        ));
+            $this->addElement('text', "rate{$termid}", array (
+                    'label' => 'Rate:', 
+                    'required' => true, 
+                    'filters' => array (
+                            'StringTrim', 
+                            'StripTags' 
+                    ), 
+                    'class' => 'span1', 
+                    'validators' => array (
+                            array (
+                                    'validator' => 'StringLength', 
+                                    'options' => array (
+                                            1, 
+                                            6 
+                                    ) 
+                            ), 
+                            array (
+                                    'validator' => 'Between', 
+                                    'options' => array (
+                                            0.0001, 
+                                            1.0000 
+                                    ) 
+                            ) 
+                    ) 
+            ));
         }
         
         // Add the submit button
         $this->addElement('submit', 'submit', array (
                 'ignore' => true, 
-                'label' => 'Save'
+                'label' => 'Save' 
         ));
         
         // Add the cancel button

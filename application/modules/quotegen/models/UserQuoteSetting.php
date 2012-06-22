@@ -73,7 +73,7 @@ class Quotegen_Model_UserQuoteSetting extends My_Model_Abstract
 
     /**
      * Gets the quote setting id
-     * 
+     *
      * @return number The quote setting id
      */
     public function getQuoteSettingId ()
@@ -83,7 +83,7 @@ class Quotegen_Model_UserQuoteSetting extends My_Model_Abstract
 
     /**
      * Sets the quote setting id
-     * 
+     *
      * @param number $_quoteSettingId
      *            The new quote setting id
      */

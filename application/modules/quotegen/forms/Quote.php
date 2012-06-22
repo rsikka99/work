@@ -2,7 +2,7 @@
 
 class Quotegen_Form_Quote extends EasyBib_Form
 {
-    
+
     public function init ()
     {
         // Set the method for the display form to POST
@@ -22,20 +22,19 @@ class Quotegen_Form_Quote extends EasyBib_Form
          */
         $this->setAttrib('class', 'form-horizontal');
         
-        $clientList = array();
-        $clientListValidator = array();
+        $clientList = array ();
+        $clientListValidator = array ();
         /* @var $client Quotegen_Model_Client */
-        foreach (Quotegen_Model_Mapper_Client::getInstance()->fetchAll() as $client)
+        foreach ( Quotegen_Model_Mapper_Client::getInstance()->fetchAll() as $client )
         {
-            $clientList[$client->getId()] = $client->getName();
-            $clientListValidator[] = $client->getId();
+            $clientList [$client->getId()] = $client->getName();
+            $clientListValidator [] = $client->getId();
         }
-        
         
         $clients = new Zend_Form_Element_Select('clientId');
         $clients->addMultiOptions($clientList);
         $clients->addValidator('InArray', false, array (
-                $clientListValidator
+                $clientListValidator 
         ));
         $this->addElement($clients);
         
@@ -57,10 +56,9 @@ class Quotegen_Form_Quote extends EasyBib_Form
                 ) 
         ));
         
-        
         $this->addElement('checkbox', 'isLeased', array (
                 'label' => 'Leased Quote', 
-                'required' => true, 
+                'required' => true 
         ));
         
         // Add the submit button

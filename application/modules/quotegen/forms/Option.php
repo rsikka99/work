@@ -60,8 +60,8 @@ class Quotegen_Form_Option extends EasyBib_Form
                         'StripTags' 
                 ), 
                 'validators' => array (
-                        'Float'
-                        )
+                        'Float' 
+                ) 
         ));
         
         $this->addElement('text', 'sku', array (

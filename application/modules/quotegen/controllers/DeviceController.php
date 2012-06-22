@@ -128,7 +128,9 @@ class Quotegen_DeviceController extends Zend_Controller_Action
                             ));
                             
                             // Redirect them here so that the form reloads
-                            $this->_helper->redirector('edit', null, null, array('id' => $deviceId));
+                            $this->_helper->redirector('edit', null, null, array (
+                                    'id' => $deviceId 
+                            ));
                         }
                         catch ( Exception $e )
                         {
@@ -246,16 +248,16 @@ class Quotegen_DeviceController extends Zend_Controller_Action
     {
         $id = $this->_getParam('id', FALSE);
         
-        
         $availableOptions = Quotegen_Model_Mapper_Option::getInstance()->fetchAllAvailableOptionsForDevice($id);
         if (count($availableOptions) < 1)
         {
             $this->_helper->flashMessenger(array (
-                    'info' => "There are no more options to add to this device."
+                    'info' => "There are no more options to add to this device." 
             ));
-            $this->_helper->redirector('edit', null, null, array('id' => $id));
+            $this->_helper->redirector('edit', null, null, array (
+                    'id' => $id 
+            ));
         }
-        
         
         $form = new Quotegen_Form_SelectOptions($availableOptions);
         // Prepare the data for the form
@@ -301,7 +303,9 @@ class Quotegen_DeviceController extends Zend_Controller_Action
                         $this->_helper->flashMessenger(array (
                                 'success' => "Successfully added {$insertedOptions} options to {$device->getMasterDevice()->getFullDeviceName()} successfully." 
                         ));
-                        $this->_helper->redirector('edit', null, null, array('id' => $id));
+                        $this->_helper->redirector('edit', null, null, array (
+                                'id' => $id 
+                        ));
                     }
                     else
                     {
@@ -318,13 +322,15 @@ class Quotegen_DeviceController extends Zend_Controller_Action
             else
             {
                 // User has cancelled. Go back to the edit page
-                $this->_helper->redirector('edit', null, null, array('id' => $id));
+                $this->_helper->redirector('edit', null, null, array (
+                        'id' => $id 
+                ));
             }
         }
         
         $this->view->form = $form;
     }
-    
+
     /**
      * Deletes an option from a device
      */
@@ -340,17 +346,19 @@ class Quotegen_DeviceController extends Zend_Controller_Action
             $deviceOption->setOptionId($optionId);
             Quotegen_Model_Mapper_DeviceOption::getInstance()->delete($deviceOption);
             $this->_helper->flashMessenger(array (
-                    'success' => "Option deleted successfully."
+                    'success' => "Option deleted successfully." 
             ));
         }
-        catch (Exception $e)
+        catch ( Exception $e )
         {
             $this->_helper->flashMessenger(array (
-                    'error' => "Could not delete that option."
+                    'error' => "Could not delete that option." 
             ));
         }
         
-        $this->_helper->redirector('edit', null, null, array('id' => $id));
+        $this->_helper->redirector('edit', null, null, array (
+                'id' => $id 
+        ));
     }
 
     /**

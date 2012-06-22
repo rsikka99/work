@@ -31,10 +31,10 @@ class Quotegen_Model_Mapper_QuoteDevicePage extends My_Model_Mapper_Abstract
     public function insert (&$object)
     {
         // Get an array of data to save
-        $data = $object->toArray();        
+        $data = $object->toArray();
         
         // Insert the data
-        $id = $this->getDbTable()->insert($data);        
+        $id = $this->getDbTable()->insert($data);
         
         // Save the object into the cache
         $this->saveItemToCache($object);

@@ -65,8 +65,8 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'quoteId = ?' => $primaryKey [0],
-                'quoteSettingId = ?' => $primaryKey [1]
+                'quoteId = ?' => $primaryKey [0], 
+                'quoteSettingId = ?' => $primaryKey [1] 
         ));
         
         // Save the object into the cache
@@ -88,14 +88,14 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_QuoteQuoteSetting)
         {
             $whereClause = array (
-                    'quoteId = ?' => $object->getQuoteId(),
+                    'quoteId = ?' => $object->getQuoteId(), 
                     'quoteSettingId = ?' => $object->getQuoteSettingId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'quoteId = ?' => $object [0],
+                    'quoteId = ?' => $object [0], 
                     'quoteSettingId = ?' => $object [1] 
             );
         }

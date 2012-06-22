@@ -198,7 +198,7 @@ class Quotegen_Model_Mapper_LeasingSchemaTerm extends My_Model_Mapper_Abstract
 
     /**
      * Fetches all the terms for a leasing schema
-     * 
+     *
      * @param $leasingSchemaId The
      *            id of the leasing schema
      * @return multitype:Quotegen_Model_LeasingSchemaTerm

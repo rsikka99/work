@@ -170,7 +170,7 @@ class Quotegen_Model_QuoteDevicePage extends My_Model_Abstract
 
     /**
      * Gets the current margin for the device pages
-     * 
+     *
      * @return the $_margin
      */
     public function getMargin ()
@@ -180,7 +180,7 @@ class Quotegen_Model_QuoteDevicePage extends My_Model_Abstract
 
     /**
      * Sets the current margin for the device pages
-     * 
+     *
      * @param number $_margin
      *            the new margin
      */

@@ -113,5 +113,4 @@ class Quotegen_Model_LeasingSchemaRange extends My_Model_Abstract
         $this->_startRange = $_startRange;
         return $this;
     }
-
 }

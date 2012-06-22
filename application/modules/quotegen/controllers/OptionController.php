@@ -105,7 +105,7 @@ class Quotegen_OptionController extends Zend_Controller_Action
                         foreach ( $values ['categories'] as $categoryId )
                         {
                             $optionCategory->setCategoryId($categoryId);
-                       		Quotegen_Model_Mapper_OptionCategory::getInstance()->insert($optionCategory); 	
+                            Quotegen_Model_Mapper_OptionCategory::getInstance()->insert($optionCategory);
                         }
                         
                         // Redirect client back to index

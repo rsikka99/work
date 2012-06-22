@@ -80,7 +80,7 @@ class Quotegen_Model_QuoteQuoteSetting extends My_Model_Abstract
 
     /**
      * Sets a new quoteSettingId
-     * 
+     *
      * @param number $_quoteSettingId
      *            the new quoteSettingId
      */

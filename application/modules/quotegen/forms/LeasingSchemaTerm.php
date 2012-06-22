@@ -26,12 +26,12 @@ class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
         $this->setName('leasingSchemaTerm');
         $this->setAttrib('id', 'leasingSchemaTerm');
         
-        $this->addElement('hidden', 'hdnId', array());
+        $this->addElement('hidden', 'hdnId', array ());
         
         $this->addElement('text', 'term', array (
                 'label' => 'New Term:', 
                 'required' => true, 
-                'class' => 'span1',
+                'class' => 'span1', 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -51,31 +51,31 @@ class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
         {
             $rangeid = $range->getId();
             
-	        $this->addElement('text', "rate{$rangeid}", array (
-	                'label' => 'Rate:', 
-	                'required' => true, 
-	                'filters' => array (
-	                        'StringTrim', 
-	                        'StripTags' 
-	                ),
-	                'class' => 'span1',
-	                'validators' => array (
-	                        array (
-	                                'validator' => 'StringLength', 
-	                                'options' => array (
-	                                        1, 
-	                                        6 
-	                                )
-	                        ),
-	                        array (
-	                                'validator' => 'Between',
-	                                'options' => array (
-	                                        0.0001,
-	                                        1.0000
-	                                )
-	                        )
-	                ) 
-	        ));
+            $this->addElement('text', "rate{$rangeid}", array (
+                    'label' => 'Rate:', 
+                    'required' => true, 
+                    'filters' => array (
+                            'StringTrim', 
+                            'StripTags' 
+                    ), 
+                    'class' => 'span1', 
+                    'validators' => array (
+                            array (
+                                    'validator' => 'StringLength', 
+                                    'options' => array (
+                                            1, 
+                                            6 
+                                    ) 
+                            ), 
+                            array (
+                                    'validator' => 'Between', 
+                                    'options' => array (
+                                            0.0001, 
+                                            1.0000 
+                                    ) 
+                            ) 
+                    ) 
+            ));
         }
         
         // Add the submit button

@@ -18,14 +18,14 @@ class Quotegen_Model_LeasedQuote extends My_Model_Abstract
     
     /**
      * The percentage for the rate of the lease
-     *  
+     *
      * @var double
      */
     protected $_rate;
     
     /**
      * The length of term in months
-     * 
+     *
      * @var int
      */
     protected $_term;
@@ -53,12 +53,14 @@ class Quotegen_Model_LeasedQuote extends My_Model_Abstract
     public function toArray ()
     {
         return array (
-                'quoteId' => $this->getId(),
-                'rate' => $this->getRate(),
-                'term' => $this->getTerm(),
+                'quoteId' => $this->getId(), 
+                'rate' => $this->getRate(), 
+                'term' => $this->getTerm() 
         );
     }
-	/**
+
+    /**
+     *
      * @return the $_quoteId
      */
     public function getQuoteId ()
@@ -66,15 +68,17 @@ class Quotegen_Model_LeasedQuote extends My_Model_Abstract
         return $this->_quoteId;
     }
 
-	/**
-     * @param number $_quoteId
+    /**
+     *
+     * @param number $_quoteId            
      */
     public function setQuoteId ($_quoteId)
     {
         $this->_quoteId = $_quoteId;
     }
 
-	/**
+    /**
+     *
      * @return the $_rate
      */
     public function getRate ()
@@ -82,15 +86,17 @@ class Quotegen_Model_LeasedQuote extends My_Model_Abstract
         return $this->_rate;
     }
 
-	/**
-     * @param number $_rate
+    /**
+     *
+     * @param number $_rate            
      */
     public function setRate ($_rate)
     {
         $this->_rate = $_rate;
     }
 
-	/**
+    /**
+     *
      * @return the $_term
      */
     public function getTerm ()
@@ -98,12 +104,12 @@ class Quotegen_Model_LeasedQuote extends My_Model_Abstract
         return $this->_term;
     }
 
-	/**
-     * @param number $_term
+    /**
+     *
+     * @param number $_term            
      */
     public function setTerm ($_term)
     {
         $this->_term = $_term;
     }
-
 }

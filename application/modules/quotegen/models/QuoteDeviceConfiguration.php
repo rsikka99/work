@@ -10,14 +10,14 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
 {
     /**
      * The quote device id
-     * 
+     *
      * @var int
      */
     protected $_quoteDeviceId;
     
     /**
      * The device configuration id
-     *  
+     *
      * @var int
      */
     protected $_deviceConfigurationId;
@@ -44,13 +44,13 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
     {
         return array (
                 'quoteDeviceId' => $this->getQuoteDeviceId(), 
-                'deviceConfigurationId' => $this->getDeviceConfigurationId()
+                'deviceConfigurationId' => $this->getDeviceConfigurationId() 
         );
     }
-    
-	/**
-	 * Gets the quoteDeviceId
-	 * 
+
+    /**
+     * Gets the quoteDeviceId
+     *
      * @return the $_quoteDeviceId
      */
     public function getQuoteDeviceId ()
@@ -58,10 +58,11 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
         return $this->_quoteDeviceId;
     }
 
-	/**
-	 * Sets the new quote device Id
-	 * 
-     * @param int $_quoteDeviceId the new quote device id
+    /**
+     * Sets the new quote device Id
+     *
+     * @param int $_quoteDeviceId
+     *            the new quote device id
      */
     public function setQuoteDeviceId ($_quoteDeviceId)
     {
@@ -69,9 +70,9 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
         return $this;
     }
 
-	/**
-	 * Gets the device configuration id
-	 * 
+    /**
+     * Gets the device configuration id
+     *
      * @return the $_deviceConfigurationId
      */
     public function getDeviceConfigurationId ()
@@ -79,14 +80,15 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
         return $this->_deviceConfigurationId;
     }
 
-	/**
-	 * Sets the new device configuration id
-	 * 
-     * @param int $_deviceConfigurationId the new device configuration id
+    /**
+     * Sets the new device configuration id
+     *
+     * @param int $_deviceConfigurationId
+     *            the new device configuration id
      */
     public function setDeviceConfigurationId ($_deviceConfigurationId)
     {
         $this->_deviceConfigurationId = $_deviceConfigurationId;
         return $this;
-    }    
+    }
 }

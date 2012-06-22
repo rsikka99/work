@@ -249,7 +249,6 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
                 $this->saveItemToCache($rate, $primaryKey);
                 
                 $rates [$rate->getLeasingSchemaTermId()] [$rate->getLeasingSchemaRangeId()] = $rate;
-            
             }
         }
         
