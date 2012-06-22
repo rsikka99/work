@@ -203,5 +203,13 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
                 'masterDeviceId = ?' => $id 
         );
     }
+    
+    /*
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     */
+    public function getPrimaryKeyValueForObject (Quotegen_Model_Device $object)
+    {
+        return $object->getMasterDeviceId();
+    }
 }
 

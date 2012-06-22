@@ -202,5 +202,13 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
                 'deviceConfigurationId = ?' => $id 
         );
     }
+    
+    /*
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+    */
+    public function getPrimaryKeyValueForObject (Quotegen_Model_GlobalDeviceConfiguration $object)
+    {
+        return $object->getDeviceConfigurationId();
+    }
 }
 

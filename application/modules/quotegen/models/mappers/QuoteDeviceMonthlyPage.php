@@ -197,5 +197,13 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
                 'quoteDeviceId = ?' => $id 
         );
     }
+    
+    /*
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+    */
+    public function getPrimaryKeyValueForObject (Quotegen_Model_QuoteDeviceMonthlyPage $object)
+    {
+        return $object->getQuoteDeviceId();
+    }
 }
 

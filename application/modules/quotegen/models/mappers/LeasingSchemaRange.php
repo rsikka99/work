@@ -209,5 +209,13 @@ class Quotegen_Model_Mapper_LeasingSchemaRange extends My_Model_Mapper_Abstract
                 'leasingSchemaId = ?' => $leasingSchemaId 
         ), 'startRange ASC');
     }
+    
+    /*
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+    */
+    public function getPrimaryKeyValueForObject (Quotegen_Model_LeasingSchemaRange $object)
+    {
+        return $object->getId();
+    }
 }
 

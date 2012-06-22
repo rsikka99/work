@@ -202,5 +202,13 @@ class Quotegen_Model_Mapper_QuoteDeviceOption extends My_Model_Mapper_Abstract
                 'id = ?' => $id 
         );
     }
+    
+    /*
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+    */
+    public function getPrimaryKeyValueForObject (Quotegen_Model_QuoteDeviceOption $object)
+    {
+        return $object->getId();
+    }
 }
 

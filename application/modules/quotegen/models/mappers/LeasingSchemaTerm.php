@@ -209,5 +209,13 @@ class Quotegen_Model_Mapper_LeasingSchemaTerm extends My_Model_Mapper_Abstract
                 'leasingSchemaId = ?' => $leasingSchemaId 
         ), 'months ASC');
     }
+    
+    /*
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+    */
+    public function getPrimaryKeyValueForObject (Quotegen_Model_LeasingSchemaTerm $object)
+    {
+        return $object->getLeasingSchemaId();
+    }
 }
 

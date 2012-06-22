@@ -254,5 +254,13 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
         
         return $rates;
     }
+    
+    /*
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+    */
+    public function getPrimaryKeyValueForObject (Quotegen_Model_LeasingSchemaRate $object)
+    {
+        return array ($object->getLeasingSchemaTermId(),$object->getLeasingSchemaRangeId());
+    }
 }
 

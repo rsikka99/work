@@ -219,6 +219,14 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
                 'userId = ?' => $userId 
         ));
     }
+    
+    /*
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+    */
+    public function getPrimaryKeyValueForObject (Quotegen_Model_UserQuoteSetting $object)
+    {
+        return array ($object->getUserId(),$object->getQuoteSettingId());
+    }
 }
 
 
