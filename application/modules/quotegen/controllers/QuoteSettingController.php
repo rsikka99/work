@@ -253,7 +253,7 @@ class Quotegen_QuotesettingController extends Zend_Controller_Action
                                 'success' => "Quote setting was updated sucessfully." 
                         ));
                         
-                        $this->_helper->redirector('index');
+                        $this->_helper->redirector('editdefault');
                     }
                     else
                     {
