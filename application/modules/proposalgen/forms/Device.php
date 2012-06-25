@@ -176,7 +176,7 @@ class Proposalgen_Form_Device extends Zend_Form
         $add_printer = new Zend_Form_Element_Text('new_printer');
         $add_printer->setLabel('* Printer Model:')
         //->setAttrib('size',30)
-        setAttrib('maxlength', 50)
+        	->setAttrib('maxlength', 50)
             ->setAttrib('id', 'new_printer')
             ->setDescription('<a id="edit_link" href="javascript: add_printer(false);" onclick="$(\'#message_container\').html(\'\');">Edit Existing Model</a>')
             ->setDecorators(array (
