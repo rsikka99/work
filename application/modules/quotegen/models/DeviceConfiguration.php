@@ -140,7 +140,7 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
     {
         if (! isset($this->_options))
         {
-            $this->_options = Quotegen_Model_Mapper_Option::getInstance()->fetchAllOptionsForDeviceConfiguration($this->getMasterDeviceId());
+            $this->_options = Quotegen_Model_Mapper_Option::getInstance()->fetchAllOptionsForDeviceConfiguration($this->getId());
         }
         return $this->_options;
     }

@@ -2,10 +2,11 @@
 <div class="well">
     
     <?php echo $this->form; ?>
-    <?php if (count($device->getOptions()) > 0) : ?>
     <div class="row">
         <div class="span6 offset2">
             <h3>Options <a href="<?php echo $this->url(array('action' => 'addoptions')); ?>" class="btn btn-success btn-mini"><i class="icon-plus-sign icon-white"></i> Add</a></h3>
+    <?php if (count($device->getOptions()) > 0) : ?>
+    
             <table class="table table-bordered table-striped table-condensed">
                 <tr>
                     <th>Option</th>
@@ -18,10 +19,9 @@
                 </tr>
                 <?php endforeach; ?>
             </table>
+    <?php else : ?>
+            <h4>There are no options currently associated with this device. Please click the add button above to associate options with this device.</h4>
+    <?php endif;?>
         </div>
     </div>
-    <?php else : ?>
-    <h4>There are no options currently associated with this device. Please click the add button above to associate options with this device.</h4>
-    <?php endif;?>
-    
 </div>
