@@ -25,7 +25,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
         if (! $leasingSchema)
         {
             $this->_helper->flashMessenger(array (
-                    'warning' => 'Leasing schema does not exist.' 
+                    'warning' => 'The leasing schema does not exist.' 
             ));
             $this->_helper->redirector('index');
         }
@@ -121,6 +121,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                             {
                                 $leasingSchemaTermMapper = new Quotegen_Model_Mapper_LeasingSchemaTerm();
                                 $leasingSchemaTerm = $leasingSchemaTermMapper->fetchAll(array (
+	                                    'id != ?' => $termId,
                                         "leasingSchemaId" => $leasingSchemaId, 
                                         "months = ?" => $months 
                                 ));
@@ -228,13 +229,12 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
             }
         }
         
-        // FIXME: Do we need the ranges here? Also this should be set within the form, and the viewscript should be under leasingschema/forms/...phtml to keep things a bit cleaner
         // Add form to page
         $form->setDecorators(array (
                 array (
                         'ViewScript', 
                         array (
-                                'viewScript' => 'forms/leasingSchemaTerm.phtml', 
+                                'viewScript' => 'leasingschema/forms/leasingSchemaTerm.phtml', 
                                 'leasingSchemaRanges' => $leasingSchema->getRanges() 
                         ) 
                 ) 
@@ -271,7 +271,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
         if (count($leasingSchemaTerms) <= 1)
         {
             $this->_helper->flashMessenger(array (
-                    'danger' => "You cannot delete term {$term->getMonths()} months as it is the last term for this Leasing Schema."
+                    'danger' => "You cannot delete term {$term->getMonths()} months as it is the last term for this leasing schema."
             ));
             $this->_helper->redirector('index');
         }
@@ -294,7 +294,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                     
                     $mapper->delete($term);
                     $this->_helper->flashMessenger(array (
-                            'success' => "The Term {$months} months was deleted successfully." 
+                            'success' => "The term {$months} months was deleted successfully." 
                     ));
                     $this->_helper->redirector('index');
                 }
@@ -319,7 +319,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
         if (! $leasingSchema)
         {
             $this->_helper->flashMessenger(array (
-                    'warning' => 'Leasing schema does not exist.' 
+                    'warning' => 'The leasing schema does not exist.' 
             ));
             $this->_helper->redirector('index');
         }
@@ -352,7 +352,9 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
 	                        {
 	                            // Save (Edit)
 	                            $leasingSchemaRangeMapper = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance();
-	                            $leasingSchemaRange = $leasingSchemaRangeMapper->fetch(array (
+	                            $leasingSchemaRange = $leasingSchemaRangeMapper->fetchAll(array (
+	                                    'id != ?' => $rangeId,
+	                                    'leasingSchemaId = ?' => $leasingSchemaId,
 	                                    'startRange = ?' => $startRange
 	                            ));
 	                            
@@ -516,7 +518,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                 array (
                         'ViewScript', 
                         array (
-                                'viewScript' => 'forms/leasingSchemaRange.phtml', 
+                                'viewScript' => 'leasingschema/forms/leasingSchemaRange.phtml', 
                                 'leasingSchemaTerms' => $leasingSchema->getTerms() 
                         ) 
                 ) 
@@ -574,7 +576,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                 {
                     $mapper->delete($range);
                     $this->_helper->flashMessenger(array (
-                            'success' => "The Range \${$this->view->escape ( $range->getStartRange() )} was deleted successfully." 
+                            'success' => "The range \${$this->view->escape ( $range->getStartRange() )} was deleted successfully." 
                     ));
                     $this->_helper->redirector('index');
                 }
