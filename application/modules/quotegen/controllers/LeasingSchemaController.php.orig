@@ -201,6 +201,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                 $leasingSchemaTermMapper = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance();
                 $leasingSchemaTerm = $leasingSchemaTermMapper->find($termId);
                 
+<<<<<<< HEAD
 		        if (! $leasingSchemaTerm)
 		        {
 		            $this->_helper->flashMessenger(array (
@@ -208,7 +209,11 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
 		            ));
 		            $this->_helper->redirector('index');
 		        }
+                
+=======
 
+                // FIXME: Naming convention, field names should be the same as the database names/toArray names. This way you can use $form->populate($model->toArray());
+>>>>>>> 84293154f10a86b878a7780cdf0dd4a4e4c5c8cc
                 $form->getElement('term')->setValue($leasingSchemaTerm->getMonths());
                 
                 // Get Rates for Term
