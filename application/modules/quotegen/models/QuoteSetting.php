@@ -8,6 +8,7 @@
  */
 class Quotegen_Model_QuoteSetting extends My_Model_Abstract
 {
+    const SYSTEM_ROW_ID = 1;
     
     /**
      * The id assigned by the database

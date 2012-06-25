@@ -157,7 +157,7 @@ class Quotegen_QuotesettingController extends Zend_Controller_Action
     public function editAction ()
     {
         // Find client and pass form object
-        $form = new Quotegen_Form_QuoteSetting();
+        $form = new Quotegen_Form_QuoteSetting(true);
         
         $quoteSettingId = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id)
             ->getQuoteSettingId();

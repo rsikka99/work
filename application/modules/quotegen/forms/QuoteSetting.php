@@ -2,6 +2,21 @@
 
 class Quotegen_Form_QuoteSetting extends EasyBib_Form
 {
+    protected $_showSystemDefaults;
+
+    /**
+     * Constructor for QuoteSetting form
+     *
+     * @param boolean $showDefaults
+     *            When set to true, defaults will be appended to each of the form elements so that users know what the
+     *            default is.
+     * @param unknown_type $options            
+     */
+    public function __construct ($showDefaults = false, $options = null)
+    {
+        $this->_showSystemDefaults = $showDefaults;
+        parent::__construct();
+    }
 
     public function init ()
     {
@@ -22,7 +37,7 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
          */
         $this->setAttrib('class', 'form-horizontal');
         
-        $this->addElement('text', 'pageCoverageMonochrome', array (
+        $pageCoverageMonochrome = $this->createElement('text', 'pageCoverageMonochrome', array (
                 'label' => 'Page Coverage Mono:', 
                 'required' => true, 
                 'class' => 'span1', 
@@ -41,10 +56,12 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                         'Int' 
                 ) 
         ));
+        $this->addElement($pageCoverageMonochrome);
         
-        $this->addElement('text', 'pageCoverageColor', array (
+        $pageCoverageColor = $this->createElement('text', 'pageCoverageColor', array (
                 'label' => 'Page Coverage Color:', 
                 'required' => true, 
+                
                 'class' => 'span1', 
                 'filters' => array (
                         'StringTrim', 
@@ -61,9 +78,11 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                         'Int' 
                 ) 
         ));
+        $this->addElement($pageCoverageColor);
         
-        $this->addElement('text', 'deviceMargin', array (
+        $deviceMargin = $this->createElement('text', 'deviceMargin', array (
                 'label' => 'Device Margin:', 
+                
                 'required' => true, 
                 'class' => 'span1', 
                 'filters' => array (
@@ -81,9 +100,11 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                         'Int' 
                 ) 
         ));
+        $this->addElement($deviceMargin);
         
-        $this->addElement('text', 'pageMargin', array (
+        $pageMargin = $this->createElement('text', 'pageMargin', array (
                 'label' => 'Page Margin:', 
+                
                 'required' => true, 
                 'class' => 'span1', 
                 'filters' => array (
@@ -101,6 +122,7 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                         'Int' 
                 ) 
         ));
+        $this->addElement($pageMargin);
         
         $pricingConfigDropdown = new Zend_Form_Element_Select('pricingConfigId', array (
                 'label' => 'Toner Preference:' 
@@ -112,6 +134,19 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
             $pricingConfigDropdown->addMultiOption($pricingConfig->getPricingConfigId(), $pricingConfig->getConfigName());
         }
         $this->addElement($pricingConfigDropdown);
+        
+        /*
+         * Set the defaults if the flag is enabled
+         */
+        
+        if ($this->_showSystemDefaults)
+        {
+            $systemDefaultQuoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->find(Quotegen_Model_QuoteSetting::SYSTEM_ROW_ID);
+            $pageCoverageMonochrome->setDescription($systemDefaultQuoteSetting->getPageCoverageMonochrome());
+            $pageCoverageColor->setDescription($systemDefaultQuoteSetting->getPageCoverageColor());
+            $deviceMargin->setDescription($systemDefaultQuoteSetting->getDeviceMargin());
+            $pageMargin->setDescription($systemDefaultQuoteSetting->getPageMargin());
+        }
         
         // Add the submit button
         $this->addElement('submit', 'submit', array (
@@ -126,5 +161,21 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
         ));
         
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
+    }
+
+    public function loadDefaultDecorators ()
+    {
+        // Only show the custom view script if we are showing defaults
+        if ($this->_showSystemDefaults)
+        {
+            $this->setDecorators(array (
+                    array (
+                            'ViewScript', 
+                            array (
+                                    'viewScript' => 'quotesetting/form/quotesetting.phtml' 
+                            ) 
+                    ) 
+            ));
+        }
     }
 }
