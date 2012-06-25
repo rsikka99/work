@@ -1,0 +1,29 @@
+<?php 
+/* @var $form Quotegen_Form_DeviceConfiguration */
+$form = $this->element;
+?>
+<form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+<h3>Device Configuration</h3>
+<?php echo $form->getElement('deviceName'); ?>
+
+<h3>Options <?php echo $form->getElement('add')->renderViewHelper(); ?></h3>
+<br>
+<?php if (count($form->getOptionElements()) > 0) : ?>
+    <?php foreach ($form->getOptionElements() as $element) : ?>
+    <div class="control-group <?php echo ($element->hasErrors()) ? 'error' : '' ?>">
+    	<?php echo $element->renderLabel(); ?>
+    	<div class="controls">
+    		<div class="input-prepend input-append">
+    			<span class="add-on">Qty:</span><?php echo trim($element->renderViewHelper()); // FIXME: Trim shouldn't need to happen, but the element has a newline rendered with it. ?><a href="<?php echo $this->url(array('action' => 'deleteoption', 'optionId' => $element->getDescription()));?>" class="add-on btn btn-danger"><i class="icon-trash"></i></a>
+    		</div>
+    		<?php echo $element->renderErrors(); ?>
+    	</div>
+    </div>
+    <?php endforeach; ?>
+<?php else : ?>
+<p>There are no options added to this device yet.</p>
+<?php endif; ?>
+
+<?php echo $form->getElement('submit'); ?>
+<?php echo $form->getElement('cancel'); ?>
+</form>

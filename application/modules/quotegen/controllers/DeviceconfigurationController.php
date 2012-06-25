@@ -184,7 +184,7 @@ class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
         $deviceConfigurationMapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
         $deviceConfiguration = $deviceConfigurationMapper->find((int)$deviceConfigurationId);
         
-        // If the deviceConfiguration doesn't exist, send them back t the view all deviceConfigurations page
+        // If the deviceConfiguration doesn't exist, send them back to the view all deviceConfigurations page
         if (! $deviceConfiguration)
         {
             $this->_helper->flashMessenger(array (
@@ -196,9 +196,7 @@ class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
         $this->view->deviceConfiguration = $deviceConfiguration;
         
         // Create a new form with the mode and roles set
-        $form = new Quotegen_Form_DeviceConfiguration($deviceConfiguration->getQuoteDevice()
-            ->getMasterDevice()
-            ->getFullDeviceName());
+        $form = new Quotegen_Form_DeviceConfiguration($deviceConfiguration->getId());
         
         // Prepare the data for the form
         $request = $this->getRequest();
@@ -211,26 +209,59 @@ class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
             $values = $request->getPost();
             
             // If we cancelled we don't need to validate anything
-            if (! isset($values ['cancel']))
+            if (isset($values ['cancel']))
             {
+                // User has cancelled. We could do a redirect here if we wanted.
+                $this->_helper->redirector('index');
+            }
+            else
+            {
+                
                 try
                 {
                     // Validate the form
                     if ($form->isValid($values))
                     {
                         $deviceConfigurationMapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
-                        $deviceConfiguration->populate($values);
-                        $deviceConfiguration->setId($deviceConfigurationId);
+//                         $deviceConfiguration->populate($values);
+//                         $deviceConfiguration->setId($deviceConfigurationId);
+        
+
+                        // Save option quantities
+                        $deviceConfigurationOption = new Quotegen_Model_DeviceConfigurationOption();
+                        $deviceConfigurationOption->setDeviceConfigurationId($deviceConfigurationId);
                         
-                        // Save to the database with cascade insert turned on
-                        $deviceConfigurationId = $deviceConfigurationMapper->save($deviceConfiguration, $deviceConfigurationId);
+                        foreach ( $form->getOptionElements() as $element )
+                        {
+                            $optionId = (int)$element->getDescription();
+                            $deviceConfigurationOption->setOptionId($optionId);
+                            $deviceConfigurationOption->setQuantity($values ["option$optionId"]);
+                            Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->save($deviceConfigurationOption);
+                        }
                         
-                        $this->_helper->flashMessenger(array (
-                                'success' => "Device configuration '{$deviceConfiguration->getId()}' was updated sucessfully." 
-                        ));
+                        // $rowsAffected = $deviceConfigurationMapper->save($deviceConfiguration, $deviceConfigurationId);
                         
-                        // Send back to the main list
-                        $this->_helper->redirector('index');
+
+                        if (isset($values ['add']))
+                        {
+                            $this->_helper->flashMessenger(array (
+                                    'success' => "Device configuration saved." 
+                            ));
+                            
+                            // Send to the add options page like they asked
+                            $this->_helper->redirector('addoptions', null, null, array (
+                                    'id' => $deviceConfigurationId 
+                            ));
+                        }
+                        else
+                        {
+                            $this->_helper->flashMessenger(array (
+                                    'success' => "Device configuration '{$deviceConfiguration->getId()}' was updated sucessfully." 
+                            ));
+                            
+                            // Send back to the main list
+                            $this->_helper->redirector('index');
+                        }
                     }
                     else
                     {
@@ -243,11 +274,6 @@ class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
                             'danger' => $e->getMessage() 
                     ));
                 }
-            }
-            else
-            {
-                // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
             }
         }
         $this->view->form = $form;

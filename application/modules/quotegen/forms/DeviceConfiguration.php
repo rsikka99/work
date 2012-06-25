@@ -8,11 +8,18 @@ class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
      *
      * @var string
      */
-    protected $_deviceName;
+    protected $_id;
+    
+    /**
+     * An array of elements used to display options
+     *
+     * @var unknown_type
+     */
+    protected $_optionElements = array ();
 
-    public function __construct ($deviceName = false, $options = null)
+    public function __construct ($id = 0, $options = null)
     {
-        $this->_deviceName = $deviceName;
+        $this->_id = $id;
         parent::__construct($options);
     }
 
@@ -35,11 +42,37 @@ class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
          */
         $this->setAttrib('class', 'form-horizontal');
         
-        if ($this->_deviceName)
+        if ($this->_id > 0)
         {
+            $device = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($this->_id);
             $deviceName = new My_Form_Element_Paragraph('deviceName');
-            $deviceName->setValue($this->_deviceName);
+            $deviceName->setValue($device->getQuoteDevice()
+                ->getMasterDevice()
+                ->getFullDeviceName());
             $this->addElement($deviceName);
+            
+            /* @var $deviceConfigurationOption Quotegen_Model_DeviceConfigurationOption */
+            foreach ( $device->getOptions() as $deviceConfigurationOption )
+            {
+                $optionElement = $this->createElement('text', "option-{$deviceConfigurationOption->getOptionId()}", array (
+                        'label' => $deviceConfigurationOption->getOption()
+                            ->getName(), 
+                        'value' => $deviceConfigurationOption->getQuantity(), 
+                        'description' => $deviceConfigurationOption->getOptionId() 
+                )
+                );
+                $optionElement->setAttrib('class', 'span1');
+                $this->_optionElements [] = $optionElement;
+            }
+            
+            $this->addElements($this->_optionElements);
+            
+            // Add the add option
+            $this->addElement('submit', 'add', array (
+                    'ignore' => true, 
+                    'label' => 'Add', 
+                    'class' => 'btn btn-success btn-mini' 
+            ));
         }
         else
         {
@@ -68,5 +101,31 @@ class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
         ));
         
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
+    }
+
+    public function loadDefaultDecorators ()
+    {
+        // Only show the custom view script if we are showing defaults
+        if ($this->_id)
+        {
+            $this->setDecorators(array (
+                    array (
+                            'ViewScript', 
+                            array (
+                                    'viewScript' => 'deviceconfiguration/form/editdeviceconfiguration.phtml' 
+                            ) 
+                    ) 
+            ));
+        }
+    }
+
+    /**
+     * Gets all the option elements
+     *
+     * @return array
+     */
+    public function getOptionElements ()
+    {
+        return $this->_optionElements;
     }
 }
