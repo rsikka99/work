@@ -131,6 +131,10 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
         /* @var $princingConfig Proposalgen_Model_PricingConfig */
         foreach ( Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll() as $pricingConfig )
         {
+            if ($pricingConfig->getPricingConfigId() === Proposalgen_Model_PricingConfig::NONE && ! $this->_showSystemDefaults)
+            {
+                continue;
+            }
             $pricingConfigDropdown->addMultiOption($pricingConfig->getPricingConfigId(), $pricingConfig->getConfigName());
         }
         $this->addElement($pricingConfigDropdown);
@@ -143,9 +147,13 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
         {
             $systemDefaultQuoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->find(Quotegen_Model_QuoteSetting::SYSTEM_ROW_ID);
             $pageCoverageMonochrome->setDescription($systemDefaultQuoteSetting->getPageCoverageMonochrome());
+            $pageCoverageMonochrome->setRequired(false);
             $pageCoverageColor->setDescription($systemDefaultQuoteSetting->getPageCoverageColor());
+            $pageCoverageColor->setRequired(false);
             $deviceMargin->setDescription($systemDefaultQuoteSetting->getDeviceMargin());
+            $deviceMargin->setRequired(false);
             $pageMargin->setDescription($systemDefaultQuoteSetting->getPageMargin());
+            $pageMargin->setRequired(false);
             $pricingConfigDropdown->setDescription($systemDefaultQuoteSetting->getPricingConfigId());
         }
         
