@@ -5,13 +5,15 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
 
     public function init ()
     {
-        /* Initialize action controller here */
+        // FIXME: Delete unused functions
     }
 
     public function indexAction ()
     {
         // Display all of the leasing schema rates in a grid
         $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
+        
+        // FIXME: Delete unused variables?
         $leasingSchemaRangeMapper = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance();
         $leasingSchemaTermMapper = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance();
         $leasingSchemaRateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
@@ -20,6 +22,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
         $leasingSchema = $leasingSchemaMapper->find(1);
         $this->view->leasingSchema = $leasingSchema;
         
+        // FIXME: Delete debug data
         $request = $this->getRequest();
         if ($request->isPost())
         {
@@ -37,12 +40,25 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
         $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
         $leasingSchema = $leasingSchemaMapper->find($leasingSchemaId);
         
+        // FIXME: What happens if the leasing schema id is invalid?
+        
+
         // Get form and pass ranges for this schema
         $leasingSchemaRanges = $leasingSchema->getRanges();
+        
+        // FIXME: What happens if there are no ranges?
+        
+
         $form = new Quotegen_Form_LeasingSchemaTerm($leasingSchemaRanges);
         
         // Set default values and attributes
+        // FIXME: Why set a form value? You already have it coming back via the parameter. 
+        // Also for naming conventions, it should be named according to the field it is related to. If it is id, then it should be named id.
+        
+
         $form->getElement('hdnId')->setValue($id);
+        
+        // FIXME: This will break when the module moves. This should be handled via a submit button that posts back, and then use redirector if it was a cancel action
         $form->getElement('cancel')->setAttrib('onclick', 'javascript: document.location.href="/quotegen/leasingschema";');
         
         // Postback
@@ -52,14 +68,20 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
             $values = $request->getPost();
             try
             {
+                // FIXME: For the previou comment, you can check if $values['cancel'] is set and then send the user somewhere if it is.
+                
+
                 if ($form->isValid($values))
                 {
                     // Get post data
                     $termId = $values ['hdnId'];
                     $months = $values ['term'];
                     
+                    // FIXME: Did you move the logic into the mapper?
                     // TODO: Move Logic Below to Mapper
-        // Save new term
+                    
+
+                    // Save new term
                     if ($termId)
                     {
                         try
@@ -67,6 +89,9 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                             // Save (Edit)
                             $leasingSchemaTermMapper = new Quotegen_Model_Mapper_LeasingSchemaTerm();
                             
+                            // FIXME: The fetch could be directly in the if statement if you're not using the return value. Otherwise the variable name is a bit confusing once used later on.
+                            // FIXME: Also, this should be in the mapper, the function could verify if a term exists already. Don't forget to escape user data. Right now we could inject sql! 
+                            // (Note: Escaping is by using the months = ? syntax within the mapper)
                             // Validate term doesn't exist
                             $exists = $leasingSchemaTermMapper->fetch('months = ' . $months);
                             
@@ -76,6 +101,8 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                                 $leasingSchemaTermModel->setId($termId);
                                 $leasingSchemaTermModel->setLeasingSchemaId($leasingSchemaId);
                                 $leasingSchemaTermModel->setMonths($months);
+                                
+                                // FIXME: Is the id going to change? If not, don't include the primary key parameter
                                 $leasingSchemaTermMapper->save($leasingSchemaTermModel, $termId);
                                 
                                 // Save rates for range and term
@@ -84,11 +111,16 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                                     $rangeId = $range->getId();
                                     $rate = $values ["rate{$rangeId}"];
                                     
+                                    // FIXME: Use mapper::getInstance() instead of instantiating a new one. Also, do this outside of the loop as we don't need to fetch an instance N times, just once.
                                     $leasingSchemaRateMapper = new Quotegen_Model_Mapper_LeasingSchemaRate();
+                                    
+                                    // FIXME: TIP: Create the model outside the loop and set all data that doesn't change each loop. Then change the data that does change and save. (This can really save on memory)
                                     $leasingSchemaRateModel = new Quotegen_Model_LeasingSchemaRate();
                                     $leasingSchemaRateModel->setLeasingSchemaTermId($termId);
                                     $leasingSchemaRateModel->setLeasingSchemaRangeId($rangeId);
                                     $leasingSchemaRateModel->setRate($rate);
+                                    
+                                    // FIXME: Is this updating? Will it change the primary key of a row? If yes, then this is correct, otherwise you don't need to pass the primary key in.
                                     $leasingSchemaRateId = $leasingSchemaRateMapper->save($leasingSchemaRateModel, array (
                                             $termId, 
                                             $rangeId 
@@ -124,6 +156,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                             $leasingSchemaTermModel->setLeasingSchemaId($leasingSchemaId);
                             $leasingSchemaTermModel->setMonths($months);
                             
+                            // FIXME: See note about the same statement above!
                             // Validate term doesn't exist
                             $exists = $leasingSchemaTermMapper->fetch('months = ' . $months);
                             
@@ -137,7 +170,9 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                                     $rangeId = $range->getId();
                                     $rate = $values ["rate{$rangeId}"];
                                     
+                                    // FIXME: Mapper should not be in the loop since we only need to declare it once.
                                     $leasingSchemaRateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
+                                    // FIXME: See note about creating the model outside the loop!
                                     $leasingSchemaRateModel = new Quotegen_Model_LeasingSchemaRate();
                                     $leasingSchemaRateModel->setLeasingSchemaRangeId($rangeId);
                                     $leasingSchemaRateModel->setLeasingSchemaTermId($termId);
@@ -185,11 +220,19 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                 // Get Term
                 $leasingSchemaTermMapper = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance();
                 $leasingSchemaTerm = $leasingSchemaTermMapper->find($id);
+                // FIXME: What happens here if the leasing term doesn't exist?
+                
+                
+                // FIXME: Naming convention, field names should be the same as the database names/toArray names. This way you can use $form->populate($model->toArray());
                 $form->getElement('term')->setValue($leasingSchemaTerm->getMonths());
                 
                 // Get Rates for Term
                 $leasingSchemaRatesMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
+                
+                // FIXME: Make a function to fetch rates for a term, and have the term model use it to return them. Also see note about SQL injection!
                 $leasingSchemaRate = $leasingSchemaRatesMapper->fetchAll('leasingSchemaTermId = ' . $id);
+                
+                // FIXME: For populating the form, you could pass it in the term id and let it use the mapper to fetch the term model. I can help explain this further if needed.
                 foreach ( $leasingSchemaRate as $rate )
                 {
                     $rangeid = $rate->getLeasingSchemaRangeId();
@@ -203,6 +246,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
             }
         }
         
+        // FIXME: Do we need the ranges here? Also this should be set within the form, and the viewscript should be under leasingschema/forms/...phtml to keep things a bit cleaner
         // Add form to page
         $form->setDecorators(array (
                 array (
@@ -229,6 +273,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
+        // FIXME: My bad if I put this example there, but otherwise you can use the delete function as it returns how many rows are returned.
         $mapper = new Quotegen_Model_Mapper_LeasingSchemaTerm();
         $term = $mapper->find($termId);
         
@@ -316,7 +361,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                     $startRange = $values ['range'];
                     
                     // TODO: Move Logic Below to Mapper
-        // Save new range
+                    // Save new range
                     if ($rangeId)
                     {
                         try
