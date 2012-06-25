@@ -25,7 +25,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
         if (! $leasingSchema)
         {
             $this->_helper->flashMessenger(array (
-                    'warning' => 'Leasing schema does not exist.' 
+                    'warning' => 'The leasing schema does not exist.' 
             ));
             $this->_helper->redirector('index');
         }
@@ -271,7 +271,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
         if (count($leasingSchemaTerms) <= 1)
         {
             $this->_helper->flashMessenger(array (
-                    'danger' => "You cannot delete term {$term->getMonths()} months as it is the last term for this Leasing Schema."
+                    'danger' => "You cannot delete term {$term->getMonths()} months as it is the last term for this leasing schema."
             ));
             $this->_helper->redirector('index');
         }
@@ -294,7 +294,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                     
                     $mapper->delete($term);
                     $this->_helper->flashMessenger(array (
-                            'success' => "The Term {$months} months was deleted successfully." 
+                            'success' => "The term {$months} months was deleted successfully." 
                     ));
                     $this->_helper->redirector('index');
                 }
@@ -319,7 +319,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
         if (! $leasingSchema)
         {
             $this->_helper->flashMessenger(array (
-                    'warning' => 'Leasing schema does not exist.' 
+                    'warning' => 'The leasing schema does not exist.' 
             ));
             $this->_helper->redirector('index');
         }
@@ -574,7 +574,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                 {
                     $mapper->delete($range);
                     $this->_helper->flashMessenger(array (
-                            'success' => "The Range \${$this->view->escape ( $range->getStartRange() )} was deleted successfully." 
+                            'success' => "The range \${$this->view->escape ( $range->getStartRange() )} was deleted successfully." 
                     ));
                     $this->_helper->redirector('index');
                 }
