@@ -160,7 +160,9 @@ CREATE  TABLE IF NOT EXISTS `quotegen_leasing_schema_rates` (
   PRIMARY KEY (`leasingSchemaTermId`, `leasingSchemaRangeId`) ,
   CONSTRAINT `quotegen_leasing_schema_rates_ibfk_2`
     FOREIGN KEY (`leasingSchemaTermId` )
-    REFERENCES `quotegen_leasing_schema_terms` (`id` ),
+    REFERENCES `quotegen_leasing_schema_terms` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `quotegen_leasing_schema_rates_ibfk_3`
     FOREIGN KEY (`leasingSchemaRangeId` )
     REFERENCES `quotegen_leasing_schema_ranges` (`id` )
