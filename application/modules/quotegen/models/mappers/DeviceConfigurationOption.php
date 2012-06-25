@@ -99,7 +99,7 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
         if ($object instanceof Quotegen_Model_DeviceConfigurationOption)
         {
             $whereClause = array (
-                    'deviceConfigurationId = ?' => $object->getCategoryId(), 
+                    'deviceConfigurationId = ?' => $object->getDeviceConfigurationId(), 
                     'optionId = ?' => $object->getOptionId() 
             );
         }

@@ -114,7 +114,7 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Quotegen_Model_DeviceConfiguration)
+        if ($result && $result instanceof Quotegen_Model_DeviceConfiguration)
         {
             return $result;
         }

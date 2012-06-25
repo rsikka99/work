@@ -299,7 +299,7 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
         
         $sql = "SELECT * FROM {$devOptTableName} as dco
                 JOIN {$this->getTableName()} as opt on dco.optionId = opt.id
-                WHERE dco.masterDeviceId = ?
+                WHERE dco.deviceConfigurationId = ?
                 ORDER BY opt.name ASC
         ";
         
@@ -323,6 +323,46 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
             $this->saveItemToCache($option);
             
             $entries [] = $deviceConfigurationOption;
+        }
+        return $entries;
+    }
+
+    /**
+     * Fetches all options that are available to be added to a device configuration (Anything that is not already
+     * added).
+     *
+     * @param int $id
+     *            The primary key of a device configuration
+     *            
+     * @return multitype:Quotegen_Model_Option The list of available options to add
+     */
+    public function fetchAllAvailableOptionsForDeviceConfiguration ($id)
+    {
+        $devOptTableName = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->getTableName();
+        $deviceOptionTableName = Quotegen_Model_Mapper_DeviceOption::getInstance()->getTableName();
+        
+        $sql = "SELECT * FROM  {$deviceOptionTableName} AS do
+                JOIN  {$this->getTableName()} AS opt ON do.optionId = opt.id
+                WHERE NOT EXISTS (
+                    SELECT * from {$devOptTableName} AS dco
+                    WHERE dco.deviceConfigurationId = ? AND dco.optionId = opt.id
+                )
+                ORDER BY  opt.name ASC
+                ";
+        
+        $resultSet = $this->getDbTable()
+            ->getAdapter()
+            ->fetchAll($sql, $id);
+        
+        $entries = array ();
+        foreach ( $resultSet as $row )
+        {
+            $object = new Quotegen_Model_Option($row);
+            
+            // Save the object into the cache
+            $this->saveItemToCache($object);
+            
+            $entries [] = $object;
         }
         return $entries;
     }
