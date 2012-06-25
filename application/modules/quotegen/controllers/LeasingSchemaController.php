@@ -229,13 +229,12 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
             }
         }
         
-        // FIXME: Do we need the ranges here? Also this should be set within the form, and the viewscript should be under leasingschema/forms/...phtml to keep things a bit cleaner
         // Add form to page
         $form->setDecorators(array (
                 array (
                         'ViewScript', 
                         array (
-                                'viewScript' => 'forms/leasingSchemaTerm.phtml', 
+                                'viewScript' => 'leasingschema/forms/leasingSchemaTerm.phtml', 
                                 'leasingSchemaRanges' => $leasingSchema->getRanges() 
                         ) 
                 ) 
@@ -519,7 +518,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                 array (
                         'ViewScript', 
                         array (
-                                'viewScript' => 'forms/leasingSchemaRange.phtml', 
+                                'viewScript' => 'leasingschema/forms/leasingSchemaRange.phtml', 
                                 'leasingSchemaTerms' => $leasingSchema->getTerms() 
                         ) 
                 ) 
