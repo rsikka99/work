@@ -77,9 +77,11 @@
 			      	<a class="btn btn-warning btn-mini" title="Edit Term" onclick="javascript: do_action('edit term', <?php echo $termid; ?>);">
 						<i class="icon-pencil icon-white"></i> Edit
 					</a>
+					<?php if ( count ( $leasingSchema->getTerms() ) > 1 ) { ?>
 			      	<a class="btn btn-danger btn-mini" title="Delete Term" onclick="javascript: do_action('delete term', <?php echo $termid; ?>);">
 						<i class="icon-trash icon-white"></i>
 					</a>
+					<?php } ?>
 		        </td>
 		      </tr>
 		      <?php } ?>

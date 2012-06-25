@@ -314,10 +314,12 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
             {
                 // delete client from database
                 if ($form->isValid($values))
-                {
+                {   
+                    $months = $term->getMonths();
+                    
                     $mapper->delete($term);
                     $this->_helper->flashMessenger(array (
-                            'success' => "The Term {$this->view->escape ( $term->getMonths() )} months was deleted successfully." 
+                            'success' => "The Term {$months} months was deleted successfully." 
                     ));
                     $this->_helper->redirector('index');
                 }
