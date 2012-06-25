@@ -121,6 +121,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                             {
                                 $leasingSchemaTermMapper = new Quotegen_Model_Mapper_LeasingSchemaTerm();
                                 $leasingSchemaTerm = $leasingSchemaTermMapper->fetchAll(array (
+	                                    'id != ?' => $termId,
                                         "leasingSchemaId" => $leasingSchemaId, 
                                         "months = ?" => $months 
                                 ));
@@ -352,7 +353,9 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
 	                        {
 	                            // Save (Edit)
 	                            $leasingSchemaRangeMapper = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance();
-	                            $leasingSchemaRange = $leasingSchemaRangeMapper->fetch(array (
+	                            $leasingSchemaRange = $leasingSchemaRangeMapper->fetchAll(array (
+	                                    'id != ?' => $rangeId,
+	                                    'leasingSchemaId = ?' => $leasingSchemaId,
 	                                    'startRange = ?' => $startRange
 	                            ));
 	                            
