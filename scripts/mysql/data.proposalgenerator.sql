@@ -3,7 +3,7 @@ INSERT INTO `proposalgenerator_part_types` (`id`, `name`) VALUES
 (2, 'COMP'  );
 
 INSERT INTO `proposalgenerator_pricing_configs` (`id` , `name`, `color_toner_part_type_id`, `mono_toner_part_type_id`) VALUES
-(1, 'NONE SELECTED', NULL, NULL),
+(1, 'USE DEFAULT', NULL, NULL),
 (2, 'OEM', 1, 1),
 (3, 'COMP', 2, 2),
 (4, 'OEM Mono, COMP Color', 2, 1),
