@@ -222,7 +222,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                 $leasingSchemaTerm = $leasingSchemaTermMapper->find($id);
                 // FIXME: What happens here if the leasing term doesn't exist?
                 
-                
+
                 // FIXME: Naming convention, field names should be the same as the database names/toArray names. This way you can use $form->populate($model->toArray());
                 $form->getElement('term')->setValue($leasingSchemaTerm->getMonths());
                 
@@ -285,6 +285,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
+        // FIXME: No need for $valid, just put a flash message and redirect to the main page and no need for the else. The redirect will stop the rest of the function from continuing.
         // Make sure this isn't the last term for this schema
         $valid = true;
         
@@ -314,7 +315,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
             {
                 // delete client from database
                 if ($form->isValid($values))
-                {   
+                {
                     $months = $term->getMonths();
                     
                     $mapper->delete($term);
@@ -341,10 +342,16 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
         $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
         $leasingSchema = $leasingSchemaMapper->find($leasingSchemaId);
         
+        // FIXME: Same deal as before, what happens if it doesnt exist?
+        
+
         // Get form and pass terms for this schema
         $leasingSchemaTerms = $leasingSchema->getTerms();
+        
+        // FIXME: Terms can be access from the form itself, although this is the lowest priority
         $form = new Quotegen_Form_LeasingSchemaRange($leasingSchemaTerms);
         
+        // FIXME: See notes about hdnId and onclick above
         // Set default values and attributes
         $form->getElement('hdnId')->setValue($id);
         $form->getElement('cancel')->setAttrib('onclick', 'javascript: document.location.href="/quotegen/leasingschema";');
@@ -358,19 +365,22 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
             {
                 if ($form->isValid($values))
                 {
+                    // FIXME: Same as before
                     // Get post data
                     $rangeId = $values ['hdnId'];
                     $startRange = $values ['range'];
                     
-                    // TODO: Move Logic Below to Mapper
+                    // TODO: Move Logic Below to Mapper (Is it moved?)
                     // Save new range
                     if ($rangeId)
                     {
                         try
                         {
+                            // FIXME: Same deal, use getInstance
                             // Save (Edit)
                             $leasingSchemaRangeMapper = new Quotegen_Model_Mapper_LeasingSchemaRange();
                             
+                            // FIXME: Same deal, sql injection, variable naming, and not needing a variable if the return data won't be used other than as the condition for the if.
                             // Validate Range doesn't exist
                             $exists = $leasingSchemaRangeMapper->fetch('startRange = ' . $startRange);
                             
@@ -380,19 +390,25 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                                 $leasingSchemaRangeModel->setId($rangeId);
                                 $leasingSchemaRangeModel->setLeasingSchemaId($leasingSchemaId);
                                 $leasingSchemaRangeModel->setStartRange($startRange);
+                                
+                                // FIXME: Same deal with the primary key
                                 $leasingSchemaRangeMapper->save($leasingSchemaRangeModel, $rangeId);
                                 
+                                // FIXME: Same deal as the other loops
                                 // Save rates for range and term
                                 foreach ( $leasingSchemaTerms as $term )
                                 {
                                     $termId = $term->getId();
                                     $rate = $values ["rate{$termId}"];
                                     
+                                    // FIXME: Same deal, use getInstance
                                     $leasingSchemaRateMapper = new Quotegen_Model_Mapper_LeasingSchemaRate();
                                     $leasingSchemaRateModel = new Quotegen_Model_LeasingSchemaRate();
                                     $leasingSchemaRateModel->setLeasingSchemaTermId($termId);
                                     $leasingSchemaRateModel->setLeasingSchemaRangeId($rangeId);
                                     $leasingSchemaRateModel->setRate($rate);
+                                    
+                                    // FIXME: Same deal with the primary key
                                     $leasingSchemaRateId = $leasingSchemaRateMapper->save($leasingSchemaRateModel, array (
                                             $termId, 
                                             $rangeId 
@@ -428,6 +444,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                             $leasingSchemaRangeModel->setLeasingSchemaId($leasingSchemaId);
                             $leasingSchemaRangeModel->setStartRange($startRange);
                             
+                            // FIXME: Sql Injection, make a function for this
                             // Validate Range doesn't exist
                             $exists = $leasingSchemaRangeMapper->fetch('startRange = ' . $startRange);
                             
@@ -435,6 +452,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                             {
                                 $rangeId = $leasingSchemaRangeMapper->insert($leasingSchemaRangeModel);
                                 
+                                // FIXME: Same notes for the loop
                                 // Save rates for range and term
                                 foreach ( $leasingSchemaTerms as $term )
                                 {
@@ -489,11 +507,20 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                 // Get Range
                 $leasingSchemaRangeMapper = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance();
                 $leasingSchemaRange = $leasingSchemaRangeMapper->find($id);
+                
+                // FIXME: What happens if it doesn't exist?
+                
+
+                // FIXME: Same notes as above for the values, field names should match data names so that you can use ->populate instead
                 $form->getElement('range')->setValue($leasingSchemaRange->getStartRange());
                 
                 // Get Rates for Range
                 $leasingSchemaRatesMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
+                
+                // FIXME: Sql Injection!
                 $leasingSchemaRate = $leasingSchemaRatesMapper->fetchAll('leasingSchemaRangeId = ' . $id);
+                
+                // FIXME: You could populate these elements by using the model within the mapper.
                 foreach ( $leasingSchemaRate as $rate )
                 {
                     $termid = $rate->getLeasingSchemaTermId();
@@ -506,6 +533,8 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                 }
             }
         }
+        
+        // FIXME: Same notes for this part
         
         // Add form to page
         $form->setDecorators(array (
@@ -520,6 +549,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
         $this->view->leasingSchemaRange = $form;
     }
 
+    // FIXME: Same notes as delete term
     public function deleterangeAction ()
     {
         $leasingSchemaId = 1;
