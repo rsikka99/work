@@ -6,8 +6,8 @@ $percentageElements[] = $form->getElement('pageCoverageMonochrome');
 $percentageElements[] = $form->getElement('pageCoverageColor');
 $percentageElements[] = $form->getElement('deviceMargin');
 $percentageElements[] = $form->getElement('pageMargin');
-
-$pricingConfigID = $form->getElement('pricingConfigId');
+$percentageElements[] = $form->getElement('pricingConfigId');
+//$pricingConfigID = $form->getElement('pricingConfigId');
 ?>
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
 <?php foreach ($percentageElements as $element) : ?>
@@ -15,37 +15,16 @@ $pricingConfigID = $form->getElement('pricingConfigId');
 	<?php echo $element->renderLabel(); ?>
 	<div class="controls">
 		<div class="input-append">
-			<?php echo $element->renderViewHelper()?><span class="add-on"><strong>System Default: </strong><?php echo number_format($element->getDescription(), 2); ?>%</span>
+			<?php if($element->getType() === 'Zend_Form_Element_Text'):?>
+				<?php echo $element->renderViewHelper()?><span class="add-on"><strong>System Default: </strong><?php echo number_format($element->getDescription(), 2); ?>%</span>
+			<?php else :?>
+				<?php /* @var $princingConfig Proposalgen_Model_Mapper_PricingConfig */ $pricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($element->getDescription()); ?>
+				<?php echo $element->renderViewHelper(); ?><span class="add-on"><strong>System Default: </strong><?php echo $pricingConfig->getConfigName(); ?></span>			
+			<?php endif?>
 		</div>
 		<?php echo $element->renderErrors(); ?>
 	</div>
 </div>
 <?php endforeach; ?>
-<?php echo $pricingConfigID; ?>
 <?php echo $this->render('quotesetting/form/form-actions.phtml')?>
 </form>
-<?php
-// FIXME: Remove the return at some point.
-return;
-$itHoursRadio = $form->getElement('itHoursRadio');
-$ithours = $form->getElement('itHours');
-
-$monthlyBreakdownRadio = $form->getElement('monthlyBreakdownRadio');
-$monthlyBreakdown = $form->getElement('monthlyBreakdown');
-?>
-
-
-<div class="control-group <?php echo ($itHoursRadio->hasErrors() || $ithours->hasErrors()) ? 'error' : '' ?>">
-    <?php echo $ithours->renderLabel(); ?>
-    <div class="controls">
-    <?php echo $itHoursRadio->renderViewHelper(); ?>
-    <?php echo $itHoursRadio->renderErrors(); ?>
-    </div>
-    <div class="controls">
-        <div class="input-append">
-            <?php echo str_replace(PHP_EOL, '', $ithours->renderViewHelper()); ?><span class="add-on"><?php echo $ithours->getDescription(); ?></span>
-        </div>
-        <?php echo $ithours->renderErrors(); ?>
-    </div>
-    
-</div>

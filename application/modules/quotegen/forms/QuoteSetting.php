@@ -146,6 +146,7 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
             $pageCoverageColor->setDescription($systemDefaultQuoteSetting->getPageCoverageColor());
             $deviceMargin->setDescription($systemDefaultQuoteSetting->getDeviceMargin());
             $pageMargin->setDescription($systemDefaultQuoteSetting->getPageMargin());
+            $pricingConfigDropdown->setDescription($systemDefaultQuoteSetting->getPricingConfigId());
         }
         
         // Add the submit button
