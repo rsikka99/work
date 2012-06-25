@@ -12,54 +12,41 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
     {
         // Display all of the leasing schema rates in a grid
         $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
-        
-        // FIXME: Delete unused variables?
-        $leasingSchemaRangeMapper = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance();
-        $leasingSchemaTermMapper = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance();
-        $leasingSchemaRateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
-        
+               
         // Get default leasing schema
         $leasingSchema = $leasingSchemaMapper->find(1);
         $this->view->leasingSchema = $leasingSchema;
-        
-        // FIXME: Delete debug data
-        $request = $this->getRequest();
-        if ($request->isPost())
-        {
-            $values = $request->getPost();
-            print_r($values);
-        }
     }
 
     public function edittermAction ()
     {
         $leasingSchemaId = 1;
-        $id = $this->_getParam('id', false);
+        $termId = $this->_getParam('id', false);
         
         // Get leasing schema
         $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
         $leasingSchema = $leasingSchemaMapper->find($leasingSchemaId);
         
-        // FIXME: What happens if the leasing schema id is invalid?
+        if (! $leasingSchema)
+        {
+            $this->_helper->flashMessenger(array (
+                    'warning' => 'Leasing schema does not exist.' 
+            ));
+            $this->_helper->redirector('index');
+        }
         
-
         // Get form and pass ranges for this schema
         $leasingSchemaRanges = $leasingSchema->getRanges();
         
-        // FIXME: What happens if there are no ranges?
-        
+        if (! $leasingSchemaRanges)
+        {
+            $this->_helper->flashMessenger(array (
+                    'warning' => 'No ranges exist.' 
+            ));
+            $this->_helper->redirector('index');
+        }
 
         $form = new Quotegen_Form_LeasingSchemaTerm($leasingSchemaRanges);
-        
-        // Set default values and attributes
-        // FIXME: Why set a form value? You already have it coming back via the parameter. 
-        // Also for naming conventions, it should be named according to the field it is related to. If it is id, then it should be named id.
-        
-
-        $form->getElement('hdnId')->setValue($id);
-        
-        // FIXME: This will break when the module moves. This should be handled via a submit button that posts back, and then use redirector if it was a cancel action
-        $form->getElement('cancel')->setAttrib('onclick', 'javascript: document.location.href="/quotegen/leasingschema";');
         
         // Postback
         $request = $this->getRequest();
@@ -68,144 +55,137 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
             $values = $request->getPost();
             try
             {
-                // FIXME: For the previou comment, you can check if $values['cancel'] is set and then send the user somewhere if it is.
-                
+	            // If we cancelled we don't need to validate anything
+	            if (! isset($values ['cancel']))
+	            {
 
-                if ($form->isValid($values))
-                {
-                    // Get post data
-                    $termId = $values ['hdnId'];
-                    $months = $values ['term'];
-                    
-                    // FIXME: Did you move the logic into the mapper?
-                    // TODO: Move Logic Below to Mapper
-                    
+	                if ($form->isValid($values))
+	                {
+	                    
+	                    // Get post data
+	                    $months = $values ['term'];
+	                    
+	                    // Save new term
+	                    if ($termId)
+	                    {
+	                        try
+	                        {
+	                            // Save (Edit)
+	                            $leasingSchemaTermMapper = new Quotegen_Model_Mapper_LeasingSchemaTerm();
+	                            $leasingSchemaTerm = $leasingSchemaTermMapper->fetchAll(array (
+	                                    "leasingSchemaId" => $leasingSchemaId,
+			                            "months = ?" => $months
+			                    ));
+                                
+	                            // Editing so count should be 1
+	                            if ( $leasingSchemaTerm )
+	                            {
+	                                $leasingSchemaTermModel = new Quotegen_Model_LeasingSchemaTerm();
+	                                $leasingSchemaTermModel->setId($termId);
+	                                $leasingSchemaTermModel->setLeasingSchemaId($leasingSchemaId);
+	                                $leasingSchemaTermModel->setMonths($months);
+	                                $leasingSchemaTermMapper->save($leasingSchemaTermModel);
+	                                
+	                                $leasingSchemaRateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
+	                                $leasingSchemaRateModel = new Quotegen_Model_LeasingSchemaRate();
+	                                
+	                                // Save rates for range and term
+	                                foreach ( $leasingSchemaRanges as $range )
+	                                {
+	                                    $rangeId = $range->getId();
+	                                    $rate = $values ["rate{$rangeId}"];
+	                                    
+	                                    $leasingSchemaRateModel->setLeasingSchemaTermId($termId);
+	                                    $leasingSchemaRateModel->setLeasingSchemaRangeId($rangeId);
+	                                    $leasingSchemaRateModel->setRate($rate);
+	                                    $leasingSchemaRateId = $leasingSchemaRateMapper->save($leasingSchemaRateModel);
+	                                }
+	                                
+	                                $this->_helper->flashMessenger(array (
+	                                        'success' => "The term was updated successfully." 
+	                                ));
+	                            }
+	                            else
+	                            {
+	                                $this->_helper->flashMessenger(array (
+	                                        'danger' => "The term {$months} months already exists." 
+	                                ));
+	                            }
+	                        }
+	                        catch ( Exception $e )
+	                        {
+	                            // Save Error
+	                            $this->_helper->flashMessenger(array (
+	                                    'danger' => 'There was an error processing the update.  Please try again.' 
+	                            ));
+	                        }
+	                    }
+	                    else
+	                    {
+	                        try
+	                        {
+	                            $leasingSchemaTermMapper = new Quotegen_Model_Mapper_LeasingSchemaTerm();
+	                            $leasingSchemaTerm = $leasingSchemaTermMapper->fetchAll(array (
+	                                    "leasingSchemaId" => $leasingSchemaId,
+			                            "months = ?" => $months
+			                    ));
+                                
+	                            if ( ! $leasingSchemaTerm )
+	                            {
+	                            	// Insert (Add)
+		                            $leasingSchemaTermModel = new Quotegen_Model_LeasingSchemaTerm();
+		                            $leasingSchemaTermModel->setLeasingSchemaId($leasingSchemaId);
+		                            $leasingSchemaTermModel->setMonths($months);
+		                            
+	                                $termId = $leasingSchemaTermMapper->insert($leasingSchemaTermModel);
 
-                    // Save new term
-                    if ($termId)
-                    {
-                        try
-                        {
-                            // Save (Edit)
-                            $leasingSchemaTermMapper = new Quotegen_Model_Mapper_LeasingSchemaTerm();
-                            
-                            // FIXME: The fetch could be directly in the if statement if you're not using the return value. Otherwise the variable name is a bit confusing once used later on.
-                            // FIXME: Also, this should be in the mapper, the function could verify if a term exists already. Don't forget to escape user data. Right now we could inject sql! 
-                            // (Note: Escaping is by using the months = ? syntax within the mapper)
-                            // Validate term doesn't exist
-                            $exists = $leasingSchemaTermMapper->fetch('months = ' . $months);
-                            
-                            if (! $exists)
-                            {
-                                $leasingSchemaTermModel = new Quotegen_Model_LeasingSchemaTerm();
-                                $leasingSchemaTermModel->setId($termId);
-                                $leasingSchemaTermModel->setLeasingSchemaId($leasingSchemaId);
-                                $leasingSchemaTermModel->setMonths($months);
-                                
-                                // FIXME: Is the id going to change? If not, don't include the primary key parameter
-                                $leasingSchemaTermMapper->save($leasingSchemaTermModel, $termId);
-                                
-                                // Save rates for range and term
-                                foreach ( $leasingSchemaRanges as $range )
-                                {
-                                    $rangeId = $range->getId();
-                                    $rate = $values ["rate{$rangeId}"];
-                                    
-                                    // FIXME: Use mapper::getInstance() instead of instantiating a new one. Also, do this outside of the loop as we don't need to fetch an instance N times, just once.
-                                    $leasingSchemaRateMapper = new Quotegen_Model_Mapper_LeasingSchemaRate();
-                                    
-                                    // FIXME: TIP: Create the model outside the loop and set all data that doesn't change each loop. Then change the data that does change and save. (This can really save on memory)
-                                    $leasingSchemaRateModel = new Quotegen_Model_LeasingSchemaRate();
-                                    $leasingSchemaRateModel->setLeasingSchemaTermId($termId);
-                                    $leasingSchemaRateModel->setLeasingSchemaRangeId($rangeId);
-                                    $leasingSchemaRateModel->setRate($rate);
-                                    
-                                    // FIXME: Is this updating? Will it change the primary key of a row? If yes, then this is correct, otherwise you don't need to pass the primary key in.
-                                    $leasingSchemaRateId = $leasingSchemaRateMapper->save($leasingSchemaRateModel, array (
-                                            $termId, 
-                                            $rangeId 
-                                    ));
-                                }
-                                
-                                $this->_helper->flashMessenger(array (
-                                        'success' => "The term was updated successfully." 
-                                ));
-                            }
-                            else
-                            {
-                                $this->_helper->flashMessenger(array (
-                                        'danger' => "The term {$months} months already exists." 
-                                ));
-                            }
-                        }
-                        catch ( Exception $e )
-                        {
-                            // Save Error
-                            $this->_helper->flashMessenger(array (
-                                    'danger' => 'There was an error processing the update.  Please try again.' 
-                            ));
-                        }
-                    }
-                    else
-                    {
-                        try
-                        {
-                            // Insert (Add)
-                            $leasingSchemaTermMapper = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance();
-                            $leasingSchemaTermModel = new Quotegen_Model_LeasingSchemaTerm();
-                            $leasingSchemaTermModel->setLeasingSchemaId($leasingSchemaId);
-                            $leasingSchemaTermModel->setMonths($months);
-                            
-                            // FIXME: See note about the same statement above!
-                            // Validate term doesn't exist
-                            $exists = $leasingSchemaTermMapper->fetch('months = ' . $months);
-                            
-                            if (! $exists)
-                            {
-                                $termId = $leasingSchemaTermMapper->insert($leasingSchemaTermModel);
-                                
-                                // Save rates for range and term
-                                foreach ( $leasingSchemaRanges as $range )
-                                {
-                                    $rangeId = $range->getId();
-                                    $rate = $values ["rate{$rangeId}"];
-                                    
-                                    // FIXME: Mapper should not be in the loop since we only need to declare it once.
-                                    $leasingSchemaRateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
-                                    // FIXME: See note about creating the model outside the loop!
-                                    $leasingSchemaRateModel = new Quotegen_Model_LeasingSchemaRate();
-                                    $leasingSchemaRateModel->setLeasingSchemaRangeId($rangeId);
-                                    $leasingSchemaRateModel->setLeasingSchemaTermId($termId);
-                                    $leasingSchemaRateModel->setRate($rate);
-                                    $leasingSchemaRateMapper->insert($leasingSchemaRateModel);
-                                }
-                                
-                                $this->_helper->flashMessenger(array (
-                                        'success' => "The term {$months} months was added successfully." 
-                                ));
-                            }
-                            else
-                            {
-                                $this->_helper->flashMessenger(array (
-                                        'danger' => "The term {$months} months already exists." 
-                                ));
-                            }
-                        }
-                        catch ( Exception $e )
-                        {
-                            // Insert Error
-                            $this->_helper->flashMessenger(array (
-                                    'danger' => 'There was an error processing the insert.  Please try again.' 
-                            ));
-                        }
-                    }
-                }
-                else
-                {
-                    $this->_helper->flashMessenger(array (
-                            'error' => "Please review and complete all required fields." 
-                    ));
-                }
+	                                $leasingSchemaRateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
+	                                $leasingSchemaRateModel = new Quotegen_Model_LeasingSchemaRate();
+	                                
+	                                // Save rates for range and term
+	                                foreach ( $leasingSchemaRanges as $range )
+	                                {
+	                                    $rangeId = $range->getId();
+	                                    $rate = $values ["rate{$rangeId}"];
+	                                    
+	                                    $leasingSchemaRateModel->setLeasingSchemaRangeId($rangeId);
+	                                    $leasingSchemaRateModel->setLeasingSchemaTermId($termId);
+	                                    $leasingSchemaRateModel->setRate($rate);
+	                                    $leasingSchemaRateMapper->insert($leasingSchemaRateModel);
+	                                }
+	                                
+	                                $this->_helper->flashMessenger(array (
+	                                        'success' => "The term {$months} months was added successfully." 
+	                                ));
+	                            }
+	                            else
+	                            {
+	                                $this->_helper->flashMessenger(array (
+	                                        'danger' => "The term {$months} months already exists." 
+	                                ));
+	                            }
+	                        }
+	                        catch ( Exception $e )
+	                        {
+	                            // Insert Error
+	                            $this->_helper->flashMessenger(array (
+	                                    'danger' => 'There was an error processing the insert.  Please try again.' 
+	                            ));
+	                        }
+	                    }
+	                }
+	                else
+	                {
+	                    $this->_helper->flashMessenger(array (
+	                            'error' => "Please review and complete all required fields." 
+	                    ));
+	                }
+	            }
+	            else 
+	            {
+	                // User has cancelled. We could do a redirect here if we wanted.
+	                $this->_helper->redirector('index');
+	            }
             }
             catch ( Zend_Validate_Exception $e )
             {
@@ -215,22 +195,27 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
         else
         {
             // Populate form for Editing
-            if ($id > 0)
+            if ($termId > 0)
             {
                 // Get Term
                 $leasingSchemaTermMapper = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance();
-                $leasingSchemaTerm = $leasingSchemaTermMapper->find($id);
-                // FIXME: What happens here if the leasing term doesn't exist?
+                $leasingSchemaTerm = $leasingSchemaTermMapper->find($termId);
                 
+		        if (! $leasingSchemaTerm)
+		        {
+		            $this->_helper->flashMessenger(array (
+		                    'warning' => 'The leasing schema term does not exist.' 
+		            ));
+		            $this->_helper->redirector('index');
+		        }
                 
-                // FIXME: Naming convention, field names should be the same as the database names/toArray names. This way you can use $form->populate($model->toArray());
                 $form->getElement('term')->setValue($leasingSchemaTerm->getMonths());
                 
                 // Get Rates for Term
                 $leasingSchemaRatesMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
                 
                 // FIXME: Make a function to fetch rates for a term, and have the term model use it to return them. Also see note about SQL injection!
-                $leasingSchemaRate = $leasingSchemaRatesMapper->fetchAll('leasingSchemaTermId = ' . $id);
+                $leasingSchemaRate = $leasingSchemaRatesMapper->fetchAll('leasingSchemaTermId = ' . $termId);
                 
                 // FIXME: For populating the form, you could pass it in the term id and let it use the mapper to fetch the term model. I can help explain this further if needed.
                 foreach ( $leasingSchemaRate as $rate )
