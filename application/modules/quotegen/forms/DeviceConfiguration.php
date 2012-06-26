@@ -58,7 +58,7 @@ class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
         // Add the submit button
         $this->addElement('submit', 'submit', array (
                 'ignore' => true, 
-                'label' => 'Create' 
+                'label' => 'Save' 
         ));
         
         // Add the cancel button

@@ -104,7 +104,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
     public function createAction ()
     {
         $request = $this->getRequest();
-        $form = new Quotegen_Form_Device(true);
+        $form = new Quotegen_Form_Device();
         
         if ($request->isPost())
         {

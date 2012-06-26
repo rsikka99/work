@@ -157,13 +157,9 @@ class Quotegen_QuotesettingController extends Zend_Controller_Action
     public function editAction ()
     {
         // Find client and pass form object
-        $form = new Quotegen_Form_QuoteSetting();
+        $form = new Quotegen_Form_QuoteSetting(true);
         
-        $quoteSettingId = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id)
-            ->getQuoteSettingId();
-        
-        $quoteSettingMapper = Quotegen_Model_Mapper_QuoteSetting::getInstance();
-        $quoteSetting = $quoteSettingMapper->find($quoteSettingId);
+        $quoteSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
         
         $form->populate($quoteSetting->toArray());
         
@@ -179,10 +175,15 @@ class Quotegen_QuotesettingController extends Zend_Controller_Action
                     // Validate the form
                     if ($form->isValid($values))
                     {
-                        $quoteSetting = new Quotegen_Model_QuoteSetting();
+                        foreach ( $values as &$value )
+                        {
+                            if (strlen($value) === 0)
+                            {
+                                $value = new Zend_Db_Expr('NULL');
+                            }
+                        }
                         $quoteSetting->populate($values);
-                        $quoteSetting->setId($quoteSettingId);
-                        $quoteSettingMapper->save($quoteSetting, $quoteSettingId);
+                        Quotegen_Model_Mapper_QuoteSetting::getInstance()->save($quoteSetting);
                         
                         // Rediret user with message
                         $this->_helper->flashMessenger(array (
@@ -253,7 +254,7 @@ class Quotegen_QuotesettingController extends Zend_Controller_Action
                                 'success' => "Quote setting was updated sucessfully." 
                         ));
                         
-                        $this->_helper->redirector('index');
+                        $this->_helper->redirector('editdefault');
                     }
                     else
                     {

@@ -8,6 +8,7 @@
  */
 class Quotegen_Model_QuoteSetting extends My_Model_Abstract
 {
+    const SYSTEM_ROW_ID = 1;
     
     /**
      * The id assigned by the database
@@ -20,34 +21,34 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
      *
      * @var double
      */
-    protected $_pageCoverageMonochrome = 0;
+    protected $_pageCoverageMonochrome;
     /**
      * The default color page coverage value
      *
      * @var double
      */
-    protected $_pageCoverageColor = 0;
+    protected $_pageCoverageColor;
     
     /**
      * The default device margin value
      *
      * @var double
      */
-    protected $_deviceMargin = 0;
+    protected $_deviceMargin;
     
     /**
      * The default page margin value
      *
      * @var double
      */
-    protected $_pageMargin = 0;
+    protected $_pageMargin;
     
     /**
      * The default pricing config preference
      *
      * @var int
      */
-    protected $_pricingConfigId = 0;
+    protected $_pricingConfigId;
     
     /**
      * A pricing config object
@@ -55,7 +56,6 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
      * @var Proposalgen_Model_PricingConfig
      */
     protected $_pricingConfig;
-    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */

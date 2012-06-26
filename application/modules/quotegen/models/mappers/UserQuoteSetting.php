@@ -208,16 +208,34 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Takes in a usedid and returns a Quotgen_Model_UserQuoteSetting
+     * Takes in a usedid and returns a Quotgen_Model_QuoteSetting
      *
      * @param int $userId            
-     * @return Quotegen_Model_UserQuoteSetting
+     * @return Quotegen_Model_QuoteSetting
      */
     public function fetchUserQuoteSetting ($userId)
     {
-        return $this->fetch(array (
+        $userQuoteSetting = $this->fetch(array (
                 'userId = ?' => $userId 
         ));
+        
+        // If no userQuoteSetting exists insert new QuoteSetting
+        // If no userQuoteSetting exists insert new UserQuoteSetting
+        if (! $userQuoteSetting)
+        {
+            // Create a new QuoteSetting
+            $quoteSetting = new Quotegen_Model_QuoteSetting();
+            $quoteSetting->setPricingConfigId(Proposalgen_Model_PricingConfig::NONE);
+            $quoteSettingId = Quotegen_Model_Mapper_QuoteSetting::getInstance()->insert($quoteSetting);
+            
+            // Create a new UserQuoteSetting 
+            $userQuoteSetting = new Quotegen_Model_UserQuoteSetting();
+            $userQuoteSetting->setUserId($userId);
+            $userQuoteSetting->setQuoteSettingId($quoteSettingId);
+            $this->insert($userQuoteSetting);
+        }
+        
+        return $userQuoteSetting->getQuoteSetting();
     }
     
     /*

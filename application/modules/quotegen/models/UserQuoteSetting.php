@@ -23,6 +23,13 @@ class Quotegen_Model_UserQuoteSetting extends My_Model_Abstract
      */
     protected $_quoteSettingId = 0;
     
+    /**
+     * Gets the related quoteSetting object
+     *
+     * @var Quotegen_Model_QuoteSetting
+     */
+    protected $_quoteSetting;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -90,6 +97,32 @@ class Quotegen_Model_UserQuoteSetting extends My_Model_Abstract
     public function setQuoteSettingId ($_quoteSettingId)
     {
         $this->_quoteSettingId = $_quoteSettingId;
+        return $this;
+    }
+
+    /**
+     * Gets the related QuoteSetting object for current userId
+     *
+     * @return the $_quoteSetting
+     */
+    public function getQuoteSetting ()
+    {
+        if (! isset($this->_quoteSetting))
+        {
+            $this->_quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->find($this->getQuoteSettingId());
+        }
+        return $this->_quoteSetting;
+    }
+
+    /**
+     * Sets the related QuoteSetting object for current userId
+     *
+     * @param Quotegen_Model_QuoteSetting $_quoteSetting
+     *            The new QuoteSetting object.
+     */
+    public function setQuoteSetting ($_quoteSetting)
+    {
+        $this->_quoteSetting = $_quoteSetting;
         return $this;
     }
 }
