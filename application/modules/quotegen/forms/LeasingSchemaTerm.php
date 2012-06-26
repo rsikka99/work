@@ -43,6 +43,10 @@ class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
                                         1, 
                                         3 
                                 ) 
+                        ), 
+                        array (
+                                'validator' => 'Digits',
+                                'message' => 'Please enter a numeric value.'
                         ) 
                 ) 
         ));
