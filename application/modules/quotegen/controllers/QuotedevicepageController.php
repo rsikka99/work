@@ -3,11 +3,6 @@
 class Quotegen_QuoteDevicePageController extends Zend_Controller_Action
 {
 
-    public function init ()
-    {
-        /* Initialize action controller here */
-    }
-
     /**
      * Displays all pages for a device
      */
@@ -244,14 +239,6 @@ class Quotegen_QuoteDevicePageController extends Zend_Controller_Action
             }
         }
         $this->view->form = $form;
-    }
-
-    /**
-     * Displays pages for a device
-     */
-    public function viewAction ()
-    {
-        $this->view->quoteDevicePages = Quotegen_Model_Mapper_QuoteDevicePage::getInstance()->find($this->_getParam('id', false));
     }
 }
 
