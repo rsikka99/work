@@ -72,7 +72,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                                         "months = ?" => $months 
                                 ));
                                 
-                                // Editing so count should be 1
+                                // Edit
                                 if ($leasingSchemaTerm)
                                 {
                                     $leasingSchemaTermModel = new Quotegen_Model_LeasingSchemaTerm();
