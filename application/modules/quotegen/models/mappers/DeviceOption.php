@@ -102,6 +102,11 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
         return $rowsAffected;
     }
 
+    public function deleteOptionsByDeviceId ($deviceId)
+    {
+       return $this->getDbTable()->delete(array('masterDeviceId = ?' => $deviceId));
+    }
+
     /**
      * Finds a deviceOption based on it's primaryKey
      *

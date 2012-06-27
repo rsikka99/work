@@ -82,6 +82,11 @@ class Quotegen_DeviceController extends Zend_Controller_Action
                 // delete device from database
                 if ($form->isValid($values))
                 {
+                    // Delete quote device options link 
+                    $deviceOption = new Quotegen_Model_DeviceOption();
+                    $deviceOption->setMasterDeviceId($deviceId);
+                    Quotegen_Model_Mapper_DeviceOption::getInstance()->deleteOptionsByDeviceId($deviceId);
+                    
                     $this->getDeviceMapper()->delete($device);
                     $this->_helper->flashMessenger(array (
                             'success' => "Device  {$device->getMasterDeviceId()} was deleted successfully." 
