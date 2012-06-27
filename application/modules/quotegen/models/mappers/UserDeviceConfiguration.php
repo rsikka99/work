@@ -21,6 +21,19 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
     }
 
     /**
+     * Counts and returns the amount of rows by deviceConfigurationId
+     * 
+     * @param int $deviceConfigurationId
+     * @return number The amount of rows in the database.
+     */
+    public function countByDeviceId ($deviceConfigurationId)
+    {
+        return $this->count(array (
+                'deviceConfigurationId = ?' => $deviceConfigurationId 
+        ));
+    }
+
+    /**
      * Saves an instance of Quotegen_Model_UserDeviceConfiguration to the database.
      *
      * @param $object Quotegen_Model_UserDeviceConfiguration
@@ -99,6 +112,19 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
         
         $rowsAffected = $this->getDbTable()->delete($whereClause);
         return $rowsAffected;
+    }
+
+    /**
+     * Deletes a deviceConfiguration by deviceConfigurationId
+     *
+     * @param int $deviceConfigurationId            
+     * @return number The amount of rows affected
+     */
+    public function deleteUserDeviceConfigurationByDeviceId ($deviceConfigurationId)
+    {
+        return $rowsAffected = $this->getDbTable()->delete(array (
+                'deviceConfigurationId = ?' => $deviceConfigurationId 
+        ));
     }
 
     /**
