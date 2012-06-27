@@ -22,6 +22,20 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
      */
     protected $_deviceConfigurationId;
     
+    /**
+     * The device configuration
+     *
+     * @var Quotegen_Model_DeviceConfiguration
+     */
+    protected $_deviceConfiguration;
+    
+    /**
+     * The quote device
+     *
+     * @var Quotegen_Model_QuoteDevice
+     */
+    protected $_quoteDevice;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -32,9 +46,9 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
         if (isset($params->quoteDeviceId) && ! is_null($params->quoteDeviceId))
-            $this->setId($params->quoteDeviceId);
+            $this->setQuoteDeviceId($params->quoteDeviceId);
         if (isset($params->deviceConfigurationId) && ! is_null($params->deviceConfigurationId))
-            $this->setId($params->deviceConfigurationId);
+            $this->setDeviceConfigurationId($params->deviceConfigurationId);
     }
     
     /*
@@ -89,6 +103,58 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
     public function setDeviceConfigurationId ($_deviceConfigurationId)
     {
         $this->_deviceConfigurationId = $_deviceConfigurationId;
+        return $this;
+    }
+
+    /**
+     * Gets the associated device configuration
+     *
+     * @return Quotegen_Model_DeviceConfiguration The device configuration
+     */
+    public function getDeviceConfiguration ()
+    {
+        if (! isset($this->_deviceConfiguration))
+        {
+            $this->_deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($this->getDeviceConfigurationId());
+        }
+        return $this->_deviceConfiguration;
+    }
+
+    /**
+     * Sets the associated device configuration
+     *
+     * @param Quotegen_Model_DeviceConfiguration $_deviceConfiguration
+     *            The device configuration.
+     */
+    public function setDeviceConfiguration ($_deviceConfiguration)
+    {
+        $this->_deviceConfiguration = $_deviceConfiguration;
+        return $this;
+    }
+
+    /**
+     * Gets the associated quote device
+     *
+     * @return Quotegen_Model_QuoteDevice The quote device.
+     */
+    public function getQuoteDevice ()
+    {
+        if (! isset($this->_quoteDevice))
+        {
+            $this->_quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($this->getQuoteDeviceId());
+        }
+        return $this->_quoteDevice;
+    }
+
+    /**
+     * Sets the associated quote device
+     *
+     * @param Quotegen_Model_QuoteDevice $_quoteDevice
+     *            The quote device.
+     */
+    public function setQuoteDevice ($_quoteDevice)
+    {
+        $this->_quoteDevice = $_quoteDevice;
         return $this;
     }
 }

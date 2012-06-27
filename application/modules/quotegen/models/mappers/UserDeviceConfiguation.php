@@ -106,7 +106,7 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
      *
      * @param $id int
      *            The id of the template to find
-     * @return void Quotegen_Model_UserDeviceConfiguration
+     * @return Quotegen_Model_UserDeviceConfiguration
      */
     public function find ($id)
     {

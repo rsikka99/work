@@ -22,5 +22,10 @@ class Quotegen_Bootstrap extends Zend_Application_Module_Bootstrap
     {
         Zend_View_Helper_PaginationControl::setDefaultViewPartial('_partials/paginator.phtml');
     }
+
+    protected function _initLibraryAutoloader ()
+    {
+        return $this->getResourceLoader()->addResourceType('library', 'library', 'library');
+    }
 }
 

@@ -107,7 +107,7 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
      *
      * @param $id int
      *            The id of the quoteDeviceConfiguration to find
-     * @return void Quotegen_Model_QuoteDeviceConfiguration
+     * @return Quotegen_Model_QuoteDeviceConfiguration
      */
     public function find ($id)
     {
@@ -134,6 +134,34 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
     }
 
     /**
+     * Finds a quoteDeviceConfiguration by device configuration id
+     *
+     * @param $id int
+     *            The id of the device configuration to find
+     * @return Quotegen_Model_QuoteDeviceConfiguration
+     */
+    public function findByDeviceConfigurationId ($id)
+    {
+        return $this->fetch(array (
+                'deviceConfigurationId = ?' => $id 
+        ));
+    }
+
+    /**
+     * Finds a quoteDeviceConfiguration by device configuration id
+     *
+     * @param $id int
+     *            The id of the quote device to find
+     * @return Quotegen_Model_QuoteDeviceConfiguration
+     */
+    public function findByQuoteDeviceId ($id)
+    {
+        return $this->fetch(array (
+                'quoteDeviceId = ?' => $id 
+        ));
+    }
+
+    /**
      * Fetches a quoteDeviceConfiguration
      *
      * @param $where string|array|Zend_Db_Table_Select
@@ -142,7 +170,7 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
      *            OPTIONAL An SQL ORDER clause.
      * @param $offset int
      *            OPTIONAL An SQL OFFSET value.
-     * @return void Quotegen_Model_QuoteDeviceConfiguration
+     * @return Quotegen_Model_QuoteDeviceConfiguration
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {

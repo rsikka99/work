@@ -103,7 +103,7 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
      *
      * @param $id int
      *            The id of the quoteDeviceMonthlyPage to find
-     * @return void Quotegen_Model_QuoteDeviceMonthlyPage
+     * @return Quotegen_Model_QuoteDeviceMonthlyPage
      */
     public function find ($id)
     {
@@ -138,7 +138,7 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
      *            OPTIONAL An SQL ORDER clause.
      * @param $offset int
      *            OPTIONAL An SQL OFFSET value.
-     * @return void Quotegen_Model_QuoteDeviceMonthlyPage
+     * @return Quotegen_Model_QuoteDeviceMonthlyPage
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {

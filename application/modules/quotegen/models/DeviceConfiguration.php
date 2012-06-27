@@ -28,7 +28,7 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
      *
      * @var Quotegen_Model_Device
      */
-    protected $_quoteDevice;
+    protected $_device;
     
     /**
      * The options added to the configuraiton
@@ -111,23 +111,23 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
      *
      * @return Quotegen_Model_Device
      */
-    public function getQuoteDevice ()
+    public function getDevice ()
     {
-        if (! isset($this->_quoteDevice))
+        if (! isset($this->_device))
         {
-            $this->_quoteDevice = Quotegen_Model_Mapper_Device::getInstance()->find($this->getMasterDeviceId());
+            $this->_device = Quotegen_Model_Mapper_Device::getInstance()->find($this->getMasterDeviceId());
         }
-        return $this->_quoteDevice;
+        return $this->_device;
     }
 
     /**
      * Sets the quote device associated with this configuration
      *
-     * @param Quotegen_Model_Device $_quoteDevice            
+     * @param Quotegen_Model_Device $_device            
      */
-    public function setQuoteDevice ($_quoteDevice)
+    public function setDevice ($_device)
     {
-        $this->_quoteDevice = $_quoteDevice;
+        $this->_device = $_device;
         return $this;
     }
 

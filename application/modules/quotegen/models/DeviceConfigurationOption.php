@@ -32,6 +32,14 @@ class Quotegen_Model_DeviceConfigurationOption extends My_Model_Abstract
     protected $_quantity = 1;
     
     /**
+     * The included quantity in the configuration.
+     * Defaults to 0
+     *
+     * @var int
+     */
+    protected $_includedQuantity = 0;
+    
+    /**
      * The option associated with this configuration
      *
      * @var Quotegen_Model_Option
@@ -151,6 +159,28 @@ class Quotegen_Model_DeviceConfigurationOption extends My_Model_Abstract
     public function setOption ($_option)
     {
         $this->_option = $_option;
+        return $this;
+    }
+
+    /**
+     * Gets the quantity of this item that is included in the price of the device/device configuration
+     * 
+     * @return number The quantity
+     */
+    public function getIncludedQuantity ()
+    {
+        return $this->_includedQuantity;
+    }
+
+    /**
+     * Sets the quantity of this item that is included in the price of the device/device configuration
+     * 
+     * @param number $_includedQuantity
+     *            The new quantity
+     */
+    public function setIncludedQuantity ($_includedQuantity)
+    {
+        $this->_includedQuantity = $_includedQuantity;
         return $this;
     }
 }

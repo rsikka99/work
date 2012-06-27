@@ -104,11 +104,27 @@ class Quotegen_Model_Mapper_QuoteDeviceOption extends My_Model_Mapper_Abstract
     }
 
     /**
+     * Deletes all options for a quote device id
+     *
+     * @param number $quoteDeviceId
+     *            The quote device id
+     * @return number The number of rows deleted
+     */
+    public function deleteAllOptionsForQuoteDevice ($quoteDeviceId)
+    {
+        $whereClause = array (
+                'quoteDeviceId = ?' => $quoteDeviceId 
+        );
+        
+        return $this->getDbTable()->delete($whereClause);
+    }
+
+    /**
      * Finds a quoteDeviceOption based on it's primaryKey
      *
      * @param $id int
      *            The id of the quoteDeviceOption to find
-     * @return void Quotegen_Model_QuoteDeviceOption
+     * @return Quotegen_Model_QuoteDeviceOption
      */
     public function find ($id)
     {
@@ -143,7 +159,7 @@ class Quotegen_Model_Mapper_QuoteDeviceOption extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL ORDER clause.
      * @param $offset int
      *            OPTIONAL An SQL OFFSET value.
-     * @return void Quotegen_Model_QuoteDeviceOption
+     * @return Quotegen_Model_QuoteDeviceOption
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -209,6 +225,20 @@ class Quotegen_Model_Mapper_QuoteDeviceOption extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->getId();
+    }
+
+    /**
+     * Fetches all quote device options for a quote device
+     * 
+     * @param number $id
+     *            The id of the quote device
+     * @return multitype:Quotegen_Model_QuoteDeviceOption
+     */
+    public function fetchAllOptionsForQuoteDevice ($id)
+    {
+        return $this->fetchAll(array (
+                'quoteDeviceId = ?' => $id 
+        ));
     }
 }
 

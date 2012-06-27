@@ -21,7 +21,7 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
      *
      * @var int
      */
-    protected $_quoteDeiviceId;
+    protected $_quoteDeviceId;
     
     /**
      * The sku of the device option
@@ -56,14 +56,14 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
      *
      * @var int
      */
-    protected $_quanity;
+    protected $_quantity;
     
     /**
      * The quanity of the item that is included
      *
      * @var int
      */
-    protected $_includedQuanitity;
+    protected $_includedQuantity;
     
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
@@ -77,19 +77,19 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
         if (isset($params->id) && ! is_null($params->id))
             $this->setId($params->id);
         if (isset($params->quoteDeviceId) && ! is_null($params->quoteDeviceId))
-            $this->setId($params->quoteDeviceId);
+            $this->setQuoteDeviceId($params->quoteDeviceId);
         if (isset($params->sku) && ! is_null($params->sku))
-            $this->setId($params->sku);
+            $this->setSku($params->sku);
         if (isset($params->name) && ! is_null($params->name))
-            $this->setId($params->name);
+            $this->setName($params->name);
         if (isset($params->description) && ! is_null($params->description))
-            $this->setId($params->description);
+            $this->setDescription($params->description);
         if (isset($params->price) && ! is_null($params->price))
-            $this->setId($params->price);
+            $this->setPrice($params->price);
         if (isset($params->quantity) && ! is_null($params->quantity))
-            $this->setId($params->quantity);
+            $this->setQuantity($params->quantity);
         if (isset($params->includedQuantity) && ! is_null($params->includedQuantity))
-            $this->setId($params->includedQuantity);
+            $this->setIncludedQuantity($params->includedQuantity);
     }
     
     /*
@@ -99,13 +99,13 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
     {
         return array (
                 'id' => $this->getId(), 
-                'quoteDeviceId' => $this->getQuoteDeiviceId(), 
+                'quoteDeviceId' => $this->getQuoteDeviceId(), 
                 'sku' => $this->getSku(), 
                 'name' => $this->getName(), 
                 'description' => $this->getDescription(), 
                 'price' => $this->getPrice(), 
-                'quantity' => $this->getQuanity(), 
-                'includedQuantity' => $this->getIncludedQuanitity() 
+                'quantity' => $this->getQuantity(), 
+                'includedQuantity' => $this->getIncludedQuantity() 
         );
     }
 
@@ -134,22 +134,22 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
     /**
      * Gets the current quoteDeviceId of the object
      *
-     * @return the $_quoteDeiviceId
+     * @return int
      */
-    public function getQuoteDeiviceId ()
+    public function getQuoteDeviceId ()
     {
-        return $this->_quoteDeiviceId;
+        return $this->_quoteDeviceId;
     }
 
     /**
      * Set a new quoteDeviceId
      *
-     * @param number $_quoteDeiviceId
+     * @param number $_quoteDeviceId
      *            the new quoteDeviceId
      */
-    public function setQuoteDeiviceId ($_quoteDeiviceId)
+    public function setQuoteDeviceId ($_quoteDeviceId)
     {
-        $this->_quoteDeiviceId = $_quoteDeiviceId;
+        $this->_quoteDeviceId = $_quoteDeviceId;
         return $this;
     }
 
@@ -244,11 +244,11 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
     /**
      * Gets the current quantity of the object
      *
-     * @return the $_quanity
+     * @return the $_quantity
      */
-    public function getQuanity ()
+    public function getQuantity ()
     {
-        return $this->_quanity;
+        return $this->_quantity;
     }
 
     /**
@@ -257,31 +257,31 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
      * @param number $_quanity
      *            the new quantity
      */
-    public function setQuanity ($_quanity)
+    public function setQuantity ($_quanity)
     {
-        $this->_quanity = $_quanity;
+        $this->_quantity = $_quanity;
         return $this;
     }
 
     /**
      * Gets the included quantity of the object
      *
-     * @return the $_includedQuanitity the new quantity
+     * @return the $_includedQuantity the new quantity
      */
-    public function getIncludedQuanitity ()
+    public function getIncludedQuantity ()
     {
-        return $this->_includedQuanitity;
+        return $this->_includedQuantity;
     }
 
     /**
      * Sets the included quantity
      *
-     * @param number $_includedQuanitity
+     * @param number $_includedQuantity
      *            the new included quantity
      */
-    public function setIncludedQuanitity ($_includedQuanitity)
+    public function setIncludedQuantity ($_includedQuantity)
     {
-        $this->_includedQuanitity = $_includedQuanitity;
+        $this->_includedQuantity = $_includedQuantity;
         return $this;
     }
 }

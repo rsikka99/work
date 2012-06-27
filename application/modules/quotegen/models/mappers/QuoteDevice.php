@@ -108,7 +108,7 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
      *
      * @param $id int
      *            The id of the quoteDevice to find
-     * @return void Quotegen_Model_QuoteDevice
+     * @return Quotegen_Model_QuoteDevice
      */
     public function find ($id)
     {
@@ -143,7 +143,7 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL ORDER clause.
      * @param $offset int
      *            OPTIONAL An SQL OFFSET value.
-     * @return void Quotegen_Model_QuoteDevice
+     * @return Quotegen_Model_QuoteDevice
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -209,6 +209,20 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->getId();
+    }
+
+    /**
+     * Gets all devices associated with a quote.
+     *
+     * @param int $quoteId
+     *            The quote id
+     * @return multitype:Quotegen_Model_QuoteDevice The quote devices for the quote
+     */
+    public function fetchDevicesForQuote ($quoteId)
+    {
+        return $this->fetchAll(array (
+                'quoteId = ?' => $quoteId 
+        ));
     }
 }
 

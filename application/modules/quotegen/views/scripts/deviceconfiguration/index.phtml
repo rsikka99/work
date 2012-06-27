@@ -11,7 +11,7 @@
     	
         <?php foreach ($this->paginator->getCurrentItems() as $deviceConfiguration) : /* @var $deviceConfiguration Quotegen_Model_DeviceConfiguration */ ?>
         <tr>
-            <td><?php echo $deviceConfiguration->getQuoteDevice()->getMasterDevice()->getFullDeviceName(); ?></td>
+            <td><?php echo $deviceConfiguration->getDevice()->getMasterDevice()->getFullDeviceName(); ?></td>
             <td>
                 <div class="btn-group">
 	                <a class="btn btn-info" title="View Device" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $deviceConfiguration->getId())); ?>"><i class="icon-eye-open"></i></a>

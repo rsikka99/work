@@ -153,7 +153,7 @@ abstract class My_Model_Mapper_Abstract
             $key = implode('_', $key);
             
             // If the item exists, return it.
-        if (array_key_exists($key, $this->_rowHashTable))
+        if (array_key_exists((string)$key, $this->_rowHashTable))
         {
             return $this->_rowHashTable [$key];
         }

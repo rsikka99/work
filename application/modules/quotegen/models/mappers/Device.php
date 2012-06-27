@@ -109,7 +109,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
      *
      * @param $id int
      *            The id of the device to find
-     * @return void Quotegen_Model_Device
+     * @return Quotegen_Model_Device
      */
     public function find ($id)
     {
@@ -144,7 +144,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL ORDER clause.
      * @param $offset int
      *            OPTIONAL An SQL OFFSET value.
-     * @return void Quotegen_Model_Device
+     * @return Quotegen_Model_Device
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {

@@ -133,7 +133,7 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
      *
      * @param $id int
      *            The id of the optionCategory to find
-     * @return void Quotegen_Model_OptionCategory
+     * @return Quotegen_Model_OptionCategory
      */
     public function find ($id)
     {
@@ -168,7 +168,7 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL ORDER clause.
      * @param $offset int
      *            OPTIONAL An SQL OFFSET value.
-     * @return void Quotegen_Model_OptionCategory
+     * @return Quotegen_Model_OptionCategory
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {

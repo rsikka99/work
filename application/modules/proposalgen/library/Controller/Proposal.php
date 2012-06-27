@@ -8,7 +8,7 @@
  * be quided through a series of forms where they are asked to answer
  * questions about their existing fleet of printers.
  *
- * @author Chris Garrah
+ * @author Lee Robert
  */
 class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
 {

@@ -9,7 +9,7 @@ class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
     }
 
     /**
-     * Displays all deviceConfigurations
+     * Displays all global device configurations
      */
     public function indexAction ()
     {
@@ -339,7 +339,7 @@ class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
                         }
                         
                         $this->_helper->flashMessenger(array (
-                                'success' => "Successfully added {$insertedOptions} options to {$deviceConfiguration->getQuoteDevice()->getMasterDevice()->getFullDeviceName()} successfully." 
+                                'success' => "Successfully added {$insertedOptions} options to {$deviceConfiguration->getDevice()->getMasterDevice()->getFullDeviceName()} successfully." 
                         ));
                         $this->_helper->redirector('edit', null, null, array (
                                 'id' => $id 

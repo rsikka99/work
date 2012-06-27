@@ -107,7 +107,7 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
      *
      * @param $id int
      *            The id of the userQuoteSetting to find
-     * @return void Quotegen_Model_UserQuoteSetting
+     * @return Quotegen_Model_UserQuoteSetting
      */
     public function find ($id)
     {
@@ -142,7 +142,7 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL ORDER clause.
      * @param $offset int
      *            OPTIONAL An SQL OFFSET value.
-     * @return void Quotegen_Model_UserQuoteSetting
+     * @return Quotegen_Model_UserQuoteSetting
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {

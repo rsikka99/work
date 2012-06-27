@@ -46,7 +46,7 @@ class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
         {
             $device = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($this->_id);
             $deviceName = new My_Form_Element_Paragraph('deviceName');
-            $deviceName->setValue($device->getQuoteDevice()
+            $deviceName->setValue($device->getDevice()
                 ->getMasterDevice()
                 ->getFullDeviceName());
             $this->addElement($deviceName);

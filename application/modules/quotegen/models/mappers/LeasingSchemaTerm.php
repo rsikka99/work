@@ -109,7 +109,7 @@ class Quotegen_Model_Mapper_LeasingSchemaTerm extends My_Model_Mapper_Abstract
      *
      * @param $id int
      *            The id of the leasingSchemaTerm to find
-     * @return void Quotegen_Model_LeasingSchemaTerm
+     * @return Quotegen_Model_LeasingSchemaTerm
      */
     public function find ($id)
     {
@@ -136,7 +136,7 @@ class Quotegen_Model_Mapper_LeasingSchemaTerm extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL ORDER clause.
      * @param $offset int
      *            OPTIONAL An SQL OFFSET value.
-     * @return void Quotegen_Model_LeasingSchemaTerm
+     * @return Quotegen_Model_LeasingSchemaTerm
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {

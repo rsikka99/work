@@ -8,8 +8,6 @@
  */
 class Quotegen_Model_Quote extends My_Model_Abstract
 {
-    const QUOTE_SESSION_NAMESPACE = 'quotegen';
-    
     /**
      * The id assigned by the database
      *
@@ -72,6 +70,13 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      * @var Quotegen_Model_Client
      */
     protected $_client;
+    
+    /**
+     * The quote devices attached to the quote
+     *
+     * @var array
+     */
+    protected $_quoteDevices;
     
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
@@ -317,6 +322,32 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         {
             $this->setClientId($_client->getId());
         }
+        return $this;
+    }
+
+    /**
+     * Gets the quote devices for the quote
+     *
+     * @return multitype:Quotegen_Model_QuoteDevice The quote devices.
+     */
+    public function getQuoteDevices ()
+    {
+        if (! isset($this->_quoteDevices))
+        {
+            $this->_quoteDevices = Quotegen_Model_Mapper_QuoteDevice::getInstance()->fetchDevicesForQuote($this->getId());
+        }
+        return $this->_quoteDevices;
+    }
+
+    /**
+     * Sets the quote devices for the quote
+     *
+     * @param multitype:Quotegen_Model_QuoteDevice $_quoteDevices
+     *            The quote devices.
+     */
+    public function setQuoteDevices ($_quoteDevices)
+    {
+        $this->_quoteDevices = $_quoteDevices;
         return $this;
     }
 }

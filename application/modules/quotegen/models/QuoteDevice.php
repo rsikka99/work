@@ -86,6 +86,20 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     protected $_quantity;
     
+    /**
+     * The device configuration that this quote is attached to
+     *
+     * @var Quotegen_Model_QuoteDeviceConfiguration
+     */
+    protected $_deviceConfiguration;
+    
+    /**
+     * The quote device options that are stored separately from device configuration options
+     *
+     * @var Quotegen_Model_QuoteDeviceOption
+     */
+    protected $_options;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -98,23 +112,25 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         if (isset($params->id) && ! is_null($params->id))
             $this->setId($params->id);
         if (isset($params->quoteId) && ! is_null($params->quoteId))
-            $this->setId($params->quoteId);
+            $this->setQuoteId($params->quoteId);
         if (isset($params->margin) && ! is_null($params->margin))
-            $this->setId($params->margin);
+            $this->setMargin($params->margin);
+        if (isset($params->name) && ! is_null($params->name))
+            $this->setName($params->name);
         if (isset($params->sku) && ! is_null($params->sku))
-            $this->setId($params->sku);
+            $this->setSku($params->sku);
         if (isset($params->oemCostPerPageMonochrome) && ! is_null($params->oemCostPerPageMonochrome))
-            $this->setId($params->oemCostPerPageMonochrome);
+            $this->setOemCostPerPageMonochrome($params->oemCostPerPageMonochrome);
         if (isset($params->omeCostPerPageColor) && ! is_null($params->omeCostPerPageColor))
-            $this->setId($params->omeCostPerPageColor);
+            $this->setOemCostPerPageColor($params->omeCostPerPageColor);
         if (isset($params->compCostPerPageMonochrome) && ! is_null($params->compCostPerPageMonochrome))
-            $this->setId($params->compCostPerPageMonochrome);
+            $this->setCompCostPerPageMonochrome($params->compCostPerPageMonochrome);
         if (isset($params->compCostPerPageColor) && ! is_null($params->compCostPerPageColor))
-            $this->setId($params->compCostPerPageColor);
+            $this->setCompCostPerPageColor($params->compCostPerPageColor);
         if (isset($params->price) && ! is_null($params->price))
-            $this->setId($params->price);
+            $this->setPrice($params->price);
         if (isset($params->quantity) && ! is_null($params->quantity))
-            $this->setId($params->quantity);
+            $this->setQuantity($params->quantity);
     }
     
     /*
@@ -128,7 +144,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
                 'margin' => $this->getMargin(), 
                 'name' => $this->getName(), 
                 'sku' => $this->getSku(), 
-                'oemCostPerPageMonochrome' => $this->getOmeCostPerPageMonochrome(), 
+                'oemCostPerPageMonochrome' => $this->getOemCostPerPageMonochrome(), 
                 'oemCostPerPageColor' => $this->getOemCostPerPageColor(), 
                 'compCostPerPageMonochrome' => $this->getCompCostPerPageMonochrome(), 
                 'compCostPerPageColor' => $this->getCompCostPerPageColor(), 
@@ -252,7 +268,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @return the $_oemCostPerPageMonochrome
      */
-    public function getOmeCostPerPageMonochrome ()
+    public function getOemCostPerPageMonochrome ()
     {
         return $this->_oemCostPerPageMonochrome;
     }
@@ -263,7 +279,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      * @param number $_oemCostPerPageMonochrome
      *            the new oemCostPerPageMonochrome
      */
-    public function setOmeCostPerPageMonochrome ($_oemCostPerPageMonochrome)
+    public function setOemCostPerPageMonochrome ($_oemCostPerPageMonochrome)
     {
         $this->_oemCostPerPageMonochrome = $_oemCostPerPageMonochrome;
         return $this;
@@ -376,6 +392,63 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     public function setQuantity ($_quantity)
     {
         $this->_quantity = $_quantity;
+        return $this;
+    }
+
+    /**
+     * Gets the device configuration associated with this quote device
+     *
+     * @return Quotegen_Model_DeviceConfiguration The device configuration
+     */
+    public function getDeviceConfiguration ()
+    {
+        if (! isset($this->_deviceConfiguration))
+        {
+            $this->_deviceConfiguration = false;
+            $quoteDeviceConfiguration = Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->findByQuoteDeviceId($this->getId());
+            if ($quoteDeviceConfiguration)
+            {
+                $this->_deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($quoteDeviceConfiguration->getDeviceConfigurationId());
+            }
+        }
+        return $this->_deviceConfiguration;
+    }
+
+    /**
+     * Sets the device configuration associated with this quote device
+     *
+     * @param Quotegen_Model_DeviceConfiguration $_deviceConfiguration
+     *            The new device configuration.
+     */
+    public function setDeviceConfiguration ($_deviceConfiguration)
+    {
+        $this->_deviceConfiguration = $_deviceConfiguration;
+        return $this;
+    }
+
+    /**
+     * Gets the quote device options
+     *
+     * @return Quotegen_Model_QuoteDeviceOption The quote device options
+     */
+    public function getOptions ()
+    {
+        if (! isset($this->_options))
+        {
+            $this->_options = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->fetchAllOptionsForQuoteDevice($this->getId());
+        }
+        return $this->_options;
+    }
+
+    /**
+     * Sets the quote device options
+     *
+     * @param Quotegen_Model_QuoteDeviceOption $_options
+     *            The new options for the device
+     */
+    public function setOptions ($_options)
+    {
+        $this->_options = $_options;
         return $this;
     }
 }

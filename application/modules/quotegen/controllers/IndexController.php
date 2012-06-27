@@ -1,12 +1,7 @@
 <?php
 
-class Quotegen_IndexController extends Zend_Controller_Action
+class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
 {
-
-    public function init ()
-    {
-        /* Initialize action controller here */
-    }
 
     public function indexAction ()
     {
@@ -27,9 +22,7 @@ class Quotegen_IndexController extends Zend_Controller_Action
                 // Existing Quote
                 if ($existingQuoteForm->isValid($values))
                 {
-                    $quoteSession = new Zend_Session_Namespace(Quotegen_Model_Quote::QUOTE_SESSION_NAMESPACE);
-                    $quoteSession->unsetAll();
-                    $quoteSession->id = $values ['quoteId'];
+                    $this->resetQuoteSession($values ['quoteId']);
                     
                     // Redirect to the build controller
                     $this->_helper->redirector('index', 'build');
@@ -60,9 +53,7 @@ class Quotegen_IndexController extends Zend_Controller_Action
                     
                     $quoteId = Quotegen_Model_Mapper_Quote::getInstance()->insert($quote);
                     
-                    $quoteSession = new Zend_Session_Namespace(Quotegen_BuildController::QUOTE_SESSION_NAMESPACE);
-                    $quoteSession->unsetAll();
-                    $quoteSession->id = $quoteId;
+                    $this->resetQuoteSession($quoteId);
                     
                     // Redirect to the build controller
                     $this->_helper->redirector('index', 'build');
