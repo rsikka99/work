@@ -40,11 +40,11 @@ class Quotegen_Model_LeasedQuote extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
         if (isset($params->quoteId) && ! is_null($params->quoteId))
-            $this->setId($params->quoteId);
+            $this->setQuoteId($params->quoteId);
         if (isset($params->rate) && ! is_null($params->rate))
-            $this->setId($params->rate);
+            $this->setRate($params->rate);
         if (isset($params->term) && ! is_null($params->term))
-            $this->setId($params->term);
+            $this->setTerm($params->term);
     }
     
     /*

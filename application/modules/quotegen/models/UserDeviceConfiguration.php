@@ -46,13 +46,13 @@ class Quotegen_Model_UserDeviceConfiguration extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
         if (isset($params->deviceConfigurationId) && ! is_null($params->deviceConfigurationId))
-            $this->setId($params->deviceConfigurationId);
+            $this->setDeviceConfigurationId($params->deviceConfigurationId);
         if (isset($params->userId) && ! is_null($params->userId))
-            $this->setId($params->userId);
+            $this->setUserId($params->userId);
         if (isset($params->name) && ! is_null($params->name))
-            $this->setId($params->name);
+            $this->setName($params->name);
         if (isset($params->description) && ! is_null($params->description))
-            $this->setId($params->description);
+            $this->setDescription($params->description);
     }
     
     /*

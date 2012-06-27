@@ -30,9 +30,9 @@ class Quotegen_Model_QuoteQuoteSetting extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
         if (isset($params->quoteId) && ! is_null($params->quoteId))
-            $this->setId($params->quoteId);
+            $this->setQuoteId($params->quoteId);
         if (isset($params->quoteSettingId) && ! is_null($params->quoteSettingId))
-            $this->setId($params->quoteSettingId);
+            $this->setQuoteSettingId($params->quoteSettingId);
     }
     
     /*

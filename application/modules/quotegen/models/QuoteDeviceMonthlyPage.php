@@ -46,13 +46,13 @@ class Quotegen_Model_QuoteDeviceMonthlyPage extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
         if (isset($params->quoteDeviceId) && ! is_null($params->quoteDeviceId))
-            $this->setId($params->quoteDeviceId);
+            $this->setQuoteDeviceId($params->quoteDeviceId);
         if (isset($params->monochrome) && ! is_null($params->monochrome))
-            $this->setId($params->monochrome);
+            $this->setMonochrome($params->monochrome);
         if (isset($params->color) && ! is_null($params->color))
-            $this->setId($params->color);
+            $this->setColor($params->color);
         if (isset($params->price) && ! is_null($params->price))
-            $this->setId($params->price);
+            $this->setPrice($params->price);
     }
     
     /*

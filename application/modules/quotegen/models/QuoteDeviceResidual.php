@@ -32,9 +32,9 @@ class Quotegen_Model_QuoteDeviceResidual extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
         if (isset($params->quoteDeviceId) && ! is_null($params->quoteDeviceId))
-            $this->setId($params->quoteDeviceId);
+            $this->getQuoteDeviceId($params->quoteDeviceId);
         if (isset($params->amount) && ! is_null($params->amount))
-            $this->setId($params->amount);
+            $this->setAmount($params->amount);
     }
     
     /*

@@ -55,15 +55,15 @@ class Quotegen_Model_QuoteDevicePage extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
         if (isset($params->quoteDeviceId) && ! is_null($params->quoteDeviceId))
-            $this->setId($params->quoteDeviceId);
+            $this->setQuoteDeviceId($params->quoteDeviceId);
         if (isset($params->costPerPageMonochrome) && ! is_null($params->costPerPageMonochrome))
-            $this->setId($params->costPerPageMonochrome);
+            $this->setCostPerPageMonochrome($params->costPerPageMonochrome);
         if (isset($params->costPerPageColor) && ! is_null($params->costPerPageColor))
-            $this->setId($params->costPerPageColor);
+            $this->setCostPerPageColor($params->costPerPageColor);
         if (isset($params->pageBillingPreference) && ! is_null($params->pageBillingPreference))
-            $this->setId($params->pageBillingPreference);
+            $this->setPageBillingPreference($params->pageBillingPreference);
         if (isset($params->margin) && ! is_null($params->margin))
-            $this->setId($params->margin);
+            $this->setMargin($params->margin);
     }
     
     /*
