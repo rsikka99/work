@@ -102,9 +102,17 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
         return $rowsAffected;
     }
 
+    /**
+     * Deletes all device options by device id;
+     * 
+     * @param int $deviceId            
+     * @return number The amount of rows affected.
+     */
     public function deleteOptionsByDeviceId ($deviceId)
     {
-       return $this->getDbTable()->delete(array('masterDeviceId = ?' => $deviceId));
+        return $this->getDbTable()->delete(array (
+                'masterDeviceId = ?' => $deviceId 
+        ));
     }
 
     /**

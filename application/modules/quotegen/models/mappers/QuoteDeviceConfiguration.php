@@ -21,6 +21,19 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
     }
 
     /**
+     * Counts and returns the amount of rows by deviceConfigurationId
+     *
+     * @param int $deviceConfigurationId            
+     * @return number The amount of rows in the database.
+     */
+    public function countByDeviceId ($deviceConfigurationId)
+    {
+        return $this->count(array (
+                'deviceConfigurationId = ?' => $deviceConfigurationId 
+        ));
+    }
+
+    /**
      * Saves an instance of Quotegen_Model_QuoteDeviceConfiguration to the database.
      * If the id is null then it will insert a new row
      *
@@ -100,6 +113,19 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
         
         $rowsAffected = $this->getDbTable()->delete($whereClause);
         return $rowsAffected;
+    }
+
+    /**
+     * Delete a quoteDeviceConfiguration by deviceConfigurationId
+     * 
+     * @param int $deviceConfigurationId            
+     * @return number The number of rows affected
+     */
+    public function deleteQuoteDeviceConfigurationById ($deviceConfigurationId)
+    {
+        return $this->getDbTable()->delete(array (
+                'deviceConfigurationId = ?' => $deviceConfigurationId 
+        ));
     }
 
     /**

@@ -19,6 +19,19 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
     {
         return self::getCachedInstance();
     }
+    
+    /**
+     * Counts and returns the amount of rows by masterDeviceId
+     *
+     * @param int $masterDeviceId
+     * @return number The amount of rows in the database.
+     */
+    public function countByDeviceId ($masterDeviceId)
+    {
+        return $this->count(array (
+                'masterDeviceId = ?' => $masterDeviceId
+        ));
+    }
 
     /**
      * Saves an instance of Quotegen_Model_DeviceConfiguration to the database.
@@ -188,6 +201,30 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
             $entries [] = $object;
         }
         return $entries;
+    }
+
+    /**
+     * Fetches all deviceConfigurations by masterdeviceId
+     * @param int $masterDeviceId            
+     * @return multitype:Quotegen_Model_DeviceConfiguration
+     */
+    public function fetchAllDeviceConfigurationByDeviceId ($masterDeviceId)
+    {
+        $deviceConfigurations = array ();
+        $resultSet = $this->getDbTable()->fetchAll(array (
+                'masterDeviceId = ?' => $masterDeviceId 
+        ));
+        
+        foreach ( $resultSet as $row )
+        {
+            $object = new Quotegen_Model_DeviceConfiguration($row->toArray());
+            
+            // Save the item into cahce
+            $this->saveItemToCache($object);
+            $deviceConfigurations [] = $object;
+        }
+        
+        return $deviceConfigurations;
     }
 
     /**

@@ -24,6 +24,19 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
     {
         return self::getCachedInstance();
     }
+    
+    /**
+     * Counts and returns the amount of rows by deviceConfigurationId
+     *
+     * @param int $deviceConfigurationId
+     * @return number The amount of rows in the database.
+     */
+    public function countByDeviceId ($deviceConfigurationId)
+    {
+        return $this->count(array (
+                'deviceConfigurationId = ?' => $deviceConfigurationId
+        ));
+    }
 
     /**
      * Saves an instance of Quotegen_Model_GlobalDeviceConfiguration to the database.
@@ -101,6 +114,13 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
         
         $rowsAffected = $this->getDbTable()->delete($whereClause);
         return $rowsAffected;
+    }
+
+    public function deleteGlobalDeviceConfigurationById ($deviceConfigurationId)
+    {
+        return $rowsAffected = $this->getDbTable()->delete(array (
+                'deviceConfigurationId = ?' => $deviceConfigurationId 
+        ));
     }
 
     /**
