@@ -165,7 +165,15 @@ class Default_AuthController extends Zend_Controller_Action
 
     public function changepasswordAction ()
     {
-        $this->view->layout()->setLayout('auth');
+        $auth = Zend_Auth::getInstance();
+        $identity = $auth->getIdentity();
+        
+        // If customer is flaged for a reset send them to the login page layout
+        if ($identity->resetPasswordOnNextLogin)
+        {
+            $this->view->layout()->setLayout('auth');
+            $this->_helper->viewRenderer('forcechangepassword');
+        }
         $form = new Default_Form_ChangePassword();
         $request = $this->getRequest();
         
@@ -176,9 +184,8 @@ class Default_AuthController extends Zend_Controller_Action
             {
                 if ($form->isValid($values))
                 {
-                    $auth = Zend_Auth::getInstance();
-                    $identity = $auth->getIdentity();
-                    $userMapper = new Application_Model_UserMapper();
+                    
+                    $userMapper = new Application_Model_Mapper_User();
                     
                     $user = $userMapper->find($identity->id);
                     $password = crypt($form->getValue("current_password"), $user->getPassword());
@@ -218,8 +225,16 @@ class Default_AuthController extends Zend_Controller_Action
             }
             else // is $values ['cancel'] is set 
             {
-                $this->logout();
-                $this->_helper->redirector('login');
+                
+                if ($identity->resetPasswordOnNextLogin)
+                {
+                    $this->logout();
+                    $this->_helper->redirector('login');
+                }
+                else
+                {
+                    $this->_helper->redirector('index','index');
+                }
             }
         }
         
