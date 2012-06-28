@@ -2,6 +2,16 @@
 
 class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abstract
 {
+    /*
+     * Column name definitions. Define all columns up here and use them down below.
+     */
+    public $col_quoteDeviceId = 'quoteDeviceId';
+    public $col_masterDeviceId = 'masterDeviceId';
+    
+    /*
+     * Mapper Definitions
+     */
+    
     /**
      * The default db table class to use
      *
@@ -70,14 +80,14 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
         
         if ($primaryKey === null)
         {
-            $primaryKey [] = $data ['quoteDeviceId'];
-            $primaryKey [] = $data ['deviceConfigurationId'];
+            $primaryKey [] = $data [$this->col_quoteDeviceId];
+            $primaryKey [] = $data [$this->col_masterDeviceId];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'quoteDeviceId = ?' => $primaryKey [0], 
-                'deviceConfigurationId = ?' => $primaryKey [1] 
+                "{$this->col_quoteDeviceId} = ?" => $primaryKey [0], 
+                "{$this->col_masterDeviceId} = ?" => $primaryKey [1] 
         ));
         
         // Save the object into the cache
@@ -99,15 +109,15 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
         if ($object instanceof Quotegen_Model_QuoteDeviceConfiguration)
         {
             $whereClause = array (
-                    'quoteDeviceId = ?' => $object->getQuoteDeviceId(), 
-                    'deviceConfigurationId = ?' => $object->getDeviceConfigurationId() 
+                    "{$this->col_quoteDeviceId} = ?" => $object->getQuoteDeviceId(), 
+                    "{$this->col_masterDeviceId} = ?" => $object->getMasterDeviceId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'quoteDeviceId = ?' => $object [0], 
-                    'deviceConfigurationId = ?' => $object [1] 
+                    "{$this->col_quoteDeviceId} = ?" => $object [0], 
+                    "{$this->col_masterDeviceId} = ?" => $object [1] 
             );
         }
         
@@ -160,21 +170,21 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
     }
 
     /**
-     * Finds a quoteDeviceConfiguration by device configuration id
+     * Finds a quoteDeviceConfiguration by device id
      *
      * @param $id int
      *            The id of the device configuration to find
      * @return Quotegen_Model_QuoteDeviceConfiguration
      */
-    public function findByDeviceConfigurationId ($id)
+    public function findByDeviceId ($id)
     {
         return $this->fetch(array (
-                'deviceConfigurationId = ?' => $id 
+                "{$this->col_masterDeviceId} = ?" => $id 
         ));
     }
 
     /**
-     * Finds a quoteDeviceConfiguration by device configuration id
+     * Finds a quoteDeviceConfiguration by quote device id
      *
      * @param $id int
      *            The id of the quote device to find
@@ -183,7 +193,7 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
     public function findByQuoteDeviceId ($id)
     {
         return $this->fetch(array (
-                'quoteDeviceId = ?' => $id 
+                "{$this->col_quoteDeviceId} = ?" => $id 
         ));
     }
 
@@ -209,8 +219,6 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
         $object = new Quotegen_Model_QuoteDeviceConfiguration($row->toArray());
         
         // Save the object into the cache
-        $primaryKey [0] = $object->getQuoteDeviceId();
-        $primaryKey [1] = $object->getDeviceConfigurationId();
         $this->saveItemToCache($object);
         
         return $object;
@@ -238,8 +246,6 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
             $object = new Quotegen_Model_QuoteDeviceConfiguration($row->toArray());
             
             // Save the object into the cache
-            $primaryKey [0] = $object->getQuoteDeviceId();
-            $primaryKey [1] = $object->getDeviceConfigurationId();
             $this->saveItemToCache($object);
             
             $entries [] = $object;
@@ -256,8 +262,8 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
     public function getWhereId ($id)
     {
         return array (
-                'quoteDeviceId = ?' => $id [0], 
-                'deviceConfigurationId = ?' => $id [1] 
+                "{$this->col_quoteDeviceId} = ?" => $id [0], 
+                "{$this->col_masterDeviceId} = ?" => $id [1] 
         );
     }
     
@@ -268,7 +274,7 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
     {
         return array (
                 $object->getQuoteDeviceId(), 
-                $object->getDeviceConfigurationId() 
+                $object->getDeviceId() 
         );
     }
 }
