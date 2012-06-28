@@ -37,7 +37,7 @@ class Quotegen_Form_Option extends EasyBib_Form
                 ) 
         ));
         
-        $this->addElement('textArea', 'description', array (
+        $this->addElement('textarea', 'description', array (
                 'label' => 'Description:', 
                 'required' => true, 
                 'style' => 'height: 100px', 
