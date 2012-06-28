@@ -12,7 +12,7 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
     
     /*
      * Define the primary key of the model association
-    */
+     */
     public $col_id = 'id';
 
     /**
@@ -355,6 +355,48 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
                 ORDER BY  opt.name ASC
                 ";
         
+        $resultSet = $this->getDbTable()
+            ->getAdapter()
+            ->fetchAll($sql, $id);
+        
+        $entries = array ();
+        foreach ( $resultSet as $row )
+        {
+            $object = new Quotegen_Model_Option($row);
+            
+            // Save the object into the cache
+            $this->saveItemToCache($object);
+            
+            $entries [] = $object;
+        }
+        return $entries;
+    }
+
+    /**
+     * Fetches all options that are available to be added to a quote device (Anything that is not already
+     * added).
+     *
+     * @param int $id
+     *            The primary key of a quote device
+     *            
+     * @return multitype:Quotegen_Model_Option The list of available options to add
+     */
+    public function fetchAllAvailableOptionsForQuoteDevice ($id)
+    {
+        $quoteDeviceConfigurationOptionTableName = Quotegen_Model_Mapper_QuoteDeviceConfigurationOption::getInstance()->getTableName();
+        $quoteDeviceOptionTableName = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->getTableName();
+        $deviceOptionTableName = Quotegen_Model_Mapper_DeviceOption::getInstance()->getTableName();
+        
+        $sql = "SELECT * FROM  {$deviceOptionTableName} AS do
+                JOIN  {$this->getTableName()} AS opt ON do.optionId = opt.id
+                WHERE NOT EXISTS (
+                    SELECT * from {$quoteDeviceConfigurationOptionTableName} AS qdco
+                    JOIN  {$quoteDeviceOptionTableName} AS qdo ON qdo.id = qdco.quoteDeviceOptionId
+                    WHERE qdo.quoteDeviceId = ? AND qdco.optionId = opt.id
+                )
+                ORDER BY  opt.name ASC
+        ";
+        echo '<pre>'; var_dump($sql); die;
         $resultSet = $this->getDbTable()
             ->getAdapter()
             ->fetchAll($sql, $id);

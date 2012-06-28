@@ -14,7 +14,7 @@ $form = $this->element;
     	<?php echo $element->quantity->renderLabel(); ?>
     	<div class="controls">
     		<div class="input-prepend input-append">
-    			<span class="add-on">Qty:</span><?php echo trim($element->quantity->renderViewHelper()); // FIXME: Trim shouldn't need to happen, but the element has a newline rendered with it. ?><span class="add-on">Included: </span><?php echo trim($element->includedQuantity->renderViewHelper());?><a href="<?php echo $this->url(array('action' => 'delete-option-from-device-configuration', 'optionId' => $element->quantity->getDescription()));?>" class="add-on btn btn-danger"><i class="icon-trash"></i></a>
+    			<span class="add-on">Qty:</span><?php echo trim($element->quantity->renderViewHelper()); // FIXME: Trim shouldn't need to happen, but the element has a newline rendered with it. ?><span class="add-on">Included: </span><?php echo trim($element->includedQuantity->renderViewHelper());?><a href="<?php echo $this->url(array('action' => 'delete-option-from-device-configuration', 'quoteDeviceOptionId' => $element->quantity->getDescription()));?>" class="add-on btn btn-danger"><i class="icon-trash"></i></a>
     		</div>
     		<?php
     		    echo $element->quantity->renderErrors();
