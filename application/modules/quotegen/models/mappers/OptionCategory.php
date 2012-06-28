@@ -9,12 +9,13 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
      *
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_OptionCategory';
-
+    
     /*
      * Define the primary key of the model association
-    */
+     */
     public $col_categoryId = 'categoryId';
     public $col_optionId = 'optionId';
+
     /**
      * Gets an instance of the mapper
      *
@@ -126,6 +127,32 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
         {
             $whereClause = array (
                     "{$this->col_optionId} = ?" => $object 
+            );
+        }
+        
+        $rowsAffected = $this->getDbTable()->delete($whereClause);
+        return $rowsAffected;
+    }
+
+    /**
+     * Deletes rows by category id
+     *
+     * @param $object mixed
+     *            This can either be a instance of Quotegen_Model_Option or the optionId
+     * @return mixed The number of rows deleted
+     */
+    public function deleteByCategoryId ($object)
+    {
+        if ($object instanceof Quotegen_Model_Category)
+        {
+            $whereClause = array (
+                    "{$this->col_categoryId} = ?" => $object->getId() 
+            );
+        }
+        else
+        {
+            $whereClause = array (
+                    "{$this->col_categoryId} = ?" => $object 
             );
         }
         

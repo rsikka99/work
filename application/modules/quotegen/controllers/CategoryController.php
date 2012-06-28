@@ -60,6 +60,7 @@ class Quotegen_CategoryController extends Zend_Controller_Action
                 // delete quote from database
                 if ($form->isValid($values))
                 {
+                    Quotegen_Model_Mapper_OptionCategory::getInstance()->deleteByCategoryId($categoryId);
                     $mapper->delete($category);
                     
                     // TODO: Show deletion of options relations
