@@ -237,6 +237,7 @@ class Quotegen_OptionController extends Zend_Controller_Action
 
     public function viewAction ()
     {
+        $this->view->option = Quotegen_Model_Mapper_Option::getInstance()->find($this->_getParam('id', false));
     }
 }
 
