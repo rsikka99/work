@@ -180,32 +180,22 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
             }
             else
             {
-                
                 try
                 {
                     // Validate the form
                     if ($form->isValid($values))
                     {
-                        $deviceConfigurationMapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
-                        //                         $deviceConfiguration->populate($values);
-                        //                         $deviceConfiguration->setId($deviceConfigurationId);
-                        
-
-                        // Save option quantities
-                        $deviceConfigurationOption = new Quotegen_Model_DeviceConfigurationOption();
-                        $deviceConfigurationOption->setDeviceConfigurationId($deviceConfigurationId);
-                        
-                        foreach ( $form->getOptionQuantityElements() as $element )
+                        $quoteDeviceOption = new Quotegen_Model_QuoteDeviceOption();
+                        foreach ( $form->getOptionElements() as $element )
                         {
-                            $optionId = (int)$element->getDescription();
-                            $deviceConfigurationOption->setOptionId($optionId);
-                            $deviceConfigurationOption->setQuantity($values ["option$optionId"]);
-                            Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->save($deviceConfigurationOption);
+                            $optionId = (int)$element->quantity->getDescription();
+                            $quoteDeviceOption->setOptionId($optionId);
+                            $quoteDeviceOption->setQuantity($values ["option$optionId-quantity"]);
+                            $quoteDeviceOption->setIncludedQuantity($values ["option$optionId-includedQuantity"]);
+                            
+                            Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->save($quoteDeviceOption);
                         }
                         
-                        // $rowsAffected = $deviceConfigurationMapper->save($deviceConfiguration, $deviceConfigurationId);
-                        
-
                         if (isset($values ['add']))
                         {
                             $this->_helper->flashMessenger(array (
@@ -214,13 +204,13 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
                             
                             // Send to the add options page like they asked
                             $this->_helper->redirector('add-options-to-device-configuration', null, null, array (
-                                    'id' => $deviceConfigurationId 
+                                    'id' => $quoteDeviceId 
                             ));
                         }
                         else
                         {
                             $this->_helper->flashMessenger(array (
-                                    'success' => "Device configuration '{$device->getId()}' was updated sucessfully." 
+                                    'success' => "Device configuration '{$quoteDeviceId}' was updated sucessfully." 
                             ));
                             
                             // Send back to the main list

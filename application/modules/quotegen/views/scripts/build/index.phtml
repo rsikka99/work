@@ -50,7 +50,7 @@
             <div class="accordion-heading">
                 <div class="accordion-buttons pull-right">
                     <?php if ($quoteDevice->getDevice()) : ?>
-                    <a href="<?php echo $this->url(array('action' => 'sync-device-configuration', 'id' => $quoteDevice->getDevice()->getId())); ?>" title="Sync Configuration with current information." class="btn btn-mini btn-info "><i class="icon-refresh"></i></a>
+                    <a href="<?php echo $this->url(array('action' => 'sync-device-configuration', 'id' => $quoteDevice->getDevice()->getMasterDeviceId())); ?>" title="Sync Configuration with current information." class="btn btn-mini btn-info "><i class="icon-refresh"></i></a>
                     <?php endif; ?>
                     <a href="<?php echo $this->url(array('action' => 'edit-quote-device', 'id' => $quoteDevice->getId())); ?>" title="Edit Device" class="btn btn-mini btn-warning "><i class="icon-pencil"></i></a>
                     <a href="<?php echo $this->url(array('action' => 'delete-quote-device', 'id' => $quoteDevice->getId())); ?>" title="Remove Device" class="btn btn-mini btn-danger "><i class="icon-trash"></i></a>
