@@ -20,7 +20,7 @@ class Quotegen_Form_Option extends EasyBib_Form
          *
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
-        $this->setAttrib('class', 'form-horizontal');
+        $this->setAttrib('class', 'form-horizontal button-styled');
         
         $this->addElement('text', 'name', array (
                 'label' => 'Name:', 
@@ -37,7 +37,7 @@ class Quotegen_Form_Option extends EasyBib_Form
                 ) 
         ));
         
-        $this->addElement('textArea', 'description', array (
+        $this->addElement('textarea', 'description', array (
                 'label' => 'Description:', 
                 'required' => true, 
                 'style' => 'height: 100px', 
