@@ -116,7 +116,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
                         // Delete user device configuration link
                         $userDeviceConfigurationMapper->deleteUserDeviceConfigurationByDeviceId($deviceConfigurationId);
                         // Delete global device configurations link
-                        $globalDeviceConfigurationMapper->deleteGlobalDeviceConfigurationById($deviceConfigurationId);
+                        $globalDeviceConfigurationMapper->delete($deviceConfigurationId);
                         // Delete the device configuration options 
                         $deviceConfigurationOptionsMapper->deleteDeviceConfigurationOptionById($deviceConfigurationId);
                         // Delete the deviceConfiguration
