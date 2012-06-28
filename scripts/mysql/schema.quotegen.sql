@@ -464,6 +464,28 @@ DEFAULT CHARACTER SET = utf8,
 COMMENT = 'Used to store leased data for a quote' ;
 
 
+-- -----------------------------------------------------
+-- Table `quotegen_quote_device_configuration_options`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `quotegen_quote_device_configuration_options` (
+  `optionId` INT NOT NULL ,
+  `quoteDeviceOptionId` INT NOT NULL ,
+  PRIMARY KEY (`optionId`, `quoteDeviceOptionId`) ,
+  INDEX `quotegen_quote_device_option_options_ibfk_1` (`optionId` ASC) ,
+  INDEX `quotegen_quote_device_option_options_ibfk_2` (`quoteDeviceOptionId` ASC) ,
+  CONSTRAINT `quotegen_quote_device_option_options_ibfk_1`
+    FOREIGN KEY (`optionId` )
+    REFERENCES `quotegen_options` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `quotegen_quote_device_option_options_ibfk_2`
+    FOREIGN KEY (`quoteDeviceOptionId` )
+    REFERENCES `quotegen_quote_device_options` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
