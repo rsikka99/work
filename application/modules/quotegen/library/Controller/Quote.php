@@ -108,7 +108,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
     {
         $deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($deviceConfigurationId);
         // Check to see if it exists already
-        $quoteDeviceConfiguration = Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->findByDeviceConfigurationId($deviceConfigurationId);
+        $quoteDeviceConfiguration = Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->findByDeviceId($deviceConfigurationId);
         $quoteDevice = null;
         
         // If the quote configuraiton doesnt exist, make one.
@@ -137,23 +137,13 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             
             // Insert teh link
             $quoteDeviceConfiguration = new Quotegen_Model_QuoteDeviceConfiguration();
-            $quoteDeviceConfiguration->setDeviceConfigurationId($deviceConfigurationId);
+            $quoteDeviceConfiguration->setMasterDeviceId($deviceConfigurationId);
             $quoteDeviceConfiguration->setQuoteDeviceId($quoteDeviceId);
             Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->insert($quoteDeviceConfiguration);
         }
         
-        // Copy the master device and sku
-        $device = $deviceConfiguration->getDevice();
-        $masterDevice = $device->getMasterDevice();
-        $quoteDevice->setName($masterDevice->getFullDeviceName());
-        $quoteDevice->setSku($device->getSku());
-        $quoteDevice->setPrice($masterDevice->getDevicePrice());
-        
-        // FIXME: These need to use calculated values!
-        $quoteDevice->setOemCostPerPageMonochrome(999);
-        $quoteDevice->setOemCostPerPageColor(999);
-        $quoteDevice->setCompCostPerPageMonochrome(999);
-        $quoteDevice->setCompCostPerPageColor(999);
+        // Perform the device sync
+        $quoteDevice = $this->syncDevice($quoteDevice, $deviceConfiguration->getDevice());
         
         // Save the quote device to the database
         Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
@@ -169,19 +159,60 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         foreach ( $deviceConfiguration->getOptions() as $deviceConfigurationOption )
         {
             $option = $deviceConfigurationOption->getOption();
-            // Copy the option
-            $quoteDeviceOption->setSku($option->getSku());
-            $quoteDeviceOption->setName($option->getName());
-            $quoteDeviceOption->setDescription($option->getDescription());
-            $quoteDeviceOption->setPrice($option->getPrice());
-            $quoteDeviceOption->setQuantity($deviceConfigurationOption->getQuantity());
-            $quoteDeviceOption->setIncludedQuantity($deviceConfigurationOption->getIncludedQuantity());
+            
+            // Perform the option sync
+            $quoteDeviceOption = $this->syncOption($quoteDeviceOption, $deviceConfigurationOption->getOption());
             
             // Save the device option
             Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->insert($quoteDeviceOption);
         }
         
         return $quoteDevice;
+    }
+
+    /**
+     * Syncs a quote device with a device
+     *
+     * @param Quotegen_Model_QuoteDevice $quoteDevice
+     *            The quote device that will be updated
+     * @param Quotegen_Model_Device $device
+     *            The device that we will use to update the quote device
+     * @return Quotegen_Model_QuoteDevice The updated quote device
+     */
+    protected function syncDevice (Quotegen_Model_QuoteDevice $quoteDevice, Quotegen_Model_Device $device)
+    {
+        $masterDevice = $device->getMasterDevice();
+        $quoteDevice->setName($masterDevice->getFullDeviceName());
+        $quoteDevice->setSku($device->getSku());
+        $quoteDevice->setPrice($masterDevice->getDevicePrice());
+        
+        // FIXME: These need to use calculated values!
+        $quoteDevice->setOemCostPerPageMonochrome(999);
+        $quoteDevice->setOemCostPerPageColor(999);
+        $quoteDevice->setCompCostPerPageMonochrome(999);
+        $quoteDevice->setCompCostPerPageColor(999);
+        
+        return $quoteDevice;
+    }
+
+    /**
+     * Syncs a quote device option with an option
+     *
+     * @param Quotegen_Model_QuoteDeviceOption $quoteDeviceOption
+     *            The quote device option that will be updated
+     * @param Quotegen_Model_Option $option
+     *            The option to update the quote device option with
+     * @return Quotegen_Model_Option The updated quote device option
+     */
+    protected function syncOption (Quotegen_Model_QuoteDeviceOption $quoteDeviceOption, Quotegen_Model_Option $option)
+    {
+        // Copy the option
+        $quoteDeviceOption->setSku($option->getSku());
+        $quoteDeviceOption->setName($option->getName());
+        $quoteDeviceOption->setDescription($option->getDescription());
+        $quoteDeviceOption->setPrice($option->getPrice());
+        
+        return $option;
     }
 
     /**
@@ -218,5 +249,26 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         
         return $deviceConfiguration;
     }
-    
+
+    /**
+     * Verifies that the device configuration selected belongs to the quote
+     *
+     * @param unknown_type $deviceConfigurationId            
+     * @return boolean
+     */
+    public function verifyDeviceConfigurationBelongsToQuote ($deviceConfigurationId)
+    {
+        $valid = false;
+        
+        $quoteDeviceConfiguration = Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->findByDeviceId($deviceConfigurationId);
+        if (! $quoteDeviceConfiguration || $quoteDeviceConfiguration->getQuoteDevice()->getQuoteId() !== $this->_quoteId)
+        {
+            $this->_helper->flashMessenger(array (
+                    'warning' => 'You may only edit device configurations associated with this quote.' 
+            ));
+            $this->_helper->redirector('index');
+        }
+        
+        return $valid;
+    }
 }

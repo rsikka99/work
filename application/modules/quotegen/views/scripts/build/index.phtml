@@ -25,7 +25,7 @@
         </div>
     </div>
 </div>
-<h1>Summary (TODO: Make Dynamic List)</h1>
+<h1>Summary</h1>
 <div class="well">
     <div class="pull-right">
         <a href="<?php echo $this->url(array('action' => 'sync-all-device-configurations')); ?>" title="Sync all configurations with current information." class="btn btn-mini btn-info "><i class="icon-refresh"></i> Sync All Devices</a>
@@ -49,9 +49,11 @@
         <div class="accordion-group">
             <div class="accordion-heading">
                 <div class="accordion-buttons pull-right">
-                    <a href="<?php echo $this->url(array('action' => 'sync-device-configuration', 'id' => $quoteDevice->getDeviceConfiguration()->getId())); ?>" title="Sync Configuration with current information." class="btn btn-mini btn-info "><i class="icon-refresh"></i></a>
-                    <a href="<?php echo $this->url(array('action' => 'edit-device-configuration', 'id' => $quoteDevice->getDeviceConfiguration()->getId())); ?>" title="Edit Configuration" class="btn btn-mini btn-warning "><i class="icon-pencil"></i></a>
-                    <a href="<?php echo $this->url(array('action' => 'delete-device-configuration', 'id' => $quoteDevice->getDeviceConfiguration()->getId())); ?>" title="Remove Configuration" class="btn btn-mini btn-danger "><i class="icon-trash"></i></a>
+                    <?php if ($quoteDevice->getDevice()) : ?>
+                    <a href="<?php echo $this->url(array('action' => 'sync-device-configuration', 'id' => $quoteDevice->getDevice()->getId())); ?>" title="Sync Configuration with current information." class="btn btn-mini btn-info "><i class="icon-refresh"></i></a>
+                    <?php endif; ?>
+                    <a href="<?php echo $this->url(array('action' => 'edit-quote-device', 'id' => $quoteDevice->getId())); ?>" title="Edit Device" class="btn btn-mini btn-warning "><i class="icon-pencil"></i></a>
+                    <a href="<?php echo $this->url(array('action' => 'delete-quote-device', 'id' => $quoteDevice->getId())); ?>" title="Remove Device" class="btn btn-mini btn-danger "><i class="icon-trash"></i></a>
                 </div>
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $quoteDevice->getId(); ?>"><?php echo $quoteDevice->getName(); ?> - (Quantity: <?php echo $quoteDevice->getQuantity(); ?>) - (Price: <?php echo $this->currency($quoteDevice->getPrice()); ?>)</a>
             </div>
@@ -60,7 +62,7 @@
                     <h4>Selected Options</h4>
                     <table class="table table-condensed table-bordered">
                         <tr><th>Option</th><th style='width: 50px'>Incl. Qty</th><th style='width: 50px'>Extra Qty</th><th style='width: 150px'>Price</th></tr>
-                        <?php foreach ($quoteDevice->getOptions() as $option) : /* @var $option Quotegen_Model_QuoteDeviceOption */ ?>
+                        <?php foreach ($quoteDevice->getQuoteDeviceOptions() as $option) : /* @var $option Quotegen_Model_QuoteDeviceOption */ ?>
                         <tr><td><?php echo $option->getName(); ?></td><td><?php echo $option->getIncludedQuantity(); ?></td><td><?php echo $option->getQuantity(); ?></td><td><?php echo $this->currency((int)$option->getPrice()); ?> ea</td></tr>
                         <?php endforeach; ?>
                     </table>
