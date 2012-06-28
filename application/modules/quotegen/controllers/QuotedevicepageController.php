@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_QuoteDevicePageController extends Zend_Controller_Action
+class Quotegen_QuotedevicepageController extends Zend_Controller_Action
 {
 
     /**
