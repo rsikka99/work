@@ -251,12 +251,12 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `quotegen_quote_device_configurations` (
   `quoteDeviceId` INT(11) NOT NULL AUTO_INCREMENT ,
-  `deviceId` INT(11) NOT NULL ,
-  INDEX `deviceConfigurationId` (`deviceId` ASC) ,
+  `masterDeviceId` INT(11) NOT NULL ,
+  INDEX `deviceConfigurationId` (`masterDeviceId` ASC) ,
   INDEX `quoteDeviceId` (`quoteDeviceId` ASC) ,
-  PRIMARY KEY (`quoteDeviceId`, `deviceId`) ,
+  PRIMARY KEY (`quoteDeviceId`, `masterDeviceId`) ,
   CONSTRAINT `quotegen_quote_device_configurations_ibfk_1`
-    FOREIGN KEY (`deviceId` )
+    FOREIGN KEY (`masterDeviceId` )
     REFERENCES `quotegen_devices` (`masterDeviceId` )
     ON DELETE CASCADE
     ON UPDATE CASCADE,

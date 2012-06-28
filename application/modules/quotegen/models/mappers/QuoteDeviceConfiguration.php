@@ -274,7 +274,7 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
     {
         return array (
                 $object->getQuoteDeviceId(), 
-                $object->getDeviceId() 
+                $object->getMasterDeviceId() 
         );
     }
 }
