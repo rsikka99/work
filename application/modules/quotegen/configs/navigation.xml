@@ -106,9 +106,9 @@
                             <label>Options</label>
                             <class>dropdown subdropdown</class>
                             <module>quotegen</module>
-                            <controller>quote</controller>
+                            <controller>option</controller>
                             <action>index</action>
-                            <resource>quotegen_quote_index</resource>
+                            <resource>quotegen_option_index</resource>
                             <pages>
                                 <viewall>
                                     <label>View All</label>

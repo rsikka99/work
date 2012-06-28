@@ -139,7 +139,7 @@ transparent;
 }
 /* Other Nav Stuff */
 .navbar .sidebar {
-  width: auto;
+  width: 170px;
 }
 .navbar .navbar-inner {
   background-color: #4b4b4b;
@@ -282,4 +282,10 @@ body {
   text-align: center;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   text-transform: uppercase;
+}
+.button-styled .form-actions {
+  padding: 0;
+  display: block;
+  padding-top: 20px;
+  text-align: center;
 }
