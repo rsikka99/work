@@ -38,6 +38,8 @@ DEFAULT CHARACTER SET = utf8;
 CREATE  TABLE IF NOT EXISTS `quotegen_device_configurations` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
   `masterDeviceId` INT(11) NOT NULL ,
+  `name` VARCHAR(255) NOT NULL ,
+  `description` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `masterDeviceId` (`masterDeviceId` ASC) ,
   CONSTRAINT `quotegen_device_configurations_ibfk_1`
@@ -68,6 +70,7 @@ CREATE  TABLE IF NOT EXISTS `quotegen_device_configuration_options` (
   `deviceConfigurationId` INT(11) NOT NULL ,
   `optionId` INT(11) NOT NULL ,
   `quantity` INT(11) NOT NULL ,
+  `includedQuantity` INT(11) NOT NULL ,
   PRIMARY KEY (`deviceConfigurationId`, `optionId`) ,
   INDEX `optionId` (`optionId` ASC) ,
   CONSTRAINT `quotegen_device_configuration_options_ibfk_1`
@@ -248,16 +251,20 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `quotegen_quote_device_configurations` (
   `quoteDeviceId` INT(11) NOT NULL AUTO_INCREMENT ,
-  `deviceConfigurationId` INT(11) NOT NULL ,
-  INDEX `deviceConfigurationId` (`deviceConfigurationId` ASC) ,
+  `deviceId` INT(11) NOT NULL ,
+  INDEX `deviceConfigurationId` (`deviceId` ASC) ,
   INDEX `quoteDeviceId` (`quoteDeviceId` ASC) ,
-  PRIMARY KEY (`quoteDeviceId`, `deviceConfigurationId`) ,
+  PRIMARY KEY (`quoteDeviceId`, `deviceId`) ,
   CONSTRAINT `quotegen_quote_device_configurations_ibfk_1`
-    FOREIGN KEY (`deviceConfigurationId` )
-    REFERENCES `quotegen_device_configurations` (`id` ),
+    FOREIGN KEY (`deviceId` )
+    REFERENCES `quotegen_devices` (`masterDeviceId` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `quotegen_quote_device_configurations_ibfk_2`
     FOREIGN KEY (`quoteDeviceId` )
-    REFERENCES `quotegen_quote_devices` (`id` ))
+    REFERENCES `quotegen_quote_devices` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -360,8 +367,6 @@ DEFAULT CHARACTER SET = utf8;
 CREATE  TABLE IF NOT EXISTS `quotegen_user_device_configurations` (
   `deviceConfigurationId` INT(11) NOT NULL ,
   `userId` INT(11) NOT NULL ,
-  `name` VARCHAR(255) NOT NULL ,
-  `description` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`deviceConfigurationId`, `userId`) ,
   INDEX `userId` (`userId` ASC) ,
   CONSTRAINT `quotegen_user_device_configurations_ibfk_1`
@@ -415,8 +420,6 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `quotegen_global_device_configurations` (
   `deviceConfigurationId` INT(11) NOT NULL ,
-  `name` VARCHAR(255) NOT NULL ,
-  `description` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`deviceConfigurationId`) ,
   CONSTRAINT `quotegen_user_device_configurations_ibfk_10`
     FOREIGN KEY (`deviceConfigurationId` )
