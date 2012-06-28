@@ -5,8 +5,8 @@ class Quotegen_Model_Mapper_QuoteDeviceConfigurationOption extends My_Model_Mapp
     /*
      * Column name definitions. Define all columns up here and use them down below.
      */
-    public $col_quoteDeviceOptionId = $this->col_quoteDeviceOptionId;
-    public $col_optionId = $this->col_optionId;
+    public $col_quoteDeviceOptionId = 'quoteDeviceOptionId';
+    public $col_optionId = 'optionId';
     
     /*
      * Mapper Definitions
