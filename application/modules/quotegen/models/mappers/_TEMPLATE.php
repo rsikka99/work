@@ -5,7 +5,7 @@ class Quotegen_Model_Mapper_Template extends My_Model_Mapper_Abstract
     /*
      * Column name definitions. Define all columns up here and use them down below. 
      */
-    public $_column_ID = 'id';
+    public $col_id = 'id';
     
     /*
      * Mapper Definitions
@@ -42,7 +42,7 @@ class Quotegen_Model_Mapper_Template extends My_Model_Mapper_Abstract
         $data = $object->toArray();
         
         // Remove the id
-        unset($data [$this->_column_ID]);
+        unset($data [$this->col_id]);
         
         // Insert the data
         $id = $this->getDbTable()->insert($data);
@@ -70,12 +70,12 @@ class Quotegen_Model_Mapper_Template extends My_Model_Mapper_Abstract
         
         if ($primaryKey === null)
         {
-            $primaryKey = $data [$this->_column_ID];
+            $primaryKey = $data [$this->col_id];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                "{$this->_column_ID} = ?" => $primaryKey 
+                "{$this->col_id} = ?" => $primaryKey 
         ));
         
         // Save the object into the cache
@@ -97,13 +97,13 @@ class Quotegen_Model_Mapper_Template extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_Template)
         {
             $whereClause = array (
-                    "{$this->_column_ID} = ?" => $object->getId() 
+                    "{$this->col_id} = ?" => $object->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    "{$this->_column_ID} = ?" => $object 
+                    "{$this->col_id} = ?" => $object 
             );
         }
         
@@ -207,7 +207,7 @@ class Quotegen_Model_Mapper_Template extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array (
-                "{$this->_column_ID} = ?" => $id 
+                "{$this->col_id} = ?" => $id 
         );
     }
 
