@@ -15,6 +15,11 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
      *
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_Device';
+    
+    /*
+     * Define the primary key of the model association
+    */
+    public $col_masterDeviceId = 'masterDeviceId';
 
     /**
      * Gets an instance of the mapper
@@ -63,12 +68,12 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         
         if ($primaryKey === null)
         {
-            $primaryKey = $data ['masterDeviceId'];
+            $primaryKey = $data [$this->col_masterDeviceId];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'masterDeviceId = ?' => $primaryKey 
+                "{$this->col_masterDeviceId} = ?" => $primaryKey 
         ));
         
         // Save the object into the cache
@@ -90,13 +95,13 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_Device)
         {
             $whereClause = array (
-                    'masterDeviceId = ?' => $object->getMasterDeviceId() 
+                    "{$this->col_masterDeviceId} = ?" => $object->getMasterDeviceId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'masterDeviceId = ?' => $object 
+                    "{$this->col_masterDeviceId} = ?" => $object 
             );
         }
         
@@ -200,12 +205,11 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array (
-                'masterDeviceId = ?' => $id 
+                "{$this->col_masterDeviceId} = ?" => $id 
         );
     }
     
     /*
-     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
      */
     public function getPrimaryKeyValueForObject ($object)
     {

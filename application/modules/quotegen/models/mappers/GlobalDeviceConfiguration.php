@@ -14,6 +14,11 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
      *
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_GlobalDeviceConfiguration';
+    
+    /*
+     * Define the primary key of the model association
+    */
+    public $col_deviceConfigurationId = 'deviceConfigurationId';
 
     /**
      * Gets an instance of the mapper
@@ -34,7 +39,7 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
     public function countByDeviceId ($deviceConfigurationId)
     {
         return $this->count(array (
-                'deviceConfigurationId = ?' => $deviceConfigurationId
+                "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId
         ));
     }
 
@@ -75,12 +80,12 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
         
         if ($primaryKey === null)
         {
-            $primaryKey = $data ['deviceConfigurationId'];
+            $primaryKey = $data [$this->col_deviceConfigurationId];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'deviceConfigurationId = ?' => $primaryKey 
+                "{$this->col_deviceConfigurationId} = ?" => $primaryKey 
         ));
         
         // Save the object into the cache
@@ -102,25 +107,18 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
         if ($object instanceof Quotegen_Model_GlobalDeviceConfiguration)
         {
             $whereClause = array (
-                    'deviceConfigurationId = ?' => $object->getDeviceConfigurationId() 
+                    "{$this->col_deviceConfigurationId} = ?" => $object->getDeviceConfigurationId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'deviceConfigurationId = ?' => $object 
+                    "{$this->col_deviceConfigurationId} = ?" => $object 
             );
         }
         
         $rowsAffected = $this->getDbTable()->delete($whereClause);
         return $rowsAffected;
-    }
-
-    public function deleteGlobalDeviceConfigurationById ($deviceConfigurationId)
-    {
-        return $rowsAffected = $this->getDbTable()->delete(array (
-                'deviceConfigurationId = ?' => $deviceConfigurationId 
-        ));
     }
 
     /**
@@ -219,7 +217,7 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
     public function getWhereId ($id)
     {
         return array (
-                'deviceConfigurationId = ?' => $id 
+                "{$this->col_deviceConfigurationId} = ?" => $id 
         );
     }
     

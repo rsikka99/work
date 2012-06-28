@@ -9,6 +9,11 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
      *
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_QuoteDeviceMonthlyPage';
+    
+    /*
+     * Define the primary key of the model association
+    */
+    public $col_quoteDeviceId = "quoteDeviceId";
 
     /**
      * Gets an instance of the mapper
@@ -57,12 +62,12 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
         
         if ($primaryKey === null)
         {
-            $primaryKey = $data ['quoteDeviceId'];
+            $primaryKey = $data [$this->col_quoteDeviceId];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'quoteDeviceId = ?' => $primaryKey 
+                "{$this->col_quoteDeviceId} = ?" => $primaryKey 
         ));
         
         // Save the object into the cache
@@ -84,13 +89,13 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
         if ($object instanceof Quotegen_Model_QuoteDeviceMonthlyPage)
         {
             $whereClause = array (
-                    'quoteDeviceId = ?' => $object->getQuoteDeviceId() 
+                    "{$this->col_quoteDeviceId} = ?" => $object->getQuoteDeviceId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'quoteDeviceId = ?' => $object 
+                    "{$this->col_quoteDeviceId} = ?" => $object 
             );
         }
         
@@ -194,7 +199,7 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
     public function getWhereId ($id)
     {
         return array (
-                'quoteDeviceId = ?' => $id 
+                "{$this->col_quoteDeviceId} = ?" => $id 
         );
     }
     

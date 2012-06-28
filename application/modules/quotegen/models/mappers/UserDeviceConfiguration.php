@@ -9,6 +9,12 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
      *
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_UserDeviceConfiguration';
+    
+    /*
+     * Define the primary key of the model association
+    */
+    public $col_deviceConfigurationId = 'deviceConfigurationId';
+    public $col_userId = 'userId';
 
     /**
      * Gets an instance of the mapper
@@ -29,7 +35,7 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
     public function countByDeviceId ($deviceConfigurationId)
     {
         return $this->count(array (
-                'deviceConfigurationId = ?' => $deviceConfigurationId 
+                "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId 
         ));
     }
 
@@ -69,14 +75,14 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
         
         if ($primaryKey === null)
         {
-            $primaryKey [] = $data ['deviceConfigurationId'];
-            $primaryKey [] = $data ['userId'];
+            $primaryKey [] = $data [$this->col_deviceConfigurationId];
+            $primaryKey [] = $data [$this->col_userId];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'deviceConfigurationId = ?' => $primaryKey [0], 
-                'userId = ?' => $primaryKey [1] 
+                "{$this->col_deviceConfigurationId} = ?" => $primaryKey [0], 
+                "{$this->col_userId} = ?" => $primaryKey [1] 
         ));
         
         // Save the object into the cache
@@ -98,15 +104,15 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
         if ($userDeviceConfiguration instanceof Quotegen_Model_UserDeviceConfiguration)
         {
             $whereClause = array (
-                    'deviceConfigurationId = ?' => $userDeviceConfiguration->getDeviceConfigurationId(), 
-                    'userId = ?' => $userDeviceConfiguration->getUserId() 
+                    "{$this->col_deviceConfigurationId} = ?" => $userDeviceConfiguration->getDeviceConfigurationId(), 
+                    "{$this->col_userId} = ?" => $userDeviceConfiguration->getUserId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'deviceConfigurationId = ?' => $userDeviceConfiguration [0], 
-                    'userId = ?' => $userDeviceConfiguration [1] 
+                    "{$this->col_deviceConfigurationId} = ?" => $userDeviceConfiguration [0], 
+                    "{$this->col_userId} = ?" => $userDeviceConfiguration [1] 
             );
         }
         
@@ -123,7 +129,7 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
     public function deleteUserDeviceConfigurationByDeviceId ($deviceConfigurationId)
     {
         return $rowsAffected = $this->getDbTable()->delete(array (
-                'deviceConfigurationId = ?' => $deviceConfigurationId 
+                "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId 
         ));
     }
 
@@ -228,8 +234,8 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
     public function getWhereId ($id)
     {
         return array (
-                'deviceConfigurationId = ?' => $id [0], 
-                'userId = ?' => $id [1] 
+                "{$this->col_deviceConfigurationId} = ?" => $id [0], 
+                "{$this->col_userId} = ?" => $id [1] 
         );
     }
     

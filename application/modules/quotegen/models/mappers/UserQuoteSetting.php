@@ -9,6 +9,12 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
      *
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_UserQuoteSetting';
+    
+    /*
+     * Define the primary key of the model association
+     */
+    public $col_userId = 'userId';
+    public $col_userQuoteSettingId = 'userQuoteSettingId';
 
     /**
      * Gets an instance of the mapper
@@ -57,14 +63,14 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
         
         if ($primaryKey === null)
         {
-            $primaryKey [] = $data ['userId'];
-            $primaryKey [] = $data ['userQuoteSettingId'];
+            $primaryKey [] = $data [$this->col_userId];
+            $primaryKey [] = $data [$this->col_userQuoteSettingId];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'userId = ?' => $primaryKey [0], 
-                'userQuoteSettingId = ?' => $primaryKey [1] 
+                "{$this->col_userId} = ?" => $primaryKey [0], 
+                "{$this->col_userQuoteSettingId} = ?" => $primaryKey [1] 
         ));
         
         // Save the object into the cache
@@ -86,15 +92,15 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_UserQuoteSetting)
         {
             $whereClause = array (
-                    'userId = ?' => $object->getUserId(), 
-                    'userQuoteSettingId = ?' => $object->getUserQuoteSettingId() 
+                    "{$this->col_userId} = ?" => $object->getUserId(), 
+                    "{$this->col_userQuoteSettingId} = ?" => $object->getUserQuoteSettingId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'userId = ?' => $object [0], 
-                    'userQuoteSettingId = ?' => $object [1] 
+                    "{$this->col_userId} = ?" => $object [0], 
+                    "{$this->col_userQuoteSettingId} = ?" => $object [1] 
             );
         }
         
@@ -202,8 +208,8 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array (
-                'userId = ?' => $id [0], 
-                'userQuoteSettingId = ?' => $id [1] 
+                "{$this->col_userId} = ?" => $id [0], 
+                "{$this->col_userQuoteSettingId} = ?" => $id [1] 
         );
     }
 
@@ -216,7 +222,7 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
     public function fetchUserQuoteSetting ($userId)
     {
         $userQuoteSetting = $this->fetch(array (
-                'userId = ?' => $userId 
+                "{$this->col_userId} = ?" => $userId 
         ));
         
         // If no userQuoteSetting exists insert new QuoteSetting

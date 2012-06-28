@@ -10,6 +10,12 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_Client';
 
+    /*
+     * Define the primary key of the model association
+    */
+    public $col_id = 'id';
+    
+    
     /**
      * Gets an instance of the mapper
      *
@@ -34,7 +40,7 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
         $data = $object->toArray();
         
         // Remove the id
-        unset($data ['id']);
+        unset($data [$this->col_id]);
         
         // Insert the data
         $id = $this->getDbTable()->insert($data);
@@ -62,12 +68,12 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
         
         if ($primaryKey === null)
         {
-            $primaryKey = $data ['id'];
+            $primaryKey = $data [$this->col_id];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'id = ?' => $primaryKey 
+                "{$this->col_id}  = ?" => $primaryKey 
         ));
         
         // Save the object into the cache
@@ -89,13 +95,13 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_Client)
         {
             $whereClause = array (
-                    'id = ?' => $object->getId() 
+                    "{$this->col_id}  = ?" => $object->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'id = ?' => $object 
+                    "{$this->col_id}  = ?" => $object 
             );
         }
         
@@ -199,7 +205,7 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array (
-                'id = ?' => $id 
+                "{$this->col_id}  = ?" => $id 
         );
     }
 

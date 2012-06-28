@@ -9,6 +9,12 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
      *
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_DeviceConfigurationOption';
+    
+    /*
+     * Define the primary key of the model association
+    */
+    public $col_deviceConfigurationId = 'deviceConfigurationId';
+    public $col_optionId = 'optionId';    
 
     /**
      * Gets an instance of the mapper
@@ -29,7 +35,7 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
     public function countByDeviceId ($deviceConfigurationId)
     {
         return $this->count(array (
-                'deviceConfigurationId = ?' => $deviceConfigurationId
+                "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId
         ));
     }
     
@@ -84,14 +90,14 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
         
         if ($primaryKey === null)
         {
-            $primaryKey [] = $data ['deviceConfigurationId'];
-            $primaryKey [] = $data ['optionId'];
+            $primaryKey [] = $data [$this->col_deviceConfigurationId];
+            $primaryKey [] = $data [$this->col_optionId];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'deviceConfigurationId = ?' => $primaryKey [0], 
-                'optionId = ?' => $primaryKey [1] 
+                "{$this->col_deviceConfigurationId} = ?" => $primaryKey [0], 
+                "{$this->col_optionId} = ?" => $primaryKey [1] 
         ));
         
         // Save the object into the cache
@@ -113,15 +119,15 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
         if ($object instanceof Quotegen_Model_DeviceConfigurationOption)
         {
             $whereClause = array (
-                    'deviceConfigurationId = ?' => $object->getDeviceConfigurationId(), 
-                    'optionId = ?' => $object->getOptionId() 
+                    "{$this->col_deviceConfigurationId} = ?" => $object->getDeviceConfigurationId(), 
+                    "{$this->col_optionId} = ?" => $object->getOptionId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'deviceConfigurationId = ?' => $object [0], 
-                    'optionId = ?' => $object [1] 
+                    "{$this->col_deviceConfigurationId} = ?"  => $object [0], 
+                    "{$this->col_optionId} = ?" => $object [1] 
             );
         }
         
@@ -138,7 +144,7 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
     public function deleteDeviceConfigurationOptionById ($deviceConfigurationId)
     {
         return $this->getDbTable()->delete(array (
-                'deviceConfigurationId = ?' => $deviceConfigurationId 
+                "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId 
         ));        
     }
 
@@ -242,8 +248,8 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
     public function getWhereId ($id)
     {
         return array (
-                'deviceConfigurationId = ?' => $id [0], 
-                'optionId = ?' => $id [1] 
+                "{$this->col_deviceConfigurationId} = ?" => $id [0], 
+                "{$this->col_optionId} = ?" => $id [1] 
         );
     }
 }

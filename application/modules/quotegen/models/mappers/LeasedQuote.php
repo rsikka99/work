@@ -9,6 +9,11 @@ class Quotegen_Model_Mapper_LeasedQuote extends My_Model_Mapper_Abstract
      *
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_LeasedQuote';
+    
+    /*
+     * Define the primary key of the model association
+    */
+    public $col_quoteId = 'quoteId';
 
     /**
      * Gets an instance of the mapper
@@ -57,12 +62,12 @@ class Quotegen_Model_Mapper_LeasedQuote extends My_Model_Mapper_Abstract
         
         if ($primaryKey === null)
         {
-            $primaryKey = $data ['quoteId'];
+            $primaryKey = $data [$this->col_quoteId];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'quoteId = ?' => $primaryKey 
+                "{$this->col_quoteId} = ?" => $primaryKey 
         ));
         
         // Save the object into the cache
@@ -84,13 +89,13 @@ class Quotegen_Model_Mapper_LeasedQuote extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_LeasedQuote)
         {
             $whereClause = array (
-                    'quoteId = ?' => $object->getQuoteId() 
+                    "{$this->col_quoteId} = ?" => $object->getQuoteId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'quoteId = ?' => $object 
+                    "{$this->col_quoteId} = ?" => $object 
             );
         }
         
@@ -193,7 +198,7 @@ class Quotegen_Model_Mapper_LeasedQuote extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array (
-                'quoteId = ?' => $id 
+                "{$this->col_quoteId} = ?" => $id 
         );
     }
     

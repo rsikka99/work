@@ -9,7 +9,12 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
      *
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_LeasingSchemaRate';
-
+    
+    /*
+     * Define the primary key of the model association
+    */
+    public $col_leasingSchemaTermId = 'col_leasingSchemaTermId';
+    public $col_leasingSchemaRangeId = 'col_leasingSchemaRangeId';
     /**
      * Gets an instance of the mapper
      *
@@ -57,14 +62,14 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
         
         if ($primaryKey === null)
         {
-            $primaryKey [] = $data ['leasingSchemaTermId'];
-            $primaryKey [] = $data ['leasingSchemaRangeId'];
+            $primaryKey [] = $data [$this->col_leasingSchemaTermId];
+            $primaryKey [] = $data [$this->col_leasingSchemaRangeId];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'leasingSchemaTermId = ?' => $primaryKey [0], 
-                'leasingSchemaRangeId = ?' => $primaryKey [1] 
+                "{$this->col_leasingSchemaTermId} = ?" => $primaryKey [0], 
+                "{$this->col_leasingSchemaRangeId} = ?" => $primaryKey [1] 
         ));
         
         // Save the object into the cache
@@ -87,15 +92,15 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_LeasingSchemaRate)
         {
             $whereClause = array (
-                    'leasingSchemaTermId = ?' => $object->getLeasingSchemaTermId(), 
-                    'leasingSchemaRangeId = ?' => $object->getLeasingSchemaRangeId() 
+                    "{$this->col_leasingSchemaTermId} = ?" => $object->getLeasingSchemaTermId(), 
+                    "{$this->col_leasingSchemaRangeId} = ?" => $object->getLeasingSchemaRangeId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'leasingSchemaTermId = ?' => $object [0], 
-                    'leasingSchemaRangeId = ?' => $object [1] 
+                    "{$this->col_leasingSchemaTermId} = ?" => $object [0], 
+                    "{$this->col_leasingSchemaRangeId} = ?" => $object [1] 
             );
         }
         
@@ -197,8 +202,8 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array (
-                'leasingSchemaTermId = ?' => $id [0], 
-                'leasingSchemaRangeId = ?' => $id [1] 
+                "{$this->col_leasingSchemaTermId} = ?" => $id [0], 
+                "{$this->col_leasingSchemaRangeId} = ?" => $id [1] 
         );
     }
 

@@ -9,6 +9,12 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
      *
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_QuoteQuoteSetting';
+    
+    /*
+     * Define the primary key of the model association
+    */
+    public $col_quoteId = 'quoteId';
+    public $col_quoteSettingId = 'quoteSettingId';
 
     /**
      * Gets an instance of the mapper
@@ -59,14 +65,14 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
         
         if ($primaryKey === null)
         {
-            $primaryKey [] = $data ['quoteId'];
-            $primaryKey [] = $data ['quoteSettingId'];
+            $primaryKey [] = $data [$this->col_quoteId];
+            $primaryKey [] = $data [$this->col_quoteSettingId];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'quoteId = ?' => $primaryKey [0], 
-                'quoteSettingId = ?' => $primaryKey [1] 
+                "{$this->col_quoteId} = ?" => $primaryKey [0], 
+                "{$this->col_quoteSettingId} = ?" => $primaryKey [1] 
         ));
         
         // Save the object into the cache
@@ -88,15 +94,15 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_QuoteQuoteSetting)
         {
             $whereClause = array (
-                    'quoteId = ?' => $object->getQuoteId(), 
-                    'quoteSettingId = ?' => $object->getQuoteSettingId() 
+                    "{$this->col_quoteId} = ?" => $object->getQuoteId(), 
+                    "{$this->col_quoteSettingId} = ?" => $object->getQuoteSettingId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'quoteId = ?' => $object [0], 
-                    'quoteSettingId = ?' => $object [1] 
+                    "{$this->col_quoteId} = ?" => $object [0], 
+                    "{$this->col_quoteSettingId} = ?" => $object [1] 
             );
         }
         
@@ -204,7 +210,8 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array (
-                'id = ?' => $id 
+                "{$this->col_quoteId} = ?" => $id [0], 
+                "{$this->col_quoteSettingId} = ?" => $id [1] 
         );
     }
     
