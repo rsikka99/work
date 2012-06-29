@@ -90,7 +90,7 @@
                     <label>Administration</label>
                     <class>dropdown</class>
                     <module>quotegen</module>
-                    <controller>quote</controller>
+                    <controller>administration</controller>
                     <action>index</action>
                     <resource>quotegen_quote_index</resource>
                     <pages>
