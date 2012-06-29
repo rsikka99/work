@@ -8,10 +8,10 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
         $request = $this->getRequest();
         $existingQuoteForm = new Quotegen_Form_SelectQuote();
         $newQuoteForm = new Quotegen_Form_Quote();
-        $newQuoteForm->setAttrib('class', 'form-vertical');
+        $newQuoteForm->setAttrib('class', 'form-vertical button-tabbed-styled');
         
         $newClientForm = new Quotegen_Form_Client();
-        $newClientForm->setAttrib('class', 'form-vertical');
+        $newClientForm->setAttrib('class', 'form-vertical button-tabbed-styled');
         
         if ($request->isPost())
         {
