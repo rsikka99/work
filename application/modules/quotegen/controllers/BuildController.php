@@ -189,9 +189,9 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
                         foreach ( $form->getOptionElements() as $element )
                         {
                             $optionId = (int)$element->quantity->getDescription();
-                            $quoteDeviceOption->setOptionId($optionId);
-                            $quoteDeviceOption->setQuantity($values ["option$optionId-quantity"]);
-                            $quoteDeviceOption->setIncludedQuantity($values ["option$optionId-includedQuantity"]);
+                            $quoteDeviceOption->setId($optionId);
+                            $quoteDeviceOption->setQuantity($values ["option{$optionId}quantity"]);
+                            $quoteDeviceOption->setIncludedQuantity($values ["option{$optionId}includedQuantity"]);
                             
                             Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->save($quoteDeviceOption);
                         }
@@ -238,9 +238,20 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
      */
     public function addOptionsToDeviceConfigurationAction ()
     {
-        $id = $this->_getParam('id', FALSE);
+        $id = (int)$this->_getParam('id', FALSE);
         
-        $availableOptions = Quotegen_Model_Mapper_Option::getInstance()->fetchAllAvailableOptionsForDeviceConfiguration($id);
+        $quoteDeviceConfiguration = Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->findByQuoteDeviceId($id);
+        if (!$quoteDeviceConfiguration)
+        {
+            $this->_helper->flashMessenger(array (
+                    'info' => "Invalid device selected or the device no longer has the ability to be configured."
+            ));
+            $this->_helper->redirector('edit-quote-device', null, null, array (
+                    'id' => $id
+            ));
+        }
+        
+        $availableOptions = Quotegen_Model_Mapper_Option::getInstance()->fetchAllAvailableOptionsForQuoteDevice($id, $quoteDeviceConfiguration->getMasterDeviceId());
         if (count($availableOptions) < 1)
         {
             $this->_helper->flashMessenger(array (
@@ -254,10 +265,6 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
         $form = new Quotegen_Form_SelectOptions($availableOptions);
         // Prepare the data for the form
         $request = $this->getRequest();
-        
-        $deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($id);
-        
-        $form->populate($deviceConfiguration->toArray());
         
         // Make sure we are posting data
         if ($request->isPost())
@@ -273,17 +280,29 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
                     // Validate the form
                     if ($form->isValid($values))
                     {
-                        $deviceConfigurationOptionMapper = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance();
-                        $deviceConfigurationOption = new Quotegen_Model_DeviceConfigurationOption();
-                        $deviceConfigurationOption->setDeviceConfigurationId($deviceConfiguration->getId());
+                        // Create a blank quote device option
+                        $quoteDeviceOption = new Quotegen_Model_QuoteDeviceOption();
+                        $quoteDeviceOption->setQuoteDeviceId($id);
+                        $quoteDeviceOption->setQuantity(1);
+                        $quoteDeviceOption->setIncludedQuantity(0);
                         
+                        // Create a ready to use link
+                        $quoteDeviceConfigurationOption = new Quotegen_Model_QuoteDeviceConfigurationOption();
+                        
+                        $optionMapper = Quotegen_Model_Mapper_Option::getInstance();
+                        $quoteDeviceOptionMapper = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance();
+                        $quoteDeviceConfigurationOptionMapper = Quotegen_Model_Mapper_QuoteDeviceConfigurationOption::getInstance();
                         $insertedOptions = 0;
                         foreach ( $values ['options'] as $optionId )
                         {
-                            $deviceConfigurationOption->setOptionId($optionId);
+                            $quoteDeviceOption = $this->syncOption($quoteDeviceOption, $optionMapper->find($optionId));
+                            $quoteDeviceOptionId = $quoteDeviceOptionMapper->insert($quoteDeviceOption);
+                            
+                            $quoteDeviceConfigurationOption->setOptionId($optionId);
+                            $quoteDeviceConfigurationOption->setQuoteDeviceOptionId($quoteDeviceOptionId);
                             try
                             {
-                                $deviceConfigurationOptionMapper->insert($deviceConfigurationOption);
+                                $quoteDeviceConfigurationOptionMapper->insert($quoteDeviceConfigurationOption);
                                 $insertedOptions ++;
                             }
                             catch ( Exception $e )
@@ -293,7 +312,7 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
                         }
                         
                         $this->_helper->flashMessenger(array (
-                                'success' => "Successfully added {$insertedOptions} options to {$deviceConfiguration->getDevice()->getMasterDevice()->getFullDeviceName()} successfully." 
+                                'success' => "Successfully added {$insertedOptions} options." 
                         ));
                         $this->_helper->redirector('edit-quote-device', null, null, array (
                                 'id' => $id 
@@ -329,25 +348,30 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
     public function deleteOptionFromDeviceConfigurationAction ()
     {
         $id = $this->_getParam('id', FALSE);
-        $optionId = $this->_getParam('optionId', FALSE);
-        
-        try
+        $quoteDeviceOptionId = $this->_getParam('quoteDeviceOptionId', FALSE);
+        if ($quoteDeviceOptionId)
         {
-            $deviceConfigurationOption = new Quotegen_Model_DeviceConfigurationOption();
-            $deviceConfigurationOption->setDeviceConfigurationId($id);
-            $deviceConfigurationOption->setOptionId($optionId);
-            Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->delete($deviceConfigurationOption);
+            try
+            {
+                $rowsAffected = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->delete($quoteDeviceOptionId);
+                
+                $this->_helper->flashMessenger(array (
+                        'success' => "Configuration Option deleted successfully." 
+                ));
+            }
+            catch ( Exception $e )
+            {
+                $this->_helper->flashMessenger(array (
+                        'error' => "Could not delete that configuration option." 
+                ));
+            }
+        }
+        else
+        {
             $this->_helper->flashMessenger(array (
-                    'success' => "Configuration Option deleted successfully." 
+                    'warning' => "You forgot to select an option to delete." 
             ));
         }
-        catch ( Exception $e )
-        {
-            $this->_helper->flashMessenger(array (
-                    'error' => "Could not delete that configuration option." 
-            ));
-        }
-        
         $this->_helper->redirector('edit-quote-device', null, null, array (
                 'id' => $id 
         ));

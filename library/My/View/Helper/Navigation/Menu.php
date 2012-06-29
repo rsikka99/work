@@ -47,7 +47,7 @@ class My_View_Helper_Navigation_Menu extends Zend_View_Helper_Navigation_Menu
         $domDoc->loadXML('<?xml version="1.0" encoding="utf-8"?>' . $html);
         
         $xpath = new DOMXPath($domDoc);
-        
+        /* @var $item DOMNode */
         foreach ( $xpath->query('//a[starts-with(@class, "dropdown")]') as $item )
         {
             
@@ -77,14 +77,16 @@ class My_View_Helper_Navigation_Menu extends Zend_View_Helper_Navigation_Menu
                 {
                     $caret = $domDoc->createElement('b', '');
                     $caret->setAttribute('class', 'right-caret pull-right');
+                    $item->insertBefore($caret, $item->childNodes->item(0));
                 }
                 else
                 {
                     $caret = $domDoc->createElement('b', '');
                     $caret->setAttribute('class', 'caret');
+                    $item->appendChild($caret);
                 }
                 
-                $item->appendChild($caret);
+                
             }
         }
         

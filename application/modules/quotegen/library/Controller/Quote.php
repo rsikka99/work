@@ -212,7 +212,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         $quoteDeviceOption->setDescription($option->getDescription());
         $quoteDeviceOption->setPrice($option->getPrice());
         
-        return $option;
+        return $quoteDeviceOption;
     }
 
     /**
