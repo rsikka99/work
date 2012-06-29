@@ -1129,8 +1129,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 catch ( Exception $e )
                 {
                     $db->rollBack();
-                    echo $e;
-                    die();
                     $this->view->message = "There was an error saving your support request.";
                 }
             }
@@ -1529,9 +1527,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 'is_leased' => ($formData ['is_leased'] == true ? 1 : 0) 
                         );
                         
-                        // loop through each instance and get instance specific
-                        // data
-                        $devices_pf_id = $formData ["pf_device_id"];
+                        // loop through each instance and get instance specific data
+                        $devices_pf_id = $formData ["devices_pf_id"];
                         $select = new Zend_Db_Select($db);
                         $select = $db->select()
                             ->from(array (
@@ -1543,21 +1540,21 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         
                         foreach ( $result as $key => $value )
                         {
-                            $upload_data_collector_id = $result [$key] ["upload_data_collector_id"];
+                            $upload_data_collector_id = $result [$key] ["id"];
                             
                             // check for unknown device
                             $select = new Zend_Db_Select($db);
                             $select = $db->select()
                                 ->from(array (
-                                    'udi' => 'unknown_device_instance' 
+                                    'udi' => 'proposalgenerator_unknown_device_instances' 
                             ))
-                                ->where('udi.report_id = ' . $report_id . ' AND udi.upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
+                                ->where('udi.report_id = ' . $report_id . ' AND udi.upload_data_collector_row_id = ?', $upload_data_collector_id, 'INTEGER');
                             $stmt = $db->query($select);
                             $unknown_device_instance = $stmt->fetchAll();
                             
                             if (count($unknown_device_instance) > 0)
                             {
-                                $unknown_device_instance_id = $unknown_device_instance [0] ['unknown_device_instance_id'];
+                                $unknown_device_instance_id = $unknown_device_instance [0] ['upload_data_collector_row_id'];
                             }
                             else
                             {
@@ -1609,7 +1606,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             $end_meter_fax = $result [$key] ["endmeterfax"];
                             $start_meter_scan = $result [$key] ["startmeterscan"];
                             $end_meter_scan = $result [$key] ["endmeterscan"];
-                            
+
                             $unknown_device_instanceData ['upload_data_collector_id'] = $upload_data_collector_id;
                             $unknown_device_instanceData ['printermodelid'] = ucwords(trim($result [$key] ["printermodelid"]));
                             $unknown_device_instanceData ['mps_monitor_startdate'] = $start_date;
@@ -1642,14 +1639,13 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             // save instances
                             if ($unknown_device_instance_id > 0)
                             {
-                                $where = $unknown_device_instanceTable->getAdapter()->quoteInto('id = ' . $report_id . ' AND unknown_device_instance_id = ?', $unknown_device_instance_id, 'INTEGER');
+                                $where = $unknown_device_instanceTable->getAdapter()->quoteInto('report_id = ' . $report_id . ' AND id = ?', $unknown_device_instance_id, 'INTEGER');
                                 $unknown_device_instanceTable->update($unknown_device_instanceData, $where);
                             }
                             else
                             {
                                 $unknown_device_instanceData ['user_id'] = $this->user_id;
                                 $unknown_device_instanceData ['report_id'] = $report_id;
-                                
                                 $unknown_device_instance_id = $unknown_device_instanceTable->insert($unknown_device_instanceData);
                             }
                             
@@ -1669,7 +1665,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             
                             // update uploaded record as not excluded
                             $upload_data_collectorData = array (
-                                    'upload_data_collector_id' => $upload_data_collector_id, 
+                                    'id' => $upload_data_collector_id, 
                                     'is_excluded' => 0 
                             );
                             $udcUpdateArray [] = $upload_data_collectorData;
@@ -1678,7 +1674,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         
                         // check for ticket for user/device_pf_id
                         $ticket_pf_requestTable = new Proposalgen_Model_DbTable_TicketPFRequest();
-                        $where = $ticket_pf_requestTable->getAdapter()->quoteInto('user_id = ' . $this->user_id . ' AND devices_pf_id = ?', $devices_pf_id, 'INTEGER');
+                        $where = $ticket_pf_requestTable->getAdapter()->quoteInto('user_id = ' . $this->user_id . ' AND pf_device_id = ?', $devices_pf_id, 'INTEGER');
                         $ticket_pf_request = $ticket_pf_requestTable->fetchRow($where);
                         
                         if (count($ticket_pf_request) > 0)
@@ -1727,13 +1723,12 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         $db->commit();
                         
                         // redirect back to mapping page
-                        $this->_redirect('data/devicemapping?grid=' . $grid);
+                        $this->_redirect('proposalgen/fleet/devicemapping?grid=' . $grid);
                     }
                     catch ( Exception $e )
                     {
                         $db->rollback();
                         $this->view->message = "There was an error saving your unknown device.";
-                        // echo $e;
                     }
                 }
             }
@@ -2459,6 +2454,49 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         {
             return null;
         }
+    }
+    
+    /**
+     *
+     * @param $is_color int
+     *            A switch indicating color ( 1 ) or b/w ( 0 ).
+     * @param $tonerLevels array
+     *            - An associative array of device toner levels
+     *
+     * @return boolean JIT Support
+     *
+     * @author Kevin Jervis
+     */
+    public function determineJITSupport ($is_color, $tonerLevels)
+    {
+        $JITCompatible = false;
+        $tonerLevelBlack = strtoupper($tonerLevels ['toner_level_black']);
+    
+        // If device is b/w, ensure it has a % for black toner.
+        if ($is_color == 0)
+        {
+            if (strpos($tonerLevelBlack, '%'))
+                $JITCompatible = true;
+        }
+        else
+        {
+            // Convert toner values to uppercase for comparison
+            $tonerLevelCyan = strtoupper($tonerLevels ['toner_level_cyan']);
+            $tonerLevelMagenta = strtoupper($tonerLevels ['toner_level_magenta']);
+            $tonerLevelYellow = strtoupper($tonerLevels ['toner_level_yellow']);
+    
+            // If any toner reports a percentage, other toner levels must have
+            // %, OK or LOW as value
+            if (strpos($tonerLevelBlack, '%') || strpos($tonerLevelCyan, '%') || strpos($tonerLevelMagenta, '%') || strpos($tonerLevelYellow, '%'))
+                if ($tonerLevelBlack == 'LOW' || $tonerLevelBlack == 'OK' || strpos($tonerLevelBlack, '%'))
+                if ($tonerLevelCyan == 'LOW' || $tonerLevelCyan == 'OK' || strpos($tonerLevelCyan, '%'))
+                if ($tonerLevelMagenta == 'LOW' || $tonerLevelMagenta == 'OK' || strpos($tonerLevelMagenta, '%'))
+                if ($tonerLevelYellow == 'LOW' || $tonerLevelYellow == 'OK' || strpos($tonerLevelYellow, '%'))
+                {
+                    $JITCompatible = true;
+                }
+        } // end else
+        return $JITCompatible;
     }
     
 }

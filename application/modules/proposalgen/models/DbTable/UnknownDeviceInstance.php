@@ -12,7 +12,7 @@ class Proposalgen_Model_DbTable_UnknownDeviceInstance extends Zend_Db_Table_Abst
             ), 
             'Reports' => array (
                     'columns' => 'report_id', 
-                    'refTableClass' => 'Proposalgen_Model_DbTable_Reports', 
+                    'refTableClass' => 'Proposalgen_Model_DbTable_Report', 
                     'refColumns' => 'id' 
             ), 
             'Users' => array (
