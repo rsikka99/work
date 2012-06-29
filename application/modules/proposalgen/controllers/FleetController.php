@@ -2349,7 +2349,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 ->where('udc.report_id = ?', $report_id, 'INTEGER')
                 ->where('udc.invalid_data = 0')
                 ->where('di.id > 0');
-                echo $select; die;
                 $stmt = $db->query($select);
                 $result = $stmt->fetchAll();
     
@@ -2439,7 +2438,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             catch ( Exception $e )
             {
                 $db->rollback();
-                echo $e; die;
                 throw new Exception("An error occurred saving mapping.", 0, $e);
             }
         }
