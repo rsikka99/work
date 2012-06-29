@@ -194,7 +194,7 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
                             ));
                             
                             // Send to the add options page like they asked
-                            $this->_helper->redirector('add-options-to-device-configuration', null, null, array (
+                            $this->_helper->redirector('add-options-to-quote-device', null, null, array (
                                     'id' => $quoteDevice->getId() 
                             ));
                         }
@@ -227,7 +227,7 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
     /**
      * This adds one or more options to a device configuration
      */
-    public function addOptionsToDeviceConfigurationAction ()
+    public function addOptionsToQuoteDeviceAction ()
     {
         // Get the quote device (Also does validation)
         $quoteDevice = $this->getQuoteDevice('id');
@@ -337,7 +337,7 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
     /**
      * Removes an option from a device configuration
      */
-    public function deleteOptionFromDeviceConfigurationAction ()
+    public function deleteOptionFromQuoteDeviceAction ()
     {
         // Get the quote device (Also does validation)
         $quoteDevice = $this->getQuoteDevice('id');
@@ -402,7 +402,7 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
         }
         
         $this->_helper->flashMessenger(array (
-                'success' => "All device configurations synced successfully. Note: If the device is no longer offered and has been deleted from the system, we have no way of syncing them." 
+                'success' => "All device configurations synced successfully. Note: If any device is no longer offered and has been deleted from the system, we have no way of syncing it." 
         ));
         $this->_helper->redirector('index');
     }

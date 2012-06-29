@@ -27,6 +27,22 @@ class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
         $this->view->paginator = $paginator;
     }
 
+    public function viewglobalAction ()
+    {
+        // Display all of the deviceConfigurations
+        $mapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper));
+        
+        // Set the current page we're on
+        $paginator->setCurrentPageNumber($this->_getParam('page', 1));
+        
+        // Set how many items to show
+        $paginator->setItemCountPerPage(15);
+        
+        // Pass the view the paginator
+        $this->view->paginator = $paginator;
+    }
+
     /**
      * Deletes a deviceConfigurations
      */
