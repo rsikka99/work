@@ -155,7 +155,7 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
         
         // Prepare the data for the form
         $request = $this->getRequest();
-        $form->populate($device->toArray());
+        $form->populate($quoteDevice->toArray());
         
         // Make sure we are posting data
         if ($request->isPost())
@@ -176,6 +176,9 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
                     // Validate the form
                     if ($form->isValid($values))
                     {
+                        $quoteDevice->populate($values);
+                        Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
+                        
                         $quoteDeviceOption = new Quotegen_Model_QuoteDeviceOption();
                         foreach ( $form->getOptionElements() as $element )
                         {
