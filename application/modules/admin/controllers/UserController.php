@@ -14,7 +14,7 @@ class Admin_UserController extends Zend_Controller_Action
     public function indexAction ()
     {
         // Fetch all the users
-        $mapper = new Application_Model_UserMapper();
+        $mapper = new Application_Model_Mapper_User();
         $users = $mapper->fetchAll();
         
         // Display all of the users
@@ -33,7 +33,7 @@ class Admin_UserController extends Zend_Controller_Action
         }
         
         // Get the user
-        $mapper = new Application_Model_UserMapper();
+        $mapper = new Application_Model_Mapper_User();
         $user = $mapper->fetch(array (
                 'id = ?' => $id 
         ));
@@ -67,7 +67,7 @@ class Admin_UserController extends Zend_Controller_Action
                     // Save to the database
                     try
                     {
-                        $mapper = new Application_Model_UserMapper();
+                        $mapper = new Application_Model_Mapper_User();
                         $user = new Application_Model_User();
                         $user->populate($values);
                         $user->setPassword($this->cryptPassword($user->getPassword()));
@@ -142,7 +142,7 @@ class Admin_UserController extends Zend_Controller_Action
             $this->_redirect('/admin/user');
         }
         
-        $mapper = new Application_Model_UserMapper();
+        $mapper = new Application_Model_Mapper_User();
         $user = $mapper->find($userId);
         
         // If the user doesn't exist, send them back t the view all users page
@@ -214,14 +214,14 @@ class Admin_UserController extends Zend_Controller_Action
         }
         
         // Get the user
-        $mapper = new Application_Model_UserMapper();
+        $mapper = new Application_Model_Mapper_User();
         $user = $mapper->find($userId);
         
         // Get all available roles. In theory this should be a managable amount
-        $rolemapper = new Admin_Model_RoleMapper();
+        $rolemapper = new Admin_Model_Mapper_Role();
         $roles = $rolemapper->fetchAll();
         
-        $userrolemapper = new Admin_Model_UserRoleMapper();
+        $userrolemapper = new Admin_Model_Mapper_UserRole();
         $userRoles = $userrolemapper->fetchAll(array (
                 'userId = ?' => $userId 
         ));
@@ -318,7 +318,7 @@ class Admin_UserController extends Zend_Controller_Action
                             unset($values ["eulaAccepted"]);
                         }
                         
-                        $mapper = new Application_Model_UserMapper();
+                        $mapper = new Application_Model_Mapper_User();
                         $user = new Application_Model_User();
                         $user->populate($values);
                         $user->setId($userId);
