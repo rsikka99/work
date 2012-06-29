@@ -7,21 +7,21 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
     {
         // Get db adapter
         $db = Zend_Db_Table::getDefaultAdapter();
-
+        
         // Get default leasing schema id
         $leasingSchemaId = 1;
         
         // Postback
         $request = $this->getRequest();
         if ($request->isPost())
-        {            
+        {
             $values = $request->getPost();
             
             $db->beginTransaction();
             try
             {
                 $upload = new Zend_File_Transfer_Adapter_Http();
-                $upload->setDestination( Zend_Registry::get('config')->app->uploadPath );
+                $upload->setDestination(Zend_Registry::get('config')->app->uploadPath);
                 
                 // Limit the extensions to csv files
                 $upload->addValidator('Extension', false, 'csv');
@@ -38,45 +38,45 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                 ));
                 $upload->getValidator('FilesSize')->setMessage('<span class="warning">*</span> File size must be between 1B and 4MB.');
                 
-                if ( $upload->receive() )
+                if ($upload->receive())
                 {
                     $rangeIds = null;
                     
                     // Get all the lines in the file
-                    $lines = file( $upload->getFileName(), FILE_IGNORE_NEW_LINES );
-
+                    $lines = file($upload->getFileName(), FILE_IGNORE_NEW_LINES);
+                    
                     // Prep mappers
                     $leasingSchemaRateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
-	                $leasingSchemaRangeMapper = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance();
+                    $leasingSchemaRangeMapper = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance();
                     $leasingSchemaTermMapper = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance();
                     
                     // Prep models
                     $leasingSchemaRateModel = new Quotegen_Model_LeasingSchemaRate();
-	                $leasingSchemaRangeModel = new Quotegen_Model_LeasingSchemaRange();
-		            $leasingSchemaTermModel = new Quotegen_Model_LeasingSchemaTerm();
-		            
-		            // Delete existing leasing schema ranges
-		            $leasingSchemaRanges = $leasingSchemaRangeMapper->fetchAll ( array (
-		                    'leasingSchemaId' => $leasingSchemaId
-		            ));
-		            foreach ( $leasingSchemaRanges as $leasingSchemaRange )
-		            {
-        				$leasingSchemaRangeMapper->delete($leasingSchemaRange);   
-		            }
-		            
-        			// Delete existing leasing schema terms
-        			$leasingSchemaTerms = $leasingSchemaTermMapper->fetchAll ( array (
-        			        'leasingSchemaId' => $leasingSchemaId
-        			));
-		            foreach ( $leasingSchemaTerms as $leasingSchemaTerm )
-		            {
-        				$leasingSchemaTermMapper->delete($leasingSchemaTerm);   
-		            }
-		            
+                    $leasingSchemaRangeModel = new Quotegen_Model_LeasingSchemaRange();
+                    $leasingSchemaTermModel = new Quotegen_Model_LeasingSchemaTerm();
+                    
+                    // Delete existing leasing schema ranges
+                    $leasingSchemaRanges = $leasingSchemaRangeMapper->fetchAll(array (
+                            'leasingSchemaId' => $leasingSchemaId 
+                    ));
+                    foreach ( $leasingSchemaRanges as $leasingSchemaRange )
+                    {
+                        $leasingSchemaRangeMapper->delete($leasingSchemaRange);
+                    }
+                    
+                    // Delete existing leasing schema terms
+                    $leasingSchemaTerms = $leasingSchemaTermMapper->fetchAll(array (
+                            'leasingSchemaId' => $leasingSchemaId 
+                    ));
+                    foreach ( $leasingSchemaTerms as $leasingSchemaTerm )
+                    {
+                        $leasingSchemaTermMapper->delete($leasingSchemaTerm);
+                    }
+                    
                     // Loop through remaining lines and save terms/rates
                     foreach ( $lines as $key => $value )
                     {
-                        if ( $key == 0 )
+                        if ($key == 0)
                         {
                             // Split value into an array
                             $ranges = explode(",", $value);
@@ -84,94 +84,129 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                             // Loop through array and save ranges
                             foreach ( $ranges as $rangekey => $range )
                             {
-                                if ( $rangekey > 0 )
+                                if ($rangekey > 0)
                                 {
-	                                $leasingSchemaRangeModel->setLeasingSchemaId($leasingSchemaId);
-	                                $leasingSchemaRangeModel->setStartRange($range);
-	                                
-		                            // Build array of range id's
-	                                $rangeIds [] = $leasingSchemaRangeMapper->insert($leasingSchemaRangeModel);
+                                    // Make sure range doesn't exist
+                                    $rangeExists = $leasingSchemaRangeMapper->fetch(array (
+                                            'leasingSchemaId = ?' => $leasingSchemaId, 
+                                            'startRange = ?' => $range 
+                                    ));
+                                    
+                                    if (! $rangeExists)
+                                    {
+                                        // Build array of range id's
+                                        $leasingSchemaRangeModel->setLeasingSchemaId($leasingSchemaId);
+                                        $leasingSchemaRangeModel->setStartRange($range);
+                                        $rangeIds [] = $leasingSchemaRangeMapper->insert($leasingSchemaRangeModel);
+                                    }
+                                    else
+                                    {
+                                        // Cancel import
+                                        $db->rollback();
+                                        $this->_helper->flashMessenger(array (
+                                                'error' => "Range of \${$range} has been defined more than once in the file. Please correct it and try again." 
+                                        ));
+                                        $this->_helper->redirector('index');
+                                    }
                                 }
                             }
                         }
                         else
-                        {   
+                        {
                             $rates = explode(",", $value);
                             foreach ( $rates as $ratekey => $value )
                             {
-		                        // First column is the term
-		                        if ( $ratekey == 0 )
-		                        {
-		                        	$months = $value;
-		                        	
-		                        	// Insert term
-		                        	$leasingSchemaTermModel->setLeasingSchemaId($leasingSchemaId);
-		                        	$leasingSchemaTermModel->setMonths($months);
-		                        	$termId = $leasingSchemaTermMapper->insert($leasingSchemaTermModel);
-		                        }
-		                        else
-		                        {
-			                        // Get Range Id for this column
-			                        $rangeId = $rangeIds [ $ratekey - 1 ];
-			                        
-			                        // Loop through remaining columns and save rates
-			                        if ( $termId > 0 && $rangeId > 0 ) 
-			                        {
-			                            // Get rate
-				                        $rate = $value;
-				                        
-				                        // Save Rate
+                                // First column is the term
+                                if ($ratekey == 0)
+                                {
+                                    $months = $value;
+                                    
+                                    // Make sure range doesn't exist
+                                    $termExists = $leasingSchemaTermMapper->fetch(array (
+                                            'leasingSchemaId = ?' => $leasingSchemaId, 
+                                            'months = ?' => $months 
+                                    ));
+                                    
+                                    if (! $termExists)
+                                    {
+                                        // Insert term
+                                        $leasingSchemaTermModel->setLeasingSchemaId($leasingSchemaId);
+                                        $leasingSchemaTermModel->setMonths($months);
+                                        $termId = $leasingSchemaTermMapper->insert($leasingSchemaTermModel);
+                                    }
+                                    else
+                                    {
+                                        // Cancel import
+                                        $db->rollBack();
+                                        $this->_helper->flashMessenger(array (
+                                                'error' => "The term {$months} months has been defined more than once in the file. Please correct it and try again." 
+                                        ));
+                                        $this->_helper->redirector('index');
+                                    }
+                                }
+                                else
+                                {
+                                    // Get Range Id for this column
+                                    $rangeId = $rangeIds [$ratekey - 1];
+                                    
+                                    // Loop through remaining columns and save rates
+                                    if ($termId > 0 && $rangeId > 0)
+                                    {
+                                        // Get rate
+                                        $rate = $value;
+                                        
+                                        // Save Rate
                                         $leasingSchemaRateModel->setLeasingSchemaTermId($termId);
                                         $leasingSchemaRateModel->setLeasingSchemaRangeId($rangeId);
                                         $leasingSchemaRateModel->setRate($rate);
                                         $leasingSchemaRateId = $leasingSchemaRateMapper->insert($leasingSchemaRateModel);
-			                        }
-		                        }
+                                    }
+                                }
                             }
                         }
                     }
                     
                     // Delete the file we just uploaded
-                    unlink( $upload->getFileName() );
+                    unlink($upload->getFileName());
                     
                     // Commit changes to the database
                     $db->commit();
                     
                     // Send success message to the screen
-                    $this->_helper->flashMessenger( array (
-                            'success' => "The leasing schema import was successful."
+                    $this->_helper->flashMessenger(array (
+                            'success' => "The leasing schema import was successful." 
                     ));
                 }
                 else
                 {
                     $db->rollback();
-                    if ( $upload->getMessages() )
+                    if ($upload->getMessages())
                     {
-		                // if upload fails, print error message message
-		                $this->view->errMessages = $upload->getMessages();
-                    } 
-                    else 
+                        // if upload fails, print error message message
+                        $this->view->errMessages = $upload->getMessages();
+                    }
+                    else
                     {
-	                    // Display errors to screen
-	                    $this->_helper->flashMessenger( array (
-	                        'error' => "An error has occurred and the import was not completed. Please double check the format of your file and try again."
-	                    ));
+                        // Display errors to screen
+                        $this->_helper->flashMessenger(array (
+                                'error' => "An error has occurred and the import was not completed. Please double check the format of your file and try again." 
+                        ));
                     }
                 }
             }
-			catch ( Zend_Db_Statement_Mysqli_Exception $e )
-			{
+            catch ( Zend_Db_Statement_Mysqli_Exception $e )
+            {
                 $db->rollback();
                 echo $e;
-                $this->_helper->flashMessenger( array (
-                    'error' => "There was an error saving the leasing schema to the database." 
+                $this->_helper->flashMessenger(array (
+                        'error' => "There was an error saving the leasing schema to the database." 
                 ));
-			}
+            }
             catch ( Exception $e )
             {
                 $db->rollback();
-                $this->_helper->flashMessenger( array (
-                    'error' => "An error has occurred and the import was not completed. Please double check the format of your file and try again." 
+                $this->_helper->flashMessenger(array (
+                        'error' => "An error has occurred and the import was not completed. Please double check the format of your file and try again." 
                 ));
             }
         }
@@ -180,7 +215,6 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
         $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
         $leasingSchema = $leasingSchemaMapper->find($leasingSchemaId);
         $this->view->leasingSchema = $leasingSchema;
-        
     }
 
     public function edittermAction ()
@@ -764,5 +798,6 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
         // Import currently handled by indexAction. 
         // Kept this in case we want to change it so import is handled on it's own page
     }
+
 }
 
