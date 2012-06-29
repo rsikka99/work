@@ -76,14 +76,6 @@
                             <action>edit</action>
                             <resource>quotegen_quotesetting_edit</resource>
                         </preferences>
-                        <systempreferences>
-                            <label>System Preferences</label>
-                            <class></class>
-                            <module>quotegen</module>
-                            <controller>quotesetting</controller>
-                            <action>editdefault</action>
-                            <resource>quotegen_quotesetting_editdefault</resource>
-                        </systempreferences>
                     </pages>
                 </settings>
                 <administration>
@@ -96,11 +88,10 @@
                     <pages>
                         <configuration>
                             <label>Configuration</label>
-                            <class></class>
                             <module>quotegen</module>
-                            <controller>quote</controller>
-                            <action>create</action>
-                            <resource>quotegen_quote_index</resource>
+                            <controller>quotesetting</controller>
+                            <action>editdefault</action>
+                            <resource>quotegen_quotesetting_editdefault</resource>
                         </configuration>
                         <options>
                             <label>Options</label>
