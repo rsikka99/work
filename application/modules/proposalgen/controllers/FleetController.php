@@ -2330,6 +2330,9 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     }
                 }
                 $devicesMsg = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->saveRows($deviceArray);
+                
+                // FIXME: this seems to want all fields passed to it rather than just the ones being updated
+                //        appears to be doing an insert instead of an update
                 $ucdMsg = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->saveRows($udcUpdateArray);
                 
                 // *************************************************************
@@ -2433,7 +2436,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 $db->commit();
     
                 // redirect back to mapping page
-                $this->_redirect('/proposalgen/data/deviceleasing');
+                $this->_redirect('/proposalgen/fleet/deviceleasing');
             }
             catch ( Exception $e )
             {
