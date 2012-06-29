@@ -1021,7 +1021,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         if ($request_description != '')
                         {
                             // update ticket
-                            $ticketTable = new Proposalgen_Model_DbTable_Tickets();
+                            $ticketTable = new Proposalgen_Model_DbTable_Ticket();
                             $ticketData = array (
                                     'description' => $request_description, 
                                     'date_updated' => $date 
@@ -1032,7 +1032,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             // add comment
                             if ($ticket_comment != '')
                             {
-                                $ticket_commentsTable = new Proposalgen_Model_DbTable_TicketComments();
+                                $ticket_commentsTable = new Proposalgen_Model_DbTable_TicketComment();
                                 $ticket_commentsData = array (
                                         'ticket_id' => $ticket_id, 
                                         'user_id' => $this->user_id, 
@@ -1055,7 +1055,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         $request_title = $formData ['request_title'];
                         
                         // save ticket
-                        $ticketTable = new Proposalgen_Model_DbTable_Tickets();
+                        $ticketTable = new Proposalgen_Model_DbTable_Ticket();
                         $ticketData = array (
                                 'user_id' => $this->user_id, 
                                 'category_id' => Proposalgen_Model_TicketCategory::PRINTFLEET_DEVICE_SUPPORT, 
@@ -1745,7 +1745,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 $form->populate($formData);
             } // end else
             
-
             if ($upload_data_collector_id > 0)
             {
                 // set default
@@ -1843,7 +1842,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         ->from(array (
                             'udc' => 'proposalgenerator_upload_data_collector_rows' 
                     ))
-                        ->where('id = ' . $report_id . ' AND id = ?', $upload_data_collector_id, 'INTEGER');
+                        ->where('report_id = ' . $report_id . ' AND id = ?', $upload_data_collector_id, 'INTEGER');
                     $stmt = $db->query($select);
                     $result = $stmt->fetchAll();
                     
@@ -2099,15 +2098,14 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 $mapped_to_id = 0;
                 $mapped_to_modelname = '';
                 $mapped_to_manufacturer = '';
-                // loop through pf_device_matchup_users to find suggested
-                // mapping
+                // loop through pf_device_matchup_users to find suggested mapping
                 $select = new Zend_Db_Select($db);
                 $select = $db->select()
                     ->from(array (
-                        'pfdmu' => 'pf_device_matchup_users' 
+                        'pfdmu' => 'proposalgenerator_user_pf_device_matchups' 
                 ), array (
-                        'devices_pf_id', 
-                        'md.id AS master_device_id', 
+                        'pf_device_id', 
+                        'master_device_id', 
                         'user_id' 
                 ))
                     ->joinLeft(array (
@@ -2117,13 +2115,10 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 ))
                     ->joinLeft(array (
                         'm' => 'manufacturers' 
-                ), 'm.manufacturer_id = md.manufacturer_id', array (
-                        'manufacturer_name' 
+                ), 'm.id = md.manufacturer_id', array (
+                        'displayname' 
                 ))
-                    ->where('pfdmu.devices_pf_id = ' . $devices_pf_id . ' AND pfdmu.user_id = ' . $this->user_id);
-                echo '<pre>';
-                echo ($select);
-                die();
+                    ->where('pfdmu.pf_device_id = ' . $devices_pf_id . ' AND pfdmu.user_id = ' . $this->user_id);
                 $stmt = $db->query($select);
                 $master_devices = $stmt->fetchAll();
                 
@@ -2139,22 +2134,22 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     $select = new Zend_Db_Select($db);
                     $select = $db->select()
                         ->from(array (
-                            'mmpf' => 'master_matchup_pf' 
+                            'mmpf' => 'proposalgenerator_master_pf_device_matchups' 
                     ), array (
-                            'devices_pf_id', 
+                            'pf_device_id', 
                             'master_device_id' 
                     ))
                         ->joinLeft(array (
-                            'md' => 'master_device' 
-                    ), 'md.master_device_id = mmpf.master_device_id', array (
+                            'md' => 'proposalgenerator_master_devices' 
+                    ), 'md.id = mmpf.master_device_id', array (
                             'printer_model' 
                     ))
                         ->joinLeft(array (
-                            'm' => 'manufacturer' 
-                    ), 'm.manufacturer_id = md.mastdevice_manufacturer', array (
-                            'manufacturer_name' 
+                            'm' => 'manufacturers' 
+                    ), 'm.id = md.manufacturer_id', array (
+                            'displayname' 
                     ))
-                        ->where('mmpf.devices_pf_id = ' . $devices_pf_id);
+                        ->where('mmpf.pf_device_id = ' . $devices_pf_id);
                     $stmt = $db->query($select);
                     $master_devices = $stmt->fetchAll();
                     
@@ -2162,7 +2157,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     {
                         $mapped_to_id = $master_devices [0] ['master_device_id'];
                         $mapped_to_modelname = $master_devices [0] ['printer_model'];
-                        $mapped_to_manufacturer = $master_devices [0] ['manufacturer_name'];
+                        $mapped_to_manufacturer = $master_devices [0] ['displayname'];
                     }
                 }
                 
