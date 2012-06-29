@@ -240,7 +240,18 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
     {
         $id = (int)$this->_getParam('id', FALSE);
         
-        $availableOptions = Quotegen_Model_Mapper_Option::getInstance()->fetchAllAvailableOptionsForQuoteDevice($id);
+        $quoteDeviceConfiguration = Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->findByQuoteDeviceId($id);
+        if (!$quoteDeviceConfiguration)
+        {
+            $this->_helper->flashMessenger(array (
+                    'info' => "Invalid device selected or the device no longer has the ability to be configured."
+            ));
+            $this->_helper->redirector('edit-quote-device', null, null, array (
+                    'id' => $id
+            ));
+        }
+        
+        $availableOptions = Quotegen_Model_Mapper_Option::getInstance()->fetchAllAvailableOptionsForQuoteDevice($id, $quoteDeviceConfiguration->getMasterDeviceId());
         if (count($availableOptions) < 1)
         {
             $this->_helper->flashMessenger(array (

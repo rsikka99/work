@@ -376,12 +376,14 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
      * Fetches all options that are available to be added to a quote device (Anything that is not already
      * added).
      *
-     * @param int $id
+     * @param int $quoteDeviceId
      *            The primary key of a quote device
+     * @param int $masterDeviceId
+     *            The primary key of the device associated with the quote device
      *            
      * @return multitype:Quotegen_Model_Option The list of available options to add
      */
-    public function fetchAllAvailableOptionsForQuoteDevice ($id)
+    public function fetchAllAvailableOptionsForQuoteDevice ($quoteDeviceId, $masterDeviceId)
     {
         $quoteDeviceConfigurationOptionTableName = Quotegen_Model_Mapper_QuoteDeviceConfigurationOption::getInstance()->getTableName();
         $quoteDeviceOptionTableName = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->getTableName();
@@ -394,12 +396,16 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
                     JOIN  {$quoteDeviceOptionTableName} AS qdo ON qdo.id = qdco.quoteDeviceOptionId
                     WHERE qdo.quoteDeviceId = ? AND qdco.optionId = opt.id
                 )
+                AND do.masterDeviceId = ?
                 ORDER BY  opt.name ASC
         ";
-        echo '<pre>'; var_dump($sql); die;
+        
         $resultSet = $this->getDbTable()
             ->getAdapter()
-            ->fetchAll($sql, $id);
+            ->fetchAll($sql, array (
+                $quoteDeviceId, 
+                $masterDeviceId 
+        ));
         
         $entries = array ();
         foreach ( $resultSet as $row )
