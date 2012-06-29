@@ -20,7 +20,7 @@ class Quotegen_Form_SelectQuote extends EasyBib_Form
          *
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
-        $this->setAttrib('class', 'form-vertical button-styled');
+        $this->setAttrib('class', 'form-vertical button-tabbed-styled');
         
         $quoteList = array ();
         $quoteListValidator = array ();

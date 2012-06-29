@@ -1,56 +1,57 @@
 <?php $quote = $this->quote; /* @var $quote Quotegen_Model_Quote */ ?>
-<?php echo $this->render('_partials/quoteHeading.phtml'); ?>
-<div class="page-header">
-    <h1>Quote <small>- Build</small></h1>
+<div class="clearfix">
+    <?php echo $this->render('_partials/quoteHeading.phtml'); ?>
+    <div class="page-header ">
+        <h1>Quote <small>- Build</small></h1>
+    </div>
 </div>
 <div class="row">
     <div class="span3">
-        <div class="well">
-            <p>Span 3</p>
+        <h3>Summary</h3>
+        <div>
+            <p>This could hold a small summary</p>
         </div>
     </div>
     <div class="span3">
-        <div class="well">
-            <p>Span 3</p>
+        <h3>Leasing Details</h3>
+        <div>
+            <p>This could hold leasing details if we needed</p>
         </div>
     </div>
-    <div class="span3">
-        <div class="well">
-            <p>Span 3</p>
-        </div>
-    </div>
-    <div class="span3">
-        <div class="well">
-            <p>Span 3</p>
+    <div class="span6">
+        <h3>More Stuff Here</h3>
+        <div>
+            <p>This could hold some information here about the quote, or just some general disclaimer text for the user to see.</p>
         </div>
     </div>
 </div>
-<h1>Summary</h1>
-<div class="well">
-    <div class="pull-right">
-        <a href="<?php echo $this->url(array('action' => 'sync-all-device-configurations')); ?>" title="Sync all configurations with current information." class="btn btn-mini btn-info "><i class="icon-refresh"></i> Sync All Devices</a>
-    </div>
-    <form class="form-inline" method="POST">
+<hr>
+
+<div class="clearfix">
+<form class="form-inline pull-right" method="POST">
         <div class="control-group">
             <div class="controls">
+            <button type="submit" name="submit" class="btn">Add</button>
                 <select name="deviceConfigurationId">
                     <option value="-1">Add New Configuration</option>
                     <option value="1">Favorite 1</option>
                     <option value="2">Favorite 2</option>
                     <option value="3">Favorite 3</option>
                 </select>
-                <button type="submit" name="submit" class="btn">Add</button>
+                <a href="<?php echo $this->url(array('action' => 'sync-all-device-configurations')); ?>" title="Sync all configurations with current information." class="btn btn-mini btn-info "><i class="icon-refresh"></i> Sync All Devices</a>
             </div>
         </div>
     </form>
-    
+<h1>Devices </h1>
+</div>
+<div>
     <div class="accordion" id="accordion2">
         <?php foreach ($quote->getQuoteDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
         <div class="accordion-group">
             <div class="accordion-heading">
                 <div class="accordion-buttons pull-right">
                     <?php if ($quoteDevice->getDevice()) : ?>
-                    <a href="<?php echo $this->url(array('action' => 'sync-device-configuration', 'id' => $quoteDevice->getDevice()->getMasterDeviceId())); ?>" title="Sync Configuration with current information." class="btn btn-mini btn-info "><i class="icon-refresh"></i></a>
+                    <a href="<?php echo $this->url(array('action' => 'sync-device-configuration', 'id' => $quoteDevice->getId())); ?>" title="Sync Configuration with current information." class="btn btn-mini btn-info "><i class="icon-refresh"></i></a>
                     <?php endif; ?>
                     <a href="<?php echo $this->url(array('action' => 'edit-quote-device', 'id' => $quoteDevice->getId())); ?>" title="Edit Device" class="btn btn-mini btn-warning "><i class="icon-pencil"></i></a>
                     <a href="<?php echo $this->url(array('action' => 'delete-quote-device', 'id' => $quoteDevice->getId())); ?>" title="Remove Device" class="btn btn-mini btn-danger "><i class="icon-trash"></i></a>
@@ -78,30 +79,3 @@
         <?php endforeach; ?>
     </div>
 </div>
-<h2>Quote Var Dump (DEBUG DATA!!!!)</h2>
-<div class="accordion" id="accordion3">
-    <div class="accordion-group">
-        <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapseDebug1">Quote Devices vardump</a>
-        </div>
-        <div id="collapseDebug1" class="accordion-body collapse">
-            <div class="accordion-inner">
-                <pre><?php var_dump($this->quote->getQuoteDevices()); ?></pre>
-            </div>
-        </div>
-    </div>
-    <div class="accordion-group">
-        <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapseDebug2">Quote Vardump</a>
-        </div>
-        <div id="collapseDebug2" class="accordion-body collapse">
-            <div class="accordion-inner">
-                <pre><?php var_dump($this->quote); ?></pre>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-

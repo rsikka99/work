@@ -80,7 +80,7 @@ class Quotegen_Form_Option extends EasyBib_Form
         ));
         
         $optionCategoryCheckBox = new Zend_Form_Element_MultiCheckbox('categories', array (
-                'label' => 'Options:' 
+                'label' => 'Categories:' 
         ));
         
         /* @var $category Quotegen_Model_Category */

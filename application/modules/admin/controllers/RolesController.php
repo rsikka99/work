@@ -18,7 +18,7 @@ class Admin_RolesController extends Zend_Controller_Action
 
     public function indexAction ()
     {
-        $roleMapper = new Admin_Model_RoleMapper();
+        $roleMapper = new Admin_Model_Mapper_Role();
         $roleList = $roleMapper->fetchAll();
         $this->view->roles = $roleList;
     }
@@ -33,7 +33,7 @@ class Admin_RolesController extends Zend_Controller_Action
         $action = $this->getRequest()->getParam("action");
         $privilege_id = $this->getRequest()->getParam("id");
         
-        $privMapper = new Admin_Model_PrivilegeMapper();
+        $privMapper = new Admin_Model_Mapper_Privilege();
         
         if (strcasecmp($operation, "delrole") === 0)
         {
@@ -68,7 +68,7 @@ class Admin_RolesController extends Zend_Controller_Action
     public function getprivilegesAction ()
     {
         $this->view->layout()->disableLayout();
-        $privMapper = new Admin_Model_PrivilegeMapper();
+        $privMapper = new Admin_Model_Mapper_Privilege();
         $order = null;
         $limit = null;
         $offset = null;

@@ -100,74 +100,44 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
      * Syncs a device configuration into a quote device for a quote.
      * If a device does not exist for the current quote it will create it for you.
      *
-     * @param number $deviceConfigurationId
-     *            The device configuration id
-     * @return Quotegen_Model_Quote_Device The quote device
+     * @param Quotegen_Model_QuoteDevice $quoteDevice
+     *            The quote device to sync
+     * @param boolean $syncOptions
+     *            If set to true, it will sync the quote options associated with the quote device
+     * @return boolean Returns true if the sync was successful. If it was false, chances are it is because there is no
+     *         link between the quote device and a device in the system.
      */
-    protected function syncDeviceConfigurationToQuote ($deviceConfigurationId)
+    protected function performSyncOnQuoteDevice (Quotegen_Model_QuoteDevice $quoteDevice, $syncOptions = true)
     {
-        $deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($deviceConfigurationId);
-        // Check to see if it exists already
-        $quoteDeviceConfiguration = Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->findByDeviceId($deviceConfigurationId);
-        $quoteDevice = null;
+        $device = $quoteDevice->getDevice();
         
-        // If the quote configuraiton doesnt exist, make one.
-        if ($quoteDeviceConfiguration)
+        // If we don't have a link back to the master then we return false.
+        if (! $device)
         {
-            $quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($quoteDeviceConfiguration->getQuoteDeviceId());
-            $quoteDeviceId = $quoteDeviceConfiguration->getQuoteDeviceId();
-        }
-        else
-        {
-            // Insert new quote device with defaults
-            $quoteDevice = new Quotegen_Model_QuoteDevice();
-            $quoteDevice->setMargin(0);
-            $quoteDevice->setQuantity(1);
-            $quoteDevice->setQuoteId($this->_quoteId);
-            $quoteDevice->setName('Temp Name');
-            $quoteDevice->setSku('Temp Sku');
-            $quoteDevice->setPrice(0);
-            
-            $quoteDevice->setOemCostPerPageMonochrome(0);
-            $quoteDevice->setOemCostPerPageColor(0);
-            $quoteDevice->setCompCostPerPageMonochrome(0);
-            $quoteDevice->setCompCostPerPageColor(0);
-            
-            $quoteDeviceId = Quotegen_Model_Mapper_QuoteDevice::getInstance()->insert($quoteDevice);
-            
-            // Insert teh link
-            $quoteDeviceConfiguration = new Quotegen_Model_QuoteDeviceConfiguration();
-            $quoteDeviceConfiguration->setMasterDeviceId($deviceConfigurationId);
-            $quoteDeviceConfiguration->setQuoteDeviceId($quoteDeviceId);
-            Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->insert($quoteDeviceConfiguration);
+            return false;
         }
         
-        // Perform the device sync
-        $quoteDevice = $this->syncDevice($quoteDevice, $deviceConfiguration->getDevice());
-        
-        // Save the quote device to the database
+        // Sync the device and save
+        $quoteDevice = $this->syncDevice($quoteDevice, $device);
         Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
         
-        // Delete all the options and copy them again
-        Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->deleteAllOptionsForQuoteDevice($quoteDeviceId);
-        
-        // Clone all the things (options)!
-        $quoteDeviceOption = new Quotegen_Model_QuoteDeviceOption();
-        $quoteDeviceOption->setQuoteDeviceId($quoteDeviceId);
-        
-        /* @var $deviceConfigurationOption Quotegen_Model_DeviceConfigurationOption */
-        foreach ( $deviceConfiguration->getOptions() as $deviceConfigurationOption )
+        // Sync our options
+        if ($syncOptions)
         {
-            $option = $deviceConfigurationOption->getOption();
-            
-            // Perform the option sync
-            $quoteDeviceOption = $this->syncOption($quoteDeviceOption, $deviceConfigurationOption->getOption());
-            
-            // Save the device option
-            Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->insert($quoteDeviceOption);
+            /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
+            foreach ( $quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption )
+            {
+                // Only sync options that still have a link back to the master
+                $option = $quoteDeviceOption->getOption();
+                if ($option)
+                {
+                    $quoteDeviceOption = $this->syncOption($quoteDeviceOption, $option);
+                    Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->save($quoteDeviceOption);
+                }
+            }
         }
         
-        return $quoteDevice;
+        return true;
     }
 
     /**
@@ -251,24 +221,37 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
     }
 
     /**
-     * Verifies that the device configuration selected belongs to the quote
+     * Gets a quote device and validates to ensure it is part of the current quote.
+     * If it is not, then we redirect the user.
      *
-     * @param unknown_type $deviceConfigurationId            
-     * @return boolean
+     * @param number $quoteDeviceId
+     *            The quote device id
+     * @return Ambigous <Quotegen_Model_QuoteDevice, void>
      */
-    public function verifyDeviceConfigurationBelongsToQuote ($deviceConfigurationId)
+    public function getQuoteDevice ($paramIdField = 'id')
     {
-        $valid = false;
+        $quoteDeviceId = $this->_getParam($paramIdField, FALSE);
         
-        $quoteDeviceConfiguration = Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->findByDeviceId($deviceConfigurationId);
-        if (! $quoteDeviceConfiguration || $quoteDeviceConfiguration->getQuoteDevice()->getQuoteId() !== $this->_quoteId)
+        // Make sure they passed an id to us
+        if (! $quoteDeviceId)
         {
             $this->_helper->flashMessenger(array (
-                    'warning' => 'You may only edit device configurations associated with this quote.' 
+                    'warning' => 'Please select a device to edit first.' 
             ));
             $this->_helper->redirector('index');
         }
         
-        return $valid;
+        $quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($quoteDeviceId);
+        
+        // Validate that we have a quote device that is associated with the quote
+        if (! $quoteDevice || $quoteDevice->getQuoteId() !== $this->_quoteId)
+        {
+            $this->_helper->flashMessenger(array (
+                    'warning' => 'You may only edit devices associated with this quote.' 
+            ));
+            $this->_helper->redirector('index');
+        }
+        
+        return $quoteDevice;
     }
 }

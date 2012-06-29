@@ -1,12 +1,9 @@
 <?php if ($this->quote): $quote = $this->quote; /* @var $quote Quotegen_Model_Quote */ ?>
-<!-- <div class="clearfix"> -->
-<div class="">
-    <div class="pull-right">
-        <dl class="dl-horizontal">
-            <dt>Client Name:</dt><dd><?php echo $quote->getClient()->getName(); ?></dd>
-            <dt>Date Created:</dt><dd><?php echo date('m/d/Y H:i', strtotime($quote->getDateCreated())); ?></dd>
-            <dt>Last Modified:</dt><dd><?php echo date('m/d/Y H:i', strtotime($quote->getDateModified())); ?></dd>
-        </dl>
-    </div>
+<div class="pull-right">
+    <dl class="dl-horizontal">
+        <dt>Client Name:</dt><dd><?php echo $quote->getClient()->getName(); ?></dd>
+        <dt>Date Created:</dt><dd><?php echo date('m/d/Y H:i', strtotime($quote->getDateCreated())); ?></dd>
+        <dt>Last Modified:</dt><dd><?php echo date('m/d/Y H:i', strtotime($quote->getDateModified())); ?></dd>
+    </dl>
 </div>
 <?php endif; ?>

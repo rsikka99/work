@@ -18,46 +18,64 @@
                     <action>index</action>
                     <resource>quotegen_quote_index</resource>
                     <pages>
-                        <myquotes>
-                            <label>Create New</label>
-                            <class></class>
-                            <module>quotegen</module>
-                            <controller>quote</controller>
-                            <action>create</action>
-                            <resource>quotegen_quote_index</resource>
-                        </myquotes>
-                        <create>
-                            <label>My Quotes</label>
-                            <class></class>
+                        <viewall>
+                            <label>View All</label>
                             <module>quotegen</module>
                             <controller>quote</controller>
                             <action>index</action>
-                            <resource>quotegen_quote_index</resource>
+                            <resource>quotegen_build_index</resource>
+                        </viewall>
+                        <create>
+                            <label>Create New</label>
+                            <module>quotegen</module>
+                            <controller>quote</controller>
+                            <action>create</action>
+                            <resource>quotegen_build_create</resource>
                         </create>
-                        <edit>
-                            <label>Edit</label>
+                        <myquotes>
+                            <label>Build</label>
+                            <class>dropdown subdropdown</class>
                             <module>quotegen</module>
-                            <controller>quote</controller>
-                            <action>edit</action>
-                            <resource>quotegen_quote_edit</resource>
+                            <controller>build</controller>
+                            <action>index</action>
                             <visible>0</visible>
-                        </edit>
-                        <delete>
-                            <label>Delete</label>
-                            <module>quotegen</module>
-                            <controller>quote</controller>
-                            <action>delete</action>
-                            <resource>quotegen_quote_delete</resource>
-                            <visible>0</visible>
-                        </delete>
-                        <view>
-                            <label>View</label>
-                            <module>quotegen</module>
-                            <controller>quote</controller>
-                            <action>view</action>
-                            <resource>quotegen_quote_view</resource>
-                            <visible>0</visible>
-                        </view>
+                            <resource>quotegen_build_index</resource>
+                            <pages>
+                                <addDevice>
+                                    <label>Add New Device</label>
+                                    <module>quotegen</module>
+                                    <controller>build</controller>
+                                    <action>add-quote-device</action>
+                                    <resource>quotegen_build_add-quote-device</resource>
+                                </addDevice>
+                                <editDevice>
+                                    <label>Edit Device</label>
+                                    <module>quotegen</module>
+                                    <controller>build</controller>
+                                    <action>edit-quote-device</action>
+                                    <visible>0</visible>
+                                    <resource>quotegen_build_edit-quote-device</resource>
+                                    <pages>
+                                        <addOptionsToDevice>
+                                            <label>Add Options</label>
+                                            <module>quotegen</module>
+                                            <controller>build</controller>
+                                            <action>add-options-to-quote-device</action>
+                                            <visible>0</visible>
+                                            <resource>quotegen_build_add-options-to-quote-device</resource>
+                                        </addOptionsToDevice>
+                                    </pages>
+                                </editDevice>
+                                <removeDevice>
+                                    <label>Remove Device</label>
+                                    <module>quotegen</module>
+                                    <controller>build</controller>
+                                    <action>delete-quote-device</action>
+                                    <visible>0</visible>
+                                    <resource>quotegen_build_delete-quote-device</resource>
+                                </removeDevice>
+                            </pages>
+                        </myquotes>
                     </pages>
                 </quotes>
                 <settings>
@@ -76,31 +94,22 @@
                             <action>edit</action>
                             <resource>quotegen_quotesetting_edit</resource>
                         </preferences>
-                        <systempreferences>
-                            <label>System Preferences</label>
-                            <class></class>
-                            <module>quotegen</module>
-                            <controller>quotesetting</controller>
-                            <action>editdefault</action>
-                            <resource>quotegen_quotesetting_editdefault</resource>
-                        </systempreferences>
                     </pages>
                 </settings>
                 <administration>
                     <label>Administration</label>
                     <class>dropdown</class>
                     <module>quotegen</module>
-                    <controller>quote</controller>
+                    <controller>administration</controller>
                     <action>index</action>
                     <resource>quotegen_quote_index</resource>
                     <pages>
                         <configuration>
                             <label>Configuration</label>
-                            <class></class>
                             <module>quotegen</module>
-                            <controller>quote</controller>
-                            <action>create</action>
-                            <resource>quotegen_quote_index</resource>
+                            <controller>quotesetting</controller>
+                            <action>editdefault</action>
+                            <resource>quotegen_quotesetting_editdefault</resource>
                         </configuration>
                         <options>
                             <label>Options</label>
@@ -260,6 +269,7 @@
                             <module>quotegen</module>
                             <controller>deviceconfiguration</controller>
                             <action>index</action>
+                            <visible>0</visible>
                             <resource>quotegen_deviceconfiguration_index</resource>
                             <pages>
                                 <viewall>

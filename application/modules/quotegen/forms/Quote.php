@@ -32,6 +32,7 @@ class Quotegen_Form_Quote extends EasyBib_Form
         }
         
         $clients = new Zend_Form_Element_Select('clientId');
+        $clients->setLabel('Select Client:');
         $clients->addMultiOptions($clientList);
         $clients->addValidator('InArray', false, array (
                 $clientListValidator 

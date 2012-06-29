@@ -24,7 +24,6 @@ class Quotegen_QuotesettingController extends Zend_Controller_Action
         $paginator->setItemCountPerPage(25);
         
         // Get all current quote settings
-        // TODO:  Get user specific quote settings
         $this->view->paginator = $paginator;
     }
 
