@@ -9,6 +9,12 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
      *
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_UserDeviceConfiguration';
+    
+    /*
+     * Define the primary key of the model association
+    */
+    public $col_deviceConfigurationId = 'deviceConfigurationId';
+    public $col_userId = 'userId';
 
     /**
      * Gets an instance of the mapper
@@ -18,6 +24,19 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
     public static function getInstance ()
     {
         return self::getCachedInstance();
+    }
+
+    /**
+     * Counts and returns the amount of rows by deviceConfigurationId
+     * 
+     * @param int $deviceConfigurationId
+     * @return number The amount of rows in the database.
+     */
+    public function countByDeviceId ($deviceConfigurationId)
+    {
+        return $this->count(array (
+                "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId 
+        ));
     }
 
     /**
@@ -56,14 +75,14 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
         
         if ($primaryKey === null)
         {
-            $primaryKey [] = $data ['deviceConfigurationId'];
-            $primaryKey [] = $data ['userId'];
+            $primaryKey [] = $data [$this->col_deviceConfigurationId];
+            $primaryKey [] = $data [$this->col_userId];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'deviceConfigurationId = ?' => $primaryKey [0], 
-                'userId = ?' => $primaryKey [1] 
+                "{$this->col_deviceConfigurationId} = ?" => $primaryKey [0], 
+                "{$this->col_userId} = ?" => $primaryKey [1] 
         ));
         
         // Save the object into the cache
@@ -85,20 +104,33 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
         if ($userDeviceConfiguration instanceof Quotegen_Model_UserDeviceConfiguration)
         {
             $whereClause = array (
-                    'deviceConfigurationId = ?' => $userDeviceConfiguration->getDeviceConfigurationId(), 
-                    'userId = ?' => $userDeviceConfiguration->getUserId() 
+                    "{$this->col_deviceConfigurationId} = ?" => $userDeviceConfiguration->getDeviceConfigurationId(), 
+                    "{$this->col_userId} = ?" => $userDeviceConfiguration->getUserId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'deviceConfigurationId = ?' => $userDeviceConfiguration [0], 
-                    'userId = ?' => $userDeviceConfiguration [1] 
+                    "{$this->col_deviceConfigurationId} = ?" => $userDeviceConfiguration [0], 
+                    "{$this->col_userId} = ?" => $userDeviceConfiguration [1] 
             );
         }
         
         $rowsAffected = $this->getDbTable()->delete($whereClause);
         return $rowsAffected;
+    }
+
+    /**
+     * Deletes a deviceConfiguration by deviceConfigurationId
+     *
+     * @param int $deviceConfigurationId            
+     * @return number The amount of rows affected
+     */
+    public function deleteUserDeviceConfigurationByDeviceId ($deviceConfigurationId)
+    {
+        return $rowsAffected = $this->getDbTable()->delete(array (
+                "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId 
+        ));
     }
 
     /**
@@ -136,11 +168,11 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
      * Fetches a userDeviceConfiguration
      *
      * @param $where string|array|Zend_Db_Table_Select
-     *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
+     *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
      * @param $order string|array
-     *            OPTIONAL An SQL ORDER clause.
+     *            OPTIONAL: A SQL ORDER clause.
      * @param $offset int
-     *            OPTIONAL An SQL OFFSET value.
+     *            OPTIONAL: A SQL OFFSET value.
      * @return object Quotegen_Model_UserDeviceConfiguration
      */
     public function fetch ($where = null, $order = null, $offset = null)
@@ -165,13 +197,13 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
      * Fetches all userDeviceConfiguration
      *
      * @param $where string|array|Zend_Db_Table_Select
-     *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
+     *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
      * @param $order string|array
-     *            OPTIONAL An SQL ORDER clause.
+     *            OPTIONAL: A SQL ORDER clause.
      * @param $count int
-     *            OPTIONAL An SQL LIMIT count. (Defaults to 25)
+     *            OPTIONAL: A SQL LIMIT count. (Defaults to 25)
      * @param $offset int
-     *            OPTIONAL An SQL LIMIT offset.
+     *            OPTIONAL: A SQL LIMIT offset.
      * @return multitype:Quotegen_Model_UserDeviceConfiguration
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
@@ -202,8 +234,8 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
     public function getWhereId ($id)
     {
         return array (
-                'deviceConfigurationId = ?' => $id [0], 
-                'userId = ?' => $id [1] 
+                "{$this->col_deviceConfigurationId} = ?" => $id [0], 
+                "{$this->col_userId} = ?" => $id [1] 
         );
     }
     

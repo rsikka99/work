@@ -16,18 +16,18 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
     protected $_quoteDeviceId;
     
     /**
-     * The device configuration id
+     * The device id
      *
      * @var int
      */
-    protected $_deviceConfigurationId;
+    protected $_masterDeviceId;
     
     /**
-     * The device configuration
+     * The device
      *
-     * @var Quotegen_Model_DeviceConfiguration
+     * @var Quotegen_Model_Device
      */
-    protected $_deviceConfiguration;
+    protected $_device;
     
     /**
      * The quote device
@@ -47,8 +47,8 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
         }
         if (isset($params->quoteDeviceId) && ! is_null($params->quoteDeviceId))
             $this->setQuoteDeviceId($params->quoteDeviceId);
-        if (isset($params->deviceConfigurationId) && ! is_null($params->deviceConfigurationId))
-            $this->setDeviceConfigurationId($params->deviceConfigurationId);
+        if (isset($params->masterDeviceId) && ! is_null($params->masterDeviceId))
+            $this->setMasterDeviceId($params->masterDeviceId);
     }
     
     /*
@@ -58,7 +58,7 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
     {
         return array (
                 'quoteDeviceId' => $this->getQuoteDeviceId(), 
-                'deviceConfigurationId' => $this->getDeviceConfigurationId() 
+                'masterDeviceId' => $this->getMasterDeviceId() 
         );
     }
 
@@ -85,50 +85,50 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
     }
 
     /**
-     * Gets the device configuration id
+     * Gets the device id
      *
-     * @return the $_deviceConfigurationId
+     * @return number
      */
-    public function getDeviceConfigurationId ()
+    public function getMasterDeviceId ()
     {
-        return $this->_deviceConfigurationId;
+        return $this->_masterDeviceId;
     }
 
     /**
-     * Sets the new device configuration id
+     * Sets the new device id
      *
-     * @param int $_deviceConfigurationId
-     *            the new device configuration id
+     * @param int $_deviceId
+     *            The new device id.
      */
-    public function setDeviceConfigurationId ($_deviceConfigurationId)
+    public function setMasterDeviceId ($_deviceId)
     {
-        $this->_deviceConfigurationId = $_deviceConfigurationId;
+        $this->_masterDeviceId = $_deviceId;
         return $this;
     }
 
     /**
-     * Gets the associated device configuration
+     * Gets the associated device
      *
-     * @return Quotegen_Model_DeviceConfiguration The device configuration
+     * @return Quotegen_Model_Device The device.
      */
-    public function getDeviceConfiguration ()
+    public function getDevice ()
     {
-        if (! isset($this->_deviceConfiguration))
+        if (! isset($this->_device))
         {
-            $this->_deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($this->getDeviceConfigurationId());
+            $this->_device = Quotegen_Model_Mapper_Device::getInstance()->find($this->getMasterDeviceId());
         }
-        return $this->_deviceConfiguration;
+        return $this->_device;
     }
 
     /**
-     * Sets the associated device configuration
+     * Sets the associated device
      *
-     * @param Quotegen_Model_DeviceConfiguration $_deviceConfiguration
-     *            The device configuration.
+     * @param Quotegen_Model_Device $_device
+     *            The device.
      */
-    public function setDeviceConfiguration ($_deviceConfiguration)
+    public function setDevice ($_device)
     {
-        $this->_deviceConfiguration = $_deviceConfiguration;
+        $this->_device = $_device;
         return $this;
     }
 

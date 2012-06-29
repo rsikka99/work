@@ -14,6 +14,11 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
      *
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_GlobalDeviceConfiguration';
+    
+    /*
+     * Define the primary key of the model association
+    */
+    public $col_deviceConfigurationId = 'deviceConfigurationId';
 
     /**
      * Gets an instance of the mapper
@@ -23,6 +28,19 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
     public static function getInstance ()
     {
         return self::getCachedInstance();
+    }
+    
+    /**
+     * Counts and returns the amount of rows by deviceConfigurationId
+     *
+     * @param int $deviceConfigurationId
+     * @return number The amount of rows in the database.
+     */
+    public function countByDeviceId ($deviceConfigurationId)
+    {
+        return $this->count(array (
+                "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId
+        ));
     }
 
     /**
@@ -62,12 +80,12 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
         
         if ($primaryKey === null)
         {
-            $primaryKey = $data ['deviceConfigurationId'];
+            $primaryKey = $data [$this->col_deviceConfigurationId];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'deviceConfigurationId = ?' => $primaryKey 
+                "{$this->col_deviceConfigurationId} = ?" => $primaryKey 
         ));
         
         // Save the object into the cache
@@ -89,13 +107,13 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
         if ($object instanceof Quotegen_Model_GlobalDeviceConfiguration)
         {
             $whereClause = array (
-                    'deviceConfigurationId = ?' => $object->getDeviceConfigurationId() 
+                    "{$this->col_deviceConfigurationId} = ?" => $object->getDeviceConfigurationId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'deviceConfigurationId = ?' => $object 
+                    "{$this->col_deviceConfigurationId} = ?" => $object 
             );
         }
         
@@ -138,11 +156,11 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
      * Fetches a GlobalDeviceConfiguration
      *
      * @param $where string|array|Zend_Db_Table_Select
-     *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
+     *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
      * @param $order string|array
-     *            OPTIONAL An SQL ORDER clause.
+     *            OPTIONAL: A SQL ORDER clause.
      * @param $offset int
-     *            OPTIONAL An SQL OFFSET value.
+     *            OPTIONAL: A SQL OFFSET value.
      * @return Quotegen_Model_GlobalDeviceConfiguration
      */
     public function fetch ($where = null, $order = null, $offset = null)
@@ -165,13 +183,13 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
      * Fetches all GlobalDeviceConfigurations
      *
      * @param $where string|array|Zend_Db_Table_Select
-     *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
+     *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
      * @param $order string|array
-     *            OPTIONAL An SQL ORDER clause.
+     *            OPTIONAL: A SQL ORDER clause.
      * @param $count int
-     *            OPTIONAL An SQL LIMIT count. (Defaults to 25)
+     *            OPTIONAL: A SQL LIMIT count. (Defaults to 25)
      * @param $offset int
-     *            OPTIONAL An SQL LIMIT offset.
+     *            OPTIONAL: A SQL LIMIT offset.
      * @return multitype:Quotegen_Model_GlobalDeviceConfiguration
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
@@ -199,7 +217,7 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
     public function getWhereId ($id)
     {
         return array (
-                'deviceConfigurationId = ?' => $id 
+                "{$this->col_deviceConfigurationId} = ?" => $id 
         );
     }
     

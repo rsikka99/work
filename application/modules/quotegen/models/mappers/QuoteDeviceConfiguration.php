@@ -2,6 +2,16 @@
 
 class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abstract
 {
+    /*
+     * Column name definitions. Define all columns up here and use them down below.
+     */
+    public $col_quoteDeviceId = 'quoteDeviceId';
+    public $col_masterDeviceId = 'masterDeviceId';
+    
+    /*
+     * Mapper Definitions
+     */
+    
     /**
      * The default db table class to use
      *
@@ -18,6 +28,19 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
     public static function getInstance ()
     {
         return self::getCachedInstance();
+    }
+
+    /**
+     * Counts and returns the amount of rows by deviceConfigurationId
+     *
+     * @param int $deviceConfigurationId            
+     * @return number The amount of rows in the database.
+     */
+    public function countByDeviceId ($deviceConfigurationId)
+    {
+        return $this->count(array (
+                'deviceConfigurationId = ?' => $deviceConfigurationId 
+        ));
     }
 
     /**
@@ -57,14 +80,14 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
         
         if ($primaryKey === null)
         {
-            $primaryKey [] = $data ['quoteDeviceId'];
-            $primaryKey [] = $data ['deviceConfigurationId'];
+            $primaryKey [] = $data [$this->col_quoteDeviceId];
+            $primaryKey [] = $data [$this->col_masterDeviceId];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'quoteDeviceId = ?' => $primaryKey [0], 
-                'deviceConfigurationId = ?' => $primaryKey [1] 
+                "{$this->col_quoteDeviceId} = ?" => $primaryKey [0], 
+                "{$this->col_masterDeviceId} = ?" => $primaryKey [1] 
         ));
         
         // Save the object into the cache
@@ -86,20 +109,33 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
         if ($object instanceof Quotegen_Model_QuoteDeviceConfiguration)
         {
             $whereClause = array (
-                    'quoteDeviceId = ?' => $object->getQuoteDeviceId(), 
-                    'deviceConfigurationId = ?' => $object->getDeviceConfigurationId() 
+                    "{$this->col_quoteDeviceId} = ?" => $object->getQuoteDeviceId(), 
+                    "{$this->col_masterDeviceId} = ?" => $object->getMasterDeviceId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'quoteDeviceId = ?' => $object [0], 
-                    'deviceConfigurationId = ?' => $object [1] 
+                    "{$this->col_quoteDeviceId} = ?" => $object [0], 
+                    "{$this->col_masterDeviceId} = ?" => $object [1] 
             );
         }
         
         $rowsAffected = $this->getDbTable()->delete($whereClause);
         return $rowsAffected;
+    }
+
+    /**
+     * Delete a quoteDeviceConfiguration by deviceConfigurationId
+     * 
+     * @param int $deviceConfigurationId            
+     * @return number The number of rows affected
+     */
+    public function deleteQuoteDeviceConfigurationById ($deviceConfigurationId)
+    {
+        return $this->getDbTable()->delete(array (
+                'deviceConfigurationId = ?' => $deviceConfigurationId 
+        ));
     }
 
     /**
@@ -134,21 +170,21 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
     }
 
     /**
-     * Finds a quoteDeviceConfiguration by device configuration id
+     * Finds a quoteDeviceConfiguration by device id
      *
      * @param $id int
      *            The id of the device configuration to find
      * @return Quotegen_Model_QuoteDeviceConfiguration
      */
-    public function findByDeviceConfigurationId ($id)
+    public function findByDeviceId ($id)
     {
         return $this->fetch(array (
-                'deviceConfigurationId = ?' => $id 
+                "{$this->col_masterDeviceId} = ?" => $id 
         ));
     }
 
     /**
-     * Finds a quoteDeviceConfiguration by device configuration id
+     * Finds a quoteDeviceConfiguration by quote device id
      *
      * @param $id int
      *            The id of the quote device to find
@@ -157,7 +193,7 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
     public function findByQuoteDeviceId ($id)
     {
         return $this->fetch(array (
-                'quoteDeviceId = ?' => $id 
+                "{$this->col_quoteDeviceId} = ?" => $id 
         ));
     }
 
@@ -165,11 +201,11 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
      * Fetches a quoteDeviceConfiguration
      *
      * @param $where string|array|Zend_Db_Table_Select
-     *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
+     *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
      * @param $order string|array
-     *            OPTIONAL An SQL ORDER clause.
+     *            OPTIONAL: A SQL ORDER clause.
      * @param $offset int
-     *            OPTIONAL An SQL OFFSET value.
+     *            OPTIONAL: A SQL OFFSET value.
      * @return Quotegen_Model_QuoteDeviceConfiguration
      */
     public function fetch ($where = null, $order = null, $offset = null)
@@ -183,8 +219,6 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
         $object = new Quotegen_Model_QuoteDeviceConfiguration($row->toArray());
         
         // Save the object into the cache
-        $primaryKey [0] = $object->getQuoteDeviceId();
-        $primaryKey [1] = $object->getDeviceConfigurationId();
         $this->saveItemToCache($object);
         
         return $object;
@@ -194,13 +228,13 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
      * Fetches all quoteDeviceConfigurations
      *
      * @param $where string|array|Zend_Db_Table_Select
-     *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
+     *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
      * @param $order string|array
-     *            OPTIONAL An SQL ORDER clause.
+     *            OPTIONAL: A SQL ORDER clause.
      * @param $count int
-     *            OPTIONAL An SQL LIMIT count. (Defaults to 25)
+     *            OPTIONAL: A SQL LIMIT count. (Defaults to 25)
      * @param $offset int
-     *            OPTIONAL An SQL LIMIT offset.
+     *            OPTIONAL: A SQL LIMIT offset.
      * @return multitype:Quotegen_Model_QuoteDeviceConfiguration
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
@@ -212,8 +246,6 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
             $object = new Quotegen_Model_QuoteDeviceConfiguration($row->toArray());
             
             // Save the object into the cache
-            $primaryKey [0] = $object->getQuoteDeviceId();
-            $primaryKey [1] = $object->getDeviceConfigurationId();
             $this->saveItemToCache($object);
             
             $entries [] = $object;
@@ -230,8 +262,8 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
     public function getWhereId ($id)
     {
         return array (
-                'quoteDeviceId = ?' => $id [0], 
-                'deviceConfigurationId = ?' => $id [1] 
+                "{$this->col_quoteDeviceId} = ?" => $id [0], 
+                "{$this->col_masterDeviceId} = ?" => $id [1] 
         );
     }
     
@@ -242,7 +274,7 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
     {
         return array (
                 $object->getQuoteDeviceId(), 
-                $object->getDeviceConfigurationId() 
+                $object->getMasterDeviceId() 
         );
     }
 }

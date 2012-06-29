@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
+class Quotegen_Form_QuoteDevice extends EasyBib_Form
 {
     
     /**
@@ -40,32 +40,52 @@ class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
          *
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
-        $this->setAttrib('class', 'form-horizontal button-styled');
+        $this->setAttrib('class', 'form-horizontal');
         
         if ($this->_id > 0)
         {
-            $device = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($this->_id);
+            $quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($this->_id);
+            
             $deviceName = new My_Form_Element_Paragraph('deviceName');
-            $deviceName->setValue($device->getDevice()
-                ->getMasterDevice()
-                ->getFullDeviceName());
+            $deviceName->setValue($quoteDevice->getName());
             $this->addElement($deviceName);
             
-            /* @var $deviceConfigurationOption Quotegen_Model_DeviceConfigurationOption */
-            foreach ( $device->getOptions() as $deviceConfigurationOption )
-            {
-                $optionElement = $this->createElement('text', "option-{$deviceConfigurationOption->getOptionId()}", array (
-                        'label' => $deviceConfigurationOption->getOption()
-                            ->getName(), 
-                        'value' => $deviceConfigurationOption->getQuantity(), 
-                        'description' => $deviceConfigurationOption->getOptionId() 
-                )
-                );
-                $optionElement->setAttrib('class', 'span1');
-                $this->_optionElements [] = $optionElement;
-            }
+            $this->addElement('text', 'margin', array (
+                    'label' => 'Margin:' 
+            ));
             
-            $this->addElements($this->_optionElements);
+            $this->addElement('text', 'price', array (
+                    'label' => 'Price:' 
+            ));
+            
+            $this->addElement('text', 'quantity', array (
+                    'label' => 'Quantity:' 
+            ));
+            
+            /* @var $deviceConfigurationOption Quotegen_Model_QuoteDeviceOption */
+            foreach ( $quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption )
+            {
+                $object = new stdClass();
+                $optionElement = $this->createElement('text', "option-{$quoteDeviceOption->getId()}-quantity", array (
+                        'label' => $quoteDeviceOption->getName(), 
+                        'value' => $quoteDeviceOption->getQuantity(), 
+                        'description' => $quoteDeviceOption->getId() 
+                ));
+                $optionElement->setAttrib('class', 'span1');
+                $this->addElement($optionElement);
+                $object->quantity = $optionElement;
+                
+                $optionElement = $this->createElement('text', "option-{$quoteDeviceOption->getId()}-includedQuantity", array (
+                        'label' => $quoteDeviceOption->getName(), 
+                        'value' => $quoteDeviceOption->getIncludedQuantity(), 
+                        'description' => $quoteDeviceOption->getId() 
+                ));
+                $optionElement->setAttrib('class', 'span1');
+                $this->addElement($optionElement);
+                $object->includedQuantity = $optionElement;
+                
+                $this->_optionElements [] = $object;
+            }
             
             // Add the add option
             $this->addElement('submit', 'add', array (
@@ -78,9 +98,9 @@ class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
         {
             $quoteDeviceList = array ();
             /* @var $device Quotegen_Model_Device */
-            foreach ( Quotegen_Model_Mapper_Device::getInstance()->fetchAll() as $device )
+            foreach ( Quotegen_Model_Mapper_Device::getInstance()->fetchAll() as $quoteDevice )
             {
-                $quoteDeviceList [$device->getMasterDeviceId()] = $device->getMasterDevice()->getFullDeviceName();
+                $quoteDeviceList [$quoteDevice->getMasterDeviceId()] = $quoteDevice->getMasterDevice()->getFullDeviceName();
             }
             $this->addElement('select', 'masterDeviceId', array (
                     'label' => 'Available Devices:', 
@@ -112,7 +132,7 @@ class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
                     array (
                             'ViewScript', 
                             array (
-                                    'viewScript' => 'deviceconfiguration/form/editdeviceconfiguration.phtml' 
+                                    'viewScript' => 'build/form/quotedevice.phtml' 
                             ) 
                     ) 
             ));

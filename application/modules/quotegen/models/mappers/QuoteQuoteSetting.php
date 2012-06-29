@@ -9,6 +9,12 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
      *
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_QuoteQuoteSetting';
+    
+    /*
+     * Define the primary key of the model association
+    */
+    public $col_quoteId = 'quoteId';
+    public $col_quoteSettingId = 'quoteSettingId';
 
     /**
      * Gets an instance of the mapper
@@ -59,14 +65,14 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
         
         if ($primaryKey === null)
         {
-            $primaryKey [] = $data ['quoteId'];
-            $primaryKey [] = $data ['quoteSettingId'];
+            $primaryKey [] = $data [$this->col_quoteId];
+            $primaryKey [] = $data [$this->col_quoteSettingId];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'quoteId = ?' => $primaryKey [0], 
-                'quoteSettingId = ?' => $primaryKey [1] 
+                "{$this->col_quoteId} = ?" => $primaryKey [0], 
+                "{$this->col_quoteSettingId} = ?" => $primaryKey [1] 
         ));
         
         // Save the object into the cache
@@ -88,15 +94,15 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_QuoteQuoteSetting)
         {
             $whereClause = array (
-                    'quoteId = ?' => $object->getQuoteId(), 
-                    'quoteSettingId = ?' => $object->getQuoteSettingId() 
+                    "{$this->col_quoteId} = ?" => $object->getQuoteId(), 
+                    "{$this->col_quoteSettingId} = ?" => $object->getQuoteSettingId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'quoteId = ?' => $object [0], 
-                    'quoteSettingId = ?' => $object [1] 
+                    "{$this->col_quoteId} = ?" => $object [0], 
+                    "{$this->col_quoteSettingId} = ?" => $object [1] 
             );
         }
         
@@ -139,11 +145,11 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
      * Fetches a template
      *
      * @param $where string|array|Zend_Db_Table_Select
-     *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
+     *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
      * @param $order string|array
-     *            OPTIONAL An SQL ORDER clause.
+     *            OPTIONAL: A SQL ORDER clause.
      * @param $offset int
-     *            OPTIONAL An SQL OFFSET value.
+     *            OPTIONAL: A SQL OFFSET value.
      * @return Quotegen_Model_QuoteQuoteSetting
      */
     public function fetch ($where = null, $order = null, $offset = null)
@@ -168,13 +174,13 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
      * Fetches all templates
      *
      * @param $where string|array|Zend_Db_Table_Select
-     *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
+     *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
      * @param $order string|array
-     *            OPTIONAL An SQL ORDER clause.
+     *            OPTIONAL: A SQL ORDER clause.
      * @param $count int
-     *            OPTIONAL An SQL LIMIT count. (Defaults to 25)
+     *            OPTIONAL: A SQL LIMIT count. (Defaults to 25)
      * @param $offset int
-     *            OPTIONAL An SQL LIMIT offset.
+     *            OPTIONAL: A SQL LIMIT offset.
      * @return multitype:Quotegen_Model_QuoteQuoteSetting
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
@@ -204,7 +210,8 @@ class Quotegen_Model_Mapper_QuoteQuoteSetting extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array (
-                'id = ?' => $id 
+                "{$this->col_quoteId} = ?" => $id [0], 
+                "{$this->col_quoteSettingId} = ?" => $id [1] 
         );
     }
     

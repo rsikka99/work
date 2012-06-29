@@ -37,6 +37,20 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
      */
     protected $_options;
     
+    /**
+     * The name of the user configuration
+     *
+     * @var string
+     */
+    protected $_name;
+    
+    /**
+     * The description of the configuration
+     *
+     * @var string
+     */
+    protected $_description;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -50,6 +64,10 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
             $this->setId($params->id);
         if (isset($params->masterDeviceId) && ! is_null($params->masterDeviceId))
             $this->setMasterDeviceId($params->masterDeviceId);
+        if (isset($params->name) && ! is_null($params->name))
+            $this->setName($params->name);
+        if (isset($params->description) && ! is_null($params->description))
+            $this->setDescription($params->description);
     }
     
     /*
@@ -59,7 +77,9 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
     {
         return array (
                 'id' => $this->getId(), 
-                'masterDeviceId' => $this->getMasterDeviceId() 
+                'masterDeviceId' => $this->getMasterDeviceId(), 
+                'name' => $this->getName(), 
+                'description' => $this->getDescription() 
         );
     }
 
@@ -153,6 +173,51 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
     public function setOptions ($_options)
     {
         $this->_options = $_options;
+        return $this;
+    }
+
+    /**
+     * Get the name of the device configuration
+     *
+     * @return the $_name
+     *         The name of the device configuration
+     */
+    public function getName ()
+    {
+        return $this->_name;
+    }
+
+    /**
+     * Sets the new name of the object
+     *
+     * @param string $_name
+     *            the new name
+     */
+    public function setName ($_name)
+    {
+        $this->_name = $_name;
+        return $this;
+    }
+
+    /**
+     * Get the description of the device configuration
+     *
+     * @return the $_description
+     */
+    public function getDescription ()
+    {
+        return $this->_description;
+    }
+
+    /**
+     * Gets the description of the object
+     *
+     * @param string $_description
+     *            the new description
+     */
+    public function setDescription ($_description)
+    {
+        $this->_description = $_description;
         return $this;
     }
 }

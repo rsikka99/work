@@ -5,6 +5,6 @@ class Quotegen_Model_DbTable_QuoteDeviceConfiguration extends Zend_Db_Table_Abst
     protected $_name = 'quotegen_quote_device_configurations';
     protected $_primary = array (
             'quoteDeviceId', 
-            'deviceConfigurationId' 
+            'deviceId' 
     );
 }

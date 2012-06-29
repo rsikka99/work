@@ -19,13 +19,13 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
                 $deviceConfigurationId = (int)$values ['deviceConfigurationId'];
                 if ($deviceConfigurationId === - 1)
                 {
-                    $this->_helper->redirector('create-new-device-configuration');
+                    $this->_helper->redirector('create-new-quote-device');
                 }
                 else
                 {
                     $newDeviceConfigurationId = $this->cloneDeviceConfiguration($deviceConfigurationId);
                     
-                    $this->_helper->redirector('edit-device-configuration', null, null, array (
+                    $this->_helper->redirector('edit-quote-device', null, null, array (
                             'id' => $newDeviceConfigurationId 
                     ));
                 }
@@ -36,7 +36,7 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
     /**
      * Create and add a new device configuration to the quote
      */
-    public function createNewDeviceConfigurationAction ()
+    public function createNewQuoteDeviceAction ()
     {
         $request = $this->getRequest();
         $form = new Quotegen_Form_DeviceConfiguration();
@@ -55,19 +55,32 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
                         // Save to the database
                         try
                         {
-                            // Create the new configuration
-                            $deviceConfiguration = new Quotegen_Model_DeviceConfiguration();
-                            $deviceConfiguration->populate($values);
-                            $deviceConfigurationId = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->insert($deviceConfiguration);
+                            $masterDeviceId = $form->getValue('masterDeviceId');
+                            $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
                             
-                            $quoteDevice = $this->syncDeviceConfigurationToQuote($deviceConfigurationId);
+                            // Create Quote Device
+                            $quoteDevice = $this->syncDevice(new Quotegen_Model_QuoteDevice(), $device);
+                            
+                            // Setup some defaults that don't get synced
+                            $quoteDevice->setQuoteId($this->_quoteId);
+                            $quoteDevice->setMargin(0);
+                            $quoteDevice->setQuantity(1);
+                            
+                            // Save our device
+                            $quoteDeviceId = Quotegen_Model_Mapper_QuoteDevice::getInstance()->insert($quoteDevice);
+                            
+                            // Create Link to Device
+                            $quoteDeviceConfiguration = new Quotegen_Model_QuoteDeviceConfiguration();
+                            $quoteDeviceConfiguration->setMasterDeviceId($masterDeviceId);
+                            $quoteDeviceConfiguration->setQuoteDeviceId($quoteDeviceId);
+                            Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->insert($quoteDeviceConfiguration);
                             
                             $this->_helper->flashMessenger(array (
-                                    'success' => "Device configuration was added to your quote successfully. Please make any modifications that you wish now." 
+                                    'success' => "Device was added to your quote successfully. Please make any modifications that you wish now." 
                             ));
                             
-                            $this->_helper->redirector('edit-device-configuration', null, null, array (
-                                    'id' => $deviceConfigurationId 
+                            $this->_helper->redirector('edit-quote-device', null, null, array (
+                                    'id' => $quoteDeviceId 
                             ));
                         }
                         catch ( Exception $e )
@@ -107,51 +120,51 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
     /**
      * This is editing the device configuration
      */
-    public function editDeviceConfigurationAction ()
+    public function editQuoteDeviceAction ()
     {
-        $deviceConfigurationId = $this->_getParam('id', false);
+        $quoteDeviceId = $this->_getParam('id', false);
         
-        // If they haven't provided an id, send them back to the view all deviceConfiguration page
-        if (! $deviceConfigurationId)
+        // Make sure they passed an id to us
+        if (! $quoteDeviceId)
         {
             $this->_helper->flashMessenger(array (
-                    'warning' => 'Please select a device configuration to edit first.' 
+                    'warning' => 'Please select a device to edit first.' 
             ));
             $this->_helper->redirector('index');
         }
         
-        $quoteDeviceConfiguration = Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->findByDeviceConfigurationId($deviceConfigurationId);
-        if (! $quoteDeviceConfiguration || $quoteDeviceConfiguration->getQuoteDevice()->getQuoteId() !== $this->_quoteId)
+        $quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($quoteDeviceId);
+        
+        // Validate that we have a quote device that is associated with the quote
+        if (! $quoteDevice || $quoteDevice->getQuoteId() !== $this->_quoteId)
         {
             $this->_helper->flashMessenger(array (
-                    'warning' => 'You may only edit device configurations associated with this quote.' 
+                    'warning' => 'You may only edit devices associated with this quote.' 
             ));
             $this->_helper->redirector('index');
         }
         
-        // Get the deviceConfiguration
-        $deviceConfigurationMapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
-        $deviceConfiguration = $deviceConfigurationMapper->find((int)$deviceConfigurationId);
+        // Get the device
+        $device = $quoteDevice->getDevice();
         
-        $quoteDevice = $this->syncDeviceConfigurationToQuote($deviceConfigurationId);
-        
-        // If the deviceConfiguration doesn't exist, send them back to the view all deviceConfigurations page
-        if (! $deviceConfiguration)
+        // TODO: Let them edit the quote device
+        // If the device doesn't exist, we send them back to the normal page
+        if (! $device)
         {
             $this->_helper->flashMessenger(array (
-                    'danger' => 'There was an error selecting the device configuration to edit.' 
+                    'danger' => 'This device no longer has a device attached to it.' 
             ));
             $this->_helper->redirector('index');
         }
         
-        $this->view->deviceConfiguration = $deviceConfiguration;
+        $this->view->device = $device;
         
         // Create a new form with the mode and roles set
-        $form = new Quotegen_Form_DeviceConfiguration($deviceConfiguration->getId());
+        $form = new Quotegen_Form_QuoteDevice($quoteDeviceId);
         
         // Prepare the data for the form
         $request = $this->getRequest();
-        $form->populate($deviceConfiguration->toArray());
+        $form->populate($device->toArray());
         
         // Make sure we are posting data
         if ($request->isPost())
@@ -167,32 +180,22 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
             }
             else
             {
-                
                 try
                 {
                     // Validate the form
                     if ($form->isValid($values))
                     {
-                        $deviceConfigurationMapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
-                        //                         $deviceConfiguration->populate($values);
-                        //                         $deviceConfiguration->setId($deviceConfigurationId);
-                        
-
-                        // Save option quantities
-                        $deviceConfigurationOption = new Quotegen_Model_DeviceConfigurationOption();
-                        $deviceConfigurationOption->setDeviceConfigurationId($deviceConfigurationId);
-                        
+                        $quoteDeviceOption = new Quotegen_Model_QuoteDeviceOption();
                         foreach ( $form->getOptionElements() as $element )
                         {
-                            $optionId = (int)$element->getDescription();
-                            $deviceConfigurationOption->setOptionId($optionId);
-                            $deviceConfigurationOption->setQuantity($values ["option$optionId"]);
-                            Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->save($deviceConfigurationOption);
+                            $optionId = (int)$element->quantity->getDescription();
+                            $quoteDeviceOption->setId($optionId);
+                            $quoteDeviceOption->setQuantity($values ["option{$optionId}quantity"]);
+                            $quoteDeviceOption->setIncludedQuantity($values ["option{$optionId}includedQuantity"]);
+                            
+                            Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->save($quoteDeviceOption);
                         }
                         
-                        // $rowsAffected = $deviceConfigurationMapper->save($deviceConfiguration, $deviceConfigurationId);
-                        
-
                         if (isset($values ['add']))
                         {
                             $this->_helper->flashMessenger(array (
@@ -201,13 +204,13 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
                             
                             // Send to the add options page like they asked
                             $this->_helper->redirector('add-options-to-device-configuration', null, null, array (
-                                    'id' => $deviceConfigurationId 
+                                    'id' => $quoteDeviceId 
                             ));
                         }
                         else
                         {
                             $this->_helper->flashMessenger(array (
-                                    'success' => "Device configuration '{$deviceConfiguration->getId()}' was updated sucessfully." 
+                                    'success' => "Device configuration '{$quoteDeviceId}' was updated sucessfully." 
                             ));
                             
                             // Send back to the main list
@@ -235,15 +238,15 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
      */
     public function addOptionsToDeviceConfigurationAction ()
     {
-        $id = $this->_getParam('id', FALSE);
+        $id = (int)$this->_getParam('id', FALSE);
         
-        $availableOptions = Quotegen_Model_Mapper_Option::getInstance()->fetchAllAvailableOptionsForDeviceConfiguration($id);
+        $availableOptions = Quotegen_Model_Mapper_Option::getInstance()->fetchAllAvailableOptionsForQuoteDevice($id);
         if (count($availableOptions) < 1)
         {
             $this->_helper->flashMessenger(array (
                     'info' => "There are no more options to add to this device." 
             ));
-            $this->_helper->redirector('edit-device-configuration', null, null, array (
+            $this->_helper->redirector('edit-quote-device', null, null, array (
                     'id' => $id 
             ));
         }
@@ -251,10 +254,6 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
         $form = new Quotegen_Form_SelectOptions($availableOptions);
         // Prepare the data for the form
         $request = $this->getRequest();
-        
-        $deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($id);
-        
-        $form->populate($deviceConfiguration->toArray());
         
         // Make sure we are posting data
         if ($request->isPost())
@@ -270,17 +269,29 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
                     // Validate the form
                     if ($form->isValid($values))
                     {
-                        $deviceConfigurationOptionMapper = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance();
-                        $deviceConfigurationOption = new Quotegen_Model_DeviceConfigurationOption();
-                        $deviceConfigurationOption->setDeviceConfigurationId($deviceConfiguration->getId());
+                        // Create a blank quote device option
+                        $quoteDeviceOption = new Quotegen_Model_QuoteDeviceOption();
+                        $quoteDeviceOption->setQuoteDeviceId($id);
+                        $quoteDeviceOption->setQuantity(1);
+                        $quoteDeviceOption->setIncludedQuantity(0);
                         
+                        // Create a ready to use link
+                        $quoteDeviceConfigurationOption = new Quotegen_Model_QuoteDeviceConfigurationOption();
+                        
+                        $optionMapper = Quotegen_Model_Mapper_Option::getInstance();
+                        $quoteDeviceOptionMapper = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance();
+                        $quoteDeviceConfigurationOptionMapper = Quotegen_Model_Mapper_QuoteDeviceConfigurationOption::getInstance();
                         $insertedOptions = 0;
                         foreach ( $values ['options'] as $optionId )
                         {
-                            $deviceConfigurationOption->setOptionId($optionId);
+                            $quoteDeviceOption = $this->syncOption($quoteDeviceOption, $optionMapper->find($optionId));
+                            $quoteDeviceOptionId = $quoteDeviceOptionMapper->insert($quoteDeviceOption);
+                            
+                            $quoteDeviceConfigurationOption->setOptionId($optionId);
+                            $quoteDeviceConfigurationOption->setQuoteDeviceOptionId($quoteDeviceOptionId);
                             try
                             {
-                                $deviceConfigurationOptionMapper->insert($deviceConfigurationOption);
+                                $quoteDeviceConfigurationOptionMapper->insert($quoteDeviceConfigurationOption);
                                 $insertedOptions ++;
                             }
                             catch ( Exception $e )
@@ -290,9 +301,9 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
                         }
                         
                         $this->_helper->flashMessenger(array (
-                                'success' => "Successfully added {$insertedOptions} options to {$deviceConfiguration->getDevice()->getMasterDevice()->getFullDeviceName()} successfully." 
+                                'success' => "Successfully added {$insertedOptions} options." 
                         ));
-                        $this->_helper->redirector('edit-device-configuration', null, null, array (
+                        $this->_helper->redirector('edit-quote-device', null, null, array (
                                 'id' => $id 
                         ));
                     }
@@ -311,7 +322,7 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
             else
             {
                 // User has cancelled. Go back to the edit page
-                $this->_helper->redirector('edit-device-configuration', null, null, array (
+                $this->_helper->redirector('edit-quote-device', null, null, array (
                         'id' => $id 
                 ));
             }
@@ -326,26 +337,31 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
     public function deleteOptionFromDeviceConfigurationAction ()
     {
         $id = $this->_getParam('id', FALSE);
-        $optionId = $this->_getParam('optionId', FALSE);
-        
-        try
+        $quoteDeviceOptionId = $this->_getParam('quoteDeviceOptionId', FALSE);
+        if ($quoteDeviceOptionId)
         {
-            $deviceConfigurationOption = new Quotegen_Model_DeviceConfigurationOption();
-            $deviceConfigurationOption->setDeviceConfigurationId($id);
-            $deviceConfigurationOption->setOptionId($optionId);
-            Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->delete($deviceConfigurationOption);
+            try
+            {
+                $rowsAffected = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->delete($quoteDeviceOptionId);
+                
+                $this->_helper->flashMessenger(array (
+                        'success' => "Configuration Option deleted successfully." 
+                ));
+            }
+            catch ( Exception $e )
+            {
+                $this->_helper->flashMessenger(array (
+                        'error' => "Could not delete that configuration option." 
+                ));
+            }
+        }
+        else
+        {
             $this->_helper->flashMessenger(array (
-                    'success' => "Configuration Option deleted successfully." 
+                    'warning' => "You forgot to select an option to delete." 
             ));
         }
-        catch ( Exception $e )
-        {
-            $this->_helper->flashMessenger(array (
-                    'error' => "Could not delete that configuration option." 
-            ));
-        }
-        
-        $this->_helper->redirector('edit-device-configuration', null, null, array (
+        $this->_helper->redirector('edit-quote-device', null, null, array (
                 'id' => $id 
         ));
     }
@@ -377,7 +393,7 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
             $quoteDeviceConfiguration = Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->findByQuoteDeviceId($quoteDevice->getId());
             if ($quoteDeviceConfiguration)
             {
-                $this->syncDeviceConfigurationToQuote($quoteDeviceConfiguration->getDeviceConfigurationId());
+                $this->syncDeviceConfigurationToQuote($quoteDeviceConfiguration->getMasterDeviceId());
             }
         }
         

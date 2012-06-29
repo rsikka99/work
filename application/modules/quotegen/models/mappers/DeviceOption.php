@@ -9,6 +9,12 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
      *
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_DeviceOption';
+    
+    /*
+     * Define the primary key of the model association
+    */
+    public $col_masterDeiviceId = 'masterDeviceId';
+    public $col_optionId = 'optionId';
 
     /**
      * Gets an instance of the mapper
@@ -57,14 +63,14 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
         
         if ($primaryKey === null)
         {
-            $primaryKey [] = $data ['masterDeviceId'];
-            $primaryKey [] = $data ['optionId'];
+            $primaryKey [] = $data [$this->col_masterDeivceId];
+            $primaryKey [] = $data [$this->col_optionId];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'masterDeviceId = ?' => $primaryKey [0], 
-                'optionId = ?' => $primaryKey [1] 
+                "{$this->col_masterDeviceId} = ?" => $primaryKey [0], 
+                "{$this->col_optionId} = ?" => $primaryKey [1] 
         ));
         
         // Save the object into the cache
@@ -86,20 +92,33 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_DeviceOption)
         {
             $whereClause = array (
-                    'masterDeviceId = ?' => $object->getMasterDeviceId(), 
-                    'optionId = ?' => $object->getOptionId() 
+                    "{$this->col_masterDeviceId} = ?" => $object->getMasterDeviceId(), 
+                    "{$this->col_optionId} = ?" => $object->getOptionId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'masterDeviceId = ?' => $object [0], 
-                    'optionId = ?' => $object [1] 
+                    "{$this->col_masterDeviceId} = ?" => $object [0], 
+                    "{$this->col_optionId} = ?" => $object [1] 
             );
         }
         
         $rowsAffected = $this->getDbTable()->delete($whereClause);
         return $rowsAffected;
+    }
+
+    /**
+     * Deletes all device options by device id;
+     * 
+     * @param int $deviceId            
+     * @return number The amount of rows affected.
+     */
+    public function deleteOptionsByDeviceId ($deviceId)
+    {
+        return $this->getDbTable()->delete(array (
+                "{$this->col_masterDeviceId} = ?" => $deviceId 
+        ));
     }
 
     /**
@@ -139,11 +158,11 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
      * Fetches a deviceOption
      *
      * @param $where string|array|Zend_Db_Table_Select
-     *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
+     *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
      * @param $order string|array
-     *            OPTIONAL An SQL ORDER clause.
+     *            OPTIONAL: A SQL ORDER clause.
      * @param $offset int
-     *            OPTIONAL An SQL OFFSET value.
+     *            OPTIONAL: A SQL OFFSET value.
      * @return Quotegen_Model_DeviceOption
      */
     public function fetch ($where = null, $order = null, $offset = null)
@@ -168,13 +187,13 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
      * Fetches all deviceOptions
      *
      * @param $where string|array|Zend_Db_Table_Select
-     *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
+     *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
      * @param $order string|array
-     *            OPTIONAL An SQL ORDER clause.
+     *            OPTIONAL: A SQL ORDER clause.
      * @param $count int
-     *            OPTIONAL An SQL LIMIT count. (Defaults to 25)
+     *            OPTIONAL: A SQL LIMIT count. (Defaults to 25)
      * @param $offset int
-     *            OPTIONAL An SQL LIMIT offset.
+     *            OPTIONAL: A SQL LIMIT offset.
      * @return multitype:Quotegen_Model_DeviceOption
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
@@ -204,8 +223,8 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array (
-                'masterDeviceId = ?' => $id [0], 
-                'optionId = ?' => $id [1] 
+                "{$this->col_masterDeviceId} = ?" => $id [0], 
+                "{$this->col_optionId} = ?" => $id [1] 
         );
     }
     

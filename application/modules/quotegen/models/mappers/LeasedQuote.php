@@ -9,6 +9,11 @@ class Quotegen_Model_Mapper_LeasedQuote extends My_Model_Mapper_Abstract
      *
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_LeasedQuote';
+    
+    /*
+     * Define the primary key of the model association
+    */
+    public $col_quoteId = 'quoteId';
 
     /**
      * Gets an instance of the mapper
@@ -57,12 +62,12 @@ class Quotegen_Model_Mapper_LeasedQuote extends My_Model_Mapper_Abstract
         
         if ($primaryKey === null)
         {
-            $primaryKey = $data ['quoteId'];
+            $primaryKey = $data [$this->col_quoteId];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'quoteId = ?' => $primaryKey 
+                "{$this->col_quoteId} = ?" => $primaryKey 
         ));
         
         // Save the object into the cache
@@ -84,13 +89,13 @@ class Quotegen_Model_Mapper_LeasedQuote extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_LeasedQuote)
         {
             $whereClause = array (
-                    'quoteId = ?' => $object->getQuoteId() 
+                    "{$this->col_quoteId} = ?" => $object->getQuoteId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'quoteId = ?' => $object 
+                    "{$this->col_quoteId} = ?" => $object 
             );
         }
         
@@ -133,11 +138,11 @@ class Quotegen_Model_Mapper_LeasedQuote extends My_Model_Mapper_Abstract
      * Fetches a leasedQuote
      *
      * @param $where string|array|Zend_Db_Table_Select
-     *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
+     *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
      * @param $order string|array
-     *            OPTIONAL An SQL ORDER clause.
+     *            OPTIONAL: A SQL ORDER clause.
      * @param $offset int
-     *            OPTIONAL An SQL OFFSET value.
+     *            OPTIONAL: A SQL OFFSET value.
      * @return Quotegen_Model_LeasedQuote
      */
     public function fetch ($where = null, $order = null, $offset = null)
@@ -159,13 +164,13 @@ class Quotegen_Model_Mapper_LeasedQuote extends My_Model_Mapper_Abstract
      * Fetches all leasedQuotes
      *
      * @param $where string|array|Zend_Db_Table_Select
-     *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
+     *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
      * @param $order string|array
-     *            OPTIONAL An SQL ORDER clause.
+     *            OPTIONAL: A SQL ORDER clause.
      * @param $count int
-     *            OPTIONAL An SQL LIMIT count. (Defaults to 25)
+     *            OPTIONAL: A SQL LIMIT count. (Defaults to 25)
      * @param $offset int
-     *            OPTIONAL An SQL LIMIT offset.
+     *            OPTIONAL: A SQL LIMIT offset.
      * @return multitype:Quotegen_Model_LeasedQuote
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
@@ -193,7 +198,7 @@ class Quotegen_Model_Mapper_LeasedQuote extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array (
-                'quoteId = ?' => $id 
+                "{$this->col_quoteId} = ?" => $id 
         );
     }
     
