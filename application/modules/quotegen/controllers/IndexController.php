@@ -8,10 +8,10 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
         $request = $this->getRequest();
         $existingQuoteForm = new Quotegen_Form_SelectQuote();
         $newQuoteForm = new Quotegen_Form_Quote();
-        $newQuoteForm->setAttrib('class', 'button-tabbed-styled');
+        $newQuoteForm->setAttrib('class', $newQuoteForm->getAttrib('class') . ' button-tabbed-styled');
         
         $newClientForm = new Quotegen_Form_Client();
-        $newClientForm->setAttrib('class', 'button-tabbed-styled');
+        $newClientForm->setAttrib('class', $newClientForm->getAttrib('class') . ' button-tabbed-styled');
         
         if ($request->isPost())
         {
@@ -38,7 +38,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
             {
                 // New Client Form
                 $this->_helper->flashMessenger(array (
-                        'info' => "Creating a client from the main page is not supported yet!"
+                        'info' => "Creating a client from the main page is not supported yet!" 
                 ));
             }
             else
