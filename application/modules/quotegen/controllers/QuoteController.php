@@ -26,7 +26,6 @@ class Quotegen_QuoteController extends Zend_Controller_Action
 
     public function deleteAction ()
     {
-        // TODO: deleteAction
         $quoteId = $this->_getParam('id', false);
         
         if (! $quoteId)
@@ -37,10 +36,10 @@ class Quotegen_QuoteController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        $mapper = new Quotegen_Model_Mapper_Quote();
-        $quote = $mapper->find($quoteId);
+        $quoteMapper = new Quotegen_Model_Mapper_Quote();
+        $quote = $quoteMapper->find($quoteId);
         
-        if (! $quoteId)
+        if (! $quote->getId())
         {
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error selecting the quote to delete.' 
@@ -48,19 +47,23 @@ class Quotegen_QuoteController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        $message = "Are you sure you want to delete {$quote->getName()}?";
+        $client = Quotegen_Model_Mapper_Client::getInstance()->find($quote->getClientId());
+        $message = "Are you sure you want to delete company {$client->getName()} ?";
         $form = new Application_Form_Delete($message);
         
         $request = $this->getRequest();
         if ($request->isPost())
         {
             $values = $request->getPost();
+            
+            // If user doesn't want to cancel
             if (! isset($values ['cancel']))
             {
-                // delete quote from database
                 if ($form->isValid($values))
                 {
-                    $mapper->delete($quote);
+                    // Delete that quote form the databases
+                    $quoteMapper->delete($quote);
+                    
                     $this->_helper->flashMessenger(array (
                             'success' => "Quote  {$this->view->escape ( $quote->getName() )} was deleted successfully." 
                     ));
