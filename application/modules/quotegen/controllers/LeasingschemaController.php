@@ -306,7 +306,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                                     $db->commit();
                                     
                                     $this->_helper->flashMessenger(array (
-                                            'success' => "The term was updated successfully." 
+                                            'success' => "The term {$months} months was updated successfully." 
                                     ));
                                 }
                                 else
@@ -322,7 +322,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                                 // Save Error
                                 $db->rollBack();
                                 $this->_helper->flashMessenger(array (
-                                        'danger' => 'There was an error processing the update.  Please try again.' 
+                                        'danger' => 'There was an error processing the update. Please try again.' 
                                 ));
                             }
                         }
@@ -379,7 +379,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                                 // Insert Error
                                 $db->rollBack();
                                 $this->_helper->flashMessenger(array (
-                                        'danger' => 'There was an error processing the insert.  Please try again.' 
+                                        'danger' => 'There was an error processing the insert. Please try again.' 
                                 ));
                             }
                         }
