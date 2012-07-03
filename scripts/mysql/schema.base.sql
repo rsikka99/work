@@ -51,7 +51,7 @@ CREATE  TABLE IF NOT EXISTS `users` (
   UNIQUE INDEX `username` (`username` ASC) )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1
-COMMENT = 'The users table stores basic information on a user' ;
+COMMENT = 'The users table stores basic information on a user';
 
 
 -- -----------------------------------------------------

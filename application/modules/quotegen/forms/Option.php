@@ -83,15 +83,17 @@ class Quotegen_Form_Option extends EasyBib_Form
                 'label' => 'Categories:' 
         ));
         
+        $categories = Quotegen_Model_Mapper_Category::getInstance()->fetchAll();
         /* @var $category Quotegen_Model_Category */
-        foreach ( Quotegen_Model_Mapper_Category::getInstance()->fetchAll() as $category )
+        foreach ( $categories as $category )
         {
             $optionCategoryCheckBox->addMultiOption($category->getId(), $category->getName());
         }
         
-        $this->addElement($optionCategoryCheckBox);
-        
-        // Add the submit button
+        if ($categories)
+            $this->addElement($optionCategoryCheckBox);
+            
+            // Add the submit button
         $this->addElement('submit', 'submit', array (
                 'ignore' => true, 
                 'label' => 'Save' 
