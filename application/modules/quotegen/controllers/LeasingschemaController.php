@@ -219,6 +219,9 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
 
     public function edittermAction ()
     {
+        // Get db adapter
+        $db = Zend_Db_Table::getDefaultAdapter();
+        
         $leasingSchemaId = 1;
         $termId = $this->_getParam('id', false);
         
@@ -252,6 +255,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
         if ($request->isPost())
         {
             $values = $request->getPost();
+            $db->beginTransaction();
             try
             {
                 // If we cancelled we don't need to validate anything
@@ -299,6 +303,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                                         $leasingSchemaRateModel->setRate($rate);
                                         $leasingSchemaRateId = $leasingSchemaRateMapper->save($leasingSchemaRateModel);
                                     }
+                                    $db->commit();
                                     
                                     $this->_helper->flashMessenger(array (
                                             'success' => "The term was updated successfully." 
@@ -306,6 +311,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                                 }
                                 else
                                 {
+                                    $db->rollBack();
                                     $this->_helper->flashMessenger(array (
                                             'danger' => "The term {$months} months already exists." 
                                     ));
@@ -314,6 +320,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                             catch ( Exception $e )
                             {
                                 // Save Error
+                                $db->rollBack();
                                 $this->_helper->flashMessenger(array (
                                         'danger' => 'There was an error processing the update.  Please try again.' 
                                 ));
@@ -353,6 +360,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                                         $leasingSchemaRateModel->setRate($rate);
                                         $leasingSchemaRateMapper->insert($leasingSchemaRateModel);
                                     }
+                                    $db->commit();
                                     
                                     $this->_helper->flashMessenger(array (
                                             'success' => "The term {$months} months was added successfully." 
@@ -360,6 +368,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                                 }
                                 else
                                 {
+                                    $db->rollBack();
                                     $this->_helper->flashMessenger(array (
                                             'danger' => "The term {$months} months already exists." 
                                     ));
@@ -368,6 +377,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                             catch ( Exception $e )
                             {
                                 // Insert Error
+                                $db->rollBack();
                                 $this->_helper->flashMessenger(array (
                                         'danger' => 'There was an error processing the insert.  Please try again.' 
                                 ));
@@ -376,6 +386,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                     }
                     else
                     {
+                        $db->rollBack();
                         $this->_helper->flashMessenger(array (
                                 'error' => "Please review and complete all required fields." 
                         ));
@@ -384,11 +395,13 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                 else
                 {
                     // User has cancelled. We could do a redirect here if we wanted.
+                    $db->rollBack();
                     $this->_helper->redirector('index');
                 }
             }
             catch ( Zend_Validate_Exception $e )
             {
+                $db->rollBack();
                 $form->buildBootstrapErrorDecorators();
             }
         }
@@ -448,6 +461,9 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
 
     public function deletetermAction ()
     {
+        // Get db adapter
+        $db = Zend_Db_Table::getDefaultAdapter();
+        
         $leasingSchemaId = 1;
         $termId = $this->_getParam('id', false);
         
@@ -488,24 +504,37 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
         $request = $this->getRequest();
         if ($request->isPost())
         {
-            $values = $request->getPost();
-            if (! isset($values ['cancel']))
+            $db->beginTransaction();
+            try 
             {
-                // delete client from database
-                if ($form->isValid($values))
-                {
-                    $months = $term->getMonths();
-                    
-                    $mapper->delete($term);
-                    $this->_helper->flashMessenger(array (
-                            'success' => "The term {$months} months was deleted successfully." 
-                    ));
-                    $this->_helper->redirector('index');
-                }
+	            $values = $request->getPost();
+	            if (! isset($values ['cancel']))
+	            {
+	                // delete client from database
+	                if ($form->isValid($values))
+	                {
+	                    $months = $term->getMonths();
+	                    $mapper->delete($term);
+	                    $db->commit();
+	                    $this->_helper->flashMessenger(array (
+	                            'success' => "The term {$months} months was deleted successfully." 
+	                    ));
+	                    $this->_helper->redirector('index');
+	                }
+	            }
+	            else // go back
+	            {
+	                $db->rollBack();
+	                $this->_helper->redirector('index');
+	            }
             }
-            else // go back
+            catch (Exception $e)
             {
-                $this->_helper->redirector('index');
+                $db->rollBack();
+	            $this->_helper->flashMessenger(array (
+	                    'danger' => 'There was an error selecting the term to delete.' 
+	            ));
+	            $this->_helper->redirector('index');
             }
         }
         $this->view->form = $form;
@@ -513,6 +542,9 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
 
     public function editrangeAction ()
     {
+        // Get db adapter
+        $db = Zend_Db_Table::getDefaultAdapter();
+        
         $leasingSchemaId = 1;
         $rangeId = $this->_getParam('id', false);
         
@@ -539,6 +571,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
         if ($request->isPost())
         {
             $values = $request->getPost();
+            $db->beginTransaction();
             try
             {
                 // If we cancelled we don't need to validate anything
@@ -568,7 +601,6 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                                     $leasingSchemaRangeModel->setId($rangeId);
                                     $leasingSchemaRangeModel->setLeasingSchemaId($leasingSchemaId);
                                     $leasingSchemaRangeModel->setStartRange($startRange);
-                                    
                                     $leasingSchemaRangeMapper->save($leasingSchemaRangeModel);
                                     
                                     $leasingSchemaRateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
@@ -585,6 +617,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                                         $leasingSchemaRateModel->setRate($rate);
                                         $leasingSchemaRateId = $leasingSchemaRateMapper->save($leasingSchemaRateModel);
                                     }
+                                    $db->commit();
                                     
                                     $this->_helper->flashMessenger(array (
                                             'success' => "The range was updated successfully." 
@@ -592,6 +625,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                                 }
                                 else
                                 {
+                                    $db->rollBack();
                                     $this->_helper->flashMessenger(array (
                                             'danger' => "The range \${$startRange} already exists." 
                                     ));
@@ -600,6 +634,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                             catch ( Exception $e )
                             {
                                 // Save Error
+                                $db->rollBack();
                                 $this->_helper->flashMessenger(array (
                                         'danger' => 'There was an error processing the update.  Please try again.' 
                                 ));
@@ -638,6 +673,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                                         $leasingSchemaRateModel->setRate($rate);
                                         $leasingSchemaRateMapper->insert($leasingSchemaRateModel);
                                     }
+                                    $db->commit();
                                     
                                     $this->_helper->flashMessenger(array (
                                             'success' => "The range \${$startRange} was added successfully." 
@@ -645,6 +681,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                                 }
                                 else
                                 {
+                                    $db->rollBack();
                                     $this->_helper->flashMessenger(array (
                                             'danger' => "The range \${$startRange} already exists." 
                                     ));
@@ -653,6 +690,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                             catch ( Exception $e )
                             {
                                 // Insert Error
+                                $db->rollBack();
                                 $this->_helper->flashMessenger(array (
                                         'danger' => 'There was an error processing the insert.  Please try again.' 
                                 ));
@@ -661,6 +699,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                     }
                     else
                     {
+                        $db->rollBack();
                         $this->_helper->flashMessenger(array (
                                 'error' => "Please review and complete all required fields." 
                         ));
@@ -669,11 +708,13 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                 else
                 {
                     // User has cancelled. We could do a redirect here if we wanted.
+                    $db->rollBack();
                     $this->_helper->redirector('index');
                 }
             }
             catch ( Zend_Validate_Exception $e )
             {
+                $db->rollBack();
                 $form->buildBootstrapErrorDecorators();
             }
         }
@@ -732,6 +773,9 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
 
     public function deleterangeAction ()
     {
+        // Get db adapter
+        $db = Zend_Db_Table::getDefaultAdapter();
+        
         $leasingSchemaId = 1;
         $rangeId = $this->_getParam('id', false);
         
@@ -773,21 +817,35 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
         if ($request->isPost())
         {
             $values = $request->getPost();
-            if (! isset($values ['cancel']))
+            $db->beginTransaction();
+            try
             {
-                // delete client from database
-                if ($form->isValid($values))
-                {
-                    $mapper->delete($range);
-                    $this->_helper->flashMessenger(array (
-                            'success' => "The range \${$this->view->escape ( $range->getStartRange() )} was deleted successfully." 
-                    ));
-                    $this->_helper->redirector('index');
-                }
+	            if (! isset($values ['cancel']))
+	            {
+	                // delete client from database
+	                if ($form->isValid($values))
+	                {
+	                    $mapper->delete($range);
+	                    $db->commit();
+	                    $this->_helper->flashMessenger(array (
+	                            'success' => "The range \${$this->view->escape ( $range->getStartRange() )} was deleted successfully." 
+	                    ));
+	                    $this->_helper->redirector('index');
+	                }
+	            }
+	            else // go back
+	            {
+	                $db->rollBack();
+	                $this->_helper->redirector('index');
+	            }
             }
-            else // go back
+            catch (Exception $e)
             {
-                $this->_helper->redirector('index');
+	        	$db->rollBack();
+	            $this->_helper->flashMessenger(array (
+	                    'danger' => 'There was an error selecting the term to delete.' 
+	            ));
+	            $this->_helper->redirector('index');
             }
         }
         $this->view->form = $form;
