@@ -1,3 +1,6 @@
+
+<h1>Leasing Schema</h1>
+
 <?php $leasingSchema = $this->leasingSchema; /* @var $leasingSchema Quotegen_Model_LeasingSchema */ ?>
 
 <?php $this->headScript()->captureStart('append','text/javascript') ?>
@@ -22,20 +25,50 @@
 			case "delete range":
 				document.location.href = 'leasingschema/deleterange/id/'+id;
 				break;
+			case "reset":
+				document.location.href = 'leasingschema/resetschema';
+				break;
+			case "import":
+				$("#leasingSchemas").submit();
+				break;
 		}
 	}
 	
 <?php $this->headScript()->captureEnd() ?>
 
+
+<?php if( isset( $this->errMessages ) ) {
+	// show the first error in the list of errors
+	echo '<div class="alert alert-error">';
+	foreach($this->errMessages as $key => $value) {
+		echo $value;
+	}
+	echo '</div>';
+} ?>
+
 <div class="well">
 
-	<form name="leasingSchemas" id="leasingSchemas" class="form-horizontal" action="" method="post" enctype="application/x-www-form-urlencoded">
+	<form name="leasingSchemas" id="leasingSchemas" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
 		
 		<?php if ( $leasingSchema ) { ?>
+				
+		<p>Select a file to upload or edit the current schema below.</p>
 		
-		<p>Insert any instructional text here.</p>
+	    <div id="upload_container" style="margin: 10px 0px 10px 0px;">
+			<span class="pull-left">
+        		Choose a <span style="color: red">.CSV</span> file to upload: 
+        		<input type="file" name="uploadedfile" id="uploadedfile" accept="application/csv, text/csv" size="60" class="upload_file" />
+        	</span>
+			<span class="">
+		      	<a class="btn" title="Import" onclick="javascript: do_action('import');">
+					<i class="icon-upload"></i> Upload
+				</a>
+			</span>
+	    </div>
 		
-		<div id="lease-terms-container" style="overflow: auto; overflow-y: hidden; -ms-overflow-y: hidden; margin: 0px 0px 10px 0px;">
+		<div style="clear: both;"></div>
+		
+		<div id="lease-terms-container" style="overflow: auto; overflow-y: hidden; -ms-overflow-y: hidden; margin: 20px 0px 0px 0px;">
 		
 		  <table id="leasingSchemaTable" class="table table-striped table-bordered">
 		    <thead id="leadingSchemaHeaders">
@@ -46,9 +79,9 @@
 					    $startRange = $range->getStartRange();
 					
 						if ($startRange == 0) { ?>
-							<th style="min-width: 80px; text-align: center;">$0 </th>
+							<th style="min-width: 80px; text-align: center;">$0+ </th>
 						<?php } else { ?>
-							<th style="min-width: 80px; text-align: center;"><?php echo $this->currency($startRange); ?> </th>
+							<th style="min-width: 80px; text-align: center;"><?php echo $this->currency($startRange); ?>+ </th>
 						<?php } ?>
 					<?php } ?>
 					<th nowrap="nowrap" style="min-width: 80px; text-align: center;">Action</th>
@@ -109,7 +142,8 @@
 				        </td>
 					<?php } ?>
 		        <?php } ?>
-		      	<td>&nbsp;</td>
+      			<td style="text-align: center;">
+				</td>
 		      </tr>
 		    </tbody>
 		  </table>
@@ -122,6 +156,9 @@
 				</a>
 		      	<a class="btn btn-success" title="Add Range" onclick="javascript: do_action('add range', 0);" href="#">
 					<i class="icon-plus icon-white"></i> Add Range
+				</a>
+		      	<a class="btn btn-inverse" title="Reset" onclick="javascript: do_action('reset', 0);">
+					<i class="icon-refresh icon-white"></i> Reset Data
 				</a>
 			</span>
 		</div>

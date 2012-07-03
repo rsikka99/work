@@ -10,7 +10,7 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
     protected $UnknownDeviceInstanceId;
     protected $UserId;
     protected $ReportId;
-    protected $UploadDataCollectorId;
+    protected $UploadDataCollectorRowId;
     protected $PrinterModelid;
     protected $MpsMonitorStartdate;
     protected $MpsMonitorEnddate;
@@ -91,25 +91,25 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @return the $UnknownDeviceInstanceId
+     * @return the $Id
      */
-    public function getUnknownDeviceInstanceId ()
+    public function getId ()
     {
-        if (! isset($this->UnknownDeviceInstanceId))
+        if (! isset($this->Id))
         {
             
-            $this->UnknownDeviceInstanceId = null;
+            $this->Id = null;
         }
-        return $this->UnknownDeviceInstanceId;
+        return $this->Id;
     }
 
     /**
      *
-     * @param field_type $UnknownDeviceInstanceId            
+     * @param field_type $Id      
      */
-    public function setUnknownDeviceInstanceId ($UnknownDeviceInstanceId)
+    public function setId ($Id)
     {
-        $this->UnknownDeviceInstanceId = $UnknownDeviceInstanceId;
+        $this->Id = $Id;
         return $this;
     }
 
@@ -163,25 +163,25 @@ class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @return the $UploadDataCollectorId
+     * @return the $UploadDataCollectorRowId
      */
-    public function getUploadDataCollectorId ()
+    public function getUploadDataCollectorRowId ()
     {
-        if (! isset($this->UploadDataCollectorId))
+        if (! isset($this->UploadDataCollectorRowId))
         {
             
-            $this->UploadDataCollectorId = null;
+            $this->UploadDataCollectorRowId = null;
         }
-        return $this->UploadDataCollectorId;
+        return $this->UploadDataCollectorRowId;
     }
 
     /**
      *
-     * @param field_type $UploadDataCollectorId            
+     * @param field_type $UploadDataCollectorRowId            
      */
-    public function setUploadDataCollectorId ($UploadDataCollectorId)
+    public function setUploadDataCollectorRowId ($UploadDataCollectorRowId)
     {
-        $this->UploadDataCollectorId = $UploadDataCollectorId;
+        $this->UploadDataCollectorRowId = $UploadDataCollectorRowId;
         return $this;
     }
 

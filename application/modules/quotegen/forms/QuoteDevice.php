@@ -50,16 +50,27 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
             $deviceName->setValue($quoteDevice->getName());
             $this->addElement($deviceName);
             
+            $this->addElement('text', 'name', array (
+                    'label' => 'Device Name:'
+            ));
+            
+            $this->addElement('text', 'sku', array (
+                    'label' => 'Sku:'
+            ));
+            
             $this->addElement('text', 'margin', array (
-                    'label' => 'Margin:' 
+                    'label' => 'Margin:', 
+                    'class' => 'span1' 
             ));
             
             $this->addElement('text', 'price', array (
-                    'label' => 'Price:' 
+                    'label' => 'Price:', 
+                    'class' => 'span1' 
             ));
             
             $this->addElement('text', 'quantity', array (
-                    'label' => 'Quantity:' 
+                    'label' => 'Quantity:', 
+                    'class' => 'span1' 
             ));
             
             /* @var $deviceConfigurationOption Quotegen_Model_QuoteDeviceOption */

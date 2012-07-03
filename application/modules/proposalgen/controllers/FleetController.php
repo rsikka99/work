@@ -1021,7 +1021,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         if ($request_description != '')
                         {
                             // update ticket
-                            $ticketTable = new Proposalgen_Model_DbTable_Tickets();
+                            $ticketTable = new Proposalgen_Model_DbTable_Ticket();
                             $ticketData = array (
                                     'description' => $request_description, 
                                     'date_updated' => $date 
@@ -1032,7 +1032,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             // add comment
                             if ($ticket_comment != '')
                             {
-                                $ticket_commentsTable = new Proposalgen_Model_DbTable_TicketComments();
+                                $ticket_commentsTable = new Proposalgen_Model_DbTable_TicketComment();
                                 $ticket_commentsData = array (
                                         'ticket_id' => $ticket_id, 
                                         'user_id' => $this->user_id, 
@@ -1055,7 +1055,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         $request_title = $formData ['request_title'];
                         
                         // save ticket
-                        $ticketTable = new Proposalgen_Model_DbTable_Tickets();
+                        $ticketTable = new Proposalgen_Model_DbTable_Ticket();
                         $ticketData = array (
                                 'user_id' => $this->user_id, 
                                 'category_id' => Proposalgen_Model_TicketCategory::PRINTFLEET_DEVICE_SUPPORT, 
@@ -1129,8 +1129,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 catch ( Exception $e )
                 {
                     $db->rollBack();
-                    echo $e;
-                    die();
                     $this->view->message = "There was an error saving your support request.";
                 }
             }
@@ -1529,9 +1527,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 'is_leased' => ($formData ['is_leased'] == true ? 1 : 0) 
                         );
                         
-                        // loop through each instance and get instance specific
-                        // data
-                        $devices_pf_id = $formData ["pf_device_id"];
+                        // loop through each instance and get instance specific data
+                        $devices_pf_id = $formData ["devices_pf_id"];
                         $select = new Zend_Db_Select($db);
                         $select = $db->select()
                             ->from(array (
@@ -1543,21 +1540,21 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         
                         foreach ( $result as $key => $value )
                         {
-                            $upload_data_collector_id = $result [$key] ["upload_data_collector_id"];
+                            $upload_data_collector_id = $result [$key] ["id"];
                             
                             // check for unknown device
                             $select = new Zend_Db_Select($db);
                             $select = $db->select()
                                 ->from(array (
-                                    'udi' => 'unknown_device_instance' 
+                                    'udi' => 'proposalgenerator_unknown_device_instances' 
                             ))
-                                ->where('udi.report_id = ' . $report_id . ' AND udi.upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
+                                ->where('udi.report_id = ' . $report_id . ' AND udi.upload_data_collector_row_id = ?', $upload_data_collector_id, 'INTEGER');
                             $stmt = $db->query($select);
                             $unknown_device_instance = $stmt->fetchAll();
                             
                             if (count($unknown_device_instance) > 0)
                             {
-                                $unknown_device_instance_id = $unknown_device_instance [0] ['unknown_device_instance_id'];
+                                $unknown_device_instance_id = $unknown_device_instance [0] ['upload_data_collector_row_id'];
                             }
                             else
                             {
@@ -1609,7 +1606,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             $end_meter_fax = $result [$key] ["endmeterfax"];
                             $start_meter_scan = $result [$key] ["startmeterscan"];
                             $end_meter_scan = $result [$key] ["endmeterscan"];
-                            
+
                             $unknown_device_instanceData ['upload_data_collector_id'] = $upload_data_collector_id;
                             $unknown_device_instanceData ['printermodelid'] = ucwords(trim($result [$key] ["printermodelid"]));
                             $unknown_device_instanceData ['mps_monitor_startdate'] = $start_date;
@@ -1642,14 +1639,13 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             // save instances
                             if ($unknown_device_instance_id > 0)
                             {
-                                $where = $unknown_device_instanceTable->getAdapter()->quoteInto('id = ' . $report_id . ' AND unknown_device_instance_id = ?', $unknown_device_instance_id, 'INTEGER');
+                                $where = $unknown_device_instanceTable->getAdapter()->quoteInto('report_id = ' . $report_id . ' AND id = ?', $unknown_device_instance_id, 'INTEGER');
                                 $unknown_device_instanceTable->update($unknown_device_instanceData, $where);
                             }
                             else
                             {
                                 $unknown_device_instanceData ['user_id'] = $this->user_id;
                                 $unknown_device_instanceData ['report_id'] = $report_id;
-                                
                                 $unknown_device_instance_id = $unknown_device_instanceTable->insert($unknown_device_instanceData);
                             }
                             
@@ -1669,7 +1665,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             
                             // update uploaded record as not excluded
                             $upload_data_collectorData = array (
-                                    'upload_data_collector_id' => $upload_data_collector_id, 
+                                    'id' => $upload_data_collector_id, 
                                     'is_excluded' => 0 
                             );
                             $udcUpdateArray [] = $upload_data_collectorData;
@@ -1678,7 +1674,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         
                         // check for ticket for user/device_pf_id
                         $ticket_pf_requestTable = new Proposalgen_Model_DbTable_TicketPFRequest();
-                        $where = $ticket_pf_requestTable->getAdapter()->quoteInto('user_id = ' . $this->user_id . ' AND devices_pf_id = ?', $devices_pf_id, 'INTEGER');
+                        $where = $ticket_pf_requestTable->getAdapter()->quoteInto('user_id = ' . $this->user_id . ' AND pf_device_id = ?', $devices_pf_id, 'INTEGER');
                         $ticket_pf_request = $ticket_pf_requestTable->fetchRow($where);
                         
                         if (count($ticket_pf_request) > 0)
@@ -1727,13 +1723,12 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         $db->commit();
                         
                         // redirect back to mapping page
-                        $this->_redirect('data/devicemapping?grid=' . $grid);
+                        $this->_redirect('proposalgen/fleet/devicemapping?grid=' . $grid);
                     }
                     catch ( Exception $e )
                     {
                         $db->rollback();
                         $this->view->message = "There was an error saving your unknown device.";
-                        // echo $e;
                     }
                 }
             }
@@ -1745,7 +1740,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 $form->populate($formData);
             } // end else
             
-
             if ($upload_data_collector_id > 0)
             {
                 // set default
@@ -1843,7 +1837,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         ->from(array (
                             'udc' => 'proposalgenerator_upload_data_collector_rows' 
                     ))
-                        ->where('id = ' . $report_id . ' AND id = ?', $upload_data_collector_id, 'INTEGER');
+                        ->where('report_id = ' . $report_id . ' AND id = ?', $upload_data_collector_id, 'INTEGER');
                     $stmt = $db->query($select);
                     $result = $stmt->fetchAll();
                     
@@ -2099,15 +2093,14 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 $mapped_to_id = 0;
                 $mapped_to_modelname = '';
                 $mapped_to_manufacturer = '';
-                // loop through pf_device_matchup_users to find suggested
-                // mapping
+                // loop through pf_device_matchup_users to find suggested mapping
                 $select = new Zend_Db_Select($db);
                 $select = $db->select()
                     ->from(array (
-                        'pfdmu' => 'pf_device_matchup_users' 
+                        'pfdmu' => 'proposalgenerator_user_pf_device_matchups' 
                 ), array (
-                        'devices_pf_id', 
-                        'md.id AS master_device_id', 
+                        'pf_device_id', 
+                        'master_device_id', 
                         'user_id' 
                 ))
                     ->joinLeft(array (
@@ -2117,13 +2110,10 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 ))
                     ->joinLeft(array (
                         'm' => 'manufacturers' 
-                ), 'm.manufacturer_id = md.manufacturer_id', array (
-                        'manufacturer_name' 
+                ), 'm.id = md.manufacturer_id', array (
+                        'displayname' 
                 ))
-                    ->where('pfdmu.devices_pf_id = ' . $devices_pf_id . ' AND pfdmu.user_id = ' . $this->user_id);
-                echo '<pre>';
-                echo ($select);
-                die();
+                    ->where('pfdmu.pf_device_id = ' . $devices_pf_id . ' AND pfdmu.user_id = ' . $this->user_id);
                 $stmt = $db->query($select);
                 $master_devices = $stmt->fetchAll();
                 
@@ -2139,22 +2129,22 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     $select = new Zend_Db_Select($db);
                     $select = $db->select()
                         ->from(array (
-                            'mmpf' => 'master_matchup_pf' 
+                            'mmpf' => 'proposalgenerator_master_pf_device_matchups' 
                     ), array (
-                            'devices_pf_id', 
+                            'pf_device_id', 
                             'master_device_id' 
                     ))
                         ->joinLeft(array (
-                            'md' => 'master_device' 
-                    ), 'md.master_device_id = mmpf.master_device_id', array (
+                            'md' => 'proposalgenerator_master_devices' 
+                    ), 'md.id = mmpf.master_device_id', array (
                             'printer_model' 
                     ))
                         ->joinLeft(array (
-                            'm' => 'manufacturer' 
-                    ), 'm.manufacturer_id = md.mastdevice_manufacturer', array (
-                            'manufacturer_name' 
+                            'm' => 'manufacturers' 
+                    ), 'm.id = md.manufacturer_id', array (
+                            'displayname' 
                     ))
-                        ->where('mmpf.devices_pf_id = ' . $devices_pf_id);
+                        ->where('mmpf.pf_device_id = ' . $devices_pf_id);
                     $stmt = $db->query($select);
                     $master_devices = $stmt->fetchAll();
                     
@@ -2162,7 +2152,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     {
                         $mapped_to_id = $master_devices [0] ['master_device_id'];
                         $mapped_to_modelname = $master_devices [0] ['printer_model'];
-                        $mapped_to_manufacturer = $master_devices [0] ['manufacturer_name'];
+                        $mapped_to_manufacturer = $master_devices [0] ['displayname'];
                     }
                 }
                 
@@ -2174,4 +2164,339 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         } // end if
         $this->view->deviceform = $form;
     }
+
+    public function savemappingAction ()
+    {
+        Tangent_Timer::Milestone("Start Save Mapping");
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $this->view->grid = $this->_getParam('grid', 'none');
+        
+        $report_id = $this->getReport()->getReportId();
+        
+        $date = date('Y-m-d H:i:s T');
+        $this->user_id = Zend_Auth::getInstance()->getIdentity()->id;
+
+        $this->view->formTitle = 'Upload Confirmation';
+        $this->view->companyName = $this->getReportCompanyName();
+        
+        // get report id from session
+        $report_id = $this->getReport()->getReportId();
+        
+        if ($this->_request->isPost())
+        {
+            $db = Zend_Db_Table::getDefaultAdapter();
+    
+            $db->beginTransaction();
+            try
+            {
+                $deviceArray = array ();
+                $udcUpdateArray = array ();
+                $metersDataArray = array ();
+    
+                $formData = $this->_request->getPost();
+    
+                $select = new Zend_Db_Select($db);
+                $select = $db->select()
+                ->from(array (
+                        'udc' => 'proposalgenerator_upload_data_collector_rows'
+                ))
+                ->joinLeft(array (
+                        'di' => 'proposalgenerator_device_instances'
+                ), 'di.id = udc.id', array (
+                        'id AS device_instance_id'
+                ))
+                ->joinLeft(array (
+                        'udi' => 'proposalgenerator_unknown_device_instances'
+                ), 'udi.id = udc.id', array (
+                        'id AS unknown_device_instance_id'
+                ))
+                ->joinLeft(array (
+                        'mmpf' => 'proposalgenerator_master_pf_device_matchups'
+                ), 'udc.devices_pf_id = mmpf.pf_device_id', array (
+                        'master_device_id AS master_matchup_id'
+                ))
+                ->joinLeft(array (
+                        'pfdmu' => 'proposalgenerator_user_pf_device_matchups'
+                ), 'udc.devices_pf_id = pfdmu.pf_device_id AND pfdmu.user_id = ' . $this->user_id, array (
+                        'master_device_id AS user_matchup_id'
+                ))
+                ->joinLeft(array (
+                        'md' => 'proposalgenerator_master_devices'
+                ), 'md.id = pfdmu.master_device_id', array (
+                        'printer_model'
+                ))
+                ->joinLeft(array (
+                        'm' => 'manufacturers'
+                ), 'm.id = md.manufacturer_id', array (
+                        'displayname'
+                ))
+                ->where('udc.report_id = ?', $report_id, 'INTEGER')
+                ->where('udc.invalid_data = 0')
+                ->where('udi.id IS NULL');
+                $stmt = $db->query($select);
+                $result = $stmt->fetchAll();
+                
+                // *************************************************************
+                // save device instances
+                // *************************************************************
+                $metersDataArray = array ();
+    
+                foreach ( $result as $key => $value )
+                {
+                    $is_leased = 0;
+                    $master_device_id = 0;
+    
+                    // get devices_pf_id
+                    $devices_pf_id = $result [$key] ['devices_pf_id'];
+                    $upload_data_collector_id = $result [$key] ['id'];
+    
+                    // get mapped to master device id
+                    if (isset($formData ['hdnMasterDevicesValue' . $devices_pf_id]))
+                    {
+                        $master_device_id = $formData ['hdnMasterDevicesValue' . $devices_pf_id];
+                    }
+                    else if ($result [$key] ['user_matchup_id'] > 0)
+                    {
+                        $master_device_id = $result [$key] ['user_matchup_id'];
+                    }
+                    else if ($result [$key] ['master_matchup_id'] > 0)
+                    {
+                        $master_device_id = $result [$key] ['master_matchup_id'];
+                    }
+    
+                    if ($master_device_id > 0)
+                    {
+                        // get jit support
+                        $is_color = $result [$key] ['is_color'];
+                        $tonerLevels = array ();
+                        if ($is_color == 0)
+                        {
+                            $tonerLevels = array (
+                                    'toner_level_black' => $result [$key] ['tonerlevel_black']
+                            );
+                        }
+                        else
+                        {
+                            $tonerLevels = array (
+                                    'toner_level_black' => $result [$key] ['tonerlevel_black'],
+                                    'toner_level_cyan' => $result [$key] ['tonerlevel_cyan'],
+                                    'toner_level_magenta' => $result [$key] ['tonerlevel_magenta'],
+                                    'toner_level_yellow' => $result [$key] ['tonerlevel_yellow']
+                            );
+                        }
+                        $jit_supplies_supported = $this->determineJITSupport($is_color, $tonerLevels);
+    
+                        // save to device instance
+                        $device_instanceTable = new Proposalgen_Model_DbTable_DeviceInstance();
+                        $devices_instanceData = array (
+                                'id' => $result [$key] ['device_instance_id'],
+                                'report_id' => $report_id,
+                                'master_device_id' => $master_device_id,
+                                'upload_data_collector_id' => $upload_data_collector_id,
+                                'serial_number' => $result [$key] ['serialnumber'],
+                                'mps_monitor_startdate' => $result [$key] ['startdate'],
+                                'mps_monitor_enddate' => $result [$key] ['enddate'],
+                                'mps_discovery_date' => $result [$key] ['discovery_date'],
+                                'jit_supplies_supported' => ($jit_supplies_supported == true ? 1 : 0),
+                                'ip_address' => $result [$key] ['ipaddress']
+                        );
+                        $deviceArray [] = $devices_instanceData;
+    
+                        // update uploaded record as not excluded
+                        $upload_data_collectorData = array (
+                                'id' => $upload_data_collector_id,
+                                'is_excluded' => 0
+                        );
+                        $udcUpdateArray [] = $upload_data_collectorData;
+                    }
+                    else
+                    {
+                        // update uploaded record as excluded
+                        $upload_data_collectorData = array (
+                                'id' => $upload_data_collector_id,
+                                'is_excluded' => 1
+                        );
+                        $udcUpdateArray [] = $upload_data_collectorData;
+                    }
+                }
+                $devicesMsg = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->saveRows($deviceArray);
+                
+                // FIXME: this seems to want all fields passed to it rather than just the ones being updated
+                //        appears to be doing an insert instead of an update
+                $ucdMsg = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->saveRows($udcUpdateArray);
+                
+                // *************************************************************
+                // save meters
+                // *************************************************************
+                // get device instance records for report
+                $select = new Zend_Db_Select($db);
+                $select = $db->select()
+                ->from(array (
+                        'udc' => 'proposalgenerator_upload_data_collector_rows'
+                ))
+                ->joinLeft(array (
+                        'di' => 'proposalgenerator_device_instances'
+                ), 'di.id = udc.id', array (
+                        'di.id AS device_instance_id'
+                ))
+                ->where('udc.report_id = ?', $report_id, 'INTEGER')
+                ->where('udc.invalid_data = 0')
+                ->where('di.id > 0');
+                $stmt = $db->query($select);
+                $result = $stmt->fetchAll();
+    
+                $columns = array (
+                        'life',
+                        'black',
+                        'color',
+                        'printblack',
+                        'printcolor',
+                        'copyblack',
+                        'copycolor',
+                        'scan',
+                        'fax'
+                );
+    
+                $metersTable = new Proposalgen_Model_DbTable_Meter();
+                foreach ( $result as $key => $value )
+                {
+                    $device_instance_id = $result [$key] ['device_instance_id'];
+    
+                    // insert meter
+                    foreach ( $columns as $key2 )
+                    {
+                        $meter_type = $key2;
+                        $start_meter = $result [$key] ["startmeter" . $meter_type];
+                        $end_meter = $result [$key] ["endmeter" . $meter_type];
+    
+                        $meter_type = strtoupper($meter_type);
+                        switch ($meter_type)
+                        {
+                        	case "PRINTCOLOR" :
+                        	    $meter_type = "PRINT COLOR";
+                        	    break;
+                        	case "COPYCOLOR" :
+                        	    $meter_type = "COPY COLOR";
+                        	    break;
+                        	case "PRINTBLACK" :
+                        	    $meter_type = "PRINT BLACK";
+                        	    break;
+                        	case "COPYBLACK" :
+                        	    $meter_type = "COPY BLACK";
+                        	    break;
+                        }
+    
+                        if ($end_meter > 0 && $start_meter > 0)
+                        {
+                            // check to see if meter exists
+                            $where = $metersTable->getAdapter()->quoteInto('meter_type = "' . $meter_type . '" AND id = ?', $device_instance_id, 'INTEGER');
+                            $meters = $metersTable->fetchRow($where);
+    
+                            $meter_id = null;
+                            if (count($meters) > 0)
+                            {
+                                $meter_id = $meters ['id'];
+                            }
+    
+                            $metersData = array (
+                                    'id' => $meter_id,
+                                    'device_instance_id' => $device_instance_id,
+                                    'meter_type' => $meter_type,
+                                    'start_meter' => $start_meter,
+                                    'end_meter' => $end_meter
+                            );
+                            $metersDataArray [] = $metersData;
+                        }
+                    }
+                }
+                $metersMsg = Proposalgen_Model_Mapper_Meter::getInstance()->saveRows($metersDataArray);
+    
+                // reset report stage flag
+                $reportTable = new Proposalgen_Model_DbTable_Report();
+                $reportData = array (
+                        'report_stage' => 'leasing'
+                );
+                $where = $reportTable->getAdapter()->quoteInto('id = ?', $report_id, 'INTEGER');
+                $report = $reportTable->fetchRow($where);
+                if ($report ['report_stage'] != 'finished')
+                {
+                    $reportTable->update($reportData, $where);
+                }
+    
+                $db->commit();
+    
+                // redirect back to mapping page
+                $this->_redirect('/proposalgen/fleet/deviceleasing');
+            }
+            catch ( Exception $e )
+            {
+                $db->rollback();
+                throw new Exception("An error occurred saving mapping.", 0, $e);
+            }
+        }
+    }
+    
+    /**
+     * This function gets the name of the company the report was prepared for
+     */
+    public function getReportCompanyName ()
+    {
+        $session = new Zend_Session_Namespace('report');
+        $report_id = $session->report_id;
+        $questionTable = new Proposalgen_Model_DbTable_TextAnswer();
+        $where = $questionTable->getAdapter()->quoteInto('question_id = 4 AND report_id = ?', $report_id, 'INTEGER');
+        $row = $questionTable->fetchRow($where);
+        if ($row ['textual_answer'])
+        {
+            return $row ['textual_answer'];
+        }
+        else
+        {
+            return null;
+        }
+    }
+    
+    /**
+     *
+     * @param $is_color int
+     *            A switch indicating color ( 1 ) or b/w ( 0 ).
+     * @param $tonerLevels array
+     *            - An associative array of device toner levels
+     *
+     * @return boolean JIT Support
+     *
+     * @author Kevin Jervis
+     */
+    public function determineJITSupport ($is_color, $tonerLevels)
+    {
+        $JITCompatible = false;
+        $tonerLevelBlack = strtoupper($tonerLevels ['toner_level_black']);
+    
+        // If device is b/w, ensure it has a % for black toner.
+        if ($is_color == 0)
+        {
+            if (strpos($tonerLevelBlack, '%'))
+                $JITCompatible = true;
+        }
+        else
+        {
+            // Convert toner values to uppercase for comparison
+            $tonerLevelCyan = strtoupper($tonerLevels ['toner_level_cyan']);
+            $tonerLevelMagenta = strtoupper($tonerLevels ['toner_level_magenta']);
+            $tonerLevelYellow = strtoupper($tonerLevels ['toner_level_yellow']);
+    
+            // If any toner reports a percentage, other toner levels must have
+            // %, OK or LOW as value
+            if (strpos($tonerLevelBlack, '%') || strpos($tonerLevelCyan, '%') || strpos($tonerLevelMagenta, '%') || strpos($tonerLevelYellow, '%'))
+                if ($tonerLevelBlack == 'LOW' || $tonerLevelBlack == 'OK' || strpos($tonerLevelBlack, '%'))
+                if ($tonerLevelCyan == 'LOW' || $tonerLevelCyan == 'OK' || strpos($tonerLevelCyan, '%'))
+                if ($tonerLevelMagenta == 'LOW' || $tonerLevelMagenta == 'OK' || strpos($tonerLevelMagenta, '%'))
+                if ($tonerLevelYellow == 'LOW' || $tonerLevelYellow == 'OK' || strpos($tonerLevelYellow, '%'))
+                {
+                    $JITCompatible = true;
+                }
+        } // end else
+        return $JITCompatible;
+    }
+    
 }

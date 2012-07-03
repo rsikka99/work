@@ -31,10 +31,10 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
         try
         {
             $object = new Proposalgen_Model_UnknownDeviceInstance();
-            $object->setUnknownDeviceInstanceId($row->id)
+            $object->setId($row->id)
                 ->setUserId($row->user_id)
                 ->setReportId($row->report_id)
-                ->setUploadDataCollectorId($row->upload_data_collector_id)
+                ->setUploadDataCollectorRowId($row->upload_data_collector_id)
                 ->setPrinterModelid($row->printermodelid)
                 ->setMpsMonitorStartdate($row->mps_monitor_startdate)
                 ->setMpsMonitorEnddate($row->mps_monitor_enddate)
@@ -387,11 +387,11 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
         $primaryKey = 0;
         try
         {
-            $data ["id"] = $object->getUnknownDeviceInstanceId();
+            $data ["id"] = $object->getId();
             $data ["user_id"] = $object->getUserId();
             $data ["report_id"] = $object->getReportId();
-            $data ["upload_data_collector_id"] = $object->getUploadDataCollectorId();
-            $data ["data_collector_modelid"] = $object->getDataCollectorModelid();
+            $data ["upload_data_collector_row_id"] = $object->getUploadDataCollectorRowId();
+            $data ["printermodelid"] = $object->getDataCollectorModelid();
             $data ["mps_monitor_startdate"] = $object->getMpsMonitorStartdate();
             $data ["mps_monitor_enddate"] = $object->getMpsMonitorEnddate();
             $data ["mps_discovery_date"] = $object->getMpsDiscoveryDate();
@@ -399,7 +399,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
             $data ["device_manufacturer"] = $object->getDeviceManufacturer();
             $data ["printer_model"] = $object->getPrinterModel();
             $data ["printer_serial_number"] = $object->getPrinterSerialNumber();
-            $data ["toner_config"] = $object->getTonerConfig();
+            $data ["toner_config_id"] = $object->getTonerConfig();
             $data ["is_copier"] = $object->getIsCopier();
             $data ["is_fax"] = $object->getIsFax();
             $data ["is_duplex"] = $object->getIsDuplex();
