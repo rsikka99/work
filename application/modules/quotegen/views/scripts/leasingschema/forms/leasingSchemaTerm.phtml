@@ -17,12 +17,13 @@ $leasingSchemaRanges = $this->leasingSchemaRanges;
 	</div>
 	
 	<div class="controls">
+		<div style="overflow: auto; overflow-y: hidden; -ms-overflow-y: hidden; margin: 20px 0px 0px 0px;">
 		<table class="table table-stripped table-bordered">
 			<thead>
 				<tr>
 					<th style="text-align: left;">Range</th>
 					<?php foreach ( $leasingSchemaRanges as $range ) { ?>
-					<th style="text-align: center;"><?php echo $this->currency($range->getStartRange()); ?></th>
+					<th style="text-align: center;"><?php echo $this->currency($range->getStartRange()); ?>+</th>
 					<?php } ?>
 				</tr>
 			</thead>
@@ -40,6 +41,7 @@ $leasingSchemaRanges = $this->leasingSchemaRanges;
 				</tr>
 			</tbody>
 		</table>
+		</div>
 	</div>
 	
 	<div>

@@ -190,7 +190,6 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
             catch ( Zend_Db_Statement_Mysqli_Exception $e )
             {
                 $db->rollback();
-                echo $e;
                 $this->_helper->flashMessenger(array (
                         'error' => "There was an error saving the leasing schema to the database." 
                 ));
