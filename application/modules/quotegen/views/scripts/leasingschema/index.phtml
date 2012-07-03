@@ -1,3 +1,6 @@
+
+<h1>Leasing Schema</h1>
+
 <?php $leasingSchema = $this->leasingSchema; /* @var $leasingSchema Quotegen_Model_LeasingSchema */ ?>
 
 <?php $this->headScript()->captureStart('append','text/javascript') ?>
@@ -29,6 +32,7 @@
 	}
 	
 <?php $this->headScript()->captureEnd() ?>
+
 
 <?php if( isset( $this->errMessages ) ) {
 	// show the first error in the list of errors
