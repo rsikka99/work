@@ -22,7 +22,7 @@ $leasingSchemaRanges = $this->leasingSchemaRanges;
 				<tr>
 					<th style="text-align: left;">Range</th>
 					<?php foreach ( $leasingSchemaRanges as $range ) { ?>
-					<th style="text-align: center;"><?php echo $this->currency($range->getStartRange()); ?></th>
+					<th style="text-align: center;"><?php echo $this->currency($range->getStartRange()); ?>+</th>
 					<?php } ?>
 				</tr>
 			</thead>
