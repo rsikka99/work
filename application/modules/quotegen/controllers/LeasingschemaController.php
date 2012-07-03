@@ -427,12 +427,12 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                 // FIXME: For populating the form, you could pass it in the term id and let it use the mapper to fetch the term model.
                 foreach ( $leasingSchemaRate as $rate )
                 {
-                    $rangeid = $rate->getLeasingSchemaRangeId();
+                    $rangeId = $rate->getLeasingSchemaRangeId();
                     $amount = $rate->getRate();
                     
-                    if ($form->getElement("rate{$rangeid}"))
+                    if ($form->getElement("rate{$rangeId}"))
                     {
-                        $form->getElement("rate{$rangeid}")->setValue($amount);
+                        $form->getElement("rate{$rangeId}")->setValue($amount);
                     }
                 }
             }
@@ -739,12 +739,12 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                 // FIXME: You could populate these elements by using the model within the mapper.
                 foreach ( $leasingSchemaRate as $rate )
                 {
-                    $termid = $rate->getLeasingSchemaTermId();
+                    $termId = $rate->getLeasingSchemaTermId();
                     $amount = $rate->getRate();
                     
-                    if ($form->getElement("rate{$termid}"))
+                    if ($form->getElement("rate{$termId}"))
                     {
-                        $form->getElement("rate{$termid}")->setValue($amount);
+                        $form->getElement("rate{$termId}")->setValue($amount);
                     }
                 }
             }
