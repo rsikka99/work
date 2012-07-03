@@ -13,8 +13,8 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
     /*
      * Define the primary key of the model association
     */
-    public $col_leasingSchemaTermId = 'col_leasingSchemaTermId';
-    public $col_leasingSchemaRangeId = 'col_leasingSchemaRangeId';
+    public $col_leasingSchemaTermId = 'leasingSchemaTermId';
+    public $col_leasingSchemaRangeId = 'leasingSchemaRangeId';
     /**
      * Gets an instance of the mapper
      *

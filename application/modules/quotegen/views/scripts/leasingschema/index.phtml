@@ -113,7 +113,7 @@
 		        <?php } ?>
 		        <td style="text-align: center;">
 			      	<a class="btn btn-warning btn-mini" title="Edit Term" onclick="javascript: do_action('edit term', <?php echo $termid; ?>);">
-						<i class="icon-pencil icon-white"></i> Edit
+						<i class="icon-pencil icon-white"></i>
 					</a>
 					<?php if ( count ( $leasingSchema->getTerms() ) > 1 ) { ?>
 			      	<a class="btn btn-danger btn-mini" title="Delete Term" onclick="javascript: do_action('delete term', <?php echo $termid; ?>);">
@@ -133,13 +133,13 @@
 					if ($startRange == 0) { ?>
 		      			<td style="text-align: center;">
 					      	<a class="btn btn-warning btn-mini" title="Edit Range" onclick="javascript: do_action('edit range', <?php echo $rangeid; ?>);">
-								<i class="icon-pencil icon-white"></i> Edit
+								<i class="icon-pencil icon-white"></i>
 							</a>
 						</td>
 					<?php } else { ?>
 				        <td style="text-align: center;">
 					      	<a class="btn btn-warning btn-mini" title="Edit Range" onclick="javascript: do_action('edit range', <?php echo $rangeid; ?>);">
-								<i class="icon-pencil icon-white"></i> Edit
+								<i class="icon-pencil icon-white"></i>
 							</a>
 					      	<a class="btn btn-danger btn-mini" title="Delete Range" onclick="javascript: do_action('delete range', <?php echo $rangeid; ?>);">
 								<i class="icon-trash icon-white"></i>
@@ -157,10 +157,10 @@
 		<div id="buttons_container">
 			<span class="pull-right">
 		      	<a class="btn btn-success" title="Add Term" onclick="javascript: do_action('add term', 0);" href="#">
-					<i class="icon-plus icon-white"></i> Add Term
+					<i class="icon-plus-sign icon-white"></i> Add Term
 				</a>
 		      	<a class="btn btn-success" title="Add Range" onclick="javascript: do_action('add range', 0);" href="#">
-					<i class="icon-plus icon-white"></i> Add Range
+					<i class="icon-plus-sign icon-white"></i> Add Range
 				</a>
 			</span>
 		</div>
