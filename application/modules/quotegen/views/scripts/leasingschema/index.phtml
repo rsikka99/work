@@ -22,6 +22,9 @@
 			case "delete range":
 				document.location.href = 'leasingschema/deleterange/id/'+id;
 				break;
+			case "reset":
+				document.location.href = 'leasingschema/resetschema';
+				break;
 			case "import":
 				$("#leasingSchemas").submit();
 				break;
@@ -135,7 +138,8 @@
 				        </td>
 					<?php } ?>
 		        <?php } ?>
-		      	<td>&nbsp;</td>
+      			<td style="text-align: center;">
+				</td>
 		      </tr>
 		    </tbody>
 		  </table>
@@ -148,6 +152,9 @@
 				</a>
 		      	<a class="btn btn-success" title="Add Range" onclick="javascript: do_action('add range', 0);" href="#">
 					<i class="icon-plus icon-white"></i> Add Range
+				</a>
+		      	<a class="btn btn-inverse" title="Reset" onclick="javascript: do_action('reset', 0);">
+					<i class="icon-refresh icon-white"></i> Reset Data
 				</a>
 			</span>
 		</div>
