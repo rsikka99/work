@@ -34,7 +34,7 @@
                     <div class="pull-right">
                         <?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
                         <div class="btn-group pull-left">
-                            <a class="btn btn-primary" href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'user', 'action' => 'profileedit', 'id' => Zend_Auth::getInstance()->getIdentity()->id))?>"><i class="icon-user icon-white"></i> <?php echo $this->Username(); ?></a>
+                            <a class="btn btn-primary" href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'user', 'action' => 'profile'))?>"><i class="icon-user icon-white"></i> <?php echo $this->Username(); ?></a>
                             <a class="pull-right btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a href="<?php echo $this->url(array( 'module' => 'default', 'controller' => 'auth', 'action' => 'changepassword'));?>">Change Password</a></li>
