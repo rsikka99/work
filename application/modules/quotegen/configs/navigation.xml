@@ -205,6 +205,15 @@
                                     <visible>0</visible>
                                 </viewschema>
                                 <addterm>
+                                    <label>Add Term</label>
+                                    <class></class>
+                                    <module>quotegen</module>
+                                    <controller>leasingschema</controller>
+                                    <action>addterm</action>
+                                    <resource>quotegen_leasingschema_addterm</resource>
+                                    <visible>0</visible>
+                                </addterm>
+                                <editterm>
                                     <label>Edit Term</label>
                                     <class></class>
                                     <module>quotegen</module>
@@ -212,7 +221,7 @@
                                     <action>editterm</action>
                                     <resource>quotegen_leasingschema_editterm</resource>
                                     <visible>0</visible>
-                                </addterm>
+                                </editterm>
                                 <delterm>
                                     <label>Delete Term</label>
                                     <class></class>
@@ -223,6 +232,15 @@
                                     <visible>0</visible>
                                 </delterm>
                                 <addrange>
+                                    <label>Add Range</label>
+                                    <class></class>
+                                    <module>quotegen</module>
+                                    <controller>leasingschema</controller>
+                                    <action>addrange</action>
+                                    <resource>quotegen_leasingschema_addrange</resource>
+                                    <visible>0</visible>
+                                </addrange>
+                                <editrange>
                                     <label>Edit Range</label>
                                     <class></class>
                                     <module>quotegen</module>
@@ -230,7 +248,7 @@
                                     <action>editrange</action>
                                     <resource>quotegen_leasingschema_editrange</resource>
                                     <visible>0</visible>
-                                </addrange>
+                                </editrange>
                                 <delrange>
                                     <label>Delete Range</label>
                                     <class></class>
