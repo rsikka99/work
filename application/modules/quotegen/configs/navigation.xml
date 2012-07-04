@@ -205,7 +205,7 @@
                                     <visible>0</visible>
                                 </viewschema>
                                 <addterm>
-                                    <label>Add/Edit Term</label>
+                                    <label>Edit Term</label>
                                     <class></class>
                                     <module>quotegen</module>
                                     <controller>leasingschema</controller>
@@ -223,7 +223,7 @@
                                     <visible>0</visible>
                                 </delterm>
                                 <addrange>
-                                    <label>Add/Edit Range</label>
+                                    <label>Edit Range</label>
                                     <class></class>
                                     <module>quotegen</module>
                                     <controller>leasingschema</controller>
