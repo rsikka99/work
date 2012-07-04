@@ -121,7 +121,11 @@
             <div class="container">
                 <div class="row">
                     <div class="span6">Copyright Tangent MTW &copy; <?php echo date("Y"); ?>. All Rights Reserved.</div>
-                    <div class="span6" id="footerLinks">About | Eula | Terms of Service</div>
+                    <div class="span6" id="footerLinks">
+						<a class="" href="<?php echo $this->url(array( 'module' => 'proposalgen', 'controller' => 'info', 'action' => 'about'));?>">About</a> |
+						<a class="" href="<?php echo $this->url(array( 'module' => 'proposalgen', 'controller' => 'info', 'action' => 'eula'));?>">Eula</a> |
+						<a class="" href="<?php echo $this->url(array( 'module' => 'proposalgen', 'controller' => 'info', 'action' => 'termsandconditions'));?>">Terms of Service</a>
+                    </div>
                 </div>
             </div>
         </footer>
