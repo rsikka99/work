@@ -1,6 +1,3 @@
-
-<h1>Leasing Schema</h1>
-
 <?php $leasingSchema = $this->leasingSchema; /* @var $leasingSchema Quotegen_Model_LeasingSchema */ ?>
 
 <?php $this->headScript()->captureStart('append','text/javascript') ?>
@@ -36,7 +33,6 @@
 	
 <?php $this->headScript()->captureEnd() ?>
 
-
 <?php if( isset( $this->errMessages ) ) {
 	// show the first error in the list of errors
 	echo '<div class="alert alert-error">';
@@ -45,6 +41,8 @@
 	}
 	echo '</div>';
 } ?>
+
+<h1>Leasing Schema</h1>
 
 <div class="well">
 
@@ -65,7 +63,7 @@
 				</a>
 			</span>
 	    	<span class="pull-right">
-				<a class="btn btn-inverse" title="Reset" onclick="javascript: do_action('reset', 0);">
+				<a class="btn btn-inverse" title="Clear Schema" onclick="javascript: do_action('reset', 0);">
 					<i class="icon-exclamation-sign icon-white"></i> Clear Schema
 				</a>
 			</span>
@@ -147,8 +145,7 @@
 				        </td>
 					<?php } ?>
 		        <?php } ?>
-      			<td style="text-align: center;">
-				</td>
+      			<td style="text-align: center;">&nbsp;</td>
 		      </tr>
 		    </tbody>
 		  	</table>
