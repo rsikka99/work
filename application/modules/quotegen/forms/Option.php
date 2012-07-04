@@ -105,6 +105,9 @@ class Quotegen_Form_Option extends EasyBib_Form
                 'label' => 'Cancel' 
         ));
         
+        $this->addElement('hash', 'csrf', array (
+                'ignore' => true
+        ));
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }
 }

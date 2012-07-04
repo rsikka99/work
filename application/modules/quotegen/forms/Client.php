@@ -89,6 +89,10 @@ class Quotegen_Form_Client extends EasyBib_Form
                 'label' => 'Cancel' 
         ));
         
+        $this->addElement('hash', 'csrf', array (
+                'ignore' => true
+        ));
+        
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }
 }

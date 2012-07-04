@@ -94,6 +94,10 @@ class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
                 'label' => 'Back' 
         ));
         
+        $this->addElement('hash', 'csrf', array (
+                'ignore' => true
+        ));
+        
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }
 }

@@ -60,6 +60,9 @@ class Quotegen_Form_SelectOptions extends EasyBib_Form
                 'ignore' => true, 
                 'label' => 'Cancel' 
         ));
+        $this->addElement('hash', 'csrf', array (
+                'ignore' => true
+        ));
         
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }
