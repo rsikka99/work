@@ -321,4 +321,14 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
         $this->_option = $_option;
         return $this;
     }
+
+    /**
+     * Gets the total quantity (quantity + included quantity)
+     * 
+     * @return number The total quantity
+     */
+    public function getTotalQuantity ()
+    {
+        return (int)$this->getQuantity() + (int)$this->getIncludedQuantity();
+    }
 }

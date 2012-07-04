@@ -9,14 +9,14 @@
 class Quotegen_View_Helper_Quotemenu extends Zend_View_Helper_Abstract
 {
     const DEVICES_CONTROLLER = 'quote_devices';
-    const PAGES_CONTROLLER = 'quote_pages';
+    const PRICING_CONTROLLER = 'quote_pricing';
     const SETTINGS_CONTROLLER = 'quote_settings';
     const REPORTS_CONTROLLER = 'quote_reports';
     static $pages = array (
-            self::DEVICES_CONTROLLER => 'Devices', 
-            self::PAGES_CONTROLLER => 'Pages', 
-            self::SETTINGS_CONTROLLER => 'Settings', 
-            self::REPORTS_CONTROLLER => 'Reports' 
+            self::DEVICES_CONTROLLER => 'Build Devices', 
+            self::PRICING_CONTROLLER => 'Configure Pricing', 
+            self::SETTINGS_CONTROLLER => 'Adjust Settings', 
+            self::REPORTS_CONTROLLER => 'View & Print Reports' 
     );
     static $activePage = 'quote_devices';
 

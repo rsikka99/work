@@ -113,8 +113,8 @@ CREATE  TABLE IF NOT EXISTS `quotegen_leasing_schemas` (
   `name` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'Stores information on different leasing schemas';
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'Stores information on different leasing schemas' ;
 
 
 -- -----------------------------------------------------
@@ -133,7 +133,7 @@ CREATE  TABLE IF NOT EXISTS `quotegen_leasing_schema_ranges` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
-COMMENT = 'Stores the available value ranges (start range) for a leasin' /* comment truncated */;
+COMMENT = 'Stores the available value ranges (start range) for a leasin' /* comment truncated */ ;
 
 
 -- -----------------------------------------------------
@@ -151,8 +151,8 @@ CREATE  TABLE IF NOT EXISTS `quotegen_leasing_schema_terms` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'Holds the terms available for a leasing schema';
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'Holds the terms available for a leasing schema' ;
 
 
 -- -----------------------------------------------------
@@ -176,8 +176,8 @@ CREATE  TABLE IF NOT EXISTS `quotegen_leasing_schema_rates` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'Stores the rates that coincide with the terms and ranges for' /* comment truncated */;
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'Stores the rates that coincide with the terms and ranges for' /* comment truncated */ ;
 
 
 -- -----------------------------------------------------
@@ -224,8 +224,8 @@ CREATE  TABLE IF NOT EXISTS `quotegen_quotes` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'Primary table for a quote. Stores basic information';
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'Primary table for a quote. Stores basic information' ;
 
 
 -- -----------------------------------------------------
@@ -243,6 +243,8 @@ CREATE  TABLE IF NOT EXISTS `quotegen_quote_devices` (
   `compCostPerPageColor` DOUBLE NOT NULL ,
   `price` DOUBLE NOT NULL ,
   `quantity` INT(11) NOT NULL ,
+  `packagePrice` DOUBLE NOT NULL ,
+  `residual` DOUBLE NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `quoteId` (`quoteId` ASC) ,
   CONSTRAINT `quotegen_quote_devices_ibfk_1`
@@ -325,21 +327,6 @@ CREATE  TABLE IF NOT EXISTS `quotegen_quote_device_options` (
   PRIMARY KEY (`id`) ,
   INDEX `quoteDeviceId` (`quoteDeviceId` ASC) ,
   CONSTRAINT `quotegen_quote_device_options_ibfk_1`
-    FOREIGN KEY (`quoteDeviceId` )
-    REFERENCES `quotegen_quote_devices` (`id` ))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `quotegen_quote_device_residuals`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `quotegen_quote_device_residuals` (
-  `quoteDeviceId` INT(11) NOT NULL ,
-  `amount` DOUBLE NOT NULL ,
-  PRIMARY KEY (`quoteDeviceId`) ,
-  INDEX `quoteDeviceId` (`quoteDeviceId` ASC) ,
-  CONSTRAINT `quotegen_quote_device_residuals_ibfk_1`
     FOREIGN KEY (`quoteDeviceId` )
     REFERENCES `quotegen_quote_devices` (`id` ))
 ENGINE = InnoDB
@@ -447,8 +434,8 @@ CREATE  TABLE IF NOT EXISTS `quotegen_global_leasing_schemas` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'This table marks leasing schemas as global';
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'This table marks leasing schemas as global' ;
 
 
 -- -----------------------------------------------------
@@ -466,8 +453,8 @@ CREATE  TABLE IF NOT EXISTS `quotegen_leased_quotes` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'Used to store leased data for a quote';
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'Used to store leased data for a quote' ;
 
 
 -- -----------------------------------------------------

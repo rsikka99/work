@@ -1,4 +1,15 @@
 <?php $quote = $this->quote; /* @var $quote Quotegen_Model_Quote */ ?>
+<?php foreach ($quote->getQuoteDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */?>
+<div class="well">
+<?php echo $quoteDevice->getName(); ?>
+    <ul>
+    <?php foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */?>
+        <li><?php echo $quoteDeviceOption->getName(); ?></li>
+    <?php endforeach; ?>
+    </ul>
+</div>
+<?php endforeach; ?>
+
 <h1>Purchased Quote</h1>
 <div class="well">
     <table class="table">
@@ -16,7 +27,22 @@
             <td><?php echo $this->currency($quoteDevice->getPrice() * $quoteDevice->getQuantity()); ?></td>
         </tr>
         <?php endforeach; ?>
-        
-    
     </table>
+</div>
+<hr>
+<h1>Example Output</h1>
+<div class="well">
+    HP Color Laserjet Cm2320nf
+    <ul>
+        <li>Prints up to 99 pages per minute</li>
+        <li>Resolution of 1,200 dpi</li>
+        <li>850 Sheet standard paper capacity <strong>(How is this calculated? Is it the capacity of the printer, or the printer plus all it's paper trays?)</strong></li>
+        <li>Integrated Duplexing (Is integrated different from automatic duplexing?)</li>
+        <li>Print, copy, scan, digital send, and fax capabilities</li>
+        <li>Scanner: Color</li>
+        <li>256 MB DDR RAM</li>
+        <li>40 GB HDD</li>
+        <li>Color control panel</li>
+        <li>Fax: Up to 33.6 kbps</li>
+    </ul>
 </div>
