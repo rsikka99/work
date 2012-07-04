@@ -1,0 +1,22 @@
+<?php $quote = $this->quote; /* @var $quote Quotegen_Model_Quote */ ?>
+<h1>Purchased Quote</h1>
+<div class="well">
+    <table class="table">
+        <tr>
+            <th>QTY</th>
+            <th>Device</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+        <?php foreach ($quote->getQuoteDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */?>
+        <tr>
+            <td><?php echo $quoteDevice->getQuantity(); ?></td>
+            <td><?php echo $quoteDevice->getName(); ?></td>
+            <td><?php echo $this->currency($quoteDevice->getPrice()); ?></td>
+            <td><?php echo $this->currency($quoteDevice->getPrice() * $quoteDevice->getQuantity()); ?></td>
+        </tr>
+        <?php endforeach; ?>
+        
+    
+    </table>
+</div>

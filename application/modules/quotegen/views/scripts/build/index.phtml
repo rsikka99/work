@@ -26,7 +26,12 @@
     </div>
 </div>
 <hr>
-
+<ul class="nav nav-tabs">
+    <li class="active"><a href="<?php echo $this->url(array('action' => 'index')); ?>">Devices</a></li>
+    <li><a href="<?php echo $this->url(array('action' => 'pages')); ?>">Pages</a></li>
+    <li><a href="<?php echo $this->url(array('action' => 'settings')); ?>">Settings</a></li>
+    <li><a href="<?php echo $this->url(array('action' => 'reports')); ?>">Reports</a></li>
+</ul>
 <div class="clearfix">
 <form class="form-inline pull-right" method="POST">
         <div class="control-group">
@@ -44,7 +49,7 @@
     </form>
 <h1>Devices </h1>
 </div>
-<div>
+<div class="well">
     <div class="accordion" id="accordion2">
         <?php foreach ($quote->getQuoteDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
         <div class="accordion-group">
@@ -61,21 +66,26 @@
             <div id="collapse<?php echo $quoteDevice->getId(); ?>" class="accordion-body collapse">
                 <div class="accordion-inner">
                     <h4>Selected Options</h4>
+                    <?php if ($quoteDevice->getQuoteDeviceOptions()) : ?>
                     <table class="table table-condensed table-bordered">
                         <tr><th>Option</th><th style='width: 50px'>Incl. Qty</th><th style='width: 50px'>Extra Qty</th><th style='width: 150px'>Price</th></tr>
                         <?php foreach ($quoteDevice->getQuoteDeviceOptions() as $option) : /* @var $option Quotegen_Model_QuoteDeviceOption */ ?>
                         <tr><td><?php echo $option->getName(); ?></td><td><?php echo $option->getIncludedQuantity(); ?></td><td><?php echo $option->getQuantity(); ?></td><td><?php echo $this->currency((int)$option->getPrice()); ?> ea</td></tr>
                         <?php endforeach; ?>
                     </table>
-                    <ul>
-                        <li>10,000 Monochrome Pages Per Month for $300</li>
-                        <li>Monochrome Overage $0.02/page</li>
-                        <li>10,000 Color Pages Per Month for $20</li>
-                        <li>Color Overage $0.02/page</li>
-                    </ul>
+                    <?php else : ?>
+                    <p>This device does not have any options added.</p>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
         <?php endforeach; ?>
     </div>
+    <form method="POST" class="button-styled">
+        <div class="form-actions">
+            
+            <input type="submit" name="saveAndContinue" class="btn" value="Back" />
+            <input type="submit" name="saveAndContinue" class="btn btn-primary" value="Next Step" />
+        </div>
+    </form>
 </div>
