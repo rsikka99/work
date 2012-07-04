@@ -441,12 +441,9 @@ class Admin_UserController extends Zend_Controller_Action
         return crypt($password, $salt);
     }
 
-    public function profileeditAction ()
+    public function profileAction ()
     {
-        $userId = $this->_getParam('id', false);
-        
-        // Get user object from id 
-        
+        $userId = Zend_Auth::getInstance()->getIdentity()->id;
 
         if (! $userId)
         {
