@@ -29,6 +29,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                 $leasingSchemaRateModel = new Quotegen_Model_LeasingSchemaRate();
                 $leasingSchemaRangeModel = new Quotegen_Model_LeasingSchemaRange();
                 $leasingSchemaTermModel = new Quotegen_Model_LeasingSchemaTerm();
+                
                 $upload = new Zend_File_Transfer_Adapter_Http();
                 $upload->setDestination(Zend_Registry::get('config')->app->uploadPath);
                 
@@ -158,7 +159,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                         
                         // Send success message to the screen
                         $this->_helper->flashMessenger(array (
-                                'success' => "The leasing schema import was successful." 
+                                'success' => "The leasing schema import was completed successfully." 
                         ));
                     }
                     else
