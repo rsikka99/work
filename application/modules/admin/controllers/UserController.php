@@ -440,5 +440,67 @@ class Admin_UserController extends Zend_Controller_Action
         $salt = sprintf('$%1$s$%2$s$%3$s$', $method, $rounds, $pepper);
         return crypt($password, $salt);
     }
+
+    public function profileeditAction ()
+    {
+        $userId = $this->_getParam('id', false);
+        
+        // Get user object from id 
+        
+
+        if (! $userId)
+        {
+            $this->_helper->flashMessenger(array (
+                    'warning' => 'Please select a user to delete first.' 
+            ));
+            $this->_redirect('/admin/user');
+        }
+        
+        // Get the user
+        $userMapper = new Application_Model_Mapper_User();
+        $user = $userMapper->find($userId);
+        
+        $form = new Admin_Form_User(2);
+        $form->populate($user->toArray());
+        
+        $request = $this->getRequest();
+        
+        // Make sure we are posting data
+        if ($request->isPost())
+        {
+            // Get the post data
+            $values = $request->getPost();
+            // If we cancelled we don't need to validate anything
+            if (! isset($values ['cancel']))
+            {
+                try
+                {
+                    // Validate the form
+                    if ($form->isValid($values))
+                    {
+                        // Update the user information
+                        $user->populate($values);
+                        $userMapper->save($user,$userId);
+                        
+                        $this->_helper->flashMessenger(array (
+                                'success' => "User {$user->getUsername()} has been updated successfully." 
+                        ));
+                        $this->_helper->redirector('index', 'index', 'default');
+                    }
+                }
+                // If anything goes wrong show error message 
+                catch ( Exception $e )
+                {
+                }
+            }
+            else
+            {
+                // Redirect user back to the home page
+                $this->_helper->redirector('index', 'index', 'default');
+            }
+        }
+        
+        $this->view->form = $form;
+    }
 }
 

@@ -202,78 +202,75 @@ class Admin_Form_User extends EasyBib_Form
             $this->addElement($frozenUntil);
         }
         
-        if ($this->getFormMode() !== self::MODE_CREATE)
+        if ($this->getFormMode() === self::MODE_EDIT)
         {
             $this->addElement('checkbox', 'reset_password', array (
                     'label' => 'Reset Password:', 
                     'required' => true 
             ));
-        }
-        
-        $password = new Zend_Form_Element_Password('password', array (
-                'label' => 'Password:', 
-                'required' => true, 
-                'filters' => array (
-                        'StringTrim' 
-                ), 
-                'validators' => array (
-                        array (
-                                'validator' => 'StringLength', 
-                                'options' => array (
-                                        4, 
-                                        80 
-                                ) 
-                        ) 
-                ) 
-        ));
-        
-        $passwordConfirm = new Zend_Form_Element_Password('password_confirm', array (
-                'label' => 'Confirm Password:', 
-                'required' => true, 
-                'filters' => array (
-                        'StringTrim' 
-                ), 
-                'validators' => array (
-                        array (
-                                'validator' => 'StringLength', 
-                                'options' => array (
-                                        1, 
-                                        255 
-                                ) 
-                        ), 
-                        array (
-                                'validator' => 'Identical', 
-                                'options' => array (
-                                        'token' => 'password' 
-                                ) 
-                        ) 
-                ), 
-                'errorMessages' => array (
-                        'Identical' => 'Passwords must match.' 
-                ) 
-        ));
-        
-        if ($this->getFormMode() !== self::MODE_CREATE)
-        {
+            
+            $password = new Zend_Form_Element_Password('password', array (
+                    'label' => 'Password:', 
+                    'required' => true, 
+                    'filters' => array (
+                            'StringTrim' 
+                    ), 
+                    'validators' => array (
+                            array (
+                                    'validator' => 'StringLength', 
+                                    'options' => array (
+                                            4, 
+                                            80 
+                                    ) 
+                            ) 
+                    ) 
+            ));
+            
+            $passwordConfirm = new Zend_Form_Element_Password('password_confirm', array (
+                    'label' => 'Confirm Password:', 
+                    'required' => true, 
+                    'filters' => array (
+                            'StringTrim' 
+                    ), 
+                    'validators' => array (
+                            array (
+                                    'validator' => 'StringLength', 
+                                    'options' => array (
+                                            1, 
+                                            255 
+                                    ) 
+                            ), 
+                            array (
+                                    'validator' => 'Identical', 
+                                    'options' => array (
+                                            'token' => 'password' 
+                                    ) 
+                            ) 
+                    ), 
+                    'errorMessages' => array (
+                            'Identical' => 'Passwords must match.' 
+                    ) 
+            ));
+            
             $password->setRequired(false);
             $passwordConfirm->setRequired(false);
+            
+            $this->addElement($password);
+            $this->addElement($passwordConfirm);
+            
+            $this->addElement('checkbox', 'locked', array (
+                    'label' => 'Locked:', 
+                    'filters' => array (
+                            new Zend_Filter_Boolean(Zend_Filter_Boolean::ALL) 
+                    ), 
+                    'required' => false 
+            ));
+            
+            $this->addElement('checkbox', 'resetPasswordOnNextLogin', array (
+                    'label' => 'Require Password Change On Next Login:', 
+                    'required' => true 
+            ));
         }
-        
-        $this->addElement($password);
-        $this->addElement($passwordConfirm);
-        
-        $this->addElement('checkbox', 'locked', array (
-                'label' => 'Locked:', 
-                'filters' => array (
-                        new Zend_Filter_Boolean(Zend_Filter_Boolean::ALL) 
-                ), 
-                'required' => false 
-        ));
-        
-        $this->addElement('checkbox', 'resetPasswordOnNextLogin', array (
-                'label' => 'Require Password Change On Next Login:', 
-                'required' => true 
-        ));
         
         // Add the submit button
         $this->addElement('submit', 'submit', array (
