@@ -194,6 +194,62 @@
                             <controller>leasingschema</controller>
                             <action>index</action>
                             <resource>quotegen_leasingschema_index</resource>
+                            <pages>
+                                <viewschema>
+                                    <label>View Schema</label>
+                                    <class></class>
+                                    <module>quotegen</module>
+                                    <controller>leasingschema</controller>
+                                    <action>index</action>
+                                    <resource>quotegen_leasingschema_index</resource>
+                                    <visible>0</visible>
+                                </viewschema>
+                                <addterm>
+                                    <label>Add/Edit Term</label>
+                                    <class></class>
+                                    <module>quotegen</module>
+                                    <controller>leasingschema</controller>
+                                    <action>editterm</action>
+                                    <resource>quotegen_leasingschema_editterm</resource>
+                                    <visible>0</visible>
+                                </addterm>
+                                <delterm>
+                                    <label>Delete Term</label>
+                                    <class></class>
+                                    <module>quotegen</module>
+                                    <controller>leasingschema</controller>
+                                    <action>deleteterm</action>
+                                    <resource>quotegen_leasingschema_deleteterm</resource>
+                                    <visible>0</visible>
+                                </delterm>
+                                <addrange>
+                                    <label>Add/Edit Range</label>
+                                    <class></class>
+                                    <module>quotegen</module>
+                                    <controller>leasingschema</controller>
+                                    <action>editrange</action>
+                                    <resource>quotegen_leasingschema_editrange</resource>
+                                    <visible>0</visible>
+                                </addrange>
+                                <delrange>
+                                    <label>Delete Range</label>
+                                    <class></class>
+                                    <module>quotegen</module>
+                                    <controller>leasingschema</controller>
+                                    <action>deleterange</action>
+                                    <resource>quotegen_leasingschema_deleterange</resource>
+                                    <visible>0</visible>
+                                </delrange>
+                                <resetschema>
+                                    <label>Clear Schema</label>
+                                    <class></class>
+                                    <module>quotegen</module>
+                                    <controller>leasingschema</controller>
+                                    <action>resetschema</action>
+                                    <resource>quotegen_leasingschema_resetschema</resource>
+                                    <visible>0</visible>
+                                </resetschema>
+                            </pages>
                         </leasing>
                         <devices>
                             <label>Devices</label>
