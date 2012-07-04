@@ -47,7 +47,7 @@ class Admin_Form_User extends EasyBib_Form
          *
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
-        $this->setAttrib('class', 'form-horizontal');
+        $this->setAttrib('class', 'form-horizontal button-styled');
         
         // Filters
         $alnum = new Zend_Filter_Alnum(true);
@@ -278,13 +278,9 @@ class Admin_Form_User extends EasyBib_Form
                 'label' => 'Save' 
         ));
         
-        // Add the cancel button
-        $this->addElement('submit', 'cancel', array (
-                'ignore' => true, 
-                'label' => 'Cancel' 
-        ));
         
-        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
+        
+        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit');
     }
 
     /**

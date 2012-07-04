@@ -444,7 +444,7 @@ class Admin_UserController extends Zend_Controller_Action
     public function profileAction ()
     {
         $userId = Zend_Auth::getInstance()->getIdentity()->id;
-
+        
         if (! $userId)
         {
             $this->_helper->flashMessenger(array (
@@ -477,17 +477,26 @@ class Admin_UserController extends Zend_Controller_Action
                     {
                         // Update the user information
                         $user->populate($values);
-                        $userMapper->save($user,$userId);
+                        $userMapper->save($user, $userId);
+                        
+                        // Update storage
+                        $storage = Zend_Auth::getInstance()->getStorage();
+                        $indentity = Zend_Auth::getInstance()->getIdentity();
+                        $indentity->firstname = $values ['firstname'];
+                        $indentity->lastname = $values ['lastname'];
+                        $indentity->email = $values ['email'];
                         
                         $this->_helper->flashMessenger(array (
                                 'success' => "User {$user->getUsername()} has been updated successfully." 
                         ));
-                        $this->_helper->redirector('index', 'index', 'default');
                     }
                 }
                 // If anything goes wrong show error message 
                 catch ( Exception $e )
                 {
+                    $this->_helper->flashMessenger(array (
+                            'warning' => "User was not updated successfully please try again.	" 
+                    ));
                 }
             }
             else
