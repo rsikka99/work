@@ -68,26 +68,22 @@
         <!-- End of Navbar -->
         <div class="subnav">
             <div class="container">
-        <?php 
-        // Find the active branch, at a depth of one
-        $nav2Container = null;
-        $rootPage = $this->navigation()->getContainer()->getPages();
-        foreach($rootPage as $page) { 
-        	if($page->isActive(true)) { 
-        		$nav2Container = $page;
-        		break;
-        	}
-        }
-        
-        if ($nav2Container && $nav2Container->hasPages())
-        {
-        ?>
-
-                <?php echo $this->navigation()->menu()->setUlClass('nav nav-pills')->setMaxDepth(2)->render($nav2Container); ?>
-
-        <?php 
-        }                    
-        ?>
+                <?php 
+                // Find the active branch, at a depth of one
+                $nav2Container = null;
+                $rootPage = $this->navigation()->getContainer()->getPages();
+                foreach($rootPage as $page) { 
+                	if($page->isActive(true)) { 
+                		$nav2Container = $page;
+                		break;
+                	}
+                }
+                
+                if ($nav2Container && $nav2Container->hasPages())
+                {
+                    echo $this->navigation()->menu()->setUlClass('nav nav-pills')->setMaxDepth(2)->render($nav2Container);
+                }                    
+                ?>
             </div>
         </div>        
         
@@ -109,7 +105,6 @@
                             <?php echo $this->flashMessenger("info", '<div class="alert alert-%s">%s</div>'); ?>
                             <?php echo $this->layout()->content ?>
                         </div>
-                        
                         <!--/span-->
                     </div>
                     <hr>
