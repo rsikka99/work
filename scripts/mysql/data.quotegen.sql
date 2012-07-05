@@ -66,8 +66,8 @@ INSERT INTO `quotegen_leasing_schema_rates` (`leasingSchemaTermId`, `leasingSche
 -- ---------------------------------
 -- Create a quote with some devices.
 -- ---------------------------------
-INSERT INTO `quotegen_quotes` (`id`, `clientId`, `dateCreated`, `dateModified`, `quoteDate`, `userId`, `clientDisplayName`, `leaseRate`, `leaseTerm`) VALUES
-(1, 2, NOW(), NOW(), NOW(), 1, NULL, NULL, NULL);
+INSERT INTO `quotegen_quotes` (`id`, `clientId`, `dateCreated`, `dateModified`, `quoteDate`, `userId`, `clientDisplayName`, `leaseRate`, `leaseTerm`, `pageCoverageMonochrome`, `pageCoverageColor`, `pricingConfigId`) VALUES
+(1, 2, NOW(), NOW(), NOW(), 1, NULL, NULL, NULL, 6, 24, 2);
 
 INSERT INTO `quotegen_quote_devices` (`id`, `quoteId`, `margin`, `name`, `sku`, `oemCostPerPageMonochrome`, `oemCostPerPageColor`, `compCostPerPageMonochrome`, `compCostPerPageColor`, `price`, `quantity`, `packagePrice`, `residual`) VALUES
 (1, 1, 20.00, 'Unsynced Device Name 1', 'Unsynced SKU 1', 999, 999, 999, 999, 999.99, 1, 999.99, 0),

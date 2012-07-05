@@ -29,7 +29,7 @@ $this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.
                 </thead>
                 <tbody>
                     <?php foreach ($quote->getQuoteDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
-                    <tr>
+                    <tr class="deviceRow">
                         <td><input type="text" name="quantity" value="<?php echo $quoteDevice->getQuantity(); ?>" class="span1" /></td>
                         <td><?php echo $quoteDevice->getName(); ?>
                             <?php if (count($quoteDevice->getQuoteDeviceOptions()) > 0) : ?>

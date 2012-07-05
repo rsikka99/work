@@ -58,16 +58,17 @@ $this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.
                             </div>
                         </td>
                     </tr>
-                    <?php if (count($quoteDevice->getQuoteDeviceOptions()) > 0) : ?>
                     <tr class="optionRow">
-                        <td colspan="1"></td>
+                        
                         <td colspan="2">
-                            <h4>Options</h4>
+                            <br>
+                            <h4>Device Options</h4>
+                            <?php if (count($quoteDevice->getQuoteDeviceOptions()) > 0) : ?>
                             <table>
                                 <tr>
-                                    <th style="width: 80px;">QTY</th>
+                                    <th style="width: 40px;">QTY</th>
                                     <th>Option Name</th>
-                                    <th style="width: 80px;">QTY Included</th>
+                                    <th style="width: 100px;">QTY Included</th>
                                     <th style="width: 120px;">Price</th>
                                 </tr>
                             <?php foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
@@ -79,10 +80,31 @@ $this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.
                                 </tr>
                             <?php endforeach; ?>
                             </table>
+                            <?php else : ?>
+                            <p>There are no options attached to this configuration.</p>
+                            <?php endif; ?>
                         </td>
-                        <td colspan="5"></td>
+                        <td colspan="5">
+                            <br>
+                            <h4>Leasing Pages</h4>
+                            <table>
+                                <tr>
+                                    <th>SKU</th>
+                                    <th style="width: 120px;">Type</th>
+                                    <th style="width: 80px;">Included</th>
+                                    <th style="width: 60px;">CPP</th>
+                                    <th style="width: 60px;">Price</th>
+                                <tr>
+                                    <td>SKUABC123</td>
+                                    <td>Print - Color</td>
+                                    <td>5,000</td>
+                                    <td>$0.12</td>
+                                    <td>$120.55</td>
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
-                    <?php endif; ?>
+                    
                     
                     <?php endforeach; ?>
                 </tbody>

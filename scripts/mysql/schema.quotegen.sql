@@ -213,15 +213,24 @@ CREATE  TABLE IF NOT EXISTS `quotegen_quotes` (
   `clientDisplayName` VARCHAR(45) NULL ,
   `leaseRate` DOUBLE NULL ,
   `leaseTerm` INT(11) NULL ,
+  `pageCoverageMonochrome` DOUBLE NOT NULL ,
+  `pageCoverageColor` DOUBLE NOT NULL ,
+  `pricingConfigId` INT(11) NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `clientId` (`clientId` ASC) ,
   INDEX `quotegen_quotes_ibfk_2` (`userId` ASC) ,
+  INDEX `quotegen_quotes_ibfk_3` (`pricingConfigId` ASC) ,
   CONSTRAINT `quotegen_quotes_ibfk_1`
     FOREIGN KEY (`clientId` )
     REFERENCES `clients` (`id` ),
   CONSTRAINT `quotegen_quotes_ibfk_2`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `quotegen_quotes_ibfk_3`
+    FOREIGN KEY (`pricingConfigId` )
+    REFERENCES `proposalgenerator_pricing_configs` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -385,24 +394,6 @@ CREATE  TABLE IF NOT EXISTS `quotegen_user_quote_settings` (
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` ),
   CONSTRAINT `quotegen_user_quote_settings_ibfk_2`
-    FOREIGN KEY (`quoteSettingId` )
-    REFERENCES `quotegen_quote_settings` (`id` ))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `quotegen_quote_quote_settings`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `quotegen_quote_quote_settings` (
-  `quoteId` INT(11) NOT NULL ,
-  `quoteSettingId` INT(11) NOT NULL ,
-  PRIMARY KEY (`quoteId`, `quoteSettingId`) ,
-  INDEX `quoteSettingId` (`quoteSettingId` ASC) ,
-  CONSTRAINT `quotegen_quote_quote_settings_ibfk_10`
-    FOREIGN KEY (`quoteId` )
-    REFERENCES `quotegen_quotes` (`id` ),
-  CONSTRAINT `quotegen_user_quote_settings_ibfk_20`
     FOREIGN KEY (`quoteSettingId` )
     REFERENCES `quotegen_quote_settings` (`id` ))
 ENGINE = InnoDB
