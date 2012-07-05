@@ -9,11 +9,12 @@ $this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.
            <div class="pull-right"><input type="submit" name="update" value="Save and Recalculate" class="btn" /></div>
        </div>
        <br>
-        <div >
+        <div>
             <table class="table table-condensed">
                 <tr>
-                    <th colspan="5"></th>
+                    <th colspan="6"></th>
                     <th colspan="2">Leased Quotes Only</th>
+                </tr>
                 <tr>
                     <th>QTY</th>
                     <th>Device</th>
@@ -37,16 +38,18 @@ $this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.
                         <?php endif; ?>
                     </td>
                     <td><?php echo $this->currency($quoteDevice->calculatePackagePrice()); ?></td>
-                    <td><input type="text" name="price" value="<?php echo $quoteDevice->getPackagePrice(); ?>" class="span2" /></td>
+                    <td><input type="text" name="packagePrice" value="<?php echo $quoteDevice->getPackagePrice(); ?>" class="span2" /></td>
                     <td><input type="text" name="margin" class="span1" value="20" /></td>
                     <td><?php echo $this->currency($quoteDevice->calculateSubTotal()); ?></td>
                     <td><input type="text" name="residual" class="span1" value="0" /></td>
                     <td>$149.99(*fake)</td>
                 </tr>
+                
+                
+                
                 <?php endforeach; ?>
             </table>
         </div>
         </form>
     </div>
-    <div class="span3"><?php echo $this->render('_partials/quoteSidebar.phtml'); ?></div>
 </div>
