@@ -46,13 +46,23 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 // New Quote
                 if ($newQuoteForm->isValid($values))
                 {
+                    $userId = Zend_Auth::getInstance()->getIdentity()->id;
+                    $userQuoteSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting($userId);
+                    
+                    $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
+                    $quoteSetting->applyOverride($userQuoteSetting);
+                    
                     $currentDate = date('Y-m-d H:i:s');
                     $quote = new Quotegen_Model_Quote($values);
                     
-                    $quote->setUserId(Zend_Auth::getInstance()->getIdentity()->id);
+                    $quote->setUserId($userId);
                     $quote->setDateCreated($currentDate);
                     $quote->setDateModified($currentDate);
                     $quote->setQuoteDate($currentDate);
+                    
+                    $quote->setPageCoverageMonochrome($quoteSetting->getPageCoverageMonochrome());
+                    $quote->setPageCoverageColor($quoteSetting->getPageCoverageColor());
+                    $quote->setPricingConfigId($quoteSetting->getPricingConfigId());
                     
                     $quoteId = Quotegen_Model_Mapper_Quote::getInstance()->insert($quote);
                     
