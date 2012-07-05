@@ -71,6 +71,8 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             $quoteDevice->setQuoteId($this->_quoteId);
                             $quoteDevice->setMargin(0);
                             $quoteDevice->setQuantity(1);
+                            $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
+                            $quoteDevice->setResidual(0);
                             
                             // Save our device
                             $quoteDeviceId = Quotegen_Model_Mapper_QuoteDevice::getInstance()->insert($quoteDevice);
@@ -312,6 +314,12 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             }
                         }
                         
+                        if ($insertedOptions > 0)
+                        {
+                            $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
+                            Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
+                        }
+                        
                         $this->_helper->flashMessenger(array (
                                 'success' => "Successfully added {$insertedOptions} options." 
                         ));
@@ -357,6 +365,12 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             try
             {
                 $rowsAffected = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->delete($quoteDeviceOptionId);
+                
+                if ($rowsAffected > 0)
+                {
+                    $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
+                    Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
+                }
                 
                 $this->_helper->flashMessenger(array (
                         'success' => "Configuration Option deleted successfully." 
