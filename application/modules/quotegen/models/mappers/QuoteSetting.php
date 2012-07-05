@@ -12,7 +12,7 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
     
     /*
      * Define the primary key of the model association
-    */
+     */
     public $col_id = 'id';
 
     /**
@@ -219,6 +219,16 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->getId();
+    }
+
+    /**
+     * Returns the system quote setting model
+     *
+     * @return Quotegen_Model_QuoteSetting
+     */
+    public function fetchSystemQuoteSetting ()
+    {
+        return $this->find(1);
     }
 }
 
