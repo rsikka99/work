@@ -1,7 +1,13 @@
 <?php
 
-class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
+class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
 {
+
+    public function init ()
+    {
+        parent::init();
+        Quotegen_View_Helper_Quotemenu::setActivePage(Quotegen_View_Helper_Quotemenu::DEVICES_CONTROLLER);
+    }
 
     /**
      * The index action is for the main page of building a quote.
@@ -423,7 +429,7 @@ class Quotegen_BuildController extends Quotegen_Library_Controller_Quote
     public function settingsAction ()
     {
     }
-    
+
     /**
      * This function takes care of displaying reports
      */

@@ -1,9 +1,27 @@
 <?php if ($this->quote): $quote = $this->quote; /* @var $quote Quotegen_Model_Quote */ ?>
-<div class="pull-right">
-    <dl class="dl-horizontal">
-        <dt>Client Name:</dt><dd><?php echo $quote->getClient()->getName(); ?></dd>
-        <dt>Date Created:</dt><dd><?php echo date('m/d/Y H:i', strtotime($quote->getDateCreated())); ?></dd>
-        <dt>Last Modified:</dt><dd><?php echo date('m/d/Y H:i', strtotime($quote->getDateModified())); ?></dd>
-    </dl>
+<div class="row">
+    <div class="span4">
+        <h3><?php echo $quote->getClient()->getName(); ?></h3>
+        <dl class="dl-horizontal">
+            <dt>Date Created:</dt><dd><?php echo date('m/d/Y H:i', strtotime($quote->getDateCreated())); ?></dd>
+            <dt>Last Modified:</dt><dd><?php echo date('m/d/Y H:i', strtotime($quote->getDateModified())); ?></dd>
+        </dl>
+    </div>
+    <div class="span4">
+        <h3>Quote Details</h3>
+        <dl class="dl-horizontal">
+            <dt>Total Devices:</dt><dd>2</dd>
+            <dt>Purchase Subtotal:</dt><dd>$10,000</dd>
+            <dt>Average Margin:</dt><dd>20%</dd>
+        </dl>
+    </div>
+    <div class="span4">
+        <h3>Lease Specific Details</h3>
+        <dl class="dl-horizontal">
+            <dt>Monthly Payment:</dt><dd>$5,049.65</dd>
+        </dl>
+    </div>
 </div>
 <?php endif; ?>
+
+<?php echo $this->Quotemenu(); ?>

@@ -25,7 +25,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                     $this->resetQuoteSession($values ['quoteId']);
                     
                     // Redirect to the build controller
-                    $this->_helper->redirector('index', 'build');
+                    $this->_helper->redirector('index', 'quote_devices');
                 }
                 else
                 {
@@ -59,7 +59,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                     $this->resetQuoteSession($quoteId);
                     
                     // Redirect to the build controller
-                    $this->_helper->redirector('index', 'build');
+                    $this->_helper->redirector('index', 'quote_devices');
                 }
                 else
                 {

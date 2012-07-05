@@ -87,6 +87,20 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     protected $_quantity;
     
     /**
+     * The price of the entire package
+     *
+     * @var int
+     */
+    protected $_packagePrice;
+    
+    /**
+     * The residual to leave on the device
+     *
+     * @var int
+     */
+    protected $_residual;
+    
+    /**
      * The device configuration that this quote is attached to
      *
      * @var Quotegen_Model_QuoteDeviceConfiguration
@@ -131,6 +145,10 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             $this->setPrice($params->price);
         if (isset($params->quantity) && ! is_null($params->quantity))
             $this->setQuantity($params->quantity);
+        if (isset($params->packagePrice) && ! is_null($params->packagePrice))
+            $this->setPackagePrice($params->packagePrice);
+        if (isset($params->residual) && ! is_null($params->residual))
+            $this->setResidual($params->residual);
     }
     
     /*
@@ -149,7 +167,9 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
                 'compCostPerPageMonochrome' => $this->getCompCostPerPageMonochrome(), 
                 'compCostPerPageColor' => $this->getCompCostPerPageColor(), 
                 'price' => $this->getPrice(), 
-                'quantity' => $this->getQuantity() 
+                'quantity' => $this->getQuantity(), 
+                'packagePrice' => $this->getPackagePrice(), 
+                'residual' => $this->getResidual() 
         );
     }
 
@@ -396,6 +416,49 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
+     * Gets the package price
+     *
+     * @return number The package price
+     */
+    public function getPackagePrice ()
+    {
+        return $this->_packagePrice;
+    }
+
+    /**
+     * Sets the new package price
+     *
+     * @param number $_packagePrice            
+     */
+    public function setPackagePrice ($_packagePrice)
+    {
+        $this->_packagePrice = $_packagePrice;
+        return $this;
+    }
+
+    /**
+     * Gets the residual on the device
+     *
+     * @return number The residual
+     */
+    public function getResidual ()
+    {
+        return $this->_residual;
+    }
+
+    /**
+     * Sets the residual on the device
+     *
+     * @param number $_residual
+     *            The new residual
+     */
+    public function setResidual ($_residual)
+    {
+        $this->_residual = $_residual;
+        return $this;
+    }
+
+    /**
      * Gets the device associated with this quote device
      *
      * @return Quotegen_Model_Device The device configuration
@@ -450,5 +513,55 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     {
         $this->_quoteDeviceOptions = $_quoteDeviceOptions;
         return $this;
+    }
+
+    /**
+     * Calculates the price of a single device and all of it's options, plus margin
+     *
+     * @return number The price
+     */
+    public function calculatePackagePrice ()
+    {
+        // Get the device price
+        $price = $this->getPrice();
+        
+        // Tack on the option prices
+        /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
+        foreach ( $this->getQuoteDeviceOptions() as $quoteDeviceOption )
+        {
+            $price += $quoteDeviceOption->getPrice() * $quoteDeviceOption->getQuantity();
+        }
+        
+        if ($price > 0)
+        {
+            $margin = $this->getMargin();
+            if ($margin > 0 && $margin < 100)
+            {
+                $margin = 1 - (1 / $margin);
+                $price = round($price / $margin, 2);
+            }
+        }
+        
+        return $price;
+    }
+
+    /**
+     * Calculates the sub total (package price * quantity)
+     *
+     * @return number The sub total
+     */
+    public function calculateSubTotal ()
+    {
+        $subTotal = 0;
+        $packagePrice = (int)$this->getPackagePrice();
+        $quantity = (int)$this->getQuantity();
+        
+        // Make sure both the price and quantity are greater than 0
+        if ($packagePrice > 0 && $quantity > 0)
+        {
+            $subTotal = $packagePrice * $quantity;
+        }
+        
+        return $subTotal;
     }
 }

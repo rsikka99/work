@@ -9,10 +9,14 @@
 	function do_action(mode, id) {
 		switch (mode) {
 			case "add term":
+				document.location.href = 'leasingschema/addterm';
+				break;
 			case "edit term":
 				document.location.href = 'leasingschema/editterm/id/'+id;
 				break;
 			case "add range":
+				document.location.href = 'leasingschema/addrange';
+				break;
 			case "edit range":
 				document.location.href = 'leasingschema/editrange/id/'+id;
 				break;
@@ -50,7 +54,8 @@
 		
 		<?php if ( $leasingSchema ) { ?>
 				
-		<p>Select a file to upload or edit the current schema below.</p>
+		<p>You can Upload a new schema or Edit the current schema below. </p>
+		<p><strong>Note:</strong> Uploading a new schema will remove the existing schema and replace it with what you are uploading. This action can not be undone.</p>
 		
 	    <div id="upload_container" style="margin: 10px 0px 10px 0px;">
 			<span class="pull-left">

@@ -1,0 +1,52 @@
+<?php 
+$quote = $this->quote; /* @var $quote Quotegen_Model_Quote */
+$this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.phtml'));
+?>
+<div class="row">
+    <div class="span12">
+        <form method="POST">
+       <div class="clearfix">
+           <div class="pull-right"><input type="submit" name="update" value="Save and Recalculate" class="btn" /></div>
+       </div>
+       <br>
+        <div >
+            <table class="table table-condensed">
+                <tr>
+                    <th colspan="5"></th>
+                    <th colspan="2">Leased Quotes Only</th>
+                <tr>
+                    <th>QTY</th>
+                    <th>Device</th>
+                    <th>Calculated Price</th>
+                    <th>Package Price</th>
+                    <th>Margin</th>
+                    <th>Sub Total</th>
+                    <th>Residual</th>
+                    <th>Monthly Payment</th>
+                </tr>
+                <?php foreach ($quote->getQuoteDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
+                <tr>
+                    <td><input type="text" name="quantity" value="<?php echo $quoteDevice->getQuantity(); ?>" class="span1" /></td>
+                    <td><?php echo $quoteDevice->getName(); ?>
+                        <?php if (count($quoteDevice->getQuoteDeviceOptions()) > 0) : ?>
+                        <ul>
+                        <?php foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
+                            <li><?php echo $quoteDeviceOption->getTotalQuantity(); ?> x <?php echo $quoteDeviceOption->getName(); ?></li>
+                        <?php endforeach; ?>
+                        </ul>
+                        <?php endif; ?>
+                    </td>
+                    <td><?php echo $this->currency($quoteDevice->calculatePackagePrice()); ?></td>
+                    <td><input type="text" name="price" value="<?php echo $quoteDevice->getPackagePrice(); ?>" class="span2" /></td>
+                    <td><input type="text" name="margin" class="span1" value="20" /></td>
+                    <td><?php echo $this->currency($quoteDevice->calculateSubTotal()); ?></td>
+                    <td><input type="text" name="residual" class="span1" value="0" /></td>
+                    <td>$149.99(*fake)</td>
+                </tr>
+                <?php endforeach; ?>
+            </table>
+        </div>
+        </form>
+    </div>
+    <div class="span3"><?php echo $this->render('_partials/quoteSidebar.phtml'); ?></div>
+</div>

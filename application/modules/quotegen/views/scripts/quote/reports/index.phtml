@@ -1,0 +1,20 @@
+<?php 
+$quote = $this->quote; /* @var $quote Quotegen_Model_Quote */
+$this->activePage = 'reports';
+echo $this->render('_partials/quoteHeading.phtml');
+ 
+?>
+<div class="row">
+    <div class="span9">
+        <div class="alert alert-warning">Please note that this section may not be ready for normal use yet.</div>
+        <div class="well">
+            Report List
+            <ul>
+                <li><a href="<?php echo $this->url(array('action' => 'purchase-quote')); ?>">Purchase Quote</a></li>
+                <li><a href="<?php echo $this->url(array('action' => 'lease-quote')); ?>">Lease Quote</a></li>
+                <li><a href="<?php echo $this->url(array('action' => 'order-list')); ?>">Order Summary</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="span3"><?php echo $this->render('_partials/quoteSidebar.phtml'); ?></div>
+</div>
