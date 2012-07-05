@@ -1,4 +1,9 @@
-<?php $quote = $this->quote; /* @var $quote Quotegen_Model_Quote */ ?>
+<?php 
+$quote = $this->quote; /* @var $quote Quotegen_Model_Quote */
+$this->activePage = 'reports';
+echo $this->render('_partials/quoteHeading.phtml');
+ 
+?>
 <?php foreach ($quote->getQuoteDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */?>
 <div class="well">
 <?php echo $quoteDevice->getName(); ?>

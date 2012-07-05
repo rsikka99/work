@@ -119,7 +119,6 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         
         // Sync the device and save
         $quoteDevice = $this->syncDevice($quoteDevice, $device);
-        Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
         
         // Sync our options
         if ($syncOptions)
@@ -136,6 +135,9 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
                 }
             }
         }
+        
+        $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
+        Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
         
         return true;
     }

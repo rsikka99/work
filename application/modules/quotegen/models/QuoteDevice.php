@@ -532,16 +532,6 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             $price += $quoteDeviceOption->getPrice() * $quoteDeviceOption->getQuantity();
         }
         
-        if ($price > 0)
-        {
-            $margin = $this->getMargin();
-            if ($margin > 0 && $margin < 100)
-            {
-                $margin = 1 - (1 / $margin);
-                $price = round($price / $margin, 2);
-            }
-        }
-        
         return $price;
     }
 
@@ -560,6 +550,17 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         if ($packagePrice > 0 && $quantity > 0)
         {
             $subTotal = $packagePrice * $quantity;
+        }
+        
+        // Apply the margin
+        if ($subTotal > 0)
+        {
+            $margin = $this->getMargin();
+            if ($margin > 0 && $margin < 100)
+            {
+                $margin = 1 - (1 / $margin);
+                $subTotal = round($subTotal / $margin, 2);
+            }
         }
         
         return $subTotal;

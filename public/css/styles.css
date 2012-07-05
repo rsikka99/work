@@ -302,3 +302,29 @@ body {
 .create-button {
   margin-bottom: 7px;
 }
+/*
+ * Quote Flow
+*/
+table.quoteDevices {
+  width: 100%;
+}
+table.quoteDevices th {
+  text-align: left;
+}
+table.quoteDevices td {
+  vertical-align: top;
+}
+table.quoteDevices th.leasedColumn,
+table.quoteDevices td.leasedColumn {
+  background-color: #f7f7c3;
+}
+table.quoteDevices tr.deviceRow td {
+  border-top: 1px solid #CECECE;
+}
+table.quoteDevices tr.optionRow table {
+  width: 100%;
+  border: 1px solid #DEDEDE;
+}
+table.quoteDevices tr.optionRow table {
+  margin-bottom: 20px;
+}
