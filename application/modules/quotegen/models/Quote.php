@@ -44,13 +44,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     protected $_quoteDate;
     
     /**
-     * The date the quote was created
-     *
-     * @var string
-     */
-    protected $_isLeased;
-    
-    /**
      * The user who created the quote/owns the quote?
      *
      * @var number
@@ -92,6 +85,32 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     protected $_quoteDevices;
     
+    /**
+     * The default black & white page coverage value
+     *
+     * @var double
+     */
+    protected $_pageCoverageMonochrome;
+    /**
+     * The default color page coverage value
+     *
+     * @var double
+     */
+    protected $_pageCoverageColor;
+    /**
+     * The default pricing config preference
+     *
+     * @var int
+     */
+    protected $_pricingConfigId;
+    
+    /**
+     * A pricing config object
+     *
+     * @var Proposalgen_Model_PricingConfig
+     */
+    protected $_pricingConfig;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -111,12 +130,16 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             $this->setDateModified($params->dateModified);
         if (isset($params->quoteDate) && ! is_null($params->quoteDate))
             $this->setQuoteDate($params->quoteDate);
-        if (isset($params->isLeased) && ! is_null($params->isLeased))
-            $this->setIsLeased($params->isLeased);
         if (isset($params->userId) && ! is_null($params->userId))
             $this->setUserId($params->userId);
         if (isset($params->clientDisplayName) && ! is_null($params->clientDisplayName))
             $this->setClientDisplayName($params->clientDisplayName);
+        if (isset($params->pageCoverageColor) && ! is_null($params->pageCoverageColor))
+            $this->setPageCoverageColor($params->pageCoverageColor);
+        if (isset($params->pageCoverageMonochrome) && ! is_null($params->pageCoverageMonochrome))
+            $this->setPageCoverageMonochrome($params->pageCoverageMonochrome);
+        if (isset($params->pricingConfigId) && ! is_null($params->pricingConfigId))
+            $this->setPricingConfigId($params->pricingConfigId);
     }
     
     /*
@@ -130,9 +153,11 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                 'dateCreated' => $this->getDateCreated(), 
                 'dateModified' => $this->getDateModified(), 
                 'quoteDate' => $this->getQuoteDate(), 
-                'isLeased' => $this->getIsLeased(), 
                 'userId' => $this->getUserId(), 
-                'clientDisplayName' => $this->getClientDisplayName() 
+                'clientDisplayName' => $this->getClientDisplayName(),
+                'pageCoverageColor' => $this->getPageCoverageColor(),
+                'pageCoverageMonochrome' => $this->getPageCoverageMonochrome(),
+                'pricingConfigId' => $this->getPricingConfigId()
         );
     }
 
@@ -242,27 +267,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function setQuoteDate ($_quoteDate)
     {
         $this->_quoteDate = $_quoteDate;
-        return $this;
-    }
-
-    /**
-     * Gets the leased flag of the quote
-     *
-     * @return string True if the quote is a leased quote
-     */
-    public function getIsLeased ()
-    {
-        return $this->_isLeased;
-    }
-
-    /**
-     * Sets the leased flag of the quote
-     *
-     * @param string $_isLeased            
-     */
-    public function setIsLeased ($_isLeased)
-    {
-        $this->_isLeased = $_isLeased;
         return $this;
     }
 
@@ -406,6 +410,89 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function setQuoteDevices ($_quoteDevices)
     {
         $this->_quoteDevices = $_quoteDevices;
+        return $this;
+    }
+
+    /**
+     *
+     * @return the $_pageCoverageMonochrome
+     */
+    public function getPageCoverageMonochrome ()
+    {
+        return $this->_pageCoverageMonochrome;
+    }
+
+    /**
+     *
+     * @param number $_pageCoverageMonochrome            
+     */
+    public function setPageCoverageMonochrome ($_pageCoverageMonochrome)
+    {
+        $this->_pageCoverageMonochrome = $_pageCoverageMonochrome;
+        return $this;
+    }
+
+    /**
+     *
+     * @return the $_pageCoverageColor
+     */
+    public function getPageCoverageColor ()
+    {
+        return $this->_pageCoverageColor;
+    }
+
+    /**
+     *
+     * @param number $_pageCoverageColor            
+     */
+    public function setPageCoverageColor ($_pageCoverageColor)
+    {
+        $this->_pageCoverageColor = $_pageCoverageColor;
+        return $this;
+    }
+
+    /**
+     *
+     * @return the $_pricingConfigId
+     */
+    public function getPricingConfigId ()
+    {
+        return $this->_pricingConfigId;
+    }
+
+    /**
+     *
+     * @param number $_pricingConfigId            
+     */
+    public function setPricingConfigId ($_pricingConfigId)
+    {
+        $this->_pricingConfigId = $_pricingConfigId;
+        return $this;
+    }
+
+    /**
+     * Gets the pricing config object
+     *
+     * @return Proposalgen_Model_PricingConfig The pricing config object.
+     */
+    public function getPricingConfig ()
+    {
+        if (! isset($this->_pricingConfig))
+        {
+            $this->_pricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->getPricingConfigId());
+        }
+        return $this->_pricingConfig;
+    }
+
+    /**
+     * Sets the pricing config object
+     *
+     * @param Proposalgen_Model_PricingConfig $_pricingConfig
+     *            The new princing config.
+     */
+    public function setPricingConfig ($_pricingConfig)
+    {
+        $this->_pricingConfig = $_pricingConfig;
         return $this;
     }
 }
