@@ -36,5 +36,11 @@ class Admin_TonerController extends Zend_Controller_Action
     public function editAction ()
     {
     }
+
+    public function viewAction ()
+    {
+        // Get Toner Details
+        $this->view->toner = Admin_Model_Mapper_Toner::getInstance()->find($this->_getParam('id', false));
+    }
 }
 

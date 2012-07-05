@@ -26,7 +26,7 @@ class Admin_Model_Toner extends My_Model_Abstract
     /**
      * The price of the toner
      *
-     * @var double
+     * @var float
      */
     protected $_price;
     
@@ -35,45 +35,45 @@ class Admin_Model_Toner extends My_Model_Abstract
      *
      * @var int
      */
-    protected $_yield;
+    protected $_yield = 0;
 
     /**
      * The part type id for the toner
      *
      * @var int
      */
-    protected $_partTypeId;
-
-    /**
-     * The part type name for the toner
-     *
-     * @var array
-     */
-    protected $_partType;
+    protected $_partTypeId = 0;
     
     /**
      * The manufacturer id for the toner
      *
      * @var int
      */
-    protected $_manufacturerId;
+    protected $_manufacturerId = 0;
 
-    /**
-     * The manufacturer name
-     *
-     * @var array
-     */    
-    protected $_manufacturer;
-    
     /**
      * The toner color id for the toenr
      *
      * @var int
      */
-    protected $_tonerColorId;
+    protected $_tonerColorId = 0;
 
     /**
-     * The toner color name
+     * The part type object
+     *
+     * @var array
+     */
+    protected $_partType;
+    
+    /**
+     * The manufacturer object
+     *
+     * @var array
+     */
+    protected $_manufacturer;
+    
+    /**
+     * The toner color object
      *
      * @var array
      */
@@ -116,9 +116,9 @@ class Admin_Model_Toner extends My_Model_Abstract
                 'sku' => $this->getSku(),
                 'price' => $this->getPrice(),
                 'yield' => $this->getYield(),
-                'part_type_id' => $this->getPartTypeId(),
-                'manufacturer_id' => $this->getManufacturerId(),
-                'toner_color_id' => $this->getTonerColorId()
+                'partTypeId' => $this->getPartTypeId(),
+                'manufacturerId' => $this->getManufacturerId(),
+                'tonerColorId' => $this->getTonerColorId()
         );
     }
     

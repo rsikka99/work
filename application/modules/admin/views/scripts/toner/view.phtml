@@ -1,0 +1,13 @@
+<?php /* @var $toner Admin_Model_Toner */ $toner = $this->toner; ?>
+<h1>Toners</h1>
+
+<div class="well">
+    <dl class="dl-horizontal">
+        <dt>SKU:</dt><dd><?php echo $toner->getSku(); ?></dd>
+        <dt>Manufacturer:</dt><dd><?php echo $toner->getManufacturer(); ?></dd>
+        <dt>Part Type:</dt><dd><?php echo $toner->getPartType(); ?></dd>
+        <dt>Color:</dt><dd><?php echo $toner->getTonerColor(); ?></dd>
+        <dt>Yield:</dt><dd><?php echo $toner->getYield(); ?></dd>
+        <dt>Price:</dt><dd><?php echo $toner->getPrice(); ?></dd>
+    </dl>
+</div>

@@ -8,13 +8,12 @@ class Admin_Model_Mapper_Toner extends My_Model_Mapper_Abstract
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Admin_Model_DBTable_Toner';
+    protected $_defaultDbTable = 'Admin_Model_DbTable_Toner';
 
     /*
      * Define the primary key of the model association
     */
     public $col_id = 'id';
-    
     
     /**
      * Gets an instance of the mapper
@@ -73,7 +72,7 @@ class Admin_Model_Mapper_Toner extends My_Model_Mapper_Abstract
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                "{$this->col_id}  = ?" => $primaryKey 
+                "{$this->col_id} = ?" => $primaryKey 
         ));
         
         // Save the object into the cache
@@ -95,13 +94,13 @@ class Admin_Model_Mapper_Toner extends My_Model_Mapper_Abstract
         if ($object instanceof Admin_Model_Toner)
         {
             $whereClause = array (
-                    "{$this->col_id}  = ?" => $object->getId() 
+                    "{$this->col_id} = ?" => $object->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    "{$this->col_id}  = ?" => $object 
+                    "{$this->col_id} = ?" => $object 
             );
         }
         
@@ -205,7 +204,7 @@ class Admin_Model_Mapper_Toner extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array (
-                "{$this->col_id}  = ?" => $id 
+                "{$this->col_id} = ?" => $id 
         );
     }
 
