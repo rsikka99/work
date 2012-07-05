@@ -184,9 +184,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                     // Validate the form
                     if ($form->isValid($values))
                     {
-                        $quoteDevice->populate($values);
-                        Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
-                        
+                        // Save the options first
                         $quoteDeviceOption = new Quotegen_Model_QuoteDeviceOption();
                         foreach ( $form->getOptionElements() as $element )
                         {
@@ -197,6 +195,11 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             
                             Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->save($quoteDeviceOption);
                         }
+                        
+                        // Save the device last
+                        $quoteDevice->populate($values);
+                        $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
+                        Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
                         
                         if (isset($values ['add']))
                         {
