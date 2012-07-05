@@ -78,6 +78,39 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
         if (isset($params->pricingConfigId) && ! is_null($params->pricingConfigId))
             $this->setPricingConfigId($params->pricingConfigId);
     }
+
+    /**
+     * Takes an array or a quote setting object and applies overrides
+     *
+     * @param
+     *            <array, Quotegen_Model_QuoteSetting> $settings
+     */
+    public function applyOverride ($settings)
+    {
+        // Turn an object into an array
+        if ($settings instanceof Quotegen_Model_QuoteSetting)
+        {
+            $settings = $settings->toArray();
+        }
+        
+        // Turn an array into an ArrayObject
+        if (is_array($settings))
+        {
+            $settings = new ArrayObject($settings, ArrayObject::ARRAY_AS_PROPS);
+        }
+        
+        // Do the same logic as populate, except never set the id.
+        if (isset($settings->pageCoverageMonochrome) && ! is_null($settings->pageCoverageMonochrome))
+            $this->setPageCoverageMonochrome($settings->pageCoverageMonochrome);
+        if (isset($settings->pageCoverageColor) && ! is_null($settings->pageCoverageColor))
+            $this->setPageCoverageColor($settings->pageCoverageColor);
+        if (isset($settings->deviceMargin) && ! is_null($settings->deviceMargin))
+            $this->setDeviceMargin($settings->deviceMargin);
+        if (isset($settings->pageMargin) && ! is_null($settings->pageMargin))
+            $this->setPageMargin($settings->pageMargin);
+        if (isset($settings->pricingConfigId) && ! is_null($settings->pricingConfigId))
+            $this->setPricingConfigId($settings->pricingConfigId);
+    }
     
     /*
      * (non-PHPdoc) @see My_Model_Abstract::toArray()
