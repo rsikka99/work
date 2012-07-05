@@ -209,9 +209,10 @@ CREATE  TABLE IF NOT EXISTS `quotegen_quotes` (
   `dateCreated` DATETIME NOT NULL ,
   `dateModified` DATETIME NOT NULL ,
   `quoteDate` DATETIME NOT NULL ,
-  `isLeased` TINYINT NOT NULL DEFAULT 0 ,
   `userId` INT(11) NOT NULL ,
-  `clientDisplayName` VARCHAR(45) NOT NULL ,
+  `clientDisplayName` VARCHAR(45) NULL ,
+  `leaseRate` DOUBLE NULL ,
+  `leaseTerm` INT(11) NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `clientId` (`clientId` ASC) ,
   INDEX `quotegen_quotes_ibfk_2` (`userId` ASC) ,
@@ -436,25 +437,6 @@ CREATE  TABLE IF NOT EXISTS `quotegen_global_leasing_schemas` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8, 
 COMMENT = 'This table marks leasing schemas as global' ;
-
-
--- -----------------------------------------------------
--- Table `quotegen_leased_quotes`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `quotegen_leased_quotes` (
-  `quoteId` INT(11) NOT NULL AUTO_INCREMENT ,
-  `rate` DOUBLE NOT NULL ,
-  `term` INT NOT NULL ,
-  PRIMARY KEY (`quoteId`) ,
-  INDEX `quotegen_leased_quotes_ibfk_1` (`quoteId` ASC) ,
-  CONSTRAINT `quotegen_leased_quotes_ibfk_1`
-    FOREIGN KEY (`quoteId` )
-    REFERENCES `quotegen_quotes` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8, 
-COMMENT = 'Used to store leased data for a quote' ;
 
 
 -- -----------------------------------------------------

@@ -65,6 +65,20 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     protected $_clientDisplayName;
     
     /**
+     * The length of the lease in months
+     *
+     * @var number
+     */
+    protected $_leaseTerm;
+    
+    /**
+     * The lease percentage
+     *
+     * @var number
+     */
+    protected $_leaseRate;
+    
+    /**
      * The client associated with the quote
      *
      * @var Quotegen_Model_Client
@@ -292,6 +306,50 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function setClientDisplayName ($_clientDisplayName)
     {
         $this->_clientDisplayName = $_clientDisplayName;
+        return $this;
+    }
+
+    /**
+     * Gets the lease length in months
+     *
+     * @return number The term in months
+     */
+    public function getLeaseTerm ()
+    {
+        return $this->_leaseTerm;
+    }
+
+    /**
+     * Sets the new lease length
+     *
+     * @param number $_leaseTerm
+     *            The new term in months
+     */
+    public function setLeaseTerm ($_leaseTerm)
+    {
+        $this->_leaseTerm = $_leaseTerm;
+        return $this;
+    }
+
+    /**
+     * Gets the rate percentage
+     *
+     * @return number The rate percentage.
+     */
+    public function getLeaseRate ()
+    {
+        return $this->_leaseRate;
+    }
+
+    /**
+     * Sets a new rate percentage
+     *
+     * @param number $_leaseRate
+     *            The new lease rate percentage
+     */
+    public function setLeaseRate ($_leaseRate)
+    {
+        $this->_leaseRate = $_leaseRate;
         return $this;
     }
 

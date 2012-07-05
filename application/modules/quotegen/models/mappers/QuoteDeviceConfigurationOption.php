@@ -232,13 +232,13 @@ class Quotegen_Model_Mapper_QuoteDeviceConfigurationOption extends My_Model_Mapp
     /**
      * Finds a quote device configuration option by option id
      *
-     * @param number $optionId            
+     * @param number $quoteDeviceOptionId            
      * @return Quotegen_Model_QuoteDeviceConfigurationOption
      */
-    public function findByQuoteDeviceOptionId ($optionId)
+    public function findByQuoteDeviceOptionId ($quoteDeviceOptionId)
     {
         return $this->fetch(array (
-                "{$this->col_optionId} = ?" => $optionId 
+                "{$this->col_quoteDeviceOptionId} = ?" => $quoteDeviceOptionId 
         ));
     }
 }

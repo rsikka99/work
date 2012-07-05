@@ -305,7 +305,7 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
             $quoteDeviceConfigurationOption = Quotegen_Model_Mapper_QuoteDeviceConfigurationOption::getInstance()->findByQuoteDeviceOptionId($this->getId());
             if ($quoteDeviceConfigurationOption)
             {
-                $this->_option = Quotegen_Model_Mapper_Option::getInstance()->find($quoteDeviceConfigurationOption->getOptionId());
+                $this->_option = $quoteDeviceConfigurationOption->getOption();
             }
         }
         return $this->_option;
@@ -324,7 +324,7 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
 
     /**
      * Gets the total quantity (quantity + included quantity)
-     * 
+     *
      * @return number The total quantity
      */
     public function getTotalQuantity ()
