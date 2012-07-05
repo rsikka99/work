@@ -5,7 +5,7 @@ class Quotegen_Form_QuoteSettingsFormTest extends PHPUnit_Framework_TestCase {
 	protected $_form;
 	
 	public function setUp() {
-		$this->_form = new Quotegen_Form_QuoteSettings ();
+		$this->_form = new Quotegen_Form_QuoteSetting();
 		parent::setUp ();
 	}
 	
