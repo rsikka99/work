@@ -192,6 +192,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             $quoteDeviceOption->setId($optionId);
                             $quoteDeviceOption->setQuantity($values ["option{$optionId}quantity"]);
                             $quoteDeviceOption->setIncludedQuantity($values ["option{$optionId}includedQuantity"]);
+                            $quoteDeviceOption->setPrice($values ["option{$optionId}price"]);
                             
                             Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->save($quoteDeviceOption);
                         }
