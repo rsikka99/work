@@ -19,9 +19,9 @@
         <?php foreach ($this->paginator->getCurrentItems() as $toner) : /* @var $toner Admin_Model_Toner */ ?>
         <tr>
             <td><?php echo $toner->getSku(); ?></td>
-            <td><?php echo $toner->getManufacturerId(); ?></td>
-            <td><?php echo $toner->getPartTypeId(); ?></td>
-            <td><?php echo $toner->getTonerColorId(); ?></td>
+            <td><?php echo $toner->getManufacturer()->getDisplayname(); ?></td>
+            <td><?php echo $toner->getPartType()->getTypeName(); ?></td>
+            <td><?php echo $toner->getTonerColor()->getTonerColorName(); ?></td>
             <td><?php echo $toner->getYield(); ?></td>
             <td><?php echo $toner->getCost(); ?></td>
             <td>
