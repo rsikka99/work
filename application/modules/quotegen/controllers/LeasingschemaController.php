@@ -702,6 +702,12 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                     ));
                 }
             }
+            else
+            {
+                // User has cancelled. We could do a redirect here if we wanted.
+                $db->rollBack();
+                $this->_helper->redirector('index');
+            }
         }
         
         // Add form to page
