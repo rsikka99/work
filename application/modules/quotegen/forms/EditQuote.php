@@ -42,10 +42,7 @@ class Quotegen_Form_EditQuote extends EasyBib_Form
                 'StripTags'
         ));
         
-        $this->addElement($quoteDate);
-        
-        
-        
+        $this->addElement($quoteDate);     
         
         
         $this->addElement('text', 'clientDisplayName', array (

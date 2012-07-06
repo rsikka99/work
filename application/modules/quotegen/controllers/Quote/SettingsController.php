@@ -36,18 +36,15 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
             {
                 if (! isset($values ['cancel']))
                 {
-                    // Create a new instance of quote
-                    $quote = new Quotegen_Model_Quote();
-                    $quote = $this->_quote;
-                    
+                    $this->_quote->populate($values);
                     // Save the new quote
-                    $quoteMapper = Quotegen_Model_Mapper_Quote::getInstance();
-                    $quoteMapper->save($quote, $quote->getId());
-                    
+                    $quoteMapper = Quotegen_Model_Mapper_Quote::getInstance()->save($this->_quote,$this->_quote->getId());                    
                     
                     $this->_helper->flashMessenger(array (
                             'success' => "Quote updated successfully." 
                     ));
+                    
+                    $this->_helper->redirector('index');
                 }
                 else
                 {
