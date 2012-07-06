@@ -1,42 +1,5 @@
 <?php $leasingSchema = $this->leasingSchema; /* @var $leasingSchema Quotegen_Model_LeasingSchema */ ?>
 
-<?php $this->headScript()->captureStart('append','text/javascript') ?>
-	
-	$(document).ready(function() {
-	
-	});
-	
-	function do_action(mode, id) {
-		switch (mode) {
-			case "add term":
-				document.location.href = 'leasingschema/addterm';
-				break;
-			case "edit term":
-				document.location.href = 'leasingschema/editterm/id/'+id;
-				break;
-			case "add range":
-				document.location.href = 'leasingschema/addrange';
-				break;
-			case "edit range":
-				document.location.href = 'leasingschema/editrange/id/'+id;
-				break;
-			case "delete term":
-				document.location.href = 'leasingschema/deleteterm/id/'+id;
-				break;
-			case "delete range":
-				document.location.href = 'leasingschema/deleterange/id/'+id;
-				break;
-			case "reset":
-				document.location.href = 'leasingschema/resetschema';
-				break;
-			case "import":
-				$("#leasingSchemas").submit();
-				break;
-		}
-	}
-	
-<?php $this->headScript()->captureEnd() ?>
-
 <?php if( isset( $this->errMessages ) ) {
 	// show the first error in the list of errors
 	echo '<div class="alert alert-error">';
@@ -63,12 +26,10 @@
         		<input type="file" name="uploadedfile" id="uploadedfile" accept="application/csv, text/csv" size="60" class="upload_file" />
         	</span>
 			<span class="">
-		      	<a class="btn" title="Import" onclick="javascript: do_action('import');">
-					<i class="icon-upload"></i> Upload
-				</a>
+				<button type="submit" class="btn"><i class="icon-upload"></i> Upload</button>
 			</span>
 	    	<span class="pull-right">
-				<a class="btn btn-inverse" title="Clear Schema" onclick="javascript: do_action('reset', 0);">
+				<a class="btn btn-inverse" title="Clear Schema" href="<?php echo $this->url( array ( 'action' => 'resetschema') ); ?>">
 					<i class="icon-exclamation-sign icon-white"></i> Clear Schema
 				</a>
 			</span>
@@ -115,11 +76,11 @@
 		        <td style="text-align: center;"><?php echo $rates[$termid][$rangeid]->getRate(); ?></td>
 		        <?php } ?>
 		        <td style="text-align: center;">
-			      	<a class="btn btn-warning btn-mini" title="Edit Term" onclick="javascript: do_action('edit term', <?php echo $termid; ?>);">
+			      	<a class="btn btn-warning btn-mini" title="Edit Term" href="<?php echo $this->url( array ( 'action' => 'editterm', 'id' => $termid) ); ?>">
 						<i class="icon-pencil icon-white"></i>
 					</a>
 					<?php if ( count ( $leasingSchema->getTerms() ) > 1 ) { ?>
-			      	<a class="btn btn-danger btn-mini" title="Delete Term" onclick="javascript: do_action('delete term', <?php echo $termid; ?>);">
+			      	<a class="btn btn-danger btn-mini" title="Delete Term" href="<?php echo $this->url( array ( 'action' => 'deleteterm', 'id' => $termid) ); ?>">
 						<i class="icon-trash icon-white"></i>
 					</a>
 					<?php } ?>
@@ -135,16 +96,16 @@
 
 					if ($startRange == 0) { ?>
 		      			<td style="text-align: center;">
-					      	<a class="btn btn-warning btn-mini" title="Edit Range" onclick="javascript: do_action('edit range', <?php echo $rangeid; ?>);">
+					      	<a class="btn btn-warning btn-mini" title="Edit Range" href="<?php echo $this->url( array ( 'action' => 'editrange', 'id' => $rangeid) ); ?>">
 								<i class="icon-pencil icon-white"></i>
 							</a>
 						</td>
 					<?php } else { ?>
 				        <td style="text-align: center;">
-					      	<a class="btn btn-warning btn-mini" title="Edit Range" onclick="javascript: do_action('edit range', <?php echo $rangeid; ?>);">
+					      	<a class="btn btn-warning btn-mini" title="Edit Range" href="<?php echo $this->url( array ( 'action' => 'editrange', 'id' => $rangeid) ); ?>">
 								<i class="icon-pencil icon-white"></i>
 							</a>
-					      	<a class="btn btn-danger btn-mini" title="Delete Range" onclick="javascript: do_action('delete range', <?php echo $rangeid; ?>);">
+					      	<a class="btn btn-danger btn-mini" title="Delete Range" href="<?php echo $this->url( array ( 'action' => 'deleterange', 'id' => $rangeid) ); ?>">
 								<i class="icon-trash icon-white"></i>
 							</a>
 				        </td>
@@ -158,10 +119,10 @@
 		
 		<div id="buttons_container">
 			<span class="pull-right">
-		      	<a class="btn btn-success" title="Add Term" onclick="javascript: do_action('add term', 0);" href="#">
+		      	<a class="btn btn-success" title="Add Term" href="<?php echo $this->url( array ( 'action' => 'addterm') ); ?>">
 					<i class="icon-plus-sign icon-white"></i> Add Term
 				</a>
-		      	<a class="btn btn-success" title="Add Range" onclick="javascript: do_action('add range', 0);" href="#">
+		      	<a class="btn btn-success" title="Add Range" href="<?php echo $this->url( array ( 'action' => 'addrange') ); ?>">
 					<i class="icon-plus-sign icon-white"></i> Add Range
 				</a>
 			</span>
