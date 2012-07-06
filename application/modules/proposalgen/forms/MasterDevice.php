@@ -171,8 +171,8 @@ class Proposalgen_Form_MasterDevice extends EasyBib_Form
         /*
          * Device Price
          */
-        $this->addElement('text', 'device_price', array (
-                'label' => 'Device Price:', 
+        $this->addElement('text', 'cost', array (
+                'label' => 'Device Cost:', 
                 'prepend' => '$', 
                 'dimension' => 1, 
                 'filters' => array (

@@ -40,7 +40,7 @@ $this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.
                             </ul>
                             <?php endif; ?>
                         </td>
-                        <td><?php echo $this->currency($quoteDevice->calculatePackagePrice()); ?></td>
+                        <td><?php echo $this->currency($quoteDevice->calculatePackageCost()); ?></td>
                         <td><input type="text" name="packagePrice" value="<?php echo $quoteDevice->getPackagePrice(); ?>" class="span2" /></td>
                         <td><input type="text" name="margin" class="span1" value="20" /></td>
                         <td><?php echo $this->currency($quoteDevice->calculateSubTotal()); ?></td>

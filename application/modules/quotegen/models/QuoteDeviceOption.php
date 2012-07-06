@@ -45,11 +45,11 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
     protected $_description;
     
     /**
-     * The price of the option
+     * The cost of the option
      *
      * @var double
      */
-    protected $_price;
+    protected $_cost;
     
     /**
      * The quantity of the option wanted
@@ -91,8 +91,8 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
             $this->setName($params->name);
         if (isset($params->description) && ! is_null($params->description))
             $this->setDescription($params->description);
-        if (isset($params->price) && ! is_null($params->price))
-            $this->setPrice($params->price);
+        if (isset($params->cost) && ! is_null($params->cost))
+            $this->setCost($params->cost);
         if (isset($params->quantity) && ! is_null($params->quantity))
             $this->setQuantity($params->quantity);
         if (isset($params->includedQuantity) && ! is_null($params->includedQuantity))
@@ -110,16 +110,16 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
                 'sku' => $this->getSku(), 
                 'name' => $this->getName(), 
                 'description' => $this->getDescription(), 
-                'price' => $this->getPrice(), 
+                'cost' => $this->getCost(), 
                 'quantity' => $this->getQuantity(), 
                 'includedQuantity' => $this->getIncludedQuantity() 
         );
     }
 
     /**
-     * Gets the id of the object
+     * Gets the id of the option
      *
-     * @return number The id of the object
+     * @return number The id of the option
      */
     public function getId ()
     {
@@ -127,7 +127,7 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
     }
 
     /**
-     * Sets the id of the object
+     * Sets the id of the option
      *
      * @param number $_id
      *            the new id
@@ -139,7 +139,7 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
     }
 
     /**
-     * Gets the current quoteDeviceId of the object
+     * Gets the current quoteDeviceId of the option
      *
      * @return int
      */
@@ -205,7 +205,7 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
     }
 
     /**
-     * Gets the objects current description
+     * Gets the options current description
      *
      * @return the $_description
      */
@@ -215,7 +215,7 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
     }
 
     /**
-     * Set a new description for the object
+     * Set a new description for the option
      *
      * @param string $_description
      *            the new description
@@ -227,29 +227,29 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
     }
 
     /**
-     * Gets the current price of the object
+     * Gets the current cost of the option
      *
-     * @return the $_price
+     * @return number The cost of the option
      */
-    public function getPrice ()
+    public function getCost ()
     {
-        return $this->_price;
+        return $this->_cost;
     }
 
     /**
-     * Sets a new price for the object
+     * Sets a new cost for the option
      *
-     * @param number $_price
-     *            the new price
+     * @param number $_cost
+     *            The new cost
      */
-    public function setPrice ($_price)
+    public function setCost ($_cost)
     {
-        $this->_price = $_price;
+        $this->_cost = $_cost;
         return $this;
     }
 
     /**
-     * Gets the current quantity of the object
+     * Gets the current quantity of the option
      *
      * @return the $_quantity
      */
@@ -259,7 +259,7 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
     }
 
     /**
-     * Sets a quantity for the object
+     * Sets a quantity for the option
      *
      * @param number $_quanity
      *            the new quantity
@@ -271,7 +271,7 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
     }
 
     /**
-     * Gets the included quantity of the object
+     * Gets the included quantity of the option
      *
      * @return the $_includedQuantity the new quantity
      */

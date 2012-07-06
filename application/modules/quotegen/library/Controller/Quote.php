@@ -136,7 +136,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             }
         }
         
-        $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
+        $quoteDevice->setPackagePrice($quoteDevice->calculatePackageCost());
         Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
         
         return true;
@@ -156,7 +156,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         $masterDevice = $device->getMasterDevice();
         $quoteDevice->setName($masterDevice->getFullDeviceName());
         $quoteDevice->setSku($device->getSku());
-        $quoteDevice->setPrice($masterDevice->getDevicePrice());
+        $quoteDevice->setCost($masterDevice->getCost());
         
         // FIXME: These need to use calculated values!
         $quoteDevice->setOemCostPerPageMonochrome(999);
@@ -182,7 +182,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         $quoteDeviceOption->setSku($option->getSku());
         $quoteDeviceOption->setName($option->getName());
         $quoteDeviceOption->setDescription($option->getDescription());
-        $quoteDeviceOption->setPrice($option->getPrice());
+        $quoteDeviceOption->setCost($option->getCost());
         
         return $quoteDeviceOption;
     }

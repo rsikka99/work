@@ -2,6 +2,7 @@
 
 function runSQLFile ($filename, mysqli $dbConnection)
 {
+    $NL = PHP_EOL;
     $statementNumber = 0;
     $sql = file_get_contents($filename);
     if ($dbConnection->multi_query($sql))
@@ -20,7 +21,7 @@ function runSQLFile ($filename, mysqli $dbConnection)
             {
                 if (!$dbConnection->next_result())
                 {
-                    throw new Exception("Statement #{$statementNumber}. Mysqli error #{$dbConnection->errno} - {$dbConnection->error}");
+                    throw new Exception("File '{$filename}'. {$NL}Statement #{$statementNumber}. {$NL}Mysqli error #{$dbConnection->errno} - {$dbConnection->error}");
                 }
             }
         }

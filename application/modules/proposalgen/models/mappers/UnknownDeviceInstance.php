@@ -181,7 +181,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                         ->setIsReplacementDevice(0)
                         ->setWattsPowerNormal($row->watts_power_normal)
                         ->setWattsPowerIdle($row->watts_power_idle)
-                        ->setDevicePrice($row->device_price)
+                        ->setCost($row->device_price)
                         ->setLaunchDate($row->launch_date)
                         ->setDateCreated($row->date_created)
                         ->setServiceCostPerPage($row->service_cost_per_page)

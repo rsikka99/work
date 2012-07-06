@@ -31,11 +31,11 @@ class Quotegen_Model_Option extends My_Model_Abstract
     protected $_description;
     
     /**
-     * The price of the option
+     * The cost of the option
      *
      * @var number
      */
-    protected $_price;
+    protected $_cost;
     
     /**
      * The sku of the device
@@ -69,8 +69,8 @@ class Quotegen_Model_Option extends My_Model_Abstract
         if (isset($params->description) && ! is_null($params->description))
             $this->setDescription($params->description);
         
-        if (isset($params->price) && ! is_null($params->price))
-            $this->setPrice($params->price);
+        if (isset($params->cost) && ! is_null($params->cost))
+            $this->setCost($params->cost);
         
         if (isset($params->sku) && ! is_null($params->sku))
             $this->setSku($params->sku);
@@ -85,7 +85,7 @@ class Quotegen_Model_Option extends My_Model_Abstract
                 'id' => $this->getId(), 
                 'name' => $this->getName(), 
                 'description' => $this->getDescription(), 
-                'price' => $this->getPrice(), 
+                'cost' => $this->getCost(), 
                 'sku' => $this->getSku() 
         );
     }
@@ -156,24 +156,24 @@ class Quotegen_Model_Option extends My_Model_Abstract
     }
 
     /**
-     * Gets the price of the option
+     * Gets the cost of the option
      *
-     * @return number The price of the option
+     * @return number The cost of the option
      */
-    public function getPrice ()
+    public function getCost ()
     {
-        return $this->_price;
+        return $this->_cost;
     }
 
     /**
-     * Sets a new price for the option
+     * Sets a new cost for the option
      *
-     * @param number $_price
-     *            The new price to set
+     * @param number $_cost
+     *            The new cost to set
      */
-    public function setPrice ($_price)
+    public function setCost ($_cost)
     {
-        $this->_price = $_price;
+        $this->_cost = $_cost;
         return $this;
     }
 

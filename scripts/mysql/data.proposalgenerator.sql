@@ -94,7 +94,7 @@ INSERT INTO `proposalgenerator_questionset_questions` (`question_id`, `questions
 (30,1);
 
 
-INSERT INTO `proposalgenerator_master_devices` (`id`, `manufacturer_id`, `printer_model`, `toner_config_id`, `is_copier`, `is_scanner`, `is_fax`, `is_duplex`, `device_price`, `launch_date`, `date_created`, `watts_power_normal`, `watts_power_idle`) VALUES
+INSERT INTO `proposalgenerator_master_devices` (`id`, `manufacturer_id`, `printer_model`, `toner_config_id`, `is_copier`, `is_scanner`, `is_fax`, `is_duplex`, `cost`, `launch_date`, `date_created`, `watts_power_normal`, `watts_power_idle`) VALUES
 (1, 7, 'Color Laserjet Cm3530 Mfp', 3, 1, 1, 0, 1, 2155.90, '2008-10-07 00:00:00', NOW(), 652, 18),
 (2, 7, 'Color Laserjet Cm2320nf', 3, 1, 1, 1, 0, 699.99, '2008-09-03 00:00:00', NOW(), 100, 10),
 (3, 7, 'Laserjet 2200d', 1, 0, 0, 0, 1, 99.00, '2001-03-20 00:00:00', NOW(), 400, 12);
@@ -103,7 +103,7 @@ INSERT INTO `proposalgenerator_master_devices` (`id`, `manufacturer_id`, `printe
 -- HP 7
 -- Black: 1, Cyan: 2, Magenta: 3, Yellow: 4
 -- OEM: 1, COMP: 2
-INSERT INTO `proposalgenerator_toners` (`id`, `sku`, `price`, `yield`, `part_type_id`, `manufacturer_id`, `toner_color_id`) VALUES
+INSERT INTO `proposalgenerator_toners` (`id`, `sku`, `cost`, `yield`, `part_type_id`, `manufacturer_id`, `toner_color_id`) VALUES
 -- Color Laserjet Cm3530 Mfp
 (1,  '866370', 224.20, 7000 , 1, 7, 2),
 (2,  '866540', 224.20, 7000 , 1, 7, 3),
