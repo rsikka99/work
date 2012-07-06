@@ -274,33 +274,14 @@ html {
 body {
   min-width: 1280px;
 }
-.well-header {
-  color: #999999;
-  font-size: 12px;
-  font-weight: bold;
-  line-height: 18px;
-  text-align: center;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-  text-transform: uppercase;
-}
-.button-styled .form-actions {
+form.form-center-actions .form-actions {
   padding: 0;
   display: block;
   padding-top: 20px;
   text-align: center;
 }
-.accordion-buttons.pull-right {
-  margin-top: 7px;
-  padding-right: 15px;
-}
-.button-tabbed-styled .form-actions {
-  padding-right: 200px;
-  display: block;
-  padding-top: 20px;
-  text-align: center;
-}
-.create-button {
-  margin-bottom: 7px;
+form.form-center-actions.form-horizontal .form-actions {
+  padding-left: 0;
 }
 /*
  * Quote Flow
