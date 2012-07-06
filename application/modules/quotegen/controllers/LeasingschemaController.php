@@ -395,76 +395,63 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                         // Save new term
                         if ($termId)
                         {
-                            try
+                            // Save (Edit)
+                            $leasingSchemaTermMapper = new Quotegen_Model_Mapper_LeasingSchemaTerm();
+                            $leasingSchemaTerm = $leasingSchemaTermMapper->fetchAll(array (
+                                    "id != ?" => $termId, 
+                                    "leasingSchemaId = ?" => $leasingSchemaId, 
+                                    "months = ?" => $months 
+                            ));
+                            
+                            // Edit
+                            if (! $leasingSchemaTerm)
                             {
-                                // Save (Edit)
-                                $leasingSchemaTermMapper = new Quotegen_Model_Mapper_LeasingSchemaTerm();
-                                $leasingSchemaTerm = $leasingSchemaTermMapper->fetchAll(array (
-                                      	"id != ?" => $termId,
-                                        "leasingSchemaId = ?" => $leasingSchemaId, 
-                                        "months = ?" => $months 
-                                ));
+                                $leasingSchemaTermModel = new Quotegen_Model_LeasingSchemaTerm();
+                                $leasingSchemaTermModel->setId($termId);
+                                $leasingSchemaTermModel->setLeasingSchemaId($leasingSchemaId);
+                                $leasingSchemaTermModel->setMonths($months);
+                                $leasingSchemaTermMapper->save($leasingSchemaTermModel);
                                 
-                                // Edit
-                                if ( ! $leasingSchemaTerm )
+                                $leasingSchemaRateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
+                                $leasingSchemaRateModel = new Quotegen_Model_LeasingSchemaRate();
+                                
+                                // Save rates for range and term
+                                foreach ( $leasingSchemaRanges as $range )
                                 {
-                                    $leasingSchemaTermModel = new Quotegen_Model_LeasingSchemaTerm();
-                                    $leasingSchemaTermModel->setId($termId);
-                                    $leasingSchemaTermModel->setLeasingSchemaId($leasingSchemaId);
-                                    $leasingSchemaTermModel->setMonths($months);
-                                    $leasingSchemaTermMapper->save($leasingSchemaTermModel);
+                                    $rangeId = $range->getId();
+                                    $rate = $values ["rate{$rangeId}"];
                                     
-                                    $leasingSchemaRateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
-                                    $leasingSchemaRateModel = new Quotegen_Model_LeasingSchemaRate();
-                                    
-                                    // Save rates for range and term
-                                    foreach ( $leasingSchemaRanges as $range )
-                                    {
-                                        $rangeId = $range->getId();
-                                        $rate = $values ["rate{$rangeId}"];
-                                        
-                                        $leasingSchemaRateModel->setLeasingSchemaTermId($termId);
-                                        $leasingSchemaRateModel->setLeasingSchemaRangeId($rangeId);
-                                        $leasingSchemaRateModel->setRate($rate);
-                                        $leasingSchemaRateId = $leasingSchemaRateMapper->save($leasingSchemaRateModel);
-                                    }
-                                    $db->commit();
-                                    
-                                    $this->_helper->flashMessenger(array (
-                                            'success' => "The term {$months} months was updated successfully." 
-                                    ));
+                                    $leasingSchemaRateModel->setLeasingSchemaTermId($termId);
+                                    $leasingSchemaRateModel->setLeasingSchemaRangeId($rangeId);
+                                    $leasingSchemaRateModel->setRate($rate);
+                                    $leasingSchemaRateId = $leasingSchemaRateMapper->save($leasingSchemaRateModel);
                                 }
-                                else
-                                {
-                                    $db->rollBack();
-                                    $this->_helper->flashMessenger(array (
-                                            'danger' => "The term {$months} months already exists." 
-                                    ));
-                                }
+                                $db->commit();
+                                
+                                $this->_helper->flashMessenger(array (
+                                        'success' => "The term {$months} months was updated successfully." 
+                                ));
                             }
-                            catch ( Exception $e )
+                            else
                             {
-                                // Save Error
                                 $db->rollBack();
                                 $this->_helper->flashMessenger(array (
-                                        'danger' => 'There was an error processing the update. Please try again.' 
+                                        'danger' => "The term {$months} months already exists." 
                                 ));
                             }
                         }
                         else
                         {
-	                        $db->rollBack();
-	                        $this->_helper->flashMessenger(array (
-	                                'error' => "No term was selected. Please try again." 
-	                        ));
+                            $db->rollBack();
+                            $this->_helper->flashMessenger(array (
+                                    'error' => "No term was selected. Please try again." 
+                            ));
                         }
                     }
                     else
                     {
                         $db->rollBack();
-                        $this->_helper->flashMessenger(array (
-                                'error' => "Please review and complete all required fields." 
-                        ));
+                        throw new InvalidArgumentException("Please correct the errors below");
                     }
                 }
                 else
@@ -473,6 +460,12 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                     $db->rollBack();
                     $this->_helper->redirector('index');
                 }
+            }
+            catch ( InvalidArgumentException $e )
+            {
+                $this->_helper->flashMessenger(array (
+                        'danger' => $e->getMessage() 
+                ));
             }
             catch ( Zend_Validate_Exception $e )
             {
@@ -666,7 +659,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                             
                             // Validate Range doesn't exist
                             $leasingSchemaRange = $leasingSchemaRangeMapper->fetch(array (
-                                    'leasingSchemaId = ?' => $leasingSchemaId,
+                                    'leasingSchemaId = ?' => $leasingSchemaId, 
                                     'startRange = ?' => $startRange 
                             ));
                             
@@ -843,9 +836,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                     else
                     {
                         $db->rollBack();
-                        $this->_helper->flashMessenger(array (
-                                'error' => "Please review and complete all required fields." 
-                        ));
+                        throw new InvalidArgumentException("Please correct the errors below");
                     }
                 }
                 else
@@ -859,6 +850,12 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
             {
                 $db->rollBack();
                 $form->buildBootstrapErrorDecorators();
+            }
+            catch ( InvalidArgumentException $e )
+            {
+                $this->_helper->flashMessenger(array (
+                        'danger' => $e->getMessage() 
+                ));
             }
         }
         else
