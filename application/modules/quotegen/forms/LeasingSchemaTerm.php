@@ -22,7 +22,7 @@ class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
          *
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
-        $this->setAttrib('class', 'form-horizontal button-styled');
+        $this->setAttrib('class', 'form-horizontal form-center-actions');
         $this->setName('leasingSchemaTerm');
         $this->setAttrib('id', 'leasingSchemaTerm');
         
