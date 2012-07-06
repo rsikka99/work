@@ -10,7 +10,7 @@
             <th>Type</th>
             <th>Color</th>
             <th>Yield</th>
-            <th>Price</th>
+            <th>Cost</th>
             <th style="width: 120px;">Action</th>
         </tr>
     </thead>
@@ -23,7 +23,7 @@
             <td><?php echo $toner->getPartTypeId(); ?></td>
             <td><?php echo $toner->getTonerColorId(); ?></td>
             <td><?php echo $toner->getYield(); ?></td>
-            <td><?php echo $toner->getPrice(); ?></td>
+            <td><?php echo $toner->getCost(); ?></td>
             <td>
                 <div class="btn-group">
 	                <a class="btn btn-info" title="View" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $toner->getId())); ?>"><i class="icon-eye-open"></i></a>

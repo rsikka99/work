@@ -24,39 +24,39 @@ class Admin_Model_Toner extends My_Model_Abstract
     protected $_sku;
     
     /**
-     * The price of the toner
+     * The cost of the toner
      *
      * @var float
      */
-    protected $_price;
+    protected $_cost;
     
     /**
      * The yield of the toner
      *
      * @var int
      */
-    protected $_yield = 0;
+    protected $_yield;
 
     /**
      * The part type id for the toner
      *
      * @var int
      */
-    protected $_partTypeId = 0;
+    protected $_partTypeId;
     
     /**
      * The manufacturer id for the toner
      *
      * @var int
      */
-    protected $_manufacturerId = 0;
+    protected $_manufacturerId;
 
     /**
      * The toner color id for the toenr
      *
      * @var int
      */
-    protected $_tonerColorId = 0;
+    protected $_tonerColorId;
 
     /**
      * The part type object
@@ -92,16 +92,22 @@ class Admin_Model_Toner extends My_Model_Abstract
         }
         if (isset($params->id) && ! is_null($params->id))
             $this->setId($params->id);
+        
         if (isset($params->sku) && ! is_null($params->sku))
             $this->setSku($params->sku);
-        if (isset($params->price) && ! is_null($params->price))
-            $this->setPrice($params->price);
+        
+        if (isset($params->cost) && ! is_null($params->cost))
+            $this->setCost($params->cost);
+        
         if (isset($params->yield) && ! is_null($params->yield))
             $this->setYield($params->yield);
+        
         if (isset($params->partTypeId) && ! is_null($params->partTypeId))
             $this->setPartTypeId($params->partTypeId);
+        
         if (isset($params->manufacturerId) && ! is_null($params->manufacturerId))
             $this->setManufacturerId($params->manufacturerId);
+        
         if (isset($params->tonerColorId) && ! is_null($params->tonerColorId))
             $this->setTonerColorId($params->tonerColorId);
     }
@@ -114,11 +120,11 @@ class Admin_Model_Toner extends My_Model_Abstract
         return array (
                 'id' => $this->getId(),
                 'sku' => $this->getSku(),
-                'price' => $this->getPrice(),
+                'cost' => $this->getCost(),
                 'yield' => $this->getYield(),
-                'partTypeId' => $this->getPartTypeId(),
-                'manufacturerId' => $this->getManufacturerId(),
-                'tonerColorId' => $this->getTonerColorId()
+                'partTypeId' => (int)$this->getPartTypeId(),
+                'manufacturerId' => (int)$this->getManufacturerId(),
+                'tonerColorId' => (int)$this->getTonerColorId()
         );
     }
     
@@ -140,7 +146,7 @@ class Admin_Model_Toner extends My_Model_Abstract
      */
     public function setId ($_id)
     {
-        $this->_id = $_id;
+        $this->_id = (int)$_id;
     }
     
 	/**
@@ -156,24 +162,24 @@ class Admin_Model_Toner extends My_Model_Abstract
      */
     public function setSku ($_sku)
     {
-        $this->_sku = $_sku;
+        $this->_sku = (string)$_sku;
         return $this;
     }
 
 	/**
-     * @return the $_price
+     * @return the $_cost
      */
-    public function getPrice ()
+    public function getCost ()
     {
-        return $this->_price;
+        return $this->_cost;
     }
 
 	/**
-     * @param number $_price
+     * @param number $_cost
      */
-    public function setPrice ($_price)
+    public function setCost ($_cost)
     {
-        $this->_price = $_price;
+        $this->_cost = (float)$_cost;
         return $this;
     }
 
@@ -190,7 +196,7 @@ class Admin_Model_Toner extends My_Model_Abstract
      */
     public function setYield ($_yield)
     {
-        $this->_yield = $_yield;
+        $this->_yield = (int)$_yield;
         return $this;
     }
 
@@ -207,7 +213,7 @@ class Admin_Model_Toner extends My_Model_Abstract
      */
     public function setPartTypeId ($_partTypeId)
     {
-        $this->_partTypeId = $_partTypeId;
+        $this->_partTypeId = (int)$_partTypeId;
         return $this;
     }
 
@@ -224,7 +230,7 @@ class Admin_Model_Toner extends My_Model_Abstract
      */
     public function setManufacturerId ($_manufacturerId)
     {
-        $this->_manufacturerId = $_manufacturerId;
+        $this->_manufacturerId = (int)$_manufacturerId;
         return $this;
     }
 
@@ -241,7 +247,7 @@ class Admin_Model_Toner extends My_Model_Abstract
      */
     public function setTonerColorId ($_tonerColorId)
     {
-        $this->_tonerColorId = $_tonerColorId;
+        $this->_tonerColorId = (int)$_tonerColorId;
         return $this;
     }
     
