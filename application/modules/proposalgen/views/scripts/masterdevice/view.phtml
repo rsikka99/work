@@ -13,7 +13,7 @@
         <dt>Is Replacement Device</dt><dd><?php echo ($masterDevice->getIsReplacementDevice()) ? "Yes" : "No"; ?></dd>
         <dt>Watts Power Normal</dt><dd><?php echo ($masterDevice->getWattsPowerNormal()) ?: 'Not Set'; ?></dd>
         <dt>Watts Power Idle</dt><dd><?php echo ($masterDevice->getWattsPowerIdle()) ?: 'Not Set'; ?></dd>
-        <dt>Device Price</dt><dd><?php echo ($masterDevice->getDevicePrice()) ? $this->currency($masterDevice->getDevicePrice()) : 'No Price Defined'; ?></dd>
+        <dt>Device Price</dt><dd><?php echo ($masterDevice->getCost()) ? $this->currency($masterDevice->getCost()) : 'No Price Defined'; ?></dd>
         <dt>Service Cost Per Page</dt><dd><?php echo ($masterDevice->getServiceCostPerPage()) ? $this->currency($masterDevice->getServiceCostPerPage(), array('precision' => 4)) : 'No Price Defined'; ?></dd>
         <dt>Launch Date</dt><dd><?php echo ($masterDevice->getLaunchDate()) ?: 'Not Set'; ?></dd>
         <dt>Date Created</dt><dd><?php echo ($masterDevice->getDateCreated()) ?: 'Not Set'; ?></dd>

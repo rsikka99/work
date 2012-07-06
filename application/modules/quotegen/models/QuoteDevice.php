@@ -73,11 +73,11 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     protected $_compCostPerPageColor;
     
     /**
-     * Number of the price of the device
+     * Number of the cost of the device
      *
      * @var double
      */
-    protected $_price;
+    protected $_cost;
     
     /**
      * Number of devices
@@ -141,8 +141,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             $this->setCompCostPerPageMonochrome($params->compCostPerPageMonochrome);
         if (isset($params->compCostPerPageColor) && ! is_null($params->compCostPerPageColor))
             $this->setCompCostPerPageColor($params->compCostPerPageColor);
-        if (isset($params->price) && ! is_null($params->price))
-            $this->setPrice($params->price);
+        if (isset($params->cost) && ! is_null($params->cost))
+            $this->setCost($params->cost);
         if (isset($params->quantity) && ! is_null($params->quantity))
             $this->setQuantity($params->quantity);
         if (isset($params->packagePrice) && ! is_null($params->packagePrice))
@@ -166,7 +166,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
                 'oemCostPerPageColor' => $this->getOemCostPerPageColor(), 
                 'compCostPerPageMonochrome' => $this->getCompCostPerPageMonochrome(), 
                 'compCostPerPageColor' => $this->getCompCostPerPageColor(), 
-                'price' => $this->getPrice(), 
+                'cost' => $this->getCost(), 
                 'quantity' => $this->getQuantity(), 
                 'packagePrice' => $this->getPackagePrice(), 
                 'residual' => $this->getResidual() 
@@ -174,9 +174,9 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Gets the id of the object
+     * Gets the id of the device
      *
-     * @return number The id of the object
+     * @return number The id of the device
      */
     public function getId ()
     {
@@ -184,7 +184,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Sets the id of the object
+     * Sets the id of the device
      *
      * @param number $_id
      *            the new id
@@ -218,7 +218,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Gets the objects margin
+     * Gets the devices margin
      *
      * @return the $_margin
      */
@@ -262,7 +262,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Gets the sku of the object
+     * Gets the sku of the device
      *
      * @return the $_sku
      */
@@ -360,7 +360,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Sets the objects compCostPerPageColor
+     * Sets the devices compCostPerPageColor
      *
      * @param number $_compCostPerPageColor
      *            the new compCostPerPageColor
@@ -372,29 +372,29 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Gets the objects price
+     * Gets the devices cost
      *
-     * @return the $_price
+     * @return number The cost of the device
      */
-    public function getPrice ()
+    public function getCost ()
     {
-        return $this->_price;
+        return $this->_cost;
     }
 
     /**
-     * Sets the objects new price
+     * Sets the devices new cost
      *
-     * @param number $_price
-     *            the new price
+     * @param number $_cost
+     *            The new cost
      */
-    public function setPrice ($_price)
+    public function setCost ($_cost)
     {
-        $this->_price = $_price;
+        $this->_cost = $_cost;
         return $this;
     }
 
     /**
-     * Gets the object currrent quatity
+     * Gets the device currrent quatity
      *
      * @return the $_quantity
      */
@@ -404,7 +404,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Sets the objects new quantity
+     * Sets the devices new quantity
      *
      * @param number $_quantity
      *            the new quanitty
@@ -516,20 +516,40 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Calculates the price of a single device and all of it's options, plus margin
+     * Calculates the cost of a single device and all of it's options
      *
      * @return number The price
      */
-    public function calculatePackagePrice ()
+    public function calculateOptionsCost ()
     {
         // Get the device price
-        $price = $this->getPrice();
+        $price = $this->getCost();
         
         // Tack on the option prices
         /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
         foreach ( $this->getQuoteDeviceOptions() as $quoteDeviceOption )
         {
-            $price += $quoteDeviceOption->getPrice() * $quoteDeviceOption->getQuantity();
+            $price += $quoteDeviceOption->getCost() * $quoteDeviceOption->getQuantity();
+        }
+        
+        return $price;
+    }
+
+    /**
+     * Calculates the cost of a single device and all of it's options
+     *
+     * @return number The price
+     */
+    public function calculatePackageCost ()
+    {
+        // Get the device price
+        $price = $this->getCost();
+        
+        // Tack on the option prices
+        /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
+        foreach ( $this->getQuoteDeviceOptions() as $quoteDeviceOption )
+        {
+            $price += $quoteDeviceOption->getCost() * $quoteDeviceOption->getQuantity();
         }
         
         return $price;
