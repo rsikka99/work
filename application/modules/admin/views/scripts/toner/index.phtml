@@ -22,8 +22,8 @@
             <td><?php echo $toner->getManufacturer()->getDisplayname(); ?></td>
             <td><?php echo $toner->getPartType()->getTypeName(); ?></td>
             <td><?php echo $toner->getTonerColor()->getTonerColorName(); ?></td>
-            <td><?php echo $toner->getYield(); ?></td>
-            <td><?php echo $toner->getCost(); ?></td>
+            <td style="text-align: right;"><?php echo number_format($toner->getYield(), 0, '', ','); ?></td>
+            <td style="text-align: right;"><?php echo "$" . number_format($toner->getCost(), 2, '.', ','); ?></td>
             <td>
                 <div class="btn-group">
 	                <a class="btn btn-info" title="View" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $toner->getId())); ?>"><i class="icon-eye-open"></i></a>
