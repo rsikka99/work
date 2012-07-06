@@ -1,0 +1,20 @@
+<?php /* @var $toner Admin_Model_Toner */ $toner = $this->toner; ?>
+<h1>Toners</h1>
+
+<div class="well">
+    <dl class="dl-horizontal">
+        <dt>SKU:</dt><dd><?php echo $toner->getSku(); ?></dd>
+        <dt>Manufacturer:</dt><dd><?php echo $toner->getManufacturer()->getDisplayname(); ?></dd>
+        <dt>Part Type:</dt><dd><?php echo $toner->getPartType()->getTypeName(); ?></dd>
+        <dt>Color:</dt><dd style="text-transform: capitalize;"><?php echo strToLower($toner->getTonerColor()->getTonerColorName()); ?></dd>
+        <dt>Yield:</dt><dd><?php echo number_format($toner->getYield(), 0, '', ','); ?></dd>
+        <dt>Price:</dt><dd><?php echo "$" . number_format($toner->getCost(), 2, '.', ','); ?></dd>
+    </dl>
+    
+	<div>
+		<div class="form-actions">	
+			<input type="button" name="back" id="back" value="Back" class="btn btn-primary" onclick="javascript: history.back();">
+		</div>
+	</div>
+
+</div>

@@ -17,7 +17,7 @@
         <tr>
             <td><?php echo $option->getName(); ?></td>
             <td><?php echo $option->getDescription(); ?></td>
-            <td><?php echo $option->getPrice();?></td>
+            <td><?php echo $option->getCost();?></td>
             <td><?php echo $option->getSku();?></td>
             <?php if (count($option->getCategories()) > 0 ) :
 				$categoryNames = array();

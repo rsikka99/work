@@ -4,7 +4,7 @@
         <dt>Name</dt><dd><?php echo $option->getName(); ?></dd>
         <dt>Description</dt><dd><?php echo $option->getDescription(); ?></dd>
         <dt>Sku</dt><dd><?php echo $option->getSku() ?></dd>
-        <dt>Price</dt><dd><?php echo $option->getPrice() ?></dd>
+        <dt>Price</dt><dd><?php echo $option->getCost() ?></dd>
         <dt>Options</dt>
         
         <?php /* @var $category Quotegen_Model_Category */ foreach ($option->getCategories() as $category) : ?>

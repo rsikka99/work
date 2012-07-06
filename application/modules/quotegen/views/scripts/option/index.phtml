@@ -17,7 +17,7 @@
         <tr>
             <td><?php echo $option->getName(); ?></td>
             <td><?php echo $option->getDescription(); ?></td>
-            <td><?php echo Zend_Locale_Format::toNumber($option->getPrice(), array ('precision' => 2));?></td>
+            <td><?php echo Zend_Locale_Format::toNumber($option->getCost(), array ('precision' => 2));?></td>
             <td><?php echo $option->getSku();?></td>
             <?php if (count($option->getCategories()) > 0 ) :
 				$categoryNames = array();

@@ -105,7 +105,7 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
                 /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
                 $optionElement = $this->createElement('text', "option-{$quoteDeviceOption->getId()}-price", array (
                         'label' => $quoteDeviceOption->getName(),
-                        'value' => $quoteDeviceOption->getPrice(),
+                        'value' => $quoteDeviceOption->getCost(),
                         'description' => $quoteDeviceOption->getId()                        
                 ));
                 $optionElement->setAttrib('class', 'span1');

@@ -4,7 +4,7 @@ INSERT INTO `quotegen_categories` (`id`, `name`, `description`) VALUES
 (3,'Networking','Allows a printer to gain network connectivity'),
 (4,'Hard Drives','Hard Drives');
 
-INSERT INTO `quotegen_options` (`id`, `name`,`description`,`price`,`sku`) VALUES
+INSERT INTO `quotegen_options` (`id`, `name`,`description`,`cost`,`sku`) VALUES
 (1, '500 Sheet Paper tray', 'The standard 500 sheet paper tray', 3.00,'PPRTRY-500'),
 (2, '40 GB Hard drive', '40gb Hard Drive', 44.00, 'HDD-WD40'),
 (3, '60 GB Hard drive', '60 GB Hard Drive', 22.00, 'HDD-WD60'),
@@ -69,7 +69,7 @@ INSERT INTO `quotegen_leasing_schema_rates` (`leasingSchemaTermId`, `leasingSche
 INSERT INTO `quotegen_quotes` (`id`, `clientId`, `dateCreated`, `dateModified`, `quoteDate`, `userId`, `clientDisplayName`, `leaseRate`, `leaseTerm`, `pageCoverageMonochrome`, `pageCoverageColor`, `pricingConfigId`) VALUES
 (1, 2, NOW(), NOW(), NOW(), 1, NULL, NULL, NULL, 6, 24, 2);
 
-INSERT INTO `quotegen_quote_devices` (`id`, `quoteId`, `margin`, `name`, `sku`, `oemCostPerPageMonochrome`, `oemCostPerPageColor`, `compCostPerPageMonochrome`, `compCostPerPageColor`, `price`, `quantity`, `packagePrice`, `residual`) VALUES
+INSERT INTO `quotegen_quote_devices` (`id`, `quoteId`, `margin`, `name`, `sku`, `oemCostPerPageMonochrome`, `oemCostPerPageColor`, `compCostPerPageMonochrome`, `compCostPerPageColor`, `cost`, `quantity`, `packagePrice`, `residual`) VALUES
 (1, 1, 20.00, 'Unsynced Device Name 1', 'Unsynced SKU 1', 999, 999, 999, 999, 999.99, 1, 999.99, 0),
 (2, 1, 20.00, 'Unsynced Device Name 2', 'Unsynced SKU 2', 999, 999, 999, 999, 999.99, 1, 999.99, 0),
 (3, 1, 20.00, 'Unsynced Device Name 3', 'Unsynced SKU 3', 999, 999, 999, 999, 999.99, 1, 999.99, 0);
@@ -79,7 +79,7 @@ INSERT INTO `quotegen_quote_device_configurations` (`masterDeviceId`, `quoteDevi
 (2, 2),
 (3, 3);
 
-INSERT INTO `quotegen_quote_device_options` (`id`, `quoteDeviceId`, `sku`, `name`, `description`, `price`, `quantity`, `includedQuantity`) VALUES
+INSERT INTO `quotegen_quote_device_options` (`id`, `quoteDeviceId`, `sku`, `name`, `description`, `cost`, `quantity`, `includedQuantity`) VALUES
 (1, 1, 'Unsynced SKU 1', 'Unsynced Option Name 1', 'Add Description!', 999.99, 1, 0),
 (2, 1, 'Unsynced SKU 2', 'Unsynced Option Name 2', 'Add Description!', 999.99, 1, 0),
 (3, 1, 'Unsynced SKU 3', 'Unsynced Option Name 3', 'Add Description!', 999.99, 1, 0),

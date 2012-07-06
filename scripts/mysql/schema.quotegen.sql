@@ -56,7 +56,7 @@ CREATE  TABLE IF NOT EXISTS `quotegen_options` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(255) NOT NULL ,
   `description` TEXT NOT NULL ,
-  `price` DOUBLE NOT NULL ,
+  `cost` DOUBLE NOT NULL ,
   `sku` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
@@ -251,7 +251,7 @@ CREATE  TABLE IF NOT EXISTS `quotegen_quote_devices` (
   `oemCostPerPageColor` DOUBLE NOT NULL ,
   `compCostPerPageMonochrome` DOUBLE NOT NULL ,
   `compCostPerPageColor` DOUBLE NOT NULL ,
-  `price` DOUBLE NOT NULL ,
+  `cost` DOUBLE NOT NULL ,
   `quantity` INT(11) NOT NULL ,
   `packagePrice` DOUBLE NOT NULL ,
   `residual` DOUBLE NOT NULL ,
@@ -331,7 +331,7 @@ CREATE  TABLE IF NOT EXISTS `quotegen_quote_device_options` (
   `sku` VARCHAR(255) NOT NULL ,
   `name` VARCHAR(255) NOT NULL ,
   `description` TEXT NOT NULL ,
-  `price` DOUBLE NOT NULL ,
+  `cost` DOUBLE NOT NULL ,
   `quantity` INT(11) NOT NULL ,
   `includedQuantity` INT(11) NOT NULL ,
   PRIMARY KEY (`id`) ,
