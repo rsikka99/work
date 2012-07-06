@@ -21,7 +21,7 @@
             <td><?php echo $toner->getSku(); ?></td>
             <td><?php echo $toner->getManufacturer()->getDisplayname(); ?></td>
             <td><?php echo $toner->getPartType()->getTypeName(); ?></td>
-            <td><?php echo $toner->getTonerColor()->getTonerColorName(); ?></td>
+            <td style="text-transform: capitalize;"><?php echo strToLower($toner->getTonerColor()->getTonerColorName()); ?></td>
             <td style="text-align: right;"><?php echo number_format($toner->getYield(), 0, '', ','); ?></td>
             <td style="text-align: right;"><?php echo "$" . number_format($toner->getCost(), 2, '.', ','); ?></td>
             <td>

@@ -1,6 +1,6 @@
 <?php
 
-class Proposalgen_Form_Toner extends EasyBib_Form
+class Admin_Form_Toner extends EasyBib_Form
 {
 
     public function init ()
@@ -28,6 +28,7 @@ class Proposalgen_Form_Toner extends EasyBib_Form
         $this->addElement('text', 'sku', array (
                 'label' => 'SKU:', 
                 'required' => true, 
+                'class' => 'span2',
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -59,11 +60,12 @@ class Proposalgen_Form_Toner extends EasyBib_Form
         ));
         
         /*
-         *  Price
+         *  Cost
          */
-        $this->addElement('text', 'price', array (
-                'label' => 'Price:', 
+        $this->addElement('text', 'cost', array (
+                'label' => 'Cost:', 
                 'required' => true, 
+                'class' => 'span1',
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -79,6 +81,7 @@ class Proposalgen_Form_Toner extends EasyBib_Form
         $this->addElement('text', 'yield', array (
                 'label' => 'Yield:', 
                 'required' => true, 
+                'class' => 'span1',
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -95,11 +98,12 @@ class Proposalgen_Form_Toner extends EasyBib_Form
         /* @var $color Proposalgen_Model_Toner_Colors */
         foreach ( Proposalgen_Model_Mapper_TonerColor::getInstance()->fetchAll() as $color )
         {
-            $colors [$color->getId()] = $color->getName();
+            $colors [$color->getTonerColorId()] = $color->getTonerColorName();
         }
         
         $this->addElement('select', 'toner_color_id', array (
                 'label' => 'Color:',
+                'class' => 'span2',
                 'multiOptions' => $colors
         ));
         
@@ -110,11 +114,12 @@ class Proposalgen_Form_Toner extends EasyBib_Form
         /* @var $parttypes Proposalgen_Model_PartType */
         foreach ( Proposalgen_Model_Mapper_PartType::getInstance()->fetchAll() as $parttype)
         {
-            $parttypes [$parttype->getId()] = $parttype->getName();
+            $parttypes [$parttype->getPartTypeId()] = $parttype->getTypeName();
         }
         
         $this->addElement('select', 'part_type_id', array (
                 'label' => 'Part Type:',
+                'class' => 'span2',
                 'multiOptions' => $parttypes
         ));
         
