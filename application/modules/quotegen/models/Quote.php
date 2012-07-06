@@ -161,6 +161,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                 'clientDisplayName' => $this->getClientDisplayName(),
                 'pageCoverageColor' => $this->getPageCoverageColor(),
                 'pageCoverageMonochrome' => $this->getPageCoverageMonochrome(),
+                'pricingConfigId' => $this->getPricingConfigId(),
                 'leaseTerm' => $this->getLeaseTerm(),
                 'leaseRate' => $this->getLeaseRate(),
         );

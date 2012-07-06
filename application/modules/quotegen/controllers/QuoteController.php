@@ -1,12 +1,7 @@
 <?php
 
-class Quotegen_QuoteController extends Zend_Controller_Action
+class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
 {
-
-    public function init ()
-    {
-        /* Initialize action controller here */
-    }
 
     public function indexAction ()
     {
@@ -99,24 +94,30 @@ class Quotegen_QuoteController extends Zend_Controller_Action
                         // Save to the database
                         try
                         {
+                            $userId = Zend_Auth::getInstance()->getIdentity()->id;
+                            $userQuoteSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting($userId);
+                            
+                            $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
+                            $quoteSetting->applyOverride($userQuoteSetting);
+                            
                             $currentDate = date('Y-m-d H:i:s');
-                            $mapper = new Quotegen_Model_Mapper_Quote();
-                            $quote = new Quotegen_Model_Quote();
+                            $quote = new Quotegen_Model_Quote($values);
                             
-                            $quote->populate($values);
-                            $quote->setUserId(Zend_Auth::getInstance()->getIdentity()->id);
-                            
+                            $quote->setUserId($userId);
                             $quote->setDateCreated($currentDate);
                             $quote->setDateModified($currentDate);
                             $quote->setQuoteDate($currentDate);
-                            $quoteId = $mapper->insert($quote);
                             
-                            $this->_helper->flashMessenger(array (
-                                    'success' => "Quote was added successfully." 
-                            ));
+                            $quote->setPageCoverageMonochrome($quoteSetting->getPageCoverageMonochrome());
+                            $quote->setPageCoverageColor($quoteSetting->getPageCoverageColor());
+                            $quote->setPricingConfigId($quoteSetting->getPricingConfigId());
                             
-                            // Start Building the quote
-                            $this->_helper->redirector('index', 'build');
+                            $quoteId = Quotegen_Model_Mapper_Quote::getInstance()->insert($quote);
+                            
+                            $this->resetQuoteSession($quoteId);
+                            
+                            // Redirect to the build controller
+                            $this->_helper->redirector('index', 'quote_devices');
                         }
                         catch ( Exception $e )
                         {
