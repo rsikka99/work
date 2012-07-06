@@ -74,8 +74,8 @@ $this->headScript()->appendScript("$('i').popover();");
             <table class="table table-condensed table-bordered table-striped">
                 <tr>
                     <th style="width: 50px;">Quantity</th>
-                    <th style="width: 100px;">Included <i class="icon-question-sign" data-placement="right"  data-title="What is included?" data-content="This is how many of the option are already included in the device cost because they come with the device."></i></th>
-                    <th style="width: 160px;">Sku</th>
+                    <th style="width: 80px;">Included <i class="icon-question-sign" data-placement="right"  data-title="What is included?" data-content="This is how many of the option are already included in the device cost because they come with the device."></i></th>
+                    <th style="width: 140px;">Sku</th>
                     <th>Option Details</th>
                     <th style="width: 80px;">Cost</th>
                 </tr>
@@ -84,7 +84,7 @@ $this->headScript()->appendScript("$('i').popover();");
                     <td><?php echo $quoteDeviceOption->getQuantity(); ?></td>
                     <td><?php echo $quoteDeviceOption->getIncludedQuantity(); ?></td>
                     <td><?php echo $quoteDeviceOption->getSku(); ?></td>
-                    <td><h5><?php echo $quoteDeviceOption->getName(); ?><br><small><?php echo $quoteDeviceOption->getDescription(); ?></small></h5></td>
+                    <td><h5><?php echo $quoteDeviceOption->getName(); ?><small> - <?php echo $quoteDeviceOption->getDescription(); ?></small></h5></td>
                     <td><?php echo $this->currency($quoteDeviceOption->getCost()); ?></td>
                 </tr>
             <?php endforeach; ?>
@@ -95,4 +95,13 @@ $this->headScript()->appendScript("$('i').popover();");
         </div>
         <?php endforeach; ?>
     </div>
+</div>
+<div class="well">
+    <form method="POST" class="form-center-actions">
+        <div class="form-actions">
+            <input type="submit" name="back" value="Go Back" class="btn"/>
+            <input type="submit" name="save" value="Save" class="btn btn-success"/>
+            <input type="submit" name="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary"/>
+        </div>
+    </form>
 </div>
