@@ -1,5 +1,8 @@
 <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
-<h1>All Options </h1>
+<div class="clearfix">
+    <a class="btn btn-success btn-small pull-right" href="<?php echo $this->url(array('action' => 'create')) ?>"> <i class="icon-white icon-plus-sign"></i> Create new</a>
+    <h1>All Quote device pages</h1>
+</div>
 <table class="table table-striped table-condensed table-bordered">
     <thead>
         <tr>
