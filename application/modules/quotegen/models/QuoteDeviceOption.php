@@ -331,4 +331,21 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
     {
         return (int)$this->getQuantity() + (int)$this->getIncludedQuantity();
     }
+    
+    /**
+     * Gets the total cost (Cost * Quantity)
+     *
+     * @return number The total cost for the option
+     */
+    public function getSubTotal ()
+    {
+        $subtotal = 0;
+        $cost = (float)$this->getCost();
+        $quantity = (int)$this->getQuantity();
+        if ($cost > 0 && $quantity > 0)
+        {
+            $subtotal = $cost * $quantity;
+        }
+        return $subtotal;
+    }
 }
