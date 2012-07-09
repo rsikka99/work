@@ -130,7 +130,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             }
         }
         
-        $quoteDevice->setPackagePrice($quoteDevice->calculatePackageCost());
+        $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
         Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
         
         return true;

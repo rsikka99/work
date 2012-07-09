@@ -80,7 +80,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             $quoteDevice->setQuoteId($this->_quoteId);
                             $quoteDevice->setMargin(0);
                             $quoteDevice->setQuantity(1);
-                            $quoteDevice->setPackagePrice($quoteDevice->calculatePackageCost());
+                            $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
                             $quoteDevice->setResidual(0);
                             
                             // Save our device
@@ -223,7 +223,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         
                         // Save the device last
                         $quoteDevice->populate($values);
-                        $quoteDevice->setPackagePrice($quoteDevice->calculatePackageCost());
+                        $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
                         Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
                         
                         if (isset($values ['add']))
@@ -352,7 +352,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         
                         if ($insertedOptions > 0)
                         {
-                            $quoteDevice->setPackagePrice($quoteDevice->calculatePackageCost());
+                            $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
                             Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
                         }
                         
@@ -409,7 +409,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                 
                 if ($rowsAffected > 0)
                 {
-                    $quoteDevice->setPackagePrice($quoteDevice->calculatePackageCost());
+                    $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
                     Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
                 }
                 

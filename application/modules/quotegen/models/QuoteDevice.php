@@ -198,7 +198,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     /**
      * Gets the quote id
      *
-     * @return the $_quoteId
+     * @return number The quote id
      */
     public function getQuoteId ()
     {
@@ -209,7 +209,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      * Sets a quote id
      *
      * @param number $_quoteId
-     *            the new quoteId
+     *            The new quoteId
      */
     public function setQuoteId ($_quoteId)
     {
@@ -220,7 +220,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     /**
      * Gets the devices margin
      *
-     * @return the $_margin
+     * @return number The margin in whole number format (20 = 20%)
      */
     public function getMargin ()
     {
@@ -231,7 +231,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      * Sets the margin
      *
      * @param number $_margin
-     *            the new margin
+     *            The new margin
      */
     public function setMargin ($_margin)
     {
@@ -240,9 +240,9 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Gets the quote name
+     * Gets the name of the quote device
      *
-     * @return the $_name
+     * @return string The name of the quote device
      */
     public function getName ()
     {
@@ -250,10 +250,10 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Sets the name
+     * Sets the name of the quote device
      *
      * @param string $_name
-     *            the new name
+     *            The new name
      */
     public function setName ($_name)
     {
@@ -262,7 +262,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Gets the sku of the device
+     * Gets the sku of the quote device
      *
      * @return the $_sku
      */
@@ -272,10 +272,10 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Sets a new sku for the objet
+     * Sets a new sku for the quote device
      *
      * @param string $_sku
-     *            the new sku
+     *            The new sku
      */
     public function setSku ($_sku)
     {
@@ -284,9 +284,9 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Gets the oemCostPerPageMonochrome
+     * Gets the OEM cost per page for monochrome pages
      *
-     * @return the $_oemCostPerPageMonochrome
+     * @return number The cost per page
      */
     public function getOemCostPerPageMonochrome ()
     {
@@ -294,10 +294,10 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Sets the oemCostPerPageMonochrome
+     * Sets the OEM cost per page for monochrome pages
      *
      * @param number $_oemCostPerPageMonochrome
-     *            the new oemCostPerPageMonochrome
+     *            The new cost per page
      */
     public function setOemCostPerPageMonochrome ($_oemCostPerPageMonochrome)
     {
@@ -306,9 +306,9 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Gets the oemCostPerPageColor
+     * Gets the OEM cost per page for color pages
      *
-     * @return the $_oemCostPerPageColor
+     * @return number The cost per page
      */
     public function getOemCostPerPageColor ()
     {
@@ -316,10 +316,10 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Sets the oemCostPerPageColor
+     * Sets the OEM cost per page for color pages
      *
      * @param number $_oemCostPerPageColor
-     *            the new oemCostPerPageColor
+     *            The new cost per page
      */
     public function setOemCostPerPageColor ($_oemCostPerPageColor)
     {
@@ -522,13 +522,13 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateOptionsCost ()
     {
-        $optionsCost = 0;        
+        $optionsCost = 0;
         
         // Add all the devices together
         /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
         foreach ( $this->getQuoteDeviceOptions() as $quoteDeviceOption )
         {
-            $optionsCost += $quoteDeviceOption->getCost() * $quoteDeviceOption->getQuantity();
+            $optionsCost += (float)$quoteDeviceOption->getCost() * (int)$quoteDeviceOption->getQuantity();
         }
         
         return $optionsCost;
@@ -537,18 +537,42 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     /**
      * Calculates the cost of a single device and all of its options
      *
-     * @return number The price
+     * @return number The cost
      */
     public function calculatePackageCost ()
     {
         // Get the device price
-        $price = $this->getCost();
+        $price = (float)$this->getCost();
         
         // Tack on the option prices
         /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
         foreach ( $this->getQuoteDeviceOptions() as $quoteDeviceOption )
         {
             $price += $quoteDeviceOption->getCost() * $quoteDeviceOption->getQuantity();
+        }
+        
+        return $price;
+    }
+
+    /**
+     * Calculates the cost of a single device and all of its options with margin
+     *
+     * @return number The price
+     */
+    public function calculatePackagePrice ()
+    {
+        // Get the device price
+        $price = $this->calculatePackageCost();
+        
+        // Tack on the margin
+        if ($price > 0)
+        {
+            $margin = $this->getMargin();
+            if ($margin > 0 && $margin < 100)
+            {
+                $margin = 1 - (1 / $margin);
+                $price = round($price / $margin, 2);
+            }
         }
         
         return $price;
@@ -562,24 +586,13 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     public function calculateSubTotal ()
     {
         $subTotal = 0;
-        $packagePrice = (int)$this->getPackagePrice();
-        $quantity = (int)$this->getQuantity();
+        $packagePrice = (float)$this->getPackagePrice();
+        $quantity = $this->getQuantity();
         
         // Make sure both the price and quantity are greater than 0
         if ($packagePrice > 0 && $quantity > 0)
         {
             $subTotal = $packagePrice * $quantity;
-        }
-        
-        // Apply the margin
-        if ($subTotal > 0)
-        {
-            $margin = $this->getMargin();
-            if ($margin > 0 && $margin < 100)
-            {
-                $margin = 1 - (1 / $margin);
-                $subTotal = round($subTotal / $margin, 2);
-            }
         }
         
         return $subTotal;
