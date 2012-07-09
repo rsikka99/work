@@ -283,6 +283,9 @@ form.form-center-actions .form-actions {
 form.form-center-actions.form-horizontal .form-actions {
   padding-left: 0;
 }
+.clearfix .btn {
+  margin-bottom: 7px;
+}
 /*
  * Quote Flow
 */

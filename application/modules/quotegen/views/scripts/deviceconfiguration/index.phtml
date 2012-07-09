@@ -1,7 +1,7 @@
 <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
 <div class="clearfix">
-    <a class="btn btn-success btn-small pull-right" href="<?php echo $this->url(array('action' => 'create')) ?>"> <i class="icon-white icon-plus-sign"></i> Create new</a>
     <h1>All Device Configurations</h1>
+    <a class="btn btn-success btn-small pull-right" href="<?php echo $this->url(array('action' => 'create')) ?>"> <i class="icon-white icon-plus-sign"></i> Create new</a>
 </div>
 <a class="btn btn-success btn-small pull-right create-button" href="<?php echo $this->url(array('action' => 'create')) ?>"> <i class="icon-white icon-plus-sign"></i> Create new</a>
 <table class="table table-striped table-condensed table-bordered">
@@ -29,6 +29,9 @@
 </table>
 <?php echo $this->paginationControl($this->paginator); ?>
 <?php else : ?>
-    <h1>There are no device configurations</h1>
+<div class='well'>
+	<a class="btn btn-success btn-small pull-right" href="<?php echo $this->url(array('action' => 'create')) ?>"> <i class="icon-white icon-plus-sign"></i> Create new</a>
+	<h1>There are no device configurations</h1>	
+</div>
 <?php endif; ?>
 
