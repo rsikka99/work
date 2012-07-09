@@ -237,8 +237,8 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         
         // Get SKU
         // TODO: Move to mapper?
-        $mapper = new Quotegen_Model_Mapper_Device();
-        $device = $mapper->find($masterDeviceId);
+        $devicemapper = new Quotegen_Model_Mapper_Device();
+        $device = $devicemapper->find($masterDeviceId);
         $sku = $device->getSku();
         $form->getElement('sku')->setValue($sku);
         
@@ -255,8 +255,14 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 {
                     // Validate the form
                     if ($form->isValid($values))
-                    {
+                    {   
                         // Save Device SKU
+                        $devicevalues = array(
+                                'masterDeviceId' => $masterDeviceId,
+                                'sku' => $values ['sku']
+                                );
+                        $device->populate($devicevalues);
+                        $deviceId = $devicemapper->save($device, $masterDeviceId);
                         
                         // Save Master Device
                         $mapper = new Proposalgen_Model_Mapper_MasterDevice();
