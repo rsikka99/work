@@ -22,9 +22,8 @@
 	            <td><?php echo $device->getSku(); ?></td>
 	            <td>
 	                <div class="btn-group">
-		                <a class="btn btn-info" title="View Device" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $device->getMasterDeviceId())); ?>"><i class="icon-eye-open"></i></a>
-	                    <a class="btn btn-warning" title="Edit Device" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $device->getMasterDeviceId())); ?>"><i class="icon-pencil"></i></a>
-	                    <a class="btn btn-danger" title="Delete Device" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $device->getMasterDeviceId())); ?>"><i class="icon-trash"></i></a>
+	                    <a class="btn btn-warning btn-mini" title="Edit Device" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $device->getMasterDeviceId())); ?>"><i class="icon-pencil icon-white"></i></a>
+	                    <a class="btn btn-danger btn-mini" title="Delete Device" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $device->getMasterDeviceId())); ?>"><i class="icon-trash icon-white"></i></a>
 	                </div>
 	            </td>
 	        </tr>

@@ -1,20 +1,25 @@
-<?php $id = $this->id; ?>
+<?php 
+$id = $this->id; 
+$device = Quotegen_Model_Mapper_Device::getInstance()->find($id);
+$devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . ' ' . $device->getMasterDevice()->getPrinterModel();
+?>
 
 <div class="clearfix">
-	<h1>Device Setup</h1>
+	<h1>Device Configuration</h1>
 </div>
 
 <div class="tabbable"> <!-- Only required for left/right tabs -->
     <ul class="nav nav-tabs">
     	<li class="active"><a href="#tab1" data-toggle="tab">Details</a></li>
     	<li><a href="#tab2" data-toggle="tab">Toners</a></li>
+    	<li><a href="#tab3" data-toggle="tab">Options</a></li>
     </ul>
     <div class="tab-content">
     	<div class="tab-pane active" id="tab1">
     		<?php echo $this->form; ?>
     	</div>
     	<div class="tab-pane" id="tab2">
-    		<h3>Device Toners</h3>
+    		<h3>Device Toners for <?php echo $devicename; ?></h3>
     		
     		<?php if ( $this->deviceToners ) { ?>
     		
@@ -31,7 +36,6 @@
 				        </tr>
 				    </thead>
 				    <tbody>
-				    	
 				        <?php foreach ($this->deviceToners as $toner) : /* @var $toner Admin_Model_Toner */ ?>
 				        <tr>
 				            <td><?php echo $toner->getSku(); ?></td>
@@ -42,9 +46,8 @@
 				            <td style="text-align: right;"><?php echo "$" . number_format($toner->getCost(), 2, '.', ','); ?></td>
 				            <td>
 				                <div class="btn-group">
-					                <a class="btn btn-info" title="View" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $toner->getId())); ?>"><i class="icon-eye-open"></i></a>
-				                    <a class="btn btn-warning" title="Edit" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $toner->getId())); ?>"><i class="icon-pencil"></i></a>
-				                    <a class="btn btn-danger" title="Delete" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $toner->getId())); ?>"><i class="icon-trash"></i></a>
+				                    <a class="btn btn-warning btn-mini" title="Edit" href="<?php echo $this->url( array ( 'module' => 'admin', 'controller' => 'toner', 'action' => 'edit', 'id' => $toner->getId())); ?>"><i class="icon-pencil icon-white"></i></a>
+				                    <a class="btn btn-danger btn-mini" title="Delete" href="<?php echo $this->url(array ( 'module' => 'admin', 'controller' => 'toner', 'action' => 'unassign', 'id' => $toner->getId())); ?>"><i class="icon-trash icon-white"></i></a>
 				                </div>
 				            </td>
 				        </tr>
@@ -54,6 +57,9 @@
 				
     		<?php } ?>
     		
+    	</div>
+    	<div class="tab-pane active" id="tab3">
+    		<h3>Options for <?php echo $devicename; ?></h3>
     	</div>
     </div>
 </div>
