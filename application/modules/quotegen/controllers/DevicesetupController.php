@@ -1,6 +1,6 @@
 <?php
 
-class Admin_DevicesetupController extends Zend_Controller_Action
+class Quotegen_DevicesetupController extends Zend_Controller_Action
 {
 
     public function init ()
@@ -203,35 +203,44 @@ class Admin_DevicesetupController extends Zend_Controller_Action
      */
     public function editAction ()
     {
-        $deviceId = $this->_getParam('id', false);
+        $masterDeviceId = $this->_getParam('id', false);
         
-        // If they haven't provided an id, send them back to the view all device page
-        if (! $deviceId)
+        // If they haven't provided an id, send them back to the view all masterDevice
+        // page
+        if (! $masterDeviceId)
         {
             $this->_helper->flashMessenger(array (
-                    'warning' => 'Please select a device to edit first.' 
+                    'warning' => 'Please select a masterDevice to edit first.' 
             ));
             $this->_helper->redirector('index');
         }
         
-        // Get the device
-        $mapper = Quotegen_Model_Mapper_Device::getInstance();
-        $device = $mapper->find($deviceId);
-        // If the device doesn't exist, send them back t the view all devices page
-        if (! $device)
+        // Get the masterDevice
+        $mapper = new Proposalgen_Model_Mapper_MasterDevice();
+        $masterDevice = $mapper->find($masterDeviceId);
+        
+        // If the masterDevice doesn't exist, send them back t the view all masterDevices page
+        if (! $masterDevice)
         {
             $this->_helper->flashMessenger(array (
-                    'danger' => 'There was an error selecting the device to edit.' 
+                    'danger' => 'There was an error selecting the masterDevice to edit.' 
             ));
             $this->_helper->redirector('index');
         }
         
         // Create a new form with the mode and roles set
-        $form = new Quotegen_Form_Device($device->getMasterDevice()->getFullDeviceName());
+        $form = new Quotegen_Form_DeviceSetup();
         
         // Prepare the data for the form
         $request = $this->getRequest();
-        $form->populate($device->toArray());
+        $form->populate($masterDevice->toArray());
+        
+        // Get SKU
+        // TODO: Move to mapper?
+        $mapper = new Quotegen_Model_Mapper_Device();
+        $device = $mapper->find($masterDeviceId);
+        $sku = $device->getSku();
+        $form->getElement('sku')->setValue($sku);
         
         // Make sure we are posting data
         if ($request->isPost())
@@ -247,15 +256,25 @@ class Admin_DevicesetupController extends Zend_Controller_Action
                     // Validate the form
                     if ($form->isValid($values))
                     {
-                        $device->populate($values);
+                        // Save Device SKU
+                        
+                        // Save Master Device
+                        $mapper = new Proposalgen_Model_Mapper_MasterDevice();
+                        $masterDevice = new Proposalgen_Model_MasterDevice();
+                        foreach ( $values as &$value )
+                        {
+                            if (strlen($value) < 1)
+                                $value = null;
+                        }
+                        $masterDevice->populate($values);
+                        $masterDevice->setId($masterDeviceId);
                         
                         // Save to the database with cascade insert turned on
-                        $deviceId = $mapper->save($device, $deviceId);
+                        $masterDeviceId = $mapper->save($masterDevice, $masterDeviceId);
                         
                         $this->_helper->flashMessenger(array (
-                                'success' => "Device '" . $this->view->escape($device->getMasterDeviceId()) . "' was updated sucessfully." 
+                                'success' => "MasterDevice '{$masterDevice->getFullDeviceName()}' was updated sucessfully." 
                         ));
-                        $this->_helper->redirector('index');
                     }
                     else
                     {
@@ -275,8 +294,6 @@ class Admin_DevicesetupController extends Zend_Controller_Action
                 $this->_helper->redirector('index');
             }
         }
-        
-        $this->view->device = $device;
         $this->view->form = $form;
     }
 

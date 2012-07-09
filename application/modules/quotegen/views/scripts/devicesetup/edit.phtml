@@ -1,27 +1,4 @@
-<?php $device = $this->device; /* @var $device Quotegen_Model_Device */?>
+<h1>Device Setup</h1>
 <div class="well">
-    
     <?php echo $this->form; ?>
-    <div class="row">
-        <div class="span6 offset2">
-            <h3>Options <a href="<?php echo $this->url(array('action' => 'addoptions')); ?>" class="btn btn-success btn-mini"><i class="icon-plus-sign icon-white"></i> Add</a></h3>
-    <?php if (count($device->getOptions()) > 0) : ?>
-    
-            <table class="table table-bordered table-striped table-condensed">
-                <tr>
-                    <th>Option</th>
-                    <th style="width: 30px;"></th>
-                </tr>
-                <?php foreach ($device->getOptions() as $option) : /* @var $option Quotegen_Model_Option */ ?>
-                <tr>
-                    <td><?php echo $option->getName(); ?></td>
-                    <td><a href="<?php echo $this->url(array('action' => 'deleteoption', 'optionId' => $option->getId()));?>" class="btn btn-mini btn-danger"><i class="icon-trash"></i></a></td>
-                </tr>
-                <?php endforeach; ?>
-            </table>
-    <?php else : ?>
-            <h4>There are no options currently associated with this device. Please click the add button above to associate options with this device.</h4>
-    <?php endif;?>
-        </div>
-    </div>
 </div>
