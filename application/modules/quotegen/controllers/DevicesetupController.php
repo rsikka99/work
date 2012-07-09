@@ -452,6 +452,14 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
     {
         $this->view->device = Quotegen_Model_Mapper_Device::getInstance()->find($this->_getParam('id', false));
     }
-    
+
+    /**
+     * Assign toners to a device
+     */
+	public function assigntonersAction ()
+	{
+	    
+	}
+	
 }
 

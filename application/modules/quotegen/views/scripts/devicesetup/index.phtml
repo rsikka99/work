@@ -10,7 +10,7 @@
 	            <th style="width: 30px;">ID</th>
 	            <th>Full Device Name</th>
 	            <th>SKU</th>
-	            <th style="width: 120px;">Action</th>
+	            <th style="width: 120px; text-align: center;">Action</th>
 	        </tr>
 	    </thead>
 	    <tbody>
@@ -21,7 +21,7 @@
 	            <td><?php echo $device->getMasterDevice()->getFullDeviceName(); ?></td>
 	            <td><?php echo $device->getSku(); ?></td>
 	            <td>
-	                <div class="btn-group">
+	                <div class="" style="text-align: center;">
 	                    <a class="btn btn-warning btn-mini" title="Edit Device" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $device->getMasterDeviceId())); ?>"><i class="icon-pencil icon-white"></i></a>
 	                    <a class="btn btn-danger btn-mini" title="Delete Device" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $device->getMasterDeviceId())); ?>"><i class="icon-trash icon-white"></i></a>
 	                </div>
