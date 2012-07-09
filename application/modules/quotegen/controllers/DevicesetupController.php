@@ -236,7 +236,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $form->populate($masterDevice->toArray());
         
         // Get SKU
-        // TODO: Move to mapper?
+        // TODO: Move to mapper or form?
         $devicemapper = new Quotegen_Model_Mapper_Device();
         $device = $devicemapper->find($masterDeviceId);
         $sku = $device->getSku();

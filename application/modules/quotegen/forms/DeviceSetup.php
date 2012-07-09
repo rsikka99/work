@@ -23,27 +23,6 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         $this->setAttrib('class', 'form-horizontal');
 
         /*
-         * SKU
-        */
-        $this->addElement('text', 'sku', array (
-                'label' => 'SKU:', 
-                'required' => true, 
-                'filters' => array (
-                        'StringTrim', 
-                        'StripTags' 
-                ), 
-                'validators' => array (
-                        array (
-                                'validator' => 'StringLength', 
-                                'options' => array (
-                                        1, 
-                                        255 
-                                ) 
-                        ) 
-                ) 
-        ));
-        
-        /*
          * Manufacturer
          */
         $manufacturers = array ();
@@ -77,6 +56,27 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                 ) 
                         ) 
                 ) 
+        ));
+
+        /*
+         * SKU
+        */
+        $this->addElement('text', 'sku', array (
+                'label' => 'SKU:',
+                'required' => true,
+                'filters' => array (
+                        'StringTrim',
+                        'StripTags'
+                ),
+                'validators' => array (
+                        array (
+                                'validator' => 'StringLength',
+                                'options' => array (
+                                        1,
+                                        255
+                                )
+                        )
+                )
         ));
         
         /*
