@@ -1,21 +1,4 @@
-<div class="tabbable tabs-left well">
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab1" data-toggle="tab">Select an existing quote</a></li>
-        <li><a href="#tab2" data-toggle="tab">Create a new quote</a></li>
-        <li><a href="#tab3" data-toggle="tab">Create a new client</a></li>
-    </ul>
-    <div class="tab-content ">
-        <div class="tab-pane active" id="tab1">
-            <p>Select an existing quote from the list below to work on it.</p>
-            <?php echo $this->existingQuoteForm; ?>
-        </div>
-        <div class="tab-pane" id="tab2">
-            
-            <?php echo $this->newQuoteForm; ?>
-        </div>
-         <div class="tab-pane" id="tab3">
-             
-            <?php echo $this->newClientForm; ?>
-        </div>
-    </div>
+<div class="well">
+    <p>Select an existing quote from the list below to work on it.</p>
+    <?php echo $this->existingQuoteForm; ?>
 </div>

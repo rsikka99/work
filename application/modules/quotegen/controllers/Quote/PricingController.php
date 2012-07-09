@@ -14,6 +14,9 @@ class Quotegen_Quote_PricingController extends Quotegen_Library_Controller_Quote
      */
     public function indexAction ()
     {
+        // Require that we have a quote object in the database to use this page
+        $this->requireQuote();
+        
         $request = $this->getRequest();
         
         if ($request->isPost())
