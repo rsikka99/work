@@ -548,7 +548,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
         foreach ( $this->getQuoteDeviceOptions() as $quoteDeviceOption )
         {
-            $price += $quoteDeviceOption->getCost() * $quoteDeviceOption->getQuantity();
+            $price += $quoteDeviceOption->getSubTotal();
         }
         
         return $price;

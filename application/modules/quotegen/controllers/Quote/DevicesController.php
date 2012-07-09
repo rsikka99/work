@@ -223,6 +223,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         
                         // Save the device last
                         $quoteDevice->populate($values);
+                        
+                        // Reset the quote options to null since we just changed the database
+                        $quoteDevice->setQuoteDeviceOptions(null);
                         $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
                         Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
                         
