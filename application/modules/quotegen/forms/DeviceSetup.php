@@ -323,7 +323,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          * Leased Toner Yield
          */
         $this->addElement('text', 'leased_toner_yield', array (
-                'label' => 'Leased Toner Yield', 
+                'label' => 'Leased Toner Yield:', 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
