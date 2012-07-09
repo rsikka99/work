@@ -204,6 +204,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
     public function editAction ()
     {
         $masterDeviceId = $this->_getParam('id', false);
+        $this->view->id = $masterDeviceId;
         
         // If they haven't provided an id, send them back to the view all masterDevice
         // page
@@ -430,5 +431,21 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
     {
         $this->view->device = Quotegen_Model_Mapper_Device::getInstance()->find($this->_getParam('id', false));
     }
+    
+    public function devicetonersAction ()
+    {
+        // Display all of the devices
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Admin_Model_Mapper_Toner::getInstance()));
+        
+        // Set the current page we're on
+        $paginator->setCurrentPageNumber($this->_getParam('page', 1));
+        
+        // Set how many items to show
+        $paginator->setItemCountPerPage(15);
+        
+        // Pass the view the paginator
+        $this->view->paginator = $paginator;
+    }
+    
 }
 
