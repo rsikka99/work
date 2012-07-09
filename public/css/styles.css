@@ -283,6 +283,9 @@ form.form-center-actions .form-actions {
 form.form-center-actions.form-horizontal .form-actions {
   padding-left: 0;
 }
+.clearfix .btn {
+  margin-bottom: 7px;
+}
 /*
  * Quote Flow
 */
@@ -309,4 +312,8 @@ table.quoteDevices tr.optionRow table {
 }
 table.quoteDevices tr.optionRow table tr:first-child th {
   border-bottom: 1px solid #CECECE;
+}
+table.quoteDeviceTable tr.header-row th,
+table.quoteDeviceTable tr.header-row td {
+  background-color: #CCC;
 }

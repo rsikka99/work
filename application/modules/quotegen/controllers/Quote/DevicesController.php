@@ -15,6 +15,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
      */
     public function indexAction ()
     {
+        // Require that we have a quote object in the database to use this page
+        $this->requireQuote();
+        
         $request = $this->getRequest();
         
         if ($request->isPost())
@@ -25,14 +28,17 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                 $deviceConfigurationId = (int)$values ['deviceConfigurationId'];
                 if ($deviceConfigurationId === - 1)
                 {
-                    $this->_helper->redirector('create-new-quote-device');
+                    $this->_helper->redirector('create-new-quote-device', null, null, array (
+                            'quoteId' => $this->_quoteId 
+                    ));
                 }
                 else
                 {
                     $newDeviceConfigurationId = $this->cloneDeviceConfiguration($deviceConfigurationId);
                     
                     $this->_helper->redirector('edit-quote-device', null, null, array (
-                            'id' => $newDeviceConfigurationId 
+                            'id' => $newDeviceConfigurationId, 
+                            'quoteId' => $this->_quoteId 
                     ));
                 }
             }
@@ -44,6 +50,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
      */
     public function createNewQuoteDeviceAction ()
     {
+        // Require that we have a quote object in the database to use this page
+        $this->requireQuote();
+        
         $request = $this->getRequest();
         $form = new Quotegen_Form_DeviceConfiguration();
         
@@ -71,7 +80,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             $quoteDevice->setQuoteId($this->_quoteId);
                             $quoteDevice->setMargin(0);
                             $quoteDevice->setQuantity(1);
-                            $quoteDevice->setPackagePrice($quoteDevice->calculatePackageCost());
+                            $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
                             $quoteDevice->setResidual(0);
                             
                             // Save our device
@@ -88,7 +97,8 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             ));
                             
                             $this->_helper->redirector('edit-quote-device', null, null, array (
-                                    'id' => $quoteDeviceId 
+                                    'id' => $quoteDeviceId, 
+                                    'quoteId' => $this->_quoteId 
                             ));
                         }
                         catch ( Exception $e )
@@ -112,7 +122,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->_helper->redirector('index', null, null, array (
+                        'quoteId' => $this->_quoteId 
+                ));
             }
         }
         $this->view->form = $form;
@@ -123,6 +135,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
      */
     public function deleteQuoteDeviceAction ()
     {
+        // Require that we have a quote object in the database to use this page
+        $this->requireQuote();
+        
         // Get the quote device (Also does validation)
         $quoteDevice = $this->getQuoteDevice('id');
         
@@ -132,7 +147,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                 'success' => 'Device deleted successfully.' 
         ));
         
-        $this->_helper->redirector('index');
+        $this->_helper->redirector('index', null, null, array (
+                'quoteId' => $this->_quoteId 
+        ));
     }
 
     /**
@@ -140,6 +157,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
      */
     public function editQuoteDeviceAction ()
     {
+        // Require that we have a quote object in the database to use this page
+        $this->requireQuote();
+        
         // Get the quote device (Also does validation)
         $quoteDevice = $this->getQuoteDevice('id');
         
@@ -153,7 +173,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             $this->_helper->flashMessenger(array (
                     'danger' => 'This device no longer has a device attached to it.' 
             ));
-            $this->_helper->redirector('index');
+            $this->_helper->redirector('index', null, null, array (
+                    'quoteId' => $this->_quoteId 
+            ));
         }
         
         $this->view->device = $device;
@@ -175,7 +197,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             if (isset($values ['cancel']))
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->_helper->redirector('index', null, null, array (
+                        'quoteId' => $this->_quoteId 
+                ));
             }
             else
             {
@@ -199,7 +223,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         
                         // Save the device last
                         $quoteDevice->populate($values);
-                        $quoteDevice->setPackagePrice($quoteDevice->calculatePackageCost());
+                        $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
                         Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
                         
                         if (isset($values ['add']))
@@ -210,7 +234,8 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             
                             // Send to the add options page like they asked
                             $this->_helper->redirector('add-options-to-quote-device', null, null, array (
-                                    'id' => $quoteDevice->getId() 
+                                    'id' => $quoteDevice->getId(), 
+                                    'quoteId' => $this->_quoteId 
                             ));
                         }
                         else
@@ -220,7 +245,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             ));
                             
                             // Send back to the main list
-                            $this->_helper->redirector('index');
+                            $this->_helper->redirector('index', null, null, array (
+                                    'quoteId' => $this->_quoteId 
+                            ));
                         }
                     }
                     else
@@ -244,6 +271,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
      */
     public function addOptionsToQuoteDeviceAction ()
     {
+        // Require that we have a quote object in the database to use this page
+        $this->requireQuote();
+        
         // Get the quote device (Also does validation)
         $quoteDevice = $this->getQuoteDevice('id');
         
@@ -254,7 +284,8 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                     'info' => "Invalid device selected or the device no longer has the ability to be configured." 
             ));
             $this->_helper->redirector('edit-quote-device', null, null, array (
-                    'id' => $quoteDevice->getId() 
+                    'id' => $quoteDevice->getId(), 
+                    'quoteId' => $this->_quoteId 
             ));
         }
         
@@ -265,7 +296,8 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                     'info' => "There are no more options to add to this device." 
             ));
             $this->_helper->redirector('edit-quote-device', null, null, array (
-                    'id' => $quoteDevice->getId() 
+                    'id' => $quoteDevice->getId(), 
+                    'quoteId' => $this->_quoteId 
             ));
         }
         
@@ -320,7 +352,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         
                         if ($insertedOptions > 0)
                         {
-                            $quoteDevice->setPackagePrice($quoteDevice->calculatePackageCost());
+                            $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
                             Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
                         }
                         
@@ -328,7 +360,8 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                                 'success' => "Successfully added {$insertedOptions} options." 
                         ));
                         $this->_helper->redirector('edit-quote-device', null, null, array (
-                                'id' => $quoteDevice->getId() 
+                                'id' => $quoteDevice->getId(), 
+                                'quoteId' => $this->_quoteId 
                         ));
                     }
                     else
@@ -347,7 +380,8 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             {
                 // User has cancelled. Go back to the edit page
                 $this->_helper->redirector('edit-quote-device', null, null, array (
-                        'id' => $quoteDevice->getId() 
+                        'id' => $quoteDevice->getId(), 
+                        'quoteId' => $this->_quoteId 
                 ));
             }
         }
@@ -360,6 +394,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
      */
     public function deleteOptionFromQuoteDeviceAction ()
     {
+        // Require that we have a quote object in the database to use this page
+        $this->requireQuote();
+        
         // Get the quote device (Also does validation)
         $quoteDevice = $this->getQuoteDevice('id');
         
@@ -372,7 +409,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                 
                 if ($rowsAffected > 0)
                 {
-                    $quoteDevice->setPackagePrice($quoteDevice->calculatePackageCost());
+                    $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
                     Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
                 }
                 
@@ -394,7 +431,8 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             ));
         }
         $this->_helper->redirector('edit-quote-device', null, null, array (
-                'id' => $quoteDevice->getId() 
+                'id' => $quoteDevice->getId(), 
+                'quoteId' => $this->_quoteId 
         ));
     }
 
@@ -403,6 +441,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
      */
     public function syncDeviceConfigurationAction ()
     {
+        
         // Get the quote device (Also does validation)
         $quoteDevice = $this->getQuoteDevice('id');
         
@@ -414,7 +453,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             ));
         }
         
-        $this->_helper->redirector('index');
+        $this->_helper->redirector('index', null, null, array (
+                'quoteId' => $this->_quoteId 
+        ));
     }
 
     /**
@@ -422,6 +463,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
      */
     public function syncAllDeviceConfigurationsAction ()
     {
+        // Require that we have a quote object in the database to use this page
+        $this->requireQuote();
+        
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
         foreach ( $this->_quote->getQuoteDevices() as $quoteDevice )
         {
@@ -431,28 +475,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         $this->_helper->flashMessenger(array (
                 'success' => "All device configurations synced successfully. Note: If any device is no longer offered and has been deleted from the system, we have no way of syncing it." 
         ));
-        $this->_helper->redirector('index');
-    }
-
-    /**
-     * This function takes care of adding pages to devices
-     */
-    public function pagesAction ()
-    {
-    }
-
-    /**
-     * This function takes care of editing quote settings
-     */
-    public function settingsAction ()
-    {
-    }
-
-    /**
-     * This function takes care of displaying reports
-     */
-    public function reportsAction ()
-    {
+        $this->_helper->redirector('index', null, null, array (
+                'quoteId' => $this->_quoteId 
+        ));
     }
 }
 

@@ -12,7 +12,6 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
     
     /**
      * The quote model.
-     * We should always have a quote id in the session when we are in this controller.
      *
      * @var Quotegen_Model_Quote
      */
@@ -40,13 +39,21 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
     {
         $this->_quoteSession = new Zend_Session_Namespace(Quotegen_Library_Controller_Quote::QUOTE_SESSION_NAMESPACE);
         
-        // Get the quote id from the session for easy access
-        $this->_quoteId = (isset($this->_quoteSession->id)) ? $this->_quoteSession->id : FALSE;
+        // Get the quote id from the url parameters
+        $this->_quoteId = $this->_getParam('quoteId');
         
         // If we have a quote id, fetch the quote object from the database. 
         if ($this->_quoteId)
         {
+            $this->_quoteId = (int)$this->_quoteId;
             $this->_quote = Quotegen_Model_Mapper_Quote::getInstance()->find($this->_quoteId);
+            if (! $this->_quote)
+            {
+                $this->_helper->flashMessenger(array (
+                        'danger' => 'Could not find the selected quote.' 
+                ));
+                $this->_helper->redirector('index', 'index');
+            }
         }
         else
         {
@@ -55,19 +62,6 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         }
         
         $this->view->quote = $this->_quote;
-    }
-
-    /**
-     * Resets the quote session to a brand new quote id.
-     *
-     * @param int $newQuoteId
-     *            The new quote id to work with
-     */
-    protected function resetQuoteSession ($newQuoteId)
-    {
-        // Reset the session and set the new id
-        $this->_quoteSession->unsetAll();
-        $this->_quoteSession->id = (int)$newQuoteId;
     }
 
     /**
@@ -136,7 +130,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             }
         }
         
-        $quoteDevice->setPackagePrice($quoteDevice->calculatePackageCost());
+        $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
         Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
         
         return true;
@@ -240,7 +234,9 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a device to edit first.' 
             ));
-            $this->_helper->redirector('index');
+            $this->_helper->redirector('index', null, null, array (
+                    'quoteId' => $this->_quoteId 
+            ));
         }
         
         $quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($quoteDeviceId);
@@ -251,9 +247,27 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'You may only edit devices associated with this quote.' 
             ));
-            $this->_helper->redirector('index');
+            $this->_helper->redirector('index', null, null, array (
+                    'quoteId' => $this->_quoteId 
+            ));
         }
         
         return $quoteDevice;
+    }
+
+    /**
+     * Checks to ensure we have a proper quote object and quote id.
+     * If not we redirect to the index controller/action and leave the user a message to select a quote.
+     */
+    public function requireQuote ()
+    {
+        // Redirect if we don't have a quote id or a quote
+        if (! $this->_quoteId || ! $this->_quote)
+        {
+            $this->_helper->flashMessenger(array (
+                    'danger' => 'There was an error getting the quote you previously selected. Please try selecting a quote again and contact the system administrator if the issue persists.' 
+            ));
+            $this->_helper->redirector('index', 'index');
+        }
     }
 }

@@ -7,6 +7,9 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
     {
         parent::init();
         Quotegen_View_Helper_Quotemenu::setActivePage(Quotegen_View_Helper_Quotemenu::REPORTS_CONTROLLER);
+        
+        // Require that we have a quote object in the database to use this page
+        $this->requireQuote();
     }
 
     /**
@@ -18,7 +21,6 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
 
     public function purchaseQuoteAction ()
     {
-        
     }
 
     public function orderListAction ()
