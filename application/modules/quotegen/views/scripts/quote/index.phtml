@@ -31,7 +31,7 @@
             <td><?php echo $quote->getUserId(); ?></td>
             <td>
                 <div class="btn-group">
-                    <a class="btn btn-warning" title="Edit Quote" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $quote->getId())); ?>"><i class="icon-pencil"></i></a>
+                    <a class="btn btn-warning" title="Edit Quote" href="<?php echo $this->url( array ( 'action' => 'index', 'controller' => 'quote_devices', 'quoteId' => $quote->getId())); ?>"><i class="icon-pencil"></i></a>
                     <a class="btn btn-danger" title="Delete Quote" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $quote->getId())); ?>"><i class="icon-trash"></i></a>
                 </div>
             </td>
