@@ -516,27 +516,26 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Calculates the cost of a single device and all of it's options
+     * Calculates the cost of a device's options
      *
-     * @return number The price
+     * @return number The cost of the options
      */
     public function calculateOptionsCost ()
     {
-        // Get the device price
-        $price = $this->getCost();
+        $optionsCost = 0;        
         
-        // Tack on the option prices
+        // Add all the devices together
         /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
         foreach ( $this->getQuoteDeviceOptions() as $quoteDeviceOption )
         {
-            $price += $quoteDeviceOption->getCost() * $quoteDeviceOption->getQuantity();
+            $optionsCost += $quoteDeviceOption->getCost() * $quoteDeviceOption->getQuantity();
         }
         
-        return $price;
+        return $optionsCost;
     }
 
     /**
-     * Calculates the cost of a single device and all of it's options
+     * Calculates the cost of a single device and all of its options
      *
      * @return number The price
      */

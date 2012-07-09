@@ -22,7 +22,7 @@ class Quotegen_Form_LeasingSchemaRange extends EasyBib_Form
          *
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
-        $this->setAttrib('class', 'form-horizontal button-styled');
+        $this->setAttrib('class', 'form-horizontal form-center-actions');
         $this->setName('leasingSchemaRange');
         $this->setAttrib('id', 'leasingSchemaRange');
         
@@ -44,6 +44,10 @@ class Quotegen_Form_LeasingSchemaRange extends EasyBib_Form
                                         1, 
                                         6 
                                 ) 
+                        ), 
+                        array (
+                                'validator' => 'Digits',
+                                'message' => 'Please enter a numeric value.'
                         ) 
                 ) 
         ));

@@ -48,7 +48,7 @@ class Admin_TonerController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        $message = "Are you sure you want to delete toner {$toner->getSku()} {$toner->getManufacturer()->getDisplayname()} {$toner->getTonerColor()->getNamae()} {$toner->getYield()}?";
+        $message = "Are you sure you want to delete toner SKU {$toner->getSku()} ({$toner->getManufacturer()->getDisplayname()} {$toner->getPartType()->getTypeName()} {$toner->getTonerColor()->getTonerColorName()} {$toner->getYield()})?";
         $form = new Application_Form_Delete($message);
         
         $request = $this->getRequest();

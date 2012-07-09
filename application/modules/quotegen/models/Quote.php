@@ -140,6 +140,10 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             $this->setPageCoverageMonochrome($params->pageCoverageMonochrome);
         if (isset($params->pricingConfigId) && ! is_null($params->pricingConfigId))
             $this->setPricingConfigId($params->pricingConfigId);
+        if (isset($params->leaseRate) && ! is_null($params->leaseRate))
+            $this->setLeaseRate($params->leaseRate);
+        if (isset($params->leaseTerm) && ! is_null($params->leaseTerm))
+            $this->setLeaseTerm($params->leaseTerm);
     }
     
     /*
@@ -157,7 +161,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                 'clientDisplayName' => $this->getClientDisplayName(),
                 'pageCoverageColor' => $this->getPageCoverageColor(),
                 'pageCoverageMonochrome' => $this->getPageCoverageMonochrome(),
-                'pricingConfigId' => $this->getPricingConfigId()
+                'pricingConfigId' => $this->getPricingConfigId(),
+                'leaseTerm' => $this->getLeaseTerm(),
+                'leaseRate' => $this->getLeaseRate(),
         );
     }
 

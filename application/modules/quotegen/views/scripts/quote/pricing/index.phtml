@@ -19,10 +19,10 @@ $this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.
                     <tr>
                         <th>QTY</th>
                         <th>Device</th>
-                        <th>Calculated Price</th>
-                        <th>Package Price</th>
+                        <th>Package Cost</th>
                         <th>Margin</th>
-                        <th>Sub Total</th>
+                        <th>Package Price</th>
+                        <th>Subtotal</th>
                         <th class="leasedColumn">Residual</th>
                         <th class="leasedColumn">Monthly Payment</th>
                     </tr>
@@ -41,10 +41,10 @@ $this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.
                             <?php endif; ?>
                         </td>
                         <td><?php echo $this->currency($quoteDevice->calculatePackageCost()); ?></td>
-                        <td><input type="text" name="packagePrice" value="<?php echo $quoteDevice->getPackagePrice(); ?>" class="span2" /></td>
-                        <td><input type="text" name="margin" class="span1" value="20" /></td>
+                        <td><input type="text" name="margin" class="span1" value="<?php echo $quoteDevice->getMargin(); ?>" /></td>
+                        <td><input type="text" name="packageCost" value="<?php echo $quoteDevice->getPackagePrice(); ?>" class="span2" /></td>
                         <td><?php echo $this->currency($quoteDevice->calculateSubTotal()); ?></td>
-                        <td class="leasedColumn"><input type="text" name="residual" class="span1" value="0" /></td>
+                        <td class="leasedColumn"><input type="text" name="residual" class="span1" value="<?php echo $quoteDevice->getResidual(); ?>" /></td>
                         <td class="leasedColumn">$149.99(*fake)</td>
                     </tr>
                     
@@ -56,4 +56,13 @@ $this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.
         </div>
         </form>
     </div>
+</div>
+<div class="well">
+    <form method="POST" class="form-center-actions">
+        <div class="form-actions">
+            <input type="submit" name="back" value="Go Back" class="btn"/>
+            <input type="submit" name="save" value="Save" class="btn btn-success"/>
+            <input type="submit" name="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary"/>
+        </div>
+    </form>
 </div>
