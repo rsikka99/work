@@ -106,20 +106,10 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         ));
         
         /*
-         * Is copier
-         */
-        $this->addElement('checkbox', 'is_copier', array (
-                'label' => 'Is copier:', 
-                'filters' => array (
-                        'Boolean' 
-                ) 
-        ));
-        
-        /*
          * Is fax
          */
         $this->addElement('checkbox', 'is_fax', array (
-                'label' => 'Is fax:', 
+                'label' => 'Is Fax:', 
                 'filters' => array (
                         'Boolean' 
                 ) 
@@ -129,7 +119,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          * Is scanner
          */
         $this->addElement('checkbox', 'is_scanner', array (
-                'label' => 'Is scanner:', 
+                'label' => 'Is Scanner:', 
                 'filters' => array (
                         'Boolean' 
                 ) 
@@ -139,7 +129,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          * Is duplex
          */
         $this->addElement('checkbox', 'is_duplex', array (
-                'label' => 'Is duplex:', 
+                'label' => 'Is Duplex:', 
                 'filters' => array (
                         'Boolean' 
                 ) 
@@ -323,7 +313,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          * Is leased
          */
         $this->addElement('checkbox', 'is_leased', array (
-                'label' => 'Is leased:', 
+                'label' => 'Is Leased:', 
                 'filters' => array (
                         'Boolean' 
                 ) 
