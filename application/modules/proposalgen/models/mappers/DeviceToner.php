@@ -56,4 +56,21 @@ class Proposalgen_Model_Mapper_DeviceToner extends Tangent_Model_Mapper_Abstract
         }
         return $primaryKey;
     }
+    
+    public function getDeviceToners($masterDeviceId)
+    {
+	    $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchAll( array( 'master_device_id = ?' => $masterDeviceId ) );
+	    $entries = array();
+	    foreach ( $deviceToners as $toner )
+	    {
+	        $tonerId = $toner->getTonerId();
+	        $toner = Admin_Model_Mapper_Toner::getInstance()->find ($tonerId);
+	    
+	        $object = new Admin_Model_Toner($toner->toArray());
+	    
+	        $entries [] = $object;
+	    }
+	    return $entries;
+    }
+    
 }

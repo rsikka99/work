@@ -1,10 +1,59 @@
 <?php $id = $this->id; ?>
 
 <div class="clearfix">
-	<a class="btn btn-success btn-small pull-right" href="<?php echo $this->url(array('action' => 'devicetoners', 'id' => $id)) ?>"> <i class="icon-white icon-plus-sign"></i> Toners</a>
 	<h1>Device Setup</h1>
 </div>
 
-<div class="well">
-    <?php echo $this->form; ?>
+<div class="tabbable"> <!-- Only required for left/right tabs -->
+    <ul class="nav nav-tabs">
+    	<li class="active"><a href="#tab1" data-toggle="tab">Details</a></li>
+    	<li><a href="#tab2" data-toggle="tab">Toners</a></li>
+    </ul>
+    <div class="tab-content">
+    	<div class="tab-pane active" id="tab1">
+    		<?php echo $this->form; ?>
+    	</div>
+    	<div class="tab-pane" id="tab2">
+    		<h3>Device Toners</h3>
+    		
+    		<?php if ( $this->deviceToners ) { ?>
+    		
+				<table class="table table-striped table-condensed table-bordered">
+				    <thead>
+				        <tr>
+				            <th>SKU</th>
+				            <th>Manufacturer</th>
+				            <th>Type</th>
+				            <th>Color</th>
+				            <th>Yield</th>
+				            <th>Cost</th>
+				            <th style="width: 120px;">Action</th>
+				        </tr>
+				    </thead>
+				    <tbody>
+				    	
+				        <?php foreach ($this->deviceToners as $toner) : /* @var $toner Admin_Model_Toner */ ?>
+				        <tr>
+				            <td><?php echo $toner->getSku(); ?></td>
+				            <td><?php echo $toner->getManufacturer()->getDisplayname(); ?></td>
+				            <td><?php echo $toner->getPartType()->getTypeName(); ?></td>
+				            <td style="text-transform: capitalize;"><?php echo strToLower($toner->getTonerColor()->getTonerColorName()); ?></td>
+				            <td style="text-align: right;"><?php echo number_format($toner->getYield(), 0, '', ','); ?></td>
+				            <td style="text-align: right;"><?php echo "$" . number_format($toner->getCost(), 2, '.', ','); ?></td>
+				            <td>
+				                <div class="btn-group">
+					                <a class="btn btn-info" title="View" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $toner->getId())); ?>"><i class="icon-eye-open"></i></a>
+				                    <a class="btn btn-warning" title="Edit" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $toner->getId())); ?>"><i class="icon-pencil"></i></a>
+				                    <a class="btn btn-danger" title="Delete" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $toner->getId())); ?>"><i class="icon-trash"></i></a>
+				                </div>
+				            </td>
+				        </tr>
+				        <?php endforeach; ?>
+				    </tbody>
+				</table>
+				
+    		<?php } ?>
+    		
+    	</div>
+    </div>
 </div>

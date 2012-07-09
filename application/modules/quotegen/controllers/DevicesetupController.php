@@ -302,6 +302,27 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             }
         }
         $this->view->form = $form;
+
+        /**
+         * Device Toners
+         */
+        $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->getDeviceToners($masterDeviceId);
+        $this->view->deviceToners = $deviceToners;
+        
+        /**
+         * Available Toners
+         */
+        // Display all of the devices
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Admin_Model_Mapper_Toner::getInstance()));
+        
+        // Set the current page we're on
+        $paginator->setCurrentPageNumber($this->_getParam('page', 1));
+        
+        // Set how many items to show
+        $paginator->setItemCountPerPage(15);
+        
+        // Pass the view the paginator
+        $this->view->paginator = $paginator;
     }
 
     /**
@@ -430,21 +451,6 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
     public function viewAction ()
     {
         $this->view->device = Quotegen_Model_Mapper_Device::getInstance()->find($this->_getParam('id', false));
-    }
-    
-    public function devicetonersAction ()
-    {
-        // Display all of the devices
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Admin_Model_Mapper_Toner::getInstance()));
-        
-        // Set the current page we're on
-        $paginator->setCurrentPageNumber($this->_getParam('page', 1));
-        
-        // Set how many items to show
-        $paginator->setItemCountPerPage(15);
-        
-        // Pass the view the paginator
-        $this->view->paginator = $paginator;
     }
     
 }
