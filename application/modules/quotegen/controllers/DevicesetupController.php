@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_DevicesetupController extends Zend_Controller_Action
+class Admin_DevicesetupController extends Zend_Controller_Action
 {
 
     public function init ()
