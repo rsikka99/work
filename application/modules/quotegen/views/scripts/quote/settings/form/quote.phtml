@@ -1,0 +1,36 @@
+<?php 
+/* @var $form Quotegen_Form_QuoteSetting */
+$form = $this->element;
+$percentageElements = array();
+$percentageElements[] = $form->getElement('pageCoverageMonochrome');
+$percentageElements[] = $form->getElement('pageCoverageColor');
+$noDefaultsElements = array();
+$noDefaultsElements[] = $form->getElement('clientDisplayName');
+$noDefaultsElements[] = $form->getElement('leaseTerm');
+$noDefaultsElements[] = $form->getElement('leaseRate');
+$noDefaultsElements[] = $form->getElement('quoteDate');
+?>
+
+
+
+<form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+<?php foreach ($noDefaultsElements as $element) :?>
+	<?php echo $element; ?>
+<?php  endforeach?>
+<?php foreach ($percentageElements as $element) : ?>
+<div class="control-group <?php echo ($element->hasErrors()) ? 'error' : '' ?>">
+	<?php echo $element->renderLabel(); ?>
+	<div class="controls">
+		<div class="input-append">
+			<?php echo $element->renderViewHelper()?><span class="add-on"><strong>System Default: </strong><?php echo number_format($element->getDescription(), 2); ?>%</span>
+		</div>
+		<?php echo $element->renderErrors(); ?>
+	</div>
+</div>
+<?php endforeach; ?>
+	<div class="form-actions">
+		<input type="submit" name="back" value="Go Back" class="btn"/>
+		<input type="submit" name="save" value="Save" class="btn btn-success"/>
+		<input type="submit" name="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary"/>
+	</div>
+</form>

@@ -50,10 +50,11 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                                 'validator' => 'Between', 
                                 'options' => array (
                                         'min' => 0, 
-                                        'max' => 100 
+                                        'max' => 100,
+                                        'inclusive' => false
                                 ) 
                         ), 
-                        'Int' 
+                        'Float' 
                 ) 
         ));
         $this->addElement($pageCoverageMonochrome);
@@ -72,17 +73,17 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                                 'validator' => 'Between', 
                                 'options' => array (
                                         'min' => 0, 
-                                        'max' => 100 
+                                        'max' => 100,
+                                        'inclusive' => false 
                                 ) 
                         ), 
-                        'Int' 
+                        'Float' 
                 ) 
         ));
         $this->addElement($pageCoverageColor);
         
         $deviceMargin = $this->createElement('text', 'deviceMargin', array (
-                'label' => 'Device Margin:', 
-                
+                'label' => 'Device Margin:',  
                 'required' => true, 
                 'class' => 'span1', 
                 'filters' => array (
@@ -97,7 +98,7 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                                         'max' => 99 
                                 ) 
                         ), 
-                        'Int' 
+                        'Float' 
                 ) 
         ));
         $this->addElement($deviceMargin);
@@ -119,7 +120,7 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                                         'max' => 99 
                                 ) 
                         ), 
-                        'Int' 
+                        'Float' 
                 ) 
         ));
         $this->addElement($pageMargin);
@@ -159,7 +160,7 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
         
         // Add the submit button
         $this->addElement('submit', 'submit', array (
-                'ignore' => true, 
+                'ignore' => true,
                 'label' => 'Save' 
         ));
         
