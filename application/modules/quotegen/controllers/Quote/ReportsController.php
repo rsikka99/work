@@ -17,6 +17,18 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
      */
     public function indexAction ()
     {
+        $request = $this->getRequest();
+        
+        if ($request->isPost())
+        {
+            $values = $request->getPost();
+            if (isset($values ['back']))
+            {
+                $this->_helper->redirector('index', 'quote_settings', null, array (
+                        'quoteId' => $this->_quoteId 
+                ));
+            }
+        }
     }
 
     public function purchaseQuoteAction ()

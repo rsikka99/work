@@ -23,23 +23,40 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         if ($request->isPost())
         {
             $values = $request->getPost();
-            if (isset($values ['deviceConfigurationId']))
+            if (isset($values ['back']))
             {
-                $deviceConfigurationId = (int)$values ['deviceConfigurationId'];
-                if ($deviceConfigurationId === - 1)
+                $this->_helper->redirector('index', 'index');
+            }
+            else
+            {
+                
+                if (isset($values ['deviceConfigurationId']))
                 {
-                    $this->_helper->redirector('create-new-quote-device', null, null, array (
-                            'quoteId' => $this->_quoteId 
-                    ));
+                    $deviceConfigurationId = (int)$values ['deviceConfigurationId'];
+                    if ($deviceConfigurationId === - 1)
+                    {
+                        $this->_helper->redirector('create-new-quote-device', null, null, array (
+                                'quoteId' => $this->_quoteId 
+                        ));
+                    }
+                    else
+                    {
+                        $newDeviceConfigurationId = $this->cloneDeviceConfiguration($deviceConfigurationId);
+                        
+                        $this->_helper->redirector('edit-quote-device', null, null, array (
+                                'id' => $newDeviceConfigurationId, 
+                                'quoteId' => $this->_quoteId 
+                        ));
+                    }
                 }
                 else
                 {
-                    $newDeviceConfigurationId = $this->cloneDeviceConfiguration($deviceConfigurationId);
-                    
-                    $this->_helper->redirector('edit-quote-device', null, null, array (
-                            'id' => $newDeviceConfigurationId, 
-                            'quoteId' => $this->_quoteId 
-                    ));
+                    if (isset($values ['saveAndContinue']))
+                    {
+                        $this->_helper->redirector('index', 'quote_pricing', null, array (
+                                'quoteId' => $this->_quoteId 
+                        ));
+                    }
                 }
             }
         }

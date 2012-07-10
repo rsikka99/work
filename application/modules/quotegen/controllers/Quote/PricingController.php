@@ -21,9 +21,25 @@ class Quotegen_Quote_PricingController extends Quotegen_Library_Controller_Quote
         
         if ($request->isPost())
         {
-            $this->_helper->flashMessenger(array (
-                    'info' => 'Saving on this page is not implemented yet!' 
-            ));
+            $values = $request->getPost();
+            if (isset($values ['back']))
+            {
+                $this->_helper->redirector('index', 'quote_devices', null, array (
+                        'quoteId' => $this->_quoteId 
+                ));
+            }
+            else
+            {
+                $this->_helper->flashMessenger(array (
+                        'info' => 'Saving on this page is not implemented yet!' 
+                ));
+                if (isset($values ['saveAndContinue']))
+                {
+                    $this->_helper->redirector('index', 'quote_settings', null, array (
+                            'quoteId' => $this->_quoteId 
+                    ));
+                }
+            }
         }
     }
 }
