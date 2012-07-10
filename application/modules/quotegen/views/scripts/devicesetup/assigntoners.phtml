@@ -5,7 +5,16 @@ $id = $this->id;
 <h1>Assign Toners</h1>
 
 <div id="filter" class="well">
-Filter
+	<label for="criteria_filter" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">Filter:</label>
+	<select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
+		<option value="sku" <?php if($this->search_filter == 'sku') { echo "selected"; } ?>>SKU</option>
+		<option value="manufacturer_id" <?php if($this->search_filter == 'manufacturer_id') { echo "selected"; } ?>>Manufacturer</option>
+	</select>
+	<label for="txtCriteria" class="details_label" style="display: inline; padding: 0px 10px 0px 10px;">for</label>
+	<span id="text_criteria"><input type="text" name="txtCriteria" style="width: 152px; margin: 0px;" id="txtCriteria" <?php if($this->search_criteria != '') { echo 'value="' . $this->search_criteria . '"'; } ?> /></span>
+	<span id="list_criteria" style="display: none;"><select name="cboCriteria" id="cboCriteria" style="width: 160px; margin: 0px;"></select></span>
+	<input type="button" name="btnSearch" id="btnSearch" value="Search" class="btn" />
+	<input type="button" name="btnClearSearch" id="btnClearSearch" value="Clear" class="btn" />
 </div>
 
 <div id="results">
