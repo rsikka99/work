@@ -1,12 +1,15 @@
 <?php
 
-class Quotegen_Quote_PricingController extends Quotegen_Library_Controller_Quote
+class Quotegen_Quote_GroupingController extends Quotegen_Library_Controller_Quote
 {
 
     public function init ()
     {
         parent::init();
-        Quotegen_View_Helper_Quotemenu::setActivePage(Quotegen_View_Helper_Quotemenu::PRICING_CONTROLLER);
+        Quotegen_View_Helper_Quotemenu::setActivePage(Quotegen_View_Helper_Quotemenu::GROUPING_CONTROLLER);
+        
+        // Require that we have a quote object in the database to use this page
+        $this->requireQuote();
     }
 
     /**
@@ -14,9 +17,6 @@ class Quotegen_Quote_PricingController extends Quotegen_Library_Controller_Quote
      */
     public function indexAction ()
     {
-        // Require that we have a quote object in the database to use this page
-        $this->requireQuote();
-        
         $request = $this->getRequest();
         
         if ($request->isPost())
@@ -35,7 +35,7 @@ class Quotegen_Quote_PricingController extends Quotegen_Library_Controller_Quote
                 ));
                 if (isset($values ['saveAndContinue']))
                 {
-                    $this->_helper->redirector('index', 'quote_grouping', null, array (
+                    $this->_helper->redirector('index', 'quote_pages', null, array (
                             'quoteId' => $this->_quoteId 
                     ));
                 }

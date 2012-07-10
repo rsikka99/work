@@ -1,0 +1,22 @@
+<?php 
+$quote = $this->quote; /* @var $quote Quotegen_Model_Quote */
+$this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.phtml'));
+
+$this->headScript()->appendScript("$('i').popover();");
+
+?>
+<div class="row">
+    <div class="span12">
+
+        <h1>Pages Coming Soon...</h1>
+    </div>
+</div>
+<div class="well">
+    <form method="POST" class="form-center-actions">
+        <div class="form-actions">
+            <input type="submit" name="back" value="Go Back" class="btn"/>
+            <input type="submit" name="save" value="Save" class="btn btn-success"/>
+            <input type="submit" name="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary"/>
+        </div>
+    </form>
+</div>
