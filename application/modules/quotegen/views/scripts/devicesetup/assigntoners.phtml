@@ -1,4 +1,52 @@
+<?php 
+$id = $this->id;
+?>
+
 <h1>Assign Toners</h1>
-<div class="well">
-    <?php echo $this->form; ?>
+
+<div id="filter" class="well">
+Filter
+</div>
+
+<div id="results">
+<?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
+	<table class="table table-striped table-condensed table-bordered">
+		<thead>
+			<tr>
+				<th>SKU</th>
+				<th>Manufacturer</th>
+				<th>Type</th>
+				<th>Color</th>
+				<th>Yield</th>
+				<th>Cost</th>
+				<th style="width: 120px; text-align: center;">Action</th>
+			</tr>
+		</thead>
+		<tbody>
+		    <?php foreach ($this->paginator->getCurrentItems() as $toner) : /* @var $toner Admin_Model_Toner */ ?>
+		    <tr>
+				<td><?php echo $toner->getSku(); ?></td>
+				<td><?php echo $toner->getManufacturer()->getDisplayname(); ?></td>
+				<td><?php echo $toner->getPartType()->getTypeName(); ?></td>
+				<td style="text-transform: capitalize;"><?php echo strToLower($toner->getTonerColor()->getTonerColorName()); ?></td>
+				<td style="text-align: right;"><?php echo number_format($toner->getYield(), 0, '', ','); ?></td>
+				<td style="text-align: right;"><?php echo "$" . number_format($toner->getCost(), 2, '.', ','); ?></td>
+				<td>
+					<div class="" style="text-align: center;">
+						<a class="btn btn-warning btn-mini" title="Edit" href="<?php echo $this->url( array ( 'module' => 'admin', 'controller' => 'toner', 'action' => 'edit', 'id' => $toner->getId())); ?>"><i class="icon-pencil icon-white"></i></a>
+						<a class="btn btn-danger btn-mini" title="Delete" href="<?php echo $this->url(array ( 'module' => 'admin', 'controller' => 'toner', 'action' => 'unassign', 'id' => $toner->getId())); ?>"><i class="icon-trash icon-white"></i></a>
+					</div>
+				</td>
+			</tr>
+	        <?php endforeach; ?>
+		</tbody>
+	</table>
+	<?php echo $this->paginationControl($this->paginator); ?>
+	<a class="btn btn-primary" href="<?php echo $this->url( array( 'action' => 'edit', 'id' => $id) ); ?>">Back</a>
+<?php else : ?>
+	<div class='well'>
+		<a class="btn btn-success btn-small pull-right" href="<?php echo $this->url(array('action' => 'create')) ?>"> <i class="icon-white icon-plus-sign"></i> Create new</a>
+	    <h1>There are no devices</h1>
+	</div>
+	<?php endif; ?>
 </div>
