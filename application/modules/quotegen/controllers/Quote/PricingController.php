@@ -35,7 +35,7 @@ class Quotegen_Quote_PricingController extends Quotegen_Library_Controller_Quote
                 ));
                 if (isset($values ['saveAndContinue']))
                 {
-                    $this->_helper->redirector('index', 'quote_grouping', null, array (
+                    $this->_helper->redirector('index', 'quote_settings', null, array (
                             'quoteId' => $this->_quoteId 
                     ));
                 }

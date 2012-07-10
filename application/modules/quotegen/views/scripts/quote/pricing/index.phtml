@@ -16,31 +16,41 @@ $this->headScript()->appendScript("$('i').popover();");
         <hr>
             <table class="table table-condensed table-bordered table-striped quoteDeviceTable">
                 <tr class="header-row">
-                    <th>Device</th>
-                    <th>Pages</th>
-                    <th>Package Cost</th>
-                    <th>Margin</th>
-                    <th>Package Price</th>
-                    <th style="width:60px;">Quantity</th>
-                    <th style="width: 90px;">Subtotal</th>
+                    <th style="width: 140px;">Item</th>
+                    <th style="width: 140px;">SKU</th>
+                    <th>Description and Features</th>
+                    <th style="width: 100px;">Package Price</th>
+                    <th style="width: 40px;">Monthly Lease</th>
+                    <th style="width: 40px;">Qty</th>
+                    <th style="width: 80px;">Subtotal</th>
+                    <th style="width: 40px;">Lease Subtotal</th>
                 </tr>
                 <tr>
-                    <td><h4><?php echo $quoteDevice->getName(); ?><br><small><?php echo $quoteDevice->getSku(); ?></small></h4>
-                        <?php if (count($quoteDevice->getQuoteDeviceOptions()) > 0) : ?>
-                        <ul>
-                        <?php foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
-                            <li><?php echo $quoteDeviceOption->getTotalQuantity(); ?> x <?php echo $quoteDeviceOption->getName(); ?></li>
-                        <?php endforeach; ?>
-                        </ul>
-                        <?php endif; ?>
-                    </td>
-                    <td>Insert ability to edit pages here</td>
-                    <th><?php echo $this->currency($quoteDevice->calculatePackageCost()); ?></th>
-                    <th><?php echo number_format($quoteDevice->getMargin(), 2); ?>%</th>
-                    <th><?php echo $this->currency($quoteDevice->getPackagePrice()); ?></th>
-                    <th><?php echo $quoteDevice->getQuantity(); ?></th>
-                    <th><?php echo $this->currency($quoteDevice->calculateSubtotal()); ?></th>
+                    <th><?php echo $quoteDevice->getName(); ?></th>                
+                    <td><?php echo $quoteDevice->getSku(); ?></td>
+                    <td>N/A</td>
+                    <td><?php echo $this->currency($quoteDevice->getPackagePrice()); ?></td>
+                    <td>N/A</td>
+                    <td><?php echo $quoteDevice->getQuantity(); ?></td>
+                    <td><?php echo $this->currency($quoteDevice->calculateSubtotal()); ?></td>
+                    <td>N/A</td>
                 </tr>
+                <?php if (count($quoteDevice->getQuoteDeviceOptions()) > 0) : ?>
+                
+                <?php foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
+                <tr>
+                    <td><?php echo $quoteDeviceOption->getName(); ?></td>
+                    <td><?php echo $quoteDeviceOption->getSku(); ?></td>
+                    <td><?php echo $quoteDeviceOption->getDescription(); ?></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <?php endforeach; ?>
+                
+                <?php endif; ?>
             </table>
         <?php endforeach; ?>
     </div>
