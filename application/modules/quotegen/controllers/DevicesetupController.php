@@ -446,6 +446,23 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
 	{
         $id = $this->_getParam('id', false);
         $this->view->id = $id;
+
+        // Make sure we are posting data
+        $request = $this->getRequest();
+        if ($request->isPost())
+        {
+            // Get the post data
+            $values = $request->getPost();
+            print_r($values); die;
+            
+            $where = '';
+            if ( $values ['btnSearch'] )
+            {
+                $filter = $values ['criteria_filter'];
+                $criteria = $values ['txtCriteria'];
+                $where = '';
+            }   
+        }
         
         // Display all of the devices
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Admin_Model_Mapper_Toner::getInstance()));
