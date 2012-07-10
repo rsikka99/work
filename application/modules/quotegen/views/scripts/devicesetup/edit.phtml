@@ -12,11 +12,11 @@ $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . 
     <ul class="nav nav-tabs">
     	<li class="active"><a href="#tab1" data-toggle="tab">Details</a></li>
     	<li><a href="#tab2" data-toggle="tab">Toners</a></li>
-    	<li><a href="#tab3" data-toggle="tab">Options</a></li>
+    	<li><a href="#tab3" data-toggle="tab">Configurations</a></li>
     </ul>
     <div class="tab-content">
     	<div class="tab-pane active" id="tab1"><?php echo $this->render('devicesetup/forms/tab-details.phtml')?></div>
     	<div class="tab-pane" id="tab2"><?php echo $this->render('devicesetup/forms/tab-toners.phtml')?></div>
-    	<div class="tab-pane" id="tab3"><?php echo $this->render('devicesetup/forms/tab-options.phtml')?></div>
+    	<div class="tab-pane" id="tab3"><?php echo $this->render('devicesetup/forms/tab-configurations.phtml')?></div>
     </div>
 </div>
