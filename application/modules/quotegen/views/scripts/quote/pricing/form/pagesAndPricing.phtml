@@ -1,0 +1,73 @@
+<?php 
+/* @var $form Quotegen_Form_PagesAndPricing */
+
+$form = $this->element;
+?>
+<form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+<div class="well">
+<?php foreach ($form->getElementSets() as $set) :
+/* @var $quoteDevice Quotegen_Model_QuoteDevice */ 
+$quoteDevice = $set->quoteDevice;
+
+?>
+    <table class="table table-condensed table-bordered table-striped quoteDeviceTable">
+        <tr class="header-row">
+            <th>Item</th>
+            <th style="width: 140px;">SKU</th>
+            <th style="width: 100px;">Package Cost</th>
+            <th style="width: 80px;">Margin (%)</th>
+            <th style="width: 160px;">Package Price</th>
+            <th style="width: 80px;">Qty</th>
+            <th style="width: 120px;">Subtotal</th>
+        </tr>
+        <tr>
+            <th><?php echo $quoteDevice->getName(); ?></th>                
+            <td><?php echo $quoteDevice->getSku(); ?></td>
+            <td><?php echo $this->currency($quoteDevice->calculatePackageCost()); ?></td>
+            <td>
+                <div class="control-group <?php echo ($set->margin->hasErrors()) ? 'error' : ''; ?>">
+                    <?php if ($set->margin->hasErrors()) :?><i class="" data-title="Error" data-placement="top" data-content="<?php echo implode('<br>', $set->margin->getMessages()); ?>"><?php endif; ?>
+                    <?php echo $set->margin->renderViewHelper(); ?>
+                    <?php if ($set->margin->hasErrors()) :?></i><?php endif; ?>
+                </div>
+            </td>
+            <td>
+                <div class="control-group <?php echo ($set->packagePrice->hasErrors()) ? 'error' : ''; ?>">
+                    <?php if ($set->packagePrice->hasErrors()) :?><i class="" data-title="Error" data-placement="top" data-content="<?php echo implode('<br>', $set->packagePrice->getMessages()); ?>"><?php endif; ?>
+                    <?php echo $set->packagePrice->renderViewHelper();?>
+                    <?php if ($set->packagePrice->hasErrors()) :?></i><?php endif; ?>
+                </div>
+            </td>
+            <td>
+                <div class="control-group <?php echo ($set->quantity->hasErrors()) ? 'error' : ''; ?>">
+                    <?php if ($set->quantity->hasErrors()) :?><i class="" data-title="Error" data-placement="top" data-content="<?php echo implode('<br>', $set->quantity->getMessages()); ?>"><?php endif; ?>
+                    <?php echo $set->quantity->renderViewHelper();?>
+                    <?php if ($set->quantity->hasErrors()) :?></i><?php endif; ?>
+                </div>
+            </td>
+            <td><?php echo $this->currency($quoteDevice->calculateSubTotal()); ?></td>
+        </tr>
+        <?php if (count($quoteDevice->getQuoteDeviceOptions()) > 0) : ?>
+        
+        <?php foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
+        <tr>
+            <td><?php echo $quoteDeviceOption->getName(); ?></td>
+            <td><?php echo $quoteDeviceOption->getSku(); ?></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <?php endforeach; ?>
+        
+        <?php endif; ?>
+    </table>
+<?php endforeach; ?>
+<div class="form-actions">
+    <input type="submit" name="back" value="Go Back" class="btn"/>
+    <input type="submit" name="save" value="Save" class="btn btn-success"/>
+    <input type="submit" name="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary"/>
+</div>
+</div>
+</form>

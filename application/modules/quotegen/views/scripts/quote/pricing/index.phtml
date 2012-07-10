@@ -12,6 +12,8 @@ $this->headScript()->appendScript("$('i').popover();");
                 <p>REMEMBER TO ADD SAVE AND RECALC HERE?</p>
             </div>
         </div>
+        <?php echo $this->form; ?>
+        <!-- 
         <?php foreach ($quote->getQuoteDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
         <hr>
             <table class="table table-condensed table-bordered table-striped quoteDeviceTable">
@@ -53,14 +55,6 @@ $this->headScript()->appendScript("$('i').popover();");
                 <?php endif; ?>
             </table>
         <?php endforeach; ?>
+         -->
     </div>
-</div>
-<div class="well">
-    <form method="POST" class="form-center-actions">
-        <div class="form-actions">
-            <input type="submit" name="back" value="Go Back" class="btn"/>
-            <input type="submit" name="save" value="Save" class="btn btn-success"/>
-            <input type="submit" name="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary"/>
-        </div>
-    </form>
 </div>
