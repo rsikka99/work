@@ -23,23 +23,40 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         if ($request->isPost())
         {
             $values = $request->getPost();
-            if (isset($values ['deviceConfigurationId']))
+            if (isset($values ['back']))
             {
-                $deviceConfigurationId = (int)$values ['deviceConfigurationId'];
-                if ($deviceConfigurationId === - 1)
+                $this->_helper->redirector('index', 'index');
+            }
+            else
+            {
+                
+                if (isset($values ['deviceConfigurationId']))
                 {
-                    $this->_helper->redirector('create-new-quote-device', null, null, array (
-                            'quoteId' => $this->_quoteId 
-                    ));
+                    $deviceConfigurationId = (int)$values ['deviceConfigurationId'];
+                    if ($deviceConfigurationId === - 1)
+                    {
+                        $this->_helper->redirector('create-new-quote-device', null, null, array (
+                                'quoteId' => $this->_quoteId 
+                        ));
+                    }
+                    else
+                    {
+                        $newDeviceConfigurationId = $this->cloneDeviceConfiguration($deviceConfigurationId);
+                        
+                        $this->_helper->redirector('edit-quote-device', null, null, array (
+                                'id' => $newDeviceConfigurationId, 
+                                'quoteId' => $this->_quoteId 
+                        ));
+                    }
                 }
                 else
                 {
-                    $newDeviceConfigurationId = $this->cloneDeviceConfiguration($deviceConfigurationId);
-                    
-                    $this->_helper->redirector('edit-quote-device', null, null, array (
-                            'id' => $newDeviceConfigurationId, 
-                            'quoteId' => $this->_quoteId 
-                    ));
+                    if (isset($values ['saveAndContinue']))
+                    {
+                        $this->_helper->redirector('index', 'quote_pricing', null, array (
+                                'quoteId' => $this->_quoteId 
+                        ));
+                    }
                 }
             }
         }
@@ -80,7 +97,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             $quoteDevice->setQuoteId($this->_quoteId);
                             $quoteDevice->setMargin(0);
                             $quoteDevice->setQuantity(1);
-                            $quoteDevice->setPackagePrice($quoteDevice->calculatePackageCost());
+                            $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
                             $quoteDevice->setResidual(0);
                             
                             // Save our device
@@ -223,7 +240,10 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         
                         // Save the device last
                         $quoteDevice->populate($values);
-                        $quoteDevice->setPackagePrice($quoteDevice->calculatePackageCost());
+                        
+                        // Reset the quote options to null since we just changed the database
+                        $quoteDevice->setQuoteDeviceOptions(null);
+                        $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
                         Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
                         
                         if (isset($values ['add']))
@@ -352,7 +372,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         
                         if ($insertedOptions > 0)
                         {
-                            $quoteDevice->setPackagePrice($quoteDevice->calculatePackageCost());
+                            $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
                             Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
                         }
                         
@@ -409,7 +429,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                 
                 if ($rowsAffected > 0)
                 {
-                    $quoteDevice->setPackagePrice($quoteDevice->calculatePackageCost());
+                    $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
                     Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
                 }
                 
