@@ -457,6 +457,10 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $tonerId = $this->_getParam('tonerid', false);
         $this->view->id = $id;
         
+        // Populate Manufacturers dropdown
+        $manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAll();
+        $this->view->manufacturers = $manufacturers;
+        
         // Save device toner assignment if tonerid available
         if ( $tonerId && $id )
         {

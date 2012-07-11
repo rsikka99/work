@@ -1,5 +1,6 @@
 <?php 
 $id = $this->id;
+$manufacturers = $this->manufacturers;
 ?>
 
 <?php $this->headScript()->captureStart('append','text/javascript') ?>
@@ -11,7 +12,7 @@ $id = $this->id;
 			
 			//clear searches
 			$("#txtCriteria").val('');
-			$("#cboCriteria").html('');
+			$("#cboCriteria").val('');
 			
 			switch (this.value) {
 				case "manufacturer":
@@ -45,6 +46,9 @@ $id = $this->id;
 		<span id="text_criteria"><input type="text" name="txtCriteria" style="width: 152px; margin: 0px 10px 0px 0px;" id="txtCriteria" <?php if($this->search_criteria != '') { echo 'value="' . $this->search_criteria . '"'; } ?> /></span>
 		<span id="list_criteria" style="display: none;">
 			<select name="cboCriteria" id="cboCriteria" style="width: 160px; margin: 0px 10px 0px 0px;">
+			<?php foreach ( $manufacturers as $manufacturer ) {  /* @var $manufacturer Proposalgen_Model_Manufacturer */ ?>
+				<option value="<?php echo $manufacturer->getId(); ?>"><?php echo $manufacturer->getDisplayname(); ?></option>
+			<?php } ?>
 			</select>
 		</span>
 		<input type="submit" name="btnSearch" id="btnSearch" value="Search" class="btn" />
