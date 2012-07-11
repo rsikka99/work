@@ -491,6 +491,58 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         // Pass the view the paginator
         $this->view->paginator = $paginator;
 	}
+
+	/**
+	 * Unassign toners from a device
+	 */
+	public function unassigntonerAction() 
+	{
+	    // Essentially this is a delete device_toner record
+        $tonerId = $this->_getParam('id', false);
+        
+        if (! $tonerId)
+        {
+            $this->_helper->flashMessenger(array (
+                    'warning' => 'Please select a toner to unassign first.' 
+            ));
+            $this->_helper->redirector('index');
+        }
+        
+        $toner = Admin_Model_Mapper_Toner::getInstance()->find($tonerId);
+        if (! $toner)
+        {
+            $this->_helper->flashMessenger(array (
+                    'danger' => 'There was an error selecting the toner to unassign.' 
+            ));
+            $this->_helper->redirector('index');
+        }
+        
+        $message = "Are you sure you want to unassign toner SKU {$toner->getSku()}?";
+        $form = new Application_Form_Delete($message);
+        
+        $request = $this->getRequest();
+        if ($request->isPost())
+        {
+            $values = $request->getPost();
+            if (! isset($values ['cancel']))
+            {
+                // delete device from database
+                if ($form->isValid($values))
+                {
+                    //$this->getDeviceMapper()->delete($device);
+                    $this->_helper->flashMessenger(array (
+                            'success' => "Toner SKU {$toner->getSku()} was unassigned successfully." 
+                    ));
+                    $this->_helper->redirector('index');
+                }
+            }
+            else
+            {
+                $this->_helper->redirector('index');
+            }
+        }
+        $this->view->form = $form;
+	}
 	
 }
 

@@ -27,7 +27,7 @@ $id = $this->id;
 			<td style="text-align: right;"><?php echo "$" . number_format($toner->getCost(), 2, '.', ','); ?></td>
 			<td>
 				<div class="" style="text-align: center;">
-					<a class="btn btn-danger btn-mini" title="Unassign" href="<?php echo $this->url(array ( 'action' => 'unassigntoners', 'id' => $id, 'tonerid' => $toner->getId())); ?>"><i class="icon-minus-sign icon-white"></i> Unassign</a>
+					<a class="btn btn-danger btn-mini" title="Unassign" href="<?php echo $this->url(array ( 'action' => 'unassigntoner', 'id' => $id, 'tonerid' => $toner->getId())); ?>"><i class="icon-minus-sign icon-white"></i> Unassign</a>
 				</div>
 			</td>
 		</tr>
