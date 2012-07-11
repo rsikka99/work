@@ -14,7 +14,7 @@ class Quotegen_Quote_PricingController extends Quotegen_Library_Controller_Quote
      */
     public function indexAction ()
     {
-        $form = new Quotegen_Form_PagesAndPricing($this->_quote);
+        $form = new Quotegen_Form_QuoteDevices($this->_quote);
         
         // Require that we have a quote object in the database to use this page
         $this->requireQuote();

@@ -26,79 +26,49 @@ $this->headScript()->appendScript("$('i').popover();");
                 </div>
             </form>
         </div>
+        <?php echo $this->form; ?>
+        <!-- 
         <?php foreach ($quote->getQuoteDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
         <hr>
             <table class="table table-condensed table-bordered table-striped quoteDeviceTable">
                 <tr class="header-row">
-                    <th>Sku</th>
-                    <th colspan="2">Name</th>
-                    <th style="width:60px;">Quantity</th>
-                    <th>Cost</th>
-                    <th style="width: 90px;">Actions</th>
+                    <th style="width: 140px;">Item</th>
+                    <th style="width: 140px;">SKU</th>
+                    <th>Description and Features</th>
+                    <th style="width: 100px;">Package Price</th>
+                    <th style="width: 40px;">Monthly Lease</th>
+                    <th style="width: 40px;">Qty</th>
+                    <th style="width: 80px;">Subtotal</th>
+                    <th style="width: 40px;">Lease Subtotal</th>
                 </tr>
                 <tr>
-                    <th><?php echo $quoteDevice->getSku(); ?></th>
-                    <th colspan="2"><?php echo $quoteDevice->getName(); ?></th>
-                    <th style="text-align: center;"><?php echo $quoteDevice->getQuantity(); ?></th>
-                    <th style="width: 100px;"><?php echo $this->currency($quoteDevice->getCost()); ?></th>
-                    <th>
-                        <div class="btn-group">
-                            <?php if ($quoteDevice->getDevice()) : ?>
-                                <a href="<?php echo $this->url(array('action' => 'sync-device-configuration', 'id' => $quoteDevice->getId())); ?>" title="Sync Configuration with current information." class="btn btn-mini btn-info "><i class="icon-refresh"></i></a>
-                            <?php else : ?>
-                                <a href="javascript:;" title="Sync Configuration with current information." class="btn btn-mini btn-info disabled"><i class="icon-refresh"></i></a>
-                            <?php endif; ?>
-                                <a href="<?php echo $this->url(array('action' => 'edit-quote-device', 'id' => $quoteDevice->getId())); ?>" title="Edit Device" class="btn btn-mini btn-warning "><i class="icon-pencil"></i></a>
-                                <a href="<?php echo $this->url(array('action' => 'delete-quote-device', 'id' => $quoteDevice->getId())); ?>" title="Remove Device" class="btn btn-mini btn-danger "><i class="icon-trash"></i></a>
-                        </div>
-                    </th>
+                    <th><?php echo $quoteDevice->getName(); ?></th>                
+                    <td><?php echo $quoteDevice->getSku(); ?></td>
+                    <td>N/A</td>
+                    <td><?php echo $this->currency($quoteDevice->getPackagePrice()); ?></td>
+                    <td>N/A</td>
+                    <td><?php echo $quoteDevice->getQuantity(); ?></td>
+                    <td><?php echo $this->currency($quoteDevice->calculateSubtotal()); ?></td>
+                    <td>N/A</td>
                 </tr>
                 <?php if (count($quoteDevice->getQuoteDeviceOptions()) > 0) : ?>
-                <tr class="header-row">
-                    <th colspan="2">Device Options</th>
-                    <th style="width:80px;">Included <i class="icon-question-sign" data-placement="left"  data-title="What is included?" data-content="This is how many of the option are already included in the device cost because they come with the device."></i></th>
-                    <th>Quantity</th>
-                    <th></th>
-                    <th>Subtotal <i class="icon-question-sign" data-placement="left"  data-title="What is the option sub total?" data-content="This subtotal shows the quantity of an option multipled by the cost of the option."></i></th>
-                </tr>
+                
                 <?php foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
                 <tr>
-                    <td style="width: 140px;"><?php echo $quoteDeviceOption->getSku(); ?></td>
-                    <td><h5><?php echo $quoteDeviceOption->getName(); ?><small> - <?php echo $quoteDeviceOption->getDescription(); ?></small></h5></td>
-                    <td style="width: 40px; text-align: center;"><?php echo $quoteDeviceOption->getIncludedQuantity(); ?></td>
-                    <td style="text-align: center;"><?php echo $quoteDeviceOption->getQuantity(); ?></td>
-                    
-                    <td><?php echo $this->currency($quoteDeviceOption->getCost()); ?></td>
-                    <td><?php echo $this->currency($quoteDeviceOption->getSubTotal()); ?></td>
+                    <td><?php echo $quoteDeviceOption->getName(); ?></td>
+                    <td><?php echo $quoteDeviceOption->getSku(); ?></td>
+                    <td><?php echo $quoteDeviceOption->getDescription(); ?></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
                 <?php endforeach; ?>
+                
                 <?php endif; ?>
-                <tr>
-                    <th colspan="5" style="text-align: right;">Package Cost <i class="icon-question-sign" data-placement="left"  data-title="What is package cost?" data-content="Package cost is determined by adding the device cost for a single device and the options cost for that single device."></i></th>
-                    <th colspan="1"><?php echo $this->currency($quoteDevice->calculatePackageCost()); ?></th>
-                </tr>
-                <tr>
-                    <th colspan="5" style="text-align: right;">Margin</th>
-                    <th colspan="1"><?php echo number_format($quoteDevice->getMargin(), 2); ?>%</th>
-                </tr>
-                <tr>
-                    <th colspan="5" style="text-align: right;">Package Price <i class="icon-question-sign" data-placement="left" data-title="What is package price" data-content="The package price is the package cost with the margin applied to it."></i></th>
-                    <th colspan="1"><?php echo $this->currency($quoteDevice->getPackagePrice()); ?></th>
-                </tr>
-                <tr>
-                    <th colspan="5" style="text-align: right;">Subtotal <i class="icon-question-sign" data-placement="left" data-title="What is subtotal?" data-content="The subtotal is the package price multiplied by the quantity of the device."></i></th>
-                    <th colspan="1"><?php echo $this->currency($quoteDevice->calculateSubTotal()); ?></th>
-                </tr>
             </table>
         <?php endforeach; ?>
+         -->
     </div>
-</div>
-<div class="well">
-    <form method="POST" class="form-center-actions">
-        <div class="form-actions">
-            <input type="submit" name="back" value="Go Back" class="btn"/>
-            <input type="submit" name="save" value="Save" class="btn btn-success"/>
-            <input type="submit" name="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary"/>
-        </div>
-    </form>
 </div>
