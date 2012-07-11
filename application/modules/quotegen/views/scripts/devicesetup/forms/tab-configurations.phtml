@@ -1,5 +1,10 @@
 <h3>Configurations</h3>
 
-<div class="pull-left">
-	<a class="btn" title="Cancel" href="<?php echo $this->url( array ( 'action' => 'index' ) ); ?>">Cancel</a>
-</div>
+<form name="frmConfigurations" id="frmConfigurations" action="" method="post">
+	<input type="hidden" name="tab" id="tab" value="3" />
+	
+	<div class="pull-left">
+		<a class="btn" title="Cancel" href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'index' ), null, true ); ?>">Cancel</a>
+	</div>
+
+</form>
