@@ -444,28 +444,43 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
      */
 	public function assigntonersAction ()
 	{
-        $id = $this->_getParam('id', false);
+        $where = null;
+        $id = $this->_getParam('id', 0);
         $this->view->id = $id;
 
+        // Display all of the devices
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Admin_Model_Mapper_Toner::getInstance(), $where));
+        
+        // Get assigned toners list
+        $assignedToners = array();
+        foreach ( $paginator->getCurrentItems() as $toner )
+        {
+        	$assignedToners[] = $toner->getId();  
+        }
+        $this->view->assignedToners = $assignedToners;
+        
         // Make sure we are posting data
         $request = $this->getRequest();
         if ($request->isPost())
         {
             // Get the post data
             $values = $request->getPost();
-            print_r($values); die;
-            
-            $where = '';
             if ( $values ['btnSearch'] )
             {
                 $filter = $values ['criteria_filter'];
-                $criteria = $values ['txtCriteria'];
-                $where = '';
+                
+                if ($filter == 'sku')
+                {
+                	$criteria = $values ['txtCriteria'];
+                	$where = array ( 'sku' => $criteria );   
+                }
+                else
+                {
+                	$criteria = $values ['cboCriteria'];
+                	$where = array ( 'manufacturer_id' => $criteria );
+                }
             }   
         }
-        
-        // Display all of the devices
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Admin_Model_Mapper_Toner::getInstance()));
         
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
