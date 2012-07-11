@@ -477,7 +477,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         {
             // Get the post data
             $values = $request->getPost();
-            if ($values ['btnSearch'])
+            if ( isset($values ['btnSearch']) )
             {
                 $filter = $values ['criteria_filter'];
                 
@@ -485,14 +485,14 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 {
                     $criteria = $values ['txtCriteria'];
                     $where = array (
-                            'sku' => $criteria 
+                            'sku LIKE ( ? )' => '%'.$criteria.'%' 
                     );
                 }
                 else
                 {
                     $criteria = $values ['cboCriteria'];
                     $where = array (
-                            'manufacturer_id' => $criteria 
+                            'manufacturer_id = ?' => $criteria 
                     );
                 }
             }
