@@ -204,6 +204,8 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
      */
     public function editAction ()
     {
+        $where = null;
+        $tonerId = $this->_getParam('tonerid', false);
         $masterDeviceId = $this->_getParam('id', false);
         $this->view->id = $masterDeviceId;
         
@@ -247,21 +249,31 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $sku = $device->getSku();
         $form->getElement('sku')->setValue($sku);
         
-        /**
-         * Device Toners
-         */
-        $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->getDeviceToners($masterDeviceId);
-        $this->view->deviceToners = $deviceToners;
-        
-        /**
-         * Device Options
-         */
-        
         // Make sure we are posting data
         if ($request->isPost())
         {
             // Get the post data
             $values = $request->getPost();
+
+            if ( isset($values ['btnSearch']) )
+            {
+                $filter = $values ['criteria_filter'];
+            
+                if ($filter == 'sku')
+                {
+                    $criteria = $values ['txtCriteria'];
+                    $where = array (
+                            'sku LIKE ( ? )' => '%'.$criteria.'%'
+                    );
+                }
+                else
+                {
+                    $criteria = $values ['cboCriteria'];
+                    $where = array (
+                            'manufacturer_id = ?' => $criteria
+                    );
+                }
+            }
             
             // If we cancelled we don't need to validate anything
             if (! isset($values ['cancel']))
@@ -315,6 +327,56 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 $this->_helper->redirector('index');
             }
         }
+
+        /**
+         * Device Toners
+         */
+        // Save device toner assignment if tonerid available
+        if ( $tonerId && $masterDeviceId )
+        {
+            $deviceTonerMapper = new Proposalgen_Model_Mapper_DeviceToner();
+            $deviceToner = new Proposalgen_Model_DeviceToner();
+            $deviceToner->setTonerId($tonerId);
+            $deviceToner->setMasterDeviceId($masterDeviceId);
+            $deviceTonerMapper->save($deviceToner);
+        
+            $this->_helper->flashMessenger(array (
+                    'success' => "The toner was assigned successfully."
+            ));
+        }
+        
+        // Populate Manufacturers dropdown
+        $manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAll();
+        $this->view->manufacturers = $manufacturers;
+        
+        $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->getDeviceToners($masterDeviceId);
+        $this->view->deviceToners = $deviceToners;
+        
+        $assignedToners = array ();
+        foreach ( $deviceToners as $toner )
+        {
+            $assignedToners [] = $toner->getId();
+        }
+        $this->view->assignedToners = $assignedToners;
+        
+        // TODO: Sorting?
+        
+        // Display all of the devices
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Admin_Model_Mapper_Toner::getInstance(), $where));
+        
+        // Set the current page we're on
+        $paginator->setCurrentPageNumber($this->_getParam('page', 1));
+        
+        // Set how many items to show
+        $paginator->setItemCountPerPage(15);
+        
+        // Pass the view the paginator
+        $this->view->paginator = $paginator;
+        
+        /**
+         * Device Options
+         */
+        
         $this->view->form = $form;
         
     }
@@ -574,12 +636,12 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                     $this->_helper->flashMessenger(array (
                             'success' => "Toner SKU {$toner->getSku()} was unassigned successfully." 
                     ));
-                    $this->_helper->redirector('assigntoners', 'devicesetup', 'quotegen', array ('id' => $id ));
+                    $this->_helper->redirector('edit', 'devicesetup', 'quotegen', array ('id' => $id ));
                 }
             }
             else
             {
-            	$this->_helper->redirector('assigntoners', 'devicesetup', 'quotegen', array ('id' => $id ));
+            	$this->_helper->redirector('edit', 'devicesetup', 'quotegen', array ('id' => $id ));
             }
         }
         $this->view->form = $form;

@@ -1,45 +1,108 @@
 <?php 
 $id = $this->id;
+$manufacturers = $this->manufacturers;
 ?>
 
-<?php if ( $this->deviceToners ) { ?>
+<?php $this->headScript()->captureStart('append','text/javascript') ?>
 
-<table class="table table-striped table-condensed table-bordered">
-	<thead>
-		<tr>
-			<th>SKU</th>
-			<th>Manufacturer</th>
-			<th>Type</th>
-			<th>Color</th>
-			<th>Yield</th>
-			<th>Cost</th>
-			<th style="width: 120px; text-align: center;">Action</th>
-		</tr>
-	</thead>
-	<tbody>
-	    <?php foreach ($this->deviceToners as $toner) : /* @var $toner Admin_Model_Toner */ ?>
-	    <tr>
-			<td><?php echo $toner->getSku(); ?></td>
-			<td><?php echo $toner->getManufacturer()->getDisplayname(); ?></td>
-			<td><?php echo $toner->getPartType()->getTypeName(); ?></td>
-			<td style="text-transform: capitalize;"><?php echo strToLower($toner->getTonerColor()->getTonerColorName()); ?></td>
-			<td style="text-align: right;"><?php echo number_format($toner->getYield(), 0, '', ','); ?></td>
-			<td style="text-align: right;"><?php echo "$" . number_format($toner->getCost(), 2, '.', ','); ?></td>
-			<td>
-				<div class="" style="text-align: center;">
-					<a class="btn btn-danger btn-mini" title="Unassign" href="<?php echo $this->url(array ( 'action' => 'unassigntoner', 'id' => $id, 'tonerid' => $toner->getId())); ?>"><i class="icon-minus-sign icon-white"></i> Unassign</a>
-				</div>
-			</td>
-		</tr>
-        <?php endforeach; ?>
-	</tbody>
-</table>
+    $(document).ready(function() {
+    
+    	// Toggle the filter field
+		$("#criteria_filter").change(function() {
+			var url = '';
+			
+			//clear searches
+			$("#txtCriteria").val('');
+			$("#cboCriteria").val('');
+			
+			switch (this.value) {
+				case "manufacturer":
+					$("#text_criteria").hide();
+					$("#list_criteria").show();
+					break;
+				case "sku":
+					$("#list_criteria").hide();
+					$("#text_criteria").show();
+					break;
+				default:
+					break;
+			}
+    	});
+		
+    });
+	
+<?php $this->headScript()->captureEnd() ?>
+		
+<h1>Assign Toners</h1>
 
-<?php } ?>
+<form name="frmAssignToner" id="frmAssignToner" action="" method="post">
 
-<div class="pull-left">
-	<a class="btn" title="Cancel" href="<?php echo $this->url( array ( 'action' => 'index' ) ); ?>">Cancel</a>
-</div>
-<div class="pull-right">
-	<a class="btn btn-success" title="Assign Toners" href="<?php echo $this->url( array ( 'action' => 'assigntoners', 'id' => $id ) ); ?>"><i class="icon-plus-sign icon-white"></i> Assign Toners</a>
-</div>
+	<div id="filter" class="well">
+		<label for="criteria_filter" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">Filter:</label>
+		<select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
+			<option value="sku" <?php if($this->search_filter == 'sku') { echo "selected"; } ?>>SKU</option>
+			<option value="manufacturer" <?php if($this->search_filter == 'manufacturer') { echo "selected"; } ?>>Manufacturer</option>
+		</select>
+		<label for="txtCriteria" class="details_label" style="display: inline; padding: 0px 10px 0px 10px;">for</label>
+		<span id="text_criteria"><input type="text" name="txtCriteria" style="width: 152px; margin: 0px 10px 0px 0px;" id="txtCriteria" <?php if($this->search_criteria != '') { echo 'value="' . $this->search_criteria . '"'; } ?> /></span>
+		<span id="list_criteria" style="display: none;">
+			<select name="cboCriteria" id="cboCriteria" style="width: 160px; margin: 0px 10px 0px 0px;">
+			<?php foreach ( $manufacturers as $manufacturer ) {  /* @var $manufacturer Proposalgen_Model_Manufacturer */ ?>
+				<option value="<?php echo $manufacturer->getId(); ?>"><?php echo $manufacturer->getDisplayname(); ?></option>
+			<?php } ?>
+			</select>
+		</span>
+		<input type="submit" name="btnSearch" id="btnSearch" value="Search" class="btn" />
+		<input type="submit" name="btnClearSearch" id="btnClearSearch" value="Clear" class="btn" />
+	</div>
+	
+	<div id="results">
+	<?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
+		<table class="table table-striped table-condensed table-bordered">
+			<thead>
+				<tr>
+					<th>SKU</th>
+				 	<th>Manufacturer</th>
+					<th>Type</th>
+					<th>Color</th>
+					<th>Yield</th>
+					<th>Cost</th>
+					<th style="width: 120px; text-align: center;">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+			    <?php foreach ($this->paginator->getCurrentItems() as $toner) : /* @var $toner Admin_Model_Toner */ ?>
+			    <tr>
+					<td><?php echo $toner->getSku(); ?></td>
+					<td><?php echo $toner->getManufacturer()->getDisplayname(); ?></td>
+					<td><?php echo $toner->getPartType()->getTypeName(); ?></td>
+					<td style="text-transform: capitalize;"><?php echo strToLower($toner->getTonerColor()->getTonerColorName()); ?></td>
+					<td style="text-align: right;"><?php echo number_format($toner->getYield(), 0, '', ','); ?></td>
+					<td style="text-align: right;"><?php echo "$" . number_format($toner->getCost(), 2, '.', ','); ?></td>
+					<td>
+						<div class="" style="text-align: center;">
+							<?php if ( in_array($toner->getId(), $this->assignedToners ) ) { ?>
+								<a class="btn btn-danger btn-mini" title="Unassign" href="<?php echo $this->url(array ( 'action' => 'unassigntoner', 'id' => $id, 'tonerid' => $toner->getId())); ?>"><i class="icon-minus-sign icon-white"></i> Unassign</a>
+							<?php } else { ?>
+								<a class="btn btn-success btn-mini" title="Assign" href="<?php echo $this->url ( array( 'action' => 'edit', 'id' => $id, 'tonerid' => $toner->getId() ) ); ?>"> <i class="icon-white icon-plus-sign"></i> Assign</a>
+							<?php } ?>
+						</div>
+					</td>
+				</tr>
+		        <?php endforeach; ?>
+			</tbody>
+		</table>
+		<?php echo $this->paginationControl($this->paginator); ?>
+		<div class="pull-left">
+			<a class="btn" title="Cancel" href="<?php echo $this->url( array ( 'action' => 'index' ) ); ?>">Cancel</a>
+		</div>
+	<?php else : ?>
+		<div class='well'>
+			<a class="btn btn-success btn-small pull-right" href="<?php echo $this->url(array('action' => 'create')) ?>"> <i class="icon-white icon-plus-sign"></i> Create new</a>
+		    <h1>There are no devices</h1>
+		</div>
+		<?php endif; ?>
+	</div>
+
+</form>
+
