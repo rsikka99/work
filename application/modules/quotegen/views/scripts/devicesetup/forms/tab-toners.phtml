@@ -37,6 +37,9 @@ $id = $this->id;
 
 <?php } ?>
 
+<div class="pull-left">
+	<a class="btn" title="Cancel" href="<?php echo $this->url( array ( 'action' => 'index' ) ); ?>">Cancel</a>
+</div>
 <div class="pull-right">
 	<a class="btn btn-success" title="Assign Toners" href="<?php echo $this->url( array ( 'action' => 'assigntoners', 'id' => $id ) ); ?>"><i class="icon-plus-sign icon-white"></i> Assign Toners</a>
 </div>
