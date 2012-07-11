@@ -204,10 +204,13 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
      */
     public function editAction ()
     {
-        $tab = 1;
         $where = null;
         $tonerId = null;
+        $tab = $this->_getParam('tab', 1);
         $masterDeviceId = $this->_getParam('id', false);
+        
+        // Pass values back to view
+        $this->view->tab = $tab;
         $this->view->id = $masterDeviceId;
         
         // If they haven't provided an id, send them back to the view all masterDevice
@@ -219,10 +222,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             ));
             $this->_helper->redirector('index');
         }
-
-        /**
-         * Device Details
-         */
+        
         // Get the masterDevice
         $mapper = new Proposalgen_Model_Mapper_MasterDevice();
         $masterDevice = $mapper->find($masterDeviceId);
@@ -236,21 +236,38 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
+        
+        /**
+         * Build Device Details Tab
+         */
         // Create a new form with the mode and roles set
         $form = new Quotegen_Form_DeviceSetup();
         
         // Prepare the data for the form
-        $request = $this->getRequest();
         $form->populate($masterDevice->toArray());
-
+        
         // Get SKU
-        // TODO: Move to mapper or form?
         $devicemapper = new Quotegen_Model_Mapper_Device();
         $device = $devicemapper->find($masterDeviceId);
         $sku = $device->getSku();
         $form->getElement('sku')->setValue($sku);
-
+        
+        
+        /**
+         * Build Device Toners Tab
+         */
+        // Populate Manufacturers dropdown
+        $manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAll();
+        $this->view->manufacturers = $manufacturers;
+        
+        
+        /**
+         * Build Device Options Tab
+         */
+        
+        
         // Make sure we are posting data
+        $request = $this->getRequest();
         if ($request->isPost())
         {
             // Get the post data
@@ -264,67 +281,120 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                     /**
                      * TONER TAB
                      */
-                    if ( isset($values ['tonerid']) ) {
+                    if (isset($values ['tonerid']))
+                    {
+                        // Get Toner Id
+                        $tonerId = $values ['tonerid'];
                         
-	                    // Get Toner Id
-	                    $tonerId = $values ['tonerid'];
-	                    
-	                    if ( isset($values ['tab']) )
+                        // Assign Toner
+                        if (isset($values ['btnAssign']))
+                        {
+                            // Save if tonerid and device id
+                            if ($tonerId && $masterDeviceId)
+                            {
+                                // Validate Toner is allowed for Device
+                                $threeColorCombined = array ("3 COLOR", "BLACK");
+                                $threeColorSeparated = array ("BLACK", "CYAN", "MAGENTA", "YELLOW");
+                                $fourColorCombined = array ("4 COLOR");
+                                $blackOnly = array ("BLACK");
+                                
+                                // Get toner
+                                $toner = Admin_Model_Mapper_Toner::getInstance()->find($tonerId);
+                                $tonerColor = $toner->getTonerColor()->getTonerColorName();
+                                
+                                // Get master device toner config
+                                $tonerConfig = $masterDevice->getTonerConfig()->getTonerConfigName();
+                                
+                                $isValid = false;
+                                switch ($tonerConfig) {
+                                	case "3 COLOR - COMBINED":
+                                	    if (in_array($tonerColor, $threeColorCombined) ) {
+                                	        $isValid = true;
+                                	    }
+                                	    break;
+                                	case "3 COLOR - SEPARATED":
+                                	    if (in_array($tonerColor, $threeColorSeparated) ) {
+                                	        $isValid = true;
+                                	    }
+                                	    break;
+                                	case "4 COLOR - COMBINED":
+                                	    if (in_array($tonerColor, $fourColorCombined) ) {
+                                	        $isValid = true;
+                                	    }
+                                	    break;
+                                	case "BLACK ONLY":
+                                	    if (in_array($tonerColor, $blackOnly) ) {
+                                	        $isValid = true;
+                                	    }
+                                	    break;
+                                }
+                                
+                                if ( $isValid )
+                                {
+	                                // Save device toner
+	                                $deviceTonerMapper = new Proposalgen_Model_Mapper_DeviceToner();
+	                                $deviceToner = new Proposalgen_Model_DeviceToner();
+	                                $deviceToner->setTonerId($tonerId);
+	                                $deviceToner->setMasterDeviceId($masterDeviceId);
+	                                $deviceTonerMapper->save($deviceToner);
+	                                
+	                                $this->_helper->flashMessenger(array (
+	                                        'success' => "The toner was assigned successfully." 
+	                                ));   
+                                }
+                                else
+                                {
+		                            $this->_helper->flashMessenger(array (
+		                                    'danger' => "The toner is an invalid toner for this device." 
+		                            ));
+                                }
+                            }
+                        }
+                        
+                        // Unassign Toner
+                        else if (isset($values ['btnUnassign']))
+                        {
+                            $devicetonerMapper = new Proposalgen_Model_Mapper_DeviceToner();
+                            $devicetonerMapper->delete(array (
+                                    'toner_id = ?' => $tonerId, 
+                                    'master_device_id = ?' => $masterDeviceId 
+                            ));
+                            
+                            $this->_helper->flashMessenger(array (
+                                    'success' => "The toner was unassigned successfully." 
+                            ));
+                        }
+
+	                    // Toners View Filter
+	                    if (isset($values ['btnView']))
 	                    {
-	                        $tab = $values ['tab'];
-	                    }
-	
-	                    // Assign Toner
-	                    if ( isset($values ['btnAssign']) )
-	                    {
-					        // Save device toner assignment if tonerid available
-					        if ( $tonerId && $masterDeviceId )
+					        // Get Device Toners List
+					        $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->getDeviceToners($masterDeviceId);
+					        $assignedToners = array ();
+					        foreach ( $deviceToners as $toner )
 					        {
-					            $deviceTonerMapper = new Proposalgen_Model_Mapper_DeviceToner();
-					            $deviceToner = new Proposalgen_Model_DeviceToner();
-					            $deviceToner->setTonerId($tonerId);
-					            $deviceToner->setMasterDeviceId($masterDeviceId);
-					            $deviceTonerMapper->save($deviceToner);
-					        
-					            $this->_helper->flashMessenger(array (
-					                    'success' => "The toner was assigned successfully."
-					            ));
+					            $assignedToners [] = $toner->getId();
 					        }
-	                    }
-	                    
-	                    // Unassign Toner
-	                    else if ( isset($values ['btnUnassign']) )
-	                    {
-		                    $devicetonerMapper = new Proposalgen_Model_Mapper_DeviceToner();
-		                    $devicetonerMapper->delete(array(
-		                            'toner_id = ?' => $tonerId, 
-		                            'master_device_id = ?' => $masterDeviceId
-		                    ));
-		                    
-		                    $this->_helper->flashMessenger(array (
-		                            'success' => "The toner was unassigned successfully." 
-		                    )); 
-	                    }
-	                    
-	                    // Filter Toners View
-	                    else if ( isset($values ['btnView']) )
-	                    {
-	                        // Update View
+					        
 	                        $view = $values ['cboView'];
 	                        $this->view->view_filter = $view;
-	                        
-	                        if ($view == "assigned") 
+	                         
+	                        if ($view == "assigned")
 	                        {
-	                        	$where = array ( 'id IN ( ? )' => $assignedToners );
+	                            $where = array (
+	                                    'id IN ( ? )' => $assignedToners
+	                            );
 	                        }
-	                        else if ($view == "unassigned") 
+	                        else if ($view == "unassigned")
 	                        {
-	                        	$where = array ( 'id NOT IN ( ? )' => $assignedToners );
+	                            $where = array (
+	                                    'id NOT IN ( ? )' => $assignedToners
+	                            );
 	                        }
 	                    }
 	                    
-	                    // Filter Toners Search
-	                    else if ( isset($values ['btnSearch']) )
+	                    // Toners Search Filter
+	                    else if (isset($values ['btnSearch']))
 	                    {
 	                        $filter = $values ['criteria_filter'];
 	                    
@@ -332,7 +402,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
 	                        {
 	                            $criteria = $values ['txtCriteria'];
 	                            $where = array (
-	                                    'sku LIKE ( ? )' => '%'.$criteria.'%'
+	                                    'sku LIKE ( ? )' => '%' . $criteria . '%'
 	                            );
 	                        }
 	                        else
@@ -344,15 +414,14 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
 	                        }
 	                    }
                     }
-
+                    
                     /**
                      * CONFIGURATIONS TAB
                      */
-                    else if ( isset($values ['configs'] ))
+                    else if (isset($values ['configs']))
                     {
-                        
                     }
-
+                    
                     /**
                      * DETAILS TAB
                      */
@@ -390,6 +459,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                     {
                         throw new InvalidArgumentException("Please correct the errors below");
                     }
+                    
                 }
                 catch ( InvalidArgumentException $e )
                 {
@@ -405,17 +475,17 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             }
         }
 
+        
         /**
-         * Device Toners
+         * Details Tab Post Posting Logic
          */
+        $this->view->form = $form;
         
-        // Populate Manufacturers dropdown
-        $manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAll();
-        $this->view->manufacturers = $manufacturers;
         
+        /**
+         * Device Toners Tab Post Posting Logic
+         */
         $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->getDeviceToners($masterDeviceId);
-        $this->view->deviceToners = $deviceToners;
-        
         $assignedToners = array ();
         foreach ( $deviceToners as $toner )
         {
@@ -423,11 +493,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         }
         $this->view->assignedToners = $assignedToners;
         
-        /**
-         * Device Options
-         */
-        
-        // Display all of the devices
+        // Display filterd list of toners
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Admin_Model_Mapper_Toner::getInstance(), $where));
         
         // Set the current page we're on
@@ -438,9 +504,11 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         
         // Pass the view the paginator
         $this->view->paginator = $paginator;
-        $this->view->tab = $tab;
-        $this->view->form = $form;
+
         
+        /**
+         * Options Tab Post Posting Logic
+         */
     }
 
     /**
@@ -586,7 +654,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $this->view->manufacturers = $manufacturers;
         
         // Save device toner assignment if tonerid available
-        if ( $tonerId && $id )
+        if ($tonerId && $id)
         {
             $deviceTonerMapper = new Proposalgen_Model_Mapper_DeviceToner();
             $deviceToner = new Proposalgen_Model_DeviceToner();
@@ -595,7 +663,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             $deviceTonerMapper->save($deviceToner);
             
             $this->_helper->flashMessenger(array (
-            	'success' => "The toner was assigned successfully." 
+                    'success' => "The toner was assigned successfully." 
             ));
         }
         
@@ -605,7 +673,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         {
             // Get the post data
             $values = $request->getPost();
-            if ( isset($values ['btnSearch']) )
+            if (isset($values ['btnSearch']))
             {
                 $filter = $values ['criteria_filter'];
                 
@@ -613,7 +681,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 {
                     $criteria = $values ['txtCriteria'];
                     $where = array (
-                            'sku LIKE ( ? )' => '%'.$criteria.'%' 
+                            'sku LIKE ( ? )' => '%' . $criteria . '%' 
                     );
                 }
                 else
@@ -625,7 +693,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 }
             }
         }
-
+        
         // Get assigned toners list
         $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->getDeviceToners($id);
         
@@ -635,9 +703,10 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             $assignedToners [] = $toner->getId();
         }
         $this->view->assignedToners = $assignedToners;
-
+        
         // TODO: Sorting?
         
+
         // Display all of the devices
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Admin_Model_Mapper_Toner::getInstance(), $where));
         
@@ -690,26 +759,26 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 if ($form->isValid($values))
                 {
                     $devicetonerMapper = new Proposalgen_Model_Mapper_DeviceToner();
-                    $devicetonerMapper->delete(array(
+                    $devicetonerMapper->delete(array (
                             'toner_id = ?' => $tonerId, 
-                            'master_device_id = ?' => $id
+                            'master_device_id = ?' => $id 
                     ));
                     
                     $this->_helper->flashMessenger(array (
                             'success' => "Toner SKU {$toner->getSku()} was unassigned successfully." 
                     ));
                     $this->_helper->redirector('edit', null, null, array (
-                            'id' => $id,
-            	        	'tab' => '2'
+                            'id' => $id, 
+                            'tab' => '2' 
                     ));
                 }
             }
             else
             {
-            	$this->_helper->redirector('edit', null, null, array (
-            	        'id' => $id,
-            	        'tab' => '2'
-            	));
+                $this->_helper->redirector('edit', null, null, array (
+                        'id' => $id, 
+                        'tab' => '2' 
+                ));
             }
         }
         $this->view->form = $form;
