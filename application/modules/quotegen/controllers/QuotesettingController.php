@@ -127,17 +127,12 @@ class Quotegen_QuotesettingController extends Zend_Controller_Action
                         ));
                         $this->_helper->redirector('index');
                     }
-                    else
-                    {
-                        // Shouldn't be here throw new execption
-                        throw new InvalidArgumentException('Please correct information');
-                    }
                 }
                 catch ( Exception $e )
                 {
                     // Delete was unsuccesfull
                     $this->_helper->flashMessenger(array (
-                            'danger' => $e->getMessage() 
+                            'danger' => 'Delete was unsuccessful please try again.'
                     ));
                 }
             }
