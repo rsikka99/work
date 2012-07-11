@@ -108,8 +108,14 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
             $this->setDeviceMargin($settings->deviceMargin);
         if (isset($settings->pageMargin) && ! is_null($settings->pageMargin))
             $this->setPageMargin($settings->pageMargin);
+        
         if (isset($settings->pricingConfigId) && ! is_null($settings->pricingConfigId))
-            $this->setPricingConfigId($settings->pricingConfigId);
+        {
+            if ($settings->pricingConfigId !== Proposalgen_Model_PricingConfig::NONE)
+            {
+                $this->setPricingConfigId($settings->pricingConfigId);
+            }
+        }
     }
     
     /*

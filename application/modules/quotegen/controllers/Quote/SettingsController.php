@@ -21,7 +21,7 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
             ));
             $this->_helper->redirector('index');
         }
-
+        
         // Get the system and user defaults and apply overrides for user settings
         $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
         $userSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
@@ -37,8 +37,8 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
             if (isset($values ['back']))
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index', 'quote_devices', null, array (
-                        'quoteId' => $this->_quoteId
+                $this->_helper->redirector('index', 'quote_pricing', null, array (
+                        'quoteId' => $this->_quoteId 
                 ));
             }
             
@@ -53,8 +53,10 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
                         $formValues ['pageCoverageMonochrome'] = $quoteSetting->getPageCoverageMonochrome();
                     if (strlen($formValues ['pageCoverageColor']) === 0)
                         $formValues ['pageCoverageColor'] = $quoteSetting->getPageCoverageColor();
-                        
-                        // Update current quote object and save new quote items to database
+                    if ($formValues ['pricingConfigId'] === (string)Proposalgen_Model_PricingConfig::NONE)
+						$formValues ['pricingConfigId'] = $quoteSetting->getPricingConfigId();
+                    
+                    // Update current quote object and save new quote items to database
                     $this->_quote->populate($formValues);
                     $quoteMapper = Quotegen_Model_Mapper_Quote::getInstance()->save($this->_quote, $this->_quote->getId());
                     

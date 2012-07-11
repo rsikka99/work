@@ -14,6 +14,8 @@ class Quotegen_Quote_PricingController extends Quotegen_Library_Controller_Quote
      */
     public function indexAction ()
     {
+        $form = new Quotegen_Form_PagesAndPricing($this->_quote);
+        
         // Require that we have a quote object in the database to use this page
         $this->requireQuote();
         
@@ -30,6 +32,22 @@ class Quotegen_Quote_PricingController extends Quotegen_Library_Controller_Quote
             }
             else
             {
+                if ($form->isValid($values))
+                {
+                    $this->_helper->flashMessenger(array (
+                            'info' => 'Form is valid!'
+                    ));
+                }
+                else
+                {
+                    
+                    $this->_helper->flashMessenger(array (
+                            'danger' => 'Please fix the errors below before saving.'
+                    ));
+                    $form->buildBootstrapErrorDecorators();
+                }
+                
+                
                 $this->_helper->flashMessenger(array (
                         'info' => 'Saving on this page is not implemented yet!' 
                 ));
@@ -41,5 +59,7 @@ class Quotegen_Quote_PricingController extends Quotegen_Library_Controller_Quote
                 }
             }
         }
+        
+        $this->view->form = $form;
     }
 }

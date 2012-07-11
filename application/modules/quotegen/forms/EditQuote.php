@@ -39,8 +39,8 @@ class Quotegen_Form_EditQuote extends EasyBib_Form
         ));
         
         $pageCoverageColor = $this->createElement('text', 'pageCoverageColor', array (
-                'label' => 'Page Covereage Color:',
-                'class' => 'span1',
+                'label' => 'Page Covereage Color:', 
+                'class' => 'span1', 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -60,7 +60,7 @@ class Quotegen_Form_EditQuote extends EasyBib_Form
         
         $pageCoverageMonochrome = $this->createElement('text', 'pageCoverageMonochrome', array (
                 'label' => 'Page Coverage Monochrome:', 
-                'class' => 'span1',
+                'class' => 'span1', 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -80,14 +80,27 @@ class Quotegen_Form_EditQuote extends EasyBib_Form
         
         $this->addElement($pageCoverageColor);
         $this->addElement($pageCoverageMonochrome);
-
+        
         // Get resolved system settings
         $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
         $userSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
         $quoteSetting->applyOverride($userSetting);
         
         $pageCoverageColor->setDescription($quoteSetting->getPageCoverageColor());
-        $pageCoverageMonochrome->setDescription($quoteSetting->getPageCoverageMonochrome());        
+        $pageCoverageMonochrome->setDescription($quoteSetting->getPageCoverageMonochrome());
+        
+        $pricingConfigDropdown = new Zend_Form_Element_Select('pricingConfigId', array (
+                'label' => 'Toner Preference:' 
+        ));
+        
+        /* @var $princingConfig Proposalgen_Model_PricingConfig */
+        foreach ( Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll() as $pricingConfig )
+        {
+            $pricingConfigDropdown->addMultiOption($pricingConfig->getPricingConfigId(), $pricingConfig->getConfigName());
+        }
+        $this->addElement($pricingConfigDropdown);
+        
+        $pricingConfigDropdown->setDescription($quoteSetting->getPricingConfigId());
         
         $this->addElement('text', 'quoteDate', array (
                 'label' => 'Quote Date:' 

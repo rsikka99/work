@@ -331,7 +331,7 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
     {
         return (int)$this->getQuantity() + (int)$this->getIncludedQuantity();
     }
-    
+
     /**
      * Gets the total cost (Cost * Quantity)
      *
