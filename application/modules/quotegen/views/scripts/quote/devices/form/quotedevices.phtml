@@ -1,0 +1,108 @@
+<?php 
+/* @var $form Quotegen_Form_PagesAndPricing */
+
+$form = $this->element;
+?>
+<form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+<div class="well">
+
+    <table class="table table-condensed table-bordered table-striped quoteDeviceTable">
+        <tr class="header-row">
+            <th colspan="4"></th>
+            
+            <th colspan="2" style="text-align: center;">Purchase</th>
+            <th colspan="2" style="text-align: center">Lease</th>
+            <th style="width: 30px;"></th>
+        </tr>
+        <tr class="header-row">
+            <th>Item</th>
+            <th style="width: 90px;">Package Cost</th>
+            <th style="width: 50px;">Margin</th>
+            <th style="width: 40px;">Qty</th>
+            <th style="width: 80px;">Price</th>
+            <th style="width: 70px;">Subtotal</th>
+            
+            <th style="width: 80px;">Price</th>
+            <th style="width: 80px;">Subtotal</th>
+            <th style="width: 30px;"></th>
+        </tr>
+        <?php foreach ($form->getElementSets() as $set) :
+/* @var $quoteDevice Quotegen_Model_QuoteDevice */ 
+$quoteDevice = $set->quoteDevice;
+
+?>
+        <tr class="deviceRow">
+            <th><h4><?php echo $quoteDevice->getName(); ?><br><small><?php echo $quoteDevice->getSku(); ?></small></h4></th>                
+            <td><?php echo $this->currency($quoteDevice->calculatePackageCost()); ?></td>
+            <td>
+                <div class="control-group <?php echo ($set->margin->hasErrors()) ? 'error' : ''; ?>">
+                    <?php if ($set->margin->hasErrors()) :?><i class="" data-title="Error" data-placement="top" data-content="<?php echo implode('<br>', $set->margin->getMessages()); ?>"><?php endif; ?>
+                    <?php echo $set->margin->renderViewHelper(); ?>
+                    <?php if ($set->margin->hasErrors()) :?></i><?php endif; ?>
+                </div>
+            </td>
+            <td>
+                <div class="control-group <?php echo ($set->quantity->hasErrors()) ? 'error' : ''; ?>">
+                    <?php if ($set->quantity->hasErrors()) :?><i class="" data-title="Error" data-placement="top" data-content="<?php echo implode('<br>', $set->quantity->getMessages()); ?>"><?php endif; ?>
+                    <?php echo $set->quantity->renderViewHelper();?>
+                    <?php if ($set->quantity->hasErrors()) :?></i><?php endif; ?>
+                </div>
+            </td>
+            <td>
+                <div class="control-group <?php echo ($set->packagePrice->hasErrors()) ? 'error' : ''; ?>">
+                    <?php if ($set->packagePrice->hasErrors()) :?><i class="" data-title="Error" data-placement="top" data-content="<?php echo implode('<br>', $set->packagePrice->getMessages()); ?>"><?php endif; ?>
+                    <?php echo $set->packagePrice->renderViewHelper();?>
+                    <?php if ($set->packagePrice->hasErrors()) :?></i><?php endif; ?>
+                </div>
+            </td>
+            <td><?php echo $this->currency($quoteDevice->calculateSubTotal()); ?></td>
+            <td>
+                <div class="control-group <?php echo ($set->packagePrice->hasErrors()) ? 'error' : ''; ?>">
+                    <?php if ($set->packagePrice->hasErrors()) :?><i class="" data-title="Error" data-placement="top" data-content="<?php echo implode('<br>', $set->packagePrice->getMessages()); ?>"><?php endif; ?>
+                    <?php echo $set->packagePrice->renderViewHelper();?>
+                    <?php if ($set->packagePrice->hasErrors()) :?></i><?php endif; ?>
+                </div>
+            </td>
+            
+            <td><?php echo $this->currency($quoteDevice->calculateSubTotal()); ?></td>
+            <td>
+                <div class="btn-group">
+                    <a href="#" class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i></a>
+                    <ul class="dropdown-menu pull-right">
+                        <?php if ($quoteDevice->getDevice()) : ?>
+                        <li><a href="<?php echo $this->url(array('action' => 'sync-device-configuration', 'id' => $quoteDevice->getId())); ?>"><i class="icon-refresh"></i> Sync Device</a>
+                        <?php endif; ?>
+                        <li><a href="<?php echo $this->url(array('action' => 'edit-quote-device', 'id' => $quoteDevice->getId())); ?>"><i class="icon-pencil"></i> Edit Device</a>
+                        <li><a href="<?php echo $this->url(array('action' => 'delete-quote-device', 'id' => $quoteDevice->getId())); ?>"><i class="icon-trash"></i> Delete Device</a>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+        <?php if (count($quoteDevice->getQuoteDeviceOptions()) > 0) : ?>
+        
+        <?php foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
+        <tr class="optionRow">
+            <td><?php echo $quoteDeviceOption->getName(); ?><i class="icon-info-sign pull-right" data-placement="right" data-title="<?php echo $quoteDeviceOption->getSku(); ?>" data-content="<?php echo $quoteDeviceOption->getDescription(); ?>"></i></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <?php endforeach; ?>
+        
+        <?php endif; ?>
+    
+<?php endforeach; ?>
+</table>
+
+<div class="form-actions">
+    <input type="submit" name="back" value="Go Back" class="btn"/>
+    <input type="submit" name="save" value="Save" class="btn btn-success"/>
+    <input type="submit" name="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary"/>
+</div>
+</div>
+</form>

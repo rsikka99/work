@@ -63,8 +63,8 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
                     'class' => 'span1' 
             ));
             
-            $this->addElement('text', 'price', array (
-                    'label' => 'Price:', 
+            $this->addElement('text', 'cost', array (
+                    'label' => 'Cost:', 
                     'class' => 'span1' 
             ));
             
@@ -103,14 +103,14 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
                 $object->includedQuantity = $optionElement;
                 
                 /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
-                $optionElement = $this->createElement('text', "option-{$quoteDeviceOption->getId()}-price", array (
+                $optionElement = $this->createElement('text', "option-{$quoteDeviceOption->getId()}-cost", array (
                         'label' => $quoteDeviceOption->getName(),
                         'value' => $quoteDeviceOption->getCost(),
                         'description' => $quoteDeviceOption->getId()                        
                 ));
                 $optionElement->setAttrib('class', 'span1');
                 $this->addElement($optionElement);
-                $object->price = $optionElement;
+                $object->cost = $optionElement;
                 
                 // Set the attribute of the form optionElements to the object array
                 $this->_optionElements [] = $object;

@@ -15,7 +15,7 @@ class Quotegen_View_Helper_Quotemenu extends Zend_View_Helper_Abstract
     const REPORTS_CONTROLLER = 'quote_reports';
     static $pages = array (
             self::DEVICES_CONTROLLER => 'Build Devices', 
-            self::PRICING_CONTROLLER => 'Configure Pages & Pricing', 
+//             self::PRICING_CONTROLLER => 'Configure Pages & Pricing', 
             self::SETTINGS_CONTROLLER => 'Adjust Settings', 
             self::REPORTS_CONTROLLER => 'View & Print Reports' 
     );

@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_Form_PagesAndPricing extends EasyBib_Form
+class Quotegen_Form_QuoteDevices extends EasyBib_Form
 {
     
     /**
@@ -51,7 +51,7 @@ class Quotegen_Form_PagesAndPricing extends EasyBib_Form
             
             $elementSet->packagePrice = $this->createElement('text', "packagePrice-{$quoteDeviceId}", array (
                     'label' => 'Package Price:', 
-                    'class' => 'span2', 
+                    'class' => 'input-mini', 
                     'value' => $quoteDevice->getPackagePrice(), 
                     'validators' => array (
                             'Float', 
@@ -117,7 +117,7 @@ class Quotegen_Form_PagesAndPricing extends EasyBib_Form
                     array (
                             'ViewScript', 
                             array (
-                                    'viewScript' => 'quote/pricing/form/pagesAndPricing.phtml' 
+                                    'viewScript' => 'quote/devices/form/quotedevices.phtml' 
                             ) 
                     ) 
             ));

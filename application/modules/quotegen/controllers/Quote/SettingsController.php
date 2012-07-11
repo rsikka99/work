@@ -37,7 +37,7 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
             if (isset($values ['back']))
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index', 'quote_pricing', null, array (
+                $this->_helper->redirector('index', 'quote_devices', null, array (
                         'quoteId' => $this->_quoteId 
                 ));
             }
