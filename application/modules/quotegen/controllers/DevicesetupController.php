@@ -205,9 +205,11 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
     public function editAction ()
     {
         $where = null;
+        $tab = $this->_getParam('tab', 1);
         $tonerId = $this->_getParam('tonerid', false);
         $masterDeviceId = $this->_getParam('id', false);
         $this->view->id = $masterDeviceId;
+        $this->view->tab = $tab;
         
         // If they haven't provided an id, send them back to the view all masterDevice
         // page
@@ -248,85 +250,6 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $device = $devicemapper->find($masterDeviceId);
         $sku = $device->getSku();
         $form->getElement('sku')->setValue($sku);
-        
-        // Make sure we are posting data
-        if ($request->isPost())
-        {
-            // Get the post data
-            $values = $request->getPost();
-
-            if ( isset($values ['btnSearch']) )
-            {
-                $filter = $values ['criteria_filter'];
-            
-                if ($filter == 'sku')
-                {
-                    $criteria = $values ['txtCriteria'];
-                    $where = array (
-                            'sku LIKE ( ? )' => '%'.$criteria.'%'
-                    );
-                }
-                else
-                {
-                    $criteria = $values ['cboCriteria'];
-                    $where = array (
-                            'manufacturer_id = ?' => $criteria
-                    );
-                }
-            }
-            
-            // If we cancelled we don't need to validate anything
-            if (! isset($values ['cancel']))
-            {
-                try
-                {
-                    // Validate the form
-                    if ($form->isValid($values))
-                    {
-                        // Save Device SKU
-                        $devicevalues = array (
-                                'masterDeviceId' => $masterDeviceId, 
-                                'sku' => $values ['sku'] 
-                        );
-                        $device->populate($devicevalues);
-                        $deviceId = $devicemapper->save($device, $masterDeviceId);
-                        
-                        // Save Master Device
-                        $mapper = new Proposalgen_Model_Mapper_MasterDevice();
-                        $masterDevice = new Proposalgen_Model_MasterDevice();
-                        foreach ( $values as &$value )
-                        {
-                            if (strlen($value) < 1)
-                                $value = null;
-                        }
-                        $masterDevice->populate($values);
-                        $masterDevice->setId($masterDeviceId);
-                        
-                        // Save to the database with cascade insert turned on
-                        $masterDeviceId = $mapper->save($masterDevice, $masterDeviceId);
-                        
-                        $this->_helper->flashMessenger(array (
-                                'success' => "MasterDevice '{$masterDevice->getFullDeviceName()}' was updated sucessfully." 
-                        ));
-                    }
-                    else
-                    {
-                        throw new InvalidArgumentException("Please correct the errors below");
-                    }
-                }
-                catch ( InvalidArgumentException $e )
-                {
-                    $this->_helper->flashMessenger(array (
-                            'danger' => $e->getMessage() 
-                    ));
-                }
-            }
-            else
-            {
-                // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
-            }
-        }
 
         /**
          * Device Toners
@@ -359,8 +282,105 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         }
         $this->view->assignedToners = $assignedToners;
         
-        // TODO: Sorting?
         
+        // Make sure we are posting data
+        if ($request->isPost())
+        {
+            // Get the post data
+            $values = $request->getPost();
+            
+            // If we cancelled we don't need to validate anything
+            if (! isset($values ['cancel']))
+            {
+                try
+                {
+
+                    // Toners
+                    if ( isset($values ['btnView']) )
+                    {
+                        // Update View
+                        $view = $values ['cboView'];
+                        $this->view->view_filter = $view;
+                        
+                        if ($view == "assigned") 
+                        {
+                        	$where = array ( 'id IN ( ? )' => $assignedToners );
+                        }
+                        else if ($view == "unassigned") 
+                        {
+                        	$where = array ( 'id NOT IN ( ? )' => $assignedToners );
+                        }
+                    }
+                    else if ( isset($values ['btnSearch']) )
+                    {
+                        $filter = $values ['criteria_filter'];
+                    
+                        if ($filter == 'sku')
+                        {
+                            $criteria = $values ['txtCriteria'];
+                            $where = array (
+                                    'sku LIKE ( ? )' => '%'.$criteria.'%'
+                            );
+                        }
+                        else
+                        {
+                            $criteria = $values ['cboCriteria'];
+                            $where = array (
+                                    'manufacturer_id = ?' => $criteria
+                            );
+                        }
+                    }
+                    
+                    // Details - Validate the form
+                    else if ($form->isValid($values))
+                    {
+                        // Save Device SKU
+                        $devicevalues = array (
+                                'masterDeviceId' => $masterDeviceId, 
+                                'sku' => $values ['sku'] 
+                        );
+                        $device->populate($devicevalues);
+                        $deviceId = $devicemapper->save($device, $masterDeviceId);
+                        
+                        // Save Master Device
+                        $mapper = new Proposalgen_Model_Mapper_MasterDevice();
+                        $masterDevice = new Proposalgen_Model_MasterDevice();
+                        foreach ( $values as &$value )
+                        {
+                            if (strlen($value) < 1)
+                                $value = null;
+                        }
+                        $masterDevice->populate($values);
+                        $masterDevice->setId($masterDeviceId);
+                        
+                        // Save to the database with cascade insert turned on
+                        $masterDeviceId = $mapper->save($masterDevice, $masterDeviceId);
+                        
+                        $this->_helper->flashMessenger(array (
+                                'success' => "MasterDevice '{$masterDevice->getFullDeviceName()}' was updated sucessfully." 
+                        ));
+                    }
+                    
+                    // Error
+                    else
+                    {
+                        throw new InvalidArgumentException("Please correct the errors below");
+                    }
+                }
+                catch ( InvalidArgumentException $e )
+                {
+                    $this->_helper->flashMessenger(array (
+                            'danger' => $e->getMessage() 
+                    ));
+                }
+            }
+            else
+            {
+                // User has cancelled. We could do a redirect here if we wanted.
+                $this->_helper->redirector('index');
+            }
+        }
+                
         // Display all of the devices
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Admin_Model_Mapper_Toner::getInstance(), $where));
         
@@ -636,12 +656,18 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                     $this->_helper->flashMessenger(array (
                             'success' => "Toner SKU {$toner->getSku()} was unassigned successfully." 
                     ));
-                    $this->_helper->redirector('edit', 'devicesetup', 'quotegen', array ('id' => $id ));
+                    $this->_helper->redirector('edit', null, null, array (
+                            'id' => $id,
+            	        	'tab' => '2'
+                    ));
                 }
             }
             else
             {
-            	$this->_helper->redirector('edit', 'devicesetup', 'quotegen', array ('id' => $id ));
+            	$this->_helper->redirector('edit', null, null, array (
+            	        'id' => $id,
+            	        'tab' => '2'
+            	));
             }
         }
         $this->view->form = $form;

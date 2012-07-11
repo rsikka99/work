@@ -1,5 +1,6 @@
 <?php 
 $id = $this->id;
+$tab = $this->tab;
 $device = Quotegen_Model_Mapper_Device::getInstance()->find($id);
 $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . ' ' . $device->getMasterDevice()->getPrinterModel();
 ?>
@@ -10,13 +11,13 @@ $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . 
 
 <div class="tabbable"> <!-- Only required for left/right tabs -->
     <ul class="nav nav-tabs">
-    	<li class="active"><a href="#tab1" data-toggle="tab">Details</a></li>
-    	<li><a href="#tab2" data-toggle="tab">Toners</a></li>
-    	<li><a href="#tab3" data-toggle="tab">Configurations</a></li>
+    	<li class="<?php if ($tab == 1) { echo " active"; } ?>"><a href="#tab1" data-toggle="tab">Details</a></li>
+    	<li class="<?php if ($tab == 2) { echo " active"; } ?>"><a href="#tab2" data-toggle="tab">Toners</a></li>
+    	<li class="<?php if ($tab == 3) { echo " active"; } ?>"><a href="#tab3" data-toggle="tab">Configurations</a></li>
     </ul>
     <div class="tab-content">
-    	<div class="tab-pane active" id="tab1"><?php echo $this->render('devicesetup/forms/tab-details.phtml')?></div>
-    	<div class="tab-pane" id="tab2"><?php echo $this->render('devicesetup/forms/tab-toners.phtml')?></div>
-    	<div class="tab-pane" id="tab3"><?php echo $this->render('devicesetup/forms/tab-configurations.phtml')?></div>
+    	<div class="tab-pane<?php if ($tab == 1) { echo " active"; } ?>" id="tab1"><?php echo $this->render('devicesetup/forms/tab-details.phtml')?></div>
+    	<div class="tab-pane<?php if ($tab == 2) { echo " active"; } ?>" id="tab2"><?php echo $this->render('devicesetup/forms/tab-toners.phtml')?></div>
+    	<div class="tab-pane<?php if ($tab == 3) { echo " active"; } ?>" id="tab3"><?php echo $this->render('devicesetup/forms/tab-configurations.phtml')?></div>
     </div>
 </div>
