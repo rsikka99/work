@@ -305,31 +305,31 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                                 // Get master device toner config
                                 $tonerConfig = $masterDevice->getTonerConfig()->getTonerConfigName();
                                 
-                                $isValid = false;
+                                $validToner = false;
                                 switch ($tonerConfig) {
                                 	case "3 COLOR - COMBINED":
                                 	    if (in_array($tonerColor, $threeColorCombined) ) {
-                                	        $isValid = true;
+                                	        $validToner = true;
                                 	    }
                                 	    break;
                                 	case "3 COLOR - SEPARATED":
                                 	    if (in_array($tonerColor, $threeColorSeparated) ) {
-                                	        $isValid = true;
+                                	        $validToner = true;
                                 	    }
                                 	    break;
                                 	case "4 COLOR - COMBINED":
                                 	    if (in_array($tonerColor, $fourColorCombined) ) {
-                                	        $isValid = true;
+                                	        $validToner = true;
                                 	    }
                                 	    break;
                                 	case "BLACK ONLY":
                                 	    if (in_array($tonerColor, $blackOnly) ) {
-                                	        $isValid = true;
+                                	        $validToner = true;
                                 	    }
                                 	    break;
                                 }
                                 
-                                if ( $isValid )
+                                if ( $validToner )
                                 {
 	                                // Save device toner
 	                                $deviceTonerMapper = new Proposalgen_Model_Mapper_DeviceToner();
