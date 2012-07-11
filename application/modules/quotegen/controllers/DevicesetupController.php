@@ -453,11 +453,25 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
     public function assigntonersAction ()
     {
         $where = null;
-        $id = $this->_getParam('id', 0);
-        $tonerId = $this->_getParam('tonerid', 0);
+        $id = $this->_getParam('id', false);
+        $tonerId = $this->_getParam('tonerid', false);
         $this->view->id = $id;
         
-        // Make sure we are posting data
+        // Save device toner assignment if tonerid available
+        if ( $tonerId && $id )
+        {
+            $deviceTonerMapper = new Proposalgen_Model_Mapper_DeviceToner();
+            $deviceToner = new Proposalgen_Model_DeviceToner();
+            $deviceToner->setTonerId($tonerId);
+            $deviceToner->setMasterDeviceId($id);
+            $deviceTonerMapper->save($deviceToner);
+            
+            $this->_helper->flashMessenger(array (
+            	'success' => "The toner was assigned successfully." 
+            ));
+        }
+        
+        // Post data for search
         $request = $this->getRequest();
         if ($request->isPost())
         {
@@ -484,18 +498,20 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             }
         }
 
-        // TODO: Sorting?
-        
-        // Display all of the devices
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Admin_Model_Mapper_Toner::getInstance(), $where));
-        
         // Get assigned toners list
+        $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->getDeviceToners($id);
+        
         $assignedToners = array ();
-        foreach ( $paginator->getCurrentItems() as $toner )
+        foreach ( $deviceToners as $toner )
         {
             $assignedToners [] = $toner->getId();
         }
         $this->view->assignedToners = $assignedToners;
+
+        // TODO: Sorting?
+        
+        // Display all of the devices
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Admin_Model_Mapper_Toner::getInstance(), $where));
         
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
@@ -513,9 +529,10 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
     public function unassigntonerAction ()
     {
         // Essentially this is a delete device_toner record
-        $tonerId = $this->_getParam('id', false);
+        $id = $this->_getParam('id', false);
+        $tonerId = $this->_getParam('tonerid', false);
         
-        if (! $tonerId)
+        if (! $tonerId && ! $id)
         {
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a toner to unassign first.' 
@@ -541,19 +558,24 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             $values = $request->getPost();
             if (! isset($values ['cancel']))
             {
-                // delete device from database
+                // Delete device toner from database
                 if ($form->isValid($values))
                 {
-                    //$this->getDeviceMapper()->delete($device);
+                    $devicetonerMapper = new Proposalgen_Model_Mapper_DeviceToner();
+                    $devicetonerMapper->delete(array(
+                            'toner_id = ?' => $tonerId, 
+                            'master_device_id = ?' => $id
+                    ));
+                    
                     $this->_helper->flashMessenger(array (
                             'success' => "Toner SKU {$toner->getSku()} was unassigned successfully." 
                     ));
-                    $this->_helper->redirector('index');
+                    $this->_helper->redirector('assigntoners', 'devicesetup', 'quotegen', array ('id' => $id ));
                 }
             }
             else
             {
-                $this->_helper->redirector('index');
+            	$this->_helper->redirector('assigntoners', 'devicesetup', 'quotegen', array ('id' => $id ));
             }
         }
         $this->view->form = $form;

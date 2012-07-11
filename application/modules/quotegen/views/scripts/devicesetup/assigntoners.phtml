@@ -77,9 +77,9 @@ $id = $this->id;
 					<td>
 						<div class="" style="text-align: center;">
 							<?php if ( in_array($toner->getId(), $this->assignedToners ) ) { ?>
-								<a class="btn btn-danger btn-mini" title="Unassign" href="<?php echo $this->url(array ( 'action' => 'unassigntoners', 'id' => $id, 'tonerid' => $toner->getId())); ?>"><i class="icon-minus-sign icon-white"></i> Unassign</a>
+								<a class="btn btn-danger btn-mini" title="Unassign" href="<?php echo $this->url(array ( 'action' => 'unassigntoner', 'id' => $id, 'tonerid' => $toner->getId())); ?>"><i class="icon-minus-sign icon-white"></i> Unassign</a>
 							<?php } else { ?>
-								<a class="btn btn-success btn-mini" title="Assign" href="<?php echo $this->url ( array( 'action' => 'assigntoner', 'id' => $id, 'tonerid' => $toner->getId() ) ); ?>"> <i class="icon-white icon-plus-sign"></i> Assign</a>
+								<a class="btn btn-success btn-mini" title="Assign" href="<?php echo $this->url ( array( 'action' => 'assigntoners', 'id' => $id, 'tonerid' => $toner->getId() ) ); ?>"> <i class="icon-white icon-plus-sign"></i> Assign</a>
 							<?php } ?>
 						</div>
 					</td>
@@ -88,7 +88,9 @@ $id = $this->id;
 			</tbody>
 		</table>
 		<?php echo $this->paginationControl($this->paginator); ?>
-		<a class="btn btn-primary" href="<?php echo $this->url( array( 'action' => 'edit', 'id' => $id) ); ?>">Back</a>
+		<div class="pull-left">
+			<a class="btn btn-primary" href="<?php echo $this->url( array( 'action' => 'edit', 'id' => $id) ); ?>">Back</a>
+		</div>
 	<?php else : ?>
 		<div class='well'>
 			<a class="btn btn-success btn-small pull-right" href="<?php echo $this->url(array('action' => 'create')) ?>"> <i class="icon-white icon-plus-sign"></i> Create new</a>
