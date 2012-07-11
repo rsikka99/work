@@ -365,20 +365,21 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             ));
                         }
 
-	                    // Toners View Filter
-	                    if (isset($values ['btnView']))
-	                    {
-					        // Get Device Toners List
-					        $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->getDeviceToners($masterDeviceId);
-					        $assignedToners = array ();
-					        foreach ( $deviceToners as $toner )
-					        {
-					            $assignedToners [] = $toner->getId();
-					        }
-					        
+                        // Get Device Toners List
+                        $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->getDeviceToners($masterDeviceId);
+                        $assignedToners = array ();
+                        foreach ( $deviceToners as $toner )
+                        {
+                            $assignedToners [] = $toner->getId();
+                        }
+                        
+                        
+                        if ( ! isset($values ['btnClearSearch']) )
+                        {
+                            // Filter view
 	                        $view = $values ['cboView'];
 	                        $this->view->view_filter = $view;
-	                         
+	                        
 	                        if ($view == "assigned")
 	                        {
 	                            $where = array (
@@ -391,28 +392,29 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
 	                                    'id NOT IN ( ? )' => $assignedToners
 	                            );
 	                        }
-	                    }
-	                    
-	                    // Toners Search Filter
-	                    else if (isset($values ['btnSearch']))
-	                    {
-	                        $filter = $values ['criteria_filter'];
-	                    
-	                        if ($filter == 'sku')
-	                        {
-	                            $criteria = $values ['txtCriteria'];
-	                            $where = array (
-	                                    'sku LIKE ( ? )' => '%' . $criteria . '%'
-	                            );
-	                        }
-	                        else
-	                        {
-	                            $criteria = $values ['cboCriteria'];
-	                            $where = array (
-	                                    'manufacturer_id = ?' => $criteria
-	                            );
-	                        }
-	                    }
+                                             
+		                    // Toners Search Filter
+		                    if (isset($values ['btnSearch']))
+		                    {
+		                        $filter = $values ['criteria_filter'];
+		                    
+		                        if ($filter == 'sku')
+		                        {
+		                            $criteria = $values ['txtCriteria'];
+		                            $where = array_merge ( (array)$where, array( 'sku LIKE ( ? )' => '%' . $criteria . '%' ) );
+		                        }
+		                        else
+		                        {
+		                            $criteria = $values ['cboCriteria'];
+		                            $where = array_merge ( (array)$where, array( 'manufacturer_id = ?' => $criteria ) );
+		                        }
+		                    }
+                        }
+                        else
+                        {
+                            // Show All
+                            $this->view->view_filter = "all";
+                        }
                     }
                     
                     /**
