@@ -1,6 +1,6 @@
 <?php 
 $id = $this->id;
-$device = Quotegen_Model_Mapper_Device::getInstance()->find($id);
+$device = $this->device; /* @var $device Quotegen_Model_Device */
 $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . ' ' . $device->getMasterDevice()->getPrinterModel();
 ?>
 
@@ -16,6 +16,21 @@ $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . 
     	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'configurations', 'id' => $id ), null, true ); ?>">Configurations</a></li>
     </ul>
     <div class="tab-content">
-    	<h3>Options</h3>
+    	<?php if (count($device->getOptions()) > 0) : ?>
+            <table class="table table-bordered table-striped table-condensed">
+                <tr>
+                    <th>Option</th>
+					<th style="width: 120px; text-align: center;">Action</th>
+                </tr>
+                <?php foreach ($device->getOptions() as $option) : /* @var $option Quotegen_Model_Option */ ?>
+                <tr>
+                    <td><?php echo $option->getName(); ?></td>
+                    <td style="text-align: center;"><a href="<?php echo $this->url(array('action' => 'deleteoption', 'optionId' => $option->getId()));?>" class="btn btn-mini btn-danger"><i class="icon-trash icon-white"></i></a></td>
+                </tr>
+                <?php endforeach; ?>
+            </table>
+    	<?php else : ?>
+            <h4>There are no options currently associated with this device. Please click the add button above to associate options with this device.</h4>
+    	<?php endif;?>
     </div>
 </div>

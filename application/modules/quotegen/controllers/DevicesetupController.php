@@ -256,6 +256,9 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         // Pass values back to view
         $this->view->id = $masterDeviceId;
         
+        // Default view
+        $this->view->view_filter = "assigned";
+        
         // If they haven't provided an id, send them back to the view all master device page
         if (! $masterDeviceId)
         {
@@ -498,20 +501,20 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             ));
             $this->_helper->redirector('index');
         }
-    
-        // Get the masterDevice
-        $mapper = new Proposalgen_Model_Mapper_MasterDevice();
-        $masterDevice = $mapper->find($id);
-    
-        // If the masterDevice doesn't exist, send them back t the view all masterDevices page
-        if (! $masterDevice)
+        
+        // Get the device
+        $mapper = Quotegen_Model_Mapper_Device::getInstance();
+        $device = $mapper->find($id);
+        // If the device doesn't exist, send them back t the view all devices page
+        if (! $device)
         {
             $this->_helper->flashMessenger(array (
-                    'danger' => 'There was an error selecting the masterDevice to edit.'
+                    'danger' => 'There was an error selecting the device to edit.' 
             ));
             $this->_helper->redirector('index');
         }
-    
+        $this->view->device = $device;
+        
         // Make sure we are posting data
         $request = $this->getRequest();
         if ($request->isPost())
