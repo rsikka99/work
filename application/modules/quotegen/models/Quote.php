@@ -158,12 +158,12 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                 'dateModified' => $this->getDateModified(), 
                 'quoteDate' => $this->getQuoteDate(), 
                 'userId' => $this->getUserId(), 
-                'clientDisplayName' => $this->getClientDisplayName(),
-                'pageCoverageColor' => $this->getPageCoverageColor(),
-                'pageCoverageMonochrome' => $this->getPageCoverageMonochrome(),
-                'pricingConfigId' => $this->getPricingConfigId(),
-                'leaseTerm' => $this->getLeaseTerm(),
-                'leaseRate' => $this->getLeaseRate(),
+                'clientDisplayName' => $this->getClientDisplayName(), 
+                'pageCoverageColor' => $this->getPageCoverageColor(), 
+                'pageCoverageMonochrome' => $this->getPageCoverageMonochrome(), 
+                'pricingConfigId' => $this->getPricingConfigId(), 
+                'leaseTerm' => $this->getLeaseTerm(), 
+                'leaseRate' => $this->getLeaseRate() 
         );
     }
 
@@ -500,5 +500,50 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $this->_pricingConfig = $_pricingConfig;
         return $this;
+    }
+
+    /**
+     * Calculates the sub total for the quote's devices.
+     * This is the number used for the purchase total and the number that will be used to choose a leasing factor.
+     *
+     * @return number The sub total
+     */
+    public function calculateQuoteSubtotal ()
+    {
+        $subtotal = 0;
+        
+        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        {
+            $subtotal += $quoteDevice->calculateSubtotal();
+        }
+        return $subtotal;
+    }
+
+    /**
+     * Calculates the lease sub total for the quote's devices.
+     *
+     * @return number The sub total
+     */
+    public function calculateQuoteLeaseSubtotal ()
+    {
+        $subtotal = 0;
+        
+        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        {
+            $subtotal += $quoteDevice->calculateLeaseSubtotal();
+        }
+        return $subtotal;
+    }
+
+    /**
+     * Gives a count of the number of devices attached to the quote.
+     *
+     * @return number The number of devices
+     */
+    public function countDevices ()
+    {
+        return count($this->getQuoteDevices());
     }
 }

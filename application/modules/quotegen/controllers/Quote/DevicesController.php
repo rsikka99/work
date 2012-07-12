@@ -16,12 +16,12 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
     public function indexAction ()
     {
         $form = new Quotegen_Form_QuoteDevices($this->_quote);
-    
+        
         // Require that we have a quote object in the database to use this page
         $this->requireQuote();
-    
+        
         $request = $this->getRequest();
-    
+        
         if ($request->isPost())
         {
             $values = $request->getPost();
@@ -35,16 +35,16 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                 if ($deviceConfigurationId === - 1)
                 {
                     $this->_helper->redirector('create-new-quote-device', null, null, array (
-                            'quoteId' => $this->_quoteId
+                            'quoteId' => $this->_quoteId 
                     ));
                 }
                 else
                 {
                     $newDeviceConfigurationId = $this->cloneDeviceConfiguration($deviceConfigurationId);
-            
+                    
                     $this->_helper->redirector('edit-quote-device', null, null, array (
-                            'id' => $newDeviceConfigurationId,
-                            'quoteId' => $this->_quoteId
+                            'id' => $newDeviceConfigurationId, 
+                            'quoteId' => $this->_quoteId 
                     ));
                 }
             }
@@ -52,38 +52,43 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             {
                 if ($form->isValid($values))
                 {
+                    $quoteDeviceMapper = Quotegen_Model_Mapper_QuoteDevice::getInstance();
+                    foreach ($form->getElementSets() as $set)
+                    {
+                        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+                        $quoteDevice = $set->quoteDevice;
+                        $quoteDeviceId = $quoteDevice->getId();
+                        $quoteDevice->setMargin($form->getValue("margin{$quoteDeviceId}"));
+                        $quoteDevice->setQuantity($form->getValue("quantity{$quoteDeviceId}"));
+                        $quoteDevice->setPackagePrice($form->getValue("packagePrice{$quoteDeviceId}"));
+                        
+                        $quoteDeviceMapper->save($quoteDevice);
+                    }
+                    
                     $this->_helper->flashMessenger(array (
-                            'info' => 'Form is valid!'
+                            'success' => 'Changes were saved successfully.' 
                     ));
                 }
                 else
                 {
-    
+                    
                     $this->_helper->flashMessenger(array (
-                            'danger' => 'Please fix the errors below before saving.'
+                            'danger' => 'Please fix the errors below before saving.' 
                     ));
                     $form->buildBootstrapErrorDecorators();
                 }
-    
-    
-                $this->_helper->flashMessenger(array (
-                        'info' => 'Saving on this page is not implemented yet!'
-                ));
+                
                 if (isset($values ['saveAndContinue']))
                 {
                     $this->_helper->redirector('index', 'quote_settings', null, array (
-                            'quoteId' => $this->_quoteId
+                            'quoteId' => $this->_quoteId 
                     ));
                 }
             }
         }
-    
+        
         $this->view->form = $form;
     }
-    
-    
-    
-  
 
     /**
      * Create and add a new device configuration to the quote
