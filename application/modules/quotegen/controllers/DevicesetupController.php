@@ -254,9 +254,6 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         // Pass values back to view
         $this->view->id = $masterDeviceId;
         
-        // Default view
-        $this->view->view_filter = "assigned";
-        
         // If they haven't provided an id, send them back to the view all master device page
         if (! $masterDeviceId)
         {
@@ -565,13 +562,13 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         if ($view == "assigned")
                         {
                             $where = array (
-                                    'optionId IN ( ? )' => $assignedOptions 
+                                    'id IN ( ? )' => $assignedOptions 
                             );
                         }
                         else if ($view == "unassigned")
                         {
                             $where = array (
-                                    'optionId NOT IN ( ? )' => $assignedOptions 
+                                    'id NOT IN ( ? )' => $assignedOptions 
                             );
                         }
                         
