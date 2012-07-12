@@ -347,7 +347,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         ));
         // Add the cancel button
         $this->addElement('submit', 'cancel', array (
-                'label' => 'Cancel' 
+                'label' => 'Done' 
         ));
         
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');

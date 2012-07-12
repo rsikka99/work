@@ -117,7 +117,7 @@ $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . 
 				</table>
 				<?php echo $this->paginationControl($this->paginator); ?>
 				<div style="text-align: center;">
-					<a class="btn" title="Cancel" href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'index' ), null, true ); ?>">Cancel</a>
+					<a class="btn" title="Done" href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'index' ), null, true ); ?>">Done</a>
 				</div>
 			<?php else : ?>
 				<div class='well'>

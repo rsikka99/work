@@ -16,6 +16,12 @@ $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . 
     	<li class="active"><a href="#tab4" data-toggle="tab">Configurations</a></li>
     </ul>
     <div class="tab-content">
-    	<h3>Configurations</h3>
+		<form name="frmOptions" id="frmOptions" action="" method="post">
+			<input type="hidden" name="optionid" id="optionid" value="" />
+    		<h3>Configurations</h3>
+			<div style="text-align: center;">
+				<a class="btn" title="Done" href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'index' ), null, true ); ?>">Done</a>
+			</div>
+		</form>
     </div>
 </div>
