@@ -51,12 +51,12 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
      */
     public function editAction ()
     {
-        $id = $this->_getParam('id', false);
-        $this->view->id = $id;
+        $masterDeviceId = $this->_getParam('id', false);
+        $this->view->id = $masterDeviceId;
         
         // If they haven't provided an id, send them back to the view all masterDevice
         // page
-        if (! $id)
+        if (! $masterDeviceId)
         {
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a masterDevice to edit first.' 
@@ -66,7 +66,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         
         // Get the masterDevice
         $mapper = new Proposalgen_Model_Mapper_MasterDevice();
-        $masterDevice = $mapper->find($id);
+        $masterDevice = $mapper->find($masterDeviceId);
         
         // If the masterDevice doesn't exist, send them back t the view all masterDevices page
         if (! $masterDevice)
@@ -85,7 +85,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         
         // Get SKU
         $devicemapper = new Quotegen_Model_Mapper_Device();
-        $device = $devicemapper->find($id);
+        $device = $devicemapper->find($masterDeviceId);
         $sku = $device->getSku();
         $form->getElement('sku')->setValue($sku);
         
@@ -105,11 +105,11 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                     {
                         // Save Device SKU
                         $devicevalues = array (
-                                'masterDeviceId' => $id, 
+                                'masterDeviceId' => $masterDeviceId, 
                                 'sku' => $values ['sku'] 
                         );
                         $device->populate($devicevalues);
-                        $deviceId = $devicemapper->save($device, $id);
+                        $deviceId = $devicemapper->save($device, $masterDeviceId);
                         
                         // Save Master Device
                         $mapper = new Proposalgen_Model_Mapper_MasterDevice();
@@ -120,7 +120,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                                 $value = null;
                         }
                         $masterDevice->populate($values);
-                        $masterDevice->setId($id);
+                        $masterDevice->setId($masterDeviceId);
                         
                         // Save to the database with cascade insert turned on
                         $masterDeviceId = $mapper->save($masterDevice, $masterDeviceId);
