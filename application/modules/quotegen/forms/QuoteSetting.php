@@ -94,8 +94,8 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                         array (
                                 'validator' => 'Between', 
                                 'options' => array (
-                                        'min' => 0, 
-                                        'max' => 99 
+                                        'min' => -100, 
+                                        'max' => 100
                                 ) 
                         ), 
                         'Float' 
@@ -116,8 +116,8 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                         array (
                                 'validator' => 'Between', 
                                 'options' => array (
-                                        'min' => 0, 
-                                        'max' => 99 
+                                        'min' => -100, 
+                                        'max' => 100
                                 ) 
                         ), 
                         'Float' 
