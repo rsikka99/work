@@ -152,6 +152,10 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         // Save to the database
                         try
                         {
+                            $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
+                            $userQuoteSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting($this->_userId);
+                            $quoteSetting->applyOverride($userQuoteSetting);
+                            
                             $masterDeviceId = $form->getValue('masterDeviceId');
                             $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
                             
@@ -160,7 +164,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             
                             // Setup some defaults that don't get synced
                             $quoteDevice->setQuoteId($this->_quoteId);
-                            $quoteDevice->setMargin(0);
+                            $quoteDevice->setMargin($quoteSetting->getDeviceMargin());
                             $quoteDevice->setQuantity(1);
                             $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
                             $quoteDevice->setResidual(0);
@@ -290,25 +294,73 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                     // Validate the form
                     if ($form->isValid($values))
                     {
+                        $formValues = $form->getValues();
+                        
+                        $numberOfOptionsSaved = 0;
+                        
                         // Save the options first
-                        $quoteDeviceOption = new Quotegen_Model_QuoteDeviceOption();
+                        /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
                         foreach ( $form->getOptionElements() as $element )
                         {
-                            $optionId = (int)$element->quantity->getDescription();
-                            $quoteDeviceOption->setId($optionId);
-                            $quoteDeviceOption->setQuantity($values ["option{$optionId}quantity"]);
-                            $quoteDeviceOption->setIncludedQuantity($values ["option{$optionId}includedQuantity"]);
-                            $quoteDeviceOption->setCost($values ["option{$optionId}cost"]);
+                            $optionHasChanged = false;
+                            $quoteDeviceOption = $element->quoteDeviceOption;
+                            $optionId = $quoteDeviceOption->getId();
+                            $quantity = (int)$formValues ["option{$optionId}quantity"];
+                            if ($quantity !== (int)$quoteDeviceOption->getQuantity())
+                            {
+                                $quoteDeviceOption->setQuantity($quantity);
+                                $optionHasChanged = true;
+                            }
                             
-                            Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->save($quoteDeviceOption);
+                            $includedQuantity = (int)$formValues ["option{$optionId}includedQuantity"];
+                            if ($includedQuantity !== (int)$quoteDeviceOption->getIncludedQuantity())
+                            {
+                                $quoteDeviceOption->setIncludedQuantity($includedQuantity);
+                                $optionHasChanged = true;
+                            }
+                            
+                            if ($optionHasChanged)
+                            {
+                                Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->save($quoteDeviceOption);
+                                $numberOfOptionsSaved ++;
+                            }
                         }
                         
                         // Save the device last
-                        $quoteDevice->populate($values);
+                        $quoteDevice->setResidual($formValues ["residual"]);
+                        $quoteDevice->setQuantity($formValues ["quantity"]);
                         
-                        // Reset the quote options to null since we just changed the database
-                        $quoteDevice->setQuoteDeviceOptions(null);
-                        $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
+                        // We need to figure out if we've changed the margin or price.
+                        $margin = (float)$formValues ["margin"];
+                        $packagePrice = (float)$formValues ["packagePrice"];
+                        
+                        if ($numberOfOptionsSaved > 0)
+                        {
+                            $quoteDevice->setMargin($margin);
+                            $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
+                        }
+                        else
+                        {
+                            /*
+                             * Here we recalculate. If the user has changes both the margin and package price, we'll
+                             * take margin as the preferred item to keep changes for.
+                             */
+                            if ($margin !== (float)$quoteDevice->getMargin())
+                            {
+                                // Recalculate the package price
+                                $quoteDevice->setMargin($margin);
+                                $packagePrice = $quoteDevice->calculatePackagePrice();
+                                $quoteDevice->setPackagePrice($packagePrice);
+                            }
+                            else if ($packagePrice !== (float)$quoteDevice->getPackagePrice())
+                            {
+                                // Recalculate the margin
+                                $quoteDevice->setPackagePrice($packagePrice);
+                                $margin = $quoteDevice->calculateMargin();
+                                $quoteDevice->setMargin($margin);
+                            }
+                        }
+                        
                         Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
                         
                         if (isset($values ['add']))
@@ -329,21 +381,29 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                                     'success' => "Device configuration '{$quoteDevice->getId()}' was updated sucessfully." 
                             ));
                             
-                            // Send back to the main list
-                            $this->_helper->redirector('index', null, null, array (
-                                    'quoteId' => $this->_quoteId 
-                            ));
+                            // Send back to the main list if they are finished
+                            if (isset($values ['saveAndFinish']))
+                            {
+                                $this->_helper->redirector('index', null, null, array (
+                                        'quoteId' => $this->_quoteId 
+                                ));
+                            }
+                            $form->populate($quoteDevice->toArray());
                         }
                     }
                     else
                     {
-                        throw new InvalidArgumentException("Please correct the errors below");
+                        $form->populate($quoteDevice->toArray());
+                        $form->populate($values);
+                        $this->_helper->flashMessenger(array (
+                                'danger' => 'Please correct the errors below' 
+                        ));
                     }
                 }
-                catch ( InvalidArgumentException $e )
+                catch ( Exception $e )
                 {
                     $this->_helper->flashMessenger(array (
-                            'danger' => $e->getMessage() 
+                            'danger' => 'Please correct the errors below' 
                     ));
                 }
             }

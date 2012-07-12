@@ -65,19 +65,18 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
                     ) 
             ));
             
-            
             $elementSet->margin = $this->createElement('text', "margin-{$quoteDeviceId}", array (
                     'label' => 'Margin:', 
-                    'class' => 'span1', 
+                    'class' => 'span2', 
                     'value' => $quoteDevice->getMargin(), 
                     'validators' => array (
                             'Float', 
                             array (
                                     'validator' => 'Between', 
                                     'options' => array (
-                                            'min' => -100, 
-                                            'max' => 100,
-                                            'inclusive' => false
+                                            'min' => - 100, 
+                                            'max' => 100, 
+                                            'inclusive' => false 
                                     ) 
                             ) 
                     ) 
