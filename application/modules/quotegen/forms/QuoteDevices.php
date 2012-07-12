@@ -59,39 +59,43 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
                                     'validator' => 'Between', 
                                     'options' => array (
                                             'min' => 0, 
-                                            'max' => 10000 
+                                            'max' => 250000,
+                                            'inclusive' => false
                                     ) 
                             ) 
                     ) 
             ));
             
-            $elementSet->leasePrice = $this->createElement('text', "leasePrice-{$quoteDeviceId}", array (
-                    'label' => 'Lease Price:',
+            $lessThanElementValidator = new My_Validate_LessThanFormValue($elementSet->packagePrice);
+            $elementSet->residual = $this->createElement('text', "residual-{$quoteDeviceId}", array (
+                    'label' => 'Residual:',
                     'class' => 'input-mini',
-                    'value' => $quoteDevice->calculateLeasePrice(),
+                    'value' => $quoteDevice->getResidual(),
                     'validators' => array (
                             'Float',
                             array (
                                     'validator' => 'Between',
                                     'options' => array (
                                             'min' => 0,
-                                            'max' => 10000
+                                            'max' => 250000
                                     )
-                            )
+                            ),
+                            $lessThanElementValidator
                     )
             ));
             
             $elementSet->margin = $this->createElement('text', "margin-{$quoteDeviceId}", array (
                     'label' => 'Margin:', 
-                    'class' => 'span1', 
+                    'class' => 'input-mini', 
                     'value' => $quoteDevice->getMargin(), 
                     'validators' => array (
                             'Float', 
                             array (
                                     'validator' => 'Between', 
                                     'options' => array (
-                                            'min' => 0, 
-                                            'max' => 99 
+                                            'min' => - 100, 
+                                            'max' => 100, 
+                                            'inclusive' => false 
                                     ) 
                             ) 
                     ) 
@@ -113,10 +117,12 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
                     ) 
             ));
             
+            
             // Add all our elements
             $this->addElement($elementSet->packagePrice);
             $this->addElement($elementSet->margin);
             $this->addElement($elementSet->quantity);
+            $this->addElement($elementSet->residual);
             
             $this->_elementSets [] = $elementSet;
         }

@@ -538,6 +538,40 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     }
 
     /**
+     * Calculates the lease sub total for the quote's devices.
+     *
+     * @return number The sub total
+     */
+    public function calculateQuoteSubtotalWithResidualsApplied ()
+    {
+        $subtotal = 0;
+        
+        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        {
+            $subtotal += $quoteDevice->calculateSubtotalWithResidual();
+        }
+        return $subtotal;
+    }
+
+    /**
+     * Calculates the total residual for the quote
+     *
+     * @return number
+     */
+    public function calculateTotalResidual ()
+    {
+        $totalResidual = 0;
+        
+        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        {
+            $totalResidual += $quoteDevice->getResidual();
+        }
+        return $totalResidual;
+    }
+
+    /**
      * Gives a count of the number of devices attached to the quote.
      *
      * @return number The number of devices
@@ -545,5 +579,27 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function countDevices ()
     {
         return count($this->getQuoteDevices());
+    }
+
+    /**
+     * Calculates the average margin across all devices
+     *
+     * @return number The average margin
+     */
+    public function calculateAverageMargin ()
+    {
+        $averageMargin = 0;
+        $deviceCount = $this->countDevices();
+        
+        if ($deviceCount > 0)
+        {
+            /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+            foreach ( $this->getQuoteDevices() as $quoteDevice )
+            {
+                $averageMargin += $quoteDevice->getMargin();
+            }
+            $averageMargin = $averageMargin / $deviceCount;
+        }
+        return $averageMargin;
     }
 }

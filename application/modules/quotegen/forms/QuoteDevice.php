@@ -11,6 +11,13 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
     protected $_id;
     
     /**
+     * The quote device
+     *
+     * @var Quotegen_Model_QuoteDevice
+     */
+    protected $_quoteDevice;
+    
+    /**
      * An array of elements used to display options
      *
      * @var unknown_type
@@ -40,37 +47,99 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
          *
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
-        $this->setAttrib('class', 'form-horizontal');
+        $this->setAttrib('class', 'form-horizontal form-center-actions');
         
         if ($this->_id > 0)
         {
-            $quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($this->_id);
+            $quoteDevice = $this->getQuoteDevice();
             
             $deviceName = new My_Form_Element_Paragraph('deviceName');
             $deviceName->setValue($quoteDevice->getName());
+            $deviceName->setIgnore(true);
             $this->addElement($deviceName);
             
             $this->addElement('text', 'name', array (
-                    'label' => 'Device Name:' 
+                    'label' => 'Device Name:', 
+                    'disabled' => true, 
+                    'ignore' => true 
             ));
             
             $this->addElement('text', 'sku', array (
-                    'label' => 'Sku:' 
+                    'label' => 'Sku:', 
+                    'disabled' => true, 
+                    'ignore' => true 
             ));
             
             $this->addElement('text', 'margin', array (
                     'label' => 'Margin:', 
-                    'class' => 'span1' 
+                    'class' => 'span3', 
+                    'validators' => array (
+                            'Float', 
+                            array (
+                                    'validator' => 'Between', 
+                                    'options' => array (
+                                            'min' => - 100, 
+                                            'max' => 100, 
+                                            'inclusive' => false 
+                                    ) 
+                            ) 
+                    ) 
+            ));
+            
+            $this->addElement('text', 'packagePrice', array (
+                    'label' => 'Package Price:', 
+                    'class' => 'span2', 
+                    'validators' => array (
+                            'Float', 
+                            array (
+                                    'validator' => 'Between', 
+                                    'options' => array (
+                                            'min' => 0, 
+                                            'max' => 250000, 
+                                            'inclusive' => false 
+                                    ) 
+                            ) 
+                    ) 
+            ));
+            
+            $lessThanElementValidator = new My_Validate_LessThanFormValue($this->getElement('packagePrice'));
+            
+            $this->addElement('text', 'residual', array (
+                    'label' => 'Residual:', 
+                    'class' => 'span2', 
+                    'validators' => array (
+                            'Float', 
+                            array (
+                                    'validator' => 'Between', 
+                                    'options' => array (
+                                            'min' => 0, 
+                                            'max' => 250000 
+                                    ) 
+                            ), 
+                            $lessThanElementValidator 
+                    ) 
             ));
             
             $this->addElement('text', 'cost', array (
                     'label' => 'Cost:', 
-                    'class' => 'span1' 
+                    'disabled' => true, 
+                    'ignore' => true 
             ));
             
             $this->addElement('text', 'quantity', array (
                     'label' => 'Quantity:', 
-                    'class' => 'span1' 
+                    'class' => 'span1', 
+                    'validators' => array (
+                            'Int', 
+                            array (
+                                    'validator' => 'Between', 
+                                    'options' => array (
+                                            'min' => 0, 
+                                            'max' => 250, 
+                                            'inclusive' => false 
+                                    ) 
+                            ) 
+                    ) 
             ));
             
             // For each option that is linked with the device
@@ -78,6 +147,8 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
             foreach ( $quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption )
             {
                 $object = new stdClass();
+                $object->quoteDeviceOption = $quoteDeviceOption;
+                
                 // Create and text element with its name as option-{id}-quantity
                 $optionElement = $this->createElement('text', "option-{$quoteDeviceOption->getId()}-quantity", array (
                         'label' => $quoteDeviceOption->getName(), 
@@ -104,9 +175,9 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
                 
                 /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
                 $optionElement = $this->createElement('text', "option-{$quoteDeviceOption->getId()}-cost", array (
-                        'label' => $quoteDeviceOption->getName(),
-                        'value' => $quoteDeviceOption->getCost(),
-                        'description' => $quoteDeviceOption->getId()                        
+                        'label' => $quoteDeviceOption->getName(), 
+                        'value' => $quoteDeviceOption->getCost(), 
+                        'description' => $quoteDeviceOption->getId() 
                 ));
                 $optionElement->setAttrib('class', 'span1');
                 $this->addElement($optionElement);
@@ -140,7 +211,14 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
         // Add the submit button
         $this->addElement('submit', 'submit', array (
                 'ignore' => true, 
-                'label' => 'Save' 
+                'label' => 'Save', 
+                'class' => 'btn btn-success' 
+        ));
+        
+        // Add the submit button
+        $this->addElement('submit', 'saveAndFinish', array (
+                'ignore' => true, 
+                'label' => 'Save Finish' 
         ));
         
         // Add the cancel button
@@ -149,7 +227,7 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
                 'label' => 'Cancel' 
         ));
         
-        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
+        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'saveAndFinish', 'cancel');
     }
 
     public function loadDefaultDecorators ()
@@ -176,5 +254,19 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
     public function getOptionElements ()
     {
         return $this->_optionElements;
+    }
+
+    /**
+     * Gets the quote device
+     *
+     * @return Quotegen_Model_QuoteDevice
+     */
+    public function getQuoteDevice ()
+    {
+        if (! isset($this->_quoteDevice) && isset($this->_id))
+        {
+            $this->_quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($this->_id);
+        }
+        return $this->_quoteDevice;
     }
 }
