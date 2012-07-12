@@ -139,6 +139,7 @@ class Quotegen_Form_EditQuote extends EasyBib_Form
                 'StripTags' 
         ));
         
+        $quoteDate->setRequired(true);
         $this->addElement($quoteDate);
         
         // Add the submit button and cancel button
