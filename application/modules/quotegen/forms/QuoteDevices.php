@@ -65,6 +65,22 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
                     ) 
             ));
             
+            $elementSet->leasePrice = $this->createElement('text', "leasePrice-{$quoteDeviceId}", array (
+                    'label' => 'Lease Price:',
+                    'class' => 'input-mini',
+                    'value' => $quoteDevice->calculateLeasePrice(),
+                    'validators' => array (
+                            'Float',
+                            array (
+                                    'validator' => 'Between',
+                                    'options' => array (
+                                            'min' => 0,
+                                            'max' => 10000
+                                    )
+                            )
+                    )
+            ));
+            
             $elementSet->margin = $this->createElement('text', "margin-{$quoteDeviceId}", array (
                     'label' => 'Margin:', 
                     'class' => 'span1', 

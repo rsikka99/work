@@ -1,5 +1,5 @@
 <?php 
-/* @var $form Quotegen_Form_PagesAndPricing */
+/* @var $form Quotegen_Form_QuoteDevices */
 
 $form = $this->element;
 ?>
@@ -55,16 +55,16 @@ $quoteDevice = $set->quoteDevice;
                     <?php if ($set->packagePrice->hasErrors()) :?></i><?php endif; ?>
                 </div>
             </td>
-            <td><?php echo $this->currency($quoteDevice->calculateSubTotal()); ?></td>
+            <td><?php echo $this->currency($quoteDevice->calculateSubtotal()); ?></td>
             <td>
-                <div class="control-group <?php echo ($set->packagePrice->hasErrors()) ? 'error' : ''; ?>">
-                    <?php if ($set->packagePrice->hasErrors()) :?><i class="" data-title="Error" data-placement="top" data-content="<?php echo implode('<br>', $set->packagePrice->getMessages()); ?>"><?php endif; ?>
-                    <?php echo $set->packagePrice->renderViewHelper();?>
-                    <?php if ($set->packagePrice->hasErrors()) :?></i><?php endif; ?>
+                <div class="control-group <?php echo ($set->leasePrice->hasErrors()) ? 'error' : ''; ?>">
+                    <?php if ($set->leasePrice->hasErrors()) :?><i class="" data-title="Error" data-placement="top" data-content="<?php echo implode('<br>', $set->leasePrice->getMessages()); ?>"><?php endif; ?>
+                    <?php echo $set->leasePrice->renderViewHelper();?>
+                    <?php if ($set->leasePrice->hasErrors()) :?></i><?php endif; ?>
                 </div>
             </td>
             
-            <td><?php echo $this->currency($quoteDevice->calculateSubTotal()); ?></td>
+            <td><?php echo $this->currency($quoteDevice->calculateSubtotal()); ?></td>
             <td>
                 <div class="btn-group">
                     <a href="#" class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i></a>

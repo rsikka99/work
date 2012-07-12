@@ -597,4 +597,43 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         
         return $subTotal;
     }
+
+    /**
+     * Calculates the lease price for the device on a monthly basis
+     *
+     * @return number The lease price for a single device
+     */
+    public function calculateLeasePrice ()
+    {
+        $leasePrice = 0;
+        $leaseRate = 0.063;
+        $packagePrice = (float)$this->getPackagePrice();
+        
+        if ($leaseRate > 0 && $packagePrice > 0)
+        {
+            $leasePrice = $leaseRate * $packagePrice;
+        }
+        
+        return round($leasePrice, 2);
+    }
+
+    /**
+     * Calculates the lease sub total (leasePrice * quantity)
+     *
+     * @return number The lease sub total
+     */
+    public function calculateLeaseSubtotal ()
+    {
+        $subTotal = 0;
+        $leasePrice = (float)$this->calculateLeasePrice();
+        $quantity = $this->getQuantity();
+        
+        // Make sure both the price and quantity are greater than 0
+        if ($leasePrice > 0 && $quantity > 0)
+        {
+            $subTotal = $leasePrice * $quantity;
+        }
+        
+        return round($subTotal, 2);
+    }
 }
