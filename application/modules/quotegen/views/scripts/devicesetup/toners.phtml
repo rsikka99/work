@@ -43,7 +43,7 @@ $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . 
     <ul class="nav nav-tabs">
     	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'edit', 'id' => $id ), null, true ); ?>">Details</a></li>
     	<li class="active"><a href="#tab2" data-toggle="tab">Toners</a></li>
-    	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'configuration', 'id' => $id ), null, true ); ?>">Configurations</a></li>
+    	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'configurations', 'id' => $id ), null, true ); ?>">Configurations</a></li>
     </ul>
     <div class="tab-content">
 		<form name="frmToners" id="frmToners" action="" method="post">
@@ -116,7 +116,7 @@ $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . 
 					</tbody>
 				</table>
 				<?php echo $this->paginationControl($this->paginator); ?>
-				<div class="pull-left">
+				<div style="text-align: center;">
 					<a class="btn" title="Cancel" href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'index' ), null, true ); ?>">Cancel</a>
 				</div>
 			<?php else : ?>

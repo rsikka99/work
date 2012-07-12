@@ -467,7 +467,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
         
         // Set how many items to show
-        $paginator->setItemCountPerPage(15);
+        $paginator->setItemCountPerPage(5);
         
         // Pass the view the paginator
         $this->view->paginator = $paginator;
