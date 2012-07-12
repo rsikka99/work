@@ -29,7 +29,12 @@ $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . 
 					</select>
 				</p>
 				<p id="search_filter">
-					<label for="criteria_filter" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">Filter Option for: </label>
+					<label for="criteria_filter" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">Filter:</label>
+					<select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
+						<option value="sku" <?php if($this->search_filter == 'sku') { echo "selected"; } ?>>SKU</option>
+						<option value="name" <?php if($this->search_filter == 'name') { echo "selected"; } ?>>Name</option>
+					</select>
+					<label for="txtCriteria" class="details_label" style="display: inline; padding: 0px 10px 0px 10px;">for</label>
 					<input type="text" name="txtCriteria" style="width: 152px; margin: 0px 10px 0px 0px;" id="txtCriteria" <?php if($this->search_criteria != '') { echo 'value="' . $this->search_criteria . '"'; } ?> />
 				</p>
 				<input type="submit" name="btnSearch" id="btnSearch" value="Search" class="btn" />
@@ -39,11 +44,13 @@ $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . 
 			<?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
 	            <table class="table table-bordered table-striped table-condensed">
 	                <tr>
+	                    <th style="width: 200px;">SKU</th>
 	                    <th>Option</th>
 						<th style="width: 120px; text-align: center;">Action</th>
 	                </tr>
 					<?php foreach ($this->paginator->getCurrentItems() as $option) : /* @var $option Quotegen_Model_Option */ ?>
 	                <tr>
+	                    <td><?php echo $option->getSku(); ?></td>
 	                    <td><?php echo $option->getName(); ?></td>
 	                    <td style="text-align: center;">
 							<div class="" style="text-align: center;">

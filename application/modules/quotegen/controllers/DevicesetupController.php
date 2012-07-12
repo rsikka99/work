@@ -190,8 +190,6 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         // TODO: Show what is being deleted in messages
         //         foreach ( $deviceConfigurations as $deviceConfiguration)
         //         {
-        
-
         //             $deviceConfigurationId = $deviceConfiguration->getId();
         //             $userDeviceConfigurationMapper->countByDeviceId($deviceConfigurationId);
         //             $globalDeviceConfigurationMapper->countByDeviceId($deviceConfigurationId);
@@ -580,9 +578,10 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         // Options Search Filter
                         if ( isset($values ['txtCriteria']) )
                         {
+                            $filter = $values ['criteria_filter'];
                             $criteria = $values ['txtCriteria'];
                             $where = array_merge((array)$where, array (
-                                    'name LIKE ( ? )' => '%' . $criteria . '%' 
+                                    "{$filter} LIKE ( ? )" => "%{$criteria}%" 
                             ));
                         }
                     }
