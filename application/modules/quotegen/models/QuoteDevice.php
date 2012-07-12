@@ -573,7 +573,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
              */
             $margin = (($price - $cost) / $cost) * 100;
         }
-        return $margin;
+        return round($margin, 2);
     }
 
     /**
@@ -626,7 +626,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @return number The sub total with a residual
      */
-    public function calculateSubTotalWithResidual ()
+    public function calculateSubtotalWithResidual ()
     {
         $subTotal = 0;
         $packagePrice = (float)$this->getPackagePrice();
