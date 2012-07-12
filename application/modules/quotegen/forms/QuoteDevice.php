@@ -102,6 +102,8 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
                     ) 
             ));
             
+            $lessThanElementValidator = new My_Validate_LessThanFormValue($this->getElement('packagePrice'));
+            
             $this->addElement('text', 'residual', array (
                     'label' => 'Residual:', 
                     'class' => 'span2', 
@@ -113,7 +115,8 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
                                             'min' => 0, 
                                             'max' => 250000 
                                     ) 
-                            ) 
+                            ), 
+                            $lessThanElementValidator 
                     ) 
             ));
             

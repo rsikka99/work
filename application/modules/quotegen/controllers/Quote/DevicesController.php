@@ -395,6 +395,16 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             }
                         }
                         
+                        $residualElement = $form->getElement("residual");
+                        $packagePriceElement = $form->getElement("packagePrice");
+                        $packagePriceElement->setValue($quoteDevice->getPackagePrice());
+                        
+                        // Throw an exception if invalid so that we may roll back our changes
+                        if (! $residualElement->isValid($formValues ["residual"]))
+                        {
+                            throw new Exception("Residual is no longer valid!");
+                        }
+                        
                         Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
                         
                         if (isset($values ['add']))
@@ -429,6 +439,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                     {
                         $form->populate($quoteDevice->toArray());
                         $form->populate($values);
+                        $form->buildBootstrapErrorDecorators();
                         $this->_helper->flashMessenger(array (
                                 'danger' => 'Please correct the errors below' 
                         ));
@@ -436,6 +447,8 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                 }
                 catch ( Exception $e )
                 {
+                    $form->populate($quoteDevice->toArray());
+                    $form->buildBootstrapErrorDecorators();
                     $this->_helper->flashMessenger(array (
                             'danger' => 'Please correct the errors below' 
                     ));
