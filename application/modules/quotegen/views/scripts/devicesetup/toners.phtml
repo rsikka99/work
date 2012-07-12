@@ -57,7 +57,6 @@ $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . 
 						<option value="assigned" <?php if ($this->view_filter == "assigned") { echo "selected"; } ?>>Assigned</option>
 						<option value="unassigned" <?php if ($this->view_filter == "unassigned") { echo "selected"; } ?>>Unassigned</option>
 					</select>
-					<input type="submit" name="btnView" id="btnView" value="Go" class="btn" />
 				</p>
 				<p id="search_filter">
 					<label for="criteria_filter" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">Filter:</label>
@@ -74,9 +73,9 @@ $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . 
 						<?php } ?>
 						</select>
 					</span>
-					<input type="submit" name="btnSearch" id="btnSearch" value="Search" class="btn" />
-					<input type="submit" name="btnClearSearch" id="btnClearSearch" value="Clear" class="btn" />
 				</p>
+				<input type="submit" name="btnSearch" id="btnSearch" value="Search" class="btn" />
+				<input type="submit" name="btnClearSearch" id="btnClearSearch" value="Clear" class="btn" />
 			</div>
 			
 			<div id="results">
