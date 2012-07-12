@@ -582,24 +582,49 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     }
 
     /**
+     * Calculates the total cost of the quote
+     *
+     * @return number The total cost.
+     */
+    public function calculateTotalCost ()
+    {
+        $totalCost = 0;
+        
+        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        {
+            if ($quoteDevice->getQuantity() > 0)
+            {
+                $totalCost += $quoteDevice->calculatePackageCost() * $quoteDevice->getQuantity();
+            }
+        }
+        return $totalCost;
+    }
+
+    /**
      * Calculates the average margin across all devices
      *
      * @return number The average margin
      */
-    public function calculateAverageMargin ()
+    public function calculateTotalMargin ()
     {
-        $averageMargin = 0;
-        $deviceCount = $this->countDevices();
+        $cost = $this->calculateTotalCost();
+        $price = $this->calculateQuoteSubtotal();
+        $margin = 0;
         
-        if ($deviceCount > 0)
+        if ($price > $cost)
         {
-            /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-            foreach ( $this->getQuoteDevices() as $quoteDevice )
-            {
-                $averageMargin += $quoteDevice->getMargin();
-            }
-            $averageMargin = $averageMargin / $deviceCount;
+            // Price is greater than cost. Positive Margin time
+            // Margin % = (price - cost) / price * 100
+            $margin = (($price - $cost) / $price) * 100;
         }
-        return $averageMargin;
+        else if ($price < $cost)
+        {
+            // Price is less than cost. Negative margin time.
+            // Margin % = (price - cost) / cost * 100
+            $margin = (($price - $cost) / $cost) * 100;
+        }
+        
+        return $margin;
     }
 }
