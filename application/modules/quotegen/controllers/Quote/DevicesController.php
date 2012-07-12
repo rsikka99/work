@@ -40,12 +40,15 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                 }
                 else
                 {
-                    $newDeviceConfigurationId = $this->cloneDeviceConfiguration($deviceConfigurationId);
-                    
-                    $this->_helper->redirector('edit-quote-device', null, null, array (
-                            'id' => $newDeviceConfigurationId, 
-                            'quoteId' => $this->_quoteId 
+                    $this->_helper->flashMessenger(array (
+                            'info' => 'Sorry. This operation is not yet supported! For now you can only create new configurations.'
                     ));
+//                     $newDeviceConfigurationId = $this->cloneDeviceConfiguration($deviceConfigurationId);
+                    
+//                     $this->_helper->redirector('edit-quote-device', null, null, array (
+//                             'id' => $newDeviceConfigurationId, 
+//                             'quoteId' => $this->_quoteId 
+//                     ));
                 }
             }
             else
