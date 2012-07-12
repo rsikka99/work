@@ -33,7 +33,7 @@ $quoteDevice = $set->quoteDevice;
 
 ?>
         <tr class="deviceRow">
-            <th><h4><?php echo $quoteDevice->getName(); ?><br><small><?php echo $quoteDevice->getSku(); ?></small></h4></th>                
+            <th><h5><?php echo $quoteDevice->getName(); ?><br><small><?php echo $quoteDevice->getSku(); ?></small></h5></th>                
             <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculatePackageCost()); ?></td>
             <td>
                 <div class="control-group <?php echo ($set->margin->hasErrors()) ? 'error' : ''; ?>">

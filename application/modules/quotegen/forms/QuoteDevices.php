@@ -59,7 +59,8 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
                                     'validator' => 'Between', 
                                     'options' => array (
                                             'min' => 0, 
-                                            'max' => 250000 
+                                            'max' => 250000,
+                                            'inclusive' => false
                                     ) 
                             ) 
                     ) 
