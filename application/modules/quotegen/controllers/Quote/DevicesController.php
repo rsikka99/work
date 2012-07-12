@@ -53,21 +53,58 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                 if ($form->isValid($values))
                 {
                     $quoteDeviceMapper = Quotegen_Model_Mapper_QuoteDevice::getInstance();
-                    foreach ($form->getElementSets() as $set)
+                    foreach ( $form->getElementSets() as $set )
                     {
+                        // We have a flag to see if we need to save the device
+                        $deviceHasChanges = false;
                         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
                         $quoteDevice = $set->quoteDevice;
                         $quoteDeviceId = $quoteDevice->getId();
-                        $quoteDevice->setMargin($form->getValue("margin{$quoteDeviceId}"));
-                        $quoteDevice->setQuantity($form->getValue("quantity{$quoteDeviceId}"));
-                        $quoteDevice->setPackagePrice($form->getValue("packagePrice{$quoteDeviceId}"));
+                        $quantity = (int)$form->getValue("quantity{$quoteDeviceId}");
                         
-                        $quoteDeviceMapper->save($quoteDevice);
+                        // Might as well only save the quantity if it's changed
+                        if ($quantity !== (int)$quoteDevice->getQuantity())
+                        {
+                            $quoteDevice->setQuantity($quantity);
+                            $deviceHasChanges = true;
+                        }
+                        
+                        // We need to figure out if we've changed the margin or price.
+                        $margin = (float)$form->getValue("margin{$quoteDeviceId}");
+                        $packagePrice = (float)$form->getValue("packagePrice{$quoteDeviceId}");
+                        
+                        /*
+                         * Here we recalculate. If the user has changes both the margin and package price, we'll take
+                         * margin as the preferred item to keep changes for.
+                         */
+                        if ($margin !== (float)$quoteDevice->getMargin())
+                        {
+                            // Recalculate the package price
+                            $quoteDevice->setMargin($margin);
+                            $packagePrice = $quoteDevice->calculatePackagePrice();
+                            $quoteDevice->setPackagePrice($packagePrice);
+                            $deviceHasChanges = true;
+                        }
+                        else if ($packagePrice !== (float)$quoteDevice->getPackagePrice())
+                        {
+                            // Recalculate the margin
+                            $quoteDevice->setPackagePrice($packagePrice);
+                            $margin = $quoteDevice->calculateMargin();
+                            $quoteDevice->setMargin($margin);
+                            $deviceHasChanges = true;
+                        }
+                        
+                        // Only save if we have changes
+                        if ($deviceHasChanges)
+                        {
+                            $quoteDeviceMapper->save($quoteDevice);
+                        }
                     }
                     
                     $this->_helper->flashMessenger(array (
                             'success' => 'Changes were saved successfully.' 
                     ));
+                    $form = new Quotegen_Form_QuoteDevices($this->_quote);
                 }
                 else
                 {

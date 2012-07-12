@@ -555,6 +555,28 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
+     * Reverse engineers the margin based on the price and cost of the package.
+     *
+     * @return number The margin
+     */
+    public function calculateMargin ()
+    {
+        $margin = 0;
+        $cost = $this->calculatePackageCost();
+        $price = $this->getPackagePrice();
+        
+        // Only calculate if we have real numbers to return
+        if ($cost > 0 && $price > 0)
+        {
+            /*
+             * Margin % = (price - cost) / cost * 100
+             */
+            $margin = (($price - $cost) / $cost) * 100;
+        }
+        return $margin;
+    }
+
+    /**
      * Calculates the cost of a single device and all of its options with margin
      *
      * @return number The price
@@ -562,15 +584,16 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     public function calculatePackagePrice ()
     {
         // Get the device price
-        $price = $this->calculatePackageCost();
+        $price = (float)$this->calculatePackageCost();
         
         // Tack on the margin
         if ($price > 0)
         {
-            $margin = $this->getMargin();
+            $margin = (float)$this->getMargin();
             if ($margin > 0 && $margin < 100)
             {
-                $margin = 1 - (1 / $margin);
+                
+                $margin = 1 - ($margin / 100);
                 $price = round($price / $margin, 2);
             }
         }
@@ -634,6 +657,6 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             $subTotal = $leasePrice * $quantity;
         }
         
-        return round($subTotal, 2);
+        return round($subTotal, 0);
     }
 }

@@ -59,27 +59,12 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
                                     'validator' => 'Between', 
                                     'options' => array (
                                             'min' => 0, 
-                                            'max' => 10000 
+                                            'max' => 25000 
                                     ) 
                             ) 
                     ) 
             ));
             
-            $elementSet->leasePrice = $this->createElement('text', "leasePrice-{$quoteDeviceId}", array (
-                    'label' => 'Lease Price:',
-                    'class' => 'input-mini',
-                    'value' => $quoteDevice->calculateLeasePrice(),
-                    'validators' => array (
-                            'Float',
-                            array (
-                                    'validator' => 'Between',
-                                    'options' => array (
-                                            'min' => 0,
-                                            'max' => 10000
-                                    )
-                            )
-                    )
-            ));
             
             $elementSet->margin = $this->createElement('text', "margin-{$quoteDeviceId}", array (
                     'label' => 'Margin:', 
@@ -90,8 +75,9 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
                             array (
                                     'validator' => 'Between', 
                                     'options' => array (
-                                            'min' => 0, 
-                                            'max' => 99 
+                                            'min' => -100, 
+                                            'max' => 100,
+                                            'inclusive' => false
                                     ) 
                             ) 
                     ) 
