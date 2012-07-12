@@ -490,30 +490,18 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
     public function optionsAction ()
     {
         $where = null;
-        $id = $this->_getParam('id', false);
-        $this->view->id = $id;
-    
-        // If they haven't provided an id, send them back to the view all masterDevice page
-        if (! $id)
-        {
-            $this->_helper->flashMessenger(array (
-                    'warning' => 'Please select a masterDevice to edit first.'
-            ));
-            $this->_helper->redirector('index');
-        }
+        $optionId = null;
+        $masterDeviceId = $this->_getParam('id', false);
+        $this->view->id = $masterDeviceId;
         
-        // Get the device
-        $mapper = Quotegen_Model_Mapper_Device::getInstance();
-        $device = $mapper->find($id);
-        // If the device doesn't exist, send them back t the view all devices page
-        if (! $device)
+        // If they haven't provided an id, send them back to the view all masterDevice page
+        if (! $masterDeviceId)
         {
             $this->_helper->flashMessenger(array (
-                    'danger' => 'There was an error selecting the device to edit.' 
+                    'warning' => 'Please select a masterDevice to edit first.' 
             ));
             $this->_helper->redirector('index');
         }
-        $this->view->device = $device;
         
         // Make sure we are posting data
         $request = $this->getRequest();
@@ -521,17 +509,90 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         {
             // Get the post data
             $values = $request->getPost();
-    
+            
             // If we cancelled we don't need to validate anything
             if (! isset($values ['cancel']))
             {
                 try
                 {
+                    // Get Toner Id
+                    $optionId = $values ['optionid'];
+	                $deviceOptionMapper = new Quotegen_Model_Mapper_DeviceOption();
+
+                    // Save if tonerid and device id
+                    if ($optionId && $masterDeviceId)
+                    {
+	                    // Assign Option
+	                    if (isset($values ['btnAssign']))
+	                    {
+	                        // Save device option
+	                        $deviceOption = new Quotegen_Model_DeviceOption();
+	                        $deviceOption->setMasterDeviceId($masterDeviceId);
+	                        $deviceOption->setOptionId($optionId);
+	                        $deviceOptionMapper->insert($deviceOption);
+	                        
+	                        $this->_helper->flashMessenger(array (
+	                                'success' => "The option was assigned successfully." 
+	                        ));
+	                    }
+	                    else if (isset($values ['btnUnassign']))
+	                    {
+	                        // Delete device option
+	                        $deviceOption = new Quotegen_Model_DeviceOption();
+	                        $deviceOption->setMasterDeviceId($masterDeviceId);
+	                        $deviceOption->setOptionId($optionId);
+	                        $deviceOptionMapper->delete($deviceOption);
+	                        
+	                        $this->_helper->flashMessenger(array (
+	                                'success' => "The option was unassigned successfully." 
+	                        ));
+	                    }
+	                    else if (isset($values ['btnSearch']))
+	                    {
+	                        // Get device options list
+	                        $device = $deviceOptionMapper->find($masterDeviceId);
+	                        $assignedOptions = array ();
+	                        foreach ( $device->getOptions() as $option )
+	                        {
+	                            $assignedOptions [] = $option->getId();
+	                        }
+	                        
+	                        // Filter view
+	                        $view = $values ['cboView'];
+	                        $this->view->view_filter = $view;
+	                        
+	                        if ($view == "assigned")
+	                        {
+	                            $where = array (
+	                                    'optionId IN ( ? )' => $assignedOptions 
+	                            );
+	                        }
+	                        else if ($view == "unassigned")
+	                        {
+	                            $where = array (
+	                                    'optionId NOT IN ( ? )' => $assignedOptions 
+	                            );
+	                        }
+	                    }
+                    }
+                    else 
+                    {
+                        $this->_helper->flashMessenger(array (
+                                'error' => "An error has occurred." 
+                        ));   
+                    }
                 }
+		        catch ( Exception $e )
+		        {
+		            echo $e; die;
+		            $this->_helper->flashMessenger(array (
+		                    'error' => "Could not delete that option." 
+		            ));
+		        }
                 catch ( InvalidArgumentException $e )
                 {
                     $this->_helper->flashMessenger(array (
-                            'danger' => $e->getMessage()
+                            'danger' => $e->getMessage() 
                     ));
                 }
             }
@@ -541,8 +602,30 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 $this->_helper->redirector('index');
             }
         }
+        
+        // Get the devivce and assigned options
+        $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
+        $assignedOptions = array ();
+        foreach ( $device->getOptions() as $option )
+        {
+            $assignedOptions [] = $option->getId();
+        }
+        $this->view->device = $device;
+        $this->view->assignedOptions = $assignedOptions;
+        
+        // Display filterd list of options
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Quotegen_Model_Mapper_Option::getInstance(), $where));
+        
+        // Set the current page we're on
+        $paginator->setCurrentPageNumber($this->_getParam('page', 1));
+        
+        // Set how many items to show
+        $paginator->setItemCountPerPage(15);
+        
+        // Pass the view the paginator
+        $this->view->paginator = $paginator;
     }
-    
+
     /**
      * Edit device configurations
      */
@@ -601,5 +684,4 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             }
         }
     }
-
 }

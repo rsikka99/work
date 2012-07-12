@@ -13,7 +13,7 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
     /*
      * Define the primary key of the model association
     */
-    public $col_masterDeiviceId = 'masterDeviceId';
+    public $col_masterDeviceId = 'masterDeviceId';
     public $col_optionId = 'optionId';
 
     /**

@@ -16,21 +16,50 @@ $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . 
     	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'configurations', 'id' => $id ), null, true ); ?>">Configurations</a></li>
     </ul>
     <div class="tab-content">
-    	<?php if (count($device->getOptions()) > 0) : ?>
-            <table class="table table-bordered table-striped table-condensed">
-                <tr>
-                    <th>Option</th>
-					<th style="width: 120px; text-align: center;">Action</th>
-                </tr>
-                <?php foreach ($device->getOptions() as $option) : /* @var $option Quotegen_Model_Option */ ?>
-                <tr>
-                    <td><?php echo $option->getName(); ?></td>
-                    <td style="text-align: center;"><a href="<?php echo $this->url(array('action' => 'deleteoption', 'optionId' => $option->getId()));?>" class="btn btn-mini btn-danger"><i class="icon-trash icon-white"></i></a></td>
-                </tr>
-                <?php endforeach; ?>
-            </table>
-    	<?php else : ?>
-            <h4>There are no options currently associated with this device. Please click the add button above to associate options with this device.</h4>
-    	<?php endif;?>
+		<form name="frmOptions" id="frmOptions" action="" method="post">
+			<input type="hidden" name="optionid" id="optionid" value="" />
+			
+			<div id="filter" class="well">
+				<p id="view_filter">
+					<label for="cboView" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">View:</label>
+					<select name="cboView" id="cboView" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
+						<option value="all" <?php if ($this->view_filter == "all") { echo "selected"; } ?>>All</option>
+						<option value="assigned" <?php if ($this->view_filter == "assigned") { echo "selected"; } ?>>Assigned</option>
+						<option value="unassigned" <?php if ($this->view_filter == "unassigned") { echo "selected"; } ?>>Unassigned</option>
+					</select>
+				</p>
+				<input type="submit" name="btnSearch" id="btnSearch" value="Search" class="btn" />
+				<input type="submit" name="btnClearSearch" id="btnClearSearch" value="Clear" class="btn" />
+			</div>
+			
+			<?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
+	            <table class="table table-bordered table-striped table-condensed">
+	                <tr>
+	                    <th>Option</th>
+						<th style="width: 120px; text-align: center;">Action</th>
+	                </tr>
+					<?php foreach ($this->paginator->getCurrentItems() as $option) : /* @var $option Quotegen_Model_Option */ ?>
+	                <tr>
+	                    <td><?php echo $option->getName(); ?></td>
+	                    <td style="text-align: center;">
+							<div class="" style="text-align: center;">
+								<?php if ( in_array($option->getId(), $this->assignedOptions ) ) { ?>
+									<button type="submit" name="btnUnassign" id="btnUnassign" class="btn btn-danger btn-mini" onclick="javascript: $('#optionid').val(<?php echo $option->getId(); ?>);"><i class="icon-minus-sign icon-white"></i> Unassign</button>
+								<?php } else { ?>
+									<button type="submit" name="btnAssign" id="btnAssign" class="btn btn-success btn-mini" onclick="javascript: $('#optionid').val(<?php echo $option->getId(); ?>);"><i class="icon-plus-sign icon-white"></i> Assign</button>
+								<?php } ?>
+							</div>
+						</td>
+	                </tr>
+	                <?php endforeach; ?>
+	            </table>
+				<?php echo $this->paginationControl($this->paginator); ?>
+	    	<?php else : ?>
+	            <h4>There are no options currently associated with this device. Please click the add button above to associate options with this device.</h4>
+	    	<?php endif; ?>
+			<div style="text-align: center;">
+				<a class="btn" title="Cancel" href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'index' ), null, true ); ?>">Cancel</a>
+			</div>
+		</form>
     </div>
 </div>
