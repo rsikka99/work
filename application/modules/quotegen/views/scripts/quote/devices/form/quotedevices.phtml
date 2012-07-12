@@ -99,7 +99,7 @@ $quoteDevice = $set->quoteDevice;
     
 <?php endforeach; ?>
 </table>
-
+<?php echo $form->getElement('crsf_check'); ?>
 <div class="form-actions">
     <input type="submit" name="back" value="Go Back" class="btn"/>
     <input type="submit" name="save" value="Save" class="btn btn-success"/>

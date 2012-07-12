@@ -42,6 +42,13 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
          */
         $this->setAttrib('class', 'form-horizontal form-center-actions');
         
+        $this->addElement('hash', 'crsf_check', array (
+                'ignore' => true, 
+                'ErrorMessages' => array (
+                        'Please press a save button to save this form. Waiting too long or refreshing the page will cause this message to appear.' 
+                ) 
+        ));
+        
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
         foreach ( $this->_quote->getQuoteDevices() as $quoteDevice )
         {
@@ -59,8 +66,8 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
                                     'validator' => 'Between', 
                                     'options' => array (
                                             'min' => 0, 
-                                            'max' => 250000,
-                                            'inclusive' => false
+                                            'max' => 250000, 
+                                            'inclusive' => false 
                                     ) 
                             ) 
                     ) 
@@ -68,20 +75,20 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
             
             $lessThanElementValidator = new My_Validate_LessThanFormValue($elementSet->packagePrice);
             $elementSet->residual = $this->createElement('text', "residual-{$quoteDeviceId}", array (
-                    'label' => 'Residual:',
-                    'class' => 'input-mini',
-                    'value' => $quoteDevice->getResidual(),
+                    'label' => 'Residual:', 
+                    'class' => 'input-mini', 
+                    'value' => $quoteDevice->getResidual(), 
                     'validators' => array (
-                            'Float',
+                            'Float', 
                             array (
-                                    'validator' => 'Between',
+                                    'validator' => 'Between', 
                                     'options' => array (
-                                            'min' => 0,
-                                            'max' => 250000
-                                    )
-                            ),
-                            $lessThanElementValidator
-                    )
+                                            'min' => 0, 
+                                            'max' => 250000 
+                                    ) 
+                            ), 
+                            $lessThanElementValidator 
+                    ) 
             ));
             
             $elementSet->margin = $this->createElement('text', "margin-{$quoteDeviceId}", array (
@@ -116,7 +123,6 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
                             ) 
                     ) 
             ));
-            
             
             // Add all our elements
             $this->addElement($elementSet->packagePrice);
