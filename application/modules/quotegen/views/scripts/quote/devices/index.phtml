@@ -11,17 +11,17 @@ $this->headScript()->appendScript("$('i').popover();");
             <div class="pull-right">
                 <a href="<?php echo $this->url(array('action' => 'sync-all-device-configurations')); ?>" title="Sync all configurations with current information." class="btn btn-info "><i class="icon-refresh"></i> Sync All Devices</a>
             </div>
-            <form class="form-inline" method="POST">
+            <form class="" method="POST">
                 <div class="control-group">
                     <div class="controls">
-                    
-                        <select name="deviceConfigurationId">
-                            <option value="-1">New Configuration</option>
-                            <option value="1">Favorite 1</option>
-                            <option value="2">Favorite 2</option>
-                            <option value="3">Favorite 3</option>
-                        </select>
-                        <button type="submit" name="submit" class="btn btn-success">Add</button>    
+                        <div class="input-append">
+                            <select name="deviceConfigurationId">
+                                <option value="-1">New Configuration</option>
+                                <option value="1">Favorite 1</option>
+                                <option value="2">Favorite 2</option>
+                                <option value="3">Favorite 3</option>
+                            </select><input type="submit" name="submit" class="btn btn-success" value="Add" />    
+                        </div>
                     </div>
                 </div>
             </form>
