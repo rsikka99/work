@@ -37,8 +37,8 @@ class Quotegen_CategoryController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        $mapper = new Quotegen_Model_Mapper_Category();
-        $category = $mapper->find($categoryId);
+        // Get a Quotegen_Model_Category object from the id that was passed.
+        $category = Quotegen_Model_Mapper_Category::getInstance()->find($categoryId);
         
         if (! $category)
         {
@@ -50,28 +50,40 @@ class Quotegen_CategoryController extends Zend_Controller_Action
         
         $message = "Are you sure you want to delete {$category->getName()}?";
         $form = new Application_Form_Delete($message);
-        
         $request = $this->getRequest();
+        
         if ($request->isPost())
         {
             $values = $request->getPost();
             if (! isset($values ['cancel']))
             {
-                // delete quote from database
-                if ($form->isValid($values))
+                try
                 {
-                    Quotegen_Model_Mapper_OptionCategory::getInstance()->deleteByCategoryId($categoryId);
-                    $mapper->delete($category);
-                    
-                    // TODO: Show deletion of options relations
+                    if ($form->isValid($values))
+                    {
+                        // Delete the entry from the lookup table by the category id.
+                        Quotegen_Model_Mapper_OptionCategory::getInstance()->deleteByCategoryId($categoryId);
+                        // Delete the entry from the category table.
+                        Quotegen_Model_Mapper_Category::getInstance()->delete($category);
+                        
+                        $this->_helper->flashMessenger(array (
+                                'success' => "Category  {$this->view->escape ( $category->getName() )} was deleted successfully." 
+                        ));
+                        
+                        // Redirect the user back to index action of this controller.
+                        $this->_helper->redirector('index');
+                    }
+                }
+                catch ( Exception $e )
+                {
                     $this->_helper->flashMessenger(array (
-                            'success' => "Category  {$this->view->escape ( $category->getName() )} was deleted successfully." 
+                            'danger' => 'There was an error deleting this category.  Please try again.' 
                     ));
-                    $this->_helper->redirector('index');
                 }
             }
-            else // go back
+            else
             {
+                // Redirect the user back to index action of this controller.
                 $this->_helper->redirector('index');
             }
         }
@@ -80,15 +92,12 @@ class Quotegen_CategoryController extends Zend_Controller_Action
 
     public function createAction ()
     {
-        // Show the form 
         $form = new Quotegen_Form_Category();
-        
-        // If the form is on post insert data 
         $request = $this->getRequest();
         
         if ($request->isPost())
         {
-            // Get values from the form
+            // When user is posting data, get the values that have been posted.
             $values = $request->getPost();
             if (! isset($values ['cancel']))
             {
@@ -96,58 +105,47 @@ class Quotegen_CategoryController extends Zend_Controller_Action
                 {
                     if ($form->isValid($values))
                     {
-                        // Persist data to database
-                        $categoryMapper = new Quotegen_Model_Mapper_Category();
+                        // Attempt to save the category to the database.
                         $category = new Quotegen_Model_Category();
                         $category->populate($values);
-                        
-                        $categoryMapper->insert($category);
+                        Quotegen_Model_Mapper_Category::getInstance()->insert($category);
                         
                         // Redirect client back to index
                         $this->_helper->redirector('index');
-                    }
-                    else // Values in form data aren't valid. 
-                    {
-                        throw new InvalidArgumentException('Please correct the fields below');
                     }
                 }
                 catch ( Exception $e )
                 {
                     $this->_helper->flashMessenger(array (
-                            'danger' => $e->getMessage() 
+                            'danger' => 'Please correct the errors below.' 
                     ));
                 }
             }
-            else // Cancel was hit: redirect user
+            else // If user has selected cancel send user back to the index pages of this Controller
             {
                 $this->_helper->redirector('index');
             }
         }
-        
         $this->view->form = $form;
     }
 
     public function editAction ()
     {
-        $categorySettingId = $this->_getParam('id', false);
+        $categoryId = $this->_getParam('id', false);
         
-        // If not idea is set then back to index page
-        if (! $categorySettingId)
+        if (! $categoryId)
         {
             $this->_helper->flashMessenger(array (
-                    'warning' => 'Please select a category first' 
+                    'warning' => 'Please select a category first.' 
             ));
-            // Redirect
             $this->_helper->redirector('index');
         }
         
         // Find client and pass form object
         $form = new Quotegen_Form_Category();
-        $mapper = new Quotegen_Model_Mapper_Category();
-        $category = $mapper->find($categorySettingId);
-        
+        $category = Quotegen_Model_Mapper_Category::getInstance()->find($categoryId);
         $form->populate($category->toArray());
-        // update record if post
+        
         $request = $this->getRequest();
         if ($request->isPost())
         {
@@ -160,37 +158,30 @@ class Quotegen_CategoryController extends Zend_Controller_Action
                     if ($form->isValid($values))
                     {
                         // Update quotesetting and message to comfirm
-                        $mapper = new Quotegen_Model_Mapper_Category();
-                        $category = new Quotegen_Model_Category();
                         $category->populate($values);
-                        $category->setId($categorySettingId);
+                        $category->setId($categoryId);
+                        Quotegen_Model_Mapper_Category::getInstance()->save($category, $categoryId);
                         
-                        $mapper->save($category, $categorySettingId);
                         $this->_helper->flashMessenger(array (
-                                'success' => "Category setting was updated sucessfully." 
+                                'success' => "Category was updated sucessfully." 
                         ));
                         
                         $this->_helper->redirector('index');
                     }
-                    else
-                    {
-                        throw new InvalidArgumentException("Please correct the errors below");
-                    }
                 }
-                catch ( InvalidArgumentException $e )
+                catch (Exception $e)
                 {
                     $this->_helper->flashMessenger(array (
-                            'danger' => $e->getMessage() 
+                            'danger' => 'Please correct the errors below' 
                     ));
                 }
             }
-            else // Client hit cancel redicect
+            else
             {
-                // User has cancelled. We could do a redirect here if we wanted.
+                // User has cancelled - redirect
                 $this->_helper->redirector('index');
             }
         }
-        
         $this->view->form = $form;
     }
 
