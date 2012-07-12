@@ -32,7 +32,7 @@ $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . 
 					<label for="criteria_filter" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">Filter:</label>
 					<select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
 						<option value="sku" <?php if($this->search_filter == 'sku') { echo "selected"; } ?>>SKU</option>
-						<option value="name" <?php if($this->search_filter == 'name') { echo "selected"; } ?>>Name</option>
+						<option value="name" <?php if($this->search_filter == 'name') { echo "selected"; } ?>>Option</option>
 					</select>
 					<label for="txtCriteria" class="details_label" style="display: inline; padding: 0px 10px 0px 10px;">for</label>
 					<input type="text" name="txtCriteria" style="width: 152px; margin: 0px 10px 0px 0px;" id="txtCriteria" <?php if($this->search_criteria != '') { echo 'value="' . $this->search_criteria . '"'; } ?> />
