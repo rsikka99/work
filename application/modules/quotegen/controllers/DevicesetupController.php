@@ -482,6 +482,65 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
     }
 
     /**
+     * Edit device options
+     */
+    public function optionsAction ()
+    {
+        $where = null;
+        $id = $this->_getParam('id', false);
+        $this->view->id = $id;
+    
+        // If they haven't provided an id, send them back to the view all masterDevice page
+        if (! $id)
+        {
+            $this->_helper->flashMessenger(array (
+                    'warning' => 'Please select a masterDevice to edit first.'
+            ));
+            $this->_helper->redirector('index');
+        }
+    
+        // Get the masterDevice
+        $mapper = new Proposalgen_Model_Mapper_MasterDevice();
+        $masterDevice = $mapper->find($id);
+    
+        // If the masterDevice doesn't exist, send them back t the view all masterDevices page
+        if (! $masterDevice)
+        {
+            $this->_helper->flashMessenger(array (
+                    'danger' => 'There was an error selecting the masterDevice to edit.'
+            ));
+            $this->_helper->redirector('index');
+        }
+    
+        // Make sure we are posting data
+        $request = $this->getRequest();
+        if ($request->isPost())
+        {
+            // Get the post data
+            $values = $request->getPost();
+    
+            // If we cancelled we don't need to validate anything
+            if (! isset($values ['cancel']))
+            {
+                try
+                {
+                }
+                catch ( InvalidArgumentException $e )
+                {
+                    $this->_helper->flashMessenger(array (
+                            'danger' => $e->getMessage()
+                    ));
+                }
+            }
+            else
+            {
+                // User has cancelled. We could do a redirect here if we wanted.
+                $this->_helper->redirector('index');
+            }
+        }
+    }
+    
+    /**
      * Edit device configurations
      */
     public function configurationsAction ()
@@ -539,4 +598,5 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             }
         }
     }
+
 }

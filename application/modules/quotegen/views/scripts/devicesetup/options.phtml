@@ -12,10 +12,10 @@ $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . 
     <ul class="nav nav-tabs">
     	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'edit', 'id' => $id ), null, true ); ?>">Details</a></li>
     	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'toners', 'id' => $id ), null, true ); ?>">Toners</a></li>
-    	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'options', 'id' => $id ), null, true ); ?>">Options</a></li>
-    	<li class="active"><a href="#tab4" data-toggle="tab">Configurations</a></li>
+    	<li class="active"><a href="#tab3" data-toggle="tab">Options</a></li>
+    	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'configurations', 'id' => $id ), null, true ); ?>">Configurations</a></li>
     </ul>
     <div class="tab-content">
-    	<h3>Configurations</h3>
+    	<h3>Options</h3>
     </div>
 </div>
