@@ -715,12 +715,12 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
 
     /**
      * Gets the quote for this device
-     * 
+     *
      * @return Quotegen_Model_Quote The quote
      */
     public function getQuote ()
     {
-        if (!isset($this->_quote))
+        if (! isset($this->_quote))
         {
             $this->_quote = Quotegen_Model_Mapper_Quote::getInstance()->find($this->getQuoteId());
         }
@@ -729,7 +729,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
 
     /**
      * Sets the quote for this device
-     * 
+     *
      * @param Quotegen_Model_Quote $_quote
      *            The quote
      */

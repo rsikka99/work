@@ -26,10 +26,8 @@ class Quotegen_ClientController extends Zend_Controller_Action
         // Pass the view the paginator
         $this->view->paginator = $paginator;
     }
-
-    /**
-     * Deletes a client
-     */
+    
+    // Deletes a single client
     public function deleteAction ()
     {
         $clientId = $this->_getParam('id', false);
@@ -42,8 +40,8 @@ class Quotegen_ClientController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        $mapper = Quotegen_Model_Mapper_Client::getInstance();
-        $client = $mapper->find($clientId);
+        $clientMapper = Quotegen_Model_Mapper_Client::getInstance();
+        $client = $clientMapper->find($clientId);
         
         if (! $client)
         {
@@ -62,17 +60,18 @@ class Quotegen_ClientController extends Zend_Controller_Action
             $values = $request->getPost();
             if (! isset($values ['cancel']))
             {
-                // delete client from database
                 if ($form->isValid($values))
                 {
-                    $mapper->delete($client);
+                    // Delete the client from the database
+                    $clientMapper->delete($client);
+                    
                     $this->_helper->flashMessenger(array (
                             'success' => "Client  {$client->getName()} was deleted successfully." 
                     ));
                     $this->_helper->redirector('index');
                 }
             }
-            else // go back
+            else // User has selected cancel button, go back. 
             {
                 $this->_helper->redirector('index');
             }
@@ -80,27 +79,20 @@ class Quotegen_ClientController extends Zend_Controller_Action
         $this->view->form = $form;
     }
 
-    /**
-     * Creates a client
-     */
     public function createAction ()
     {
-        // TODO: createAction
         $request = $this->getRequest();
         $form = new Quotegen_Form_Client();
         
         if ($request->isPost())
         {
             $values = $request->getPost();
-            
             if (! isset($values ['cancel']))
             {
-                
                 try
                 {
                     if ($form->isValid($values))
                     {
-                        
                         // Save to the database
                         try
                         {
@@ -157,16 +149,13 @@ class Quotegen_ClientController extends Zend_Controller_Action
             }
             else
             {
-                // User has cancelled. We could do a redirect here if we wanted.
+                // User has cancelled - redirect
                 $this->_helper->redirector('index');
             }
         }
         $this->view->form = $form;
     }
 
-    /**
-     * Edits a client
-     */
     public function editAction ()
     {
         $clientId = $this->_getParam('id', false);
@@ -183,6 +172,7 @@ class Quotegen_ClientController extends Zend_Controller_Action
         // Get the client
         $mapper = Quotegen_Model_Mapper_Client::getInstance();
         $client = $mapper->find($clientId);
+        
         // If the client doesn't exist, send them back t the view all clients page
         if (! $client)
         {
@@ -213,8 +203,6 @@ class Quotegen_ClientController extends Zend_Controller_Action
                     // Validate the form
                     if ($form->isValid($values))
                     {
-                        $mapper = Quotegen_Model_Mapper_Client::getInstance();
-                        $client = new Quotegen_Model_Client();
                         $client->populate($values);
                         $client->setId($clientId);
                         
@@ -225,15 +213,11 @@ class Quotegen_ClientController extends Zend_Controller_Action
                                 'success' => "Client '{$client->getName()}' was updated sucessfully." 
                         ));
                     }
-                    else
-                    {
-                        throw new InvalidArgumentException("Please correct the errors below");
-                    }
                 }
-                catch ( InvalidArgumentException $e )
+                catch ( Exception $e )
                 {
                     $this->_helper->flashMessenger(array (
-                            'danger' => $e->getMessage() 
+                            'danger' => 'Please correct the errors below.' 
                     ));
                 }
             }
@@ -246,9 +230,6 @@ class Quotegen_ClientController extends Zend_Controller_Action
         $this->view->form = $form;
     }
 
-    /**
-     * Displays a client
-     */
     public function viewAction ()
     {
         $this->view->client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_getParam('id', false));
