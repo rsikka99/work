@@ -31,11 +31,27 @@ class Quotegen_Form_EditQuote extends EasyBib_Form
         ));
         
         $this->addElement('text', 'leaseTerm', array (
-                'label' => 'Lease Term:' 
+                'label' => 'Lease Term:', 
+                'required' => true, 
+                'filters' => array (
+                        'StringTrim', 
+                        'StripTags' 
+                ), 
+                'validators' => array (
+                        'Float' 
+                ) 
         ));
         
         $this->addElement('text', 'leaseRate', array (
-                'label' => 'Lease Rate:' 
+                'label' => 'Lease Rate:', 
+                'required' => true, 
+                'filters' => array (
+                        'StringTrim', 
+                        'StripTags' 
+                ), 
+                'validators' => array (
+                        'Float' 
+                ) 
         ));
         
         $pageCoverageColor = $this->createElement('text', 'pageCoverageColor', array (
