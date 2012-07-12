@@ -10,15 +10,18 @@
     <div class="span4">
         <h3>Quote Details</h3>
         <dl class="dl-horizontal">
-            <dt>Total Devices:</dt><dd>2</dd>
-            <dt>Purchase Subtotal:</dt><dd>$10,000</dd>
-            <dt>Average Margin:</dt><dd>20%</dd>
+            <dt>Total Devices:</dt><dd><?php echo number_format($quote->countDevices()); ?></dd>
+            <dt>Purchase Subtotal:</dt><dd><?php echo $this->currency($quote->calculateQuoteSubtotal()); ?></dd>
+            <dt>Average Margin:</dt><dd><?php echo number_format($quote->calculateAverageMargin(), 2); ?>%</dd>
         </dl>
     </div>
     <div class="span4">
         <h3>Lease Specific Details</h3>
         <dl class="dl-horizontal">
-            <dt>Monthly Payment:</dt><dd>$5,049.65</dd>
+            <dt>Lease Subtotal:</dt><dd><?php echo $this->currency($quote->calculateQuoteSubtotalWithResidualsApplied()); ?></dd>
+            <dt>Lease Term:</dt><dd><?php echo number_format($quote->getLeaseTerm()); ?> months</dd>
+            <dt>Total Residual:</dt><dd><?php echo $this->currency($quote->calculateTotalResidual()); ?></dd>
+            <dt>Monthly Payment:</dt><dd><?php echo $this->currency($quote->calculateQuoteLeaseSubtotal()); ?></dd>
         </dl>
     </div>
 </div>

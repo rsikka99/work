@@ -317,3 +317,9 @@ table.quoteDeviceTable tr.header-row th,
 table.quoteDeviceTable tr.header-row td {
   background-color: #CCC;
 }
+table.quoteDeviceTable tr.optionRow td {
+  border-top: 0;
+}
+table.quoteDeviceTable tr.deviceRow .control-group {
+  margin: 0;
+}

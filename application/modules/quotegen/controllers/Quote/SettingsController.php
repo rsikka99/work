@@ -28,7 +28,7 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
         $quoteSetting->applyOverride($userSetting);
         
         $form = new Quotegen_Form_EditQuote();
-        
+        $form->populate($this->_quote->toArray());
         $request = $this->getRequest();
         
         if ($request->isPost())
@@ -37,7 +37,7 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
             if (isset($values ['back']))
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index', 'quote_pricing', null, array (
+                $this->_helper->redirector('index', 'quote_devices', null, array (
                         'quoteId' => $this->_quoteId 
                 ));
             }
@@ -70,19 +70,18 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
                                 'quoteId' => $this->_quoteId 
                         ));
                     }
+                    
+                    $form->populate($this->_quote->toArray());
                 }
-                else
-                    throw new InvalidArgumentException('Please correct the error messages below');
             }
             catch ( Exception $e )
             {
-                throw new Exception('Error saving to the database', 0, $e);
                 $this->_helper->flashMessenger(array (
-                        'danger' => $e->getMessage() 
+                        'danger' => 'Error saving settings.  Please try again.'
                 ));
             }
         }
-        $form->populate($this->_quote->toArray());
+        
         $this->view->form = $form;
     }
 }

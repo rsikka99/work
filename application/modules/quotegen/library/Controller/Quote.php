@@ -30,6 +30,13 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
      * @var Zend_Session_Namespace
      */
     protected $_quoteSession;
+    
+    /**
+     * The user id of the user who is logged in
+     *
+     * @var number
+     */
+    protected $_userId;
 
     /**
      * Last initialization step, called from the constructor.
@@ -37,6 +44,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
      */
     public function init ()
     {
+        $this->_userId = Zend_Auth::getInstance()->getIdentity()->id;
         $this->_quoteSession = new Zend_Session_Namespace(Quotegen_Library_Controller_Quote::QUOTE_SESSION_NAMESPACE);
         
         // Get the quote id from the url parameters
@@ -131,6 +139,11 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         }
         
         $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
+        if ($quoteDevice->getResidual() > $quoteDevice->getPackagePrice())
+        {
+            $quoteDevice->setResidual(0);
+        }
+        
         Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
         
         return true;

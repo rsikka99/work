@@ -114,6 +114,13 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     protected $_quoteDeviceOptions;
     
+    /**
+     * The quote that this device is for
+     *
+     * @var Quotegen_Model_Quote
+     */
+    protected $_quote;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -555,6 +562,41 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
+     * Reverse engineers the margin based on the price and cost of the package.
+     *
+     * @return number The margin
+     */
+    public function calculateMargin ()
+    {
+        $margin = 0;
+        $cost = $this->calculatePackageCost();
+        $price = $this->getPackagePrice();
+        
+        // Only calculate if we have real numbers to return
+        if ($cost > 0 && $price > 0)
+        {
+            if ($price > $cost)
+            {
+                // Price is greater than cost. Positive Margin time
+                // Margin % = (price - cost) / price * 100
+                $margin = (($price - $cost) / $price) * 100;
+            }
+            else if ($price < $cost)
+            {
+                // Price is less than cost. Negative margin time.
+                // Margin % = (price - cost) / cost * 100
+                $margin = (($price - $cost) / $cost) * 100;
+            }
+            else
+            {
+                // If the prices are identical, we make 0 margin.
+                $margin = 0;
+            }
+        }
+        return round($margin, 2);
+    }
+
+    /**
      * Calculates the cost of a single device and all of its options with margin
      *
      * @return number The price
@@ -562,16 +604,28 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     public function calculatePackagePrice ()
     {
         // Get the device price
-        $price = $this->calculatePackageCost();
+        $cost = (float)$this->calculatePackageCost();
+        $price = 0;
         
         // Tack on the margin
-        if ($price > 0)
+        if ($cost > 0)
         {
-            $margin = $this->getMargin();
+            $margin = (float)$this->getMargin();
             if ($margin > 0 && $margin < 100)
             {
-                $margin = 1 - (1 / $margin);
-                $price = round($price / $margin, 2);
+                // When we have a positive margin, we apply it to the cost
+                $margin = 1 - (abs($margin) / 100);
+                $price = round($cost / $margin, 2);
+            }
+            else if ($margin < 0 && $margin > - 100)
+            {
+                // When we have a negative margin, we remove it from the cost
+                $margin = 1 - (abs($margin) / 100);
+                $price = round($cost * $margin, 2);
+            }
+            else
+            {
+                $price = $cost;
             }
         }
         
@@ -583,7 +637,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @return number The sub total
      */
-    public function calculateSubTotal ()
+    public function calculateSubtotal ()
     {
         $subTotal = 0;
         $packagePrice = (float)$this->getPackagePrice();
@@ -596,5 +650,92 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         }
         
         return $subTotal;
+    }
+
+    /**
+     * Calculates the sub total with a residual ((package price - residual) * quantity)
+     *
+     * @return number The sub total with a residual
+     */
+    public function calculateSubtotalWithResidual ()
+    {
+        $subTotal = 0;
+        $packagePrice = (float)$this->getPackagePrice();
+        $quantity = $this->getQuantity();
+        $residual = (float)$this->getResidual();
+        
+        // Make sure both the price and quantity are greater than 0
+        if ($packagePrice > 0 && $quantity > 0)
+        {
+            $subTotal = ($packagePrice - $residual) * $quantity;
+        }
+        
+        return $subTotal;
+    }
+
+    /**
+     * Calculates the lease price for the device on a monthly basis
+     *
+     * @return number The lease price for a single device
+     */
+    public function calculateLeasePrice ()
+    {
+        $leasePrice = 0;
+        $leaseRate = $this->getQuote()->getLeaseRate();
+        $packagePrice = (float)$this->getPackagePrice();
+        $residual = (float)$this->getResidual();
+        
+        if ($leaseRate > 0 && $packagePrice > 0)
+        {
+            $leasePrice = $leaseRate * ($packagePrice - $residual);
+        }
+        
+        return round($leasePrice, 2);
+    }
+
+    /**
+     * Calculates the lease sub total (leasePrice * quantity)
+     *
+     * @return number The lease sub total
+     */
+    public function calculateLeaseSubtotal ()
+    {
+        $subTotal = 0;
+        $leasePrice = (float)$this->calculateLeasePrice();
+        $quantity = $this->getQuantity();
+        
+        // Make sure both the price and quantity are greater than 0
+        if ($leasePrice > 0 && $quantity > 0)
+        {
+            $subTotal = $leasePrice * $quantity;
+        }
+        
+        return round($subTotal, 0);
+    }
+
+    /**
+     * Gets the quote for this device
+     * 
+     * @return Quotegen_Model_Quote The quote
+     */
+    public function getQuote ()
+    {
+        if (!isset($this->_quote))
+        {
+            $this->_quote = Quotegen_Model_Mapper_Quote::getInstance()->find($this->getQuoteId());
+        }
+        return $this->_quote;
+    }
+
+    /**
+     * Sets the quote for this device
+     * 
+     * @param Quotegen_Model_Quote $_quote
+     *            The quote
+     */
+    public function setQuote ($_quote)
+    {
+        $this->_quote = $_quote;
+        return $this;
     }
 }
