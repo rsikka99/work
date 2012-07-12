@@ -11,6 +11,13 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
     protected $_id;
     
     /**
+     * The quote device
+     *
+     * @var Quotegen_Model_QuoteDevice
+     */
+    protected $_quoteDevice;
+    
+    /**
      * An array of elements used to display options
      *
      * @var unknown_type
@@ -44,7 +51,7 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
         
         if ($this->_id > 0)
         {
-            $quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($this->_id);
+            $quoteDevice = $this->getQuoteDevice();
             
             $deviceName = new My_Form_Element_Paragraph('deviceName');
             $deviceName->setValue($quoteDevice->getName());
@@ -88,7 +95,7 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
                                     'validator' => 'Between', 
                                     'options' => array (
                                             'min' => 0, 
-                                            'max' => 25000, 
+                                            'max' => 250000, 
                                             'inclusive' => false 
                                     ) 
                             ) 
@@ -104,7 +111,7 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
                                     'validator' => 'Between', 
                                     'options' => array (
                                             'min' => 0, 
-                                            'max' => 25000 
+                                            'max' => 250000 
                                     ) 
                             ) 
                     ) 
@@ -244,5 +251,19 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
     public function getOptionElements ()
     {
         return $this->_optionElements;
+    }
+
+    /**
+     * Gets the quote device
+     *
+     * @return Quotegen_Model_QuoteDevice
+     */
+    public function getQuoteDevice ()
+    {
+        if (! isset($this->_quoteDevice) && isset($this->_id))
+        {
+            $this->_quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($this->_id);
+        }
+        return $this->_quoteDevice;
     }
 }

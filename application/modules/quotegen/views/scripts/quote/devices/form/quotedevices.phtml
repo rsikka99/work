@@ -11,7 +11,7 @@ $form = $this->element;
             <th colspan="4"></th>
             
             <th colspan="2" style="text-align: center;">Purchase</th>
-            <th colspan="2" style="text-align: center">Lease</th>
+            <th colspan="3" style="text-align: center">Lease</th>
             <th style="width: 30px;"></th>
         </tr>
         <tr class="header-row">
@@ -22,6 +22,7 @@ $form = $this->element;
             <th style="width: 80px;">Price</th>
             <th style="width: 70px;">Subtotal</th>
             
+            <th style="width: 60px;">Residual</th>
             <th style="width: 60px;">Price</th>
             <th style="width: 80px;">Subtotal <i class="icon-info-sign pull-right" data-placement="left" data-title="Leasing Subtotal Details" data-content="This subtotal is rounded to the nearest whole number to give nice looking numbers to the client."></i></th>
             <th style="width: 30px;"></th>
@@ -56,6 +57,13 @@ $quoteDevice = $set->quoteDevice;
                 </div>
             </td>
             <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculateSubtotal()); ?></td>
+            <td>
+                <div class="control-group <?php echo ($set->residual->hasErrors()) ? 'error' : ''; ?>">
+                    <?php if ($set->residual->hasErrors()) :?><i class="" data-title="Error" data-placement="top" data-content="<?php echo implode('<br>', $set->residual->getMessages()); ?>"><?php endif; ?>
+                    <?php echo $set->residual->renderViewHelper();?>
+                    <?php if ($set->residual->hasErrors()) :?></i><?php endif; ?>
+                </div>
+            </td>
             <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculateLeasePrice()); ?></td>
             <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculateLeaseSubtotal()); ?></td>
             <td>

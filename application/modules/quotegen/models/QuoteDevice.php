@@ -606,7 +606,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @return number The sub total
      */
-    public function calculateSubTotal ()
+    public function calculateSubtotal ()
     {
         $subTotal = 0;
         $packagePrice = (float)$this->getPackagePrice();
@@ -616,6 +616,27 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         if ($packagePrice > 0 && $quantity > 0)
         {
             $subTotal = $packagePrice * $quantity;
+        }
+        
+        return $subTotal;
+    }
+    
+    /**
+     * Calculates the sub total with a residual ((package price - residual) * quantity)
+     *
+     * @return number The sub total with a residual
+     */
+    public function calculateSubTotalWithResidual ()
+    {
+        $subTotal = 0;
+        $packagePrice = (float)$this->getPackagePrice();
+        $quantity = $this->getQuantity();
+        $residual = (float)$this->getResidual();
+        
+        // Make sure both the price and quantity are greater than 0
+        if ($packagePrice > 0 && $quantity > 0)
+        {
+            $subTotal = ($packagePrice - $residual) * $quantity;
         }
         
         return $subTotal;
@@ -631,10 +652,11 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         $leasePrice = 0;
         $leaseRate = 0.063;
         $packagePrice = (float)$this->getPackagePrice();
+        $residual = (float)$this->getResidual();
         
         if ($leaseRate > 0 && $packagePrice > 0)
         {
-            $leasePrice = $leaseRate * $packagePrice;
+            $leasePrice = $leaseRate * ($packagePrice - $residual);
         }
         
         return round($leasePrice, 2);

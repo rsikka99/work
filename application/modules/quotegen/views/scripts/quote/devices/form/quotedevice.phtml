@@ -8,6 +8,12 @@ $form = $this->element;
     <?php echo $form->getElement('name'); ?>
     <?php echo $form->getElement('sku'); ?>
     <?php echo $form->getElement('cost'); ?>
+    <div class="control-group">
+        <label for="cost" class="control-label optional">Package Cost:</label>
+        <div class="controls">
+            <input class="span2" disabled="disabled" value="<?php echo $form->getQuoteDevice()->calculatePackageCost(); ?>" />
+        </div>
+    </div>
     <?php echo $form->getElement('margin'); ?>
     <?php echo $form->getElement('packagePrice'); ?>
     <?php echo $form->getElement('residual'); ?>
