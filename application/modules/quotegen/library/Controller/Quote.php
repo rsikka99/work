@@ -33,7 +33,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
     
     /**
      * The user id of the user who is logged in
-     * 
+     *
      * @var number
      */
     protected $_userId;
@@ -139,6 +139,11 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         }
         
         $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
+        if ($quoteDevice->getResidual() > $quoteDevice->getPackagePrice())
+        {
+            $quoteDevice->setResidual(0);
+        }
+        
         Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
         
         return true;
