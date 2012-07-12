@@ -83,11 +83,15 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         // Prepare the data for the form
         $form->populate($masterDevice->toArray());
         
-        // Get SKU
+        // Populate SKU
+        $sku = null;
         $devicemapper = new Quotegen_Model_Mapper_Device();
         $device = $devicemapper->find($masterDeviceId);
-        $sku = $device->getSku();
-        $form->getElement('sku')->setValue($sku);
+        if ( $device )
+        {
+	        $sku = $device->getSku();
+        }
+	    $form->getElement('sku')->setValue($sku);
         
         // Make sure we are posting data
         $request = $this->getRequest();
@@ -690,4 +694,5 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             }
         }
     }
+
 }
