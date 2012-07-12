@@ -515,80 +515,90 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             {
                 try
                 {
-                    // Get Toner Id
+                    // Get Option Id
                     $optionId = $values ['optionid'];
-	                $deviceOptionMapper = new Quotegen_Model_Mapper_DeviceOption();
-
-                    // Save if tonerid and device id
+                    $deviceOptionMapper = new Quotegen_Model_Mapper_DeviceOption();
+                    
+                    // Save if option and device id
                     if ($optionId && $masterDeviceId)
                     {
-	                    // Assign Option
-	                    if (isset($values ['btnAssign']))
-	                    {
-	                        // Save device option
-	                        $deviceOption = new Quotegen_Model_DeviceOption();
-	                        $deviceOption->setMasterDeviceId($masterDeviceId);
-	                        $deviceOption->setOptionId($optionId);
-	                        $deviceOptionMapper->insert($deviceOption);
-	                        
-	                        $this->_helper->flashMessenger(array (
-	                                'success' => "The option was assigned successfully." 
-	                        ));
-	                    }
-	                    else if (isset($values ['btnUnassign']))
-	                    {
-	                        // Delete device option
-	                        $deviceOption = new Quotegen_Model_DeviceOption();
-	                        $deviceOption->setMasterDeviceId($masterDeviceId);
-	                        $deviceOption->setOptionId($optionId);
-	                        $deviceOptionMapper->delete($deviceOption);
-	                        
-	                        $this->_helper->flashMessenger(array (
-	                                'success' => "The option was unassigned successfully." 
-	                        ));
-	                    }
-	                    else if (isset($values ['btnSearch']))
-	                    {
-	                        // Get device options list
-	                        $device = $deviceOptionMapper->find($masterDeviceId);
-	                        $assignedOptions = array ();
-	                        foreach ( $device->getOptions() as $option )
-	                        {
-	                            $assignedOptions [] = $option->getId();
-	                        }
-	                        
-	                        // Filter view
-	                        $view = $values ['cboView'];
-	                        $this->view->view_filter = $view;
-	                        
-	                        if ($view == "assigned")
-	                        {
-	                            $where = array (
-	                                    'optionId IN ( ? )' => $assignedOptions 
-	                            );
-	                        }
-	                        else if ($view == "unassigned")
-	                        {
-	                            $where = array (
-	                                    'optionId NOT IN ( ? )' => $assignedOptions 
-	                            );
-	                        }
-	                    }
+                        // Assign Option
+                        if (isset($values ['btnAssign']))
+                        {
+                            // Save device option
+                            $deviceOption = new Quotegen_Model_DeviceOption();
+                            $deviceOption->setMasterDeviceId($masterDeviceId);
+                            $deviceOption->setOptionId($optionId);
+                            $deviceOptionMapper->insert($deviceOption);
+                            
+                            $this->_helper->flashMessenger(array (
+                                    'success' => "The option was assigned successfully." 
+                            ));
+                        }
+                        else if (isset($values ['btnUnassign']))
+                        {
+                            // Delete device option
+                            $deviceOption = new Quotegen_Model_DeviceOption();
+                            $deviceOption->setMasterDeviceId($masterDeviceId);
+                            $deviceOption->setOptionId($optionId);
+                            $deviceOptionMapper->delete($deviceOption);
+                            
+                            $this->_helper->flashMessenger(array (
+                                    'success' => "The option was unassigned successfully." 
+                            ));
+                        }
                     }
-                    else 
+                    
+                    // Filter
+                    else if (isset($values ['btnSearch']))
                     {
-                        $this->_helper->flashMessenger(array (
-                                'error' => "An error has occurred." 
-                        ));   
+                        // Get device options list
+        				$device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
+                        $assignedOptions = array ();
+                        foreach ( $device->getOptions() as $option )
+                        {
+                            $assignedOptions [] = $option->getId();
+                        }
+                        
+                        // Filter view
+                        $view = $values ['cboView'];
+                        $this->view->view_filter = $view;
+                        
+                        if ($view == "assigned")
+                        {
+                            $where = array (
+                                    'optionId IN ( ? )' => $assignedOptions 
+                            );
+                        }
+                        else if ($view == "unassigned")
+                        {
+                            $where = array (
+                                    'optionId NOT IN ( ? )' => $assignedOptions 
+                            );
+                        }
+                        
+                        // Options Search Filter
+                        if ( isset($values ['txtCriteria']) )
+                        {
+                            $criteria = $values ['txtCriteria'];
+                            $where = array_merge((array)$where, array (
+                                    'name LIKE ( ? )' => '%' . $criteria . '%' 
+                            ));
+                        }
+                    }
+                    
+                    // Clear Filter
+                    else
+                    {
+                        $this->view->view_filter = "all";
                     }
                 }
-		        catch ( Exception $e )
-		        {
-		            echo $e; die;
-		            $this->_helper->flashMessenger(array (
-		                    'error' => "Could not delete that option." 
-		            ));
-		        }
+                catch ( Exception $e )
+                {
+                    $this->_helper->flashMessenger(array (
+                            'error' => "An error has occurred." 
+                    ));
+                }
                 catch ( InvalidArgumentException $e )
                 {
                     $this->_helper->flashMessenger(array (
@@ -603,7 +613,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             }
         }
         
-        // Get the devivce and assigned options
+        // Get the device and assigned options
         $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
         $assignedOptions = array ();
         foreach ( $device->getOptions() as $option )

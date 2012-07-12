@@ -28,6 +28,10 @@ $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . 
 						<option value="unassigned" <?php if ($this->view_filter == "unassigned") { echo "selected"; } ?>>Unassigned</option>
 					</select>
 				</p>
+				<p id="search_filter">
+					<label for="criteria_filter" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">Filter Option for: </label>
+					<input type="text" name="txtCriteria" style="width: 152px; margin: 0px 10px 0px 0px;" id="txtCriteria" <?php if($this->search_criteria != '') { echo 'value="' . $this->search_criteria . '"'; } ?> />
+				</p>
 				<input type="submit" name="btnSearch" id="btnSearch" value="Search" class="btn" />
 				<input type="submit" name="btnClearSearch" id="btnClearSearch" value="Clear" class="btn" />
 			</div>
