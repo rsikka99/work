@@ -26,6 +26,7 @@ class Default_InfoController extends Zend_Controller_Action
      */
     public function termsandconditionsAction ()
     {
+        $this->view->path = APPLICATION_PATH . "/../data/info/termsandconditions.txt";
     } // end function termsandconditionsAction
 
     /**
@@ -33,6 +34,7 @@ class Default_InfoController extends Zend_Controller_Action
      */
     public function eulaAction ()
     {
+        $this->view->path = APPLICATION_PATH . "/../data/info/eula.txt";
     } // end function eulaAction
 
     
