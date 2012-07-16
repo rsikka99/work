@@ -1,0 +1,30 @@
+<?php
+	/**
+	 * This is the Terms and Conditions view script which will be responsible
+	 * for displaying the company End User License Agreement.
+	 * 
+	 * @author Kevin Jervis
+	 */
+	$auth = Zend_Auth::getInstance();
+?>
+
+<h2>Terms &amp; Conditions</h2>
+<textarea readonly="readonly" style="width: 98%; resize: none; margin-top: 10px; margin-bottom: 20px; height: 500px; padding: 5px;" title="End user license agreement">
+<?php 
+	$CurrentEULA = fopen($this->EulaPath,"r");
+	$oldchars = array("’");
+	$newchars = array("'");
+	
+	while (!feof($CurrentEULA)) {
+		$lineOfText = fgets($CurrentEULA);
+		$lineOfText = str_replace($oldchars,$newchars,$lineOfText);
+		print $lineOfText;
+	}
+	fclose($CurrentEULA);
+?>
+</textarea>
+<?php
+	if($this->message) {
+		echo "<div id=\"error\">$this->message</div>";
+	}
+?>
