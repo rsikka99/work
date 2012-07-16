@@ -34,6 +34,10 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
     public function purchaseQuoteAction ()
     {
     }
+    
+    public function leaseQuoteAction ()
+    {
+    }
 
     public function orderListAction ()
     {
