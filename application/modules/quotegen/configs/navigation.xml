@@ -32,50 +32,101 @@
                             <action>create</action>
                             <resource>quotegen_build_create</resource>
                         </create>
-                        <myquotes>
-                            <label>Build</label>
+                        <builddevice>
+                            <label>Build Devices</label>
                             <class>dropdown subdropdown</class>
                             <module>quotegen</module>
-                            <controller>build</controller>
+                            <controller>quote_devices</controller>
                             <action>index</action>
                             <visible>0</visible>
-                            <resource>quotegen_build_index</resource>
+                            <resource>quotegen_quote_devices_index</resource>
+                            <reset_params>0</reset_params>
                             <pages>
                                 <addDevice>
                                     <label>Add New Device</label>
                                     <module>quotegen</module>
-                                    <controller>build</controller>
-                                    <action>add-quote-device</action>
-                                    <resource>quotegen_build_add-quote-device</resource>
+                                    <controller>quote_devices</controller>
+                                    <action>create-new-quote-device</action>
+                                    <resource>quotegen_quote_devices_create-new-quote-device</resource>
+                                    <reset_params>0</reset_params>
                                 </addDevice>
                                 <editDevice>
                                     <label>Edit Device</label>
                                     <module>quotegen</module>
-                                    <controller>build</controller>
+                                    <controller>quote_devices</controller>
                                     <action>edit-quote-device</action>
                                     <visible>0</visible>
-                                    <resource>quotegen_build_edit-quote-device</resource>
+                                    <resource>quotegen_quote_devices_edit-quote-device</resource>
+                                    <reset_params>0</reset_params>
                                     <pages>
                                         <addOptionsToDevice>
                                             <label>Add Options</label>
                                             <module>quotegen</module>
-                                            <controller>build</controller>
+                                            <controller>quote_devices</controller>
                                             <action>add-options-to-quote-device</action>
                                             <visible>0</visible>
-                                            <resource>quotegen_build_add-options-to-quote-device</resource>
+                                            <resource>quotegen_quote_devices_add-options-to-quote-device</resource>
+                                            <reset_params>0</reset_params>
                                         </addOptionsToDevice>
                                     </pages>
                                 </editDevice>
                                 <removeDevice>
                                     <label>Remove Device</label>
                                     <module>quotegen</module>
-                                    <controller>build</controller>
+                                    <controller>quote_devices</controller>
                                     <action>delete-quote-device</action>
                                     <visible>0</visible>
-                                    <resource>quotegen_build_delete-quote-device</resource>
+                                    <resource>quotegen_quote_devices_delete-quote-device</resource>
+                                    <reset_params>0</reset_params>
                                 </removeDevice>
                             </pages>
-                        </myquotes>
+                        </builddevice>
+                        <adjustsettings>
+                            <label>Adjust Settings</label>
+                            <class>dropdown subdropdown</class>
+                            <module>quotegen</module>
+                            <controller>quote_settings</controller>
+                            <action>index</action>
+                            <visible>0</visible>
+                            <resource>quotegen_quote_settings_index</resource>
+                            <reset_params>0</reset_params>
+                        </adjustsettings>
+                        <viewAndPrintReports>
+                            <label>View Reports</label>
+                            <class>dropdown subdropdown</class>
+                            <module>quotegen</module>
+                            <controller>quote_reports</controller>
+                            <action>index</action>
+                            <visible>0</visible>
+                            <resource>quotegen_quote_reports_index</resource>
+                            <reset_params>0</reset_params>
+                            <pages>
+                                <purchaseQuote>
+                                    <label>Purchase Report</label>
+                                    <module>quotegen</module>
+                                    <controller>quote_reports</controller>
+                                    <action>purchase-quote</action>
+                                    <resource>quotegen_quote_reports_purchase-quote</resource>
+                                    <reset_params>0</reset_params>
+                                </purchaseQuote>
+                                <leaseQuote>
+                                    <label>Lease Report</label>
+                                    <module>quotegen</module>
+                                    <controller>quote_reports</controller>
+                                    <action>lease-quote</action>
+                                    <resource>quotegen_quote_reports_lease-quote</resource>
+                                    <reset_params>0</reset_params>
+                                </leaseQuote>
+                                <orderList>
+                                    <label>Order List</label>
+                                    <module>quotegen</module>
+                                    <controller>quote_reports</controller>
+                                    <action>order-list</action>
+                                    <resource>quotegen_quote_reports_order-list</resource>
+                                    <reset_params>0</reset_params>
+                                </orderList>
+                            </pages>
+                        </viewAndPrintReports>
                     </pages>
                 </quotes>
                 <settings>
