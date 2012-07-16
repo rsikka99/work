@@ -1,21 +1,21 @@
-INSERT INTO `proposalgenerator_part_types` (`id`, `name`) VALUES
+INSERT INTO `pgen_part_types` (`id`, `name`) VALUES
 (1, 'OEM'   ),
 (2, 'COMP'  );
 
-INSERT INTO `proposalgenerator_pricing_configs` (`id` , `name`, `color_toner_part_type_id`, `mono_toner_part_type_id`) VALUES
+INSERT INTO `pgen_pricing_configs` (`id` , `name`, `color_toner_part_type_id`, `mono_toner_part_type_id`) VALUES
 (1, 'USE DEFAULT', NULL, NULL),
 (2, 'OEM', 1, 1),
 (3, 'COMP', 2, 2),
 (4, 'OEM Mono, COMP Color', 2, 1),
 (5, 'OEM Color, COMP Mono', 1, 2);
     
-INSERT INTO `proposalgenerator_toner_configs` (`id`, `name`) VALUES
+INSERT INTO `pgen_toner_configs` (`id`, `name`) VALUES
 (1, 'BLACK ONLY'),
 (2, '3 COLOR - SEPARATED'),
 (3, '3 COLOR - COMBINED'),
 (4, '4 COLOR - COMBINED');
 
-INSERT INTO `proposalgenerator_toner_colors` (`id`, `name`) VALUES
+INSERT INTO `pgen_toner_colors` (`id`, `name`) VALUES
 (1,'BLACK'),
 (2,'CYAN'),
 (3,'MAGENTA'),
@@ -23,31 +23,31 @@ INSERT INTO `proposalgenerator_toner_colors` (`id`, `name`) VALUES
 (5,'3 COLOR'),
 (6,'4 COLOR');
 
-INSERT INTO `proposalgenerator_ticket_statuses` (`id`, `name`) VALUES 
+INSERT INTO `pgen_ticket_statuses` (`id`, `name`) VALUES 
 (1, 'New'      ),
 (2, 'Open'     ),
 (3, 'Closed'   ),
 (4, 'Rejected' );
 
-INSERT INTO `proposalgenerator_ticket_categories` (`id`, `name`) VALUES 
+INSERT INTO `pgen_ticket_categories` (`id`, `name`) VALUES 
 (1, 'Printfleet'   ),
 (2, 'FM Audit'     );
 
 /* Default System Report Settings */
-INSERT INTO `proposalgenerator_report_settings` (`id`,`actualPageCoverageMono`,`actualPageCoverageColor`,`serviceCostPerPage`,`adminCostPerPage`,`assessmentReportMargin`,`grossMarginReportMargin`,`monthlyLeasePayment`,`defaultPrinterCost`,`leasedBwCostPerPage`,`leasedColorCostPerPage`,`mpsBwCostPerPage`,`mpsColorCostPerPage`,`kilowattsPerHour`,`assessmentPricingConfigId`,`grossMarginPricingConfigId`) VALUES
+INSERT INTO `pgen_report_settings` (`id`,`actualPageCoverageMono`,`actualPageCoverageColor`,`serviceCostPerPage`,`adminCostPerPage`,`assessmentReportMargin`,`grossMarginReportMargin`,`monthlyLeasePayment`,`defaultPrinterCost`,`leasedBwCostPerPage`,`leasedColorCostPerPage`,`mpsBwCostPerPage`,`mpsColorCostPerPage`,`kilowattsPerHour`,`assessmentPricingConfigId`,`grossMarginPricingConfigId`) VALUES
 (1,6,24,0.0035,0.0006,20,20,250,1000,0.015,0.08,0.02,0.09,0.1,2,3);
 
 /* Default System Survey Settings */
-INSERT INTO `proposalgenerator_survey_settings` (`id`, `page_coverage_mono`, `page_coverage_color`) VALUES
+INSERT INTO `pgen_survey_settings` (`id`, `page_coverage_mono`, `page_coverage_color`) VALUES
 (1,6,24);
 
 /*
 Question Set data
 */
-INSERT INTO `proposalgenerator_question_sets` (`id`, `name`) VALUES
+INSERT INTO `pgen_question_sets` (`id`, `name`) VALUES
 (1, 'Office Depot Questions ver1');
 
-INSERT INTO `proposalgenerator_questions` (`id`, `description`) VALUES
+INSERT INTO `pgen_questions` (`id`, `description`) VALUES
 (4, 'The name of the company the report is being created for'),
 (5, 'Number of employees on site'),
 (6, 'Rate MPS Goals: Ensure print hardware matches print volume needs'),
@@ -70,7 +70,7 @@ INSERT INTO `proposalgenerator_questions` (`id`, `description`) VALUES
 (24, 'Monthly repair calls for broken printers'),
 (30, 'Company Address');
 
-INSERT INTO `proposalgenerator_questionset_questions` (`question_id`, `questionset_id`) VALUES
+INSERT INTO `pgen_questionset_questions` (`question_id`, `questionset_id`) VALUES
 (4,1),
 (5,1),
 (6,1),
@@ -94,7 +94,7 @@ INSERT INTO `proposalgenerator_questionset_questions` (`question_id`, `questions
 (30,1);
 
 
-INSERT INTO `proposalgenerator_master_devices` (`id`, `manufacturer_id`, `printer_model`, `toner_config_id`, `is_copier`, `is_scanner`, `is_fax`, `is_duplex`, `cost`, `launch_date`, `date_created`, `watts_power_normal`, `watts_power_idle`) VALUES
+INSERT INTO `pgen_master_devices` (`id`, `manufacturer_id`, `printer_model`, `toner_config_id`, `is_copier`, `is_scanner`, `is_fax`, `is_duplex`, `cost`, `launch_date`, `date_created`, `watts_power_normal`, `watts_power_idle`) VALUES
 (1, 7, 'Color Laserjet Cm3530 Mfp', 3, 1, 1, 0, 1, 2155.90, '2008-10-07 00:00:00', NOW(), 652, 18),
 (2, 7, 'Color Laserjet Cm2320nf', 3, 1, 1, 1, 0, 699.99, '2008-09-03 00:00:00', NOW(), 100, 10),
 (3, 7, 'Laserjet 2200d', 1, 0, 0, 0, 1, 99.00, '2001-03-20 00:00:00', NOW(), 400, 12);
@@ -103,7 +103,7 @@ INSERT INTO `proposalgenerator_master_devices` (`id`, `manufacturer_id`, `printe
 -- HP 7
 -- Black: 1, Cyan: 2, Magenta: 3, Yellow: 4
 -- OEM: 1, COMP: 2
-INSERT INTO `proposalgenerator_toners` (`id`, `sku`, `cost`, `yield`, `part_type_id`, `manufacturer_id`, `toner_color_id`) VALUES
+INSERT INTO `pgen_toners` (`id`, `sku`, `cost`, `yield`, `part_type_id`, `manufacturer_id`, `toner_color_id`) VALUES
 -- Color Laserjet Cm3530 Mfp
 (1,  '866370', 224.20, 7000 , 1, 7, 2),
 (2,  '866540', 224.20, 7000 , 1, 7, 3),
@@ -122,7 +122,7 @@ INSERT INTO `proposalgenerator_toners` (`id`, `sku`, `cost`, `yield`, `part_type
 (13, '808256', 88.97 , 5000 , 1, 7, 1),
 (14, '775081', 30.62 , 5000 , 2, 3, 1);
 
-INSERT INTO `proposalgenerator_device_toners` (`toner_id`, `master_device_id`) VALUES
+INSERT INTO `pgen_device_toners` (`toner_id`, `master_device_id`) VALUES
 -- Color Laserjet Cm3530 Mfp
 (1, 1),
 (2, 1),

@@ -39,6 +39,7 @@ div.wrapper {
 .pageHeader .breadcrumb {
   background: transparent;
   border: 0;
+  filter: none;
   -webkit-box-shadow: 0 0 0;
   -moz-box-shadow: 0 0 0;
   box-shadow: 0 0 0;

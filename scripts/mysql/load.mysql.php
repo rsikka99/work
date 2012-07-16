@@ -91,9 +91,7 @@ try
         $conn->select_db($options ['db'] ['params'] ['dbname']);
         
         echo "Loading Schema...";
-        runSQLFile(dirname(__FILE__) . '/schema.base.sql', $conn);
-        runSQLFile(dirname(__FILE__) . '/schema.proposalgenerator.sql', $conn);
-        runSQLFile(dirname(__FILE__) . '/schema.quotegen.sql', $conn);
+        runSQLFile(dirname(__FILE__) . '/schema.sql', $conn);
         
         if ('testing' != APPLICATION_ENV)
         {
