@@ -15,7 +15,7 @@
 
 	<form name="leasingSchemas" id="leasingSchemas" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
 		
-		<?php if ( $leasingSchema ) { ?>
+		<?php if ( $leasingSchema ) : ?>
 				
 		<p>You can Upload a new schema or Edit the current schema below. </p>
 		<p><strong>Note:</strong> Uploading a new schema will remove the existing schema and replace it with what you are uploading. This action can not be undone.</p>
@@ -43,16 +43,16 @@
 		    <thead id="leadingSchemaHeaders">
 				<tr>
 					<th nowrap="nowrap" style="min-width: 80px; text-align: center;">Term (months) </th>
-					<?php foreach ($leasingSchema->getRanges() as $range ) {
+					<?php foreach ($leasingSchema->getRanges() as $range ) :
 					    $rangeid = $range->getId();
 					    $startRange = $range->getStartRange();
 					
-						if ($startRange == 0) { ?>
+						if ($startRange == 0) : ?>
 							<th style="min-width: 80px; text-align: center;">$0+ </th>
-						<?php } else { ?>
+						<?php else : ?>
 							<th style="min-width: 80px; text-align: center;"><?php echo $this->currency($startRange); ?>+ </th>
-						<?php } ?>
-					<?php } ?>
+						<?php endif; ?>
+					<?php endforeach; ?>
 					<th nowrap="nowrap" style="min-width: 80px; text-align: center;">Action</th>
 				</tr>
 		    </thead>
@@ -61,7 +61,7 @@
 		      <!-- LOOP THROUGH TERMS AND DISPLAY ROWS -->
 		      <?php $colcount = 1; ?>
 		      <?php $rates = $leasingSchema->getRates(); ?>
-		      <?php foreach ( $leasingSchema->getTerms() as $term ) {
+		      <?php foreach ( $leasingSchema->getTerms() as $term ) :
 		          $termid = $term->getId();
 		          $month = $term->getMonths();
 		      ?>
@@ -69,38 +69,38 @@
 		        <td style="text-align: center;">
 		        	<?php echo $month; ?> months
 		        </td>
-		        <?php foreach ( $leasingSchema->getRanges() as $range ) {
+		        <?php foreach ( $leasingSchema->getRanges() as $range ) :
 		            $colcount += 1;
 	            	$rangeid = $range->getId();
 		        ?>
-		        <td style="text-align: center;"><?php echo $rates[$termid][$rangeid]->getRate(); ?></td>
-		        <?php } ?>
+		        <td style="text-align: center;"><?php echo number_format($rates[$termid][$rangeid]->getRate(), 4); ?></td>
+		        <?php endforeach; ?>
 		        <td style="text-align: center;">
 			      	<a class="btn btn-warning btn-mini" title="Edit Term" href="<?php echo $this->url( array ( 'action' => 'editterm', 'id' => $termid) ); ?>">
 						<i class="icon-pencil icon-white"></i>
 					</a>
-					<?php if ( count ( $leasingSchema->getTerms() ) > 1 ) { ?>
+					<?php if ( count ( $leasingSchema->getTerms() ) > 1 ) : ?>
 			      	<a class="btn btn-danger btn-mini" title="Delete Term" href="<?php echo $this->url( array ( 'action' => 'deleteterm', 'id' => $termid) ); ?>">
 						<i class="icon-trash icon-white"></i>
 					</a>
-					<?php } ?>
+					<?php endif; ?>
 		        </td>
 		      </tr>
-		      <?php } ?>
+		      <?php endforeach; ?>
 		      <!-- END LOOP THROUGH TERMS AND DISPLAY ROWS -->
 		      <tr>
 		      	<td>&nbsp;</td>
-				<?php foreach ($leasingSchema->getRanges() as $range ) { 
+				<?php foreach ($leasingSchema->getRanges() as $range ) : 
 					$rangeid = $range->getId();
 					$startRange = $range->getStartRange();
 
-					if ($startRange == 0) { ?>
+					if ($startRange == 0) : ?>
 		      			<td style="text-align: center;">
 					      	<a class="btn btn-warning btn-mini" title="Edit Range" href="<?php echo $this->url( array ( 'action' => 'editrange', 'id' => $rangeid) ); ?>">
 								<i class="icon-pencil icon-white"></i>
 							</a>
 						</td>
-					<?php } else { ?>
+					<?php else : ?>
 				        <td style="text-align: center;">
 					      	<a class="btn btn-warning btn-mini" title="Edit Range" href="<?php echo $this->url( array ( 'action' => 'editrange', 'id' => $rangeid) ); ?>">
 								<i class="icon-pencil icon-white"></i>
@@ -109,8 +109,8 @@
 								<i class="icon-trash icon-white"></i>
 							</a>
 				        </td>
-					<?php } ?>
-		        <?php } ?>
+					<?php endif; ?>
+		        <?php endforeach; ?>
       			<td style="text-align: center;">&nbsp;</td>
 		      </tr>
 		    </tbody>
@@ -130,9 +130,9 @@
 		
 		<div style="clear: both;"></div>
 		
-		<?php } else { ?>
+		<?php else : ?>
 			<h2>There is not Leasing Schema Data available.</h2>
-		<?php }?>
+		<?php endif; ?>
 	</form>
 	
 </div>
