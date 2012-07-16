@@ -17,7 +17,6 @@ class Default_InfoController extends Zend_Controller_Action
     
     function preDispatch ()
     {
-    
     } // end function preDispatch
     
     /**
