@@ -12,127 +12,94 @@
 <h1>Leasing Schema</h1>
 
 <div class="well">
-
-	<form name="leasingSchemas" id="leasingSchemas" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-		
-		<?php if ( $leasingSchema ) : ?>
-				
-		<p>You can Upload a new schema or Edit the current schema below. </p>
-		<p><strong>Note:</strong> Uploading a new schema will remove the existing schema and replace it with what you are uploading. This action can not be undone.</p>
-		
-	    <div id="upload_container" style="margin: 10px 0px 10px 0px;">
-			<span class="pull-left">
-        		Choose a <span style="color: red">.CSV</span> file to upload: 
-        		<input type="file" name="uploadedfile" id="uploadedfile" accept="application/csv, text/csv" size="60" class="upload_file" />
-        	</span>
-			<span class="">
-				<button type="submit" class="btn"><i class="icon-upload"></i> Upload</button>
-			</span>
-	    	<span class="pull-right">
-				<a class="btn btn-inverse" title="Clear Schema" href="<?php echo $this->url( array ( 'action' => 'resetschema') ); ?>">
-					<i class="icon-exclamation-sign icon-white"></i> Clear Schema
-				</a>
-			</span>
-	    </div>
-		
-		<div style="clear: both;"></div>
-		
-		<div id="lease-terms-container" style="overflow: auto; overflow-y: hidden; -ms-overflow-y: hidden; margin: 20px 0px 0px 0px;">
-		
-		  	<table id="leasingSchemaTable" class="table table-striped table-bordered">
-		    <thead id="leadingSchemaHeaders">
-				<tr>
-					<th nowrap="nowrap" style="min-width: 80px; text-align: center;">Term (months) </th>
-					<?php foreach ($leasingSchema->getRanges() as $range ) :
-					    $rangeid = $range->getId();
-					    $startRange = $range->getStartRange();
-					
-						if ($startRange == 0) : ?>
-							<th style="min-width: 80px; text-align: center;">$0+ </th>
-						<?php else : ?>
-							<th style="min-width: 80px; text-align: center;"><?php echo $this->currency($startRange); ?>+ </th>
-						<?php endif; ?>
-					<?php endforeach; ?>
-					<th nowrap="nowrap" style="min-width: 80px; text-align: center;">Action</th>
-				</tr>
-		    </thead>
-		    
-		    <tbody id="leasingSchemaData">
-		      <!-- LOOP THROUGH TERMS AND DISPLAY ROWS -->
-		      <?php $colcount = 1; ?>
-		      <?php $rates = $leasingSchema->getRates(); ?>
-		      <?php foreach ( $leasingSchema->getTerms() as $term ) :
-		          $termid = $term->getId();
-		          $month = $term->getMonths();
-		      ?>
-		      <tr id="term-<?php echo $termid; ?>">
-		        <td style="text-align: center;">
-		        	<?php echo $month; ?> months
-		        </td>
-		        <?php foreach ( $leasingSchema->getRanges() as $range ) :
-		            $colcount += 1;
-	            	$rangeid = $range->getId();
-		        ?>
-		        <td style="text-align: center;"><?php echo number_format($rates[$termid][$rangeid]->getRate(), 4); ?></td>
-		        <?php endforeach; ?>
-		        <td style="text-align: center;">
-			      	<a class="btn btn-warning btn-mini" title="Edit Term" href="<?php echo $this->url( array ( 'action' => 'editterm', 'id' => $termid) ); ?>">
-						<i class="icon-pencil icon-white"></i>
-					</a>
-					<?php if ( count ( $leasingSchema->getTerms() ) > 1 ) : ?>
-			      	<a class="btn btn-danger btn-mini" title="Delete Term" href="<?php echo $this->url( array ( 'action' => 'deleteterm', 'id' => $termid) ); ?>">
-						<i class="icon-trash icon-white"></i>
-					</a>
-					<?php endif; ?>
-		        </td>
-		      </tr>
-		      <?php endforeach; ?>
-		      <!-- END LOOP THROUGH TERMS AND DISPLAY ROWS -->
-		      <tr>
-		      	<td>&nbsp;</td>
-				<?php foreach ($leasingSchema->getRanges() as $range ) : 
-					$rangeid = $range->getId();
-					$startRange = $range->getStartRange();
-
-					if ($startRange == 0) : ?>
-		      			<td style="text-align: center;">
-					      	<a class="btn btn-warning btn-mini" title="Edit Range" href="<?php echo $this->url( array ( 'action' => 'editrange', 'id' => $rangeid) ); ?>">
-								<i class="icon-pencil icon-white"></i>
-							</a>
-						</td>
-					<?php else : ?>
-				        <td style="text-align: center;">
-					      	<a class="btn btn-warning btn-mini" title="Edit Range" href="<?php echo $this->url( array ( 'action' => 'editrange', 'id' => $rangeid) ); ?>">
-								<i class="icon-pencil icon-white"></i>
-							</a>
-					      	<a class="btn btn-danger btn-mini" title="Delete Range" href="<?php echo $this->url( array ( 'action' => 'deleterange', 'id' => $rangeid) ); ?>">
-								<i class="icon-trash icon-white"></i>
-							</a>
-				        </td>
-					<?php endif; ?>
-		        <?php endforeach; ?>
-      			<td style="text-align: center;">&nbsp;</td>
-		      </tr>
-		    </tbody>
-		  	</table>
-		</div>
-		
-		<div id="buttons_container">
-			<span class="pull-right">
-		      	<a class="btn btn-success" title="Add Term" href="<?php echo $this->url( array ( 'action' => 'addterm') ); ?>">
-					<i class="icon-plus-sign icon-white"></i> Add Term
-				</a>
-		      	<a class="btn btn-success" title="Add Range" href="<?php echo $this->url( array ( 'action' => 'addrange') ); ?>">
-					<i class="icon-plus-sign icon-white"></i> Add Range
-				</a>
-			</span>
-		</div>
-		
-		<div style="clear: both;"></div>
-		
-		<?php else : ?>
-			<h2>There is not Leasing Schema Data available.</h2>
-		<?php endif; ?>
-	</form>
+<?php if ( $leasingSchema ) : ?>
+	<p>You can Upload a new schema or Edit the current schema below. </p>
+	<p><strong>Note:</strong> Uploading a new schema will remove the existing schema and replace it with what you are uploading. This action can not be undone.</p>
 	
+    <div class="clearfix">
+		<span class="pull-left">
+    		Choose a <span style="color: red">.CSV</span> file to upload: 
+    		<input type="file" name="uploadedfile" id="uploadedfile" accept="application/csv, text/csv" size="60" class="upload_file" />
+    	</span>
+		<span>
+			<button type="submit" class="btn"><i class="icon-upload"></i> Upload</button>
+		</span>
+    	<span class="pull-right">
+			<a class="btn btn-inverse" title="Clear Schema" href="<?php echo $this->url( array ( 'action' => 'resetschema') ); ?>">
+				<i class="icon-exclamation-sign icon-white"></i> Clear Schema
+			</a>
+		</span>
+    </div>
+	<div style="overflow: auto; overflow-y: hidden; -ms-overflow-y: hidden; margin: 20px 0px 0px 0px;">
+	
+        <table id="leasingSchemaTable" class="table table-striped table-bordered">
+    	    <thead>
+    			<tr>
+    				<th nowrap="nowrap" style="min-width: 80px; text-align: center;">Term (months) </th>
+    				<?php foreach ($leasingSchema->getRanges() as $range ) : ?>
+    					<?php if ($range->getStartRange() == 0) : ?>
+    						<th style="min-width: 80px; text-align: center;">$0+ </th>
+    					<?php else : ?>
+    						<th style="min-width: 80px; text-align: center;"><?php echo $this->currency($range->getStartRange()); ?>+ </th>
+    					<?php endif; ?>
+    				<?php endforeach; ?>
+    				<th nowrap="nowrap" style="min-width: 80px; text-align: center;">Action</th>
+    			</tr>
+    	    </thead>
+    	    <tbody>
+    	      <?php
+    	          // Loop through the terms and rates 
+    	          $rates = $leasingSchema->getRates(); 
+              ?>
+            <?php foreach ( $leasingSchema->getTerms() as $term ) : /* @var $term Quotegen_Model_LeasingSchemaTerm */ ?>
+                <tr>
+        	        <td style="text-align: center;">
+        	        	<?php echo $term->getMonths(); ?> months
+        	        </td>
+        	        
+                <?php foreach ( $leasingSchema->getRanges() as $range ) : /* @var $range Quotegen_Model_LeasingSchemaRange */ ?>
+                    <td style="text-align: center;"><?php echo number_format($rates[$term->getId()][$range->getId()]->getRate(), 4); ?></td>
+                <?php endforeach; ?>
+                
+                    <td style="text-align: center;">
+        		      	<a class="btn btn-warning btn-mini" title="Edit Term" href="<?php echo $this->url( array ( 'action' => 'editterm', 'id' => $term->getId()) ); ?>">
+        					<i class="icon-pencil icon-white"></i>
+        				</a>
+    				<?php if ( count ( $leasingSchema->getTerms() ) > 1 ) : ?>
+        		      	<a class="btn btn-danger btn-mini" title="Delete Term" href="<?php echo $this->url( array ( 'action' => 'deleteterm', 'id' => $term->getId()) ); ?>">
+        					<i class="icon-trash icon-white"></i>
+        				</a>
+    				<?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+                <tr>
+    	      	    <td></td>
+      	    <?php foreach ($leasingSchema->getRanges() as $range ) : /* @var $range Quotegen_Model_LeasingSchemaRange */ ?> 
+                    <td style="text-align: center;">
+    		      	    <a class="btn btn-warning btn-mini" title="Edit Range" href="<?php echo $this->url( array ( 'action' => 'editrange', 'id' => $range->getId()) ); ?>">
+    						<i class="icon-pencil icon-white"></i>
+    					</a>
+				    <?php if ($range->getStartRange() != 0) : ?>
+    			      	<a class="btn btn-danger btn-mini" title="Delete Range" href="<?php echo $this->url( array ( 'action' => 'deleterange', 'id' => $range->getId()) ); ?>">
+    						<i class="icon-trash icon-white"></i>
+    					</a>
+					<?php endif; ?>
+    		        </td>
+            <?php endforeach; ?>
+      			    <td style="text-align: center;">&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
+	</div>
+	
+	<div class="clearfix">
+    	<span class="pull-right">
+          	<a class="btn btn-success" title="Add Term" href="<?php echo $this->url( array ( 'action' => 'addterm') ); ?>"><i class="icon-plus-sign icon-white"></i> Add Term</a>
+          	<a class="btn btn-success" title="Add Range" href="<?php echo $this->url( array ( 'action' => 'addrange') ); ?>"><i class="icon-plus-sign icon-white"></i> Add Range</a>
+    	</span>
+	</div>
+<?php else : ?>
+	<h2>There is no Leasing Schema Data available.</h2>
+<?php endif; ?>
 </div>
