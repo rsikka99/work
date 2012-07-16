@@ -7,14 +7,14 @@
             <module>default</module>
             <controller>index</controller>
             <action>index</action>
-            <resource>default_index_index</resource>
+            <resource>default__index__index</resource>
             <order>000</order>
             <login>
                 <label>Login</label>
                 <module>default</module>
                 <controller>auth</controller>
                 <action>login</action>
-                <resource>default_auth_login</resource>
+                <resource>default__auth__login</resource>
                 <visible>0</visible>
             </login>
             <changepassword>
@@ -22,7 +22,7 @@
                 <module>default</module>
                 <controller>auth</controller>
                 <action>changepassword</action>
-                <resource>default_auth_changepassword</resource>
+                <resource>default__auth__changepassword</resource>
                 <visible>0</visible>
             </changepassword>
             <forgotpassword>
@@ -30,7 +30,7 @@
                 <module>default</module>
                 <controller>auth</controller>
                 <action>forgotpassword</action>
-                <resource>default_auth_forgotpassword</resource>
+                <resource>default__auth__forgotpassword</resource>
                 <visible>0</visible>
             </forgotpassword>
         </menu>

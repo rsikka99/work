@@ -7,7 +7,7 @@
             <module>proposalgen</module>
             <controller>index</controller>
             <action>index</action>
-            <resource>proposalgen_index_index</resource>
+            <resource>proposalgen__index__index</resource>
 			<order>200</order>
             <pages>
                 <admin>
@@ -21,21 +21,21 @@
                             <module>proposalgen</module>
                             <controller>manufacturer</controller>
                             <action>index</action>
-                            <resource>proposalgen_manufacturer_index</resource>
+                            <resource>proposalgen__manufacturer__index</resource>
                             <pages>
                                 <viewall>
                                     <label>View all</label>
                                     <module>proposalgen</module>
                                     <controller>manufacturer</controller>
                                     <action>index</action>
-                                    <resource>proposalgen_manufacturer_index</resource>
+                                    <resource>proposalgen__manufacturer__index</resource>
                                 </viewall>
                                 <view>
                                     <label> View</label>
                                     <module>proposalgen</module>
                                     <controller>manufacturer</controller>
                                     <action>view</action>
-                                    <resource>proposalgen_manufacturer_view</resource>
+                                    <resource>proposalgen__manufacturer__view</resource>
                                     <visible>0</visible>
                                 </view>
                                 <delete>
@@ -43,7 +43,7 @@
                                     <module>proposalgen</module>
                                     <controller>manufacturer</controller>
                                     <action>delete</action>
-                                    <resource>proposalgen_manufacturer_delete</resource>
+                                    <resource>proposalgen__manufacturer__delete</resource>
                                     <visible>0</visible>
                                 </delete>
                                 <create>
@@ -51,14 +51,14 @@
                                     <module>proposalgen</module>
                                     <controller>manufacturer</controller>
                                     <action>create</action>
-                                    <resource>proposalgen_manufacturer_create</resource>
+                                    <resource>proposalgen__manufacturer__create</resource>
                                 </create>
                                 <update>
                                     <label>Edit</label>
                                     <module>proposalgen</module>
                                     <controller>manufacturer</controller>
                                     <action>edit</action>
-                                    <resource>proposalgen_manufacturer_edit</resource>
+                                    <resource>proposalgen__manufacturer__edit</resource>
                                     <visible>0</visible>
                                 </update>
                             </pages>
@@ -69,21 +69,21 @@
                             <module>proposalgen</module>
                             <controller>masterdevice</controller>
                             <action>index</action>
-                            <resource>proposalgen_masterdevice_index</resource>
+                            <resource>proposalgen__masterdevice__index</resource>
                             <pages>
                                 <viewall>
                                     <label>View all</label>
                                     <module>proposalgen</module>
                                     <controller>masterdevice</controller>
                                     <action>index</action>
-                                    <resource>proposalgen_masterdevice_index</resource>
+                                    <resource>proposalgen__masterdevice__index</resource>
                                 </viewall>
                                 <view>
                                     <label> View</label>
                                     <module>proposalgen</module>
                                     <controller>masterdevice</controller>
                                     <action>view</action>
-                                    <resource>proposalgen_masterdevice_view</resource>
+                                    <resource>proposalgen__masterdevice__view</resource>
                                     <visible>0</visible>
                                 </view>
                                 <delete>
@@ -91,7 +91,7 @@
                                     <module>proposalgen</module>
                                     <controller>masterdevice</controller>
                                     <action>delete</action>
-                                    <resource>proposalgen_masterdevice_delete</resource>
+                                    <resource>proposalgen__masterdevice__delete</resource>
                                     <visible>0</visible>
                                 </delete>
                                 <create>
@@ -99,14 +99,14 @@
                                     <module>proposalgen</module>
                                     <controller>masterdevice</controller>
                                     <action>create</action>
-                                    <resource>proposalgen_masterdevice_create</resource>
+                                    <resource>proposalgen__masterdevice__create</resource>
                                 </create>
                                 <update>
                                     <label>Edit</label>
                                     <module>proposalgen</module>
                                     <controller>masterdevice</controller>
                                     <action>edit</action>
-                                    <resource>proposalgen_masterdevice_edit</resource>
+                                    <resource>proposalgen__masterdevice__edit</resource>
                                     <visible>0</visible>
                                 </update>
                             </pages>
@@ -119,7 +119,7 @@
                     <module>proposalgen</module>
                     <controller>index</controller>
                     <action>index</action>
-                    <resource>propsalgen_index_index</resource>
+                    <resource>propsalgen__index__index</resource>
                     <visible>0</visible>
                     <pages>
                         <survey>
@@ -127,7 +127,7 @@
                             <module>proposalgen</module>
                             <controller>survey</controller>
                             <action>index</action>
-                            <resource>proposalgen_survey_index</resource>
+                            <resource>proposalgen__survey__index</resource>
                             <class>dropdown subdropdown</class>
                             <pages>
                                 <company>
@@ -135,49 +135,49 @@
                                     <module>proposalgen</module>
                                     <controller>survey</controller>
                                     <action>company</action>
-                                    <resource>proposalgen_survey_company</resource>
+                                    <resource>proposalgen__survey__company</resource>
                                 </company>
                                 <general>
                                     <label>General</label>
                                     <module>proposalgen</module>
                                     <controller>survey</controller>
                                     <action>general</action>
-                                    <resource>proposalgen_survey_general</resource>
+                                    <resource>proposalgen__survey__general</resource>
                                 </general>
                                 <finance>
                                     <label>Finance</label>
                                     <module>proposalgen</module>
                                     <controller>survey</controller>
                                     <action>finance</action>
-                                    <resource>proposalgen_survey_finance</resource>
+                                    <resource>proposalgen__survey__finance</resource>
                                 </finance>
                                 <purchasing>
                                     <label>Purchasing</label>
                                     <module>proposalgen</module>
                                     <controller>survey</controller>
                                     <action>purchasing</action>
-                                    <resource>proposalgen_survey_purchasing</resource>
+                                    <resource>proposalgen__survey__purchasing</resource>
                                 </purchasing>
                                 <it>
                                     <label>It</label>
                                     <module>proposalgen</module>
                                     <controller>survey</controller>
                                     <action>it</action>
-                                    <resource>proposalgen_survey_it</resource>
+                                    <resource>proposalgen__survey__it</resource>
                                 </it>
                                 <users>
                                     <label>Users</label>
                                     <module>proposalgen</module>
                                     <controller>survey</controller>
                                     <action>users</action>
-                                    <resource>proposalgen_survey_users</resource>
+                                    <resource>proposalgen__survey__users</resource>
                                 </users>
                                 <verify>
                                     <label>Verify</label>
                                     <module>proposalgen</module>
                                     <controller>survey</controller>
                                     <action>verify</action>
-                                    <resource>proposalgen_survey_verify</resource>
+                                    <resource>proposalgen__survey__verify</resource>
                                 </verify>
                             </pages>
                         </survey>
@@ -186,7 +186,7 @@
                             <module>proposalgen</module>
                             <controller>data</controller>
                             <action>index</action>
-                            <resource>proposalgen_data_index</resource>
+                            <resource>proposalgen__data__index</resource>
                             <class>dropdown subdropdown</class>
                             <pages>
                                 <upload>
@@ -194,21 +194,21 @@
                                     <module>proposalgen</module>
                                     <controller>data</controller>
                                     <action>index</action>
-                                    <resource>proposalgen_data_index</resource>
+                                    <resource>proposalgen__data__index</resource>
                                 </upload>
                                 <devicemapping>
                                     <label>Map Devices</label>
                                     <module>proposalgen</module>
                                     <controller>data</controller>
                                     <action>devicemapping</action>
-                                    <resource>proposalgen_data_devicemapping</resource>
+                                    <resource>proposalgen__data__devicemapping</resource>
                                 </devicemapping>
                                 <deviceleasing>
                                     <label>Summary</label>
                                     <module>proposalgen</module>
                                     <controller>data</controller>
                                     <action>deviceleasing</action>
-                                    <resource>proposalgen_data_deviceleasing</resource>
+                                    <resource>proposalgen__data__deviceleasing</resource>
                                 </deviceleasing>
                             </pages>
                         </fleetdata>
@@ -217,14 +217,14 @@
                             <module>proposalgen</module>
                             <controller>data</controller>
                             <action>reportsettings</action>
-                            <resource>proposalgen_data_reportsettings</resource>
+                            <resource>proposalgen__data__reportsettings</resource>
                         </reportsettings>
                         <reports>
                             <label>Available Reports</label>
                             <module>proposalgen</module>
                             <controller>report</controller>
                             <action>index</action>
-                            <resource>proposalgen_report_index</resource>
+                            <resource>proposalgen__report__index</resource>
                             <class>dropdown subdropdown</class>
                             <pages>
                                 <assessment>
@@ -232,28 +232,28 @@
                                     <module>proposalgen</module>
                                     <controller>report</controller>
                                     <action>assessment</action>
-                                    <resource>proposalgen_report_assesment</resource>
+                                    <resource>proposalgen__report__assesment</resource>
                                 </assessment>
                                 <grossmargin>
                                     <label>Gross Margin</label>
                                     <module>proposalgen</module>
                                     <controller>report</controller>
                                     <action>grossmargin</action>
-                                    <resource>proposalgen_report_grossmargin</resource>
+                                    <resource>proposalgen__report__grossmargin</resource>
                                 </grossmargin>
                                 <solution>
                                     <label>Solution</label>
                                     <module>proposalgen</module>
                                     <controller>report</controller>
                                     <action>solution</action>
-                                    <resource>proposalgen_repot_solution</resource>
+                                    <resource>proposalgen__repot__solution</resource>
                                 </solution>
                                 <printingdevicelist>
                                     <label>Printing Device List</label>
                                     <module>proposalgen</module>
                                     <controller>report</controller>
                                     <action>printingdevicelist</action>
-                                    <resource>proposalgen_report_printingdevicelist</resource>
+                                    <resource>proposalgen__report__printingdevicelist</resource>
                                 </printingdevicelist>
                             </pages>
                         </reports>
@@ -265,35 +265,35 @@
                     <module>proposalgen</module>
                     <controller>admin</controller>
                     <action>index</action>
-                    <resource>proposalgen_admin_index</resource>
+                    <resource>proposalgen__admin__index</resource>
                     <pages>
                         <manageusers>
                             <label>Manage Users</label>
                             <module>proposalgen</module>
                             <controller>admin</controller>
                             <action>manageusers</action>
-                            <resource>proposalgen_admin_manageusers</resource>
+                            <resource>proposalgen__admin__manageusers</resource>
                         </manageusers>
                         <managemanufacturers>
                             <label>Manage Manufacturers</label>
                             <module>proposalgen</module>
                             <controller>admin</controller>
                             <action>manufacturers</action>
-                            <resource>proposalgen_admin_manufacturers</resource>
+                            <resource>proposalgen__admin__manufacturers</resource>
                         </managemanufacturers>
                         <manageprinterandtoner>
                             <label>Manage Master Printer And Toner Properties</label>
                             <module>proposalgen</module>
                             <controller>managedevices</controller>
                             <action>managedevices</action>
-                            <resource>proposalgen_managedevices_managedevices</resource>
+                            <resource>proposalgen__managedevices__managedevices</resource>
                         </manageprinterandtoner>
                         <updatepricing>
                             <label>Update Pricing</label>
                             <module>proposalgen</module>
                             <controller>admin</controller>
                             <action>bulkdevicepricing</action>
-                            <resource>proposalgen_admin_bulkdevicepricing</resource>
+                            <resource>proposalgen__admin__bulkdevicepricing</resource>
                         </updatepricing>
                         <supporttickets>
                             <label>Support Tickets</label>
@@ -307,21 +307,21 @@
                             <module>proposalgen</module>
                             <controller>admin</controller>
                             <action>managereplacements</action>
-                            <resource>proposalgen_admin_managereplacements</resource>
+                            <resource>proposalgen__admin__managereplacements</resource>
                         </managereplacements>
                         <managematchups>
                             <label>Manage Printer Matchups</label>
                             <module>proposalgen</module>
                             <controller>admin</controller>
                             <action>managematchups</action>
-                            <resource>proposalgen_admin_managematchups</resource>
+                            <resource>proposalgen__admin__managematchups</resource>
                         </managematchups>
                         <defaultreportsettings>
                             <label>Default Report Settings</label>
                             <module>proposalgen</module>
                             <controller>admin</controller>
                             <action>managesettings</action>
-                            <resource>proposalgen_admin_managesettings</resource>
+                            <resource>proposalgen__admin__managesettings</resource>
                         </defaultreportsettings>
                     </pages>
                 </systemadmin>
@@ -330,7 +330,7 @@
                     <module>proposalgen</module>
                     <controller>admin</controller>
                     <action>index</action>
-                    <resource>proposalgen_admin_index</resource>
+                    <resource>proposalgen__admin__index</resource>
                     <class>dropdown></class>
                     <pages>
                         <myreportsettings>
@@ -338,14 +338,14 @@
                             <module>proposalgen</module>
                             <controller>admin</controller>
                             <action>managemysettings</action>
-                            <resource>proposalgen_admin_managemysettings</resource>
+                            <resource>proposalgen__admin__managemysettings</resource>
                         </myreportsettings>
                         <managemyreports>
                             <label>Manage My Reports</label>
                             <module>proposalgen</module>
                             <controller>admin</controller>
                             <action>managemyreports</action>
-                            <resource>proposalgen_admin_managemyreports</resource>
+                            <resource>proposalgen__admin__managemyreports</resource>
                         </managemyreports>
                     </pages>
                 </myadmin>

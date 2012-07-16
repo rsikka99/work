@@ -6,7 +6,7 @@ $this->headScript()->appendScript("$('i').popover();");
 
 ?>
 <div class="page-header">
-    <h1>Purchased Quote</h1>
+    <h1>Leased Quote</h1>
 </div>
 <div class="row">
     <div class="span12">
@@ -21,9 +21,9 @@ $this->headScript()->appendScript("$('i').popover();");
                 <?php foreach ($quote->getQuoteDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
                 <tr class="deviceRow">
                     <th><h5><?php echo $quoteDevice->getName(); ?><br><small><?php echo $quoteDevice->getSku(); ?></small></h5></th>                
-                    <td style="text-align: right;"><?php echo $this->currency($quoteDevice->getPackagePrice()); ?></td>
+                    <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculateLeasePrice()); ?></td>
                     <td style="text-align: right;"><?php echo number_format($quoteDevice->getQuantity()); ?></td>
-                    <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculateSubtotal()); ?></td>
+                    <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculateLeaseSubtotal()); ?></td>
                 </tr>
                 <?php if (count($quoteDevice->getQuoteDeviceOptions()) > 0) : ?>
                 
