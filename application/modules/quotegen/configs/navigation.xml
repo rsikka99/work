@@ -47,7 +47,7 @@
                                     <module>quotegen</module>
                                     <controller>quote_devices</controller>
                                     <action>create-new-quote-device</action>
-                                    <resource>quotegen_quote_devices_create-new-quote-device</resource>
+                                    <resource>quotegen__quote_devices__create-new-quote-device</resource>
                                     <reset_params>0</reset_params>
                                 </addDevice>
                                 <editDevice>
@@ -56,7 +56,7 @@
                                     <controller>quote_devices</controller>
                                     <action>edit-quote-device</action>
                                     <visible>0</visible>
-                                    <resource>quotegen_quote_devices_edit-quote-device</resource>
+                                    <resource>quotegen__quote_devices__edit-quote-device</resource>
                                     <reset_params>0</reset_params>
                                     <pages>
                                         <addOptionsToDevice>
@@ -65,7 +65,7 @@
                                             <controller>quote_devices</controller>
                                             <action>add-options-to-quote-device</action>
                                             <visible>0</visible>
-                                            <resource>quotegen_quote_devices_add-options-to-quote-device</resource>
+                                            <resource>quotegen__quote_devices__add-options-to-quote-device</resource>
                                             <reset_params>0</reset_params>
                                         </addOptionsToDevice>
                                     </pages>
@@ -76,7 +76,7 @@
                                     <controller>quote_devices</controller>
                                     <action>delete-quote-device</action>
                                     <visible>0</visible>
-                                    <resource>quotegen_quote_devices_delete-quote-device</resource>
+                                    <resource>quotegen__quote_devices__delete-quote-device</resource>
                                     <reset_params>0</reset_params>
                                 </removeDevice>
                             </pages>
@@ -106,7 +106,7 @@
                                     <module>quotegen</module>
                                     <controller>quote_reports</controller>
                                     <action>purchase-quote</action>
-                                    <resource>quotegen_quote_reports_purchase-quote</resource>
+                                    <resource>quotegen__quote_reports__purchase-quote</resource>
                                     <reset_params>0</reset_params>
                                 </purchaseQuote>
                                 <leaseQuote>
@@ -114,7 +114,7 @@
                                     <module>quotegen</module>
                                     <controller>quote_reports</controller>
                                     <action>lease-quote</action>
-                                    <resource>quotegen_quote_reports_lease-quote</resource>
+                                    <resource>quotegen__quote_reports__lease-quote</resource>
                                     <reset_params>0</reset_params>
                                 </leaseQuote>
                                 <orderList>
@@ -122,7 +122,7 @@
                                     <module>quotegen</module>
                                     <controller>quote_reports</controller>
                                     <action>order-list</action>
-                                    <resource>quotegen_quote_reports_order-list</resource>
+                                    <resource>quotegen__quote_reports__order-list</resource>
                                     <reset_params>0</reset_params>
                                 </orderList>
                             </pages>
