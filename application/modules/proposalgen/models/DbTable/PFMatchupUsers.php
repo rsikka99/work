@@ -2,7 +2,7 @@
 
 class Proposalgen_Model_DbTable_PFMatchupUser extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'proposalgenerator_user_pf_device_matchups';
+    protected $_name = 'pgen_user_pf_device_matchups';
     protected $_primary = array (
             'user_id', 
             'devices_pf_id', 

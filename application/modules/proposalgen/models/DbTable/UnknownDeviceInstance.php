@@ -2,7 +2,7 @@
 
 class Proposalgen_Model_DbTable_UnknownDeviceInstance extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'proposalgenerator_unknown_device_instances';
+    protected $_name = 'pgen_unknown_device_instances';
     protected $_primary = 'id';
     protected $_referenceMap = array (
             'UploadDataCollectorRow' => array (
