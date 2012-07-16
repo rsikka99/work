@@ -124,7 +124,7 @@ class Application_Model_Acl extends Zend_Acl
         else
         {
             // We're processing a resource instead of a request object
-            $boom = explode("_", $request);
+            $boom = explode("__", $request);
             $resource ["moduleName"] = $boom [0];
             $resource ["controllerName"] = $boom [1];
             $resource ["actionName"] = $boom [2];

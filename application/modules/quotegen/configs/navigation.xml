@@ -7,7 +7,7 @@
             <module>quotegen</module>
             <controller>index</controller>
             <action>index</action>
-            <resource>quotegen_index_index</resource>
+            <resource>quotegen__index__index</resource>
             <order>100</order>
             <pages>
                 <quotes>
@@ -16,21 +16,21 @@
                     <module>quotegen</module>
                     <controller>quote</controller>
                     <action>index</action>
-                    <resource>quotegen_quote_index</resource>
+                    <resource>quotegen__quote__index</resource>
                     <pages>
                         <viewall>
                             <label>View All</label>
                             <module>quotegen</module>
                             <controller>quote</controller>
                             <action>index</action>
-                            <resource>quotegen_build_index</resource>
+                            <resource>quotegen__build__index</resource>
                         </viewall>
                         <create>
                             <label>Create New</label>
                             <module>quotegen</module>
                             <controller>quote</controller>
                             <action>create</action>
-                            <resource>quotegen_build_create</resource>
+                            <resource>quotegen__build__create</resource>
                         </create>
                         <builddevice>
                             <label>Build Devices</label>
@@ -39,7 +39,7 @@
                             <controller>quote_devices</controller>
                             <action>index</action>
                             <visible>0</visible>
-                            <resource>quotegen_quote_devices_index</resource>
+                            <resource>quotegen__quote_devices__index</resource>
                             <reset_params>0</reset_params>
                             <pages>
                                 <addDevice>
@@ -88,7 +88,7 @@
                             <controller>quote_settings</controller>
                             <action>index</action>
                             <visible>0</visible>
-                            <resource>quotegen_quote_settings_index</resource>
+                            <resource>quotegen__quote_settings__index</resource>
                             <reset_params>0</reset_params>
                         </adjustsettings>
                         <viewAndPrintReports>
@@ -98,7 +98,7 @@
                             <controller>quote_reports</controller>
                             <action>index</action>
                             <visible>0</visible>
-                            <resource>quotegen_quote_reports_index</resource>
+                            <resource>quotegen__quote_reports__index</resource>
                             <reset_params>0</reset_params>
                             <pages>
                                 <purchaseQuote>
@@ -135,7 +135,7 @@
                     <module>quotegen</module>
                     <controller>quotesetting</controller>
                     <action>index</action>
-                    <resource>quotegen_quotesetting_index</resource>
+                    <resource>quotegen__quotesetting__index</resource>
                     <pages>
                         <preferences>
                             <label>My Preferences</label>
@@ -143,7 +143,7 @@
                             <module>quotegen</module>
                             <controller>quotesetting</controller>
                             <action>edit</action>
-                            <resource>quotegen_quotesetting_edit</resource>
+                            <resource>quotegen__quotesetting__edit</resource>
                         </preferences>
                     </pages>
                 </settings>
@@ -153,14 +153,14 @@
                     <module>quotegen</module>
                     <controller>administration</controller>
                     <action>index</action>
-                    <resource>quotegen_quote_index</resource>
+                    <resource>quotegen__quote__index</resource>
                     <pages>
                         <configuration>
                             <label>Configuration</label>
                             <module>quotegen</module>
                             <controller>quotesetting</controller>
                             <action>editdefault</action>
-                            <resource>quotegen_quotesetting_editdefault</resource>
+                            <resource>quotegen__quotesetting__editdefault</resource>
                         </configuration>
                         <options>
                             <label>Options</label>
@@ -168,7 +168,7 @@
                             <module>quotegen</module>
                             <controller>option</controller>
                             <action>index</action>
-                            <resource>quotegen_option_index</resource>
+                            <resource>quotegen__option__index</resource>
                             <pages>
                                 <viewall>
                                     <label>View All</label>
@@ -176,7 +176,7 @@
                                     <module>quotegen</module>
                                     <controller>option</controller>
                                     <action>index</action>
-                                    <resource>quotegen_option_index</resource>
+                                    <resource>quotegen__option__index</resource>
                                 </viewall>
                                 <addnew>
                                     <label>Add New</label>
@@ -184,7 +184,7 @@
                                     <module>quotegen</module>
                                     <controller>option</controller>
                                     <action>create</action>
-                                    <resource>quotegen_option_create</resource>
+                                    <resource>quotegen__option__create</resource>
                                 </addnew>
                                 <categories>
                                     <label>Categories</label>
@@ -192,14 +192,14 @@
                                     <module>quotegen</module>
                                     <controller>category</controller>
                                     <action>index</action>
-                                    <resource>quotegen_category_index</resource>
+                                    <resource>quotegen__category__index</resource>
                                     <pages>
                                         <create>
                                             <label>Create</label>
                                             <module>quotegen</module>
                                             <controller>category</controller>
                                             <action>create</action>
-                                            <resource>quotegen_category_create</resource>
+                                            <resource>quotegen__category__create</resource>
                                             <visible>0</visible>
                                         </create>
                                         <view>
@@ -207,7 +207,7 @@
                                             <module>quotegen</module>
                                             <controller>category</controller>
                                             <action>view</action>
-                                            <resource>quotegen_category_view</resource>
+                                            <resource>quotegen__category__view</resource>
                                             <visible>0</visible>
                                         </view>
                                         <edit>
@@ -215,7 +215,7 @@
                                             <module>quotegen</module>
                                             <controller>category</controller>
                                             <action>edit</action>
-                                            <resource>quotegen_category_edit</resource>
+                                            <resource>quotegen__category__edit</resource>
                                             <visible>0</visible>
                                         </edit>
                                     </pages>
@@ -225,7 +225,7 @@
                                     <module>quotegen</module>
                                     <controller>option</controller>
                                     <action>view</action>
-                                    <resource>quotegen_option_view</resource>
+                                    <resource>quotegen__option__view</resource>
                                     <visible>0</visible>
                                 </view>
                                 <edit>
@@ -233,7 +233,7 @@
                                     <module>quotegen</module>
                                     <controller>option</controller>
                                     <action>edit</action>
-                                    <resource>quotegen_option_edit</resource>
+                                    <resource>quotegen__option__edit</resource>
                                     <visible>0</visible>
                                 </edit>
                             </pages>
@@ -244,7 +244,7 @@
                             <module>quotegen</module>
                             <controller>leasingschema</controller>
                             <action>index</action>
-                            <resource>quotegen_leasingschema_index</resource>
+                            <resource>quotegen__leasingschema__index</resource>
                             <pages>
                                 <viewschema>
                                     <label>View Schema</label>
@@ -252,7 +252,7 @@
                                     <module>quotegen</module>
                                     <controller>leasingschema</controller>
                                     <action>index</action>
-                                    <resource>quotegen_leasingschema_index</resource>
+                                    <resource>quotegen__leasingschema__index</resource>
                                     <visible>0</visible>
                                 </viewschema>
                                 <addterm>
@@ -261,7 +261,7 @@
                                     <module>quotegen</module>
                                     <controller>leasingschema</controller>
                                     <action>addterm</action>
-                                    <resource>quotegen_leasingschema_addterm</resource>
+                                    <resource>quotegen__leasingschema__addterm</resource>
                                     <visible>0</visible>
                                 </addterm>
                                 <editterm>
@@ -270,7 +270,7 @@
                                     <module>quotegen</module>
                                     <controller>leasingschema</controller>
                                     <action>editterm</action>
-                                    <resource>quotegen_leasingschema_editterm</resource>
+                                    <resource>quotegen__leasingschema__editterm</resource>
                                     <visible>0</visible>
                                 </editterm>
                                 <delterm>
@@ -279,7 +279,7 @@
                                     <module>quotegen</module>
                                     <controller>leasingschema</controller>
                                     <action>deleteterm</action>
-                                    <resource>quotegen_leasingschema_deleteterm</resource>
+                                    <resource>quotegen__leasingschema__deleteterm</resource>
                                     <visible>0</visible>
                                 </delterm>
                                 <addrange>
@@ -288,7 +288,7 @@
                                     <module>quotegen</module>
                                     <controller>leasingschema</controller>
                                     <action>addrange</action>
-                                    <resource>quotegen_leasingschema_addrange</resource>
+                                    <resource>quotegen__leasingschema__addrange</resource>
                                     <visible>0</visible>
                                 </addrange>
                                 <editrange>
@@ -297,7 +297,7 @@
                                     <module>quotegen</module>
                                     <controller>leasingschema</controller>
                                     <action>editrange</action>
-                                    <resource>quotegen_leasingschema_editrange</resource>
+                                    <resource>quotegen__leasingschema__editrange</resource>
                                     <visible>0</visible>
                                 </editrange>
                                 <delrange>
@@ -306,7 +306,7 @@
                                     <module>quotegen</module>
                                     <controller>leasingschema</controller>
                                     <action>deleterange</action>
-                                    <resource>quotegen_leasingschema_deleterange</resource>
+                                    <resource>quotegen__leasingschema__deleterange</resource>
                                     <visible>0</visible>
                                 </delrange>
                                 <resetschema>
@@ -315,7 +315,7 @@
                                     <module>quotegen</module>
                                     <controller>leasingschema</controller>
                                     <action>resetschema</action>
-                                    <resource>quotegen_leasingschema_resetschema</resource>
+                                    <resource>quotegen__leasingschema__resetschema</resource>
                                     <visible>0</visible>
                                 </resetschema>
                             </pages>
@@ -326,7 +326,7 @@
                             <module>quotegen</module>
                             <controller>device</controller>
                             <action>index</action>
-                            <resource>quotegen_device_index</resource>
+                            <resource>quotegen__device__index</resource>
                             <pages>
                                 <viewall>
                                     <label>View All</label>
@@ -334,7 +334,7 @@
                                     <module>quotegen</module>
                                     <controller>device</controller>
                                     <action>index</action>
-                                    <resource>quotegen_option_index</resource>
+                                    <resource>quotegen__option__index</resource>
                                 </viewall>
                                 <addnew>
                                     <label>Add New</label>
@@ -342,7 +342,7 @@
                                     <module>quotegen</module>
                                     <controller>device</controller>
                                     <action>create</action>
-                                    <resource>quotegen_device_create</resource>
+                                    <resource>quotegen__device__create</resource>
                                 </addnew>
                                 <categories>
                                     <label>Pre-configured Packages</label>
@@ -350,7 +350,7 @@
                                     <module>quotegen</module>
                                     <controller>deviceconfiguration</controller>
                                     <action>viewglobal</action>
-                                    <resource>quotegen_deviceconfiguration_viewglobal</resource>
+                                    <resource>quotegen__deviceconfiguration__viewglobal</resource>
                                     <pages>
                                         <viewall>
                                             <label>View All</label>
@@ -358,7 +358,7 @@
                                             <module>quotegen</module>
                                             <controller>deviceconfiguration</controller>
                                             <action>index</action>
-                                            <resource>quotegen_deviceconfiguration_index</resource>
+                                            <resource>quotegen__deviceconfiguration__index</resource>
                                         </viewall>
                                         <addnew>
                                             <label>Add New</label>
@@ -366,7 +366,7 @@
                                             <module>quotegen</module>
                                             <controller>deviceconfiguration</controller>
                                             <action>create</action>
-                                            <resource>quotegen_deviceconfiguration_create</resource>
+                                            <resource>quotegen__deviceconfiguration__create</resource>
                                         </addnew>
                                     </pages>
                                 </categories>
@@ -375,7 +375,7 @@
                                     <module>quotegen</module>
                                     <controller>device</controller>
                                     <action>delete</action>
-                                    <resource>quotegen_device_delete</resource>
+                                    <resource>quotegen__device__delete</resource>
                                     <visible>0</visible>
                                 </delete>
                                 <update>
@@ -383,7 +383,7 @@
                                     <module>quotegen</module>
                                     <controller>device</controller>
                                     <action>edit</action>
-                                    <resource>quotegen_device_edit</resource>
+                                    <resource>quotegen__device__edit</resource>
                                     <visible>0</visible>
                                 </update>
                             </pages>
@@ -395,21 +395,21 @@
                             <controller>deviceconfiguration</controller>
                             <action>index</action>
                             <visible>0</visible>
-                            <resource>quotegen_deviceconfiguration_index</resource>
+                            <resource>quotegen__deviceconfiguration__index</resource>
                             <pages>
                                 <viewall>
                                     <label>View all</label>
                                     <module>quotegen</module>
                                     <controller>deviceconfiguration</controller>
                                     <action>index</action>
-                                    <resource>quotegen_deviceconfiguration_index</resource>
+                                    <resource>quotegen__deviceconfiguration__index</resource>
                                 </viewall>
                                 <view>
                                     <label>View</label>
                                     <module>quotegen</module>
                                     <controller>deviceconfiguration</controller>
                                     <action>view</action>
-                                    <resource>quotegen_deviceconfiguration_view</resource>
+                                    <resource>quotegen__deviceconfiguration__view</resource>
                                     <visible>0</visible>
                                 </view>
                                 <delete>
@@ -417,7 +417,7 @@
                                     <module>quotegen</module>
                                     <controller>deviceconfiguration</controller>
                                     <action>delete</action>
-                                    <resource>quotegen_deviceconfiguration_delete</resource>
+                                    <resource>quotegen__deviceconfiguration__delete</resource>
                                     <visible>0</visible>
                                 </delete>
                                 <create>
@@ -425,14 +425,14 @@
                                     <module>quotegen</module>
                                     <controller>deviceconfiguration</controller>
                                     <action>create</action>
-                                    <resource>quotegen_deviceconfiguration_create</resource>
+                                    <resource>quotegen__deviceconfiguration__create</resource>
                                 </create>
                                 <update>
                                     <label>Edit</label>
                                     <module>quotegen</module>
                                     <controller>deviceconfiguration</controller>
                                     <action>edit</action>
-                                    <resource>quotegen_deviceconfiguration_edit</resource>
+                                    <resource>quotegen__deviceconfiguration__edit</resource>
                                     <visible>0</visible>
                                 </update>
                             </pages>
