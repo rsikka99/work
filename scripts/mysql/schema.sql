@@ -1250,8 +1250,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_quotes` (
   `quoteDate` DATETIME NOT NULL ,
   `userId` INT(11) NOT NULL ,
   `clientDisplayName` VARCHAR(45) NULL DEFAULT NULL ,
-  `leaseRate` DOUBLE NULL DEFAULT NULL ,
-  `leaseTerm` INT(11) NULL DEFAULT NULL ,
+  `leaseRate` DOUBLE NULL ,
+  `leaseTerm` INT(11) NULL ,
   `pageCoverageMonochrome` DOUBLE NOT NULL ,
   `pageCoverageColor` DOUBLE NOT NULL ,
   `pricingConfigId` INT(11) NOT NULL ,
@@ -1499,6 +1499,28 @@ CREATE  TABLE IF NOT EXISTS `user_roles` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `qgen_quote_lease_terms`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `qgen_quote_lease_terms` (
+  `quoteId` INT NOT NULL ,
+  `leasingSchemaTermId` INT NOT NULL ,
+  PRIMARY KEY (`quoteId`, `leasingSchemaTermId`) ,
+  INDEX `fk_qgen_quote_lease_terms_qgen_quotes1` (`quoteId` ASC) ,
+  INDEX `fk_qgen_quote_lease_terms_qgen_leasing_schema_terms1` (`leasingSchemaTermId` ASC) ,
+  CONSTRAINT `fk_qgen_quote_lease_terms_qgen_quotes1`
+    FOREIGN KEY (`quoteId` )
+    REFERENCES `qgen_quotes` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_qgen_quote_lease_terms_qgen_leasing_schema_terms1`
+    FOREIGN KEY (`leasingSchemaTermId` )
+    REFERENCES `qgen_leasing_schema_terms` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
 
 
 
