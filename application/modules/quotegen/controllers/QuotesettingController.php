@@ -46,21 +46,22 @@ class Quotegen_QuotesettingController extends Zend_Controller_Action
                     if ($form->isValid($values))
                     {
                         // Save to the database
-                        $mapper = Quotegen_Model_Mapper_QuoteSetting::getInstance();
                         $quoteSettings = new Quotegen_Model_Quotesetting();
                         $quoteSettings->populate($values);
-                        $mapper->insert($quoteSettings);
+                        Quotegen_Model_Mapper_QuoteSetting::getInstance()->insert($quoteSettings);
                         $this->_helper->redirector('index');
                     }
                     else
                     {
-                        throw new InvalidArgumentException("Please correct the errors below.");
+                        $this->_helper->flashMessenger(array (
+                                'danger' => 'Please correct the errors below.' 
+                        ));
                     }
                 }
-                catch ( InvalidArgumentException $e )
+                catch ( Exception $e )
                 {
                     $this->_helper->flashMessenger(array (
-                            'danger' => $e->getMessage() 
+                            'danger' => 'Error creating user.  Please try again.' 
                     ));
                 }
             }
@@ -132,7 +133,7 @@ class Quotegen_QuotesettingController extends Zend_Controller_Action
                 {
                     // Delete was unsuccesfull
                     $this->_helper->flashMessenger(array (
-                            'danger' => 'Delete was unsuccessful please try again.'
+                            'danger' => 'Delete was unsuccessful please try again.' 
                     ));
                 }
             }
@@ -186,13 +187,15 @@ class Quotegen_QuotesettingController extends Zend_Controller_Action
                     }
                     else
                     {
-                        throw new InvalidArgumentException("Please correct the errors below");
+                        $this->_helper->flashMessenger(array (
+                                'danger' => 'Please correct the errors below.' 
+                        ));
                     }
                 }
-                catch ( InvalidArgumentException $e )
+                catch ( Exception $e )
                 {
                     $this->_helper->flashMessenger(array (
-                            'danger' => $e->getMessage() 
+                            'danger' => 'Error editing quote setting.  Please try again.' 
                     ));
                 }
             }
@@ -214,8 +217,8 @@ class Quotegen_QuotesettingController extends Zend_Controller_Action
         
         // Find client and pass form object
         $form = new Quotegen_Form_QuoteSetting();
-        $mapper = Quotegen_Model_Mapper_QuoteSetting::getInstance();
-        $quoteSetting = $mapper->find($quoteSettingId);
+        $quoteSettingMapper = Quotegen_Model_Mapper_QuoteSetting::getInstance();
+        $quoteSetting = $quoteSettingMapper->find($quoteSettingId);
         
         $form->populate($quoteSetting->toArray());
         // update record if post
@@ -243,22 +246,24 @@ class Quotegen_QuotesettingController extends Zend_Controller_Action
                         $quoteSetting->populate($values);
                         $quoteSetting->setId($quoteSettingId);
                         
-                        $mapper->save($quoteSetting, $quoteSettingId);
+                        $quoteSettingMapper->save($quoteSetting, $quoteSettingId);
                         $this->_helper->flashMessenger(array (
-                                'success' => "Quote setting was updated sucessfully." 
+                                'success' => "Default quote setting was updated sucessfully." 
                         ));
                         
                         $this->_helper->redirector('editdefault');
                     }
                     else
                     {
-                        throw new InvalidArgumentException("Please correct the errors below");
+                        $this->_helper->flashMessenger(array (
+                                'danger' => 'Please correct the errors below' 
+                        ));
                     }
                 }
-                catch ( InvalidArgumentException $e )
+                catch ( Exception $e )
                 {
                     $this->_helper->flashMessenger(array (
-                            'danger' => $e->getMessage() 
+                            'danger' => 'Error saving configuration.  Please try again.' 
                     ));
                 }
             }

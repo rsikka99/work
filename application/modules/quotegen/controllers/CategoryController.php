@@ -113,11 +113,17 @@ class Quotegen_CategoryController extends Zend_Controller_Action
                         // Redirect client back to index
                         $this->_helper->redirector('index');
                     }
+                    else
+                    {
+                        $this->_helper->flashMessenger(array (
+                                'danger' => 'Please correct the errors below.' 
+                        ));
+                    }
                 }
                 catch ( Exception $e )
                 {
                     $this->_helper->flashMessenger(array (
-                            'danger' => 'Please correct the errors below.' 
+                            'danger' => 'There was an error creating this category.  Please try again..' 
                     ));
                 }
             }
@@ -168,11 +174,17 @@ class Quotegen_CategoryController extends Zend_Controller_Action
                         
                         $this->_helper->redirector('index');
                     }
+                    else
+                    {
+                        $this->_helper->flashMessenger(array (
+                                'danger' => 'Please correct the errors below' 
+                        ));
+                    }
                 }
-                catch (Exception $e)
+                catch ( Exception $e )
                 {
                     $this->_helper->flashMessenger(array (
-                            'danger' => 'Please correct the errors below' 
+                            'danger' => 'There was an error updating this category.  Please try again' 
                     ));
                 }
             }

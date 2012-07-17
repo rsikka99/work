@@ -213,11 +213,15 @@ class Quotegen_ClientController extends Zend_Controller_Action
                                 'success' => "Client '{$client->getName()}' was updated sucessfully." 
                         ));
                     }
+                    else
+                    {
+						$this->_helper->flashMessenger(array('danger' => 'Please correct the errors below'));
+                    }
                 }
                 catch ( Exception $e )
                 {
                     $this->_helper->flashMessenger(array (
-                            'danger' => 'Please correct the errors below.' 
+                            'danger' => 'There was an error saving this client.  Please try again..' 
                     ));
                 }
             }
