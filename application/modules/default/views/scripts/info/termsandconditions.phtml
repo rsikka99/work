@@ -7,3 +7,18 @@
 ?>
 
 <h2>Terms &amp; Conditions</h2>
+
+<textarea readonly="readonly" style="width: 98%; resize: none; margin-top: 10px; margin-bottom: 20px; height: 500px; padding: 5px;" title="Terms and Conditions">
+<?php 
+	$path = fopen($this->path,"r");
+	$oldchars = array("’");
+	$newchars = array("'");
+	
+	while (!feof($path)) {
+		$lineOfText = fgets($path);
+		$lineOfText = str_replace($oldchars,$newchars,$lineOfText);
+		print $lineOfText;
+	}
+	fclose($path);
+?>
+</textarea>

@@ -17,25 +17,28 @@ class Default_InfoController extends Zend_Controller_Action
     
     function preDispatch ()
     {
-    
     } // end function preDispatch
     
     /**
-     * Display the company End User License Agreement (EULA)
+     * Display the company Terms and Conditions
      *
      */
     public function termsandconditionsAction ()
     {
+        $this->view->path = APPLICATION_PATH . "/../data/info/termsandconditions.txt";
     } // end function termsandconditionsAction
 
     /**
-     * To be determined
+     * Display the company End User License Agreement (EULA)
      */
     public function eulaAction ()
     {
+        $this->view->path = APPLICATION_PATH . "/../data/info/eula.txt";
     } // end function eulaAction
 
-    
+    /**
+     * Displays the program verion and meta information
+     */
     public function aboutAction ()
     {
         try
