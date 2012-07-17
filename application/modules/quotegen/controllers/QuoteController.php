@@ -114,10 +114,10 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
                             
                             $quoteId = Quotegen_Model_Mapper_Quote::getInstance()->insert($quote);
                             
-                            $this->resetQuoteSession($quoteId);
-                            
                             // Redirect to the build controller
-                            $this->_helper->redirector('index', 'quote_devices');
+                            $this->_helper->redirector('index', 'quote_devices', null, array (
+                                    'quoteId' => $quoteId 
+                            ));
                         }
                         catch ( Exception $e )
                         {
