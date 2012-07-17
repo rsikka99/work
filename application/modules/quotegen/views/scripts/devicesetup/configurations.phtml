@@ -1,11 +1,9 @@
 <?php 
 $id = $this->id;
-$device = Quotegen_Model_Mapper_Device::getInstance()->find($id);
-$devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . ' ' . $device->getMasterDevice()->getPrinterModel();
 ?>
 
 <div class="clearfix">
-	<h1><?php echo $devicename; ?></h1>
+	<h1><?php echo $this->devicename; ?></h1>
 </div>
 
 <div class="tabbable"> <!-- Only required for left/right tabs -->
@@ -18,12 +16,15 @@ $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . 
     <div class="tab-content">
 		<form name="frmOptions" id="frmOptions" action="" method="post">
 			<input type="hidden" name="optionid" id="optionid" value="" />
-    		<h3>Configurations</h3>
-    		
+			
     		<div id="configurations" class="well">
 				<label for="configuration" class="details_label" style="display: inline; padding: 0px 10px 0px 10px;">Select Configuration:</label>
 				<select name="configuration" id="configuration" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
+				<?php foreach ($this->configurations as $configuration) { ?>
+					<option value="<?php echo $configuration->getId(); ?>"><?php echo $configuration->getName(); ?></option>
+				<?php } ?>
 				</select>
+    			<a class="btn btn-success btn-small pull-right create-button" href="<?php echo $this->url(array('action' => 'create')) ?>"> <i class="icon-white icon-plus-sign"></i> Create new</a>
     		</div>
     		
     		<div id="options">

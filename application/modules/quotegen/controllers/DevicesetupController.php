@@ -641,6 +641,8 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
      */
     public function configurationsAction ()
     {
+        $where = null;
+        $configurationId = $this->_getParam('configId', false);
         $masterDeviceId = $this->_getParam('id', false);
         $this->view->id = $masterDeviceId;
         
@@ -656,6 +658,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         // Get the masterDevice
         $mapper = new Proposalgen_Model_Mapper_MasterDevice();
         $masterDevice = $mapper->find($masterDeviceId);
+        $this->view->devicename = $masterDevice->getManufacturer()->getDisplayname() . ' ' . $masterDevice->getPrinterModel();
         
         // If the masterDevice doesn't exist, send them back t the view all masterDevices page
         if (! $masterDevice)
@@ -665,6 +668,10 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             ));
             $this->_helper->redirector('index');
         }
+        
+        // Get configurations
+        $configurations = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAllDeviceConfigurationByDeviceId($masterDeviceId);
+        $this->view->configurations = $configurations;
         
         // Make sure we are posting data
         $request = $this->getRequest();
@@ -693,15 +700,24 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             }
         }
 
-        // Get the device and assigned options
-        $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
+        // Get the assigned device options
+        $deviceOptions = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->fetchAll(array("deviceConfigurationid = ?" => $configurationId));
+        
+        $optionIds = null;
         $assignedOptions = array ();
-        foreach ( $device->getOptions() as $option )
+        foreach ( $deviceOptions as $option )
         {
-            $assignedOptions [] = $option->getId();
+            if ( $optionIds ) {
+                $optionIds .= ",";
+            }
+            $optionIds .= $option->getOptionId();
+            $assignedOptions [] = $option->getOptionId();
         }
-        $this->view->device = $device;
+        $where = "id IN ({$optionIds})";
         $this->view->assignedOptions = $assignedOptions;
+        
+        // Get configuration assigned options
+        
         
         // Display filterd list of options
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Quotegen_Model_Mapper_Option::getInstance()));
