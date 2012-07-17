@@ -52,7 +52,7 @@ class Quotegen_Form_Option extends EasyBib_Form
                 ) 
         ));
         
-        $this->addElement('text', 'price', array (
+        $this->addElement('text', 'cost', array (
                 'label' => 'Price:', 
                 'required' => true, 
                 'filters' => array (
