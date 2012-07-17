@@ -689,6 +689,44 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             {
                 try
                 {
+                    // Get Option Id
+                    $optionId = $values ['optionid'];
+                    $deviceConfigurationOptionMapper = new Quotegen_Model_Mapper_DeviceConfigurationOption();
+                    $deviceConfigurationOption = new Quotegen_Model_DeviceConfigurationOption();
+                    
+                    // Save if option and device id
+                    if ($optionId && $masterDeviceId)
+                    {
+                        // Assign Option
+                        if (isset($values ['btnAssign']))
+                        {
+                            // Save device option
+                            $deviceConfigurationOption->setMasterDeviceId($masterDeviceId);
+                            $deviceConfigurationOption->setOptionId($optionId);
+                            $deviceConfigurationOptionMapper->insert($deviceConfigurationOption);
+                            
+                            $this->_helper->flashMessenger(array (
+                                    'success' => "The option was assigned successfully." 
+                            ));
+                        }
+                        else if (isset($values ['btnUnassign']))
+                        {
+                            // Delete device option
+                            $deviceConfigurationOption->setMasterDeviceId($masterDeviceId);
+                            $deviceConfigurationOption->setOptionId($optionId);
+                            $deviceConfigurationOptionMapper->delete($deviceConfigurationOption);
+                            
+                            $this->_helper->flashMessenger(array (
+                                    'success' => "The option was unassigned successfully." 
+                            ));
+                        }
+                    }
+                }
+                catch ( Exception $e )
+                {
+                    $this->_helper->flashMessenger(array (
+                            'error' => "An error has occurred." 
+                    ));
                 }
                 catch ( InvalidArgumentException $e )
                 {
