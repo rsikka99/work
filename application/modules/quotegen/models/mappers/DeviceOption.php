@@ -213,6 +213,37 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
         }
         return $entries;
     }
+
+
+    /**
+     * Fetches all options by device
+     *
+     * @param $where string|array|Zend_Db_Table_Select
+     *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
+     * @param $order string|array
+     *            OPTIONAL: A SQL ORDER clause.
+     * @param $count int
+     *            OPTIONAL: A SQL LIMIT count. (Defaults to 25)
+     * @param $offset int
+     *            OPTIONAL: A SQL LIMIT offset.
+     * @return multitype:Quotegen_Model_DeviceOption
+     */
+    public function fetchAllOptionsByDeviceId ($id)
+    {
+        $where = array ('masterDeviceId = ?' => $id);
+        $resultSet = $this->getDbTable()->fetchAll($where);
+        $entries = array ();
+        foreach ( $resultSet as $row )
+        {
+            $object = new Quotegen_Model_DeviceOption($row->toArray());
+            $optionId = $object->getOptionId();
+            
+            // Get Option object
+    
+            $entries [] = $object;
+        }
+        return $entries;
+    }
     
     /**
      * Gets a where clause for filtering by id

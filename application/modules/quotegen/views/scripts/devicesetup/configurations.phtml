@@ -20,11 +20,11 @@ $id = $this->id;
     		<div id="configurations" class="well">
 				<label for="configuration" class="details_label" style="display: inline; padding: 0px 10px 0px 10px;">Select Configuration:</label>
 				<select name="configuration" id="configuration" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
-				<?php foreach ($this->configurations as $configuration) { ?>
+				<?php foreach ($this->configurations as $configuration) { /* @var $configuration Quotegen_Model_DeviceConfiguration */ ?>
 					<option value="<?php echo $configuration->getId(); ?>"><?php echo $configuration->getName(); ?></option>
 				<?php } ?>
 				</select>
-    			<a class="btn btn-success btn-small pull-right create-button" href="<?php echo $this->url(array('action' => 'create')) ?>"> <i class="icon-white icon-plus-sign"></i> Create new</a>
+    			<a class="btn btn-success btn-small create-button" href="<?php echo $this->url(array('action' => 'createconfiguration')) ?>"> <i class="icon-white icon-plus-sign"></i> Create new</a>
     		</div>
     		
     		<div id="options">

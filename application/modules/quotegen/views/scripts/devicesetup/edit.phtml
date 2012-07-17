@@ -1,11 +1,9 @@
 <?php 
 $id = $this->id;
-$device = Quotegen_Model_Mapper_Device::getInstance()->find($id);
-$devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . ' ' . $device->getMasterDevice()->getPrinterModel();
 ?>
 
 <div class="clearfix">
-	<h1><?php echo $devicename; ?></h1>
+	<h1><?php echo $this->devicename; ?></h1>
 </div>
 
 <div class="tabbable"> <!-- Only required for left/right tabs -->

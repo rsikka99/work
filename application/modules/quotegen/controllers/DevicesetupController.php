@@ -67,6 +67,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         // Get the masterDevice
         $mapper = new Proposalgen_Model_Mapper_MasterDevice();
         $masterDevice = $mapper->find($masterDeviceId);
+        $this->view->devicename = $masterDevice->getManufacturer()->getDisplayname() . ' ' . $masterDevice->getPrinterModel();
         
         // If the masterDevice doesn't exist, send them back t the view all masterDevices page
         if (! $masterDevice)
@@ -270,6 +271,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         // Get the master device
         $mapper = new Proposalgen_Model_Mapper_MasterDevice();
         $masterDevice = $mapper->find($masterDeviceId);
+        $this->view->devicename = $masterDevice->getManufacturer()->getDisplayname() . ' ' . $masterDevice->getPrinterModel();
         
         // If the master device doesn't exist, send them back to the view all master devices page
         if (! $masterDevice)
@@ -615,6 +617,8 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         
         // Get the device and assigned options
         $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
+        $this->view->devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . ' ' . $device->getMasterDevice()->getPrinterModel();
+        
         $assignedOptions = array ();
         foreach ( $device->getOptions() as $option )
         {
@@ -719,8 +723,8 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         // Get configuration assigned options
         
         
-        // Display filterd list of options
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Quotegen_Model_Mapper_Option::getInstance()));
+        // Display filterd list of device options
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Quotegen_Model_Mapper_DeviceOption::getInstance(), array("masterDeviceId = ?" => $masterDeviceId)));
         
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
