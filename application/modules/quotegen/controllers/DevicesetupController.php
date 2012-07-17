@@ -641,12 +641,11 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
      */
     public function configurationsAction ()
     {
-        $where = null;
-        $id = $this->_getParam('id', false);
-        $this->view->id = $id;
+        $masterDeviceId = $this->_getParam('id', false);
+        $this->view->id = $masterDeviceId;
         
         // If they haven't provided an id, send them back to the view all masterDevice page
-        if (! $id)
+        if (! $masterDeviceId)
         {
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a masterDevice to edit first.' 
@@ -656,7 +655,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         
         // Get the masterDevice
         $mapper = new Proposalgen_Model_Mapper_MasterDevice();
-        $masterDevice = $mapper->find($id);
+        $masterDevice = $mapper->find($masterDeviceId);
         
         // If the masterDevice doesn't exist, send them back t the view all masterDevices page
         if (! $masterDevice)
@@ -693,6 +692,28 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 $this->_helper->redirector('index');
             }
         }
+
+        // Get the device and assigned options
+        $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
+        $assignedOptions = array ();
+        foreach ( $device->getOptions() as $option )
+        {
+            $assignedOptions [] = $option->getId();
+        }
+        $this->view->device = $device;
+        $this->view->assignedOptions = $assignedOptions;
+        
+        // Display filterd list of options
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Quotegen_Model_Mapper_Option::getInstance()));
+        
+        // Set the current page we're on
+        $paginator->setCurrentPageNumber($this->_getParam('page', 1));
+        
+        // Set how many items to show
+        $paginator->setItemCountPerPage(15);
+        
+        // Pass the view the paginator
+        $this->view->paginator = $paginator;
     }
 
 }

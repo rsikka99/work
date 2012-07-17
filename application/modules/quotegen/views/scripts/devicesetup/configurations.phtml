@@ -19,6 +19,41 @@ $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . 
 		<form name="frmOptions" id="frmOptions" action="" method="post">
 			<input type="hidden" name="optionid" id="optionid" value="" />
     		<h3>Configurations</h3>
+    		
+    		<div id="configurations" class="well">
+				<label for="configuration" class="details_label" style="display: inline; padding: 0px 10px 0px 10px;">Select Configuration:</label>
+				<select name="configuration" id="configuration" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
+				</select>
+    		</div>
+    		
+    		<div id="options">
+			<?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
+	            <table class="table table-bordered table-striped table-condensed">
+	                <tr>
+	                    <th style="width: 200px;">SKU</th>
+	                    <th>Option</th>
+						<th style="width: 120px; text-align: center;">Action</th>
+	                </tr>
+					<?php foreach ($this->paginator as $option) : /* @var $option Quotegen_Model_Option */ ?>
+	                <tr>
+	                    <td><?php echo $option->getSku(); ?></td>
+	                    <td><?php echo $option->getName(); ?></td>
+	                    <td style="text-align: center;">
+							<div class="" style="text-align: center;">
+								<?php if ( in_array($option->getId(), $this->assignedOptions ) ) { ?>
+									<button type="submit" name="btnUnassign" id="btnUnassign" class="btn btn-danger btn-mini" onclick="javascript: $('#optionid').val(<?php echo $option->getId(); ?>);"><i class="icon-minus-sign icon-white"></i> Unassign</button>
+								<?php } else { ?>
+									<button type="submit" name="btnAssign" id="btnAssign" class="btn btn-success btn-mini" onclick="javascript: $('#optionid').val(<?php echo $option->getId(); ?>);"><i class="icon-plus-sign icon-white"></i> Assign</button>
+								<?php } ?>
+							</div>
+						</td>
+	                </tr>
+	                <?php endforeach; ?>
+	            </table>
+				<?php echo $this->paginationControl($this->paginator); ?>
+			<?php endif; ?>
+    		</div>
+    		
 			<div style="text-align: center;">
 				<a class="btn" title="Done" href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'index' ), null, true ); ?>">Done</a>
 			</div>

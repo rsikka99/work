@@ -213,7 +213,7 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
         }
         return $entries;
     }
-
+    
     /**
      * Gets a where clause for filtering by id
      *

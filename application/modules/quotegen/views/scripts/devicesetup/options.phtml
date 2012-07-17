@@ -40,7 +40,7 @@ $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . 
 				<input type="submit" name="btnSearch" id="btnSearch" value="Search" class="btn" />
 				<input type="submit" name="btnClearSearch" id="btnClearSearch" value="Clear" class="btn" />
 			</div>
-			
+			<?php print_r($this->paginator); die; ?>
 			<?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
 	            <table class="table table-bordered table-striped table-condensed">
 	                <tr>
@@ -48,7 +48,7 @@ $devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . 
 	                    <th>Option</th>
 						<th style="width: 120px; text-align: center;">Action</th>
 	                </tr>
-					<?php foreach ($this->paginator->getCurrentItems() as $option) : /* @var $option Quotegen_Model_Option */ ?>
+					<?php foreach ($this->paginator as $option) : /* @var $option Quotegen_Model_Option */ ?>
 	                <tr>
 	                    <td><?php echo $option->getSku(); ?></td>
 	                    <td><?php echo $option->getName(); ?></td>
