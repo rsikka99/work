@@ -704,27 +704,28 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             }
         }
 
-        // Get the assigned device options
-        $deviceOptions = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->fetchAll(array("deviceConfigurationid = ?" => $configurationId));
-        
-        $optionIds = null;
-        $assignedOptions = array ();
+        // Get all available options for device
+        $deviceOptions = Quotegen_Model_Mapper_DeviceOption::getInstance()->fetchAllOptionsByDeviceId($masterDeviceId);
+        $availableOptions = array ();
         foreach ( $deviceOptions as $option )
         {
-            if ( $optionIds ) {
-                $optionIds .= ",";
-            }
-            $optionIds .= $option->getOptionId();
+            $availableOptions [] = $option->getId();
+        }
+        $where = array (
+                "id IN ( ? )" => $availableOptions
+        );
+        
+        // Get the assigned options for device
+        $deviceConfigurationOptions = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->fetchAll(array("deviceConfigurationid = ?" => $configurationId));
+        $assignedOptions = array ();
+        foreach ( $deviceConfigurationOptions as $option )
+        {
             $assignedOptions [] = $option->getOptionId();
         }
-        $where = "id IN ({$optionIds})";
         $this->view->assignedOptions = $assignedOptions;
         
-        // Get configuration assigned options
-        
-        
         // Display filterd list of device options
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Quotegen_Model_Mapper_DeviceOption::getInstance(), array("masterDeviceId = ?" => $masterDeviceId)));
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Quotegen_Model_Mapper_Option::getInstance(), $where));
         
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
