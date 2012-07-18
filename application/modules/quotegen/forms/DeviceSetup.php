@@ -63,7 +63,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         */
         $this->addElement('text', 'sku', array (
                 'label' => 'SKU:',
-                'required' => true,
+                'required' => false,
                 'filters' => array (
                         'StringTrim',
                         'StripTags'
