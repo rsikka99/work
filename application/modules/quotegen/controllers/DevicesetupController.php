@@ -691,8 +691,14 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 {
                     // Get Option Id
                     $optionId = $values ['optionid'];
+                    $qty = $values ["txtQty{$optionId}"];
                     $deviceConfigurationOptionMapper = new Quotegen_Model_Mapper_DeviceConfigurationOption();
                     $deviceConfigurationOption = new Quotegen_Model_DeviceConfigurationOption();
+                    
+                    // Populate Device Configuration Option object
+                    $deviceConfigurationOption->setMasterDeviceId($masterDeviceId);
+                    $deviceConfigurationOption->setOptionId($optionId);
+                    $deviceConfigurationOption->setQuantity($qty);
                     
                     // Save if option and device id
                     if ($optionId && $masterDeviceId)
@@ -701,8 +707,6 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         if (isset($values ['btnAssign']))
                         {
                             // Save device option
-                            $deviceConfigurationOption->setMasterDeviceId($masterDeviceId);
-                            $deviceConfigurationOption->setOptionId($optionId);
                             $deviceConfigurationOptionMapper->insert($deviceConfigurationOption);
                             
                             $this->_helper->flashMessenger(array (
@@ -712,8 +716,6 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         else if (isset($values ['btnUnassign']))
                         {
                             // Delete device option
-                            $deviceConfigurationOption->setMasterDeviceId($masterDeviceId);
-                            $deviceConfigurationOption->setOptionId($optionId);
                             $deviceConfigurationOptionMapper->delete($deviceConfigurationOption);
                             
                             $this->_helper->flashMessenger(array (
