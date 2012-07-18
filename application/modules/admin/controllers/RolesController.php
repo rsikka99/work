@@ -26,9 +26,79 @@ class Admin_RolesController extends Zend_Controller_Action
      */
     public function testAction ()
     {
-        $this->view->roles = Admin_Model_Mapper_Role::getInstance()->fetchAll();
+        $roleId = $this->_getParam('roleId', 2);
+        $role = Admin_Model_Mapper_Role::getInstance()->find($roleId);
+        $this->view->roles = array (
+                $role 
+        );
         
-        $this->view->moduleList = $this->getModuleList(true);
+        $currentPrivileges [] = array ();
+        $alphaNumeric = new Zend_Filter_Alnum();
+        /* @var $privilege Admin_Model_Privilege */
+        foreach ( $role->getPrivileges() as $privilege )
+        {
+            $permissionPath = $privilege->getPermissionPath();
+            $fieldName = $alphaNumeric->filter($permissionPath);
+            $currentPrivileges ["privileges-$fieldName"] = $privilege->getPermissionPath();
+        }
+        
+        $privilegeList = $this->getModuleList(true);
+        $form = new Admin_Form_Privileges($privilegeList);
+        $form->populate(array (
+                'privileges' => $currentPrivileges 
+        ));
+        
+        $request = $this->getRequest();
+        
+        if ($request->isPost())
+        {
+            if ($form->isValid($request->getPost()))
+            {
+                $formValues = $form->getValues();
+                $privilegeValues = $formValues ['privileges'];
+                $valuesToInsert = array ();
+                $valuesToDelete = array ();
+                
+                $privilegeMapper = Admin_Model_Mapper_Privilege::getInstance();
+                $newPrivilege = new Admin_Model_Privilege();
+                $newPrivilege->setRoleId($roleId);
+                
+                foreach ( $privilegeValues as $value )
+                {
+                    $hasPrivilegeAlready = false;
+                    foreach ( $role->getPrivileges() as $privilege )
+                    {
+                        if (strcasecmp($value, $privilege->getPermissionPath()) === 0)
+                        {
+                            $hasPrivilegeAlready = true;
+                            break;
+                        }
+                    }
+                    
+                    if (! $hasPrivilegeAlready)
+                    {
+                        // Insert
+                        $newPrivilege->setFromPermissionPath($value);
+                        $privilegeMapper->insert($newPrivilege);
+                    }
+                }
+                
+                foreach ( $role->getPrivileges() as $privilege )
+                {
+                    if (! in_array($privilege->getPermissionPath(), $privilegeValues))
+                    {
+                        // Delete
+                        $privilegeMapper->delete($privilege);
+                    }
+                }
+                
+                $this->_helper->flashMessenger(array (
+                        'success' => 'New privileges saved successfully' 
+                ));
+            }
+        }
+        
+        $this->view->form = $form;
     }
 
     /**
@@ -144,12 +214,12 @@ class Admin_RolesController extends Zend_Controller_Action
      */
     public function getModuleList ($withChildren = false)
     {
-        $percentModule = $this->createModuleObject('%', '%_');
+        $percentModule = $this->createModuleObject('%', '%__');
         
         if ($withChildren)
         {
-            $percentController = $this->createControllerObject('%', '%_%_');
-            $percentAction = $this->createActionObject('%', '%_%_%');
+            $percentController = $this->createControllerObject('%', '%__%__');
+            $percentAction = $this->createActionObject('%', '%__%__%');
             
             $percentModule->controllers = array (
                     $percentController 
@@ -214,9 +284,16 @@ class Admin_RolesController extends Zend_Controller_Action
             throw new InvalidArgumentException('The parameter "module" is expected to be of type stdClass.');
         }
         
+        $percentController = $this->createControllerObject('%', "{$module->permissionPath}%__");
+        if ($withChildren)
+        {
+            $percentController->actions = array (
+                    $this->createActionObject('%', $percentController->permissionPath . '%') 
+            );
+        }
         // Add an object for the wildcard
         $controllerList = array (
-                $this->createControllerObject('%', "{$module->permissionPath}%__") 
+                $percentController 
         );
         
         // Read the directory

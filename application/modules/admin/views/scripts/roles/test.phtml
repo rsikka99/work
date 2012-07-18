@@ -1,36 +1,8 @@
 <div class="page-header">
     <h1>Role Management (Beta)</h1>
 </div>
-    <?php foreach ($this->moduleList as $module) : ?>
-    <h4>Module: <?php echo $module->name; ?></h4>
-    <div class="row">
-        <?php foreach ($module->controllers as $controller ) :?>
-        <div class="span4"><div class="well">
-            <h5>Controller: <?php echo $controller->name; ?></h5>
-            <?php foreach ($controller->actions as $action ) : ?>
-            <input type="checkbox" name="privileges[]" value="<?php echo $action->permissionPath; ?>" /><?php echo $action->name; ?><br>
-            <?php endforeach;?>
-        </div></div>
-        <?php endforeach;?>
-    </div>
-    <?php endforeach;?>
-
 <div class="well">
-<ul>
-<?php foreach ($this->moduleList as $module) : ?>
-    <li><?php echo $module->permissionPath; ?><ul>
-        <?php foreach ($module->controllers as $controller ) :?>
-        <li><?php echo $controller->permissionPath; ?><ul>
-            <?php foreach ($controller->actions as $action ) : ?>
-                <li><?php echo $action->permissionPath; ?></li>
-            <?php endforeach;?>
-        </ul>
-        </li>
-        <?php endforeach;?>
-        </ul>
-        </li>
-<?php endforeach;?>
-</ul>
+<?php echo $this->form; ?>
 </div>
 <hr>
 <?php if (count($this->roles) > 0) : ?>
