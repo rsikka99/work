@@ -1,0 +1,50 @@
+<div class="page-header">
+    <h1>Role Management (Beta)</h1>
+</div>
+    <?php foreach ($this->moduleList as $module) : ?>
+    <h4>Module: <?php echo $module->name; ?></h4>
+    <div class="row">
+        <?php foreach ($module->controllers as $controller ) :?>
+        <div class="span4"><div class="well">
+            <h5>Controller: <?php echo $controller->name; ?></h5>
+            <?php foreach ($controller->actions as $action ) : ?>
+            <input type="checkbox" name="privileges[]" value="<?php echo $action->permissionPath; ?>" /><?php echo $action->name; ?><br>
+            <?php endforeach;?>
+        </div></div>
+        <?php endforeach;?>
+    </div>
+    <?php endforeach;?>
+
+<div class="well">
+<ul>
+<?php foreach ($this->moduleList as $module) : ?>
+    <li><?php echo $module->permissionPath; ?><ul>
+        <?php foreach ($module->controllers as $controller ) :?>
+        <li><?php echo $controller->permissionPath; ?><ul>
+            <?php foreach ($controller->actions as $action ) : ?>
+                <li><?php echo $action->permissionPath; ?></li>
+            <?php endforeach;?>
+        </ul>
+        </li>
+        <?php endforeach;?>
+        </ul>
+        </li>
+<?php endforeach;?>
+</ul>
+</div>
+<hr>
+<?php if (count($this->roles) > 0) : ?>
+<?php foreach ($this->roles as $role) : /* @var $role Admin_Model_Role */?>
+<h3><?php echo $role->getName(); ?></h3>
+<div class="well">
+<h4>Permissions</h4>
+    <?php foreach ($role->getPrivileges() as $privilege) : /* @var $privilege Admin_Model_Privilege */ ?>
+    <ul>
+        <li><?php echo $privilege->getModule();?>__<?php echo $privilege->getController();?>__<?php echo $privilege->getAction();?></li>
+    </ul>
+    <?php endforeach; ?>
+</div>
+<?php endforeach; ?>
+<?php else :?>
+<h3>Sorry, no roles could be found in the system!</h3>
+<?php endif; ?>

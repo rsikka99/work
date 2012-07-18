@@ -14,28 +14,21 @@ class Admin_Model_Role extends My_Model_Abstract
      *
      * @var int
      */
-    protected $_id = 0;
+    protected $_id;
     
     /**
-     * The module to provide access to
+     * The name of the role
      *
      * @var string
      */
-    protected $_module;
+    protected $_name;
     
     /**
-     * The controller to provide access to
+     * The privielges associated with this role
      *
-     * @var string
+     * @var array
      */
-    protected $_controller;
-    
-    /**
-     * The action to provide access to
-     *
-     * @var string
-     */
-    protected $_action;
+    protected $_privileges;
 
     public function __construct ($options = null)
     {
@@ -145,6 +138,32 @@ class Admin_Model_Role extends My_Model_Abstract
         }
         
         $this->_name = $input->name;
+        return $this;
+    }
+
+    /**
+     * Gets the privileges for this role
+     *
+     * @return multitype:Admin_Model_Privilege
+     */
+    public function getPrivileges ()
+    {
+        if (!isset($this->_privileges))
+        {
+            $this->_privileges = Admin_Model_Mapper_Privilege::getInstance()->fetchAllForRole($this->getId());
+        }
+        return $this->_privileges;
+    }
+
+    /**
+     * Sets the privileges for this role
+     *
+     * @param multitype:multitype:Admin_Model_Privilege $_privileges
+     *            The new privileges
+     */
+    public function setPrivileges ($_privileges)
+    {
+        $this->_privileges = $_privileges;
         return $this;
     }
 }

@@ -117,14 +117,14 @@ class Application_Model_Acl extends Zend_Acl
          */
         if (is_null($request) === false && $request !== false && $request instanceof Zend_Controller_Request_Abstract)
         {
-            $resource ["moduleName"] = $request->getModuleName();
-            $resource ["controllerName"] = $request->getControllerName();
-            $resource ["actionName"] = $request->getActionName();
+            $resource ["moduleName"] = strtolower($request->getModuleName());
+            $resource ["controllerName"] = strtolower($request->getControllerName());
+            $resource ["actionName"] = strtolower($request->getActionName());
         }
         else
         {
             // We're processing a resource instead of a request object
-            $boom = explode("__", $request);
+            $boom = explode("__", strtolower($request));
             if (count($boom) !== 3)
             {
                 user_error("ACL Resource did not provide exactly 3 paramters. Access will be denied to '$request'", E_USER_WARNING);

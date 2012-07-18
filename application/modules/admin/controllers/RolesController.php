@@ -3,6 +3,11 @@
 class Admin_RolesController extends Zend_Controller_Action
 {
 
+    /**
+     * (non-PHPdoc)
+     *
+     * @see Zend_Controller_Action::init()
+     */
     public function init ()
     {
         /* Initialize action controller here */
@@ -16,6 +21,18 @@ class Admin_RolesController extends Zend_Controller_Action
             ->initContext();
     }
 
+    /**
+     * Beta action for role management
+     */
+    public function testAction ()
+    {
+        $this->view->roles = Admin_Model_Mapper_Role::getInstance()->fetchAll();
+        
+        $this->view->moduleList = $this->getModuleList(true);
+    }
+
+    /**
+     */
     public function indexAction ()
     {
         $roleMapper = new Admin_Model_Mapper_Role();
@@ -23,14 +40,17 @@ class Admin_RolesController extends Zend_Controller_Action
         $this->view->roles = $roleList;
     }
 
+    /**
+     * Handles the jqgrid edit features.
+     */
     public function editAction ()
     {
         // Edit Operations: add del edit
         $operation = $this->getRequest()->getParam("oper");
         $roleId = $this->getRequest()->getParam("roleId");
-        $module = $this->getRequest()->getParam("module");
-        $controller = $this->getRequest()->getParam("controller");
-        $action = $this->getRequest()->getParam("action");
+        $module = $this->getRequest()->getParam("moduleName");
+        $controller = $this->getRequest()->getParam("controllerName");
+        $action = $this->getRequest()->getParam("actionName");
         $privilege_id = $this->getRequest()->getParam("id");
         
         $privMapper = new Admin_Model_Mapper_Privilege();
@@ -65,6 +85,9 @@ class Admin_RolesController extends Zend_Controller_Action
         }
     }
 
+    /**
+     * Gets the privileges for a role
+     */
     public function getprivilegesAction ()
     {
         $this->view->layout()->disableLayout();
@@ -97,9 +120,16 @@ class Admin_RolesController extends Zend_Controller_Action
         
         $privileges = $privMapper->fetchAll($where, $order, $limit, $offset);
         
+        /* @var $privilege Admin_Model_Privilege */
         foreach ( $privileges as $privilege )
         {
-            $privilegeList [] = $privilege->toArray();
+            $privilegeList [] = array (
+                    'id' => $privilege->getId(), 
+                    'roleId' => $privilege->getRoleId(), 
+                    'moduleName' => $privilege->getModule(), 
+                    'controllerName' => $privilege->getController(), 
+                    'actionName' => $privilege->getAction() 
+            );
         }
         $this->view->total = ($limit) ? ceil($numberOfRecords / $limit) : 1;
         $this->view->page = 1;
@@ -107,33 +137,238 @@ class Admin_RolesController extends Zend_Controller_Action
         $this->view->rows = $privilegeList;
     }
 
-    public function getmodulesAction ()
+    /**
+     * Gets an array of module names that can be used within permissions.
+     *
+     * @return multitype:stdClass The list of modules.
+     */
+    public function getModuleList ($withChildren = false)
     {
-        $this->view->layout()->disableLayout();
-        $moduleList = array (
-                "%" 
-        );
-        $moduleName = trim($this->getRequest()->getParam('moduleName'));
+        $percentModule = $this->createModuleObject('%', '%_');
         
+        if ($withChildren)
+        {
+            $percentController = $this->createControllerObject('%', '%_%_');
+            $percentAction = $this->createActionObject('%', '%_%_%');
+            
+            $percentModule->controllers = array (
+                    $percentController 
+            );
+            $percentController->actions = array (
+                    $percentAction 
+            );
+        }
+        
+        // Add % to the list
+        $moduleList = array (
+                $percentModule 
+        );
+        
+        /* @var $modulesDir Directory */
         $modulesDir = dir(APPLICATION_PATH . "/modules");
         while ( false !== ($entry = $modulesDir->read()) )
         {
-            if (substr($entry, 0, 1) != '.')
+            $modulePath = APPLICATION_PATH . "/modules/{$entry}";
+            // Omit . and .. from the list
+            if (substr($entry, 0, 1) != '.' && is_dir($modulePath))
             {
-                $moduleList [] = $entry;
+                $moduleName = ucfirst($entry);
+                $modulePermissionPath = "{$moduleName}__";
+                $moduleList [] = $this->createModuleObject($moduleName, $modulePermissionPath, $modulePath, $withChildren);
             }
         }
+        
+        $modulesDir->close();
+        
+        return $moduleList;
+    }
+
+    public function createModuleObject ($name, $permissionPath, $path = false, $withChildren = false)
+    {
+        $module = new stdClass();
+        $module->name = $name;
+        $module->permissionPath = strtolower($permissionPath);
+        $module->path = $path;
+        $module->controllers = array ();
+        if ($withChildren)
+        {
+            $module->controllers = $this->getControllerList($module, $withChildren);
+        }
+        return $module;
+    }
+
+    /**
+     * Gets a list of controllers for a module
+     *
+     * @param stdClass $module
+     *            The module object to get the controller list for
+     * @param boolean $withChildren
+     *            DEFAULT FALSE. If set to true this will fetch the actions as as well.
+     * @throws InvalidArgumentException
+     * @return multitype:stdClass
+     */
+    public function getControllerList ($module, $withChildren = false)
+    {
+        if (! $module instanceof stdClass)
+        {
+            throw new InvalidArgumentException('The parameter "module" is expected to be of type stdClass.');
+        }
+        
+        // Add an object for the wildcard
+        $controllerList = array (
+                $this->createControllerObject('%', "{$module->permissionPath}%__") 
+        );
+        
+        // Read the directory
+        $controllerDirectory = dir("{$module->path}/controllers");
+        while ( false !== ($entry = $controllerDirectory->read()) )
+        {
+            $controllerPath = "{$module->path}/controllers";
+            // Omit . and .. from the list
+            if (substr($entry, 0, 1) != '.')
+            {
+                $secondControllerPath = "{$controllerPath}/{$entry}";
+                // If we have a directory, we need to go into it. (Maybe find a way to recurse through infinite directories?)
+                if (is_dir($secondControllerPath))
+                {
+                    // Read the directory
+                    
+
+                    $secondControllerDirectory = dir($secondControllerPath);
+                    while ( false !== ($secondEntry = $secondControllerDirectory->read()) )
+                    {
+                        
+                        // Omit . and .. from the list, as well as checking to see that we have a file that matches Controller.php
+                        if (substr($secondEntry, 0, 1) != '.' && strpos($secondEntry, 'Controller.php'))
+                        {
+                            $controllerName = "{$entry}_" . substr($secondEntry, 0, strlen($secondEntry) - 14);
+                            $permissionPath = "{$module->permissionPath}{$controllerName}__";
+                            $controllerClassName = "{$module->name}_{$controllerName}Controller";
+                            // Add a new controller object
+                            $controllerList [] = $this->createControllerObject($controllerName, $permissionPath, $controllerClassName, $secondControllerPath, $secondEntry, $withChildren);
+                        }
+                    }
+                }
+                else
+                {
+                    // Make sure we have a controller
+                    if (strpos($entry, 'Controller.php'))
+                    {
+                        $controllerName = substr($entry, 0, strlen($entry) - 14);
+                        $permissionPath = "{$module->permissionPath}{$controllerName}__";
+                        $controllerClassName = "{$module->name}_{$controllerName}Controller";
+                        
+                        // Add a new controller object
+                        $controllerList [] = $this->createControllerObject($controllerName, $permissionPath, $controllerClassName, $controllerPath, $entry, $withChildren);
+                    }
+                }
+            }
+        }
+        
+        return $controllerList;
+    }
+
+    /**
+     * Creates a new controller object
+     *
+     * @param string $name
+     *            The name of the controller
+     * @param string $className
+     *            The classname of the controller
+     * @param string $path
+     *            The path where the controller is located
+     * @param string $filename
+     *            The filename of the controller
+     * @param boolean $withChildren
+     *            DEFAULT FALSE. If set to true this will fetch the actions as as well.
+     * @return stdClass
+     */
+    public function createControllerObject ($name, $permissionPath = false, $className = false, $path = false, $filename = false, $withChildren = false)
+    {
+        $controller = new stdClass();
+        $controller->name = $name;
+        $controller->className = $className;
+        $controller->permissionPath = strtolower($permissionPath);
+        $controller->path = $path;
+        $controller->filename = $filename;
+        $controller->actions = array ();
+        
+        if ($withChildren)
+        {
+            $controller->actions = $this->getActionList($controller);
+        }
+        
+        return $controller;
+    }
+
+    /**
+     * Gets a list of actions available for a controller
+     *
+     * @param stdClass $controller
+     *            The controller to get actions for
+     * @return multitype:stdClass
+     */
+    public function getActionList ($controller)
+    {
+        $actionList = array (
+                $this->createActionObject('%', "{$controller->permissionPath}%") 
+        );
+        
+        // Load the file
+        require_once "{$controller->path}/{$controller->filename}";
+        
+        // Work with reflection to get all the methods
+        $controllerClass = new ReflectionClass($controller->className);
+        foreach ( $controllerClass->getMethods(ReflectionMethod::IS_PUBLIC) as $method => $value )
+        {
+            if (strcmp(substr($value->getName(), - 6), 'Action') === 0)
+            {
+                $actionName = substr($value->getName(), 0, strlen($value->getName()) - 6);
+                
+                $permissionPath = "{$controller->permissionPath}{$actionName}";
+                $actionList [] = $this->createActionObject($actionName, $permissionPath);
+            }
+        }
+        
+        return $actionList;
+    }
+
+    public function createActionObject ($name, $permissionPath, $description = false)
+    {
+        $action = new stdClass();
+        $action->name = $name;
+        $action->permissionPath = strtolower($permissionPath);
+        $action->description = $description;
+        return $action;
+    }
+
+    /**
+     * Gets a list of modules
+     */
+    public function getmodulesAction ()
+    {
+        // Disable the layout
+        $this->view->layout()->disableLayout();
+        
+        $moduleList = $this->getModuleList();
         
         $this->view->moduleList = $moduleList;
     }
 
+    /**
+     * Gets a list of controllers in a module
+     */
     public function getcontrollersAction ()
     {
+        // Disable the layout
         $this->view->layout()->disableLayout();
+        
+        // Add % to the list
         $controllerList = array (
-                "%" 
+                htmlentities("%") 
         );
         $moduleName = trim($this->getRequest()->getParam('moduleName'));
+        
         if (isset($moduleName) && strlen($moduleName) > 0 && ! (strcasecmp("%", $moduleName) === 0))
         {
             $controllersDir = dir(APPLICATION_PATH . "/modules/$moduleName/controllers");
@@ -141,41 +376,81 @@ class Admin_RolesController extends Zend_Controller_Action
             {
                 if (substr($entry, 0, 1) != '.' && substr($entry, 0, 14) != 'RolesController')
                 {
-                    // Never include the error controller
-                    if (strpos($entry, 'ErrorController') === FALSE)
-                        $controllerList [] = substr($entry, 0, strlen($entry) - 4);
+                    if (is_dir(APPLICATION_PATH . "/modules/$moduleName/controllers/$entry"))
+                    {
+                        $subDir = dir(APPLICATION_PATH . "/modules/$moduleName/controllers/$entry");
+                        while ( false !== ($subEntry = $subDir->read()) )
+                        {
+                            if (substr($subEntry, 0, 1) != '.' && substr($subEntry, 0, 14) != 'RolesController')
+                            {
+                                // Never include the error controller
+                                if (strpos($subEntry, 'ErrorController') === FALSE)
+                                    $controllerList [] = "{$entry}_" . substr($subEntry, 0, strlen($subEntry) - 14);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Never include the error controller
+                        if (strpos($entry, 'ErrorController') === FALSE)
+                            $controllerList [] = substr($entry, 0, strlen($entry) - 4);
+                    }
                 }
             }
         }
         $this->view->controllerList = $controllerList;
     }
 
+    /**
+     * Gets a list of actions for a controller
+     */
     public function getactionsAction ()
     {
-        $this->view->layout()->disableLayout();
-        $actionList = array (
-                "%" 
-        );
-        $moduleName = trim($this->getRequest()->getParam('moduleName'));
-        if (isset($moduleName) && strlen($moduleName) > 0 && strcasecmp("%", $moduleName) !== 0)
+        try
         {
-            $controllerName = $this->getRequest()->getParam('controller');
-            if (isset($controllerName) && strlen($controllerName) > 0 && strcasecmp("%", $controllerName) !== 0)
+            
+            // Disable the layout
+            $this->view->layout()->disableLayout();
+            
+            // Add % to the list
+            $actionList = array (
+                    htmlentities("%") 
+            );
+            $moduleName = trim($this->_getParam('moduleName'));
+            if (isset($moduleName) && strlen($moduleName) > 0 && strcasecmp("%", $moduleName) !== 0)
             {
-                $controllerName = str_ireplace("controller", "", $controllerName);
-                //set_include_path(APPLICATION_PATH . "/modules/" . $this->getRequest()->getParam('moduleName') . '/controllers/' . PATH_SEPARATOR . get_include_path());
-                require_once APPLICATION_PATH . '/modules/' . $moduleName . '/controllers/' . $controllerName . 'Controller.php';
-                $controller = new ReflectionClass(($moduleName != 'default' ? ucfirst($moduleName) . '_' : '') . $controllerName . "Controller");
-                foreach ( $controller->getMethods(ReflectionMethod::IS_PUBLIC) as $method => $value )
+                $controllerName = $this->getRequest()->getParam('controllerName');
+                if (isset($controllerName) && strlen($controllerName) > 0 && strcasecmp("%", $controllerName) !== 0)
                 {
-                    if (substr($value->getName(), - 6) == 'Action')
+                    $controllerName = str_ireplace("controller", "", $controllerName);
+                    
+                    $folder = APPLICATION_PATH . '/modules/' . $moduleName . '/controllers/';
+                    $className = $controllerName;
+                    if (strpos($controllerName, '_'))
                     {
-                        $actionList [] = substr($value->getName(), 0, strlen($value->getName()) - 6);
+                        $boom = explode('_', $controllerName);
+                        $folder .= $boom [0] . '/';
+                        $controllerName = $boom [1];
+                    }
+                    
+                    // Include the file
+                    require_once $folder . $controllerName . 'Controller.php';
+                    $controller = new ReflectionClass(($moduleName != 'default' ? ucfirst($moduleName) . '_' : '') . $className . "Controller");
+                    foreach ( $controller->getMethods(ReflectionMethod::IS_PUBLIC) as $method => $value )
+                    {
+                        if (substr($value->getName(), - 6) == 'Action')
+                        {
+                            $actionList [] = substr($value->getName(), 0, strlen($value->getName()) - 6);
+                        }
                     }
                 }
             }
+            $this->view->actionList = $actionList;
         }
-        $this->view->actionList = $actionList;
+        catch ( Exception $e )
+        {
+            $this->view->actionList = array ();
+        }
     }
 }
 

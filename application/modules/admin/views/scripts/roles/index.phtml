@@ -21,8 +21,8 @@ $(function() {
         colModel: [
             {name: 'id', index: 'id', width: 80, align: 'center'},
             {
-                name: 'module',
-                index: 'module',
+                name: 'moduleName',
+                index: 'moduleName',
                 width: 250,
                 editable: true,
                 edittype: 'select',
@@ -45,8 +45,8 @@ $(function() {
                 }
             },
             {
-                name: 'controller',
-                index: 'controller',
+                name: 'controllerName',
+                index: 'controllerName',
                 width: 250,
                 editable: true,
                 edittype: 'select',
@@ -59,7 +59,7 @@ $(function() {
                 	                 {
                 	                     var thisval = $(e.target).val();
                 	                     var module =
-                	                     $.get('<?php echo $this->BaseUrl("/admin/roles/getactions/controller/"); ?>'+thisval + '<?php echo "/moduleName/"?>'+$("#module").val(), function(data)
+                	                     $.get('<?php echo $this->BaseUrl("/admin/roles/getactions/controllerName/"); ?>'+thisval + '<?php echo "/moduleName/"?>'+$("#module").val(), function(data)
                 	                     {
                 	                         var res = $(data).html();
                 	                         $("#action").html(res);
@@ -70,8 +70,8 @@ $(function() {
             	}
             },
             {
-                name: 'action',
-                index: 'action',
+                name: 'actionName',
+                index: 'actionName',
                 width: 250,
                 editable: true,
                 edittype: 'select',
@@ -227,6 +227,8 @@ $(function() {
 	});
 });
 <?php $this->headScript()->captureEnd(); ?>
+<a class="btn btn-primary" href="<?php echo $this->url(array('action' => 'test')); ?>">New Role Management (Beta)</a>
+
 <div id="roleManager">
     <select name='role' id='roles'>
     <?php foreach ($this->roles as $role) : ?>

@@ -2,6 +2,16 @@
 
 class Admin_Model_Mapper_Privilege extends My_Model_Mapper_Abstract
 {
+    
+    /*
+     * Define the primary key of the model association
+     */
+    public $col_id = 'id';
+    public $col_roleId = 'roleId';
+    public $col_module = 'module';
+    public $col_controller = 'controller';
+    public $col_action = 'action';
+    
     /**
      * The default db table class to use
      *
@@ -34,7 +44,7 @@ class Admin_Model_Mapper_Privilege extends My_Model_Mapper_Abstract
         $data = $object->toArray();
         
         // Remove the id
-        unset($data ['id']);
+        unset($data [$this->col_id]);
         
         // Insert the data
         $id = $this->getDbTable()->insert($data);
@@ -62,12 +72,12 @@ class Admin_Model_Mapper_Privilege extends My_Model_Mapper_Abstract
         
         if ($primaryKey === null)
         {
-            $primaryKey = $data ['id'];
+            $primaryKey = $data [$this->col_id];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'id = ?' => $primaryKey 
+                "{$this->col_id} = ?" => $primaryKey 
         ));
         
         // Save the object into the cache
@@ -89,13 +99,13 @@ class Admin_Model_Mapper_Privilege extends My_Model_Mapper_Abstract
         if ($object instanceof Admin_Model_Privilege)
         {
             $whereClause = array (
-                    'id = ?' => $object->getId() 
+                    "{$this->col_id} = ?" => $object->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'id = ?' => $object 
+                    "{$this->col_id} = ?" => $object 
             );
         }
         
@@ -199,7 +209,7 @@ class Admin_Model_Mapper_Privilege extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array (
-                'id = ?' => $id 
+                "{$this->col_id} = ?" => $id 
         );
     }
 
@@ -209,6 +219,25 @@ class Admin_Model_Mapper_Privilege extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->getId();
+    }
+
+    /**
+     * Fetches all the priveleges for a role.
+     * Sorted by module, then controller, then action.
+     *
+     * @param int $roleId
+     *            The id of the role.
+     * @return multitype:Admin_Model_Privilege The array of privileges.
+     */
+    public function fetchAllForRole ($roleId)
+    {
+        return $this->fetchAll(array (
+                "{$this->col_roleId} = ?" => $roleId 
+        ), array (
+                "{$this->col_module} ASC", 
+                "{$this->col_controller} ASC", 
+                "{$this->col_action} ASC" 
+        ));
     }
 }
 
