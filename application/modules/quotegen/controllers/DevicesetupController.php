@@ -700,8 +700,16 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                     $deviceConfigurationOption->setOptionId($optionId);
                     $deviceConfigurationOption->setQuantity($qty);
                     
+                    // Validate Qty
+                    if ($qty < 0)
+                    {
+                            $this->_helper->flashMessenger(array (
+                                    'error' => "You must enter a quantity to assign." 
+                            ));
+                    }
+                    
                     // Save if option and device id
-                    if ($optionId && $masterDeviceId)
+                    else if ($optionId && $masterDeviceId)
                     {
                         // Assign Option
                         if (isset($values ['btnAssign']))
@@ -752,7 +760,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             $availableOptions [] = $option->getId();
         }
         $where = array (
-                "id IN ( ? )" => $availableOptions
+                "optionId IN ( ? )" => $availableOptions
         );
         
         // Get the assigned options for device
@@ -765,7 +773,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $this->view->assignedOptions = $assignedOptions;
         
         // Display filterd list of device options
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Quotegen_Model_Mapper_Option::getInstance(), $where));
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance(), $where));
         
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
