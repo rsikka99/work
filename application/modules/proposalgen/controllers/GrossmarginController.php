@@ -1,6 +1,6 @@
 <?php
 
-class Proposal_GrossmarginController extends My_Controller_Report
+class Proposalgen_GrossmarginController extends My_Controller_Report
 {
 
     public function indexAction ()
