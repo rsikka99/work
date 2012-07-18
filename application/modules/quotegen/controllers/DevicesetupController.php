@@ -152,7 +152,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        $device = $this->getDevice($deviceId);
+        $device = Quotegen_Model_Mapper_Device::getInstance()->find($deviceId);
         if (! $device)
         {
             $this->_helper->flashMessenger(array (
@@ -212,7 +212,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         // Delete the deviceConfiguration
                         $deviceConfigurationMapper->delete($deviceConfiguration);
                     }
-                    $this->getDeviceMapper()->delete($device);
+                    Quotegen_Model_Mapper_DeviceOption::getInstance()->delete($device);
                     $this->_helper->flashMessenger(array (
                             'success' => "Device  {$device->getMasterDeviceId()} was deleted successfully." 
                     ));
