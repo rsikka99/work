@@ -13,6 +13,7 @@
                 <admin>
                     <label>Admin Functions</label>
                     <uri>#</uri>
+                    <resource>proposalgen__manufacturer__index</resource>
                     <class>dropdown</class>
                     <pages>
                         <manufacturers>

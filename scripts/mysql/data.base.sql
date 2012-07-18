@@ -12,39 +12,87 @@ INSERT INTO `users` (`id`, `username`, `password`, `firstname`, `lastname`, `ema
 (5, 'jsadler', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'John', 'Sadler', 'jsadler@tangentmtw.com'),
 (6, 'nmcconkey', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Norm', 'McConkey', 'nmcconkey@tangentmtw.com'),
 (7, 'eoffshack', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Emily', 'Offshack', 'eoffshack@tangentmtw.com'),
-(8, 'mrogall', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Marc', 'Rogall', 'mrogall@tangentmtw.com'),
-(9, 'lkittner', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Laura', 'Kittner', 'lkittner@tangentmtw.com'),
-(10, 'dnikolopoulos', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Demetra', 'Nikolopoulos', 'dnikolopoulos@tangentmtw.com'),
-(11, 'companyadmin', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Company', 'Admin', 'development@tangentmtw.com'),
-(12, 'standarduser', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Standard', 'User', 'development@tangentmtw.com');
+(8, 'standarduser', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Standard', 'User', 'development@tangentmtw.com');
 
 INSERT INTO `roles` VALUES
-    (1, 'Root'),
-    (2, 'Anyone'),
-    (3, 'System Administrator'),
-    (4, 'Standard User');
+    (1, 'Root Admin'),
+    (2, 'Proposal Generator Admin'),
+    (3, 'Quote Generator Admin'),
+    (4, 'Proposal Generator'),
+    (5, 'Quote Generator');
+    
     
 /* Add roles to users */
-INSERT INTO `user_roles` VALUES
-    (1,2), /* root,Root */
+INSERT INTO `user_roles` (`userId`, `roleId`) VALUES
+    (1,1), /* root,Root */
+   
+    -- lrobert
+    (2,2),
+    (2,3),
     (2,4),
+    (2,5),
+    
+    -- cgarrah
+    (3,2),
+    (3,3),
     (3,4),
+    (3,5),
+    
+    -- swilder
+    (4,2),
+    (4,3),
     (4,4),
+    (4,5),
+    
+    -- jsadler
+    (5,2),
+    (5,3),
     (5,4),
+    (5,5),
+    
+    -- nmcconkey
+    (6,2),
+    (6,3),
     (6,4),
+    (6,5),
+    
+    -- eoffshack
+    (7,2),
+    (7,3),
     (7,4),
+    (7,5),
+    
+    -- standarduser
     (8,4),
-    (9,4),
-    (10,4),
-    (11,4),
-    (12,3);
+    (8,5);
     
 /* Add privileges to the roles */
 INSERT INTO `privileges` (`roleId`, `module`, `controller`, `action`) VALUES
+-- ROOT    
     (1, '%', '%', '%'),    
-    (2, 'default', 'auth', 'eula'),
-    (2, 'default', 'auth', 'login'),
-    (2, 'default', 'auth', 'forgotpassword');
+-- Proposal Generator Admin
+    (2, 'default', '%', '%'),
+    (2, 'proposalgen', 'manufacturer', '%'),
+    (2, 'proposalgen', 'masterdevice', '%'),
+-- Quote Generator Admin
+    (3, 'default', '%', '%'),
+    (3, 'quotegen', '%', '%'),
+-- Proposal Generator Standard
+    (4, 'default', '%', '%'),
+    (4, 'proposalgen', 'index', '%'),
+    (4, 'proposalgen', 'survey', '%'),
+    (4, 'proposalgen', 'fleet', '%'),
+    (4, 'proposalgen', 'report', '%'),
+-- Quote Generator Standard
+    (5, 'default', '%', '%'),
+    (5, 'quotegen', 'index', '%'),
+    (5, 'quotegen', 'quote_devices', '%'),
+    (5, 'quotegen', 'quote_rettings', '%'),
+    (5, 'quotegen', 'quote_reports', '%'),
+    (5, 'quotegen', 'quotesetting', 'edit'),
+    (5, 'quotegen', 'quote', 'index'),
+    (5, 'quotegen', 'quote', 'create'),
+    (5, 'quotegen', 'quote', 'delete');
     
 INSERT INTO `log_types` (`id`, `name`) VALUES
 (1, 'Application Log'),

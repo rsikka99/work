@@ -23,14 +23,14 @@
                             <module>quotegen</module>
                             <controller>quote</controller>
                             <action>index</action>
-                            <resource>quotegen__build__index</resource>
+                            <resource>quotegen__quote__index</resource>
                         </viewall>
                         <create>
                             <label>Create New</label>
                             <module>quotegen</module>
                             <controller>quote</controller>
                             <action>create</action>
-                            <resource>quotegen__build__create</resource>
+                            <resource>quotegen__quote__create</resource>
                         </create>
                         <builddevice>
                             <label>Build Devices</label>
@@ -134,8 +134,8 @@
                     <class>dropdown</class>
                     <module>quotegen</module>
                     <controller>quotesetting</controller>
-                    <action>index</action>
-                    <resource>quotegen__quotesetting__index</resource>
+                    <action>edit</action>
+                    <resource>quotegen__quotesetting__edit</resource>
                     <pages>
                         <preferences>
                             <label>My Preferences</label>
@@ -153,7 +153,7 @@
                     <module>quotegen</module>
                     <controller>administration</controller>
                     <action>index</action>
-                    <resource>quotegen__quote__index</resource>
+                    <resource>quotegen__administration__index</resource>
                     <pages>
                         <configuration>
                             <label>Configuration</label>
