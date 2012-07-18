@@ -9,32 +9,12 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
     }
 
     /**
-     * Gets a device from the database
-     *
-     * @param int $id            
-     */
-    public function getDevice ($id)
-    {
-        return $this->getDeviceMapper()->find($id);
-    }
-
-    /**
-     * Gets the mapper
-     *
-     * @return Quotegen_Model_Mapper_Device
-     */
-    public function getDeviceMapper ()
-    {
-        return Quotegen_Model_Mapper_Device::getInstance();
-    }
-
-    /**
      * Displays all devices
      */
     public function indexAction ()
     {
         // Display all of the devices
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($this->getDeviceMapper()));
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Proposalgen_Model_Mapper_MasterDevice::getInstance()));
         
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
