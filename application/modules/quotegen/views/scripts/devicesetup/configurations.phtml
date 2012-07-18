@@ -33,12 +33,14 @@ $id = $this->id;
 	                <tr>
 	                    <th style="width: 200px;">SKU</th>
 	                    <th>Option</th>
+	                    <th style="width: 120px; text-align: center;">Quantity</th>
 						<th style="width: 120px; text-align: center;">Action</th>
 	                </tr>
 					<?php foreach ($this->paginator as $option) : /* @var $option Quotegen_Model_Option */ ?>
 	                <tr>
 	                    <td><?php echo $option->getSku(); ?></td>
 	                    <td><?php echo $option->getName(); ?></td>
+	                    <td style="text-align: center;"><input type="text" name="txtQty<?php echo $option->getId(); ?>" id="txtQty<?php echo $option->getId(); ?>" value="" class="span1" /></td>
 	                    <td style="text-align: center;">
 							<div class="" style="text-align: center;">
 								<?php if ( in_array($option->getId(), $this->assignedOptions ) ) { ?>
