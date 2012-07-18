@@ -5,16 +5,26 @@ class Application_Model_Acl extends Zend_Acl
     protected static $_instance;
     protected static $UnrestrictedPages = array (
             'default' => array (
-                    'error' => array (
-                            '%' 
-                    ) 
-            ), 
-            'default' => array (
                     'auth' => array (
                             'login', 
                             'logout', 
                             'forgotpassword', 
                             'changepassword' 
+                    ), 
+                    'error' => array (
+                            '%' 
+                    ) 
+            ) 
+    );
+    protected static $UnrestrictedMemberPages = array (
+            'default' => array (
+                    'index' => array (
+                            '%' 
+                    ) 
+            ), 
+            'admin' => array (
+                    'user' => array (
+                            'profile' 
                     ) 
             ) 
     );
@@ -107,6 +117,7 @@ class Application_Model_Acl extends Zend_Acl
     public function isAllowed ($role = null, $request = null, $privilege = null)
     {
         $isAllowed = false;
+        $isLoggedIn = ($role !== null);
         
         $resource ["moduleName"] = "";
         $resource ["controllerName"] = "";
@@ -136,12 +147,12 @@ class Application_Model_Acl extends Zend_Acl
         }
         
         // If it's a global page, let the user through
-        if ($this->isGlobalPage($resource))
+        if ($this->isGlobalPage($resource, $isLoggedIn))
         {
             return true;
         }
         
-        if ($role === null)
+        if (! $isLoggedIn)
         {
             return false;
         }
@@ -224,14 +235,20 @@ class Application_Model_Acl extends Zend_Acl
         return $isAllowed;
     }
 
-    protected function isGlobalPage ($resource)
+    /**
+     * Checks to see if the page is unrestricted.
+     *
+     * @param string $resource
+     *            The resource to check
+     * @param boolean $isLoggedIn
+     *            Whether or not the user is logged in.
+     * @return boolean
+     */
+    protected function isGlobalPage ($resource, $isLoggedIn = false)
     {
-        $currentModule = $resource ['moduleName'];
-        $currentController = $resource ['controllerName'];
-        $currentAction = $resource ['actionName'];
         foreach ( self::$UnrestrictedPages as $module => $controllers )
         {
-            if (strcasecmp($module, $currentModule) === 0)
+            if (strcasecmp($module, $resource ['moduleName']) === 0)
             {
                 foreach ( $controllers as $controller => $actions )
                 {
@@ -239,13 +256,41 @@ class Application_Model_Acl extends Zend_Acl
                     {
                         return true;
                     }
-                    if (strcasecmp($controller, $currentController) === 0)
+                    if (strcasecmp($controller, $resource ['controllerName']) === 0)
                     {
                         foreach ( $actions as $action )
                         {
-                            if (strcasecmp($action, $currentAction) === 0 || strcasecmp($action, '%') === 0)
+                            if (strcasecmp($action, $resource ['actionName']) === 0 || strcasecmp($action, '%') === 0)
                             {
                                 return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        // If we're logged in, check another array.
+        if ($isLoggedIn)
+        {
+            foreach ( self::$UnrestrictedMemberPages as $module => $controllers )
+            {
+                if (strcasecmp($module, $resource ['moduleName']) === 0)
+                {
+                    foreach ( $controllers as $controller => $actions )
+                    {
+                        if (strcasecmp($controller, '%') === 0)
+                        {
+                            return true;
+                        }
+                        if (strcasecmp($controller, $resource ['controllerName']) === 0)
+                        {
+                            foreach ( $actions as $action )
+                            {
+                                if (strcasecmp($action, $resource ['actionName']) === 0 || strcasecmp($action, '%') === 0)
+                                {
+                                    return true;
+                                }
                             }
                         }
                     }

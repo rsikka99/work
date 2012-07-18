@@ -19,7 +19,8 @@ INSERT INTO `roles` VALUES
     (2, 'Proposal Generator Admin'),
     (3, 'Quote Generator Admin'),
     (4, 'Proposal Generator'),
-    (5, 'Quote Generator');
+    (5, 'Quote Generator'),
+    (6, 'System Administrator');
     
     
 /* Add roles to users */
@@ -71,20 +72,16 @@ INSERT INTO `privileges` (`roleId`, `module`, `controller`, `action`) VALUES
 -- ROOT    
     (1, '%', '%', '%'),    
 -- Proposal Generator Admin
-    (2, 'default', '%', '%'),
     (2, 'proposalgen', 'manufacturer', '%'),
     (2, 'proposalgen', 'masterdevice', '%'),
 -- Quote Generator Admin
-    (3, 'default', '%', '%'),
     (3, 'quotegen', '%', '%'),
 -- Proposal Generator Standard
-    (4, 'default', '%', '%'),
     (4, 'proposalgen', 'index', '%'),
     (4, 'proposalgen', 'survey', '%'),
     (4, 'proposalgen', 'fleet', '%'),
     (4, 'proposalgen', 'report', '%'),
 -- Quote Generator Standard
-    (5, 'default', '%', '%'),
     (5, 'quotegen', 'index', '%'),
     (5, 'quotegen', 'quote_devices', '%'),
     (5, 'quotegen', 'quote_rettings', '%'),
