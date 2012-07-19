@@ -91,12 +91,24 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         if ( strlen( $values ['sku'] ) > 0 )
                         {
 	                        // Save Device SKU
+	                        $device = new Quotegen_Model_Device();
 	                        $devicevalues = array (
 	                                'masterDeviceId' => $masterDeviceId, 
 	                                'sku' => $values ['sku'] 
 	                        );
 	                        $device->populate($devicevalues);
-	                        $deviceId = $devicemapper->save($device, $masterDeviceId);
+	                        
+	                        // If $sku set above, then record exists to update
+	                        if ( $sku )
+	                        {
+		                        $deviceId = $devicemapper->save($device, $masterDeviceId);
+	                        }
+	                        
+	                        // Else no record, so insert it
+	                        else
+	                        {
+		                        $deviceId = $devicemapper->insert($device);
+	                        }
                         }
                         else 
                         {
@@ -104,6 +116,8 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             // move delete logic into it's own function
                             // so it can be called from here and the deleteAction if needed
                             // ?? May be easier to turn on cascading deletes?
+                            Quotegen_Model_Mapper_DeviceOption::getInstance()->deleteOptionsByDeviceId($masterDeviceId);
+                            $devicemapper->delete($device);
                         }
                         
                         // Save Master Device
@@ -133,6 +147,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 }
                 catch ( InvalidArgumentException $e )
                 {
+                    echo $e; die;
                     $this->_helper->flashMessenger(array (
                             'danger' => $e->getMessage() 
                     ));
