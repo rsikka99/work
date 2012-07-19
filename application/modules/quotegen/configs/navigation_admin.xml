@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
     <nav>
-        <page>
-            <label>Admin Item</label>
-            <uri>#</uri>
-        </page>
+        <clients>
+            <order>3000</order>
+            <label>Clients</label>
+            <module>quotegen</module>
+            <controller>client</controller>
+            <action>index</action>
+            <resource>quotegen__client__index</resource>
+            <pages>
+                <create>
+                    <label>Create New</label>
+                    <module>quotegen</module>
+                    <controller>client</controller>
+                    <action>create</action>
+                    <visible>0</visible>
+                    <resource>quotegen__client__create</resource>
+                </create>
+            </pages>
+        </clients>
     </nav>
 </config>
