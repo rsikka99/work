@@ -1,74 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<nav>
-		<menu>
-			<label>System Administration</label>
-			<class>dropdown</class>
-			<module>admin</module>
-			<controller>index</controller>
-			<action>index</action>
-			<resource>admin__index__index</resource>
-			<order>500</order>
-			<visible>0</visible>
-			<pages>
-				<UserManagement>
-					<label>User Management</label>
-					<class>dropdown</class>
-					<module>admin</module>
-					<controller>user</controller>
-					<action>index</action>
-					<resource>admin__user__index</resource>
-					<pages>
-						<viewall>
-							<label>View All</label>
-							<module>admin</module>
-							<controller>user</controller>
-							<action>index</action>
-							<resource>admin__user__index</resource>
-						</viewall>
-						<create>
-							<label>Create User</label>
-							<module>admin</module>
-							<controller>user</controller>
-							<action>create</action>
-							<resource>admin__user__create</resource>
-							<icon>plus-sign</icon>
-						</create>
-						<edit>
-							<label>Edit User</label>
-							<module>admin</module>
-							<controller>user</controller>
-							<action>edit</action>
-							<resource>admin__user__create</resource>
-							<icon>pencil</icon>
-							<visible>0</visible>
-						</edit>
-						<delete>
-							<label>Delete User</label>
-							<module>admin</module>
-							<controller>user</controller>
-							<action>delete</action>
-							<resource>admin__user__delete</resource>
-							<visible>0</visible>
-						</delete>
-						<view>
-							<label>View User</label>
-							<module>admin</module>
-							<controller>user</controller>
-							<action>view</action>
-							<resource>admin__user__view</resource>
-							<visible>0</visible>
-						</view>
-					</pages>
-				</UserManagement>
-				<RoleManagement>
-					<label>Role Management</label>
-					<module>admin</module>
-					<controller>roles</controller>
-					<action>index</action>
-					<resource>admin__roles__index</resource>
-				</RoleManagement>
-			</pages>
-		</menu>
-	</nav>
+    <nav>
+        <edituserprofile>
+            <label>Edit User Profile</label>
+            <module>admin</module>
+            <controller>user</controller>
+            <action>profile</action>
+            <resource>admin__user__profile</resource>
+            <icon>pencil</icon>
+            <visible>0</visible>
+        </edituserprofile>
+    </nav>
 </config>

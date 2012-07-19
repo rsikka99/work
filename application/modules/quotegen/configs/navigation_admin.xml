@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <nav>
+        <page>
+            <label>Admin Item</label>
+            <uri>#</uri>
+        </page>
+    </nav>
+</config>

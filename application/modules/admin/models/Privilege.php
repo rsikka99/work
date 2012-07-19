@@ -43,6 +43,13 @@ class Admin_Model_Privilege extends My_Model_Abstract
      * @var string
      */
     protected $_action;
+    
+    /**
+     * The calculated permission path
+     *
+     * @var string
+     */
+    protected $_permissionPath;
 
     public function __construct ($options = null)
     {
@@ -215,6 +222,8 @@ class Admin_Model_Privilege extends My_Model_Abstract
         }
         
         $this->_module = $input->module;
+        // Reset the permission path
+        $this->_permissionPath = null;
         return $this;
     }
 
@@ -243,6 +252,8 @@ class Admin_Model_Privilege extends My_Model_Abstract
         }
         
         $this->_controller = $input->controller;
+        // Reset the permission path
+        $this->_permissionPath = null;
         return $this;
     }
 
@@ -271,6 +282,45 @@ class Admin_Model_Privilege extends My_Model_Abstract
         }
         
         $this->_action = $input->action;
+        // Reset the permission path
+        $this->_permissionPath = null;
+        return $this;
+    }
+
+    /**
+     * Gets the permission path for a given privilege
+     *
+     * @return string
+     */
+    public function getPermissionPath ()
+    {
+        if (! isset($this->_permissionPath))
+        {
+            $this->_permissionPath = strtolower($this->getModule() . "__" . $this->getController() . "__" . $this->getAction());
+        }
+        return $this->_permissionPath;
+    }
+
+    /**
+     * Sets the module, controller, and action from a permission path.
+     *
+     * @param string $permissionPath
+     *            The permission path. It requires 3 items delimited by a double underscore '__'
+     * @return Admin_Model_Privilege This instance for chaining.
+     */
+    public function setFromPermissionPath ($permissionPath)
+    {
+        $boom = explode('__', strtolower($permissionPath));
+        if (count($boom) !== 3)
+        {
+            user_error('Permission path requires 3 parts to it.', E_USER_WARNING);
+        }
+        else
+        {
+            $this->setModule($boom [0]);
+            $this->setController($boom [1]);
+            $this->setAction($boom [2]);
+        }
         return $this;
     }
 }

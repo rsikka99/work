@@ -30,39 +30,46 @@
         <!-- Start of Navbar -->
         <div class="navbar">
             <div class="navbar-inner">
+            <div class="container">
                 <div class="sidebar pull-right">
                     <div class="pull-right">
                         <?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
-                        <div class="btn-group pull-left">
-                            <a class="btn btn-primary" href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'user', 'action' => 'profile'))?>"><i class="icon-user icon-white"></i> <?php echo $this->Username(); ?></a>
+                        <div class="btn-group pull-right">
+                            <a class="btn btn-mini btn-primary" href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'user', 'action' => 'profile'))?>"><i class="icon-user icon-white"></i> <?php echo $this->Username(); ?></a>
                             <a class="pull-right btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a href="<?php echo $this->url(array( 'module' => 'default', 'controller' => 'auth', 'action' => 'changepassword'));?>">Change Password</a></li>
                                 <li><a href="<?php echo $this->url(array( 'module' => 'default', 'controller' => 'auth', 'action' => 'logout'));?>">Logout</a></li>
                             </ul>
                         </div>
-                        <div class="btn-group pull-right">
-                            <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" title="System Administration" href="#">
-								<span class="icon-cog icon-white"></span>
-								<span class="caret"></span>
-							</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="<?php echo $this->url(array( 'module' => 'quotegen', 'controller' => 'client', 'action' => 'index'));?>">Clients</a></li>
-                                <li><a href="<?php echo $this->url(array( 'module' => 'admin', 'controller' => 'roles', 'action' => 'index'));?>">Roles</a></li>
-                                <li><a href="<?php echo $this->url(array( 'module' => 'admin', 'controller' => 'user', 'action' => 'index'));?>">Users</a></li>
-                                <li><a href="<?php echo $this->url(array( 'module' => 'quotegen', 'controller' => 'device', 'action' => 'index'));?>">Devices</a></li>
-                                <li><a href="<?php echo $this->url(array( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'index'));?>">Manage Devices</a></li>
-                                <li><a href="<?php echo $this->url(array( 'module' => 'proposalgen', 'controller' => 'masterdevice', 'action' => 'index'));?>">Master Devices</a></li>
-                                <li><a href="<?php echo $this->url(array( 'module' => 'proposalgen', 'controller' => 'manufacturer', 'action' => 'index'));?>">Manufacturers</a></li>
-                                <li><a href="<?php echo $this->url(array( 'module' => 'admin', 'controller' => 'toner', 'action' => 'index'));?>">Toners</a></li>
-                            </ul>
-                        </div>
+                        
+                            <?php 
+                            /* @var $pages Zend_Navigation */
+                            $pages = $this->navigation()->getContainer();
+                            $nav3Container = $pages->findBy('resource', 'admin__index__index');
+                            
+                            if ($nav3Container && $nav3Container->hasPages()) :
+                                // Temporarily set the navigation item to visible (Maybe this should be a separate container?)
+                                $nav3Container->set('visible', true);
+                                $adminNav = null;
+                                $adminNav = $this->navigation()->menu()->setUlClass('dropdown-menu')->setMaxDepth(2)->renderMenu($nav3Container);
+                            ?>
+                                <?php if ($adminNav) : ?>
+                                    <div class="adminNav btn-group pull-left">
+                                        <a class="btn btn-mini btn-primary" data-toggle="dropdown" title="System Administration" href="#"><span class="icon-cog icon-white"></span> Admin</a>
+                                        <a class="pull-right btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><b class="caret"></b></a>
+                                        <?php echo $adminNav; ?>
+                                    </div>
+        							
+                                <?php endif; ?>
+                                <?php $nav3Container->set('visible', false); ?>
+                            <?php endif; ?>
                         <?php else : ?>
                             <a class="btn btn-danger" href="<?php echo $this->url(array(), 'login');?>"><i class="icon-user icon-white"></i> Login</a>
                         <?php endif; ?>
                     </div>
                 </div>
-                <div class="container">
+                
                     <?php echo $this->navigation()->menu()->setUlClass('nav nav-pills')->setMinDepth(0)->setMaxDepth(0)->render(); ?>
                 </div>
             </div>
@@ -87,7 +94,7 @@
                 }                    
                 ?>
             </div>
-        </div>        
+        </div>
         
         <div class="wrapper" id="eminem">
             <header class="pageHeader">

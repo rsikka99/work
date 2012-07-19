@@ -93,8 +93,8 @@ CREATE  TABLE IF NOT EXISTS `privileges` (
   CONSTRAINT `privileges_ibfk_!`
     FOREIGN KEY (`roleId` )
     REFERENCES `roles` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 9
 DEFAULT CHARACTER SET = latin1;
@@ -1486,17 +1486,18 @@ DEFAULT CHARACTER SET = latin1;
 CREATE  TABLE IF NOT EXISTS `user_roles` (
   `userId` INT(11) NOT NULL ,
   `roleId` INT(11) NOT NULL ,
-  PRIMARY KEY (`userId`) ,
+  PRIMARY KEY (`userId`, `roleId`) ,
   INDEX `FK_userRoles_roles` (`roleId` ASC) ,
   CONSTRAINT `FK_userRoles_users`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
-    ON DELETE CASCADE,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `FK_userRoles_roles`
     FOREIGN KEY (`roleId` )
     REFERENCES `roles` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 

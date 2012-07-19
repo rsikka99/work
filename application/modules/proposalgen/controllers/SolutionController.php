@@ -1,6 +1,6 @@
 <?php
 
-class Proposal_SolutionController extends My_Controller_Report
+class Proposalgen_SolutionController extends My_Controller_Report
 {
 
     public function indexAction ()

@@ -129,6 +129,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         {
             $view->navigation()->setRole(null);
         }
+        
+        $config = new Zend_Config_Xml(__DIR__ . '/configs/navigation.xml', 'nav');
+        /* @var $container Zend_Navigation */
+        $container = $view->navigation()->getContainer();
+        $container->addPages($config);
     }
 
     /**

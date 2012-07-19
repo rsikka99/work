@@ -26,7 +26,7 @@
                 <visible>0</visible>
             </changepassword>
             <forgotpassword>
-                <label>Forgot Password</label>s
+                <label>Forgot Password</label>
                 <module>default</module>
                 <controller>auth</controller>
                 <action>forgotpassword</action>
