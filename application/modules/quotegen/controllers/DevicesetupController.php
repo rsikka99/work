@@ -756,6 +756,22 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 $this->_helper->redirector('index');
             }
         }
+        
+        // Get the assigned options for device
+        $deviceConfigurationWhere = null;
+        if ( $configurationId )
+        {
+            $deviceConfigurationWhere = array(
+                    "deviceConfigurationid = ?" => $configurationId
+            );
+        }
+        $deviceConfigurationOptions = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->fetchAll($deviceConfigurationWhere);
+        $assignedOptions = array ();
+        foreach ( $deviceConfigurationOptions as $option )
+        {
+            $assignedOptions [] = $option->getOptionId();
+        }
+        $this->view->assignedOptions = $assignedOptions;
 
         // Get all available options for device
         $deviceOptions = Quotegen_Model_Mapper_DeviceOption::getInstance()->fetchAllOptionsByDeviceId($masterDeviceId);
@@ -764,18 +780,12 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         {
             $availableOptions [] = $option->getId();
         }
-        $where = array (
-                "optionId IN ( ? )" => $availableOptions
-        );
-        
-        // Get the assigned options for device
-        $deviceConfigurationOptions = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->fetchAll(array("deviceConfigurationid = ?" => $configurationId));
-        $assignedOptions = array ();
-        foreach ( $deviceConfigurationOptions as $option )
+        if ( $availableOptions )
         {
-            $assignedOptions [] = $option->getOptionId();
+            $where = array (
+                    "optionId IN ( ? )" => $availableOptions
+            );
         }
-        $this->view->assignedOptions = $assignedOptions;
         
         // Display filterd list of device options
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance(), $where));
