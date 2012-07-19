@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <nav>
+        <sysadmin>
+            <label>System Administration</label>
+            <class>dropdown</class>
+            <module>admin</module>
+            <controller>index</controller>
+            <action>index</action>
+            <resource>admin__index__index</resource>
+            <visible>0</visible>
+            <order>500</order>
+        </sysadmin>
+    </nav>
+</config>
