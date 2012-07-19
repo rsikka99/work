@@ -88,13 +88,23 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 {
                     if ($form->isValid($values))
                     {
-                        // Save Device SKU
-                        $devicevalues = array (
-                                'masterDeviceId' => $masterDeviceId, 
-                                'sku' => $values ['sku'] 
-                        );
-                        $device->populate($devicevalues);
-                        $deviceId = $devicemapper->save($device, $masterDeviceId);
+                        if ( strlen( $values ['sku'] ) > 0 )
+                        {
+	                        // Save Device SKU
+	                        $devicevalues = array (
+	                                'masterDeviceId' => $masterDeviceId, 
+	                                'sku' => $values ['sku'] 
+	                        );
+	                        $device->populate($devicevalues);
+	                        $deviceId = $devicemapper->save($device, $masterDeviceId);
+                        }
+                        else 
+                        {
+                            //TODO: Delete Devices record if exists
+                            // move delete logic into it's own function
+                            // so it can be called from here and the deleteAction if needed
+                            // ?? May be easier to turn on cascading deletes?
+                        }
                         
                         // Save Master Device
                         $mapper = new Proposalgen_Model_Mapper_MasterDevice();
