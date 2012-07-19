@@ -2,7 +2,7 @@
 <config>
     <nav>
         <manufacturers>
-            <label>Manage Manufacturers</label>
+            <label>Manufacturers</label>
             <class>dropdown subdropdown</class>
             <module>proposalgen</module>
             <controller>manufacturer</controller>
@@ -17,7 +17,7 @@
                     <resource>proposalgen__manufacturer__index</resource>
                 </viewall>
                 <view>
-                    <label> View</label>
+                    <label>View</label>
                     <module>proposalgen</module>
                     <controller>manufacturer</controller>
                     <action>view</action>
@@ -50,7 +50,7 @@
             </pages>
         </manufacturers>
         <masterdevices>
-            <label>Manage Master Devices</label>
+            <label>Master Devices</label>
             <class>dropdown subdropdown</class>
             <module>proposalgen</module>
             <controller>masterdevice</controller>

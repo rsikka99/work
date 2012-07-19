@@ -2,7 +2,7 @@
 <config>
     <nav>
         <UserManagement>
-            <label>User Management</label>
+            <label>Users</label>
             <module>admin</module>
             <controller>user</controller>
             <action>index</action>
@@ -52,7 +52,7 @@
             </pages>
         </UserManagement>
         <RoleManagement>
-            <label>Role Management</label>
+            <label>Roles</label>
             <module>admin</module>
             <controller>roles</controller>
             <action>index</action>
