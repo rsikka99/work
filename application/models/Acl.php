@@ -23,6 +23,9 @@ class Application_Model_Acl extends Zend_Acl
                     ) 
             ), 
             'admin' => array (
+                    'index' => array (
+                            'index' 
+                    ), 
                     'user' => array (
                             'profile' 
                     ) 

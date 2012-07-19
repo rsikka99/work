@@ -52,7 +52,7 @@
                                 // Temporarily set the navigation item to visible (Maybe this should be a separate container?)
                                 $nav3Container->set('visible', true);
                                 $adminNav = null;
-                                $adminNav = $this->navigation()->menu()->setUlClass('dropdown-menu')->setMaxDepth(2)->renderMenu($nav3Container);
+                                $adminNav = $this->navigation()->menu()->setUlClass('dropdown-menu')->setMaxDepth(1)->renderMenu($nav3Container);
                             ?>
                                 <?php if ($adminNav) : ?>
                                     <div class="adminNav btn-group pull-left">

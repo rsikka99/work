@@ -8,7 +8,7 @@
             <module>proposalgen</module>
             <controller>manufacturer</controller>
             <action>index</action>
-            <resource>default__index__index</resource>
+            <resource>proposalgen__manufacturer__index</resource>
             <pages>
                 <viewall>
                     <label>View all</label>
