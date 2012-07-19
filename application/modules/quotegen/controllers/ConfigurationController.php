@@ -99,9 +99,10 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                     if ($form->isValid($values))
                     {
                         // Attempt to save the configuration to the database.
-                        $configuration = new Quotegen_Model_DeviceConfiguration();
-                        $configuration->populate($values);
-                        Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->insert($configuration);
+                        $mapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
+                        $deviceConfiguration = new Quotegen_Model_DeviceConfiguration();
+                        $deviceConfiguration->populate($values);
+                        $deviceConfigurationId = $mapper->insert($deviceConfiguration);
                         
                         // Redirect client back to index
                         $this->_helper->redirector('index');
@@ -362,6 +363,5 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                 'id' => $id 
         ));
     }
-
 }
 

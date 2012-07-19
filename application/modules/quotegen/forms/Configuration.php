@@ -24,7 +24,7 @@ class Quotegen_Form_Configuration extends EasyBib_Form
         
         $masterDeviceList = array ();
         /* @var $masterDevice Proposalgen_Model_MasterDevice */
-        foreach ( Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllAvailableMasterDevices() as $masterDevice )
+        foreach ( Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAll() as $masterDevice )
         {
             $masterDeviceList [$masterDevice->getId()] = $masterDevice->getFullDeviceName();
         }

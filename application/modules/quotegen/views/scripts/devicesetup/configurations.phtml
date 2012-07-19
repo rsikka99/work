@@ -24,7 +24,7 @@ $id = $this->id;
 					<option value="<?php echo $configuration->getId(); ?>"><?php echo $configuration->getName(); ?></option>
 				<?php } ?>
 				</select>
-    			<a class="btn btn-success btn-small create-button" href="<?php echo $this->url(array('action' => 'createconfiguration')) ?>"> <i class="icon-white icon-plus-sign"></i> Create new</a>
+    			<a class="btn btn-success btn-small create-button" href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'configuration', 'action' => 'create')) ?>"> <i class="icon-white icon-plus-sign"></i> Create new</a>
     		</div>
     		
     		<div id="options">
