@@ -22,15 +22,145 @@ class Admin_RolesController extends Zend_Controller_Action
     }
 
     /**
-     * Beta action for role management
+     * Shows all the roles and allows the user to choose to create, edit, or delete a role.
      */
-    public function testAction ()
+    public function indexAction ()
     {
-        $roleId = $this->_getParam('roleId', 2);
+        $roleMapper = new Admin_Model_Mapper_Role();
+        $roleList = Admin_Model_Mapper_Role::getInstance()->fetchAll();
+        $this->view->roles = $roleList;
+    }
+
+    /**
+     * Allows creation of a role
+     */
+    public function createAction ()
+    {
+        $form = new Admin_Form_Role();
+        $request = $this->getRequest();
+        
+        if ($request->isPost())
+        {
+            if ($this->_getParam('cancel', FALSE))
+            {
+                $this->_helper->redirector('index');
+            }
+            else
+            {
+                
+                if ($form->isValid($request->getPost()))
+                {
+                    try
+                    {
+                        $role = new Admin_Model_Role();
+                        $role->populate($form->getValues());
+                        $roleId = Admin_Model_Mapper_Role::getInstance()->insert($role);
+                        if ($roleId > 0)
+                        {
+                            $this->_helper->flashMessenger(array (
+                                    'success' => "Successfully deleted the role '{$role->getName()}'." 
+                            ));
+                            $this->_helper->redirector('edit', null, null, array (
+                                    'roleId' => $roleId 
+                            ));
+                        }
+                        else
+                        {
+                            $this->_helper->flashMessenger(array (
+                                    'danger' => "There was an issue creating your role. Please try again and if the problem persists contact your system administrator." 
+                            ));
+                        }
+                    }
+                    catch ( Exception $e )
+                    {
+                        $this->_helper->flashMessenger(array (
+                                'danger' => "There was an issue creating your role. Please try again and if the problem persists contact your system administrator." 
+                        ));
+                    }
+                }
+            }
+        }
+        
+        $this->view->form = $form;
+    }
+
+    /**
+     * Allows deletion of a role
+     */
+    public function deleteAction ()
+    {
+        $roleId = $this->_getParam('roleId', FALSE);
+        
+        if (! $roleId)
+        {
+            $this->_helper->flashMessenger(array (
+                    'warning' => 'Please select a role to edit' 
+            ));
+            $this->_helper->redirector('index');
+        }
+        
         $role = Admin_Model_Mapper_Role::getInstance()->find($roleId);
-        $this->view->roles = array (
-                $role 
-        );
+        if (! $role)
+        {
+            $this->_helper->flashMessenger(array (
+                    'danger' => 'It appears that this role does not exist. Please try again if you think this is in error.' 
+            ));
+            $this->_helper->redirector('index');
+        }
+        
+        $form = new Application_Form_Delete("Are you sure you want to delete the role '{$role->getName()}'?");
+        $request = $this->getRequest();
+        
+        if ($request->isPost())
+        {
+            if ($form->isValid($request->getPost()))
+            {
+                $result = Admin_Model_Mapper_Role::getInstance()->delete($role);
+                if ($result > 0)
+                {
+                    $this->_helper->flashMessenger(array (
+                            'success' => "Successfully deleted the role '{$role->getName()}'." 
+                    ));
+                    $this->_helper->redirector('index');
+                }
+                else
+                {
+                    $this->_helper->flashMessenger(array (
+                            'danger' => "Unable to delete the role '{$role->getName()}'. Please try again and contact your system administrator if this problem persists." 
+                    ));
+                    $this->_helper->redirector('index');
+                }
+            }
+        }
+        
+        $this->view->form = $form;
+    }
+
+    /**
+     * Allows the editing of a role
+     */
+    public function editAction ()
+    {
+        $roleId = $this->_getParam('roleId', FALSE);
+        
+        if (! $roleId)
+        {
+            $this->_helper->flashMessenger(array (
+                    'warning' => 'Please select a role to edit' 
+            ));
+            $this->_helper->redirector('index');
+        }
+        
+        $role = Admin_Model_Mapper_Role::getInstance()->find($roleId);
+        if (! $role)
+        {
+            $this->_helper->flashMessenger(array (
+                    'warning' => 'It appears that this role does not exist. Please try again if you think this is in error.' 
+            ));
+            $this->_helper->redirector('index');
+        }
+        
+        $this->view->role = $role;
         
         $currentPrivileges [] = array ();
         $alphaNumeric = new Zend_Filter_Alnum();
@@ -99,112 +229,6 @@ class Admin_RolesController extends Zend_Controller_Action
         }
         
         $this->view->form = $form;
-    }
-
-    /**
-     */
-    public function indexAction ()
-    {
-        $roleMapper = new Admin_Model_Mapper_Role();
-        $roleList = $roleMapper->fetchAll();
-        $this->view->roles = $roleList;
-    }
-
-    /**
-     * Handles the jqgrid edit features.
-     */
-    public function editAction ()
-    {
-        // Edit Operations: add del edit
-        $operation = $this->getRequest()->getParam("oper");
-        $roleId = $this->getRequest()->getParam("roleId");
-        $module = $this->getRequest()->getParam("moduleName");
-        $controller = $this->getRequest()->getParam("controllerName");
-        $action = $this->getRequest()->getParam("actionName");
-        $privilege_id = $this->getRequest()->getParam("id");
-        
-        $privMapper = new Admin_Model_Mapper_Privilege();
-        
-        if (strcasecmp($operation, "delrole") === 0)
-        {
-        }
-        else if (strcasecmp($operation, "addrole") === 0)
-        {
-        }
-        else if (strcasecmp($operation, "del") === 0)
-        {
-            $privMapper->delete($this->getRequest()
-                ->getParam("id"));
-        }
-        else if (strcasecmp($operation, "add") === 0)
-        {
-            $privilege = new Admin_Model_Privilege();
-            $privilege->setRoleId($roleId)
-                ->setModule($module)
-                ->setController($controller)
-                ->setAction($action);
-            $privMapper->insert($privilege);
-        }
-        else if (strcasecmp($operation, "edit") === 0)
-        {
-            $privilege = $privMapper->find($privilege_id);
-            $privilege->setModule($module)
-                ->setController($controller)
-                ->setAction($action);
-            $privMapper->save($privilege);
-        }
-    }
-
-    /**
-     * Gets the privileges for a role
-     */
-    public function getprivilegesAction ()
-    {
-        $this->view->layout()->disableLayout();
-        $privMapper = new Admin_Model_Mapper_Privilege();
-        $order = null;
-        $limit = null;
-        $offset = null;
-        if (isset($_REQUEST ['rows']))
-        {
-            $limit = $_REQUEST ['rows'];
-            if (isset($_REQUEST ['page']))
-            {
-                $offset = (((int)$_REQUEST ['page']) - 1) * $limit;
-            }
-        }
-        if (isset($_REQUEST ['sidx']) && isset($_REQUEST ['sord']))
-        {
-            $order = array (
-                    $_REQUEST ['sidx'] . " " . $_REQUEST ["sord"] 
-            );
-        }
-        
-        $privilegeList = array ();
-        $roleId = $this->getRequest()->getParam('roleId');
-        $where = array (
-                "roleId = ?" => $roleId 
-        );
-        
-        $numberOfRecords = $privMapper->count($where);
-        
-        $privileges = $privMapper->fetchAll($where, $order, $limit, $offset);
-        
-        /* @var $privilege Admin_Model_Privilege */
-        foreach ( $privileges as $privilege )
-        {
-            $privilegeList [] = array (
-                    'id' => $privilege->getId(), 
-                    'roleId' => $privilege->getRoleId(), 
-                    'moduleName' => $privilege->getModule(), 
-                    'controllerName' => $privilege->getController(), 
-                    'actionName' => $privilege->getAction() 
-            );
-        }
-        $this->view->total = ($limit) ? ceil($numberOfRecords / $limit) : 1;
-        $this->view->page = 1;
-        $this->view->records = $numberOfRecords;
-        $this->view->rows = $privilegeList;
     }
 
     /**
@@ -417,117 +441,6 @@ class Admin_RolesController extends Zend_Controller_Action
         $action->permissionPath = strtolower($permissionPath);
         $action->description = $description;
         return $action;
-    }
-
-    /**
-     * Gets a list of modules
-     */
-    public function getmodulesAction ()
-    {
-        // Disable the layout
-        $this->view->layout()->disableLayout();
-        
-        $moduleList = $this->getModuleList();
-        
-        $this->view->moduleList = $moduleList;
-    }
-
-    /**
-     * Gets a list of controllers in a module
-     */
-    public function getcontrollersAction ()
-    {
-        // Disable the layout
-        $this->view->layout()->disableLayout();
-        
-        // Add % to the list
-        $controllerList = array (
-                htmlentities("%") 
-        );
-        $moduleName = trim($this->getRequest()->getParam('moduleName'));
-        
-        if (isset($moduleName) && strlen($moduleName) > 0 && ! (strcasecmp("%", $moduleName) === 0))
-        {
-            $controllersDir = dir(APPLICATION_PATH . "/modules/$moduleName/controllers");
-            while ( false !== ($entry = $controllersDir->read()) )
-            {
-                if (substr($entry, 0, 1) != '.' && substr($entry, 0, 14) != 'RolesController')
-                {
-                    if (is_dir(APPLICATION_PATH . "/modules/$moduleName/controllers/$entry"))
-                    {
-                        $subDir = dir(APPLICATION_PATH . "/modules/$moduleName/controllers/$entry");
-                        while ( false !== ($subEntry = $subDir->read()) )
-                        {
-                            if (substr($subEntry, 0, 1) != '.' && substr($subEntry, 0, 14) != 'RolesController')
-                            {
-                                // Never include the error controller
-                                if (strpos($subEntry, 'ErrorController') === FALSE)
-                                    $controllerList [] = "{$entry}_" . substr($subEntry, 0, strlen($subEntry) - 14);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // Never include the error controller
-                        if (strpos($entry, 'ErrorController') === FALSE)
-                            $controllerList [] = substr($entry, 0, strlen($entry) - 4);
-                    }
-                }
-            }
-        }
-        $this->view->controllerList = $controllerList;
-    }
-
-    /**
-     * Gets a list of actions for a controller
-     */
-    public function getactionsAction ()
-    {
-        try
-        {
-            
-            // Disable the layout
-            $this->view->layout()->disableLayout();
-            
-            // Add % to the list
-            $actionList = array (
-                    htmlentities("%") 
-            );
-            $moduleName = trim($this->_getParam('moduleName'));
-            if (isset($moduleName) && strlen($moduleName) > 0 && strcasecmp("%", $moduleName) !== 0)
-            {
-                $controllerName = $this->getRequest()->getParam('controllerName');
-                if (isset($controllerName) && strlen($controllerName) > 0 && strcasecmp("%", $controllerName) !== 0)
-                {
-                    $controllerName = str_ireplace("controller", "", $controllerName);
-                    
-                    $folder = APPLICATION_PATH . '/modules/' . $moduleName . '/controllers/';
-                    $className = $controllerName;
-                    if (strpos($controllerName, '_'))
-                    {
-                        $boom = explode('_', $controllerName);
-                        $folder .= $boom [0] . '/';
-                        $controllerName = $boom [1];
-                    }
-                    
-                    // Include the file
-                    require_once $folder . $controllerName . 'Controller.php';
-                    $controller = new ReflectionClass(($moduleName != 'default' ? ucfirst($moduleName) . '_' : '') . $className . "Controller");
-                    foreach ( $controller->getMethods(ReflectionMethod::IS_PUBLIC) as $method => $value )
-                    {
-                        if (substr($value->getName(), - 6) == 'Action')
-                        {
-                            $actionList [] = substr($value->getName(), 0, strlen($value->getName()) - 6);
-                        }
-                    }
-                }
-            }
-            $this->view->actionList = $actionList;
-        }
-        catch ( Exception $e )
-        {
-            $this->view->actionList = array ();
-        }
     }
 }
 

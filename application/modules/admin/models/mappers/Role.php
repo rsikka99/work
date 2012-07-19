@@ -2,6 +2,12 @@
 
 class Admin_Model_Mapper_Role extends My_Model_Mapper_Abstract
 {
+    /*
+     * Column Names
+     */
+    public $col_id = 'id';
+    public $col_name = 'name';
+    
     /**
      * The default db table class to use
      *
@@ -34,7 +40,7 @@ class Admin_Model_Mapper_Role extends My_Model_Mapper_Abstract
         $data = $object->toArray();
         
         // Remove the id
-        unset($data ['id']);
+        unset($data [$this->col_id]);
         
         // Insert the data
         $id = $this->getDbTable()->insert($data);
@@ -62,12 +68,12 @@ class Admin_Model_Mapper_Role extends My_Model_Mapper_Abstract
         
         if ($primaryKey === null)
         {
-            $primaryKey = $data ['id'];
+            $primaryKey = $data [$this->col_id];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'id = ?' => $primaryKey 
+                "{$this->col_id} = ?" => $primaryKey 
         ));
         
         // Save the object into the cache
@@ -89,13 +95,13 @@ class Admin_Model_Mapper_Role extends My_Model_Mapper_Abstract
         if ($object instanceof Admin_Model_Role)
         {
             $whereClause = array (
-                    'id = ?' => $object->getId() 
+                    "{$this->col_id} = ?" => $object->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'id = ?' => $object 
+                    "{$this->col_id} = ?" => $object 
             );
         }
         
@@ -176,6 +182,13 @@ class Admin_Model_Mapper_Role extends My_Model_Mapper_Abstract
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
+        if ($order === null)
+        {
+            $order = array (
+                    "{$this->col_name} ASC" 
+            );
+        }
+        
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
         $entries = array ();
         foreach ( $resultSet as $row )
@@ -199,7 +212,7 @@ class Admin_Model_Mapper_Role extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array (
-                'id = ?' => $id 
+                "{$this->col_id} = ?" => $id 
         );
     }
 
