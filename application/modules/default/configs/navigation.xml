@@ -42,9 +42,10 @@
                 </usermenu>
                 <footermenu>
                     <id>footermenu</id>
-                    <label>Info</label>
+                    <label>Information</label>
                     <uri>#</uri>
-                    <visible>0</visible>
+                    <visible>1</visible>
+                    <class>dropdown</class>
                     <pages>
                         <about>
                             <label>About</label>
