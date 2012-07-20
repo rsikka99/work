@@ -1,4 +1,9 @@
 <?php if ($this->quote): $quote = $this->quote; /* @var $quote Quotegen_Model_Quote */ ?>
+<div class="page-header">
+    <h1>Quote - <small><?php echo $quote->getClient()->getName(); ?></small></h1>
+</div>
+<?php echo $this->Quotemenu(); ?>
+<!-- 
 <div class="row">
     <div class="span4">
         <h3><?php echo $quote->getClient()->getName(); ?></h3>
@@ -25,6 +30,6 @@
         </dl>
     </div>
 </div>
+ -->
 <?php endif; ?>
 
-<?php echo $this->Quotemenu(); ?>
