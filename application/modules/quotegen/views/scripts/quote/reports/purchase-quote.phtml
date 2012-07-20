@@ -39,6 +39,10 @@ $this->headScript()->appendScript("$('i').popover();");
                 <?php endif; ?>
             
         <?php endforeach; ?>
+        <tr>
+            <td colspan="3"></td>
+            <th style="text-align: right;"><?php echo $this->currency($quote->calculateQuoteSubtotal()); ?></th>
+        </tr>
         </table>
     </div>
 </div>

@@ -39,6 +39,11 @@ $this->headScript()->appendScript("$('i').popover();");
                 <?php endif; ?>
             
         <?php endforeach; ?>
+        <tr>
+            <td></td>
+            <td colspan="2">Term: <?php echo $quote->getLeaseTerm(); ?> Months</td>
+            <th style="text-align: right;"><?php echo $this->currency($quote->calculateQuoteLeaseSubtotal()); ?></th>
+        </tr>
         </table>
     </div>
 </div>
