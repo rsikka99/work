@@ -134,6 +134,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         /* @var $container Zend_Navigation */
         $container = $view->navigation()->getContainer();
         $container->addPages($config);
+        Zend_Registry::set('Zend_Navigation', $container);
     }
 
     /**
