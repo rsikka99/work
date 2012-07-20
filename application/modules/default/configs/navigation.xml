@@ -40,6 +40,35 @@
                         </logout>
                     </pages>
                 </usermenu>
+                <footermenu>
+                    <id>footermenu</id>
+                    <label>Info</label>
+                    <uri>#</uri>
+                    <visible>0</visible>
+                    <pages>
+                        <about>
+                            <label>About</label>
+                            <module>default</module>
+                            <controller>info</controller>
+                            <action>about</action>
+                            <resource>default__info__about</resource>
+                        </about>
+                        <eula>
+                            <label>Eula</label>
+                            <module>default</module>
+                            <controller>info</controller>
+                            <action>eula</action>
+                            <resource>default__info__eula</resource>
+                        </eula>
+                        <termsandconditions>
+                            <label>Terms &amp; Conditions</label>
+                            <module>default</module>
+                            <controller>info</controller>
+                            <action>termsandconditions</action>
+                            <resource>default__info__termsandconditions</resource>
+                        </termsandconditions>
+                    </pages>
+                </footermenu>
                 <forgotpassword>
                     <label>Forgot Password</label>
                     <module>default</module>
