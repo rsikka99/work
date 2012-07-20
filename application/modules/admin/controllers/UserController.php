@@ -443,6 +443,7 @@ class Admin_UserController extends Zend_Controller_Action
 
     public function profileAction ()
     {
+        
         $userId = Zend_Auth::getInstance()->getIdentity()->id;
         
         if (! $userId)
@@ -505,7 +506,6 @@ class Admin_UserController extends Zend_Controller_Action
                 $this->_helper->redirector('index', 'index', 'default');
             }
         }
-        
         $this->view->form = $form;
     }
 }

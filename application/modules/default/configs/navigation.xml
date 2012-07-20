@@ -9,30 +9,46 @@
             <action>index</action>
             <resource>default__index__index</resource>
             <order>000</order>
-            <login>
-                <label>Login</label>
-                <module>default</module>
-                <controller>auth</controller>
-                <action>login</action>
-                <resource>default__auth__login</resource>
-                <visible>0</visible>
-            </login>
-            <changepassword>
-                <label>Reset Password</label>
-                <module>default</module>
-                <controller>auth</controller>
-                <action>changepassword</action>
-                <resource>default__auth__changepassword</resource>
-                <visible>0</visible>
-            </changepassword>
-            <forgotpassword>
-                <label>Forgot Password</label>
-                <module>default</module>
-                <controller>auth</controller>
-                <action>forgotpassword</action>
-                <resource>default__auth__forgotpassword</resource>
-                <visible>0</visible>
-            </forgotpassword>
+            <pages>
+                <login>
+                    <label>Login</label>
+                    <module>default</module>
+                    <controller>auth</controller>
+                    <action>login</action>
+                    <resource>default__auth__login</resource>
+                    <visible>0</visible>
+                </login>
+                <usermenu>
+                    <id>usermenu</id>
+                    <label>User Menu</label>
+                    <uri>#</uri>
+                    <visible>0</visible>
+                    <pages>
+                        <changepassword>
+                            <label>Reset Password</label>
+                            <module>default</module>
+                            <controller>auth</controller>
+                            <action>changepassword</action>
+                            <resource>default__auth__changepassword</resource>
+                        </changepassword>
+                        <logout>
+                            <label>Logout</label>
+                            <module>default</module>
+                            <controller>auth</controller>
+                            <action>logout</action>
+                            <resource>default__auth__logout</resource>
+                        </logout>
+                    </pages>
+                </usermenu>
+                <forgotpassword>
+                    <label>Forgot Password</label>
+                    <module>default</module>
+                    <controller>auth</controller>
+                    <action>forgotpassword</action>
+                    <resource>default__auth__forgotpassword</resource>
+                    <visible>0</visible>
+                </forgotpassword>
+            </pages>
         </menu>
     </nav>
 </config>

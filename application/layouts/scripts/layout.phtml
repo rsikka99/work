@@ -37,32 +37,14 @@
                         <div class="btn-group pull-right">
                             <a class="btn btn-mini btn-primary" href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'user', 'action' => 'profile'))?>"><i class="icon-user icon-white"></i> <?php echo $this->Username(); ?></a>
                             <a class="pull-right btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="<?php echo $this->url(array( 'module' => 'default', 'controller' => 'auth', 'action' => 'changepassword'));?>">Change Password</a></li>
-                                <li><a href="<?php echo $this->url(array( 'module' => 'default', 'controller' => 'auth', 'action' => 'logout'));?>">Logout</a></li>
-                            </ul>
+                            <?php echo $this->Usermenu(); ?>
                         </div>
-                        
-                            <?php 
-                            /* @var $pages Zend_Navigation */
-                            $pages = $this->navigation()->getContainer();
-                            $nav3Container = $pages->findBy('resource', 'admin__index__index');
-                            
-                            if ($nav3Container && $nav3Container->hasPages()) :
-                                // Temporarily set the navigation item to visible (Maybe this should be a separate container?)
-                                $nav3Container->set('visible', true);
-                                $adminNav = null;
-                                $adminNav = $this->navigation()->menu()->setUlClass('dropdown-menu')->setMaxDepth(1)->renderMenu($nav3Container);
-                            ?>
-                                <?php if ($adminNav) : ?>
-                                    <div class="adminNav btn-group pull-left">
-                                        <a class="btn btn-mini btn-primary" data-toggle="dropdown" title="System Administration" href="#"><span class="icon-cog icon-white"></span> Admin</a>
-                                        <a class="pull-right btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><b class="caret"></b></a>
-                                        <?php echo $adminNav; ?>
-                                    </div>
-        							
-                                <?php endif; ?>
-                                <?php $nav3Container->set('visible', false); ?>
+                            <?php if (($adminNav = $this->Adminmenu()) == true) : ?>
+                                <div class="adminNav btn-group pull-left">
+                                    <a class="btn btn-mini btn-primary" data-toggle="dropdown" title="System Administration" href="#"><span class="icon-cog icon-white"></span> Admin</a>
+                                    <a class="pull-right btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><b class="caret"></b></a>
+                                    <?php echo $adminNav; ?>
+                                </div>
                             <?php endif; ?>
                         <?php else : ?>
                             <a class="btn btn-danger" href="<?php echo $this->url(array(), 'login');?>"><i class="icon-user icon-white"></i> Login</a>
@@ -77,25 +59,9 @@
         <!-- End of Navbar -->
         <div class="subnav">
             <div class="container">
-                <?php 
-                // Find the active branch, at a depth of one
-                $nav2Container = null;
-                $rootPage = $this->navigation()->getContainer()->getPages();
-                foreach($rootPage as $page) { 
-                	if($page->isActive(true)) { 
-                		$nav2Container = $page;
-                		break;
-                	}
-                }
-                
-                if ($nav2Container && $nav2Container->hasPages())
-                {
-                    echo $this->navigation()->menu()->setUlClass('nav nav-pills')->setMaxDepth(2)->render($nav2Container);
-                }                    
-                ?>
+                <?php echo $this->Subnav(); ?>
             </div>
         </div>
-        
         <div class="wrapper" id="eminem">
             <header class="pageHeader">
                 <div class="headerSpace"></div>
@@ -112,7 +78,7 @@
                         <div class="span12">
                             <?php echo $this->placeholder('ProgressionNav'); ?>
                             <?php echo $this->flashMessenger("info", '<div class="alert alert-%s">%s</div>'); ?>
-                            <?php echo $this->layout()->content ?>
+                            <?php echo $this->layout()->content; ?>
                         </div>
                         <!--/span-->
                     </div>
