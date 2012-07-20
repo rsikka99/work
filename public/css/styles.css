@@ -290,6 +290,9 @@ form.form-center-actions.form-horizontal .form-actions {
 .clearfix .btn.create-button {
   margin-bottom: 7px;
 }
+.well.no-padding {
+  padding: 0;
+}
 /*
  * Quote Flow
 */
