@@ -20,6 +20,9 @@ class Application_Model_Acl extends Zend_Acl
                     ), 
                     'index' => array (
                             '%' 
+                    ), 
+                    'info' => array (
+                            '%' 
                     ) 
             ), 
             'admin' => array (
