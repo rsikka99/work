@@ -1,38 +1,21 @@
 <?php
 
 /**
- * Quotegen_View_Helper_Quotemenu
+ * Application_View_Helper_Footermenu
  *
  * @author Lee Robert
  *        
  */
-class Quotegen_View_Helper_Quotemenu extends Zend_View_Helper_Abstract
+class Application_View_Helper_Footermenu extends Zend_View_Helper_Abstract
 {
-    const DEVICES_CONTROLLER = 'quote_devices';
-    const PRICING_CONTROLLER = 'quote_pricing';
-    const PAGES_CONTROLLER = 'quote_pages';
-    const SETTINGS_CONTROLLER = 'quote_settings';
-    const REPORTS_CONTROLLER = 'quote_reports';
-    static $pages = array (
-            self::DEVICES_CONTROLLER => 'Build Devices', 
-//             self::PRICING_CONTROLLER => 'Configure Pages & Pricing', 
-            self::SETTINGS_CONTROLLER => 'Adjust Settings', 
-            self::REPORTS_CONTROLLER => 'View & Print Reports' 
-    );
-    static $activePage = 'quote_devices';
 
-    static function setActivePage ($controller)
-    {
-        self::$activePage = $controller;
-    }
-
-    public function Quotemenu ()
+    public function Footermenu ()
     {
         // Get the container
         $html = "";
         /* @var $pages Zend_Navigation */
         $pages = $this->view->navigation()->getContainer();
-        $container = $pages->findBy('id', 'quotemenu');
+        $container = $pages->findBy('id', 'footermenu');
         if ($container && $container->hasPages())
         {
             // If it's invisible, we'll need to turn it visible to be rendered properly
@@ -49,7 +32,7 @@ class Quotegen_View_Helper_Quotemenu extends Zend_View_Helper_Abstract
                 ->renderMenu($container, array (
                     'minDepth' => 0, 
                     'maxDepth' => 0, 
-                    'ulClass' => 'nav nav-tabs' 
+                    'ulClass' => 'footer-nav' 
             ));
             
             // Bring back it's original visibility

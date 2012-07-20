@@ -2,6 +2,7 @@
 <config>
     <nav>
         <manufacturers>
+            <order>13000</order>
             <label>Manufacturers</label>
             <class>dropdown subdropdown</class>
             <module>proposalgen</module>
@@ -50,6 +51,7 @@
             </pages>
         </manufacturers>
         <masterdevices>
+            <order>13000</order>
             <label>Master Devices</label>
             <class>dropdown subdropdown</class>
             <module>proposalgen</module>

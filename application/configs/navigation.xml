@@ -2,6 +2,7 @@
 <config>
     <nav>
         <sysadmin>
+            <id>adminmenu</id>
             <label>System Administration</label>
             <class>dropdown</class>
             <module>admin</module>

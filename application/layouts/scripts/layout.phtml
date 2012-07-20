@@ -30,46 +30,27 @@
         <!-- Start of Navbar -->
         <div class="navbar">
             <div class="navbar-inner">
-            <div class="container">
-                <div class="sidebar pull-right">
-                    <div class="pull-right">
-                        <?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
-                        <div class="btn-group pull-right">
-                            <a class="btn btn-mini btn-primary" href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'user', 'action' => 'profile'))?>"><i class="icon-user icon-white"></i> <?php echo $this->Username(); ?></a>
-                            <a class="pull-right btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="<?php echo $this->url(array( 'module' => 'default', 'controller' => 'auth', 'action' => 'changepassword'));?>">Change Password</a></li>
-                                <li><a href="<?php echo $this->url(array( 'module' => 'default', 'controller' => 'auth', 'action' => 'logout'));?>">Logout</a></li>
-                            </ul>
-                        </div>
-                        
-                            <?php 
-                            /* @var $pages Zend_Navigation */
-                            $pages = $this->navigation()->getContainer();
-                            $nav3Container = $pages->findBy('resource', 'admin__index__index');
-                            
-                            if ($nav3Container && $nav3Container->hasPages()) :
-                                // Temporarily set the navigation item to visible (Maybe this should be a separate container?)
-                                $nav3Container->set('visible', true);
-                                $adminNav = null;
-                                $adminNav = $this->navigation()->menu()->setUlClass('dropdown-menu')->setMaxDepth(2)->renderMenu($nav3Container);
-                            ?>
-                                <?php if ($adminNav) : ?>
+                <div class="container">
+                    <div class="sidebar pull-right">
+                        <div class="pull-right">
+                            <?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
+                            <div class="btn-group pull-right">
+                                <a class="btn btn-mini btn-primary" href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'user', 'action' => 'profile'))?>"><i class="icon-user icon-white"></i> <?php echo $this->Username(); ?></a>
+                                <a class="pull-right btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><b class="caret"></b></a>
+                                <?php echo $this->Usermenu(); ?>
+                            </div>
+                                <?php if (($adminNav = $this->Adminmenu()) == true) : ?>
                                     <div class="adminNav btn-group pull-left">
                                         <a class="btn btn-mini btn-primary" data-toggle="dropdown" title="System Administration" href="#"><span class="icon-cog icon-white"></span> Admin</a>
                                         <a class="pull-right btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><b class="caret"></b></a>
                                         <?php echo $adminNav; ?>
                                     </div>
-        							
                                 <?php endif; ?>
-                                <?php $nav3Container->set('visible', false); ?>
+                            <?php else : ?>
+                                <a class="btn btn-danger" href="<?php echo $this->url(array(), 'login');?>"><i class="icon-user icon-white"></i> Login</a>
                             <?php endif; ?>
-                        <?php else : ?>
-                            <a class="btn btn-danger" href="<?php echo $this->url(array(), 'login');?>"><i class="icon-user icon-white"></i> Login</a>
-                        <?php endif; ?>
+                        </div>
                     </div>
-                </div>
-                
                     <?php echo $this->navigation()->menu()->setUlClass('nav nav-pills')->setMinDepth(0)->setMaxDepth(0)->render(); ?>
                 </div>
             </div>
@@ -77,25 +58,9 @@
         <!-- End of Navbar -->
         <div class="subnav">
             <div class="container">
-                <?php 
-                // Find the active branch, at a depth of one
-                $nav2Container = null;
-                $rootPage = $this->navigation()->getContainer()->getPages();
-                foreach($rootPage as $page) { 
-                	if($page->isActive(true)) { 
-                		$nav2Container = $page;
-                		break;
-                	}
-                }
-                
-                if ($nav2Container && $nav2Container->hasPages())
-                {
-                    echo $this->navigation()->menu()->setUlClass('nav nav-pills')->setMaxDepth(2)->render($nav2Container);
-                }                    
-                ?>
+                <?php echo $this->Subnav(); ?>
             </div>
         </div>
-        
         <div class="wrapper" id="eminem">
             <header class="pageHeader">
                 <div class="headerSpace"></div>
@@ -112,7 +77,7 @@
                         <div class="span12">
                             <?php echo $this->placeholder('ProgressionNav'); ?>
                             <?php echo $this->flashMessenger("info", '<div class="alert alert-%s">%s</div>'); ?>
-                            <?php echo $this->layout()->content ?>
+                            <?php echo $this->layout()->content; ?>
                         </div>
                         <!--/span-->
                     </div>
@@ -126,9 +91,7 @@
                 <div class="row">
                     <div class="span6">Copyright Tangent MTW &copy; <?php echo date("Y"); ?>. All Rights Reserved.</div>
                     <div class="span6" id="footerLinks">
-						<a class="" href="<?php echo $this->url(array( 'module' => 'default', 'controller' => 'info', 'action' => 'about'));?>">About</a> |
-						<a class="" href="<?php echo $this->url(array( 'module' => 'default', 'controller' => 'info', 'action' => 'eula'));?>">Eula</a> |
-						<a class="" href="<?php echo $this->url(array( 'module' => 'default', 'controller' => 'info', 'action' => 'termsandconditions'));?>">Terms and Conditions</a>
+                        <?php echo $this->Footermenu(); ?>
                     </div>
                 </div>
             </div>

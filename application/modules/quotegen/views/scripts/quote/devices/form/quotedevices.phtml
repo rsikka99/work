@@ -3,9 +3,8 @@
 
 $form = $this->element;
 ?>
+<div class="well no-padding">
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
-<div class="well">
-
     <table class="table table-condensed table-bordered table-striped quoteDeviceTable">
         <tr class="header-row">
             <th colspan="4"></th>
@@ -28,10 +27,9 @@ $form = $this->element;
             <th style="width: 30px;"></th>
         </tr>
         <?php foreach ($form->getElementSets() as $set) :
-/* @var $quoteDevice Quotegen_Model_QuoteDevice */ 
-$quoteDevice = $set->quoteDevice;
-
-?>
+    /* @var $quoteDevice Quotegen_Model_QuoteDevice */ 
+    $quoteDevice = $set->quoteDevice;
+    ?>
         <tr class="deviceRow">
             <th><h5><?php echo $quoteDevice->getName(); ?><br><small><?php echo $quoteDevice->getSku(); ?></small></h5></th>                
             <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculatePackageCost()); ?></td>
@@ -80,30 +78,28 @@ $quoteDevice = $set->quoteDevice;
             </td>
         </tr>
         <?php if (count($quoteDevice->getQuoteDeviceOptions()) > 0) : ?>
-        
-        <?php foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
-        <tr class="optionRow">
-            <td><?php echo $quoteDeviceOption->getName(); ?><i class="icon-info-sign pull-right" data-placement="right" data-title="<?php echo $quoteDeviceOption->getSku(); ?>" data-content="<?php echo $quoteDeviceOption->getDescription(); ?>"></i></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <?php endforeach; ?>
-        
+            <?php foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
+            <tr class="optionRow">
+                <td><?php echo $quoteDeviceOption->getName(); ?><i class="icon-info-sign pull-right" data-placement="right" data-title="<?php echo $quoteDeviceOption->getSku(); ?>" data-content="<?php echo $quoteDeviceOption->getDescription(); ?>"></i></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <?php endforeach; ?>
         <?php endif; ?>
-    
-<?php endforeach; ?>
-</table>
-<?php echo $form->getElement('crsf_check'); ?>
-<div class="form-actions">
-    <input type="submit" name="back" value="Go Back" class="btn"/>
-    <input type="submit" name="save" value="Save" class="btn btn-success"/>
-    <input type="submit" name="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary"/>
-</div>
-</div>
+    <?php endforeach; ?>
+    </table>
+    <div class="form-actions">
+        <input type="submit" name="back" value="Go Back" class="btn"/>
+        <input type="submit" name="save" value="Save" class="btn btn-success"/>
+        <input type="submit" name="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary"/>
+    </div>
+    <?php echo $form->getElement('crsf_check')->renderViewHelper(); ?>
 </form>
+</div>

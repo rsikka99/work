@@ -22,31 +22,6 @@ class Admin_UserController extends Zend_Controller_Action
     }
 
     /**
-     * Used to view a user
-     */
-    public function viewAction ()
-    {
-        $id = $this->_getParam('id', 0);
-        if ($id < 1)
-        {
-            throw new Exception("Error getching user", 500);
-        }
-        
-        // Get the user
-        $mapper = new Application_Model_Mapper_User();
-        $user = $mapper->fetch(array (
-                'id = ?' => $id 
-        ));
-        
-        // Pass false unless we found the user
-        $this->view->user = false;
-        if ($user)
-        {
-            $this->view->user = $user;
-        }
-    }
-
-    /**
      * Used to create a new user
      */
     public function createAction ()
@@ -505,7 +480,6 @@ class Admin_UserController extends Zend_Controller_Action
                 $this->_helper->redirector('index', 'index', 'default');
             }
         }
-        
         $this->view->form = $form;
     }
 }

@@ -1,6 +1,0 @@
-<ul class="nav nav-pills">
-<?php foreach ($this->quoteMenuPages as $controller => $title) : ?>
-    <li <?php echo ($controller === $this->activeQuoteMenuPage) ? 'class="active"' : ''; ?>><a href="<?php echo $this->url(array('controller' => $controller, 'action' => 'index')); ?>"><?php echo $title; ?></a></li>
-    <li class="divider"></li>
-<?php endforeach; ?>
-</ul>
