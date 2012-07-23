@@ -6,9 +6,6 @@ class Application_Model_Acl extends Zend_Acl
     protected static $UnrestrictedPages = array (
             'default' => array (
                     'auth' => array (
-                            'login', 
-                            'logout', 
-                            'forgotpassword', 
                             'changepassword' 
                     ), 
                     'error' => array (
@@ -18,13 +15,30 @@ class Application_Model_Acl extends Zend_Acl
     );
     protected static $UnrestrictedMemberPages = array (
             'default' => array (
+                    'auth' => array (
+                            'logout' 
+                    ), 
                     'index' => array (
+                            '%' 
+                    ), 
+                    'info' => array (
                             '%' 
                     ) 
             ), 
             'admin' => array (
+                    'index' => array (
+                            'index' 
+                    ), 
                     'user' => array (
                             'profile' 
+                    ) 
+            ) 
+    );
+    protected static $UnrestrictedGuestOnlyPages = array (
+            'default' => array (
+                    'auth' => array (
+                            'login', 
+                            'forgotpassword' 
                     ) 
             ) 
     );
@@ -246,20 +260,64 @@ class Application_Model_Acl extends Zend_Acl
      */
     protected function isGlobalPage ($resource, $isLoggedIn = false)
     {
-        foreach ( self::$UnrestrictedPages as $module => $controllers )
+        // Do we have global pages?
+        if ($this->checkResourceAgainstArray($resource, self::$UnrestrictedPages))
         {
+            return true;
+        }
+        
+        if ($isLoggedIn)
+        {
+            // Do we have global member pages?
+            if ($this->checkResourceAgainstArray($resource, self::$UnrestrictedMemberPages))
+            {
+                return true;
+            }
+        }
+        else
+        {
+            // Do we have guest only pages?
+            if ($this->checkResourceAgainstArray($resource, self::$UnrestrictedGuestOnlyPages))
+            {
+                return true;
+            }
+        }
+        
+        // Nothing found, so we don't have global access
+        return false;
+    }
+
+    /**
+     * Checks to see if a given resource is within an array
+     *
+     * @param array $resource
+     *            An array of resources {moduleName, controllerName, actionName}
+     * @param unknown_type $array
+     *            An 3d to check against [module][controller][action]
+     * @return boolean True if it is in the array
+     */
+    private function checkResourceAgainstArray ($resource, $array)
+    {
+        foreach ( $array as $module => $controllers )
+        {
+            // Check the module name
             if (strcasecmp($module, $resource ['moduleName']) === 0)
             {
+                // Check the controller
                 foreach ( $controllers as $controller => $actions )
                 {
+                    // Check the controller for a wildcard
                     if (strcasecmp($controller, '%') === 0)
                     {
                         return true;
                     }
+                    
+                    // Check the controller
                     if (strcasecmp($controller, $resource ['controllerName']) === 0)
                     {
                         foreach ( $actions as $action )
                         {
+                            // Check the action
                             if (strcasecmp($action, $resource ['actionName']) === 0 || strcasecmp($action, '%') === 0)
                             {
                                 return true;
@@ -269,35 +327,6 @@ class Application_Model_Acl extends Zend_Acl
                 }
             }
         }
-        
-        // If we're logged in, check another array.
-        if ($isLoggedIn)
-        {
-            foreach ( self::$UnrestrictedMemberPages as $module => $controllers )
-            {
-                if (strcasecmp($module, $resource ['moduleName']) === 0)
-                {
-                    foreach ( $controllers as $controller => $actions )
-                    {
-                        if (strcasecmp($controller, '%') === 0)
-                        {
-                            return true;
-                        }
-                        if (strcasecmp($controller, $resource ['controllerName']) === 0)
-                        {
-                            foreach ( $actions as $action )
-                            {
-                                if (strcasecmp($action, $resource ['actionName']) === 0 || strcasecmp($action, '%') === 0)
-                                {
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
         return false;
     }
 }

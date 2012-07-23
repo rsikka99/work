@@ -1,40 +1,39 @@
 <?php
 
-/**
- * InfoController:
- * This controller is responsible for routing users to requested actions
- * found on the footer of the layout (About, Terms & Conditions, Eula).
- *
- * @author John Sadler
- */
 class Default_InfoController extends Zend_Controller_Action
 {
 
-    function init ()
-    {
-    } // end function init
-
-    
-    function preDispatch ()
-    {
-    } // end function preDispatch
-    
     /**
      * Display the company Terms and Conditions
-     *
      */
     public function termsandconditionsAction ()
     {
-        $this->view->path = APPLICATION_PATH . "/../data/info/termsandconditions.txt";
-    } // end function termsandconditionsAction
+        $file = APPLICATION_PATH . "/../data/info/termsandconditions.txt";
+        $text = 'Not Available';
+        
+        if (file_exists($file))
+        {
+            $text = str_replace("’", "'", file_get_contents($file));
+        }
+        
+        $this->view->text = $text;
+    }
 
     /**
      * Display the company End User License Agreement (EULA)
      */
     public function eulaAction ()
     {
-        $this->view->path = APPLICATION_PATH . "/../data/info/eula.txt";
-    } // end function eulaAction
+        $file = APPLICATION_PATH . "/../data/info/eula.txt";
+        $text = 'Not Available';
+        
+        if (file_exists($file))
+        {
+            $text = str_replace("’", "'", file_get_contents($file));
+        }
+        
+        $this->view->text = $text;
+    }
 
     /**
      * Displays the program verion and meta information
@@ -58,7 +57,5 @@ class Default_InfoController extends Zend_Controller_Action
             $this->view->databaseVersion = $result ["meta_value"];
         }
     } // end action aboutAction
-
-
 } //end class infoController
 
