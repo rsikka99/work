@@ -1,1 +1,0 @@
-Zend_Auth|a:1:{s:7:"storage";O:8:"stdClass":7:{s:2:"id";i:1;s:8:"username";s:4:"root";s:6:"locked";i:0;s:8:"nickname";s:13:"Administrator";s:9:"firstname";s:5:"Super";s:8:"lastname";s:4:"User";s:5:"email";s:22:"lrobert@tangentmtw.com";}}
