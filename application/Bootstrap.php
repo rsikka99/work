@@ -16,6 +16,16 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
         return $config;
     }
+    
+    /**
+     * Start session
+     */
+    public function _initCoreSession()
+    {
+        $this->bootstrap('db');
+        $this->bootstrap('session');
+        Zend_Session::start();
+    }
 
     /**
      * Initializes php runtime settings
