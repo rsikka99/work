@@ -572,15 +572,33 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         
                         if ($view == "assigned")
                         {
-                            $where = array (
-                                    'id IN ( ? )' => $assignedOptions 
-                            );
+                            if ($assignedOptions)
+                            {
+	                            $where = array (
+	                                    'id IN ( ? )' => $assignedOptions 
+	                            );
+                            }
+                            else
+                            {
+	                            $where = array (
+	                                    'id IN ( ? )' => "NULL"
+	                            ); 
+                            }
                         }
                         else if ($view == "unassigned")
                         {
-                            $where = array (
-                                    'id NOT IN ( ? )' => $assignedOptions 
-                            );
+                            if ($assignedOptions)
+                            {
+	                            $where = array (
+	                                    'id NOT IN ( ? )' => $assignedOptions 
+	                            );
+                            }
+                            else
+                            {
+	                            $where = array (
+	                                    'id NOT IN ( ? )' => "NULL" 
+	                            );
+                            }
                         }
                         
                         // Options Search Filter

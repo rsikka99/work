@@ -114,15 +114,12 @@ $manufacturers = $this->manufacturers;
 					</tbody>
 				</table>
 				<?php echo $this->paginationControl($this->paginator); ?>
-				<div style="text-align: center;">
-					<a class="btn" title="Done" href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'index' ), null, true ); ?>">Done</a>
-				</div>
 			<?php else : ?>
-				<div class='well'>
-					<a class="btn btn-success btn-small pull-right" href="<?php echo $this->url(array('action' => 'create', 'tab' => 2)) ?>"> <i class="icon-white icon-plus-sign"></i> Create new</a>
-				    <h1>There are no devices</h1>
-				</div>
+				<h4>There are no toners assigned to this device.</h4>
 			<?php endif; ?>
+			</div>
+			<div style="text-align: center;">
+				<a class="btn" title="Done" href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'index' ), null, true ); ?>">Done</a>
 			</div>
 		</form>
     </div>
