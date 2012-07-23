@@ -4,13 +4,25 @@
  */
 
 $gitHash = "";
-$appPath = realpath(__DIR__ . "../../");
-$cmdGitLastRev = '/usr/bin/git rev-list --max-count=1 master';
+$appPath = realpath(__DIR__ . "/../../");
+
+$cmd = '/usr/bin/git';
+if (stristr(PHP_OS, 'WIN'))
+{
+    // Git is in a different place when we're using windows
+    $cmd = '"C:\Program Files (x86)\Git\bin\git.exe"';
+}
+
+$params = 'rev-list --max-count=1 HEAD';
+
 if (is_dir($appPath . "/.git"))
 {
     chdir($appPath);
-    $hash = shell_exec($cmdGitLastRev);
+    exec("{$cmd} {$params}", $output, $returnCode);
+    if ($returnCode === 0)
+    {
+        $gitHash = implode(PHP_EOL, $output);
+    }
 }
-
 echo $gitHash;
 return 0;
