@@ -18,10 +18,7 @@ class Quotegen_Model_CategoryTest extends PHPUnit_Framework_TestCase
                 	'description' => 'A fine finisher'
                 );
         
-        $this->assertAttributeEmpty('id', $category);
-        $this->assertAttributeEmpty('name', $category);
-        $this->assertAttributeEmpty('description', $category);
         $category->populate($data);
-        $this->assertNotEmpty($category);
+        $this->assertSame($data, $category->toArray());
     }
 }
