@@ -12,7 +12,7 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
     
     /*
      * Define the primary key of the model association
-    */
+     */
     public $col_masterDeviceId = 'masterDeviceId';
     public $col_optionId = 'optionId';
 
@@ -60,12 +60,12 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
     public function save ($object, $primaryKey = null)
     {
         $data = $this->unsetNullValues($object->toArray());
-        
+
         if ($primaryKey === null)
         {
-            $primaryKey [] = $data [$this->col_masterDeivceId];
+            $primaryKey [] = $data [$this->col_masterDeviceId];
             $primaryKey [] = $data [$this->col_optionId];
-        }
+        } 
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
@@ -110,7 +110,7 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
 
     /**
      * Deletes all device options by device id;
-     * 
+     *
      * @param int $deviceId            
      * @return number The amount of rows affected.
      */
@@ -138,7 +138,7 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
         }
         
         // Assuming we don't have a cached object, lets go get it.
-        $result = $this->getDbTable()->find($id);
+        $result = $this->getDbTable()->find(array('masterDeviceId' => $id [0]),array('optionId' => $id [1]));
         if (0 == count($result))
         {
             return;

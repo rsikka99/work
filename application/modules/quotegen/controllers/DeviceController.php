@@ -80,11 +80,12 @@ class Quotegen_DeviceController extends Zend_Controller_Action
         $quoteDeviceConfigurationMapper = Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance();
         $deviceConfigurationMapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
         $deviceConfigurationOptionsMapper = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance();
-
+        
         // TODO: Show what is being deleted in messages 
 //         foreach ( $deviceConfigurations as $deviceConfiguration)
 //         {
-            
+
+
 //             $deviceConfigurationId = $deviceConfiguration->getId();
 //             $userDeviceConfigurationMapper->countByDeviceId($deviceConfigurationId);
 //             $globalDeviceConfigurationMapper->countByDeviceId($deviceConfigurationId);
@@ -92,8 +93,8 @@ class Quotegen_DeviceController extends Zend_Controller_Action
 //             $deviceConfigurationMapper->countByDeviceId($deviceConfigurationId);
 //             $deviceConfigurationOptionsMapper->countByDeviceId($deviceConfigurationId);
 //         }
-
         
+
         $message = "Are you sure you want to delete {$device->getMasterDeviceId()}?";
         $form = new Application_Form_Delete($message);
         
@@ -215,8 +216,9 @@ class Quotegen_DeviceController extends Zend_Controller_Action
         }
         
         // Get the device
-        $mapper = Quotegen_Model_Mapper_Device::getInstance();
-        $device = $mapper->find($deviceId);
+        $deviceMapper = Quotegen_Model_Mapper_Device::getInstance();
+        
+        $device = $deviceMapper->find($deviceId);
         // If the device doesn't exist, send them back t the view all devices page
         if (! $device)
         {
@@ -227,35 +229,55 @@ class Quotegen_DeviceController extends Zend_Controller_Action
         }
         
         // Create a new form with the mode and roles set
-        $form = new Quotegen_Form_Device($device->getMasterDevice()->getFullDeviceName());
+        $form = new Quotegen_Form_Device($deviceId);
         
         // Prepare the data for the form
         $request = $this->getRequest();
-        $form->populate($device->toArray());
+		$form->populate($device->toArray());
         
         // Make sure we are posting data
         if ($request->isPost())
         {
             // Get the post data
             $values = $request->getPost();
+            // Set the device name 
+            $values['deviceName'] = $device->getMasterDevice()->getFullDeviceName();
             
-            // If we cancelled we don't need to validate anything
-            if (! isset($values ['cancel']))
+            // If we cancelled we don't need to validate anything	
+            if (! isset($values ['back']))
             {
                 try
                 {
                     // Validate the form
                     if ($form->isValid($values))
                     {
-                        $device->populate($values);
-                        
-                        // Save to the database with cascade insert turned on
-                        $deviceId = $mapper->save($device, $deviceId);
-                        
+                        // Save individual option included quantities
+                        $deviceOptionMapper = Quotegen_Model_Mapper_DeviceOption::getInstance();                        
+                        foreach ( $form->getDeviceOptionElements() as $object )
+                        {
+                            $includeQuantity = $object->deviceOptionElement->getValue();
+                            if(!$includeQuantity)
+                            {
+                                $includeQuantity = 0;
+                            }
+                            $object->deviceOption->setIncludedQuantity($includeQuantity);
+                            $deviceOptionMapper->save($object->deviceOption);                            
+                        }
+
                         $this->_helper->flashMessenger(array (
-                                'success' => "Device '" . $this->view->escape($device->getMasterDeviceId()) . "' was updated sucessfully." 
+                                'success' => "Device '" . $this->view->escape($device->getMasterDevice()->getFullDeviceName()) . "' was updated sucessfully."
                         ));
-                        $this->_helper->redirector('index');
+                        
+                        // Save new device attributes (sku)
+                        $deviceMapper->save($device);
+                        
+                        if (isset($values ['addOption']))
+                        {
+                            $this->_helper->redirector('addoptions', null, null, array (
+                                    'deviceId' => $deviceId
+                            ));
+                        }
+                        $form->populate($values);                        
                     }
                     else
                     {
@@ -275,8 +297,6 @@ class Quotegen_DeviceController extends Zend_Controller_Action
                 $this->_helper->redirector('index');
             }
         }
-        
-        $this->view->device = $device;
         $this->view->form = $form;
     }
 
@@ -285,16 +305,16 @@ class Quotegen_DeviceController extends Zend_Controller_Action
      */
     public function addoptionsAction ()
     {
-        $id = $this->_getParam('id', FALSE);
+        $deviceId = $this->_getParam('deviceId', FALSE);
         
-        $availableOptions = Quotegen_Model_Mapper_Option::getInstance()->fetchAllAvailableOptionsForDevice($id);
+        $availableOptions = Quotegen_Model_Mapper_Option::getInstance()->fetchAllAvailableOptionsForDevice($deviceId);
         if (count($availableOptions) < 1)
         {
             $this->_helper->flashMessenger(array (
                     'info' => "There are no more options to add to this device." 
             ));
             $this->_helper->redirector('edit', null, null, array (
-                    'id' => $id 
+                    'id' => $deviceId 
             ));
         }
         
@@ -302,7 +322,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
         // Prepare the data for the form
         $request = $this->getRequest();
         
-        $device = $this->getDevice($id);
+        $device = $this->getDevice($deviceId);
         
         $form->populate($device->toArray());
         
@@ -325,9 +345,11 @@ class Quotegen_DeviceController extends Zend_Controller_Action
                         $deviceOption->setMasterDeviceId($device->getMasterDeviceId());
                         
                         $insertedOptions = 0;
+                        
                         foreach ( $values ['options'] as $optionId )
                         {
-                            $deviceOption->setOptionId($optionId);
+                            $deviceOption->setOptionId((int)$optionId);
+							$deviceOption->setIncludedQuantity(0);
                             try
                             {
                                 $deviceOptionMapper->insert($deviceOption);
@@ -343,7 +365,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
                                 'success' => "Successfully added {$insertedOptions} options to {$device->getMasterDevice()->getFullDeviceName()} successfully." 
                         ));
                         $this->_helper->redirector('edit', null, null, array (
-                                'id' => $id 
+                                'id' => $deviceId 
                         ));
                     }
                     else
@@ -362,7 +384,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
             {
                 // User has cancelled. Go back to the edit page
                 $this->_helper->redirector('edit', null, null, array (
-                        'id' => $id 
+                        'id' => $deviceId 
                 ));
             }
         }
@@ -376,8 +398,9 @@ class Quotegen_DeviceController extends Zend_Controller_Action
     public function deleteoptionAction ()
     {
         $id = $this->_getParam('id', FALSE);
-        $optionId = $this->_getParam('optionId', FALSE);
         
+        $optionId = $this->_getParam('optionId', FALSE);
+
         try
         {
             $deviceOption = new Quotegen_Model_DeviceOption();

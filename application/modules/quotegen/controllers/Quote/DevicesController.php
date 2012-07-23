@@ -349,13 +349,6 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                                 $optionHasChanged = true;
                             }
                             
-                            $includedQuantity = (int)$formValues ["option{$optionId}includedQuantity"];
-                            if ($includedQuantity !== (int)$quoteDeviceOption->getIncludedQuantity())
-                            {
-                                $quoteDeviceOption->setIncludedQuantity($includedQuantity);
-                                $optionHasChanged = true;
-                            }
-                            
                             if ($optionHasChanged)
                             {
                                 Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->save($quoteDeviceOption);
