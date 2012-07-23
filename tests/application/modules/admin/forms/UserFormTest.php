@@ -2,7 +2,6 @@
 
 class Admin_Form_UserFormTest extends PHPUnit_Framework_TestCase
 {
-    
     protected $_createform;
     protected $_editform;
     protected $_usereditform;
@@ -394,7 +393,7 @@ class Admin_Form_UserFormTest extends PHPUnit_Framework_TestCase
                 'frozenUntil' => $frozenUntil, 
                 'locked' => $locked 
         );
-        $this->assertFalse($this->_createform->isValid($data), "User form accepted bad data!");
+        $this->assertFalse($this->_createform->isValid($data), "User form accepted bad data! " . var_export($data, true));
     }
 
     /**
@@ -579,7 +578,7 @@ class Admin_Form_UserFormTest extends PHPUnit_Framework_TestCase
                 'frozenUntil' => $frozenUntil, 
                 'locked' => $locked 
         );
-        $this->assertFalse($this->_editform->isValid($data), "User form accepted bad data!");
+        $this->assertFalse($this->_editform->isValid($data), "User form accepted bad data! " . var_export($data, true));
     }
 
     /**
@@ -590,63 +589,27 @@ class Admin_Form_UserFormTest extends PHPUnit_Framework_TestCase
         return array (
                 array (
                         0, 
-                        'lrobert', 
-                        'tmt', 
-                        'tmt', 
-                        'Lee', 
-                        'Robert', 
-                        'lrobert@tangentmtw.com', 
-                        0, 
-                        null, 
-                        false 
+                        'Herman', 
+                        'i', 
+                        'lrobert@tangentmtw.com' 
                 ), 
                 array (
                         1, 
-                        'lrobert', 
-                        'tmtwdev', 
-                        'tmtwdev', 
-                        'Herman', 
                         'i', 
-                        'lrobert@tangentmtw.com', 
-                        0, 
-                        null, 
-                        false 
+                        'Herman', 
+                        'lrobert@tangentmtw.com' 
                 ), 
                 array (
                         2, 
-                        'lrobert', 
-                        'tmtwdev', 
-                        'tmtwdev', 
-                        'i', 
-                        'Herman', 
-                        'lrobert@tangentmtw.com', 
-                        0, 
-                        null, 
-                        false 
+                        'Lee', 
+                        'Robert', 
+                        'lrobert' 
                 ), 
                 array (
                         3, 
-                        'lrobert', 
-                        'tmtwdev', 
-                        'tmtwdev', 
                         'Lee', 
                         'Robert', 
-                        'lrobert', 
-                        0, 
-                        null, 
-                        false 
-                ), 
-                array (
-                        4, 
-                        'lrobert', 
-                        'tmtwdev', 
-                        'tmtwdev', 
-                        'Lee', 
-                        'Robert', 
-                        'lrobert at tangentmtw dot com', 
-                        0, 
-                        null, 
-                        false 
+                        'lrobert at tangentmtw dot com' 
                 ) 
         );
     }
@@ -654,22 +617,15 @@ class Admin_Form_UserFormTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider badUserEditData
      */
-    public function testFormRejectsBadDataInUserEditForm ($id, $username, $password, $passwordConfirm, $firstname, $lastname, $email, $loginAttempts, $frozenUntil, $locked)
+    public function testFormRejectsBadDataInUserEditForm ($id, $firstname, $lastname, $email)
     {
         $data = array (
                 'id' => $id, 
-                'username' => $username, 
-                'password' => $password, 
-                'password_confirm' => $passwordConfirm, 
                 'firstname' => $firstname, 
                 'lastname' => $lastname, 
-                'email' => $email, 
-                'loginAttempts' => $loginAttempts, 
-                'frozenUntil' => $frozenUntil, 
-                'locked' => $locked 
+                'email' => $email 
         );
-        $this->assertFalse($this->_usereditform->isValid($data), "User form accepted bad data!");
+        $this->assertFalse($this->_usereditform->isValid($data), "User form accepted bad data! " . var_export($data, true));
     }
-
 }
 
