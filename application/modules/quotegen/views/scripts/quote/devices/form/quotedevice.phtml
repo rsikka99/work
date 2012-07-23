@@ -23,15 +23,14 @@ $form = $this->element;
     <br>
     <?php if (count($form->getOptionElements()) > 0) : ?>
         <?php foreach ($form->getOptionElements() as $element) : ?>
-        <div class="control-group <?php echo ($element->quantity->hasErrors() || $element->includedQuantity->hasErrors() || $element->cost->hasErrors()) ? 'error' : '' ?>">
+        <div class="control-group <?php echo ($element->quantity->hasErrors() || $element->cost->hasErrors()) ? 'error' : '' ?>">
         	<?php echo $element->quantity->renderLabel(); ?>
         	<div class="controls">
         		<div class="input-prepend input-append">
-        			<span class="add-on">Qty:</span><?php echo trim($element->quantity->renderViewHelper()); ?><span class="add-on">Included: </span><?php echo trim($element->includedQuantity->renderViewHelper());?><span class='add-on' style="width: 100px; text-align: left;">Cost: <?php echo $this->currency((float)$element->quoteDeviceOption->getCost()); ?></span><a href="<?php echo $this->url(array('action' => 'delete-option-from-quote-device', 'quoteDeviceOptionId' => $element->quantity->getDescription()));?>" class="add-on btn btn-danger"><i class="icon-trash"></i></a>
+        			<span class="add-on">Qty:</span><?php echo trim($element->quantity->renderViewHelper()); ?><span class='add-on' style="width: 100px; text-align: left;">Cost: <?php echo $this->currency((float)$element->quoteDeviceOption->getCost()); ?></span><a href="<?php echo $this->url(array('action' => 'delete-option-from-quote-device', 'quoteDeviceOptionId' => $element->quantity->getDescription()));?>" class="add-on btn btn-danger"><i class="icon-trash"></i></a>
         		</div>
         		<?php
         		    echo $element->quantity->renderErrors();
-        		    echo $element->includedQuantity->renderErrors();
         		    echo $element->cost->renderErrors();
         		 ?>
         	</div>

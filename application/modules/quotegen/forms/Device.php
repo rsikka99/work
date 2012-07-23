@@ -3,15 +3,29 @@
 class Quotegen_Form_Device extends EasyBib_Form
 {
     /**
-     * If this is set to false it the form will display a dropdown to select a device.
+     * Device Id
      *
-     * @var string
+     * @var int
      */
-    protected $_deviceName;
+    protected $_deviceId;
+    
+    /**
+     * An array of elements that repeneds Quotegen_Model_Option objects
+     *
+     * @var array
+     */
+    protected $_deviceOptionElements = array ();
+    
+    /**
+     * Options for the devices
+     *
+     * @var Quotegen_Model_Option array
+     */
+    protected $_deviceOptions;
 
-    public function __construct ($deviceName = false, $options = null)
+    public function __construct ($deviceId = null, $options = null)
     {
-        $this->_deviceName = $deviceName;
+        $this->_deviceId = $deviceId;
         parent::__construct($options);
     }
 
@@ -34,11 +48,62 @@ class Quotegen_Form_Device extends EasyBib_Form
          */
         $this->setAttrib('class', 'form-horizontal form-center-actions');
         
-        if ($this->_deviceName)
+        if ($this->_deviceId)
         {
+            $device = Quotegen_Model_Mapper_Device::getInstance()->find($this->_deviceId);
             $deviceName = new My_Form_Element_Paragraph('deviceName');
-            $deviceName->setValue($this->_deviceName);
+            $deviceName->setValue($device->getMasterDevice()
+                ->getFullDeviceName());
+            $deviceName->setName('deviceName');
+            
             $this->addElement($deviceName);
+            
+            $this->addElement('text', 'sku', array (
+                    'label' => 'SKU:', 
+                    'required' => true, 
+                    'filters' => array (
+                            'StringTrim', 
+                            'StripTags' 
+                    ), 
+                    'validators' => array (
+                            array (
+                                    'validator' => 'StringLength', 
+                                    'options' => array (
+                                            1, 
+                                            255 
+                                    ) 
+                            ) 
+                    ) 
+            ));
+            
+            /* @var $option Quotegen_Model_Option */
+            foreach ( $device->getOptions() as $option )
+            {
+                $object = new stdClass();
+                
+                // Create a unique element with a unique id
+                $deviceOption = Quotegen_Model_Mapper_DeviceOption::getInstance()->find(array (
+                        $this->_deviceId, 
+                        $option->getId() 
+                ));
+                if (! $deviceOption->getIncludedQuantity())
+                    $deviceOption->setIncludedQuantity(0);
+                $optionElement = $this->createElement('text', "option-{$option->getId()}", array (
+                        'label' => $option->getName(), 
+                        'value' => $deviceOption->getIncludedQuantity(), 
+                        'class' => 'span1' 
+                ));
+                
+                // Add the elements to the table
+                $this->addElement($optionElement);
+                
+                $object->deviceOptionElement = $optionElement;
+                $object->deviceOption = $deviceOption;
+                $object->option = $option;
+                
+                // Add the elements to the options array
+                $this->_deviceOptionElements [] = $object;
+            }
         }
         else
         {
@@ -54,24 +119,7 @@ class Quotegen_Form_Device extends EasyBib_Form
             ));
         }
         
-        $this->addElement('text', 'sku', array (
-                'label' => 'SKU:', 
-                'required' => true, 
-                'filters' => array (
-                        'StringTrim', 
-                        'StripTags' 
-                ), 
-                'validators' => array (
-                        array (
-                                'validator' => 'StringLength', 
-                                'options' => array (
-                                        1, 
-                                        255 
-                                ) 
-                        ) 
-                ) 
-        ));
-        
+
         // Add the submit button
         $this->addElement('submit', 'submit', array (
                 'ignore' => true, 
@@ -85,5 +133,56 @@ class Quotegen_Form_Device extends EasyBib_Form
         ));
         
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
+    }
+
+    public function loadDefaultDecorators ()
+    {
+        if ($this->_deviceId)
+        {
+            $this->setDecorators(array (
+                    array (
+                            'ViewScript', 
+                            array (
+                                    'viewScript' => 'device/form/edit.phtml' 
+                            ) 
+                    ) 
+            ));
+        }
+    }
+
+    /**
+     *
+     * @return the $_deviceOptionElements
+     */
+    public function getDeviceOptionElements ()
+    {
+        return $this->_deviceOptionElements;
+    }
+
+    /**
+     *
+     * @param multitype: $_deviceOptionElements            
+     */
+    public function setDeviceOptionElements ($_deviceOptionElements)
+    {
+        $this->_deviceOptionElements = $_deviceOptionElements;
+    }
+
+    /**
+     *
+     * @return the $_deviceOptions
+     */
+    public function getDeviceOptions ()
+    {
+        return $this->_deviceOptions;
+    }
+
+    /**
+     *
+     * @param field_type $_deviceOptions            
+     */
+    public function setDeviceOptions ($_deviceOptions)
+    {
+        $this->_deviceOptions = $_deviceOptions;
     }
 }

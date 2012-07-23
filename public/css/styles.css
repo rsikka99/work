@@ -355,6 +355,7 @@ table.quoteDeviceTable tr.header-row td {
 table.quoteDeviceTable tr.optionRow td {
   border-top: 0;
 }
-table.quoteDeviceTable tr.deviceRow .control-group {
+.form-horizontal td .control-group,
+.form-horizontal td .controls {
   margin: 0;
 }

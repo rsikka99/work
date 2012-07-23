@@ -59,13 +59,6 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
     protected $_quantity;
     
     /**
-     * The quanity of the item that is included
-     *
-     * @var int
-     */
-    protected $_includedQuantity;
-    
-    /**
      * The option associated
      *
      * @var Quotegen_Model_Option
@@ -95,8 +88,6 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
             $this->setCost($params->cost);
         if (isset($params->quantity) && ! is_null($params->quantity))
             $this->setQuantity($params->quantity);
-        if (isset($params->includedQuantity) && ! is_null($params->includedQuantity))
-            $this->setIncludedQuantity($params->includedQuantity);
     }
     
     /*
@@ -111,8 +102,7 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
                 'name' => $this->getName(), 
                 'description' => $this->getDescription(), 
                 'cost' => $this->getCost(), 
-                'quantity' => $this->getQuantity(), 
-                'includedQuantity' => $this->getIncludedQuantity() 
+                'quantity' => $this->getQuantity() 
         );
     }
 
@@ -267,28 +257,6 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
     public function setQuantity ($_quanity)
     {
         $this->_quantity = $_quanity;
-        return $this;
-    }
-
-    /**
-     * Gets the included quantity of the option
-     *
-     * @return the $_includedQuantity the new quantity
-     */
-    public function getIncludedQuantity ()
-    {
-        return $this->_includedQuantity;
-    }
-
-    /**
-     * Sets the included quantity
-     *
-     * @param number $_includedQuantity
-     *            the new included quantity
-     */
-    public function setIncludedQuantity ($_includedQuantity)
-    {
-        $this->_includedQuantity = $_includedQuantity;
         return $this;
     }
 
