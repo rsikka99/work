@@ -73,28 +73,8 @@ class Quotegen_DeviceController extends Zend_Controller_Action
         // TODO: Show how many of each option will be deleted
         // Get all the deviceConfiguration associated with the masterDeviceId
         $deviceConfigurations = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAllDeviceConfigurationByDeviceId($deviceId);
-        
-        // Set up all mappers required for deletion
-        $userDeviceConfigurationMapper = Quotegen_Model_Mapper_UserDeviceConfiguration::getInstance();
-        $globalDeviceConfigurationMapper = Quotegen_Model_Mapper_GlobalDeviceConfiguration::getInstance();
-        $quoteDeviceConfigurationMapper = Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance();
-        $deviceConfigurationMapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
-        $deviceConfigurationOptionsMapper = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance();
-        
-        // TODO: Show what is being deleted in messages 
-//         foreach ( $deviceConfigurations as $deviceConfiguration)
-//         {
-
-
-//             $deviceConfigurationId = $deviceConfiguration->getId();
-//             $userDeviceConfigurationMapper->countByDeviceId($deviceConfigurationId);
-//             $globalDeviceConfigurationMapper->countByDeviceId($deviceConfigurationId);
-//             $quoteDeviceConfigurationMapper->countByDeviceId($deviceConfigurationId);
-//             $deviceConfigurationMapper->countByDeviceId($deviceConfigurationId);
-//             $deviceConfigurationOptionsMapper->countByDeviceId($deviceConfigurationId);
-//         }
-        
-
+       
+        // TODO: Show what is being deleted in messages
         $message = "Are you sure you want to delete {$device->getMasterDeviceId()}?";
         $form = new Application_Form_Delete($message);
         
@@ -115,17 +95,17 @@ class Quotegen_DeviceController extends Zend_Controller_Action
                     {
                         $deviceConfigurationId = $deviceConfiguration->getId();
                         // Delete user device configuration link
-                        $userDeviceConfigurationMapper->deleteUserDeviceConfigurationByDeviceId($deviceConfigurationId);
+                        Quotegen_Model_Mapper_UserDeviceConfiguration::getInstance()->deleteUserDeviceConfigurationByDeviceId($deviceConfigurationId);
                         // Delete global device configurations link
-                        $globalDeviceConfigurationMapper->delete($deviceConfigurationId);
+                        Quotegen_Model_Mapper_GlobalDeviceConfiguration::getInstance()->delete($deviceConfigurationId);
                         // Delete the device configuration options 
-                        $deviceConfigurationOptionsMapper->deleteDeviceConfigurationOptionById($deviceConfigurationId);
+                        Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->deleteDeviceConfigurationOptionById($deviceConfigurationId);
                         // Delete the deviceConfiguration
-                        $deviceConfigurationMapper->delete($deviceConfiguration);
+                        Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->delete($deviceConfiguration);
                     }
                     $this->getDeviceMapper()->delete($device);
                     $this->_helper->flashMessenger(array (
-                            'success' => "Device  {$device->getMasterDeviceId()} was deleted successfully." 
+                            'success' => "Device  '{$device->getMasterDevice()->getFullDeviceName()}' was deleted successfully." 
                     ));
                     $this->_helper->redirector('index');
                 }
