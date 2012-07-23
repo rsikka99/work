@@ -65,6 +65,13 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
      */
     protected $_option;
     
+    /**
+     * Inluded quantity of the option
+     * 
+     * @var int
+     */
+    protected $_includedQuantity;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -88,6 +95,8 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
             $this->setCost($params->cost);
         if (isset($params->quantity) && ! is_null($params->quantity))
             $this->setQuantity($params->quantity);
+        if (isset($params->includedQuantity) && ! is_null($params->includedQuantity))
+            $this->setIncludedQuantity($params->includedQuantity);
     }
     
     /*
@@ -102,7 +111,8 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
                 'name' => $this->getName(), 
                 'description' => $this->getDescription(), 
                 'cost' => $this->getCost(), 
-                'quantity' => $this->getQuantity() 
+                'quantity' => $this->getQuantity(),
+                'includedQuantity' => $this->getIncludedQuantity()
         );
     }
 
@@ -316,4 +326,20 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
         }
         return $subtotal;
     }
+	/**
+     * @return the $_includedQuantity
+     */
+    public function getIncludedQuantity ()
+    {
+        return $this->_includedQuantity;
+    }
+
+	/**
+     * @param number $_includedQuantity
+     */
+    public function setIncludedQuantity ($_includedQuantity)
+    {
+        $this->_includedQuantity = $_includedQuantity;
+    }
+
 }
