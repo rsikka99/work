@@ -664,49 +664,49 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
     }
 
     /**
-     * Edit device configurations
+     * OLD device configurations
      */
-    public function configurationsAction ()
+    public function oldconfigurationsAction ()
     {
         $where = null;
         $configurationId = $this->_getParam('configId', false);
         $masterDeviceId = $this->_getParam('id', false);
         $this->view->id = $masterDeviceId;
-        
+    
         // If they haven't provided an id, send them back to the view all masterDevice page
         if (! $masterDeviceId)
         {
             $this->_helper->flashMessenger(array (
-                    'warning' => 'Please select a masterDevice to edit first.' 
+                    'warning' => 'Please select a masterDevice to edit first.'
             ));
             $this->_helper->redirector('index');
         }
-        
+    
         // Get the masterDevice
         $mapper = new Proposalgen_Model_Mapper_MasterDevice();
         $masterDevice = $mapper->find($masterDeviceId);
         $this->view->devicename = $masterDevice->getManufacturer()->getDisplayname() . ' ' . $masterDevice->getPrinterModel();
-        
+    
         // If the masterDevice doesn't exist, send them back t the view all masterDevices page
         if (! $masterDevice)
         {
             $this->_helper->flashMessenger(array (
-                    'danger' => 'There was an error selecting the masterDevice to edit.' 
+                    'danger' => 'There was an error selecting the masterDevice to edit.'
             ));
             $this->_helper->redirector('index');
         }
-        
+    
         // Get configurations
         $configurations = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAllDeviceConfigurationByDeviceId($masterDeviceId);
         $this->view->configurations = $configurations;
-        
+    
         // Make sure we are posting data
         $request = $this->getRequest();
         if ($request->isPost())
         {
             // Get the post data
             $values = $request->getPost();
-            
+    
             // If we cancelled we don't need to validate anything
             if (! isset($values ['cancel']))
             {
@@ -717,20 +717,20 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                     $qty = $values ["txtQty{$optionId}"];
                     $deviceConfigurationOptionMapper = new Quotegen_Model_Mapper_DeviceConfigurationOption();
                     $deviceConfigurationOption = new Quotegen_Model_DeviceConfigurationOption();
-                    
+    
                     // Populate Device Configuration Option object
                     $deviceConfigurationOption->setMasterDeviceId($masterDeviceId);
                     $deviceConfigurationOption->setOptionId($optionId);
                     $deviceConfigurationOption->setQuantity($qty);
-                    
+    
                     // Validate Qty
                     if ($qty < 0)
                     {
-                            $this->_helper->flashMessenger(array (
-                                    'error' => "You must enter a quantity to assign." 
-                            ));
+                        $this->_helper->flashMessenger(array (
+                                'error' => "You must enter a quantity to assign."
+                        ));
                     }
-                    
+    
                     // Save if option and device id
                     else if ($optionId && $masterDeviceId)
                     {
@@ -739,18 +739,18 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         {
                             // Save device option
                             $deviceConfigurationOptionMapper->insert($deviceConfigurationOption);
-                            
+    
                             $this->_helper->flashMessenger(array (
-                                    'success' => "The option was assigned successfully." 
+                                    'success' => "The option was assigned successfully."
                             ));
                         }
                         else if (isset($values ['btnUnassign']))
                         {
                             // Delete device option
                             $deviceConfigurationOptionMapper->delete($deviceConfigurationOption);
-                            
+    
                             $this->_helper->flashMessenger(array (
-                                    'success' => "The option was unassigned successfully." 
+                                    'success' => "The option was unassigned successfully."
                             ));
                         }
                     }
@@ -758,13 +758,13 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 catch ( Exception $e )
                 {
                     $this->_helper->flashMessenger(array (
-                            'error' => "An error has occurred." 
+                            'error' => "An error has occurred."
                     ));
                 }
                 catch ( InvalidArgumentException $e )
                 {
                     $this->_helper->flashMessenger(array (
-                            'danger' => $e->getMessage() 
+                            'danger' => $e->getMessage()
                     ));
                 }
             }
@@ -774,7 +774,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 $this->_helper->redirector('index');
             }
         }
-        
+    
         // Get the assigned options for device
         $deviceConfigurationWhere = null;
         if ( $configurationId )
@@ -790,7 +790,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             $assignedOptions [] = $option->getOptionId();
         }
         $this->view->assignedOptions = $assignedOptions;
-
+    
         // Get all available options for device
         $deviceOptions = Quotegen_Model_Mapper_DeviceOption::getInstance()->fetchAllOptionsByDeviceId($masterDeviceId);
         $availableOptions = array ();
@@ -804,9 +804,133 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                     "optionId IN ( ? )" => $availableOptions
             );
         }
-        
+    
         // Display filterd list of device options
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance(), $where));
+    
+        // Set the current page we're on
+        $paginator->setCurrentPageNumber($this->_getParam('page', 1));
+    
+        // Set how many items to show
+        $paginator->setItemCountPerPage(15);
+    
+        // Pass the view the paginator
+        $this->view->paginator = $paginator;
+    }
+    
+    /**
+     * Edit device configurations
+     */
+    public function configurationsAction ()
+    {
+        $where = null;
+        
+        // Get master device 
+        $masterDeviceId = $this->_getParam('id', false);
+        $this->view->id = $masterDeviceId;
+        
+        // If they haven't provided an id, send them back to the view all masterDevice page
+        if (! $masterDeviceId)
+        {
+            $this->_helper->flashMessenger(array (
+                    'warning' => 'Please select a masterDevice to edit first.' 
+            ));
+            $this->_helper->redirector('index');
+        }
+        
+        // Get the device
+        $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
+        $this->view->devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . ' ' . $device->getMasterDevice()->getPrinterModel();
+
+        // Get device configurations list
+        $deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAll(array('masterDeviceId = ?' => $masterDeviceId));
+        $assignedConfigurations = array ();
+        foreach ( $deviceConfiguration as $configuration )
+        {
+            $assignedConfigurations [] = $configuration->getId();
+        }
+        $this->view->assignedConfigurations = $assignedConfigurations;
+        
+        // Make sure we are posting data
+        $request = $this->getRequest();
+        if ($request->isPost())
+        {
+            // Get the post data
+            $values = $request->getPost();
+        
+            // If we cancelled we don't need to validate anything
+            if (! isset($values ['cancel']))
+            {
+                try
+                {
+                    // Filter
+                    if (isset($values ['btnSearch']))
+                    {
+                        
+                        // Filter view
+                        $view = $values ['cboView'];
+                        $this->view->view_filter = $view;
+                        
+                        if ($view == "assigned")
+                        {
+                            if ($assignedConfigurations)
+                            {
+	                            $where = array (
+	                                    'id IN ( ? )' => $assignedConfigurations 
+	                            );
+                            }
+                            else
+                            {
+	                            $where = array (
+	                                    'id IN ( ? )' => "NULL"
+	                            ); 
+                            }
+                        }
+                        else if ($view == "unassigned")
+                        {
+                            if ($assignedConfigurations)
+                            {
+	                            $where = array (
+	                                    'id NOT IN ( ? )' => $assignedConfigurations 
+	                            );
+                            }
+                            else
+                            {
+	                            $where = array (
+	                                    'id NOT IN ( ? )' => "NULL" 
+	                            );
+                            }
+                        }
+                    }
+                    
+                    // Clear Filter
+                    else
+                    {
+                        $this->view->view_filter = "all";
+                    }
+                }
+                catch ( Exception $e )
+                {
+                    $this->_helper->flashMessenger(array (
+                            'error' => "An error has occurred."
+                    ));
+                }
+                catch ( InvalidArgumentException $e )
+                {
+                    $this->_helper->flashMessenger(array (
+                            'danger' => $e->getMessage()
+                    ));
+                }
+            }
+            else
+            {
+                // User has cancelled. We could do a redirect here if we wanted.
+                $this->_helper->redirector('index');
+            }
+        }
+        
+        // Display all of the devices
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Quotegen_Model_Mapper_DeviceConfiguration::getInstance(), $where));
         
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
