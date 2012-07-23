@@ -200,14 +200,23 @@ class Admin_Form_User extends EasyBib_Form
             ));
             
             $this->addElement($frozenUntil);
-        }
-        
-        if ($this->getFormMode() === self::MODE_EDIT)
-        {
+            
+            $this->addElement('checkbox', 'locked', array (
+                    'label' => 'Locked:', 
+                    'filters' => array (
+                            new Zend_Filter_Boolean(Zend_Filter_Boolean::ALL) 
+                    ), 
+                    'required' => false 
+            ));
+            
             $this->addElement('checkbox', 'reset_password', array (
                     'label' => 'Reset Password:', 
                     'required' => true 
             ));
+        }
+        
+        if ($this->getFormMode() !== self::MODE_USER_EDIT)
+        {
             
             $password = new Zend_Form_Element_Password('password', array (
                     'label' => 'Password:', 
@@ -236,7 +245,7 @@ class Admin_Form_User extends EasyBib_Form
                             array (
                                     'validator' => 'StringLength', 
                                     'options' => array (
-                                            1, 
+                                            4, 
                                             255 
                                     ) 
                             ), 
@@ -258,18 +267,13 @@ class Admin_Form_User extends EasyBib_Form
             $this->addElement($password);
             $this->addElement($passwordConfirm);
             
-            $this->addElement('checkbox', 'locked', array (
-                    'label' => 'Locked:', 
-                    'filters' => array (
-                            new Zend_Filter_Boolean(Zend_Filter_Boolean::ALL) 
-                    ), 
-                    'required' => false 
-            ));
-            
-            $this->addElement('checkbox', 'resetPasswordOnNextLogin', array (
-                    'label' => 'Require Password Change On Next Login:', 
-                    'required' => true 
-            ));
+            if ($this->getFormMode() === self::MODE_CREATE)
+            {
+                $this->addElement('checkbox', 'resetPasswordOnNextLogin', array (
+                        'label' => 'Require Password Change On Next Login:', 
+                        'required' => true 
+                ));
+            }
         }
         
         // Add the submit button
@@ -277,8 +281,6 @@ class Admin_Form_User extends EasyBib_Form
                 'ignore' => true, 
                 'label' => 'Save' 
         ));
-        
-        
         
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit');
     }

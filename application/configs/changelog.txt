@@ -1,0 +1,12 @@
+Changelog for MPS Tools
+-----------------------
+This file contains information on what has changed in each version of the 
+software. The information may not be entirely complete or accurate and is 
+just used as a way to help describe the changes as we progress versions.
+ 
+ 
+ Version 0.1.0
+ -------------
+ - First glance at the quote generator
+ - Very minimal support for proposal generator features
+ - New kind of permission system to allow finer grain permissions

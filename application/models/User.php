@@ -152,6 +152,7 @@ class Application_Model_User extends My_Model_Abstract
                 'frozenUntil' => $this->getFrozenUntil(), 
                 'loginAttempts' => $this->getLoginAttempts(), 
                 'resetPasswordOnNextLogin' => $this->getResetPasswordOnNextLogin(), 
+                'eulaAccepted' => $this->getEulaAccepted(), 
                 'locked' => $this->getLocked() 
         );
     }

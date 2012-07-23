@@ -1,14 +1,8 @@
-<?php
-	/**
-	 * About
-	 * 
-	 * @author John Sadler
-	 */
-?>
-
-<h2>About <?php echo $this->App()->title; ?></h2>
-<br/>
-<p><em>Version: <?php echo $this->App()->version; ?></em></p>
+<div class="page-header">
+    <h1>About <?php echo $this->App()->title; ?></h1>
+</div>
+<p><em>Version: <?php echo $this->Version(); ?></em></p>
 <p><em>Database Version: <?php echo $this->databaseVersion; ?></em></p>
-<p><em>Build Date: <?php echo $this->App()->builddate; ?></em></p>
-<p><em>Build Hash: <?php echo $this->App()->buildhash; ?></em></p>
+<p><em>Build Date: <?php echo $this->buildinfo->date; ?></em></p>
+<p><em>Build Hash: <?php echo $this->buildinfo->githash; ?></em></p>
+<pre style='margin-top: 10px; margin-bottom: 20px; height: 500px; padding: 5px; overflow-y: scroll;'><?php echo $this->changelog?></pre>
