@@ -105,15 +105,6 @@ resources.session.saveHandler.options.lifetimeColumn = "lifetime"
 ; Staging Configuration
 ; -------------------------------------------------------------------------------------------------------------
 [staging : production]
-; -----------------
-; Database Settings
-; -----------------
-resources.db.adapter         = mysqli
-resources.db.params.host     = "localhost"
-resources.db.params.username = "USERNAME"
-resources.db.params.password = "PASSWORD"
-resources.db.params.dbname   = "DATABASENAME"
-resources.db.isDefaultTableAdapter = true
 
 ; -------------------------------------------------------------------------------------------------------------
 ; Testing Configuration
@@ -124,15 +115,7 @@ resources.db.isDefaultTableAdapter = true
 ; --------------
 phpSettings.display_startup_errors = 1
 phpSettings.display_errors = 1
-; -----------------
-; Database Settings
-; -----------------
-resources.db.adapter         = mysqli
-resources.db.params.host     = "localhost"
-resources.db.params.username = "USERNAME"
-resources.db.params.password = "PASSWORD"
-resources.db.params.dbname   = "DATABASENAME"
-resources.db.isDefaultTableAdapter = true
+
 
 ; -------------------------------------------------------------------------------------------------------------
 ; Development Configuration
@@ -144,17 +127,5 @@ resources.db.isDefaultTableAdapter = true
 phpSettings.display_startup_errors = 1
 phpSettings.display_errors = 1
 resources.frontController.params.displayExceptions = 1
-
-; -----------------
-; Database Settings
-; -----------------
-resources.db.adapter         = mysqli
-resources.db.params.host     = "localhost"
-resources.db.params.username = "CHANGEME"
-resources.db.params.password = "CHANGEME"
-resources.db.params.dbname   = "CHANGEME"
-resources.db.isDefaultTableAdapter = true
-
-
 
 ; End of File

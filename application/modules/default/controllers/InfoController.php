@@ -36,26 +36,82 @@ class Default_InfoController extends Zend_Controller_Action
     }
 
     /**
-     * Displays the program verion and meta information
+     * Displays the program version and meta information
      */
     public function aboutAction ()
     {
+        // TODO: Move these all into view helpers!
+        $this->view->buildinfo = $this->getBuildInfo()->build;
+        $this->view->changelog = $this->getChangelog();
+        $this->view->databaseVersion = $this->getDatabaseVersion();
+    }
+
+    /**
+     * Gets the database version from the database metadata table
+     *
+     * @return string Returns the string 'Not available' when it cannot fetch the version from the database.
+     */
+    public function getDatabaseVersion ()
+    {
+        $databaseVersion = "Not Available";
         try
         {
             $db = Zend_Db_Table::getDefaultAdapter();
             $result = $db->fetchRow("SELECT * FROM database_metadata WHERE meta_key='dbversion' LIMIT 1;");
+            if ($result)
+            {
+                $databaseVersion = $result ["meta_value"];
+            }
         }
         catch ( Exception $e )
         {
-            // Do nothing, database version is not available at this point
-            $result = FALSE;
+        }
+        return $databaseVersion;
+    }
+
+    /**
+     * Gets the build information as a Zend_Config_Ini object
+     *
+     * @return Zend_Config_Ini The config object, or FALSE if the file was malformed/non existant.
+     */
+    public function getBuildInfo ()
+    {
+        $configPath = APPLICATION_PATH . '/configs/buildinfo.ini';
+        $config = false;
+        if (file_exists($configPath))
+        {
+            try
+            {
+                $config = new Zend_Config_Ini($configPath, 'production');
+            }
+            catch ( Exception $e )
+            {
+            }
         }
         
-        $this->view->databaseVersion = "Not Available";
-        if ($result)
+        // TODO: Check to see if installation has a git
+        // repository, and get the checked out commit hash if it is.
+        
+
+        return $config;
+    }
+
+    /**
+     * Gets the changelog information for the project
+     *
+     * @return string
+     */
+    public function getChangelog ()
+    {
+        // TODO: Make this get module specific changelog details
+        $file = APPLICATION_PATH . "/configs/changelog.txt";
+        $text = 'Not Available';
+        
+        if (file_exists($file))
         {
-            $this->view->databaseVersion = $result ["meta_value"];
+            $text = file_get_contents($file);
         }
-    } // end action aboutAction
-} //end class infoController
+        return $text;
+    }
+}
 
