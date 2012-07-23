@@ -1,11 +1,8 @@
-<?php 
-	$form = $this->element;  /* @var Quotegen_Form_Device */ ?>
-
+<?php $form = $this->element;  /* @var Quotegen_Form_Device */ ?>
 <div class="well">
 	<form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
-		<h2><?php echo $form->getElement('deviceName'); ?></h2>
-		<?php echo $form->getElement('sku'); ?>
-		<hr/>
+		<h2><?php echo $form->getElement('deviceName') ?></h2>
+		<?php echo $form->getElement('sku'); ?>		
 		<div class='row'>
 			<div class='span4 offset2'>
 			<h3>Options <input type="submit" name="addOption" value="Add" class="btn btn-success btn-mini"/></h3><br/>

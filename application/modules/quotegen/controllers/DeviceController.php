@@ -233,13 +233,15 @@ class Quotegen_DeviceController extends Zend_Controller_Action
         
         // Prepare the data for the form
         $request = $this->getRequest();
-        $form->populate($device->toArray());
+		$form->populate($device->toArray());
         
         // Make sure we are posting data
         if ($request->isPost())
         {
             // Get the post data
             $values = $request->getPost();
+            // Set the device name 
+            $values['deviceName'] = $device->getMasterDevice()->getFullDeviceName();
             
             // If we cancelled we don't need to validate anything	
             if (! isset($values ['back']))
@@ -263,11 +265,10 @@ class Quotegen_DeviceController extends Zend_Controller_Action
                         }
 
                         $this->_helper->flashMessenger(array (
-                                'success' => "Device '" . $this->view->escape($device->getMasterDeviceId()) . "' was updated sucessfully."
+                                'success' => "Device '" . $this->view->escape($device->getMasterDevice()->getFullDeviceName()) . "' was updated sucessfully."
                         ));
                         
                         // Save new device attributes (sku)
-                        $device->populate($values);
                         $deviceMapper->save($device);
                         
                         if (isset($values ['addOption']))
@@ -276,6 +277,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
                                     'deviceId' => $deviceId
                             ));
                         }
+                        $form->populate($values);                        
                     }
                     else
                     {
@@ -295,8 +297,6 @@ class Quotegen_DeviceController extends Zend_Controller_Action
                 $this->_helper->redirector('index');
             }
         }
-        
-        $this->view->device = $device;
         $this->view->form = $form;
     }
 
