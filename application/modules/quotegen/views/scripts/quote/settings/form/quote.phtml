@@ -11,8 +11,52 @@ $noDefaultsElements[] = $form->getElement('leaseRate');
 $noDefaultsElements[] = $form->getElement('quoteDate');
 $pricingConfigId = $form->getElement('pricingConfigId');
 ?>
+<?php $this->headScript()->captureStart(); ?>
+$(function() {
+	$('#leasingSchema').change(function(){
+		var value = this.value;
+		$('#leasingSchemaTerms').empty().attr('disabled', 'disabled');
+		if (value != 0)
+		{
+    		$.ajax( 
+    		{
+    		    url:'<?php echo $this->url(array('format' => 'json', 'action' => 'leasing-schema-terms')); ?>/leasingSchemaId/' + value,
+    		    success: function(data) {
+    		         var terms = data['leasingSchemaTerms'];
+    		         var html = '';
+    		         var len = terms.length;
+    		         for (var i = 0; i < len; i++)
+    		         {
+    		             html += '<option value="' + terms[i].id + '">' + terms[i].months + ' Months</option>';
+    		         }
+    		         $('#leasingSchemaTerms').append(html);
+    		         $('#leasingSchemaTerms').removeAttr('disabled');
+    		    },
+    		    error: function (data) {
+                    alert('Error Occured!');
+    		    }
+    		});
+		}
+	});
+});
+<?php $this->headScript()->captureEnd(); ?>
 
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+
+<div class="control-group">
+    <div class="controls">
+        <select id="leasingSchema">
+            <option value="0">Select...</option>
+            <option value="1">default</option>
+        </select>
+    </div>
+</div>
+
+<div class="control-group">
+    <div class="controls">
+        <select id="leasingSchemaTerms" disabled='disabled'></select>
+    </div>
+</div>
 
 <!-- Show all noDefaultElements -->
 <?php foreach ($noDefaultsElements as $element) :?>
