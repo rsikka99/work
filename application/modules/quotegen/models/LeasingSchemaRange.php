@@ -28,6 +28,13 @@ class Quotegen_Model_LeasingSchemaRange extends My_Model_Abstract
      */
     protected $_startRange = 0;
     
+    /**
+     * Leasing Schema
+     *
+     * @var Quotegen_Model_LeasingSchema
+     */
+    protected $_leasingSchema;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -111,6 +118,31 @@ class Quotegen_Model_LeasingSchemaRange extends My_Model_Abstract
     public function setStartRange ($_startRange)
     {
         $this->_startRange = $_startRange;
+        return $this;
+    }
+
+    /**
+     * Gets the leasing schema
+     *
+     * @return Quotegen_Model_LeasingSchema
+     */
+    public function getLeasingSchema ()
+    {
+        if (! isset($this->_leasingSchema))
+        {
+            $this->_leasingSchema = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($this->getLeasingSchemaId());
+        }
+        return $this->_leasingSchema;
+    }
+
+    /**
+     * Sets the leasing schema
+     *
+     * @param Quotegen_Model_LeasingSchema $_leasingSchema            
+     */
+    public function setLeasingSchema ($_leasingSchema)
+    {
+        $this->_leasingSchema = $_leasingSchema;
         return $this;
     }
 }

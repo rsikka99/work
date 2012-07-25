@@ -1508,9 +1508,10 @@ DEFAULT CHARACTER SET = latin1;
 CREATE  TABLE IF NOT EXISTS `qgen_quote_lease_terms` (
   `quoteId` INT NOT NULL ,
   `leasingSchemaTermId` INT NOT NULL ,
-  PRIMARY KEY (`quoteId`, `leasingSchemaTermId`) ,
+  PRIMARY KEY (`quoteId`) ,
   INDEX `fk_qgen_quote_lease_terms_qgen_quotes1` (`quoteId` ASC) ,
   INDEX `fk_qgen_quote_lease_terms_qgen_leasing_schema_terms1` (`leasingSchemaTermId` ASC) ,
+  UNIQUE INDEX `quoteId_UNIQUE` (`quoteId` ASC, `leasingSchemaTermId` ASC) ,
   CONSTRAINT `fk_qgen_quote_lease_terms_qgen_quotes1`
     FOREIGN KEY (`quoteId` )
     REFERENCES `qgen_quotes` (`id` )

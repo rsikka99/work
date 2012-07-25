@@ -6,7 +6,7 @@ class Quotegen_Model_Mapper_QuoteLeaseTerm extends My_Model_Mapper_Abstract
      * Column name definitions. Define all columns up here and use them down below.
      */
     public $col_quoteId = 'quoteId';
-    public $col_leaseTermId = 'leaseTermId';
+    public $col_leaseTermId = 'leasingSchemaTermId';
     
     /*
      * Mapper Definitions
@@ -59,8 +59,7 @@ class Quotegen_Model_Mapper_QuoteLeaseTerm extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return array (
-                $object->getQuoteId(), 
-                $object->getLeaseTermId() 
+                $object->getQuoteId() 
         );
     }
 
@@ -79,14 +78,12 @@ class Quotegen_Model_Mapper_QuoteLeaseTerm extends My_Model_Mapper_Abstract
         
         if ($primaryKey === null)
         {
-            $primaryKey [] = $data [$this->col_quoteId];
-            $primaryKey [] = $data [$this->col_leaseTermId];
+            $primaryKey = $data [$this->col_quoteId];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                "{$this->col_quoteId} = ?" => $primaryKey [0], 
-                "{$this->col_leaseTermId} = ?" => $primaryKey [1] 
+                "{$this->col_quoteId} = ?" => $primaryKey 
         ));
         
         // Save the object into the cache
@@ -108,15 +105,13 @@ class Quotegen_Model_Mapper_QuoteLeaseTerm extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_QuoteLeaseTerm)
         {
             $whereClause = array (
-                    "{$this->col_quoteId} = ?" => $object->getQuoteDeviceOptionId(), 
-                    "{$this->col_leaseTermId} = ?" => $object->getOptionId() 
+                    "{$this->col_quoteId} = ?" => $object->getQuoteId() 
             );
         }
         else
         {
             $whereClause = array (
-                    "{$this->col_quoteId} = ?" => $object [0], 
-                    "{$this->col_leaseTermId} = ?" => $object [1] 
+                    "{$this->col_quoteId} = ?" => $object [0] 
             );
         }
         
@@ -177,8 +172,6 @@ class Quotegen_Model_Mapper_QuoteLeaseTerm extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_QuoteLeaseTerm($row->toArray());
         
         // Save the object into the cache
-        $primaryKey [0] = $object->getQuoteDeviceOptionId();
-        $primaryKey [1] = $object->getOptionId();
         $this->saveItemToCache($object);
         
         return $object;
@@ -206,8 +199,6 @@ class Quotegen_Model_Mapper_QuoteLeaseTerm extends My_Model_Mapper_Abstract
             $object = new Quotegen_Model_QuoteLeaseTerm($row->toArray());
             
             // Save the object into the cache
-            $primaryKey [0] = $object->getQuoteDeviceOptionId();
-            $primaryKey [1] = $object->getOptionId();
             $this->saveItemToCache($object);
             
             $entries [] = $object;
@@ -224,8 +215,7 @@ class Quotegen_Model_Mapper_QuoteLeaseTerm extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array (
-                "{$this->col_quoteId} = ?" => $id [0], 
-                "{$this->col_leaseTermId} = ?" => $id [1] 
+                "{$this->col_quoteId} = ?" => $id [0] 
         );
     }
 }

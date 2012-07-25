@@ -14,14 +14,14 @@ class Quotegen_Model_QuoteLeaseTerm extends My_Model_Abstract
      *
      * @var int
      */
-    protected $_quoteId = 0;
+    protected $_quoteId;
     
     /**
      * The lease term id
      *
      * @var int
      */
-    protected $_leaseTermId = 0;
+    protected $_leasingSchemaTermId;
     
     /**
      * The quote
@@ -48,8 +48,8 @@ class Quotegen_Model_QuoteLeaseTerm extends My_Model_Abstract
         }
         if (isset($params->quoteId) && ! is_null($params->quoteId))
             $this->setQuoteId($params->quoteId);
-        if (isset($params->leaseTermId) && ! is_null($params->leaseTermId))
-            $this->setLeaseTermId($params->leaseTermId);
+        if (isset($params->leasingSchemaTermId) && ! is_null($params->leasingSchemaTermId))
+            $this->setLeasingSchemaTermId($params->leasingSchemaTermId);
     }
     
     /*
@@ -59,7 +59,7 @@ class Quotegen_Model_QuoteLeaseTerm extends My_Model_Abstract
     {
         return array (
                 'quoteId' => $this->getQuoteId(), 
-                'leaseTermId' => $this->getLeaseTermId() 
+                'leasingSchemaTermId' => $this->getLeasingSchemaTermId() 
         );
     }
 
@@ -90,20 +90,20 @@ class Quotegen_Model_QuoteLeaseTerm extends My_Model_Abstract
      *
      * @return number The lease term id
      */
-    public function getLeaseTermId ()
+    public function getLeasingSchemaTermId ()
     {
-        return $this->_leaseTermId;
+        return $this->_leasingSchemaTermId;
     }
 
     /**
      * Sets a lease term id
      *
-     * @param number $_leaseTermId
+     * @param number $_leasingSchemaTermId
      *            The id
      */
-    public function setLeaseTermId ($_leaseTermId)
+    public function setLeasingSchemaTermId ($_leasingSchemaTermId)
     {
-        $this->_leaseTermId = $_leaseTermId;
+        $this->_leasingSchemaTermId = $_leasingSchemaTermId;
         return $this;
     }
 
@@ -141,7 +141,7 @@ class Quotegen_Model_QuoteLeaseTerm extends My_Model_Abstract
     {
         if (! isset($this->_quote))
         {
-            $this->_leaseTerm = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->find($this->getLeaseTermId());
+            $this->_leaseTerm = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->find($this->getLeasingSchemaTermId());
         }
         return $this->_leaseTerm;
     }

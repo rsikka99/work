@@ -117,7 +117,9 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
      */
     public function find ($id)
     {
-        $result = $this->getDbTable()->find($id);
+        
+        $result = $this->getDbTable()->find($id[0], $id[1]);
+        
         if (0 == count($result))
         {
             return;
