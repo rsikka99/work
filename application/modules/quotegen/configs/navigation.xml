@@ -40,6 +40,7 @@
                             <action>index</action>
                             <resource>quotegen__quote_devices__index</resource>
                             <reset_params>0</reset_params>
+                            <visible>0</visible>
                             <pages>
                                 <builddevice>
                                     <label>Build Devices</label>

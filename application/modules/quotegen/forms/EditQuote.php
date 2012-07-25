@@ -30,6 +30,8 @@ class Quotegen_Form_EditQuote extends EasyBib_Form
                 ) 
         ));
         
+        
+        
         $this->addElement('text', 'leaseTerm', array (
                 'label' => 'Lease Term:', 
                 'required' => true, 

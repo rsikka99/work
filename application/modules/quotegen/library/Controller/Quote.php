@@ -68,8 +68,6 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             // Create a new one
             $this->_quote = new Quotegen_Model_Quote();
         }
-        
-        $this->view->quote = $this->_quote;
     }
 
     /**
