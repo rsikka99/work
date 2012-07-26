@@ -9,12 +9,12 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
      *
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_QuoteDevice';
-
+    
     /*
      * Define the primary key of the model association
-    */
+     */
     public $col_id = 'id';
-    
+
     /**
      * Gets an instance of the mapper
      *
@@ -111,21 +111,29 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
     /**
      * Finds a quoteDevice based on it's primaryKey
      *
-     * @param $id int
-     *            The id of the quoteDevice to find
+     * @param $id mixed
+     *            The id of the quoteDevice to find, 
+     *            Quotegen_Model_Quote with an id
      * @return Quotegen_Model_QuoteDevice
      */
-    public function find ($id)
+    public function find ($object)
     {
         // Get the item from the cache and return it if we find it.
-        $result = $this->getItemFromCache($id);
+        $result = $this->getItemFromCache($object);
         if ($result instanceof Quotegen_Model_QuoteDevice)
         {
             return $result;
         }
         
+        if ($object instanceof Quotegen_Model_Quote)
+        {
+            $object = array (
+                    "quoteId = ?" => $object->getId() 
+            );
+        }
+        
         // Assuming we don't have a cached object, lets go get it.
-        $result = $this->getDbTable()->find($id);
+        $result = $this->getDbTable()->find($object);
         if (0 == count($result))
         {
             return;
