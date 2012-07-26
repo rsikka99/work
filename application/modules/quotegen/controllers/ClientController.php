@@ -62,8 +62,18 @@ class Quotegen_ClientController extends Zend_Controller_Action
             {
                 if ($form->isValid($values))
                 {
-                    // Delete the client from the database
-                    $clientMapper->delete($client);
+                    try
+                    {
+                        // Delete the client from the database
+                        $clientMapper->delete($client);
+                    }
+                    catch ( Exception $e )
+                    {
+                        $this->_helper->flashMessenger(array(
+                                'danger' => "Client {$client->getName} cannot be deleted since there are  quote(s) attached."
+                                ));
+                        $this->_helper->redirector('index');
+                    }
                     
                     $this->_helper->flashMessenger(array (
                             'success' => "Client  {$client->getName()} was deleted successfully." 
@@ -215,7 +225,9 @@ class Quotegen_ClientController extends Zend_Controller_Action
                     }
                     else
                     {
-						$this->_helper->flashMessenger(array('danger' => 'Please correct the errors below'));
+                        $this->_helper->flashMessenger(array (
+                                'danger' => 'Please correct the errors below' 
+                        ));
                     }
                 }
                 catch ( Exception $e )
