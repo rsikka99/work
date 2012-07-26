@@ -3,6 +3,8 @@
 class Quotegen_Form_EditQuote extends EasyBib_Form
 {
 
+    protected $_leasingSchemaId;
+    
     public function init ()
     {
         // Set the method for the display form to POST
@@ -30,28 +32,46 @@ class Quotegen_Form_EditQuote extends EasyBib_Form
                 ) 
         ));
         
-        $this->addElement('text', 'leaseTerm', array (
-                'label' => 'Lease Term:', 
-                'required' => true, 
-                'filters' => array (
-                        'StringTrim', 
-                        'StripTags' 
-                ), 
-                'validators' => array (
-                        'Float' 
-                ) 
+        $leasingSchemas = array ();
+        $leasingSchemaId = null;
+        /* @var $leasingSchema Quotegen_Model_LeasingSchema */
+        foreach ( Quotegen_Model_Mapper_LeasingSchema::getInstance()->fetchAll() as $leasingSchema )
+        {
+            if (!$leasingSchemaId)
+            {
+                $leasingSchemaId = $leasingSchema->getId();
+            }
+            $leasingSchemas [$leasingSchema->getId()] = $leasingSchema->getName();
+        }
+        
+        if ($this->_leasingSchemaId)
+        {
+            $leasingSchemaId = $this->_leasingSchemaId;
+        }
+        
+        $this->addElement('select', 'leasingSchemaId', array (
+                'label' => 'Leasing Schema:', 
+                'multiOptions' => $leasingSchemas, 
+                'required' => true,
+                'value' => $leasingSchemaId
         ));
         
-        $this->addElement('text', 'leaseRate', array (
-                'label' => 'Lease Rate:', 
-                'required' => true, 
-                'filters' => array (
-                        'StringTrim', 
-                        'StripTags' 
-                ), 
-                'validators' => array (
-                        'Float' 
-                ) 
+        $leasingSchema = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($leasingSchemaId);
+        $leasingSchemaTerms = array();
+        if ($leasingSchema)
+        {
+            /* @var $leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm */
+            foreach ($leasingSchema->getTerms() as $leasingSchemaTerm)
+            {
+                $leasingSchemaTerms[$leasingSchemaTerm->getId()] = $leasingSchemaTerm->getMonths();
+            }
+        }
+        
+        
+        $this->addElement('select', 'leasingSchemaTermId', array (
+                'label' => 'Lease Term:', 
+                'multiOptions' => $leasingSchemaTerms,
+                'required' => true 
         ));
         
         $pageCoverageColor = $this->createElement('text', 'pageCoverageColor', array (
