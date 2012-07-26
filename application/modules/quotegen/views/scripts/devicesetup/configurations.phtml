@@ -35,14 +35,12 @@ $id = $this->id;
 				            <th style="width: 30px;">ID</th>
 				            <th style="width: 200px;">Configuration Name</th>
 				            <th>Description</th>
-				            <th style="width: 100px; text-align: center;">Edit</th>
 				            <th style="width: 100px; text-align: center;">Action</th>
 				        </tr>
 				    </thead>
 				    <tbody>
 				    	
-				        <?php 
-				        foreach ($this->paginator as $configuration) : /* @var $configuration Quotegen_Model_DeviceConfiguration */ ?>
+				        <?php foreach ($this->paginator as $configuration) : /* @var $configuration Quotegen_Model_DeviceConfiguration */ ?>
 				        <tr>
 				            <td><?php echo $configuration->getId(); ?></td>
 				            <td><?php echo $configuration->getName(); ?></td>
@@ -53,15 +51,6 @@ $id = $this->id;
 				                    <a class="btn btn-danger btn-mini" title="Delete Configuration" href="<?php echo $this->url(array ( 'module' => 'quotegen', 'controller' => 'configuration', 'action' => 'delete', 'id' => $configuration->getId())); ?>"><i class="icon-trash icon-white"></i></a>
 				                </div>
 				            </td>
-		                    <td style="text-align: center;">
-								<div class="" style="text-align: center;">
-									<?php if ( in_array($configuration->getId(), $this->assignedConfigurations ) ) { ?>
-										<button type="submit" name="btnUnassign" id="btnUnassign" class="btn btn-danger btn-mini" onclick="javascript: $('#configurationid').val(<?php echo $configuration->getId(); ?>);"><i class="icon-minus-sign icon-white"></i> Unassign</button>
-									<?php } else { ?>
-										<button type="submit" name="btnAssign" id="btnAssign" class="btn btn-success btn-mini" onclick="javascript: $('#configurationid').val(<?php echo $configuration->getId(); ?>);"><i class="icon-plus-sign icon-white"></i> Assign</button>
-									<?php } ?>
-								</div>
-							</td>
 				        </tr>
 				        <?php endforeach; ?>
 				        
