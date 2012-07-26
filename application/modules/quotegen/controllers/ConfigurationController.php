@@ -234,9 +234,6 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'info' => "There are no more options to add to this device." 
             ));
-            $this->_helper->redirector('edit', null, null, array (
-                    'id' => $id 
-            ));
         }
         
         $form = new Quotegen_Form_SelectOptions($availableOptions);
@@ -244,6 +241,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
         $request = $this->getRequest();
         
         $deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($id);
+        $this->view->name = $deviceConfiguration->getName();
         
         $form->populate($deviceConfiguration->toArray());
         
@@ -302,9 +300,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
             else
             {
                 // User has cancelled. Go back to the edit page
-                $this->_helper->redirector('edit', null, null, array (
-                        'id' => $id 
-                ));
+                $this->_helper->redirector('index');
             }
         }
         
@@ -340,5 +336,6 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                 'id' => $id 
         ));
     }
+
 }
 

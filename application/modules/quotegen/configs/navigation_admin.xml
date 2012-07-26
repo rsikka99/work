@@ -19,5 +19,21 @@
                 </create>
             </pages>
         </clients>
+        <managedevices>
+            <label>Manage Devices</label>
+            <class></class>
+            <module>quotegen</module>
+            <controller>devicesetup</controller>
+            <action>index</action>
+            <resource>quotegen__devicesetup__index</resource>
+        </managedevices>
+        <configurations>
+            <label>Configurations</label>
+            <class></class>
+            <module>quotegen</module>
+            <controller>configuration</controller>
+            <action>index</action>
+            <resource>quotegen__configuration__index</resource>
+        </configurations>
     </nav>
 </config>

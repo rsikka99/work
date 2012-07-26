@@ -8,13 +8,12 @@
     <thead>
         <tr>
             <th style="width: 200px;">Master Device</th>
-            <th style="width: 200px;">Configuration</th>
+            <th style="width: 150px;">Configuration</th>
             <th style="">Description</th>
             <th style="width: 100px; text-align: center;">Action</th>
         </tr>
     </thead>
     <tbody>
-    	
         <?php foreach ($this->paginator->getCurrentItems() as $deviceConfiguration) : /* @var $deviceConfiguration Quotegen_Model_DeviceConfiguration */ ?>
         <tr>
             <td><?php echo $deviceConfiguration->getDevice()->getMasterDevice()->getFullDeviceName(); ?></td>
@@ -23,6 +22,7 @@
             <td>
                 <div class="" style="text-align: center;">
                     <a class="btn btn-warning btn-mini" title="Edit Configuration" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $deviceConfiguration->getId())); ?>"><i class="icon-pencil icon-white"></i></a>
+                    <a class="btn btn-warning btn-mini" title="Manage Options" href="<?php echo $this->url( array ( 'action' => 'addoptions', 'id' => $deviceConfiguration->getId())); ?>"><i class="icon-list-alt icon-white"></i></a>
                     <a class="btn btn-danger btn-mini" title="Delete Configuration" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $deviceConfiguration->getId())); ?>"><i class="icon-trash icon-white"></i></a>
                 </div>
             </td>
@@ -34,6 +34,6 @@
 <?php else : ?>
 <div class='well'>
 	<a class="btn btn-success btn-small pull-right" href="<?php echo $this->url(array('action' => 'create')) ?>"> <i class="icon-white icon-plus-sign"></i> Create new</a>
-	<h1>There are no device configurations</h1>	
+	<h4>There are no device configurations</h4>	
 </div>
 <?php endif; ?>

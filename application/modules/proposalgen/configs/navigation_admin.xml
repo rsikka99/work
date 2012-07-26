@@ -99,13 +99,5 @@
                 </update>
             </pages>
         </masterdevices>
-        <managedevices>
-            <label>Manage Devices</label>
-            <class></class>
-            <module>quotegen</module>
-            <controller>devicesetup</controller>
-            <action>index</action>
-            <resource>quotegen__devicesetup__index</resource>
-        </managedevices>
     </nav>
 </config>
