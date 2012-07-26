@@ -234,6 +234,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'info' => "There are no more options to add to this device." 
             ));
+            $this->_helper->redirector('index');
         }
         
         $form = new Quotegen_Form_SelectOptions($availableOptions);
@@ -274,16 +275,16 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                             }
                             catch ( Exception $e )
                             {
-                                // Do nothing
+			                    $this->_helper->flashMessenger(array (
+			                            'danger' => "Failed to add options to configuration. Please try again."
+			                    ));
                             }
                         }
                         
                         $this->_helper->flashMessenger(array (
-                                'success' => "Successfully added {$insertedOptions} options to {$deviceConfiguration->getDevice()->getMasterDevice()->getFullDeviceName()} successfully." 
+                                'success' => "Successfully added {$insertedOptions} options to {$deviceConfiguration->getName()}." 
                         ));
-                        $this->_helper->redirector('edit', null, null, array (
-                                'id' => $id 
-                        ));
+                        $this->_helper->redirector('index');
                     }
                     else
                     {
