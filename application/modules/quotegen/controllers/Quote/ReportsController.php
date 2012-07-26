@@ -2,6 +2,11 @@
 
 class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
 {
+    public $contexts = array (
+            'purchase-quote' => array (
+                    'docx' 
+            ) 
+    );
 
     public function init ()
     {
@@ -10,6 +15,8 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
         
         // Require that we have a quote object in the database to use this page
         $this->requireQuote();
+        
+        $this->_helper->contextSwitch()->initContext();
     }
 
     /**
@@ -34,7 +41,7 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
     public function purchaseQuoteAction ()
     {
     }
-    
+
     public function leaseQuoteAction ()
     {
     }
