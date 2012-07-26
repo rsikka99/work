@@ -118,7 +118,10 @@ INSERT INTO `qgen_leasing_schema_rates` (`leasingSchemaTermId`, `leasingSchemaRa
 INSERT INTO `qgen_quotes` (`id`, `clientId`, `dateCreated`, `dateModified`, `quoteDate`, `userId`, `clientDisplayName`, `leaseRate`, `leaseTerm`, `pageCoverageMonochrome`, `pageCoverageColor`, `pricingConfigId`) VALUES
 (1, 2, NOW(), NOW(), NOW(), 1, NULL, NULL, NULL, 6, 24, 2);
 
-INSERT INTO `qgen_quote_devices` (`id`, `quoteId`, `margin`, `name`, `sku`, `oemCostPerPageMonochrome`, `oemCostPerPageColor`, `compCostPerPageMonochrome`, `compCostPerPageColor`, `cost`, `quantity`, `packagePrice`, `residual`) VALUES
+INSERT INTO `qgen_quote_device_groups` (`id`, `quoteId`) VALUES
+(1, 1);
+
+INSERT INTO `qgen_quote_devices` (`id`, `quoteDeviceGroupId`, `margin`, `name`, `sku`, `oemCostPerPageMonochrome`, `oemCostPerPageColor`, `compCostPerPageMonochrome`, `compCostPerPageColor`, `cost`, `quantity`, `packagePrice`, `residual`) VALUES
 (1, 1, 20.00, 'Unsynced Device Name 1', 'Unsynced SKU 1', 999, 999, 999, 999, 999.99, 1, 999.99, 0),
 (2, 1, 20.00, 'Unsynced Device Name 2', 'Unsynced SKU 2', 999, 999, 999, 999, 999.99, 1, 999.99, 0),
 (3, 1, 20.00, 'Unsynced Device Name 3', 'Unsynced SKU 3', 999, 999, 999, 999, 999.99, 1, 999.99, 0);

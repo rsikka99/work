@@ -1279,11 +1279,33 @@ COMMENT = 'Primary table for a quote. Stores basic information' ;
 
 
 -- -----------------------------------------------------
+-- Table `qgen_quote_device_groups`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `qgen_quote_device_groups` (
+  `id` INT NOT NULL ,
+  `quoteId` INT NOT NULL ,
+  `costPerPageMonochrome` DOUBLE NOT NULL DEFAULT 0 ,
+  `costPerPageColor` DOUBLE NOT NULL DEFAULT 0 ,
+  `pageMargin` DOUBLE NOT NULL DEFAULT 0 ,
+  `includedMonochromePages` INT NOT NULL DEFAULT 0 ,
+  `includedColorPages` INT NOT NULL DEFAULT 0 ,
+  `includedPrice` DOUBLE NOT NULL DEFAULT 0 ,
+  PRIMARY KEY (`id`) ,
+  INDEX `quotegen_quote_device_groups_ibfk_1` (`quoteId` ASC) ,
+  CONSTRAINT `quotegen_quote_device_groups_ibfk_1`
+    FOREIGN KEY (`quoteId` )
+    REFERENCES `qgen_quotes` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `qgen_quote_devices`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `qgen_quote_devices` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `quoteId` INT(11) NOT NULL ,
+  `quoteDeviceGroupId` INT(11) NOT NULL ,
   `margin` DOUBLE NOT NULL ,
   `name` VARCHAR(255) NOT NULL ,
   `sku` VARCHAR(255) NOT NULL ,
@@ -1296,10 +1318,10 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_devices` (
   `packagePrice` DOUBLE NOT NULL ,
   `residual` DOUBLE NOT NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `quoteId` (`quoteId` ASC) ,
+  INDEX `quoteId` (`quoteDeviceGroupId` ASC) ,
   CONSTRAINT `quotegen_quote_devices_ibfk_1`
-    FOREIGN KEY (`quoteId` )
-    REFERENCES `qgen_quotes` (`id` ))
+    FOREIGN KEY (`quoteDeviceGroupId` )
+    REFERENCES `qgen_quote_device_groups` (`id` ))
 ENGINE = InnoDB
 AUTO_INCREMENT = 7
 DEFAULT CHARACTER SET = utf8;
@@ -1371,41 +1393,6 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_device_configurations` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 7
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `qgen_quote_device_pages`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_quote_device_pages` (
-  `quoteDeviceId` INT(11) NOT NULL ,
-  `costPerPageMonochrome` DOUBLE NOT NULL ,
-  `costPerPageColor` DOUBLE NOT NULL ,
-  `pageBillingPreference` ENUM('Per Page','Monthly') NULL DEFAULT 'Per Page' ,
-  `margin` DOUBLE NOT NULL ,
-  PRIMARY KEY (`quoteDeviceId`) ,
-  INDEX `quoteDeviceId` (`quoteDeviceId` ASC) ,
-  CONSTRAINT `quotegen_quote_device_pages_ibfk_1`
-    FOREIGN KEY (`quoteDeviceId` )
-    REFERENCES `qgen_quote_devices` (`id` ))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `qgen_quote_device_monthly_pages`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_quote_device_monthly_pages` (
-  `quoteDeviceId` INT(11) NOT NULL ,
-  `monochrome` INT(11) NOT NULL ,
-  `color` INT(11) NOT NULL ,
-  `price` DOUBLE NOT NULL ,
-  PRIMARY KEY (`quoteDeviceId`) ,
-  INDEX `quoteDeviceId` (`quoteDeviceId` ASC) ,
-  CONSTRAINT `quotegen_quote_device_monthly_pages_ibfk_1`
-    FOREIGN KEY (`quoteDeviceId` )
-    REFERENCES `qgen_quote_device_pages` (`quoteDeviceId` ))
-ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
