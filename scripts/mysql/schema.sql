@@ -1284,12 +1284,7 @@ COMMENT = 'Primary table for a quote. Stores basic information' ;
 CREATE  TABLE IF NOT EXISTS `qgen_quote_device_groups` (
   `id` INT NOT NULL ,
   `quoteId` INT NOT NULL ,
-  `costPerPageMonochrome` DOUBLE NOT NULL DEFAULT 0 ,
-  `costPerPageColor` DOUBLE NOT NULL DEFAULT 0 ,
   `pageMargin` DOUBLE NOT NULL DEFAULT 0 ,
-  `includedMonochromePages` INT NOT NULL DEFAULT 0 ,
-  `includedColorPages` INT NOT NULL DEFAULT 0 ,
-  `includedPrice` DOUBLE NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`id`) ,
   INDEX `quotegen_quote_device_groups_ibfk_1` (`quoteId` ASC) ,
   CONSTRAINT `quotegen_quote_device_groups_ibfk_1`
@@ -1509,6 +1504,55 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_lease_terms` (
     REFERENCES `qgen_leasing_schema_terms` (`id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `qgen_quote_device_group_pages`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `qgen_quote_device_group_pages` (
+  `id` INT NOT NULL ,
+  `quoteDeviceGroupId` INT NOT NULL ,
+  `name` VARCHAR(255) NOT NULL ,
+  `sku` VARCHAR(45) NOT NULL DEFAULT 0 ,
+  `costPerPage` DOUBLE NOT NULL DEFAULT 0 ,
+  `includedPrice` DOUBLE NOT NULL DEFAULT 0 ,
+  `includedQuantity` INT NOT NULL DEFAULT 0 ,
+  PRIMARY KEY (`id`) ,
+  CONSTRAINT `fk_qgen_quote_device_group_pages_qgen_quote_device_groups1`
+    FOREIGN KEY (`quoteDeviceGroupId` )
+    REFERENCES `qgen_quote_device_groups` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `qgen_page_types`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `qgen_page_types` (
+  `id` INT NOT NULL ,
+  `name` VARCHAR(255) NOT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `qgen_pages`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `qgen_pages` (
+  `id` INT NOT NULL ,
+  `sku` VARCHAR(45) NOT NULL ,
+  `pageTypeId` INT NOT NULL ,
+  `suggestedCostPerPage` DOUBLE NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `sku_UNIQUE` (`sku` ASC) ,
+  INDEX `fk_qgen_pages_qgen_page_types1` (`pageTypeId` ASC) ,
+  CONSTRAINT `fk_qgen_pages_qgen_page_types1`
+    FOREIGN KEY (`pageTypeId` )
+    REFERENCES `qgen_page_types` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 

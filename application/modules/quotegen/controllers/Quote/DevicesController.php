@@ -200,7 +200,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             $quoteDevice = $this->syncDevice(new Quotegen_Model_QuoteDevice(), $device);
                             
                             // Setup some defaults that don't get synced
-                            $quoteDevice->setQuoteId($this->_quoteId);
+                            $quoteDevice->setQuoteDeviceGroupId($this->_quoteId);
                             $quoteDevice->setMargin($quoteSetting->getDeviceMargin());
                             $quoteDevice->setQuantity(1);
                             $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());

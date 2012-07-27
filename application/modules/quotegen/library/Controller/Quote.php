@@ -253,7 +253,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         $quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($quoteDeviceId);
         
         // Validate that we have a quote device that is associated with the quote
-        if (! $quoteDevice || $quoteDevice->getQuoteId() !== $this->_quoteId)
+        if (! $quoteDevice || $quoteDevice->getQuoteDeviceGroupId() !== $this->_quoteId)
         {
             $this->_helper->flashMessenger(array (
                     'warning' => 'You may only edit devices associated with this quote.' 
