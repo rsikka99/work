@@ -228,7 +228,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
     {
         $id = $this->_getParam('id', FALSE);
         
-        $availableOptions = Quotegen_Model_Mapper_Option::getInstance()->fetchAllAvailableOptionsForDeviceConfiguration($id);
+        $availableOptions = Quotegen_Model_Mapper_Option::getInstance()->fetchAll();
         if (count($availableOptions) < 1)
         {
             $this->_helper->flashMessenger(array (
@@ -236,17 +236,25 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
             ));
             $this->_helper->redirector('index');
         }
-        
-        $form = new Quotegen_Form_SelectOptions($availableOptions);
-        // Prepare the data for the form
-        $request = $this->getRequest();
-        
+
         $deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($id);
         $this->view->name = $deviceConfiguration->getName();
-        
+
+        // Prepare the data for the form
+        $form = new Quotegen_Form_SelectOptions($availableOptions);
         $form->populate($deviceConfiguration->toArray());
+
+        // Get selected options for device
+        $where = "deviceConfigurationId = {$id}";
+        $selectedOptions = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->fetchAll($where);
+        foreach ($selectedOptions as $option)
+        {
+            $selectedOptionsList [] = $option->getOptionId();
+        }
+        $form->getElement("options")->setValue($selectedOptionsList);
         
         // Make sure we are posting data
+        $request = $this->getRequest();
         if ($request->isPost())
         {
             // Get the post data
