@@ -147,7 +147,6 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 }
                 catch ( InvalidArgumentException $e )
                 {
-                    echo $e; die;
                     $this->_helper->flashMessenger(array (
                             'danger' => $e->getMessage() 
                     ));

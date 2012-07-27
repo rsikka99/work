@@ -247,6 +247,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
         // Get selected options for device
         $where = "deviceConfigurationId = {$id}";
         $selectedOptions = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->fetchAll($where);
+        $selectedOptionsList = array ();
         foreach ($selectedOptions as $option)
         {
             $selectedOptionsList [] = $option->getOptionId();
@@ -272,23 +273,28 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                         $deviceConfigurationOption = new Quotegen_Model_DeviceConfigurationOption();
                         $deviceConfigurationOption->setDeviceConfigurationId($deviceConfiguration->getId());
                         
-                        $insertedOptions = 0;
-                        foreach ( $values ['options'] as $optionId )
+                        try 
                         {
-                            $deviceConfigurationOption->setOptionId($optionId);
-                            try
-                            {
-                                $deviceConfigurationOptionMapper->insert($deviceConfigurationOption);
-                                $insertedOptions ++;
-                            }
-                            catch ( Exception $e )
-                            {
+	                        // Delete current device configuration options
+				            $deviceConfigurationOption = new Quotegen_Model_DeviceConfigurationOption();
+				            Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->deleteDeviceConfigurationOptionById($id);
+
+				            // Insert selected device configuration options
+				            $insertedOptions = 0;
+				            foreach ( $values ['options'] as $optionId )
+				            {
+				                $deviceConfigurationOption->setDeviceConfigurationId($id);
+				                $deviceConfigurationOption->setOptionId($optionId);
+			                    $deviceConfigurationOptionMapper->insert($deviceConfigurationOption);
+			                    $insertedOptions ++;
+				            }
+                        }
+                        catch (Exception $e)
+                        {
 			                    $this->_helper->flashMessenger(array (
 			                            'danger' => "Failed to add options to configuration. Please try again."
 			                    ));
-                            }
                         }
-                        
                         $this->_helper->flashMessenger(array (
                                 'success' => "Successfully added {$insertedOptions} options to {$deviceConfiguration->getName()}." 
                         ));
