@@ -257,9 +257,9 @@ $trueCostsTable = (object)array (
 
 $purchaseQuoteTable = (object)array (
         "tablestyle" => array (
-                'cellMarginTop' => 75, 
+                'cellMarginTop' => 25, 
                 'cellMarginRight' => 100, 
-                'cellMarginBottom' => 75, 
+                'cellMarginBottom' => 25, 
                 'cellMarginLeft' => 100 
         ), 
         "col1Width" => 2257, 
@@ -279,9 +279,14 @@ $purchaseQuoteTable = (object)array (
                         ), 
                         "fontStyle" => array (
                                 'color' => 'FFFFFF', 
-                                'bold' => true 
+                                'bold' => true, 
+                                'name' => 'Calibri', 
+                                'size' => 11 
                         ), 
-                        "paragraphStyle" => 'nospacing' 
+                        "paragraphStyle" => array (
+                                'nospacing' => true, 
+                                'spaceAfter' => 0 
+                        ) 
                 ), 
                 "cell2" => (object)array (
                         "cellStyle" => array (
@@ -293,9 +298,14 @@ $purchaseQuoteTable = (object)array (
                         ), 
                         "fontStyle" => array (
                                 'color' => 'FFFFFF', 
-                                'bold' => true 
+                                'bold' => true, 
+                                'name' => 'Calibri', 
+                                'size' => 11 
                         ), 
-                        "paragraphStyle" => 'nospacing' 
+                        "paragraphStyle" => array (
+                                'nospacing' => true, 
+                                'spaceAfter' => 0 
+                        ) 
                 ), 
                 "cell3" => (object)array (
                         "cellStyle" => array (
@@ -307,23 +317,33 @@ $purchaseQuoteTable = (object)array (
                         ), 
                         "fontStyle" => array (
                                 'color' => 'FFFFFF', 
-                                'bold' => true 
+                                'bold' => true, 
+                                'name' => 'Calibri', 
+                                'size' => 11 
                         ), 
-                        "paragraphStyle" => 'nospacing' 
+                        "paragraphStyle" => array (
+                                'nospacing' => true, 
+                                'spaceAfter' => 0 
+                        ) 
                 ), 
                 "cell4" => (object)array (
                         "cellStyle" => array (
                                 "borderTopSize" => 1, 
                                 "borderRightSize" => 1, 
                                 "borderBottomSize" => 1, 
-                                "borderLeftSize" => 1,
-                                "bgColor" => 'F0003C'
+                                "borderLeftSize" => 1, 
+                                "bgColor" => 'F0003C' 
                         ), 
                         "fontStyle" => array (
                                 'color' => 'FFFFFF', 
-                                'bold' => true 
+                                'bold' => true, 
+                                'name' => 'Calibri', 
+                                'size' => 11 
                         ), 
-                        "paragraphStyle" => 'nospacing' 
+                        "paragraphStyle" => array (
+                                'nospacing' => true, 
+                                'spaceAfter' => 0 
+                        ) 
                 ) 
         ), 
         "device" => (object)array (
@@ -332,54 +352,90 @@ $purchaseQuoteTable = (object)array (
                         "cellStyle" => array (
                                 "borderTopSize" => 1, 
                                 "borderRightSize" => 1, 
-                                "borderBottomSize" => 1, 
+                                "borderBottomSize" => null, 
                                 "borderLeftSize" => 1 
                         ), 
                         "fontStyle" => 'bold_text', 
                         "paragraphStyle" => 'nospacing' 
-                ),
+                ), 
                 "cell2" => (object)array (
-                        "cellStyle" => array (
-                                "borderTopSize" => 1,
-                                "borderRightSize" => 1,
-                                "borderBottomSize" => 1,
-                                "borderLeftSize" => 1
-                        ),
-                        "fontStyle" => null,
-                        "paragraphStyle" => 'nospacing'
-                ),
-                "cell3" => (object)array (
-                        "cellStyle" => array (
-                                "borderTopSize" => 1,
-                                "borderRightSize" => 1,
-                                "borderBottomSize" => 1,
-                                "borderLeftSize" => 1
-                        ),
-                        "fontStyle" => null,
-                        "paragraphStyle" => 'nospacing'
-                ),
-                "cell4" => (object)array (
-                        "cellStyle" => array (
-                                "borderTopSize" => 1,
-                                "borderRightSize" => 1,
-                                "borderBottomSize" => 1,
-                                "borderLeftSize" => 1
-                        ),
-                        "fontStyle" => null,
-                        "paragraphStyle" => 'nospacing'
-                ),
-        ), 
-        "option" => (object)array (
-                "rowheight" => null, 
-                "cell1" => (object)array (
                         "cellStyle" => array (
                                 "borderTopSize" => 1, 
                                 "borderRightSize" => 1, 
-                                "borderBottomSize" => 1, 
+                                "borderBottomSize" => null, 
                                 "borderLeftSize" => 1 
                         ), 
                         "fontStyle" => null, 
                         "paragraphStyle" => 'nospacing' 
+                ), 
+                "cell3" => (object)array (
+                        "cellStyle" => array (
+                                "borderTopSize" => 1, 
+                                "borderRightSize" => 1, 
+                                "borderBottomSize" => null, 
+                                "borderLeftSize" => 1 
+                        ), 
+                        "fontStyle" => null, 
+                        "paragraphStyle" => 'nospacing' 
+                ), 
+                "cell4" => (object)array (
+                        "cellStyle" => array (
+                                "borderTopSize" => 1, 
+                                "borderRightSize" => 1, 
+                                "borderBottomSize" => null, 
+                                "borderLeftSize" => 1 
+                        ), 
+                        "fontStyle" => null, 
+                        "paragraphStyle" => array (
+                                'nospacing' => true, 
+                                'align' => 'right' 
+                        ) 
+                ) 
+        ), 
+        "option" => (object)array (
+                "rowheight" => 75, 
+                "cell1" => (object)array (
+                        "cellStyle" => array (
+                                "borderTopSize" => null, 
+                                "borderRightSize" => 1, 
+                                "borderBottomSize" => null, 
+                                "borderLeftSize" => 1 
+                        ), 
+                        "fontStyle" => null, 
+                        "paragraphStyle" => 'nospacing' 
+                ), 
+                "cell2" => (object)array (
+                        "cellStyle" => array (
+                                "borderTopSize" => null, 
+                                "borderRightSize" => 1, 
+                                "borderBottomSize" => null, 
+                                "borderLeftSize" => 1 
+                        ), 
+                        "fontStyle" => null, 
+                        "paragraphStyle" => 'nospacing' 
+                ), 
+                "cell3" => (object)array (
+                        "cellStyle" => array (
+                                "borderTopSize" => null, 
+                                "borderRightSize" => 1, 
+                                "borderBottomSize" => null, 
+                                "borderLeftSize" => 1 
+                        ), 
+                        "fontStyle" => null, 
+                        "paragraphStyle" => 'nospacing' 
+                ), 
+                "cell4" => (object)array (
+                        "cellStyle" => array (
+                                "borderTopSize" => null, 
+                                "borderRightSize" => 1, 
+                                "borderBottomSize" => null, 
+                                "borderLeftSize" => 1 
+                        ), 
+                        "fontStyle" => null, 
+                        "paragraphStyle" => array (
+                                'nospacing' => true, 
+                                'align' => 'right' 
+                        ) 
                 ) 
         ), 
         "subtotal" => (object)array (
@@ -389,10 +445,48 @@ $purchaseQuoteTable = (object)array (
                                 "borderTopSize" => 1, 
                                 "borderRightSize" => 1, 
                                 "borderBottomSize" => 1, 
-                                "borderLeftSize" => 1 
+                                "borderLeftSize" => 1, 
+                                "bgColor" => 'D9D9D9' 
                         ), 
                         "fontStyle" => null, 
                         "paragraphStyle" => 'nospacing' 
+                ), 
+                "cell2" => (object)array (
+                        "cellStyle" => array (
+                                "borderTopSize" => 1, 
+                                "borderRightSize" => 1, 
+                                "borderBottomSize" => 1, 
+                                "borderLeftSize" => 1, 
+                                "bgColor" => 'D9D9D9', 
+                                "gridSpan" => 2, 
+                                "valign" => 'center' 
+                        ), 
+                        "fontStyle" => array (
+                                'bold' => true 
+                        ), 
+                        "paragraphStyle" => array (
+                                'nospacing' => true, 
+                                'align' => 'right', 
+                                'spaceAfter' => 0 
+                        ) 
+                ), 
+                "cell3" => (object)array (
+                        "cellStyle" => array (
+                                "borderTopSize" => 1, 
+                                "borderRightSize" => 1, 
+                                "borderBottomSize" => 1, 
+                                "borderLeftSize" => 1, 
+                                "bgColor" => 'D9D9D9', 
+                                "valign" => 'center' 
+                        ), 
+                        "fontStyle" => array (
+                                'bold' => true 
+                        ), 
+                        "paragraphStyle" => array (
+                                'nospacing' => true, 
+                                'align' => 'right', 
+                                'spaceAfter' => 0 
+                        ) 
                 ) 
         ), 
         "cpp" => (object)array (
