@@ -1,0 +1,25 @@
+<?php
+
+/* @var $quote Quotegen_Model_Quote */
+$quote = $this->quote;
+
+/**
+ * Solution - Solution 1: PrintIQ®
+ */
+/* @var $section PHPWord_Section */
+$section = $this->section;
+
+$section->addPageBreak();
+$section->addTitle($this->translate('Your PrintIQ Solution'), 1);
+
+$section->addText($this->translate('Below is a quote for the requested hardware:'));
+
+$tcStyle = $this->styles->tables->purchaseQuote;
+$table = $section->addTable($tcStyle->tablestyle);
+
+$table->addRow($tcStyle->header->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->header->cell1->cellStyle)->addText($this->translate('Item'), $tcStyle->header->cell1->fontStyle, $tcStyle->header->cell1->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->cell2->cellStyle)->addText($this->translate('SKU'), $tcStyle->header->cell2->fontStyle, $tcStyle->header->cell2->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->cell3->cellStyle)->addText($this->translate('Description and Features'), $tcStyle->header->cell3->fontStyle, $tcStyle->header->cell3->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->header->cell4->cellStyle)->addText($this->translate('Quantity'), $tcStyle->header->cell4->fontStyle, $tcStyle->header->cell4->paragraphStyle);
+
