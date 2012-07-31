@@ -556,7 +556,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
         foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
-            $subtotal += $quoteDeviceGroup->calculateQuoteSubtotalWithResidualsApplied();
+            $subtotal += $quoteDeviceGroup->calculateGroupSubtotalWithResidualsApplied();
         }
         return $subtotal;
     }

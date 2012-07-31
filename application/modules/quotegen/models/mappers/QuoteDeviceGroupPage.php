@@ -6,6 +6,7 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupPage extends My_Model_Mapper_Abstrac
      * Column name definitions. Define all columns up here and use them down below.
      */
     public $col_id = 'id';
+    public $col_quoteDeviceGroupId = 'quoteDeviceGroupId';
     
     /*
      * Mapper Definitions
@@ -217,6 +218,20 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupPage extends My_Model_Mapper_Abstrac
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->getId();
+    }
+
+    /**
+     * Fetches all the pages for a quote device group
+     *
+     * @param int $quoteDeviceGroupId
+     *            The quote device group id
+     * @return Ambigous <multitype:Quotegen_Model_QuoteDeviceGroupPage, multitype:Quotegen_Model_QuoteDeviceGroupPage >
+     */
+    public function fetchAllPagesForQuoteDeviceGroup ($quoteDeviceGroupId)
+    {
+        return $this->fetchAll(array (
+                "{$this->col_quoteDeviceGroupId} = ?" => $quoteDeviceGroupId 
+        ));
     }
 }
 
