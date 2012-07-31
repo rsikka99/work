@@ -4,11 +4,11 @@
 $form = $this->element;
 ?>
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+<?php echo $form->getElement('crsf_check'); ?>
 <?php foreach ($form->getQuoteDeviceGroups() as $group) : 
     /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
     $quoteDeviceGroup = $group->quoteDeviceGroup;
 ?>
-    <hr>
     <table class="table table-condensed table-bordered table-striped quoteDeviceTable">
         <tr class="header-row">
             <th colspan="4"><div class="input-prepend"><button type="submit" name="addConfiguration" value="<?php echo $quoteDeviceGroup->getId(); ?>" class="btn btn-success">Add</button><select name="deviceConfigurationId-<?php echo $quoteDeviceGroup->getId(); ?>">
@@ -151,5 +151,4 @@ $form = $this->element;
         <input type="submit" name="save" value="Save" class="btn btn-success"/>
         <input type="submit" name="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary"/>
     </div>
-    <?php echo $form->getElement('crsf_check')->renderViewHelper(); ?>
 </form>
