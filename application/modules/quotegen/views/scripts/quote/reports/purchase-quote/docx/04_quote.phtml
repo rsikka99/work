@@ -53,7 +53,7 @@ foreach ( $quoteDevices as $quoteDevice )
         $table->addCell($tcStyle->col1Width, $tcStyle->option->cell1->cellStyle)->addText($this->translate($quoteDeviceOption->getName()), $tcStyle->option->cell1->fontStyle, $tcStyle->option->cell1->paragraphStyle);
         $table->addCell($tcStyle->col2Width, $tcStyle->option->cell2->cellStyle)->addText($this->translate($quoteDeviceOption->getSku()), $tcStyle->option->cell2->fontStyle, $tcStyle->option->cell2->paragraphStyle);
         $table->addCell($tcStyle->col3Width, $tcStyle->option->cell3->cellStyle)->addText($this->translate($quoteDeviceOption->getDescription()), $tcStyle->option->cell3->fontStyle, $tcStyle->option->cell3->paragraphStyle);
-     	$table->addCell($tcStyle->col4Width, $tcStyle->option->cell4->cellStyle)->addText($this->translate($quoteDeviceOption->getQuantity()), $tcStyle->option->cell4->fontStyle, $tcStyle->option->cell4->paragraphStyle);
+     	$table->addCell($tcStyle->col4Width, $tcStyle->option->cell4->cellStyle)->addText($quoteDeviceOption->getQuantity(), $tcStyle->option->cell4->fontStyle, $tcStyle->option->cell4->paragraphStyle);
     }
 }
 
@@ -63,5 +63,16 @@ $table->addRow($tcStyle->subtotal->rowheight);
 $table->addCell($tcStyle->cell1Width,$tcStyle->subtotal->cell1->cellStyle)->addText();
 $table->addCell($tcStyle->span23Width,$tcStyle->subtotal->cell2->cellStyle)->addText($this->translate('Subtotal for group ' . $groupCount),$tcStyle->subtotal->cell2->fontStyle, $tcStyle->subtotal->cell2->paragraphStyle);
 $table->addCell($tcStyle->cell4Width,$tcStyle->subtotal->cell3->cellStyle)->addText('$' . number_format($quote->calculateQuoteSubtotalWithResidualsApplied(),2),$tcStyle->subtotal->cell3->fontStyle, $tcStyle->subtotal->cell3->paragraphStyle);
+
+$table->addRow($tcStyle->cpp->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->cpp->cell1->cellStyle)->addText($this->translate(), $tcStyle->cpp->cell1->fontStyle, $tcStyle->cpp->cell1->paragraphStyle);
+$table->addCell($tcStyle->span23Width, $tcStyle->cpp->cell2->cellStyle)->addText($this->translate('Black overage rate'), $tcStyle->cpp->cell2->fontStyle, $tcStyle->cpp->cell2->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->cpp->cell3->cellStyle)->addText($this->translate(), $tcStyle->cpp->cell3->fontStyle, $tcStyle->cpp->cell3->paragraphStyle);
+
+$table->addRow($tcStyle->cpp->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->cpp->cell1->cellStyle)->addText($this->translate(), $tcStyle->cpp->cell1->fontStyle, $tcStyle->cpp->cell1->paragraphStyle);
+$table->addCell($tcStyle->span23Width, $tcStyle->cpp->cell2->cellStyle)->addText($this->translate('Color overage rate'), $tcStyle->cpp->cell2->fontStyle, $tcStyle->cpp->cell2->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->cpp->cell3->cellStyle)->addText($this->translate(), $tcStyle->cpp->cell3->fontStyle, $tcStyle->cpp->cell3->paragraphStyle);
+
 
 
