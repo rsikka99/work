@@ -228,7 +228,26 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         {
             $subtotal += $quoteDevice->calculateLeaseSubtotal();
         }
+        
+        $subtotal += $this->calculateTotalPagePrice();
+        
         return $subtotal;
+    }
+    
+    public function calculateTotalPagePrice()
+    {
+        $pagePrice = 0;
+        $leaseTerm = (int)$this->getQuote()->getLeaseTerm();
+        
+        /* @var $quoteDeviceGroupPage Quotegen_Model_QuoteDeviceGroupPage */
+        foreach ( $this->getPages() as $quoteDeviceGroupPage )
+        {
+            if ($quoteDeviceGroupPage->getIncludedPrice() > 0 && $leaseTerm > 0)
+            {
+                $pagePrice += $quoteDeviceGroupPage->getIncludedPrice() * $leaseTerm;
+            }
+        }
+        return $pagePrice;
     }
 
     /**
@@ -245,6 +264,9 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         {
             $subtotal += $quoteDevice->calculateSubtotalWithResidual();
         }
+        
+        $subtotal += $this->calculateTotalPagePrice();
+        
         return $subtotal;
     }
 
@@ -287,7 +309,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
 
     /**
      * Gets pages associated with the group
-     * 
+     *
      * @return multitype: Quotegen_Model_QuoteDeviceGroupPages
      */
     public function getPages ()

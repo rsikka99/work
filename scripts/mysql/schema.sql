@@ -1515,7 +1515,7 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_device_group_pages` (
   `quoteDeviceGroupId` INT NOT NULL ,
   `name` VARCHAR(255) NOT NULL ,
   `sku` VARCHAR(45) NOT NULL DEFAULT 0 ,
-  `costPerPage` DOUBLE NOT NULL DEFAULT 0 ,
+  `pricePerPage` DOUBLE NOT NULL DEFAULT 0 ,
   `includedPrice` DOUBLE NOT NULL DEFAULT 0 ,
   `includedQuantity` INT NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`id`) ,
