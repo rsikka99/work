@@ -62,7 +62,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         $db->beginTransaction();
                         
                         $quoteDeviceMapper = Quotegen_Model_Mapper_QuoteDevice::getInstance();
-                        foreach ( $form->getElementSets() as $set )
+                        foreach ( $form->getQuoteDeviceGroups() as $set )
                         {
                             // We have a flag to see if we need to save the device
                             $deviceHasChanges = false;
@@ -654,10 +654,14 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         // Require that we have a quote object in the database to use this page
         $this->requireQuote();
         
-        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-        foreach ( $this->_quote->getQuoteDevices() as $quoteDevice )
+        /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
+        foreach ( $this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
+            /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+            foreach ( $quoteDeviceGroup->getQuoteDevices() as $quoteDevice )
+            {
             $this->performSyncOnQuoteDevice($quoteDevice);
+            }
         }
         
         $this->_helper->flashMessenger(array (

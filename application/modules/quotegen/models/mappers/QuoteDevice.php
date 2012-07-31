@@ -9,12 +9,13 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
      *
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_QuoteDevice';
-
+    
     /*
      * Define the primary key of the model association
-    */
+     */
     public $col_id = 'id';
-    
+    public $col_quoteDeviceGroupId = 'quoteDeviceGroupId';
+
     /**
      * Gets an instance of the mapper
      *
@@ -198,7 +199,7 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
     /**
      * Gets a where clause for filtering by id
      *
-     * @param unknown_type $id            
+     * @param $id unknown_type           
      * @return array
      */
     public function getWhereId ($id)
@@ -217,16 +218,16 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Gets all devices associated with a quote.
+     * Gets all devices associated with a quote
      *
-     * @param int $quoteId
-     *            The quote id
-     * @return multitype:Quotegen_Model_QuoteDevice The quote devices for the quote
+     * @param $quoteDeviceGroupId int
+     *            The quote device group id
+     * @return multitype:Quotegen_Model_QuoteDevice The quote devices for the quote device group
      */
-    public function fetchDevicesForQuote ($quoteId)
+    public function fetchDevicesForQuoteDeviceGroup ($quoteDeviceGroupId)
     {
         return $this->fetchAll(array (
-                'quoteId = ?' => $quoteId 
+                "{$this->col_quoteDeviceGroupId} = ?" => $quoteDeviceGroupId 
         ));
     }
 }

@@ -1,10 +1,11 @@
-<?php 
+<?php
 /* @var $form Quotegen_Form_QuoteDevices */
 
 $form = $this->element;
 ?>
 <div class="well no-padding">
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+<?php foreach ($form->getQuoteDeviceGroups() as $group) : ?>
     <table class="table table-condensed table-bordered table-striped quoteDeviceTable">
         <tr class="header-row">
             <th colspan="4"></th>
@@ -26,8 +27,10 @@ $form = $this->element;
             <th style="width: 80px;">Subtotal <i class="icon-info-sign pull-right" data-placement="left" data-title="Leasing Subtotal Details" data-content="This subtotal is rounded to the nearest whole number to give nice looking numbers to the client."></i></th>
             <th style="width: 30px;"></th>
         </tr>
-        <?php foreach ($form->getElementSets() as $set) :
-    /* @var $quoteDevice Quotegen_Model_QuoteDevice */ 
+        <?php 
+        
+                foreach ($group->sets as $set) :
+    /* @var $quoteDevice Quotegen_Model_QuoteDevice */
     $quoteDevice = $set->quoteDevice;
     ?>
         <tr class="deviceRow">
@@ -93,8 +96,10 @@ $form = $this->element;
             </tr>
             <?php endforeach; ?>
         <?php endif; ?>
+        
     <?php endforeach; ?>
     </table>
+<?php endforeach; ?>
     <div class="form-actions">
         <input type="submit" name="back" value="Go Back" class="btn"/>
         <input type="submit" name="save" value="Save" class="btn btn-success"/>

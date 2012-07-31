@@ -15,7 +15,7 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
      *
      * @var mixed
      */
-    protected $_elementSets = array ();
+    protected $_quoteDeviceGroups = array ();
 
     public function __construct ($quote, $options = null)
     {
@@ -49,88 +49,96 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
                 ) 
         ));
         
-        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-        foreach ( $this->_quote->getQuoteDevices() as $quoteDevice )
+        /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
+        foreach ( $this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
-            $quoteDeviceId = $quoteDevice->getId();
-            $elementSet = new stdClass();
-            $elementSet->quoteDevice = $quoteDevice;
+            $group = new stdClass();
+            $group->sets = array ();
+            foreach ( $quoteDeviceGroup->getQuoteDevices() as $quoteDevice )
+            {
+                /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+                $quoteDeviceId = $quoteDevice->getId();
+                $elementSet = new stdClass();
+                $elementSet->quoteDevice = $quoteDevice;
+                
+                $elementSet->packagePrice = $this->createElement('text', "packagePrice-{$quoteDeviceId}", array (
+                        'label' => 'Package Price:', 
+                        'class' => 'input-mini', 
+                        'value' => $quoteDevice->getPackagePrice(), 
+                        'validators' => array (
+                                'Float', 
+                                array (
+                                        'validator' => 'Between', 
+                                        'options' => array (
+                                                'min' => 0, 
+                                                'max' => 250000, 
+                                                'inclusive' => false 
+                                        ) 
+                                ) 
+                        ) 
+                ));
+                
+                $lessThanElementValidator = new My_Validate_LessThanFormValue($elementSet->packagePrice);
+                $elementSet->residual = $this->createElement('text', "residual-{$quoteDeviceId}", array (
+                        'label' => 'Residual:', 
+                        'class' => 'input-mini', 
+                        'value' => $quoteDevice->getResidual(), 
+                        'validators' => array (
+                                'Float', 
+                                array (
+                                        'validator' => 'Between', 
+                                        'options' => array (
+                                                'min' => 0, 
+                                                'max' => 250000 
+                                        ) 
+                                ), 
+                                $lessThanElementValidator 
+                        ) 
+                ));
+                
+                $elementSet->margin = $this->createElement('text', "margin-{$quoteDeviceId}", array (
+                        'label' => 'Margin:', 
+                        'class' => 'input-mini', 
+                        'value' => $quoteDevice->getMargin(), 
+                        'validators' => array (
+                                'Float', 
+                                array (
+                                        'validator' => 'Between', 
+                                        'options' => array (
+                                                'min' => - 100, 
+                                                'max' => 100, 
+                                                'inclusive' => false 
+                                        ) 
+                                ) 
+                        ) 
+                ));
+                
+                $elementSet->quantity = $this->createElement('text', "quantity-{$quoteDeviceId}", array (
+                        'label' => 'Quantity:', 
+                        'class' => 'span1', 
+                        'value' => $quoteDevice->getQuantity(), 
+                        'validators' => array (
+                                'Float', 
+                                array (
+                                        'validator' => 'Between', 
+                                        'options' => array (
+                                                'min' => 0, 
+                                                'max' => 10000 
+                                        ) 
+                                ) 
+                        ) 
+                ));
+                
+                // Add all our elements
+                $this->addElement($elementSet->packagePrice);
+                $this->addElement($elementSet->margin);
+                $this->addElement($elementSet->quantity);
+                $this->addElement($elementSet->residual);
+                
+                $group->sets[] = $elementSet;
             
-            $elementSet->packagePrice = $this->createElement('text', "packagePrice-{$quoteDeviceId}", array (
-                    'label' => 'Package Price:', 
-                    'class' => 'input-mini', 
-                    'value' => $quoteDevice->getPackagePrice(), 
-                    'validators' => array (
-                            'Float', 
-                            array (
-                                    'validator' => 'Between', 
-                                    'options' => array (
-                                            'min' => 0, 
-                                            'max' => 250000, 
-                                            'inclusive' => false 
-                                    ) 
-                            ) 
-                    ) 
-            ));
-            
-            $lessThanElementValidator = new My_Validate_LessThanFormValue($elementSet->packagePrice);
-            $elementSet->residual = $this->createElement('text', "residual-{$quoteDeviceId}", array (
-                    'label' => 'Residual:', 
-                    'class' => 'input-mini', 
-                    'value' => $quoteDevice->getResidual(), 
-                    'validators' => array (
-                            'Float', 
-                            array (
-                                    'validator' => 'Between', 
-                                    'options' => array (
-                                            'min' => 0, 
-                                            'max' => 250000 
-                                    ) 
-                            ), 
-                            $lessThanElementValidator 
-                    ) 
-            ));
-            
-            $elementSet->margin = $this->createElement('text', "margin-{$quoteDeviceId}", array (
-                    'label' => 'Margin:', 
-                    'class' => 'input-mini', 
-                    'value' => $quoteDevice->getMargin(), 
-                    'validators' => array (
-                            'Float', 
-                            array (
-                                    'validator' => 'Between', 
-                                    'options' => array (
-                                            'min' => - 100, 
-                                            'max' => 100, 
-                                            'inclusive' => false 
-                                    ) 
-                            ) 
-                    ) 
-            ));
-            
-            $elementSet->quantity = $this->createElement('text', "quantity-{$quoteDeviceId}", array (
-                    'label' => 'Quantity:', 
-                    'class' => 'span1', 
-                    'value' => $quoteDevice->getQuantity(), 
-                    'validators' => array (
-                            'Float', 
-                            array (
-                                    'validator' => 'Between', 
-                                    'options' => array (
-                                            'min' => 0, 
-                                            'max' => 10000 
-                                    ) 
-                            ) 
-                    ) 
-            ));
-            
-            // Add all our elements
-            $this->addElement($elementSet->packagePrice);
-            $this->addElement($elementSet->margin);
-            $this->addElement($elementSet->quantity);
-            $this->addElement($elementSet->residual);
-            
-            $this->_elementSets [] = $elementSet;
+            }
+            $this->_quoteDeviceGroups [] = $group;
         }
         
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
@@ -157,8 +165,8 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
      *
      * @return array
      */
-    public function getElementSets ()
+    public function getQuoteDeviceGroups ()
     {
-        return $this->_elementSets;
+        return $this->_quoteDeviceGroups;
     }
 }

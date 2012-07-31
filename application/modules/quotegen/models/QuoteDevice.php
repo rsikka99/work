@@ -681,7 +681,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     public function calculateLeasePrice ()
     {
         $leasePrice = 0;
-        $leaseRate = $this->getQuoteDeviceGroup()->getLeaseRate();
+        $leaseRate = $this->getQuoteDeviceGroup()->getQuote()->getLeaseRate();
         $packagePrice = (float)$this->getPackagePrice();
         $residual = (float)$this->getResidual();
         

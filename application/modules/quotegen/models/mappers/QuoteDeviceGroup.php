@@ -3,7 +3,7 @@
 class Quotegen_Model_Mapper_QuoteDeviceGroup extends My_Model_Mapper_Abstract
 {
     /*
-     * Column name definitions. Define all columns up here and use them down below. 
+     * Column name definitions. Define all columns up here and use them down below.
      */
     public $col_id = 'id';
     public $col_quoteId = 'quoteId';
@@ -202,7 +202,7 @@ class Quotegen_Model_Mapper_QuoteDeviceGroup extends My_Model_Mapper_Abstract
     /**
      * Gets a where clause for filtering by id
      *
-     * @param unknown_type $id            
+     * @param $id unknown_type           
      * @return array
      */
     public function getWhereId ($id)
@@ -218,6 +218,21 @@ class Quotegen_Model_Mapper_QuoteDeviceGroup extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->getId();
+    }
+
+    /**
+     * Gets all the device groups for a quote
+     *
+     * @param $quoteId int
+     *            The quote id
+     * @return Ambigous <multitype:Quotegen_Model_QuoteDeviceGroup, multitype:Quotegen_Model_QuoteDeviceGroup >
+     */
+    public function fetchDeviceGroupsForQuote ($quoteId)
+    {
+        return $this->fetchAll(array (
+                "{$this->col_quoteId} = ?" => $quoteId 
+        ));
+    
     }
 }
 
