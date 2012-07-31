@@ -88,7 +88,7 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
                     // Update current quote object and save new quote items to database
                     $this->_quote->populate($formValues);
                     
-                    if ((int)$formValues ['leasingSchemaTermId'] != (int)$leasingSchemaTerm->getId())
+                    if (!$leasingSchemaTerm || (int)$formValues ['leasingSchemaTermId'] != (int)$leasingSchemaTerm->getId())
                     {
                         $quoteLeaseTerm = new Quotegen_Model_QuoteLeaseTerm();
                         $quoteLeaseTerm->setQuoteId($this->_quote->getId());
