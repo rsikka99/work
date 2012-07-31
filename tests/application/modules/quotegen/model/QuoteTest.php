@@ -14,12 +14,11 @@ class Quotegen_Model_QuoteTest extends PHPUnit_Framework_TestCase
         // Initialize
         $this->_quote = new Quotegen_Model_Quote();
         $quoteDeviceGroup = new Quotegen_Model_QuoteDeviceGroup();
-        $quoteDeviceGroups = array();
+        $quoteDeviceGroups = array ();
         $quoteDevices = array ();
         $quoteDevice = new Quotegen_Model_QuoteDevice();
         
-        
-        $quoteDeviceGroups[] = $quoteDeviceGroup;
+        $quoteDeviceGroups [] = $quoteDeviceGroup;
         // Populate quote
         $this->_quote->setLeaseRate(0.05);
         $this->_quote->setLeaseTerm(48);
@@ -43,7 +42,20 @@ class Quotegen_Model_QuoteTest extends PHPUnit_Framework_TestCase
         $quoteDevice->setQuoteDeviceGroup($quoteDeviceGroup);
         $quoteDeviceGroup->setPages($quoteDeviceGroupPages);
         
+        $quoteDevice->setQuantity(1);
         $quoteDevice->setCost(1000);
+        $quoteDevice->setMargin(20);
+        $quoteDevice->setPackagePrice(1275);
+        $quoteDevice->setResidual(50);
+        
+        
+        $quoteDevice->setCompCostPerPageColor(0);
+        $quoteDevice->setCompCostPerPageMonochrome(0);
+        $quoteDevice->setOemCostPerPageColor(0);
+        $quoteDevice->setOemCostPerPageMonochrome(0);        
+        
+        
+        
         
         $quoteDeviceOptions = array ();
         
@@ -130,5 +142,54 @@ class Quotegen_Model_QuoteTest extends PHPUnit_Framework_TestCase
                 $this->assertNotNull($quoteDevice->getQuoteDeviceGroup());
             }
         }
+    }
+
+    public function testCalculateQuoteSubtotal ()
+    {
+        $expectedAnswer = 1275;
+        $actualResult = $this->_quote->calculateQuoteSubtotal();
+        $this->assertEquals($expectedAnswer, $actualResult);
+    }
+
+    public function testCalculateQuoteLeaseSubtotal ()
+    {
+        $expectedAnswer = 24061;
+        $actualResult = $this->_quote->calculateQuoteLeaseSubtotal();
+        $this->assertEquals($expectedAnswer, $actualResult);
+    }
+
+    public function testCalculateQuoteSubtotalWithResidualsApplied ()
+    {
+        $expectedAnswer = 25225;
+        $actualResult = $this->_quote->calculateQuoteSubtotalWithResidualsApplied();
+        $this->assertEquals($expectedAnswer, $actualResult);
+    }
+
+    public function testCalculateTotalResidual ()
+    {
+        $expectedAnswer = 50;
+        $actualResult = $this->_quote->calculateTotalResidual();
+        $this->assertEquals($expectedAnswer, $actualResult);
+    }
+
+    public function testCountDevices ()
+    {
+        $expectedAnswer = 1;
+        $actualResult = $this->_quote->countDevices();
+        $this->assertEquals($expectedAnswer, $actualResult);
+    }
+
+    public function testCalculateTotalCost ()
+    {
+        $expectedAnswer = 1020;
+        $actualResult = $this->_quote->calculateTotalCost();
+        $this->assertEquals($expectedAnswer, $actualResult);
+    }
+
+    public function testCalculateTotalMargin ()
+    {
+        $expectedAnswer = 20;
+        $actualResult = $this->_quote->calculateTotalMargin();
+        $this->assertEquals($expectedAnswer, $actualResult);
     }
 }
