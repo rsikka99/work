@@ -9,12 +9,12 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
      *
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_QuoteDevice';
-
+    
     /*
      * Define the primary key of the model association
-    */
+     */
     public $col_id = 'id';
-    
+
     /**
      * Gets an instance of the mapper
      *
@@ -111,8 +111,9 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
     /**
      * Finds a quoteDevice based on it's primaryKey
      *
-     * @param $id int
-     *            The id of the quoteDevice to find
+     * @param $id mixed
+     *            The id of the quoteDevice to find, 
+     *            Quotegen_Model_Quote with an id
      * @return Quotegen_Model_QuoteDevice
      */
     public function find ($id)
@@ -131,12 +132,12 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
             return;
         }
         $row = $result->current();
-        $object = new Quotegen_Model_QuoteDevice($row->toArray());
+        $result = new Quotegen_Model_QuoteDevice($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object);
+        $this->saveItemToCache($result);
         
-        return $object;
+        return $result;
     }
 
     /**
