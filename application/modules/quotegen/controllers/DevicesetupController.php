@@ -68,11 +68,11 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $sku = null;
         $devicemapper = new Quotegen_Model_Mapper_Device();
         $device = $devicemapper->find($masterDeviceId);
-        if ( $device )
+        if ($device)
         {
-	        $sku = $device->getSku();
+            $sku = $device->getSku();
         }
-	    $form->getElement('sku')->setValue($sku);
+        $form->getElement('sku')->setValue($sku);
         
         // Make sure we are posting data
         $request = $this->getRequest();
@@ -88,34 +88,34 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 {
                     if ($form->isValid($values))
                     {
-                        if ( strlen( $values ['sku'] ) > 0 )
+                        if (strlen($values ['sku']) > 0)
                         {
-	                        // Save Device SKU
-	                        $device = new Quotegen_Model_Device();
-	                        $devicevalues = array (
-	                                'masterDeviceId' => $masterDeviceId, 
-	                                'sku' => $values ['sku'] 
-	                        );
-	                        $device->populate($devicevalues);
-	                        
-	                        // If $sku set above, then record exists to update
-	                        if ( $sku )
-	                        {
-		                        $deviceId = $devicemapper->save($device, $masterDeviceId);
-	                        }
-	                        
-	                        // Else no record, so insert it
-	                        else
-	                        {
-		                        $deviceId = $devicemapper->insert($device);
-	                        }
+                            // Save Device SKU
+                            $device = new Quotegen_Model_Device();
+                            $devicevalues = array (
+                                    'masterDeviceId' => $masterDeviceId, 
+                                    'sku' => $values ['sku'] 
+                            );
+                            $device->populate($devicevalues);
+                            
+                            // If $sku set above, then record exists to update
+                            if ($sku)
+                            {
+                                $deviceId = $devicemapper->save($device, $masterDeviceId);
+                            }
+                            
+                            // Else no record, so insert it
+                            else
+                            {
+                                $deviceId = $devicemapper->insert($device);
+                            }
                         }
-                        else 
+                        else
                         {
                             //TODO: Delete Devices record if exists
-                            // move delete logic into it's own function
-                            // so it can be called from here and the deleteAction if needed
-                            // ?? May be easier to turn on cascading deletes?
+        // move delete logic into it's own function
+        // so it can be called from here and the deleteAction if needed
+        // ?? May be easier to turn on cascading deletes?
                             Quotegen_Model_Mapper_DeviceOption::getInstance()->deleteOptionsByDeviceId($masterDeviceId);
                             $devicemapper->delete($device);
                         }
@@ -558,7 +558,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                     else if (isset($values ['btnSearch']))
                     {
                         // Get device options list
-        				$device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
+                        $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
                         $assignedOptions = array ();
                         foreach ( $device->getOptions() as $option )
                         {
@@ -573,35 +573,35 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         {
                             if ($assignedOptions)
                             {
-	                            $where = array (
-	                                    'id IN ( ? )' => $assignedOptions 
-	                            );
+                                $where = array (
+                                        'id IN ( ? )' => $assignedOptions 
+                                );
                             }
                             else
                             {
-	                            $where = array (
-	                                    'id IN ( ? )' => "NULL"
-	                            ); 
+                                $where = array (
+                                        'id IN ( ? )' => "NULL" 
+                                );
                             }
                         }
                         else if ($view == "unassigned")
                         {
                             if ($assignedOptions)
                             {
-	                            $where = array (
-	                                    'id NOT IN ( ? )' => $assignedOptions 
-	                            );
+                                $where = array (
+                                        'id NOT IN ( ? )' => $assignedOptions 
+                                );
                             }
                             else
                             {
-	                            $where = array (
-	                                    'id NOT IN ( ? )' => "NULL" 
-	                            );
+                                $where = array (
+                                        'id NOT IN ( ? )' => "NULL" 
+                                );
                             }
                         }
                         
                         // Options Search Filter
-                        if ( isset($values ['txtCriteria']) )
+                        if (isset($values ['txtCriteria']))
                         {
                             $filter = $values ['criteria_filter'];
                             $criteria = $values ['txtCriteria'];
@@ -639,7 +639,9 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         
         // Get the device and assigned options
         $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
-        $this->view->devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . ' ' . $device->getMasterDevice()->getPrinterModel();
+        $this->view->devicename = $device->getMasterDevice()
+            ->getManufacturer()
+            ->getDisplayname() . ' ' . $device->getMasterDevice()->getPrinterModel();
         
         $assignedOptions = array ();
         foreach ( $device->getOptions() as $option )
@@ -661,17 +663,20 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         // Pass the view the paginator
         $this->view->paginator = $paginator;
     }
-    
+
     /**
      * Edit device configurations
      */
     public function configurationsAction ()
     {
-        $where = null;
-        
         // Get master device 
         $masterDeviceId = $this->_getParam('id', false);
         $this->view->id = $masterDeviceId;
+
+        // Default where to this device
+        $where = array (
+                'masterDeviceId = ?' => $masterDeviceId
+        );
         
         // If they haven't provided an id, send them back to the view all masterDevice page
         if (! $masterDeviceId)
@@ -684,10 +689,14 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         
         // Get the device
         $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
-        $this->view->devicename = $device->getMasterDevice()->getManufacturer()->getDisplayname() . ' ' . $device->getMasterDevice()->getPrinterModel();
-
+        $this->view->devicename = $device->getMasterDevice()
+            ->getManufacturer()
+            ->getDisplayname() . ' ' . $device->getMasterDevice()->getPrinterModel();
+        
         // Get device configurations list
-        $deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAll(array('masterDeviceId = ?' => $masterDeviceId));
+        $deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAll(array (
+                'masterDeviceId = ?' => $masterDeviceId 
+        ));
         $assignedConfigurations = array ();
         foreach ( $deviceConfiguration as $configuration )
         {
@@ -701,63 +710,67 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         {
             // Get the post data
             $values = $request->getPost();
-        
+            
             // If we cancelled we don't need to validate anything
             if (! isset($values ['cancel']))
             {
                 try
                 {
-                   	// Get Configuration Id
-	                $configurationId = $values ['configurationid'];
-	                
-	                // Save if option and device id
-	                if ($configurationId && $masterDeviceId)
-	                {
-	                    $deviceConfigurationMapper = new Quotegen_Model_Mapper_DeviceConfiguration();
-		                $deviceConfiguration = new Quotegen_Model_DeviceConfiguration();
-	                    $deviceConfiguration->setMasterDeviceId($masterDeviceId);
-	                    $deviceConfiguration->setId($configurationId);
-	                    
-	                    // Assign Option
-	                    if (isset($values ['btnAssign']))
-	                    {
-	                        // Save device option
-	                        $deviceConfigurationMapper->insert($deviceConfiguration);
-	                
-	                        $this->_helper->flashMessenger(array (
-	                                'success' => "The configuration was assigned successfully."
-	                        ));
-	                    }
-	                    else if (isset($values ['btnUnassign']))
-	                    {
-	                        // Delete device configuration
-	                        $deviceConfigurationMapper->delete($deviceConfiguration);
-	                
-	                        $this->_helper->flashMessenger(array (
-	                                'success' => "The configuration was unassigned successfully."
-	                        ));
-	                    }
-	                }
-	                
+                    // Get Configuration Id
+                    $configurationId = $values ['configurationid'];
+                    
+                    // Save if option and device id
+                    if ($configurationId && $masterDeviceId)
+                    {
+                        $deviceConfigurationMapper = new Quotegen_Model_Mapper_DeviceConfiguration();
+                        $deviceConfiguration = new Quotegen_Model_DeviceConfiguration();
+                        $deviceConfiguration->setMasterDeviceId($masterDeviceId);
+                        $deviceConfiguration->setId($configurationId);
+                        
+                        // Assign Option
+                        if (isset($values ['btnAssign']))
+                        {
+                            // Save device option
+                            $deviceConfigurationMapper->insert($deviceConfiguration);
+                            
+                            $this->_helper->flashMessenger(array (
+                                    'success' => "The configuration was assigned successfully." 
+                            ));
+                        }
+                        else if (isset($values ['btnUnassign']))
+                        {
+                            // Delete device configuration options
+                            $deviceConfigurationOptionsMapper = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->deleteDeviceConfigurationOptionById($configurationId);
+                            
+                            // Delete device configuration
+                            $deviceConfigurationMapper->delete($deviceConfiguration);
+                            
+                            $this->_helper->flashMessenger(array (
+                                    'success' => "The configuration was unassigned successfully." 
+                            ));
+                        }
+                    }
+                    
                     // Filter
                     else if (isset($values ['btnSearch']))
                     {
                         // Filter view
+                        $filter = null;
                         $view = $values ['cboView'];
                         $this->view->view_filter = $view;
-                    
+                        
                         if ($view == "assigned")
                         {
                             if ($assignedConfigurations)
                             {
-                                $where = array (
-                                        'id IN ( ? )' => $assignedConfigurations
+                                $filter = array (
+                                        'id IN ( ? )' => $assignedConfigurations 
                                 );
                             }
                             else
                             {
-                                $where = array (
-                                        'id IN ( ? )' => "NULL"
+                                $filter = array (
+                                        'id IN ( ? )' => "NULL" 
                                 );
                             }
                         }
@@ -765,16 +778,21 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         {
                             if ($assignedConfigurations)
                             {
-                                $where = array (
-                                        'id NOT IN ( ? )' => $assignedConfigurations
+                                $filter = array (
+                                        'id NOT IN ( ? )' => $assignedConfigurations 
                                 );
                             }
                             else
                             {
-                                $where = array (
-                                        'id NOT IN ( ? )' => "NULL"
+                                $filter = array (
+                                        'id NOT IN ( ? )' => "NULL" 
                                 );
                             }
+                        }
+                        
+                        if ($filter)
+                        {
+                            $where = array_merge($where, $filter);
                         }
                     }
                     
@@ -787,13 +805,13 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 catch ( Exception $e )
                 {
                     $this->_helper->flashMessenger(array (
-                            'error' => "An error has occurred."
+                            'error' => "An error has occurred." 
                     ));
                 }
                 catch ( InvalidArgumentException $e )
                 {
                     $this->_helper->flashMessenger(array (
-                            'danger' => $e->getMessage()
+                            'danger' => $e->getMessage() 
                     ));
                 }
             }
@@ -816,5 +834,4 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         // Pass the view the paginator
         $this->view->paginator = $paginator;
     }
-
 }

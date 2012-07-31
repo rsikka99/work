@@ -85,9 +85,20 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
      */
     public function createAction ()
     {
-        $form = new Quotegen_Form_Configuration();
-        $request = $this->getRequest();
+        // Get master device id if passed in
+        $page = $this->_getParam('page', false);
+        $masterDeviceId = $this->_getParam('id', false);
         
+        // Get form
+        $form = new Quotegen_Form_Configuration();
+        
+        // Set default master device in dropdown
+        if ( $masterDeviceId )
+        {
+            $form->getElement('masterDeviceId')->setValue($masterDeviceId);
+        }
+        
+        $request = $this->getRequest();
         if ($request->isPost())
         {
             // When user is posting data, get the values that have been posted.
@@ -127,7 +138,18 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
             }
             else // If user has selected cancel send user back to the index pages of this Controller
             {
-                $this->_helper->redirector('index');
+                if ($page == "configurations")
+                {
+	                // User has cancelled. Go back to the edit page
+		            $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+		                    'id' => $masterDeviceId
+		            ));
+                }
+                else
+                {
+	                // User has cancelled. Go back to the edit page
+	                $this->_helper->redirector('index');   
+                }
             }
         }
         $this->view->form = $form;
