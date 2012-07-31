@@ -39,7 +39,7 @@ class Quotegen_Model_QuoteDeviceGroupPage extends My_Model_Abstract
      *
      * @var float
      */
-    protected $_costPerPage;
+    protected $_pricePerPage;
     /**
      * The price of the included pages
      *
@@ -74,8 +74,8 @@ class Quotegen_Model_QuoteDeviceGroupPage extends My_Model_Abstract
         if (isset($params->sku) && ! is_null($params->sku))
             $this->setSku($params->sku);
         
-        if (isset($params->costPerPage) && ! is_null($params->costPerPage))
-            $this->setCostPerPage($params->costPerPage);
+        if (isset($params->pricePerPage) && ! is_null($params->pricePerPage))
+            $this->setPricePerPage($params->pricePerPage);
         
         if (isset($params->includedPrice) && ! is_null($params->includedPrice))
             $this->setIncludedPrice($params->includedPrice);
@@ -94,7 +94,7 @@ class Quotegen_Model_QuoteDeviceGroupPage extends My_Model_Abstract
                 "quoteDeviceGroupId" => $this->getQuoteDeviceGroupId(), 
                 "name" => $this->getName(), 
                 "sku" => $this->getSku(), 
-                "costPerPage" => $this->getCostPerPage(), 
+                "pricePerPage" => $this->getPricePerPage(), 
                 "includedPrice" => $this->getIncludedPrice(), 
                 "includedQuantity" => $this->getIncludedQuantity() 
         );
@@ -185,23 +185,23 @@ class Quotegen_Model_QuoteDeviceGroupPage extends My_Model_Abstract
     }
 
     /**
-     * Gets the cost per page
+     * Gets the price per page
      *
      * @return number
      */
-    public function getCostPerPage ()
+    public function getPricePerPage ()
     {
-        return $this->_costPerPage;
+        return $this->_pricePerPage;
     }
 
     /**
-     * Sets the cost per page
+     * Sets the price per page
      *
-     * @param number $_costPerPage            
+     * @param number $_pricePerPage            
      */
-    public function setCostPerPage ($_costPerPage)
+    public function setPricePerPage ($_pricePerPage)
     {
-        $this->_costPerPage = $_costPerPage;
+        $this->_pricePerPage = $_pricePerPage;
         return $this;
     }
 

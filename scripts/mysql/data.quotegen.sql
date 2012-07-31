@@ -122,7 +122,7 @@ INSERT INTO `qgen_quote_device_groups` (`id`, `quoteId`) VALUES
 (1, 1),
 (2, 1);
 
-INSERT INTO `qgen_quote_device_group_pages` (`id`, `quoteDeviceGroupId`, `name`, `sku`, `costPerPage`, `includedPrice`, `includedQuantity`) VALUES
+INSERT INTO `qgen_quote_device_group_pages` (`id`, `quoteDeviceGroupId`, `name`, `sku`, `pricePerPage`, `includedPrice`, `includedQuantity`) VALUES
 (1, 1, 'Print Monochrome Pages', 'PAGEMONO1234', 0.05, 500, 10000),
 (2, 1, 'Print Color Pages', 'PAGECOLOR1234', 0.15, 1500, 10000),
 (3, 2, 'Print Monochrome Pages', 'PAGEMONO1234', 0.05, 250, 5000),
