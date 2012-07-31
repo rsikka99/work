@@ -44,6 +44,13 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
      */
     protected $_quoteDevices;
     
+    /**
+     * Pages associated with the device group
+     *
+     * @var array
+     */
+    protected $_pages;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -109,7 +116,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     /**
      * Sets the quote id
      *
-     * @param $_quoteId number           
+     * @param $_quoteId number            
      */
     public function setQuoteId ($_quoteId)
     {
@@ -130,7 +137,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     /**
      * Sets the page margin
      *
-     * @param $_pageMargin number           
+     * @param $_pageMargin number            
      */
     public function setPageMargin ($_pageMargin)
     {
@@ -155,7 +162,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     /**
      * Sets the quote
      *
-     * @param $_quote Quotegen_Model_Quote           
+     * @param $_quote Quotegen_Model_Quote            
      */
     public function setQuote ($_quote)
     {
@@ -229,7 +236,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
      *
      * @return number The sub total
      */
-    public function calculateQuoteSubtotalWithResidualsApplied ()
+    public function calculateGroupSubtotalWithResidualsApplied ()
     {
         $subtotal = 0;
         
@@ -257,8 +264,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         }
         return $totalResidual;
     }
-    
-    
+
     /**
      * Calculates the total cost of the quote
      *
@@ -267,7 +273,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     public function calculateTotalCost ()
     {
         $totalCost = 0;
-    
+        
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
         foreach ( $this->getQuoteDevices() as $quoteDevice )
         {
@@ -279,4 +285,27 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         return $totalCost;
     }
 
+    /**
+     * Gets pages associated with the group
+     * 
+     * @return multitype: Quotegen_Model_QuoteDeviceGroupPages
+     */
+    public function getPages ()
+    {
+        if (! isset($this->_pages))
+        {
+            $this->_pages = Quotegen_Model_Mapper_QuoteDeviceGroupPage::getInstance()->fetchAllPagesForQuoteDeviceGroup($this->getId());
+        }
+        return $this->_pages;
+    }
+
+    /**
+     *
+     * @param multitype: $_pages            
+     */
+    public function setPages ($_pages)
+    {
+        $this->_pages = $_pages;
+        return $this;
+    }
 }

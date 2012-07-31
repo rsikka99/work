@@ -38,11 +38,11 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                     try
                     {
                         $db->beginTransaction();
-                        
+                        $changesMade = false;
                         $quoteDeviceMapper = Quotegen_Model_Mapper_QuoteDevice::getInstance();
-                        foreach ( $form->getQuoteDeviceGroups() as $sets )
+                        foreach ( $form->getQuoteDeviceGroups() as $group )
                         {
-                            foreach ( $sets->quoteDevice as $set )
+                            foreach ( $group->sets as $set )
                             {
                                 // We have a flag to see if we need to save the device
                                 $deviceHasChanges = false;
@@ -72,9 +72,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                                 $packagePrice = (float)$form->getValue("packagePrice{$quoteDeviceId}");
                                 
                                 /*
-                             * Here we recalculate. If the user has changes both the margin and package price, we'll
-                             * take margin as the preferred item to keep changes for.
-                             */
+                                 * Here we recalculate. If the user has changes both the margin and package price, we'll
+                                 * take margin as the preferred item to keep changes for.
+                                 */
                                 if ($margin !== (float)$quoteDevice->getMargin())
                                 {
                                     // Recalculate the package price
@@ -105,18 +105,28 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                                         throw new Exception("Residual is no longer valid!");
                                     }
                                     $quoteDeviceMapper->save($quoteDevice);
+                                    
+                                    $changesMade = true;
                                 }
                             }
                         }
                         
                         $db->commit();
                         
+                        // Let the user know that we have made changes to the quote
+                        if ($changesMade)
+                        {
+                            $this->_helper->flashMessenger(array (
+                                    'success' => 'Changes were saved successfully.' 
+                            ));
+                        }
+                        
                         if (isset($values ['addConfiguration']))
                         {
                             $quoteDeviceGroupId = $values ['addConfiguration'];
-                            if (isset($values ['deviceConfigurationId']))
+                            if (isset($values ["deviceConfigurationId-$quoteDeviceGroupId"]))
                             {
-                                $deviceConfigurationId = (int)$values ['deviceConfigurationId'];
+                                $deviceConfigurationId = (int)$values ["deviceConfigurationId-$quoteDeviceGroupId"];
                                 if ($deviceConfigurationId === - 1)
                                 {
                                     $this->_helper->redirector('create-new-quote-device', null, null, array (
@@ -138,13 +148,6 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                                     //                     ));
                                 }
                             }
-                        }
-                        else
-                        {
-                            // Should this be displayed even if they are adding a device?
-                            $this->_helper->flashMessenger(array (
-                                    'success' => 'Changes were saved successfully.' 
-                            ));
                         }
                         
                         $form = new Quotegen_Form_QuoteDevices($this->_quote);

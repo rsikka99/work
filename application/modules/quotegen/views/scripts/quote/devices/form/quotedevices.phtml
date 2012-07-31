@@ -4,11 +4,14 @@
 $form = $this->element;
 ?>
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
-<?php foreach ($form->getQuoteDeviceGroups() as $group) : ?>
+<?php foreach ($form->getQuoteDeviceGroups() as $group) : 
+    /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
+    $quoteDeviceGroup = $group->quoteDeviceGroup;
+?>
     <hr>
     <table class="table table-condensed table-bordered table-striped quoteDeviceTable">
         <tr class="header-row">
-            <th colspan="4"><div class="input-prepend"><button type="submit" name="addConfiguration" value="<?php echo $group->quoteDeviceGroup->getId(); ?>" class="btn btn-success">Add</button><select name="deviceConfigurationId">
+            <th colspan="4"><div class="input-prepend"><button type="submit" name="addConfiguration" value="<?php echo $quoteDeviceGroup->getId(); ?>" class="btn btn-success">Add</button><select name="deviceConfigurationId-<?php echo $quoteDeviceGroup->getId(); ?>">
                                 <option value="-1">New Configuration</option>
                                 <option value="1">Favorite 1</option>
                                 <option value="2">Favorite 2</option>
@@ -86,7 +89,7 @@ $form = $this->element;
         <?php if (count($quoteDevice->getQuoteDeviceOptions()) > 0) : ?>
             <?php foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
             <tr class="optionRow">
-                <td><?php echo $quoteDeviceOption->getName(); ?><i class="icon-info-sign pull-right" data-placement="right" data-title="<?php echo $quoteDeviceOption->getSku(); ?>" data-content="<?php echo $quoteDeviceOption->getDescription(); ?>"></i></td>
+                <td><?php echo $quoteDeviceOption->getName(); ?><i class="icon-info-sign pull-right" data-placement="right" data-title="<?php echo $quoteDeviceOption->getSku(); ?>" data-content="<?php echo $quoteDeviceOption->getDescription(); ?>"></i><br><h5><small><?php echo $quoteDeviceOption->getSku(); ?></small></h5></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -101,6 +104,46 @@ $form = $this->element;
         <?php endif; ?>
         
     <?php endforeach; ?>
+    <tr class="header-row">
+        <th>Pages</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th><button type="submit" name="addPages" value="<?php echo $quoteDeviceGroup->getId(); ?>" class="btn btn-success btn-mini"><i class="icon-plus-sign icon-white"></i></button></th>
+    </tr>
+    <?php if (count($quoteDeviceGroup->getPages()) > 0) :?>
+    <?php foreach ($quoteDeviceGroup->getPages() as $quoteDeviceGroupPage) : /* @var $quoteDeviceGroupPage Quotegen_Model_QuoteDeviceGroupPage */ ?>
+    <tr>
+        <td><h5><?php echo $quoteDeviceGroupPage->getName(); ?><br><small><?php echo $quoteDeviceGroupPage->getSku(); ?></small></h5></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><?php echo number_format($quoteDeviceGroupPage->getIncludedQuantity()); ?></td>
+        <td></td>
+        <td></td>
+        <td><?php echo $this->currency($quoteDeviceGroupPage->getCostPerPage()); ?></td>
+        <td><?php echo $this->currency($quoteDeviceGroupPage->getIncludedPrice()); ?></td>
+        <td></td>
+    </tr>
+    <?php endforeach; ?>
+    <?php endif; ?>
+    <tr class="header-row">
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th><?php echo $this->currency($quoteDeviceGroup->calculateGroupSubtotal()); ?></th>
+        <th><?php echo $this->currency($quoteDeviceGroup->calculateTotalResidual()); ?></th>
+        <th></th>
+        <th><?php echo $this->currency($quoteDeviceGroup->calculateGroupLeaseSubtotal()); ?></th>
+        <th></th>
+    </tr>
     </table>
 <?php endforeach; ?>
     <div class="form-actions">

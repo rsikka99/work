@@ -122,6 +122,13 @@ INSERT INTO `qgen_quote_device_groups` (`id`, `quoteId`) VALUES
 (1, 1),
 (2, 1);
 
+INSERT INTO `qgen_quote_device_group_pages` (`id`, `quoteDeviceGroupId`, `name`, `sku`, `costPerPage`, `includedPrice`, `includedQuantity`) VALUES
+(1, 1, 'Print Monochrome Pages', 'PAGEMONO1234', 0.05, 500, 10000),
+(2, 1, 'Print Color Pages', 'PAGECOLOR1234', 0.15, 1500, 10000),
+(3, 2, 'Print Monochrome Pages', 'PAGEMONO1234', 0.05, 250, 5000),
+(4, 2, 'Print Color Pages', 'PAGECOLOR1234', 0.15, 750, 5000);
+
+
 INSERT INTO `qgen_quote_devices` (`id`, `quoteDeviceGroupId`, `margin`, `name`, `sku`, `oemCostPerPageMonochrome`, `oemCostPerPageColor`, `compCostPerPageMonochrome`, `compCostPerPageColor`, `cost`, `quantity`, `packagePrice`, `residual`) VALUES
 (1, 1, 20.00, 'Unsynced Device Name 1', 'Unsynced SKU 1', 999, 999, 999, 999, 999.99, 1, 999.99, 0),
 (2, 1, 20.00, 'Unsynced Device Name 2', 'Unsynced SKU 2', 999, 999, 999, 999, 999.99, 1, 999.99, 0),

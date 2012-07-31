@@ -6,7 +6,7 @@
  * @author Lee Robert
  *        
  */
-class Quotegen_Model_QuoteDeviceGroupPages extends My_Model_Abstract
+class Quotegen_Model_QuoteDeviceGroupPage extends My_Model_Abstract
 {
     
     /**
