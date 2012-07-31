@@ -88,14 +88,6 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         return $this->_quoteId;
     }
 
-    protected function getDeviceConfiguration ($deviceConfigurationId)
-    {
-    }
-
-    protected function saveDeviceConfiguration ($walues)
-    {
-    }
-
     /**
      * Syncs a device configuration into a quote device for a quote.
      * If a device does not exist for the current quote it will create it for you.
