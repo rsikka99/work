@@ -133,7 +133,7 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
                         $this->_quote->setLeaseRate($leasingSchemaRate->getRate());
                     }
                     
-                    $quoteMapper = Quotegen_Model_Mapper_Quote::getInstance()->save($this->_quote, $this->_quote->getId());
+                    $this->saveQuote();
                     
                     $db->commit();
                     

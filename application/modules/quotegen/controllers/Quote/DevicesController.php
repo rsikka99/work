@@ -29,28 +29,6 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             {
                 $this->_helper->redirector('index', 'index');
             }
-            else if (isset($values ['deviceConfigurationId']))
-            {
-                $deviceConfigurationId = (int)$values ['deviceConfigurationId'];
-                if ($deviceConfigurationId === - 1)
-                {
-                    $this->_helper->redirector('create-new-quote-device', null, null, array (
-                            'quoteId' => $this->_quoteId 
-                    ));
-                }
-                else
-                {
-                    $this->_helper->flashMessenger(array (
-                            'info' => 'Sorry. This operation is not yet supported! For now you can only create new configurations.'
-                    ));
-//                     $newDeviceConfigurationId = $this->cloneDeviceConfiguration($deviceConfigurationId);
-                    
-//                     $this->_helper->redirector('edit-quote-device', null, null, array (
-//                             'id' => $newDeviceConfigurationId, 
-//                             'quoteId' => $this->_quoteId 
-//                     ));
-                }
-            }
             else
             {
                 if ($form->isValid($values))
@@ -62,76 +40,113 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         $db->beginTransaction();
                         
                         $quoteDeviceMapper = Quotegen_Model_Mapper_QuoteDevice::getInstance();
-                        foreach ( $form->getElementSets() as $set )
+                        foreach ( $form->getQuoteDeviceGroups() as $sets )
                         {
-                            // We have a flag to see if we need to save the device
-                            $deviceHasChanges = false;
-                            /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-                            $quoteDevice = $set->quoteDevice;
-                            $quoteDeviceId = $quoteDevice->getId();
-                            $quantity = (int)$form->getValue("quantity{$quoteDeviceId}");
-                            
-                            // Might as well only save the quantity if it's changed
-                            if ($quantity !== (int)$quoteDevice->getQuantity())
+                            foreach ( $sets->quoteDevice as $set )
                             {
-                                $quoteDevice->setQuantity($quantity);
-                                $deviceHasChanges = true;
-                            }
-                            
-                            $residual = (int)$form->getValue("residual{$quoteDeviceId}");
-                            
-                            // Might as well only save the quantity if it's changed
-                            if ($residual !== (int)$quoteDevice->getResidual())
-                            {
-                                $quoteDevice->setResidual($residual);
-                                $deviceHasChanges = true;
-                            }
-                            
-                            // We need to figure out if we've changed the margin or price.
-                            $margin = (float)$form->getValue("margin{$quoteDeviceId}");
-                            $packagePrice = (float)$form->getValue("packagePrice{$quoteDeviceId}");
-                            
-                            /*
+                                // We have a flag to see if we need to save the device
+                                $deviceHasChanges = false;
+                                /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+                                $quoteDevice = $set->quoteDevice;
+                                $quoteDeviceId = $quoteDevice->getId();
+                                $quantity = (int)$form->getValue("quantity{$quoteDeviceId}");
+                                
+                                // Might as well only save the quantity if it's changed
+                                if ($quantity !== (int)$quoteDevice->getQuantity())
+                                {
+                                    $quoteDevice->setQuantity($quantity);
+                                    $deviceHasChanges = true;
+                                }
+                                
+                                $residual = (int)$form->getValue("residual{$quoteDeviceId}");
+                                
+                                // Might as well only save the quantity if it's changed
+                                if ($residual !== (int)$quoteDevice->getResidual())
+                                {
+                                    $quoteDevice->setResidual($residual);
+                                    $deviceHasChanges = true;
+                                }
+                                
+                                // We need to figure out if we've changed the margin or price.
+                                $margin = (float)$form->getValue("margin{$quoteDeviceId}");
+                                $packagePrice = (float)$form->getValue("packagePrice{$quoteDeviceId}");
+                                
+                                /*
                              * Here we recalculate. If the user has changes both the margin and package price, we'll
                              * take margin as the preferred item to keep changes for.
                              */
-                            if ($margin !== (float)$quoteDevice->getMargin())
-                            {
-                                // Recalculate the package price
-                                $quoteDevice->setMargin($margin);
-                                $packagePrice = $quoteDevice->calculatePackagePrice();
-                                $quoteDevice->setPackagePrice($packagePrice);
-                                $deviceHasChanges = true;
-                            }
-                            else if ($packagePrice !== (float)$quoteDevice->getPackagePrice())
-                            {
-                                // Recalculate the margin
-                                $quoteDevice->setPackagePrice($packagePrice);
-                                $margin = $quoteDevice->calculateMargin();
-                                $quoteDevice->setMargin($margin);
-                                $deviceHasChanges = true;
-                            }
-                            
-                            // Only save if we have changes
-                            if ($deviceHasChanges)
-                            {
-                                $residualElement = $form->getElement("residual{$quoteDeviceId}");
-                                $packagePriceElement = $form->getElement("packagePrice{$quoteDeviceId}");
-                                $packagePriceElement->setValue($quoteDevice->getPackagePrice());
-                                
-                                // Throw an exception if invalid so that we may roll back our changes
-                                if (! $residualElement->isValid($residual))
+                                if ($margin !== (float)$quoteDevice->getMargin())
                                 {
-                                    throw new Exception("Residual is no longer valid!");
+                                    // Recalculate the package price
+                                    $quoteDevice->setMargin($margin);
+                                    $packagePrice = $quoteDevice->calculatePackagePrice();
+                                    $quoteDevice->setPackagePrice($packagePrice);
+                                    $deviceHasChanges = true;
                                 }
-                                $quoteDeviceMapper->save($quoteDevice);
+                                else if ($packagePrice !== (float)$quoteDevice->getPackagePrice())
+                                {
+                                    // Recalculate the margin
+                                    $quoteDevice->setPackagePrice($packagePrice);
+                                    $margin = $quoteDevice->calculateMargin();
+                                    $quoteDevice->setMargin($margin);
+                                    $deviceHasChanges = true;
+                                }
+                                
+                                // Only save if we have changes
+                                if ($deviceHasChanges)
+                                {
+                                    $residualElement = $form->getElement("residual{$quoteDeviceId}");
+                                    $packagePriceElement = $form->getElement("packagePrice{$quoteDeviceId}");
+                                    $packagePriceElement->setValue($quoteDevice->getPackagePrice());
+                                    
+                                    // Throw an exception if invalid so that we may roll back our changes
+                                    if (! $residualElement->isValid($residual))
+                                    {
+                                        throw new Exception("Residual is no longer valid!");
+                                    }
+                                    $quoteDeviceMapper->save($quoteDevice);
+                                }
                             }
                         }
                         
                         $db->commit();
-                        $this->_helper->flashMessenger(array (
-                                'success' => 'Changes were saved successfully.' 
-                        ));
+                        
+                        if (isset($values ['addConfiguration']))
+                        {
+                            $quoteDeviceGroupId = $values ['addConfiguration'];
+                            if (isset($values ['deviceConfigurationId']))
+                            {
+                                $deviceConfigurationId = (int)$values ['deviceConfigurationId'];
+                                if ($deviceConfigurationId === - 1)
+                                {
+                                    $this->_helper->redirector('create-new-quote-device', null, null, array (
+                                            'quoteId' => $this->_quoteId, 
+                                            'quoteDeviceGroupId' => $quoteDeviceGroupId 
+                                    ));
+                                }
+                                else
+                                {
+                                    $this->_helper->flashMessenger(array (
+                                            'info' => 'Sorry. This operation is not yet supported! For now you can only create new configurations.' 
+                                    ));
+                                    //                     $newDeviceConfigurationId = $this->cloneDeviceConfiguration($deviceConfigurationId);
+                                    
+
+                                    //                     $this->_helper->redirector('edit-quote-device', null, null, array (
+                                    //                             'id' => $newDeviceConfigurationId,
+                                    //                             'quoteId' => $this->_quoteId
+                                    //                     ));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // Should this be displayed even if they are adding a device?
+                            $this->_helper->flashMessenger(array (
+                                    'success' => 'Changes were saved successfully.' 
+                            ));
+                        }
+                        
                         $form = new Quotegen_Form_QuoteDevices($this->_quote);
                     }
                     catch ( Exception $e )
@@ -171,6 +186,8 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
     {
         // Require that we have a quote object in the database to use this page
         $this->requireQuote();
+        $this->requireQuoteDeviceGroup();
+        $quoteDeviceGroupId = $this->_getParam('quoteDeviceGroupId');
         
         $request = $this->getRequest();
         $form = new Quotegen_Form_DeviceConfiguration();
@@ -200,7 +217,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             $quoteDevice = $this->syncDevice(new Quotegen_Model_QuoteDevice(), $device);
                             
                             // Setup some defaults that don't get synced
-                            $quoteDevice->setQuoteId($this->_quoteId);
+                            $quoteDevice->setQuoteDeviceGroupId($quoteDeviceGroupId);
                             $quoteDevice->setMargin($quoteSetting->getDeviceMargin());
                             $quoteDevice->setQuantity(1);
                             $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
@@ -654,10 +671,14 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         // Require that we have a quote object in the database to use this page
         $this->requireQuote();
         
-        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-        foreach ( $this->_quote->getQuoteDevices() as $quoteDevice )
+        /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
+        foreach ( $this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
-            $this->performSyncOnQuoteDevice($quoteDevice);
+            /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+            foreach ( $quoteDeviceGroup->getQuoteDevices() as $quoteDevice )
+            {
+                $this->performSyncOnQuoteDevice($quoteDevice);
+            }
         }
         
         $this->_helper->flashMessenger(array (

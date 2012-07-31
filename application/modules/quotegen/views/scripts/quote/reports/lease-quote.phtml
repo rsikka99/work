@@ -18,7 +18,7 @@ $this->headScript()->appendScript("$('i').popover();");
                     <th style="width: 40px;">Qty</th>
                     <th style="width: 70px;">Subtotal</th>
                 </tr>
-                <?php foreach ($quote->getQuoteDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
+                <?php foreach ($quote->getQuoteDeviceGroups() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
                 <tr class="deviceRow">
                     <th><h5><?php echo $quoteDevice->getName(); ?><br><small><?php echo $quoteDevice->getSku(); ?></small></h5></th>                
                     <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculateLeasePrice()); ?></td>

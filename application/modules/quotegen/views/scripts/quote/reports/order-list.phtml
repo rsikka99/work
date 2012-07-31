@@ -16,7 +16,7 @@ $this->headScript()->appendScript("$('i').popover();");
                     <th style="width: 80px;">SKU</th>
                     <th>Item</th>
                 </tr>
-                <?php foreach ($quote->getQuoteDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
+                <?php foreach ($quote->getQuoteDeviceGroups() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
                 <tr class="deviceRow">
                     <td><?php echo number_format($quoteDevice->getQuantity()); ?></td>
                     <td><?php echo $quoteDevice->getSku(); ?></td>            

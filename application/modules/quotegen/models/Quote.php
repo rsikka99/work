@@ -83,7 +83,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @var array
      */
-    protected $_quoteDevices;
+    protected $_quoteDeviceGroups;
     
     /**
      * The default black & white page coverage value
@@ -187,7 +187,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Sets the id of the object
      *
-     * @param number $_id
+     * @param $_id number
      *            the new id
      */
     public function setId ($_id)
@@ -208,7 +208,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Sets the client id of the quote
      *
-     * @param number $_clientId
+     * @param $_clientId number
      *            The new client id
      */
     public function setClientId ($_clientId)
@@ -230,7 +230,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Sets the date the quote was created
      *
-     * @param string $_dateCreated
+     * @param $_dateCreated string
      *            The date modified in MySQL format
      */
     public function setDateCreated ($_dateCreated)
@@ -252,7 +252,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Sets the date that the quote was last modified on
      *
-     * @param string $_dateModified
+     * @param $_dateModified string
      *            The date modified in MySQL format
      */
     public function setDateModified ($_dateModified)
@@ -274,7 +274,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Sets the date the quote was made for
      *
-     * @param string $_quoteDate
+     * @param $_quoteDate string
      *            The date in MySQL format
      */
     public function setQuoteDate ($_quoteDate)
@@ -296,7 +296,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Sets the user id
      *
-     * @param number $_userId
+     * @param $_userId number
      *            The user id
      */
     public function setUserId ($_userId)
@@ -318,7 +318,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Sets the client's display name
      *
-     * @param string $_clientDisplayName            
+     * @param $_clientDisplayName string           
      */
     public function setClientDisplayName ($_clientDisplayName)
     {
@@ -339,7 +339,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Sets the new lease length
      *
-     * @param number $_leaseTerm
+     * @param $_leaseTerm number
      *            The new term in months
      */
     public function setLeaseTerm ($_leaseTerm)
@@ -361,7 +361,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Sets a new rate percentage
      *
-     * @param number $_leaseRate
+     * @param $_leaseRate number
      *            The new lease rate percentage
      */
     public function setLeaseRate ($_leaseRate)
@@ -387,7 +387,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Sets the client for the report (Also sets the client id of the report if the client has one.
      *
-     * @param Quotegen_Model_Client $_client
+     * @param $_client Quotegen_Model_Client
      *            The new client
      */
     public function setClient (Quotegen_Model_Client $_client)
@@ -405,24 +405,24 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @return multitype:Quotegen_Model_QuoteDevice The quote devices.
      */
-    public function getQuoteDevices ()
+    public function getQuoteDeviceGroups ()
     {
-        if (! isset($this->_quoteDevices))
+        if (! isset($this->_quoteDeviceGroups))
         {
-            $this->_quoteDevices = Quotegen_Model_Mapper_QuoteDevice::getInstance()->fetchDevicesForQuote($this->getId());
+            $this->_quoteDeviceGroups = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->fetchDeviceGroupsForQuote($this->getId());
         }
-        return $this->_quoteDevices;
+        return $this->_quoteDeviceGroups;
     }
 
     /**
      * Sets the quote devices for the quote
      *
-     * @param multitype:Quotegen_Model_QuoteDevice $_quoteDevices
+     * @param $_quoteDevices multitype:Quotegen_Model_QuoteDevice
      *            The quote devices.
      */
     public function setQuoteDevices ($_quoteDevices)
     {
-        $this->_quoteDevices = $_quoteDevices;
+        $this->_quoteDeviceGroups = $_quoteDevices;
         return $this;
     }
 
@@ -437,7 +437,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
 
     /**
      *
-     * @param number $_pageCoverageMonochrome            
+     * @param $_pageCoverageMonochrome number           
      */
     public function setPageCoverageMonochrome ($_pageCoverageMonochrome)
     {
@@ -456,7 +456,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
 
     /**
      *
-     * @param number $_pageCoverageColor            
+     * @param $_pageCoverageColor number           
      */
     public function setPageCoverageColor ($_pageCoverageColor)
     {
@@ -475,7 +475,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
 
     /**
      *
-     * @param number $_pricingConfigId            
+     * @param $_pricingConfigId number           
      */
     public function setPricingConfigId ($_pricingConfigId)
     {
@@ -500,7 +500,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Sets the pricing config object
      *
-     * @param Proposalgen_Model_PricingConfig $_pricingConfig
+     * @param $_pricingConfig Proposalgen_Model_PricingConfig
      *            The new princing config.
      */
     public function setPricingConfig ($_pricingConfig)
@@ -519,10 +519,10 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $subtotal = 0;
         
-        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
+        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
-            $subtotal += $quoteDevice->calculateSubtotal();
+            $subtotal += $quoteDeviceGroup->calculateGroupSubtotal();
         }
         return $subtotal;
     }
@@ -536,10 +536,10 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $subtotal = 0;
         
-        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
+        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
-            $subtotal += $quoteDevice->calculateLeaseSubtotal();
+            $subtotal += $quoteDeviceGroup->calculateGroupLeaseSubtotal();
         }
         return $subtotal;
     }
@@ -553,10 +553,10 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $subtotal = 0;
         
-        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
+        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
-            $subtotal += $quoteDevice->calculateSubtotalWithResidual();
+            $subtotal += $quoteDeviceGroup->calculateQuoteSubtotalWithResidualsApplied();
         }
         return $subtotal;
     }
@@ -570,10 +570,10 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $totalResidual = 0;
         
-        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
+        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
-            $totalResidual += $quoteDevice->getResidual();
+            $totalResidual += $quoteDeviceGroup->calculateTotalResidual();
         }
         return $totalResidual;
     }
@@ -585,7 +585,14 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     public function countDevices ()
     {
-        return count($this->getQuoteDevices());
+        $count = 0;
+        
+        /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
+        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        {
+            $count += count($quoteDeviceGroup->getQuoteDevices());
+        }
+        return $count;
     }
 
     /**
@@ -597,13 +604,10 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $totalCost = 0;
         
-        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
+        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
-            if ($quoteDevice->getQuantity() > 0)
-            {
-                $totalCost += $quoteDevice->calculatePackageCost() * $quoteDevice->getQuantity();
-            }
+            $totalCost += $quoteDeviceGroup->calculateTotalCost();
         }
         return $totalCost;
     }
@@ -656,7 +660,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Sets the leasing schema term
      *
-     * @param Quotegen_Model_LeasingSchemaTerm $_leasingSchemaTerm            
+     * @param $_leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm           
      */
     public function setLeasingSchemaTerm ($_leasingSchemaTerm)
     {
