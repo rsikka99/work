@@ -54,6 +54,7 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
         {
             $group = new stdClass();
             $group->sets = array ();
+            $group->quoteDeviceGroup = $quoteDeviceGroup;
             foreach ( $quoteDeviceGroup->getQuoteDevices() as $quoteDevice )
             {
                 /* @var $quoteDevice Quotegen_Model_QuoteDevice */

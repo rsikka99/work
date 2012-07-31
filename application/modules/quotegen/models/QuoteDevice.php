@@ -716,7 +716,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     /**
      * Gets the quote for this device
      *
-     * @return Quotegen_Model_Mapper_QuoteDeviceGroup The quote device group
+     * @return Quotegen_Model_QuoteDeviceGroup The quote device group
      */
     public function getQuoteDeviceGroup ()
     {

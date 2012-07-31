@@ -119,12 +119,13 @@ INSERT INTO `qgen_quotes` (`id`, `clientId`, `dateCreated`, `dateModified`, `quo
 (1, 2, NOW(), NOW(), NOW(), 1, NULL, NULL, NULL, 6, 24, 2);
 
 INSERT INTO `qgen_quote_device_groups` (`id`, `quoteId`) VALUES
-(1, 1);
+(1, 1),
+(2, 1);
 
 INSERT INTO `qgen_quote_devices` (`id`, `quoteDeviceGroupId`, `margin`, `name`, `sku`, `oemCostPerPageMonochrome`, `oemCostPerPageColor`, `compCostPerPageMonochrome`, `compCostPerPageColor`, `cost`, `quantity`, `packagePrice`, `residual`) VALUES
 (1, 1, 20.00, 'Unsynced Device Name 1', 'Unsynced SKU 1', 999, 999, 999, 999, 999.99, 1, 999.99, 0),
 (2, 1, 20.00, 'Unsynced Device Name 2', 'Unsynced SKU 2', 999, 999, 999, 999, 999.99, 1, 999.99, 0),
-(3, 1, 20.00, 'Unsynced Device Name 3', 'Unsynced SKU 3', 999, 999, 999, 999, 999.99, 1, 999.99, 0);
+(3, 2, 20.00, 'Unsynced Device Name 3', 'Unsynced SKU 3', 999, 999, 999, 999, 999.99, 1, 999.99, 0);
 
 INSERT INTO `qgen_quote_device_configurations` (`masterDeviceId`, `quoteDeviceId`) VALUES
 (1, 1),
