@@ -46,7 +46,7 @@ class Quotegen_Form_SelectOptions extends EasyBib_Form
             // Add the submit button
             $this->addElement('submit', 'submit', array (
                     'ignore' => true, 
-                    'label' => 'Add' 
+                    'label' => 'Save' 
             ));
         }
         else

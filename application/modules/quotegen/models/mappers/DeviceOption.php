@@ -214,6 +214,27 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
         return $entries;
     }
 
+
+    /**
+     * Fetches all options by device
+     *
+     * @param $id int
+     *            The id of the deviceOption to find
+     * @return multitype:Quotegen_Model_Option
+     */
+    public function fetchAllOptionsByDeviceId ($id)
+    {
+        $resultSet = $this->getDbTable()->fetchAll(array ('masterDeviceId = ?' => $id));
+        $entries = array ();
+        foreach ( $resultSet as $row )
+        {
+            $object = new Quotegen_Model_DeviceOption($row->toArray());
+            $option = Quotegen_Model_Mapper_Option::getInstance()->find($object->getOptionId());
+            $entries [] = $option;
+        }
+        return $entries;
+    }
+    
     /**
      * Gets a where clause for filtering by id
      *
