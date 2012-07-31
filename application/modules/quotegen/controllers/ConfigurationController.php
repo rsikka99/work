@@ -186,8 +186,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                 {
 	                // User has cancelled. Go back to the edit page
 		            $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
-		                    'id' => $id,
-		                    'configurationid' => $deviceConfigurationId
+		                    'id' => $id
 		            ));
                 }
                 else
