@@ -11,16 +11,11 @@ class Quotegen_Model_QuoteDeviceOptionTest extends PHPUnit_Framework_TestCase
 
     public function setUp ()
     {
-        // Initialize
-        $this->_quoteDeviceOption = new Quotegen_Model_QuoteDeviceOption();
-        
         // Create option
         $this->_quoteDeviceOption = new Quotegen_Model_QuoteDeviceOption();
         $this->_quoteDeviceOption->setQuantity(1);
         $this->_quoteDeviceOption->setIncludedQuantity(1);
         $this->_quoteDeviceOption->setCost(20);
-        
-     
         
         parent::setUp();
     }
@@ -30,15 +25,15 @@ class Quotegen_Model_QuoteDeviceOptionTest extends PHPUnit_Framework_TestCase
         parent::tearDown();
         $this->_quoteDeviceOption = null;
     }
-    
-    public function testTotalQuantity()
+
+    public function testTotalQuantity ()
     {
         $expectedAnswer = 2;
         $actualResult = $this->_quoteDeviceOption->getTotalQuantity();
         $this->assertEquals($expectedAnswer, $actualResult);
     }
-    
-    public function testSubTotal()
+
+    public function testSubTotal ()
     {
         $expectedAnswer = 20;
         $actualResult = $this->_quoteDeviceOption->getSubTotal();
