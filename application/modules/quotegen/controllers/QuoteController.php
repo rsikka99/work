@@ -51,21 +51,28 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
         {
             $values = $request->getPost();
             
-            // If user doesn't want to cancel
             if (! isset($values ['cancel']))
             {
                 if ($form->isValid($values))
                 {
-                    // Delete that quote form the databases
+                    $quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($quote);
+				                    
+                    // Delete entry from QuoteDeviceOption
+                    $quoteDeviceOption = new Quotegen_Model_QuoteDeviceOption();
+                    Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->deleteAllOptionsForQuoteDevice($quoteDevice->getId());
+                    
+                    // Delete entry from QuoteDevice
+                    Quotegen_Model_Mapper_QuoteDevice::getInstance()->delete($quoteDevice);
+                                        
                     $quoteMapper->delete($quote);
                     
                     $this->_helper->flashMessenger(array (
-                            'success' => "Quote  {$this->view->escape ( $quote->getName() )} was deleted successfully." 
+                            'success' => "Quote  {$this->view->escape ($quote->getName())} was deleted successfully." 
                     ));
                     $this->_helper->redirector('index');
                 }
             }
-            else // go back
+            else
             {
                 $this->_helper->redirector('index');
             }
@@ -75,23 +82,18 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
 
     public function createAction ()
     {
-        // TODO: createAction
         $request = $this->getRequest();
         $form = new Quotegen_Form_Quote();
         
         if ($request->isPost())
         {
             $values = $request->getPost();
-            
             if (! isset($values ['cancel']))
             {
-                
                 try
                 {
                     if ($form->isValid($values))
                     {
-                        
-                        // Save to the database
                         try
                         {
                             $userId = Zend_Auth::getInstance()->getIdentity()->id;

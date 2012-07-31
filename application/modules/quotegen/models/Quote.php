@@ -111,6 +111,13 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     protected $_pricingConfig;
     
+    /**
+     * The leasing schema term for the quote
+     *
+     * @var Quotegen_Model_LeasingSchemaTerm
+     */
+    protected $_leasingSchemaTerm;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -626,5 +633,34 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         }
         
         return $margin;
+    }
+
+    /**
+     * Gets the leasing schema term
+     *
+     * @return Quotegen_Model_LeasingSchemaTerm
+     */
+    public function getLeasingSchemaTerm ()
+    {
+        if (! isset($this->_leasingSchemaTerm))
+        {
+            $quoteLeaseTerm = Quotegen_Model_Mapper_QuoteLeaseTerm::getInstance()->find($this->getId());
+            if ($quoteLeaseTerm)
+            {
+                $this->_leasingSchemaTerm = $quoteLeaseTerm->getLeaseTerm();
+            }
+        }
+        return $this->_leasingSchemaTerm;
+    }
+
+    /**
+     * Sets the leasing schema term
+     *
+     * @param Quotegen_Model_LeasingSchemaTerm $_leasingSchemaTerm            
+     */
+    public function setLeasingSchemaTerm ($_leasingSchemaTerm)
+    {
+        $this->_leasingSchemaTerm = $_leasingSchemaTerm;
+        return $this;
     }
 }
