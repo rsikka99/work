@@ -138,7 +138,9 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
      */
     public function editAction ()
     {
-        $deviceConfigurationId = $this->_getParam('id', false);
+        $id = $this->_getParam('id', false);
+        $deviceConfigurationId = $this->_getParam('configurationid', false);
+        $page = $this->_getParam('page', false);
         
         // If they haven't provided an id, send them back to the view all deviceConfiguration page
         if (! $deviceConfigurationId)
@@ -180,8 +182,19 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
             // If we cancelled we don't need to validate anything
             if (isset($values ['cancel']))
             {
-                // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                if ($page == "configurations")
+                {
+	                // User has cancelled. Go back to the edit page
+		            $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+		                    'id' => $id,
+		                    'configurationid' => $deviceConfigurationId
+		            ));
+                }
+                else
+                {
+	                // User has cancelled. Go back to the edit page
+	                $this->_helper->redirector('index');   
+                }
             }
             else
             {
