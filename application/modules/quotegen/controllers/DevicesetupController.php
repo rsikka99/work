@@ -709,9 +709,38 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 {
                    	// Get Configuration Id
 	                $configurationId = $values ['configurationid'];
+	                
+	                // Save if option and device id
+	                if ($configurationId && $masterDeviceId)
+	                {
+	                    $deviceConfigurationMapper = new Quotegen_Model_Mapper_DeviceConfiguration();
+		                $deviceConfiguration = new Quotegen_Model_DeviceConfiguration();
+	                    $deviceConfiguration->setMasterDeviceId($masterDeviceId);
+	                    $deviceConfiguration->setId($configurationId);
 	                    
+	                    // Assign Option
+	                    if (isset($values ['btnAssign']))
+	                    {
+	                        // Save device option
+	                        $deviceConfigurationMapper->insert($deviceConfiguration);
+	                
+	                        $this->_helper->flashMessenger(array (
+	                                'success' => "The configuration was assigned successfully."
+	                        ));
+	                    }
+	                    else if (isset($values ['btnUnassign']))
+	                    {
+	                        // Delete device configuration
+	                        $deviceConfigurationMapper->delete($deviceConfiguration);
+	                
+	                        $this->_helper->flashMessenger(array (
+	                                'success' => "The configuration was unassigned successfully."
+	                        ));
+	                    }
+	                }
+	                
                     // Filter
-                    if (isset($values ['btnSearch']))
+                    else if (isset($values ['btnSearch']))
                     {
                         // Filter view
                         $view = $values ['cboView'];
