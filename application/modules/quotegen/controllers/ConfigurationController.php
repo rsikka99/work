@@ -305,6 +305,8 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
     public function addoptionsAction ()
     {
         $id = $this->_getParam('id', FALSE);
+        $configurationId = $this->_getParam('configurationid', FALSE);
+        $page = $this->_getParam('page', FALSE);
         
         $availableOptions = Quotegen_Model_Mapper_Option::getInstance()->fetchAll();
         if (count($availableOptions) < 1)
@@ -312,10 +314,22 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'info' => "There are no more options to add to this device." 
             ));
-            $this->_helper->redirector('index');
+            
+            if ($page == "configurations")
+            {
+                // User has cancelled. Go back to the edit page
+                $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+                        'id' => $id 
+                ));
+            }
+            else
+            {
+                // User has cancelled. Go back to the edit page
+                $this->_helper->redirector('index');
+            }
         }
         
-        $deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($id);
+        $deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($configurationId);
         $this->view->name = $deviceConfiguration->getName();
         
         // Prepare the data for the form
@@ -323,7 +337,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
         $form->populate($deviceConfiguration->toArray());
         
         // Get selected options for device
-        $where = "deviceConfigurationId = {$id}";
+        $where = "deviceConfigurationId = {$configurationId}";
         $selectedOptions = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->fetchAll($where);
         $selectedOptionsList = array ();
         foreach ( $selectedOptions as $option )
@@ -355,13 +369,13 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                         {
                             // Delete current device configuration options
                             $deviceConfigurationOption = new Quotegen_Model_DeviceConfigurationOption();
-                            Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->deleteDeviceConfigurationOptionById($id);
+                            Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->deleteDeviceConfigurationOptionById($configurationId);
                             
                             // Insert selected device configuration options
                             $insertedOptions = 0;
                             foreach ( $values ['options'] as $optionId )
                             {
-                                $deviceConfigurationOption->setDeviceConfigurationId($id);
+                                $deviceConfigurationOption->setDeviceConfigurationId($configurationId);
                                 $deviceConfigurationOption->setOptionId($optionId);
                                 $deviceConfigurationOptionMapper->insert($deviceConfigurationOption);
                                 $insertedOptions ++;
@@ -376,7 +390,19 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                         $this->_helper->flashMessenger(array (
                                 'success' => "Successfully added {$insertedOptions} options to {$deviceConfiguration->getName()}." 
                         ));
-                        $this->_helper->redirector('index');
+			            
+			            if ($page == "configurations")
+			            {
+			                // User has cancelled. Go back to the edit page
+			                $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+			                        'id' => $id 
+			                ));
+			            }
+			            else
+			            {
+			                // User has cancelled. Go back to the edit page
+			                $this->_helper->redirector('index');
+			            }
                     }
                     else
                     {
@@ -392,8 +418,18 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
             }
             else
             {
-                // User has cancelled. Go back to the edit page
-                $this->_helper->redirector('index');
+	            if ($page == "configurations")
+	            {
+	                // User has cancelled. Go back to the edit page
+	                $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+	                        'id' => $id 
+	                ));
+	            }
+	            else
+	            {
+	                // User has cancelled. Go back to the edit page
+	                $this->_helper->redirector('index');
+	            }
             }
         }
         
