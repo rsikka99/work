@@ -562,7 +562,8 @@ $data = array (
 $this->partial("{$basePath}/01_titlepage.phtml", $titledata);
 $this->partial("{$basePath}/02_yourprintiq.phtml", $data);
 $this->partial("{$basePath}/03_evaluatingthetruecost.phtml", $data);
-$this->partial("{$basePath}/04_quote.phtml", $data);
+$this->partial("{$basePath}/04_purchasequote.phtml", $data);
+$this->partial("{$basePath}/04_leasedquote.phtml", $data);
 $this->partial("{$basePath}/05_businessprint.phtml", $data);
 
 $objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
