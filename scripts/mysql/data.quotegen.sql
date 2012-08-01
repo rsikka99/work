@@ -119,7 +119,7 @@ INSERT INTO `qgen_quotes` (`id`, `clientId`, `dateCreated`, `dateModified`, `quo
 (1, 2, NOW(), NOW(), NOW(), 1, NULL, 0.0343, 39, 6, 24, 2);
 
 INSERT INTO `qgen_quote_lease_terms` (`quoteId`, `leasingSchemaTermId`) VALUES
-(1, 4)
+(1, 4);
 
 INSERT INTO `qgen_quote_device_groups` (`id`, `quoteId`) VALUES
 (1, 1),
