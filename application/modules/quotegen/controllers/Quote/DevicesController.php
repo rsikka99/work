@@ -149,6 +149,22 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                                 }
                             }
                         }
+                        else if (isset($values ['addPages']))
+                        {
+                            $quoteDeviceGroupId = $values ['addPages'];
+                            $this->_helper->redirector('add-pages', null, null, array (
+                                    'quoteId' => $this->_quoteId, 
+                                    'quoteDeviceGroupId' => $quoteDeviceGroupId 
+                            ));
+                        }
+                        else if (isset($values ['deletePage']))
+                        {
+                            $quoteDeviceGroupPageId = $values ['deletePage'];
+                            $this->_helper->redirector('delete-pages', null, null, array (
+                                    'quoteId' => $this->_quoteId,
+                                    'quoteDeviceGroupPageId' => $quoteDeviceGroupPageId
+                            ));
+                        }
                         
                         $form = new Quotegen_Form_QuoteDevices($this->_quote);
                     }
@@ -687,6 +703,129 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         $this->_helper->flashMessenger(array (
                 'success' => "All device configurations synced successfully. Note: If any device is no longer offered and has been deleted from the system, we have no way of syncing it." 
         ));
+        $this->_helper->redirector('index', null, null, array (
+                'quoteId' => $this->_quoteId 
+        ));
+    }
+
+    /**
+     * This function takes care of adding pages to a quote group
+     */
+    public function addPagesAction ()
+    {
+        $quoteDeviceGroupId = $this->_getParam('quoteDeviceGroupId', FALSE);
+        if (! $quoteDeviceGroupId)
+        {
+            $this->_helper->flashMessenger(array (
+                    'danger' => "You must be adding pages to a valid group." 
+            ));
+            // Redirect
+            $this->_helper->redirector('index', null, null, array (
+                    'quoteId' => $this->_quoteId 
+            ));
+        }
+        
+        $quoteDeviceGroup = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->find($quoteDeviceGroupId);
+        if (! $quoteDeviceGroup || $quoteDeviceGroup->getQuoteId() !== $this->_quote->getId())
+        {
+            $this->_helper->flashMessenger(array (
+                    'danger' => "You cannot add pages to this group." 
+            ));
+            // Redirect
+            $this->_helper->redirector('index', null, null, array (
+                    'quoteId' => $this->_quoteId 
+            ));
+        }
+        
+        $form = new Quotegen_Form_QuoteDeviceGroupPage();
+        $request = $this->getRequest();
+        if ($request->isPost())
+        {
+            $values = $request->getPost();
+            if ($form->isValid($values))
+            {
+                try
+                {
+                    // Add pages
+                    $quoteDeviceGroupPage = new Quotegen_Model_QuoteDeviceGroupPage();
+                    $quoteDeviceGroupPage->setQuoteDeviceGroupId($quoteDeviceGroupId);
+                    $quoteDeviceGroupPage->populate($form->getValues());
+                    
+                    Quotegen_Model_Mapper_QuoteDeviceGroupPage::getInstance()->insert($quoteDeviceGroupPage);
+                    $this->_helper->flashMessenger(array (
+                            'success' => "Pages successfully added." 
+                    ));
+                    
+                    // Redirect
+                    $this->_helper->redirector('index', null, null, array (
+                            'quoteId' => $this->_quoteId 
+                    ));
+                }
+                catch ( Exception $e )
+                {
+                    $this->_helper->flashMessenger(array (
+                            'danger' => "There was an error saving. Please try again or contact your system administrator." 
+                    ));
+                }
+            }
+            else
+            {
+                $form->buildBootstrapErrorDecorators();
+                $this->_helper->flashMessenger(array (
+                        'danger' => "Please correct the errors below to continue." 
+                ));
+            }
+        }
+        
+        $this->view->form = $form;
+    }
+
+    /**
+     * Deletes a page from a quote device group
+     */
+    public function deletePagesAction ()
+    {
+        $quoteDeviceGroupPageId = $this->_getParam('quoteDeviceGroupPageId', FALSE);
+        if (! $quoteDeviceGroupPageId)
+        {
+            $this->_helper->flashMessenger(array (
+                    'danger' => "Please select a valid page to delete" 
+            ));
+            
+            // Redirect
+            $this->_helper->redirector('index', null, null, array (
+                    'quoteId' => $this->_quoteId 
+            ));
+        }
+        
+        $quoteDeviceGroupPage = Quotegen_Model_Mapper_QuoteDeviceGroupPage::getInstance()->find($quoteDeviceGroupPageId);
+        if (! $quoteDeviceGroupPage || $quoteDeviceGroupPage->getQuoteDeviceGroup()->getQuoteId() !== $this->_quote->getId())
+        {
+            $this->_helper->flashMessenger(array (
+                    'danger' => "Please select a valid page to delete" 
+            ));
+            
+            // Redirect
+            $this->_helper->redirector('index', null, null, array (
+                    'quoteId' => $this->_quoteId 
+            ));
+        }
+        
+        try
+        {
+            Quotegen_Model_Mapper_QuoteDeviceGroupPage::getInstance()->delete($quoteDeviceGroupPage);
+            $this->_helper->flashMessenger(array (
+                    'success' => "Pages successfully deleted." 
+            ));
+        }
+        catch ( Exception $e )
+        {
+            $this->_helper->flashMessenger(array (
+                    'danger' => "There was an error deleting the page. Please try again or contact your system administrator." 
+            ));
+        }
+        
+        // Redirect
         $this->_helper->redirector('index', null, null, array (
                 'quoteId' => $this->_quoteId 
         ));

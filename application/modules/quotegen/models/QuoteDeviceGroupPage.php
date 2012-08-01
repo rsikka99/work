@@ -53,6 +53,13 @@ class Quotegen_Model_QuoteDeviceGroupPage extends My_Model_Abstract
      */
     protected $_includedQuantity;
     
+    /**
+     * The quote device group the page belongs to
+     *
+     * @var Quotegen_Model_QuoteDeviceGroup
+     */
+    protected $_quoteDeviceGroup;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -244,6 +251,31 @@ class Quotegen_Model_QuoteDeviceGroupPage extends My_Model_Abstract
     public function setIncludedQuantity ($_includedQuantity)
     {
         $this->_includedQuantity = $_includedQuantity;
+        return $this;
+    }
+
+    /**
+     * Gets the quote device group for the page
+     * 
+     * @return Quotegen_Model_QuoteDeviceGroup
+     */
+    public function getQuoteDeviceGroup ()
+    {
+        if (! isset($this->_quoteDeviceGroup))
+        {
+            $this->_quoteDeviceGroup = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->find($this->getQuoteDeviceGroupId());
+        }
+        return $this->_quoteDeviceGroup;
+    }
+
+    /**
+     * Sets the quote device group for the page
+     * 
+     * @param Quotegen_Model_QuoteDeviceGroup $_quoteDeviceGroup            
+     */
+    public function setQuoteDeviceGroup ($_quoteDeviceGroup)
+    {
+        $this->_quoteDeviceGroup = $_quoteDeviceGroup;
         return $this;
     }
 }
