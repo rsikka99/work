@@ -44,6 +44,21 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
      */
     public function init ()
     {
+        // Add the ability to have a docx context
+        $this->_helper->contextSwitch()->addContext('docx', array (
+                'suffix' => 'docx', 
+                'callbacks' => array (
+                        'init' => array (
+                                $this, 
+                                'initDocxContext' 
+                        ), 
+                        'post' => array (
+                                $this, 
+                                'postDocxContext' 
+                        ) 
+                ) 
+        ));
+        
         $this->_userId = Zend_Auth::getInstance()->getIdentity()->id;
         $this->_quoteSession = new Zend_Session_Namespace(Quotegen_Library_Controller_Quote::QUOTE_SESSION_NAMESPACE);
         
@@ -290,5 +305,20 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
                     'quoteId' => $this->_quoteId 
             ));
         }
+    }
+
+    /**
+     * Initializes the view to work with docx
+     */
+    public function initDocxContext ()
+    {
+        // Include php word and initialize a new instance
+        require_once ('PHPWord.php');
+        $this->view->phpword = new PHPWord();
+    }
+
+    public function postDocxContext ()
+    {
+        // TODO: Nothing to do in post yet
     }
 }

@@ -1,0 +1,19 @@
+<?php 
+$id = $this->id;
+?>
+
+<div class="clearfix">
+	<h1><?php echo $this->devicename; ?></h1>
+</div>
+
+<div class="tabbable"> <!-- Only required for left/right tabs -->
+    <ul class="nav nav-tabs">
+    	<li class="active"><a href="#tab1" data-toggle="tab">Details</a></li>
+    	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'toners', 'id' => $id ), null, true ); ?>">Toners</a></li>
+    	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'options', 'id' => $id ), null, true ); ?>">Options</a></li>
+    	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'configurations', 'id' => $id ), null, true ); ?>">Configurations</a></li>
+    </ul>
+    <div class="tab-content">
+    	<?php echo $this->form; ?>
+    </div>
+</div>
