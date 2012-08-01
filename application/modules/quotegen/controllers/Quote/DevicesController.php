@@ -42,6 +42,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         $quoteDeviceMapper = Quotegen_Model_Mapper_QuoteDevice::getInstance();
                         foreach ( $form->getQuoteDeviceGroups() as $group )
                         {
+                            // Save devices and options
                             foreach ( $group->sets as $set )
                             {
                                 // We have a flag to see if we need to save the device
@@ -109,6 +110,43 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                                     $changesMade = true;
                                 }
                             }
+                            
+                            $pagesMapper = Quotegen_Model_Mapper_QuoteDeviceGroupPage::getInstance();
+                            // Save Pages
+                            foreach ( $group->quoteDeviceGroupPages as $set )
+                            {
+                                $pageHasChanges = false;
+                                /* @var $quoteDeviceGroupPage Quotegen_Model_QuoteDeviceGroupPage */
+                                $quoteDeviceGroupPage = $set->quoteDeviceGroupPage;
+                                $quoteDeviceGroupPageId = $quoteDeviceGroupPage->getId();
+                                $includedQuantity = (int)$form->getValue("includedQuantity{$quoteDeviceGroupPageId}");
+                                $includedPrice = (float)$form->getValue("includedPrice{$quoteDeviceGroupPageId}");
+                                $pricePerPage = (float)$form->getValue("pricePerPage{$quoteDeviceGroupPageId}");
+                                
+                                if ($includedQuantity !== (int)$quoteDeviceGroupPage->getIncludedQuantity())
+                                {
+                                    $pageHasChanges = true;
+                                    $quoteDeviceGroupPage->setIncludedQuantity($includedQuantity);
+                                }
+                                
+                                if ($includedPrice !== (float)$quoteDeviceGroupPage->getIncludedPrice())
+                                {
+                                    $pageHasChanges = true;
+                                    $quoteDeviceGroupPage->setIncludedPrice($includedPrice);
+                                }
+                                
+                                if ($pricePerPage !== (float)$quoteDeviceGroupPage->getPricePerPage())
+                                {
+                                    $pageHasChanges = true;
+                                    $quoteDeviceGroupPage->setPricePerPage($pricePerPage);
+                                }
+                                
+                                if ($pageHasChanges)
+                                {
+                                    $pagesMapper->save($quoteDeviceGroupPage);
+                                    $changesMade = true;
+                                }
+                            }
                         }
                         
                         $db->commit();
@@ -161,8 +199,8 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         {
                             $quoteDeviceGroupPageId = $values ['deletePage'];
                             $this->_helper->redirector('delete-pages', null, null, array (
-                                    'quoteId' => $this->_quoteId,
-                                    'quoteDeviceGroupPageId' => $quoteDeviceGroupPageId
+                                    'quoteId' => $this->_quoteId, 
+                                    'quoteDeviceGroupPageId' => $quoteDeviceGroupPageId 
                             ));
                         }
                         

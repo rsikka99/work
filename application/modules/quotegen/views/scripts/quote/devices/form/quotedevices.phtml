@@ -116,18 +116,39 @@ $form = $this->element;
         <th></th>
         <th><button type="submit" name="addPages" value="<?php echo $quoteDeviceGroup->getId(); ?>" class="btn btn-success btn-mini"><i class="icon-plus-sign icon-white"></i></button></th>
     </tr>
-    <?php if (count($quoteDeviceGroup->getPages()) > 0) :?>
-    <?php foreach ($quoteDeviceGroup->getPages() as $quoteDeviceGroupPage) : /* @var $quoteDeviceGroupPage Quotegen_Model_QuoteDeviceGroupPage */ ?>
+    <?php if (count($group->quoteDeviceGroupPages) > 0) :?>
+    <?php foreach ($group->quoteDeviceGroupPages as $set) : 
+    /* @var $quoteDeviceGroupPage Quotegen_Model_QuoteDeviceGroupPage */
+    $quoteDeviceGroupPage = $set->quoteDeviceGroupPage; 
+    ?>
     <tr>
         <td><h5><?php echo $quoteDeviceGroupPage->getName(); ?><br><small><?php echo $quoteDeviceGroupPage->getSku(); ?></small></h5></td>
         <td></td>
         <td></td>
-        <td><?php echo number_format($quoteDeviceGroupPage->getIncludedQuantity()); ?></td>
+        <td>
+            <div class="control-group <?php echo ($set->includedQuantity->hasErrors()) ? 'error' : ''; ?>">
+                <?php if ($set->includedQuantity->hasErrors()) :?><i class="" data-title="Error" data-placement="top" data-content="<?php echo implode('<br>', $set->includedQuantity->getMessages()); ?>"><?php endif; ?>
+                <?php echo $set->includedQuantity->renderViewHelper(); ?>
+                <?php if ($set->includedQuantity->hasErrors()) :?></i><?php endif; ?>
+            </div>
+        </td>
         <td></td>
         <td></td>
         <td></td>
-        <td><?php echo $this->currency($quoteDeviceGroupPage->getPricePerPage()); ?></td>
-        <td><?php echo $this->currency($quoteDeviceGroupPage->getIncludedPrice()); ?></td>
+        <td>
+            <div class="control-group <?php echo ($set->pricePerPage->hasErrors()) ? 'error' : ''; ?>">
+                <?php if ($set->pricePerPage->hasErrors()) :?><i class="" data-title="Error" data-placement="top" data-content="<?php echo implode('<br>', $set->pricePerPage->getMessages()); ?>"><?php endif; ?>
+                <?php echo $set->pricePerPage->renderViewHelper(); ?>
+                <?php if ($set->pricePerPage->hasErrors()) :?></i><?php endif; ?>
+            </div>
+        </td>
+        <td>
+            <div class="control-group <?php echo ($set->includedPrice->hasErrors()) ? 'error' : ''; ?>">
+                <?php if ($set->includedPrice->hasErrors()) :?><i class="" data-title="Error" data-placement="top" data-content="<?php echo implode('<br>', $set->includedPrice->getMessages()); ?>"><?php endif; ?>
+                <?php echo $set->includedPrice->renderViewHelper(); ?>
+                <?php if ($set->includedPrice->hasErrors()) :?></i><?php endif; ?>
+            </div>
+        </td>
         <td><button type="submit" name="deletePage" value="<?php echo $quoteDeviceGroupPage->getId(); ?>" class="btn btn-danger btn-mini"><i class="icon-trash icon-white"></i></button></td>
     </tr>
     <?php endforeach; ?>

@@ -55,9 +55,78 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
             $group = new stdClass();
             $group->sets = array ();
             $group->quoteDeviceGroup = $quoteDeviceGroup;
+            $group->quoteDeviceGroupPages = array ();
+            
+            /* @var $quoteDeviceGroupPage Quotegen_Model_QuoteDeviceGroupPage */
+            foreach ( $quoteDeviceGroup->getPages() as $quoteDeviceGroupPage )
+            {
+                $quoteDeviceGroupPageId = $quoteDeviceGroupPage->getId();
+                $elementSet = new stdClass();
+                $elementSet->quoteDeviceGroupPage = $quoteDeviceGroupPage;
+                
+                $elementSet->includedQuantity = $this->createElement('text', "includedQuantity-{$quoteDeviceGroupPageId}", array (
+                        'label' => 'Included Quantity:', 
+                        'class' => 'input-mini', 
+                        'value' => $quoteDeviceGroupPage->getIncludedQuantity(), 
+                        'validators' => array (
+                                'Int', 
+                                array (
+                                        'validator' => 'Between', 
+                                        'options' => array (
+                                                'min' => 0, 
+                                                'max' => 50000, 
+                                                'inclusive' => true 
+                                        ) 
+                                ) 
+                        ) 
+                ));
+                
+                $elementSet->includedPrice = $this->createElement('text', "includedPrice-{$quoteDeviceGroupPageId}", array (
+                        'label' => 'Included Price:', 
+                        'class' => 'input-mini', 
+                        'value' => $quoteDeviceGroupPage->getIncludedPrice(), 
+                        'validators' => array (
+                                'Float', 
+                                array (
+                                        'validator' => 'Between', 
+                                        'options' => array (
+                                                'min' => 0, 
+                                                'max' => 5000, 
+                                                'inclusive' => true 
+                                        ) 
+                                ) 
+                        ) 
+                ));
+                
+                $elementSet->pricePerPage = $this->createElement('text', "pricePerPage-{$quoteDeviceGroupPageId}", array (
+                        'label' => 'Included Price:', 
+                        'class' => 'input-mini', 
+                        'value' => $quoteDeviceGroupPage->getPricePerPage(), 
+                        'validators' => array (
+                                'Float', 
+                                array (
+                                        'validator' => 'Between', 
+                                        'options' => array (
+                                                'min' => 0, 
+                                                'max' => 5, 
+                                                'inclusive' => false 
+                                        ) 
+                                ) 
+                        ) 
+                ));
+                
+                // Add all our elements
+                $this->addElement($elementSet->includedQuantity);
+                $this->addElement($elementSet->includedPrice);
+                $this->addElement($elementSet->pricePerPage);
+                
+                $group->quoteDeviceGroupPages [] = $elementSet;
+            }
+            
+            /* @var $quoteDevice Quotegen_Model_QuoteDevice */
             foreach ( $quoteDeviceGroup->getQuoteDevices() as $quoteDevice )
             {
-                /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+                
                 $quoteDeviceId = $quoteDevice->getId();
                 $elementSet = new stdClass();
                 $elementSet->quoteDevice = $quoteDevice;
@@ -136,8 +205,7 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
                 $this->addElement($elementSet->quantity);
                 $this->addElement($elementSet->residual);
                 
-                $group->sets[] = $elementSet;
-            
+                $group->sets [] = $elementSet;
             }
             $this->_quoteDeviceGroups [] = $group;
         }
