@@ -383,7 +383,6 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                         }
                         catch ( Exception $e )
                         {
-                            echo $e; die;
                             $this->_helper->flashMessenger(array (
                                     'danger' => "Failed to add options to configuration. Please try again." 
                             ));
