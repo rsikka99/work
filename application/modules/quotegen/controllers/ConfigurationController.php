@@ -185,7 +185,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
             {
                 // User has cancelled. Go back to the edit page
                 $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
-                        'id' => $masterDeviceId 
+                        'id' => $id 
                 ));
             }
             else
@@ -210,7 +210,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
             {
                 // User has cancelled. Go back to the edit page
                 $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
-                        'id' => $masterDeviceId
+                        'id' => $id
                 ));
             }
             else
@@ -272,7 +272,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                         {
                             // User has cancelled. Go back to the edit page
                             $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
-                                    'id' => $masterDeviceId
+                                    'id' => $id
                             ));
                         }
                         else
@@ -383,6 +383,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                         }
                         catch ( Exception $e )
                         {
+                            echo $e; die;
                             $this->_helper->flashMessenger(array (
                                     'danger' => "Failed to add options to configuration. Please try again." 
                             ));

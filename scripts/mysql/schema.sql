@@ -1075,8 +1075,8 @@ DEFAULT CHARACTER SET = utf8;
 CREATE  TABLE IF NOT EXISTS `qgen_device_configuration_options` (
   `deviceConfigurationId` INT(11) NOT NULL ,
   `optionId` INT(11) NOT NULL ,
-  `quantity` INT(11) NOT NULL ,
-  `includedQuantity` INT(11) NOT NULL ,
+  `quantity` INT(11) NOT NULL DEFAULT '1' ,
+  `includedQuantity` INT(11) NOT NULL DEFAULT '1' ,
   PRIMARY KEY (`deviceConfigurationId`, `optionId`) ,
   INDEX `optionId` (`optionId` ASC) ,
   CONSTRAINT `quotegen_device_configuration_options_ibfk_1`
