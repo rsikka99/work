@@ -4,6 +4,14 @@
 $form = $this->element;
 ?>
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+<div class="clearfix">
+    <div class="pull-right">
+        <a href="<?php echo $this->url(array('action' => 'sync-all-device-configurations')); ?>" title="Sync all configurations with current information." class="btn btn-info "><i class="icon-refresh"></i> Sync All Devices</a>
+    </div>
+    <div>
+        <button type="submit" name="addGroup" value="addGroup" class="btn btn-success"><i class="icon-plus-sign icon-white"></i> Add Group</button>
+    </div>
+</div>
 <?php echo $form->getElement('crsf_check'); ?>
 <?php foreach ($form->getQuoteDeviceGroups() as $group) : 
     /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
@@ -11,16 +19,19 @@ $form = $this->element;
 ?>
     <table class="table table-condensed table-bordered table-striped quoteDeviceTable">
         <tr class="header-row">
-            <th colspan="4"><div class="input-prepend"><button type="submit" name="addConfiguration" value="<?php echo $quoteDeviceGroup->getId(); ?>" class="btn btn-success">Add</button><select name="deviceConfigurationId-<?php echo $quoteDeviceGroup->getId(); ?>">
-                                <option value="-1">New Configuration</option>
-                                <option value="1">Favorite 1</option>
-                                <option value="2">Favorite 2</option>
-                                <option value="3">Favorite 3</option>
-                            </select>    </div></th>
-            
+            <th colspan="4">
+                <div class="input-prepend">
+                <button type="submit" name="addConfiguration" value="<?php echo $quoteDeviceGroup->getId(); ?>" class="btn btn-success">Add</button><select name="deviceConfigurationId-<?php echo $quoteDeviceGroup->getId(); ?>">
+                    <option value="-1">New Configuration</option>
+                    <option value="1">Favorite 1</option>
+                    <option value="2">Favorite 2</option>
+                    <option value="3">Favorite 3</option>
+                </select>
+                </div>
+            </th>
             <th colspan="2" style="text-align: center;">Purchase</th>
             <th colspan="3" style="text-align: center">Lease</th>
-            <th style="width: 30px;"></th>
+            <th style="width: 30px;"><button type="submit" name="deleteGroup" value="<?php echo $quoteDeviceGroup->getId(); ?>" title="Delete Group" class="btn btn-danger btn-mini"><i class="icon-trash icon-white"></i></button></th>
         </tr>
         <tr class="header-row">
             <th>Item</th>
