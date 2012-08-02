@@ -153,15 +153,15 @@ class Quotegen_Model_QuoteTest extends PHPUnit_Framework_TestCase
 
     public function testCalculateQuoteLeaseSubtotal ()
     {
-        $expectedAnswer = 24061;
-        $actualResult = $this->_quote->calculateQuoteLeaseSubtotal();
+        $expectedAnswer = 561;
+        $actualResult = $this->_quote->calculateQuoteMonthlyLeaseSubtotal();
         $this->assertEquals($expectedAnswer, $actualResult);
     }
 
     public function testCalculateQuoteSubtotalWithResidualsApplied ()
     {
         $expectedAnswer = 25225;
-        $actualResult = $this->_quote->calculateQuoteSubtotalWithResidualsApplied();
+        $actualResult = $this->_quote->calculateQuoteLeaseValue();
         $this->assertEquals($expectedAnswer, $actualResult);
     }
 

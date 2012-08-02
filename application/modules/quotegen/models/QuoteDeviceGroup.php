@@ -209,7 +209,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
         foreach ( $this->getQuoteDevices() as $quoteDevice )
         {
-            $subtotal += $quoteDevice->calculateSubtotal();
+            $subtotal += $quoteDevice->calculatePurchaseSubtotal();
         }
         return $subtotal;
     }
@@ -219,33 +219,29 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
      *
      * @return number The sub total
      */
-    public function calculateGroupLeaseSubtotal ()
+    public function calculateGroupMonthlyLeasePrice ()
     {
         $subtotal = 0;
         
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
         foreach ( $this->getQuoteDevices() as $quoteDevice )
         {
-            $subtotal += $quoteDevice->calculateLeaseSubtotal();
+            $subtotal += $quoteDevice->calculatePackageMonthlyLeasePrice();
         }
         
-        $subtotal += $this->calculateTotalPagePrice();
+        $subtotal += $this->calculateMonthlyPagePrice();
         
         return $subtotal;
     }
-    
-    public function calculateTotalPagePrice()
+
+    public function calculateMonthlyPagePrice ()
     {
         $pagePrice = 0;
-        $leaseTerm = (int)$this->getQuote()->getLeaseTerm();
         
         /* @var $quoteDeviceGroupPage Quotegen_Model_QuoteDeviceGroupPage */
         foreach ( $this->getPages() as $quoteDeviceGroupPage )
         {
-            if ($quoteDeviceGroupPage->getIncludedPrice() > 0 && $leaseTerm > 0)
-            {
-                $pagePrice += $quoteDeviceGroupPage->getIncludedPrice() * $leaseTerm;
-            }
+            $pagePrice += $quoteDeviceGroupPage->getIncludedPrice();
         }
         return $pagePrice;
     }
@@ -255,17 +251,21 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
      *
      * @return number The sub total
      */
-    public function calculateGroupSubtotalWithResidualsApplied ()
+    public function calculateGroupLeaseValue ()
     {
         $subtotal = 0;
         
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
         foreach ( $this->getQuoteDevices() as $quoteDevice )
         {
-            $subtotal += $quoteDevice->calculateSubtotalWithResidual();
+            $subtotal += $quoteDevice->calculateLeaseValue();
         }
         
-        $subtotal += $this->calculateTotalPagePrice();
+        $leaseTerm = (int)$this->getQuote()->getLeaseTerm();
+        if ($leaseTerm > 0)
+        {
+            $subtotal += $this->calculateMonthlyPagePrice() * $leaseTerm;
+        }
         
         return $subtotal;
     }

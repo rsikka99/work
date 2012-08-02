@@ -28,7 +28,7 @@ $this->headScript()->appendScript("$('i').popover();");
                     <td></td>           
                     <td style="text-align: right;"><?php echo $this->currency($quoteDevice->getPackagePrice()); ?></td>
                     <td style="text-align: right;"><?php echo number_format($quoteDevice->getQuantity()); ?></td>
-                    <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculateSubtotal()); ?></td>
+                    <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculatePurchaseSubtotal()); ?></td>
                 </tr>
                 <?php if (count($quoteDevice->getQuoteDeviceOptions()) > 0) : ?>
                 

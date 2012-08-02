@@ -9,13 +9,15 @@ refer to Lee Robert to double check.
 Variables
 ---------
 Quote
-	Group
-		Package
+	Group[]
+		Package[]
 			Device
-				Option
+				Option[]
 					Option Quantity
 					Option Cost
 					Option Included Quantity
+					Total Quantity
+					SubTotal
 			Device Cost
 		Package Cost
 		Package Margin
@@ -24,10 +26,11 @@ Quote
 		Package Residual
 		Package Purchase Subtotal
 		Package Lease Subtotal
-	Pages
+	GroupPages[]
 		Price Per Page
 		Included Quantity
 		Included Price
+	Group Monthly Page Price
 	Group Page Margin
 	Group Purchase Subtotal
 	Group Lease Subtotal
