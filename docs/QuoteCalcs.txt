@@ -83,6 +83,9 @@ Group Lease Subtotal 		= SUM(Package Lease Subtotal) + SUM( (Page Included Price
 Quote Purchase Subtotal 	= SUM(Group Purchase Subtotal)
 Quote Lease Subtotal 		= SUM(Group Lease Subtotal)
 
+Quote Value 				= Quote Lease Subtotal
+
+Quote Monthly Subtotal 		= Quote Lease Subtotal * Lease Factor
 
 
 
