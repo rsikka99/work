@@ -53,7 +53,7 @@ $this->headScript()->appendScript("$('i').popover();");
                 
         <?php foreach ($quoteDeviceGroup->getPages() as $quoteDeviceGroupPage) : /* @var $quoteDeviceGroupPage Quotegen_Model_QuoteDeviceGroupPage */ ?>
         <tr class="pagesRow">
-            <td><?php echo $quoteDeviceGroupPage->getName(); ?></td>
+            <td><?php echo $quoteDeviceGroupPage->getName(); ?> Pages</td>
             <td><?php echo $quoteDeviceGroupPage->getSku(); ?></td>
             <td></td>
             <td></td>

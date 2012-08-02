@@ -45,6 +45,7 @@ class Quotegen_Model_Mapper_QuoteDeviceGroup extends My_Model_Mapper_Abstract
         // Remove the id
         unset($data [$this->col_id]);
         
+        
         // Insert the data
         $id = $this->getDbTable()->insert($data);
         

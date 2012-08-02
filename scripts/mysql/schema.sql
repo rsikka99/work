@@ -1075,8 +1075,8 @@ DEFAULT CHARACTER SET = utf8;
 CREATE  TABLE IF NOT EXISTS `qgen_device_configuration_options` (
   `deviceConfigurationId` INT(11) NOT NULL ,
   `optionId` INT(11) NOT NULL ,
-  `quantity` INT(11) NOT NULL ,
-  `includedQuantity` INT(11) NOT NULL ,
+  `quantity` INT(11) NOT NULL DEFAULT 1 ,
+  `includedQuantity` INT(11) NOT NULL DEFAULT 1 ,
   PRIMARY KEY (`deviceConfigurationId`, `optionId`) ,
   INDEX `optionId` (`optionId` ASC) ,
   CONSTRAINT `quotegen_device_configuration_options_ibfk_1`
@@ -1282,7 +1282,7 @@ COMMENT = 'Primary table for a quote. Stores basic information' ;
 -- Table `qgen_quote_device_groups`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `qgen_quote_device_groups` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `quoteId` INT NOT NULL ,
   `pageMargin` DOUBLE NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`id`) ,
@@ -1511,7 +1511,7 @@ ENGINE = InnoDB;
 -- Table `qgen_quote_device_group_pages`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `qgen_quote_device_group_pages` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `quoteDeviceGroupId` INT NOT NULL ,
   `name` VARCHAR(255) NOT NULL ,
   `sku` VARCHAR(45) NOT NULL DEFAULT 0 ,
@@ -1531,7 +1531,7 @@ ENGINE = InnoDB;
 -- Table `qgen_page_types`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `qgen_page_types` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
@@ -1541,7 +1541,7 @@ ENGINE = InnoDB;
 -- Table `qgen_pages`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `qgen_pages` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `sku` VARCHAR(45) NOT NULL ,
   `pageTypeId` INT NOT NULL ,
   `suggestedCostPerPage` DOUBLE NOT NULL ,

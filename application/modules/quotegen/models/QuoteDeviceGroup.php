@@ -14,7 +14,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
      *
      * @var int
      */
-    protected $_id = 0;
+    protected $_id;
     
     /**
      * The quote id of the quote that the device group belongs to
