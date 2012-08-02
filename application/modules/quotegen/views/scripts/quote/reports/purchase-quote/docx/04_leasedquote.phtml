@@ -66,9 +66,8 @@ foreach ( $quoteDeviceGroups as $quoteDeviceGroup )
     
     // Show pages devider
     $table->addRow($tcStyle->pages->rowheight);
-    $table->addCell($tcStyle->cell1Width, $tcStyle->pages->cell1->cellStyle)->addText('Pages');
-    $table->addCell($tcStyle->span234Width, $tcStyle->pages->cell2->cellStyle)->addText();
-
+    $table->addCell($tcStyle->spanAllWidth, $tcStyle->pages->cell1->cellStyle,4)->addText($this->translate('Pages'),$tcStyle->pages->cell1->fontStle, $tcStyle->pages->cell1->paragraphStyle);
+    
     /* @var $page Quotegen_Model_QuoteDeviceGroupPage */
     foreach ( $quoteDeviceGroup->getPages() as $page )
     {
@@ -84,17 +83,16 @@ foreach ( $quoteDeviceGroups as $quoteDeviceGroup )
     $groupCount ++;
     $table->addRow($tcStyle->subtotal->rowheight);
     $table->addCell($tcStyle->cell1Width, $tcStyle->subtotal->cell1->cellStyle)->addText();
-    $table->addCell($tcStyle->span23Width, $tcStyle->subtotal->cell2->cellStyle)->addText($this->translate('Subtotal for group ' . $groupCount), $tcStyle->subtotal->cell2->fontStyle, $tcStyle->subtotal->cell2->paragraphStyle);
-    $table->addCell($tcStyle->cell4Width, $tcStyle->subtotal->cell3->cellStyle)->addText('$' . number_format($quote->calculateQuoteSubtotalWithResidualsApplied(), 2), $tcStyle->subtotal->cell3->fontStyle, $tcStyle->subtotal->cell3->paragraphStyle);
+    $table->addCell($tcStyle->span23Width, $tcStyle->subtotal->cell2->cellStyle, 2)->addText($this->translate('Subtotal for group ' . $groupCount), $tcStyle->subtotal->cell2->fontStyle, $tcStyle->subtotal->cell2->paragraphStyle);
+    $table->addCell($tcStyle->cell4Width, $tcStyle->subtotal->cell3->cellStyle)->addText('$' . number_format($quote->calculateQuoteLeaseSubtotal(), 2), $tcStyle->subtotal->cell3->fontStyle, $tcStyle->subtotal->cell3->paragraphStyle);
     
-    $table->addRow($tcStyle->cpp->rowheight);
-    $table->addCell($tcStyle->col1Width, $tcStyle->cpp->cell1->cellStyle)->addText($this->translate(), $tcStyle->cpp->cell1->fontStyle, $tcStyle->cpp->cell1->paragraphStyle);
-    $table->addCell($tcStyle->span23Width, $tcStyle->cpp->cell2->cellStyle)->addText($this->translate('Black overage rate'), $tcStyle->cpp->cell2->fontStyle, $tcStyle->cpp->cell2->paragraphStyle);
-    $table->addCell($tcStyle->col4Width, $tcStyle->cpp->cell3->cellStyle)->addText($this->translate(), $tcStyle->cpp->cell3->fontStyle, $tcStyle->cpp->cell3->paragraphStyle);
-    
-    $table->addRow($tcStyle->cpp->rowheight);
-    $table->addCell($tcStyle->col1Width, $tcStyle->cpp->cell1->cellStyle)->addText($this->translate(), $tcStyle->cpp->cell1->fontStyle, $tcStyle->cpp->cell1->paragraphStyle);
-    $table->addCell($tcStyle->span23Width, $tcStyle->cpp->cell2->cellStyle)->addText($this->translate('Color overage rate'), $tcStyle->cpp->cell2->fontStyle, $tcStyle->cpp->cell2->paragraphStyle);
-    $table->addCell($tcStyle->col4Width, $tcStyle->cpp->cell3->cellStyle)->addText($this->translate(), $tcStyle->cpp->cell3->fontStyle, $tcStyle->cpp->cell3->paragraphStyle);
+    foreach ( $quoteDeviceGroup->getPages() as $page )
+    {
+        // Show pages amount
+        $table->addRow($tcStyle->cpp->rowheight);
+        $table->addCell($tcStyle->col1Width, $tcStyle->cpp->cell1->cellStyle)->addText($this->translate(), $tcStyle->cpp->cell1->fontStyle, $tcStyle->cpp->cell1->paragraphStyle);
+        $table->addCell($tcStyle->span23Width, $tcStyle->cpp->cell2->cellStyle, 2)->addText($this->translate($page->getName() . ' overage rate'), $tcStyle->cpp->cell2->fontStyle, $tcStyle->cpp->cell2->paragraphStyle);
+        $table->addCell($tcStyle->col4Width, $tcStyle->cpp->cell3->cellStyle)->addText('$' . number_format($page->getPricePerPage(),2), $tcStyle->cpp->cell3->fontStyle, $tcStyle->cpp->cell3->paragraphStyle);
+    }    
     $section->addTextBreak();
 }

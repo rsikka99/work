@@ -458,7 +458,6 @@ $purchaseQuoteTable = (object)array (
                                 "borderBottomSize" => 1, 
                                 "borderLeftSize" => 1, 
                                 "bgColor" => 'D9D9D9', 
-                                "gridSpan" => 2, 
                                 "valign" => 'center' 
                         ), 
                         "fontStyle" => array (
@@ -507,7 +506,6 @@ $purchaseQuoteTable = (object)array (
                                 "borderRightSize" => 1, 
                                 "borderBottomSize" => 1, 
                                 "borderLeftSize" => 1, 
-                                "gridSpan" => 2, 
                                 "valign" => 'center' 
                         ), 
                         "fontStyle" => null, 
@@ -546,7 +544,7 @@ $leasedQuoteTable = (object)array (
         "col3Width" => 3702, 
         "col4Width" => 1083, 
         "span23Width" => 5688, 
-        "span234Width" => 6771, 
+        "spanAllWidth" => 9028, 
         "header" => (object)array (
                 "rowheight" => null, 
                 "cell1" => (object)array (
@@ -645,7 +643,10 @@ $leasedQuoteTable = (object)array (
                                 "borderBottomSize" => null, 
                                 "borderLeftSize" => 1 
                         ), 
-                        "fontStyle" => null, 
+                        "fontStyle" => array (
+                                'name' => 'Calibri', 
+                                'size' => 11 
+                        ), 
                         "paragraphStyle" => 'nospacing' 
                 ), 
                 "cell3" => (object)array (
@@ -655,7 +656,10 @@ $leasedQuoteTable = (object)array (
                                 "borderBottomSize" => null, 
                                 "borderLeftSize" => 1 
                         ), 
-                        "fontStyle" => null, 
+                        "fontStyle" => array (
+                                'name' => 'Calibri', 
+                                'size' => 11 
+                        ), 
                         "paragraphStyle" => 'nospacing' 
                 ), 
                 "cell4" => (object)array (
@@ -665,7 +669,10 @@ $leasedQuoteTable = (object)array (
                                 "borderBottomSize" => null, 
                                 "borderLeftSize" => 1 
                         ), 
-                        "fontStyle" => null, 
+                        "fontStyle" => array (
+                                'name' => 'Calibri', 
+                                'size' => 11 
+                        ), 
                         "paragraphStyle" => array (
                                 'nospacing' => true, 
                                 'align' => 'right' 
@@ -681,7 +688,10 @@ $leasedQuoteTable = (object)array (
                                 "borderBottomSize" => null, 
                                 "borderLeftSize" => 1 
                         ), 
-                        "fontStyle" => null, 
+                        "fontStyle" => array (
+                                'name' => 'Calibri', 
+                                'size' => 11 
+                        ), 
                         "paragraphStyle" => 'nospacing' 
                 ), 
                 "cell2" => (object)array (
@@ -691,7 +701,10 @@ $leasedQuoteTable = (object)array (
                                 "borderBottomSize" => null, 
                                 "borderLeftSize" => 1 
                         ), 
-                        "fontStyle" => null, 
+                        "fontStyle" => array (
+                                'name' => 'Calibri', 
+                                'size' => 11 
+                        ), 
                         "paragraphStyle" => 'nospacing' 
                 ), 
                 "cell3" => (object)array (
@@ -701,7 +714,10 @@ $leasedQuoteTable = (object)array (
                                 "borderBottomSize" => null, 
                                 "borderLeftSize" => 1 
                         ), 
-                        "fontStyle" => null, 
+                        "fontStyle" => array (
+                                'name' => 'Calibri', 
+                                'size' => 11 
+                        ), 
                         "paragraphStyle" => 'nospacing' 
                 ), 
                 "cell4" => (object)array (
@@ -711,7 +727,10 @@ $leasedQuoteTable = (object)array (
                                 "borderBottomSize" => null, 
                                 "borderLeftSize" => 1 
                         ), 
-                        "fontStyle" => null, 
+                        "fontStyle" => array (
+                                'name' => 'Calibri', 
+                                'size' => 11 
+                        ), 
                         "paragraphStyle" => array (
                                 'nospacing' => true, 
                                 'align' => 'right' 
@@ -726,27 +745,17 @@ $leasedQuoteTable = (object)array (
                                 "borderRightSize" => 1, 
                                 "borderBottomSize" => 1, 
                                 "borderLeftSize" => 1, 
-                                "bgColor" => 'D9D9D9' 
-                        ), 
-                        "fontStyle" => null, 
-                        "paragraphStyle" => 'nospacing' 
-                ), 
-                "cell2" => (object)array (
-                        "cellStyle" => array (
-                                "borderTopSize" => 1, 
-                                "borderRightSize" => 1, 
-                                "borderBottomSize" => 1, 
-                                "borderLeftSize" => 1, 
                                 "bgColor" => 'D9D9D9', 
-                                "gridSpan" => 3, 
                                 "valign" => 'center' 
                         ), 
                         "fontStyle" => array (
-                                'bold' => true 
+                                'bold' => true, 
+                                'name' => 'Calibri', 
+                                'size' => 11 
                         ), 
                         "paragraphStyle" => array (
                                 'nospacing' => true, 
-                                'align' => 'right', 
+                                'align' => 'center', 
                                 'spaceAfter' => 0 
                         ) 
                 ) 
@@ -761,7 +770,10 @@ $leasedQuoteTable = (object)array (
                                 "borderLeftSize" => 1, 
                                 "bgColor" => 'D9D9D9' 
                         ), 
-                        "fontStyle" => null, 
+                        "fontStyle" => array (
+                                'name' => 'Calibri', 
+                                'size' => 11 
+                        ), 
                         "paragraphStyle" => 'nospacing' 
                 ), 
                 "cell2" => (object)array (
@@ -771,11 +783,12 @@ $leasedQuoteTable = (object)array (
                                 "borderBottomSize" => 1, 
                                 "borderLeftSize" => 1, 
                                 "bgColor" => 'D9D9D9', 
-                                "gridSpan" => 2, 
                                 "valign" => 'center' 
                         ), 
                         "fontStyle" => array (
-                                'bold' => true 
+                                'bold' => true, 
+                                'name' => 'Calibri', 
+                                'size' => 11 
                         ), 
                         "paragraphStyle" => array (
                                 'nospacing' => true, 
@@ -793,7 +806,9 @@ $leasedQuoteTable = (object)array (
                                 "valign" => 'center' 
                         ), 
                         "fontStyle" => array (
-                                'bold' => true 
+                                'bold' => true, 
+                                'name' => 'Calibri', 
+                                'size' => 11 
                         ), 
                         "paragraphStyle" => array (
                                 'nospacing' => true, 
@@ -811,7 +826,10 @@ $leasedQuoteTable = (object)array (
                                 "borderBottomSize" => 1, 
                                 "borderLeftSize" => 1 
                         ), 
-                        "fontStyle" => null, 
+                        "fontStyle" => array (
+                                'name' => 'Calibri', 
+                                'size' => 11 
+                        ), 
                         "paragraphStyle" => 'nospacing' 
                 ), 
                 "cell2" => (object)array (
@@ -820,10 +838,12 @@ $leasedQuoteTable = (object)array (
                                 "borderRightSize" => 1, 
                                 "borderBottomSize" => 1, 
                                 "borderLeftSize" => 1, 
-                                "gridSpan" => 2, 
                                 "valign" => 'center' 
                         ), 
-                        "fontStyle" => null, 
+                        "fontStyle" => array (
+                                'name' => 'Calibri', 
+                                'size' => 11 
+                        ), 
                         "paragraphStyle" => array (
                                 'nospacing' => true, 
                                 'align' => 'right', 
@@ -837,7 +857,10 @@ $leasedQuoteTable = (object)array (
                                 "borderBottomSize" => 1, 
                                 "borderLeftSize" => 1 
                         ), 
-                        "fontStyle" => null, 
+                        "fontStyle" => array (
+                                'name' => 'Calibri', 
+                                'size' => 11 
+                        ), 
                         "paragraphStyle" => array (
                                 'nospacing' => true, 
                                 'align' => 'right', 
