@@ -32,7 +32,9 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
      */
     public function deleteAction ()
     {
-        $deviceConfigurationId = $this->_getParam('id', false);
+        $id = $this->_getParam('id', false);
+        $deviceConfigurationId = $this->_getParam('configurationid', false);
+        $page = $this->_getParam('page', false);
         
         if (! $deviceConfigurationId)
         {
@@ -50,7 +52,19 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error selecting the device configuration to delete.' 
             ));
-            $this->_helper->redirector('index');
+            
+            if ($page == "configurations")
+            {
+                // User has cancelled. Go back to the edit page
+                $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+                        'id' => $id 
+                ));
+            }
+            else
+            {
+                // User has cancelled. Go back to the edit page
+                $this->_helper->redirector('index');
+            }
         }
         
         $message = "Are you sure you want to delete the &quot;{$deviceConfiguration->getName()}&quot; configuration?";
@@ -69,12 +83,35 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                     $this->_helper->flashMessenger(array (
                             'success' => "Device configuration \"{$deviceConfiguration->getName()}\" was deleted successfully." 
                     ));
-                    $this->_helper->redirector('index');
+            
+	            if ($page == "configurations")
+	            {
+	                // User has cancelled. Go back to the edit page
+	                $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+	                        'id' => $id 
+	                ));
+	            }
+	            else
+	            {
+	                // User has cancelled. Go back to the edit page
+	                $this->_helper->redirector('index');
+	            }
                 }
             }
             else // go back
             {
-                $this->_helper->redirector('index');
+	            if ($page == "configurations")
+	            {
+	                // User has cancelled. Go back to the edit page
+	                $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+	                        'id' => $id 
+	                ));
+	            }
+	            else
+	            {
+	                // User has cancelled. Go back to the edit page
+	                $this->_helper->redirector('index');
+	            }
             }
         }
         $this->view->form = $form;
