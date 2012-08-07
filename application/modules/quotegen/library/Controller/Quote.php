@@ -92,6 +92,13 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
      */
     protected function saveQuote ()
     {
+        // We always want the modified date to reflect our last change
+        $this->_quote->setDateModified(date('Y-m-d H:i:s'));
+        
+        // We always want to update our lease rate if available
+        $this->recalculateLeaseData();
+        
+        // If we already have an id then we update, otherwise insert
         if ($this->_quoteId)
         {
             Quotegen_Model_Mapper_Quote::getInstance()->save($this->_quote);
@@ -101,6 +108,42 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             $this->_quoteId = Quotegen_Model_Mapper_Quote::getInstance()->insert($this->_quote);
         }
         return $this->_quoteId;
+    }
+
+    /**
+     * Recalculates and repopulates the lease data for a quote.
+     */
+    private function recalculateLeaseData ()
+    {
+        $quoteLeaseValue = (float)$this->_quote->calculateQuoteLeaseValue();
+        $leasingSchemaTerm = $this->_quote->getLeasingSchemaTerm();
+        $leasingSchema = $leasingSchemaTerm->getLeasingSchema();
+        $leasingSchemaRanges = $leasingSchema->getRanges();
+        
+        $selectedRange = false;
+        /* @var $leasingSchemaRange Quotegen_Model_LeasingSchemaRange */
+        foreach ( $leasingSchemaRanges as $leasingSchemaRange )
+        {
+            $selectedRange = $leasingSchemaRange;
+            if ((float)$leasingSchemaRange->getStartRange() <= $quoteLeaseValue)
+            {
+                
+                break;
+            }
+        }
+        
+        if ($selectedRange)
+        {
+            // Get the rate
+            $leasingSchemaRate = new Quotegen_Model_LeasingSchemaRate();
+            $leasingSchemaRate->setLeasingSchemaRangeId($selectedRange->getId());
+            $leasingSchemaRate->setLeasingSchemaTermId($leasingSchemaTerm->getId());
+            
+            $rateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
+            $leasingSchemaRate = $rateMapper->find($rateMapper->getPrimaryKeyValueForObject($leasingSchemaRate));
+            $this->_quote->setLeaseTerm($leasingSchemaTerm->getMonths());
+            $this->_quote->setLeaseRate($leasingSchemaRate->getRate());
+        }
     }
 
     /**

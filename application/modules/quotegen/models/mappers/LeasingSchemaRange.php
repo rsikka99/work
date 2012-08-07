@@ -212,7 +212,7 @@ class Quotegen_Model_Mapper_LeasingSchemaRange extends My_Model_Mapper_Abstract
     {
         return $this->fetchAll(array (
                 'leasingSchemaId = ?' => $leasingSchemaId 
-        ), 'startRange ASC');
+        ), 'startRange DESC');
     }
     
     /*

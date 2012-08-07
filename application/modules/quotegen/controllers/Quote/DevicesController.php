@@ -242,6 +242,12 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                     }
                 }
                 
+                // Only update the quote if we made changes
+                if ($changesMade)
+                {
+                    $this->saveQuote();
+                }
+                
                 $db->commit();
                 
                 // Let the user know that we have made changes to the quote
@@ -326,6 +332,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             $quoteDeviceConfiguration->setQuoteDeviceId($quoteDeviceId);
                             Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->insert($quoteDeviceConfiguration);
                             
+                            // Update the quote
+                            $this->saveQuote();
+                            
                             $this->_helper->flashMessenger(array (
                                     'success' => "Device was added to your quote successfully. Please make any modifications that you wish now." 
                             ));
@@ -377,6 +386,10 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         
         $optionsDeleted = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->deleteAllOptionsForQuoteDevice($quoteDevice->getId());
         $quoteDevicesDeleted = Quotegen_Model_Mapper_QuoteDevice::getInstance()->delete($quoteDevice);
+        
+        // Update the quote
+        $this->saveQuote();
+        
         $this->_helper->flashMessenger(array (
                 'success' => 'Device deleted successfully.' 
         ));
@@ -513,6 +526,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         }
                         
                         Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
+                        
+                        // Update the quote
+                        $this->saveQuote();
                         
                         if (isset($values ['add']))
                         {
@@ -653,6 +669,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         {
                             $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
                             Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
+                            
+                            // Update the quote
+                            $this->saveQuote();
                         }
                         
                         $this->_helper->flashMessenger(array (
@@ -710,6 +729,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                 {
                     $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
                     Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
+                    
+                    // Update the quote
+                    $this->saveQuote();
                 }
                 
                 $this->_helper->flashMessenger(array (
@@ -747,6 +769,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         $device = $quoteDevice->getDevice();
         if ($this->performSyncOnQuoteDevice($quoteDevice))
         {
+            // Update the quote
+            $this->saveQuote();
+            
             $this->_helper->flashMessenger(array (
                     'success' => "Configuration synced successfully." 
             ));
@@ -765,19 +790,35 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         // Require that we have a quote object in the database to use this page
         $this->requireQuote();
         
+        $devicesSynced = 0;
         /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
         foreach ( $this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
             /* @var $quoteDevice Quotegen_Model_QuoteDevice */
             foreach ( $quoteDeviceGroup->getQuoteDevices() as $quoteDevice )
             {
-                $this->performSyncOnQuoteDevice($quoteDevice);
+                if ($this->performSyncOnQuoteDevice($quoteDevice))
+                {
+                    $devicesSynced ++;
+                }
             }
         }
         
-        $this->_helper->flashMessenger(array (
-                'success' => "All device configurations synced successfully. Note: If any device is no longer offered and has been deleted from the system, we have no way of syncing it." 
-        ));
+        if ($devicesSynced > 0)
+        {
+            // Update the quote
+            $this->saveQuote();
+            
+            $this->_helper->flashMessenger(array (
+                    'success' => "All device configurations synced successfully. Note: If any device is no longer offered and has been deleted from the system, we have no way of syncing it." 
+            ));
+        }
+        else
+        {
+            $this->_helper->flashMessenger(array (
+                    'warning' => 'No device configurations were synced. This could be caused by the devices no longer being in the system.' 
+            ));
+        }
         $this->_helper->redirector('index', null, null, array (
                 'quoteId' => $this->_quoteId 
         ));
@@ -837,6 +878,10 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         $quoteDeviceGroupPage->populate($form->getValues());
                         
                         Quotegen_Model_Mapper_QuoteDeviceGroupPage::getInstance()->insert($quoteDeviceGroupPage);
+                        
+                        // Update the quote
+                        $this->saveQuote();
+                        
                         $this->_helper->flashMessenger(array (
                                 'success' => "Pages successfully added." 
                         ));
@@ -900,6 +945,10 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         try
         {
             Quotegen_Model_Mapper_QuoteDeviceGroupPage::getInstance()->delete($quoteDeviceGroupPage);
+            
+            // Update the quote
+            $this->saveQuote();
+            
             $this->_helper->flashMessenger(array (
                     'success' => "Pages successfully deleted." 
             ));
@@ -973,6 +1022,10 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         try
         {
             Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->delete($quoteDeviceGroup);
+            
+            // Update the quote
+            $this->saveQuote();
+            
             $this->_helper->flashMessenger(array (
                     'success' => "Group successfully deleted." 
             ));
