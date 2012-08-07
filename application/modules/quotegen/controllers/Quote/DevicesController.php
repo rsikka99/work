@@ -817,38 +817,49 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         if ($request->isPost())
         {
             $values = $request->getPost();
-            if ($form->isValid($values))
+            
+            if (isset($values ['cancel']))
             {
-                try
-                {
-                    // Add pages
-                    $quoteDeviceGroupPage = new Quotegen_Model_QuoteDeviceGroupPage();
-                    $quoteDeviceGroupPage->setQuoteDeviceGroupId($quoteDeviceGroupId);
-                    $quoteDeviceGroupPage->populate($form->getValues());
-                    
-                    Quotegen_Model_Mapper_QuoteDeviceGroupPage::getInstance()->insert($quoteDeviceGroupPage);
-                    $this->_helper->flashMessenger(array (
-                            'success' => "Pages successfully added." 
-                    ));
-                    
-                    // Redirect
-                    $this->_helper->redirector('index', null, null, array (
-                            'quoteId' => $this->_quoteId 
-                    ));
-                }
-                catch ( Exception $e )
-                {
-                    $this->_helper->flashMessenger(array (
-                            'danger' => "There was an error saving. Please try again or contact your system administrator." 
-                    ));
-                }
+                // User has cancelled. We could do a redirect here if we wanted.
+                $this->_helper->redirector('index', null, null, array (
+                        'quoteId' => $this->_quoteId 
+                ));
             }
             else
             {
-                $form->buildBootstrapErrorDecorators();
-                $this->_helper->flashMessenger(array (
-                        'danger' => "Please correct the errors below to continue." 
-                ));
+                if ($form->isValid($values))
+                {
+                    try
+                    {
+                        // Add pages
+                        $quoteDeviceGroupPage = new Quotegen_Model_QuoteDeviceGroupPage();
+                        $quoteDeviceGroupPage->setQuoteDeviceGroupId($quoteDeviceGroupId);
+                        $quoteDeviceGroupPage->populate($form->getValues());
+                        
+                        Quotegen_Model_Mapper_QuoteDeviceGroupPage::getInstance()->insert($quoteDeviceGroupPage);
+                        $this->_helper->flashMessenger(array (
+                                'success' => "Pages successfully added." 
+                        ));
+                        
+                        // Redirect
+                        $this->_helper->redirector('index', null, null, array (
+                                'quoteId' => $this->_quoteId 
+                        ));
+                    }
+                    catch ( Exception $e )
+                    {
+                        $this->_helper->flashMessenger(array (
+                                'danger' => "There was an error saving. Please try again or contact your system administrator." 
+                        ));
+                    }
+                }
+                else
+                {
+                    $form->buildBootstrapErrorDecorators();
+                    $this->_helper->flashMessenger(array (
+                            'danger' => "Please correct the errors below to continue." 
+                    ));
+                }
             }
         }
         
