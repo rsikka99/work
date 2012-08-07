@@ -66,7 +66,7 @@ $this->headScript()->appendScript("$('i').popover();");
         
         <tr>
             <td colspan="5"></td>
-            <th style="text-align: right;"><?php echo $this->currency($quoteDeviceGroup->calculateGroupLeaseSubtotal()); ?></th>
+            <th style="text-align: right;"><?php echo $this->currency($quoteDeviceGroup->calculateGroupMonthlyLeasePrice()); ?></th>
         </tr>
         <?php if (count($quoteDeviceGroup->getPages()) > 0) : ?>
         <?php foreach ($quoteDeviceGroup->getPages() as $quoteDeviceGroupPage) : /* @var $quoteDeviceGroupPage Quotegen_Model_QuoteDeviceGroupPage */ ?>
@@ -79,6 +79,6 @@ $this->headScript()->appendScript("$('i').popover();");
         <?php endif; ?>
         </table>
         <?php endforeach; ?>
-        <h3>Quote Monthly Total: <?php echo $this->currency($quote->calculateQuoteLeaseSubtotal()); ?></h3>
+        <h3>Quote Monthly Total: <?php echo $this->currency($quote->calculateQuoteMonthlyLeaseSubtotal()); ?></h3>
     </div>
 </div>

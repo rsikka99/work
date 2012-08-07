@@ -105,7 +105,7 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
                         }
                         
                         // Determine the new lease factor
-                        $leaseQuoteTotal = $this->_quote->calculateQuoteLeaseSubtotal();
+                        $leaseQuoteTotal = $this->_quote->calculateQuoteMonthlyLeaseSubtotal();
                         $leasingSchemaTerm = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->find($formValues ['leasingSchemaTermId']);
                         $leasingSchema = $leasingSchemaTerm->getLeasingSchema();
                         $leasingSchemaRanges = $leasingSchema->getRanges();

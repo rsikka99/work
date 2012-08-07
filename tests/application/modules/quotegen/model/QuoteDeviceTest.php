@@ -111,28 +111,28 @@ class Quotegen_Model_QuoteDeviceTest extends PHPUnit_Framework_TestCase
     public function testCalculateSubtotal ()
     {
         $expectedAnswer = 1275;
-        $actualResult = $this->_quoteDevice->calculateSubtotal();
+        $actualResult = $this->_quoteDevice->calculatePurchaseSubtotal();
         $this->assertEquals($expectedAnswer, $actualResult);
     }
 
-    public function testCalculateSubtotalWithResidual ()
+    public function testCalculateLeaseValue ()
     {
         $expectedAnswer = 1225;
-        $actualResult = $this->_quoteDevice->calculateSubtotalWithResidual();
+        $actualResult = $this->_quoteDevice->calculateLeaseValue();
         $this->assertEquals($expectedAnswer, $actualResult);
     }
 
-    public function testCalculateLeasePrice ()
+    public function testCalculateMonthlyLeasePrice ()
     {
         $expectedAnswer = 61.25;
-        $actualResult = $this->_quoteDevice->calculateLeasePrice();
+        $actualResult = $this->_quoteDevice->calculateMonthlyLeasePrice();
         $this->assertEquals($expectedAnswer, $actualResult);
     }
 
-    public function testCalculateLeaseSubtotal ()
+    public function testCalculatePackageMonthlyLeasePrice ()
     {
         $expectedAnswer = 61;
-        $actualResult = $this->_quoteDevice->calculateLeaseSubtotal();
+        $actualResult = $this->_quoteDevice->calculatePackageMonthlyLeasePrice();
         $this->assertEquals($expectedAnswer, $actualResult);
     }
 }

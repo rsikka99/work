@@ -318,7 +318,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Sets the client's display name
      *
-     * @param $_clientDisplayName string           
+     * @param $_clientDisplayName string            
      */
     public function setClientDisplayName ($_clientDisplayName)
     {
@@ -437,7 +437,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
 
     /**
      *
-     * @param $_pageCoverageMonochrome number           
+     * @param $_pageCoverageMonochrome number            
      */
     public function setPageCoverageMonochrome ($_pageCoverageMonochrome)
     {
@@ -456,7 +456,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
 
     /**
      *
-     * @param $_pageCoverageColor number           
+     * @param $_pageCoverageColor number            
      */
     public function setPageCoverageColor ($_pageCoverageColor)
     {
@@ -475,7 +475,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
 
     /**
      *
-     * @param $_pricingConfigId number           
+     * @param $_pricingConfigId number            
      */
     public function setPricingConfigId ($_pricingConfigId)
     {
@@ -511,7 +511,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
 
     /**
      * Calculates the sub total for the quote's devices.
-     * This is the number used for the purchase total and the number that will be used to choose a leasing factor.
+     * This is the number used for the purchase total.
      *
      * @return number The sub total
      */
@@ -532,14 +532,14 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @return number The sub total
      */
-    public function calculateQuoteLeaseSubtotal ()
+    public function calculateQuoteMonthlyLeaseSubtotal ()
     {
         $subtotal = 0;
         
         /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
         foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
-            $subtotal += $quoteDeviceGroup->calculateGroupLeaseSubtotal();
+            $subtotal += $quoteDeviceGroup->calculateGroupMonthlyLeasePrice();
         }
         return $subtotal;
     }
@@ -549,14 +549,14 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @return number The sub total
      */
-    public function calculateQuoteSubtotalWithResidualsApplied ()
+    public function calculateQuoteLeaseValue ()
     {
         $subtotal = 0;
         
         /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
         foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
-            $subtotal += $quoteDeviceGroup->calculateGroupSubtotalWithResidualsApplied();
+            $subtotal += $quoteDeviceGroup->calculateGroupLeaseValue();
         }
         return $subtotal;
     }
@@ -640,6 +640,23 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     }
 
     /**
+     * Calculates the total price of pages for the quote
+     *
+     * @return number The monthly page price.
+     */
+    public function calculateTotalMonthlyPagePrice ()
+    {
+        $totalPrice = 0;
+        
+        /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
+        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        {
+            $totalPrice += $quoteDeviceGroup->calculateMonthlyPagePrice();
+        }
+        return $totalPrice;
+    }
+
+    /**
      * Gets the leasing schema term
      *
      * @return Quotegen_Model_LeasingSchemaTerm
@@ -660,7 +677,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Sets the leasing schema term
      *
-     * @param $_leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm           
+     * @param $_leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm            
      */
     public function setLeasingSchemaTerm ($_leasingSchemaTerm)
     {

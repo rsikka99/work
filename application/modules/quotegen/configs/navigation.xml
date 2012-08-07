@@ -92,7 +92,6 @@
                                 </builddevice>
                                 <adjustsettings>
                                     <label>Adjust Settings</label>
-                                    <class>dropdown</class>
                                     <module>quotegen</module>
                                     <controller>quote_settings</controller>
                                     <action>index</action>
@@ -134,6 +133,14 @@
                                         </orderList>
                                     </pages>
                                 </viewAndPrintReports>
+                                <debug>
+                                    <label>Debug Calculations</label>
+                                    <module>quotegen</module>
+                                    <controller>quote_debug</controller>
+                                    <action>index</action>
+                                    <resource>quotegen__quote_debug__index</resource>
+                                    <reset_params>0</reset_params>
+                                </debug>
                             </pages>
                         </quote>
                     </pages>

@@ -637,7 +637,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @return number The sub total
      */
-    public function calculateSubtotal ()
+    public function calculatePurchaseSubtotal ()
     {
         $subTotal = 0;
         $packagePrice = (float)$this->getPackagePrice();
@@ -657,7 +657,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @return number The sub total with a residual
      */
-    public function calculateSubtotalWithResidual ()
+    public function calculateLeaseValue ()
     {
         $subTotal = 0;
         $packagePrice = (float)$this->getPackagePrice();
@@ -678,7 +678,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @return number The lease price for a single device
      */
-    public function calculateLeasePrice ()
+    public function calculateMonthlyLeasePrice ()
     {
         $leasePrice = 0;
         $leaseRate = $this->getQuoteDeviceGroup()->getQuote()->getLeaseRate();
@@ -698,10 +698,10 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @return number The lease sub total
      */
-    public function calculateLeaseSubtotal ()
+    public function calculatePackageMonthlyLeasePrice ()
     {
         $subTotal = 0;
-        $leasePrice = (float)$this->calculateLeasePrice();
+        $leasePrice = (float)$this->calculateMonthlyLeasePrice();
         $quantity = $this->getQuantity();
         
         // Make sure both the price and quantity are greater than 0

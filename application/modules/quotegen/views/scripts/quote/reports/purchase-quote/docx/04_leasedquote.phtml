@@ -80,7 +80,7 @@ foreach ( $quoteDeviceGroups as $quoteDeviceGroup )
     $table->addRow($tcStyle->subtotal->rowheight);
     $table->addCell($tcStyle->cell1Width, $tcStyle->subtotal->cell1->cellStyle)->addText();
     $table->addCell($tcStyle->span23Width, $tcStyle->subtotal->cell2->cellStyle, 2)->addText($this->translate('Subtotal for group ' . $groupCount), $tcStyle->subtotal->cell2->fontStyle, $tcStyle->subtotal->cell2->paragraphStyle);
-    $table->addCell($tcStyle->cell4Width, $tcStyle->subtotal->cell3->cellStyle)->addText('$' . number_format($quoteDeviceGroup->calculateGroupLeaseSubtotal(), 2), $tcStyle->subtotal->cell3->fontStyle, $tcStyle->subtotal->cell3->paragraphStyle);
+    $table->addCell($tcStyle->cell4Width, $tcStyle->subtotal->cell3->cellStyle)->addText('$' . number_format($quoteDeviceGroup->calculateGroupMonthlyLeasePrice(), 2), $tcStyle->subtotal->cell3->fontStyle, $tcStyle->subtotal->cell3->paragraphStyle);
     
     foreach ( $quoteDeviceGroup->getPages() as $page )
     {
@@ -99,4 +99,4 @@ $table = $section->addTable($tcStyle->tablestyle);
 
 $table->addRow($tcStyle->monthlyTotal->rowheight);
 $table->addCell($tcStyle->span123Width, $tcStyle->monthlyTotal->cell1->cellStyle, 3)->addText($this->translate('Monthly Total'), $tcStyle->monthlyTotal->cell1->fontStyle, $tcStyle->monthlyTotal->cell1->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->monthlyTotal->cell2->cellStyle)->addText('$' . number_format($quote->calculateQuoteLeaseSubtotal(), 2), $tcStyle->monthlyTotal->cell2->fontStyle, $tcStyle->monthlyTotal->cell2->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->monthlyTotal->cell2->cellStyle)->addText('$' . number_format($quote->calculateQuoteMonthlyLeaseSubtotal(), 2), $tcStyle->monthlyTotal->cell2->fontStyle, $tcStyle->monthlyTotal->cell2->paragraphStyle);

@@ -74,7 +74,7 @@ $form = $this->element;
                     <?php if ($set->packagePrice->hasErrors()) :?></i><?php endif; ?>
                 </div>
             </td>
-            <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculateSubtotal()); ?></td>
+            <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculatePurchaseSubtotal()); ?></td>
             <td>
                 <div class="control-group <?php echo ($set->residual->hasErrors()) ? 'error' : ''; ?>">
                     <?php if ($set->residual->hasErrors()) :?><i class="" data-title="Error" data-placement="top" data-content="<?php echo implode('<br>', $set->residual->getMessages()); ?>"><?php endif; ?>
@@ -82,8 +82,8 @@ $form = $this->element;
                     <?php if ($set->residual->hasErrors()) :?></i><?php endif; ?>
                 </div>
             </td>
-            <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculateLeasePrice()); ?></td>
-            <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculateLeaseSubtotal()); ?></td>
+            <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculateMonthlyLeasePrice()); ?></td>
+            <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculatePackageMonthlyLeasePrice()); ?></td>
             <td>
                 <div class="btn-group">
                     <a href="#" class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i></a>
@@ -173,7 +173,7 @@ $form = $this->element;
         <th><?php echo $this->currency($quoteDeviceGroup->calculateGroupSubtotal()); ?></th>
         <th><?php echo $this->currency($quoteDeviceGroup->calculateTotalResidual()); ?></th>
         <th></th>
-        <th><?php echo $this->currency($quoteDeviceGroup->calculateGroupLeaseSubtotal()); ?></th>
+        <th><?php echo $this->currency($quoteDeviceGroup->calculateGroupMonthlyLeasePrice()); ?></th>
         <th></th>
     </tr>
     </table>
