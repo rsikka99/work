@@ -545,6 +545,7 @@ $leasedQuoteTable = (object)array (
         "col4Width" => 1083, 
         "span23Width" => 5688, 
         "spanAllWidth" => 9028, 
+        "span123Width" => 7945, 
         "header" => (object)array (
                 "rowheight" => null, 
                 "cell1" => (object)array (
@@ -744,19 +745,64 @@ $leasedQuoteTable = (object)array (
                                 "borderTopSize" => 1, 
                                 "borderRightSize" => 1, 
                                 "borderBottomSize" => 1, 
-                                "borderLeftSize" => 1, 
-                                "bgColor" => 'D9D9D9', 
-                                "valign" => 'center' 
+                                "borderLeftSize" => 1 
                         ), 
                         "fontStyle" => array (
-                                'bold' => true, 
                                 'name' => 'Calibri', 
                                 'size' => 11 
                         ), 
                         "paragraphStyle" => array (
+                                'spaceAfter' => 0, 
+                                'nospacing' => true 
+                        ) 
+                ), 
+                "cell2" => (object)array (
+                        "cellStyle" => array (
+                                "borderTopSize" => 1, 
+                                "borderRightSize" => 1, 
+                                "borderBottomSize" => 1, 
+                                "borderLeftSize" => 1 
+                        ), 
+                        "fontStyle" => array (
+                                'name' => 'Calibri', 
+                                'size' => 11 
+                        ), 
+                        "paragraphStyle" => array (
+                                'spaceAfter' => 0, 
+                                'nospacing' => true 
+                        ) 
+                ), 
+                "cell3" => (object)array (
+                        "cellStyle" => array (
+                                "borderTopSize" => 1, 
+                                "borderRightSize" => 1, 
+                                "borderBottomSize" => 1, 
+                                "borderLeftSize" => 1 
+                        ), 
+                        "fontStyle" => array (
+                                'name' => 'Calibri', 
+                                'size' => 11 
+                        ), 
+                        "paragraphStyle" => array (
+                                'spaceAfter' => 0, 
+                                'nospacing' => true 
+                        ) 
+                ), 
+                "cell4" => (object)array (
+                        "cellStyle" => array (
+                                "borderTopSize" => 1, 
+                                "borderRightSize" => 1, 
+                                "borderBottomSize" => 1, 
+                                "borderLeftSize" => 1 
+                        ), 
+                        "fontStyle" => array (
+                                'name' => 'Calibri', 
+                                'size' => 11 
+                        ), 
+                        "paragraphStyle" => array (
+                                'spaceAfter' => 0, 
                                 'nospacing' => true, 
-                                'align' => 'center', 
-                                'spaceAfter' => 0 
+                                'align' => 'right' 
                         ) 
                 ) 
         ), 
@@ -867,6 +913,43 @@ $leasedQuoteTable = (object)array (
                                 'spaceAfter' => 0 
                         ) 
                 ) 
+        ), 
+        "monthlyTotal" => (object)array (
+                "rowheight" => null, 
+                "cell1" => (object)array (
+                        "cellStyle" => array (
+                                "borderTopSize" => 1, 
+                                "borderRightSize" => 1, 
+                                "borderBottomSize" => 1, 
+                                "borderLeftSize" => 1, 
+                                "bgColor" => 'D9D9D9' 
+                        ), 
+                        "fontStyle" => array (
+                                'name' => 'Calibri', 
+                                'size' => 11 
+                        ), 
+                        "paragraphStyle" => 'nospacing' 
+                ), 
+                "cell2" => (object)array (
+                        "cellStyle" => array (
+                                "borderTopSize" => 1, 
+                                "borderRightSize" => 1, 
+                                "borderBottomSize" => 1, 
+                                "borderLeftSize" => 1, 
+                                "bgColor" => 'D9D9D9', 
+                                "valign" => 'center' 
+                        ), 
+                        "fontStyle" => array (
+                                'bold' => true, 
+                                'name' => 'Calibri', 
+                                'size' => 11 
+                        ), 
+                        "paragraphStyle" => array (
+                                'nospacing' => true, 
+                                'align' => 'right', 
+                                'spaceAfter' => 0 
+                        ) 
+                ) 
         ) 
 );
 
@@ -904,7 +987,8 @@ $this->partial("{$basePath}/03_evaluatingthetruecost.phtml", $data);
 $this->partial("{$basePath}/04_purchasequote.phtml", $data);
 $this->partial("{$basePath}/04_leasedquote.phtml", $data);
 
-$this->partial("{$basePath}/05_businessprint.phtml", $data);
+$this->partial("{$basePath}/05_businessprint.phtml
+", $data);
 
 $objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
 
