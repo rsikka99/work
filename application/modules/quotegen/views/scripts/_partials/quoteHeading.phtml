@@ -2,8 +2,8 @@
 <div class="page-header">
     <h1>Quote - <small><?php echo $quote->getClient()->getName(); ?></small></h1>
 </div>
-<?php echo $this->Quotemenu(); ?>
-<!-- 
+<?php echo $this->quoteMenu(); ?>
+<?php if (false) : /* Disabling this so it doesnt appear in code*/?>
 <div class="row">
     <div class="span4">
         <h3><?php echo $quote->getClient()->getName(); ?></h3>
@@ -23,13 +23,14 @@
     <div class="span4">
         <h3>Lease Specific Details</h3>
         <dl class="dl-horizontal">
-            <dt>Lease Subtotal:</dt><dd><?php echo $this->currency($quote->calculateQuoteLeaseValue()); ?></dd>
+            <dt>Quote Value:</dt><dd><?php echo $this->currency($quote->calculateQuoteLeaseValue()); ?></dd>
             <dt>Lease Term:</dt><dd><?php echo number_format($quote->getLeaseTerm()); ?> months</dd>
+            <dt>Lease Factor:</dt><dd><?php echo number_format($quote->getLeaseRate(), 4); ?></dd>
             <dt>Total Residual:</dt><dd><?php echo $this->currency($quote->calculateTotalResidual()); ?></dd>
             <dt>Monthly Payment:</dt><dd><?php echo $this->currency($quote->calculateQuoteMonthlyLeaseSubtotal()); ?></dd>
         </dl>
     </div>
 </div>
- -->
+ <?php endif; ?> 
 <?php endif; ?>
 

@@ -10,8 +10,8 @@ $id = $this->id;
     <ul class="nav nav-tabs">
     	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'edit', 'id' => $id ), null, true ); ?>">Details</a></li>
     	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'toners', 'id' => $id ), null, true ); ?>">Toners</a></li>
-    	<li class="active"><a href="#tab3" data-toggle="tab">Options</a></li>
-    	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'configurations', 'id' => $id ), null, true ); ?>">Configurations</a></li>
+    	<li class="active"><a href="#tab3" data-toggle="tab">Available Options</a></li>
+    	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'configurations', 'id' => $id ), null, true ); ?>">Hardware Configurations</a></li>
     </ul>
     <div class="tab-content">
 		<form name="frmOptions" id="frmOptions" action="" method="post">

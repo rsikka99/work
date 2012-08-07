@@ -71,8 +71,9 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         if ($device)
         {
             $sku = $device->getSku();
+            $form->getElement('can_sell')->setValue(true);
+        	$form->getElement('sku')->setValue($sku);
         }
-        $form->getElement('sku')->setValue($sku);
         
         // Make sure we are posting data
         $request = $this->getRequest();
@@ -112,10 +113,9 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         }
                         else
                         {
-                            //TODO: Delete Devices record if exists
-        // move delete logic into it's own function
-        // so it can be called from here and the deleteAction if needed
-        // ?? May be easier to turn on cascading deletes?
+                            // TODO: Delete Devices record if exists
+                            // Delete configurations and configuration options
+					        // ?? May be easier to turn on cascading deletes?
                             Quotegen_Model_Mapper_DeviceOption::getInstance()->deleteOptionsByDeviceId($masterDeviceId);
                             $devicemapper->delete($device);
                         }
