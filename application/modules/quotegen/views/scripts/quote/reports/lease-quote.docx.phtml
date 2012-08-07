@@ -1,13 +1,13 @@
 <?php
 
 // TODO: Remove hardcoded values
-$filename = 'purchase-quote.docx';
+$filename = 'lease-quote.docx';
 $savePath = PUBLIC_PATH . '/downloads/' . $filename;
 $linkToFile = $this->baseUrl('/downloads/' . $filename);
 
 // This may not need to be removed from here
 // Base path to the files used to render the document
-$basePath = 'quote/reports/purchase-quote/docx';
+$basePath = 'quote/reports/lease-quote/docx';
 $commonPartsBasePath = 'quote/reports/common/docx';
 
 $quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
@@ -262,7 +262,7 @@ $trueCostsTable = (object)array (
         ) 
 );
 
-$purchaseQuoteTable = (object)array (
+$leaseQuoteTable = (object)array (
         "tablestyle" => array (
                 'cellMarginTop' => 25, 
                 'cellMarginRight' => 100, 
@@ -716,7 +716,7 @@ $purchaseQuoteTable = (object)array (
 $styles = (object)array (
         "tables" => (object)array (
                 "truecosts" => $trueCostsTable, 
-                "quoteTable" => $purchaseQuoteTable 
+                "quoteTable" => $leaseQuoteTable 
         ) 
 );
 
@@ -739,7 +739,7 @@ $this->partial("{$commonPartsBasePath}/titlepage.phtml", $titledata);
 $this->partial("{$commonPartsBasePath}/evaluatingthetruecost.phtml", $data);
 
 // TODO: Some logic about showing the right quote to the client
-$this->partial("{$basePath}/purchasequote.phtml", $data);
+$this->partial("{$basePath}/leasedquote.phtml", $data);
 $this->partial("{$commonPartsBasePath}/businessprint.phtml", $data);
 
 $objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');

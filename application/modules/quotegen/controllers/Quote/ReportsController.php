@@ -5,6 +5,9 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
     public $contexts = array (
             'purchase-quote' => array (
                     'docx' 
+            ), 
+            'lease-quote' => array (
+                    'docx' 
             ) 
     );
 
