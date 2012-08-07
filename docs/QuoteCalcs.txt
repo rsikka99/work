@@ -1,0 +1,96 @@
+----------
+Intentions
+----------
+The intention of this document is to clarify calculations. If you think a calculation here is incorrect, please 
+refer to Lee Robert to double check.
+
+
+---------
+Variables
+---------
+Quote
+	Group[]
+		Package[]
+			Device
+				Option[]
+					Option Quantity
+					Option Cost
+					Option Included Quantity
+					Total Quantity
+					SubTotal
+			Device Cost
+		Package Cost
+		Package Margin
+		Package Price
+		Package Quantity
+		Package Residual
+		Package Purchase Subtotal
+		Package Lease Subtotal
+	GroupPages[]
+		Price Per Page
+		Included Quantity
+		Included Price
+	Group Monthly Page Price
+	Group Page Margin
+	Group Purchase Subtotal
+	Group Lease Subtotal
+Quote Purchase Subtotal
+Quote Lease Subtotal
+Quote Lease Monthly Payment
+
+
+--------------------------------------------
+Margin Calculation (Use 20%/0.20 as example)
+--------------------------------------------
+Applying a margin to a cost means that the price will be 20% profit and 80% cost. 
+If the margin is a whole number as percent (20%), then we need to convert it to decimal form (20 / 100 = 0.2)
+
+Cost / (1 - Margin) = Price
+100 / (1 - 0.20) = 125
+100 / (0.80) = 125
+
+As you can see, a 20% margin on 100 is not the same as a 20% markup.
+
+--------------------------------------
+Figuring out which lease factor to use
+--------------------------------------
+We have a leasing schema and we know the quote is attached to a term which has multiple ranges.
+Knowing the term allows us to take the total quote value to select the proper lease factor (lookup with lease range)
+
+Once we know the lease factor the calculation is actually extremely simple.
+
+Quote Total Value * Lease Factor = Monthly Payment 
+
+
+-----------------
+Quote Total Value
+-----------------
+So of course now you're asking how do we calculate the total quote value when leasing?
+
+I'll define each calculation below and how it progresses.
+
+Package Cost 				= (Device Cost + (Option Cost * Quantity))
+
+Package Price 				= Package Cost / (1 - Package Margin)
+
+Package Purchase Subtotal 	= Package Price * Quantity
+Package Lease Subtotal 		= (Package Price - Package Residual) * Quantity
+Package Total Residual 		= Package Residual * Quantity
+
+Group Purchase Subtotal 	= SUM(Package Purchase Subtotal)
+
+Note: This next calculation may not have the right calculation for pages, but this makes the most sense to me
+Group Lease Subtotal 		= SUM(Package Lease Subtotal) + SUM( (Page Included Price * Page Included Quantity * Lease Term) )
+
+
+Quote Purchase Subtotal 	= SUM(Group Purchase Subtotal)
+Quote Lease Subtotal 		= SUM(Group Lease Subtotal)
+
+Quote Value 				= Quote Lease Subtotal
+
+Quote Monthly Subtotal 		= Quote Lease Subtotal * Lease Factor
+
+
+
+
+

@@ -14,6 +14,7 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
      * Define the primary key of the model association
      */
     public $col_id = 'id';
+    public $col_quoteDeviceGroupId = 'quoteDeviceGroupId';
 
     /**
      * Gets an instance of the mapper
@@ -116,35 +117,28 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
      *            Quotegen_Model_Quote with an id
      * @return Quotegen_Model_QuoteDevice
      */
-    public function find ($object)
+    public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
-        $result = $this->getItemFromCache($object);
+        $result = $this->getItemFromCache($id);
         if ($result instanceof Quotegen_Model_QuoteDevice)
         {
             return $result;
         }
         
-        if ($object instanceof Quotegen_Model_Quote)
-        {
-            $object = array (
-                    "quoteId = ?" => $object->getId() 
-            );
-        }
-        
         // Assuming we don't have a cached object, lets go get it.
-        $result = $this->getDbTable()->find($object);
+        $result = $this->getDbTable()->find($id);
         if (0 == count($result))
         {
             return;
         }
         $row = $result->current();
-        $object = new Quotegen_Model_QuoteDevice($row->toArray());
+        $result = new Quotegen_Model_QuoteDevice($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($object);
+        $this->saveItemToCache($result);
         
-        return $object;
+        return $result;
     }
 
     /**
@@ -206,7 +200,7 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
     /**
      * Gets a where clause for filtering by id
      *
-     * @param unknown_type $id            
+     * @param $id unknown_type           
      * @return array
      */
     public function getWhereId ($id)
@@ -225,16 +219,16 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Gets all devices associated with a quote.
+     * Gets all devices associated with a quote
      *
-     * @param int $quoteId
-     *            The quote id
-     * @return multitype:Quotegen_Model_QuoteDevice The quote devices for the quote
+     * @param $quoteDeviceGroupId int
+     *            The quote device group id
+     * @return multitype:Quotegen_Model_QuoteDevice The quote devices for the quote device group
      */
-    public function fetchDevicesForQuote ($quoteId)
+    public function fetchDevicesForQuoteDeviceGroup ($quoteDeviceGroupId)
     {
         return $this->fetchAll(array (
-                'quoteId = ?' => $quoteId 
+                "{$this->col_quoteDeviceGroupId} = ?" => $quoteDeviceGroupId 
         ));
     }
 }

@@ -1,0 +1,83 @@
+<?php
+
+/* @var $quote Quotegen_Model_Quote */
+$quote = $this->quote;
+
+/**
+ * Solution - Solution 1: PrintIQ®
+ */
+/* @var $section PHPWord_Section */
+$section = $this->section;
+
+$section->addPageBreak();
+$section->addTitle($this->translate('Your PrintIQ Solution'), 1);
+
+$section->addText($this->translate('Below is a quote for the requested hardware:'));
+//TODO: Check wording for translate and number formats
+
+
+// List all devices per group
+$quoteDeviceGroups = $quote->getQuoteDeviceGroups();
+$groupCount = 0;
+/* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
+foreach ( $quoteDeviceGroups as $quoteDeviceGroup )
+{
+    $quoteDevices = $quoteDeviceGroup->getQuoteDevices();
+    
+    $tcStyle = $this->styles->tables->purchaseQuote;
+    $table = $section->addTable($tcStyle->tablestyle);
+    
+    $table->addRow($tcStyle->header->rowheight);
+    $table->addCell($tcStyle->col1Width, $tcStyle->header->cell1->cellStyle)->addText($this->translate('Item'), $tcStyle->header->cell1->fontStyle, $tcStyle->header->cell1->paragraphStyle);
+    $table->addCell($tcStyle->col2Width, $tcStyle->header->cell2->cellStyle)->addText($this->translate('SKU'), $tcStyle->header->cell2->fontStyle, $tcStyle->header->cell2->paragraphStyle);
+    $table->addCell($tcStyle->col3Width, $tcStyle->header->cell3->cellStyle)->addText($this->translate('Description and Features'), $tcStyle->header->cell3->fontStyle, $tcStyle->header->cell3->paragraphStyle);
+    $table->addCell($tcStyle->col4Width, $tcStyle->header->cell4->cellStyle)->addText($this->translate('Quantity'), $tcStyle->header->cell4->fontStyle, $tcStyle->header->cell4->paragraphStyle);
+    
+    /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+    foreach ( $quoteDevices as $quoteDevice )
+    {
+        
+        $device = $quoteDevice->getDevice();
+        $table->addRow($tcStyle->device->rowheight);
+        // Device Name
+        $table->addCell($tcStyle->col1Width, $tcStyle->device->cell1->cellStyle)->addText($this->translate($device->getMasterDevice()
+            ->getFullDeviceName()), $tcStyle->device->cell1->fontStyle, $tcStyle->device->cell1->paragraphStyle);
+        // Sku
+        $table->addCell($tcStyle->col2Width, $tcStyle->device->cell2->cellStyle)->addText($this->translate($device->getSku()), $tcStyle->device->cell2->fontStyle, $tcStyle->device->cell2->paragraphStyle);
+        // Description and features
+        $table->addCell($tcStyle->col3Width, $tcStyle->device->cell3->cellStyle)->addText($this->translate(), $tcStyle->device->cell3->fontStyle, $tcStyle->device->cell3->paragraphStyle);
+        // Quantity
+        $table->addCell($tcStyle->col4Width, $tcStyle->device->cell4->cellStyle)->addText($this->translate($quoteDevice->getQuantity()), $tcStyle->device->cell4->fontStyle, $tcStyle->device->cell4->paragraphStyle);
+        
+        // Get quote device options
+        $quoteDeviceOptions = $quoteDevice->getQuoteDeviceOptions();
+        
+        /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
+        foreach ( $quoteDeviceOptions as $quoteDeviceOption )
+        {
+            $table->addRow($tcStyle->option->rowheight);
+            $table->addCell($tcStyle->col1Width, $tcStyle->option->cell1->cellStyle)->addText($this->translate($quoteDeviceOption->getName()), $tcStyle->option->cell1->fontStyle, $tcStyle->option->cell1->paragraphStyle);
+            $table->addCell($tcStyle->col2Width, $tcStyle->option->cell2->cellStyle)->addText($this->translate($quoteDeviceOption->getSku()), $tcStyle->option->cell2->fontStyle, $tcStyle->option->cell2->paragraphStyle);
+            $table->addCell($tcStyle->col3Width, $tcStyle->option->cell3->cellStyle)->addText($this->translate($quoteDeviceOption->getDescription()), $tcStyle->option->cell3->fontStyle, $tcStyle->option->cell3->paragraphStyle);
+            $table->addCell($tcStyle->col4Width, $tcStyle->option->cell4->cellStyle)->addText($quoteDeviceOption->getQuantity(), $tcStyle->option->cell4->fontStyle, $tcStyle->option->cell4->paragraphStyle);
+        }
+    }
+
+	// Show subtotal line
+    $groupCount ++;
+    $table->addRow($tcStyle->subtotal->rowheight);
+    $table->addCell($tcStyle->cell1Width, $tcStyle->subtotal->cell1->cellStyle)->addText();
+    $table->addCell($tcStyle->span23Width, $tcStyle->subtotal->cell2->cellStyle,2)->addText($this->translate('Subtotal for group ' . $groupCount), $tcStyle->subtotal->cell2->fontStyle, $tcStyle->subtotal->cell2->paragraphStyle);
+    $table->addCell($tcStyle->cell4Width, $tcStyle->subtotal->cell3->cellStyle)->addText('$' . number_format($quoteDeviceGroup->calculateGroupSubtotal(), 2), $tcStyle->subtotal->cell3->fontStyle, $tcStyle->subtotal->cell3->paragraphStyle);
+    foreach ( $quoteDeviceGroup->getPages() as $page )
+    {
+        // Show pages amount
+        $table->addRow($tcStyle->cpp->rowheight);
+        $table->addCell($tcStyle->col1Width, $tcStyle->cpp->cell1->cellStyle)->addText($this->translate(), $tcStyle->cpp->cell1->fontStyle, $tcStyle->cpp->cell1->paragraphStyle);
+        $table->addCell($tcStyle->span23Width, $tcStyle->cpp->cell2->cellStyle,2)->addText($this->translate($page->getName() . ' overage rate'), $tcStyle->cpp->cell2->fontStyle, $tcStyle->cpp->cell2->paragraphStyle);
+        $table->addCell($tcStyle->col4Width, $tcStyle->cpp->cell3->cellStyle)->addText('$' . number_format($page->getPricePerPage(), 2), $tcStyle->cpp->cell3->fontStyle, $tcStyle->cpp->cell3->paragraphStyle);
+    }
+    
+    $section->addTextBreak();
+}
+

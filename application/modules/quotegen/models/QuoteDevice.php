@@ -21,7 +21,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @var int
      */
-    protected $_quoteId;
+    protected $_quoteDeviceGroupId;
     
     /**
      * A number representing margins
@@ -119,7 +119,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @var Quotegen_Model_Quote
      */
-    protected $_quote;
+    protected $_quoteDeviceGroup;
     
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
@@ -132,8 +132,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         }
         if (isset($params->id) && ! is_null($params->id))
             $this->setId($params->id);
-        if (isset($params->quoteId) && ! is_null($params->quoteId))
-            $this->setQuoteId($params->quoteId);
+        if (isset($params->quoteDeviceGroupId) && ! is_null($params->quoteDeviceGroupId))
+            $this->setQuoteDeviceGroupId($params->quoteDeviceGroupId);
         if (isset($params->margin) && ! is_null($params->margin))
             $this->setMargin($params->margin);
         if (isset($params->name) && ! is_null($params->name))
@@ -165,7 +165,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     {
         return array (
                 'id' => $this->getId(), 
-                'quoteId' => $this->getQuoteId(), 
+                'quoteDeviceGroupId' => $this->getQuoteDeviceGroupId(), 
                 'margin' => $this->getMargin(), 
                 'name' => $this->getName(), 
                 'sku' => $this->getSku(), 
@@ -205,22 +205,22 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     /**
      * Gets the quote id
      *
-     * @return number The quote id
+     * @return number The quote device group id
      */
-    public function getQuoteId ()
+    public function getQuoteDeviceGroupId ()
     {
-        return $this->_quoteId;
+        return $this->_quoteDeviceGroupId;
     }
 
     /**
      * Sets a quote id
      *
-     * @param number $_quoteId
-     *            The new quoteId
+     * @param number $_quoteDeviceGroupId
+     *            The new quote device group id
      */
-    public function setQuoteId ($_quoteId)
+    public function setQuoteDeviceGroupId ($_quoteDeviceGroupId)
     {
-        $this->_quoteId = $_quoteId;
+        $this->_quoteDeviceGroupId = $_quoteDeviceGroupId;
         return $this;
     }
 
@@ -637,7 +637,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @return number The sub total
      */
-    public function calculateSubtotal ()
+    public function calculatePurchaseSubtotal ()
     {
         $subTotal = 0;
         $packagePrice = (float)$this->getPackagePrice();
@@ -657,7 +657,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @return number The sub total with a residual
      */
-    public function calculateSubtotalWithResidual ()
+    public function calculateLeaseValue ()
     {
         $subTotal = 0;
         $packagePrice = (float)$this->getPackagePrice();
@@ -678,10 +678,10 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @return number The lease price for a single device
      */
-    public function calculateLeasePrice ()
+    public function calculateMonthlyLeasePrice ()
     {
         $leasePrice = 0;
-        $leaseRate = $this->getQuote()->getLeaseRate();
+        $leaseRate = $this->getQuoteDeviceGroup()->getQuote()->getLeaseRate();
         $packagePrice = (float)$this->getPackagePrice();
         $residual = (float)$this->getResidual();
         
@@ -698,10 +698,10 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @return number The lease sub total
      */
-    public function calculateLeaseSubtotal ()
+    public function calculatePackageMonthlyLeasePrice ()
     {
         $subTotal = 0;
-        $leasePrice = (float)$this->calculateLeasePrice();
+        $leasePrice = (float)$this->calculateMonthlyLeasePrice();
         $quantity = $this->getQuantity();
         
         // Make sure both the price and quantity are greater than 0
@@ -716,26 +716,26 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     /**
      * Gets the quote for this device
      *
-     * @return Quotegen_Model_Quote The quote
+     * @return Quotegen_Model_QuoteDeviceGroup The quote device group
      */
-    public function getQuote ()
+    public function getQuoteDeviceGroup ()
     {
-        if (! isset($this->_quote))
+        if (! isset($this->_quoteDeviceGroup))
         {
-            $this->_quote = Quotegen_Model_Mapper_Quote::getInstance()->find($this->getQuoteId());
+            $this->_quoteDeviceGroup = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->find($this->getQuoteDeviceGroupId());
         }
-        return $this->_quote;
+        return $this->_quoteDeviceGroup;
     }
 
     /**
      * Sets the quote for this device
      *
-     * @param Quotegen_Model_Quote $_quote
-     *            The quote
+     * @param Quotegen_Model_Mapper_QuoteDeviceGroup $_quoteDeviceGroup
+     *            The quote device group
      */
-    public function setQuote ($_quote)
+    public function setQuoteDeviceGroup ($_quoteDeviceGroup)
     {
-        $this->_quote = $_quote;
+        $this->_quoteDeviceGroup = $_quoteDeviceGroup;
         return $this;
     }
 }

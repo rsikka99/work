@@ -44,6 +44,21 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
      */
     public function init ()
     {
+        // Add the ability to have a docx context
+        $this->_helper->contextSwitch()->addContext('docx', array (
+                'suffix' => 'docx', 
+                'callbacks' => array (
+                        'init' => array (
+                                $this, 
+                                'initDocxContext' 
+                        ), 
+                        'post' => array (
+                                $this, 
+                                'postDocxContext' 
+                        ) 
+                ) 
+        ));
+        
         $this->_userId = Zend_Auth::getInstance()->getIdentity()->id;
         $this->_quoteSession = new Zend_Session_Namespace(Quotegen_Library_Controller_Quote::QUOTE_SESSION_NAMESPACE);
         
@@ -88,21 +103,13 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         return $this->_quoteId;
     }
 
-    protected function getDeviceConfiguration ($deviceConfigurationId)
-    {
-    }
-
-    protected function saveDeviceConfiguration ($walues)
-    {
-    }
-
     /**
      * Syncs a device configuration into a quote device for a quote.
      * If a device does not exist for the current quote it will create it for you.
      *
-     * @param Quotegen_Model_QuoteDevice $quoteDevice
+     * @param $quoteDevice Quotegen_Model_QuoteDevice
      *            The quote device to sync
-     * @param boolean $syncOptions
+     * @param $syncOptions boolean
      *            If set to true, it will sync the quote options associated with the quote device
      * @return boolean Returns true if the sync was successful. If it was false, chances are it is because there is no
      *         link between the quote device and a device in the system.
@@ -150,9 +157,9 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
     /**
      * Syncs a quote device with a device
      *
-     * @param Quotegen_Model_QuoteDevice $quoteDevice
+     * @param $quoteDevice Quotegen_Model_QuoteDevice
      *            The quote device that will be updated
-     * @param Quotegen_Model_Device $device
+     * @param $device Quotegen_Model_Device
      *            The device that we will use to update the quote device
      * @return Quotegen_Model_QuoteDevice The updated quote device
      */
@@ -175,9 +182,9 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
     /**
      * Syncs a quote device option with an option
      *
-     * @param Quotegen_Model_QuoteDeviceOption $quoteDeviceOption
+     * @param $quoteDeviceOption Quotegen_Model_QuoteDeviceOption
      *            The quote device option that will be updated
-     * @param Quotegen_Model_Option $option
+     * @param $option Quotegen_Model_Option
      *            The option to update the quote device option with
      * @return Quotegen_Model_Option The updated quote device option
      */
@@ -196,7 +203,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
      * Clones a device configuration for a quote.
      * (Favorite -> Quote Device Configuration)
      *
-     * @param int $deviceConfigurationId
+     * @param $deviceConfigurationId int
      *            The device configuration id to clone
      * @throws InvalidArgumentException
      * @return Quotegen_Model_DeviceConfiguration The new device configuration
@@ -231,7 +238,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
      * Gets a quote device and validates to ensure it is part of the current quote.
      * If it is not, then we redirect the user.
      *
-     * @param number $quoteDeviceId
+     * @param $quoteDeviceId number
      *            The quote device id
      * @return Ambigous <Quotegen_Model_QuoteDevice, void>
      */
@@ -253,7 +260,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         $quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($quoteDeviceId);
         
         // Validate that we have a quote device that is associated with the quote
-        if (! $quoteDevice || $quoteDevice->getQuoteId() !== $this->_quoteId)
+        if (! $quoteDevice || $quoteDevice->getQuoteDeviceGroup()->getQuoteId() !== $this->_quoteId)
         {
             $this->_helper->flashMessenger(array (
                     'warning' => 'You may only edit devices associated with this quote.' 
@@ -280,5 +287,38 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             ));
             $this->_helper->redirector('index', 'index');
         }
+    }
+
+    /**
+     * Checks to ensure we have a proper quote device group object id.
+     * If not we redirect to the index controller/action and leave the user a message to select a quote.
+     */
+    public function requireQuoteDeviceGroup ()
+    {
+        // Redirect if we don't have a quote id or a quote
+        if (! $this->_quoteId || ! $this->_quote)
+        {
+            $this->_helper->flashMessenger(array (
+                    'danger' => 'Invalid quote group selected!' 
+            ));
+            $this->_helper->redirector('index', null, null, array (
+                    'quoteId' => $this->_quoteId 
+            ));
+        }
+    }
+
+    /**
+     * Initializes the view to work with docx
+     */
+    public function initDocxContext ()
+    {
+        // Include php word and initialize a new instance
+        require_once ('PHPWord.php');
+        $this->view->phpword = new PHPWord();
+    }
+
+    public function postDocxContext ()
+    {
+        // TODO: Nothing to do in post yet
     }
 }

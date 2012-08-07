@@ -10,26 +10,33 @@ $this->headScript()->appendScript("$('i').popover();");
 </div>
 <div class="row">
     <div class="span12">
+        <?php foreach ($quote->getQuoteDeviceGroups() as $quoteDeviceGroup) : /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */ ?>
         <table class="table table-condensed table-bordered table-striped quoteDeviceTable">
                 <tr class="header-row">
-                    <th>Item</th>
-                    
+                    <th style="width: 220px;">Item</th>
+                    <th style="width: 140px;">Sku</th>
+                    <th>Description</th>
                     <th style="width: 80px;">Price</th>
                     <th style="width: 40px;">Qty</th>
                     <th style="width: 70px;">Subtotal</th>
                 </tr>
-                <?php foreach ($quote->getQuoteDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
+                
+                <?php foreach ($quoteDeviceGroup->getQuoteDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
                 <tr class="deviceRow">
-                    <th><h5><?php echo $quoteDevice->getName(); ?><br><small><?php echo $quoteDevice->getSku(); ?></small></h5></th>                
+                    <th><h5><?php echo $quoteDevice->getName(); ?></h5></th>
+                    <td><?php echo $quoteDevice->getSku(); ?></td>     
+                    <td></td>           
                     <td style="text-align: right;"><?php echo $this->currency($quoteDevice->getPackagePrice()); ?></td>
                     <td style="text-align: right;"><?php echo number_format($quoteDevice->getQuantity()); ?></td>
-                    <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculateSubtotal()); ?></td>
+                    <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculatePurchaseSubtotal()); ?></td>
                 </tr>
                 <?php if (count($quoteDevice->getQuoteDeviceOptions()) > 0) : ?>
                 
                 <?php foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
                 <tr class="optionRow">
-                    <td><?php echo $quoteDeviceOption->getName(); ?><i class="icon-info-sign pull-right" data-placement="right" data-title="<?php echo $quoteDeviceOption->getSku(); ?>" data-content="<?php echo $quoteDeviceOption->getDescription(); ?>"></i></td>
+                    <td><?php echo $quoteDeviceOption->getName(); ?></td>
+                    <td><?php echo $quoteDeviceOption->getSku(); ?></td>
+                    <td><?php echo $quoteDeviceOption->getDescription(); ?></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -39,10 +46,13 @@ $this->headScript()->appendScript("$('i').popover();");
                 <?php endif; ?>
             
         <?php endforeach; ?>
+        
         <tr>
-            <td colspan="3"></td>
-            <th style="text-align: right;"><?php echo $this->currency($quote->calculateQuoteSubtotal()); ?></th>
+            <td colspan="5"></td>
+            <th style="text-align: right;"><?php echo $this->currency($quoteDeviceGroup->calculateGroupSubtotal()); ?></th>
         </tr>
         </table>
+        <?php endforeach; ?>
+        <h3>Quote Total: <?php echo $this->currency($quote->calculateQuoteSubtotal()); ?></h3>
     </div>
 </div>

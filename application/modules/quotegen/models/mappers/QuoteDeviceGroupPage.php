@@ -1,24 +1,28 @@
 <?php
 
-class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstract
+class Quotegen_Model_Mapper_QuoteDeviceGroupPage extends My_Model_Mapper_Abstract
 {
+    /*
+     * Column name definitions. Define all columns up here and use them down below.
+     */
+    public $col_id = 'id';
+    public $col_quoteDeviceGroupId = 'quoteDeviceGroupId';
+    
+    /*
+     * Mapper Definitions
+     */
     /**
      * The default db table class to use
      *
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Quotegen_Model_DbTable_QuoteDeviceMonthlyPage';
-    
-    /*
-     * Define the primary key of the model association
-    */
-    public $col_quoteDeviceId = "quoteDeviceId";
+    protected $_defaultDbTable = 'Quotegen_Model_DbTable_QuoteDeviceGroupPage';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Quotegen_Model_Mapper_QuoteDeviceMonthlyPage
+     * @return Quotegen_Model_Mapper_QuoteDeviceGroupPage
      */
     public static function getInstance ()
     {
@@ -26,10 +30,10 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
     }
 
     /**
-     * Saves an instance of Quotegen_Model_QuoteDeviceMonthlyPage to the database.
+     * Saves an instance of Quotegen_Model_QuoteDeviceGroupPage to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Quotegen_Model_QuoteDeviceMonthlyPage
+     * @param $object Quotegen_Model_QuoteDeviceGroupPage
      *            The object to insert
      * @return mixed The primary key of the new row
      */
@@ -38,8 +42,13 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
         // Get an array of data to save
         $data = $object->toArray();
         
+        // Remove the id
+        unset($data [$this->col_id]);
+        
         // Insert the data
         $id = $this->getDbTable()->insert($data);
+        
+        $object->setId($id);
         
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -48,10 +57,10 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
     }
 
     /**
-     * Saves (updates) an instance of Quotegen_Model_QuoteDeviceMonthlyPage to the database.
+     * Saves (updates) an instance of Quotegen_Model_QuoteDeviceGroupPage to the database.
      *
-     * @param $object Quotegen_Model_QuoteDeviceMonthlyPage
-     *            The quoteDeviceMonthlyPage model to save to the database
+     * @param $object Quotegen_Model_QuoteDeviceGroupPage
+     *            The QuoteDeviceGroupPage model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
      * @return int The number of rows affected
@@ -62,12 +71,12 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
         
         if ($primaryKey === null)
         {
-            $primaryKey = $data [$this->col_quoteDeviceId];
+            $primaryKey = $data [$this->col_id];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                "{$this->col_quoteDeviceId} = ?" => $primaryKey 
+                "{$this->col_id} = ?" => $primaryKey 
         ));
         
         // Save the object into the cache
@@ -80,22 +89,22 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
      * Deletes rows from the database.
      *
      * @param $object mixed
-     *            This can either be an instance of Quotegen_Model_QuoteDeviceMonthlyPage or the
+     *            This can either be an instance of Quotegen_Model_QuoteDeviceGroupPage or the
      *            primary key to delete
      * @return mixed The number of rows deleted
      */
     public function delete ($object)
     {
-        if ($object instanceof Quotegen_Model_QuoteDeviceMonthlyPage)
+        if ($object instanceof Quotegen_Model_QuoteDeviceGroupPage)
         {
             $whereClause = array (
-                    "{$this->col_quoteDeviceId} = ?" => $object->getQuoteDeviceId() 
+                    "{$this->col_id} = ?" => $object->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    "{$this->col_quoteDeviceId} = ?" => $object 
+                    "{$this->col_id} = ?" => $object 
             );
         }
         
@@ -104,17 +113,17 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
     }
 
     /**
-     * Finds a quoteDeviceMonthlyPage based on it's primaryKey
+     * Finds a QuoteDeviceGroupPage based on it's primaryKey
      *
      * @param $id int
-     *            The id of the quoteDeviceMonthlyPage to find
-     * @return Quotegen_Model_QuoteDeviceMonthlyPage
+     *            The id of the QuoteDeviceGroupPage to find
+     * @return Quotegen_Model_QuoteDeviceGroupPage
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Quotegen_Model_QuoteDeviceMonthlyPage)
+        if ($result instanceof Quotegen_Model_QuoteDeviceGroupPage)
         {
             return $result;
         }
@@ -126,7 +135,7 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
             return;
         }
         $row = $result->current();
-        $object = new Quotegen_Model_QuoteDeviceMonthlyPage($row->toArray());
+        $object = new Quotegen_Model_QuoteDeviceGroupPage($row->toArray());
         
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -135,7 +144,7 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
     }
 
     /**
-     * Fetches a quoteDeviceMonthlyPage
+     * Fetches a QuoteDeviceGroupPage
      *
      * @param $where string|array|Zend_Db_Table_Select
      *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
@@ -143,7 +152,7 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
      *            OPTIONAL: A SQL ORDER clause.
      * @param $offset int
      *            OPTIONAL: A SQL OFFSET value.
-     * @return Quotegen_Model_QuoteDeviceMonthlyPage
+     * @return Quotegen_Model_QuoteDeviceGroupPage
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -153,7 +162,7 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
             return;
         }
         
-        $object = new Quotegen_Model_QuoteDeviceMonthlyPage($row->toArray());
+        $object = new Quotegen_Model_QuoteDeviceGroupPage($row->toArray());
         
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -162,7 +171,7 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
     }
 
     /**
-     * Fetches all quoteDeviceMonthlyPages
+     * Fetches all QuoteDeviceGroupPages
      *
      * @param $where string|array|Zend_Db_Table_Select
      *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
@@ -172,7 +181,7 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
      *            OPTIONAL: A SQL LIMIT count. (Defaults to 25)
      * @param $offset int
      *            OPTIONAL: A SQL LIMIT offset.
-     * @return multitype:Quotegen_Model_QuoteDeviceMonthlyPage
+     * @return multitype:Quotegen_Model_QuoteDeviceGroupPage
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -180,7 +189,7 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-            $object = new Quotegen_Model_QuoteDeviceMonthlyPage($row->toArray());
+            $object = new Quotegen_Model_QuoteDeviceGroupPage($row->toArray());
             
             // Save the object into the cache
             $this->saveItemToCache($object);
@@ -199,16 +208,30 @@ class Quotegen_Model_Mapper_QuoteDeviceMonthlyPage extends My_Model_Mapper_Abstr
     public function getWhereId ($id)
     {
         return array (
-                "{$this->col_quoteDeviceId} = ?" => $id 
+                "{$this->col_id} = ?" => $id 
         );
     }
-    
-    /*
+
+    /**
      * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return $object->getQuoteDeviceId();
+        return $object->getId();
+    }
+
+    /**
+     * Fetches all the pages for a quote device group
+     *
+     * @param int $quoteDeviceGroupId
+     *            The quote device group id
+     * @return Ambigous <multitype:Quotegen_Model_QuoteDeviceGroupPage, multitype:Quotegen_Model_QuoteDeviceGroupPage >
+     */
+    public function fetchAllPagesForQuoteDeviceGroup ($quoteDeviceGroupId)
+    {
+        return $this->fetchAll(array (
+                "{$this->col_quoteDeviceGroupId} = ?" => $quoteDeviceGroupId 
+        ));
     }
 }
 

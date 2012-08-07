@@ -88,7 +88,7 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
                     // Update current quote object and save new quote items to database
                     $this->_quote->populate($formValues);
                     
-                    if ((int)$formValues ['leasingSchemaTermId'] != (int)$leasingSchemaTerm->getId())
+                    if (!$leasingSchemaTerm || (int)$formValues ['leasingSchemaTermId'] != (int)$leasingSchemaTerm->getId())
                     {
                         $quoteLeaseTerm = new Quotegen_Model_QuoteLeaseTerm();
                         $quoteLeaseTerm->setQuoteId($this->_quote->getId());
@@ -105,7 +105,7 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
                         }
                         
                         // Determine the new lease factor
-                        $leaseQuoteTotal = $this->_quote->calculateQuoteLeaseSubtotal();
+                        $leaseQuoteTotal = $this->_quote->calculateQuoteMonthlyLeaseSubtotal();
                         $leasingSchemaTerm = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->find($formValues ['leasingSchemaTermId']);
                         $leasingSchema = $leasingSchemaTerm->getLeasingSchema();
                         $leasingSchemaRanges = $leasingSchema->getRanges();
@@ -133,7 +133,7 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
                         $this->_quote->setLeaseRate($leasingSchemaRate->getRate());
                     }
                     
-                    $quoteMapper = Quotegen_Model_Mapper_Quote::getInstance()->save($this->_quote, $this->_quote->getId());
+                    $this->saveQuote();
                     
                     $db->commit();
                     
