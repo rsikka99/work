@@ -57,6 +57,16 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                         ) 
                 ) 
         ));
+        
+        /*
+         * Is Quote Gen Device
+         */
+        $this->addElement('checkbox', 'can_sell', array (
+                'label' => 'Can Sell Device:', 
+                'filters' => array (
+                        'Boolean' 
+                ) 
+        ));
 
         /*
          * SKU
@@ -68,14 +78,18 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                         'StringTrim',
                         'StripTags'
                 ),
+                'allowEmpty' => false, 
                 'validators' => array (
+                        new Custom_Validate_FieldDependsOnValue('can_sell', '1', array (
+                                new Zend_Validate_NotEmpty()
+                        ),
                         array (
                                 'validator' => 'StringLength',
                                 'options' => array (
                                         1,
                                         255
                                 )
-                        )
+                        )) 
                 )
         ));
         
