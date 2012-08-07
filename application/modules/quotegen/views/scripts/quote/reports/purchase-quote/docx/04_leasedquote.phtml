@@ -14,7 +14,7 @@ $section->addTitle($this->translate('Your PrintIQ Solution'), 1);
 
 $section->addText($this->translate('Below is a quote for the requested hardware (leased):'));
 
-$tcStyle = $this->styles->tables->leasedQuote;
+$tcStyle = $this->styles->tables->quoteTable;
 
 //TODO: Check wording for translate and number formats
 
@@ -68,7 +68,7 @@ foreach ( $quoteDeviceGroups as $quoteDeviceGroup )
     foreach ( $quoteDeviceGroup->getPages() as $page )
     {
         // Show pages amount
-        $table->addRow($tcStyle->option->rowheight);
+        $table->addRow($tcStyle->pages->rowheight);
         $table->addCell($tcStyle->col1Width, $tcStyle->pages->cell1->cellStyle)->addText($this->translate($page->getName()), $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
         $table->addCell($tcStyle->col2Width, $tcStyle->pages->cell2->cellStyle)->addText($this->translate($page->getSku()), $tcStyle->pages->cell2->fontStyle, $tcStyle->pages->cell2->paragraphStyle);
         $table->addCell($tcStyle->col3Width, $tcStyle->pages->cell3->cellStyle)->addText($this->translate('Pages Included'), $tcStyle->pages->cell3->fontStyle, $tcStyle->pages->cell3->paragraphStyle);
@@ -94,9 +94,7 @@ foreach ( $quoteDeviceGroups as $quoteDeviceGroup )
 }
 
 // Show monthly total
-$tcStyle = $this->styles->tables->purchaseQuote;
 $table = $section->addTable($tcStyle->tablestyle);
-
 $table->addRow($tcStyle->monthlyTotal->rowheight);
 $table->addCell($tcStyle->span123Width, $tcStyle->monthlyTotal->cell1->cellStyle, 3)->addText($this->translate('Monthly Total'), $tcStyle->monthlyTotal->cell1->fontStyle, $tcStyle->monthlyTotal->cell1->paragraphStyle);
 $table->addCell($tcStyle->col4Width, $tcStyle->monthlyTotal->cell2->cellStyle)->addText('$' . number_format($quote->calculateQuoteMonthlyLeaseSubtotal(), 2), $tcStyle->monthlyTotal->cell2->fontStyle, $tcStyle->monthlyTotal->cell2->paragraphStyle);
