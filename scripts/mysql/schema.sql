@@ -1316,7 +1316,9 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_devices` (
   INDEX `quoteId` (`quoteDeviceGroupId` ASC) ,
   CONSTRAINT `quotegen_quote_devices_ibfk_1`
     FOREIGN KEY (`quoteDeviceGroupId` )
-    REFERENCES `qgen_quote_device_groups` (`id` ))
+    REFERENCES `qgen_quote_device_groups` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 7
 DEFAULT CHARACTER SET = utf8;
