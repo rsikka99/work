@@ -55,15 +55,7 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
             {
                 if ($form->isValid($values))
                 {
-                    $quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($quote);
-				                    
-                    // Delete entry from QuoteDeviceOption
-                    $quoteDeviceOption = new Quotegen_Model_QuoteDeviceOption();
-                    Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->deleteAllOptionsForQuoteDevice($quoteDevice->getId());
-                    
-                    // Delete entry from QuoteDevice
-                    Quotegen_Model_Mapper_QuoteDevice::getInstance()->delete($quoteDevice);
-                                        
+            
                     $quoteMapper->delete($quote);
                     
                     $this->_helper->flashMessenger(array (
