@@ -1290,8 +1290,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_device_groups` (
   CONSTRAINT `quotegen_quote_device_groups_ibfk_1`
     FOREIGN KEY (`quoteId` )
     REFERENCES `qgen_quotes` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -1338,7 +1338,9 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_device_options` (
   INDEX `quoteDeviceId` (`quoteDeviceId` ASC) ,
   CONSTRAINT `quotegen_quote_device_options_ibfk_1`
     FOREIGN KEY (`quoteDeviceId` )
-    REFERENCES `qgen_quote_devices` (`id` ))
+    REFERENCES `qgen_quote_devices` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 14
 DEFAULT CHARACTER SET = utf8;
@@ -1522,8 +1524,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_device_group_pages` (
   CONSTRAINT `fk_qgen_quote_device_group_pages_qgen_quote_device_groups1`
     FOREIGN KEY (`quoteDeviceGroupId` )
     REFERENCES `qgen_quote_device_groups` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 

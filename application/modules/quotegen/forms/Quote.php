@@ -41,7 +41,7 @@ class Quotegen_Form_Quote extends EasyBib_Form
         
         $this->addElement('text', 'clientDisplayName', array (
                 'label' => 'Client Display Name:', 
-                'required' => true, 
+                'required' => false, 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -55,11 +55,6 @@ class Quotegen_Form_Quote extends EasyBib_Form
                                 ) 
                         ) 
                 ) 
-        ));
-        
-        $this->addElement('checkbox', 'isLeased', array (
-                'label' => 'Leased Quote', 
-                'required' => true 
         ));
         
         // Add the submit button

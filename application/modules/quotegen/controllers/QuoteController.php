@@ -86,8 +86,10 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
                 {
                     if ($form->isValid($values))
                     {
+                        $db = Zend_Db_Table::getDefaultAdapter();
                         try
                         {
+                            $db->beginTransaction();
                             $userId = Zend_Auth::getInstance()->getIdentity()->id;
                             $userQuoteSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting($userId);
                             
@@ -108,6 +110,15 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
                             
                             $quoteId = Quotegen_Model_Mapper_Quote::getInstance()->insert($quote);
                             
+                            $quoteDeviceGroup = new Quotegen_Model_QuoteDeviceGroup();
+                            
+                            $quoteDeviceGroup->setQuoteId($quoteId);
+                            $quoteDeviceGroup->setPageMargin($quoteSetting->getPageMargin());
+                            
+                            $quoteDeviceGroupId = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->insert($quoteDeviceGroup);
+                            
+                            $db->commit();
+                            
                             // Redirect to the build controller
                             $this->_helper->redirector('index', 'quote_devices', null, array (
                                     'quoteId' => $quoteId 
@@ -115,6 +126,8 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
                         }
                         catch ( Exception $e )
                         {
+                            $db->rollBack();
+                            
                             $this->_helper->flashMessenger(array (
                                     'danger' => 'There was an error processing this request.  Please try again.' 
                             ));
@@ -138,91 +151,6 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
             }
         }
         $this->view->form = $form;
-    }
-
-    public function editAction ()
-    {
-        $quoteId = $this->_getParam('id', false);
-        
-        // If they haven't provided an id, send them back to the view all quote
-        // page
-        if (! $quoteId)
-        {
-            $this->_helper->flashMessenger(array (
-                    'warning' => 'Please select a quote to edit first.' 
-            ));
-            $this->_helper->redirector('index');
-        }
-        
-        // Get the quote
-        $mapper = new Quotegen_Model_Mapper_Quote();
-        $quote = $mapper->find($quoteId);
-        // If the quote doesn't exist, send them back t the view all quotes page
-        if (! $quote)
-        {
-            $this->_helper->flashMessenger(array (
-                    'danger' => 'There was an error selecting the quote to edit.' 
-            ));
-            $this->_helper->redirector('index');
-        }
-        
-        // Create a new form with the mode and roles set
-        $form = new Quotegen_Form_Quote();
-        
-        // Prepare the data for the form
-        $request = $this->getRequest();
-        $form->populate($quote->toArray());
-        
-        // Make sure we are posting data
-        if ($request->isPost())
-        {
-            // Get the post data
-            $values = $request->getPost();
-            
-            // If we cancelled we don't need to validate anything
-            if (! isset($values ['cancel']))
-            {
-                try
-                {
-                    // Validate the form
-                    if ($form->isValid($values))
-                    {
-                        $mapper = new Quotegen_Model_Mapper_Quote();
-                        $quote = new Quotegen_Model_Quote();
-                        $quote->populate($values);
-                        $quote->setId($quoteId);
-                        
-                        // Save to the database with cascade insert turned on
-                        $quoteId = $mapper->save($quote, $quoteId);
-                        
-                        $this->_helper->flashMessenger(array (
-                                'success' => "Quote was updated sucessfully." 
-                        ));
-                    }
-                    else
-                    {
-                        throw new InvalidArgumentException("Please correct the errors below");
-                    }
-                }
-                catch ( InvalidArgumentException $e )
-                {
-                    $this->_helper->flashMessenger(array (
-                            'danger' => $e->getMessage() 
-                    ));
-                }
-            }
-            else
-            {
-                // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
-            }
-        }
-        $this->view->form = $form;
-    }
-
-    public function viewAction ()
-    {
-        $this->view->quote = Quotegen_Model_Mapper_Quote::getInstance()->find($this->_getParam('id', false));
     }
 }
 
