@@ -2,6 +2,7 @@
 
 class Quotegen_Form_Quote extends EasyBib_Form
 {
+    protected $_leasingSchemaId;
 
     public function init ()
     {
@@ -40,36 +41,139 @@ class Quotegen_Form_Quote extends EasyBib_Form
         $this->addElement($clients);
         
         $this->addElement('text', 'clientDisplayName', array (
-                'label' => 'Client Display Name:', 
-                'required' => false, 
+                'label' => 'Display Name:', 
+                'filters' => array (
+                        'StringTrim', 
+                        'StripTags' 
+                ) 
+        ));
+        
+        $leasingSchemas = array ();
+        $leasingSchemaId = null;
+        /* @var $leasingSchema Quotegen_Model_LeasingSchema */
+        foreach ( Quotegen_Model_Mapper_LeasingSchema::getInstance()->fetchAll() as $leasingSchema )
+        {
+            if (! $leasingSchemaId)
+            {
+                $leasingSchemaId = $leasingSchema->getId();
+            }
+            $leasingSchemas [$leasingSchema->getId()] = $leasingSchema->getName();
+        }
+        
+        if ($this->_leasingSchemaId)
+        {
+            $leasingSchemaId = $this->_leasingSchemaId;
+        }
+        
+        $this->addElement('select', 'leasingSchemaId', array (
+                'label' => 'Leasing Schema:', 
+                'multiOptions' => $leasingSchemas, 
+                'required' => true, 
+                'value' => $leasingSchemaId 
+        ));
+        
+        $leasingSchema = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($leasingSchemaId);
+        $leasingSchemaTerms = array ();
+        if ($leasingSchema)
+        {
+            /* @var $leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm */
+            foreach ( $leasingSchema->getTerms() as $leasingSchemaTerm )
+            {
+                $leasingSchemaTerms [$leasingSchemaTerm->getId()] = $leasingSchemaTerm->getMonths();
+            }
+        }
+        
+        $this->addElement('select', 'leasingSchemaTermId', array (
+                'label' => 'Lease Term:', 
+                'multiOptions' => $leasingSchemaTerms, 
+                'required' => true 
+        ));
+        
+        $pageCoverageColor = $this->createElement('text', 'pageCoverageColor', array (
+                'label' => 'Page Covereage Color:', 
+                'class' => 'span1', 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
                 ), 
                 'validators' => array (
                         array (
-                                'validator' => 'StringLength', 
+                                'validator' => 'Between', 
                                 'options' => array (
-                                        1, 
-                                        255 
+                                        'min' => 0, 
+                                        'max' => 100, 
+                                        'inclusive' => false 
                                 ) 
-                        ) 
+                        ), 
+                        'Float' 
                 ) 
         ));
         
-        // Add the submit button
-        $this->addElement('submit', 'submit', array (
-                'ignore' => true, 
-                'label' => 'Save & Continue' 
+        $pageCoverageMonochrome = $this->createElement('text', 'pageCoverageMonochrome', array (
+                'label' => 'Page Coverage Monochrome:', 
+                'class' => 'span1', 
+                'filters' => array (
+                        'StringTrim', 
+                        'StripTags' 
+                ), 
+                'validators' => array (
+                        array (
+                                'validator' => 'Between', 
+                                'options' => array (
+                                        'min' => 0, 
+                                        'max' => 100, 
+                                        'inclusive' => false 
+                                ) 
+                        ), 
+                        'Float' 
+                ) 
         ));
         
-        // Add the cancel button
+        $this->addElement($pageCoverageColor);
+        $this->addElement($pageCoverageMonochrome);
+        
+        // Get resolved system settings
+        $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
+        $userSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
+        $quoteSetting->applyOverride($userSetting);
+        
+        $pageCoverageColor->setDescription($quoteSetting->getPageCoverageColor());
+        $pageCoverageMonochrome->setDescription($quoteSetting->getPageCoverageMonochrome());
+        
+        $pricingConfigDropdown = new Zend_Form_Element_Select('pricingConfigId', array (
+                'label' => 'Toner Preference:' 
+        ));
+        
+        /* @var $princingConfig Proposalgen_Model_PricingConfig */
+        foreach ( Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll() as $pricingConfig )
+        {
+            $pricingConfigDropdown->addMultiOption($pricingConfig->getPricingConfigId(), $pricingConfig->getConfigName());
+        }
+        $this->addElement($pricingConfigDropdown);
+        
+        $pricingConfigDropdown->setDescription($quoteSetting->getPricingConfigId());
+        
+        // Add the submit button and cancel button
+        $this->addElement('submit', 'submit', array (
+                'ignore' => true, 
+                'label' => 'Create' 
+        ));
         $this->addElement('submit', 'cancel', array (
                 'ignore' => true, 
                 'label' => 'Cancel' 
-        ));        
-
-        
+        ));
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
+    }
+
+    public function loadDefaultDecorators ()
+    {
+        $this->setDecorators(array (
+                array (
+                        'ViewScript', 
+                        array (
+                                'viewScript' => 'index/form/quote.phtml' 
+                        ) 
+                ) 
+        ));
     }
 }

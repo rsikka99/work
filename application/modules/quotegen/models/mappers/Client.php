@@ -9,13 +9,13 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
      *
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_Client';
-
+    
     /*
      * Define the primary key of the model association
-    */
+     */
     public $col_id = 'id';
-    
-    
+    public $col_name = 'name';
+
     /**
      * Gets an instance of the mapper
      *
@@ -215,6 +215,19 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->getId();
+    }
+
+    /**
+     * Fetches all clients available to the user
+     *
+     * @param int $userId
+     *            The user's id (May be company id in the future)
+     * @return multitype:Quotegen_Model_Client
+     */
+    public function fetchAllClientsAvailableToUser ($userId)
+    {
+        // TODO: When we move to user/company based clients we will filter it here for them
+        return $this->fetchAll(null, "$this->col_name ASC");
     }
 }
 

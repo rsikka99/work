@@ -117,32 +117,40 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
     {
         $quoteLeaseValue = (float)$this->_quote->calculateQuoteLeaseValue();
         $leasingSchemaTerm = $this->_quote->getLeasingSchemaTerm();
-        $leasingSchema = $leasingSchemaTerm->getLeasingSchema();
-        $leasingSchemaRanges = $leasingSchema->getRanges();
-        
-        $selectedRange = false;
-        /* @var $leasingSchemaRange Quotegen_Model_LeasingSchemaRange */
-        foreach ( $leasingSchemaRanges as $leasingSchemaRange )
+        if ($leasingSchemaTerm)
         {
-            $selectedRange = $leasingSchemaRange;
-            if ((float)$leasingSchemaRange->getStartRange() <= $quoteLeaseValue)
+            $leasingSchema = $leasingSchemaTerm->getLeasingSchema();
+            if ($leasingSchema)
             {
-                
-                break;
+                $leasingSchemaRanges = $leasingSchema->getRanges();
+                if (count($leasingSchemaRanges) > 0)
+                {
+                    $selectedRange = false;
+                    /* @var $leasingSchemaRange Quotegen_Model_LeasingSchemaRange */
+                    foreach ( $leasingSchemaRanges as $leasingSchemaRange )
+                    {
+                        $selectedRange = $leasingSchemaRange;
+                        if ((float)$leasingSchemaRange->getStartRange() <= $quoteLeaseValue)
+                        {
+                            
+                            break;
+                        }
+                    }
+                    
+                    if ($selectedRange)
+                    {
+                        // Get the rate
+                        $leasingSchemaRate = new Quotegen_Model_LeasingSchemaRate();
+                        $leasingSchemaRate->setLeasingSchemaRangeId($selectedRange->getId());
+                        $leasingSchemaRate->setLeasingSchemaTermId($leasingSchemaTerm->getId());
+                        
+                        $rateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
+                        $leasingSchemaRate = $rateMapper->find($rateMapper->getPrimaryKeyValueForObject($leasingSchemaRate));
+                        $this->_quote->setLeaseTerm($leasingSchemaTerm->getMonths());
+                        $this->_quote->setLeaseRate($leasingSchemaRate->getRate());
+                    }
+                }
             }
-        }
-        
-        if ($selectedRange)
-        {
-            // Get the rate
-            $leasingSchemaRate = new Quotegen_Model_LeasingSchemaRate();
-            $leasingSchemaRate->setLeasingSchemaRangeId($selectedRange->getId());
-            $leasingSchemaRate->setLeasingSchemaTermId($leasingSchemaTerm->getId());
-            
-            $rateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
-            $leasingSchemaRate = $rateMapper->find($rateMapper->getPrimaryKeyValueForObject($leasingSchemaRate));
-            $this->_quote->setLeaseTerm($leasingSchemaTerm->getMonths());
-            $this->_quote->setLeaseRate($leasingSchemaRate->getRate());
         }
     }
 
