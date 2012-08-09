@@ -103,34 +103,6 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
                         {
                             Quotegen_Model_Mapper_QuoteLeaseTerm::getInstance()->insert($quoteLeaseTerm);
                         }
-                        
-                        // Determine the new lease factor
-                        $leaseQuoteTotal = $this->_quote->calculateQuoteMonthlyLeaseSubtotal();
-                        $leasingSchemaTerm = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->find($formValues ['leasingSchemaTermId']);
-                        $leasingSchema = $leasingSchemaTerm->getLeasingSchema();
-                        $leasingSchemaRanges = $leasingSchema->getRanges();
-                        
-                        $selectedRange = false;
-                        /* @var $leasingSchemaRange Quotegen_Model_LeasingSchemaRange */
-                        foreach ( $leasingSchemaRanges as $leasingSchemaRange )
-                        {
-                            $selectedRange = $leasingSchemaRange;
-                            
-                            if ($leaseQuoteTotal >= (float)$leasingSchemaRange->getStartRange())
-                            {
-                                break;
-                            }
-                        }
-                        
-                        // Get the rate
-                        $leasingSchemaRate = new Quotegen_Model_LeasingSchemaRate();
-                        $leasingSchemaRate->setLeasingSchemaRangeId($selectedRange->getId());
-                        $leasingSchemaRate->setLeasingSchemaTermId($leasingSchemaTerm->getId());
-                        
-                        $rateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
-                        $leasingSchemaRate = $rateMapper->find($rateMapper->getPrimaryKeyValueForObject($leasingSchemaRate));
-                        $this->_quote->setLeaseTerm($leasingSchemaTerm->getMonths());
-                        $this->_quote->setLeaseRate($leasingSchemaRate->getRate());
                     }
                     
                     $this->saveQuote();

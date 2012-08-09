@@ -12,26 +12,27 @@
             <pages>
                 <quotes>
                     <label>Quotes</label>
+                    <id>indexmenu</id>
                     <class>dropdown</class>
                     <module>quotegen</module>
                     <controller>quote</controller>
                     <action>index</action>
                     <resource>quotegen__quote__index</resource>
                     <pages>
-                        <viewall>
-                            <label>View All</label>
-                            <module>quotegen</module>
-                            <controller>quote</controller>
-                            <action>index</action>
-                            <resource>quotegen__quote__index</resource>
-                        </viewall>
                         <create>
-                            <label>Create New</label>
+                            <label>Create New Quote</label>
                             <module>quotegen</module>
-                            <controller>quote</controller>
-                            <action>create</action>
-                            <resource>quotegen__quote__create</resource>
+                            <controller>index</controller>
+                            <action>index</action>
+                            <resource>quotegen__index__index</resource>
                         </create>
+                        <existingQuote>
+                            <label>Existing Quote</label>
+                            <module>quotegen</module>
+                            <controller>index</controller>
+                            <action>existing-quote</action>
+                            <resource>quotegen__index__existing-quote</resource>
+                        </existingQuote>
                         <quote>
                             <id>quotemenu</id>
                             <label>Current Quote</label>
@@ -171,6 +172,13 @@
                     <action>index</action>
                     <resource>quotegen__administration__index</resource>
                     <pages>
+                        <managequotes>
+                            <label>Manage Quotes</label>
+                            <module>quotegen</module>
+                            <controller>quote</controller>
+                            <action>index</action>
+                            <resource>quotegen__quote__index</resource>
+                        </managequotes>
                         <configuration>
                             <label>Configuration</label>
                             <module>quotegen</module>
