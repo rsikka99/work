@@ -126,7 +126,10 @@ class Quotegen_Model_QuoteDeviceConfigurationOption extends My_Model_Abstract
     {
         if (! isset($this->_deviceOption))
         {
-            $this->_deviceOption = Quotegen_Model_Mapper_DeviceOption::getInstance()->find($this->getOptionId(), $this->getMasterDeviceId());
+            $this->_deviceOption = Quotegen_Model_Mapper_DeviceOption::getInstance()->find(array (
+                    $this->getMasterDeviceId(), 
+                    $this->getOptionId() 
+            ));
         }
         return $this->_deviceOption;
     }

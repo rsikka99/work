@@ -185,10 +185,10 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             foreach ( $quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption )
             {
                 // Only sync options that still have a link back to the master
-                $option = $quoteDeviceOption->getDeviceOption();
-                if ($option)
+                $deviceOption = $quoteDeviceOption->getDeviceOption();
+                if ($deviceOption)
                 {
-                    $quoteDeviceOption = $this->syncOption($quoteDeviceOption, $option);
+                    $quoteDeviceOption = $this->syncOption($quoteDeviceOption, $deviceOption);
                     Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->save($quoteDeviceOption);
                 }
             }
@@ -242,10 +242,14 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
     protected function syncOption (Quotegen_Model_QuoteDeviceOption $quoteDeviceOption, Quotegen_Model_DeviceOption $deviceOption)
     {
         // Copy the option
-        $quoteDeviceOption->setSku($deviceOption->getOption()->getSku());
-        $quoteDeviceOption->setName($deviceOption->getOption()->getName());
-        $quoteDeviceOption->setDescription($deviceOption->getOption()->getDescription());
-        $quoteDeviceOption->setCost($deviceOption->getOption()->getCost());
+        $quoteDeviceOption->setSku($deviceOption->getOption()
+            ->getSku());
+        $quoteDeviceOption->setName($deviceOption->getOption()
+            ->getName());
+        $quoteDeviceOption->setDescription($deviceOption->getOption()
+            ->getDescription());
+        $quoteDeviceOption->setCost($deviceOption->getOption()
+            ->getCost());
         $quoteDeviceOption->setIncludedQuantity($deviceOption->getIncludedQuantity());
         
         return $quoteDeviceOption;
@@ -374,7 +378,6 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             $quoteDeviceOption->setQuoteDeviceId($quoteDeviceId);
             $quoteDeviceOption->setQuantity($option->getQuantity());
             $quoteDeviceOption->setIncludedQuantity($option->getQuantity());
-            
         }
         
         return true;
