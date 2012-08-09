@@ -556,7 +556,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         else
                         {
                             $this->_helper->flashMessenger(array (
-                                    'success' => "Device configuration '{$quoteDevice->getId()}' was updated sucessfully." 
+                                    'success' => "Device configuration was updated successfully." 
                             ));
                             
                             // Send back to the main list if they are finished
