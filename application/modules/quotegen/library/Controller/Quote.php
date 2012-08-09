@@ -350,36 +350,77 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
      *            The device configuration to clone
      * @param Quotegen_Model_QuoteDeviceGroup $quoteDeviceGroup
      *            The quote device group to clone to
-     * @return boolean
+     * @return int The quote device id, or false on error
      */
-    public function cloneFavoriteDeviceToQuote ($favoriteDevice, $quoteDeviceGroup)
+    public function cloneFavoriteDeviceToQuote ($favoriteDevice, $quoteDeviceGroup, $defaultMargin = 20)
     {
-        // If it's not an object, it must be an id, so try and find it
-        if (! ($favoriteDevice instanceof Quotegen_Model_DeviceConfiguration))
+        try
         {
-            $favoriteDevice = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($favoriteDevice);
+            // If it's not an object, it must be an id, so try and find it
+            if (! ($favoriteDevice instanceof Quotegen_Model_DeviceConfiguration))
+            {
+                $favoriteDevice = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($favoriteDevice);
+            }
+            
+            // If it's not an object, it must be an id, so try and find it
+            if (! ($quoteDeviceGroup instanceof Quotegen_Model_QuoteDeviceGroup))
+            {
+                $quoteDeviceGroup = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->find($quoteDeviceGroup);
+            }
+            
+            if (! $quoteDeviceGroup)
+            {
+                throw new InvalidArgumentException('Invalid quote device group or device group id');
+            }
+            if (! $favoriteDevice)
+            {
+                throw new InvalidArgumentException('Invalid device configuration or device configuration id');
+            }
+            
+            // Get a new device and sync the device properties
+            $quoteDevice = $this->syncDevice(new Quotegen_Model_QuoteDevice(), $favoriteDevice->getDevice());
+            $quoteDevice->setQuoteDeviceGroupId($quoteDeviceGroup->getId());
+            $quoteDevice->setMargin($defaultMargin);
+            $quoteDevice->setQuantity(1);
+            $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
+            $quoteDevice->setResidual(0);
+            
+            $quoteDeviceId = Quotegen_Model_Mapper_QuoteDevice::getInstance()->insert($quoteDevice);
+            
+            // Insert link to device
+            $quoteDeviceConfiguration = new Quotegen_Model_QuoteDeviceConfiguration();
+            $quoteDeviceConfiguration->setMasterDeviceId($favoriteDevice->getMasterDeviceId());
+            $quoteDeviceConfiguration->setQuoteDeviceId($quoteDeviceId);
+            Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->insert($quoteDeviceConfiguration);
+            
+            // Prepare option link
+            $quoteDeviceConfigurationOption = new Quotegen_Model_QuoteDeviceConfigurationOption();
+            $quoteDeviceConfigurationOption->setMasterDeviceId($favoriteDevice->getMasterDeviceId());
+            
+            /* @var $option Quotegen_Model_DeviceConfigurationOption */
+            foreach ( $favoriteDevice->getOptions() as $option )
+            {
+                // Get the device option
+                $deviceOption = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->find(array (
+                        $favoriteDevice->getMasterDeviceId(), 
+                        $option->getOptionId() 
+                ));
+                
+                // Insert quote device option
+                $quoteDeviceOption = $this->syncOption(new Quotegen_Model_QuoteDeviceOption(), $deviceOption);
+                $quoteDeviceOption->setQuoteDeviceId($quoteDeviceId);
+                $quoteDeviceOptionId = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->insert($quoteDeviceOption);
+                
+                // Insert link
+                $quoteDeviceConfigurationOption->setQuoteDeviceOptionId($quoteDeviceOptionId);
+                $quoteDeviceConfigurationOption->setOptionId($option->getOptionId());
+                Quotegen_Model_Mapper_QuoteDeviceConfigurationOption::getInstance()->insert($quoteDeviceConfigurationOption);
+            }
         }
-        
-        // If it's not an object, it must be an id, so try and find it
-        if (! ($quoteDeviceGroup instanceof Quotegen_Model_QuoteDeviceGroup))
+        catch ( Exception $e )
         {
-            $quoteDeviceGroup = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->find($quoteDeviceGroup);
+            return false;
         }
-        
-        // Get a new device and sync the device properties
-        $quoteDevice = $this->syncDevice(new Quotegen_Model_QuoteDevice(), $favoriteDevice->getDevice());
-        $quoteDevice->setQuoteDeviceGroupId($quoteDeviceGroup->getId());
-        $quoteDeviceId = Quotegen_Model_Mapper_QuoteDevice::getInstance()->insert($quoteDevice);
-        
-        /* @var $option Quotegen_Model_DeviceConfigurationOption */
-        foreach ( $favoriteDevice->getOptions() as $option )
-        {
-            $quoteDeviceOption = new Quotegen_Model_QuoteDeviceOption();
-            $quoteDeviceOption->setQuoteDeviceId($quoteDeviceId);
-            $quoteDeviceOption->setQuantity($option->getQuantity());
-            $quoteDeviceOption->setIncludedQuantity($option->getQuantity());
-        }
-        
-        return true;
+        return $quoteDeviceId;
     }
 }
