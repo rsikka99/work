@@ -44,6 +44,12 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 
                 $quoteId = $this->saveQuote();
                 
+                // Add a default group
+                $quoteDeviceGroup = new Quotegen_Model_QuoteDeviceGroup();
+                $quoteDeviceGroup->setPageMargin($quoteSetting->getPageMargin());
+                $quoteDeviceGroup->setQuoteId($quoteId);
+                $quoteDeviceGroupId = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->insert($quoteDeviceGroup);
+                
                 $quoteLeaseTerm = new Quotegen_Model_QuoteLeaseTerm();
                 $quoteLeaseTerm->setQuoteId($this->_quote->getId());
                 $quoteLeaseTerm->setLeasingSchemaTermId($formValues ['leasingSchemaTermId']);
