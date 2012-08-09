@@ -2,7 +2,7 @@
 /* @var $form Quotegen_Form_QuoteDevices */
 $form = $this->element;
 
-$addDeviceOptions[] = '<option value="-1">New Configuration</option>';
+$addDeviceOptions[] = '<option value="-1">New Device</option>';
 /* @var $quoteDeviceConfiguration Quotegen_Model_DeviceConfiguration */
 foreach (Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAll() as $quoteDeviceConfiguration)
 {
@@ -105,7 +105,7 @@ $addDeviceOptionsHtml = implode("\n", $addDeviceOptions);
         <?php if (count($quoteDevice->getQuoteDeviceOptions()) > 0) : ?>
             <?php foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
             <tr class="optionRow">
-                <td><?php echo $quoteDeviceOption->getName(); ?><i class="icon-info-sign pull-right" data-placement="right" data-title="<?php echo $quoteDeviceOption->getSku(); ?>" data-content="<?php echo $quoteDeviceOption->getDescription(); ?>"></i><br><h5><small><?php echo $quoteDeviceOption->getSku(); ?></small></h5></td>
+                <td style="padding-left: 25px;"><?php echo $quoteDeviceOption->getName(); ?><i class="icon-info-sign pull-right" data-placement="right" data-title="<?php echo $quoteDeviceOption->getSku(); ?>" data-content="<?php echo $quoteDeviceOption->getDescription(); ?>"></i><br><h5><small><?php echo $quoteDeviceOption->getSku(); ?></small></h5></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -186,6 +186,6 @@ $addDeviceOptionsHtml = implode("\n", $addDeviceOptions);
     <div class="form-actions">
         <input type="submit" name="back" value="Go Back" class="btn"/>
         <input type="submit" name="save" value="Save" class="btn btn-success"/>
-        <input type="submit" name="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary"/>
+        <input type="submit" name="saveAndContinue" value="Save &amp; Return" class="btn btn-primary"/>
     </div>
 </form>
