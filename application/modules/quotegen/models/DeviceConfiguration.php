@@ -151,30 +151,7 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
         return $this;
     }
 
-    /**
-     * Get the array of options for the device
-     *
-     * @return multitype:Quotegen_Model_DeviceOption The array of options
-     */
-    public function getOptions ()
-    {
-        if (! isset($this->_options))
-        {
-            $this->_options = Quotegen_Model_Mapper_Option::getInstance()->fetchAllOptionsForDeviceConfiguration($this->getId());
-        }
-        return $this->_options;
-    }
-
-    /**
-     * Set a new array of options for the device
-     *
-     * @param multitype:Quotegen_Model_DeviceOption $_options            
-     */
-    public function setOptions ($_options)
-    {
-        $this->_options = $_options;
-        return $this;
-    }
+    
 
     /**
      * Get the name of the device configuration
@@ -218,6 +195,31 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
     public function setDescription ($_description)
     {
         $this->_description = $_description;
+        return $this;
+    }
+    
+    /**
+     * Get the array of options for the device
+     *
+     * @return multitype:Quotegen_Model_DeviceConfigurationOption The array of options
+     */
+    public function getOptions ()
+    {
+        if (! isset($this->_options))
+        {
+            $this->_options = Quotegen_Model_Mapper_Option::getInstance()->fetchAllOptionsForDeviceConfiguration($this->getId());
+        }
+        return $this->_options;
+    }
+    
+    /**
+     * Set a new array of options for the device
+     *
+     * @param multitype:Quotegen_Model_DeviceOption $_options
+     */
+    public function setOptions ($_options)
+    {
+        $this->_options = $_options;
         return $this;
     }
 }

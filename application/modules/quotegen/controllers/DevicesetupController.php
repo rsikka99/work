@@ -560,7 +560,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         // Get device options list
                         $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
                         $assignedOptions = array ();
-                        foreach ( $device->getOptions() as $option )
+                        foreach ( $device->getDeviceOptions() as $option )
                         {
                             $assignedOptions [] = $option->getId();
                         }
@@ -644,7 +644,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             ->getDisplayname() . ' ' . $device->getMasterDevice()->getPrinterModel();
         
         $assignedOptions = array ();
-        foreach ( $device->getOptions() as $option )
+        foreach ( $device->getDeviceOptions() as $option )
         {
             $assignedOptions [] = $option->getId();
         }
