@@ -59,7 +59,7 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
                     $quoteMapper->delete($quote);
                     
                     $this->_helper->flashMessenger(array (
-                            'success' => "Quote  {$this->view->escape ($quote->getName())} was deleted successfully." 
+                            'success' => "Quote was deleted successfully." 
                     ));
                     $this->_helper->redirector('index');
                 }
