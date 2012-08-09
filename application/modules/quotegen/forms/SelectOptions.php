@@ -36,6 +36,10 @@ class Quotegen_Form_SelectOptions extends EasyBib_Form
             foreach ( $this->_availableOptions as $option )
             {
                 $optionList [$option->getId()] = $option->getName();
+                
+                // TODO: Create label, quantity and included quantity fields for each option
+                // Use view script for form display
+                // Remove multiCheckbox control
             }
             
             $this->addElement('multiCheckbox', 'options', array (

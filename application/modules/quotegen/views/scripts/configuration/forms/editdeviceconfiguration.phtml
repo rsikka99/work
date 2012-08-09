@@ -1,0 +1,70 @@
+<?php 
+$deviceConfigurationId = $this->deviceConfigurationId;
+$deviceOptions = $this->deviceOptions;
+?>
+
+<form name="deviceConfiguration" id="deviceConfiguration" class="form-horizontal" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>">
+	
+	<div class="<?php echo ($this->element->getElement("masterDeviceId")->hasErrors()) ? 'error' : '' ?>">
+		<div class="control-group">
+			<label class="control-label pull-left" for="range">Master Device: </label>
+			<div class="controls">
+				<?php if ( $this->element->getElement("masterDeviceId")->hasErrors() ) { 
+					$this->element->getElement("masterDeviceId")->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+				} ?>
+				<?php echo trim($this->element->getElement("masterDeviceId")->renderViewHelper()); ?>
+				<?php echo $this->element->getElement("masterDeviceId")->renderErrors(); ?>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label pull-left" for="range">Name: </label>
+			<div class="controls">
+				<?php if ( $this->element->getElement("name")->hasErrors() ) { 
+					$this->element->getElement("name")->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+				} ?>
+				<?php echo trim($this->element->getElement("name")->renderViewHelper()); ?>
+				<?php echo $this->element->getElement("name")->renderErrors(); ?>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label pull-left" for="description">Description: </label>
+			<div class="controls">
+				<?php if ( $this->element->getElement("description")->hasErrors() ) { 
+					$this->element->getElement("description")->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+				} ?>
+				<?php echo trim($this->element->getElement("description")->renderViewHelper()); ?>
+				<?php echo $this->element->getElement("description")->renderErrors(); ?>
+			</div>
+		</div>
+	
+		<div class="control-group">
+			<label class="control-label pull-left" for="description">Options: </label>
+			<div class="controls">
+				<table class="table table-stripped table-bordered" style="width: auto;">
+					<thead>
+						<tr>
+							<th style="text-align: left;">Name</th>
+							<th style="text-align: center;">Quantity</th>
+							<th style="text-align: center;">Included Quantity</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ( $deviceOptions as $option ) {  /* @var $option Quotegen_Model_DeviceOption */ ?>
+						<tr>
+							<td style="text-align: left;"><?php echo $option->getOption()->getName(); ?></td>
+							<td style="text-align: center;"><input type="text" class="span1" name="quantity<?php echo $option->getOptionId(); ?>" id="quantity<?php echo $option->getOptionId(); ?>" value="<?php echo $option->getQuantity($deviceConfigurationId); ?>" /></td>
+							<td style="text-align: center;"><input type="text" class="span1" name="included<?php echo $option->getOptionId(); ?>" id="included<?php echo $option->getOptionId(); ?>" value="<?php echo $option->getIncludedQuantity($deviceConfigurationId); ?>" /></td>
+						</tr>
+						<?php } ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+	<div>
+		<?php echo $this->element->submit; ?>
+		<?php echo $this->element->cancel; ?>
+	</div>
+
+</form>
