@@ -38,7 +38,7 @@ class Quotegen_Model_DeviceConfigurationOption extends My_Model_Abstract
      * @var int
      */
     protected $_includedQuantity = 0;
-    
+
     /**
      * The option associated with this configuration
      *
@@ -61,6 +61,8 @@ class Quotegen_Model_DeviceConfigurationOption extends My_Model_Abstract
             $this->setOptionId($params->optionId);
         if (isset($params->quantity) && ! is_null($params->quantity))
             $this->setQuantity($params->quantity);
+        if (isset($params->includedQuantity) && ! is_null($params->includedQuantity))
+            $this->setIncludedQuantity($params->includedQuantity);
     }
     
     /*
@@ -71,7 +73,8 @@ class Quotegen_Model_DeviceConfigurationOption extends My_Model_Abstract
         return array (
                 'deviceConfigurationId' => $this->getDeviceConfigurationId(), 
                 'optionId' => $this->getOptionId(), 
-                'quantity' => $this->getQuantity() 
+                'quantity' => $this->getQuantity(),
+                'includedQuantity' => $this->getIncludedQuantity()
         );
     }
 
@@ -148,7 +151,8 @@ class Quotegen_Model_DeviceConfigurationOption extends My_Model_Abstract
      */
     public function getOption ()
     {
-        return $this->_option;
+        $option = Quotegen_Model_Mapper_Option::getInstance()->find($this->_optionId);
+        return $option;
     }
 
     /**

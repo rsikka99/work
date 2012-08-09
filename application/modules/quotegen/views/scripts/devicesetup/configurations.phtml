@@ -42,7 +42,6 @@ $id = $this->id;
 				            <td>
 				                <div class="" style="text-align: center;">
 				                    <a class="btn btn-warning btn-mini" title="Edit Configuration" href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'configuration', 'action' => 'edit', 'id' => $id, 'configurationid' => $configuration->getId(), 'page' => 'configurations')); ?>"><i class="icon-pencil icon-white"></i></a>
-				                    <a class="btn btn-warning btn-mini" title="Manage Options" href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'configuration', 'action' => 'addoptions', 'id' => $id, 'configurationid' => $configuration->getId(), 'page' => 'configurations')); ?>"><i class="icon-list-alt icon-white"></i></a>
 				                    <a class="btn btn-danger btn-mini" title="Delete Configuration" href="<?php echo $this->url(array ( 'module' => 'quotegen', 'controller' => 'configuration', 'action' => 'delete', 'id' => $id, 'configurationid' => $configuration->getId(), 'page' => 'configurations')); ?>"><i class="icon-trash icon-white"></i></a>
 				                </div>
 				            </td>

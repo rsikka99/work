@@ -24,11 +24,25 @@ class Quotegen_Model_DeviceOption extends My_Model_Abstract
     protected $_optionId;
     
     /**
+     * The quanity of the item
+     *
+     * @var int
+     */
+    protected $_quantity;
+    
+    /**
      * The quanity of the item that is included
      *
      * @var int
      */
     protected $_includedQuantity;
+
+    /**
+     * The option associated with this configuration
+     *
+     * @var Quotegen_Model_Option
+     */
+    protected $_option;
     
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
@@ -43,8 +57,6 @@ class Quotegen_Model_DeviceOption extends My_Model_Abstract
             $this->setMasterDeviceId($params->masterDeviceId);
         if (isset($params->optionId) && ! is_null($params->optionId))
             $this->setOptionId($params->optionId);
-        if (isset($params->includedQuantity) && ! is_null($params->includedQuantity))
-            $this->setIncludedQuantity($params->includedQuantity);
     }
     
     /*
@@ -54,8 +66,7 @@ class Quotegen_Model_DeviceOption extends My_Model_Abstract
     {
         return array (
                 'masterDeviceId' => $this->getMasterDeviceId(), 
-                'optionId' => $this->getOptionId(), 
-                'includedQuantity' => $this->getIncludedQuantity() 
+                'optionId' => $this->getOptionId()
         );
     }
 
@@ -104,13 +115,58 @@ class Quotegen_Model_DeviceOption extends My_Model_Abstract
     }
 
     /**
+     * Gets the quantity of the option
+     *
+     * @return the $_quantity the new quantity
+     */
+    public function getQuantity ($deviceConfigurationId = null)
+    {
+        if (! isset($this->_quantity))
+        {
+            $where = "deviceConfigurationId = {$deviceConfigurationId} AND optionId = {$this->getOptionId()}";
+            $deviceConfigurationOption = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->fetch($where);
+            if ( $deviceConfigurationOption )
+            {
+            	$this->_quantity = $deviceConfigurationOption->getQuantity();   
+            }
+            else
+            {
+                $this->_quantity = 0;
+            }
+        }
+        return $this->_quantity;
+    }
+
+    /**
+     * Sets the quantity
+     *
+     * @param number $_quantity
+     *            the new quantity
+     */
+    public function setQuantity ($_quantity)
+    {
+        $this->_quantity = $_quantity;
+        return $this;
+    }
+
+    /**
      * Gets the included quantity of the option
      *
      * @return the $_includedQuantity the new quantity
      */
-    public function getIncludedQuantity ()
+    public function getIncludedQuantity ($deviceConfigurationId = null)
     {
-        return $this->_includedQuantity;
+            $where = "deviceConfigurationId = {$deviceConfigurationId} AND optionId = {$this->getOptionId()}";
+            $deviceConfigurationOption = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->fetch($where);
+            if ( $deviceConfigurationOption )
+            {
+            	$this->_includedQuantity = $deviceConfigurationOption->getIncludedQuantity();   
+            }
+            else
+            {
+                $this->_includedQuantity = 0;
+            }
+            return $this->_includedQuantity;
     }
 
     /**
@@ -122,6 +178,31 @@ class Quotegen_Model_DeviceOption extends My_Model_Abstract
     public function setIncludedQuantity ($_includedQuantity)
     {
         $this->_includedQuantity = $_includedQuantity;
+        return $this;
+    }
+
+    /**
+     * Gets the option associated with the device configuration option
+     *
+     * @return Quotegen_Model_Option
+     */
+    public function getOption ()
+    {
+        if (! isset($this->_option))
+        {
+        	$this->_option = Quotegen_Model_Mapper_Option::getInstance()->find($this->getOptionId());
+        }
+        return $this->_option;
+    }
+
+    /**
+     * Sets the option associated with the device configuration option
+     *
+     * @param Quotegen_Model_Option $_option            
+     */
+    public function setOption ($_option)
+    {
+        $this->_option = $_option;
         return $this;
     }
 }
