@@ -259,18 +259,16 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
         $devOptTableName = $deviceOptionMapper->getTableName();
         
         $sql = "SELECT * FROM {$this->getTableName()} as opt
-                WHERE EXISTS (
-                    SELECT * from {$devOptTableName} AS do
+        		JOIN {$devOptTableName} AS do ON opt.{$this->col_id} = do.optionId
                     WHERE do.masterDeviceId = ? AND do.optionId = opt.id
-                )
                 ORDER BY  opt.name ASC
         ";
         
         $resultSet = $this->getDbTable()
             ->getAdapter()
             ->fetchAll($sql, $id);
-        
         $entries = array ();
+        
         foreach ( $resultSet as $row )
         {
             $deviceOption = new Quotegen_Model_DeviceOption($row);

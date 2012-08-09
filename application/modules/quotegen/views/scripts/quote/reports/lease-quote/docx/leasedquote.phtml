@@ -12,7 +12,7 @@ $section = $this->section;
 $section->addPageBreak();
 
 $section->addTitle($this->translate('Your PrintIQ Solution'), 1);
-$section->addText($this->translate('Below is a quote for the requested hardware (leased):'));
+$section->addText($this->translate('Below is a quote for the requested hardware:'));
 //TODO: Check wording for translate and number formats
 
 
@@ -87,7 +87,7 @@ foreach ( $quoteDeviceGroups as $quoteDeviceGroup )
         // Show pages amount
         $table->addRow($tcStyle->cpp->rowheight);
         $table->addCell($tcStyle->col1Width, $tcStyle->cpp->cell1->cellStyle)->addText($this->translate(), $tcStyle->cpp->cell1->fontStyle, $tcStyle->cpp->cell1->paragraphStyle);
-        $table->addCell($tcStyle->span23Width, $tcStyle->cpp->cell2->cellStyle, 2)->addText(sprintf($this->translate('%1$s overage rate'), $page->getName()), $tcStyle->cpp->cell2->fontStyle, $tcStyle->cpp->cell2->paragraphStyle);
+        $table->addCell($tcStyle->span23Width, $tcStyle->cpp->cell2->cellStyle, 2)->addText(sprintf($this->translate('%1$s overage rate per page'), $page->getName()), $tcStyle->cpp->cell2->fontStyle, $tcStyle->cpp->cell2->paragraphStyle);
         $table->addCell($tcStyle->col4Width, $tcStyle->cpp->cell3->cellStyle)->addText($this->currency($page->getPricePerPage()), $tcStyle->cpp->cell3->fontStyle, $tcStyle->cpp->cell3->paragraphStyle);
     }
     
@@ -99,3 +99,6 @@ $table = $section->addTable($tcStyle->tablestyle);
 $table->addRow($tcStyle->monthlyTotal->rowheight);
 $table->addCell($tcStyle->span123Width, $tcStyle->monthlyTotal->cell1->cellStyle, 3)->addText($this->translate('Monthly Total'), $tcStyle->monthlyTotal->cell1->fontStyle, $tcStyle->monthlyTotal->cell1->paragraphStyle);
 $table->addCell($tcStyle->col4Width, $tcStyle->monthlyTotal->cell2->cellStyle)->addText($this->currency($quote->calculateQuoteMonthlyLeaseSubtotal()), $tcStyle->monthlyTotal->cell2->fontStyle, $tcStyle->monthlyTotal->cell2->paragraphStyle);
+
+$section->addTextBreak();
+$section->addText('This quote is valid for 7 days from the date on the cover of this document. Depending on your requirements, you may be subject to additional charges for installation, insurance, and documentation fees. Please review the contract for details.');
