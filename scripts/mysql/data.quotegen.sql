@@ -1,56 +1,6 @@
-INSERT INTO `qgen_categories` (`id`, `name`, `description`) VALUES
-(1,'Paper Tray','Increases the paper capacity of a printer'),
-(2,'Finishers','These perform various tasks to finish off your prints'),
-(3,'Networking','Allows a printer to gain network connectivity'),
-(4,'Hard Drives','Hard Drives');
-
-INSERT INTO `qgen_options` (`id`, `name`,`description`,`cost`,`sku`) VALUES
-(1, '500 Sheet Paper tray', 'The standard 500 sheet paper tray', 3.00,'PPRTRY-500'),
-(2, '40 GB Hard drive', '40gb Hard Drive', 44.00, 'HDD-WD40'),
-(3, '60 GB Hard drive', '60 GB Hard Drive', 22.00, 'HDD-WD60'),
-(4, 'Stapler/Collator', 'Staples and collates pages', 320.00, 'FNSHRSTPLCOL'),
-(5, 'Stapler', 'Staples papers together to form booklets', 225.00, 'FNSHRSTPL'),
-(6, 'WiFi Adapter', 'a/b/g/n WiFi adapter', 35.00, 'NTWKWIFI-ABGN-11');
-
-INSERT INTO `qgen_option_categories` (`optionId`, `categoryId`) VALUES
-(1,1),
-(1,4),
-(3,4),
-(4,2),
-(6,2),
-(6,3);
-
-INSERT INTO `qgen_quote_settings` (`id`, `pageCoverageMonochrome`, `pageCoverageColor`, `deviceMargin`, `pageMargin`, `pricingConfigId`) VALUES
-(1, 6.00, 24.00, 20, 20, 2);
-
-INSERT INTO `qgen_quote_settings` (`id`) VALUES
-(2),
-(3);
-
-INSERT INTO `qgen_user_quote_settings` (`userId`,`quoteSettingId`) VALUES
-(1,2),
-(2,3);
-
--- Add Devices
-INSERT INTO `qgen_devices` (`masterDeviceId`, `sku`) VALUES 
-(1, 'FAKESKU3123'),
-(2, 'FAKESKU4113'),
-(3, 'FAKESKU7553');
-
--- Add Options To the Devices
-INSERT INTO `qgen_device_options` (`masterDeviceId`, `optionId`) VALUES
-(1, 1),
-(1, 2),
-(1, 4),
-
-(2, 1),
-(2, 3),
-(2, 5),
-
-(3, 1),
-(3, 5);
-
--- Add some leasing schemas
+-- ---------------------------------
+-- Create a default leasing schema
+-- ---------------------------------
 INSERT INTO `qgen_leasing_schemas` (`id`, `name`) VALUES
 (1,'default');
 
@@ -111,6 +61,62 @@ INSERT INTO `qgen_leasing_schema_rates` (`leasingSchemaTermId`, `leasingSchemaRa
 (8, 2, 0.0217),
 (8, 3, 0.0214),
 (8, 4, 0.0213);
+
+
+-- ---------------------------------------------------
+-- Insert quote devices, options and option categories
+-- ---------------------------------------------------
+INSERT INTO `qgen_categories` (`id`, `name`, `description`) VALUES
+(1,'Paper Tray','Increases the paper capacity of a printer'),
+(2,'Finishers','These perform various tasks to finish off your prints'),
+(3,'Networking','Allows a printer to gain network connectivity'),
+(4,'Hard Drives','Hard Drives');
+
+INSERT INTO `qgen_options` (`id`, `name`,`description`,`cost`,`sku`) VALUES
+(1, '500 Sheet Paper tray', 'The standard 500 sheet paper tray', 3.00,'PPRTRY-500'),
+(2, '40 GB Hard drive', '40gb Hard Drive', 44.00, 'HDD-WD40'),
+(3, '60 GB Hard drive', '60 GB Hard Drive', 22.00, 'HDD-WD60'),
+(4, 'Stapler/Collator', 'Staples and collates pages', 320.00, 'FNSHRSTPLCOL'),
+(5, 'Stapler', 'Staples papers together to form booklets', 225.00, 'FNSHRSTPL'),
+(6, 'WiFi Adapter', 'a/b/g/n WiFi adapter', 35.00, 'NTWKWIFI-ABGN-11');
+
+INSERT INTO `qgen_option_categories` (`optionId`, `categoryId`) VALUES
+(1,1),
+(1,4),
+(3,4),
+(4,2),
+(6,2),
+(6,3);
+
+INSERT INTO `qgen_quote_settings` (`id`, `pageCoverageMonochrome`, `pageCoverageColor`, `deviceMargin`, `pageMargin`, `pricingConfigId`) VALUES
+(1, 6.00, 24.00, 20, 20, 2);
+
+INSERT INTO `qgen_quote_settings` (`id`) VALUES
+(2),
+(3);
+
+INSERT INTO `qgen_user_quote_settings` (`userId`,`quoteSettingId`) VALUES
+(1,2),
+(2,3);
+
+-- Add Devices
+INSERT INTO `qgen_devices` (`masterDeviceId`, `sku`) VALUES 
+(1, 'FAKESKU3123'),
+(2, 'FAKESKU4113'),
+(3, 'FAKESKU7553');
+
+-- Add Options To the Devices
+INSERT INTO `qgen_device_options` (`masterDeviceId`, `optionId`) VALUES
+(1, 1),
+(1, 2),
+(1, 4),
+
+(2, 1),
+(2, 3),
+(2, 5),
+
+(3, 1),
+(3, 5);
 
 -- ---------------------------------
 -- Create a quote with some devices.

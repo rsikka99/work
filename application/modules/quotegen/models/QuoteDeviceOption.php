@@ -283,7 +283,7 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
             $quoteDeviceConfigurationOption = Quotegen_Model_Mapper_QuoteDeviceConfigurationOption::getInstance()->findByQuoteDeviceOptionId($this->getId());
             if ($quoteDeviceConfigurationOption)
             {
-                $this->_deviceOption = $quoteDeviceConfigurationOption->getOption();
+                $this->_deviceOption = $quoteDeviceConfigurationOption->getDeviceOption();
             }
         }
         return $this->_deviceOption;

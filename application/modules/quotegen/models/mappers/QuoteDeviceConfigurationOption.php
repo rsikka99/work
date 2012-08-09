@@ -79,14 +79,12 @@ class Quotegen_Model_Mapper_QuoteDeviceConfigurationOption extends My_Model_Mapp
         
         if ($primaryKey === null)
         {
-            $primaryKey [] = $data [$this->col_quoteDeviceOptionId];
-            $primaryKey [] = $data [$this->col_optionId];
+            $primaryKey = $this->col_quoteDeviceOptionId;
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                "{$this->col_quoteDeviceOptionId} = ?" => $primaryKey [0], 
-                "{$this->col_optionId} = ?" => $primaryKey [1] 
+                "{$this->col_quoteDeviceOptionId} = ?" => $primaryKey 
         ));
         
         // Save the object into the cache
@@ -108,15 +106,13 @@ class Quotegen_Model_Mapper_QuoteDeviceConfigurationOption extends My_Model_Mapp
         if ($object instanceof Quotegen_Model_QuoteDeviceConfigurationOption)
         {
             $whereClause = array (
-                    "{$this->col_quoteDeviceOptionId} = ?" => $object->getQuoteDeviceOptionId(), 
-                    "{$this->col_optionId} = ?" => $object->getOptionId() 
+                    "{$this->col_quoteDeviceOptionId} = ?" => $object->getQuoteDeviceOptionId() 
             );
         }
         else
         {
             $whereClause = array (
-                    "{$this->col_quoteDeviceOptionId} = ?" => $object [0], 
-                    "{$this->col_optionId} = ?" => $object [1] 
+                    "{$this->col_quoteDeviceOptionId} = ?" => $object 
             );
         }
         
@@ -177,8 +173,6 @@ class Quotegen_Model_Mapper_QuoteDeviceConfigurationOption extends My_Model_Mapp
         $object = new Quotegen_Model_QuoteDeviceConfigurationOption($row->toArray());
         
         // Save the object into the cache
-        $primaryKey [0] = $object->getQuoteDeviceOptionId();
-        $primaryKey [1] = $object->getOptionId();
         $this->saveItemToCache($object);
         
         return $object;
@@ -206,8 +200,6 @@ class Quotegen_Model_Mapper_QuoteDeviceConfigurationOption extends My_Model_Mapp
             $object = new Quotegen_Model_QuoteDeviceConfigurationOption($row->toArray());
             
             // Save the object into the cache
-            $primaryKey [0] = $object->getQuoteDeviceOptionId();
-            $primaryKey [1] = $object->getOptionId();
             $this->saveItemToCache($object);
             
             $entries [] = $object;
@@ -224,8 +216,7 @@ class Quotegen_Model_Mapper_QuoteDeviceConfigurationOption extends My_Model_Mapp
     public function getWhereId ($id)
     {
         return array (
-                "{$this->col_quoteDeviceOptionId} = ?" => $id [0], 
-                "{$this->col_optionId} = ?" => $id [1] 
+                "{$this->col_quoteDeviceOptionId} = ?" => $id 
         );
     }
 
