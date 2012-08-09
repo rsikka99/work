@@ -152,13 +152,13 @@ INSERT INTO `qgen_quote_device_options` (`id`, `quoteDeviceId`, `sku`, `name`, `
 (7, 3, 'Unsynced SKU 7', 'Unsynced Option Name 7', 'Add Description!', 999.99, 1, 0),
 (8, 3, 'Unsynced SKU 8', 'Unsynced Option Name 8', 'Add Description!', 999.99, 1, 0);
 
-INSERT INTO `qgen_quote_device_configuration_options` (`quoteDeviceOptionId`, `optionId`) VALUES
-(1, 1),
-(2, 2),
-(3, 4),
-(4, 1),
-(5, 3),
-(6, 5),
-(7, 1),
-(8, 5);
+INSERT INTO `qgen_quote_device_configuration_options` (`quoteDeviceOptionId`, `optionId`, `masterDeviceId`) VALUES
+(1, 1, 1),
+(2, 2, 1),
+(3, 4, 1),
+(4, 1, 2),
+(5, 3, 2),
+(6, 5, 2),
+(7, 1, 3),
+(8, 5, 3);
 

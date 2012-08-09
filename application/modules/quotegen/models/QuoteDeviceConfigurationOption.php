@@ -24,11 +24,18 @@ class Quotegen_Model_QuoteDeviceConfigurationOption extends My_Model_Abstract
     protected $_optionId = 0;
     
     /**
+     * Master device Id
+     *
+     * @var int
+     */
+    protected $_masterDeviceId;
+    
+    /**
      * The option associated with this configuration
      *
      * @var Quotegen_Model_Option
      */
-    protected $_option;
+    protected $_deviceOption;
     
     /**
      * The quote device option associated with this configuration
@@ -50,6 +57,8 @@ class Quotegen_Model_QuoteDeviceConfigurationOption extends My_Model_Abstract
             $this->setQuoteDeviceOptionId($params->quoteDeviceOptionId);
         if (isset($params->optionId) && ! is_null($params->optionId))
             $this->setOptionId($params->optionId);
+        if (isset($params->masterDeviceId) && ! is_null($params->masterDeviceId))
+            $this->setMasterDeviceId($params->masterDeviceId);
     }
     
     /*
@@ -59,7 +68,8 @@ class Quotegen_Model_QuoteDeviceConfigurationOption extends My_Model_Abstract
     {
         return array (
                 'quoteDeviceOptionId' => $this->getQuoteDeviceOptionId(), 
-                'optionId' => $this->getOptionId() 
+                'optionId' => $this->getOptionId(), 
+                'masterDeviceId' => $this->getMasterDeviceId() 
         );
     }
 
@@ -110,25 +120,25 @@ class Quotegen_Model_QuoteDeviceConfigurationOption extends My_Model_Abstract
     /**
      * Gets the option associated with the device configuration option
      *
-     * @return Quotegen_Model_Option
+     * @return Quotegen_Model_DeviceOption
      */
-    public function getOption ()
+    public function getDeviceOption ()
     {
-        if (! isset($this->_option))
+        if (! isset($this->_deviceOption))
         {
-            $this->_option = Quotegen_Model_Mapper_Option::getInstance()->find($this->getOptionId());
+            $this->_deviceOption = Quotegen_Model_Mapper_DeviceOption::getInstance()->find($this->getOptionId(), $this->getMasterDeviceId());
         }
-        return $this->_option;
+        return $this->_deviceOption;
     }
 
     /**
      * Sets the option associated with the device configuration option
      *
-     * @param Quotegen_Model_Option $_option            
+     * @param Quotegen_Model_DeviceOption $_deviceOption            
      */
-    public function setOption ($_option)
+    public function setDeviceOption ($_deviceOption)
     {
-        $this->_option = $_option;
+        $this->_deviceOption = $_deviceOption;
         return $this;
     }
 
@@ -155,6 +165,27 @@ class Quotegen_Model_QuoteDeviceConfigurationOption extends My_Model_Abstract
     public function setQuoteDeviceOption ($_quoteDeviceOption)
     {
         $this->_quoteDeviceOption = $_quoteDeviceOption;
+        return $this;
+    }
+
+    /**
+     * Gets the master device id
+     *
+     * @return number
+     */
+    public function getMasterDeviceId ()
+    {
+        return $this->_masterDeviceId;
+    }
+
+    /**
+     * Sets the master device id
+     *
+     * @param number $_masterDeviceId            
+     */
+    public function setMasterDeviceId ($_masterDeviceId)
+    {
+        $this->_masterDeviceId = $_masterDeviceId;
         return $this;
     }
 }

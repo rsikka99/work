@@ -77,7 +77,7 @@ class Quotegen_Form_Device extends EasyBib_Form
             ));
             
             /* @var $option Quotegen_Model_Option */
-            foreach ( $device->getOptions() as $option )
+            foreach ( $device->getDeviceOptions() as $option )
             {
                 $object = new stdClass();
                 

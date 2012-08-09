@@ -136,13 +136,13 @@ class Quotegen_Model_Device extends My_Model_Abstract
     /**
      * Get the array of options for the device
      *
-     * @return multitype:Quotegen_Model_Option The array of options
+     * @return multitype:Quotegen_Model_DeviceOption The array of options
      */
-    public function getOptions ()
+    public function getDeviceOptions ()
     {
         if (! isset($this->_options))
         {
-            $this->_options = Quotegen_Model_Mapper_Option::getInstance()->fetchAllOptionsForDevice($this->getMasterDeviceId());
+            $this->_options = Quotegen_Model_Mapper_Option::getInstance()->fetchAllDeviceOptionsForDevice($this->getMasterDeviceId());
         }
         return $this->_options;
     }

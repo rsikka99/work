@@ -253,9 +253,10 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
      *            
      * @return multitype:Quotegen_Model_Option The list of options
      */
-    public function fetchAllOptionsForDevice ($id)
+    public function fetchAllDeviceOptionsForDevice ($id)
     {
-        $devOptTableName = Quotegen_Model_Mapper_DeviceOption::getInstance()->getTableName();
+        $deviceOptionMapper = Quotegen_Model_Mapper_DeviceOption::getInstance();
+        $devOptTableName = $deviceOptionMapper->getTableName();
         
         $sql = "SELECT * FROM {$this->getTableName()} as opt
                 WHERE EXISTS (
@@ -272,12 +273,14 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-            $object = new Quotegen_Model_Option($row);
-            
+            $deviceOption = new Quotegen_Model_DeviceOption($row);
+            $deviceOptionMapper->saveItemToCache($deviceOption);
+            $option = new Quotegen_Model_Option($row);
+            $deviceOption->setOption($option);
             // Save the object into the cache
-            $this->saveItemToCache($object);
+            $this->saveItemToCache($option);
             
-            $entries [] = $object;
+            $entries [] = $deviceOption;
         }
         return $entries;
     }

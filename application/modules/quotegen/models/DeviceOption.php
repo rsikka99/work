@@ -30,6 +30,13 @@ class Quotegen_Model_DeviceOption extends My_Model_Abstract
      */
     protected $_includedQuantity;
     
+    /**
+     * The option associated with this device option
+     *
+     * @var Quotegen_Model_Option
+     */
+    protected $_option;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -122,6 +129,32 @@ class Quotegen_Model_DeviceOption extends My_Model_Abstract
     public function setIncludedQuantity ($_includedQuantity)
     {
         $this->_includedQuantity = $_includedQuantity;
+        return $this;
+    }
+
+    /**
+     * Gets the option
+     *
+     * @return Quotegen_Model_Option
+     */
+    public function getOption ()
+    {
+        if (! isset($this->_option))
+        {
+            $this->_option = Quotegen_Model_Mapper_Option::getInstance()->find($this->getOptionId());
+        }
+        return $this->_option;
+    }
+
+    /**
+     * Sets the option
+     *
+     * @param Quotegen_Model_Option $_option
+     *            The new option
+     */
+    public function setOption ($_option)
+    {
+        $this->_option = $_option;
         return $this;
     }
 }
