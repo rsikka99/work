@@ -1,7 +1,15 @@
 <?php
 /* @var $form Quotegen_Form_QuoteDevices */
-
 $form = $this->element;
+
+$addDeviceOptions[] = '<option value="-1">New Configuration</option>';
+/* @var $quoteDeviceConfiguration Quotegen_Model_DeviceConfiguration */
+foreach (Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAll() as $quoteDeviceConfiguration)
+{
+    $addDeviceOptions[] = "<option value='{$quoteDeviceConfiguration->getId()}'>{$quoteDeviceConfiguration->getName()}</option>";   
+}
+$addDeviceOptionsHtml = implode("\n", $addDeviceOptions);
+
 ?>
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
 <div class="clearfix">
@@ -22,10 +30,7 @@ $form = $this->element;
             <th colspan="4">
                 <div class="input-prepend">
                 <button type="submit" name="addConfiguration" value="<?php echo $quoteDeviceGroup->getId(); ?>" class="btn btn-success">Add</button><select name="deviceConfigurationId-<?php echo $quoteDeviceGroup->getId(); ?>">
-                    <option value="-1">New Configuration</option>
-                    <option value="1">Favorite 1</option>
-                    <option value="2">Favorite 2</option>
-                    <option value="3">Favorite 3</option>
+                    <?php echo $addDeviceOptionsHtml; ?>
                 </select>
                 </div>
             </th>

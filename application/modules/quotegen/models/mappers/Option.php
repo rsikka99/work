@@ -299,7 +299,7 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
      * @param int $id
      *            The primary key of a device
      *            
-     * @return multitype:Quotegen_Model_Option The list of options
+     * @return multitype:Quotegen_Model_DeviceConfigurationOption The list of options
      */
     public function fetchAllOptionsForDeviceConfiguration ($id)
     {
