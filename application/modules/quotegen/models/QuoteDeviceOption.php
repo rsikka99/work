@@ -63,7 +63,7 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
      *
      * @var Quotegen_Model_Option
      */
-    protected $_option;
+    protected $_deviceOption;
     
     /**
      * Inluded quantity of the option
@@ -273,30 +273,30 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
     /**
      * Gets the associated option, if any.
      *
-     * @return Quotegen_Model_Option The option, or false if no link exists
+     * @return Quotegen_Model_DeviceOption The option, or false if no link exists
      */
-    public function getOption ()
+    public function getDeviceOption ()
     {
-        if (! isset($this->_option))
+        if (! isset($this->_deviceOption))
         {
-            $this->_option = false;
+            $this->_deviceOption = false;
             $quoteDeviceConfigurationOption = Quotegen_Model_Mapper_QuoteDeviceConfigurationOption::getInstance()->findByQuoteDeviceOptionId($this->getId());
             if ($quoteDeviceConfigurationOption)
             {
-                $this->_option = $quoteDeviceConfigurationOption->getOption();
+                $this->_deviceOption = $quoteDeviceConfigurationOption->getDeviceOption();
             }
         }
-        return $this->_option;
+        return $this->_deviceOption;
     }
 
     /**
      * Sets the associated option.
      *
-     * @param Quotegen_Model_Option $_option            
+     * @param Quotegen_Model_DeviceOption $_option            
      */
     public function setOption ($_option)
     {
-        $this->_option = $_option;
+        $this->_deviceOption = $_option;
         return $this;
     }
 

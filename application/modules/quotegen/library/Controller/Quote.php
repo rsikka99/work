@@ -185,10 +185,10 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             foreach ( $quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption )
             {
                 // Only sync options that still have a link back to the master
-                $option = $quoteDeviceOption->getOption();
-                if ($option)
+                $deviceOption = $quoteDeviceOption->getDeviceOption();
+                if ($deviceOption)
                 {
-                    $quoteDeviceOption = $this->syncOption($quoteDeviceOption, $option);
+                    $quoteDeviceOption = $this->syncOption($quoteDeviceOption, $deviceOption);
                     Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->save($quoteDeviceOption);
                 }
             }
@@ -235,54 +235,24 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
      *
      * @param $quoteDeviceOption Quotegen_Model_QuoteDeviceOption
      *            The quote device option that will be updated
-     * @param $option Quotegen_Model_Option
+     * @param $deviceOption Quotegen_Model_Option
      *            The option to update the quote device option with
      * @return Quotegen_Model_Option The updated quote device option
      */
-    protected function syncOption (Quotegen_Model_QuoteDeviceOption $quoteDeviceOption, Quotegen_Model_Option $option)
+    protected function syncOption (Quotegen_Model_QuoteDeviceOption $quoteDeviceOption, Quotegen_Model_DeviceOption $deviceOption)
     {
         // Copy the option
-        $quoteDeviceOption->setSku($option->getSku());
-        $quoteDeviceOption->setName($option->getName());
-        $quoteDeviceOption->setDescription($option->getDescription());
-        $quoteDeviceOption->setCost($option->getCost());
+        $quoteDeviceOption->setSku($deviceOption->getOption()
+            ->getSku());
+        $quoteDeviceOption->setName($deviceOption->getOption()
+            ->getName());
+        $quoteDeviceOption->setDescription($deviceOption->getOption()
+            ->getDescription());
+        $quoteDeviceOption->setCost($deviceOption->getOption()
+            ->getCost());
+        $quoteDeviceOption->setIncludedQuantity($deviceOption->getIncludedQuantity());
         
         return $quoteDeviceOption;
-    }
-
-    /**
-     * Clones a device configuration for a quote.
-     * (Favorite -> Quote Device Configuration)
-     *
-     * @param $deviceConfigurationId int
-     *            The device configuration id to clone
-     * @throws InvalidArgumentException
-     * @return Quotegen_Model_DeviceConfiguration The new device configuration
-     */
-    protected function cloneDeviceConfiguration ($deviceConfigurationId)
-    {
-        // Get the device configuration
-        $deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($deviceConfigurationId);
-        
-        // In case we get an invalid id
-        if (! $deviceConfiguration)
-        {
-            throw new InvalidArgumentException('No device configuration exists by that device configuration id');
-        }
-        
-        // Get all the options before we start changing things.
-        $options = $deviceConfiguration->getOptions();
-        
-        $deviceConfigurationId = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->insert($deviceConfiguration);
-        
-        /* @var $deviceConfigurationOption Quotegen_Model_DeviceConfigurationOption */
-        foreach ( $options as &$deviceConfigurationOption )
-        {
-            $deviceConfigurationOption->setDeviceConfigurationId($deviceConfigurationId);
-            Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->insert($deviceConfigurationOption);
-        }
-        
-        return $deviceConfiguration;
     }
 
     /**
@@ -371,5 +341,86 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
     public function postDocxContext ()
     {
         // TODO: Nothing to do in post yet
+    }
+
+    /**
+     * Clones a favorite device into a new quote device
+     *
+     * @param Quotegen_Model_DeviceConfiguration $favoriteDevice
+     *            The device configuration to clone
+     * @param Quotegen_Model_QuoteDeviceGroup $quoteDeviceGroup
+     *            The quote device group to clone to
+     * @return int The quote device id, or false on error
+     */
+    public function cloneFavoriteDeviceToQuote ($favoriteDevice, $quoteDeviceGroup, $defaultMargin = 20)
+    {
+        try
+        {
+            // If it's not an object, it must be an id, so try and find it
+            if (! ($favoriteDevice instanceof Quotegen_Model_DeviceConfiguration))
+            {
+                $favoriteDevice = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($favoriteDevice);
+            }
+            
+            // If it's not an object, it must be an id, so try and find it
+            if (! ($quoteDeviceGroup instanceof Quotegen_Model_QuoteDeviceGroup))
+            {
+                $quoteDeviceGroup = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->find($quoteDeviceGroup);
+            }
+            
+            if (! $quoteDeviceGroup)
+            {
+                throw new InvalidArgumentException('Invalid quote device group or device group id');
+            }
+            if (! $favoriteDevice)
+            {
+                throw new InvalidArgumentException('Invalid device configuration or device configuration id');
+            }
+            
+            // Get a new device and sync the device properties
+            $quoteDevice = $this->syncDevice(new Quotegen_Model_QuoteDevice(), $favoriteDevice->getDevice());
+            $quoteDevice->setQuoteDeviceGroupId($quoteDeviceGroup->getId());
+            $quoteDevice->setMargin($defaultMargin);
+            $quoteDevice->setQuantity(1);
+            $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
+            $quoteDevice->setResidual(0);
+            
+            $quoteDeviceId = Quotegen_Model_Mapper_QuoteDevice::getInstance()->insert($quoteDevice);
+            
+            // Insert link to device
+            $quoteDeviceConfiguration = new Quotegen_Model_QuoteDeviceConfiguration();
+            $quoteDeviceConfiguration->setMasterDeviceId($favoriteDevice->getMasterDeviceId());
+            $quoteDeviceConfiguration->setQuoteDeviceId($quoteDeviceId);
+            Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->insert($quoteDeviceConfiguration);
+            
+            // Prepare option link
+            $quoteDeviceConfigurationOption = new Quotegen_Model_QuoteDeviceConfigurationOption();
+            $quoteDeviceConfigurationOption->setMasterDeviceId($favoriteDevice->getMasterDeviceId());
+            
+            /* @var $option Quotegen_Model_DeviceConfigurationOption */
+            foreach ( $favoriteDevice->getOptions() as $option )
+            {
+                // Get the device option
+                $deviceOption = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->find(array (
+                        $favoriteDevice->getMasterDeviceId(), 
+                        $option->getOptionId() 
+                ));
+                
+                // Insert quote device option
+                $quoteDeviceOption = $this->syncOption(new Quotegen_Model_QuoteDeviceOption(), $deviceOption);
+                $quoteDeviceOption->setQuoteDeviceId($quoteDeviceId);
+                $quoteDeviceOptionId = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->insert($quoteDeviceOption);
+                
+                // Insert link
+                $quoteDeviceConfigurationOption->setQuoteDeviceOptionId($quoteDeviceOptionId);
+                $quoteDeviceConfigurationOption->setOptionId($option->getOptionId());
+                Quotegen_Model_Mapper_QuoteDeviceConfigurationOption::getInstance()->insert($quoteDeviceConfigurationOption);
+            }
+        }
+        catch ( Exception $e )
+        {
+            return false;
+        }
+        return $quoteDeviceId;
     }
 }

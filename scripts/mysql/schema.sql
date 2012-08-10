@@ -1076,7 +1076,6 @@ CREATE  TABLE IF NOT EXISTS `qgen_device_configuration_options` (
   `deviceConfigurationId` INT(11) NOT NULL ,
   `optionId` INT(11) NOT NULL ,
   `quantity` INT(11) NOT NULL DEFAULT 1 ,
-  `includedQuantity` INT(11) NOT NULL DEFAULT 1 ,
   PRIMARY KEY (`deviceConfigurationId`, `optionId`) ,
   INDEX `optionId` (`optionId` ASC) ,
   CONSTRAINT `quotegen_device_configuration_options_ibfk_1`
@@ -1097,6 +1096,7 @@ DEFAULT CHARACTER SET = utf8;
 CREATE  TABLE IF NOT EXISTS `qgen_device_options` (
   `masterDeviceId` INT(11) NOT NULL ,
   `optionId` INT(11) NOT NULL ,
+  `includedQuantity` INT(11) NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`masterDeviceId`, `optionId`) ,
   INDEX `optionId` (`optionId` ASC) ,
   CONSTRAINT `quotegen_device_options_ibfk_1`
@@ -1352,14 +1352,15 @@ DEFAULT CHARACTER SET = utf8;
 -- Table `qgen_quote_device_configuration_options`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `qgen_quote_device_configuration_options` (
-  `optionId` INT(11) NOT NULL ,
   `quoteDeviceOptionId` INT(11) NOT NULL ,
-  PRIMARY KEY (`optionId`, `quoteDeviceOptionId`) ,
-  INDEX `quotegen_quote_device_option_options_ibfk_1` (`optionId` ASC) ,
+  `optionId` INT(11) NOT NULL ,
+  `masterDeviceId` INT(11) NOT NULL ,
+  PRIMARY KEY (`quoteDeviceOptionId`) ,
+  INDEX `quotegen_quote_device_option_options_ibfk_1` (`optionId` ASC, `masterDeviceId` ASC) ,
   INDEX `quotegen_quote_device_option_options_ibfk_2` (`quoteDeviceOptionId` ASC) ,
   CONSTRAINT `quotegen_quote_device_option_options_ibfk_1`
-    FOREIGN KEY (`optionId` )
-    REFERENCES `qgen_options` (`id` )
+    FOREIGN KEY (`optionId` , `masterDeviceId` )
+    REFERENCES `qgen_device_options` (`optionId` , `masterDeviceId` )
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `quotegen_quote_device_option_options_ibfk_2`

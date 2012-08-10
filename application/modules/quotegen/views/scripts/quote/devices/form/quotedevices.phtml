@@ -1,7 +1,15 @@
 <?php
 /* @var $form Quotegen_Form_QuoteDevices */
-
 $form = $this->element;
+
+$addDeviceOptions[] = '<option value="-1">New Device</option>';
+/* @var $quoteDeviceConfiguration Quotegen_Model_DeviceConfiguration */
+foreach (Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAll() as $quoteDeviceConfiguration)
+{
+    $addDeviceOptions[] = "<option value='{$quoteDeviceConfiguration->getId()}'>{$quoteDeviceConfiguration->getName()}</option>";   
+}
+$addDeviceOptionsHtml = implode("\n", $addDeviceOptions);
+
 ?>
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
 <div class="clearfix">
@@ -22,10 +30,7 @@ $form = $this->element;
             <th colspan="4">
                 <div class="input-prepend">
                 <button type="submit" name="addConfiguration" value="<?php echo $quoteDeviceGroup->getId(); ?>" class="btn btn-success">Add</button><select name="deviceConfigurationId-<?php echo $quoteDeviceGroup->getId(); ?>">
-                    <option value="-1">New Configuration</option>
-                    <option value="1">Favorite 1</option>
-                    <option value="2">Favorite 2</option>
-                    <option value="3">Favorite 3</option>
+                    <?php echo $addDeviceOptionsHtml; ?>
                 </select>
                 </div>
             </th>
@@ -100,7 +105,7 @@ $form = $this->element;
         <?php if (count($quoteDevice->getQuoteDeviceOptions()) > 0) : ?>
             <?php foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
             <tr class="optionRow">
-                <td><?php echo $quoteDeviceOption->getName(); ?><i class="icon-info-sign pull-right" data-placement="right" data-title="<?php echo $quoteDeviceOption->getSku(); ?>" data-content="<?php echo $quoteDeviceOption->getDescription(); ?>"></i><br><h5><small><?php echo $quoteDeviceOption->getSku(); ?></small></h5></td>
+                <td style="padding-left: 25px;"><?php echo $quoteDeviceOption->getName(); ?><i class="icon-info-sign pull-right" data-placement="right" data-title="<?php echo $quoteDeviceOption->getSku(); ?>" data-content="<?php echo $quoteDeviceOption->getDescription(); ?>"></i><br><h5><small><?php echo $quoteDeviceOption->getSku(); ?></small></h5></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -181,6 +186,6 @@ $form = $this->element;
     <div class="form-actions">
         <input type="submit" name="back" value="Go Back" class="btn"/>
         <input type="submit" name="save" value="Save" class="btn btn-success"/>
-        <input type="submit" name="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary"/>
+        <input type="submit" name="saveAndContinue" value="Save &amp; Return" class="btn btn-primary"/>
     </div>
 </form>

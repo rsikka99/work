@@ -253,31 +253,32 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
      *            
      * @return multitype:Quotegen_Model_Option The list of options
      */
-    public function fetchAllOptionsForDevice ($id)
+    public function fetchAllDeviceOptionsForDevice ($id)
     {
-        $devOptTableName = Quotegen_Model_Mapper_DeviceOption::getInstance()->getTableName();
+        $deviceOptionMapper = Quotegen_Model_Mapper_DeviceOption::getInstance();
+        $devOptTableName = $deviceOptionMapper->getTableName();
         
         $sql = "SELECT * FROM {$this->getTableName()} as opt
-                WHERE EXISTS (
-                    SELECT * from {$devOptTableName} AS do
+        		JOIN {$devOptTableName} AS do ON opt.{$this->col_id} = do.optionId
                     WHERE do.masterDeviceId = ? AND do.optionId = opt.id
-                )
                 ORDER BY  opt.name ASC
         ";
         
         $resultSet = $this->getDbTable()
             ->getAdapter()
             ->fetchAll($sql, $id);
-        
         $entries = array ();
+        
         foreach ( $resultSet as $row )
         {
-            $object = new Quotegen_Model_Option($row);
-            
+            $deviceOption = new Quotegen_Model_DeviceOption($row);
+            $deviceOptionMapper->saveItemToCache($deviceOption);
+            $option = new Quotegen_Model_Option($row);
+            $deviceOption->setOption($option);
             // Save the object into the cache
-            $this->saveItemToCache($object);
+            $this->saveItemToCache($option);
             
-            $entries [] = $object;
+            $entries [] = $deviceOption;
         }
         return $entries;
     }
@@ -296,7 +297,7 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
      * @param int $id
      *            The primary key of a device
      *            
-     * @return multitype:Quotegen_Model_Option The list of options
+     * @return multitype:Quotegen_Model_DeviceConfigurationOption The list of options
      */
     public function fetchAllOptionsForDeviceConfiguration ($id)
     {

@@ -76,20 +76,17 @@ class Quotegen_Form_Device extends EasyBib_Form
                     ) 
             ));
             
-            /* @var $option Quotegen_Model_Option */
-            foreach ( $device->getOptions() as $option )
+            /* @var $deviceOption Quotegen_Model_DeviceOption */
+            foreach ( $device->getDeviceOptions() as $deviceOption )
             {
                 $object = new stdClass();
-                
+
                 // Create a unique element with a unique id
-                $deviceOption = Quotegen_Model_Mapper_DeviceOption::getInstance()->find(array (
-                        $this->_deviceId, 
-                        $option->getId() 
-                ));
+
                 if (! $deviceOption->getIncludedQuantity())
                     $deviceOption->setIncludedQuantity(0);
-                $optionElement = $this->createElement('text', "option-{$option->getId()}", array (
-                        'label' => $option->getName(), 
+                $optionElement = $this->createElement('text', "option-{$deviceOption->getOption()->getId()}", array (
+                        'label' => $deviceOption->getOption()->getName(), 
                         'value' => $deviceOption->getIncludedQuantity(), 
                         'class' => 'span1' 
                 ));
@@ -99,7 +96,7 @@ class Quotegen_Form_Device extends EasyBib_Form
                 
                 $object->deviceOptionElement = $optionElement;
                 $object->deviceOption = $deviceOption;
-                $object->option = $option;
+                $object->option = $deviceOption->getOption();
                 
                 // Add the elements to the options array
                 $this->_deviceOptionElements [] = $object;
