@@ -102,16 +102,21 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();
-            if (isset($values['cancel']))
+            if (isset($values ['cancel']))
             {
                 $this->_helper->redirector('index');
             }
             
             // Create Client
+            $clientId = $clientService->create($values);
             
-            
-            // Redirect with client id so that the client is preselected
-            
+            if ($clientId)
+            {
+                // Redirect with client id so that the client is preselected
+                $this->_helper->redirector('index', null, null, array (
+                        'clientId' => $clientId 
+                ));
+            }
         }
         
         $this->view->form = $clientService->getForm();

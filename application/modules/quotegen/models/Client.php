@@ -17,12 +17,6 @@ class Quotegen_Model_Client extends My_Model_Abstract
     protected $_id = 0;
     
     /**
-     * The userid of the user
-     *
-     * @var int
-     */
-    protected $_userId = 0;
-    /**
      * Represents the client name
      *
      * @var string
@@ -52,8 +46,6 @@ class Quotegen_Model_Client extends My_Model_Abstract
         }
         if (isset($params->id) && ! is_null($params->id))
             $this->setId($params->id);
-        if (isset($params->userId) && ! is_null($params->userId))
-            $this->setUserId($params->userId);
         if (isset($params->name) && ! is_null($params->name))
             $this->setName($params->name);
         if (isset($params->address) && ! is_null($params->address))
@@ -69,7 +61,6 @@ class Quotegen_Model_Client extends My_Model_Abstract
     {
         return array (
                 'id' => $this->getId(), 
-                'userId' => $this->getUserId(), 
                 'name' => $this->getName(), 
                 'address' => $this->getAddress(), 
                 'phoneNumber' => $this->getPhoneNumber() 
@@ -95,25 +86,6 @@ class Quotegen_Model_Client extends My_Model_Abstract
     public function setId ($_id)
     {
         $this->_id = $_id;
-    }
-
-    /**
-     *
-     * @return the $_userId
-     */
-    public function getUserId ()
-    {
-        return $this->_userId;
-    }
-
-    /**
-     *
-     * @param number $_userId            
-     */
-    public function setUserId ($_userId)
-    {
-        $this->_userId = $_userId;
-        return $this;
     }
 
     /**
