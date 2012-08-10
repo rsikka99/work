@@ -33,6 +33,13 @@
                             <action>existing-quote</action>
                             <resource>quotegen__index__existing-quote</resource>
                         </existingQuote>
+                        <createclient>
+                            <label>Create New Client</label>
+                            <module>quotegen</module>
+                            <controller>index</controller>
+                            <action>create-client</action>
+                            <resource>quotegen__index__create-client</resource>
+                        </createclient>
                         <quote>
                             <id>quotemenu</id>
                             <label>Current Quote</label>

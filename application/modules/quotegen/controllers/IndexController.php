@@ -94,5 +94,27 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
         }
         $this->view->existingQuoteForm = $existingQuoteForm;
     }
+
+    public function createClientAction ()
+    {
+        $clientService = new Admin_Service_Client();
+        
+        if ($this->getRequest()->isPost())
+        {
+            $values = $this->getRequest()->getPost();
+            if (isset($values['cancel']))
+            {
+                $this->_helper->redirector('index');
+            }
+            
+            // Create Client
+            
+            
+            // Redirect with client id so that the client is preselected
+            
+        }
+        
+        $this->view->form = $clientService->getForm();
+    }
 }
 
