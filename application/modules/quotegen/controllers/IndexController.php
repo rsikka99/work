@@ -14,6 +14,14 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
         
         $quoteForm = new Quotegen_Form_Quote();
         
+        $clientId = $this->_getParam('clientId', FALSE);
+        if ($clientId)
+        {
+            $quoteForm->populate(array (
+                    'clientId' => $clientId 
+            ));
+        }
+        
         if ($request->isPost())
         {
             $values = $request->getPost();
