@@ -24,7 +24,15 @@ $cell = $table->addCell(5818);
 $cell->addTextBreak(3);
 $cell->addImage(ASSETS_PATH . "/docx/quote/images/cell2.jpg");
 $cell->addTextBreak(5);
-$cell->addText($this->translate('Prepared For:') . " " . $client->getName(), 'titlepageHeaderFont', 'titlepageHeaderParagraph');
+
+$clientName = $quote->getClientDisplayName();
+if (empty($clientName))
+{
+    $clientName = $client->getName();
+}
+
+$cell->addText($this->translate('Prepared For:') . " " . $clientName, 'titlepageHeaderFont', 'titlepageHeaderParagraph');
+
 $cell->addText($quoteDate, 'titlepageHeaderFont', 'titlepageHeaderParagraph');
 $cell->addTextBreak(4);
 // Parse the address
