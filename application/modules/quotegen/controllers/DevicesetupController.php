@@ -27,6 +27,93 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
     }
 
     /**
+     * Create new device
+     */
+    public function createAction ()
+    {   
+        // Create a new form with the mode and roles set
+        $form = new Quotegen_Form_DeviceSetup();
+        
+        // Make sure we are posting data
+        $request = $this->getRequest();
+        if ($request->isPost())
+        {
+            // Get the post data
+            $values = $request->getPost();
+            
+            // If we cancelled we don't need to validate anything
+            if (! isset($values ['cancel']))
+            {
+                try
+                {
+                    if ($form->isValid($values))
+                    {
+                        // Save Master Device
+                        $mapper = new Proposalgen_Model_Mapper_MasterDevice();
+                        $masterDevice = new Proposalgen_Model_MasterDevice();
+                        foreach ( $values as &$value )
+                        {
+                            if (strlen($value) < 1)
+                                $value = null;
+                        }
+                        $masterDevice->populate($values);
+                        
+                        // Save to the database with cascade insert turned on
+                        $masterDeviceId = $mapper->insert($masterDevice);
+                        
+                        // Save Quotegen Device
+                        $sku = $values ['sku'];
+                        if ($masterDeviceId > 0 && strlen($sku) > 0)
+                        {
+                            // Save Device SKU
+        					$devicemapper = new Quotegen_Model_Mapper_Device();
+                            $device = new Quotegen_Model_Device();
+                            $devicevalues = array (
+                                    'masterDeviceId' => $masterDeviceId, 
+                                    'sku' => $sku 
+                            );
+                            $device->populate($devicevalues);
+                            $devicemapper->insert($device);
+                        }
+                        
+                        $this->_helper->flashMessenger(array (
+                                'success' => "MasterDevice '{$masterDevice->getFullDeviceName()}' was updated sucessfully." 
+                        ));
+                    }
+                    
+                    // Error
+                    else
+                    {
+                        throw new InvalidArgumentException("Please correct the errors below");
+                    }
+                }
+                catch ( InvalidArgumentException $e )
+                {
+                    $this->_helper->flashMessenger(array (
+                            'danger' => $e->getMessage() 
+                    ));
+                }
+            }
+            else
+            {
+                // User has cancelled. We could do a redirect here if we wanted.
+                $this->_helper->redirector('index');
+            }
+        }
+        
+        // Add form to page
+        $form->setDecorators(array (
+                array (
+                        'ViewScript', 
+                        array (
+                                'viewScript' => 'devicesetup/forms/createdevice.phtml'
+                        ) 
+                ) 
+        ));
+        $this->view->form = $form;
+    }
+    
+    /**
      * Edit device details
      */
     public function editAction ()
