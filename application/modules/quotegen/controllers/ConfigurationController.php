@@ -383,8 +383,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                 }
             }
         }
-
-
+        
         // Add form to page
         $form->setDecorators(array (
                 array (

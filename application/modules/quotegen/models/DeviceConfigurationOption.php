@@ -25,7 +25,7 @@ class Quotegen_Model_DeviceConfigurationOption extends My_Model_Abstract
     
     /**
      * The quantity in the configuration.
-     * Defaults to 1
+     * Defaults to 0
      *
      * @var int
      */
