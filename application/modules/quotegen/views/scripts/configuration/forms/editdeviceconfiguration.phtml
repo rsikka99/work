@@ -52,8 +52,8 @@ $deviceOptions = $this->deviceOptions;
 						<?php foreach ( $deviceOptions as $option ) {  /* @var $option Quotegen_Model_DeviceOption */ ?>
 						<tr>
 							<td style="text-align: left;"><?php echo $option->getOption()->getName(); ?></td>
-							<td style="text-align: center;"><input type="text" class="span1" name="quantity<?php echo $option->getOptionId(); ?>" id="quantity<?php echo $option->getOptionId(); ?>" value="<?php echo $option->getQuantity($deviceConfigurationId); ?>" /></td>
-							<td style="text-align: center;"><input type="text" class="span1" name="included<?php echo $option->getOptionId(); ?>" id="included<?php echo $option->getOptionId(); ?>" value="<?php echo $option->getIncludedQuantity($deviceConfigurationId); ?>" /></td>
+							<td style="text-align: center;"><input type="text" class="span1" name="quantity<?php echo $option->getOptionId(); ?>" id="quantity<?php echo $option->getOptionId(); ?>" value="<?php echo $option->getDeviceConfigurationOption($deviceConfigurationId)->getQuantity(); ?>" /></td>
+							<td style="text-align: center;"><input type="text" class="span1" name="included<?php echo $option->getOptionId(); ?>" id="included<?php echo $option->getOptionId(); ?>" value="<?php echo $option->getDeviceConfigurationOption($deviceConfigurationId)->getIncludedQuantity(); ?>" /></td>
 						</tr>
 						<?php } ?>
 					</tbody>
