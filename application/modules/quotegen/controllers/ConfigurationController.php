@@ -129,12 +129,26 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
         // Get form
         $form = new Quotegen_Form_Configuration();
         
-        // Set default master device in dropdown
+        // Prep the device dropdown
+        $form->getElement('masterDeviceId')->setAttrib("onchange", "javascript: document.location.href='/quotegen/configuration/create/id/'+this.value");
         if ($masterDeviceId)
         {
             $form->getElement('masterDeviceId')->setValue($masterDeviceId);
         }
-        
+        else 
+        {
+            // Get first master device id from list
+	        foreach ( Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAll() as $masterDevice )
+	        {
+            	$masterDeviceId = $masterDevice->getId();
+            	break;
+	        }
+        }
+
+        // Get device options
+        $where = "masterDeviceId = {$masterDeviceId}";
+        $deviceOptions = Quotegen_Model_Mapper_DeviceOption::getInstance()->fetchAll($where);
+
         $request = $this->getRequest();
         if ($request->isPost())
         {
@@ -199,6 +213,17 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                 }
             }
         }
+        
+        // Add form to page
+        $form->setDecorators(array (
+                array (
+                        'ViewScript',
+                        array (
+                                'viewScript' => 'configuration/forms/createDeviceConfiguration.phtml',
+                                'deviceOptions' => $deviceOptions
+                        )
+                )
+        ));
         $this->view->form = $form;
     }
 
