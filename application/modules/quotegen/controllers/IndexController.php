@@ -14,6 +14,14 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
         
         $quoteForm = new Quotegen_Form_Quote();
         
+        $clientId = $this->_getParam('clientId', FALSE);
+        if ($clientId)
+        {
+            $quoteForm->populate(array (
+                    'clientId' => $clientId 
+            ));
+        }
+        
         if ($request->isPost())
         {
             $values = $request->getPost();
@@ -43,6 +51,12 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 $this->_quote->setUserId($this->_userId);
                 
                 $quoteId = $this->saveQuote();
+                
+                // Add a default group
+                $quoteDeviceGroup = new Quotegen_Model_QuoteDeviceGroup();
+                $quoteDeviceGroup->setPageMargin($quoteSetting->getPageMargin());
+                $quoteDeviceGroup->setQuoteId($quoteId);
+                $quoteDeviceGroupId = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->insert($quoteDeviceGroup);
                 
                 $quoteLeaseTerm = new Quotegen_Model_QuoteLeaseTerm();
                 $quoteLeaseTerm->setQuoteId($this->_quote->getId());
@@ -87,6 +101,33 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
             }
         }
         $this->view->existingQuoteForm = $existingQuoteForm;
+    }
+
+    public function createClientAction ()
+    {
+        $clientService = new Admin_Service_Client();
+        
+        if ($this->getRequest()->isPost())
+        {
+            $values = $this->getRequest()->getPost();
+            if (isset($values ['cancel']))
+            {
+                $this->_helper->redirector('index');
+            }
+            
+            // Create Client
+            $clientId = $clientService->create($values);
+            
+            if ($clientId)
+            {
+                // Redirect with client id so that the client is preselected
+                $this->_helper->redirector('index', null, null, array (
+                        'clientId' => $clientId 
+                ));
+            }
+        }
+        
+        $this->view->form = $clientService->getForm();
     }
 }
 

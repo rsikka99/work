@@ -70,9 +70,15 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
                     'ignore' => true 
             ));
             
+            $this->addElement('text', 'totalPrice', array(
+                    'label' => 'Total Package Price',
+                    'disabled' => true,
+                    'ignore' => true,
+                    ));
+            
             $this->addElement('text', 'margin', array (
                     'label' => 'Margin:', 
-                    'class' => 'span3', 
+                    'class' => 'span1', 
                     'validators' => array (
                             'Float', 
                             array (
@@ -87,7 +93,7 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
             ));
             
             $this->addElement('text', 'packagePrice', array (
-                    'label' => 'Package Price:', 
+                    'label' => 'Package Price Per Unit:', 
                     'class' => 'span2', 
                     'validators' => array (
                             'Float', 
@@ -105,7 +111,7 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
             $lessThanElementValidator = new My_Validate_LessThanFormValue($this->getElement('packagePrice'));
             
             $this->addElement('text', 'residual', array (
-                    'label' => 'Residual:', 
+                    'label' => 'Residual Per Unit (leased only):', 
                     'class' => 'span2', 
                     'validators' => array (
                             'Float', 
