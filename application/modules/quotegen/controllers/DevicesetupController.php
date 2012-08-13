@@ -313,8 +313,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
 	                        // Save Master Device
 	                        $mapper = new Proposalgen_Model_Mapper_MasterDevice();
 	                        $masterDevice = new Proposalgen_Model_MasterDevice();
-                            $currentDate = date('Y-m-d H:i:s');
-                            $masterDevice->setDateCreated($currentDate);
+                            $masterDevice->setDateCreated(date('Y-m-d H:i:s'));
 
                             foreach ( $values as &$value )
                             {
@@ -323,6 +322,9 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             }
                             
 	                        $masterDevice->populate($values);
+	                        
+	                        // TODO: Make sure device doesn't exist
+	                        
 	                        $masterDeviceId = $mapper->insert($masterDevice);
 	                        
 	                        // Save Toners
@@ -353,6 +355,11 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
 	                        $this->_helper->flashMessenger(array (
 	                                'success' => "MasterDevice '{$masterDevice->getFullDeviceName()}' was updated sucessfully." 
 	                        ));
+                            
+                            // Redirect them here so that the form reloads
+                            $this->_helper->redirector('edit', null, null, array (
+                                    'id' => $masterDeviceId 
+                            ));
                         }
                         else
                         {
