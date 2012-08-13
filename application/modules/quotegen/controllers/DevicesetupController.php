@@ -31,6 +31,14 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
      */
     public function createAction ()
     {   
+        $where = null;
+        $filter = null;
+        $view_filter = null;
+        $assignedToners = null;
+
+        // Populate manufacturers dropdown
+        $manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAll();
+        
         // Create a new form with the mode and roles set
         $form = new Quotegen_Form_DeviceSetup();
         
@@ -40,45 +48,318 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         {
             // Get the post data
             $values = $request->getPost();
+            $assignedToners = $values ['hdnToners'];
             
             // If we cancelled we don't need to validate anything
             if (! isset($values ['cancel']))
             {
                 try
                 {
-                    if ($form->isValid($values))
+                    // Filter
+                    if (isset($values ['btnSearch']))
                     {
-                        // Save Master Device
-                        $mapper = new Proposalgen_Model_Mapper_MasterDevice();
-                        $masterDevice = new Proposalgen_Model_MasterDevice();
-                        foreach ( $values as &$value )
+                        // Toners Search Filter
+                        $filter = $values ['criteria_filter'];
+                        
+                        if ($filter == 'sku')
                         {
-                            if (strlen($value) < 1)
-                                $value = null;
+                            $criteria = $values ['txtCriteria'];
+                            $where = array_merge((array)$where, array (
+                                    'sku LIKE ( ? )' => '%' . $criteria . '%' 
+                            ));
                         }
-                        $masterDevice->populate($values);
-                        
-                        // Save to the database with cascade insert turned on
-                        $masterDeviceId = $mapper->insert($masterDevice);
-                        
-                        // Save Quotegen Device
-                        $sku = $values ['sku'];
-                        if ($masterDeviceId > 0 && strlen($sku) > 0)
+                        else
                         {
-                            // Save Device SKU
-        					$devicemapper = new Quotegen_Model_Mapper_Device();
-                            $device = new Quotegen_Model_Device();
-                            $devicevalues = array (
-                                    'masterDeviceId' => $masterDeviceId, 
-                                    'sku' => $sku 
-                            );
-                            $device->populate($devicevalues);
-                            $devicemapper->insert($device);
+                            $criteria = $values ['cboCriteria'];
+                            $where = array_merge((array)$where, array (
+                                    'manufacturer_id = ?' => $criteria 
+                            ));
+                        }
+                    }
+                    
+                    // Clear Filter
+                    else if (isset($values ['btnClearSearch']))
+                    {
+                        $view_filter = null;
+                    }
+                    
+                    else if ($form->isValid($values))
+                    {
+                        // validate toners against toner_config
+                        $has_toner = false;
+                        $has_black = false;
+                        $has_yellow = false;
+                        $has_magenta = false;
+                        $has_cyan = false;
+                        $has_3color = false;
+                        $has_4color = false;
+                        $toners_valid = false;
+                        
+                        $toner_config_id = $values ['toner_config_id'];
+	                    $toners = explode(',', $values ['hdnToners']);
+	                    
+                        foreach ( $toners as $key => $value )
+                        {
+                            $toner_id = $value;
+                            
+                            if ($toner_id > 0)
+                            {
+                                // get color and type
+                                // TODO: Fix up toners mapper... getting errors in find
+                                // $curToner = Proposalgen_Model_Mapper_Toner::getInstance()->find( (int)$toner_id );
+
+                                // get color and type from $key
+        						$db = Zend_Db_Table::getDefaultAdapter();
+                                $select = new Zend_Db_Select($db);
+                                $select = $db->select()
+                                ->from(array (
+                                        't' => 'pgen_toners'
+                                ))
+                                ->join(array (
+                                        'tc' => 'pgen_toner_colors'
+                                	), 'tc.id = t.toner_color_id', array (
+				                        'tc.name AS toner_color_name' 
+				                ))
+                                ->join(array (
+                                        'pt' => 'pgen_part_types'
+                                	), 'pt.id = t.part_type_id', array (
+				                        'pt.name AS part_type_name' 
+				                ))
+                                ->where('t.id = ?', $toner_id);
+                                $stmt = $db->query($select);
+                                $curToner = $stmt->fetchAll();
+                                
+                                if ( $curToner )
+                                {
+                                    // TODO: Use once toners mapper has been updated
+                                    // $curColor = strtolower($curToner->getColorName());
+                                    // $curType = strtolower($curToner->getPartType());
+                                    
+                                    $curColor = strtolower($curToner [0] ['toner_color_name']);
+                                    $curType = strtolower($curToner [0] ['part_type_name']);
+                                    if ($curColor == "black")
+                                    {
+                                        $has_black = true;
+                                    }
+                                    else if ($curColor == "yellow")
+                                    {
+                                        $has_yellow = true;
+                                    }
+                                    else if ($curColor == "magenta")
+                                    {
+                                        $has_magenta = true;
+                                    }
+                                    else if ($curColor == "cyan")
+                                    {
+                                        $has_cyan = true;
+                                    }
+                                    else if ($curColor == "3 color")
+                                    {
+                                        $has_3color = true;
+                                    }
+                                    else if ($curColor == "4 color")
+                                    {
+                                        $has_4color = true;
+                                    }
+                                }
+                            }
                         }
                         
-                        $this->_helper->flashMessenger(array (
-                                'success' => "MasterDevice '{$masterDevice->getFullDeviceName()}' was updated sucessfully." 
-                        ));
+                        $toner_errors = "";
+                        $toner_error_colors = "";
+                        if ( $toners )
+                        {
+                            // Has toners, validate to make sure they match
+                            // the device
+                            switch ($toner_config_id)
+                            {
+                                case "1" :
+                                    // BLACK ONLY
+                                    if ($has_3color || $has_4color || $has_cyan || $has_magenta || $has_yellow)
+                                    {
+                                        $repop_form = 1;
+                                        $toners_valid = false;
+                                        $toner_errors = "Error: You are trying to add invalid toners to this printer. Only Black Toners are allowed.";
+                                    }
+                                    else if ($has_black)
+                                    {
+                                        $toners_valid = true;
+                                    }
+                                    else
+                                    {
+                                        $repop_form = 1;
+                                        $toner_errors = "Error: Missing a Black Toner. Please add one and try again.";
+                                    }
+                                    break;
+                                case "2" :
+                                    // 3 COLOR - SEPARATED
+                                    if ($has_3color || $has_4color)
+                                    {
+                                        $repop_form = 1;
+                                        $toners_valid = false;
+                                        $toner_errors = "Error: You are trying to add invalid toners to this printer. Only Black, Yellow, Magenta and Cyan Toners are allowed.";
+                                    }
+                                    else if ($has_black)
+                                    {
+                                        if ($has_yellow)
+                                        {
+                                            if ($has_magenta)
+                                            {
+                                                if ($has_cyan)
+                                                {
+                                                    $toners_valid = true;
+                                                }
+                                                else
+                                                {
+                                                    $toner_error_colors = "Cyan";
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (! empty($toner_error_colors))
+                                                {
+                                                    $toner_error_colors .= ", ";
+                                                }
+                                                $toner_error_colors = "Magenta";
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (! empty($toner_error_colors))
+                                            {
+                                                $toner_error_colors .= ", ";
+                                            }
+                                            $toner_error_colors = "Yellow";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (! empty($toner_error_colors))
+                                        {
+                                            $toner_error_colors .= ", ";
+                                        }
+                                        $toner_error_colors = "Black";
+                                    }
+                                    
+                                    if ($toner_error_colors != '')
+                                    {
+                                        $repop_form = 1;
+                                        $toner_errors = "Error: Missing a " . $toner_error_colors . " Toner. Please add one and try again.";
+                                    }
+                                    break;
+                                case "3" :
+                                    // 3 COLOR - COMBINED
+                                    if ($has_4color || $has_cyan || $has_magenta || $has_yellow)
+                                    {
+                                        $repop_form = 1;
+                                        $toners_valid = false;
+                                        $toner_errors = "Error: You are trying to add invalid toners to this printer. Only 3 Color and Black Toners are allowed.";
+                                    }
+                                    else if ($has_black)
+                                    {
+                                        if ($has_3color)
+                                        {
+                                            $toners_valid = true;
+                                        }
+                                        else
+                                        {
+                                            $toner_error_colors = "3 Color";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (! empty($toner_error_colors))
+                                        {
+                                            $toner_error_colors .= ", ";
+                                        }
+                                        $toner_error_colors = "Black";
+                                    }
+                                    
+                                    if ($toner_error_colors != '')
+                                    {
+                                        $repop_form = 1;
+                                        $toner_errors = "Error: Missing a " . $toner_error_colors . " Toner. Please add one and try again.";
+                                    }
+                                    break;
+                                case "4" :
+                                    // 4 COLOR - COMBINED
+                                    if ($has_3color || $has_black || $has_cyan || $has_magenta || $has_yellow)
+                                    {
+                                        $repop_form = 1;
+                                        $toners_valid = false;
+                                        $toner_errors = "Error: You are trying to add invalid toners to this printer. Only 4 Color Toners are allowed.";
+                                    }
+                                    else if ($has_4color)
+                                    {
+                                        $toners_valid = true;
+                                    }
+                                    else
+                                    {
+                                        $repop_form = 1;
+                                        $toner_errors = "Error: Missing a 4 Color Toner. Please add one and try again.";
+                                    }
+                                    break;
+                            }
+                        
+                        }
+                        else
+                        {
+                            $toners_valid = false;
+                            $toner_errors = "You must add required toners before saving this device.";
+                        }
+                        
+                        if ( $toner_errors == "" )
+                        {
+	                        // Save Master Device
+	                        $mapper = new Proposalgen_Model_Mapper_MasterDevice();
+	                        $masterDevice = new Proposalgen_Model_MasterDevice();
+                            $currentDate = date('Y-m-d H:i:s');
+                            $masterDevice->setDateCreated($currentDate);
+
+                            foreach ( $values as &$value )
+                            {
+                                if (strlen($value) < 1)
+                                    $value = null;
+                            }
+                            
+	                        $masterDevice->populate($values);
+	                        $masterDeviceId = $mapper->insert($masterDevice);
+	                        
+	                        // Save Toners
+	                    	foreach ($toners as $key => $value)
+	                    	{ 
+	                            $deviceTonerMapper = new Proposalgen_Model_Mapper_DeviceToner();
+	                            $deviceToner = new Proposalgen_Model_DeviceToner();
+	                            $deviceToner->setTonerId($value);
+	                            $deviceToner->setMasterDeviceId($masterDeviceId);
+	                            $deviceTonerMapper->save($deviceToner);
+	                    	}
+	                    	   
+	                        // Save Quotegen Device
+	                        $sku = $values ['sku'];
+	                        if ($masterDeviceId > 0 && strlen($sku) > 0)
+	                        {
+	                            // Save Device SKU
+	        					$devicemapper = new Quotegen_Model_Mapper_Device();
+	                            $device = new Quotegen_Model_Device();
+	                            $devicevalues = array (
+	                                    'masterDeviceId' => $masterDeviceId, 
+	                                    'sku' => $sku 
+	                            );
+	                            $device->populate($devicevalues);
+	                            $devicemapper->insert($device);
+	                        }
+	                        
+	                        $this->_helper->flashMessenger(array (
+	                                'success' => "MasterDevice '{$masterDevice->getFullDeviceName()}' was updated sucessfully." 
+	                        ));
+                        }
+                        else
+                        {
+	                        $this->_helper->flashMessenger(array (
+	                                'danger' => $toner_errors
+	                        ));
+                        }
                     }
                     
                     // Error
@@ -101,12 +382,26 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             }
         }
         
+        // Display filterd list of toners
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Admin_Model_Mapper_Toner::getInstance(), $where));
+        
+        // Set the current page we're on
+        $paginator->setCurrentPageNumber($this->_getParam('page', 1));
+        
+        // Set how many items to show
+        $paginator->setItemCountPerPage(15);
+        
         // Add form to page
         $form->setDecorators(array (
                 array (
                         'ViewScript', 
                         array (
-                                'viewScript' => 'devicesetup/forms/createdevice.phtml'
+                                'viewScript' => 'devicesetup/forms/createdevice.phtml',
+        						'manufacturers' => $manufacturers,
+        						'assignedToners' => $assignedToners,
+                                'paginator' => $paginator,
+                                'viewfilter' => $view_filter,
+                                'search_filter' => $filter
                         ) 
                 ) 
         ));

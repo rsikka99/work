@@ -2,6 +2,74 @@
 $form = $this->form;
 ?>
 
+<?php $this->headScript()->captureStart('append','text/javascript') ?>
+
+    $(document).ready(function() {
+    
+    	// Toggle the filter field
+		$("#criteria_filter").change(function() {
+			var url = '';
+			
+			//clear searches
+			$("#txtCriteria").val('');
+			$("#cboCriteria").val('');
+			
+			switch (this.value) {
+				case "manufacturer":
+					$("#text_criteria").hide();
+					$("#list_criteria").show();
+					break;
+				case "sku":
+					$("#list_criteria").hide();
+					$("#text_criteria").show();
+					break;
+				default:
+					break;
+			}
+    	});
+    	
+    });
+    
+    function removeA(arr) {
+	    var what, a= arguments, L= a.length, ax;
+	    while(L> 1 && arr.length){
+	        what= a[--L];
+	        while((ax= arr.indexOf(what))!= -1){
+	            arr.splice(ax, 1);
+	        }
+	    }
+	    return arr;
+	}
+	    
+    function update_toner(id) {
+    	var ids = $("#hdnToners").val();
+    	var idsArray = ids.split(',');
+    	
+    	if ( jQuery.inArray(id.toString(), idsArray) > -1 ) {
+    		// remove from array
+    		idsArray.splice(jQuery.inArray(id.toString(), idsArray), 1);
+    		
+    		// toggle button to assign
+    		$("#btnAssign"+id).attr('class','btn btn-success btn-mini');
+    		$("#btnAssign"+id).html('<i class="icon-plus-sign icon-white"></i> Assign');
+    		
+    	} else {
+    		// add to array
+    		if ( ids.length > 0 ) {
+    			idsArray.push(id);
+    		} else {
+    			idsArray = id;
+    		}
+    		
+    		// toggle button to remove
+    		$("#btnAssign"+id).attr('class','btn btn-danger btn-mini');
+    		$("#btnAssign"+id).html('<i class="icon-minus-sign icon-white"></i> Unassign');
+    	}
+    	$("#hdnToners").val(idsArray.toString());
+    }
+	
+<?php $this->headScript()->captureEnd() ?>
+
 <form name="createdevice" id="createdevice" class="form-horizontal" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>">
 	
 	<div class="control-group">
@@ -213,6 +281,69 @@ $form = $this->form;
 			<?php echo trim($element->renderViewHelper()); ?>
 			<?php echo $element->renderErrors(); ?>
 		</div>
+	</div>
+	
+	<div id="toners_container">
+	<h3>Toners</h3>
+	<input type="hidden" name="hdnToners" id="hdnToners" value="<?php echo $this->assignedToners ?>" />
+	
+	<div id="filter" class="well">
+		<label for="criteria_filter" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">Filter:</label>
+		<select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
+			<option value="sku" <?php if($this->search_filter == 'sku') { echo "selected"; } ?>>SKU</option>
+			<option value="manufacturer" <?php if($this->search_filter == 'manufacturer') { echo "selected"; } ?>>Manufacturer</option>
+		</select>
+		<label for="txtCriteria" class="details_label" style="display: inline; padding: 0px 10px 0px 10px;">for</label>
+		<span id="text_criteria"><input type="text" name="txtCriteria" style="width: 152px; margin: 0px 10px 0px 0px;" id="txtCriteria" <?php if($this->search_criteria != '') { echo 'value="' . $this->search_criteria . '"'; } ?> /></span>
+		<span id="list_criteria" style="display: none;">
+			<select name="cboCriteria" id="cboCriteria" style="width: 160px; margin: 0px 10px 0px 0px;">
+			<?php foreach ( $this->manufacturers as $manufacturer ) {  /* @var $manufacturer Proposalgen_Model_Manufacturer */ ?>
+				<option value="<?php echo $manufacturer->getId(); ?>"><?php echo $manufacturer->getDisplayname(); ?></option>
+			<?php } ?>
+			</select>
+		</span>
+		<input type="submit" name="btnSearch" id="btnSearch" value="Search" class="btn" />
+		<input type="submit" name="btnClearSearch" id="btnClearSearch" value="Clear" class="btn" />
+	</div>
+	
+	<?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
+		<table class="table table-striped table-condensed table-bordered">
+			<thead>
+				<tr>
+					<th>SKU</th>
+				 	<th>Manufacturer</th>
+					<th>Type</th>
+					<th>Color</th>
+					<th>Yield</th>
+					<th>Cost</th>
+					<th style="width: 100px; text-align: center;">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+			    <?php foreach ($this->paginator->getCurrentItems() as $toner) : /* @var $toner Admin_Model_Toner */ ?>
+			    <tr>
+					<td><?php echo $toner->getSku(); ?></td>
+					<td><?php echo $toner->getManufacturer()->getDisplayname(); ?></td>
+					<td><?php echo $toner->getPartType()->getTypeName(); ?></td>
+					<td style="text-transform: capitalize;"><?php echo strToLower($toner->getTonerColor()->getTonerColorName()); ?></td>
+					<td style="text-align: right;"><?php echo number_format($toner->getYield(), 0, '', ','); ?></td>
+					<td style="text-align: right;"><?php echo "$" . number_format($toner->getCost(), 2, '.', ','); ?></td>
+					<td style="text-align: center;">
+						<?php if ( in_array($toner->getId(), explode(",", $this->assignedToners) ) ) { ?>
+							<button type="button" name="btnAssign<?php echo $toner->getId(); ?>" id="btnAssign<?php echo $toner->getId(); ?>" class="btn btn-danger btn-mini" onclick="javascript: update_toner(<?php echo $toner->getId(); ?>);"><i class="icon-minus-sign icon-white"></i> Unassign</button>
+						<?php } else { ?>
+							<button type="button" name="btnAssign<?php echo $toner->getId(); ?>" id="btnAssign<?php echo $toner->getId(); ?>" class="btn btn-success btn-mini" onclick="javascript: update_toner(<?php echo $toner->getId(); ?>);"><i class="icon-plus-sign icon-white"></i> Assign</button>
+						<?php } ?>
+					</td>
+				</tr>
+		        <?php endforeach; ?>
+			</tbody>
+		</table>
+		<?php echo $this->paginationControl($this->paginator); ?>
+	<?php else : ?>
+		<h4>There are no toners available.</h4>
+	<?php endif; ?>
+	
 	</div>
 	
 	<div>
