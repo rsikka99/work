@@ -229,5 +229,23 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
         // TODO: When we move to user/company based clients we will filter it here for them
         return $this->fetchAll(null, "$this->col_name ASC");
     }
+
+    /**
+     * Finds a client by name (Case insensitive)
+     * 
+     * @param unknown_type $clientName            
+     * @return Ambigous <Quotegen_Model_Client, void>
+     */
+    public function findClientByName ($clientName)
+    {
+        if ($clientName instanceof Quotegen_Model_Client)
+        {
+            $clientName = $clientName->getName();
+        }
+        
+        return $this->fetch(array (
+                "UPPER({$this->col_name}) = UPPER(?)" => $clientName 
+        ));
+    }
 }
 
