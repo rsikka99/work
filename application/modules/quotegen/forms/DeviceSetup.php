@@ -239,7 +239,9 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         
         /*
          * Launch Date
-         */
+         * 
+         * DOES NOT WORK IN VIEW SCRIPT?!?
+         * 
         $minYear = 1950;
         $maxYear = date('Y') + 2;
         $launchDate = new ZendX_JQuery_Form_Element_DatePicker('launch_date');
@@ -253,12 +255,25 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
             ->setDescription('yyyy-mm-dd')
             ->addValidator(new My_Validate_DateTime('/\d{4}-\d{2}-\d{2}/'))
             ->setRequired(true);
-        $launchDate->addFilters(array (
-                'StringTrim', 
-                'StripTags' 
-        ));
+	        $launchDate->addFilters(array (
+	                'StringTrim', 
+	                'StripTags' 
+	        ));
         
         $this->addElement($launchDate);
+         */
+        $this->addElement('text', 'launch_date', array (
+                'label' => 'Launch Date:',
+                'required' => true, 
+                'filters' => array (
+                        'StringTrim',
+                        'StripTags'
+                ),
+                'description' => 'yyyy-mm-dd',
+                'validators' => array (
+                        'Date',
+                        )
+        ));
         
         /*
          * Duty Cycle
