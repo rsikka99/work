@@ -1035,7 +1035,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $assignedOptions = array ();
         foreach ( $device->getDeviceOptions() as $option )
         {
-            $assignedOptions [] = $option->getId();
+            $assignedOptions [] = $option->getOptionId();
         }
         $this->view->device = $device;
         $this->view->assignedOptions = $assignedOptions;
