@@ -23,26 +23,85 @@ class Admin_Service_Client
         return $this->_form;
     }
 
+    /**
+     * Creates a client from data
+     *
+     * @param array $data
+     *            An array of data to use when creating a client. The data will be validated using the form.
+     * @return int The client id, or false on failed validation.
+     */
     public function create ($data)
     {
         $clientId = false;
-        $data = $this->validateData($data);
+        $data = $this->validateAndFilterData($data);
         if ($data !== FALSE)
         {
             $client = new Quotegen_Model_Client($data);
             
-            $clientId = Quotegen_Model_Mapper_Client::getInstance()->insert($client);
+            if (Quotegen_Model_Mapper_Client::getInstance()->findClientByName($client))
+            {
+                $this->getForm()
+                    ->getElement('name')
+                    ->addError('A client with this name already exists');
+                $this->getForm()->buildBootstrapErrorDecorators();
+            }
+            else
+            {
+                $clientId = Quotegen_Model_Mapper_Client::getInstance()->insert($client);
+            }
         }
         
         return $clientId;
     }
 
-    protected function validateData ($data)
+    /**
+     * Updates a client
+     *
+     * @param array $data
+     *            An array of data to use when creating a client. The data will be validated using the form.
+     * @return boolean Whether or not the update was successful
+     */
+    public function update ($data)
+    {
+        $success = false;
+        $data = $this->validateAndFilterData($data);
+        
+        if ($data !== FALSE)
+        {
+            $client = new Quotegen_Model_Client($data);
+            
+            if (Quotegen_Model_Mapper_Client::getInstance()->findClientByName($client))
+            {
+                $this->getForm()
+                    ->getElement('name')
+                    ->addError('A client with this name already exists');
+                $this->getForm()->buildBootstrapErrorDecorators();
+            }
+            else
+            {
+                $rowsAffected = Quotegen_Model_Mapper_Client::getInstance()->save($client);
+                $success = ($rowsAffected);
+            }
+        }
+        
+        return $success;
+    }
+
+    /**
+     * Validates the data with the form
+     *
+     * @param array $data
+     *            The array of data to validate
+     * @return array The array of valid and filtered data, or false on error.
+     */
+    protected function validateAndFilterData ($data)
     {
         $validData = false;
-        if ($this->getForm()->isValid($data))
+        $form = $this->getForm();
+        
+        if ($form->isValid($data))
         {
-            $validData = $this->getForm()->getValues();
+            $validData = $form->getValues();
         }
         else
         {

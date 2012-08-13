@@ -69,9 +69,9 @@ class Quotegen_ClientController extends Zend_Controller_Action
                     }
                     catch ( Exception $e )
                     {
-                        $this->_helper->flashMessenger(array(
-                                'danger' => "Client {$client->getName} cannot be deleted since there are  quote(s) attached."
-                                ));
+                        $this->_helper->flashMessenger(array (
+                                'danger' => "Client {$client->getName} cannot be deleted since there are  quote(s) attached." 
+                        ));
                         $this->_helper->redirector('index');
                     }
                     
@@ -91,79 +91,36 @@ class Quotegen_ClientController extends Zend_Controller_Action
 
     public function createAction ()
     {
-        $request = $this->getRequest();
-        $form = new Quotegen_Form_Client();
-        
-        if ($request->isPost())
+        $clientService = new Admin_Service_Client();
+
+        if ($this->getRequest()->isPost())
         {
-            $values = $request->getPost();
-            if (! isset($values ['cancel']))
+            $values = $this->getRequest()->getPost();
+            if (isset($values ['cancel']))
             {
-                try
-                {
-                    if ($form->isValid($values))
-                    {
-                        // Save to the database
-                        try
-                        {
-                            $mapper = Quotegen_Model_Mapper_Client::getInstance();
-                            $client = new Quotegen_Model_Client();
-                            $values ['clientId'] = Zend_Auth::getInstance()->getIdentity()->id;
-                            $client->populate($values);
-                            $clientId = $mapper->insert($client);
-                            
-                            $this->_helper->flashMessenger(array (
-                                    'success' => "Client {$client->getName()} was added successfully." 
-                            ));
-                            
-                            // Reset the form after everything is saved successfully
-                            $form->reset();
-                        }
-                        catch ( Zend_Db_Statement_Mysqli_Exception $e )
-                        {
-                            // Check to see what error code was thrown
-                            switch ($e->getCode())
-                            {
-                                // Duplicate column
-                                case 1062 :
-                                    $this->_helper->flashMessenger(array (
-                                            'danger' => 'Client already exists.' 
-                                    ));
-                                    break;
-                                default :
-                                    $this->_helper->flashMessenger(array (
-                                            'danger' => 'Error saving to database.  Please try again.' 
-                                    ));
-                                    break;
-                            }
-                            
-                            $form->populate($request->getPost());
-                        }
-                        catch ( Exception $e )
-                        {
-                            $this->_helper->flashMessenger(array (
-                                    'danger' => 'There was an error processing this request.  Please try again.' 
-                            ));
-                            $form->populate($request->getPost());
-                        }
-                    }
-                    else
-                    {
-                        throw new Zend_Validate_Exception("Form Validation Failed");
-                    }
-                }
-                catch ( Zend_Validate_Exception $e )
-                {
-                    $form->buildBootstrapErrorDecorators();
-                }
-            }
-            else
-            {
-                // User has cancelled - redirect
                 $this->_helper->redirector('index');
             }
+            
+            try
+            {
+                // Create Client
+                $clientId = $clientService->create($values);
+            }
+            catch ( Exception $e )
+            {
+                $clientId = false;
+            }
+            
+            if ($clientId)
+            {
+                // Redirect with client id so that the client is preselected
+                $this->_helper->redirector('index', null, null, array (
+                        'clientId' => $clientId 
+                ));
+            }
         }
-        $this->view->form = $form;
+        
+        $this->view->form = $clientService->getForm();
     }
 
     public function editAction ()
