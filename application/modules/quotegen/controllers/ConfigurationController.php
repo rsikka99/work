@@ -385,7 +385,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                             $deviceConfigurationOptionMapper = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance();
                             $deviceConfigurationOptionModel = new Quotegen_Model_DeviceConfigurationOption();
                             
-                            if ( $quantity > 0 || $includedQuantity > 0 )
+                            if ( $quantity > 0 )
                             {
                                 // Update if option exists
                                 $deviceConfigurationOption = $deviceConfigurationOptionMapper->fetch($where);
