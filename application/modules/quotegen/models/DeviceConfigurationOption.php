@@ -61,8 +61,6 @@ class Quotegen_Model_DeviceConfigurationOption extends My_Model_Abstract
             $this->setOptionId($params->optionId);
         if (isset($params->quantity) && ! is_null($params->quantity))
             $this->setQuantity($params->quantity);
-        if (isset($params->includedQuantity) && ! is_null($params->includedQuantity))
-            $this->setIncludedQuantity($params->includedQuantity);
     }
     
     /*
@@ -73,8 +71,7 @@ class Quotegen_Model_DeviceConfigurationOption extends My_Model_Abstract
         return array (
                 'deviceConfigurationId' => $this->getDeviceConfigurationId(), 
                 'optionId' => $this->getOptionId(), 
-                'quantity' => $this->getQuantity(),
-                'includedQuantity' => $this->getIncludedQuantity()
+                'quantity' => $this->getQuantity()
         );
     }
 

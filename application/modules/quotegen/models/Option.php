@@ -43,13 +43,20 @@ class Quotegen_Model_Option extends My_Model_Abstract
      * @var string
      */
     protected $_sku;
-    
+
     /**
      * An array of Quotegen_Model_Category associated with the object
      *
      * @var array
      */
     protected $_categories;
+    
+    /**
+     * Returns this options included quantity for a device
+     *
+     * @var int
+     */
+    protected $_includedQuantity;
     
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
@@ -224,4 +231,28 @@ class Quotegen_Model_Option extends My_Model_Abstract
         $this->_categories = $_categories;
         return $this;
     }
+    
+    /**
+     * Gets the included quantity for a device option
+     *
+     * @return int $includedQuantity
+     */
+    public function getIncludedQuantity ( $deviceId )
+    {
+        if (! isset($this->_includedQuantity))
+        {
+            $includedQuantity = Quotegen_Model_Mapper_DeviceOption::getInstance()->fetch("masterDeviceId = {$deviceId} AND optionid = {$this->getId()}");
+            if ($includedQuantity)
+            {
+                $this->_includedQuantity = $includedQuantity->getIncludedQuantity();
+            }
+            else
+            {
+                $this->_includedQuantity = 0;
+            }
+        }
+        return $this->_includedQuantity;
+    }
+    
+    
 }

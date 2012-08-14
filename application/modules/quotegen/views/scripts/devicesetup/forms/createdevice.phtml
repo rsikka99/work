@@ -5,7 +5,9 @@ $form = $this->form;
 <?php $this->headScript()->captureStart('append','text/javascript') ?>
 
     $(document).ready(function() {
-    
+    	// Set up info popups
+    	$('i').popover();
+    	
     	// Toggle the filter field
 		$("#criteria_filter").change(function() {
 			var url = '';

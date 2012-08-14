@@ -565,7 +565,8 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        $device = Quotegen_Model_Mapper_Device::getInstance()->find($deviceId);
+        // Get the Master Device
+        $device = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($deviceId);
         if (! $device)
         {
             $this->_helper->flashMessenger(array (
@@ -574,30 +575,26 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        // TODO: Show how many of each option will be deleted
+        // Get the Quotegen Device
+        $quoteDevice = Quotegen_Model_Mapper_Device::getInstance()->find($deviceId);
+        
         // Get all the deviceConfiguration associated with the masterDeviceId
         $deviceConfigurations = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAllDeviceConfigurationByDeviceId($deviceId);
         
         // Set up all mappers required for deletion
+        $tonerMapper = Proposalgen_Model_Mapper_Toner::getInstance();
+        $quoteDeviceMapper = Quotegen_Model_Mapper_Device::getInstance();
         $userDeviceConfigurationMapper = Quotegen_Model_Mapper_UserDeviceConfiguration::getInstance();
         $globalDeviceConfigurationMapper = Quotegen_Model_Mapper_GlobalDeviceConfiguration::getInstance();
         $quoteDeviceConfigurationMapper = Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance();
         $deviceConfigurationMapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
         $deviceConfigurationOptionsMapper = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance();
         
-        // TODO: Show what is being deleted in messages
-        //         foreach ( $deviceConfigurations as $deviceConfiguration)
-        //         {
-        //             $deviceConfigurationId = $deviceConfiguration->getId();
-        //             $userDeviceConfigurationMapper->countByDeviceId($deviceConfigurationId);
-        //             $globalDeviceConfigurationMapper->countByDeviceId($deviceConfigurationId);
-        //             $quoteDeviceConfigurationMapper->countByDeviceId($deviceConfigurationId);
-        //             $deviceConfigurationMapper->countByDeviceId($deviceConfigurationId);
-        //             $deviceConfigurationOptionsMapper->countByDeviceId($deviceConfigurationId);
-        //         }
+        $deviceManufacturer = $device->getManufacturer()->getDisplayname();
+        $deviceModel = $device->getPrinterModel();
+        $deviceName = $deviceManufacturer . ' ' . $deviceModel;
         
-
-        $message = "Are you sure you want to delete {$device->getMasterDeviceId()}?";
+        $message = "Are you sure you want to delete {$deviceName}?";
         $form = new Application_Form_Delete($message);
         
         $request = $this->getRequest();
@@ -625,9 +622,25 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         // Delete the deviceConfiguration
                         $deviceConfigurationMapper->delete($deviceConfiguration);
                     }
-                    Quotegen_Model_Mapper_DeviceOption::getInstance()->delete($device);
+                    Quotegen_Model_Mapper_DeviceOption::getInstance()->delete($quoteDevice);
+                    
+                    // Delete Quotegen Device
+                    Quotegen_Model_Mapper_Device::getInstance()->delete($quoteDevice);
+                    
+                    // Delete toners for Master Device
+                    $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchAll("master_device_id = {$deviceId}");
+                    foreach ( $deviceToners as $toner )
+                    {
+                        $tonerId = $toner->getTonerId();
+                        Proposalgen_Model_Mapper_DeviceToner::getInstance()->delete("toner_id = {$tonerId}");
+                    }
+                    
+                    // Delete Master Device
+                    Proposalgen_Model_Mapper_MasterDevice::getInstance()->delete($device);
+                    
+                    // Display Message and return
                     $this->_helper->flashMessenger(array (
-                            'success' => "Device  {$device->getMasterDeviceId()} was deleted successfully." 
+                            'success' => "{$deviceName} was deleted successfully." 
                     ));
                     $this->_helper->redirector('index');
                 }
@@ -912,29 +925,50 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                     // Get Option Id
                     $optionId = $values ['optionid'];
                     $deviceOptionMapper = new Quotegen_Model_Mapper_DeviceOption();
+                    $deviceOption = new Quotegen_Model_DeviceOption();
                     
                     // Save if option and device id
                     if ($optionId && $masterDeviceId)
                     {
+	                    // Prep values
+	                    if (isset($values ["included{$optionId}"]))
+	                    {
+	                    	$includedQuantity = $values ["included{$optionId}"];   
+	                    }
+	                    else
+	                    {
+	                        $includedQuantity = null;
+	                    }
+	                    $deviceOption->setMasterDeviceId($masterDeviceId);
+	                    $deviceOption->setOptionId($optionId);
+	                    $deviceOption->setIncludedQuantity($includedQuantity);
+	                    
+	                    // Update included quantity for Option
+                        if (isset($values ['btnUpdate']))
+                        {
+                            // Update device option
+                            $deviceOptionMapper->save($deviceOption);
+                            
+                            $this->_helper->flashMessenger(array (
+                                    'success' => "The option was updated successfully." 
+                            ));
+                        }
+                        
                         // Assign Option
-                        if (isset($values ['btnAssign']))
+                        else if (isset($values ['btnAssign']))
                         {
                             // Save device option
-                            $deviceOption = new Quotegen_Model_DeviceOption();
-                            $deviceOption->setMasterDeviceId($masterDeviceId);
-                            $deviceOption->setOptionId($optionId);
                             $deviceOptionMapper->insert($deviceOption);
                             
                             $this->_helper->flashMessenger(array (
                                     'success' => "The option was assigned successfully." 
                             ));
                         }
+                        
+                        // Unassign Option
                         else if (isset($values ['btnUnassign']))
                         {
                             // Delete device option
-                            $deviceOption = new Quotegen_Model_DeviceOption();
-                            $deviceOption->setMasterDeviceId($masterDeviceId);
-                            $deviceOption->setOptionId($optionId);
                             $deviceOptionMapper->delete($deviceOption);
                             
                             $this->_helper->flashMessenger(array (

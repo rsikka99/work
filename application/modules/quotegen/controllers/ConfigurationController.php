@@ -166,36 +166,33 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                         $values ['masterDeviceId'] = $masterDeviceId;
                         $deviceConfiguration->populate($values);
                         $deviceConfigurationId = $mapper->insert($deviceConfiguration);
-
+                        
                         // Save Options
                         foreach ( $deviceOptions as $option )
                         {
                             $optionId = $option->getOptionId();
                             $quantity = $values ["quantity{$optionId}"];
-                            $includedQuantity = $values ["included{$optionId}"];
                         
                             $where = "deviceConfigurationId = {$deviceConfigurationId} AND optionId = {$optionId}";
                             $deviceConfigurationOptionMapper = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance();
                             $deviceConfigurationOptionModel = new Quotegen_Model_DeviceConfigurationOption();
                         
-                            if ( $quantity > 0 || $includedQuantity > 0 )
+                            if ( $quantity > 0 )
                             {
                                 // Update if option exists
                                 $deviceConfigurationOption = $deviceConfigurationOptionMapper->fetch($where);
                                 if ( $deviceConfigurationOption )
                                 {
                                     $deviceConfigurationOption->setQuantity($quantity);
-                                    $deviceConfigurationOption->setIncludedQuantity($includedQuantity);
                                     $deviceConfigurationOptionMapper->save($deviceConfigurationOption);
                                 }
                         
                                 // Else Add option
                                 else
-                                {
+                                {   
                                     $deviceConfigurationOptionModel->setDeviceConfigurationId($deviceConfigurationId);
                                     $deviceConfigurationOptionModel->setOptionId($optionId);
                                     $deviceConfigurationOptionModel->setQuantity($quantity);
-                                    $deviceConfigurationOptionModel->setIncludedQuantity($includedQuantity);
                                     $deviceConfigurationOptionMapper->insert($deviceConfigurationOptionModel);
                                 }
                             }
@@ -205,6 +202,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                                 $deviceConfigurationOption = $deviceConfigurationOptionMapper->fetch($where);
                                 $deviceConfigurationOptionMapper->delete($deviceConfigurationOption);
                             }
+                            
                         }
                             
                         $this->_helper->flashMessenger(array (
@@ -382,20 +380,18 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                         {
                             $optionId = $option->getOptionId();
                             $quantity = $values ["quantity{$optionId}"];
-                            $includedQuantity = $values ["included{$optionId}"];
 
                             $where = "deviceConfigurationId = {$deviceConfigurationId} AND optionId = {$optionId}";
                             $deviceConfigurationOptionMapper = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance();
                             $deviceConfigurationOptionModel = new Quotegen_Model_DeviceConfigurationOption();
                             
-                            if ( $quantity > 0 || $includedQuantity > 0 )
+                            if ( $quantity > 0 )
                             {
                                 // Update if option exists
                                 $deviceConfigurationOption = $deviceConfigurationOptionMapper->fetch($where);
                                 if ( $deviceConfigurationOption )
                                 {
                                     $deviceConfigurationOption->setQuantity($quantity);
-                                    $deviceConfigurationOption->setIncludedQuantity($includedQuantity);
                                     $deviceConfigurationOptionMapper->save($deviceConfigurationOption);
                                 }
                                 
@@ -405,7 +401,6 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                                     $deviceConfigurationOptionModel->setDeviceConfigurationId($deviceConfigurationId);
                                     $deviceConfigurationOptionModel->setOptionId($optionId);
                                     $deviceConfigurationOptionModel->setQuantity($quantity);
-                                    $deviceConfigurationOptionModel->setIncludedQuantity($includedQuantity);
                                     $deviceConfigurationOptionMapper->insert($deviceConfigurationOptionModel);
                                 }
                             }
