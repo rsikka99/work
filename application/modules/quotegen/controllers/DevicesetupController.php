@@ -925,31 +925,50 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                     // Get Option Id
                     $optionId = $values ['optionid'];
                     $deviceOptionMapper = new Quotegen_Model_Mapper_DeviceOption();
+                    $deviceOption = new Quotegen_Model_DeviceOption();
                     
                     // Save if option and device id
                     if ($optionId && $masterDeviceId)
                     {
+	                    // Prep values
+	                    if (isset($values ["included{$optionId}"]))
+	                    {
+	                    	$includedQuantity = $values ["included{$optionId}"];   
+	                    }
+	                    else
+	                    {
+	                        $includedQuantity = null;
+	                    }
+	                    $deviceOption->setMasterDeviceId($masterDeviceId);
+	                    $deviceOption->setOptionId($optionId);
+	                    $deviceOption->setIncludedQuantity($includedQuantity);
+	                    
+	                    // Update included quantity for Option
+                        if (isset($values ['btnUpdate']))
+                        {
+                            // Update device option
+                            $deviceOptionMapper->save($deviceOption);
+                            
+                            $this->_helper->flashMessenger(array (
+                                    'success' => "The option was updated successfully." 
+                            ));
+                        }
+                        
                         // Assign Option
-                        if (isset($values ['btnAssign']))
+                        else if (isset($values ['btnAssign']))
                         {
                             // Save device option
-                    		$includedQuantity = $values ["included{$optionId}"];
-                            $deviceOption = new Quotegen_Model_DeviceOption();
-                            $deviceOption->setMasterDeviceId($masterDeviceId);
-                            $deviceOption->setOptionId($optionId);
-                            $deviceOption->setIncludedQuantity($includedQuantity);
                             $deviceOptionMapper->insert($deviceOption);
                             
                             $this->_helper->flashMessenger(array (
                                     'success' => "The option was assigned successfully." 
                             ));
                         }
+                        
+                        // Unassign Option
                         else if (isset($values ['btnUnassign']))
                         {
                             // Delete device option
-                            $deviceOption = new Quotegen_Model_DeviceOption();
-                            $deviceOption->setMasterDeviceId($masterDeviceId);
-                            $deviceOption->setOptionId($optionId);
                             $deviceOptionMapper->delete($deviceOption);
                             
                             $this->_helper->flashMessenger(array (

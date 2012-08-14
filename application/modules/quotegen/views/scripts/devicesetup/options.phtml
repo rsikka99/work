@@ -44,7 +44,7 @@ $id = $this->id;
 	                <tr>
 	                    <th style="width: 200px;">SKU</th>
 	                    <th>Option</th>
-	                    <th style="width: 120px; text-align: center;">Included Quantity</th>
+	                    <th style="width: 160px; text-align: center;">Included Quantity</th>
 						<th style="width: 120px; text-align: center;">Action</th>
 	                </tr>
 					<?php foreach ($this->paginator as $option) : /* @var $option Quotegen_Model_Option */ ?>
@@ -58,6 +58,7 @@ $id = $this->id;
 								<?php } else { ?>
 	                    			<input type="text" name="included<?php echo $option->getId(); ?>" id="included<?php echo $option->getId(); ?>" class="span1" value="<?php echo $option->getIncludedQuantity($id); ?>" />
 								<?php } ?>
+								<!-- button type="submit" name="btnUpdate" id="btnUpdate" class="btn btn-success btn-mini" onclick="javascript: $('#optionid').val(<?php echo $option->getId(); ?>);"><i class=" icon-refresh icon-white"></i> Update</button -->
 							</div>
 	                    </td>
 	                    <td style="text-align: center;">
