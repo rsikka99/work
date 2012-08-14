@@ -327,7 +327,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_device_instances` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
   `report_id` INT(11) NOT NULL ,
   `master_device_id` INT(11) NOT NULL ,
-  `upload_data_collector_id` INT(11) NOT NULL ,
+  `upload_data_collector_row_id` INT(11) NOT NULL ,
   `serial_number` VARCHAR(255) NULL DEFAULT NULL ,
   `mps_monitor_startdate` DATETIME NOT NULL ,
   `mps_monitor_enddate` DATETIME NOT NULL ,
@@ -338,7 +338,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_device_instances` (
   PRIMARY KEY (`id`) ,
   INDEX `report_id` (`report_id` ASC) ,
   INDEX `master_device_id` (`master_device_id` ASC) ,
-  INDEX `upload_data_collector_id` (`upload_data_collector_id` ASC) ,
+  INDEX `upload_data_collector_id` (`upload_data_collector_row_id` ASC) ,
   CONSTRAINT `proposalgenerator_device_instances_ibfk_1`
     FOREIGN KEY (`report_id` )
     REFERENCES `pgen_reports` (`id` ),
@@ -346,7 +346,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_device_instances` (
     FOREIGN KEY (`master_device_id` )
     REFERENCES `pgen_master_devices` (`id` ),
   CONSTRAINT `proposalgenerator_device_instances_ibfk_3`
-    FOREIGN KEY (`upload_data_collector_id` )
+    FOREIGN KEY (`upload_data_collector_row_id` )
     REFERENCES `pgen_upload_data_collector_rows` (`id` ))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
