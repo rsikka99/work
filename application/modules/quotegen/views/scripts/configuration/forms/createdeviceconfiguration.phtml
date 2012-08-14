@@ -44,7 +44,6 @@ $deviceOptions = $this->deviceOptions;
 						<tr>
 							<th style="text-align: left;">Name</th>
 							<th style="text-align: center;">Quantity</th>
-							<th style="text-align: center;">Included Quantity</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -52,7 +51,6 @@ $deviceOptions = $this->deviceOptions;
 						<tr>
 							<td style="text-align: left;"><?php echo $option->getOption()->getName(); ?></td>
 							<td style="text-align: center;"><input type="text" class="span1" name="quantity<?php echo $option->getOptionId(); ?>" id="quantity<?php echo $option->getOptionId(); ?>" value="0" /></td>
-							<td style="text-align: center;"><input type="text" class="span1" name="included<?php echo $option->getOptionId(); ?>" id="included<?php echo $option->getOptionId(); ?>" value="0" /></td>
 						</tr>
 						<?php } ?>
 					</tbody>
