@@ -640,7 +640,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                     
                     // Display Message and return
                     $this->_helper->flashMessenger(array (
-                            'success' => "Device {$deviceName} was deleted successfully." 
+                            'success' => "{$deviceName} was deleted successfully." 
                     ));
                     $this->_helper->redirector('index');
                 }
