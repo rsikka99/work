@@ -34,9 +34,9 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         //*****************************************************************
         
 
-        //upload_data_collector_id
-        $element = new Zend_Form_Element_Hidden('upload_data_collector_id');
-        $element->setAttrib('id', 'upload_data_collector_id');
+        //upload_data_collector_row_id
+        $element = new Zend_Form_Element_Hidden('upload_data_collector_row_id');
+        $element->setAttrib('id', 'upload_data_collector_row_id');
         $element->setDecorators(array (
                 'ViewHelper' 
         ));
@@ -557,12 +557,12 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //device_price
-        $element = new Zend_Form_Element_Text('device_price');
+        //device_cost
+        $element = new Zend_Form_Element_Text('cost');
         $element->setLabel('Printer Price:')
             ->setAttrib('size', 6)
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', 'device_price')
+            ->setAttrib('id', 'cost')
             ->addValidator(new Zend_Validate_Float())
             ->setOrder($elementCounter)
             ->setAttrib('style', 'text-align: right')
@@ -581,7 +581,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => 'device_price-element' 
+                                'id' => 'cost-element' 
                         ) 
                 ), 
                 array (
@@ -697,12 +697,12 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $descriptionDecorator);
         $elementCounter ++;
         
-        //black_toner_SKU
-        $element = new Zend_Form_Element_Text('black_toner_SKU');
+        //black_toner_sku
+        $element = new Zend_Form_Element_Text('black_toner_sku');
         $element->setLabel('* Black SKU / Price / Yield:')
             ->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', 'black_toner_SKU')
+            ->setAttrib('id', 'black_toner_sku')
             ->setOrder($elementCounter)
             ->setDecorators(array (
                 'ViewHelper', 
@@ -711,7 +711,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => 'black_toner_SKU-element', 
+                                'id' => 'black_toner_sku-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ), 
@@ -725,11 +725,11 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //black_toner_price
-        $element = new Zend_Form_Element_Text('black_toner_price');
+        //black_toner_cost
+        $element = new Zend_Form_Element_Text('black_toner_cost');
         $element->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', 'black_toner_price')
+            ->setAttrib('id', 'black_toner_cost')
             ->addValidator(new Zend_Validate_Float())
             ->setOrder($elementCounter)
             ->setAttrib('style', 'text-align: right')
@@ -748,7 +748,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => 'black_toner_price-element', 
+                                'id' => 'black_toner_cost-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ) 
@@ -780,12 +780,12 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //cyan_toner_SKU
-        $element = new Zend_Form_Element_Text('cyan_toner_SKU');
+        //cyan_toner_sku
+        $element = new Zend_Form_Element_Text('cyan_toner_sku');
         $element->setLabel('* Cyan SKU / Price / Yield:')
             ->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', 'cyan_toner_SKU')
+            ->setAttrib('id', 'cyan_toner_sku')
             ->setOrder($elementCounter)
             ->setDecorators(array (
                 'ViewHelper', 
@@ -794,7 +794,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => 'cyan_toner_SKU-element', 
+                                'id' => 'cyan_toner_sku-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ), 
@@ -808,11 +808,11 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //cyan_toner_price
-        $element = new Zend_Form_Element_Text('cyan_toner_price');
+        //cyan_toner_cost
+        $element = new Zend_Form_Element_Text('cyan_toner_cost');
         $element->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', 'cyan_toner_price')
+            ->setAttrib('id', 'cyan_toner_cost')
             ->addValidator(new Zend_Validate_Float())
             ->setOrder($elementCounter)
             ->setAttrib('style', 'text-align: right')
@@ -831,7 +831,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => 'cyan_toner_price-element', 
+                                'id' => 'cyan_toner_cost-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ) 
@@ -863,12 +863,12 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //magenta_toner_SKU
-        $element = new Zend_Form_Element_Text('magenta_toner_SKU');
+        //magenta_toner_sku
+        $element = new Zend_Form_Element_Text('magenta_toner_sku');
         $element->setLabel('* Magenta SKU / Price / Yield:')
             ->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', 'magenta_toner_SKU')
+            ->setAttrib('id', 'magenta_toner_sku')
             ->setOrder($elementCounter)
             ->setDecorators(array (
                 'ViewHelper', 
@@ -877,7 +877,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => 'magenta_toner_SKU-element', 
+                                'id' => 'magenta_toner_sku-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ), 
@@ -891,11 +891,11 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //magenta_toner_price
-        $element = new Zend_Form_Element_Text('magenta_toner_price');
+        //magenta_toner_cost
+        $element = new Zend_Form_Element_Text('magenta_toner_cost');
         $element->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', 'magenta_toner_price')
+            ->setAttrib('id', 'magenta_toner_cost')
             ->addValidator(new Zend_Validate_Float())
             ->setOrder($elementCounter)
             ->setAttrib('style', 'text-align: right')
@@ -914,7 +914,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => 'magenta_toner_price-element', 
+                                'id' => 'magenta_toner_cost-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ) 
@@ -946,12 +946,12 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //yellow_toner_SKU
-        $element = new Zend_Form_Element_Text('yellow_toner_SKU');
+        //yellow_toner_sku
+        $element = new Zend_Form_Element_Text('yellow_toner_sku');
         $element->setLabel('* Yellow SKU / Price / Yield:')
             ->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', 'yellow_toner_SKU')
+            ->setAttrib('id', 'yellow_toner_sku')
             ->setOrder($elementCounter)
             ->setDecorators(array (
                 'ViewHelper', 
@@ -960,7 +960,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => 'yellow_toner_SKU-element', 
+                                'id' => 'yellow_toner_sku-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ), 
@@ -974,11 +974,11 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //yellow_toner_price
-        $element = new Zend_Form_Element_Text('yellow_toner_price');
+        //yellow_toner_cost
+        $element = new Zend_Form_Element_Text('yellow_toner_cost');
         $element->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', 'yellow_toner_price')
+            ->setAttrib('id', 'yellow_toner_cost')
             ->addValidator(new Zend_Validate_Float())
             ->setOrder($elementCounter)
             ->setAttrib('style', 'text-align: right')
@@ -997,7 +997,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => 'yellow_toner_price-element', 
+                                'id' => 'yellow_toner_cost-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ) 
@@ -1029,12 +1029,12 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //3color_toner_SKU
-        $element = new Zend_Form_Element_Text('3color_toner_SKU');
+        //three_color_toner_sku
+        $element = new Zend_Form_Element_Text('three_color_toner_sku');
         $element->setLabel('* 3 Color SKU / Price / Yield:')
             ->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', '3color_toner_SKU')
+            ->setAttrib('id', 'three_color_toner_sku')
             ->setOrder($elementCounter)
             ->setDecorators(array (
                 'ViewHelper', 
@@ -1043,7 +1043,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => '3color_toner_SKU-element', 
+                                'id' => 'three_color_toner_sku-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ), 
@@ -1057,11 +1057,11 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //3color_toner_price
-        $element = new Zend_Form_Element_Text('3color_toner_price');
+        //three_color_toner_cost
+        $element = new Zend_Form_Element_Text('three_color_toner_cost');
         $element->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', '3color_toner_price')
+            ->setAttrib('id', 'three_color_toner_cost')
             ->addValidator(new Zend_Validate_Float())
             ->setOrder($elementCounter)
             ->setAttrib('style', 'text-align: right')
@@ -1080,7 +1080,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => '3color_toner_price-element', 
+                                'id' => 'three_color_toner_cost-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ) 
@@ -1089,11 +1089,11 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //3color_toner_yield
-        $element = new Zend_Form_Element_Text('3color_toner_yield');
+        //three_color_toner_yield
+        $element = new Zend_Form_Element_Text('three_color_toner_yield');
         $element->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 5)
-            ->setAttrib('id', '3color_toner_yield')
+            ->setAttrib('id', 'three_color_toner_yield')
             ->addValidator(new Zend_Validate_Int())
             ->setOrder($elementCounter)
             ->setAttrib('style', 'text-align: right')
@@ -1104,7 +1104,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => '3color_toner_yield-element', 
+                                'id' => 'three_color_toner_yield-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ) 
@@ -1112,12 +1112,12 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //4color_toner_SKU
-        $element = new Zend_Form_Element_Text('4color_toner_SKU');
+        //four_color_toner_sku
+        $element = new Zend_Form_Element_Text('four_color_toner_sku');
         $element->setLabel('* 4 Color SKU / Price / Yield:')
             ->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', '4color_toner_SKU')
+            ->setAttrib('id', 'four_color_toner_sku')
             ->setOrder($elementCounter)
             ->setDecorators(array (
                 'ViewHelper', 
@@ -1126,7 +1126,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => '4color_toner_SKU-element', 
+                                'id' => 'four_color_toner_sku-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ), 
@@ -1140,11 +1140,11 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //4color_toner_price
-        $element = new Zend_Form_Element_Text('4color_toner_price');
+        //four_color_toner_cost
+        $element = new Zend_Form_Element_Text('four_color_toner_cost');
         $element->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', '4color_toner_price')
+            ->setAttrib('id', 'four_color_toner_cost')
             ->addValidator(new Zend_Validate_Float())
             ->setOrder($elementCounter)
             ->setAttrib('style', 'text-align: right')
@@ -1163,7 +1163,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => '4color_toner_price-element', 
+                                'id' => 'four_color_toner_cost-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ) 
@@ -1172,11 +1172,11 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //4color_toner_yield
-        $element = new Zend_Form_Element_Text('4color_toner_yield');
+        //four_color_toner_yield
+        $element = new Zend_Form_Element_Text('four_color_toner_yield');
         $element->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 5)
-            ->setAttrib('id', '4color_toner_yield')
+            ->setAttrib('id', 'four_color_toner_yield')
             ->addValidator(new Zend_Validate_Int())
             ->setOrder($elementCounter)
             ->setAttrib('style', 'text-align: right')
@@ -1187,7 +1187,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => '4color_toner_yield-element', 
+                                'id' => 'four_color_toner_yield-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ) 
@@ -1229,12 +1229,12 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $descriptionDecorator);
         $elementCounter ++;
         
-        //black_toner_SKU
-        $element = new Zend_Form_Element_Text('black_comp_SKU');
+        //black_toner_sku
+        $element = new Zend_Form_Element_Text('black_comp_sku');
         $element->setLabel('Black SKU / Price / Yield:')
             ->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', 'black_comp_SKU')
+            ->setAttrib('id', 'black_comp_sku')
             ->setOrder($elementCounter)
             ->setDecorators(array (
                 'ViewHelper', 
@@ -1243,7 +1243,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => 'black_comp_SKU-element', 
+                                'id' => 'black_comp_sku-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ), 
@@ -1258,11 +1258,11 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //black_comp_price
-        $element = new Zend_Form_Element_Text('black_comp_price');
+        //black_comp_cost
+        $element = new Zend_Form_Element_Text('black_comp_cost');
         $element->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', 'black_comp_price')
+            ->setAttrib('id', 'black_comp_cost')
             ->addValidator(new Zend_Validate_Float())
             ->setOrder($elementCounter)
             ->setAttrib('style', 'text-align: right')
@@ -1281,7 +1281,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => 'black_comp_price-element', 
+                                'id' => 'black_comp_cost-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ) 
@@ -1313,12 +1313,12 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //cyan_comp_SKU
-        $element = new Zend_Form_Element_Text('cyan_comp_SKU');
+        //cyan_comp_sku
+        $element = new Zend_Form_Element_Text('cyan_comp_sku');
         $element->setLabel('Cyan SKU / Price / Yield:')
             ->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', 'cyan_comp_SKU')
+            ->setAttrib('id', 'cyan_comp_sku')
             ->setOrder($elementCounter)
             ->setDecorators(array (
                 'ViewHelper', 
@@ -1327,7 +1327,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => 'cyan_comp_SKU-element', 
+                                'id' => 'cyan_comp_sku-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ), 
@@ -1342,11 +1342,11 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //cyan_comp_price
-        $element = new Zend_Form_Element_Text('cyan_comp_price');
+        //cyan_comp_cost
+        $element = new Zend_Form_Element_Text('cyan_comp_cost');
         $element->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', 'cyan_comp_price')
+            ->setAttrib('id', 'cyan_comp_cost')
             ->addValidator(new Zend_Validate_Float())
             ->setOrder($elementCounter)
             ->setAttrib('style', 'text-align: right')
@@ -1365,7 +1365,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => 'cyan_comp_price-element', 
+                                'id' => 'cyan_comp_cost-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ) 
@@ -1397,12 +1397,12 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //magenta_comp_SKU
-        $element = new Zend_Form_Element_Text('magenta_comp_SKU');
+        //magenta_comp_sku
+        $element = new Zend_Form_Element_Text('magenta_comp_sku');
         $element->setLabel('Magenta SKU / Price / Yield:')
             ->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', 'magenta_comp_SKU')
+            ->setAttrib('id', 'magenta_comp_sku')
             ->setOrder($elementCounter)
             ->setDecorators(array (
                 'ViewHelper', 
@@ -1411,7 +1411,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => 'magenta_comp_SKU-element', 
+                                'id' => 'magenta_comp_sku-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ), 
@@ -1426,11 +1426,11 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //magenta_comp_price
-        $element = new Zend_Form_Element_Text('magenta_comp_price');
+        //magenta_comp_cost
+        $element = new Zend_Form_Element_Text('magenta_comp_cost');
         $element->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', 'magenta_comp_price')
+            ->setAttrib('id', 'magenta_comp_cost')
             ->addValidator(new Zend_Validate_Float())
             ->setOrder($elementCounter)
             ->setAttrib('style', 'text-align: right')
@@ -1449,7 +1449,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => 'magenta_comp_price-element', 
+                                'id' => 'magenta_comp_cost-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ) 
@@ -1481,12 +1481,12 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //yellow_comp_SKU
-        $element = new Zend_Form_Element_Text('yellow_comp_SKU');
+        //yellow_comp_sku
+        $element = new Zend_Form_Element_Text('yellow_comp_sku');
         $element->setLabel('Yellow SKU / Price / Yield:')
             ->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', 'yellow_comp_SKU')
+            ->setAttrib('id', 'yellow_comp_sku')
             ->setOrder($elementCounter)
             ->setDecorators(array (
                 'ViewHelper', 
@@ -1495,7 +1495,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => 'yellow_comp_SKU-element', 
+                                'id' => 'yellow_comp_sku-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ), 
@@ -1510,11 +1510,11 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //yellow_comp_price
-        $element = new Zend_Form_Element_Text('yellow_comp_price');
+        //yellow_comp_cost
+        $element = new Zend_Form_Element_Text('yellow_comp_cost');
         $element->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', 'yellow_comp_price')
+            ->setAttrib('id', 'yellow_comp_cost')
             ->addValidator(new Zend_Validate_Float())
             ->setOrder($elementCounter)
             ->setAttrib('style', 'text-align: right')
@@ -1533,7 +1533,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => 'yellow_comp_price-element', 
+                                'id' => 'yellow_comp_cost-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ) 
@@ -1565,12 +1565,12 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //3color_comp_SKU
-        $element = new Zend_Form_Element_Text('3color_comp_SKU');
+        //three_color_comp_sku
+        $element = new Zend_Form_Element_Text('three_color_comp_sku');
         $element->setLabel('3 Color SKU / Price / Yield:')
             ->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', '3color_comp_SKU')
+            ->setAttrib('id', 'three_color_comp_sku')
             ->setOrder($elementCounter)
             ->setDecorators(array (
                 'ViewHelper', 
@@ -1579,7 +1579,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => '3color_comp_SKU-element', 
+                                'id' => 'three_color_comp_sku-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ), 
@@ -1594,11 +1594,11 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //3color_comp_price
-        $element = new Zend_Form_Element_Text('3color_comp_price');
+        //three_color_comp_cost
+        $element = new Zend_Form_Element_Text('three_color_comp_cost');
         $element->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', '3color_comp_price')
+            ->setAttrib('id', 'three_color_comp_cost')
             ->addValidator(new Zend_Validate_Float())
             ->setOrder($elementCounter)
             ->setAttrib('style', 'text-align: right')
@@ -1617,7 +1617,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => '3color_comp_price-element', 
+                                'id' => 'three_color_comp_cost-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ) 
@@ -1626,11 +1626,11 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //3color_comp_yield
-        $element = new Zend_Form_Element_Text('3color_comp_yield');
+        //three_color_comp_yield
+        $element = new Zend_Form_Element_Text('three_color_comp_yield');
         $element->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 5)
-            ->setAttrib('id', '3color_comp_yield')
+            ->setAttrib('id', 'three_color_comp_yield')
             ->addValidator(new Zend_Validate_Int())
             ->setOrder($elementCounter)
             ->setAttrib('style', 'text-align: right')
@@ -1641,7 +1641,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => '3color_comp_yield-element', 
+                                'id' => 'three_color_comp_yield-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ) 
@@ -1649,12 +1649,12 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //4color_comp_SKU
-        $element = new Zend_Form_Element_Text('4color_comp_SKU');
+        //four_color_comp_sku
+        $element = new Zend_Form_Element_Text('four_color_comp_sku');
         $element->setLabel('4 Color SKU / Price / Yield:')
             ->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', '4color_comp_SKU')
+            ->setAttrib('id', 'four_color_comp_sku')
             ->setOrder($elementCounter)
             ->setDecorators(array (
                 'ViewHelper', 
@@ -1663,7 +1663,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => '4color_comp_SKU-element', 
+                                'id' => 'four_color_comp_sku-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ), 
@@ -1678,11 +1678,11 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //4color_comp_price
-        $element = new Zend_Form_Element_Text('4color_comp_price');
+        //four_color_comp_cost
+        $element = new Zend_Form_Element_Text('four_color_comp_cost');
         $element->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 10)
-            ->setAttrib('id', '4color_comp_price')
+            ->setAttrib('id', 'four_color_comp_cost')
             ->addValidator(new Zend_Validate_Float())
             ->setOrder($elementCounter)
             ->setAttrib('style', 'text-align: right')
@@ -1701,7 +1701,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => '4color_comp_price-element', 
+                                'id' => 'four_color_comp_cost-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ) 
@@ -1710,11 +1710,11 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         array_push($elements, $element);
         $elementCounter ++;
         
-        //4color_comp_yield
-        $element = new Zend_Form_Element_Text('4color_comp_yield');
+        //four_color_comp_yield
+        $element = new Zend_Form_Element_Text('four_color_comp_yield');
         $element->setAttrib('class', 'span2')
             ->setAttrib('maxlength', 5)
-            ->setAttrib('id', '4color_comp_yield')
+            ->setAttrib('id', 'four_color_comp_yield')
             ->addValidator(new Zend_Validate_Int())
             ->setOrder($elementCounter)
             ->setAttrib('style', 'text-align: right')
@@ -1725,7 +1725,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => '4color_comp_yield-element', 
+                                'id' => 'four_color_comp_yield-element', 
                                 'style' => 'display: inline' 
                         ) 
                 ) 

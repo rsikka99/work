@@ -28,7 +28,7 @@ class My_Log
      */
     private static $_uniqueId;
 
-    public static function getUniqueId ()
+    static function getUniqueId ()
     {
         if (! isset(self::$_uniqueId))
         {
@@ -37,8 +37,19 @@ class My_Log
         return self::$_uniqueId;
     }
 
+    static function logException (Exception $e)
+    {
+        $errorMessage = $e->getMessage();
+        $stackTrace = $e->getTraceAsString();
+        
+        self::error($e);
+        self::error($stackTrace);
+    }
+
     static function log ($message, $level = null, $source = null)
     {
+        $uid = self::getUniqueId();
+        
         if (FALSE !== ($logger = self::getLogger()))
         {
             if ($level === null)
@@ -48,7 +59,7 @@ class My_Log
                 $source = self::SOURCE_ZENDLOG;
             
             $logger->setEventItem('logTypeId', $source);
-            $logger->log($message, $level);
+            $logger->log("{$uid}: {$message}", $level);
         }
     }
 

@@ -13,7 +13,7 @@
 		var sLeft = ($(window).width()/2)-200;
 		
 		jQuery("#details_toners").jqGrid({
-			url:'<?php echo $this->baseUrl(); ?>/admin/devicetoners?deviceid=0',
+			url:'<?php echo $this->url(array('action' => 'devicetoners', 'controller' => 'admin')); ?>?deviceid=0',
 			datatype:'json',
 			colNames:['Toner ID', 'SKU', 'Manufacturer', 'Type', 'Color', 'Yield', 'Price', 'MasterID'],
 			colModel:[
@@ -45,7 +45,7 @@
 		);
     		
 		jQuery("#results_list").jqGrid({
-			url:'<?php echo $this->baseUrl(); ?>/data/deviceleasinglist',
+			url:'<?php echo $this->url(array('action' => 'deviceleasinglist')); ?>',
 			datatype:'json',
 			colNames:['UDCID','Devices PF ID','Import Printer Name (IP)','Master Printer Name','AMPV','Ownership','Exclude','Master Printer ID'],
 			colModel:[
@@ -176,7 +176,7 @@
 		} else {
 			mode = 0;
 		}
-		url = '<?php echo $this->baseUrl(); ?>/data/setexcluded?id='+id+'&mode='+mode;
+		url = '<?php echo $this->url(array('action' => 'setexcluded')); ?>?id='+id+'&mode='+mode;
 		$.ajax ({
 			type: "POST",
 			contentType: "application/json; charset=utf-8",
@@ -194,7 +194,7 @@
 		} else {
 			mode = 0;
 		}
-		url = '<?php echo $this->baseUrl(); ?>/data/setleased?id='+id+'&mode='+mode;
+		url = '<?php echo $this->url(array('action' => 'setleased')); ?>?id='+id+'&mode='+mode;
 		$.ajax ({
 			type: "POST",
 			contentType: "application/json; charset=utf-8",
@@ -207,16 +207,15 @@
 
     function doAction(inAction) {
         if(inAction == 'cancel') {
-			document.location.href = "<?php echo $this->baseUrl(); ?>/data/devicemapping";
+			document.location.href = "<?php echo $this->url(array('action' => 'devicemapping')); ?>";
         }
     }
 
 	function toggle_mapped() {
 		if(document.getElementById('excluded_results_list_container').style.display == 'none') {
 		 	if(show_mapped == false) {
-				$('#excluded_results_list').setGridParam({url:'<?php echo $this->baseUrl(); ?>/data/deviceleasingexcludedlist'});
+				$('#excluded_results_list').setGridParam({url:'<?php echo $this->url(array('action' => 'deviceleasingexcludedlist')); ?>'});
 				$('#excluded_results_list').trigger("reloadGrid");
-				show_mapped = true;
 			}
 			$("#toggle_mapped_link").html("[-] Hide Excluded Printers");
 			document.getElementById('excluded_results_list_container').style.display = 'block';
@@ -231,13 +230,13 @@
 			if(id.indexOf('udi') >= 0) {
 				//GET UNKNOWN DEVICE DETAILS
 				url = '<?php echo $this->baseUrl(); ?>/data/unknowndevicedetails?deviceid='+id.replace('udi','');
-				toners_url = '<?php echo $this->baseUrl(); ?>/data/unknowndevicetoners?deviceid='+id.replace('udi','');
+				toners_url = '<?php echo $this->url(array('action' => 'unknowndevicetoners', 'controller' => 'data')); ?>?deviceid='+id.replace('udi','');
 				$("#details_toners").jqGrid().hideCol('manufacturer_id');
 				
 			} else {
 		    	//GET DEVICE DETAILS
-				url = '<?php echo $this->baseUrl(); ?>/data/devicedetails?deviceid='+id;
-				toners_url = '<?php echo $this->baseUrl(); ?>/data/devicetoners?deviceid='+id;
+				url = '<?php echo $this->url(array('action' => 'devicedetails', 'controller' => 'data')); ?>?deviceid='+id;
+				toners_url = '<?php echo $this->url(array('action' => 'devicetoners', 'controller' => 'data')); ?>?deviceid='+id;
 				$("#details_toners").jqGrid().showCol('manufacturer_id');
 			}
 			

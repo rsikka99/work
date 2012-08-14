@@ -31,7 +31,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
     public function indexAction ()
     {
         $this->view->title = "Admin Console";
-        $session = new Zend_Session_Namespace('report');
+        $session = new Zend_Session_Namespace('proposalgenerator_report');
         $config = Zend_Registry::get('config');
         $this->MPSProgramName = $config->app->MPSProgramName;
         
@@ -1238,15 +1238,15 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             if ($toner_array != '')
             {
                 $fieldList = array (
-                        'manufacturer_name', 
+                        'fullname', 
                         '(null) AS master_device_id' 
                 );
-                $where = 't.toner_id IN(' . $toner_array . ')';
+                $where = 't.id IN(' . $toner_array . ')';
             }
             else
             {
                 $fieldList = array (
-                        'manufacturer_name' 
+                        'fullname' 
                 );
                 $where = 'dt.master_device_id = ' . $deviceID;
             }
@@ -1254,23 +1254,23 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $select = new Zend_Db_Select($db);
             $select = $db->select();
             $select->from(array (
-                    't' => 'toner' 
+                    't' => 'pgen_toners' 
             ));
             if ($toner_array == '')
             {
                 $select->joinLeft(array (
-                        'dt' => 'device_toner' 
-                ), 't.toner_id = dt.toner_id');
+                        'dt' => 'pgen_device_toners' 
+                ), 't.id = dt.toner_id');
             }
             $select->joinLeft(array (
-                    'pt' => 'part_type' 
-            ), 'pt.part_type_id = t.part_type_id');
+                    'pt' => 'pgen_part_types' 
+            ), 'pt.id = t.part_type_id');
             $select->joinLeft(array (
-                    'tc' => 'toner_color' 
-            ), 'tc.toner_color_id = t.toner_color_id');
+                    'tc' => 'pgen_toner_colors' 
+            ), 'tc.id = t.toner_color_id');
             $select->joinLeft(array (
-                    'm' => 'manufacturer' 
-            ), 'm.manufacturer_id = t.manufacturer_id', $fieldList);
+                    'm' => 'manufacturers' 
+            ), 'm.id = t.manufacturer_id', $fieldList);
             $select->where($where);
             $stmt = $db->query($select);
             $result = $stmt->fetchAll();
@@ -3024,7 +3024,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             if ($level == "report")
             {
                 // check report table
-                $session = new Zend_Session_Namespace('report');
+                $session = new Zend_Session_Namespace('proposalgenerator_report');
                 $report_id = $session->report_id;
                 if ($report_id > 0)
                 {
@@ -4754,7 +4754,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 if ($formData ['form_mode'] == 'view' && $formData ['report_id'] > 0)
                 {
-                    $session = new Zend_Session_Namespace('report');
+                    $session = new Zend_Session_Namespace('proposalgenerator_report');
                     $session->report_id = $formData ["report_id"];
                     $this->_redirect('/report');
                 }
