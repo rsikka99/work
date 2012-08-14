@@ -924,6 +924,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 {
                     // Get Option Id
                     $optionId = $values ['optionid'];
+                    $includedQuantity = $values ["included{$optionId}"];
                     $deviceOptionMapper = new Quotegen_Model_Mapper_DeviceOption();
                     
                     // Save if option and device id
@@ -936,6 +937,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             $deviceOption = new Quotegen_Model_DeviceOption();
                             $deviceOption->setMasterDeviceId($masterDeviceId);
                             $deviceOption->setOptionId($optionId);
+                            $deviceOption->setIncludedQuantity($includedQuantity);
                             $deviceOptionMapper->insert($deviceOption);
                             
                             $this->_helper->flashMessenger(array (
