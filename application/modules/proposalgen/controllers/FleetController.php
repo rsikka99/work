@@ -2745,7 +2745,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     $ampv = 0;
                     $is_leased = $result [$key] ['is_leased'];
                     $devices_pf_id = $result [$key] ['devices_pf_id'];
-                    $upload_data_collector_row_id = $result [$key] ['upload_data_collector_row_id'];
+                    $upload_data_collector_row_id = $result [$key] ['id'];
                     
                     $mapped_to = '';
                     $mapped_to_id = null;
@@ -2945,6 +2945,122 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         // encode user data to return to the client:
         $json = Zend_Json::encode($formdata);
         $this->view->data = $json;
+    }
+
+    public function setleasedAction ()
+    {
+        // disable the default layout
+        $this->_helper->layout->disableLayout();
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $devices_pf_id = $this->_getParam('id', false);
+        $value = $this->_getParam('mode', 0);
+        
+        // get report id from session
+        $report_id = $this->getReport()->getReportId();
+        
+        $updateData = array (
+                'is_leased' => $value 
+        );
+        
+        $db->beginTransaction();
+        try
+        {
+            // create table instances
+            $upload_data_collectorTable = new Proposalgen_Model_DbTable_UploadDataCollectorRow();
+            $device_instanceTable = new Proposalgen_Model_DbTable_DeviceInstance();
+            $unknown_device_instanceTable = new Proposalgen_Model_DbTable_UnknownDeviceInstance();
+            
+            // get upload_data_collector rows for report and device_pf
+            $where = $upload_data_collectorTable->getAdapter()->quoteInto('id = ' . $report_id . ' AND devices_pf_id = ?', $devices_pf_id, 'INTEGER');
+            $upload_data_collector = $upload_data_collectorTable->fetchAll($where);
+            
+            foreach ( $upload_data_collector as $key => $value )
+            {
+                $upload_data_collector_id = $upload_data_collector [$key] ['id'];
+                
+                // check if saved as device_instance
+                $where = $device_instanceTable->getAdapter()->quoteInto('id = ' . $report_id . ' AND upload_data_collector_row_id = ?', $upload_data_collector_id, 'INTEGER');
+                $device_instance = $device_instanceTable->fetchRow($where);
+                
+                if (count($device_instance) > 0)
+                {
+                    $device_instanceTable->update($updateData, $where);
+                }
+                else
+                {
+                    // check if saved as unknown_device_instance
+                    $where = $unknown_device_instanceTable->getAdapter()->quoteInto('id = ' . $report_id . ' AND upload_data_collector_row_id = ?', $upload_data_collector_id, 'INTEGER');
+                    $unknown_device_instance = $unknown_device_instanceTable->fetchRow($where);
+                    
+                    if (count($unknown_device_instance) > 0)
+                    {
+                        $unknown_device_instanceTable->update($updateData, $where);
+                    }
+                    else
+                    {
+                        // if neither, update upload record
+                        $where = $upload_data_collectorTable->getAdapter()->quoteInto('id = ' . $report_id . ' AND id = ?', $upload_data_collector_id, 'INTEGER');
+                        $upload_data_collectorTable->update($updateData, $where);
+                    }
+                }
+            }
+            $db->commit();
+        }
+        catch ( Exception $e )
+        {
+            $db->rollBack();
+        }
+    }
+
+    public function setexcludedAction ()
+    {
+        // disable the default layout
+        $this->_helper->layout->disableLayout();
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $upload_data_collector_id = $this->_getParam('id', false);
+        $value = $this->_getParam('mode', 0);
+        
+        $updateData = array (
+                'is_excluded' => $value 
+        );
+        
+        $db->beginTransaction();
+        try
+        {
+            // check if saved as device_instance
+            $device_instanceTable = new Proposalgen_Model_DbTable_DeviceInstance();
+            $where = $device_instanceTable->getAdapter()->quoteInto('upload_data_collector_row_id = ?', $upload_data_collector_id, 'INTEGER');
+            $device_instance = $device_instanceTable->fetchRow($where);
+            
+            if (count($device_instance) > 0)
+            {
+                $device_instanceTable->update($updateData, $where);
+            }
+            else
+            {
+                // check if saved as unknown_device_instance
+                $unknown_device_instanceTable = new Proposalgen_Model_DbTable_UnknownDeviceInstance();
+                $where = $unknown_device_instanceTable->getAdapter()->quoteInto('upload_data_collector_row_id = ?', $upload_data_collector_id, 'INTEGER');
+                $unknown_device_instance = $unknown_device_instanceTable->fetchRow($where);
+                
+                if (count($unknown_device_instance) > 0)
+                {
+                    $unknown_device_instanceTable->update($updateData, $where);
+                }
+                else
+                {
+                    // if neither, update upload record
+                    $upload_data_collectorTable = new Proposalgen_Model_DbTable_UploadDataCollectorRow();
+                    $where = $upload_data_collectorTable->getAdapter()->quoteInto('id = ?', $upload_data_collector_id, 'INTEGER');
+                    $upload_data_collectorTable->update($updateData, $where);
+                }
+            }
+            $db->commit();
+        }
+        catch ( Exception $e )
+        {
+            $db->rollBack();
+        }
     }
 
     public function reportsettingsAction ()
