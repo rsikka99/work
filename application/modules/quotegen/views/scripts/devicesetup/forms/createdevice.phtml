@@ -224,7 +224,7 @@ $form = $this->form;
 			<?php if ( $element->hasErrors() ) { 
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
+			<?php echo trim($this->datePicker("launch_date", "", array('dateFormat' => date('Y-m-d')), array())); ?>
 			<?php echo trim($element->renderDescription()); ?>
 			<?php echo $element->renderErrors(); ?>
 		</div>

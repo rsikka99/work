@@ -241,7 +241,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          * Launch Date
          * 
          * DOES NOT WORK IN VIEW SCRIPT?!?
-         * 
+         */
         $minYear = 1950;
         $maxYear = date('Y') + 2;
         $launchDate = new ZendX_JQuery_Form_Element_DatePicker('launch_date');
@@ -261,7 +261,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
 	        ));
         
         $this->addElement($launchDate);
-         */
+        /*/
         $this->addElement('text', 'launch_date', array (
                 'label' => 'Launch Date:',
                 'required' => true, 
@@ -274,6 +274,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                         'Date',
                         )
         ));
+        /*/
         
         /*
          * Duty Cycle
