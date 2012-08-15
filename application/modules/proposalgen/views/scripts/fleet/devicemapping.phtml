@@ -18,7 +18,7 @@
 			datatype:'json',
 			colNames:['UDCID','Devices PF ID','Count','Import Printer Name','Mapped To ID','Mapped To Modelname','Mapped To Manufacturer','Master Printer Name','Is Added','Action'],
 			colModel:[
-				{tag:0, width: 10, name:'upload_data_collector_id', index:'upload_data_collector_id', hidden:true, title:false, sortable:false},
+				{tag:0, width: 10, name:'upload_data_collector_row_id', index:'upload_data_collector_row_id', hidden:true, title:false, sortable:false},
 				{tag:1, width: 10, name:'devices_pf_id', index:'devices_pf_id', hidden:true, title:false, sortable:false},
 				{tag:2, width: 40, name:'count', index:'count', align:'center', title:false, sortable:false},
 				{tag:3, width: 200, name:'imported_devicename', index:'imported_devicename', title:false, sortable:false},
@@ -36,7 +36,7 @@
 				var ids = jQuery("#results_list").jqGrid('getDataIDs');
 				for(var i=0; i < ids.length; i++) {
 					var cur_row = ids[i];
-					var upload_data_collector_id = document.getElementById("results_list").rows[i+1].cells[0].innerHTML;
+					var upload_data_collector_row_id = document.getElementById("results_list").rows[i+1].cells[0].innerHTML;
 					var devices_pf_id = document.getElementById("results_list").rows[i+1].cells[1].innerHTML;
 					var is_added = document.getElementById("results_list").rows[i+1].cells[8].innerHTML;
 					var mapped_to_id = document.getElementById("results_list").rows[i+1].cells[4].innerHTML;
@@ -45,8 +45,8 @@
 					var mapped_to_deviceName = mapped_to_manufacturer + " " + mapped_to_modelname;
 					mapped_to_deviceName = mapped_to_deviceName.replace("&nbsp; &nbsp;", "");
 					
-					edit_button = '<input title="Edit Printer" type="button" name="btnEdit'+devices_pf_id+'" id="btnEdit'+devices_pf_id+'" onclick="javascript: add_device('+upload_data_collector_id+');" value="Edit" class="btn" />';
-					add_button = '<input title="Add New Printer" type="button" name="btnAdd'+devices_pf_id+'" id="btnAdd'+devices_pf_id+'" onclick="javascript: add_device('+upload_data_collector_id+');" value="Add" class="btn" />';
+					edit_button = '<input title="Edit Printer" type="button" name="btnEdit'+devices_pf_id+'" id="btnEdit'+devices_pf_id+'" onclick="javascript: add_device('+upload_data_collector_row_id+');" value="Edit" class="btn" />';
+					add_button = '<input title="Add New Printer" type="button" name="btnAdd'+devices_pf_id+'" id="btnAdd'+devices_pf_id+'" onclick="javascript: add_device('+upload_data_collector_row_id+');" value="Add" class="btn" />';
 					
 					if(is_added > -1) {
 						//display message instead of dropdown
@@ -164,7 +164,7 @@
 			datatype:'local',
 			colNames:['UDCID','Devices PF ID','Count','Import Printer Name','Mapped To ID','Mapped To Modelname','Mapped To Manufacturer','Master Printer Name','Is Added','Action'],
 			colModel:[
-				{tag:0, width: 10, name:'upload_data_collector_id', index:'upload_data_collector_id', hidden:true, title:false, sortable:false},
+				{tag:0, width: 10, name:'upload_data_collector_row_id', index:'upload_data_collector_row_id', hidden:true, title:false, sortable:false},
 				{tag:1, width: 10, name:'devices_pf_id', index:'devices_pf_id', hidden:true, title:false, sortable:false},
 				{tag:2, width: 40, name:'count', index:'count', align:'center', title:false, sortable:false},
 				{tag:3, width: 200, name:'imported_devicename', index:'imported_devicename', title:false, sortable:false},
@@ -182,7 +182,7 @@
 				var ids = jQuery("#mapped_list").jqGrid('getDataIDs');
 				for(var i=0; i < ids.length; i++) {
 					var cur_row = ids[i];
-					var upload_data_collector_id = document.getElementById("mapped_list").rows[i+1].cells[0].innerHTML;
+					var upload_data_collector_row_id = document.getElementById("mapped_list").rows[i+1].cells[0].innerHTML;
 					var devices_pf_id = document.getElementById("mapped_list").rows[i+1].cells[1].innerHTML;
 					var is_added = document.getElementById("mapped_list").rows[i+1].cells[8].innerHTML;
 					var mapped_to_id = document.getElementById("mapped_list").rows[i+1].cells[4].innerHTML;
@@ -199,8 +199,8 @@
     					edit_button = '<input title="Edit Printer" type="button" name="btnEdit'+devices_pf_id+'" id="btnEdit'+devices_pf_id+'" onclick="javascript: edit_device('+devices_pf_id+');" value="Edit" '+disable+' class="btn" />';
     					add_button = '<input title="Edit Printer" type="button" name="btnAdd'+devices_pf_id+'" id="btnAdd'+devices_pf_id+'" onclick="javascript: edit_device('+devices_pf_id+');" value="Edit" '+disable+' class="btn" />';
                     <?php } else { ?>
-    					edit_button = '<input title="Edit Printer" type="button" name="btnEdit'+devices_pf_id+'" id="btnEdit'+devices_pf_id+'" onclick="javascript: add_device('+upload_data_collector_id+');" value="Edit" '+disable+' class="btn" />';
-    					add_button = '<input title="Add New Printer" type="button" name="btnAdd'+devices_pf_id+'" id="btnAdd'+devices_pf_id+'" onclick="javascript: add_device('+upload_data_collector_id+');" value="Add" '+disable+' class="btn" />';
+    					edit_button = '<input title="Edit Printer" type="button" name="btnEdit'+devices_pf_id+'" id="btnEdit'+devices_pf_id+'" onclick="javascript: add_device('+upload_data_collector_row_id+');" value="Edit" '+disable+' class="btn" />';
+    					add_button = '<input title="Add New Printer" type="button" name="btnAdd'+devices_pf_id+'" id="btnAdd'+devices_pf_id+'" onclick="javascript: add_device('+upload_data_collector_row_id+');" value="Add" '+disable+' class="btn" />';
                     <?php } ?>
                     
 					if(is_added > -1) {

@@ -17,225 +17,225 @@
 		$( "#mps_launch_date" ).datepicker({ dateFormat: 'mm/dd/yy', changeMonth: true, changeYear: true});
 	
 		$("#toner_config").change(function() {
-			var config = new Array("black", "cyan", "magenta", "yellow", "3color", "4color");
+			var config = new Array("black", "cyan", "magenta", "yellow", "three_color", "four_color");
 			var config_name = $("#toner_config option:selected").text();
 			
 			switch(config_name) {
 				case "Black Only":
-					config = new Array("cyan", "magenta", "yellow", "3color", "4color");
+					config = new Array("cyan", "magenta", "yellow", "three_color", "four_color");
 					if($("#is_leased").is(":checked")) {
-                        document.getElementById("black_toner_SKU-label").innerHTML = '<label class="forms_label optional" for="black_toner_SKU">* Black Yield:</label>';
-                    	document.getElementById("black_toner_SKU-label").style.display = "block";
-                        document.getElementById("black_toner_SKU-element").style.display = "none";
-                        document.getElementById("black_toner_price-element").style.display = "none";
+                        document.getElementById("black_toner_sku-label").innerHTML = '<label class="forms_label optional" for="black_toner_sku">* Black Yield:</label>';
+                    	document.getElementById("black_toner_sku-label").style.display = "block";
+                        document.getElementById("black_toner_sku-element").style.display = "none";
+                        document.getElementById("black_toner_cost-element").style.display = "none";
                        	document.getElementById("black_toner_yield-element").style.display = "inline";
                        	
-                        document.getElementById("black_comp_SKU-label").innerHTML = '<label class="forms_label optional" for="black_comp_SKU">Black Yield:</label>';
-                    	document.getElementById("black_comp_SKU-label").style.display = "block";
-                        document.getElementById("black_comp_SKU-element").style.display = "none";
-                        document.getElementById("black_comp_price-element").style.display = "none";
+                        document.getElementById("black_comp_sku-label").innerHTML = '<label class="forms_label optional" for="black_comp_sku">Black Yield:</label>';
+                    	document.getElementById("black_comp_sku-label").style.display = "block";
+                        document.getElementById("black_comp_sku-element").style.display = "none";
+                        document.getElementById("black_comp_cost-element").style.display = "none";
                        	document.getElementById("black_comp_yield-element").style.display = "inline";
 					} else {
-                        document.getElementById("black_toner_SKU-label").innerHTML = '<label class="forms_label optional" for="black_toner_SKU">* Black SKU / Price / Yield:</label>';
-                    	document.getElementById("black_toner_SKU-label").style.display = "block";
-                        document.getElementById("black_toner_SKU-element").style.display = "inline";
-                        document.getElementById("black_toner_price-element").style.display = "inline";
+                        document.getElementById("black_toner_sku-label").innerHTML = '<label class="forms_label optional" for="black_toner_sku">* Black SKU / Price / Yield:</label>';
+                    	document.getElementById("black_toner_sku-label").style.display = "block";
+                        document.getElementById("black_toner_sku-element").style.display = "inline";
+                        document.getElementById("black_toner_cost-element").style.display = "inline";
                        	document.getElementById("black_toner_yield-element").style.display = "inline";
                        	
-                        document.getElementById("black_comp_SKU-label").innerHTML = '<label class="forms_label optional" for="black_comp_SKU">Black SKU / Price / Yield:</label>';
-                    	document.getElementById("black_comp_SKU-label").style.display = "block";
-                        document.getElementById("black_comp_SKU-element").style.display = "inline";
-                        document.getElementById("black_comp_price-element").style.display = "inline";
+                        document.getElementById("black_comp_sku-label").innerHTML = '<label class="forms_label optional" for="black_comp_sku">Black SKU / Price / Yield:</label>';
+                    	document.getElementById("black_comp_sku-label").style.display = "block";
+                        document.getElementById("black_comp_sku-element").style.display = "inline";
+                        document.getElementById("black_comp_cost-element").style.display = "inline";
                        	document.getElementById("black_comp_yield-element").style.display = "inline";
 					}
 					break;
 				case "3 Color - Combined":
-					config = new Array("cyan", "magenta", "yellow", "4color");
+					config = new Array("cyan", "magenta", "yellow", "four_color");
 					if($("#is_leased").is(":checked")) {
-                        document.getElementById("black_toner_SKU-label").innerHTML = '<label class="forms_label optional" for="black_toner_SKU">* Black Yield:</label>';
-                        document.getElementById("black_toner_SKU-label").style.display = "block";
-                        document.getElementById("black_toner_SKU-element").style.display = "none";
-                        document.getElementById("black_toner_price-element").style.display = "none";
+                        document.getElementById("black_toner_sku-label").innerHTML = '<label class="forms_label optional" for="black_toner_sku">* Black Yield:</label>';
+                        document.getElementById("black_toner_sku-label").style.display = "block";
+                        document.getElementById("black_toner_sku-element").style.display = "none";
+                        document.getElementById("black_toner_cost-element").style.display = "none";
                     	document.getElementById("black_toner_yield-element").style.display = "inline";
                     	
-                        document.getElementById("3color_toner_SKU-label").innerHTML = '<label class="forms_label optional" for="3color_toner_SKU">* 3 Color Yield:</label>';
-                        document.getElementById("3color_toner_SKU-label").style.display = "block";
-                        document.getElementById("3color_toner_SKU-element").style.display = "none";
-                        document.getElementById("3color_toner_price-element").style.display = "none";
-                    	document.getElementById("3color_toner_yield-element").style.display = "inline";
+                        document.getElementById("three_color_toner_sku-label").innerHTML = '<label class="forms_label optional" for="three_color_toner_sku">* 3 Color Yield:</label>';
+                        document.getElementById("three_color_toner_sku-label").style.display = "block";
+                        document.getElementById("three_color_toner_sku-element").style.display = "none";
+                        document.getElementById("three_color_toner_cost-element").style.display = "none";
+                    	document.getElementById("three_color_toner_yield-element").style.display = "inline";
                     	
-                        document.getElementById("black_comp_SKU-label").innerHTML = '<label class="forms_label optional" for="black_comp_SKU">Black Yield:</label>';
-                        document.getElementById("black_comp_SKU-label").style.display = "block";
-                        document.getElementById("black_comp_SKU-element").style.display = "none";
-                        document.getElementById("black_comp_price-element").style.display = "none";
+                        document.getElementById("black_comp_sku-label").innerHTML = '<label class="forms_label optional" for="black_comp_sku">Black Yield:</label>';
+                        document.getElementById("black_comp_sku-label").style.display = "block";
+                        document.getElementById("black_comp_sku-element").style.display = "none";
+                        document.getElementById("black_comp_cost-element").style.display = "none";
                     	document.getElementById("black_comp_yield-element").style.display = "inline";
                     	
-                        document.getElementById("3color_comp_SKU-label").innerHTML = '<label class="forms_label optional" for="3color_comp_SKU">3 Color Yield:</label>';
-                        document.getElementById("3color_comp_SKU-label").style.display = "block";
-                        document.getElementById("3color_comp_SKU-element").style.display = "none";
-                        document.getElementById("3color_comp_price-element").style.display = "none";
-                    	document.getElementById("3color_comp_yield-element").style.display = "inline";
+                        document.getElementById("three_color_comp_sku-label").innerHTML = '<label class="forms_label optional" for="three_color_comp_sku">3 Color Yield:</label>';
+                        document.getElementById("three_color_comp_sku-label").style.display = "block";
+                        document.getElementById("three_color_comp_sku-element").style.display = "none";
+                        document.getElementById("three_color_comp_cost-element").style.display = "none";
+                    	document.getElementById("three_color_comp_yield-element").style.display = "inline";
                     	
 					} else {
-                        document.getElementById("black_toner_SKU-label").innerHTML = '<label class="forms_label optional" for="black_toner_SKU">* Black SKU / Price / Yield:</label>';
-                        document.getElementById("black_toner_SKU-label").style.display = "block";
-                        document.getElementById("black_toner_SKU-element").style.display = "inline";
-                        document.getElementById("black_toner_price-element").style.display = "inline";
+                        document.getElementById("black_toner_sku-label").innerHTML = '<label class="forms_label optional" for="black_toner_sku">* Black SKU / Price / Yield:</label>';
+                        document.getElementById("black_toner_sku-label").style.display = "block";
+                        document.getElementById("black_toner_sku-element").style.display = "inline";
+                        document.getElementById("black_toner_cost-element").style.display = "inline";
                     	document.getElementById("black_toner_yield-element").style.display = "inline";
                         
-                        document.getElementById("3color_toner_SKU-label").innerHTML = '<label class="forms_label optional" for="3color_toner_SKU">* 3 Color SKU / Price / Yield:</label>';
-                        document.getElementById("3color_toner_SKU-label").style.display = "block";
-                        document.getElementById("3color_toner_SKU-element").style.display = "inline";
-                        document.getElementById("3color_toner_price-element").style.display = "inline";
-                    	document.getElementById("3color_toner_yield-element").style.display = "inline";
+                        document.getElementById("three_color_toner_sku-label").innerHTML = '<label class="forms_label optional" for="three_color_toner_sku">* 3 Color SKU / Price / Yield:</label>';
+                        document.getElementById("three_color_toner_sku-label").style.display = "block";
+                        document.getElementById("three_color_toner_sku-element").style.display = "inline";
+                        document.getElementById("three_color_toner_cost-element").style.display = "inline";
+                    	document.getElementById("three_color_toner_yield-element").style.display = "inline";
                     	
-                        document.getElementById("black_comp_SKU-label").innerHTML = '<label class="forms_label optional" for="black_comp_SKU">Black SKU / Price / Yield:</label>';
-                        document.getElementById("black_comp_SKU-label").style.display = "block";
-                        document.getElementById("black_comp_SKU-element").style.display = "inline";
-                        document.getElementById("black_comp_price-element").style.display = "inline";
+                        document.getElementById("black_comp_sku-label").innerHTML = '<label class="forms_label optional" for="black_comp_sku">Black SKU / Price / Yield:</label>';
+                        document.getElementById("black_comp_sku-label").style.display = "block";
+                        document.getElementById("black_comp_sku-element").style.display = "inline";
+                        document.getElementById("black_comp_cost-element").style.display = "inline";
                     	document.getElementById("black_comp_yield-element").style.display = "inline";
                         
-                        document.getElementById("3color_comp_SKU-label").innerHTML = '<label class="forms_label optional" for="3color_comp_SKU">3 Color SKU / Price / Yield:</label>';
-                        document.getElementById("3color_comp_SKU-label").style.display = "block";
-                        document.getElementById("3color_comp_SKU-element").style.display = "inline";
-                        document.getElementById("3color_comp_price-element").style.display = "inline";
-                    	document.getElementById("3color_comp_yield-element").style.display = "inline";
+                        document.getElementById("three_color_comp_sku-label").innerHTML = '<label class="forms_label optional" for="three_color_comp_sku">3 Color SKU / Price / Yield:</label>';
+                        document.getElementById("three_color_comp_sku-label").style.display = "block";
+                        document.getElementById("three_color_comp_sku-element").style.display = "inline";
+                        document.getElementById("three_color_comp_cost-element").style.display = "inline";
+                    	document.getElementById("three_color_comp_yield-element").style.display = "inline";
                     	
 					}
 					break;
 				case "3 Color - Separated":
-					config = new Array("3color", "4color");
+					config = new Array("three_color", "four_color");
 					if($("#is_leased").is(":checked")) {
 						display = "none";
-                        document.getElementById("black_toner_SKU-label").innerHTML = '<label class="forms_label optional" for="black_toner_SKU">* Black Yield:</label>';
-                        document.getElementById("black_toner_SKU-label").style.display = "block";
-                        document.getElementById("black_toner_SKU-element").style.display = "none";
-                        document.getElementById("black_toner_price-element").style.display = "none";
+                        document.getElementById("black_toner_sku-label").innerHTML = '<label class="forms_label optional" for="black_toner_sku">* Black Yield:</label>';
+                        document.getElementById("black_toner_sku-label").style.display = "block";
+                        document.getElementById("black_toner_sku-element").style.display = "none";
+                        document.getElementById("black_toner_cost-element").style.display = "none";
                     	document.getElementById("black_toner_yield-element").style.display = "inline";
                     	
-                        document.getElementById("cyan_toner_SKU-label").innerHTML = '<label class="forms_label optional" for="cyan_toner_SKU">* Cyan Yield:</label>';
-                        document.getElementById("cyan_toner_SKU-label").style.display = "block";
-                        document.getElementById("cyan_toner_SKU-element").style.display = "none";
-                        document.getElementById("cyan_toner_price-element").style.display = "none";
+                        document.getElementById("cyan_toner_sku-label").innerHTML = '<label class="forms_label optional" for="cyan_toner_sku">* Cyan Yield:</label>';
+                        document.getElementById("cyan_toner_sku-label").style.display = "block";
+                        document.getElementById("cyan_toner_sku-element").style.display = "none";
+                        document.getElementById("cyan_toner_cost-element").style.display = "none";
                     	document.getElementById("cyan_toner_yield-element").style.display = "inline";
                     	
-                        document.getElementById("magenta_toner_SKU-label").innerHTML = '<label class="forms_label optional" for="magenta_toner_SKU">* Magenta Yield:</label>';
-                        document.getElementById("magenta_toner_SKU-label").style.display = "block";
-                        document.getElementById("magenta_toner_SKU-element").style.display = "none";
-                        document.getElementById("magenta_toner_price-element").style.display = "none";
+                        document.getElementById("magenta_toner_sku-label").innerHTML = '<label class="forms_label optional" for="magenta_toner_sku">* Magenta Yield:</label>';
+                        document.getElementById("magenta_toner_sku-label").style.display = "block";
+                        document.getElementById("magenta_toner_sku-element").style.display = "none";
+                        document.getElementById("magenta_toner_cost-element").style.display = "none";
                     	document.getElementById("magenta_toner_yield-element").style.display = "inline";
                     	
-                        document.getElementById("yellow_toner_SKU-label").innerHTML = '<label class="forms_label optional" for="yellow_toner_SKU">* Yellow Yield:</label>';
-                        document.getElementById("yellow_toner_SKU-label").style.display = "block";
-                        document.getElementById("yellow_toner_SKU-element").style.display = "none";
-                        document.getElementById("yellow_toner_price-element").style.display = "none";
+                        document.getElementById("yellow_toner_sku-label").innerHTML = '<label class="forms_label optional" for="yellow_toner_sku">* Yellow Yield:</label>';
+                        document.getElementById("yellow_toner_sku-label").style.display = "block";
+                        document.getElementById("yellow_toner_sku-element").style.display = "none";
+                        document.getElementById("yellow_toner_cost-element").style.display = "none";
                     	document.getElementById("yellow_toner_yield-element").style.display = "inline";
                     	
-                        document.getElementById("black_comp_SKU-label").innerHTML = '<label class="forms_label optional" for="black_comp_SKU">Black Yield:</label>';
-                        document.getElementById("black_comp_SKU-label").style.display = "block";
-                        document.getElementById("black_comp_SKU-element").style.display = "none";
-                        document.getElementById("black_comp_price-element").style.display = "none";
+                        document.getElementById("black_comp_sku-label").innerHTML = '<label class="forms_label optional" for="black_comp_sku">Black Yield:</label>';
+                        document.getElementById("black_comp_sku-label").style.display = "block";
+                        document.getElementById("black_comp_sku-element").style.display = "none";
+                        document.getElementById("black_comp_cost-element").style.display = "none";
                     	document.getElementById("black_comp_yield-element").style.display = "inline";
                     	
-                        document.getElementById("cyan_comp_SKU-label").innerHTML = '<label class="forms_label optional" for="cyan_comp_SKU">Cyan Yield:</label>';
-                        document.getElementById("cyan_comp_SKU-label").style.display = "block";
-                        document.getElementById("cyan_comp_SKU-element").style.display = "none";
-                        document.getElementById("cyan_comp_price-element").style.display = "none";
+                        document.getElementById("cyan_comp_sku-label").innerHTML = '<label class="forms_label optional" for="cyan_comp_sku">Cyan Yield:</label>';
+                        document.getElementById("cyan_comp_sku-label").style.display = "block";
+                        document.getElementById("cyan_comp_sku-element").style.display = "none";
+                        document.getElementById("cyan_comp_cost-element").style.display = "none";
                     	document.getElementById("cyan_comp_yield-element").style.display = "inline";
                     	
-                        document.getElementById("magenta_comp_SKU-label").innerHTML = '<label class="forms_label optional" for="magenta_comp_SKU">Magenta Yield:</label>';
-                        document.getElementById("magenta_comp_SKU-label").style.display = "block";
-                        document.getElementById("magenta_comp_SKU-element").style.display = "none";
-                        document.getElementById("magenta_comp_price-element").style.display = "none";
+                        document.getElementById("magenta_comp_sku-label").innerHTML = '<label class="forms_label optional" for="magenta_comp_sku">Magenta Yield:</label>';
+                        document.getElementById("magenta_comp_sku-label").style.display = "block";
+                        document.getElementById("magenta_comp_sku-element").style.display = "none";
+                        document.getElementById("magenta_comp_cost-element").style.display = "none";
                     	document.getElementById("magenta_comp_yield-element").style.display = "inline";
                     	
-                        document.getElementById("yellow_comp_SKU-label").innerHTML = '<label class="forms_label optional" for="yellow_comp_SKU">Yellow Yield:</label>';
-                        document.getElementById("yellow_comp_SKU-label").style.display = "block";
-                        document.getElementById("yellow_comp_SKU-element").style.display = "none";
-                        document.getElementById("yellow_comp_price-element").style.display = "none";
+                        document.getElementById("yellow_comp_sku-label").innerHTML = '<label class="forms_label optional" for="yellow_comp_sku">Yellow Yield:</label>';
+                        document.getElementById("yellow_comp_sku-label").style.display = "block";
+                        document.getElementById("yellow_comp_sku-element").style.display = "none";
+                        document.getElementById("yellow_comp_cost-element").style.display = "none";
                     	document.getElementById("yellow_comp_yield-element").style.display = "inline";
                     	
 					} else {
                 		display = "inline";
-                        document.getElementById("black_toner_SKU-label").innerHTML = '<label class="forms_label optional" for="black_toner_SKU">* Black SKU / Price / Yield:</label>';
-                        document.getElementById("black_toner_SKU-label").style.display = "block";
-                        document.getElementById("black_toner_SKU-element").style.display = "inline";
-                        document.getElementById("black_toner_price-element").style.display = "inline";
+                        document.getElementById("black_toner_sku-label").innerHTML = '<label class="forms_label optional" for="black_toner_sku">* Black SKU / Price / Yield:</label>';
+                        document.getElementById("black_toner_sku-label").style.display = "block";
+                        document.getElementById("black_toner_sku-element").style.display = "inline";
+                        document.getElementById("black_toner_cost-element").style.display = "inline";
                     	document.getElementById("black_toner_yield-element").style.display = "inline";
                     	
-                        document.getElementById("cyan_toner_SKU-label").innerHTML = '<label class="forms_label optional" for="cyan_toner_SKU">* Cyan SKU / Price / Yield:</label>';
-                        document.getElementById("cyan_toner_SKU-label").style.display = "block";
-                        document.getElementById("cyan_toner_SKU-element").style.display = "inline";
-                        document.getElementById("cyan_toner_price-element").style.display = "inline";
+                        document.getElementById("cyan_toner_sku-label").innerHTML = '<label class="forms_label optional" for="cyan_toner_sku">* Cyan SKU / Price / Yield:</label>';
+                        document.getElementById("cyan_toner_sku-label").style.display = "block";
+                        document.getElementById("cyan_toner_sku-element").style.display = "inline";
+                        document.getElementById("cyan_toner_cost-element").style.display = "inline";
                     	document.getElementById("cyan_toner_yield-element").style.display = "inline";
                     	
-                        document.getElementById("magenta_toner_SKU-label").innerHTML = '<label class="forms_label optional" for="magenta_toner_SKU">* Magenta SKU / Price / Yield:</label>';
-                        document.getElementById("magenta_toner_SKU-label").style.display = "block";
-                        document.getElementById("magenta_toner_SKU-element").style.display = "inline";
-                        document.getElementById("magenta_toner_price-element").style.display = "inline";
+                        document.getElementById("magenta_toner_sku-label").innerHTML = '<label class="forms_label optional" for="magenta_toner_sku">* Magenta SKU / Price / Yield:</label>';
+                        document.getElementById("magenta_toner_sku-label").style.display = "block";
+                        document.getElementById("magenta_toner_sku-element").style.display = "inline";
+                        document.getElementById("magenta_toner_cost-element").style.display = "inline";
                     	document.getElementById("magenta_toner_yield-element").style.display = "inline";
                     	
-                        document.getElementById("yellow_toner_SKU-label").innerHTML = '<label class="forms_label optional" for="yellow_toner_SKU">* Yellow SKU / Price / Yield:</label>';
-                        document.getElementById("yellow_toner_SKU-label").style.display = "block";
-                        document.getElementById("yellow_toner_SKU-element").style.display = "inline";
-                        document.getElementById("yellow_toner_price-element").style.display = "inline";
+                        document.getElementById("yellow_toner_sku-label").innerHTML = '<label class="forms_label optional" for="yellow_toner_sku">* Yellow SKU / Price / Yield:</label>';
+                        document.getElementById("yellow_toner_sku-label").style.display = "block";
+                        document.getElementById("yellow_toner_sku-element").style.display = "inline";
+                        document.getElementById("yellow_toner_cost-element").style.display = "inline";
                     	document.getElementById("yellow_toner_yield-element").style.display = "inline";
                     	
-                        document.getElementById("black_comp_SKU-label").innerHTML = '<label class="forms_label optional" for="black_comp_SKU">Black SKU / Price / Yield:</label>';
-                        document.getElementById("black_comp_SKU-label").style.display = "block";
-                        document.getElementById("black_comp_SKU-element").style.display = "inline";
-                        document.getElementById("black_comp_price-element").style.display = "inline";
+                        document.getElementById("black_comp_sku-label").innerHTML = '<label class="forms_label optional" for="black_comp_sku">Black SKU / Price / Yield:</label>';
+                        document.getElementById("black_comp_sku-label").style.display = "block";
+                        document.getElementById("black_comp_sku-element").style.display = "inline";
+                        document.getElementById("black_comp_cost-element").style.display = "inline";
                     	document.getElementById("black_comp_yield-element").style.display = "inline";
                     	
-                        document.getElementById("cyan_comp_SKU-label").innerHTML = '<label class="forms_label optional" for="cyan_comp_SKU">Cyan SKU / Price / Yield:</label>';
-                        document.getElementById("cyan_comp_SKU-label").style.display = "block";
-                        document.getElementById("cyan_comp_SKU-element").style.display = "inline";
-                        document.getElementById("cyan_comp_price-element").style.display = "inline";
+                        document.getElementById("cyan_comp_sku-label").innerHTML = '<label class="forms_label optional" for="cyan_comp_sku">Cyan SKU / Price / Yield:</label>';
+                        document.getElementById("cyan_comp_sku-label").style.display = "block";
+                        document.getElementById("cyan_comp_sku-element").style.display = "inline";
+                        document.getElementById("cyan_comp_cost-element").style.display = "inline";
                     	document.getElementById("cyan_comp_yield-element").style.display = "inline";
                     	
-                        document.getElementById("magenta_comp_SKU-label").innerHTML = '<label class="forms_label optional" for="magenta_comp_SKU">Magenta SKU / Price / Yield:</label>';
-                        document.getElementById("magenta_comp_SKU-label").style.display = "block";
-                        document.getElementById("magenta_comp_SKU-element").style.display = "inline";
-                        document.getElementById("magenta_comp_price-element").style.display = "inline";
+                        document.getElementById("magenta_comp_sku-label").innerHTML = '<label class="forms_label optional" for="magenta_comp_sku">Magenta SKU / Price / Yield:</label>';
+                        document.getElementById("magenta_comp_sku-label").style.display = "block";
+                        document.getElementById("magenta_comp_sku-element").style.display = "inline";
+                        document.getElementById("magenta_comp_cost-element").style.display = "inline";
                     	document.getElementById("magenta_comp_yield-element").style.display = "inline";
                     	
-                        document.getElementById("yellow_comp_SKU-label").innerHTML = '<label class="forms_label optional" for="yellow_comp_SKU">Yellow SKU / Price / Yield:</label>';
-                        document.getElementById("yellow_comp_SKU-label").style.display = "block";
-                        document.getElementById("yellow_comp_SKU-element").style.display = "inline";
-                        document.getElementById("yellow_comp_price-element").style.display = "inline";
+                        document.getElementById("yellow_comp_sku-label").innerHTML = '<label class="forms_label optional" for="yellow_comp_sku">Yellow SKU / Price / Yield:</label>';
+                        document.getElementById("yellow_comp_sku-label").style.display = "block";
+                        document.getElementById("yellow_comp_sku-element").style.display = "inline";
+                        document.getElementById("yellow_comp_cost-element").style.display = "inline";
                     	document.getElementById("yellow_comp_yield-element").style.display = "inline";
                     	
 					}
 					break;
 				case "4 Color - Combined":
-					config = new Array("black", "cyan", "magenta", "yellow", "3color");
+					config = new Array("black", "cyan", "magenta", "yellow", "three_color");
 					if($("#is_leased").is(":checked")) {
 						display = "none";
-                        document.getElementById("4color_toner_SKU-label").innerHTML = '<label class="forms_label optional" for="4color_toner_SKU">* 4 Color Yield:</label>';
-                        document.getElementById("4color_toner_SKU-label").style.display = "block";
-                        document.getElementById("4color_toner_SKU-element").style.display = "none";
-                        document.getElementById("4color_toner_price-element").style.display = "none";
-                    	document.getElementById("4color_toner_yield-element").style.display = "inline";
+                        document.getElementById("four_color_toner_sku-label").innerHTML = '<label class="forms_label optional" for="four_color_toner_sku">* 4 Color Yield:</label>';
+                        document.getElementById("four_color_toner_sku-label").style.display = "block";
+                        document.getElementById("four_color_toner_sku-element").style.display = "none";
+                        document.getElementById("four_color_toner_cost-element").style.display = "none";
+                    	document.getElementById("four_color_toner_yield-element").style.display = "inline";
                     	
-                        document.getElementById("4color_comp_SKU-label").innerHTML = '<label class="forms_label optional" for="4color_comp_SKU">4 Color Yield:</label>';
-                        document.getElementById("4color_comp_SKU-label").style.display = "block";
-                        document.getElementById("4color_comp_SKU-element").style.display = "none";
-                        document.getElementById("4color_comp_price-element").style.display = "none";
-                    	document.getElementById("4color_comp_yield-element").style.display = "inline";
+                        document.getElementById("four_color_comp_sku-label").innerHTML = '<label class="forms_label optional" for="four_color_comp_sku">4 Color Yield:</label>';
+                        document.getElementById("four_color_comp_sku-label").style.display = "block";
+                        document.getElementById("four_color_comp_sku-element").style.display = "none";
+                        document.getElementById("four_color_comp_cost-element").style.display = "none";
+                    	document.getElementById("four_color_comp_yield-element").style.display = "inline";
                     	
 					} else {
                 		display = "inline";
-                        document.getElementById("4color_toner_SKU-label").innerHTML = '<label class="forms_label optional" for="4color_toner_SKU">* 4 Color SKU / Price / Yield:</label>';
-                        document.getElementById("4color_toner_SKU-label").style.display = "block";
-                        document.getElementById("4color_toner_SKU-element").style.display = "inline";
-                        document.getElementById("4color_toner_price-element").style.display = "inline";
-                    	document.getElementById("4color_toner_yield-element").style.display = "inline";
+                        document.getElementById("four_color_toner_sku-label").innerHTML = '<label class="forms_label optional" for="four_color_toner_sku">* 4 Color SKU / Price / Yield:</label>';
+                        document.getElementById("four_color_toner_sku-label").style.display = "block";
+                        document.getElementById("four_color_toner_sku-element").style.display = "inline";
+                        document.getElementById("four_color_toner_cost-element").style.display = "inline";
+                    	document.getElementById("four_color_toner_yield-element").style.display = "inline";
                     	
-                        document.getElementById("4color_comp_SKU-label").innerHTML = '<label class="forms_label optional" for="4color_comp_SKU">4 Color SKU / Price / Yield:</label>';
-                        document.getElementById("4color_comp_SKU-label").style.display = "block";
-                        document.getElementById("4color_comp_SKU-element").style.display = "inline";
-                        document.getElementById("4color_comp_price-element").style.display = "inline";
-                    	document.getElementById("4color_comp_yield-element").style.display = "inline";
+                        document.getElementById("four_color_comp_sku-label").innerHTML = '<label class="forms_label optional" for="four_color_comp_sku">4 Color SKU / Price / Yield:</label>';
+                        document.getElementById("four_color_comp_sku-label").style.display = "block";
+                        document.getElementById("four_color_comp_sku-element").style.display = "inline";
+                        document.getElementById("four_color_comp_cost-element").style.display = "inline";
+                    	document.getElementById("four_color_comp_yield-element").style.display = "inline";
 					}
 					break;
 			}
@@ -249,15 +249,15 @@
 		function hide_color_configs(config) {
 			for(var i=0; i < config.length; i++) {
 				//OEM Fields
-				document.getElementById(config[i] + "_toner_SKU-label").style.display = "none";
-				document.getElementById(config[i] + "_toner_SKU-element").style.display = "none";
-				document.getElementById(config[i] + "_toner_price-element").style.display = "none";
+				document.getElementById(config[i] + "_toner_sku-label").style.display = "none";
+				document.getElementById(config[i] + "_toner_sku-element").style.display = "none";
+				document.getElementById(config[i] + "_toner_cost-element").style.display = "none";
 				document.getElementById(config[i] + "_toner_yield-element").style.display = "none";
 				
 				//COMP Fields
-				document.getElementById(config[i] + "_comp_SKU-label").style.display = "none";
-				document.getElementById(config[i] + "_comp_SKU-element").style.display = "none";
-				document.getElementById(config[i] + "_comp_price-element").style.display = "none";
+				document.getElementById(config[i] + "_comp_sku-label").style.display = "none";
+				document.getElementById(config[i] + "_comp_sku-element").style.display = "none";
+				document.getElementById(config[i] + "_comp_cost-element").style.display = "none";
 				document.getElementById(config[i] + "_comp_yield-element").style.display = "none";
 			}
 		}

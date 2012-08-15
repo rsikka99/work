@@ -1,4 +1,29 @@
 // Make the scroll bar always show
+
+#lightbox {
+	display: none;
+	background: #000000;
+    .opacity(0.9);
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	min-width: 100%;
+	min-height: 100%;
+	z-index: 1000;
+}
+
+#lightbox-panel {
+	display: none;
+	position: fixed;
+	top: 30px;
+	left: 50%;
+	background: #FFFFFF;
+	padding: 10px 15px 10px 15px;
+	border: 2px solid #CCCCCC;
+	z-index: 1001;
+}
+
+
 html {
 	overflow-y: scroll;
 }
@@ -68,4 +93,3 @@ form.form-center-actions.form-horizontal .form-actions {
 #footerLinks ul.footer-nav > li:last-child a {
     border-right: 0;
 }
-// End of Footer Navigation
