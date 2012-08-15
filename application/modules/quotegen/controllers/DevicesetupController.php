@@ -35,7 +35,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $filter = null;
         $view_filter = null;
         $assignedToners = null;
-
+        
         // Populate manufacturers dropdown
         $manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAll();
         
