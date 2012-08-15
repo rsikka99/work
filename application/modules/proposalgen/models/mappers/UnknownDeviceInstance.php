@@ -34,7 +34,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
             $object->setId($row->id)
                 ->setUserId($row->user_id)
                 ->setReportId($row->report_id)
-                ->setUploadDataCollectorRowId($row->upload_data_collector_id)
+                ->setUploadDataCollectorRowId($row->upload_data_collector_row_id)
                 ->setPrinterModelid($row->printermodelid)
                 ->setMpsMonitorStartdate($row->mps_monitor_startdate)
                 ->setMpsMonitorEnddate($row->mps_monitor_enddate)
@@ -51,45 +51,45 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                 ->setJitSuppliesSupported($row->jit_supplies_supported)
                 ->setWattsPowerNormal($row->watts_power_normal)
                 ->setWattsPowerIdle($row->watts_power_idle)
-                ->setDevicePrice($row->device_price)
+                ->setDevicePrice($row->cost)
                 ->setLaunchDate($row->launch_date)
                 ->setDateCreated($row->date_created)
-                ->setBlackTonerSKU($row->black_toner_SKU)
-                ->setBlackTonerPrice($row->black_toner_price)
+                ->setBlackTonerSKU($row->black_toner_sku)
+                ->setBlackTonerPrice($row->black_toner_cost)
                 ->setBlackTonerYield($row->black_toner_yield)
-                ->setCyanTonerSKU($row->cyan_toner_SKU)
-                ->setCyanTonerPrice($row->cyan_toner_price)
+                ->setCyanTonerSKU($row->cyan_toner_sku)
+                ->setCyanTonerPrice($row->cyan_toner_cost)
                 ->setCyanTonerYield($row->cyan_toner_yield)
-                ->setMagentaTonerSKU($row->magenta_toner_SKU)
-                ->setMagentaTonerPrice($row->magenta_toner_price)
+                ->setMagentaTonerSKU($row->magenta_toner_sku)
+                ->setMagentaTonerPrice($row->magenta_toner_cost)
                 ->setMagentaTonerYield($row->magenta_toner_yield)
-                ->setYellowTonerSKU($row->yellow_toner_SKU)
-                ->setYellowTonerPrice($row->yellow_toner_price)
+                ->setYellowTonerSKU($row->yellow_toner_sku)
+                ->setYellowTonerPrice($row->yellow_toner_cost)
                 ->setYellowTonerYield($row->yellow_toner_yield)
-                ->setThreeColorTonerSKU($row ['3color_toner_SKU'])
-                ->setThreeColorTonerPrice($row ['3color_toner_price'])
-                ->setThreeColorTonerYield($row ['3color_toner_yield'])
-                ->setFourColorTonerSKU($row ['4color_toner_SKU'])
-                ->setFourColorTonerPrice($row ['4color_toner_price'])
-                ->setFourColorTonerYield($row ['4color_toner_yield'])
-                ->setBlackCompSKU($row->black_comp_SKU)
-                ->setBlackCompPrice($row->black_comp_price)
+                ->setThreeColorTonerSKU($row ['three_color_toner_sku'])
+                ->setThreeColorTonerPrice($row ['three_color_toner_cost'])
+                ->setThreeColorTonerYield($row ['three_color_toner_yield'])
+                ->setFourColorTonerSKU($row ['four_color_toner_sku'])
+                ->setFourColorTonerPrice($row ['four_color_toner_cost'])
+                ->setFourColorTonerYield($row ['four_color_toner_yield'])
+                ->setBlackCompSKU($row->black_comp_sku)
+                ->setBlackCompPrice($row->black_comp_cost)
                 ->setBlackCompYield($row->black_comp_yield)
-                ->setCyanCompSKU($row->cyan_comp_SKU)
-                ->setCyanCompPrice($row->cyan_comp_price)
+                ->setCyanCompSKU($row->cyan_comp_sku)
+                ->setCyanCompPrice($row->cyan_comp_cost)
                 ->setCyanCompYield($row->cyan_comp_yield)
-                ->setMagentaCompSKU($row->magenta_comp_SKU)
-                ->setMagentaCompPrice($row->magenta_comp_price)
+                ->setMagentaCompSKU($row->magenta_comp_sku)
+                ->setMagentaCompPrice($row->magenta_comp_cost)
                 ->setMagentaCompYield($row->magenta_comp_yield)
-                ->setYellowCompSKU($row->yellow_comp_SKU)
-                ->setYellowCompPrice($row->yellow_comp_price)
+                ->setYellowCompSKU($row->yellow_comp_sku)
+                ->setYellowCompPrice($row->yellow_comp_cost)
                 ->setYellowCompYield($row->yellow_comp_yield)
-                ->setThreeColorCompSKU($row ['3color_comp_SKU'])
-                ->setThreeColorCompPrice($row ['3color_comp_price'])
-                ->setThreeColorCompYield($row ['3color_comp_yield'])
-                ->setFourColorCompSKU($row ['4color_comp_SKU'])
-                ->setFourColorCompPrice($row ['4color_comp_price'])
-                ->setFourColorCompYield($row ['4color_comp_yield'])
+                ->setThreeColorCompSKU($row ['three_color_comp_sku'])
+                ->setThreeColorCompPrice($row ['three_color_comp_cost'])
+                ->setThreeColorCompYield($row ['three_color_comp_yield'])
+                ->setFourColorCompSKU($row ['four_color_comp_sku'])
+                ->setFourColorCompPrice($row ['four_color_comp_cost'])
+                ->setFourColorCompYield($row ['four_color_comp_yield'])
                 ->setStartMeterLife($row->start_meter_life)
                 ->setEndMeterLife($row->end_meter_life)
                 ->setStartMeterBlack($row->start_meter_black)
@@ -138,7 +138,8 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                     $device = new Proposalgen_Model_DeviceInstance();
                     
                     $manufacturer = new Proposalgen_Model_Manufacturer();
-                    $manufacturer->setManufacturerName($row->device_manufacturer);
+                    $manufacturer->setFullname($row->device_manufacturer);
+                    $manufacturer->setDisplayname($row->device_manufacturer);
                     
                     $tonerConfigMapper = Proposalgen_Model_Mapper_TonerConfig::getInstance();
                     $tonerConfig = $tonerConfigMapper->find($row->toner_config_id);
@@ -181,7 +182,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                         ->setIsReplacementDevice(0)
                         ->setWattsPowerNormal($row->watts_power_normal)
                         ->setWattsPowerIdle($row->watts_power_idle)
-                        ->setCost($row->device_price)
+                        ->setCost($row->cost)
                         ->setLaunchDate($row->launch_date)
                         ->setDateCreated($row->date_created)
                         ->setServiceCostPerPage($row->service_cost_per_page)
@@ -212,7 +213,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                     $device->setDeviceInstanceId(null)
                         ->setReportId($row->report_id)
                         ->setMasterDevice($masterdevice)
-                        ->setUploadDataCollectorId($row->upload_data_collector_id)
+                        ->setUploadDataCollectorId($row->upload_data_collector_row_id)
                         ->setSerialNumber($row->printer_serial_number)
                         ->setMPSMonitorStartDate($row->mps_monitor_startdate)
                         ->setMPSMonitorEndDate($row->mps_monitor_enddate)
@@ -285,7 +286,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                 }
                 break;
             case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED :
-                if ($this->validateCOMPTonerFields($row, "black_comp") && $this->validateCOMPTonerFields($row, "3color_comp"))
+                if ($this->validateCOMPTonerFields($row, "black_comp") && $this->validateCOMPTonerFields($row, "three_color_comp"))
                 {
                     $comptoners [Proposalgen_Model_TonerColor::BLACK] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::BLACK, $manufacturer, Proposalgen_Model_PartType::COMP, "_comp");
                     $comptoners [Proposalgen_Model_TonerColor::THREE_COLOR] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::THREE_COLOR, $manufacturer, Proposalgen_Model_PartType::COMP, "_comp");
@@ -293,7 +294,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                 }
                 break;
             case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED :
-                if ($this->validateCOMPTonerFields($row, "4color_comp"))
+                if ($this->validateCOMPTonerFields($row, "four_color_comp"))
                 {
                     $comptoners [Proposalgen_Model_TonerColor::FOUR_COLOR] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::FOUR_COLOR, $manufacturer, Proposalgen_Model_PartType::COMP, "_comp");
                     $hasValidCOMPToners = true;
@@ -314,9 +315,9 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
     public function validateCOMPTonerFields ($row, $rowName)
     {
         $valid = false;
-        if (! is_null($row [$rowName . "_SKU"]) && ! is_null($row [$rowName . "_price"]) && ! is_null($row [$rowName . "_yield"]))
+        if (! is_null($row [$rowName . "_sku"]) && ! is_null($row [$rowName . "_cost"]) && ! is_null($row [$rowName . "_yield"]))
         {
-            if (strlen($row [$rowName . "_SKU"]) > 0 && $row [$rowName . "_price"] > 0 && $row [$rowName . "_yield"] > 0)
+            if (strlen($row [$rowName . "_sku"]) > 0 && $row [$rowName . "_cost"] > 0 && $row [$rowName . "_yield"] > 0)
             {
                 $valid = true;
             }
@@ -342,10 +343,10 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                 $colortext = "yellow";
                 break;
             case Proposalgen_Model_TonerColor::THREE_COLOR :
-                $colortext = "3color";
+                $colortext = "three_color";
                 break;
             case Proposalgen_Model_TonerColor::FOUR_COLOR :
-                $colortext = "4color";
+                $colortext = "four_color";
                 break;
         }
         $colortext .= $colorSuffix;
@@ -364,10 +365,10 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
         }
         else
         {
-            if (isset($row [$colortext . "_SKU"]))
+            if (isset($row [$colortext . "_sku"]))
             {
-                $toner->setTonerSKU($row [$colortext . "_SKU"])
-                    ->setTonerPrice($row [$colortext . "_price"])
+                $toner->setTonerSKU($row [$colortext . "_sku"])
+                    ->setTonerPrice($row [$colortext . "_cost"])
                     ->setTonerYield($row [$colortext . "_yield"])
                     ->setPartType($partTypeMapper->find($partType))
                     ->setManufacturer($manufacturer)
@@ -407,48 +408,48 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
             $data ["jit_supplies_supported"] = $object->getJitSuppliesSupported();
             $data ["watts_power_normal"] = $object->getWattsPowerNormal();
             $data ["watts_power_idle"] = $object->getWattsPowerIdle();
-            $data ["device_price"] = $object->getDevicePrice();
+            $data ["cost"] = $object->getDevicePrice();
             $data ["launch_date"] = $object->getLaunchDate();
             $data ["date_created"] = $object->getDateCreated();
-            $data ["black_toner_SKU"] = $object->getBlackTonerSKU();
-            $data ["black_toner_price"] = $object->getBlackTonerPrice();
+            $data ["black_toner_sku"] = $object->getBlackTonerSKU();
+            $data ["black_toner_cost"] = $object->getBlackTonerPrice();
             $data ["black_toner_yield"] = $object->getBlackTonerYield();
-            $data ["cyan_toner_SKU"] = $object->getCyanTonerSKU();
-            $data ["cyan_toner_price"] = $object->getCyanTonerPrice();
+            $data ["cyan_toner_sku"] = $object->getCyanTonerSKU();
+            $data ["cyan_toner_cost"] = $object->getCyanTonerPrice();
             $data ["cyan_toner_yield"] = $object->getCyanTonerYield();
-            $data ["magenta_toner_SKU"] = $object->getMagentaTonerSKU();
-            $data ["magenta_toner_price"] = $object->getMagentaTonerPrice();
+            $data ["magenta_toner_sku"] = $object->getMagentaTonerSKU();
+            $data ["magenta_toner_cost"] = $object->getMagentaTonerPrice();
             $data ["magenta_toner_yield"] = $object->getMagentaTonerYield();
-            $data ["yellow_toner_SKU"] = $object->getYellowTonerSKU();
-            $data ["yellow_toner_price"] = $object->getYellowTonerPrice();
+            $data ["yellow_toner_sku"] = $object->getYellowTonerSKU();
+            $data ["yellow_toner_cost"] = $object->getYellowTonerPrice();
             $data ["yellow_toner_yield"] = $object->getYellowTonerYield();
-            $data ["3color_toner_SKU"] = $object->getThreeColorTonerSKU();
-            $data ["3color_toner_SKU"] = $object->getThreeColorTonerSKU();
-            $data ["3color_toner_price"] = $object->getThreeColorTonerPrice();
-            $data ["3color_toner_yield"] = $object->getThreeColorTonerYield();
-            $data ["4color_toner_SKU"] = $object->getFourColorTonerSKU();
-            $data ["4color_toner_price"] = $object->getFourColorTonerPrice();
-            $data ["4color_toner_yield"] = $object->getFourColorTonerYield();
+            $data ["three_color_toner_sku"] = $object->getThreeColorTonerSKU();
+            $data ["three_color_toner_sku"] = $object->getThreeColorTonerSKU();
+            $data ["three_color_toner_cost"] = $object->getThreeColorTonerPrice();
+            $data ["three_color_toner_yield"] = $object->getThreeColorTonerYield();
+            $data ["four_color_toner_sku"] = $object->getFourColorTonerSKU();
+            $data ["four_color_toner_cost"] = $object->getFourColorTonerPrice();
+            $data ["four_color_toner_yield"] = $object->getFourColorTonerYield();
             
-            $data ["black_comp_SKU"] = $object->getBlackCompSKU();
-            $data ["black_comp_price"] = $object->getBlackCompPrice();
+            $data ["black_comp_sku"] = $object->getBlackCompSKU();
+            $data ["black_comp_cost"] = $object->getBlackCompPrice();
             $data ["black_comp_yield"] = $object->getBlackCompYield();
-            $data ["cyan_comp_SKU"] = $object->getCyanCompSKU();
-            $data ["cyan_comp_price"] = $object->getCyanCompPrice();
+            $data ["cyan_comp_sku"] = $object->getCyanCompSKU();
+            $data ["cyan_comp_cost"] = $object->getCyanCompPrice();
             $data ["cyan_comp_yield"] = $object->getCyanCompYield();
-            $data ["magenta_comp_SKU"] = $object->getMagentaCompSKU();
-            $data ["magenta_comp_price"] = $object->getMagentaCompPrice();
+            $data ["magenta_comp_sku"] = $object->getMagentaCompSKU();
+            $data ["magenta_comp_cost"] = $object->getMagentaCompPrice();
             $data ["magenta_comp_yield"] = $object->getMagentaCompYield();
-            $data ["yellow_comp_SKU"] = $object->getYellowCompSKU();
-            $data ["yellow_comp_price"] = $object->getYellowCompPrice();
+            $data ["yellow_comp_sku"] = $object->getYellowCompSKU();
+            $data ["yellow_comp_cost"] = $object->getYellowCompPrice();
             $data ["yellow_comp_yield"] = $object->getYellowCompYield();
-            $data ["3color_comp_SKU"] = $object->getThreeColorCompSKU();
-            $data ["3color_comp_SKU"] = $object->getThreeColorCompSKU();
-            $data ["3color_comp_price"] = $object->getThreeColorCompPrice();
-            $data ["3color_comp_yield"] = $object->getThreeColorCompYield();
-            $data ["4color_comp_SKU"] = $object->getFourColorCompSKU();
-            $data ["4color_comp_price"] = $object->getFourColorCompPrice();
-            $data ["4color_comp_yield"] = $object->getFourColorCompYield();
+            $data ["three_color_comp_sku"] = $object->getThreeColorCompSKU();
+            $data ["three_color_comp_sku"] = $object->getThreeColorCompSKU();
+            $data ["three_color_comp_cost"] = $object->getThreeColorCompPrice();
+            $data ["three_color_comp_yield"] = $object->getThreeColorCompYield();
+            $data ["four_color_comp_sku"] = $object->getFourColorCompSKU();
+            $data ["four_color_comp_cost"] = $object->getFourColorCompPrice();
+            $data ["four_color_comp_yield"] = $object->getFourColorCompYield();
             
             $data ["start_meter_life"] = $object->getStartMeterLife();
             $data ["end_meter_life"] = $object->getEndMeterLife();

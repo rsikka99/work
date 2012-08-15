@@ -81,40 +81,40 @@
                         <fleetdata>
                             <label>Upload Fleet Data</label>
                             <module>proposalgen</module>
-                            <controller>data</controller>
+                            <controller>fleet</controller>
                             <action>index</action>
-                            <resource>proposalgen__data__index</resource>
+                            <resource>proposalgen__fleet__index</resource>
                             <class>dropdown subdropdown</class>
                             <pages>
                                 <upload>
                                     <label>Upload</label>
                                     <module>proposalgen</module>
-                                    <controller>data</controller>
+                                    <controller>fleet</controller>
                                     <action>index</action>
-                                    <resource>proposalgen__data__index</resource>
+                                    <resource>proposalgen__fleet__index</resource>
                                 </upload>
                                 <devicemapping>
                                     <label>Map Devices</label>
                                     <module>proposalgen</module>
-                                    <controller>data</controller>
+                                    <controller>fleet</controller>
                                     <action>devicemapping</action>
-                                    <resource>proposalgen__data__devicemapping</resource>
+                                    <resource>proposalgen__fleet__devicemapping</resource>
                                 </devicemapping>
                                 <deviceleasing>
                                     <label>Summary</label>
                                     <module>proposalgen</module>
-                                    <controller>data</controller>
+                                    <controller>fleet</controller>
                                     <action>deviceleasing</action>
-                                    <resource>proposalgen__data__deviceleasing</resource>
+                                    <resource>proposalgen__fleet__deviceleasing</resource>
                                 </deviceleasing>
                             </pages>
                         </fleetdata>
                         <reportsettings>
                             <label>Report Settings</label>
                             <module>proposalgen</module>
-                            <controller>data</controller>
+                            <controller>fleet</controller>
                             <action>reportsettings</action>
-                            <resource>proposalgen__data__reportsettings</resource>
+                            <resource>proposalgen__fleet__reportsettings</resource>
                         </reportsettings>
                         <reports>
                             <label>Available Reports</label>
