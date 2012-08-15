@@ -597,15 +597,15 @@ DEFAULT CHARACTER SET = utf8;
 -- Table `pgen_report_report_settings`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_report_report_settings` (
-  `report_id` INT(11) NOT NULL ,
-  `report_setting_id` INT(11) NOT NULL ,
-  PRIMARY KEY (`report_id`, `report_setting_id`) ,
-  INDEX `report_setting_id` (`report_setting_id` ASC) ,
+  `reportId` INT(11) NOT NULL ,
+  `reportSettingId` INT(11) NOT NULL ,
+  PRIMARY KEY (`reportId`) ,
+  INDEX `report_setting_id` (`reportSettingId` ASC) ,
   CONSTRAINT `proposalgenerator_report_report_settings_ibfk_1`
-    FOREIGN KEY (`report_id` )
+    FOREIGN KEY (`reportId` )
     REFERENCES `pgen_reports` (`id` ),
   CONSTRAINT `proposalgenerator_report_report_settings_ibfk_2`
-    FOREIGN KEY (`report_setting_id` )
+    FOREIGN KEY (`reportSettingId` )
     REFERENCES `pgen_report_settings` (`id` ))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -628,15 +628,15 @@ DEFAULT CHARACTER SET = utf8;
 -- Table `pgen_report_survey_settings`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_report_survey_settings` (
-  `report_id` INT(11) NOT NULL ,
-  `survey_setting_id` INT(11) NOT NULL ,
-  PRIMARY KEY (`report_id`, `survey_setting_id`) ,
-  INDEX `survey_setting_id` (`survey_setting_id` ASC) ,
+  `reportId` INT(11) NOT NULL ,
+  `surveySettingId` INT(11) NOT NULL ,
+  PRIMARY KEY (`reportId`) ,
+  INDEX `survey_setting_id` (`surveySettingId` ASC) ,
   CONSTRAINT `proposalgenerator_report_survey_settings_ibfk_1`
-    FOREIGN KEY (`report_id` )
+    FOREIGN KEY (`reportId` )
     REFERENCES `pgen_reports` (`id` ),
   CONSTRAINT `proposalgenerator_report_survey_settings_ibfk_2`
-    FOREIGN KEY (`survey_setting_id` )
+    FOREIGN KEY (`surveySettingId` )
     REFERENCES `pgen_survey_settings` (`id` ))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -953,15 +953,15 @@ DEFAULT CHARACTER SET = utf8;
 -- Table `pgen_user_report_settings`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_user_report_settings` (
-  `user_id` INT(11) NOT NULL ,
-  `report_setting_id` INT(11) NOT NULL ,
-  PRIMARY KEY (`user_id`, `report_setting_id`) ,
-  INDEX `report_setting_id` (`report_setting_id` ASC) ,
+  `userId` INT(11) NOT NULL ,
+  `reportSettingId` INT(11) NOT NULL ,
+  PRIMARY KEY (`userId`) ,
+  INDEX `report_setting_id` (`reportSettingId` ASC) ,
   CONSTRAINT `proposalgenerator_user_report_settings_ibfk_1`
-    FOREIGN KEY (`user_id` )
+    FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` ),
   CONSTRAINT `proposalgenerator_user_report_settings_ibfk_2`
-    FOREIGN KEY (`report_setting_id` )
+    FOREIGN KEY (`reportSettingId` )
     REFERENCES `pgen_report_settings` (`id` ))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -971,15 +971,15 @@ DEFAULT CHARACTER SET = utf8;
 -- Table `pgen_user_survey_settings`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_user_survey_settings` (
-  `user_id` INT(11) NOT NULL ,
-  `survey_setting_id` INT(11) NOT NULL ,
-  PRIMARY KEY (`user_id`, `survey_setting_id`) ,
-  INDEX `survey_setting_id` (`survey_setting_id` ASC) ,
+  `userId` INT(11) NOT NULL ,
+  `surveySettingId` INT(11) NOT NULL ,
+  PRIMARY KEY (`userId`) ,
+  INDEX `survey_setting_id` (`surveySettingId` ASC) ,
   CONSTRAINT `proposalgenerator_user_survey_settings_ibfk_1`
-    FOREIGN KEY (`user_id` )
+    FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` ),
   CONSTRAINT `proposalgenerator_user_survey_settings_ibfk_2`
-    FOREIGN KEY (`survey_setting_id` )
+    FOREIGN KEY (`surveySettingId` )
     REFERENCES `pgen_survey_settings` (`id` ))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
