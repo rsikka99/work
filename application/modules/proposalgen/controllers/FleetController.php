@@ -1210,12 +1210,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 {
                     case "1" :
                         // black only - sku / price / yield
-                        $black_array = array (
-                                $formData ['black_toner_sku'], 
-                                $formData ['black_toner_cost'], 
-                                $formData ['black_toner_yield'] 
-                        );
                         
+
                         if (($formData ['is_leased'] && empty($formData ['black_toner_yield'])) || (! $formData ['is_leased'] && (empty($formData ['black_toner_sku']) || empty($formData ['black_toner_cost']) || empty($formData ['black_toner_yield']))))
                         {
                             $valid_toners = false;
@@ -1223,15 +1219,19 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             $this->view->message = "Incomplete black toner data supplied.<br />Please fill out all fields.";
                             break;
                         }
+                        else
+                        {
+                            $black_array = array (
+                                    $formData ['black_toner_sku'], 
+                                    $formData ['black_toner_cost'], 
+                                    $formData ['black_toner_yield'] 
+                            );
+                        }
                         
                         // validate black comp fields
                         if (! $formData ['is_leased'])
                         {
-                            $black_comp_array = array (
-                                    $formData ['black_comp_sku'], 
-                                    $formData ['black_comp_cost'], 
-                                    $formData ['black_comp_yield'] 
-                            );
+                            
                             if (! empty($formData ['black_comp_sku']) || ! empty($formData ['black_comp_cost']) || ! empty($formData ['black_comp_yield']))
                             {
                                 if (empty($formData ['black_comp_sku']) || empty($formData ['black_comp_cost']) || empty($formData ['black_comp_yield']))
@@ -1241,38 +1241,36 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                     $this->view->message = "Incomplete compatible black toner data supplied.<br />Please fill out all fields.";
                                     break;
                                 }
+                                else
+                                {
+                                    $black_comp_array = array (
+                                            $formData ['black_comp_sku'], 
+                                            $formData ['black_comp_cost'], 
+                                            $formData ['black_comp_yield'] 
+                                    );
+                                }
                             }
                         }
                         
                         break;
                     case "2" :
                         // 3 color - separated - sku / price / yield
-                        $black_array = array (
-                                $formData ['black_toner_sku'], 
-                                $formData ['black_toner_cost'], 
-                                $formData ['black_toner_yield'] 
-                        );
-                        $cyan_array = array (
-                                $formData ['cyan_toner_sku'], 
-                                $formData ['cyan_toner_cost'], 
-                                $formData ['cyan_toner_yield'] 
-                        );
-                        $magenta_array = array (
-                                $formData ['magenta_toner_sku'], 
-                                $formData ['magenta_toner_cost'], 
-                                $formData ['magenta_toner_yield'] 
-                        );
-                        $yellow_array = array (
-                                $formData ['yellow_toner_sku'], 
-                                $formData ['yellow_toner_cost'], 
-                                $formData ['yellow_toner_yield'] 
-                        );
+                        
+
                         if (($formData ['is_leased'] && empty($formData ['black_toner_yield'])) || (! $formData ['is_leased'] && (empty($formData ['black_toner_sku']) || empty($formData ['black_toner_cost']) || empty($formData ['black_toner_yield']))))
                         {
                             $valid_toners = false;
                             $this->view->field = "black";
                             $this->view->message = "Incomplete black toner data supplied.<br />Please fill out all fields.";
                             break;
+                        }
+                        else
+                        {
+                            $black_array = array (
+                                    $formData ['black_toner_sku'], 
+                                    $formData ['black_toner_cost'], 
+                                    $formData ['black_toner_yield'] 
+                            );
                         }
                         if (($formData ['is_leased'] && empty($formData ['cyan_toner_yield'])) || (! $formData ['is_leased'] && (empty($formData ['cyan_toner_sku']) || empty($formData ['cyan_toner_cost']) || empty($formData ['cyan_toner_yield']))))
                         {
@@ -1281,6 +1279,14 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             $this->view->message = "Incomplete cyan toner data supplied.<br />Please fill out all fields.";
                             break;
                         }
+                        else
+                        {
+                            $cyan_array = array (
+                                    $formData ['cyan_toner_sku'], 
+                                    $formData ['cyan_toner_cost'], 
+                                    $formData ['cyan_toner_yield'] 
+                            );
+                        }
                         if (($formData ['is_leased'] && empty($formData ['magenta_toner_yield'])) || (! $formData ['is_leased'] && (empty($formData ['magenta_toner_sku']) || empty($formData ['magenta_toner_cost']) || empty($formData ['magenta_toner_yield']))))
                         {
                             $valid_toners = false;
@@ -1288,12 +1294,28 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             $this->view->message = "Incomplete magenta toner data supplied.<br />Please fill out all fields.";
                             break;
                         }
+                        else
+                        {
+                            $magenta_array = array (
+                                    $formData ['magenta_toner_sku'], 
+                                    $formData ['magenta_toner_cost'], 
+                                    $formData ['magenta_toner_yield'] 
+                            );
+                        }
                         if (($formData ['is_leased'] && empty($formData ['yellow_toner_yield'])) || (! $formData ['is_leased'] && (empty($formData ['yellow_toner_sku']) || empty($formData ['yellow_toner_cost']) || empty($formData ['yellow_toner_yield']))))
                         {
                             $valid_toners = false;
                             $this->view->field = "yellow";
                             $this->view->message = "Incomplete yellow toner data supplied.<br />Please fill out all fields.";
                             break;
+                        }
+                        else
+                        {
+                            $yellow_array = array (
+                                    $formData ['yellow_toner_sku'], 
+                                    $formData ['yellow_toner_cost'], 
+                                    $formData ['yellow_toner_yield'] 
+                            );
                         }
                         
                         // COMP 3 color - separated - sku / price / yield
@@ -1376,16 +1398,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         break;
                     case "3" :
                         // 3 color - combined - sku / price / yield
-                        $black_array = array (
-                                $formData ['black_toner_sku'], 
-                                $formData ['black_toner_cost'], 
-                                $formData ['black_toner_yield'] 
-                        );
-                        $three_color_array = array (
-                                $formData ['three_color_toner_sku'], 
-                                $formData ['three_color_toner_cost'], 
-                                $formData ['three_color_toner_yield'] 
-                        );
+                        
+
                         if (($formData ['is_leased'] && empty($formData ['black_toner_yield'])) || (! $formData ['is_leased'] && (empty($formData ['black_toner_sku']) || empty($formData ['black_toner_cost']) || empty($formData ['black_toner_yield']))))
                         {
                             $valid_toners = false;
@@ -1393,6 +1407,15 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             $this->view->message = "Incomplete black toner data supplied.<br />Please fill out all fields.";
                             break;
                         }
+                        else
+                        {
+                            $black_array = array (
+                                    $formData ['black_toner_sku'], 
+                                    $formData ['black_toner_cost'], 
+                                    $formData ['black_toner_yield'] 
+                            );
+                        }
+                        
                         if (($formData ['is_leased'] && empty($formData ['three_color_toner_yield'])) || (! $formData ['is_leased'] && (empty($formData ['three_color_toner_sku']) || empty($formData ['three_color_toner_cost']) || empty($formData ['three_color_toner_yield']))))
                         {
                             $valid_toners = false;
@@ -1400,20 +1423,18 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             $this->view->message = "Incomplete 3 color toner data supplied.<br />Please fill out all fields.";
                             break;
                         }
+                        else
+                        {
+                            $three_color_array = array (
+                                    $formData ['three_color_toner_sku'], 
+                                    $formData ['three_color_toner_cost'], 
+                                    $formData ['three_color_toner_yield'] 
+                            );
+                        }
                         
                         // COMP 3 color - combined - sku / price / yield
                         if (! $formData ['is_leased'])
                         {
-                            $black_comp_array = array (
-                                    $formData ['black_comp_sku'], 
-                                    $formData ['black_comp_cost'], 
-                                    $formData ['black_comp_yield'] 
-                            );
-                            $three_color_comp_array = array (
-                                    $formData ['three_color_comp_sku'], 
-                                    $formData ['three_color_comp_cost'], 
-                                    $formData ['three_color_comp_yield'] 
-                            );
                             
                             if (! empty($formData ['black_comp_sku']) || ! empty($formData ['black_comp_cost']) || ! empty($formData ['black_comp_yield']))
                             {
@@ -1423,6 +1444,14 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                     $this->view->field = "black_comp";
                                     $this->view->message = "Incomplete compatible black toner data supplied.<br />Please fill out all fields.";
                                     break;
+                                }
+                                else
+                                {
+                                    $black_comp_array = array (
+                                            $formData ['black_comp_sku'], 
+                                            $formData ['black_comp_cost'], 
+                                            $formData ['black_comp_yield'] 
+                                    );
                                 }
                             }
                             if (! empty($formData ['three_color_comp_sku']) || ! empty($formData ['three_color_comp_cost']) || ! empty($formData ['three_color_comp_yield']))
@@ -1434,16 +1463,21 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                     $this->view->message = "Incomplete compatible 3 color toner data supplied.<br />Please fill out all fields.";
                                     break;
                                 }
+                                else
+                                {
+                                    $three_color_comp_array = array (
+                                            $formData ['three_color_comp_sku'], 
+                                            $formData ['three_color_comp_cost'], 
+                                            $formData ['three_color_comp_yield'] 
+                                    );
+                                }
                             }
                         }
                         break;
                     case "4" :
                         // 4 color - combined - sku / price / yield
-                        $four_color_array = array (
-                                $formData ['four_color_toner_sku'], 
-                                $formData ['four_color_toner_cost'], 
-                                $formData ['four_color_toner_yield'] 
-                        );
+                        
+
                         if (($formData ['is_leased'] && empty($formData ['four_color_toner_yield'])) || (! $formData ['is_leased'] && (empty($formData ['four_color_toner_sku']) || empty($formData ['four_color_toner_cost']) || empty($formData ['four_color_toner_yield']))))
                         {
                             $valid_toners = false;
@@ -1451,15 +1485,18 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             $this->view->message = "Incomplete 4 color toner data supplied. Please fill out all fields.";
                             break;
                         }
+                        else
+                        {
+                            $four_color_array = array (
+                                    $formData ['four_color_toner_sku'], 
+                                    $formData ['four_color_toner_cost'], 
+                                    $formData ['four_color_toner_yield'] 
+                            );
+                        }
                         
                         // COMP 4 color - combined - sku / price / yield
                         if (! $formData ['is_leased'])
                         {
-                            $four_color_comp_array = array (
-                                    $formData ['four_color_comp_sku'], 
-                                    $formData ['four_color_comp_cost'], 
-                                    $formData ['four_color_comp_yield'] 
-                            );
                             if (! empty($formData ['four_color_comp_sku']) || ! empty($formData ['four_color_comp_cost']) || ! empty($formData ['four_color_comp_yield']))
                             {
                                 if (empty($formData ['four_color_comp_sku']) || empty($formData ['four_color_comp_cost']) || empty($formData ['four_color_comp_yield']))
@@ -1468,6 +1505,14 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                     $this->view->field = "four_color";
                                     $this->view->message = "Incomplete compatible 4 color toner data supplied.<br />Please fill out all fields.";
                                     break;
+                                }
+                                else
+                                {
+                                    $four_color_comp_array = array (
+                                            $formData ['four_color_comp_sku'], 
+                                            $formData ['four_color_comp_cost'], 
+                                            $formData ['four_color_comp_yield'] 
+                                    );
                                 }
                             }
                         }
@@ -1657,7 +1702,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             }
                             else
                             {
-                                $unknown_device_instanceData ['user_id'] = $this->user_id;
+                                
+                                $unknown_device_instanceData ['user_id'] = $this->_userId;
                                 $unknown_device_instanceData ['report_id'] = $report_id;
                                 $unknown_device_instance_id = $unknown_device_instanceTable->insert($unknown_device_instanceData);
                             }
@@ -1678,7 +1724,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             
                             // FIXME: (Lee Robert) - This was a quick hack to get this update working with the Tangent Mapper. It would be better to do a simple update using the new My_Model_Mapper_Abstract type of mapper. 
                             $uploadDataCollectorRow = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($upload_data_collector_row_id);
-                            $uploadDataCollectorRow->setIsExcluded(false);
+                            $uploadDataCollectorRow->setIsExcluded(0);
                             Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->save($uploadDataCollectorRow);
                         }
                         
@@ -1785,8 +1831,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     $manufacturername = strtolower($result [0] ['device_manufacturer']);
                     $devicename = strtolower($result [0] ['printer_model']);
                     $tempDate = $result [0] ['launch_date'];
-                    $ppm_black = $result [0] ['PPM_black'];
-                    $ppm_color = $result [0] ['PPM_color'];
+                    $ppm_black = $result [0] ['ppm_black'];
+                    $ppm_color = $result [0] ['ppm_color'];
                     $wattspowernormal = $result [0] ['watts_power_normal'];
                     $wattspoweridle = $result [0] ['watts_power_idle'];
                     $device_cost = $result [0] ['cost'];
@@ -2179,6 +2225,9 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
     public function savemappingAction ()
     {
+        // Mark the step we're on as active
+        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FLEETDATA_MAPDEVICES);
+        
         Tangent_Timer::Milestone("Start Save Mapping");
         $db = Zend_Db_Table::getDefaultAdapter();
         $this->view->grid = $this->_getParam('grid', 'none');
@@ -2214,12 +2263,12 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 ))
                     ->joinLeft(array (
                         'di' => 'pgen_device_instances' 
-                ), 'di.id = udc.id', array (
-                        'id AS device_instance_id' 
+                ), 'di.upload_data_collector_row_id = udc.id', array (
+                        'di.id AS device_instance_id' 
                 ))
                     ->joinLeft(array (
                         'udi' => 'pgen_unknown_device_instances' 
-                ), 'udi.id = udc.id', array (
+                ), 'udi.upload_data_collector_row_id = udc.id', array (
                         'id AS unknown_device_instance_id' 
                 ))
                     ->joinLeft(array (
@@ -2316,14 +2365,14 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         
                         // FIXME: (Lee Robert) - This was a quick hack to get this update working with the Tangent Mapper. It would be better to do a simple update using the new My_Model_Mapper_Abstract type of mapper. 
                         $uploadDataCollectorRow = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($upload_data_collector_row_id);
-                        $uploadDataCollectorRow->setIsExcluded(false);
+                        $uploadDataCollectorRow->setIsExcluded(0);
                         Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->save($uploadDataCollectorRow);
                     }
                     else
                     {
                         // FIXME: (Lee Robert) - This was a quick hack to get this update working with the Tangent Mapper. It would be better to do a simple update using the new My_Model_Mapper_Abstract type of mapper. 
                         $uploadDataCollectorRow = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($upload_data_collector_row_id);
-                        $uploadDataCollectorRow->setIsExcluded(true);
+                        $uploadDataCollectorRow->setIsExcluded(1);
                         Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->save($uploadDataCollectorRow);
                     }
                 }
@@ -2418,14 +2467,10 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 // reset report stage flag
                 $reportTable = new Proposalgen_Model_DbTable_Report();
                 
-                $report = Proposalgen_Model_Mapper_Report::getInstance()->find($report_id);
-                if ($report->getReportStage() != 'finished')
-                {
-                    $report->setReportStage('summary');
-                    Proposalgen_Model_Mapper_Report::getInstance()->save($report);
-                }
-                
                 $db->commit();
+                
+                $this->saveReport();
+                $this->gotoNextStep();
                 
                 // redirect back to mapping page
                 $this->_redirect('/proposalgen/fleet/deviceleasing');
@@ -2503,6 +2548,9 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
     public function deviceleasingAction ()
     {
+        // Mark the step we're on as active
+        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FLEETDATA_SUMMARY);
+        
         $db = Zend_Db_Table::getDefaultAdapter();
         
         $this->view->formTitle = 'Upload Summary';
@@ -2510,36 +2558,14 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         
         $report_id = $this->getReport()->getReportId();
         
-        
         $upload_data_collectorTable = new Proposalgen_Model_DbTable_UploadDataCollectorRow();
         $where = $upload_data_collectorTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
         $result = $upload_data_collectorTable->fetchAll($where);
         $this->view->mappingArray = $result;
-        
-        // check for previously uploaded data for report in device instance and
-        // unknown device instance tables
-        $notes = '';
-        $select = $db->select()
-            ->from(array (
-                'udc' => 'pgen_upload_data_collector_rows' 
-        ))
-            ->where('udc.report_id = ' . $report_id);
-
-        $stmt = $db->query($select);
-        $result = $stmt->fetchAll();
-        
-        // get upload count
-        $select = new Zend_Db_Select($db);
-        $select = $db->select()
-            ->from(array (
-                'udc' => 'pgen_upload_data_collector_rows' 
-        ))
-            ->where('id = ' . $report_id);
-        $stmt = $db->query($select);
-        $result = $stmt->fetchAll();
         $this->view->upload_count = count($result);
         
-        // get exclude count
+        // FIXME: Why not a mysql count?
+        // Get the excluded count
         $select = new Zend_Db_Select($db);
         $select = $db->select()
             ->from(array (
@@ -2547,14 +2573,12 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         ))
             ->where('(invalid_data = 1 OR is_excluded = 1) AND report_id = ' . $report_id);
         $stmt = $db->query($select);
-        $result = $stmt->fetchAll();
-        $this->view->exclude_count = count($result);
+        $this->view->exclude_count = count($stmt->fetchAll());
         
         $this->view->mapped_count = $this->view->upload_count - $this->view->exclude_count;
         
         // return instructional message
         $this->view->message = "<p>" . $this->view->mapped_count . " of " . $this->view->upload_count . " uploaded printers are mapped and available to include in your report. " . $this->view->exclude_count . " printer(s) have been excluded due to insufficient data.<p>";
-        
         
         if ($this->_request->isPost())
         {
@@ -2565,14 +2589,14 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     'udc' => 'pgen_upload_data_collector_rows' 
             ))
                 ->joinLeft(array (
-                    'di' => 'device_instance' 
-            ), 'di.upload_data_collector_row_id = udc.upload_data_collector_row_id', array (
-                    'device_instance_id' 
+                    'di' => 'pgen_device_instances' 
+            ), 'di.upload_data_collector_row_id = udc.id', array (
+                    'id' 
             ))
                 ->joinLeft(array (
-                    'udi' => 'unknown_device_instance' 
-            ), 'udi.upload_data_collector_row_id = udc.upload_data_collector_row_id', array (
-                    'unknown_device_instance_id' 
+                    'udi' => 'pgen_unknown_device_instances' 
+            ), 'udi.upload_data_collector_row_id = udc.id', array (
+                    'id' 
             ))
                 ->where('udc.invalid_data = 0 AND udc.report_id = ' . $report_id)
                 ->where('di.is_excluded = 0 || udi.is_excluded = 0');
@@ -2581,20 +2605,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             
             if (count($result) > 0)
             {
-                // reset report stage flag
-                $reportTable = new Proposalgen_Model_DbTable_Report();
-                $reportData = array (
-                        'report_stage' => 'settings' 
-                );
-                $where = $reportTable->getAdapter()->quoteInto('id = ?', $report_id, 'INTEGER');
-                $report = $reportTable->fetchRow($where);
-                if ($report ['report_stage'] != 'finished')
-                {
-                    $reportTable->update($reportData, $where);
-                }
-                
-                // redirect back to mapping page
-                $this->_redirect('data/reportsettings');
+                $this->saveReport();
+                $this->gotoNextStep();
             }
             else
             {
@@ -2630,14 +2642,14 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             ->joinLeft(array (
                 'di' => 'pgen_device_instances' 
         ), 'di.upload_data_collector_row_id = udc.id', array (
-                'id AS di_device_instance_id', 
+                'di.id AS di_device_instance_id', 
                 'master_device_id', 
                 'is_excluded AS di_is_excluded' 
         ))
             ->joinLeft(array (
                 'udi' => 'pgen_unknown_device_instances' 
         ), 'udi.upload_data_collector_row_id = udc.id', array (
-                'id AS udi_unknown_device_instance_id', 
+                'udi.id AS udi_unknown_device_instance_id', 
                 'is_leased AS udi_is_leased', 
                 'is_excluded AS udi_is_excluded' 
         ))
@@ -2688,14 +2700,14 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             ->joinLeft(array (
                 'di' => 'pgen_device_instances' 
         ), 'di.upload_data_collector_row_id = udc.id', array (
-                'id AS di_device_instance_id', 
+                'di.id AS di_device_instance_id', 
                 'master_device_id', 
                 'is_excluded AS di_is_excluded' 
         ))
             ->joinLeft(array (
                 'udi' => 'pgen_unknown_device_instances' 
         ), 'udi.upload_data_collector_row_id = udc.id', array (
-                'id AS udi_unknown_device_instance_id', 
+                'udi.id AS udi_unknown_device_instance_id', 
                 'device_manufacturer AS udi_device_manufacturer', 
                 'printer_model AS udi_printer_model', 
                 'is_leased AS udi_is_leased', 
@@ -2719,7 +2731,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             ->limit($limit, $start);
         $stmt = $db->query($select);
         $result = $stmt->fetchAll();
-        
         try
         {
             if (count($result) > 0)
@@ -2738,8 +2749,10 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     
                     $mapped_to = '';
                     $mapped_to_id = null;
+                    
                     if ($result [$key] ['udi_unknown_device_instance_id'] > 0)
                     {
+                        
                         $mapped_to = ucwords(strtolower($result [$key] ['udi_device_manufacturer'] . ' ' . $result [$key] ['udi_printer_model'])) . '<span style="color: red;"> (New)</span>';
                         $mapped_to_id = "udi" . $result [$key] ['udi_unknown_device_instance_id'];
                         $is_excluded = $result [$key] ['udi_is_excluded'];
@@ -2747,7 +2760,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         
                         // get average monthly page volume for unknown device
                         $unknown_device_instanceMapper = Proposalgen_Model_Mapper_UnknownDeviceInstance::getInstance();
-                        $unknown_device_instance = $unknown_device_instanceMapper->fetchAllUnknownDevicesAsKnownDevices($report_id, 'unknown_device_instance_id = ' . $result [$key] ['udi_unknown_device_instance_id']);
+                        $unknown_device_instance = $unknown_device_instanceMapper->fetchAllUnknownDevicesAsKnownDevices($report_id, 'id = ' . $result [$key] ['udi_unknown_device_instance_id']);
                         
                         if (count($unknown_device_instance) > 0)
                         {
@@ -2773,7 +2786,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     {
                         $is_excluded = 0;
                     }
-                    
                     $formdata->rows [$i] ['id'] = $upload_data_collector_row_id;
                     $formdata->rows [$i] ['cell'] = array (
                             $upload_data_collector_row_id, 
@@ -2819,9 +2831,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             $sidx = 9;
         }
         
-        // get report id from session
-        $session = new Zend_Session_Namespace('report');
-        $report_id = $session->report_id;
+        $report_id = $this->getReport()->getReportId();
         
         $select = new Zend_Db_Select($db);
         $select = $db->select()
@@ -2935,5 +2945,11 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         // encode user data to return to the client:
         $json = Zend_Json::encode($formdata);
         $this->view->data = $json;
+    }
+
+    public function reportsettingsAction ()
+    {
+        // Mark the step we're on as active
+        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_REPORTSETTINGS);
     }
 }

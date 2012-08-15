@@ -22,6 +22,8 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     protected $_reportSession;
     protected $_reportSteps;
     
+    protected $_userId;
+    
     /**
      * The current step that the user is viewing.
      *
@@ -39,6 +41,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     {
         $this->_reportSession = new Zend_Session_Namespace('proposalgenerator_report');
         $this->view->reportSteps = $this->getReportSteps();
+        $this->_userId = Zend_Auth::getInstance()->getIdentity()->id;
     }
 
     /**
@@ -145,12 +148,15 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
      */
     protected function checkIfNextStepIsNew (Proposalgen_Model_Report_Step $step)
     {
-        $nextStep = $step->getNextStep();
-        if ($nextStep !== null)
+        if ($step !== null)
         {
-            if (! $nextStep->getCanAccess())
+            $nextStep = $step->getNextStep();
+            if ($nextStep !== null)
             {
-                return $nextStep;
+                if (! $nextStep->getCanAccess())
+                {
+                    return $nextStep;
+                }
             }
         }
         
