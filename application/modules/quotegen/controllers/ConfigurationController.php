@@ -84,18 +84,18 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                             'success' => "Device configuration \"{$deviceConfiguration->getName()}\" was deleted successfully." 
                     ));
             
-	            if ($page == "configurations")
-	            {
-	                // User has cancelled. Go back to the edit page
-	                $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
-	                        'id' => $id 
-	                ));
-	            }
-	            else
-	            {
-	                // User has cancelled. Go back to the edit page
-	                $this->_helper->redirector('index');
-	            }
+		            if ($page == "configurations")
+		            {
+		                // User has cancelled. Go back to the edit page
+		                $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+		                        'id' => $id 
+		                ));
+		            }
+		            else
+		            {
+		                // User has cancelled. Go back to the edit page
+		                $this->_helper->redirector('index');
+		            }
                 }
             }
             else // go back
