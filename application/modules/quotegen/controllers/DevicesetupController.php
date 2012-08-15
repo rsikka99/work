@@ -500,6 +500,8 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             {
                                 $deviceId = $devicemapper->insert($device);
                             }
+                            
+                            $this->view->quotegendevice = $device;
                         }
                         else
                         {
@@ -508,6 +510,8 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
 					        // ?? May be easier to turn on cascading deletes?
                             Quotegen_Model_Mapper_DeviceOption::getInstance()->deleteOptionsByDeviceId($masterDeviceId);
                             $devicemapper->delete($device);
+                            
+                            $this->view->quotegendevice = null;
                         }
                         
                         // Save Master Device
