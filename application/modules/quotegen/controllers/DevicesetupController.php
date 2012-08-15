@@ -127,7 +127,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
 				                ))
                                 ->where('t.id = ?', $toner_id);
                                 $stmt = $db->query($select);
-                                $curToner = $stmt->fetchAll();
+                                $curToner = $stmt->fetch();
                                 
                                 if ( $curToner )
                                 {
@@ -135,8 +135,8 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                                     // $curColor = strtolower($curToner->getColorName());
                                     // $curType = strtolower($curToner->getPartType());
                                     
-                                    $curColor = strtolower($curToner [0] ['toner_color_name']);
-                                    $curType = strtolower($curToner [0] ['part_type_name']);
+                                    $curColor = strtolower($curToner ['toner_color_name']);
+                                    $curType = strtolower($curToner ['part_type_name']);
                                     if ($curColor == "black")
                                     {
                                         $has_black = true;
@@ -457,6 +457,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $sku = null;
         $devicemapper = new Quotegen_Model_Mapper_Device();
         $device = $devicemapper->find($masterDeviceId);
+        $this->view->quotegendevice = $device;
         if ($device)
         {
             $sku = $device->getSku();
@@ -687,6 +688,10 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             ));
             $this->_helper->redirector('index');
         }
+        
+        // Get quotegen device
+        $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
+        $this->view->quotegendevice = $device;
         
         // Populate manufacturers dropdown
         $manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAll();
@@ -1061,17 +1066,20 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         }
         
         // Get the device and assigned options
-        $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
-        $this->view->devicename = $device->getMasterDevice()
-            ->getManufacturer()
-            ->getDisplayname() . ' ' . $device->getMasterDevice()->getPrinterModel();
+        $device = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
+        $this->view->devicename = $device->getManufacturer()->getDisplayname() . ' ' . $device->getPrinterModel();
+        
+        // Get quote device
+        $quoteDevice = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
         
         $assignedOptions = array ();
-        foreach ( $device->getDeviceOptions() as $option )
+        if ( $quoteDevice )
         {
-            $assignedOptions [] = $option->getOptionId();
+	        foreach ( $quoteDevice->getDeviceOptions() as $option )
+	        {
+	            $assignedOptions [] = $option->getOptionId();
+	        }   
         }
-        $this->view->device = $device;
         $this->view->assignedOptions = $assignedOptions;
         
         // Display filterd list of options

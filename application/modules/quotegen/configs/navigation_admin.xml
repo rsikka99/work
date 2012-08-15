@@ -26,6 +26,64 @@
             <controller>devicesetup</controller>
             <action>index</action>
             <resource>quotegen__devicesetup__index</resource>
+            <pages>
+                <viewall>
+                    <label>View All Devices</label>
+                    <module>quotegen</module>
+                    <controller>devicesetup</controller>
+                    <action>index</action>
+                    <visible>0</visible>
+                    <resource>quotegen__devicesetup__index</resource>
+                </viewall>
+                <create>
+                    <label>Create New</label>
+                    <module>quotegen</module>
+                    <controller>devicesetup</controller>
+                    <action>create</action>
+                    <visible>0</visible>
+                    <resource>quotegen__devicesetup__create</resource>
+                </create>
+                <edit>
+                    <label>Details</label>
+                    <module>quotegen</module>
+                    <controller>devicesetup</controller>
+                    <action>edit</action>
+                    <visible>0</visible>
+                    <resource>quotegen__devicesetup__edit</resource>
+                </edit>
+                <delete>
+                    <label>Delete</label>
+                    <module>quotegen</module>
+                    <controller>devicesetup</controller>
+                    <action>delete</action>
+                    <visible>0</visible>
+                    <resource>quotegen__devicesetup__delete</resource>
+                </delete>
+                <toners>
+                    <label>Toners</label>
+                    <module>quotegen</module>
+                    <controller>devicesetup</controller>
+                    <action>toners</action>
+                    <visible>0</visible>
+                    <resource>quotegen__devicesetup__toners</resource>
+                </toners>
+                <options>
+                    <label>Available Options</label>
+                    <module>quotegen</module>
+                    <controller>devicesetup</controller>
+                    <action>options</action>
+                    <visible>0</visible>
+                    <resource>quotegen__devicesetup__options</resource>
+                </options>
+                <configurations>
+                    <label>Hardware Configurations</label>
+                    <module>quotegen</module>
+                    <controller>devicesetup</controller>
+                    <action>configurations</action>
+                    <visible>0</visible>
+                    <resource>quotegen__devicesetup__configurations</resource>
+                </configurations>
+            </pages>
         </managedevices>
         <configurations>
             <label>Configurations</label>
@@ -34,6 +92,32 @@
             <controller>configuration</controller>
             <action>index</action>
             <resource>quotegen__configuration__index</resource>
+          	<pages>
+                <create>
+                    <label>Create Configuration</label>
+                    <module>quotegen</module>
+                    <controller>configuration</controller>
+                    <action>create</action>
+                    <visible>0</visible>
+                    <resource>quotegen__configuration__create</resource>
+                </create>
+                <edit>
+                    <label>Edit Configuration</label>
+                    <module>quotegen</module>
+                    <controller>configuration</controller>
+                    <action>edit</action>
+                    <visible>0</visible>
+                    <resource>quotegen__configuration__edit</resource>
+                </edit>
+                <delete>
+                    <label>Delete Configuration</label>
+                    <module>quotegen</module>
+                    <controller>configuration</controller>
+                    <action>delete</action>
+                    <visible>0</visible>
+                    <resource>quotegen__configuration__delete</resource>
+                </delete>
+            </pages>
         </configurations>
     </nav>
 </config>
