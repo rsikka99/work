@@ -76,7 +76,7 @@ $form = $this->form;
 <?php $this->headScript()->captureEnd() ?>
 
 <form name="createdevice" id="createdevice" class="form-horizontal" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>">
-	
+
 	<div class="control-group">
 		<?php $element = $this->element->getElement("manufacturer_id"); ?>
 		<?php echo $element->renderLabel(); ?>
@@ -231,7 +231,7 @@ $form = $this->form;
 			} 
 			
 			echo trim($this->datePicker("launch_date", "", array(
-	            'dateFormat' => 'Y-m-d',
+	            'dateFormat' => 'yy-mm-dd',
 	            'timeFormat' => 'hh:mm',
 	            'changeYear' => 'true',
 	            'changeMonth' => 'true',
