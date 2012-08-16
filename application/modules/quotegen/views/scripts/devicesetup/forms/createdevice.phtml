@@ -238,7 +238,7 @@ $form = $this->form;
 	            'changeMonth' => 'true',
 	            'yearRange' => "{$minYear}:{$maxYear}"
 		    ), $formatstyle)); ?>
-			<?php echo $element->renderErrors(); ?>
+			<?php echo trim($element->renderErrors()); ?>
 			<?php echo trim($element->renderDescription()); ?>
 		</div>
 	</div>
