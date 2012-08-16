@@ -224,7 +224,6 @@ $form = $this->form;
 		<?php $element = $this->element->getElement("launch_date"); ?>
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<!-- May be a better way, but the form datepicker render viewhelper errors here so have to recreate the element on the fly -->
 			<?php 
 			$formatstyle = array();
 			if ( $element->hasErrors() ) {
