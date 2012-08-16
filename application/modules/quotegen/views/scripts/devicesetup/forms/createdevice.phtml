@@ -1,4 +1,7 @@
 <?php
+$minYear = 1950;
+$maxYear = date('Y') + 2;
+
 $form = $this->form;
 ?>
 
@@ -221,12 +224,26 @@ $form = $this->form;
 		<?php $element = $this->element->getElement("launch_date"); ?>
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
+			<!-- May be a better way, but the form datepicker render viewhelper errors here so have to recreate the element on the fly -->
 			<?php if ( $element->hasErrors() ) { 
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+				echo trim($this->datePicker("launch_date", "", array(
+		            'dateFormat' => 'Y-m-d',
+		            'timeFormat' => 'hh:mm',
+		            'changeYear' => 'true',
+		            'changeMonth' => 'true',
+		            'yearRange' => "{$minYear}:{$maxYear}"
+			    ), array('style' => 'border-color: #B94A48; color: #B94A48;')));
+			} else {
+				echo trim($this->datePicker("launch_date", "", array(
+		            'dateFormat' => 'Y-m-d',
+		            'timeFormat' => 'hh:mm',
+		            'changeYear' => 'true',
+		            'changeMonth' => 'true',
+		            'yearRange' => "{$minYear}:{$maxYear}"
+			    ), array())); 
 			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
-			<?php echo trim($element->renderDescription()); ?>
 			<?php echo $element->renderErrors(); ?>
+			<?php echo trim($element->renderDescription()); ?>
 		</div>
 	</div>
 	<div class="control-group">
