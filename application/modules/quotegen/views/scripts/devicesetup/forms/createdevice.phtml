@@ -225,18 +225,24 @@ $form = $this->form;
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($this->datePicker("launch_date", "", array(
+				echo trim($this->datePicker("launch_date", "", array(
 		            'dateFormat' => 'Y-m-d',
 		            'timeFormat' => 'hh:mm',
 		            'changeYear' => 'true',
 		            'changeMonth' => 'true',
 		            'yearRange' => "{$minYear}:{$maxYear}"
-			    ), array())); ?>
-			<?php // echo trim($element->renderViewHelper()); ?>
-			<?php echo trim($element->renderDescription()); ?>
+			    ), array('style' => 'border-color: #B94A48; color: #B94A48;')));
+			} else {
+				echo trim($this->datePicker("launch_date", "", array(
+		            'dateFormat' => 'Y-m-d',
+		            'timeFormat' => 'hh:mm',
+		            'changeYear' => 'true',
+		            'changeMonth' => 'true',
+		            'yearRange' => "{$minYear}:{$maxYear}"
+			    ), array())); 
+			} ?>
 			<?php echo $element->renderErrors(); ?>
+			<?php echo trim($element->renderDescription()); ?>
 		</div>
 	</div>
 	<div class="control-group">
