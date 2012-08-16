@@ -225,23 +225,19 @@ $form = $this->form;
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<!-- May be a better way, but the form datepicker render viewhelper errors here so have to recreate the element on the fly -->
-			<?php if ( $element->hasErrors() ) { 
-				echo trim($this->datePicker("launch_date", "", array(
-		            'dateFormat' => 'Y-m-d',
-		            'timeFormat' => 'hh:mm',
-		            'changeYear' => 'true',
-		            'changeMonth' => 'true',
-		            'yearRange' => "{$minYear}:{$maxYear}"
-			    ), array('style' => 'border-color: #B94A48; color: #B94A48;')));
-			} else {
-				echo trim($this->datePicker("launch_date", "", array(
-		            'dateFormat' => 'Y-m-d',
-		            'timeFormat' => 'hh:mm',
-		            'changeYear' => 'true',
-		            'changeMonth' => 'true',
-		            'yearRange' => "{$minYear}:{$maxYear}"
-			    ), array())); 
-			} ?>
+			<?php 
+			$formatstyle = array();
+			if ( $element->hasErrors() ) {
+				$formatstyle = array('style' => 'border-color: #B94A48; color: #B94A48;'); 
+			} 
+			
+			echo trim($this->datePicker("launch_date", "", array(
+	            'dateFormat' => 'Y-m-d',
+	            'timeFormat' => 'hh:mm',
+	            'changeYear' => 'true',
+	            'changeMonth' => 'true',
+	            'yearRange' => "{$minYear}:{$maxYear}"
+		    ), $formatstyle)); ?>
 			<?php echo $element->renderErrors(); ?>
 			<?php echo trim($element->renderDescription()); ?>
 		</div>

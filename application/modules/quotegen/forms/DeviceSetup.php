@@ -239,12 +239,10 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         
         /*
          * Launch Date
-         * 
          */
         $minYear = 1950;
         $maxYear = date('Y') + 2;
         $launchDate = new ZendX_JQuery_Form_Element_DatePicker('launch_date');
-        
         $launchDate->setLabel('Launch Date:')
             ->setJQueryParam('dateFormat', 'yy-mm-dd')
             ->setJqueryParam('timeFormat', 'hh:mm')
@@ -253,12 +251,11 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
             ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
             ->setDescription('yyyy-mm-dd')
             ->addValidator(new My_Validate_DateTime('/\d{4}-\d{2}-\d{2}/'))
-            ->setRequired(true);
-	        $launchDate->addFilters(array (
+            ->setRequired(true)
+	        ->addFilters(array (
 	                'StringTrim', 
 	                'StripTags' 
 	        ));
-        
         $this->addElement($launchDate);
         
         /*
@@ -360,6 +357,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         $this->addElement('submit', 'submit', array (
                 'label' => 'Save' 
         ));
+        
         // Add the cancel button
         $this->addElement('submit', 'cancel', array (
                 'label' => 'Cancel' 
