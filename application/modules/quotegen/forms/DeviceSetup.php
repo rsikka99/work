@@ -34,6 +34,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         
         $this->addElement('select', 'manufacturer_id', array (
                 'label' => 'Manufacturer:', 
+                'class' => 'span3',
                 'multiOptions' => $manufacturers 
         ));
         
@@ -42,6 +43,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('text', 'printer_model', array (
                 'label' => 'Model Name:', 
+                'class' => 'span3',
                 'required' => true, 
                 'filters' => array (
                         'StringTrim', 
@@ -73,6 +75,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         */
         $this->addElement('text', 'sku', array (
                 'label' => 'SKU:',
+                'class' => 'span2',
                 'required' => false,
                 'filters' => array (
                         'StringTrim',
@@ -105,6 +108,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         
         $this->addElement('select', 'toner_config_id', array (
                 'label' => 'Toner Configuration:', 
+                'class' => 'span3',
                 'required' => true, 
                 'multiOptions' => $tonerConfigs 
         ));
@@ -154,6 +158,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('text', 'watts_power_normal', array (
                 'label' => 'Watts Power Normal:', 
+                'class' => 'span1',
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -175,6 +180,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('text', 'watts_power_idle', array (
                 'label' => 'Watts Power Idle:', 
+                'class' => 'span1',
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -198,6 +204,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('text', 'cost', array (
                 'label' => 'Device Cost:', 
+                'class' => 'span1',
                 'prepend' => '$', 
                 'dimension' => 1, 
                 'filters' => array (
@@ -221,6 +228,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('text', 'service_cost_per_page', array (
                 'label' => 'Service Cost Per Page:', 
+                'class' => 'span1',
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -239,13 +247,12 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         
         /*
          * Launch Date
-         * 
-         */
+        /*/
         $minYear = 1950;
         $maxYear = date('Y') + 2;
         $launchDate = new ZendX_JQuery_Form_Element_DatePicker('launch_date');
-        
         $launchDate->setLabel('Launch Date:')
+            ->setAttrib('class', 'span2')
             ->setJQueryParam('dateFormat', 'yy-mm-dd')
             ->setJqueryParam('timeFormat', 'hh:mm')
             ->setJQueryParam('changeYear', 'true')
@@ -253,19 +260,20 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
             ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
             ->setDescription('yyyy-mm-dd')
             ->addValidator(new My_Validate_DateTime('/\d{4}-\d{2}-\d{2}/'))
-            ->setRequired(true);
-	        $launchDate->addFilters(array (
+            ->setRequired(true)
+	        ->addFilters(array (
 	                'StringTrim', 
 	                'StripTags' 
 	        ));
-        
         $this->addElement($launchDate);
+        /*/
         
         /*
          * Duty Cycle
          */
         $this->addElement('text', 'duty_cycle', array (
                 'label' => 'Duty Cycle:', 
+                'class' => 'span1',
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -286,7 +294,8 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          * Print Speed (Monochrome)
          */
         $this->addElement('text', 'ppm_black', array (
-                'label' => 'Print Speed (Monochrome):', 
+                'label' => 'Print Speed (Mono):', 
+                'class' => 'span1',
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -308,6 +317,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('text', 'ppm_color', array (
                 'label' => 'Print Speed (Color):', 
+                'class' => 'span1',
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -339,6 +349,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('text', 'leased_toner_yield', array (
                 'label' => 'Leased Toner Yield:', 
+                'class' => 'span1',
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -360,6 +371,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         $this->addElement('submit', 'submit', array (
                 'label' => 'Save' 
         ));
+        
         // Add the cancel button
         $this->addElement('submit', 'cancel', array (
                 'label' => 'Cancel' 

@@ -817,7 +817,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                     {
                         // Get Device Toners List
                         $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->getDeviceToners($masterDeviceId);
-                        $assignedToners = array ();
+                        $assignedToners = array ('');
                         foreach ( $deviceToners as $toner )
                         {
                             $assignedToners [] = $toner->getId();
@@ -826,6 +826,9 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         // Filter view
                         $view = $values ['cboView'];
                         $this->view->view_filter = $view;
+                        
+                        // Toners Search Filter
+                        $filter = $values ['criteria_filter'];
                         
                         if ($view == "assigned")
                         {
@@ -840,10 +843,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             );
                         }
                         
-                        // Toners Search Filter
-                        $filter = $values ['criteria_filter'];
-                        
-                        if ($filter == 'sku')
+                        else if ($filter == 'sku')
                         {
                             $criteria = $values ['txtCriteria'];
                             $where = array_merge((array)$where, array (
