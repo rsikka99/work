@@ -13,11 +13,11 @@ class Proposalgen_Model_PricingConfig extends Tangent_Model_Abstract
     const OEMMONO_COMPCOLOR = 4;
     const COMPMONO_OEMCOLOR = 5;
     public static $ConfigNames = array (
-            1 => "No Preference", 
-            2 => "OEM Only", 
-            3 => "Compatible Only", 
-            4 => "OEM Mono and Compatible Color", 
-            5 => "Compatible Mono and OEM Color" 
+            1 => "", 
+            2 => "OEM", 
+            3 => "COMP", 
+            4 => "OEM Mono, COMP Color", 
+            5 => "COMP Mono, OEM Color" 
     );
     protected $PricingConfigId;
     protected $ConfigName;

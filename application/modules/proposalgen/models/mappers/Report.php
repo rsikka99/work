@@ -1,229 +1,222 @@
 <?php
 
-class Proposalgen_Model_Mapper_Report extends Tangent_Model_Mapper_Abstract
+class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
 {
-    protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_Report";
-    static $_instance;
+    /*
+     * Column name definitions. Define all columns up here and use them down below.
+     */
+    public $col_id = 'id';
+    
+    /*
+     * Mapper Definitions
+     */
+    /**
+     * The default db table class to use
+     *
+     * @var String
+     *
+     */
+    protected $_defaultDbTable = 'Proposalgen_Model_DbTable_Report';
 
     /**
+     * Gets an instance of the mapper
      *
      * @return Proposalgen_Model_Mapper_Report
      */
     public static function getInstance ()
     {
-        if (! isset(self::$_instance))
-        {
-            $className = get_class();
-            self::$_instance = new $className();
-        }
-        return self::$_instance;
+        return self::getCachedInstance();
     }
 
     /**
-     * Maps a database row object to an Proposalgen_Model
+     * Saves an instance of Proposalgen_Model_Report to the database.
+     * If the id is null then it will insert a new row
      *
-     * @param Zend_Db_Table_Row $row            
-     * @return The appropriate Proposalgen_Model
+     * @param $object Proposalgen_Model_Report
+     *            The object to insert
+     * @return mixed The primary key of the new row
      */
-    public function mapRowToObject (Zend_Db_Table_Row $row)
+    public function insert (&$object)
     {
-        $object = null;
-        try
+        // Get an array of data to save
+        $data = $object->toArray();
+        
+        // Remove the id
+        unset($data [$this->col_id]);
+        
+        // Insert the data
+        $id = $this->getDbTable()->insert($data);
+        
+        $object->setId($id);
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object);
+        
+        return $id;
+    }
+
+    /**
+     * Saves (updates) an instance of Proposalgen_Model_Report to the database.
+     *
+     * @param $object Proposalgen_Model_Report
+     *            The report model to save to the database
+     * @param $primaryKey mixed
+     *            Optional: The original primary key, in case we're changing it
+     * @return int The number of rows affected
+     */
+    public function save ($object, $primaryKey = null)
+    {
+        $data = $this->unsetNullValues($object->toArray());
+        
+        if ($primaryKey === null)
         {
-            $object = new Proposalgen_Model_Report();
-            $object->setReportId($row->id)
-                ->setUserId($row->user_id)
-                ->setCustomerCompanyName($row->customer_company_name)
-                ->setUserPricingOverride($row->user_pricing_override)
-                ->setReportStage($row->report_stage)
-                ->setQuestionSetId($row->questionset_id)
-                ->setDateCreated($row->date_created)
-                ->setLastModified($row->last_modified)
-                ->setReportDate($row->report_date)
-                ->setDevicesModified($row->devices_modified);
+            $primaryKey = $data [$this->col_id];
         }
-        catch ( Exception $e )
+        
+        // Update the row
+        $rowsAffected = $this->getDbTable()->update($data, array (
+                "{$this->col_id} = ?" => $primaryKey 
+        ));
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object);
+        
+        return $rowsAffected;
+    }
+
+    /**
+     * Deletes rows from the database.
+     *
+     * @param $object mixed
+     *            This can either be an instance of Proposalgen_Model_Report or the
+     *            primary key to delete
+     * @return mixed The number of rows deleted
+     */
+    public function delete ($object)
+    {
+        if ($object instanceof Proposalgen_Model_Report)
         {
-            throw new Exception("Failed to map a report row", 0, $e);
+            $whereClause = array (
+                    "{$this->col_id} = ?" => $object->getId() 
+            );
         }
+        else
+        {
+            $whereClause = array (
+                    "{$this->col_id} = ?" => $object 
+            );
+        }
+        
+        $rowsAffected = $this->getDbTable()->delete($whereClause);
+        return $rowsAffected;
+    }
+
+    /**
+     * Finds a report based on it's primaryKey
+     *
+     * @param $id int
+     *            The id of the report to find
+     * @return Proposalgen_Model_Report
+     */
+    public function find ($id)
+    {
+        // Get the item from the cache and return it if we find it.
+        $result = $this->getItemFromCache($id);
+        if ($result instanceof Proposalgen_Model_Report)
+        {
+            return $result;
+        }
+        
+        // Assuming we don't have a cached object, lets go get it.
+        $result = $this->getDbTable()->find($id);
+        if (0 == count($result))
+        {
+            return;
+        }
+        $row = $result->current();
+        $object = new Proposalgen_Model_Report($row->toArray());
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object);
+        
         return $object;
     }
 
     /**
-     * Saved an Proposalgen_Model_ object to the database
+     * Fetches a report
      *
-     * @param unknown_type $object            
+     * @param $where string|array|Zend_Db_Table_Select
+     *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
+     * @param $order string|array
+     *            OPTIONAL: A SQL ORDER clause.
+     * @param $offset int
+     *            OPTIONAL: A SQL OFFSET value.
+     * @return Proposalgen_Model_Report
      */
-    public function save (Proposalgen_Model_Report $object)
+    public function fetch ($where = null, $order = null, $offset = null)
     {
-        $primaryKey = 0;
-        try
+        $row = $this->getDbTable()->fetchRow($where, $order, $offset);
+        if (is_null($row))
         {
-            $data ["id"] = $object->getReportId();
-            $data ["user_id"] = $object->getUserId();
-            $data ["customer_company_name"] = $object->getCustomerCompanyName();
-            $data ["user_pricing_override"] = $object->getUserPricingOverride();
-            $data ["report_stage"] = $object->getReportStage();
-            $data ["questionset_id"] = $object->getQuestionSetId();
-            $data ["date_created"] = $object->getDateCreated();
-            $data ["last_modified"] = $object->getLastModified();
-            $data ["report_date"] = $object->getReportDate();
-            $data ["devices_modified"] = $object->getDevicesModified();
-            
-            $primaryKey = $this->saveRow($data);
+            return;
         }
-        catch ( Exception $e )
-        {
-            throw new Exception("Error saving " . get_class($this) . " to the database.", 0, $e);
-        }
-        return $primaryKey;
+        
+        $object = new Proposalgen_Model_Report($row->toArray());
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object);
+        
+        return $object;
     }
 
     /**
-     * Clones a report and all related records
+     * Fetches all reports
      *
-     * @param $report_id Integer            
-     * @param $user_list Array
-     *            of user ids
-     * @return $message Return status message
+     * @param $where string|array|Zend_Db_Table_Select
+     *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
+     * @param $order string|array
+     *            OPTIONAL: A SQL ORDER clause.
+     * @param $count int
+     *            OPTIONAL: A SQL LIMIT count. (Defaults to 25)
+     * @param $offset int
+     *            OPTIONAL: A SQL LIMIT offset.
+     * @return multitype:Proposalgen_Model_Report
      */
-    public function cloneReport ($report_id, $user_list)
+    public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
-        $db = Zend_Db_Table::getDefaultAdapter();
-        $sql = "";
-        $message = "";
-        
-        /* @var $report Proposalgen_Model_Report */
-        $currentReport = $this->find($report_id);
-        $report = clone $currentReport;
-        
-        $db->beginTransaction();
-        try
+        $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
+        $entries = array ();
+        foreach ( $resultSet as $row )
         {
-            // Get new users array
-            $users = explode(",", str_replace("'", "", $user_list));
+            $object = new Proposalgen_Model_Report($row->toArray());
             
-            foreach ( $users as $newUserId )
-            {
-                /*
-                 * Copy the report to the new user. Note that we only need to clear the report id and set the new user
-                 * id since we already selected the data.
-                 */
-                $report->setReportId(null);
-                $report->setUserId($newUserId);
-                $newReportId = $this->save($report);
-                $report->setReportId($newReportId);
-                
-                /*
-                 * Note the following SQL Statements. The big change is putting them all in double quotes. Using {}
-                 * around inserted variables instead of adding strings together. With the Zend Formatter configured
-                 * properly it won't rejoin strings so you can keep a whole string on multiple lines.
-                 */
-                
-                // Copy Date Answers
-                $answerDatesTable = new Proposalgen_Model_DbTable_DateAnswer();
-                $sql = "INSERT INTO date_answers (question_id, report_id, date_answer) 
-                        SELECT question_id, {$newReportId}, date_answer FROM answers_dates 
-                        WHERE report_id = {$report_id};";
-                $newAnswerDate = $answerDatesTable->getAdapter()->prepare($sql);
-                $newAnswerDate->execute();
-                
-                // Copy Numeric Answers
-                $answerNumericTable = new Proposalgen_Model_DbTable_NumericAnswer();
-                $sql = "INSERT INTO numeric_answers (question_id, report_id, numierc_answer)
-                SELECT question_id, {$newReportId}, numierc_answer FROM numeric_answers
-                WHERE report_id = {$report_id};";
-                $newAnswerNumeric = $answerNumericTable->getAdapter()->prepare($sql);
-                $newAnswerNumeric->execute();
-                
-                // Copy Textual Answers
-                $answerTextualTable = new Proposalgen_Model_DbTable_TextAnswer();
-                $sql = "INSERT INTO textual_answers (question_id, report_id, textual_answer)
-                SELECT question_id, {$newReportId}, textual_answer FROM textual_answers
-                WHERE report_id = {$report_id};";
-                
-                $newAnswerTextual = $answerTextualTable->getAdapter()->prepare($sql);
-                $newAnswerTextual->execute();
-                
-                // Copy all the upload data collector rows
-                $uploadDataCollectorRows = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->fetchAll(array (
-                        'report_id = ?', 
-                        $report_id 
-                ));
-                /* @var $uploadDataCollectorRow Proposalgen_Model_UploadDataCollectorRow */
-                foreach ( $uploadDataCollectorRows as $uploadDataCollectorRow )
-                {
-                    $oldUploadDataCollectorRowId = $uploadDataCollectorRow->UploadDataCollectorId;
-                    
-                    /*
-                     * Note here that we've already fetched the row. Since we already have an object, we can just change
-                     * whats needed and perform the change.
-                     */
-                    $uploadDataCollectorRow->setUploadDataCollectorId(null);
-                    $uploadDataCollectorRow->setReportId($newReportId);
-                    $newUploadDataCollectorId = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->save($uploadDataCollectorRow);
-                    
-                    // Copy the unknown device record
-                    /*
-                     * Note here that we've already fetched the row. Since we already have an object, we can just change
-                     * whats needed and perform the change.
-                     */
-                    
-                    /* @var $unknownDeviceInstance Proposalgen_Model_UnknownDeviceInstance */
-                    $unknownDeviceInstance = Proposalgen_Model_Mapper_UnknownDeviceInstance::getInstance()->fetchRow(array (
-                            'upload_data_collector_row_id = ?' => $oldUploadDataCollectorRowId 
-                    ));
-                    
-                    if ($unknownDeviceInstance)
-                    {
-                        $oldUnknownDeviceInstanceId = $unknownDeviceInstance->getUnknownDeviceInstanceId();
-                        
-                        $unknownDeviceInstance->setUnknownDeviceInstanceId(null);
-                        
-                        $unknownDeviceInstance->setUserId($newUserId);
-                        $unknownDeviceInstance->setReportId($newReportId);
-                        $unknownDeviceInstance->setUploadDataCollectorId($newUploadDataCollectorId);
-                        $newUnknownDeviceInstanceId = Proposalgen_Model_Mapper_UnknownDeviceInstance::getInstance()->save($unknownDeviceInstance);
-                    }
-                    
-                    // Copy Device Instance
-                    /*
-                     * Note here that we've already fetched the row. Since we already have an object, we can just change
-                     * whats needed and perform the change.
-                     */
-                    /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
-                    $deviceInstance = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchRow(array (
-                            'upload_data_collector_row_id = ?' => $oldUploadDataCollectorRowId 
-                    ));
-                    if ($deviceInstance)
-                    {
-                        $oldDeviceInstanceId = $deviceInstance->getDeviceInstanceId();
-                        
-                        $deviceInstance->setDeviceInstanceId(null);
-                        $deviceInstance->setReportId($newReportId);
-                        $deviceInstance->setUploadDataCollectorId($newUploadDataCollectorId);
-                        $newDeviceInstanceId = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->save($deviceInstance);
-                        
-                        // Copy Meters
-                        /*
-                         * Note. This is a good user of the sql as it selects multiple meters
-                         */
-                        $meterTable = new Proposalgen_Model_DbTable_Meter();
-                        $sql = "INSERT INTO meters (device_instance_id, meter_type, start_meter, end_meter)
-                                    SELECT {$newDeviceInstanceId}, meter_type, start_meter, end_meter FROM meters
-                                WHERE device_instance_id = {$oldDeviceInstanceId};";
-                        $new_meter = $meterTable->getAdapter()->prepare($sql);
-                        $new_meter->execute();
-                    }
-                } // end foreach upload_data_collector
-            } // end loop though $user_list
-            $db->commit();
+            // Save the object into the cache
+            $this->saveItemToCache($object);
+            
+            $entries [] = $object;
         }
-        catch ( Exception $e )
-        {
-            $db->rollback();
-            throw new Exception("Failed to clone the report.", 0, $e);
-        }
-        return $message;
+        return $entries;
+    }
+
+    /**
+     * Gets a where clause for filtering by id
+     *
+     * @param unknown_type $id            
+     * @return array
+     */
+    public function getWhereId ($id)
+    {
+        return array (
+                "{$this->col_id} = ?" => $id 
+        );
+    }
+
+    /**
+     * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     */
+    public function getPrimaryKeyValueForObject ($object)
+    {
+        return $object->getId();
     }
 }
+

@@ -141,23 +141,23 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_reports` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `user_id` INT(11) NOT NULL ,
-  `customer_company_name` VARCHAR(255) NOT NULL ,
-  `user_pricing_override` TINYINT(4) NULL DEFAULT '0' ,
-  `report_stage` ENUM('company','general','finance','purchasing','it','users','verify','upload','mapdevices','summary','reportsettings','finished') NULL DEFAULT NULL ,
-  `questionset_id` INT(11) NOT NULL ,
-  `date_created` DATETIME NOT NULL ,
-  `last_modified` DATETIME NOT NULL ,
-  `report_date` DATETIME NULL DEFAULT NULL ,
-  `devices_modified` TINYINT(4) NULL DEFAULT '0' ,
+  `userId` INT(11) NOT NULL ,
+  `customerCompanyName` VARCHAR(255) NOT NULL ,
+  `userPricingOverride` TINYINT(4) NULL DEFAULT '0' ,
+  `reportStage` ENUM('company','general','finance','purchasing','it','users','verify','upload','mapdevices','summary','reportsettings','finished') NULL DEFAULT NULL ,
+  `questionSetId` INT(11) NOT NULL ,
+  `dateCreated` DATETIME NOT NULL ,
+  `lastModified` DATETIME NOT NULL ,
+  `reportDate` DATETIME NULL DEFAULT NULL ,
+  `devicesModified` TINYINT(4) NULL DEFAULT '0' ,
   PRIMARY KEY (`id`) ,
-  INDEX `user_id` (`user_id` ASC) ,
-  INDEX `questionset_id` (`questionset_id` ASC) ,
+  INDEX `user_id` (`userId` ASC) ,
+  INDEX `questionset_id` (`questionSetId` ASC) ,
   CONSTRAINT `proposalgenerator_reports_ibfk_1`
-    FOREIGN KEY (`user_id` )
+    FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` ),
   CONSTRAINT `proposalgenerator_reports_ibfk_2`
-    FOREIGN KEY (`questionset_id` )
+    FOREIGN KEY (`questionSetId` )
     REFERENCES `pgen_question_sets` (`id` ))
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
