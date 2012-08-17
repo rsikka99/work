@@ -25,9 +25,9 @@ abstract class My_Controller_Report extends Zend_Controller_Action
 
     public function init ()
     {
-        $session = new Zend_Session_Namespace('report');
+        $session = new Zend_Session_Namespace('proposalgenerator_report');
         
-        $this->ReportId = $session->report_id;
+        $this->ReportId = $session->reportId;
         $this->ReportAbsoluteCachePath = PUBLIC_FOLDER . "/cache/reports/" . $this->ReportId;
         $this->ReportCachePath = "/cache/reports/" . $this->ReportId;
         // Make the directory if it doesnt exist
