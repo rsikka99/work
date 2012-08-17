@@ -44,6 +44,7 @@ $deviceOptions = $this->deviceOptions;
 					<thead>
 						<tr>
 							<th style="text-align: left;">Name</th>
+							<th style="text-align: center;">Included</th>
 							<th style="text-align: center;">Quantity</th>
 						</tr>
 					</thead>
@@ -51,6 +52,7 @@ $deviceOptions = $this->deviceOptions;
 						<?php foreach ( $deviceOptions as $option ) {  /* @var $option Quotegen_Model_DeviceOption */ ?>
 						<tr>
 							<td style="text-align: left;"><?php echo $option->getOption()->getName(); ?></td>
+							<td style="text-align: center;"><?php echo $option->getIncludedQuantity(); ?></td>
 							<td style="text-align: center;"><input type="text" class="span1" name="quantity<?php echo $option->getOptionId(); ?>" id="quantity<?php echo $option->getOptionId(); ?>" value="<?php echo $option->getDeviceConfigurationOption($deviceConfigurationId)->getQuantity(); ?>" /></td>
 						</tr>
 						<?php } ?>
