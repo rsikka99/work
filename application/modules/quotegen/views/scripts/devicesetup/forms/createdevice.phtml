@@ -224,19 +224,7 @@ $form = $this->form;
 		<?php $element = $this->element->getElement("launch_date"); ?>
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php 
-			$formatstyle = array('class' => 'span2');
-			if ( $element->hasErrors() ) {
-				$formatstyle = array('class' => 'span2', 'style' => 'border-color: #B94A48; color: #B94A48;'); 
-			} 
-			
-			echo trim($this->datePicker("launch_date", "", array( 
-	            'dateFormat' => 'yy-mm-dd', 
-	            'timeFormat' => 'hh:mm', 
-	            'changeYear' => 'true', 
-	            'changeMonth' => 'true', 
-	            'yearRange' => "{$minYear}:{$maxYear}" 
-		    ), $formatstyle)); ?>
+		    <?php echo $element->renderUiWidgetElement(); ?>
 			<?php echo trim($element->renderErrors()); ?>
 			<?php echo trim($element->renderDescription()); ?>
 		</div>
