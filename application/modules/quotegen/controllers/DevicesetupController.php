@@ -60,19 +60,23 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                     {
                         // Toners Search Filter
                         $filter = $values ['criteria_filter'];
+
+                        $txtCriteria = $values ['txtCriteria'];
+                        $this->view->txtCriteria = $txtCriteria;
+                        
+                        $cboCriteria = $values ['cboCriteria'];
+                        $this->view->cboCriteria = $cboCriteria;
                         
                         if ($filter == 'sku')
                         {
-                            $criteria = $values ['txtCriteria'];
                             $where = array_merge((array)$where, array (
-                                    'sku LIKE ( ? )' => '%' . $criteria . '%' 
+                                    'sku LIKE ( ? )' => '%' . $txtCriteria . '%' 
                             ));
                         }
                         else
                         {
-                            $criteria = $values ['cboCriteria'];
                             $where = array_merge((array)$where, array (
-                                    'manufacturer_id = ?' => $criteria 
+                                    'manufacturer_id = ?' => $cboCriteria 
                             ));
                         }
                     }
@@ -408,7 +412,9 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         						'assignedToners' => $assignedToners,
                                 'paginator' => $paginator,
                                 'viewfilter' => $view_filter,
-                                'search_filter' => $filter
+                                'search_filter' => $filter,
+                                'cboCriteria' => $cboCriteria,
+                                'txtCriteria' => $txtCriteria
                         ) 
                 ) 
         ));

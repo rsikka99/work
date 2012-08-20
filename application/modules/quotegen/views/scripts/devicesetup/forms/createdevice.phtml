@@ -33,6 +33,16 @@ $form = $this->form;
 			}
     	});
     	
+    	// Set up filter values
+    	<?php if ( $this->search_filter == "manufacturer" ) { ?>
+			$("#text_criteria").hide();
+			$("#list_criteria").show();
+			$("#cboCriteria").val(<?php echo $this->cboCriteria; ?>);
+    	<?php } else { ?>
+			$("#list_criteria").hide();
+			$("#text_criteria").show();
+    		$("#txtCriteria").val("<?php echo $this->txtCriteria; ?>");
+   		<?php } ?>
     });
     
     function removeA(arr) {
@@ -77,6 +87,7 @@ $form = $this->form;
 
 <form name="createdevice" id="createdevice" class="form-horizontal" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>">
 
+<div class="well">
 	<div class="control-group">
 		<?php $element = $this->element->getElement("manufacturer_id"); ?>
 		<?php echo $element->renderLabel(); ?>
@@ -284,7 +295,9 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	
+</div>
+
+<div>
 	<div id="toners_container">
 	<h3>Toners</h3>
 	<input type="hidden" name="hdnToners" id="hdnToners" value="<?php echo $this->assignedToners ?>" />
@@ -352,5 +365,6 @@ $form = $this->form;
 		<?php echo $this->element->submit; ?>
 		<?php echo $this->element->cancel; ?>
 	</div>
+</div>
 
 </form>
