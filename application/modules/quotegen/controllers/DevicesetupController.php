@@ -925,6 +925,8 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
     {
         $where = null;
         $optionId = null;
+        $txtCriteria = null;
+        $cboCriteria = null;
         $masterDeviceId = $this->_getParam('id', false);
         $this->view->id = $masterDeviceId;
         
@@ -1012,7 +1014,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         $assignedOptions = array ();
                         foreach ( $device->getDeviceOptions() as $option )
                         {
-                            $assignedOptions [] = $option->getId();
+                            $assignedOptions [] = $option->getOptionId();
                         }
                         
                         // Filter view
