@@ -35,6 +35,8 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $filter = null;
         $view_filter = null;
         $assignedToners = null;
+        $txtCriteria = null;
+        $cboCriteria = null;
         
         // Populate manufacturers dropdown
         $manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAll();
@@ -54,7 +56,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             if (! isset($values ['cancel']))
             {
                 try
-                {
+                {   
                     // Filter
                     if (isset($values ['btnSearch']))
                     {
@@ -671,6 +673,8 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
     {
         $where = null;
         $tonerId = null;
+        $txtCriteria = null;
+        $cboCriteria = null;
         $masterDeviceId = $this->_getParam('id', false);
         
         // Pass values back to view
@@ -721,6 +725,23 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 {
                     // Get Toner Id
                     $tonerId = $values ['tonerid'];
+                    
+                    if (! isset ($values ['btnClearSearch'] ) ) 
+                    {
+	                    // Filter view
+	                    $view = $values ['cboView'];
+	                    $this->view->view_filter = $view;
+	                    
+	                    // Toners Search Filter
+	                    $filter = $values ['criteria_filter'];
+	                    $this->view->search_filter = $filter;
+	                    
+	                    $txtCriteria = $values ['txtCriteria'];
+	                    $this->view->txtCriteria = $txtCriteria;
+	                    
+	                    $cboCriteria = $values ['cboCriteria'];
+	                    $this->view->cboCriteria = $cboCriteria;
+                    }
                     
                     // Assign Toner
                     if (isset($values ['btnAssign']))
@@ -829,13 +850,6 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             $assignedToners [] = $toner->getId();
                         }
                         
-                        // Filter view
-                        $view = $values ['cboView'];
-                        $this->view->view_filter = $view;
-                        
-                        // Toners Search Filter
-                        $filter = $values ['criteria_filter'];
-                        
                         if ($view == "assigned")
                         {
                             $where = array (
@@ -851,16 +865,14 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         
                         else if ($filter == 'sku')
                         {
-                            $criteria = $values ['txtCriteria'];
                             $where = array_merge((array)$where, array (
-                                    'sku LIKE ( ? )' => '%' . $criteria . '%' 
+                                    'sku LIKE ( ? )' => '%' . $txtCriteria . '%' 
                             ));
                         }
                         else
                         {
-                            $criteria = $values ['cboCriteria'];
                             $where = array_merge((array)$where, array (
-                                    'manufacturer_id = ?' => $criteria 
+                                    'manufacturer_id = ?' => $cboCriteria 
                             ));
                         }
                     }
