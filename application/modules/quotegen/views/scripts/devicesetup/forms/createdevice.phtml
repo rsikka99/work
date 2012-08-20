@@ -76,7 +76,7 @@ $form = $this->form;
 <?php $this->headScript()->captureEnd() ?>
 
 <form name="createdevice" id="createdevice" class="form-horizontal" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>">
-	
+
 	<div class="control-group">
 		<?php $element = $this->element->getElement("manufacturer_id"); ?>
 		<?php echo $element->renderLabel(); ?>
@@ -224,19 +224,9 @@ $form = $this->form;
 		<?php $element = $this->element->getElement("launch_date"); ?>
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($this->datePicker("launch_date", "", array(
-		            'dateFormat' => 'Y-m-d',
-		            'timeFormat' => 'hh:mm',
-		            'changeYear' => 'true',
-		            'changeMonth' => 'true',
-		            'yearRange' => "{$minYear}:{$maxYear}"
-			    ), array())); ?>
-			<?php // echo trim($element->renderViewHelper()); ?>
+		    <?php echo $element->renderUiWidgetElement(); ?>
+			<?php echo trim($element->renderErrors()); ?>
 			<?php echo trim($element->renderDescription()); ?>
-			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
 	<div class="control-group">
@@ -341,11 +331,11 @@ $form = $this->form;
 					<td style="text-align: right;"><?php echo number_format($toner->getYield(), 0, '', ','); ?></td>
 					<td style="text-align: right;"><?php echo "$" . number_format($toner->getCost(), 2, '.', ','); ?></td>
 					<td style="text-align: center;">
-						<?php if ( in_array($toner->getId(), explode(",", $this->assignedToners) ) ) { ?>
-							<button type="button" name="btnAssign<?php echo $toner->getId(); ?>" id="btnAssign<?php echo $toner->getId(); ?>" class="btn btn-danger btn-mini" onclick="javascript: update_toner(<?php echo $toner->getId(); ?>);"><i class="icon-minus-sign icon-white"></i> Unassign</button>
-						<?php } else { ?>
-							<button type="button" name="btnAssign<?php echo $toner->getId(); ?>" id="btnAssign<?php echo $toner->getId(); ?>" class="btn btn-success btn-mini" onclick="javascript: update_toner(<?php echo $toner->getId(); ?>);"><i class="icon-plus-sign icon-white"></i> Assign</button>
-						<?php } ?>
+					<?php if ( in_array($toner->getId(), explode(",", $this->assignedToners) ) ) { ?>
+						<button type="button" name="btnAssign<?php echo $toner->getId(); ?>" id="btnAssign<?php echo $toner->getId(); ?>" class="btn btn-danger btn-mini" onclick="javascript: update_toner(<?php echo $toner->getId(); ?>);"><i class="icon-minus-sign icon-white"></i> Unassign</button>
+					<?php } else { ?>
+						<button type="button" name="btnAssign<?php echo $toner->getId(); ?>" id="btnAssign<?php echo $toner->getId(); ?>" class="btn btn-success btn-mini" onclick="javascript: update_toner(<?php echo $toner->getId(); ?>);"><i class="icon-plus-sign icon-white"></i> Assign</button>
+					<?php } ?>
 					</td>
 				</tr>
 		        <?php endforeach; ?>
