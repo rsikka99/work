@@ -131,6 +131,7 @@ class Proposalgen_ReportController extends My_Controller_Report
      */
     public function indexAction ()
     {
+        
         $this->view->headScript()->prependFile($this->view->baseUrl("/scripts/htmlReport.js"));
         //$this->_helper->layout->setLayout('newreport');
         $this->view->formTitle = "Report Summary";

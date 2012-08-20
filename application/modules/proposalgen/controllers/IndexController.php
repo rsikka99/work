@@ -72,24 +72,24 @@ class Proposalgen_IndexController extends Zend_Controller_Action
         if (strcmp($proposalOptions, 'ViewUnfinishedStartNewProposal') === 0)
         {
             $reports = Proposalgen_Model_Mapper_Report::getInstance()->fetchAll(array (
-                    "(user_id = ? AND questionset_id = 1" => $this->userId, 
-                    "report_stage != ?) OR report_stage IS NULL" => "finished" 
+                    "(userId = ? AND questionSetId = 1" => $this->userId, 
+                    "reportStage != ?) OR reportStage IS NULL" => "finished" 
             ), array (
-                    "date_created DESC" 
+                    "dateCreated DESC" 
             ));
             // Tack on a proposal that handles creating a new one
             $newReport = new Proposalgen_Model_Report();
-            $newReport->setReportId(0);
+            $newReport->setId(0);
             $newReport->setCustomerCompanyName("Start New Proposal");
             array_unshift($reports, $newReport);
         }
         else
         {
             $reports = Proposalgen_Model_Mapper_Report::getInstance()->fetchAll(array (
-                    "user_id = ? AND questionset_id = 1" => $this->userId, 
-                    "report_stage = ?" => "finished" 
+                    "userId = ? AND questionSetId = 1" => $this->userId, 
+                    "reportStage = ?" => "finished" 
             ), array (
-                    "date_created DESC" 
+                    "dateCreated DESC" 
             ));
         }
         

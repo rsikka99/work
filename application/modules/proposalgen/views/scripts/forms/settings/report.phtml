@@ -1,235 +1,57 @@
-<?php
-$formID = 'settings_table';
-$form = new Zend_Form();
+<?php 
+/* @var $form Proposalgen_Form_Settings_Report */
+$form = $this->element;
 ?>
-
-<?php $this->headScript()->captureStart('append','text/javascript') ?>
-	
-	$(document).ready(function() {
-		$( "#report_date" ).datepicker({ dateFormat: 'mm/dd/yy', changeMonth: true, changeYear: true});
-	});
-	
-<?php $this->headScript()->captureEnd() ?>
-
-<div class="settingsPage">
-<form id="<?php echo $formID?>" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>" enctype="multipart/form-data">
-	<a name="top"></a>
-	
-	<h4>General</h4>
-	<div class="well">
-    <table id="<?php echo $formID?>" style="width: 100%;">
-		<col style='width:auto;'/>
-		<col style='width: 150px;' />
-		<col style='width: 150px;' />
-		<col style='width: 150px;' />
-        <tbody>
-        	<!-- Report Date --------------------------------------------------------------------------------------- -->
-	        <tr>
-                <td><?php echo $this->element->report_date->renderLabel();?></td>
-                <td>&nbsp;</td>
-                <td <?php echo ($this->element->report_date->hasErrors()) ? "class='error'" : ""; ?> align="right"><?php echo $this->element->report_date->renderViewHelper(); ?></td>
-				<td>mm/dd/yyyy</td>
-            </tr>
-        </tbody>
-    </table>
-	</div>
-	
-	<h4>Assessment / Solution</h4>
-	<div class="well">
-    <table id="<?php echo $formID?>" style="width: 100%;">
-		<col style='width:auto;'/>
-		<col style='width: 150px;' />
-		<col style='width: 150px;' />
-		<col style='width: 150px;' />
-		<thead>
-			<tr>
-				<th class="forms_heading" align="left" valign="top"><strong>Property</strong></th>
-				<th class="forms_heading" align="center" valign="top"><strong>Default Setting</strong></th>
-				<th class="forms_heading" align="center" valign="top" colspan="2"><strong>Override</strong></th>
-			</tr>
-		</thead>
-        <tbody>
-        	<!-- Pricing Margin % --------------------------------------------------------------------------------------- -->
-	        <tr>
-                <td><?php echo $this->element->pricing_margin->renderLabel();?></td>
-                <td align="left" style="padding-left: 10"><?php echo ($this->defaultSettings["pricing_margin"]) ? $this->defaultSettings["pricing_margin"] . "%" : ""; ?></td>
-                <td <?php echo ($this->element->pricing_margin->hasErrors()) ? "class='error'" : ""; ?> align="right"><?php echo $this->element->pricing_margin->renderViewHelper(); ?></td>
-				<td>%</td>
-            </tr>
-            <?php if ($this->element->pricing_margin->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><ul class="errors"><li>Must be between 1 and 100</li></ul></td>
-            <?php endif; ?>
-            
-        	
-            <!-- Monthly Lease Payment $ --------------------------------------------------------------------------------------- -->
-            <tr>
-                <td><?php echo $this->element->monthly_lease_payment->renderLabel();?></td>
-                <td align="left" style="padding-left: 10"><?php echo ($this->defaultSettings["monthly_lease_payment"]) ? "$" . $this->defaultSettings["monthly_lease_payment"] . " / device" : ""; ?></td>
-                <td <?php echo ($this->element->monthly_lease_payment->hasErrors()) ? "class='error'" : ""; ?> align="right">$<?php echo $this->element->monthly_lease_payment->renderViewHelper(); ?></td>
-				<td>&nbsp;/ device</td>
-            </tr>
-            <?php if ($this->element->monthly_lease_payment->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><?php echo $this->element->monthly_lease_payment->renderErrors(); ?></td>
-            <?php endif; ?>
-            
-            <!-- Default Printer Cost $ --------------------------------------------------------------------------------------- -->
-            <tr>
-                <td><?php echo $this->element->default_printer_cost->renderLabel();?></td>
-                <td align="left" style="padding-left: 10"><?php echo ($this->defaultSettings["default_printer_cost"]) ? "$" . $this->defaultSettings["default_printer_cost"] . " / device" : ""; ?></td>
-                <td <?php echo ($this->element->default_printer_cost->hasErrors()) ? "class='error'" : ""; ?> align="right">$<?php echo $this->element->default_printer_cost->renderViewHelper(); ?></td>
-				<td>&nbsp;/ device</td>
-            </tr>
-            <?php if ($this->element->default_printer_cost->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><?php echo $this->element->default_printer_cost->renderErrors(); ?></td>
-            <?php endif; ?>
-            
-            <!-- Leased BW CPP $ --------------------------------------------------------------------------------------- -->
-            <tr>
-                <td><?php echo $this->element->leased_bw_per_page->renderLabel();?></td>
-                <td align="left" style="padding-left: 10"><?php echo ($this->defaultSettings["leased_bw_per_page"]) ? "$" . $this->defaultSettings["leased_bw_per_page"] . " / page" : ""; ?></td>
-                <td <?php echo ($this->element->leased_bw_per_page->hasErrors()) ? "class='error'" : ""; ?> align="right">$<?php echo $this->element->leased_bw_per_page->renderViewHelper(); ?></td>
-				<td>&nbsp;/ page</td>
-            </tr>
-            <?php if ($this->element->leased_bw_per_page->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><?php echo $this->element->leased_bw_per_page->renderErrors(); ?></td>
-            <?php endif; ?>
-            
-            <!-- Leased COLOR CPP $ --------------------------------------------------------------------------------------- -->
-            <tr>
-                <td><?php echo $this->element->leased_color_per_page->renderLabel();?></td>
-                <td align="left" style="padding-left: 10"><?php echo ($this->defaultSettings["leased_color_per_page"]) ? "$" . $this->defaultSettings["leased_color_per_page"] . " / page" : ""; ?></td>
-                <td <?php echo ($this->element->leased_color_per_page->hasErrors()) ? "class='error'" : ""; ?> align="right">$<?php echo $this->element->leased_color_per_page->renderViewHelper(); ?></td>
-				<td>&nbsp;/ page</td>
-            </tr>
-            <?php if ($this->element->leased_color_per_page->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><?php echo $this->element->leased_color_per_page->renderErrors(); ?></td>
-            <?php endif; ?>
-            
-            <!-- MPS BW CPP $ --------------------------------------------------------------------------------------- -->
-            <tr>
-                <td><?php echo $this->element->mps_bw_per_page->renderLabel();?></td>
-                <td align="left" style="padding-left: 10"><?php echo ($this->defaultSettings["mps_bw_per_page"]) ? "$" . $this->defaultSettings["mps_bw_per_page"] . " / page" : ""; ?></td>
-                <td <?php echo ($this->element->mps_bw_per_page->hasErrors()) ? "class='error'" : ""; ?> align="right">$<?php echo $this->element->mps_bw_per_page->renderViewHelper(); ?></td>
-				<td>&nbsp;/ page</td>
-            </tr>
-            <?php if ($this->element->mps_bw_per_page->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><?php echo $this->element->mps_bw_per_page->renderErrors(); ?></td>
-            <?php endif; ?>
-            
-            <!-- MPS COLOR CPP $ --------------------------------------------------------------------------------------- -->
-            <tr>
-                <td><?php echo $this->element->mps_color_per_page->renderLabel();?></td>
-                <td align="left" style="padding-left: 10"><?php echo ($this->defaultSettings["mps_color_per_page"]) ? "$" . $this->defaultSettings["mps_color_per_page"] . " / page" : ""; ?></td>
-                <td <?php echo ($this->element->mps_color_per_page->hasErrors()) ? "class='error'" : ""; ?> align="right">$<?php echo $this->element->mps_color_per_page->renderViewHelper(); ?></td>
-				<td>&nbsp;/ page</td>
-            </tr>
-            <?php if ($this->element->mps_color_per_page->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><?php echo $this->element->mps_color_per_page->renderErrors(); ?></td>
-            <?php endif; ?>
-            
-            <!-- Price for KWH $ --------------------------------------------------------------------------------------- -->
-            <tr>
-                <td><?php echo $this->element->kilowatts_per_hour->renderLabel();?></td>
-                <td align="left" style="padding-left: 10"><?php echo ($this->defaultSettings["kilowatts_per_hour"]) ? "$" . $this->defaultSettings["kilowatts_per_hour"] . " / KWh" : ""; ?></td>
-                <td <?php echo ($this->element->kilowatts_per_hour->hasErrors()) ? "class='error'" : ""; ?> align="right">$<?php echo $this->element->kilowatts_per_hour->renderViewHelper(); ?></td>
-				<td>&nbsp;/ KWh</td>
-            </tr>
-            <?php if ($this->element->kilowatts_per_hour->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><?php echo $this->element->kilowatts_per_hour->renderErrors(); ?></td>
-            <?php endif; ?>
-            
-            <!-- Pricing Config $ --------------------------------------------------------------------------------------- -->
-            <tr>
-                <td><?php echo $this->element->pricing_config_id->renderLabel();?></td>
-                <td align="left" style="padding-left: 10"><?php echo ($this->defaultSettings["pricing_config_id"]) ? $this->defaultSettings["pricing_config_id"] : ""; ?></td>
-                <td <?php echo ($this->element->pricing_config_id->hasErrors()) ? "class='error'" : ""; ?> align="right"><?php echo $this->element->pricing_config_id->renderViewHelper(); ?></td>
-				<td>&nbsp;</td>
-            </tr>
-            <?php if ($this->element->pricing_config_id->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><?php echo $this->element->pricing_config_id->renderErrors(); ?></td>
-            <?php endif; ?>
-            
-        </tbody>
-	</table>
-	</div>
-	
-	<h4>Gross Margin</h4>
-	<div class="well">
-    <table id="<?php echo $formID?>" style="width: 100%;">
-		<col style='width:auto;'/>
-		<col style='width: 150px;' />
-		<col style='width: 150px;' />
-		<col style='width: 150px;' />
-		<thead>
-			<tr>
-				<th class="forms_heading" align="left" valign="top"><strong>Property</strong></th>
-				<th class="forms_heading" align="center" valign="top"><strong>Default Setting</strong></th>
-				<th class="forms_heading" align="center" valign="top" colspan="2"><strong>Override</strong></th>
-			</tr>
-		</thead>
-        <tbody>
-        	<!-- Actual Page Coverage MONO $ --------------------------------------------------------------------------------------- -->
-	        <tr>
-                <td><?php echo $this->element->actual_page_coverage_mono->renderLabel();?></td>
-                <td align="left" style="padding-left: 10"><?php echo ($this->defaultSettings["actual_page_coverage_mono"]) ? $this->defaultSettings["actual_page_coverage_mono"] . "%" : ""; ?></td>
-                <td <?php echo ($this->element->actual_page_coverage_mono->hasErrors()) ? "class='error'" : ""; ?> align="right"><?php echo $this->element->actual_page_coverage_mono->renderViewHelper(); ?></td>
-				<td>%</td>
-            </tr>
-            <?php if ($this->element->actual_page_coverage_mono->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><ul class="errors"><li>Must be between 1 and 100</li></ul></td>
-            <?php endif; ?>
-            
-            <!-- Actual Page Coverage COLOR $ --------------------------------------------------------------------------------------- -->
-	        <tr>
-                <td><?php echo $this->element->actual_page_coverage_color->renderLabel();?></td>
-                <td align="left" style="padding-left: 10"><?php echo ($this->defaultSettings["actual_page_coverage_color"]) ? $this->defaultSettings["actual_page_coverage_color"] . "%" : ""; ?></td>
-                <td <?php echo ($this->element->actual_page_coverage_color->hasErrors()) ? "class='error'" : ""; ?> align="right"><?php echo $this->element->actual_page_coverage_color->renderViewHelper(); ?></td>
-				<td>%</td>
-            </tr>
-            <?php if ($this->element->actual_page_coverage_color->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><ul class="errors"><li>Must be between 1 and 100</li></ul></td>
-            <?php endif; ?>
-            
-            <!-- Admin CPP $ --------------------------------------------------------------------------------------- -->
-            <tr>
-                <td><?php echo $this->element->admin_charge_per_page->renderLabel();?></td>
-                <td align="left" style="padding-left: 10"><?php echo ($this->defaultSettings["admin_charge_per_page"]) ? "$" . $this->defaultSettings["admin_charge_per_page"] . " / page" : ""; ?></td>
-                <td <?php echo ($this->element->admin_charge_per_page->hasErrors()) ? "class='error'" : ""; ?> align="right">$<?php echo $this->element->admin_charge_per_page->renderViewHelper(); ?></td>
-				<td>&nbsp;/ page</td>
-            </tr>
-            <?php if ($this->element->admin_charge_per_page->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><?php echo $this->element->admin_charge_per_page->renderErrors(); ?></td>
-            <?php endif; ?>
-            
-            <!-- Service CPP $ --------------------------------------------------------------------------------------- -->
-            <tr>
-                <td><?php echo $this->element->service_cost_per_page->renderLabel();?></td>
-                <td align="left" style="padding-left: 10"><?php echo ($this->defaultSettings["service_cost_per_page"]) ? "$" . $this->defaultSettings["service_cost_per_page"] . " / page" : ""; ?></td>
-                <td <?php echo ($this->element->service_cost_per_page->hasErrors()) ? "class='error'" : ""; ?> align="right">$<?php echo $this->element->service_cost_per_page->renderViewHelper(); ?></td>
-				<td>&nbsp;/ page</td>
-            </tr>
-            <?php if ($this->element->service_cost_per_page->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><?php echo $this->element->service_cost_per_page->renderErrors(); ?></td>
-            <?php endif; ?>
-            
-             <!-- Pricing Config $ --------------------------------------------------------------------------------------- -->
-            <tr>
-                <td><?php echo $this->element->gross_margin_pricing_config_id->renderLabel();?></td>
-                <td align="left" style="padding-left: 10">COMP</td>
-                <td <?php echo ($this->element->gross_margin_pricing_config_id->hasErrors()) ? "class='error'" : ""; ?> align="right"><?php echo $this->element->gross_margin_pricing_config_id->renderViewHelper(); ?></td>
-				<td>&nbsp;</td>
-            </tr>
-            <?php if ($this->element->gross_margin_pricing_config_id->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><?php echo $this->element->gross_margin_pricing_config_id->renderErrors(); ?></td>
-            <?php endif; ?>
-            
-        </tbody>
-	</table>
-	</div>
-	
-    <div id="submitBtns" class="submitBar">
-		<?php echo $this->element->save_settings; ?>
-		<?php echo $this->element->back_button; ?>
-	</div>
+<form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+    <div class="row">
+        <div class="span10 offset1">
+            <div class="well">
+        <?php foreach ($form->getFormElementGroups() as $group) : ?>
+            <h3><?php echo $group->title; ?></h3>
+            <hr>
+            <table style="width: 100%;">
+                <tr>
+                    <th style="width: 300px; text-align: left;">Property</th>
+                    <th style="text-align: left;">Default</th>
+                    <th style="width: 150px; text-align: right;">Value</th>
+                    <th style="width: 75px;"></th>
+                </tr>
+            <?php foreach ($group->elements as $element) :
+                $inputPrepend = (strlen($element->getAttrib('inputprepend')) > 0) ? $element->getAttrib('inputprepend') : FALSE;
+                $inputAppend = (strlen($element->getAttrib('inputappend')) > 0) ? $element->getAttrib('inputappend') : FALSE;
+            ?>
+                <tr style="height: 50px;">
+                    <td><?php echo $element->getLabel(); ?></td>
+                    <td><?php echo ($inputPrepend) ?: ""; ?><?php echo $element->getAttrib('data-defaultvalue'); ?><?php echo ($inputAppend) ?: ""; ?></td>
+                    <td style="text-align: right;"><?php echo ($inputPrepend) ?: ""; ?><?php
+                    if ($element instanceof ZendX_JQuery_Form_Element_UiWidget)
+                    { 
+                        // Well this work around isn't so great, but it's neccessary.
+                        echo $element->renderUiWidgetElement();
+                    }
+                    else
+                    {
+                        echo $element->renderViewHelper();
+                        
+                    } 
+                    ?></td>
+                    <td style="padding-left: 5px;"><?php echo ($inputAppend) ?: ""; ?></td>
+                </tr>
+                <?php if ($element->hasErrors()) : ?>
+                <tr>
+                    <td colspan="4" style="text-align: right;"><div class="control-group error"><?php echo $element->renderErrors(); ?></div></td>
+                </tr>
+                <?php endif; ?>
+                
+            <?php endforeach; ?>
+            </table>
+            <br><br>
+        <?php endforeach; ?>
+        
+            <?php echo $form->getElement('submit'); ?>
+            <?php echo $form->getElement('cancel'); ?>
+        
+            </div>
+        </div>
+    </div>
 </form>
-</div>

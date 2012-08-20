@@ -71,7 +71,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         );
         
         $formDataFromAnswers ["company_address"] = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(30, $this->getReport()
-            ->getReportId())) ?  : "";
+            ->getId())) ?  : "";
         
         $form->populate($formDataFromAnswers);
         
@@ -135,22 +135,22 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $form = new Proposalgen_Form_Survey_General();
         
         $mpsGoalRankings [1] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(6, $this->getReport()
-            ->getReportId())) ?  : false;
+            ->getId())) ?  : false;
         $mpsGoalRankings [2] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(7, $this->getReport()
-            ->getReportId())) ?  : false;
+            ->getId())) ?  : false;
         $mpsGoalRankings [3] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(8, $this->getReport()
-            ->getReportId())) ?  : false;
+            ->getId())) ?  : false;
         $mpsGoalRankings [4] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(9, $this->getReport()
-            ->getReportId())) ?  : false;
+            ->getId())) ?  : false;
         $mpsGoalRankings [5] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(10, $this->getReport()
-            ->getReportId())) ?  : false;
+            ->getId())) ?  : false;
         
         /*
          * Get saved answers.
          */
         $formDataFromAnswers = array (
                 "numb_employees" => (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(5, $this->getReport()
-                    ->getReportId())) ?  : "" 
+                    ->getId())) ?  : "" 
         );
         
         /*
@@ -245,7 +245,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $formDataFromAnswers = array ();
         
         $tonerCostRadio = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(11, $this->getReport()
-            ->getReportId())) ?  : FALSE;
+            ->getId())) ?  : FALSE;
         
         if ($tonerCostRadio !== FALSE)
         {
@@ -253,7 +253,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         }
         
         $tonerCost = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(11, $this->getReport()
-            ->getReportId())) ?  : FALSE;
+            ->getId())) ?  : FALSE;
         
         if ($tonerCost !== FALSE)
         {
@@ -261,7 +261,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         }
         
         $laborCostRadio = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(12, $this->getReport()
-            ->getReportId())) ?  : FALSE;
+            ->getId())) ?  : FALSE;
         
         if ($laborCostRadio !== FALSE)
         {
@@ -269,7 +269,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         }
         
         $laborCost = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(12, $this->getReport()
-            ->getReportId())) ?  : FALSE;
+            ->getId())) ?  : FALSE;
         
         if ($laborCost !== FALSE)
         {
@@ -277,7 +277,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         }
         
         $avgPurchase = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(14, $this->getReport()
-            ->getReportId())) ?  : FALSE;
+            ->getId())) ?  : FALSE;
         
         if ($avgPurchase !== FALSE)
         {
@@ -285,7 +285,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         }
         
         $itHourlyRate = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(15, $this->getReport()
-            ->getReportId())) ?  : FALSE;
+            ->getId())) ?  : FALSE;
         
         if ($itHourlyRate !== FALSE)
         {
@@ -374,11 +374,11 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         // Get any saved answers
         $formDataFromAnswers = array (
                 "numb_vendors" => (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(16, $this->getReport()
-                    ->getReportId())) ?  : "" 
+                    ->getId())) ?  : "" 
         );
         
         $numberOfMonthlyOrders = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(17, $this->getReport()
-            ->getReportId())) ?  : FALSE;
+            ->getId())) ?  : FALSE;
         if ($numberOfMonthlyOrders !== FALSE)
         {
             switch ($numberOfMonthlyOrders)
@@ -479,7 +479,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $formDataFromAnswers = array ();
         
         $itHoursRadio = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(18, $this->getReport()
-            ->getReportId())) ?  : FALSE;
+            ->getId())) ?  : FALSE;
         
         if ($itHoursRadio !== FALSE)
         {
@@ -487,7 +487,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         }
         
         $itHours = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(18, $this->getReport()
-            ->getReportId())) ?  : FALSE;
+            ->getId())) ?  : FALSE;
         
         if ($itHours !== FALSE)
         {
@@ -495,7 +495,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         }
         
         $monthlyBreakdownsRadio = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(20, $this->getReport()
-            ->getReportId())) ?  : FALSE;
+            ->getId())) ?  : FALSE;
         
         if ($monthlyBreakdownsRadio !== FALSE)
         {
@@ -503,7 +503,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         }
         
         $monthlyBreakdowns = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(20, $this->getReport()
-            ->getReportId())) ?  : FALSE;
+            ->getId())) ?  : FALSE;
         
         if ($monthlyBreakdowns !== FALSE)
         {
@@ -511,7 +511,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         }
         
         $locationTracking = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(19, $this->getReport()
-            ->getReportId())) ?  : FALSE;
+            ->getId())) ?  : FALSE;
         
         if ($locationTracking !== FALSE)
         {
@@ -593,20 +593,20 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         // Get any saved answers
         $formDataFromAnswers = array (
                 "pageCoverage_BW" => (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(21, $this->getReport()
-                    ->getReportId())) ?  : "", 
+                    ->getId())) ?  : "", 
                 "pageCoverage_Color" => (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(22, $this->getReport()
-                    ->getReportId())) ?  : "" 
+                    ->getId())) ?  : "" 
         );
         
         $percentPrintVolume = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(23, $this->getReport()
-            ->getReportId())) ?  : FALSE;
+            ->getId())) ?  : FALSE;
         if ($percentPrintVolume !== FALSE)
         {
             $formDataFromAnswers ["printVolume"] = $percentPrintVolume;
         }
         
         $averagePrinterDowntime = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(24, $this->getReport()
-            ->getReportId())) ?  : FALSE;
+            ->getId())) ?  : FALSE;
         if ($averagePrinterDowntime !== FALSE)
         {
             $formDataFromAnswers ["repairTime"] = $averagePrinterDowntime;
@@ -691,7 +691,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
             }
         }
         
-        $reportId = $this->getReport()->getReportId();
+        $reportId = $this->getReport()->getId();
         // Populate all our view variables
         $currency = new Zend_Currency();
         
@@ -799,7 +799,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $textualAnswer->setQuestionId($questionId);
         $textualAnswer->setAnswer($answer);
         $textualAnswer->setReportId($this->getReport()
-            ->getReportId());
+            ->getId());
         $mapper->save($textualAnswer);
     }
 
@@ -816,7 +816,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $numericAnswer->setQuestionId($questionId);
         $numericAnswer->setAnswer($answer);
         $numericAnswer->setReportId($this->getReport()
-            ->getReportId());
+            ->getId());
         $mapper->save($numericAnswer);
     }
 
@@ -833,7 +833,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $dateAnswer->setQuestionId($questionId);
         $dateAnswer->setAnswer($answer);
         $dateAnswer->setReportId($this->getReport()
-            ->getReportId());
+            ->getId());
         $mapper->save($dateAnswer);
     }
 }

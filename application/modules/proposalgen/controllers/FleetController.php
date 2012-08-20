@@ -12,7 +12,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FLEETDATA_UPLOAD);
         
         $report = $this->getReport();
-        $reportId = $report->getReportId();
+        $reportId = $report->getId();
         
         $request = $this->getRequest();
         
@@ -152,7 +152,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $userId = Zend_Auth::getInstance()->getIdentity()->id;
         $dateInputFormat = "mm/dd/yyyy HH:mm:ss";
         $dateOutputFormat = "yyyy/mm/dd HH:mm:ss";
-        $reportId = $this->getReport()->getReportId();
+        $reportId = $this->getReport()->getId();
         $minimumDeviceAgeInDays = 4;
         $isValid = true;
         
@@ -401,7 +401,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             $sidx = 9;
             
             // get report id from session
-        $report_id = $this->getReport()->getReportId();
+        $report_id = $this->getReport()->getId();
         
         try
         {
@@ -538,7 +538,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $db = Zend_Db_Table::getDefaultAdapter();
         $this->view->grid = $this->_getParam('grid', 'none');
         
-        $report_id = $this->getReport()->getReportId();
+        $report_id = $this->getReport()->getId();
         
         // get unmapped counts
         $select = new Zend_Db_Select($db);
@@ -644,7 +644,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $db = Zend_Db_Table::getDefaultAdapter();
         
         $this->user_id = Zend_Auth::getInstance()->getIdentity()->id;
-        $report_id = $this->getReport()->getReportId();
+        $report_id = $this->getReport()->getId();
         
         $select = new Zend_Db_Select($db);
         $select = $db->select()
@@ -807,7 +807,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $db = Zend_Db_Table::getDefaultAdapter();
         
         $this->user_id = Zend_Auth::getInstance()->getIdentity()->id;
-        $report_id = $this->getReport()->getReportId();
+        $report_id = $this->getReport()->getId();
         
         $select = new Zend_Db_Select($db);
         $select = $db->select()
@@ -961,7 +961,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $this->view->formTitle = 'Add Unknown Printer';
         
         $this->user_id = Zend_Auth::getInstance()->getIdentity()->id;
-        $report_id = $this->getReport()->getReportId();
+        $report_id = $this->getReport()->getId();
         
         // add device form
         $form = new Proposalgen_Form_UnknownDevice(null, "edit");
@@ -2232,7 +2232,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $db = Zend_Db_Table::getDefaultAdapter();
         $this->view->grid = $this->_getParam('grid', 'none');
         
-        $report_id = $this->getReport()->getReportId();
+        $report_id = $this->getReport()->getId();
         
         $date = date('Y-m-d H:i:s T');
         $this->user_id = Zend_Auth::getInstance()->getIdentity()->id;
@@ -2241,7 +2241,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $this->view->companyName = $this->getReportCompanyName();
         
         // get report id from session
-        $report_id = $this->getReport()->getReportId();
+        $report_id = $this->getReport()->getId();
         
         if ($this->_request->isPost())
         {
@@ -2556,7 +2556,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $this->view->formTitle = 'Upload Summary';
         $this->view->companyName = $this->getReportCompanyName();
         
-        $report_id = $this->getReport()->getReportId();
+        $report_id = $this->getReport()->getId();
         
         $upload_data_collectorTable = new Proposalgen_Model_DbTable_UploadDataCollectorRow();
         $where = $upload_data_collectorTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
@@ -2632,7 +2632,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         }
         
         // get report id from session
-        $report_id = $this->getReport()->getReportId();
+        $report_id = $this->getReport()->getId();
         
         $select = new Zend_Db_Select($db);
         $select = $db->select()
@@ -2831,7 +2831,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             $sidx = 9;
         }
         
-        $report_id = $this->getReport()->getReportId();
+        $report_id = $this->getReport()->getId();
         
         $select = new Zend_Db_Select($db);
         $select = $db->select()
@@ -2956,7 +2956,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $value = $this->_getParam('mode', 0);
         
         // get report id from session
-        $report_id = $this->getReport()->getReportId();
+        $report_id = $this->getReport()->getId();
         
         $updateData = array (
                 'is_leased' => $value 
@@ -3063,9 +3063,44 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         }
     }
 
+    /**
+     * Allows the user to set the report settings in the override hierarchy
+     * BOOKMARK: REPORT SETTINGS
+     */
     public function reportsettingsAction ()
     {
         // Mark the step we're on as active
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_REPORTSETTINGS);
+        
+        $reportSettingsService = new Proposalgen_Service_ReportSettings($this->getReport()->getId(), $this->_userId);
+        
+        if ($this->getRequest()->isPost())
+        {
+            $values = $this->getRequest()->getPost();
+            if (isset($values ['cancel']))
+            {
+                $this->gotoPreviousStep();
+            }
+            else
+            {
+                if ($reportSettingsService->update($values))
+                {
+                    $this->_helper->flashMessenger(array (
+                            'success' => 'Settings saved.' 
+                    ));
+                    
+                    $this->saveReport();
+                    $this->gotoNextStep();
+                }
+                else
+                {
+                    $this->_helper->flashMessenger(array (
+                            'danger' => 'Please correct the errors below.' 
+                    ));
+                }
+            }
+        }
+        
+        $this->view->form = $reportSettingsService->getForm();
     }
 }

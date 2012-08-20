@@ -1,12 +1,15 @@
 <?php
 
-/**
- * Class Proposalgen_Model_Mapper_Report_Setting
- *
- * This class is a data mapper for the Report_Setting model.
- */
 class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
 {
+    /*
+     * Column name definitions. Define all columns up here and use them down below.
+     */
+    public $col_id = 'id';
+    
+    /*
+     * Mapper Definitions
+     */
     /**
      * The default db table class to use
      *
@@ -29,18 +32,25 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
      * Saves an instance of Proposalgen_Model_Report_Setting to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $report_setting Proposalgen_Model_Report_Setting
+     * @param $object Proposalgen_Model_Report_Setting
      *            The object to insert
      * @return mixed The primary key of the new row
      */
-    public function insert (Proposalgen_Model_Report_Setting &$report_setting)
+    public function insert (&$object)
     {
-        $data = $report_setting->toArray();
-        unset($data ['id']);
+        // Get an array of data to save
+        $data = $object->toArray();
+        
+        // Remove the id
+        unset($data [$this->col_id]);
+        
+        // Insert the data
         $id = $this->getDbTable()->insert($data);
         
-        // Since the report_setting is set properly, set the id in the appropriate places
-        $report_setting->setId($id);
+        $object->setId($id);
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object);
         
         return $id;
     }
@@ -48,53 +58,57 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Proposalgen_Model_Report_Setting to the database.
      *
-     * @param $report_setting Proposalgen_Model_Report_Setting
+     * @param $object Proposalgen_Model_Report_Setting
      *            The report_setting model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
      * @return int The number of rows affected
      */
-    public function save (Proposalgen_Model_Report_Setting $report_setting, $primaryKey = null)
+    public function save ($object, $primaryKey = null)
     {
-        $data = $this->unsetNullValues($report_setting->toArray());
+        $data = $this->unsetNullValues($object->toArray());
         
         if ($primaryKey === null)
         {
-            $primaryKey = $data ['id'];
+            $primaryKey = $data [$this->col_id];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                'id = ?' => $primaryKey 
+                "{$this->col_id} = ?" => $primaryKey 
         ));
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object);
         
         return $rowsAffected;
     }
 
     /**
-     * Saves an instance of Proposalgen_Model_Report_Setting to the database.
-     * If the id is null then it will insert a new row
+     * Deletes rows from the database.
      *
-     * @param $report_setting mixed
-     *            This can either be an instance of Proposalgen_Model_Report_Setting or the primary key to delete
-     * @return mixed The primary key of the new row
+     * @param $object mixed
+     *            This can either be an instance of Proposalgen_Model_Report_Setting or the
+     *            primary key to delete
+     * @return mixed The number of rows deleted
      */
-    public function delete ($report_setting)
+    public function delete ($object)
     {
-        if ($report_setting instanceof Proposalgen_Model_Report_Setting)
+        if ($object instanceof Proposalgen_Model_Report_Setting)
         {
             $whereClause = array (
-                    'id = ?' => $report_setting->getId() 
+                    "{$this->col_id} = ?" => $object->getId() 
             );
         }
         else
         {
             $whereClause = array (
-                    'id = ?' => $report_setting 
+                    "{$this->col_id} = ?" => $object 
             );
         }
         
-        return $this->getDbTable()->delete($whereClause);
+        $rowsAffected = $this->getDbTable()->delete($whereClause);
+        return $rowsAffected;
     }
 
     /**
@@ -102,29 +116,42 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
      *
      * @param $id int
      *            The id of the report_setting to find
-     * @return void Proposalgen_Model_Report_Setting
+     * @return Proposalgen_Model_Report_Setting
      */
     public function find ($id)
     {
+        // Get the item from the cache and return it if we find it.
+        $result = $this->getItemFromCache($id);
+        if ($result instanceof Proposalgen_Model_Report_Setting)
+        {
+            return $result;
+        }
+        
+        // Assuming we don't have a cached object, lets go get it.
         $result = $this->getDbTable()->find($id);
         if (0 == count($result))
         {
             return;
         }
         $row = $result->current();
-        return new Proposalgen_Model_Report_Setting($row->toArray());
+        $object = new Proposalgen_Model_Report_Setting($row->toArray());
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object);
+        
+        return $object;
     }
 
     /**
      * Fetches a report_setting
      *
      * @param $where string|array|Zend_Db_Table_Select
-     *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
+     *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
      * @param $order string|array
-     *            OPTIONAL An SQL ORDER clause.
+     *            OPTIONAL: A SQL ORDER clause.
      * @param $offset int
-     *            OPTIONAL An SQL OFFSET value.
-     * @return void Proposalgen_Model_Report_Setting
+     *            OPTIONAL: A SQL OFFSET value.
+     * @return Proposalgen_Model_Report_Setting
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -133,20 +160,26 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
         {
             return;
         }
-        return new Proposalgen_Model_Report_Setting($row->toArray());
+        
+        $object = new Proposalgen_Model_Report_Setting($row->toArray());
+        
+        // Save the object into the cache
+        $this->saveItemToCache($object);
+        
+        return $object;
     }
 
     /**
      * Fetches all report_settings
      *
      * @param $where string|array|Zend_Db_Table_Select
-     *            OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
+     *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
      * @param $order string|array
-     *            OPTIONAL An SQL ORDER clause.
+     *            OPTIONAL: A SQL ORDER clause.
      * @param $count int
-     *            OPTIONAL An SQL LIMIT count. (Defaults to 25)
+     *            OPTIONAL: A SQL LIMIT count. (Defaults to 25)
      * @param $offset int
-     *            OPTIONAL An SQL LIMIT offset.
+     *            OPTIONAL: A SQL LIMIT offset.
      * @return multitype:Proposalgen_Model_Report_Setting
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
@@ -155,9 +188,27 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-            $entries [] = new Proposalgen_Model_Report_Setting($row->toArray());
+            $object = new Proposalgen_Model_Report_Setting($row->toArray());
+            
+            // Save the object into the cache
+            $this->saveItemToCache($object);
+            
+            $entries [] = $object;
         }
         return $entries;
+    }
+
+    /**
+     * Gets a where clause for filtering by id
+     *
+     * @param unknown_type $id            
+     * @return array
+     */
+    public function getWhereId ($id)
+    {
+        return array (
+                "{$this->col_id} = ?" => $id 
+        );
     }
 
     /**
@@ -166,5 +217,93 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->getId();
+    }
+
+    /**
+     * Gets the systems report setting object
+     *
+     * @return Proposalgen_Model_Report_Setting
+     */
+    public function fetchSystemReportSetting ()
+    {
+        return $this->find(1);
+    }
+
+    /**
+     * Gets a users report setting object
+     *
+     * @param int $userId
+     *            The user's id
+     * @return Proposalgen_Model_Report_Setting Returns false if it could not find one.
+     */
+    public function fetchUserReportSetting ($userId)
+    {
+        $reportSetting = false;
+        $userReportSetting = Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->find($userId);
+        if ($userReportSetting)
+        {
+            $reportSetting = $this->find($userReportSetting->getReportSettingId());
+        }
+        
+        // If we don't have a setting yet, make a blank one
+        if (! $reportSetting)
+        {
+            $reportSetting = new Proposalgen_Model_Report_Setting();
+            $reportSettingId = Proposalgen_Model_Mapper_Report_Setting::getInstance()->insert($reportSetting);
+            
+            if ($userReportSetting)
+            {
+                $userReportSetting->setReportSettingId($reportSettingId);
+                Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->save($userReportSetting);
+            }
+            else
+            {
+                $userReportSetting = new Proposalgen_Model_User_Report_Setting();
+                $userReportSetting->setUserId($userId);
+                $userReportSetting->setReportSettingId($reportSettingId);
+                Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->insert($userReportSetting);
+            }
+        }
+        
+        return $reportSetting;
+    }
+
+    /**
+     * Gets a reports report setting object
+     *
+     * @param int $reportId
+     *            The report's id
+     * @return Proposalgen_Model_Report_Setting Returns false if it could not find one.
+     */
+    public function fetchReportReportSetting ($reportId)
+    {
+        $reportSetting = false;
+        $reportReportSetting = Proposalgen_Model_Mapper_Report_Report_Setting::getInstance()->find($reportId);
+        if ($reportReportSetting)
+        {
+            $reportSetting = $this->find($reportReportSetting->getReportSettingId());
+        }
+        
+        // If we don't have a setting yet, make a blank one
+        if (! $reportSetting)
+        {
+            $reportSetting = new Proposalgen_Model_Report_Setting();
+            $reportSettingId = Proposalgen_Model_Mapper_Report_Setting::getInstance()->insert($reportSetting);
+            
+            if ($reportReportSetting)
+            {
+                $reportReportSetting->setReportSettingId($reportSettingId);
+                Proposalgen_Model_Mapper_Report_Report_Setting::getInstance()->save($reportReportSetting);
+            }
+            else
+            {
+                $reportReportSetting = new Proposalgen_Model_Report_Report_Setting();
+                $reportReportSetting->setReportId($reportId);
+                $reportReportSetting->setReportSettingId($reportSettingId);
+                Proposalgen_Model_Mapper_Report_Report_Setting::getInstance()->insert($reportReportSetting);
+            }
+        }
+        
+        return $reportSetting;
     }
 }

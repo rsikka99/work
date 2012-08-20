@@ -50,7 +50,7 @@ class Proposalgen_Form_SelectReport extends EasyBib_Form
                 $date = strftime('%x', strtotime($report->getDateCreated()));
                 $reportName .= ' (' . $date . ')';
             }
-            $select->addMultiOption($report->getReportId(), $reportName);
+            $select->addMultiOption($report->getId(), $reportName);
         }
         
         $this->addElement($select);

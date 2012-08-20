@@ -21,7 +21,6 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     protected $_report;
     protected $_reportSession;
     protected $_reportSteps;
-    
     protected $_userId;
     
     /**
@@ -112,12 +111,17 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
             }
         }
         
-        $id = $reportMapper->save($this->_report);
-        if ($this->_report->getReportId() === null || $this->_report->getReportId() < 1)
+        if ($this->_report->getId() === null || $this->_report->getId() < 1)
         {
-            $this->_report->setReportId($id);
-            $this->_reportSession->reportId = $id;
+            $id = $reportMapper->insert($this->_report);
+            $this->_report->setId($id);
         }
+        else
+        {
+            $id = $reportMapper->save($this->_report);
+        }
+        
+        $this->_reportSession->reportId = $this->_report->getId();
     }
 
     /**
@@ -207,8 +211,9 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
         foreach ( $this->getReportSteps() as $step )
         {
             $step->setActive(false);
-            if (strcasecmp($step->getName(), $activeStepName) === 0)
+            if (strcasecmp($step->getEnumValue(), $activeStepName) === 0)
             {
+                
                 $this->_activeStep = $step;
                 $step->setActive(true);
                 break;

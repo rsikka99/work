@@ -163,37 +163,37 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
         }
         
         // Set the fields if they were passed in
-        if (isset($params->id))
+        if (isset($params->id) && $params->id !== null)
             $this->setId($params->id);
-        if (isset($params->actualPageCoverageMono))
+        if (isset($params->actualPageCoverageMono) && $params->actualPageCoverageMono !== null)
             $this->setActualPageCoverageMono($params->actualPageCoverageMono);
-        if (isset($params->actualPageCoverageColor))
+        if (isset($params->actualPageCoverageColor) && $params->actualPageCoverageColor !== null)
             $this->setActualPageCoverageColor($params->actualPageCoverageColor);
-        if (isset($params->serviceCostPerPage))
+        if (isset($params->serviceCostPerPage) && $params->serviceCostPerPage !== null)
             $this->setServiceCostPerPage($params->serviceCostPerPage);
-        if (isset($params->adminChargePerPage))
-            $this->setAdminChargePerPage($params->adminChargePerPage);
-        if (isset($params->assessmentReportMargin))
+        if (isset($params->adminCostPerPage) && $params->adminCostPerPage !== null)
+            $this->setAdminCostPerPage($params->adminCostPerPage);
+        if (isset($params->assessmentReportMargin) && $params->assessmentReportMargin !== null)
             $this->setAssessmentReportMargin($params->assessmentReportMargin);
-        if (isset($params->grossMarginReportMargin))
+        if (isset($params->grossMarginReportMargin) && $params->grossMarginReportMargin !== null)
             $this->setGrossMarginReportMargin($params->grossMarginReportMargin);
-        if (isset($params->monthlyLeasePayment))
+        if (isset($params->monthlyLeasePayment) && $params->monthlyLeasePayment !== null)
             $this->setMonthlyLeasePayment($params->monthlyLeasePayment);
-        if (isset($params->defaultPrinterCost))
+        if (isset($params->defaultPrinterCost) && $params->defaultPrinterCost !== null)
             $this->setDefaultPrinterCost($params->defaultPrinterCost);
-        if (isset($params->leasedBwPerPage))
-            $this->setLeasedBwPerPage($params->leasedBwPerPage);
-        if (isset($params->leasedColorPerPage))
-            $this->setLeasedColorPerPage($params->leasedColorPerPage);
-        if (isset($params->mpsBwPerPage))
-            $this->setMpsBwPerPage($params->mpsBwPerPage);
-        if (isset($params->mpsColorPerPage))
-            $this->setMpsColorPerPage($params->mpsColorPerPage);
-        if (isset($params->kilowattsPerHour))
+        if (isset($params->leasedBwCostPerPage) && $params->leasedBwCostPerPage !== null)
+            $this->setLeasedBwCostPerPage($params->leasedBwCostPerPage);
+        if (isset($params->leasedColorCostPerPage) && $params->leasedColorCostPerPage !== null)
+            $this->setLeasedColorCostPerPage($params->leasedColorCostPerPage);
+        if (isset($params->mpsBwCostPerPage) && $params->mpsBwCostPerPage !== null)
+            $this->setMpsBwCostPerPage($params->mpsBwCostPerPage);
+        if (isset($params->mpsColorCostPerPage) && $params->mpsColorCostPerPage !== null)
+            $this->setMpsColorCostPerPage($params->mpsColorCostPerPage);
+        if (isset($params->kilowattsPerHour) && $params->kilowattsPerHour !== null)
             $this->setKilowattsPerHour($params->kilowattsPerHour);
-        if (isset($params->assessmentPricingConfigId))
+        if (isset($params->assessmentPricingConfigId) && $params->assessmentPricingConfigId !== null)
             $this->setAssessmentPricingConfigId($params->assessmentPricingConfigId);
-        if (isset($params->grossMarginPricingConfigId))
+        if (isset($params->grossMarginPricingConfigId) && $params->grossMarginPricingConfigId !== null)
             $this->setGrossMarginPricingConfigId($params->grossMarginPricingConfigId);
     }
 
@@ -209,15 +209,15 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
                 "actualPageCoverageMono" => $this->getActualPageCoverageMono(), 
                 "actualPageCoverageColor" => $this->getActualPageCoverageColor(), 
                 "serviceCostPerPage" => $this->getServiceCostPerPage(), 
-                "adminChargePerPage" => $this->getAdminChargePerPage(), 
+                "adminCostPerPage" => $this->getAdminCostPerPage(), 
                 "assessmentReportMargin" => $this->getAssessmentReportMargin(), 
                 "grossMarginReportMargin" => $this->getGrossMarginReportMargin(), 
                 "monthlyLeasePayment" => $this->getMonthlyLeasePayment(), 
                 "defaultPrinterCost" => $this->getDefaultPrinterCost(), 
-                "leasedBwPerPage" => $this->getLeasedBwPerPage(), 
-                "leasedColorPerPage" => $this->getLeasedColorPerPage(), 
-                "mpsBwPerPage" => $this->getMpsBwPerPage(), 
-                "mpsColorPerPage" => $this->getMpsColorPerPage(), 
+                "leasedBwCostPerPage" => $this->getLeasedBwCostPerPage(), 
+                "leasedColorCostPerPage" => $this->getLeasedColorCostPerPage(), 
+                "mpsBwCostPerPage" => $this->getMpsBwCostPerPage(), 
+                "mpsColorCostPerPage" => $this->getMpsColorCostPerPage(), 
                 "kilowattsPerHour" => $this->getKilowattsPerHour(), 
                 "assessmentPricingConfigId" => $this->getAssessmentPricingConfigId(), 
                 "grossMarginPricingConfigId" => $this->getGrossMarginPricingConfigId() 

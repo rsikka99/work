@@ -5,263 +5,108 @@
  *
  * @version v1.0
  */
-class Proposalgen_Form_Settings_Report extends Zend_Form
+class Proposalgen_Form_Settings_Report extends EasyBib_Form
 {
-
     /**
-     * Constructor builds the form
-     * 
-     * @param $options -
-     *            not used (required)
-     * @return HTML markup for the from is automatically returned by zend_form
+     * The default settings
+     *
+     * @var Proposalgen_Model_Report_Setting
      */
-    public function __construct ($options = null)
+    protected $_defaultSettings;
+    
+    /**
+     * Groups of elements
+     *
+     * @var array
+     */
+    protected $_formElementGroups;
+
+    public function __construct (Proposalgen_Model_Report_Setting $defaultSettings, $options = null)
     {
-        //call parent contsructor
+        $this->_defaultSettings = $defaultSettings;
         parent::__construct($options);
+    }
+
+    public function init ()
+    {
+        // Set the method for the display form to POST
+        $this->setMethod('POST');
+        /**
+         * Add class to form for label alignment
+         *
+         * - Vertical .form-vertical (not required)	Stacked, left-aligned labels
+         * over controls (default)
+         * - Inline .form-inline Left-aligned label and inline-block controls
+         * for compact style
+         * - Search .form-search Extra-rounded text input for a typical search
+         * aesthetic
+         * - Horizontal .form-horizontal
+         *
+         * Use .form-horizontal to have same experience as with Bootstrap v1!
+         */
+        $this->setAttrib('class', 'form-horizontal form-center-actions');
         
-        $elements = array ();
-        $elementCounter = 0;
-        $formElements = new Zend_Form();
-        $this->setName('settings_form');
-        
-        $config = Zend_Registry::get('config');
-        $MPSProgramName = $config->app->MPSProgramName;
-        
-        $this->setAction("");
         $this->setMethod("POST");
         
+        // TODO: What the hell does this do?
         $currencyRegex = '/^\d+(?:\.\d{0,2})?$/';
         $currencyValidator = new Zend_Validate_Regex($currencyRegex);
         $currencyValidator->setMessage("Please enter a valid dollar amount.");
         $greaterThanZeroValidator = new Zend_Validate_GreaterThan(0);
+        $datetimeValidator = new My_Validate_DateTime('/\d{2}\/\d{2}\/\d{4}/');
+        
+        // Setup some form element groups
+        $generalGroup = new stdClass();
+        $generalGroup->title = "General";
+        $generalGroup->elements = array ();
+        $this->_formElementGroups [] = $generalGroup;
+        
+        $proposalGroup = new stdClass();
+        $proposalGroup->title = "Assessment / Solution";
+        $proposalGroup->elements = array ();
+        $this->_formElementGroups [] = $proposalGroup;
+        
+        $grossMarginGroup = new stdClass();
+        $grossMarginGroup->title = "Gross Margin";
+        $grossMarginGroup->elements = array ();
+        $this->_formElementGroups [] = $grossMarginGroup;
         
         //*****************************************************************
-        //REPORT FIELDS
+        // GENERAL SETTING FIELDS
         //*****************************************************************
         
 
-        //report
-        $report_date = new Zend_Form_Element_Text('report_date');
-        $report_date->setLabel('Report Date:')
-            ->setRequired(true)
+        $minYear = (int)date('Y') - 2;
+        $maxYear = $minYear + 4;
+        $report_date = new ZendX_JQuery_Form_Element_DatePicker('reportDate');
+        //$report_date = new My_Form_Element_DateTimePicker('reportDate');
+        $report_date->setLabel('Report Date')
+            ->setJQueryParam('dateFormat', 'mm/dd/yy')
+            ->setJQueryParam('changeYear', 'true')
+            ->setJqueryParam('changeMonth', 'true')
+            ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
+            ->addValidator($datetimeValidator)
+            ->setAttrib('placeholder', 'mm/dd/yyyy')
             ->setAttrib('class', 'span2')
-            ->setAttrib('maxlength', 20)
-            ->setAttrib('id', 'report_date')
-            ->setValue(date("m/d/Y"))
-            ->setDescription('mm/dd/yyyy')
-            ->setDecorators(array (
-                'ViewHelper', 
-                array (
-                        'Description', 
-                        array (
-                                'escape' => false, 
-                                'tag' => false 
-                        ) 
-                ), 
-                'Errors', 
-                array (
-                        'HtmlTag', 
-                        array (
-                                'tag' => 'dd', 
-                                'id' => 'report_date-element' 
-                        ) 
-                ), 
-                array (
-                        'Label', 
-                        array (
-                                'tag' => 'dt', 
-                                'class' => 'forms_label' 
-                        ) 
-                ) 
-        ))
-            ->setOrder($elementCounter);
-        array_push($elements, $report_date);
-        $elementCounter ++;
-        $formElements->addElement($report_date);
+            ->setAttrib('style', 'text-align: right')
+            ->setRequired(true);
+        $report_date->addFilters(array (
+                'StringTrim', 
+                'StripTags' 
+        ));
+        
+        $this->addElement($report_date);
+        
+        $generalGroup->elements [] = $report_date;
         
         //*****************************************************************
-        //SETTINGS FIELDS
+        // PROPOSAL SETTING FIELDS
         //*****************************************************************
         
 
-        //page coverage bw
-        $page_coverage = new Zend_Form_Element_Text('estimated_page_coverage_mono');
-        $page_coverage->setLabel('Page Coverage Monochrome:')
-            ->addValidator(new Zend_Validate_Float())
-            ->addValidator(new Zend_Validate_Between(0, 100), false)
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ))
-            ->setAttrib('class', 'span1')
-            ->setAttrib('maxlength', 10)
-            ->setAttrib('style', 'text-align: right')
-            ->setOrder($elementCounter)
-            ->setAttrib('id', 'page_coverage')
-            ->setDescription('%')
-            ->setDecorators(array (
-                'ViewHelper', 
-                array (
-                        'Description', 
-                        array (
-                                'escape' => false, 
-                                'tag' => false 
-                        ) 
-                ), 
-                'Errors', 
-                array (
-                        'HtmlTag', 
-                        array (
-                                'tag' => 'dd', 
-                                'id' => 'page_coverage-element' 
-                        ) 
-                ), 
-                array (
-                        'Label', 
-                        array (
-                                'tag' => 'dt', 
-                                'class' => 'forms_label' 
-                        ) 
-                ) 
-        ));
-        array_push($elements, $page_coverage);
-        $elementCounter ++;
-        $formElements->addElement($page_coverage);
-        
-        //page coverage color
-        $page_coverageColor = new Zend_Form_Element_Text('estimated_page_coverage_color');
-        $page_coverageColor->setLabel('Page Coverage Color:')
-            ->addValidator(new Zend_Validate_Float())
-            ->addValidator(new Zend_Validate_Between(0, 100), false)
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ))
-            ->setAttrib('class', 'span1')
-            ->setAttrib('maxlength', 10)
-            ->setAttrib('style', 'text-align: right')
-            ->setOrder($elementCounter)
-            ->setAttrib('id', 'page_coverage')
-            ->setDescription('%')
-            ->setDecorators(array (
-                'ViewHelper', 
-                array (
-                        'Description', 
-                        array (
-                                'escape' => false, 
-                                'tag' => false 
-                        ) 
-                ), 
-                'Errors', 
-                array (
-                        'HtmlTag', 
-                        array (
-                                'tag' => 'dd', 
-                                'id' => 'estimated_page_coverage_color-element' 
-                        ) 
-                ), 
-                array (
-                        'Label', 
-                        array (
-                                'tag' => 'dt', 
-                                'class' => 'forms_label' 
-                        ) 
-                ) 
-        ));
-        $page_coverageColor->getValidator('Float')->setMessage('Please enter a number.');
-        $page_coverageColor->getValidator('greaterThan')->setMessage('Please enter a number, cannot be zero.');
-        array_push($elements, $page_coverageColor);
-        $elementCounter ++;
-        $formElements->addElement($page_coverageColor);
-        
-        //actual page coverage black & white
-        $actual_page_coverage = new Zend_Form_Element_Text('actual_page_coverage_mono');
-        $actual_page_coverage->setLabel('Page Coverage Monochrome:')
-            ->addValidator(new Zend_Validate_Float())
-            ->addValidator(new Zend_Validate_Between(0, 100), false)
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ))
-            ->setAttrib('class', 'span1')
-            ->setAttrib('maxlength', 10)
-            ->setAttrib('style', 'text-align: right')
-            ->setOrder($elementCounter)
-            ->setAttrib('id', 'actual_page_coverage')
-            ->setDescription('%')
-            ->setDecorators(array (
-                'ViewHelper', 
-                array (
-                        'Description', 
-                        array (
-                                'escape' => false, 
-                                'tag' => false 
-                        ) 
-                ), 
-                'Errors', 
-                array (
-                        'HtmlTag', 
-                        array (
-                                'tag' => 'dd', 
-                                'id' => 'actual_page_coverage_mono-element' 
-                        ) 
-                ), 
-                array (
-                        'Label', 
-                        array (
-                                'tag' => 'dt', 
-                                'class' => 'forms_label' 
-                        ) 
-                ) 
-        ));
-        array_push($elements, $actual_page_coverage);
-        $elementCounter ++;
-        $formElements->addElement($actual_page_coverage);
-        
-        //actual page coverage color
-        $actual_page_coverage_color = new Zend_Form_Element_Text('actual_page_coverage_color');
-        $actual_page_coverage_color->setLabel('Page Coverage Color:')
-            ->addValidator(new Zend_Validate_Float())
-            ->addValidator(new Zend_Validate_Between(0, 100), false)
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ))
-            ->setAttrib('class', 'span1')
-            ->setAttrib('maxlength', 10)
-            ->setAttrib('style', 'text-align: right')
-            ->setOrder($elementCounter)
-            ->setAttrib('id', 'actual_page_coverage_color')
-            ->setDescription('%')
-            ->setDecorators(array (
-                'ViewHelper', 
-                array (
-                        'Description', 
-                        array (
-                                'escape' => false, 
-                                'tag' => false 
-                        ) 
-                ), 
-                'Errors', 
-                array (
-                        'HtmlTag', 
-                        array (
-                                'tag' => 'dd', 
-                                'id' => 'actual_page_coverage_color-element' 
-                        ) 
-                ), 
-                array (
-                        'Label', 
-                        array (
-                                'tag' => 'dt', 
-                                'class' => 'forms_label' 
-                        ) 
-                ) 
-        ));
-        array_push($elements, $actual_page_coverage_color);
-        $elementCounter ++;
-        $formElements->addElement($actual_page_coverage_color);
-        
-        //page pricing margin
-        $pricing_margin = new Zend_Form_Element_Text('pricing_margin');
-        $pricing_margin->setLabel('Pricing Margin:')
+        // Page Pricing Margin
+        $pricing_margin = new Zend_Form_Element_Text('assessmentReportMargin');
+        $pricing_margin->setLabel('Pricing Margin')
             ->addValidator(new Zend_Validate_Float())
             ->addValidator(new Zend_Validate_Between(array (
                 'min' => 0, 
@@ -270,552 +115,316 @@ class Proposalgen_Form_Settings_Report extends Zend_Form
             ->setAttrib('class', 'span1')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
-            ->setOrder($elementCounter)
-            ->setAttrib('id', 'pricing_margin')
             ->setDescription('%')
             ->setValue('20')
-            ->setDecorators(array (
-                'ViewHelper', 
-                array (
-                        'Description', 
-                        array (
-                                'escape' => false, 
-                                'tag' => false 
-                        ) 
-                ), 
-                'Errors', 
-                array (
-                        'HtmlTag', 
-                        array (
-                                'tag' => 'dd', 
-                                'id' => 'pricing_margin-element' 
-                        ) 
-                ), 
-                array (
-                        'Label', 
-                        array (
-                                'tag' => 'dt', 
-                                'class' => 'forms_label' 
-                        ) 
-                ) 
-        ));
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getAssessmentReportMargin(), 2))
+            ->setAttrib('inputappend', '%');
         $pricing_margin->getValidator('Float')->setMessage('Please enter a number.');
         $pricing_margin->getValidator('Between')->setMessage('Must be greater than 0 and less than 100.');
-        array_push($elements, $pricing_margin);
-        $elementCounter ++;
-        $formElements->addElement($pricing_margin);
         
-        //page service cost
-        $service_cost = new Zend_Form_Element_Text('service_cost_per_page');
-        $service_cost->setLabel('Service Cost:')
+        $this->addElement($pricing_margin);
+        $proposalGroup->elements [] = $pricing_margin;
+        
+        // Average Monthly Lease Payment
+        $element = new Zend_Form_Element_Text('monthlyLeasePayment');
+        $element->setLabel('Average Monthly Lease Payment')
             ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span2')
-            ->setAttrib('service', 'service')
+            ->setAttrib('class', 'input-mini')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
-            ->setOrder($elementCounter)
-            ->setAttrib('id', 'service_cost')
             ->setDescription('$')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getMonthlyLeasePayment(), 2))
+            ->setAttrib('inputprepend', '$')
+            ->setAttrib('inputappend', ' / device')
             ->addValidator('greaterThan', true, array (
                 'min' => 0 
-        ))
-            ->setDecorators(array (
-                'ViewHelper', 
-                array (
-                        'Description', 
-                        array (
-                                'escape' => false, 
-                                'tag' => false 
-                        ) 
-                ), 
-                'Errors', 
-                array (
-                        'HtmlTag', 
-                        array (
-                                'tag' => 'dd', 
-                                'id' => 'service_cost_per_page-element' 
-                        ) 
-                ), 
-                array (
-                        'Label', 
-                        array (
-                                'tag' => 'dt', 
-                                'class' => 'forms_label' 
-                        ) 
-                ) 
         ));
-        $service_cost->getValidator('Float')->setMessage('Please enter a number.');
-        array_push($elements, $service_cost);
-        $elementCounter ++;
-        $formElements->addElement($service_cost);
+        $element->getValidator('Float')->setMessage('Please enter a number.');
         
-        //page admin charge
-        $admin_charge = new Zend_Form_Element_Text('admin_charge_per_page');
-        $admin_charge->setLabel('Admin Charge:')
+        $this->addElement($element);
+        $proposalGroup->elements [] = $element;
+        
+        // Default Printer Cost
+        $element = new Zend_Form_Element_Text('defaultPrinterCost');
+        $element->setLabel('Default Printer Cost')
             ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span2')
+            ->setAttrib('class', 'input-mini')
+            ->setAttrib('maxlength', 10)
+            ->setAttrib('style', 'text-align: right')
+            ->setDescription('$')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getDefaultPrinterCost(), 2))
+            ->setAttrib('inputprepend', '$')
+            ->setAttrib('inputappend', ' / device')
+            ->addValidator('greaterThan', true, array (
+                'min' => 0 
+        ));
+        $element->getValidator('Float')->setMessage('Please enter a number.');
+        
+        $this->addElement($element);
+        $proposalGroup->elements [] = $element;
+        
+        // Leased Cost Per Page (Monochrome)
+        $element = new Zend_Form_Element_Text('leasedBwCostPerPage');
+        $element->setLabel('Leased Monochrome Cost')
+            ->addValidator(new Zend_Validate_Float())
+            ->setAttrib('class', 'input-mini')
+            ->setAttrib('maxlength', 10)
+            ->setAttrib('style', 'text-align: right')
+            ->setDescription('$')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getLeasedBwCostPerPage(), 4))
+            ->setAttrib('inputprepend', '$')
+            ->setAttrib('inputappend', ' / page')
+            ->addValidator('greaterThan', true, array (
+                'min' => 0 
+        ));
+        $element->getValidator('Float')->setMessage('Please enter a number.');
+        
+        $this->addElement($element);
+        $proposalGroup->elements [] = $element;
+        
+        // Leased Cost Per Page (Color)
+        $element = new Zend_Form_Element_Text('leasedColorCostPerPage');
+        $element->setLabel('Leased Color Cost')
+            ->addValidator(new Zend_Validate_Float())
+            ->setAttrib('class', 'input-mini')
+            ->setAttrib('maxlength', 10)
+            ->setAttrib('style', 'text-align: right')
+            ->setDescription('$')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getLeasedColorCostPerPage(), 4))
+            ->setAttrib('inputprepend', '$')
+            ->setAttrib('inputappend', ' / page')
+            ->addValidator('greaterThan', true, array (
+                'min' => 0 
+        ));
+        $element->getValidator('Float')->setMessage('Please enter a number.');
+        
+        $this->addElement($element);
+        $proposalGroup->elements [] = $element;
+        
+        // PrintIQ MPS Cost Per Page (Monochrome)
+        $element = new Zend_Form_Element_Text('mpsBwCostPerPage');
+        $element->setLabel('PrintIQ Monochrome Cost')
+            ->addValidator(new Zend_Validate_Float())
+            ->setAttrib('class', 'input-mini')
+            ->setAttrib('maxlength', 10)
+            ->setAttrib('style', 'text-align: right')
+            ->setDescription('$')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getMpsBwCostPerPage(), 4))
+            ->setAttrib('inputprepend', '$')
+            ->setAttrib('inputappend', ' / page')
+            ->addValidator('greaterThan', true, array (
+                'min' => 0 
+        ));
+        $element->getValidator('Float')->setMessage('Please enter a number.');
+        
+        $this->addElement($element);
+        $proposalGroup->elements [] = $element;
+        
+        // PrintIQ MPS Cost Per Page (Color)
+        $element = new Zend_Form_Element_Text('mpsColorCostPerPage');
+        $element->setLabel('PrintIQ Color Cost')
+            ->addValidator(new Zend_Validate_Float())
+            ->setAttrib('class', 'input-mini')
             ->setAttrib('page', 'page')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
-            ->setOrder($elementCounter)
-            ->setAttrib('id', 'admin_charge')
-            ->setDescription('$')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ))
-            ->setDecorators(array (
-                'ViewHelper', 
-                array (
-                        'Description', 
-                        array (
-                                'escape' => false, 
-                                'tag' => false 
-                        ) 
-                ), 
-                'Errors', 
-                array (
-                        'HtmlTag', 
-                        array (
-                                'tag' => 'dd', 
-                                'id' => 'admin_charge_per_page-element' 
-                        ) 
-                ), 
-                array (
-                        'Label', 
-                        array (
-                                'tag' => 'dt', 
-                                'class' => 'forms_label' 
-                        ) 
-                ) 
-        ));
-        $admin_charge->getValidator('Float')->setMessage('Please enter a number.');
-        array_push($elements, $admin_charge);
-        $elementCounter ++;
-        $formElements->addElement($admin_charge);
-        
-        //monthly lease payment
-        $element = new Zend_Form_Element_Text('monthly_lease_payment');
-        $element->setLabel('Average Monthly Lease Payment:')
-            ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span2')
-            ->setAttrib('maxlength', 10)
-            ->setAttrib('style', 'text-align: right')
-            ->setOrder($elementCounter)
-            ->setAttrib('id', 'monthly_lease_payment')
-            ->setDescription('$')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ))
-            ->setDecorators(array (
-                'ViewHelper', 
-                array (
-                        'Description', 
-                        array (
-                                'escape' => false, 
-                                'tag' => false 
-                        ) 
-                ), 
-                'Errors', 
-                array (
-                        'HtmlTag', 
-                        array (
-                                'tag' => 'dd', 
-                                'id' => 'monthly_lease_payment-element' 
-                        ) 
-                ), 
-                array (
-                        'Label', 
-                        array (
-                                'tag' => 'dt', 
-                                'class' => 'forms_label' 
-                        ) 
-                ) 
-        ));
-        $element->getValidator('Float')->setMessage('Please enter a number.');
-        array_push($elements, $element);
-        $elementCounter ++;
-        $formElements->addElement($element);
-        
-        //average non-leased printer cost
-        $element = new Zend_Form_Element_Text('default_printer_cost');
-        $element->setLabel('Default Printer Cost:')
-            ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span2')
-            ->setAttrib('maxlength', 10)
-            ->setAttrib('style', 'text-align: right')
-            ->setOrder($elementCounter)
-            ->setAttrib('id', 'average_nonlease_printer_cost')
-            ->setDescription('$')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ))
-            ->setDecorators(array (
-                'ViewHelper', 
-                array (
-                        'Description', 
-                        array (
-                                'escape' => false, 
-                                'tag' => false 
-                        ) 
-                ), 
-                'Errors', 
-                array (
-                        'HtmlTag', 
-                        array (
-                                'tag' => 'dd', 
-                                'id' => 'default_printer_cost-element' 
-                        ) 
-                ), 
-                array (
-                        'Label', 
-                        array (
-                                'tag' => 'dt', 
-                                'class' => 'forms_label' 
-                        ) 
-                ) 
-        ));
-        $element->getValidator('Float')->setMessage('Please enter a number.');
-        array_push($elements, $element);
-        $elementCounter ++;
-        $formElements->addElement($element);
-        
-        //leased bw per page
-        $element = new Zend_Form_Element_Text('leased_bw_per_page');
-        $element->setLabel('Leased Monochrome Cost:')
-            ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span2')
-            ->setAttrib('maxlength', 10)
-            ->setAttrib('page', 'page')
-            ->setAttrib('style', 'text-align: right')
-            ->setOrder($elementCounter)
-            ->setAttrib('id', 'leased_bw_per_page')
-            ->setDescription('$')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ))
-            ->setDecorators(array (
-                'ViewHelper', 
-                array (
-                        'Description', 
-                        array (
-                                'escape' => false, 
-                                'tag' => false 
-                        ) 
-                ), 
-                'Errors', 
-                array (
-                        'HtmlTag', 
-                        array (
-                                'tag' => 'dd', 
-                                'id' => 'leased_bw_per_page-element' 
-                        ) 
-                ), 
-                array (
-                        'Label', 
-                        array (
-                                'tag' => 'dt', 
-                                'class' => 'forms_label' 
-                        ) 
-                ) 
-        ));
-        $element->getValidator('Float')->setMessage('Please enter a number.');
-        array_push($elements, $element);
-        $elementCounter ++;
-        $formElements->addElement($element);
-        
-        //leased color per page
-        $element = new Zend_Form_Element_Text('leased_color_per_page');
-        $element->setLabel('Leased Color Cost:')
-            ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span2')
-            ->setAttrib('maxlength', 10)
-            ->setAttrib('page', 'page')
-            ->setAttrib('style', 'text-align: right')
-            ->setOrder($elementCounter)
-            ->setAttrib('id', 'leased_color_per_page')
-            ->setDescription('$')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ))
-            ->setDecorators(array (
-                'ViewHelper', 
-                array (
-                        'Description', 
-                        array (
-                                'escape' => false, 
-                                'tag' => false 
-                        ) 
-                ), 
-                'Errors', 
-                array (
-                        'HtmlTag', 
-                        array (
-                                'tag' => 'dd', 
-                                'id' => 'leased_color_per_page-element' 
-                        ) 
-                ), 
-                array (
-                        'Label', 
-                        array (
-                                'tag' => 'dt', 
-                                'class' => 'forms_label' 
-                        ) 
-                ) 
-        ));
-        $element->getValidator('Float')->setMessage('Please enter a number.');
-        array_push($elements, $element);
-        $elementCounter ++;
-        $formElements->addElement($element);
-        
-        //kilowatts per hour
-        $element = new Zend_Form_Element_Text('kilowatts_per_hour');
-        $element->setLabel('Energy Cost:')
-            ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span2')
-            ->setAttrib('KW', 'KW')
-            ->setAttrib('maxlength', 10)
-            ->setAttrib('style', 'text-align: right')
-            ->setOrder($elementCounter)
-            ->setAttrib('id', 'kilowatts_per_hour')
-            ->setDescription('$')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ))
-            ->setDecorators(array (
-                'ViewHelper', 
-                array (
-                        'Description', 
-                        array (
-                                'escape' => false, 
-                                'tag' => false 
-                        ) 
-                ), 
-                'Errors', 
-                array (
-                        'HtmlTag', 
-                        array (
-                                'tag' => 'dd', 
-                                'id' => 'kilowatts_per_hour-element' 
-                        ) 
-                ), 
-                array (
-                        'Label', 
-                        array (
-                                'tag' => 'dt', 
-                                'class' => 'forms_label' 
-                        ) 
-                ) 
-        ));
-        $element->getValidator('Float')->setMessage('Please enter a number.');
-        array_push($elements, $element);
-        $elementCounter ++;
-        $formElements->addElement($element);
-        
-        //BW cost per page
-        $element = new Zend_Form_Element_Text('mps_bw_per_page');
-        $element->setLabel($MPSProgramName . ' Monochrome Cost:')
-            ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span2')
-            ->setAttrib('page', 'page')
-            ->setAttrib('maxlength', 10)
-            ->setAttrib('style', 'text-align: right')
-            ->setOrder($elementCounter)
-            ->setAttrib('id', 'mps_bw_per_page')
-            ->setDescription('$')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ))
-            ->setDecorators(array (
-                'ViewHelper', 
-                array (
-                        'Description', 
-                        array (
-                                'escape' => false, 
-                                'tag' => false 
-                        ) 
-                ), 
-                'Errors', 
-                array (
-                        'HtmlTag', 
-                        array (
-                                'tag' => 'dd', 
-                                'id' => 'mps_bw_per_page-element' 
-                        ) 
-                ), 
-                array (
-                        'Label', 
-                        array (
-                                'tag' => 'dt', 
-                                'class' => 'forms_label' 
-                        ) 
-                ) 
-        ));
-        $element->getValidator('Float')->setMessage('Please enter a number.');
-        array_push($elements, $element);
-        $elementCounter ++;
-        $formElements->addElement($element);
-        
-        //BW cost per page
-        $element = new Zend_Form_Element_Text('mps_color_per_page');
-        $element->setLabel($MPSProgramName . ' Color Cost:')
-            ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span2')
-            ->setAttrib('page', 'page')
-            ->setAttrib('maxlength', 10)
-            ->setAttrib('style', 'text-align: right')
-            ->setOrder($elementCounter)
             ->setAttrib('id', 'mps_color_per_page')
             ->setDescription('$')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getMpsColorCostPerPage(), 4))
+            ->setAttrib('inputprepend', '$')
+            ->setAttrib('inputappend', ' / page')
+            ->addValidator('greaterThan', true, array (
+                'min' => 0 
+        ));
+        $element->getValidator('Float')->setMessage('Please enter a number.');
+        
+        $this->addElement($element);
+        $proposalGroup->elements [] = $element;
+        
+        // Energy Cost ($/KW/H)
+        $element = new Zend_Form_Element_Text('kilowattsPerHour');
+        $element->setLabel('Energy Cost')
+            ->addValidator(new Zend_Validate_Float())
+            ->setAttrib('class', 'input-mini')
+            ->setAttrib('maxlength', 10)
+            ->setAttrib('style', 'text-align: right')
+            ->setDescription('$')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getKilowattsPerHour(), 2))
+            ->setAttrib('inputprepend', '$')
+            ->setAttrib('inputappend', ' / KWh')
+            ->addValidator('greaterThan', true, array (
+                'min' => 0 
+        ));
+        $element->getValidator('Float')->setMessage('Please enter a number.');
+        
+        $this->addElement($element);
+        $proposalGroup->elements [] = $element;
+        
+        // Toner preference for the assessment
+        $pricing_config = new Zend_Form_Element_Select('assessmentPricingConfigId');
+        $pricing_config->setLabel('Toner Preference')
+            ->setAttrib('class', 'span2')
+            ->setAttrib('data-defaultvalue', $this->_defaultSettings->getAssessmentPricingConfig()
+            ->getConfigName())
+            ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
+        
+        $this->addElement($pricing_config);
+        $proposalGroup->elements [] = $pricing_config;
+        
+        //*****************************************************************
+        // GROSS MARGIN SETTING FIELDS
+        //*****************************************************************
+        
+
+        // Page Pricing Margin
+        $gross_margin_pricing_margin = new Zend_Form_Element_Text('grossMarginPricingMargin');
+        $gross_margin_pricing_margin->setLabel('Pricing Margin')
+            ->addValidator(new Zend_Validate_Float())
+            ->addValidator(new Zend_Validate_Between(array (
+                'min' => 0, 
+                'max' => 99 
+        )))
+            ->setAttrib('class', 'span1')
+            ->setAttrib('maxlength', 10)
+            ->setAttrib('style', 'text-align: right')
+            ->setDescription('%')
+            ->setValue('20')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getGrossMarginReportMargin(), 2))
+            ->setAttrib('inputappend', '%');
+        $gross_margin_pricing_margin->getValidator('Float')->setMessage('Please enter a number.');
+        $gross_margin_pricing_margin->getValidator('Between')->setMessage('Must be greater than 0 and less than 100.');
+        
+        $this->addElement($pricing_margin);
+        $grossMarginGroup->elements [] = $pricing_margin;
+        
+        // Actual Page Coverage (Monochrome)
+        $actual_page_coverage = new Zend_Form_Element_Text('actualPageCoverageMono');
+        $actual_page_coverage->setLabel('Page Coverage Monochrome')
+            ->addValidator(new Zend_Validate_Float())
+            ->addValidator(new Zend_Validate_Between(0, 100), false)
             ->addValidator('greaterThan', true, array (
                 'min' => 0 
         ))
-            ->setDecorators(array (
-                'ViewHelper', 
-                array (
-                        'Description', 
-                        array (
-                                'escape' => false, 
-                                'tag' => false 
-                        ) 
-                ), 
-                'Errors', 
-                array (
-                        'HtmlTag', 
-                        array (
-                                'tag' => 'dd', 
-                                'id' => 'mps_color_per_page-element' 
-                        ) 
-                ), 
-                array (
-                        'Label', 
-                        array (
-                                'tag' => 'dt', 
-                                'class' => 'forms_label' 
-                        ) 
-                ) 
-        ));
-        $element->getValidator('Float')->setMessage('Please enter a number.');
-        array_push($elements, $element);
-        $elementCounter ++;
-        $formElements->addElement($element);
+            ->setAttrib('class', 'span1')
+            ->setAttrib('maxlength', 10)
+            ->setAttrib('style', 'text-align: right')
+            ->setDescription('%')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getActualPageCoverageMono(), 2))
+            ->setAttrib('inputappend', '%');
         
-        //pricing config
-        $pricing_config = new Zend_Form_Element_Select('pricing_config_id');
-        $pricing_config->setLabel('Toner Preference:')
-            ->setOrder($elementCounter)
-            ->setAttrib('id', 'pricing_config_id')
-            ->setAttrib('class', 'wide-select')
-            ->setAttribs(array (
-                'style' => 'width: 130px;' 
+        $this->addElement($actual_page_coverage);
+        $grossMarginGroup->elements [] = $actual_page_coverage;
+        
+        // Actual Page Coverage (Color)
+        $actual_page_coverage_color = new Zend_Form_Element_Text('actualPageCoverageColor');
+        $actual_page_coverage_color->setLabel('Page Coverage Color')
+            ->addValidator(new Zend_Validate_Float())
+            ->addValidator(new Zend_Validate_Between(0, 100), false)
+            ->addValidator('greaterThan', true, array (
+                'min' => 0 
         ))
-            ->setDecorators(array (
-                'ViewHelper', 
-                array (
-                        'Description', 
-                        array (
-                                'escape' => false, 
-                                'tag' => false 
-                        ) 
-                ), 
-                'Errors', 
-                array (
-                        'HtmlTag', 
-                        array (
-                                'tag' => 'dd', 
-                                'id' => 'pricing_config_id-element' 
-                        ) 
-                ), 
-                array (
-                        'Label', 
-                        array (
-                                'tag' => 'dt', 
-                                'class' => 'forms_label' 
-                        ) 
-                ) 
-        ));
-        array_push($elements, $pricing_config);
-        $elementCounter ++;
-        $formElements->addElement($pricing_config);
+            ->setAttrib('class', 'span1')
+            ->setAttrib('maxlength', 10)
+            ->setAttrib('style', 'text-align: right')
+            ->setAttrib('id', 'actualPageCoverageColor')
+            ->setDescription('%')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getActualPageCoverageColor(), 2))
+            ->setAttrib('inputappend', '%');
         
-        //pricing config
-        $gross_margin_pricing_config = new Zend_Form_Element_Select('gross_margin_pricing_config_id');
-        $gross_margin_pricing_config->setLabel('Toner Preference:')
-            ->setOrder($elementCounter)
-            ->setAttrib('id', 'pricing_config_id')
-            ->setAttrib('class', 'wide-select')
-            ->setAttribs(array (
-                'style' => 'width: 150px;' 
-        ))
-            ->setDecorators(array (
-                'ViewHelper', 
-                array (
-                        'Description', 
-                        array (
-                                'escape' => false, 
-                                'tag' => false 
-                        ) 
-                ), 
-                'Errors', 
-                array (
-                        'HtmlTag', 
-                        array (
-                                'tag' => 'dd', 
-                                'id' => 'pricing_config_id-element' 
-                        ) 
-                ), 
-                array (
-                        'Label', 
-                        array (
-                                'tag' => 'dt', 
-                                'class' => 'forms_label' 
-                        ) 
-                ) 
-        ));
-        array_push($elements, $gross_margin_pricing_config);
-        $elementCounter ++;
-        $formElements->addElement($gross_margin_pricing_config);
+        $this->addElement($actual_page_coverage_color);
+        $grossMarginGroup->elements [] = $actual_page_coverage_color;
         
-        //save button
+        // Admin Cost Per Page
+        $admin_charge = new Zend_Form_Element_Text('adminCostPerPage');
+        $admin_charge->setLabel('Admin Charge')
+            ->addValidator(new Zend_Validate_Float())
+            ->setAttrib('class', 'input-mini')
+            ->setAttrib('maxlength', 10)
+            ->setAttrib('style', 'text-align: right')
+            ->setDescription('$')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getAdminCostPerPage(), 4))
+            ->setAttrib('inputprepend', '$')
+            ->setAttrib('inputappend', ' / page')
+            ->addValidator('greaterThan', true, array (
+                'min' => 0 
+        ));
+        $admin_charge->getValidator('Float')->setMessage('Please enter a number.');
+        
+        $this->addElement($admin_charge);
+        $grossMarginGroup->elements [] = $admin_charge;
+        
+        // Service Cost Per Page
+        $service_cost = new Zend_Form_Element_Text('serviceCostPerPage');
+        $service_cost->setLabel('Service Cost')
+            ->addValidator(new Zend_Validate_Float())
+            ->setAttrib('class', 'input-mini')
+            ->setAttrib('maxlength', 10)
+            ->setAttrib('style', 'text-align: right')
+            ->setDescription('$')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getServiceCostPerPage(), 4))
+            ->setAttrib('inputprepend', '$')
+            ->setAttrib('inputappend', ' / page')
+            ->addValidator('greaterThan', true, array (
+                'min' => 0 
+        ));
+        $service_cost->getValidator('Float')->setMessage('Please enter a number.');
+        
+        $this->addElement($service_cost);
+        $grossMarginGroup->elements [] = $service_cost;
+        
+        // Toner preference for the gross margin
+        $gross_margin_pricing_config = new Zend_Form_Element_Select('grossMarginPricingConfigId');
+        $gross_margin_pricing_config->setLabel('Toner Preference')
+            ->setAttrib('class', 'span2')
+            ->setAttrib('data-defaultvalue', $this->_defaultSettings->getGrossMarginPricingConfig()
+            ->getConfigName())
+            ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
+        
+        $this->addElement($gross_margin_pricing_config);
+        $grossMarginGroup->elements [] = $gross_margin_pricing_config;
+        
+        //*****************************************************************
+        // BUTTONS
+        //*****************************************************************
+        
+
+        // Save button
         $element = new Zend_Form_Element_Submit('save_settings', array (
                 'disableLoadDefaultDecorators' => true 
         ));
-        $element->setLabel('Save and continue')
-            ->setOrder($elementCounter)
-            ->setAttrib('class', 'btn btn-primary')
-            ->setDecorators(array (
-                'ViewHelper', 
-                'Errors' 
-        ));
-        array_push($elements, $element);
-        $elementCounter ++;
+        $element->setLabel('Save and continue')->setAttrib('class', 'btn btn-primary');
+        $this->addElement($element);
         
         //back button
         $element = new Zend_Form_Element_Button('back_button');
         $element->setLabel('Back')
-            ->setOrder($elementCounter)
             ->setAttrib('class', 'btn')
-            ->setAttrib('onClick', 'javascript: document.location.href="../data/deviceleasing";')
-            ->setDecorators(array (
-                'ViewHelper', 
-                'Errors' 
-        ));
-        array_push($elements, $element);
-        $elementCounter ++;
+            ->setAttrib('onClick', 'javascript: document.location.href="../data/deviceleasing";');
+        $this->addElement($element);
         
-        //add all defined elements to the form
-        $this->setDecorators(array (
-                'FormElements', 
-                array (
-                        'HtmlTag', 
-                        array (
-                                'tag' => 'table', 
-                                'cellspacing' => '10' 
-                        ) 
-                ), 
-                'Form' 
+        // Add the submit button
+        $this->addElement('submit', 'submit', array (
+                'ignore' => true, 
+                'label' => 'Save & Continue' 
         ));
         
-        $this->addElements($elements);
+        // Add the cancel button
+        $this->addElement('submit', 'cancel', array (
+                'ignore' => true, 
+                'label' => 'Back' 
+        ));
+        
+        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
+    }
+
+    /**
+     * Gets the forms element groups to assist the view renderer
+     *
+     * @return array
+     */
+    public function getFormElementGroups ()
+    {
+        return $this->_formElementGroups;
     }
 }
 ?>

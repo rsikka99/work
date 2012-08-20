@@ -2541,7 +2541,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             // Other variables used in several places
             $pageCounts = $this->getPageCounts();
             $reportQuestions = $this->getReportQuestions();
-            $companyName = $this->getReport()->CustomerCompanyName;
+            $companyName = $this->getReport()->_customerCompanyName;
             $employeeCount = $reportQuestions [5]->NumericAnswer;
             
             // Formatting variables
