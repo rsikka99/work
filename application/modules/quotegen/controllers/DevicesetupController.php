@@ -702,9 +702,9 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             ));
             $this->_helper->redirector('index');
         }
-        
-        // Get the toner config id
-        $tonerConfigId = $masterDevice->getTonerConfigId();
+
+        // Get master device toner config
+        $tonerConfig = $masterDevice->getTonerConfig()->getTonerConfigName();
         
         // Get quotegen device
         $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
@@ -773,9 +773,6 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             // Get toner
                             $toner = Admin_Model_Mapper_Toner::getInstance()->find($tonerId);
                             $tonerColor = $toner->getTonerColor()->getTonerColorName();
-                            
-                            // Get master device toner config
-                            $tonerConfig = $masterDevice->getTonerConfig()->getTonerConfigName();
                             
                             $validToner = false;
                             switch ($tonerConfig)
@@ -899,7 +896,22 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 $this->_helper->redirector('index');
             }
         }
-        
+
+        switch ($tonerConfig)
+        {
+        	case "3 COLOR - COMBINED" :
+        	    $validTonerColors = array(1,5);
+        	    break;
+        	case "3 COLOR - SEPARATED" :
+        	    $validTonerColors = array(1,2,3,4);
+        	    break;
+        	case "4 COLOR - COMBINED" :
+        	    $validTonerColors = array(6);
+        	    break;
+        	case "BLACK ONLY" :
+        	    $validTonerColors = array(1);
+        	    break;
+        }
         $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->getDeviceToners($masterDeviceId);
         $assignedToners = array ();
         foreach ( $deviceToners as $toner )
@@ -909,6 +921,9 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $this->view->assignedToners = $assignedToners;
         
         // Display filterd list of toners
+        $where = array_merge((array)$where, array ( 
+                'toner_color_id IN ( ? )' => $validTonerColors 
+        ));
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Admin_Model_Mapper_Toner::getInstance(), $where));
         
         // Set the current page we're on
