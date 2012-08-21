@@ -51,6 +51,20 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
     protected $_pricingConfigId;
     
     /**
+     * Service cost per page
+     *
+     * @var float
+     */
+    protected $_serviceCostPerPage;
+    
+    /**
+     * Admin cost per page
+     *
+     * @var float
+     */
+    protected $_adminCostPerPage;
+    
+    /**
      * A pricing config object
      *
      * @var Proposalgen_Model_PricingConfig
@@ -108,6 +122,10 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
             $this->setDeviceMargin($settings->deviceMargin);
         if (isset($settings->pageMargin) && ! is_null($settings->pageMargin))
             $this->setPageMargin($settings->pageMargin);
+        if (isset($params->serviceCostPerPage) && ! is_null($params->serviceCostPerPage))
+            $this->setServiceCostPerPage($params->serviceCostPerPage);
+        if (isset($params->adminCostPerPage) && ! is_null($params->adminCostPerPage))
+            $this->setAdminCostPerPage($params->adminCostPerPage);
         
         if (isset($settings->pricingConfigId) && ! is_null($settings->pricingConfigId))
         {
@@ -129,7 +147,9 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
                 'pageCoverageColor' => $this->getPageCoverageColor(), 
                 'deviceMargin' => $this->getDeviceMargin(), 
                 'pageMargin' => $this->getPageMargin(), 
-                'pricingConfigId' => $this->getPricingConfigId() 
+                'pricingConfigId' => $this->getPricingConfigId(), 
+                "serviceCostPerPage" => $this->getServiceCostPerPage(), 
+                "adminCostPerPage" => $this->getAdminCostPerPage() 
         );
     }
 
@@ -270,6 +290,48 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
     public function setPricingConfig ($_pricingConfig)
     {
         $this->_pricingConfig = $_pricingConfig;
+        return $this;
+    }
+
+    /**
+     * Gets the service cost per page
+     *
+     * @return number
+     */
+    public function getServiceCostPerPage ()
+    {
+        return $this->_serviceCostPerPage;
+    }
+
+    /**
+     * Sets the service cost per page
+     *
+     * @param number $_serviceCostPerPage            
+     */
+    public function setServiceCostPerPage ($_serviceCostPerPage)
+    {
+        $this->_serviceCostPerPage = $_serviceCostPerPage;
+        return $this;
+    }
+
+    /**
+     * Gets the admin cost per page
+     *
+     * @return number
+     */
+    public function getAdminCostPerPage ()
+    {
+        return $this->_adminCostPerPage;
+    }
+
+    /**
+     * Sets the admin cost per page
+     *
+     * @param number $_adminCostPerPage            
+     */
+    public function setAdminCostPerPage ($_adminCostPerPage)
+    {
+        $this->_adminCostPerPage = $_adminCostPerPage;
         return $this;
     }
 }

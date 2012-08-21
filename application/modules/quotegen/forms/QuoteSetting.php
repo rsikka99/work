@@ -50,8 +50,8 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                                 'validator' => 'Between', 
                                 'options' => array (
                                         'min' => 0, 
-                                        'max' => 100,
-                                        'inclusive' => false
+                                        'max' => 100, 
+                                        'inclusive' => false 
                                 ) 
                         ), 
                         'Float' 
@@ -73,7 +73,7 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                                 'validator' => 'Between', 
                                 'options' => array (
                                         'min' => 0, 
-                                        'max' => 100,
+                                        'max' => 100, 
                                         'inclusive' => false 
                                 ) 
                         ), 
@@ -83,7 +83,7 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
         $this->addElement($pageCoverageColor);
         
         $deviceMargin = $this->createElement('text', 'deviceMargin', array (
-                'label' => 'Device Margin:',  
+                'label' => 'Device Margin:', 
                 'required' => true, 
                 'class' => 'span1', 
                 'filters' => array (
@@ -94,8 +94,8 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                         array (
                                 'validator' => 'Between', 
                                 'options' => array (
-                                        'min' => -100, 
-                                        'max' => 100
+                                        'min' => - 100, 
+                                        'max' => 100 
                                 ) 
                         ), 
                         'Float' 
@@ -116,14 +116,60 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                         array (
                                 'validator' => 'Between', 
                                 'options' => array (
-                                        'min' => -100, 
-                                        'max' => 100
+                                        'min' => - 100, 
+                                        'max' => 100 
                                 ) 
                         ), 
                         'Float' 
                 ) 
         ));
         $this->addElement($pageMargin);
+        
+        $adminCostPerPage = $this->createElement('text', 'adminCostPerPage', array (
+                'label' => 'Admin Cost Per Page:', 
+                
+                'required' => true, 
+                'class' => 'input-mini', 
+                'filters' => array (
+                        'StringTrim', 
+                        'StripTags' 
+                ), 
+                'validators' => array (
+                        array (
+                                'validator' => 'Between', 
+                                'options' => array (
+                                        'min' => 0, 
+                                        'max' => 5, 
+                                        'inclusive' => false 
+                                ) 
+                        ), 
+                        'Float' 
+                ) 
+        ));
+        $this->addElement($adminCostPerPage);
+        
+        $serviceCostPerPage = $this->createElement('text', 'serviceCostPerPage', array (
+                'label' => 'Service Cost Per Page:',
+        
+                'required' => true,
+                'class' => 'input-mini',
+                'filters' => array (
+                        'StringTrim',
+                        'StripTags'
+                ),
+                'validators' => array (
+                        array (
+                                'validator' => 'Between',
+                                'options' => array (
+                                        'min' => 0,
+                                        'max' => 5,
+                                        'inclusive' => false
+                                )
+                        ),
+                        'Float'
+                )
+        ));
+        $this->addElement($serviceCostPerPage);
         
         $pricingConfigDropdown = new Zend_Form_Element_Select('pricingConfigId', array (
                 'label' => 'Toner Preference:' 
@@ -160,7 +206,7 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
         
         // Add the submit button
         $this->addElement('submit', 'submit', array (
-                'ignore' => true,
+                'ignore' => true, 
                 'label' => 'Save' 
         ));
         
@@ -169,7 +215,7 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                 'ignore' => true, 
                 'label' => 'Cancel' 
         ));
-
+        
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }
 

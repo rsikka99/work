@@ -1280,28 +1280,11 @@ COMMENT = 'Primary table for a quote. Stores basic information' ;
 
 
 -- -----------------------------------------------------
--- Table `qgen_quote_device_groups`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_quote_device_groups` (
-  `id` INT NOT NULL AUTO_INCREMENT ,
-  `quoteId` INT NOT NULL ,
-  `pageMargin` DOUBLE NOT NULL DEFAULT 0 ,
-  PRIMARY KEY (`id`) ,
-  INDEX `quotegen_quote_device_groups_ibfk_1` (`quoteId` ASC) ,
-  CONSTRAINT `quotegen_quote_device_groups_ibfk_1`
-    FOREIGN KEY (`quoteId` )
-    REFERENCES `qgen_quotes` (`id` )
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `qgen_quote_devices`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `qgen_quote_devices` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `quoteDeviceGroupId` INT(11) NOT NULL ,
+  `quoteId` INT(11) NOT NULL ,
   `margin` DOUBLE NOT NULL ,
   `name` VARCHAR(255) NOT NULL ,
   `sku` VARCHAR(255) NOT NULL ,
@@ -1310,14 +1293,13 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_devices` (
   `compCostPerPageMonochrome` DOUBLE NOT NULL ,
   `compCostPerPageColor` DOUBLE NOT NULL ,
   `cost` DOUBLE NOT NULL ,
-  `quantity` INT(11) NOT NULL ,
   `packagePrice` DOUBLE NOT NULL ,
   `residual` DOUBLE NOT NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `quoteId` (`quoteDeviceGroupId` ASC) ,
+  INDEX `quoteId` (`quoteId` ASC) ,
   CONSTRAINT `quotegen_quote_devices_ibfk_1`
-    FOREIGN KEY (`quoteDeviceGroupId` )
-    REFERENCES `qgen_quote_device_groups` (`id` )
+    FOREIGN KEY (`quoteId` )
+    REFERENCES `qgen_quotes` (`id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -1407,6 +1389,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_settings` (
   `deviceMargin` DOUBLE NULL DEFAULT NULL ,
   `pageMargin` DOUBLE NULL DEFAULT NULL ,
   `pricingConfigId` INT(11) NULL DEFAULT NULL ,
+  `serviceCostPerPage` DOUBLE NULL ,
+  `adminCostPerPage` DOUBLE NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `quotegen_quote_settings_ibfk1` (`pricingConfigId` ASC) ,
   CONSTRAINT `quotegen_quote_settings_ibfk1`
@@ -1514,6 +1498,26 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `qgen_quote_device_groups`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `qgen_quote_device_groups` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `quoteId` INT NOT NULL ,
+  `pageMargin` DOUBLE NOT NULL DEFAULT 0 ,
+  `name` VARCHAR(255) NOT NULL ,
+  `isDefault` TINYINT NOT NULL DEFAULT 0 ,
+  `groupPages` TINYINT NOT NULL DEFAULT 0 ,
+  PRIMARY KEY (`id`) ,
+  INDEX `quotegen_quote_device_groups_ibfk_1` (`quoteId` ASC) ,
+  CONSTRAINT `quotegen_quote_device_groups_ibfk_1`
+    FOREIGN KEY (`quoteId` )
+    REFERENCES `qgen_quotes` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `qgen_quote_device_group_pages`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `qgen_quote_device_group_pages` (
@@ -1557,6 +1561,29 @@ CREATE  TABLE IF NOT EXISTS `qgen_pages` (
   CONSTRAINT `fk_qgen_pages_qgen_page_types1`
     FOREIGN KEY (`pageTypeId` )
     REFERENCES `qgen_page_types` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `qgen_quote_device_group_devices`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `qgen_quote_device_group_devices` (
+  `quoteDeviceId` INT NOT NULL ,
+  `quoteDeviceGroupId` INT NOT NULL ,
+  `quantity` INT NOT NULL DEFAULT 1 ,
+  PRIMARY KEY (`quoteDeviceGroupId`, `quoteDeviceId`) ,
+  INDEX `qgen_quote_device_group_devices_ibfk1` (`quoteDeviceId` ASC) ,
+  INDEX `qgen_quote_device_group_devices_ibfk2` (`quoteDeviceGroupId` ASC) ,
+  CONSTRAINT `qgen_quote_device_group_devices_ibfk1`
+    FOREIGN KEY (`quoteDeviceId` )
+    REFERENCES `qgen_quote_devices` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `qgen_quote_device_group_devices_ibfk2`
+    FOREIGN KEY (`quoteDeviceGroupId` )
+    REFERENCES `qgen_quote_device_groups` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

@@ -2,9 +2,8 @@
 
 class Quotegen_Form_EditQuote extends EasyBib_Form
 {
-
     protected $_leasingSchemaId;
-    
+
     public function init ()
     {
         // Set the method for the display form to POST
@@ -37,7 +36,7 @@ class Quotegen_Form_EditQuote extends EasyBib_Form
         /* @var $leasingSchema Quotegen_Model_LeasingSchema */
         foreach ( Quotegen_Model_Mapper_LeasingSchema::getInstance()->fetchAll() as $leasingSchema )
         {
-            if (!$leasingSchemaId)
+            if (! $leasingSchemaId)
             {
                 $leasingSchemaId = $leasingSchema->getId();
             }
@@ -52,25 +51,24 @@ class Quotegen_Form_EditQuote extends EasyBib_Form
         $this->addElement('select', 'leasingSchemaId', array (
                 'label' => 'Leasing Schema:', 
                 'multiOptions' => $leasingSchemas, 
-                'required' => true,
-                'value' => $leasingSchemaId
+                'required' => true, 
+                'value' => $leasingSchemaId 
         ));
         
         $leasingSchema = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($leasingSchemaId);
-        $leasingSchemaTerms = array();
+        $leasingSchemaTerms = array ();
         if ($leasingSchema)
         {
             /* @var $leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm */
-            foreach ($leasingSchema->getTerms() as $leasingSchemaTerm)
+            foreach ( $leasingSchema->getTerms() as $leasingSchemaTerm )
             {
-                $leasingSchemaTerms[$leasingSchemaTerm->getId()] = $leasingSchemaTerm->getMonths();
+                $leasingSchemaTerms [$leasingSchemaTerm->getId()] = $leasingSchemaTerm->getMonths();
             }
         }
         
-        
         $this->addElement('select', 'leasingSchemaTermId', array (
                 'label' => 'Lease Term:', 
-                'multiOptions' => $leasingSchemaTerms,
+                'multiOptions' => $leasingSchemaTerms, 
                 'required' => true 
         ));
         
@@ -116,6 +114,52 @@ class Quotegen_Form_EditQuote extends EasyBib_Form
         
         $this->addElement($pageCoverageColor);
         $this->addElement($pageCoverageMonochrome);
+        
+        $adminCostPerPage = $this->createElement('text', 'adminCostPerPage', array (
+                'label' => 'Admin Cost Per Page:', 
+                
+                'required' => true, 
+                'class' => 'input-mini', 
+                'filters' => array (
+                        'StringTrim', 
+                        'StripTags' 
+                ), 
+                'validators' => array (
+                        array (
+                                'validator' => 'Between', 
+                                'options' => array (
+                                        'min' => 0, 
+                                        'max' => 5, 
+                                        'inclusive' => false 
+                                ) 
+                        ), 
+                        'Float' 
+                ) 
+        ));
+        $this->addElement($adminCostPerPage);
+        
+        $serviceCostPerPage = $this->createElement('text', 'serviceCostPerPage', array (
+                'label' => 'Service Cost Per Page:', 
+                
+                'required' => true, 
+                'class' => 'input-mini', 
+                'filters' => array (
+                        'StringTrim', 
+                        'StripTags' 
+                ), 
+                'validators' => array (
+                        array (
+                                'validator' => 'Between', 
+                                'options' => array (
+                                        'min' => 0, 
+                                        'max' => 5, 
+                                        'inclusive' => false 
+                                ) 
+                        ), 
+                        'Float' 
+                ) 
+        ));
+        $this->addElement($serviceCostPerPage);
         
         // Get resolved system settings
         $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();

@@ -49,9 +49,9 @@ class Quotegen_Form_Quote extends EasyBib_Form
                 'multiOptions' => array (
                         'purchased' => 'Purchased', 
                         'leased' => 'Leased' 
-                )
-                 
-        ));
+                ) 
+        )
+        );
         
         $this->addElement('text', 'clientDisplayName', array (
                 'label' => 'Display Name:', 
@@ -121,6 +121,7 @@ class Quotegen_Form_Quote extends EasyBib_Form
                         'Float' 
                 ) 
         ));
+        $this->addElement($pageCoverageColor);
         
         $pageCoverageMonochrome = $this->createElement('text', 'pageCoverageMonochrome', array (
                 'label' => 'Page Coverage Monochrome:', 
@@ -142,8 +143,53 @@ class Quotegen_Form_Quote extends EasyBib_Form
                 ) 
         ));
         
-        $this->addElement($pageCoverageColor);
         $this->addElement($pageCoverageMonochrome);
+        
+        $adminCostPerPage = $this->createElement('text', 'adminCostPerPage', array (
+                'label' => 'Admin Cost Per Page:', 
+                
+                'required' => true, 
+                'class' => 'input-mini', 
+                'filters' => array (
+                        'StringTrim', 
+                        'StripTags' 
+                ), 
+                'validators' => array (
+                        array (
+                                'validator' => 'Between', 
+                                'options' => array (
+                                        'min' => 0, 
+                                        'max' => 5, 
+                                        'inclusive' => false 
+                                ) 
+                        ), 
+                        'Float' 
+                ) 
+        ));
+        $this->addElement($adminCostPerPage);
+        
+        $serviceCostPerPage = $this->createElement('text', 'serviceCostPerPage', array (
+                'label' => 'Service Cost Per Page:', 
+                
+                'required' => true, 
+                'class' => 'input-mini', 
+                'filters' => array (
+                        'StringTrim', 
+                        'StripTags' 
+                ), 
+                'validators' => array (
+                        array (
+                                'validator' => 'Between', 
+                                'options' => array (
+                                        'min' => 0, 
+                                        'max' => 5, 
+                                        'inclusive' => false 
+                                ) 
+                        ), 
+                        'Float' 
+                ) 
+        ));
+        $this->addElement($serviceCostPerPage);
         
         // Get resolved system settings
         $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
