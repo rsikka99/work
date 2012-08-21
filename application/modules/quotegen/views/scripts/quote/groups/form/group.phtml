@@ -1,0 +1,44 @@
+<?php 
+	/* @var $form Quotegen_Form_Group */
+	$form = $this->element; 
+	
+	// Get elements in the form 
+	$deviceElement = $form->getElement('devices');
+	$quantityElement = $form->getElement('quantity');
+	$groupElement = $form->getElement('groups');
+?>
+
+<form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+	<table>
+		<tr>
+			<td><button type="submit" name="addDevice" title="Add Device" class="btn btn-success">Add</button> </td>
+			<td><?php echo $quantityElement->renderViewHelper() . ' of the '; ?></td>
+			<td><?php echo $deviceElement->renderViewHelper() . ' device to the '; ?></td>
+			<td><?php echo $groupElement->renderViewHelper() . ' group.'; ?></td>
+		</tr>
+	</table>
+	<br/>
+	<button type="submit" name="addGroup" title="Add Group" class="btn btn-success">Add Group</button> 
+</form>
+
+<?php /* @var $deviceGroup Quotegen_Model_QuoteDeviceGroup */$deviceGroups = $form->getQuote()->getQuoteDeviceGroups();?>
+<?php foreach ($deviceGroups as $deviceGroup) : ?>	
+<h3> <?php echo $deviceGroup->getId(); ?></h3>
+<table class='table table-bordered table-striped table-condensed'>
+	<tr>
+		<th style='width: 200px'>Device</th>
+		<th >Sku</th>
+		<th style='width: 150px'>Quantity</th>
+		<th style='width: 30px'></th>
+	</tr>
+	<?php $groupDevices = $deviceGroup->getQuoteDevices();?>
+	<?php /* @var $device Quotegen_Model_QuoteDevice */ foreach ($groupDevices as $device) : ?>
+	<tr>
+		<td><?php echo $device->getName() ?></td>
+		<td><?php echo $device->getSku() ?></td>
+		<td><?php echo $device->getQuantity() ?></td>
+		<td></td>
+	</tr>
+	<?php endforeach ?>
+</table>
+<?php endforeach ?>

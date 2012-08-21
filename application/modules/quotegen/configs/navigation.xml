@@ -149,6 +149,14 @@
                                     <resource>quotegen__quote_debug__index</resource>
                                     <reset_params>0</reset_params>
                                 </debug>
+                                <groups>
+                                    <label>Groups</label>
+                                    <module>quotegen</module>
+                                    <controller>quote_groups</controller>
+                                    <action>index</action>
+                                    <resource>quotegen__quote_groups__index</resource>
+                                    <reset_params>0</reset_params>
+                                </groups>
                             </pages>
                         </quote>
                     </pages>
