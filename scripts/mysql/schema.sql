@@ -1255,6 +1255,7 @@ CREATE  TABLE IF NOT EXISTS `qgen_quotes` (
   `pageCoverageMonochrome` DOUBLE NOT NULL ,
   `pageCoverageColor` DOUBLE NOT NULL ,
   `pricingConfigId` INT(11) NOT NULL ,
+  `quoteType` ENUM('purchased', 'leased') NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `clientId` (`clientId` ASC) ,
   INDEX `quotegen_quotes_ibfk_2` (`userId` ASC) ,

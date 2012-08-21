@@ -8,6 +8,9 @@
  */
 class Quotegen_Model_Quote extends My_Model_Abstract
 {
+    const QUOTE_TYPE_LEASED = 'leased';
+    const QUOTE_TYPE_PURCHASED = 'purchased';
+    
     /**
      * The id assigned by the database
      *
@@ -105,6 +108,13 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     protected $_pricingConfigId;
     
     /**
+     * The quote type
+     *
+     * @var string
+     */
+    protected $_quoteType;
+    
+    /**
      * A pricing config object
      *
      * @var Proposalgen_Model_PricingConfig
@@ -147,6 +157,8 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             $this->setPageCoverageMonochrome($params->pageCoverageMonochrome);
         if (isset($params->pricingConfigId) && ! is_null($params->pricingConfigId))
             $this->setPricingConfigId($params->pricingConfigId);
+        if (isset($params->quoteType) && ! is_null($params->quoteType))
+            $this->setQuoteType($params->quoteType);
         if (isset($params->leaseRate) && ! is_null($params->leaseRate))
             $this->setLeaseRate($params->leaseRate);
         if (isset($params->leaseTerm) && ! is_null($params->leaseTerm))
@@ -169,6 +181,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                 'pageCoverageColor' => $this->getPageCoverageColor(), 
                 'pageCoverageMonochrome' => $this->getPageCoverageMonochrome(), 
                 'pricingConfigId' => $this->getPricingConfigId(), 
+                'quoteType' => $this->getQuoteType(), 
                 'leaseTerm' => $this->getLeaseTerm(), 
                 'leaseRate' => $this->getLeaseRate() 
         );
@@ -480,6 +493,27 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function setPricingConfigId ($_pricingConfigId)
     {
         $this->_pricingConfigId = $_pricingConfigId;
+        return $this;
+    }
+
+    /**
+     * Gets the quote type
+     *
+     * @return string
+     */
+    public function getQuoteType ()
+    {
+        return $this->_quoteType;
+    }
+
+    /**
+     * Sets the quote type
+     *
+     * @param string $_quoteType            
+     */
+    public function setQuoteType ($_quoteType)
+    {
+        $this->_quoteType = $_quoteType;
         return $this;
     }
 
