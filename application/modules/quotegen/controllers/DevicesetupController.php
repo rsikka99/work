@@ -671,7 +671,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
      */
     public function tonersAction ()
     {
-        $where = null;
+        $where = array();
         $tonerId = null;
         $txtCriteria = null;
         $cboCriteria = null;
@@ -702,6 +702,9 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             ));
             $this->_helper->redirector('index');
         }
+        
+        // Get the toner config id
+        $tonerConfigId = $masterDevice->getTonerConfigId();
         
         // Get quotegen device
         $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
