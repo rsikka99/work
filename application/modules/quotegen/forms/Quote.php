@@ -40,6 +40,19 @@ class Quotegen_Form_Quote extends EasyBib_Form
         ));
         $this->addElement($clients);
         
+        $this->addElement('radio', 'quoteType', array (
+                'label' => 'Type Of Quote:', 
+                'filters' => array (
+                        'StringTrim', 
+                        'StripTags' 
+                ), 
+                'multiOptions' => array (
+                        'purchased' => 'Purchased', 
+                        'leased' => 'Leased' 
+                )
+                 
+        ));
+        
         $this->addElement('text', 'clientDisplayName', array (
                 'label' => 'Display Name:', 
                 'filters' => array (
