@@ -896,7 +896,16 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 $this->_helper->redirector('index');
             }
         }
+        
+        $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->getDeviceToners($masterDeviceId);
+        $assignedToners = array ();
+        foreach ( $deviceToners as $toner )
+        {
+            $assignedToners [] = $toner->getId();
+        }
+        $this->view->assignedToners = $assignedToners;
 
+        // Display filterd list of toners
         switch ($tonerConfig)
         {
         	case "3 COLOR - COMBINED" :
@@ -912,18 +921,11 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         	    $validTonerColors = array(1);
         	    break;
         }
-        $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->getDeviceToners($masterDeviceId);
-        $assignedToners = array ();
-        foreach ( $deviceToners as $toner )
-        {
-            $assignedToners [] = $toner->getId();
-        }
-        $this->view->assignedToners = $assignedToners;
         
-        // Display filterd list of toners
         $where = array_merge((array)$where, array ( 
                 'toner_color_id IN ( ? )' => $validTonerColors 
         ));
+        
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Admin_Model_Mapper_Toner::getInstance(), $where));
         
         // Set the current page we're on
