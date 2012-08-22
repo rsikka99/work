@@ -30,9 +30,11 @@ class Quotegen_Form_AddDevice extends EasyBib_Form
                 'class' => 'btn btn-success'
         ));
         
+        
         $this->addElement('select', 'deviceConfigurationId', array (
                 'label' => 'Device Configuration', 
                 'multiOptions' => array (
+                        '-1' => 'New Configuration',
                         '1' => 'test2', 
                         '2' => 'test2', 
                         '3' => 'test3' 
