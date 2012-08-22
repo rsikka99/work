@@ -1,14 +1,84 @@
 <?php 
 $quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
+$devices = $this->devices;
 $this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.phtml'));
-
 $this->headScript()->appendScript("$('i').popover();");
-
 ?>
-<div class="row">
-    <div class="span12">
-        <div class="well no-padding">
-            <?php echo $this->form; ?>
-        </div>
-    </div>
-</div>
+
+<table class="table table-condensed table-bordered table-striped quoteDeviceTable">
+	<tr class="header-row">
+    	<th colspan="12">
+        	<div class="input-prepend">
+                <button type="submit" name="addConfiguration" value="<?php echo $quote->getId(); ?>" class="btn btn-success">Add</button><select name="deviceConfigurationId-<?php echo $quote->getId(); ?>">
+                </select>
+            </div>
+		</th>
+	</tr>
+    <tr class="header-row">
+    	<th>Item</th>
+        <th style="width: 90px;">Sku</th>
+        <th>Description</th>
+        <th style="width: 70px;">Cost</th>
+        <th style="width: 60px;">Quantity</th>
+        <th>Subtotal </th>
+        <th style="width: 30px"></th>
+	</tr>
+    <?php /* @var $device Quotegen_Model_QuoteDevice */foreach ($devices as $device) : ?>
+    <tr class="deviceRow">
+    	<th><h4><?php echo $device->getName(); ?></h4></th>                
+        <td><h4><?php echo $device->getSku(); ?></h4></td>
+        <td></td>
+        <?php // FIXME: Currency format ?>
+        <td style="text-align: right"><h4><?php echo '$'.number_format($device->getCost(),2)?></h4></td>
+        <td></td>
+        <td style="text-align: right"><h4><?php echo '$'.number_format($device->getCost(),2) ?></h4></td>
+        <td>
+        	<div class="btn-group">
+        		<a href="#" class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i></a>
+        		<ul class="dropdown-menu pull-right">
+        		<?php if ($device->getDevice()) : ?>
+	            	<li><a href="<?php echo $this->url(array('action' => 'sync-device-configuration', 'id' => $device->getId())); ?>"><i class="icon-refresh"></i> Sync Device</a>
+            	<?php endif; ?>
+	            	<li><a href="<?php echo $this->url(array('action' => 'edit-quote-device', 'id' => $device->getId())); ?>"><i class="icon-pencil"></i> Edit Device</a>
+            		<li><a href="<?php echo $this->url(array('action' => 'delete-quote-device', 'id' => $device->getId())); ?>"><i class="icon-trash"></i> Delete Device</a>
+				</ul>
+			</div>
+        </td>
+	</tr>
+	<?php if (count($device->getQuoteDeviceOptions()) > 0) : ?>
+    	<?php foreach ($device->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
+    	<tr class="optionRow">
+	    	<td style="padding-left: 25px;"><?php echo $quoteDeviceOption->getName(); ?></td>
+    	    <td><?php echo $quoteDeviceOption->getSku(); ?></td>
+        	<td><?php echo $quoteDeviceOption->getDescription(); ?></td>
+	        <td style="text-align: right"><?php echo '$'.number_format($quoteDeviceOption->getCost(),2); ?></td>
+    	    <td style="text-align: right"><?php echo number_format($quoteDeviceOption->getQuantity()); ?></td>
+        	<td style="text-align: right"><?php echo '$'.number_format($quoteDeviceOption->getSubTotal(),2); ?></td>
+	        <td></td>
+		</tr>
+    <?php endforeach; ?>
+    <?php endif; ?>
+    <tr>
+    	<td colspan='5'> </td>
+    	<td style='text-align: right'><?php echo '$'. number_format($device->getPackagePrice(),2);?></td>
+    	<td></td>
+    </tr>
+    <?php endforeach; ?>
+    <tr class="header-row">
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+   		<th></th>
+        <th></th>
+    </tr>
+</table>
+
+<form>
+	<div class="form-actions">
+		<input type="submit" name="back" value="Go Back" class="btn"/>
+	    <input type="submit" name="save" value="Save" class="btn btn-success"/>
+	    <input type="submit" name="saveAndContinue" value="Save &amp; Return" class="btn btn-primary"/>
+	</div>
+</form>
