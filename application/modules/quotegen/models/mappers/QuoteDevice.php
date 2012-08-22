@@ -14,7 +14,7 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
      * Define the primary key of the model association
      */
     public $col_id = 'id';
-    public $col_quoteDeviceGroupId = 'quoteDeviceGroupId';
+    public $col_quoteId = 'quoteId';
 
     /**
      * Gets an instance of the mapper
@@ -225,10 +225,10 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
      *            The quote device group id
      * @return multitype:Quotegen_Model_QuoteDevice The quote devices for the quote device group
      */
-    public function fetchDevicesForQuoteDeviceGroup ($quoteDeviceGroupId)
+    public function fetchDevicesForQuoteDeviceGroup ($quoteId)
     {
         return $this->fetchAll(array (
-                "{$this->col_quoteDeviceGroupId} = ?" => $quoteDeviceGroupId 
+                "{$this->col_quoteId} = ?" => $quoteId 
         ));
     }
 }
