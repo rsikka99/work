@@ -92,62 +92,13 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
                     ) 
             ));
             
-            $this->addElement('text', 'packagePrice', array (
-                    'label' => 'Package Price Per Unit:', 
-                    'class' => 'span2', 
-                    'validators' => array (
-                            'Float', 
-                            array (
-                                    'validator' => 'Between', 
-                                    'options' => array (
-                                            'min' => 0, 
-                                            'max' => 250000, 
-                                            'inclusive' => false 
-                                    ) 
-                            ) 
-                    ) 
-            ));
-            
-            $lessThanElementValidator = new My_Validate_LessThanFormValue($this->getElement('packagePrice'));
-            
-            $this->addElement('text', 'residual', array (
-                    'label' => 'Residual Per Unit (leased only):', 
-                    'class' => 'span2', 
-                    'validators' => array (
-                            'Float', 
-                            array (
-                                    'validator' => 'Between', 
-                                    'options' => array (
-                                            'min' => 0, 
-                                            'max' => 250000 
-                                    ) 
-                            ), 
-                            $lessThanElementValidator 
-                    ) 
-            ));
             
             $this->addElement('text', 'cost', array (
                     'label' => 'Cost:', 
                     'disabled' => true, 
                     'ignore' => true 
             ));
-            
-            $this->addElement('text', 'quantity', array (
-                    'label' => 'Quantity:', 
-                    'class' => 'span1', 
-                    'validators' => array (
-                            'Int', 
-                            array (
-                                    'validator' => 'Between', 
-                                    'options' => array (
-                                            'min' => 0, 
-                                            'max' => 250, 
-                                            'inclusive' => false 
-                                    ) 
-                            ) 
-                    ) 
-            ));
-            
+       
             // For each option that is linked with the device
             /* @var $deviceConfigurationOption Quotegen_Model_QuoteDeviceOption */
             foreach ( $quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption )
@@ -157,18 +108,17 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
                 
                 // Create and text element with its name as option-{id}-quantity
                 $optionElement = $this->createElement('text', "option-{$quoteDeviceOption->getId()}-quantity", array (
-                        'label' => $quoteDeviceOption->getName(), 
-                        'value' => $quoteDeviceOption->getQuantity(), 
-                        'description' => $quoteDeviceOption->getId() 
+                        'label' => $quoteDeviceOption->getName(),
+                        'value' => $quoteDeviceOption->getQuantity(),
+                        'description' => $quoteDeviceOption->getId()
                 ));
                 $optionElement->setAttrib('class', 'span1');
                 
-                // Add the optionElement to the form 
+                // Add the optionElement to the form
                 $this->addElement($optionElement);
                 
                 // Create a quantity namespace inside object and store the element
                 $object->quantity = $optionElement;
-                    
                 /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
                 $optionElement = $this->createElement('text', "option-{$quoteDeviceOption->getId()}-cost", array (
                         'label' => $quoteDeviceOption->getName(), 
@@ -177,8 +127,6 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
                 ));
                 $optionElement->setAttrib('class', 'span1');
                 $this->addElement($optionElement);
-                
-                
                 
                 $object->cost = $optionElement;
                 
