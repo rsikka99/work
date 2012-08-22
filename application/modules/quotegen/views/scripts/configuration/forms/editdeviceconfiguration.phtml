@@ -30,7 +30,7 @@ $deviceOptions = $this->deviceOptions;
 			<label class="control-label pull-left" for="description">Description: </label>
 			<div class="controls">
 				<?php if ( $this->element->getElement("description")->hasErrors() ) { 
-					$this->element->getElement("description")->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+					$this->element->getElement("description")->setAttrib('style', 'height: 100px; border-color: #B94A48; color: #B94A48;');
 				} ?>
 				<?php echo trim($this->element->getElement("description")->renderViewHelper()); ?>
 				<?php echo $this->element->getElement("description")->renderErrors(); ?>
