@@ -15,6 +15,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
      */
     public function indexAction ()
     {
+        /*
         $form = new Quotegen_Form_QuoteDevices($this->_quote);
         
         // Require that we have a quote object in the database to use this page
@@ -125,6 +126,8 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         }
         
         $this->view->form = $form;
+        */
+        $this->view->devices  = Quotegen_Model_Mapper_QuoteDevice::getInstance()->fetchDevicesForQuoteDeviceGroup($this->_quoteId);
     }
 
     /**
