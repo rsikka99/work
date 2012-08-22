@@ -8,9 +8,11 @@ $this->headScript()->appendScript("$('i').popover();");
 <table class="table table-condensed table-bordered table-striped quoteDeviceTable">
 	<tr class="header-row">
     	<th colspan="12">
-        	<div class="input-prepend">
-                <button type="submit" name="addConfiguration" value="<?php echo $quote->getId(); ?>" class="btn btn-success">Add</button><select name="deviceConfigurationId-<?php echo $quote->getId(); ?>">
-                </select>
+            <div class='pull-right'>
+            	<a href="<?php echo $this->url(array('action' => 'sync-all-device-configurations')); ?>" title="Sync all configurations with current information." class="btn btn-info "><i class="icon-refresh"></i> Sync All Devices</a>
+            </div>
+    		<div>
+                <?php echo $this->form;?>
             </div>
 		</th>
 	</tr>
@@ -74,7 +76,6 @@ $this->headScript()->appendScript("$('i').popover();");
         <th></th>
     </tr>
 </table>
-
 <form>
 	<div class="form-actions">
 		<input type="submit" name="back" value="Go Back" class="btn"/>
