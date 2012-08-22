@@ -21,7 +21,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @var int
      */
-    protected $_quoteDeviceGroupId;
+    protected $_quoteId;
     
     /**
      * A number representing margins
@@ -80,13 +80,6 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     protected $_cost;
     
     /**
-     * Number of devices
-     *
-     * @var int
-     */
-    protected $_quantity;
-    
-    /**
      * The price of the entire package
      *
      * @var int
@@ -121,6 +114,13 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     protected $_quoteDeviceGroup;
     
+    /**
+     * Packages that are attached to a quote
+     * 
+     * @var Quotegen_Model_QuoteDevice
+     */
+    protected $_quoteDevices;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -132,8 +132,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         }
         if (isset($params->id) && ! is_null($params->id))
             $this->setId($params->id);
-        if (isset($params->quoteDeviceGroupId) && ! is_null($params->quoteDeviceGroupId))
-            $this->setQuoteDeviceGroupId($params->quoteDeviceGroupId);
+        if (isset($params->quoteId) && ! is_null($params->quoteId))
+            $this->setQuoteId(($params->quoteId));
         if (isset($params->margin) && ! is_null($params->margin))
             $this->setMargin($params->margin);
         if (isset($params->name) && ! is_null($params->name))
@@ -150,8 +150,6 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             $this->setCompCostPerPageColor($params->compCostPerPageColor);
         if (isset($params->cost) && ! is_null($params->cost))
             $this->setCost($params->cost);
-        if (isset($params->quantity) && ! is_null($params->quantity))
-            $this->setQuantity($params->quantity);
         if (isset($params->packagePrice) && ! is_null($params->packagePrice))
             $this->setPackagePrice($params->packagePrice);
         if (isset($params->residual) && ! is_null($params->residual))
@@ -165,7 +163,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     {
         return array (
                 'id' => $this->getId(), 
-                'quoteDeviceGroupId' => $this->getQuoteDeviceGroupId(), 
+                'quoteId' => $this->getQuoteId(), 
                 'margin' => $this->getMargin(), 
                 'name' => $this->getName(), 
                 'sku' => $this->getSku(), 
@@ -174,7 +172,6 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
                 'compCostPerPageMonochrome' => $this->getCompCostPerPageMonochrome(), 
                 'compCostPerPageColor' => $this->getCompCostPerPageColor(), 
                 'cost' => $this->getCost(), 
-                'quantity' => $this->getQuantity(), 
                 'packagePrice' => $this->getPackagePrice(), 
                 'residual' => $this->getResidual() 
         );
@@ -202,15 +199,18 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         return $this;
     }
 
+
+        
     /**
      * Gets the quote id
      *
      * @return number The quote device group id
      */
-    public function getQuoteDeviceGroupId ()
+    public function getQuoteId ()
     {
-        return $this->_quoteDeviceGroupId;
+        return $this->_quoteId;
     }
+    
 
     /**
      * Sets a quote id
@@ -218,9 +218,9 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      * @param number $_quoteDeviceGroupId
      *            The new quote device group id
      */
-    public function setQuoteDeviceGroupId ($_quoteDeviceGroupId)
+    public function setQuoteId ($_quoteId)
     {
-        $this->_quoteDeviceGroupId = $_quoteDeviceGroupId;
+        $this->_quoteId = $_quoteId;
         return $this;
     }
 
@@ -397,28 +397,6 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     public function setCost ($_cost)
     {
         $this->_cost = $_cost;
-        return $this;
-    }
-
-    /**
-     * Gets the device currrent quatity
-     *
-     * @return the $_quantity
-     */
-    public function getQuantity ()
-    {
-        return $this->_quantity;
-    }
-
-    /**
-     * Sets the devices new quantity
-     *
-     * @param number $_quantity
-     *            the new quanitty
-     */
-    public function setQuantity ($_quantity)
-    {
-        $this->_quantity = $_quantity;
         return $this;
     }
 
@@ -641,6 +619,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     {
         $subTotal = 0;
         $packagePrice = (float)$this->getPackagePrice();
+        
         $quantity = $this->getQuantity();
         
         // Make sure both the price and quantity are greater than 0
@@ -702,13 +681,17 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     {
         $subTotal = 0;
         $leasePrice = (float)$this->calculateMonthlyLeasePrice();
-        $quantity = $this->getQuantity();
+        
+        // FIXME: Get quanity from adjustment page
+        
+        
+		//         $quantity = $this->getQuantity();
         
         // Make sure both the price and quantity are greater than 0
-        if ($leasePrice > 0 && $quantity > 0)
-        {
-            $subTotal = $leasePrice * $quantity;
-        }
+        //if ($leasePrice > 0 && $quantity > 0)
+        //{
+        //    $subTotal = $leasePrice * $quantity;
+        //}
         
         return round($subTotal, 0);
     }
@@ -722,7 +705,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     {
         if (! isset($this->_quoteDeviceGroup))
         {
-            $this->_quoteDeviceGroup = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->find($this->getQuoteDeviceGroupId());
+            $this->_quoteDeviceGroup = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->find($this->getQuoteId());
         }
         return $this->_quoteDeviceGroup;
     }
@@ -737,5 +720,20 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     {
         $this->_quoteDeviceGroup = $_quoteDeviceGroup;
         return $this;
+    }
+    
+    
+	/**
+	 * Gets the quoteDevices for a quote
+	 * 
+     * @return the $_quoteDevices
+     */
+    public function getQuoteDevices ()
+    {
+        if(! isset($this->_quoteDevices))
+        {
+            $this->_quoteDevices = Quotegen_Model_Mapper_QuoteDevice::getInstance()->fetchDevicesForQuoteDeviceGroup($this->_id);
+        }
+        return $this->_quoteDevices;
     }
 }
