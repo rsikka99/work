@@ -114,6 +114,14 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         ));
         
         /*
+         * Hidden Toner Configuration
+         * 
+         * This will be used when editing to hold the toner config id when the dropdown is disabled
+         */
+        $element = $this->createElement('hidden', "hidden_toner_config_id", array ());
+        $this->addElement($element);
+        
+        /*
          * Is copier
          */
         $this->addElement('checkbox', 'is_copier', array (

@@ -1579,13 +1579,13 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_device_group_devices` (
   CONSTRAINT `qgen_quote_device_group_devices_ibfk1`
     FOREIGN KEY (`quoteDeviceId` )
     REFERENCES `qgen_quote_devices` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `qgen_quote_device_group_devices_ibfk2`
     FOREIGN KEY (`quoteDeviceGroupId` )
     REFERENCES `qgen_quote_device_groups` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
