@@ -473,6 +473,12 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         	$form->getElement('sku')->setValue($sku);
         }
         
+        // Update hidden toner config to current toner config value so it gets submitted with the form
+        // Disable and set Toner Config to not be required
+        $form->getElement('hidden_toner_config_id')->setValue($form->getElement('toner_config_id')->getValue());
+        $form->getElement('toner_config_id')->setAttrib('disabled', 'disabled');
+        $form->getElement('toner_config_id')->setRequired(false);
+        
         // Make sure we are posting data
         $request = $this->getRequest();
         if ($request->isPost())
@@ -487,6 +493,10 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 {
                     if ($form->isValid($values))
                     {
+                        // In order to use populate, we need to make sure the toner_config_id value is set
+                        // Since it's disabled in edit mode, we need to assign it the value from the hidden field
+                        $values ['toner_config_id'] = $values ['hidden_toner_config_id'];
+                        
                         if (strlen($values ['sku']) > 0)
                         {
                             // Save Device SKU
