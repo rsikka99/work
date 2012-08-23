@@ -24,7 +24,7 @@ $tcStyle = $this->styles->tables->quoteTable;
 /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
 foreach ( $quoteDeviceGroups as $quoteDeviceGroup )
 {
-    $quoteDevices = $quoteDeviceGroup->getQuoteDevices();
+    $quoteDevices = $quoteDeviceGroup->getQuoteDeviceGroupDevices();
     
     $table = $section->addTable($tcStyle->tablestyle);
     

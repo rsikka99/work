@@ -32,21 +32,21 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     
     /**
      * Group Name
-     * 
+     *
      * @var string
      */
     protected $_name;
     
     /**
      * Flag for default group
-     * 
+     *
      * @var int
      */
     protected $_isDefault;
     
     /**
      * Are the pages going to be grouped
-     * 
+     *
      * @var int
      */
     protected $_groupPages;
@@ -59,11 +59,11 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     protected $_quote;
     
     /**
-     * The quote devices
+     * The quote device group devices
      *
      * @var array
      */
-    protected $_quoteDevices;
+    protected $_quoteDeviceGroupDevices;
     
     /**
      * Pages associated with the device group
@@ -95,7 +95,6 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         
         if (isset($params->isDefault) && ! is_null($params->isDefault))
             $this->setIsDefault($params->isDefault);
-        
     }
     
     /*
@@ -106,9 +105,9 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         return array (
                 'id' => $this->getId(), 
                 'quoteId' => $this->getQuoteId(), 
-                'pageMargin' => $this->getPageMargin(),
-                "name" => $this->getName(),
-                "isDefault" => $this->getIsDefault(),
+                'pageMargin' => $this->getPageMargin(), 
+                "name" => $this->getName(), 
+                "isDefault" => $this->getIsDefault() 
         );
     }
 
@@ -203,26 +202,26 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     /**
      * Gets the quote devices
      *
-     * @return multitype:Quotegen_Model_QuoteDevice
+     * @return multitype:Quotegen_Model_QuoteDeviceGroupDevice
      */
-    public function getQuoteDevices ()
+    public function getQuoteDeviceGroupDevices ()
     {
-        if (! isset($this->_quoteDevices))
+        if (! isset($this->_quoteDeviceGroupDevices))
         {
-            $this->_quoteDevices = Quotegen_Model_Mapper_QuoteDevice::getInstance()->fetchDevicesForQuoteDeviceGroup($this->getId());
+            $this->_quoteDeviceGroupDevices = Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->fetchDevicesForQuoteDeviceGroup($this->getId());
         }
-        return $this->_quoteDevices;
+        return $this->_quoteDeviceGroupDevices;
     }
 
     /**
      * Sets the quote devices
      *
-     * @param $_quoteDevices multitype:Quotegen_Model_QuoteDevice
+     * @param $_quoteDeviceGroupDevices multitype:Quotegen_Model_QuoteDeviceGroupDevice
      *            The quote devices
      */
-    public function setQuoteDevices ($_quoteDevices)
+    public function setQuoteDeviceGroupDevices ($_quoteDeviceGroupDevices)
     {
-        $this->_quoteDevices = $_quoteDevices;
+        $this->_quoteDeviceGroupDevices = $_quoteDeviceGroupDevices;
         return $this;
     }
 
@@ -236,10 +235,14 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     {
         $subtotal = 0;
         
-        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
         {
-            $subtotal += $quoteDevice->calculatePurchaseSubtotal();
+            $quantity = $quoteDeviceGroupDevice->getQuantity();
+            if ($quantity > 0)
+            {
+                $subtotal += $quoteDeviceGroupDevice->getQuoteDevice()->calculatePackagePrice() * $quantity;
+            }
         }
         return $subtotal;
     }
@@ -253,10 +256,14 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     {
         $subtotal = 0;
         
-        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
         {
-            $subtotal += $quoteDevice->calculatePackageMonthlyLeasePrice();
+            $quantity = $quoteDeviceGroupDevice->getQuantity();
+            if ($quantity > 0)
+            {
+                $subtotal += $quoteDeviceGroupDevice->getQuoteDevice()->calculatePackageMonthlyLeasePrice() * $quantity;
+            }
         }
         
         $subtotal += $this->calculateMonthlyPagePrice();
@@ -285,10 +292,10 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     {
         $subtotal = 0;
         
-        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
         {
-            $subtotal += $quoteDevice->calculateLeaseValue();
+            $subtotal += $quoteDeviceGroupDevice->getQuoteDevice()->calculateLeaseValue();
         }
         
         $leaseTerm = (int)$this->getQuote()->getLeaseTerm();
@@ -310,7 +317,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         $totalResidual = 0;
         
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDevice )
         {
             $totalResidual += $quoteDevice->getResidual();
         }
@@ -327,7 +334,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         $totalCost = 0;
         
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDevice )
         {
             if ($quoteDevice->getQuantity() > 0)
             {
@@ -360,7 +367,9 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         $this->_pages = $_pages;
         return $this;
     }
-	/**
+
+    /**
+     *
      * @return the $_name
      */
     public function getName ()
@@ -368,15 +377,17 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         return $this->_name;
     }
 
-	/**
-     * @param string $_name
+    /**
+     *
+     * @param string $_name            
      */
     public function setName ($_name)
     {
         $this->_name = $_name;
     }
 
-	/**
+    /**
+     *
      * @return the $_isDefault
      */
     public function getIsDefault ()
@@ -384,15 +395,17 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         return $this->_isDefault;
     }
 
-	/**
-     * @param number $_isDefault
+    /**
+     *
+     * @param number $_isDefault            
      */
     public function setIsDefault ($_isDefault)
     {
         $this->_isDefault = $_isDefault;
     }
 
-	/**
+    /**
+     *
      * @return the $_groupPages
      */
     public function getGroupPages ()
@@ -400,12 +413,43 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         return $this->_groupPages;
     }
 
-	/**
-     * @param number $_groupPages
+    /**
+     *
+     * @param number $_groupPages            
      */
     public function setGroupPages ($_groupPages)
     {
         $this->_groupPages = $_groupPages;
     }
 
+    /**
+     * ********************************************************
+     * Calculations for the quote device group
+     *
+     * Calculations here use the quote and quote devices related
+     * to this group.
+     *
+     * *********************************************************
+     */
+    
+    /**
+     * Calculates the sub total (package price * quantity)
+     *
+     * @return number The sub total
+     */
+    public function calculatePurchaseSubtotal ()
+    {
+        $subTotal = 0;
+        $packagePrice = (float)$this->getPackagePrice();
+        
+        $quantity = $this->getQuantity();
+        
+        // Make sure both the price and quantity are greater than 0
+        if ($packagePrice > 0 && $quantity > 0)
+        {
+            $subTotal = $packagePrice * $quantity;
+        }
+        
+        return $subTotal;
+    }
 }
