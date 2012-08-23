@@ -523,9 +523,10 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         }
                         else
                         {
-                            // TODO: Delete Devices record if exists
-                            // Delete configurations and configuration options
-					        // ?? May be easier to turn on cascading deletes?
+                            // Delete device options, configurations and configuration options
+					        Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->deleteConfigurationByDeviceId($masterDeviceId);
+					        
+					        // Delete the device options and device
                             Quotegen_Model_Mapper_DeviceOption::getInstance()->deleteOptionsByDeviceId($masterDeviceId);
                             $devicemapper->delete($device);
                             
@@ -588,7 +589,6 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        // Get the Master Device
         $device = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($deviceId);
         if (! $device)
         {
@@ -598,21 +598,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        // Get the Quotegen Device
-        $quoteDevice = Quotegen_Model_Mapper_Device::getInstance()->find($deviceId);
-        
-        // Get all the deviceConfiguration associated with the masterDeviceId
-        $deviceConfigurations = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAllDeviceConfigurationByDeviceId($deviceId);
-        
-        // Set up all mappers required for deletion
-        $tonerMapper = Proposalgen_Model_Mapper_Toner::getInstance();
-        $quoteDeviceMapper = Quotegen_Model_Mapper_Device::getInstance();
-        $userDeviceConfigurationMapper = Quotegen_Model_Mapper_UserDeviceConfiguration::getInstance();
-        $globalDeviceConfigurationMapper = Quotegen_Model_Mapper_GlobalDeviceConfiguration::getInstance();
-        $quoteDeviceConfigurationMapper = Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance();
-        $deviceConfigurationMapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
-        $deviceConfigurationOptionsMapper = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance();
-        
+        // Get the device name
         $deviceManufacturer = $device->getManufacturer()->getDisplayname();
         $deviceModel = $device->getPrinterModel();
         $deviceName = $deviceManufacturer . ' ' . $deviceModel;
@@ -629,26 +615,16 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 // delete device from database
                 if ($form->isValid($values))
                 {
-                    // Delete quote device options link
+                    // Delete device options, configurations and configuration options
+					Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->deleteConfigurationByDeviceId($deviceId);
+					        
+					// Delete the device options and device
                     Quotegen_Model_Mapper_DeviceOption::getInstance()->deleteOptionsByDeviceId($deviceId);
                     
-                    /* @var $deviceConfiguration Quotegen_Model_DeviceConfiguration */
-                    foreach ( $deviceConfigurations as $deviceConfiguration )
-                    {
-                        $deviceConfigurationId = $deviceConfiguration->getId();
-                        // Delete user device configuration link
-                        $userDeviceConfigurationMapper->deleteUserDeviceConfigurationByDeviceId($deviceConfigurationId);
-                        // Delete global device configurations link
-                        $globalDeviceConfigurationMapper->delete($deviceConfigurationId);
-                        // Delete the device configuration options
-                        $deviceConfigurationOptionsMapper->deleteDeviceConfigurationOptionById($deviceConfigurationId);
-                        // Delete the deviceConfiguration
-                        $deviceConfigurationMapper->delete($deviceConfiguration);
-                    }
-                    Quotegen_Model_Mapper_DeviceOption::getInstance()->delete($quoteDevice);
-                    
-                    // Delete Quotegen Device
-                    Quotegen_Model_Mapper_Device::getInstance()->delete($quoteDevice);
+                    // Get the Quotegen Device Object
+                    $quotegenDeviceMapper = Quotegen_Model_Mapper_Device::getInstance();
+                    $quotegenDevice = $quotegenDeviceMapper->find($deviceId);
+                    Quotegen_Model_Mapper_Device::getInstance()->delete($quotegenDevice);
                     
                     // Delete toners for Master Device
                     $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchAll("master_device_id = {$deviceId}");
