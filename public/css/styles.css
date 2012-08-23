@@ -106,6 +106,9 @@
   -moz-border-radius: 0 0 4px 4px;
   border-radius: 0 0 4px 4px;
 }
+.form-inline {
+  margin: 0;
+}
 /* Nav Tabs */
 .nav-tabs > li > p:hover,
 .nav-pills > li > p:hover {
