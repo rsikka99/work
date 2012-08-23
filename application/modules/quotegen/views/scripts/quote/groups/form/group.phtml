@@ -31,11 +31,11 @@
 		<th style='width: 150px'>Quantity</th>
 		<th style='width: 30px'></th>
 	</tr>
-	<?php $groupDevices = $deviceGroup->getQuoteDeviceGroupDevices();?>
-	<?php /* @var $device Quotegen_Model_QuoteDevice */ foreach ($groupDevices as $device) : ?>
+	<?php $quoteDeviceGroupDevices = $deviceGroup->getQuoteDeviceGroupDevices();?>
+	<?php /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */ foreach ($quoteDeviceGroupDevices as $quoteDeviceGroupDevice) : ?>
 	<tr>
-		<td><?php echo $device->getName() ?></td>
-		<td><?php echo $device->getSku() ?></td>
+		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getName() ?></td>
+		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getSku() ?></td>
 		<td></td>
 		<td></td>
 	</tr>

@@ -113,7 +113,7 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
      * Finds a quoteDevice based on it's primaryKey
      *
      * @param $id mixed
-     *            The id of the quoteDevice to find, 
+     *            The id of the quoteDevice to find,
      *            Quotegen_Model_Quote with an id
      * @return Quotegen_Model_QuoteDevice
      */
@@ -200,7 +200,7 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
     /**
      * Gets a where clause for filtering by id
      *
-     * @param $id unknown_type           
+     * @param $id unknown_type            
      * @return array
      */
     public function getWhereId ($id)
@@ -216,6 +216,19 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->getId();
+    }
+
+    /**
+     * Gets all the devices for a quote
+     * 
+     * @param int $quoteId            
+     * @return multitype:Quotegen_Model_QuoteDevice
+     */
+    public function fetchDevicesForQuote ($quoteId)
+    {
+        return $this->fetchAll(array (
+                "{$this->col_quoteId} = ?" => $quoteId 
+        ));
     }
 }
 

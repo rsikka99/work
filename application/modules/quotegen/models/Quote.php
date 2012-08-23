@@ -128,6 +128,13 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     protected $_leasingSchemaTerm;
     
+    /**
+     * The quote device configurations in this quote
+     *
+     * @var multitype:Quotegen_Model_QuoteDevice
+     */
+    protected $_quoteDevices;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -430,12 +437,12 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Sets the quote devices for the quote
      *
-     * @param $_quoteDevices multitype:Quotegen_Model_QuoteDevice
+     * @param $_quoteDeviceGroups multitype:Quotegen_Model_QuoteDeviceGroup
      *            The quote devices.
      */
-    public function setQuoteDevices ($_quoteDevices)
+    public function setQuoteDeviceGroups ($_quoteDeviceGroups)
     {
-        $this->_quoteDeviceGroups = $_quoteDevices;
+        $this->_quoteDeviceGroups = $_quoteDeviceGroups;
         return $this;
     }
 
@@ -716,6 +723,31 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function setLeasingSchemaTerm ($_leasingSchemaTerm)
     {
         $this->_leasingSchemaTerm = $_leasingSchemaTerm;
+        return $this;
+    }
+
+    /**
+     * Gets all the quote device configurations for a quote
+     *
+     * @return multitype:Quotegen_Model_QuoteDevice
+     */
+    public function getQuoteDevices ()
+    {
+        if (! isset($this->_quoteDevices))
+        {
+            $this->_quoteDevices = Quotegen_Model_Mapper_QuoteDevice::getInstance()->fetchDevicesForQuote($this->getId());
+        }
+        return $this->_quoteDevices;
+    }
+
+    /**
+     * Sets all the quote device configurations for a quote
+     *
+     * @param multitype:Quotegen_Model_QuoteDevice $_quoteDevices            
+     */
+    public function setQuoteDevices ($_quoteDevices)
+    {
+        $this->_quoteDevices = $_quoteDevices;
         return $this;
     }
 }
