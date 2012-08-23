@@ -1,25 +1,28 @@
 <?php
 
-class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
+class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstract
 {
+    /*
+     * Column name definitions. Define all columns up here and use them down below.
+     */
+    public $col_quoteDeviceId = 'quoteDeviceId';
+    public $col_quoteDeviceGroupId = 'quoteDeviceGroupId';
+    
+    /*
+     * Mapper Definitions
+     */
     /**
      * The default db table class to use
      *
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Quotegen_Model_DbTable_QuoteDevice';
-    
-    /*
-     * Define the primary key of the model association
-     */
-    public $col_id = 'id';
-    public $col_quoteId = 'quoteId';
+    protected $_defaultDbTable = 'Quotegen_Model_DbTable_QuoteDeviceGroupDevice';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Quotegen_Model_Mapper_QuoteDevice
+     * @return Quotegen_Model_Mapper_QuoteDeviceGroupDevice
      */
     public static function getInstance ()
     {
@@ -27,10 +30,10 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves an instance of Quotegen_Model_QuoteDevice to the database.
+     * Saves an instance of Quotegen_Model_QuoteDeviceGroupDevice to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Quotegen_Model_QuoteDevice
+     * @param $object Quotegen_Model_QuoteDeviceGroupDevice
      *            The object to insert
      * @return mixed The primary key of the new row
      */
@@ -38,9 +41,6 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
     {
         // Get an array of data to save
         $data = $object->toArray();
-        
-        // Remove the id
-        unset($data [$this->col_id]);
         
         // Insert the data
         $id = $this->getDbTable()->insert($data);
@@ -54,10 +54,34 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves (updates) an instance of Quotegen_Model_QuoteDevice to the database.
      *
-     * @param $object Quotegen_Model_QuoteDevice
-     *            The quoteDevice model to save to the database
+     * @param unknown_type $quoteId            
+     * @param unknown_type $deviceId            
+     */
+    public function insertDeviceInDefaultGroup($quoteId, $deviceId)
+    {
+        $deviceGroup = new Quotegen_Model_QuoteDeviceGroupDevice();
+        $deviceGroup->setQuoteDeviceId($deviceId);
+        $deviceGroup->setQuantity(1);
+        $deviceGroup->setQuoteDeviceGroupId(1);
+        $quoteDeviceGroup = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->findDefaultGroupId($quoteId);
+        $deviceGroup->setQuoteDeviceGroupId($quoteDeviceGroup->getId());
+        
+        $data = $deviceGroup->toArray();
+        
+        $id = $this->getDbTable()->insert($data);
+                
+        // Save the object into the cache
+        $this->saveItemToCache($deviceGroup);
+        
+        return $id;
+    }
+
+    /**
+     * Saves (updates) an instance of Quotegen_Model_QuoteDeviceGroupDevice to the database.
+     *
+     * @param $object Quotegen_Model_QuoteDeviceGroupDevice
+     *            The template model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
      * @return int The number of rows affected
@@ -68,12 +92,14 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
         
         if ($primaryKey === null)
         {
-            $primaryKey = $data [$this->col_id];
+            $primaryKey [] = $data [$this->col_quoteDeviceId];
+            $primaryKey [] = $data [$this->col_quoteDeviceGroupId];
         }
         
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
-                "{$this->col_id} = ?" => $primaryKey 
+                "{$this->col_quoteDeviceId} = ?" => $primaryKey [0], 
+                "{$this->col_quoteDeviceGroupId} = ?" => $primaryKey [1] 
         ));
         
         // Save the object into the cache
@@ -86,22 +112,24 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
      * Deletes rows from the database.
      *
      * @param $object mixed
-     *            This can either be an instance of Quotegen_Model_QuoteDevice or the
+     *            This can either be an instance of Quotegen_Model_QuoteDeviceGroupDevice or the
      *            primary key to delete
      * @return mixed The number of rows deleted
      */
     public function delete ($object)
     {
-        if ($object instanceof Quotegen_Model_QuoteDevice)
+        if ($object instanceof Quotegen_Model_QuoteDeviceGroupDevice)
         {
             $whereClause = array (
-                    "{$this->col_id} = ?" => $object->getId() 
+                    "{$this->col_quoteDeviceId} = ?" => $object->getQuoteDeviceId(), 
+                    "{$this->col_quoteDeviceGroupId} = ?" => $object->getQuoteDeviceGroupId() 
             );
         }
         else
         {
             $whereClause = array (
-                    "{$this->col_id} = ?" => $object 
+                    "{$this->col_quoteDeviceId} = ?" => $object->getQuoteDeviceId(), 
+                    "{$this->col_quoteDeviceGroupId} = ?" => $object->getQuoteDeviceGroupId() 
             );
         }
         
@@ -110,18 +138,17 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Finds a quoteDevice based on it's primaryKey
+     * Finds a template based on it's primaryKey
      *
-     * @param $id mixed
-     *            The id of the quoteDevice to find, 
-     *            Quotegen_Model_Quote with an id
-     * @return Quotegen_Model_QuoteDevice
+     * @param $id int
+     *            The id of the template to find
+     * @return Quotegen_Model_QuoteDeviceGroupDevice
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Quotegen_Model_QuoteDevice)
+        if ($result instanceof Quotegen_Model_QuoteDeviceGroupDevice)
         {
             return $result;
         }
@@ -133,16 +160,16 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
             return;
         }
         $row = $result->current();
-        $result = new Quotegen_Model_QuoteDevice($row->toArray());
+        $object = new Quotegen_Model_QuoteDeviceGroupDevice($row->toArray());
         
         // Save the object into the cache
-        $this->saveItemToCache($result);
+        $this->saveItemToCache($object);
         
-        return $result;
+        return $object;
     }
 
     /**
-     * Fetches a quoteDevice
+     * Fetches a template
      *
      * @param $where string|array|Zend_Db_Table_Select
      *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
@@ -150,7 +177,7 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
      *            OPTIONAL: A SQL ORDER clause.
      * @param $offset int
      *            OPTIONAL: A SQL OFFSET value.
-     * @return Quotegen_Model_QuoteDevice
+     * @return Quotegen_Model_QuoteDeviceGroupDevice
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -160,7 +187,7 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
             return;
         }
         
-        $object = new Quotegen_Model_QuoteDevice($row->toArray());
+        $object = new Quotegen_Model_QuoteDeviceGroupDevice($row->toArray());
         
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -169,7 +196,7 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches all quoteDevices
+     * Fetches all templates
      *
      * @param $where string|array|Zend_Db_Table_Select
      *            OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
@@ -179,7 +206,7 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
      *            OPTIONAL: A SQL LIMIT count. (Defaults to 25)
      * @param $offset int
      *            OPTIONAL: A SQL LIMIT offset.
-     * @return multitype:Quotegen_Model_QuoteDevice
+     * @return multitype:Quotegen_Model_QuoteDeviceGroupDevice
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -187,7 +214,7 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-            $object = new Quotegen_Model_QuoteDevice($row->toArray());
+            $object = new Quotegen_Model_QuoteDeviceGroupDevice($row->toArray());
             
             // Save the object into the cache
             $this->saveItemToCache($object);
@@ -200,36 +227,26 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
     /**
      * Gets a where clause for filtering by id
      *
-     * @param $id unknown_type           
+     * @param unknown_type $id            
      * @return array
      */
     public function getWhereId ($id)
     {
         return array (
-                "{$this->col_id} = ?" => $id 
+                "{$this->col_quoteDeviceId} = ?" => $id [0], 
+                "{$this->col_quoteDeviceGroupId} = ?" => $id [1] 
         );
     }
-    
-    /*
+
+    /**
      * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return $object->getId();
-    }
-
-    /**
-     * Gets all devices associated with a quote
-     *
-     * @param $quoteDeviceGroupId int
-     *            The quote device group id
-     * @return multitype:Quotegen_Model_QuoteDevice The quote devices for the quote device group
-     */
-    public function fetchDevicesForQuoteDeviceGroup ($quoteId)
-    {
-        return $this->fetchAll(array (
-                "{$this->col_quoteId} = ?" => $quoteId 
-        ));
+        return array (
+                $object->getQuoteDeviceId(), 
+                $object->getQuoteDeviceGroupId 
+        );
     }
 }
 

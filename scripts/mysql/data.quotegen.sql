@@ -127,9 +127,10 @@ INSERT INTO `qgen_quotes` (`id`, `clientId`, `dateCreated`, `dateModified`, `quo
 INSERT INTO `qgen_quote_lease_terms` (`quoteId`, `leasingSchemaTermId`) VALUES
 (1, 4);
 
-INSERT INTO `qgen_quote_device_groups` (`id`, `quoteId`) VALUES
-(1, 1),
-(2, 1);
+INSERT INTO `qgen_quote_device_groups` (`id`, `quoteId`, `name`, `isDefault`) VALUES
+(1, 1,'Deafult Group (Ungrouped)', 1),
+(2, 1,'Kingston Office', 0),
+(3, 1,'Head Office', 0);
 
 INSERT INTO `qgen_quote_device_group_pages` (`id`, `quoteDeviceGroupId`, `name`, `sku`, `pricePerPage`, `includedPrice`, `includedQuantity`) VALUES
 (1, 1, 'Print Monochrome', 'PAGEMONO1234', 0.05, 500, 10000),
@@ -137,11 +138,18 @@ INSERT INTO `qgen_quote_device_group_pages` (`id`, `quoteDeviceGroupId`, `name`,
 (3, 2, 'Print Monochrome', 'PAGEMONO1234', 0.05, 250, 5000),
 (4, 2, 'Print Color', 'PAGECOLOR1234', 0.15, 750, 5000);
 
+INSERT INTO `qgen_quote_devices` (`id`,`quoteId`, `margin`, `name`, `sku`, `oemCostPerPageMonochrome`, `oemCostPerPageColor`, `compCostPerPageMonochrome`, `compCostPerPageColor`, `cost`, `packagePrice`, `residual`) VALUES
+(1, 1, 20.00, 'Unsynced Device Name 1', 'Unsynced SKU 1', 999, 999, 999, 999, 999.99, 999.99, 0),
+(2, 1, 20.00, 'Unsynced Device Name 2', 'Unsynced SKU 2', 999, 999, 999, 999, 999.99, 999.99, 0),
+(3, 1, 20.00, 'Unsynced Device Name 3', 'Unsynced SKU 3', 999, 999, 999, 999, 999.99, 999.99, 0);
 
-INSERT INTO `qgen_quote_devices` (`id`, `quoteDeviceGroupId`, `margin`, `name`, `sku`, `oemCostPerPageMonochrome`, `oemCostPerPageColor`, `compCostPerPageMonochrome`, `compCostPerPageColor`, `cost`, `quantity`, `packagePrice`, `residual`) VALUES
-(1, 1, 20.00, 'Unsynced Device Name 1', 'Unsynced SKU 1', 999, 999, 999, 999, 999.99, 1, 999.99, 0),
-(2, 1, 20.00, 'Unsynced Device Name 2', 'Unsynced SKU 2', 999, 999, 999, 999, 999.99, 1, 999.99, 0),
-(3, 2, 20.00, 'Unsynced Device Name 3', 'Unsynced SKU 3', 999, 999, 999, 999, 999.99, 1, 999.99, 0);
+INSERT INTO `qgen_quote_device_group_devices` (`quoteDeviceId`,`quoteDeviceGroupId`,`quantity`) VALUES
+(1,1,1),
+(2,1,1),
+(3,1,1),
+(2,2,1),
+(3,2,1),
+(3,3,3);
 
 INSERT INTO `qgen_quote_device_configurations` (`masterDeviceId`, `quoteDeviceId`) VALUES
 (1, 1),

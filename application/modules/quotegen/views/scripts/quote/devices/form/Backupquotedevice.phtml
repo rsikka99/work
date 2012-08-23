@@ -4,6 +4,7 @@ $form = $this->element;
 ?>
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
     <h3>Device Configuration</h3>
+    <?php echo $form->getElement('deviceName'); ?>
     <?php echo $form->getElement('name'); ?>
     <?php echo $form->getElement('sku'); ?>
     <?php echo $form->getElement('cost'); ?>
@@ -27,13 +28,28 @@ $form = $this->element;
     <?php else : ?>
     <p>There are no options added to this device yet.</p>
     <?php endif; ?>
-    <h3>Package Cost</h3>
     <div class="control-group">
         <label class="control-label optional">Package Cost Per Unit</label>
         <div class="controls">
-            <input class="span2" disabled="disabled" name='packagePrice' style="padding-left: 2px" value="<?php echo $form->getQuoteDevice()->calculatePackageCost(); ?>" />
+            <input class="span2" disabled="disabled" style="padding-left: 2px" value="<?php echo $form->getQuoteDevice()->calculatePackageCost(); ?>" />
         </div>
     </div>
+    <hr>
+    <h3> Prices and Margins </h3> <br/>
+    <?php echo $form->getElement('margin'); ?>
+    <?php echo $form->getElement('packagePrice'); ?>
+    <?php echo $form->getElement('residual'); ?>
+    <?php echo $form->getElement('quantity'); ?>    
+    
+    
+    <div class="control-group">
+        <label class="control-label optional">Total Package Price</label>
+        <div class="controls">
+            <input class="span2" disabled="disabled" style="padding-left: 2px" value="<?php echo $form->getQuoteDevice()->calculatePurchaseSubtotal(); ?>" />
+        </div>
+    </div>
+    
+    
     <div class="form-actions">
         <?php echo $form->getElement('cancel')->renderViewHelper(); ?>
         <?php echo $form->getElement('submit')->renderViewHelper(); ?>
