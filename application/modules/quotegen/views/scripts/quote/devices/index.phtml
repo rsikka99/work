@@ -18,7 +18,7 @@ $this->headScript()->appendScript("$('i').popover();");
 	</tr>
     <tr class="header-row">
     	<th>Item</th>
-        <th style="width: 90px;">Sku</th>
+        <th style="width: 1;">Sku</th>
         <th>Description</th>
         <th style="width: 70px;">Cost</th>
         <th style="width: 60px;">Quantity</th>
@@ -27,7 +27,7 @@ $this->headScript()->appendScript("$('i').popover();");
 	</tr>
     <?php /* @var $device Quotegen_Model_QuoteDevice */foreach ($devices as $device) : ?>
     <tr class="deviceRow">
-    	<th><h4><?php echo $device->getName(); ?></h4></th>                
+    	<td><h4><?php echo $device->getName(); ?></h4></td>                
         <td><h4><?php echo $device->getSku(); ?></h4></td>
         <td></td>
         <?php // FIXME: Currency format ?>
@@ -61,18 +61,12 @@ $this->headScript()->appendScript("$('i').popover();");
     <?php endforeach; ?>
     <?php endif; ?>
     <tr>
-    	<td colspan='5'> </td>
+    	<td colspan='5' style='text-align: right'><strong> Package Cost </strong></td>
     	<td style='text-align: right'><?php echo '$'. number_format($device->calculatePackageCost(),2);?></td>
     	<td></td>
     </tr>
     <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-   		<td></td>
-        <td></td>
+    	<td colspan='7'>&nbsp;</td>
     </tr>
     <?php endforeach; ?>
     <tr class="header-row">
