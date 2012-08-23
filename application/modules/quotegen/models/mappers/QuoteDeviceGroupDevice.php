@@ -54,6 +54,30 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
     }
 
     /**
+     *
+     * @param unknown_type $quoteId            
+     * @param unknown_type $deviceId            
+     */
+    public function insertDeviceInDefaultGroup($quoteId, $deviceId)
+    {
+        $deviceGroup = new Quotegen_Model_QuoteDeviceGroupDevice();
+        $deviceGroup->setQuoteDeviceId($deviceId);
+        $deviceGroup->setQuantity(1);
+        $deviceGroup->setQuoteDeviceGroupId(1);
+        $quoteDeviceGroup = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->findDefaultGroupId($quoteId);
+        $deviceGroup->setQuoteDeviceGroupId($quoteDeviceGroup->getId());
+        
+        $data = $deviceGroup->toArray();
+        
+        $id = $this->getDbTable()->insert($data);
+                
+        // Save the object into the cache
+        $this->saveItemToCache($deviceGroup);
+        
+        return $id;
+    }
+
+    /**
      * Saves (updates) an instance of Quotegen_Model_QuoteDeviceGroupDevice to the database.
      *
      * @param $object Quotegen_Model_QuoteDeviceGroupDevice
@@ -98,14 +122,14 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
         {
             $whereClause = array (
                     "{$this->col_quoteDeviceId} = ?" => $object->getQuoteDeviceId(), 
-                    "{$this->col_quoteDeviceGroupId} = ?" => $object->getMasterDeviceId() 
+                    "{$this->col_quoteDeviceGroupId} = ?" => $object->getQuoteDeviceGroupId() 
             );
         }
         else
         {
             $whereClause = array (
                     "{$this->col_quoteDeviceId} = ?" => $object->getQuoteDeviceId(), 
-                    "{$this->col_quoteDeviceGroupId} = ?" => $object->getMasterDeviceId() 
+                    "{$this->col_quoteDeviceGroupId} = ?" => $object->getQuoteDeviceGroupId() 
             );
         }
         
