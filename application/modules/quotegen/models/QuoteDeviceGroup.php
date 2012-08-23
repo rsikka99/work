@@ -89,6 +89,13 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         
         if (isset($params->pageMargin) && ! is_null($params->pageMargin))
             $this->setPageMargin($params->pageMargin);
+        
+        if (isset($params->name) && ! is_null($params->name))
+            $this->setName($params->name);
+        
+        if (isset($params->isDefault) && ! is_null($params->isDefault))
+            $this->setIsDefault($params->isDefault);
+        
     }
     
     /*
@@ -99,7 +106,9 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         return array (
                 'id' => $this->getId(), 
                 'quoteId' => $this->getQuoteId(), 
-                'pageMargin' => $this->getPageMargin() 
+                'pageMargin' => $this->getPageMargin(),
+                "name" => $this->getName(),
+                "isDefault" => $this->getIsDefault(),
         );
     }
 
