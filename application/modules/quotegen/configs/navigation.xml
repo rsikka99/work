@@ -50,8 +50,16 @@
                             <reset_params>0</reset_params>
                             <visible>0</visible>
                             <pages>
+                                <adjustsettings>
+                                    <label>Settings</label>
+                                    <module>quotegen</module>
+                                    <controller>quote_settings</controller>
+                                    <action>index</action>
+                                    <resource>quotegen__quote_settings__index</resource>
+                                    <reset_params>0</reset_params>
+                                </adjustsettings>
                                 <builddevice>
-                                    <label>Build Devices</label>
+                                    <label>Build Configurations</label>
                                     <class>dropdown</class>
                                     <module>quotegen</module>
                                     <controller>quote_devices</controller>
@@ -98,16 +106,32 @@
                                         </removeDevice>
                                     </pages>
                                 </builddevice>
-                                <adjustsettings>
-                                    <label>Adjust Settings</label>
+                                <groupDevices>
+                                    <label>Group Devices</label>
                                     <module>quotegen</module>
-                                    <controller>quote_settings</controller>
+                                    <controller>quote_groups</controller>
                                     <action>index</action>
-                                    <resource>quotegen__quote_settings__index</resource>
+                                    <resource>quotegen__quote_groups__index</resource>
                                     <reset_params>0</reset_params>
-                                </adjustsettings>
+                                </groupDevices>
+                                <managepages>
+                                    <label>Add Pages</label>
+                                    <module>quotegen</module>
+                                    <controller>quote_pages</controller>
+                                    <action>index</action>
+                                    <resource>quotegen__quote_pages__index</resource>
+                                    <reset_params>0</reset_params>
+                                </managepages>
+                                <profitability>
+                                    <label>Profitability</label>
+                                    <module>quotegen</module>
+                                    <controller>quote_profitability</controller>
+                                    <action>index</action>
+                                    <resource>quotegen__quote_profitability__index</resource>
+                                    <reset_params>0</reset_params>
+                                </profitability>
                                 <viewAndPrintReports>
-                                    <label>View Reports</label>
+                                    <label>Reports</label>
                                     <class>dropdown</class>
                                     <module>quotegen</module>
                                     <controller>quote_reports</controller>
@@ -142,21 +166,13 @@
                                     </pages>
                                 </viewAndPrintReports>
                                 <debug>
-                                    <label>Debug Calculations</label>
+                                    <label>Debug</label>
                                     <module>quotegen</module>
                                     <controller>quote_debug</controller>
                                     <action>index</action>
                                     <resource>quotegen__quote_debug__index</resource>
                                     <reset_params>0</reset_params>
                                 </debug>
-                                <groups>
-                                    <label>Groups</label>
-                                    <module>quotegen</module>
-                                    <controller>quote_groups</controller>
-                                    <action>index</action>
-                                    <resource>quotegen__quote_groups__index</resource>
-                                    <reset_params>0</reset_params>
-                                </groups>
                             </pages>
                         </quote>
                     </pages>
