@@ -217,19 +217,5 @@ class Quotegen_Model_Mapper_QuoteDevice extends My_Model_Mapper_Abstract
     {
         return $object->getId();
     }
-
-    /**
-     * Gets all devices associated with a quote
-     *
-     * @param $quoteDeviceGroupId int
-     *            The quote device group id
-     * @return multitype:Quotegen_Model_QuoteDevice The quote devices for the quote device group
-     */
-    public function fetchDevicesForQuoteDeviceGroup ($quoteId)
-    {
-        return $this->fetchAll(array (
-                "{$this->col_quoteId} = ?" => $quoteId 
-        ));
-    }
 }
 

@@ -31,7 +31,7 @@
 		<th style='width: 150px'>Quantity</th>
 		<th style='width: 30px'></th>
 	</tr>
-	<?php $groupDevices = $deviceGroup->getQuoteDevices();?>
+	<?php $groupDevices = $deviceGroup->getQuoteDeviceGroupDevices();?>
 	<?php /* @var $device Quotegen_Model_QuoteDevice */ foreach ($groupDevices as $device) : ?>
 	<tr>
 		<td><?php echo $device->getName() ?></td>

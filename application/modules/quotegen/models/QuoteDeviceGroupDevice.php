@@ -29,6 +29,20 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
      */
     protected $_quantity;
     
+    /**
+     * The quote device
+     *
+     * @var Quotegen_Model_QuoteDevice
+     */
+    protected $_quoteDevice;
+    
+    /**
+     * The quote device group
+     *
+     * @var Quotegen_Model_QuoteDeviceGroup
+     */
+    protected $_quoteDeviceGroup;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -121,6 +135,56 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
     public function setQuantity ($_quantity)
     {
         $this->_quantity = $_quantity;
+        return $this;
+    }
+
+    /**
+     * Gets the quote device
+     * 
+     * @return Quotegen_Model_QuoteDevice
+     */
+    public function getQuoteDevice ()
+    {
+        if (! isset($this->_quoteDevice))
+        {
+            $this->_quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($this->getQuoteDeviceId());
+        }
+        return $this->_quoteDevice;
+    }
+
+    /**
+     * Sets the quote device
+     * 
+     * @param Quotegen_Model_QuoteDevice $_quoteDevice            
+     */
+    public function setQuoteDevice ($_quoteDevice)
+    {
+        $this->_quoteDevice = $_quoteDevice;
+        return $this;
+    }
+
+    /**
+     * Gets the quote device group
+     * 
+     * @return Quotegen_Model_QuoteDeviceGroup
+     */
+    public function getQuoteDeviceGroup ()
+    {
+        if (! isset($this->_quoteDeviceGroup))
+        {
+            $this->_quoteDeviceGroup = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->find($this->getQuoteDeviceGroupId());
+        }
+        return $this->_quoteDeviceGroup;
+    }
+
+    /**
+     * Sets the quote device group
+     * 
+     * @param Quotegen_Model_QuoteDeviceGroup $_quoteDeviceGroup            
+     */
+    public function setQuoteDeviceGroup ($_quoteDeviceGroup)
+    {
+        $this->_quoteDeviceGroup = $_quoteDeviceGroup;
         return $this;
     }
 }

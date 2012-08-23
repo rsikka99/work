@@ -58,7 +58,7 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
      * @param unknown_type $quoteId            
      * @param unknown_type $deviceId            
      */
-    public function insertDeviceInDefaultGroup($quoteId, $deviceId)
+    public function insertDeviceInDefaultGroup ($quoteId, $deviceId)
     {
         $deviceGroup = new Quotegen_Model_QuoteDeviceGroupDevice();
         $deviceGroup->setQuoteDeviceId($deviceId);
@@ -70,7 +70,7 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
         $data = $deviceGroup->toArray();
         
         $id = $this->getDbTable()->insert($data);
-                
+        
         // Save the object into the cache
         $this->saveItemToCache($deviceGroup);
         
@@ -245,8 +245,22 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
     {
         return array (
                 $object->getQuoteDeviceId(), 
-                $object->getQuoteDeviceGroupId 
+                $object->getQuoteDeviceGroupId() 
         );
+    }
+
+    /**
+     * Gets all devices associated with a quote
+     *
+     * @param $quoteDeviceGroupId int
+     *            The quote device group id
+     * @return multitype:Quotegen_Model_QuoteDeviceGroupDevices The quote devices for the quote device group
+     */
+    public function fetchDevicesForQuoteDeviceGroup ($quoteDeviceGroupId)
+    {
+        return $this->fetchAll(array (
+                "{$this->col_quoteDeviceGroupId} = ?" => $quoteDeviceGroupId 
+        ));
     }
 }
 
