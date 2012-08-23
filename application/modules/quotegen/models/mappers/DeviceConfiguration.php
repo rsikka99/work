@@ -121,6 +121,29 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
     }
 
     /**
+     * Deletes device configuration and all device configuration options by device id;
+     *
+     * @param int $deviceId            
+     * @return number The amount of rows affected.
+     */
+    public function deleteConfigurationByDeviceId ($deviceId)
+    {
+        // Get all device configurations for this device
+        $deviceConfigurations = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAllDeviceConfigurationByDeviceId($deviceId);
+        
+        // Loop through and delete all configuration options for each configuration
+        foreach ($deviceConfigurations as $deviceConfiguration)
+        {
+            Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->deleteDeviceConfigurationOptionById($deviceConfiguration->getId());
+        }
+        
+        // Delete all device configurations
+        return $this->getDbTable()->delete(array (
+                "masterDeviceId = ?" => $deviceId 
+        ));
+    }
+
+    /**
      * Finds a deviceConfiguration based on it's primaryKey
      *
      * @param $id int
