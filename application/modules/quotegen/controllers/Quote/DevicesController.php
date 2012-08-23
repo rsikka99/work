@@ -16,7 +16,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
     public function indexAction ()
     {
         $form = new Quotegen_Form_AddDevice();
-                
+        
         $this->requireQuote();
         
         $request = $this->getRequest();
@@ -26,161 +26,30 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             $values = $request->getPost();
             if (isset($values ['addConfiguration']))
             {
-                    $deviceConfigurationId = (int)$values ["deviceConfigurationId"];
-                    if ($deviceConfigurationId === - 1)
-                    {
-                        $this->_helper->redirector('create-new-quote-device', null, null, array (
-                                'quoteId' => $this->_quoteId,
-                                //'quoteDeviceGroupId' => $quoteDeviceGroupId
-                        ));
-                    }
-                    /*
-                    else
-                    {
-                
-                        // Get the system and user defaults and apply overrides for user settings
-                        $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
-                        $userSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
-                        $quoteSetting->applyOverride($userSetting);
-                
-                        $newQuoteDeviceId = $this->cloneFavoriteDeviceToQuote($deviceConfigurationId, $quoteDeviceGroupId, $quoteSetting->getDeviceMargin());
-                        if ($newQuoteDeviceId)
-                        {
-                
-                            $this->_helper->redirector('edit-quote-device', null, null, array (
-                                    'id' => $newQuoteDeviceId,
-                                    'quoteId' => $this->_quoteId
-                            ));
-                        }
-                        else
-                        {
-                            $this->_helper->flashMessenger(array (
-                                    'danger' => 'There was an error while trying to add the favorite device. Please try again or contact your administrator if the issue persists.'
-                            ));
-                        }
-                    }*/
-                }
-            }
-        
-        
-        /*
-        $form = new Quotegen_Form_QuoteDevices($this->_quote);
-        
-        // Require that we have a quote object in the database to use this page
-        $this->requireQuote();
-        
-        $request = $this->getRequest();
-        
-        if ($request->isPost())
-        {
-            $values = $request->getPost();
-            if (isset($values ['back']))
-            {
-                $this->_helper->redirector('index', 'index');
-            }
-            else
-            {
-                // Process our giant form before performing the following actions
-                if ($this->processBuildDevicesForm($values, $form))
+                $deviceConfigurationId = (int)$values ["deviceConfigurationId"];
+                if ($deviceConfigurationId === - 1)
                 {
-                    if (isset($values ['addConfiguration']))
-                    {
-                    
-                    
-                    
-                        $quoteDeviceGroupId = $values ['addConfiguration'];
-                        if (isset($values ["deviceConfigurationId-$quoteDeviceGroupId"]))
-                        {
-                            $deviceConfigurationId = (int)$values ["deviceConfigurationId-$quoteDeviceGroupId"];
-                            if ($deviceConfigurationId === - 1)
-                            {
-                                $this->_helper->redirector('create-new-quote-device', null, null, array (
-                                        'quoteId' => $this->_quoteId, 
-                                        'quoteDeviceGroupId' => $quoteDeviceGroupId 
-                                ));
-                            }
-                            else
-                            {
-                                
-                                // Get the system and user defaults and apply overrides for user settings
-                                $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
-                                $userSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
-                                $quoteSetting->applyOverride($userSetting);
-                                
-                                $newQuoteDeviceId = $this->cloneFavoriteDeviceToQuote($deviceConfigurationId, $quoteDeviceGroupId, $quoteSetting->getDeviceMargin());
-                                if ($newQuoteDeviceId)
-                                {
-                                    
-                                    $this->_helper->redirector('edit-quote-device', null, null, array (
-                                            'id' => $newQuoteDeviceId, 
-                                            'quoteId' => $this->_quoteId 
-                                    ));
-                                }
-                                else
-                                {
-                                    $this->_helper->flashMessenger(array (
-                                            'danger' => 'There was an error while trying to add the favorite device. Please try again or contact your administrator if the issue persists.' 
-                                    ));
-                                }
-                            }
-                        }
-                    }
-                    else if (isset($values ['addPages']))
-                    {
-                        $quoteDeviceGroupId = $values ['addPages'];
-                        $this->_helper->redirector('add-pages', null, null, array (
-                                'quoteId' => $this->_quoteId, 
-                                'quoteDeviceGroupId' => $quoteDeviceGroupId 
-                        ));
-                    }
-                    else if (isset($values ['deletePage']))
-                    {
-                        $quoteDeviceGroupPageId = $values ['deletePage'];
-                        $this->_helper->redirector('delete-pages', null, null, array (
-                                'quoteId' => $this->_quoteId, 
-                                'quoteDeviceGroupPageId' => $quoteDeviceGroupPageId 
-                        ));
-                    }
-                    else if (isset($values ['addGroup']))
-                    {
-                        $quoteDeviceGroup = new Quotegen_Model_QuoteDeviceGroup();
-                        $quoteDeviceGroup->setQuoteId($this->_quoteId);
-                        $quoteDeviceGroup->setPageMargin(0);
-                        
-                        $result = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->insert($quoteDeviceGroup);
-                        
-                        // Refresh the page
-                        $this->_helper->redirector(null, null, null, array (
-                                'quoteId' => $this->_quoteId 
-                        ));
-                    }
-                    else if (isset($values ['deleteGroup']))
-                    {
-                        $quoteDeviceGroupId = $values ['deleteGroup'];
-                        $this->_helper->redirector('delete-group', null, null, array (
-                                'quoteId' => $this->_quoteId, 
-                                'quoteDeviceGroupId' => $quoteDeviceGroupId 
-                        ));
-                    }
-                    
-                    // Reset the form
-                    $form = new Quotegen_Form_QuoteDevices($this->_quote);
-                }
-                
-                if (isset($values ['saveAndContinue']))
-                {
-                    $this->_helper->redirector('index', 'quote_settings', null, array (
+                    $this->_helper->redirector('create-new-quote-device', null, null, array (
                             'quoteId' => $this->_quoteId 
                     ));
                 }
+                /*
+                 * else { // Get the system and user defaults and apply overrides for user settings $quoteSetting =
+                 * Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting(); $userSetting =
+                 * Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
+                 * $quoteSetting->applyOverride($userSetting); $newQuoteDeviceId =
+                 * $this->cloneFavoriteDeviceToQuote($deviceConfigurationId, $quoteDeviceGroupId,
+                 * $quoteSetting->getDeviceMargin()); if ($newQuoteDeviceId) {
+                 * $this->_helper->redirector('edit-quote-device', null, null, array ( 'id' => $newQuoteDeviceId,
+                 * 'quoteId' => $this->_quoteId )); } else { $this->_helper->flashMessenger(array ( 'danger' => 'There
+                 * was an error while trying to add the favorite device. Please try again or contact your administrator
+                 * if the issue persists.' )); } }
+                 */
             }
         }
         
         $this->view->form = $form;
-        */
-        
-		$this->view->form = $form;
-$this->view->devices = Quotegen_Model_Mapper_QuoteDevice::getInstance()->fetchDevicesForQuoteDeviceGroup($this->_quoteId);
+        $this->view->devices = Quotegen_Model_Mapper_QuoteDevice::getInstance()->fetchDevicesForQuoteDeviceGroup($this->_quoteId);
     }
 
     /**
@@ -384,12 +253,14 @@ $this->view->devices = Quotegen_Model_Mapper_QuoteDevice::getInstance()->fetchDe
                             
                             // Setup some defaults that don't get synced
                             $quoteDevice->setQuoteId($quoteId);
-                            $quoteDevice->setMargin($quoteSetting->getDeviceMargin());
+							$quoteDevice->setMargin($quoteSetting->getDeviceMargin());
                             $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
                             $quoteDevice->setResidual(0);
-                            
                             // Save our device
                             $quoteDeviceId = Quotegen_Model_Mapper_QuoteDevice::getInstance()->insert($quoteDevice);
+                            
+                            // Add to default group
+                            Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->insertDeviceInDefaultGroup($this->_quote->getId(), (int)$quoteDeviceId);
                             
                             // Create Link to Device
                             $quoteDeviceConfiguration = new Quotegen_Model_QuoteDeviceConfiguration();
@@ -448,8 +319,11 @@ $this->view->devices = Quotegen_Model_Mapper_QuoteDevice::getInstance()->fetchDe
         
         // Get the quote device (Also does validation)
         $quoteDevice = $this->getQuoteDevice('id');
-        
         $optionsDeleted = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->deleteAllOptionsForQuoteDevice($quoteDevice->getId());
+        
+        // Delete grouped devices as well.
+		//$qouteGroupDevicesDelete = Quotegen_Model_Mapper_
+		
         $quoteDevicesDeleted = Quotegen_Model_Mapper_QuoteDevice::getInstance()->delete($quoteDevice);
         
         // Update the quote
@@ -544,7 +418,7 @@ $this->view->devices = Quotegen_Model_Mapper_QuoteDevice::getInstance()->fetchDe
                                 $numberOfOptionsSaved ++;
                             }
                         }
-                                                
+                        
                         Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
                         
                         // Update the quote
