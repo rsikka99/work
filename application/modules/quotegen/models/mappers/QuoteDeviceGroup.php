@@ -7,6 +7,7 @@ class Quotegen_Model_Mapper_QuoteDeviceGroup extends My_Model_Mapper_Abstract
      */
     public $col_id = 'id';
     public $col_quoteId = 'quoteId';
+    public $col_default = 'isDefault';
     
     /*
      * Mapper Definitions
@@ -45,7 +46,6 @@ class Quotegen_Model_Mapper_QuoteDeviceGroup extends My_Model_Mapper_Abstract
         // Remove the id
         unset($data [$this->col_id]);
         
-        
         // Insert the data
         $id = $this->getDbTable()->insert($data);
         
@@ -55,6 +55,45 @@ class Quotegen_Model_Mapper_QuoteDeviceGroup extends My_Model_Mapper_Abstract
         $this->saveItemToCache($object);
         
         return $id;
+    }
+
+    /**
+     * Inserts the default row for devices when a quote is created
+     *
+     * @param int $quoteId            
+     * @return id number of the id that has been created
+     */
+    public function insertDefaultGroupByQuoteId ($quoteId)
+    {
+        $deviceGroup = new Quotegen_Model_QuoteDeviceGroup();
+        $deviceGroup->setQuoteId($quoteId);
+        $deviceGroup->setIsDefault(1);
+        $deviceGroup->setName('Default Group (Ungrouped)');
+        
+        $data = $deviceGroup->toArray();
+        
+        $id = $this->getDbTable()->insert($data);
+        
+        $deviceGroup->setId($id);
+        
+        // Save the object into the cache
+        $this->saveItemToCache($deviceGroup);
+        
+        return $id;
+    }
+
+    /**
+     * Gets the default row / quote Id
+     * 
+     * @param int $quoteId
+     * @return Ambigous <Quotegen_Model_QuoteDeviceGroup, void>
+     */
+    public function findDefaultGroupId ($quoteId)
+    {
+        return $this->fetch(array (
+                "{$this->col_quoteId} = ?" => $quoteId, 
+                "{$this->col_default} = ?" => 1
+        ));
     }
 
     /**
@@ -203,7 +242,7 @@ class Quotegen_Model_Mapper_QuoteDeviceGroup extends My_Model_Mapper_Abstract
     /**
      * Gets a where clause for filtering by id
      *
-     * @param $id unknown_type           
+     * @param $id unknown_type            
      * @return array
      */
     public function getWhereId ($id)
@@ -233,7 +272,6 @@ class Quotegen_Model_Mapper_QuoteDeviceGroup extends My_Model_Mapper_Abstract
         return $this->fetchAll(array (
                 "{$this->col_quoteId} = ?" => $quoteId 
         ));
-    
     }
 }
 

@@ -16,7 +16,7 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
      * @var mixed
      */
     protected $_quoteDeviceGroups = array ();
-
+    
     public function __construct ($quote, $options = null)
     {
         $this->_quote = $quote;
@@ -186,7 +186,6 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
                 $elementSet->quantity = $this->createElement('text', "quantity-{$quoteDeviceId}", array (
                         'label' => 'Quantity:', 
                         'class' => 'span1', 
-                        'value' => $quoteDevice->getQuantity(), 
                         'validators' => array (
                                 'Float', 
                                 array (

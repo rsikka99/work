@@ -1,0 +1,10 @@
+<?php 
+$quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
+$this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.phtml'));
+
+$this->headScript()->appendScript("$('i').popover();");
+
+?>
+<div class='well'>
+	<?php echo $this->form;?>
+</div>

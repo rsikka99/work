@@ -31,6 +31,27 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     protected $_pageMargin;
     
     /**
+     * Group Name
+     * 
+     * @var string
+     */
+    protected $_name;
+    
+    /**
+     * Flag for default group
+     * 
+     * @var int
+     */
+    protected $_isDefault;
+    
+    /**
+     * Are the pages going to be grouped
+     * 
+     * @var int
+     */
+    protected $_groupPages;
+    
+    /**
      * The quote
      *
      * @var Quotegen_Model_Quote
@@ -68,6 +89,13 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         
         if (isset($params->pageMargin) && ! is_null($params->pageMargin))
             $this->setPageMargin($params->pageMargin);
+        
+        if (isset($params->name) && ! is_null($params->name))
+            $this->setName($params->name);
+        
+        if (isset($params->isDefault) && ! is_null($params->isDefault))
+            $this->setIsDefault($params->isDefault);
+        
     }
     
     /*
@@ -78,7 +106,9 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         return array (
                 'id' => $this->getId(), 
                 'quoteId' => $this->getQuoteId(), 
-                'pageMargin' => $this->getPageMargin() 
+                'pageMargin' => $this->getPageMargin(),
+                "name" => $this->getName(),
+                "isDefault" => $this->getIsDefault(),
         );
     }
 
@@ -330,4 +360,52 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         $this->_pages = $_pages;
         return $this;
     }
+	/**
+     * @return the $_name
+     */
+    public function getName ()
+    {
+        return $this->_name;
+    }
+
+	/**
+     * @param string $_name
+     */
+    public function setName ($_name)
+    {
+        $this->_name = $_name;
+    }
+
+	/**
+     * @return the $_isDefault
+     */
+    public function getIsDefault ()
+    {
+        return $this->_isDefault;
+    }
+
+	/**
+     * @param number $_isDefault
+     */
+    public function setIsDefault ($_isDefault)
+    {
+        $this->_isDefault = $_isDefault;
+    }
+
+	/**
+     * @return the $_groupPages
+     */
+    public function getGroupPages ()
+    {
+        return $this->_groupPages;
+    }
+
+	/**
+     * @param number $_groupPages
+     */
+    public function setGroupPages ($_groupPages)
+    {
+        $this->_groupPages = $_groupPages;
+    }
+
 }
