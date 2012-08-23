@@ -640,14 +640,14 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     {
         $subTotal = 0;
         $packagePrice = (float)$this->getPackagePrice();
-        $quantity = $this->getQuantity();
+//        $quantity = $this->getQuantity();
         $residual = (float)$this->getResidual();
         
         // Make sure both the price and quantity are greater than 0
-        if ($packagePrice > 0 && $quantity > 0)
-        {
-            $subTotal = ($packagePrice - $residual) * $quantity;
-        }
+        //if ($packagePrice > 0 && $quantity > 0)
+        //{
+            //$subTotal = ($packagePrice - $residual) * $quantity;
+        //}
         
         return $subTotal;
     }
