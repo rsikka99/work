@@ -23,7 +23,7 @@
 
 <?php /* @var $deviceGroup Quotegen_Model_QuoteDeviceGroup */$deviceGroups = $form->getQuote()->getQuoteDeviceGroups();?>
 <?php foreach ($deviceGroups as $deviceGroup) : ?>	
-<h3> <?php echo $deviceGroup->getId(); ?></h3>
+<h3> <?php echo $deviceGroup->getName(); ?></h3>
 <table class='table table-bordered table-striped table-condensed'>
 	<tr>
 		<th style='width: 200px'>Device</th>
@@ -31,12 +31,12 @@
 		<th style='width: 150px'>Quantity</th>
 		<th style='width: 30px'></th>
 	</tr>
-	<?php $groupDevices = $deviceGroup->getQuoteDevices();?>
-	<?php /* @var $device Quotegen_Model_QuoteDevice */ foreach ($groupDevices as $device) : ?>
+	<?php $quoteDeviceGroupDevices = $deviceGroup->getQuoteDeviceGroupDevices();?>
+	<?php /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */ foreach ($quoteDeviceGroupDevices as $quoteDeviceGroupDevice) : ?>
 	<tr>
-		<td><?php echo $device->getName() ?></td>
-		<td><?php echo $device->getSku() ?></td>
-		<td></td>
+		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getName() ?></td>
+		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getSku() ?></td>
+		<td><?php echo $quoteDeviceGroupDevice->getQuantity() ?></td>
 		<td></td>
 	</tr>
 	<?php endforeach ?>

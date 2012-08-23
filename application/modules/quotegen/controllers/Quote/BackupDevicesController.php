@@ -817,7 +817,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         foreach ( $this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
             /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-            foreach ( $quoteDeviceGroup->getQuoteDevices() as $quoteDevice )
+            foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDevice )
             {
                 if ($this->performSyncOnQuoteDevice($quoteDevice))
                 {
@@ -1018,7 +1018,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         }
         
         // Make sure we don't have quote devices
-        if (count($quoteDeviceGroup->getQuoteDevices()) > 0)
+        if (count($quoteDeviceGroup->getQuoteDeviceGroupDevices()) > 0)
         {
             $this->_helper->flashMessenger(array (
                     'danger' => "You cannot delete a group that still has devices. Please remove all pages and devices before attempting to delete a group." 

@@ -69,7 +69,7 @@ class Quotegen_Model_QuoteDeviceTest extends PHPUnit_Framework_TestCase
         $quoteDevice->setQuoteDeviceOptions($quoteDeviceOptions);
         $quoteDevices [] = $quoteDevice;
         $quoteDeviceGroup->setQuote($quote);
-        $quoteDeviceGroup->setQuoteDevices($quoteDevices);
+        $quoteDeviceGroup->setQuoteDeviceGroupDevices($quoteDevices);
         
         parent::setUp();
     }

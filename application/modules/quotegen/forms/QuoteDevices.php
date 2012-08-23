@@ -124,7 +124,7 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
             }
             
             /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-            foreach ( $quoteDeviceGroup->getQuoteDevices() as $quoteDevice )
+            foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDevice )
             {
                 
                 $quoteDeviceId = $quoteDevice->getId();

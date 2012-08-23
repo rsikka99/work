@@ -67,7 +67,7 @@ class Quotegen_Model_QuoteTest extends PHPUnit_Framework_TestCase
         $quoteDevice->setQuoteDeviceOptions($quoteDeviceOptions);
         $quoteDevices [] = $quoteDevice;
         $quoteDeviceGroup->setQuote($this->_quote);
-        $quoteDeviceGroup->setQuoteDevices($quoteDevices);
+        $quoteDeviceGroup->setQuoteDeviceGroupDevices($quoteDevices);
         
         parent::setUp();
     }
@@ -91,7 +91,7 @@ class Quotegen_Model_QuoteTest extends PHPUnit_Framework_TestCase
         /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
         foreach ( $this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
-            $this->assertTrue((count($quoteDeviceGroup->getQuoteDevices()) > 0));
+            $this->assertTrue((count($quoteDeviceGroup->getQuoteDeviceGroupDevices()) > 0));
         }
     }
 
@@ -116,7 +116,7 @@ class Quotegen_Model_QuoteTest extends PHPUnit_Framework_TestCase
         foreach ( $this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
             /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-            foreach ( $quoteDeviceGroup->getQuoteDevices() as $quoteDevice )
+            foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDevice )
             {
                 
                 $this->assertTrue((count($quoteDevice->getQuoteDeviceOptions()) > 0));
@@ -133,7 +133,7 @@ class Quotegen_Model_QuoteTest extends PHPUnit_Framework_TestCase
         foreach ( $this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
             /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-            foreach ( $quoteDeviceGroup->getQuoteDevices() as $quoteDevice )
+            foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDevice )
             {
                 $this->assertNotNull($quoteDevice->getQuoteDeviceGroup());
             }

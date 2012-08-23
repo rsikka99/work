@@ -21,7 +21,7 @@ $this->headScript()->appendScript("$('i').popover();");
                     <th style="width: 70px;">Subtotal</th>
                 </tr>
                 
-                <?php foreach ($quoteDeviceGroup->getQuoteDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
+                <?php foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
                 <tr class="deviceRow">
                     <th><h5><?php echo $quoteDevice->getName(); ?></h5></th>
                     <td><?php echo $quoteDevice->getSku(); ?></td>     

@@ -14,7 +14,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @var int
      */
-    protected $_id = 0;
+    protected $_id;
     
     /**
      * The id of a quote
@@ -116,7 +116,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     
     /**
      * Packages that are attached to a quote
-     * 
+     *
      * @var Quotegen_Model_QuoteDevice
      */
     protected $_quoteDevices;
@@ -199,8 +199,6 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         return $this;
     }
 
-
-        
     /**
      * Gets the quote id
      *
@@ -210,7 +208,6 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     {
         return $this->_quoteId;
     }
-    
 
     /**
      * Sets a quote id
@@ -611,27 +608,6 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Calculates the sub total (package price * quantity)
-     *
-     * @return number The sub total
-     */
-    public function calculatePurchaseSubtotal ()
-    {
-        $subTotal = 0;
-        $packagePrice = (float)$this->getPackagePrice();
-        
-        $quantity = $this->getQuantity();
-        
-        // Make sure both the price and quantity are greater than 0
-        if ($packagePrice > 0 && $quantity > 0)
-        {
-            $subTotal = $packagePrice * $quantity;
-        }
-        
-        return $subTotal;
-    }
-
-    /**
      * Calculates the sub total with a residual ((package price - residual) * quantity)
      *
      * @return number The sub total with a residual
@@ -640,14 +616,9 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     {
         $subTotal = 0;
         $packagePrice = (float)$this->getPackagePrice();
-//        $quantity = $this->getQuantity();
         $residual = (float)$this->getResidual();
         
-        // Make sure both the price and quantity are greater than 0
-        //if ($packagePrice > 0 && $quantity > 0)
-        //{
-            //$subTotal = ($packagePrice - $residual) * $quantity;
-        //}
+        $subTotal = ($packagePrice - $residual);
         
         return $subTotal;
     }
@@ -660,7 +631,9 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     public function calculateMonthlyLeasePrice ()
     {
         $leasePrice = 0;
-        $leaseRate = $this->getQuoteDeviceGroup()->getQuote()->getLeaseRate();
+        $leaseRate = $this->getQuoteDeviceGroup()
+            ->getQuote()
+            ->getLeaseRate();
         $packagePrice = (float)$this->getPackagePrice();
         $residual = (float)$this->getResidual();
         
@@ -684,15 +657,17 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         
         // FIXME: Get quanity from adjustment page
         
+
+        //         $quantity = $this->getQuantity();
         
-		//         $quantity = $this->getQuantity();
-        
+
         // Make sure both the price and quantity are greater than 0
         //if ($leasePrice > 0 && $quantity > 0)
         //{
         //    $subTotal = $leasePrice * $quantity;
         //}
         
+
         return round($subTotal, 0);
     }
 
@@ -721,16 +696,15 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         $this->_quoteDeviceGroup = $_quoteDeviceGroup;
         return $this;
     }
-    
-    
-	/**
-	 * Gets the quoteDevices for a quote
-	 * 
+
+    /**
+     * Gets the quoteDevices for a quote
+     *
      * @return the $_quoteDevices
      */
     public function getQuoteDevices ()
     {
-        if(! isset($this->_quoteDevices))
+        if (! isset($this->_quoteDevices))
         {
             $this->_quoteDevices = Quotegen_Model_Mapper_QuoteDevice::getInstance()->fetchDevicesForQuoteDeviceGroup($this->_id);
         }

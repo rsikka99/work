@@ -36,38 +36,34 @@ class Quotegen_Form_Group extends EasyBib_Form
         
         $this->addElement('text', 'quantity', array (
                 'label' => 'Quantity', 
-                'class' => 'span1',
-                'value' => 1, 
+                'class' => 'span1', 
+                'value' => 1 
         ));
         
         $deviceDropdown = new Zend_Form_Element_Select('devices', array (
                 'label' => 'Devices:' 
         ));
         
-        /* @var $quoteDeviceGroups Quotegen_Model_QuoteDeviceGroup */
-        $quoteDeviceGroups = $this->_quote->getQuoteDeviceGroups();
-
-        foreach ( $quoteDeviceGroups as $quoteDeviceGroup )
+        $quoteDevices = $this->_quote->getQuoteDevices();
+        
+        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+        foreach ( $quoteDevices as $quoteDevice )
         {
-            /* @var $device Quotegen_Model_QuoteDevice */
-            foreach ( $quoteDeviceGroup->getQuoteDevices() as $device )
-            {
-                $deviceDropdown->addMultiOption($device->getId(), $device->getName());
-            }
+            $deviceDropdown->addMultiOption($quoteDevice->getId(), $quoteDevice->getName());
         }
         
-        $this->addElement($deviceDropdown);     
+        $this->addElement($deviceDropdown);
         
         $groupDropdown = new Zend_Form_Element_Select('groups', array (
-                'label' => 'Groups:'
+                'label' => 'Groups:' 
         ));
-       
+        
         $groupDropdown->addMultiOption('1', 'Default Group (Ungrouped)');
         $this->addElement($groupDropdown);
         
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }
-    
+
     public function loadDefaultDecorators ()
     {
         $this->setDecorators(array (
@@ -79,7 +75,9 @@ class Quotegen_Form_Group extends EasyBib_Form
                 ) 
         ));
     }
-	/**
+
+    /**
+     *
      * @return the $_quote
      */
     public function getQuote ()
@@ -87,15 +85,15 @@ class Quotegen_Form_Group extends EasyBib_Form
         return $this->_quote;
     }
 
-	/**
-     * @param Quotegen_Model_Quote $_quote
+    /**
+     *
+     * @param Quotegen_Model_Quote $_quote            
      */
     public function setQuote ($_quote)
     {
         $this->_quote = $_quote;
         return this;
     }
-
 }
 
 ?>
