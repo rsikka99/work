@@ -62,8 +62,17 @@ $this->headScript()->appendScript("$('i').popover();");
     <?php endif; ?>
     <tr>
     	<td colspan='5'> </td>
-    	<td style='text-align: right'><?php echo '$'. number_format($device->getPackagePrice(),2);?></td>
+    	<td style='text-align: right'><?php echo '$'. number_format($device->calculatePackageCost(),2);?></td>
     	<td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+   		<td></td>
+        <td></td>
     </tr>
     <?php endforeach; ?>
     <tr class="header-row">
