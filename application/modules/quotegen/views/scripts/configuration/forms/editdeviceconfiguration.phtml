@@ -3,6 +3,29 @@ $deviceConfigurationId = $this->deviceConfigurationId;
 $deviceOptions = $this->deviceOptions;
 ?>
 
+<?php $this->headScript()->captureStart('append','text/javascript') ?>
+
+    $(document).ready(function() {
+    	// set default count
+    	update_count();
+    	
+    	$("#description").keyup(function() {
+    		update_count();
+    	});
+    });
+    
+    function update_count() {
+    	var count =  $("#description").val().length;
+    	$("#charcounter").html(255 - count);
+    	if ( count > 205 ) {
+    		$("#charcounter").attr('style','color: red');
+    	} else {
+    		$("#charcounter").attr('style','color: black');
+    	}
+    }
+    
+<?php $this->headScript()->captureEnd() ?>
+    
 <form name="deviceConfiguration" id="deviceConfiguration" class="form-horizontal" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>">
 	
 	<div class="<?php echo ($this->element->getElement("masterDeviceId")->hasErrors()) ? 'error' : '' ?>">
@@ -33,6 +56,7 @@ $deviceOptions = $this->deviceOptions;
 					$this->element->getElement("description")->setAttrib('style', 'height: 100px; border-color: #B94A48; color: #B94A48;');
 				} ?>
 				<?php echo trim($this->element->getElement("description")->renderViewHelper()); ?>
+				<label>Characters Remaining: <span id="charcounter">255</span></label>
 				<?php echo $this->element->getElement("description")->renderErrors(); ?>
 			</div>
 		</div>

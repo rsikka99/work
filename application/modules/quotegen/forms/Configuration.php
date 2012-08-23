@@ -46,6 +46,7 @@ class Quotegen_Form_Configuration extends EasyBib_Form
                 'label' => 'Description:', 
                 'required' => true, 
                 'style' => 'height: 100px', 
+                'maxlength' => 255,
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
