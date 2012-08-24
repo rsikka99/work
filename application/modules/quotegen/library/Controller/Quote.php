@@ -352,7 +352,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
      *            The quote device group to clone to
      * @return int The quote device id, or false on error
      */
-    public function cloneFavoriteDeviceToQuote ($favoriteDevice, $quoteDeviceGroup, $defaultMargin = 20)
+    public function cloneFavoriteDeviceToQuote ($favoriteDevice, $defaultMargin = 20)
     {
         try
         {
@@ -362,26 +362,10 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
                 $favoriteDevice = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($favoriteDevice);
             }
             
-            // If it's not an object, it must be an id, so try and find it
-            if (! ($quoteDeviceGroup instanceof Quotegen_Model_QuoteDeviceGroup))
-            {
-                $quoteDeviceGroup = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->find($quoteDeviceGroup);
-            }
-            
-            if (! $quoteDeviceGroup)
-            {
-                throw new InvalidArgumentException('Invalid quote device group or device group id');
-            }
-            if (! $favoriteDevice)
-            {
-                throw new InvalidArgumentException('Invalid device configuration or device configuration id');
-            }
-            
             // Get a new device and sync the device properties
             $quoteDevice = $this->syncDevice(new Quotegen_Model_QuoteDevice(), $favoriteDevice->getDevice());
-            $quoteDevice->setQuoteDeviceGroupId($quoteDeviceGroup->getId());
+            $quoteDevice->setQuoteId($this->_quote->getId());
             $quoteDevice->setMargin($defaultMargin);
-            $quoteDevice->setQuantity(1);
             $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
             $quoteDevice->setResidual(0);
             
@@ -401,7 +385,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             foreach ( $favoriteDevice->getOptions() as $option )
             {
                 // Get the device option
-                $deviceOption = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->find(array (
+                $deviceOption = Quotegen_Model_Mapper_DeviceOption::getInstance()->find(array (
                         $favoriteDevice->getMasterDeviceId(), 
                         $option->getOptionId() 
                 ));
@@ -409,6 +393,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
                 // Insert quote device option
                 $quoteDeviceOption = $this->syncOption(new Quotegen_Model_QuoteDeviceOption(), $deviceOption);
                 $quoteDeviceOption->setQuoteDeviceId($quoteDeviceId);
+                $quoteDeviceOption->setQuantity($option->getQuantity());
                 $quoteDeviceOptionId = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->insert($quoteDeviceOption);
                 
                 // Insert link
@@ -419,6 +404,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         }
         catch ( Exception $e )
         {
+            My_Log::logException($e);
             return false;
         }
         return $quoteDeviceId;

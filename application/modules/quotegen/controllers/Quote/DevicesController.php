@@ -33,18 +33,29 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             'quoteId' => $this->_quoteId 
                     ));
                 }
-                /*
-                 * else { // Get the system and user defaults and apply overrides for user settings $quoteSetting =
-                 * Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting(); $userSetting =
-                 * Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
-                 * $quoteSetting->applyOverride($userSetting); $newQuoteDeviceId =
-                 * $this->cloneFavoriteDeviceToQuote($deviceConfigurationId, $quoteDeviceGroupId,
-                 * $quoteSetting->getDeviceMargin()); if ($newQuoteDeviceId) {
-                 * $this->_helper->redirector('edit-quote-device', null, null, array ( 'id' => $newQuoteDeviceId,
-                 * 'quoteId' => $this->_quoteId )); } else { $this->_helper->flashMessenger(array ( 'danger' => 'There
-                 * was an error while trying to add the favorite device. Please try again or contact your administrator
-                 * if the issue persists.' )); } }
-                 */
+                else
+                {
+                    // Get the system and user defaults and apply overrides for user settings $quoteSetting =
+                    $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
+                    $userSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
+                    $quoteSetting->applyOverride($userSetting);
+
+                    
+                    $newQuoteDeviceId = $this->cloneFavoriteDeviceToQuote($deviceConfigurationId,  $quoteSetting->getDeviceMargin());
+                    if ($newQuoteDeviceId)
+                    {
+                        $this->_helper->redirector('edit-quote-device', null, null, array (
+                                'id' => $newQuoteDeviceId, 
+                                'quoteId' => $this->_quoteId 
+                        ));
+                    }
+                    else
+                    {
+                        $this->_helper->flashMessenger(array (
+                                'danger' => 'There was an error while trying to add the favorite device. Please try again or contact your administrator if the issue persists.' 
+                        ));
+                    }
+                }
             }
         }
         
@@ -234,6 +245,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             
             if (! isset($values ['cancel']))
             {
+                
                 try
                 {
                     if ($form->isValid($values))
@@ -253,9 +265,10 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             
                             // Setup some defaults that don't get synced
                             $quoteDevice->setQuoteId($quoteId);
-							$quoteDevice->setMargin($quoteSetting->getDeviceMargin());
+                            $quoteDevice->setMargin($quoteSetting->getDeviceMargin());
                             $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
                             $quoteDevice->setResidual(0);
+                            
                             // Save our device
                             $quoteDeviceId = Quotegen_Model_Mapper_QuoteDevice::getInstance()->insert($quoteDevice);
                             
@@ -285,6 +298,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             $this->_helper->flashMessenger(array (
                                     'danger' => 'There was an error processing this request.  Please try again.' 
                             ));
+                            My_Log::logException($e);
                             $form->populate($request->getPost());
                         }
                     }
@@ -322,8 +336,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         $optionsDeleted = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->deleteAllOptionsForQuoteDevice($quoteDevice->getId());
         
         // Delete grouped devices as well.
-		//$qouteGroupDevicesDelete = Quotegen_Model_Mapper_
-		
+        //$qouteGroupDevicesDelete = Quotegen_Model_Mapper_
+        
+
         $quoteDevicesDeleted = Quotegen_Model_Mapper_QuoteDevice::getInstance()->delete($quoteDevice);
         
         // Update the quote

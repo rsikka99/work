@@ -12,9 +12,9 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
     
     /*
      * Define the primary key of the model association
-    */
+     */
     public $col_deviceConfigurationId = 'deviceConfigurationId';
-    public $col_optionId = 'optionId';    
+    public $col_optionId = 'optionId';
 
     /**
      * Gets an instance of the mapper
@@ -25,20 +25,19 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
     {
         return self::getCachedInstance();
     }
-    
+
     /**
      * Counts and returns the amount of rows by deviceConfigurationId
      *
-     * @param int $deviceConfigurationId
+     * @param int $deviceConfigurationId            
      * @return number The amount of rows in the database.
      */
     public function countByDeviceId ($deviceConfigurationId)
     {
         return $this->count(array (
-                "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId
+                "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId 
         ));
     }
-    
 
     /**
      * Saves an instance of Quotegen_Model_DeviceConfigurationOption to the database.
@@ -126,7 +125,7 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
         else
         {
             $whereClause = array (
-                    "{$this->col_deviceConfigurationId} = ?"  => $object [0], 
+                    "{$this->col_deviceConfigurationId} = ?" => $object [0], 
                     "{$this->col_optionId} = ?" => $object [1] 
             );
         }
@@ -137,15 +136,15 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
 
     /**
      * Delete a deviceConfigurationOption by deviceConfigurationId
-     * 
-     * @param int $deviceConfigurationId
+     *
+     * @param int $deviceConfigurationId            
      * @return number The number of rows affected.
      */
     public function deleteDeviceConfigurationOptionById ($deviceConfigurationId)
     {
         return $this->getDbTable()->delete(array (
                 "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId 
-        ));        
+        ));
     }
 
     /**
@@ -165,7 +164,7 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
         }
         
         // Assuming we don't have a cached object, lets go get it.
-        $result = $this->getDbTable()->find($id);
+        $result = $this->getDbTable()->find($id [0], $id [1]);
         if (0 == count($result))
         {
             return;
