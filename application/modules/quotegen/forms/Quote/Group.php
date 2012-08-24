@@ -34,10 +34,11 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Horizontal
             /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
-                $this->addElement('text', "quantity-{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}-{$quoteDeviceGroupDevice->getQuoteDeviceId()}", array (
-                        'label' => 'Quantity', 
+                $this->addElement('text', "quantity_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}", array (
+                        'label' => 'Quantity',
+                        'required' => true, 
                         'class' => 'span1', 
-                        'value' => 1, 
+                        'value' => $quoteDeviceGroupDevice->getQuantity(), 
                         'decorators' => array (
                                 'FieldSize', 
                                 'ViewHelper', 

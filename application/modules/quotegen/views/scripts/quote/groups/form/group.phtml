@@ -36,7 +36,7 @@
     	<tr>
     		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getName() ?></td>
     		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getSku() ?></td>
-    		<td><?php echo $form->getElement("quantity-{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}-{$quoteDeviceGroupDevice->getQuoteDeviceId()}"); ?></td>
+    		<td><?php echo $form->getElement("quantity_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}"); ?></td>
     		<td></td>
     	</tr>
     	<?php endforeach ?>
