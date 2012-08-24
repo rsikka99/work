@@ -32,13 +32,15 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
         if ($request->isPost())
         {
             $values = $request->getPost();
-            if (isset($values ['back']))
+            if (isset($values ['goBack']))
             {
-                $this->_helper->redirector('index', 'quote_settings', null, array (
+                $this->_helper->redirector('index', 'quote_profitability', null, array (
                         'quoteId' => $this->_quoteId 
                 ));
             }
         }
+        
+        $this->view->navigationForm = new Quotegen_Form_Quote_Navigation(Quotegen_Form_Quote_Navigation::BUTTONS_BACK);
     }
 
     public function purchaseQuoteAction ()

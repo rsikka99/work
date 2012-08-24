@@ -46,10 +46,22 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                  * if the issue persists.' )); } }
                  */
             }
+            else if (isset($values ['goBack']))
+            {
+                $this->_helper->redirector('index', 'quote_settings', null, array (
+                        'quoteId' => $this->_quoteId 
+                ));
+            }
+            else if (isset($values ['saveAndContinue']))
+            {
+                $this->_helper->redirector('index', 'quote_groups', null, array (
+                        'quoteId' => $this->_quoteId 
+                ));
+            }
         }
         
         $this->view->form = $form;
-        $this->view->navigationForm = new Quotegen_Form_Quote_Navigation(Quotegen_Form_Quote_Navigation::BUTTONS_ALL);
+        $this->view->navigationForm = new Quotegen_Form_Quote_Navigation(Quotegen_Form_Quote_Navigation::BUTTONS_BACK_NEXT);
         $this->view->devices = Quotegen_Model_Mapper_QuoteDevice::getInstance()->fetchDevicesForQuote($this->_quoteId);
     }
 
@@ -254,7 +266,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             
                             // Setup some defaults that don't get synced
                             $quoteDevice->setQuoteId($quoteId);
-							$quoteDevice->setMargin($quoteSetting->getDeviceMargin());
+                            $quoteDevice->setMargin($quoteSetting->getDeviceMargin());
                             $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
                             $quoteDevice->setResidual(0);
                             // Save our device
@@ -323,8 +335,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         $optionsDeleted = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->deleteAllOptionsForQuoteDevice($quoteDevice->getId());
         
         // Delete grouped devices as well.
-		//$qouteGroupDevicesDelete = Quotegen_Model_Mapper_
-		
+        //$qouteGroupDevicesDelete = Quotegen_Model_Mapper_
+        
+
         $quoteDevicesDeleted = Quotegen_Model_Mapper_QuoteDevice::getInstance()->delete($quoteDevice);
         
         // Update the quote
