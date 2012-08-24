@@ -523,17 +523,16 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculatePackageCost ()
     {
-        // Get the device price
-        $price = (float)$this->getCost();
+        // Get the device cost
+        $cost = (float)$this->getCost();
+            // Tack on the option costs
+            /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
+            foreach ( $this->getQuoteDeviceOptions() as $quoteDeviceOption )
+            {
+                $cost += $quoteDeviceOption->getSubTotal();
+            }
         
-        // Tack on the option prices
-        /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
-        foreach ( $this->getQuoteDeviceOptions() as $quoteDeviceOption )
-        {
-            $price += $quoteDeviceOption->getSubTotal();
-        }
-        
-        return $price;
+        return $cost;
     }
 
     /**
