@@ -36,6 +36,7 @@ class Quotegen_Form_Configuration extends EasyBib_Form
         $this->addElement('text', 'name', array (
                 'label' => 'Name:', 
                 'required' => true, 
+                'maxlength' => 255,
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
