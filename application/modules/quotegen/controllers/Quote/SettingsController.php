@@ -127,7 +127,7 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
                     
                     if (isset($values ['saveAndContinue']))
                     {
-                        $this->_helper->redirector('index', 'quote_reports', null, array (
+                        $this->_helper->redirector('index', 'quote_devices', null, array (
                                 'quoteId' => $this->_quoteId 
                         ));
                     }
