@@ -49,6 +49,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         }
         
         $this->view->form = $form;
+        $this->view->navigationForm = new Quotegen_Form_Quote_Navigation(Quotegen_Form_Quote_Navigation::BUTTONS_ALL);
         $this->view->devices = Quotegen_Model_Mapper_QuoteDevice::getInstance()->fetchDevicesForQuote($this->_quoteId);
     }
 

@@ -44,7 +44,7 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
             $leasingSchemaId = ($leasingSchemaTerm) ? $leasingSchemaTerm->getLeasingSchemaId() : FALSE;
         }
         // We pass the leasing schema id here so that the form knows which values to populate  for the terms
-        $form = new Quotegen_Form_EditQuote($leasingSchemaId);
+        $form = new Quotegen_Form_Quote_QuoteSetting($leasingSchemaId);
         $populateData = $this->_quote->toArray();
         if ($leasingSchemaTerm)
         {
@@ -76,19 +76,31 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
                     {
                         $formValues ['pageCoverageMonochrome'] = $quoteSetting->getPageCoverageMonochrome();
                     }
+                    
                     if (strlen($formValues ['pageCoverageColor']) === 0)
                     {
                         $formValues ['pageCoverageColor'] = $quoteSetting->getPageCoverageColor();
                     }
+                    
                     if ($formValues ['pricingConfigId'] === (string)Proposalgen_Model_PricingConfig::NONE)
                     {
                         $formValues ['pricingConfigId'] = $quoteSetting->getPricingConfigId();
                     }
                     
+                    if (strlen($formValues ['adminCostPerPage']) === 0)
+                    {
+                        $formValues ['adminCostPerPage'] = $quoteSetting->getAdminCostPerPage();
+                    }
+                    
+                    if (strlen($formValues ['serviceCostPerPage']) === 0)
+                    {
+                        $formValues ['serviceCostPerPage'] = $quoteSetting->getServiceCostPerPage();
+                    }
+                    
                     // Update current quote object and save new quote items to database
                     $this->_quote->populate($formValues);
                     
-                    if (!$leasingSchemaTerm || (int)$formValues ['leasingSchemaTermId'] != (int)$leasingSchemaTerm->getId())
+                    if (! $leasingSchemaTerm || (int)$formValues ['leasingSchemaTermId'] != (int)$leasingSchemaTerm->getId())
                     {
                         $quoteLeaseTerm = new Quotegen_Model_QuoteLeaseTerm();
                         $quoteLeaseTerm->setQuoteId($this->_quote->getId());
