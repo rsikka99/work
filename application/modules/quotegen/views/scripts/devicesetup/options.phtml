@@ -17,6 +17,10 @@ $id = $this->id;
 		<form name="frmOptions" id="frmOptions" action="" method="post">
 			<input type="hidden" name="optionid" id="optionid" value="" />
 			
+			<div class="clearfix">
+		    	<a class="btn btn-success btn-small pull-right create-button" href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'option', 'action' => 'create', 'id' => $id, 'page' => 'options')) ?>"> <i class="icon-white icon-plus-sign"></i> Create new</a>
+			</div>
+			
 			<div id="filter" class="well">
 				<p id="view_filter">
 					<label for="cboView" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">View:</label>
