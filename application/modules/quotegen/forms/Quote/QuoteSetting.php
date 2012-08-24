@@ -9,7 +9,7 @@ class Quotegen_Form_Quote_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
         $this->addPrefixPath('My_Form_Element', 'My/Form/Element', 'element');
         
         parent::__construct($options);
-        Quotegen_Form_Quote_Navigation::addFormActionsToForm(Quotegen_Form_Quote_Navigation::BUTTONS_SAVE_NEXT, $this);
+        Quotegen_Form_Quote_Navigation::addFormActionsToForm(Quotegen_Form_Quote_Navigation::BUTTONS_NEXT, $this);
     }
 
     public function init ()

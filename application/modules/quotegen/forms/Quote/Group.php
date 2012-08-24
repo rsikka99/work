@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_Form_Group extends EasyBib_Form
+class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Horizontal
 {
     /**
      * This represents the current quote being worked on
@@ -13,32 +13,42 @@ class Quotegen_Form_Group extends EasyBib_Form
     {
         $this->_quote = $quote;
         parent::__construct($options);
+        Quotegen_Form_Quote_Navigation::addFormActionsToForm(Quotegen_Form_Quote_Navigation::BUTTONS_ALL, $this);
     }
 
     public function init ()
     {
         // Set the method for the display form to POST
         $this->setMethod('POST');
-        /**
-         * Add class to form for label alignment
-         *
-         * - Vertical .form-vertical (not required)	Stacked, left-aligned labels
-         * over controls (default)
-         * - Inline .form-inline Left-aligned label and inline-block controls
-         * for compact style
-         * - Search .form-search Extra-rounded text input for a typical search
-         * aesthetic
-         * - Horizontal .form-horizontal
-         *
-         * Use .form-horizontal to have same experience as with Bootstrap v1!
-         */
-        $this->setAttrib('class', 'form-horizontal form-center-actions');
+        $this->_addClassNames('form-center-actions');
         
         $this->addElement('text', 'quantity', array (
                 'label' => 'Quantity', 
                 'class' => 'span1', 
                 'value' => 1 
         ));
+        
+        /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
+        foreach ( $this->getQuote()->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        {
+            /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+            foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+            {
+                $this->addElement('text', "quantity_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}", array (
+                        'label' => 'Quantity',
+                        'required' => true, 
+                        'class' => 'span1', 
+                        'value' => $quoteDeviceGroupDevice->getQuantity(), 
+                        'decorators' => array (
+                                'FieldSize', 
+                                'ViewHelper', 
+                                'Addon', 
+                                'ElementErrors', 
+                                'Wrapper' 
+                        ) 
+                ));
+            }
+        }
         
         $deviceDropdown = new Zend_Form_Element_Select('devices', array (
                 'label' => 'Devices:' 
@@ -60,8 +70,6 @@ class Quotegen_Form_Group extends EasyBib_Form
         
         $groupDropdown->addMultiOption('1', 'Default Group (Ungrouped)');
         $this->addElement($groupDropdown);
-        
-        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }
 
     public function loadDefaultDecorators ()
@@ -77,8 +85,9 @@ class Quotegen_Form_Group extends EasyBib_Form
     }
 
     /**
+     * Gets the quote
      *
-     * @return the $_quote
+     * @return Quotegen_Model_Quote
      */
     public function getQuote ()
     {
@@ -86,6 +95,7 @@ class Quotegen_Form_Group extends EasyBib_Form
     }
 
     /**
+     * Sets the quote
      *
      * @param Quotegen_Model_Quote $_quote            
      */

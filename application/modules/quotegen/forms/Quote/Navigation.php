@@ -26,7 +26,7 @@ class Quotegen_Form_Quote_Navigation extends Twitter_Bootstrap_Form
      *            TWO_BUTTONS = Back, Save And Continue.
      *            ONLY_BACK = Back.
      *            ONLY_NEXT = Save And Continue.
-     * @param unknown_type $options
+     * @param null $options
      *            See Zend_Form::__construct()
      * @throws InvalidArgumentException Thrown when you pass an incorrect button mode
      */
