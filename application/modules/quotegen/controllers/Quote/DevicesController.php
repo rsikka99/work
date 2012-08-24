@@ -39,9 +39,8 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                     $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
                     $userSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
                     $quoteSetting->applyOverride($userSetting);
-
                     
-                    $newQuoteDeviceId = $this->cloneFavoriteDeviceToQuote($deviceConfigurationId,  $quoteSetting->getDeviceMargin());
+                    $newQuoteDeviceId = $this->cloneFavoriteDeviceToQuote($deviceConfigurationId, $quoteSetting->getDeviceMargin());
                     if ($newQuoteDeviceId)
                     {
                         $this->_helper->redirector('edit-quote-device', null, null, array (
@@ -710,15 +709,11 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         
         $devicesSynced = 0;
         /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
-        foreach ( $this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        foreach ( $this->_quote->getQuoteDevices() as $quoteDevice )
         {
-            /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-            foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDevice )
+            if ($this->performSyncOnQuoteDevice($quoteDevice))
             {
-                if ($this->performSyncOnQuoteDevice($quoteDevice))
-                {
-                    $devicesSynced ++;
-                }
+                $devicesSynced ++;
             }
         }
         
