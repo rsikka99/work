@@ -30,8 +30,8 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
         // Get the system and user defaults and apply overrides for user settings
         $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
         $userSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
-        $quoteSetting->applyOverride($userSetting);
         
+        $quoteSetting->applyOverride($userSetting);
         // Get the leasing schema id to have the form populate the select box options properly
         $leasingSchemaId = false;
         $leasingSchemaTerm = $this->_quote->getLeasingSchemaTerm();

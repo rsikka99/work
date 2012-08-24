@@ -127,10 +127,10 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
             $this->setDeviceMargin($settings->deviceMargin);
         if (isset($settings->pageMargin) && ! is_null($settings->pageMargin))
             $this->setPageMargin($settings->pageMargin);
-        if (isset($params->serviceCostPerPage) && ! is_null($params->serviceCostPerPage))
-            $this->setServiceCostPerPage($params->serviceCostPerPage);
-        if (isset($params->adminCostPerPage) && ! is_null($params->adminCostPerPage))
-            $this->setAdminCostPerPage($params->adminCostPerPage);
+        if (isset($settings->serviceCostPerPage) && ! is_null($settings->serviceCostPerPage))
+            $this->setServiceCostPerPage($settings->serviceCostPerPage);
+        if (isset($settings->adminCostPerPage) && ! is_null($settings->adminCostPerPage))
+            $this->setAdminCostPerPage($settings->adminCostPerPage);
         
         if (isset($settings->pricingConfigId) && ! is_null($settings->pricingConfigId))
         {
