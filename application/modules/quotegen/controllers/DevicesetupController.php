@@ -970,18 +970,9 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                     // Save if option and device id
                     if ($optionId && $masterDeviceId)
                     {
-	                    // Prep values
-	                    if (isset($values ["included{$optionId}"]))
-	                    {
-	                    	$includedQuantity = $values ["included{$optionId}"];   
-	                    }
-	                    else
-	                    {
-	                        $includedQuantity = null;
-	                    }
 	                    $deviceOption->setMasterDeviceId($masterDeviceId);
 	                    $deviceOption->setOptionId($optionId);
-	                    $deviceOption->setIncludedQuantity($includedQuantity);
+	                    $deviceOption->setIncludedQuantity(0);
 	                    
 	                    // Update included quantity for Option
                         if (isset($values ['btnUpdate']))
