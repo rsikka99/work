@@ -1,5 +1,5 @@
 <?php 
-	/* @var $form Quotegen_Form_Group */
+	/* @var $form Quotegen_Form_Quote_Group */
 	$form = $this->element; 
 	
 	// Get elements in the form 
@@ -19,26 +19,29 @@
 	</table>
 	<br/>
 	<button type="submit" name="addGroup" title="Add Group" class="btn btn-success">Add Group</button> 
-</form>
 
-<?php /* @var $deviceGroup Quotegen_Model_QuoteDeviceGroup */$deviceGroups = $form->getQuote()->getQuoteDeviceGroups();?>
-<?php foreach ($deviceGroups as $deviceGroup) : ?>	
-<h3> <?php echo $deviceGroup->getName(); ?></h3>
-<table class='table table-bordered table-striped table-condensed'>
-	<tr>
-		<th style='width: 200px'>Device</th>
-		<th >Sku</th>
-		<th style='width: 150px'>Quantity</th>
-		<th style='width: 30px'></th>
-	</tr>
-	<?php $quoteDeviceGroupDevices = $deviceGroup->getQuoteDeviceGroupDevices();?>
-	<?php /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */ foreach ($quoteDeviceGroupDevices as $quoteDeviceGroupDevice) : ?>
-	<tr>
-		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getName() ?></td>
-		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getSku() ?></td>
-		<td><?php echo $quoteDeviceGroupDevice->getQuantity() ?></td>
-		<td></td>
-	</tr>
-	<?php endforeach ?>
-</table>
-<?php endforeach ?>
+
+    <?php /* @var $deviceGroup Quotegen_Model_QuoteDeviceGroup */$deviceGroups = $form->getQuote()->getQuoteDeviceGroups();?>
+    <?php foreach ($deviceGroups as $deviceGroup) : ?>	
+    <h3> <?php echo $deviceGroup->getName(); ?></h3>
+    <table class='table table-bordered table-striped table-condensed'>
+    	<tr>
+    		<th style='width: 200px'>Device</th>
+    		<th >Sku</th>
+    		<th style='width: 150px'>Quantity</th>
+    		<th style='width: 30px'></th>
+    	</tr>
+    	<?php $quoteDeviceGroupDevices = $deviceGroup->getQuoteDeviceGroupDevices();?>
+    	<?php /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */ foreach ($quoteDeviceGroupDevices as $quoteDeviceGroupDevice) : ?>
+    	<tr>
+    		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getName() ?></td>
+    		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getSku() ?></td>
+    		<td><?php echo $form->getElement("quantity-{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}-{$quoteDeviceGroupDevice->getQuoteDeviceId()}"); ?></td>
+    		<td></td>
+    	</tr>
+    	<?php endforeach ?>
+    </table>
+    <?php endforeach ?>
+    
+    <?php echo $form->getDisplayGroup('actions')->render(); ?>
+</form>

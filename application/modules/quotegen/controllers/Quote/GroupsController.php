@@ -2,6 +2,7 @@
 
 class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
 {
+
     public function init ()
     {
         parent::init();
@@ -13,8 +14,16 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
      */
     public function indexAction ()
     {
-        $form = new Quotegen_Form_Group($this->_quote);
-                
+        $form = new Quotegen_Form_Quote_Group($this->_quote);
+        
+        $request = $this->getRequest();
+        if ($request->isPost())
+        {
+            $values = $request->getPost();
+            
+            
+        }
+        
         $this->view->form = $form;
     }
 }
