@@ -120,8 +120,10 @@ class Quotegen_Form_Quote_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
                                 ) 
                         ), 
                         'Float' 
-                ) 
+                ), 
+                'append' => 'Default: ' . number_format($quoteSetting->getPageCoverageColor(), 2) . "%" 
         ));
+        $this->addElement($pageCoverageColor);
         
         $pageCoverageMonochrome = $this->createElement('text', 'pageCoverageMonochrome', array (
                 'label' => 'Page Coverage Monochrome:', 
@@ -140,10 +142,9 @@ class Quotegen_Form_Quote_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
                                 ) 
                         ), 
                         'Float' 
-                ) 
+                ), 
+                'append' => 'Default: ' . number_format($quoteSetting->getPageCoverageMonochrome(), 2) . '%' 
         ));
-        
-        $this->addElement($pageCoverageColor);
         $this->addElement($pageCoverageMonochrome);
         
         /**
@@ -153,8 +154,6 @@ class Quotegen_Form_Quote_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
          */
         $adminCostPerPage = $this->createElement('text', 'adminCostPerPage', array (
                 'label' => 'Admin Cost Per Page:', 
-                
-                'required' => true, 
                 'class' => 'input-mini', 
                 'filters' => array (
                         'StringTrim', 
@@ -178,8 +177,6 @@ class Quotegen_Form_Quote_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
         
         $serviceCostPerPage = $this->createElement('text', 'serviceCostPerPage', array (
                 'label' => 'Service Cost Per Page:', 
-                
-                'required' => true, 
                 'class' => 'input-mini', 
                 'filters' => array (
                         'StringTrim', 
@@ -200,9 +197,6 @@ class Quotegen_Form_Quote_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
                     ->currency((float)$quoteSetting->getServiceCostPerPage()) 
         ));
         $this->addElement($serviceCostPerPage);
-        
-        $pageCoverageColor->setAttrib('append', 'Default: ' . number_format($quoteSetting->getPageCoverageColor(), 2) . "%");
-        $pageCoverageMonochrome->setAttrib('append', 'Default: ' . number_format($quoteSetting->getPageCoverageMonochrome(), 2) . '%');
         
         /**
          * ------------------------------------------------------------------

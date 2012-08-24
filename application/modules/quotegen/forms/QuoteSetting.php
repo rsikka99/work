@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_Form_QuoteSetting extends EasyBib_Form
+class Quotegen_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
 {
     protected $_showSystemDefaults;
 
@@ -15,7 +15,8 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
     public function __construct ($showDefaults = false, $options = null)
     {
         $this->_showSystemDefaults = $showDefaults;
-        parent::__construct();
+        parent::__construct($options);
+        Quotegen_Form_Quote_Navigation::addFormActionsToForm(Quotegen_Form_Quote_Navigation::BUTTONS_SAVE, $this);
     }
 
     public function init ()
@@ -41,7 +42,7 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                 'label' => 'Page Coverage Mono:', 
                 'required' => true, 
                 'class' => 'span1', 
-                'filters' => array (    
+                'filters' => array (
                         'StringTrim', 
                         'StripTags' 
                 ), 
@@ -149,29 +150,29 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
         $this->addElement($adminCostPerPage);
         
         $serviceCostPerPage = $this->createElement('text', 'serviceCostPerPage', array (
-                'label' => 'Service Cost Per Page:',
-        
-                'required' => true,
-                'class' => 'input-mini',
+                'label' => 'Service Cost Per Page:', 
+                
+                'required' => true, 
+                'class' => 'input-mini', 
                 'filters' => array (
-                        'StringTrim',
-                        'StripTags'
-                ),
+                        'StringTrim', 
+                        'StripTags' 
+                ), 
                 'validators' => array (
                         array (
-                                'validator' => 'Between',
+                                'validator' => 'Between', 
                                 'options' => array (
-                                        'min' => 0,
-                                        'max' => 5,
-                                        'inclusive' => false
-                                )
-                        ),
-                        'Float'
-                )
+                                        'min' => 0, 
+                                        'max' => 5, 
+                                        'inclusive' => false 
+                                ) 
+                        ), 
+                        'Float' 
+                ) 
         ));
         $this->addElement($serviceCostPerPage);
         
-        $pricingConfigDropdown = new Zend_Form_Element_Select('pricingConfigId', array (
+        $pricingConfigDropdown = $this->createElement('select', 'pricingConfigId', array (
                 'label' => 'Toner Preference:' 
         ));
         
@@ -193,45 +194,23 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
         if ($this->_showSystemDefaults)
         {
             $systemDefaultQuoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->find(Quotegen_Model_QuoteSetting::SYSTEM_ROW_ID);
-            $pageCoverageMonochrome->setDescription($systemDefaultQuoteSetting->getPageCoverageMonochrome());
+            $pageCoverageMonochrome->setAttrib('append', sprintf("System Default: %s%%", number_format($systemDefaultQuoteSetting->getPageCoverageMonochrome(), 2)));
             $pageCoverageMonochrome->setRequired(false);
-            $pageCoverageColor->setDescription($systemDefaultQuoteSetting->getPageCoverageColor());
+            $pageCoverageColor->setAttrib('append', sprintf("System Default: %s%%", number_format($systemDefaultQuoteSetting->getPageCoverageColor(), 2)));
             $pageCoverageColor->setRequired(false);
-            $deviceMargin->setDescription($systemDefaultQuoteSetting->getDeviceMargin());
+            $adminCostPerPage->setAttrib('append', sprintf("System Default: %s", $this->getView()
+                ->currency((float)$systemDefaultQuoteSetting->getAdminCostPerPage())));
+            $adminCostPerPage->setRequired(false);
+            $serviceCostPerPage->setAttrib('append', sprintf("System Default: %s", $this->getView()
+                ->currency((float)$systemDefaultQuoteSetting->getServiceCostPerPage())));
+            $serviceCostPerPage->setRequired(false);
+            
+            $deviceMargin->setAttrib('append', sprintf("System Default: %s%%", number_format($systemDefaultQuoteSetting->getDeviceMargin(), 2)));
             $deviceMargin->setRequired(false);
-            $pageMargin->setDescription($systemDefaultQuoteSetting->getPageMargin());
+            $pageMargin->setAttrib('append', sprintf("System Default: %s", number_format($systemDefaultQuoteSetting->getPageMargin(), 2)));
             $pageMargin->setRequired(false);
-            $pricingConfigDropdown->setDescription($systemDefaultQuoteSetting->getPricingConfigId());
-        }
-        
-        // Add the submit button
-        $this->addElement('submit', 'submit', array (
-                'ignore' => true, 
-                'label' => 'Save' 
-        ));
-        
-        // Add the cancel button
-        $this->addElement('submit', 'cancel', array (
-                'ignore' => true, 
-                'label' => 'Cancel' 
-        ));
-        
-        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
-    }
-
-    public function loadDefaultDecorators ()
-    {
-        // Only show the custom view script if we are showing defaults
-        if ($this->_showSystemDefaults)
-        {
-            $this->setDecorators(array (
-                    array (
-                            'ViewScript', 
-                            array (
-                                    'viewScript' => 'quotesetting/form/quotesetting.phtml' 
-                            ) 
-                    ) 
-            ));
+            $pricingConfigDropdown->setAttrib('append', sprintf("System Default: %s", $systemDefaultQuoteSetting->getPricingConfig()
+                ->getConfigName()));
         }
     }
 }
