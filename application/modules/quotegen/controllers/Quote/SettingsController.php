@@ -44,7 +44,7 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
             $leasingSchemaId = ($leasingSchemaTerm) ? $leasingSchemaTerm->getLeasingSchemaId() : FALSE;
         }
         // We pass the leasing schema id here so that the form knows which values to populate  for the terms
-        $form = new Quotegen_Form_EditQuote($leasingSchemaId);
+        $form = new Quotegen_Form_Quote_QuoteSetting($leasingSchemaId);
         $populateData = $this->_quote->toArray();
         if ($leasingSchemaTerm)
         {

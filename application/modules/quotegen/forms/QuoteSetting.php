@@ -41,7 +41,7 @@ class Quotegen_Form_QuoteSetting extends EasyBib_Form
                 'label' => 'Page Coverage Mono:', 
                 'required' => true, 
                 'class' => 'span1', 
-                'filters' => array (
+                'filters' => array (    
                         'StringTrim', 
                         'StripTags' 
                 ), 
