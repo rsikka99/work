@@ -199,6 +199,7 @@ class Quotegen_Model_Mapper_QuoteDeviceOption extends My_Model_Mapper_Abstract
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
         $entries = array ();
+        
         foreach ( $resultSet as $row )
         {
             $object = new Quotegen_Model_QuoteDeviceOption($row->toArray());
@@ -208,6 +209,7 @@ class Quotegen_Model_Mapper_QuoteDeviceOption extends My_Model_Mapper_Abstract
             
             $entries [] = $object;
         }
+        
         return $entries;
     }
 
@@ -242,7 +244,7 @@ class Quotegen_Model_Mapper_QuoteDeviceOption extends My_Model_Mapper_Abstract
     public function fetchAllOptionsForQuoteDevice ($id)
     {
         return $this->fetchAll(array (
-                'quoteDeviceId = ?' => $id 
+                'quoteDeviceId = ?' => (int)$id 
         ));
     }
 }

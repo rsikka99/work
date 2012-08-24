@@ -111,10 +111,10 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
                             $quoteId = Quotegen_Model_Mapper_Quote::getInstance()->insert($quote);
                             
                             $quoteDeviceGroup = new Quotegen_Model_QuoteDeviceGroup();
-                            
                             $quoteDeviceGroup->setQuoteId($quoteId);
                             $quoteDeviceGroup->setPageMargin($quoteSetting->getPageMargin());
-                            
+                            $quoteDeviceGroup->setName('Default Group (Ungrouped)');
+                            $quoteDeviceGroup->setIsDefault(1);
                             $quoteDeviceGroupId = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->insert($quoteDeviceGroup);
                             
                             $db->commit();
