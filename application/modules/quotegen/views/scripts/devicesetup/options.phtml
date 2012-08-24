@@ -39,6 +39,10 @@ $id = $this->id;
 				<input type="submit" name="btnClearSearch" id="btnClearSearch" value="Clear" class="btn" />
 			</div>
 			
+			<div class="clearfix">
+		    	<a class="btn btn-success btn-small pull-right create-button" href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'option', 'action' => 'create', 'id' => $id, 'page' => 'options')) ?>"> <i class="icon-white icon-plus-sign"></i> Create new</a>
+			</div>
+			
 			<?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
 	            <table class="table table-bordered table-striped table-condensed">
 	                <tr>

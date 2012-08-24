@@ -1026,6 +1026,7 @@ DEFAULT CHARACTER SET = utf8;
 CREATE  TABLE IF NOT EXISTS `qgen_devices` (
   `masterDeviceId` INT(11) NOT NULL ,
   `sku` VARCHAR(255) NOT NULL ,
+  `description` TEXT NULL DEFAULT NULL ,
   PRIMARY KEY (`masterDeviceId`) ,
   INDEX `quotegen_devices_ibfk_1` (`masterDeviceId` ASC) ,
   CONSTRAINT `quotegen_devices_ibfk_1`

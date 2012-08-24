@@ -95,6 +95,20 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                         )) 
                 )
         ));
+
+
+        /*
+         * Description of standard features
+        */
+        $this->addElement('textarea', 'description', array (
+                'label' => 'Standard Features:', 
+                'required' => true, 
+                'style' => 'height: 100px', 
+                'filters' => array (
+                        'StringTrim', 
+                        'StripTags' 
+                ) 
+        ));
         
         /*
          * Toner Configuration

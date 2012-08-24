@@ -352,7 +352,8 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
 	                            $device = new Quotegen_Model_Device();
 	                            $devicevalues = array (
 	                                    'masterDeviceId' => $masterDeviceId, 
-	                                    'sku' => $sku 
+	                                    'sku' => $sku,
+	                                    'description' => $values ['description']
 	                            );
 	                            $device->populate($devicevalues);
 	                            $devicemapper->insert($device);
@@ -471,6 +472,9 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             $sku = $device->getSku();
             $form->getElement('can_sell')->setValue(true);
         	$form->getElement('sku')->setValue($sku);
+
+        	$description = $device->getDescription();
+        	$form->getElement('description')->setValue($description);
         }
         
         // Update hidden toner config to current toner config value so it gets submitted with the form
@@ -503,7 +507,8 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             $device = new Quotegen_Model_Device();
                             $devicevalues = array (
                                     'masterDeviceId' => $masterDeviceId, 
-                                    'sku' => $values ['sku'] 
+                                    'sku' => $values ['sku'],
+                                    'description' => $values ['description']
                             );
                             $device->populate($devicevalues);
                             

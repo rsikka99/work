@@ -79,10 +79,6 @@ $this->headScript()->appendScript("$('i').popover();");
         <th></th>
     </tr>
 </table>
-<form>
-	<div class="form-actions">
-		<input type="submit" name="back" value="Go Back" class="btn"/>
-	    <input type="submit" name="save" value="Save" class="btn btn-success"/>
-	    <input type="submit" name="saveAndContinue" value="Save &amp; Return" class="btn btn-primary"/>
-	</div>
-</form>
+<div class="well">
+	<?php echo $this->navigationForm; ?>
+</div>

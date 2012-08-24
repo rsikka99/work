@@ -78,7 +78,12 @@ class Quotegen_OptionController extends Zend_Controller_Action
 
     public function createAction ()
     {
+        // Get master device id if passed in
+        $page = $this->_getParam('page', false);
+        $id = $this->_getParam('id', false);
+        
         $form = new Quotegen_Form_Option();
+        
         // If the form is on post insert data
         $request = $this->getRequest();
         
@@ -108,8 +113,18 @@ class Quotegen_OptionController extends Zend_Controller_Action
                             Quotegen_Model_Mapper_OptionCategory::getInstance()->insert($optionCategory);
                         }
                         
-                        // Redirect client back to index
-                        $this->_helper->redirector('index');
+                        if ($page == "options")
+                        {
+                            // User has cancelled. Go back to the edit page
+                            $this->_helper->redirector('options', 'devicesetup', 'quotegen', array (
+                                    'id' => $id 
+                            ));
+                        }
+                        else
+                        {
+                            // User has cancelled. Go back to the edit page
+                            $this->_helper->redirector('index');
+                        }
                     }
                     else // Values in form data aren't valid.
                     {
@@ -125,11 +140,22 @@ class Quotegen_OptionController extends Zend_Controller_Action
             }
             else // Cancel was hit: redirect user
             {
-                $this->_helper->redirector('index');
+                if ($page == "options")
+                {
+                    // User has cancelled. Go back to the edit page
+                    $this->_helper->redirector('options', 'devicesetup', 'quotegen', array (
+                            'id' => $id 
+                    ));
+                }
+                else
+                {
+                    // User has cancelled. Go back to the edit page
+                    $this->_helper->redirector('index');
+                }
             }
         }
         
-       	$this->view->form = $form;
+        $this->view->form = $form;
     }
 
     public function editAction ()
