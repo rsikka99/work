@@ -22,6 +22,13 @@ class Quotegen_Model_Device extends My_Model_Abstract
      * @var string
      */
     protected $_sku;
+
+    /**
+     * The description of the standard features
+     *
+     * @var description
+     */
+    protected $_description;
     
     /**
      * The master device object
@@ -50,6 +57,8 @@ class Quotegen_Model_Device extends My_Model_Abstract
             $this->setMasterDeviceId($params->masterDeviceId);
         if (isset($params->sku) && ! is_null($params->sku))
             $this->setSku($params->sku);
+        if (isset($params->description) && ! is_null($params->description))
+            $this->setDescription($params->description);
     }
     
     /*
@@ -59,7 +68,8 @@ class Quotegen_Model_Device extends My_Model_Abstract
     {
         return array (
                 'masterDeviceId' => $this->getMasterDeviceId(), 
-                'sku' => $this->getSku() 
+                'sku' => $this->getSku(),
+                'description' => $this->getDescription()
         );
     }
 
@@ -104,6 +114,28 @@ class Quotegen_Model_Device extends My_Model_Abstract
     public function setSku ($_sku)
     {
         $this->_sku = $_sku;
+        return $this;
+    }
+
+    /**
+     * Gets the description of the standard features
+     *
+     * @return string The description
+     */
+    public function getDescription ()
+    {
+        return $this->_description;
+    }
+
+    /**
+     * Sets a new description for the standard features
+     *
+     * @param description $_description
+     *            The new description
+     */
+    public function setDescription ($_description)
+    {
+        $this->_description = $_description;
         return $this;
     }
 

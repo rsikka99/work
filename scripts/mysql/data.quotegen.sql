@@ -100,10 +100,10 @@ INSERT INTO `qgen_user_quote_settings` (`userId`,`quoteSettingId`) VALUES
 (2,3);
 
 -- Add Devices
-INSERT INTO `qgen_devices` (`masterDeviceId`, `sku`) VALUES 
-(1, 'FAKESKU3123'),
-(2, 'FAKESKU4113'),
-(3, 'FAKESKU7553');
+INSERT INTO `qgen_devices` (`masterDeviceId`, `sku`, `description`) VALUES 
+(1, 'FAKESKU3123', NULL),
+(2, 'FAKESKU4113', NULL),
+(3, 'FAKESKU7553', NULL);
 
 -- Add Options To the Devices
 INSERT INTO `qgen_device_options` (`masterDeviceId`, `optionId`) VALUES
