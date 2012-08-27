@@ -1,24 +1,31 @@
 <?php 
 	/* @var $form Quotegen_Form_Quote_Group */
-	$form = $this->element; 
+	$form = $this->element;
+	$addDeviceToGroupSubform = $form->getSubForm('addDeviceToGroup');
+	$deviceQuantitySubform = $form->getSubForm('deviceQuantity');
+	$addGroupSubform = $form->getSubForm('addGroup');
 	
 	// Get elements in the form 
-	$deviceElement = $form->getElement('devices');
-	$quantityElement = $form->getElement('quantity');
-	$groupElement = $form->getElement('groups');
+	$deviceElement = $addDeviceToGroupSubform->getElement('devices');
+	$quantityElement = $addDeviceToGroupSubform->getElement('quantity');
+	$groupElement = $addDeviceToGroupSubform->getElement('groups');
 ?>
 
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
 	<table>
 		<tr>
-			<td><button type="submit" name="addDevice" title="Add Device" class="btn btn-success">Add</button> </td>
-			<td><?php echo $quantityElement->renderViewHelper() . ' of the '; ?></td>
-			<td><?php echo $deviceElement->renderViewHelper() . ' device to the '; ?></td>
-			<td><?php echo $groupElement->renderViewHelper() . ' group.'; ?></td>
+			<td><?php echo $addDeviceToGroupSubform->getElement('addDevice'); ?></td>
+			<td><?php echo $quantityElement; ?></td>
+			<td> of the </td>
+			<td><?php echo $deviceElement; ?></td>
+			<td> device to the </td>
+			<td><?php echo $groupElement; ?></td>
+			<td> group.</td>
 		</tr>
 	</table>
 	<br/>
-	<button type="submit" name="addGroup" title="Add Group" class="btn btn-success">Add Group</button> 
+	<?php echo $addGroupSubform->getElement('addGroup'); ?>
+	<?php echo $addGroupSubform->getElement('name'); ?> 
 
 
     <?php /* @var $deviceGroup Quotegen_Model_QuoteDeviceGroup */$deviceGroups = $form->getQuote()->getQuoteDeviceGroups();?>
@@ -36,7 +43,7 @@
     	<tr>
     		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getName() ?></td>
     		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getSku() ?></td>
-    		<td><?php echo $form->getElement("quantity_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}"); ?></td>
+    		<td><?php echo $deviceQuantitySubform->getElement("quantity_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}"); ?></td>
     		<td></td>
     	</tr>
     	<?php endforeach ?>

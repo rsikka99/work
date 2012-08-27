@@ -29,52 +29,113 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
             }
             else
             {
-                // We're saving quantities here
-                if ($form->isValid($values))
+                // What are we doing?
+                
+
+                if (isset($values ['addGroup']))
                 {
-                    $db = Zend_Db_Table::getDefaultAdapter();
-                    try
+                    // Adding a new group
+                    $addGroupSubform = $form->getSubForm('addGroup');
+                    
+                    $addDeviceToGroupSubform = $form->getSubForm('addDeviceToGroup');
+                    if ($addGroupSubform->isValid($values))
                     {
-                        $db->beginTransaction();
-                        $quoteDeviceGroupDeviceMapper = Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance();
-                        /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
-                        foreach ( $this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
+                        $this->_helper->flashMessenger(array (
+                                'info' => 'New Group Triggered. (NOT IMPLEMENTED YET)' 
+                        ));
+                    }
+                    else
+                    {
+                        $this->_helper->flashMessenger(array (
+                                'danger' => 'Please correct the errors below:' 
+                        ));
+                    }
+                }
+                else if (isset($values ['addDevice']))
+                {
+                    // Adding a device to a group
+                    $addDeviceToGroupSubform = $form->getSubForm('addDeviceToGroup');
+                    if ($addDeviceToGroupSubform->isValid($values))
+                    {
+                        $this->_helper->flashMessenger(array (
+                                'info' => 'Adding a device to a group has been triggered. (NOT IMPLEMENTED YET)' 
+                        ));
+                    }
+                    else
+                    {
+                        $this->_helper->flashMessenger(array (
+                                'danger' => 'Please correct the errors below:' 
+                        ));
+                    }
+                }
+                else
+                {
+                    
+                    // TODO: Switch this to validate subforms instead?
+                    if ($form->getSubForm('deviceQuantity')->isValid($values))
+                    {
+                        $db = Zend_Db_Table::getDefaultAdapter();
+                        try
                         {
-                            /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
-                            foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+                            // Start of the first transaction.
+                            $db->beginTransaction();
+                            
+                            $deviceQuantitySubform = $form->getSubForm('deviceQuantity');
+                            
+                            $quantityUpdates = 0;
+                            
+                            $quoteDeviceGroupDeviceMapper = Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance();
+                            /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
+                            foreach ( $this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
                             {
-                                $quoteDeviceGroupDevice->setQuantity($form->getValue("quantity_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}"));
-                                $quoteDeviceGroupDeviceMapper->save($quoteDeviceGroupDevice);
+                                /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+                                foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+                                {
+                                    $newQuantity = $deviceQuantitySubform->getValue("quantity_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}");
+                                    if ((int)$newQuantity !== (int)$quoteDeviceGroupDevice->getQuantity())
+                                    {
+                                        $quoteDeviceGroupDevice->setQuantity($newQuantity);
+                                        $quoteDeviceGroupDeviceMapper->save($quoteDeviceGroupDevice);
+                                        $quantityUpdates ++;
+                                    }
+                                }
+                            }
+                            
+                            $this->saveQuote();
+                            
+                            $db->commit();
+                            
+                            if ($quantityUpdates > 0)
+                            {
+                                $this->_helper->flashMessenger(array (
+                                        'success' => 'Your changes to the device quantities have been saved.' 
+                                ));
+                            }
+                            
+                            // Redirect?
+                            if (isset($values ['saveAndContinue']))
+                            {
+                                $this->_helper->redirector('index', 'quote_pages', null, array (
+                                        'quoteId' => $this->_quoteId 
+                                ));
                             }
                         }
-                        
-                        $this->saveQuote();
-                        
-                        $db->commit();
-                        
-                        $this->_helper->flashMessenger(array (
-                                'success' => 'Your changes have been saved.' 
-                        ));
-                        
-                        
-                        // Time to move on?
-                        if (isset($values ['saveAndContinue']))
+                        catch ( Exception $e )
                         {
+                            $db->rollBack();
                             
-                            $this->_helper->redirector('index', 'quote_pages', null, array (
-                                    'quoteId' => $this->_quoteId 
+                            // Log the error
+                            My_Log::logException($e);
+                            
+                            $this->_helper->flashMessenger(array (
+                                    'danger' => 'There was an error saving your changes. Please try again or contact your system administrator.' 
                             ));
                         }
                     }
-                    catch ( Exception $e )
+                    else
                     {
-                        $db->rollBack();
-                        
-                        // Log the error
-                        My_Log::logException($e);
-                        
                         $this->_helper->flashMessenger(array (
-                                'danger' => 'There was an error saving your changes. Please try again or contact your system administrator.' 
+                                'danger' => 'Please correct the errors below:' 
                         ));
                     }
                 }

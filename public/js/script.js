@@ -14,6 +14,6 @@ $().ready(function() {
 	/*
 	 * Enable hover popovers
 	 */
-	//$('css selector').popover();
+	$('.hasPopover').popover();
 
 });
