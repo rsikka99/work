@@ -41,7 +41,7 @@ class Quotegen_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
         $pageCoverageMonochrome = $this->createElement('text', 'pageCoverageMonochrome', array (
                 'label' => 'Page Coverage Mono:', 
                 'required' => true, 
-                'class' => 'span1', 
+                'class' => 'input-mini', 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -64,7 +64,7 @@ class Quotegen_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
                 'label' => 'Page Coverage Color:', 
                 'required' => true, 
                 
-                'class' => 'span1', 
+                'class' => 'input-mini', 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -86,7 +86,7 @@ class Quotegen_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
         $deviceMargin = $this->createElement('text', 'deviceMargin', array (
                 'label' => 'Device Margin:', 
                 'required' => true, 
-                'class' => 'span1', 
+                'class' => 'input-mini', 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -108,7 +108,7 @@ class Quotegen_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
                 'label' => 'Page Margin:', 
                 
                 'required' => true, 
-                'class' => 'span1', 
+                'class' => 'input-mini', 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
