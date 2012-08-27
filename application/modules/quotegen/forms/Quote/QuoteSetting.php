@@ -105,7 +105,7 @@ class Quotegen_Form_Quote_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
          */
         $pageCoverageColor = $this->createElement('text', 'pageCoverageColor', array (
                 'label' => 'Page Covereage Color:', 
-                'class' => 'span1', 
+                'class' => 'input-mini', 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -127,7 +127,7 @@ class Quotegen_Form_Quote_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
         
         $pageCoverageMonochrome = $this->createElement('text', 'pageCoverageMonochrome', array (
                 'label' => 'Page Coverage Monochrome:', 
-                'class' => 'span1', 
+                'class' => 'input-mini', 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -215,5 +215,30 @@ class Quotegen_Form_Quote_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
             $pricingConfigDropdown->addMultiOption($pricingConfig->getPricingConfigId(), $pricingConfig->getConfigName());
         }
         $this->addElement($pricingConfigDropdown);
+        
+        $this->addDisplayGroup(array (
+                'clientDisplayName', 
+                'quoteDate' 
+        ), 'generalGroup', array (
+                'legend' => 'General' 
+        ));
+        
+        $this->addDisplayGroup(array (
+                'leasingSchemaId', 
+                'leasingSchemaTermId' 
+        ), 'leasingGroup', array (
+                'legend' => 'Leasing' 
+        ));
+        
+        $this->addDisplayGroup(array (
+                'pricingConfigId',
+                'pageCoverageMonochrome', 
+                'pageCoverageColor',
+                'adminCostPerPage',
+                'serviceCostPerPage'
+                 
+        ), 'pagesGroup', array (
+                'legend' => 'Pages' 
+        ));
     }
 }
