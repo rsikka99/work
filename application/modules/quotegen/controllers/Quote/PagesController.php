@@ -14,7 +14,7 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
      */
     public function indexAction ()
     {
-        $form = new Quotegen_Form_Quote_Group($this->_quote);
+        $form = new Quotegen_Form_Quote_Page($this->_quote);         
         
         $request = $this->getRequest();
         if ($request->isPost())
