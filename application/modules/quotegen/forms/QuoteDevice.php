@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_Form_QuoteDevice extends EasyBib_Form
+class Quotegen_Form_QuoteDevice extends Twitter_Bootstrap_Form_Horizontal
 {
     
     /**

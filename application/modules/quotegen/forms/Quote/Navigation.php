@@ -60,9 +60,6 @@ class Quotegen_Form_Quote_Navigation extends Twitter_Bootstrap_Form
                 self::BUTTONS_NEXT 
         )))
             throw new InvalidArgumentException('Invalid Button Mode!');
-            
-            // Add the center actions
-        $form->_addClassNames('form-center-actions');
         
         $goBackButton = false;
         $nextButton = false;
