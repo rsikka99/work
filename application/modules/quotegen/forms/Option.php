@@ -24,6 +24,7 @@ class Quotegen_Form_Option extends EasyBib_Form
         
         $this->addElement('text', 'name', array (
                 'label' => 'Name:', 
+                'class' => 'span3',
                 'required' => true, 
                 'maxlength' => 255, 
                 'filters' => array (
@@ -39,6 +40,7 @@ class Quotegen_Form_Option extends EasyBib_Form
         
         $this->addElement('textarea', 'description', array (
                 'label' => 'Description:', 
+                'class' => 'span3',
                 'required' => true, 
                 'style' => 'height: 100px', 
                 'maxlength' => 255, 
@@ -69,7 +71,7 @@ class Quotegen_Form_Option extends EasyBib_Form
         
         $this->addElement('text', 'sku', array (
                 'label' => 'SKU:', 
-                'class' => 'span2',
+                'class' => 'span3',
                 'required' => true, 
                 'maxlength' => 255, 
                 'filters' => array (
