@@ -42,7 +42,6 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Inline
             /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
-                
                 $this->addElement('text', "quantity_black_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}", array (
                         'label' => 'Quantity', 
                         'required' => true, 
@@ -55,10 +54,16 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Inline
                         'required' => true, 
                         'class' => 'span1', 
                         'value' => '0', 
-                   
                 ));
             }
         }
+        
+        $this->addElement('button', 'save', array (
+                'buttonType' => Twitter_Bootstrap_Form_Element_Button::BUTTON_SUCCESS, 
+                'type' => 'submit', 
+                'label' => 'Save' 
+        ));
+        
     }
 
     public function loadDefaultDecorators ()
