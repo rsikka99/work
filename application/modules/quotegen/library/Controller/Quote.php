@@ -409,4 +409,31 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         }
         return $quoteDeviceId;
     }
+
+    /**
+     * Function gets the total page count for monochrome and color for this quote
+     *
+     * @return array The amount of pages tallied
+     */
+    public function getTotalPages ()
+    {
+        $quoteDeviceGroupDeviceMapper = Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance();
+        
+        $quanities = array ();
+        $quanities ['monochromePagesQuantity'] = 0;
+        $quanities ['colorPagesQuantity'] = 0;
+        
+        foreach ( $this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        {
+            /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+            foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+            {
+                $quanities ['monochromePagesQuantity'] += $quoteDeviceGroupDevice->getMonochromePagesQuantity();
+                $quanities ['colorPagesQuantity'] += $quoteDeviceGroupDevice->getColorPagesQuantity();
+            }
+        }
+        
+        return $quanities;
+    }
 }
+
