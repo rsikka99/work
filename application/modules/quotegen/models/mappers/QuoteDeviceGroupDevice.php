@@ -45,8 +45,6 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
         // Insert the data
         $id = $this->getDbTable()->insert($data);
         
-        $object->setId($id);
-        
         // Save the object into the cache
         $this->saveItemToCache($object);
         
