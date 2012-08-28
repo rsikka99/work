@@ -25,7 +25,7 @@ class Quotegen_Form_Option extends EasyBib_Form
         $this->addElement('text', 'name', array (
                 'label' => 'Name:', 
                 'required' => true, 
-                
+                'maxlength' => 255, 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -41,6 +41,7 @@ class Quotegen_Form_Option extends EasyBib_Form
                 'label' => 'Description:', 
                 'required' => true, 
                 'style' => 'height: 100px', 
+                'maxlength' => 255, 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -55,6 +56,7 @@ class Quotegen_Form_Option extends EasyBib_Form
         $this->addElement('text', 'cost', array (
                 'label' => 'Price:', 
                 'required' => true, 
+                'maxlength' => 8, 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -67,7 +69,7 @@ class Quotegen_Form_Option extends EasyBib_Form
         $this->addElement('text', 'sku', array (
                 'label' => 'Sku:', 
                 'required' => true, 
-                
+                'maxlength' => 255, 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
