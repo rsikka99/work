@@ -40,6 +40,17 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                     $addDeviceToGroupSubform = $form->getSubForm('addDeviceToGroup');
                     if ($addGroupSubform->isValid($values))
                     {
+                        // TODO: Add the new group
+                        $quoteDeviceGroup = new Quotegen_Model_QuoteDeviceGroup();
+                        $quoteDeviceGroup->setQuoteId($this->_quoteId);
+                        $quoteDeviceGroup->setName($addGroupSubform->getValue('name'));
+                        
+                        $quoteDeviceGroup->setIsDefault(FALSE);
+                        $quoteDeviceGroup->setGroupPages(FALSE);
+                        $quoteDeviceGroup->setPageMargin(0);
+                        
+                        Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->insert($quoteDeviceGroup);
+                        
                         $this->_helper->flashMessenger(array (
                                 'info' => 'New Group Triggered. (NOT IMPLEMENTED YET)' 
                         ));
@@ -57,6 +68,9 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                     $addDeviceToGroupSubform = $form->getSubForm('addDeviceToGroup');
                     if ($addDeviceToGroupSubform->isValid($values))
                     {
+                        // TODO: Add the device to the group
+                        
+
                         $this->_helper->flashMessenger(array (
                                 'info' => 'Adding a device to a group has been triggered. (NOT IMPLEMENTED YET)' 
                         ));

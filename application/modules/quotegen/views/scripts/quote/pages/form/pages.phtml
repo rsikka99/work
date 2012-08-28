@@ -11,8 +11,8 @@
 ?>
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
 <?php 
-		/* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
-		foreach ($quote->getQuoteDeviceGroups() as $quoteDeviceGroup ) : ?>
+	/* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
+	foreach ($quote->getQuoteDeviceGroups() as $quoteDeviceGroup ) : ?>
 	<h3><?php echo $quoteDeviceGroup->getName(); ?></h3>
 	<table class='table table-bordered table-striped table-condensed'>
 		<?php if(!$quoteDeviceGroup->getIsDefault()) : ?>
@@ -43,4 +43,28 @@
 		<?php endforeach;?>
 	</table>
 		<?php endforeach;?>
+		
+	<table class='table table-bordered table-striped table-condensed'>
+		<tr>
+			<th> Type </th>
+			<th> CPP </th>
+			<th> Quantity </th>
+			<th> Cost </th>
+			<th> Price Per Page </th>
+			<th> Revenue </th>
+			<th> Profit </th>
+		</tr>
+		<?php ?>
+		<tr>
+			<td>   </td>
+			<td>   </td>
+			<td>   </td>
+			<td>   </td>
+			<td>   </td>
+			<td>   </td>
+			<td>   </td>
+		</tr>
+		<?php ?>
+	</table>
+	<?php echo $form->getElement('save'); ?>
 </form>

@@ -43,6 +43,20 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
      */
     protected $_quoteDeviceGroup;
     
+    /**
+     * The quantity of monochrome pages assigned to the deviced
+     *
+     * @var int
+     */
+    protected $_monochromePagesQuantity;
+    
+    /**
+     * The quantity of color pages assigned to the deviced*
+     *
+     * @var int
+     */
+    protected $_colorPagesQuantity;
+    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -58,6 +72,10 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
             $this->setQuoteDeviceGroupId($params->quoteDeviceGroupId);
         if (isset($params->quantity) && ! is_null($params->quantity))
             $this->setQuantity($params->quantity);
+        if (isset($params->monochromePagesQuantity) && ! is_null($params->monochromePagesQuantity))
+            $this->setMonochromePagesQuantity($params->monochromePagesQuantity);
+        if (isset($params->colorPagesQuantity) && ! is_null($params->colorPagesQuantity))
+            $this->setColorPagesQuantity($params->colorPagesQuantity);
     }
     
     /*
@@ -68,7 +86,9 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
         return array (
                 'quoteDeviceId' => $this->getQuoteDeviceId(), 
                 'quoteDeviceGroupId' => $this->getQuoteDeviceGroupId(), 
-                'quantity' => $this->getQuantity() 
+                'quantity' => $this->getQuantity(), 
+                'monochromePagesQuantity' => $this->getMonochromePagesQuantity(), 
+                'colorPagesQuantity' => $this->getColorPagesQuantity() 
         );
     }
 
@@ -140,7 +160,7 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
 
     /**
      * Gets the quote device
-     * 
+     *
      * @return Quotegen_Model_QuoteDevice
      */
     public function getQuoteDevice ()
@@ -154,7 +174,7 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
 
     /**
      * Sets the quote device
-     * 
+     *
      * @param Quotegen_Model_QuoteDevice $_quoteDevice            
      */
     public function setQuoteDevice ($_quoteDevice)
@@ -165,7 +185,7 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
 
     /**
      * Gets the quote device group
-     * 
+     *
      * @return Quotegen_Model_QuoteDeviceGroup
      */
     public function getQuoteDeviceGroup ()
@@ -179,12 +199,54 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
 
     /**
      * Sets the quote device group
-     * 
+     *
      * @param Quotegen_Model_QuoteDeviceGroup $_quoteDeviceGroup            
      */
     public function setQuoteDeviceGroup ($_quoteDeviceGroup)
     {
         $this->_quoteDeviceGroup = $_quoteDeviceGroup;
+        return $this;
+    }
+
+    /**
+     * Gets the number of _monochrome pages for this device
+     *
+     * @return the $_monochromePagesQuantity
+     */
+    public function getMonochromePagesQuantity ()
+    {
+        return $this->_monochromePagesQuantity;
+    }
+
+    /**
+     * Sets the number of _monochrome pages for this device
+     *
+     * @param number $_monochromePagesQuantity            
+     */
+    public function setMonochromePagesQuantity ($_monochromePagesQuantity)
+    {
+        $this->_monochromePagesQuantity = $_monochromePagesQuantity;
+        return $this;
+    }
+
+    /**
+     * Gets the number of color pages for this device
+     *
+     * @return the $_colorPagesQuantity
+     */
+    public function getColorPagesQuantity ()
+    {
+        return $this->_colorPagesQuantity;
+    }
+
+    /**
+     * Gets the number of color pages for this device
+     *
+     * @param number $_colorPagesQuantity            
+     */
+    public function setColorPagesQuantity ($_colorPagesQuantity)
+    {
+        $this->_colorPagesQuantity = $_colorPagesQuantity;
         return $this;
     }
 }
