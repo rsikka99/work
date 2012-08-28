@@ -102,10 +102,19 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                         $quantity = $addDeviceToGroupSubform->getValue('quantity');
                         
                         $quoteDeviceGroupDeviceMapper = Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance();
-                        $quoteDeviceGroupDevice = $quoteDeviceGroupDeviceMapper->find(array($quoteDeviceId, $quoteDeviceGroupId));
+                        $quoteDeviceGroupDevice = $quoteDeviceGroupDeviceMapper->find(array (
+                                $quoteDeviceId, 
+                                $quoteDeviceGroupId 
+                        ));
+                        
+                        // If we found one, update it, otherwise insert a new one
                         if ($quoteDeviceGroupDevice)
                         {
-                            $quoteDeviceGroupDevice->setQuantity($quoteDeviceGroupDevice->getQuantity() + $quantity);
+                            // Quantity should never reach over 999
+                            $newQuantity = $quoteDeviceGroupDevice->getQuantity() + $quantity;
+                            if ($newQuantity > 999)
+                                $newQuantity = 999;
+                            $quoteDeviceGroupDevice->setQuantity($newQuantity);
                             Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->save($quoteDeviceGroupDevice);
                         }
                         else
@@ -123,11 +132,41 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                         $this->_helper->flashMessenger(array (
                                 'success' => "Added the devices successfully." 
                         ));
+                        
+                        // Redirect to ourselves
+                        $this->_helper->redirector(null, null, null, array (
+                                'quoteId' => $this->_quoteId 
+                        ));
                     }
                     else
                     {
                         $this->_helper->flashMessenger(array (
                                 'danger' => 'Please correct the errors below:' 
+                        ));
+                    }
+                }
+                else if (isset($values ['deleteDeviceFromGroup']))
+                {
+                    $deviceQuantitySubform = $form->getSubForm('deviceQuantity');
+                    if ($deviceQuantitySubform->isValid($values))
+                    {
+                        $keyPair = explode('_', $deviceQuantitySubform->getValue('deleteDeviceFromGroup'));
+                        
+                        Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->delete($keyPair);
+                        
+                        $this->_helper->flashMessenger(array (
+                                'success' => 'Device deleted successfully.' 
+                        ));
+                        
+                        // Redirect to ourselves
+                        $this->_helper->redirector(null, null, null, array (
+                                'quoteId' => $this->_quoteId
+                        ));
+                    }
+                    else
+                    {
+                        $this->_helper->flashMessenger(array (
+                                'danger' => 'You cannot delete this device.' 
                         ));
                     }
                 }

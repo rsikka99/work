@@ -126,8 +126,8 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
         else
         {
             $whereClause = array (
-                    "{$this->col_quoteDeviceId} = ?" => $object->getQuoteDeviceId(), 
-                    "{$this->col_quoteDeviceGroupId} = ?" => $object->getQuoteDeviceGroupId() 
+                    "{$this->col_quoteDeviceId} = ?" => $object[0], 
+                    "{$this->col_quoteDeviceGroupId} = ?" => $object[1] 
             );
         }
         

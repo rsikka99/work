@@ -26,7 +26,7 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
         // Validation Varaibles
         // ----------------------------------------------------------------------
         $minDeviceQuantity = 0;
-        $maxDeviceQuantity = 100;
+        $maxDeviceQuantity = 999;
         
         // ----------------------------------------------------------------------
         // Add device to group subform
@@ -173,7 +173,7 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
                         ) 
                 ));
                 
-                $validQuoteGroupId_DeviceId_Combinations [] = "{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}";
+                $validQuoteGroupId_DeviceId_Combinations [] = "{$quoteDeviceGroupDevice->getQuoteDeviceId()}_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}";
             }
         }
         

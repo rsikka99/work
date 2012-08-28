@@ -54,7 +54,7 @@
     		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getName() ?></td>
     		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getSku() ?></td>
     		<td><?php echo $deviceQuantitySubform->getElement("quantity_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}"); ?></td>
-    		<td><button type="submit" name="delete" value="<?php echo "{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}"?>" class="btn btn-danger btn-mini"><i class="icon-trash"></i></button></td>
+    		<td><button type="submit" name="deleteDeviceFromGroup" value="<?php echo "{$quoteDeviceGroupDevice->getQuoteDeviceId()}_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}"?>" class="btn btn-danger btn-mini"><i class="icon-trash"></i></button></td>
     	</tr>
     	<?php endforeach ?>
     </table>
