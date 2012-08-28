@@ -5,6 +5,8 @@
 	$deviceQuantitySubform = $form->getSubForm('deviceQuantity');
 	$addGroupSubform = $form->getSubForm('addGroup');
 	
+	$deleteDeviceButton = $deviceQuantitySubform->getElement('deleteDeviceFromGroup');
+	
 	// Get elements in the form 
 	$deviceElement = $addDeviceToGroupSubform->getElement('devices');
 	$quantityElement = $addDeviceToGroupSubform->getElement('quantity');
@@ -44,7 +46,9 @@
     		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getName() ?></td>
     		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getSku() ?></td>
     		<td><?php echo $deviceQuantitySubform->getElement("quantity_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}"); ?></td>
-    		<td></td>
+    		<td><?php $deleteDeviceButton->setValue("{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}");
+    		    echo $deleteDeviceButton; 
+    		?></td>
     	</tr>
     	<?php endforeach ?>
     </table>

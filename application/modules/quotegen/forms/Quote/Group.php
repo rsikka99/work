@@ -42,6 +42,7 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
         
         $this->addSubForm($addDeviceToGroupSubform, 'addDeviceToGroup');
         
+        // Quantity of the new device
         $addDeviceToGroupSubform->addElement('text', 'quantity', array (
                 'label' => 'Quantity', 
                 'class' => 'span1', 
@@ -58,27 +59,31 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
                 ) 
         ));
         
+        // Available devices
         $deviceDropdown = $addDeviceToGroupSubform->createElement('select', 'devices', array (
                 'label' => 'Devices:' 
         ));
         
-        $quoteDevices = $this->_quote->getQuoteDevices();
-        
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-        foreach ( $quoteDevices as $quoteDevice )
+        foreach ( $this->_quote->getQuoteDevices() as $quoteDevice )
         {
             $deviceDropdown->addMultiOption($quoteDevice->getId(), $quoteDevice->getName());
         }
         
         $addDeviceToGroupSubform->addElement($deviceDropdown);
         
+        // Groups
         $groupDropdown = $addDeviceToGroupSubform->createElement('select', 'groups', array (
                 'label' => 'Groups:' 
         ));
         
-        $groupDropdown->addMultiOption('1', 'Default Group (Ungrouped)');
+        foreach ( $this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        {
+            $groupDropdown->addMultiOption("{$quoteDeviceGroup->getId()}", $quoteDeviceGroup->getName());
+        }
         $addDeviceToGroupSubform->addElement($groupDropdown);
         
+        // Add button
         $addDeviceToGroupSubform->addElement('button', 'addDevice', array (
                 'buttonType' => Twitter_Bootstrap_Form_Element_Button::BUTTON_SUCCESS, 
                 'type' => 'submit', 
@@ -90,52 +95,99 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
         // ----------------------------------------------------------------------
         $addGroupSubform = new Twitter_Bootstrap_Form_Inline();
         $addGroupSubform->setElementDecorators(array (
-                'FieldSize',
-                'ViewHelper',
-                'Addon',
-                'PopoverElementErrors',
-                'Wrapper'
+                'FieldSize', 
+                'ViewHelper', 
+                'Addon', 
+                'PopoverElementErrors', 
+                'Wrapper' 
         ));
         $this->addSubForm($addGroupSubform, 'addGroup');
         
+        // The add group button
         $addGroupButton = $addGroupSubform->createElement('button', 'addGroup', array (
                 'buttonType' => Twitter_Bootstrap_Form_Element_Button::BUTTON_SUCCESS, 
                 'type' => 'submit', 
                 'label' => 'Add Group' 
         ));
         
+        // The name of the new group
         $addGroupSubform->addElement('text', 'name', array (
                 'required' => true, 
-                'prepend' => $addGroupButton 
+                'prepend' => $addGroupButton, 
+                'filters' => array (
+                        'StringTrim', 
+                        'StripTags' 
+                ), 
+                'validators' => array (
+                        array (
+                                'validator' => 'StringLength', 
+                                'options' => array (
+                                        3, 
+                                        40 
+                                ) 
+                        ) 
+                ) 
         ));
         
         // ----------------------------------------------------------------------
         // Quantity subform
         // ----------------------------------------------------------------------
         $deviceQuantitySubform = new Twitter_Bootstrap_Form_Inline();
-        $this->addSubForm($addDeviceToGroupSubform, 'deviceQuantity');
+        $this->addSubForm($deviceQuantitySubform, 'deviceQuantity');
         
+        $deviceQuantitySubform->setElementDecorators(array (
+                'FieldSize', 
+                'ViewHelper', 
+                'Addon', 
+                'PopoverElementErrors', 
+                'Wrapper' 
+        ));
+        
+        // Setup all the boxes
+        
+
+        $validQuoteGroupId_DeviceId_Combinations = array ();
         /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
         foreach ( $this->getQuote()->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
             /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
-                $addDeviceToGroupSubform->addElement('text', "quantity_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}", array (
+                $deviceQuantitySubform->addElement('text', "quantity_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}", array (
                         'label' => 'Quantity', 
                         'required' => true, 
                         'class' => 'span1', 
                         'value' => $quoteDeviceGroupDevice->getQuantity(), 
-                        'decorators' => array (
-                                'FieldSize', 
-                                'ViewHelper', 
-                                'Addon', 
-                                'ElementErrors', 
-                                'PopoverElementErrors' 
+                        'validators' => array (
+                                'Int', 
+                                array (
+                                        'validator' => 'Between', 
+                                        'options' => array (
+                                                'min' => $minDeviceQuantity, 
+                                                'max' => $maxDeviceQuantity 
+                                        ) 
+                                ) 
                         ) 
                 ));
+                
+                $validQuoteGroupId_DeviceId_Combinations [] = "{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}";
             }
         }
+        
+        $deviceQuantitySubform->addElement('button', 'deleteDeviceFromGroup', array (
+                'buttonType' => Twitter_Bootstrap_Form_Element_Button::BUTTON_DANGER,
+                'label' => ' ', 
+                'icon' => 'trash', 
+                'validators' => array (
+                        array (
+                                'validator' => 'InArray', 
+                                'options' => array (
+                                        'haystack' => $validQuoteGroupId_DeviceId_Combinations 
+                                ) 
+                        ) 
+                ),
+                'value' => '1'
+        ));
     }
 
     public function loadDefaultDecorators ()
