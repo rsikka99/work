@@ -314,7 +314,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                 'validator' => 'Between', 
                                 'options' => array (
                                         'min' => 0, 
-                                        'max' => 100000 
+                                        'max' => 999999 
                                 ) 
                         ) 
                 ) 
