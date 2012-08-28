@@ -58,13 +58,6 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
      */
     protected $_quoteDeviceGroupDevices;
     
-    /**
-     * Pages associated with the device group
-     *
-     * @var array
-     */
-    protected $_pages;
-    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -234,21 +227,10 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
             }
         }
         
-        $subtotal += $this->calculateMonthlyPagePrice();
+        // TODO: This needs pages included ?
         
-        return $subtotal;
-    }
 
-    public function calculateMonthlyPagePrice ()
-    {
-        $pagePrice = 0;
-        
-        /* @var $quoteDeviceGroupPage Quotegen_Model_QuoteDeviceGroupPage */
-        foreach ( $this->getPages() as $quoteDeviceGroupPage )
-        {
-            $pagePrice += $quoteDeviceGroupPage->getIncludedPrice();
-        }
-        return $pagePrice;
+        return $subtotal;
     }
 
     /**
@@ -266,12 +248,9 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
             $subtotal += $quoteDeviceGroupDevice->getQuoteDevice()->calculateLeaseValue();
         }
         
-        $leaseTerm = (int)$this->getQuote()->getLeaseTerm();
-        if ($leaseTerm > 0)
-        {
-            $subtotal += $this->calculateMonthlyPagePrice() * $leaseTerm;
-        }
+        // TODO: Pages?
         
+
         return $subtotal;
     }
 
@@ -310,30 +289,6 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
             }
         }
         return $totalCost;
-    }
-
-    /**
-     * Gets pages associated with the group
-     *
-     * @return multitype: Quotegen_Model_QuoteDeviceGroupPages
-     */
-    public function getPages ()
-    {
-        if (! isset($this->_pages))
-        {
-            $this->_pages = Quotegen_Model_Mapper_QuoteDeviceGroupPage::getInstance()->fetchAllPagesForQuoteDeviceGroup($this->getId());
-        }
-        return $this->_pages;
-    }
-
-    /**
-     *
-     * @param multitype: $_pages            
-     */
-    public function setPages ($_pages)
-    {
-        $this->_pages = $_pages;
-        return $this;
     }
 
     /**
