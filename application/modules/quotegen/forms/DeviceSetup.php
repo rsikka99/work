@@ -303,7 +303,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         $this->addElement('text', 'duty_cycle', array (
                 'label' => 'Duty Cycle:', 
                 'class' => 'span1',
-                'maxlength' => 5, 
+                'maxlength' => 6, 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
