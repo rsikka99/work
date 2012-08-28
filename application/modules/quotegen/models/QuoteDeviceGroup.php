@@ -24,13 +24,6 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     protected $_quoteId;
     
     /**
-     * The cost per monochrome page
-     *
-     * @var number
-     */
-    protected $_pageMargin;
-    
-    /**
      * Group Name
      *
      * @var string
@@ -87,9 +80,6 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         if (isset($params->quoteId) && ! is_null($params->quoteId))
             $this->setQuoteId($params->quoteId);
         
-        if (isset($params->pageMargin) && ! is_null($params->pageMargin))
-            $this->setPageMargin($params->pageMargin);
-        
         if (isset($params->name) && ! is_null($params->name))
             $this->setName($params->name);
         
@@ -105,7 +95,6 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         return array (
                 'id' => $this->getId(), 
                 'quoteId' => $this->getQuoteId(), 
-                'pageMargin' => $this->getPageMargin(), 
                 "name" => $this->getName(), 
                 "isDefault" => $this->getIsDefault() 
         );
@@ -150,27 +139,6 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     public function setQuoteId ($_quoteId)
     {
         $this->_quoteId = $_quoteId;
-        return $this;
-    }
-
-    /**
-     * Gets the page margin
-     *
-     * @return number
-     */
-    public function getPageMargin ()
-    {
-        return $this->_pageMargin;
-    }
-
-    /**
-     * Sets the page margin
-     *
-     * @param $_pageMargin number            
-     */
-    public function setPageMargin ($_pageMargin)
-    {
-        $this->_pageMargin = $_pageMargin;
         return $this;
     }
 
