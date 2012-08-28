@@ -32,6 +32,7 @@ class Quotegen_Form_LeasingSchemaRange extends EasyBib_Form
                 'label' => 'New Range:', 
                 'required' => true, 
                 'class' => 'span1', 
+                'maxlength' => 6,
                 'style' => 'position: relative; left: -4px;', 
                 'filters' => array (
                         'StringTrim', 
@@ -59,6 +60,7 @@ class Quotegen_Form_LeasingSchemaRange extends EasyBib_Form
             $this->addElement('text', "rate{$termid}", array (
                     'label' => 'Rate:', 
                     'required' => true, 
+                	'maxlength' => 6,
                     'filters' => array (
                             'StringTrim', 
                             'StripTags' 
