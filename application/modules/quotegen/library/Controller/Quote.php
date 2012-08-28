@@ -222,10 +222,10 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         $quoteDevice->setCost($masterDevice->getCost());
         
         // FIXME: These need to use calculated values!
-        $quoteDevice->setOemCostPerPageMonochrome(999);
-        $quoteDevice->setOemCostPerPageColor(999);
-        $quoteDevice->setCompCostPerPageMonochrome(999);
-        $quoteDevice->setCompCostPerPageColor(999);
+        $quoteDevice->setOemCostPerPageMonochrome(0.016);
+        $quoteDevice->setOemCostPerPageColor(0.072);
+        $quoteDevice->setCompCostPerPageMonochrome(0.012);
+        $quoteDevice->setCompCostPerPageColor(0.056);
         
         return $quoteDevice;
     }
