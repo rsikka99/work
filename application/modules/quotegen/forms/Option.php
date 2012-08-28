@@ -55,6 +55,7 @@ class Quotegen_Form_Option extends EasyBib_Form
         
         $this->addElement('text', 'cost', array (
                 'label' => 'Price:', 
+                'class' => 'span1',
                 'required' => true, 
                 'maxlength' => 8, 
                 'filters' => array (
@@ -67,7 +68,8 @@ class Quotegen_Form_Option extends EasyBib_Form
         ));
         
         $this->addElement('text', 'sku', array (
-                'label' => 'Sku:', 
+                'label' => 'SKU:', 
+                'class' => 'span2',
                 'required' => true, 
                 'maxlength' => 255, 
                 'filters' => array (
