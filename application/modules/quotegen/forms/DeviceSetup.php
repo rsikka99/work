@@ -303,7 +303,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         $this->addElement('text', 'duty_cycle', array (
                 'label' => 'Duty Cycle:', 
                 'class' => 'span1',
-                'maxlength' => 4, 
+                'maxlength' => 6, 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -314,7 +314,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                 'validator' => 'Between', 
                                 'options' => array (
                                         'min' => 0, 
-                                        'max' => 50000 
+                                        'max' => 999999 
                                 ) 
                         ) 
                 ) 
@@ -359,8 +359,8 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                         array (
                                 'validator' => 'Between', 
                                 'options' => array (
-                                        'min' => 0, 
-                                        'max' => 1000 
+                                        'min' => 0,
+                                        'max' => 1000
                                 ) 
                         ) 
                 ) 

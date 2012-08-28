@@ -60,7 +60,7 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
         ));
         
         // Available devices
-        $deviceDropdown = $addDeviceToGroupSubform->createElement('select', 'devices', array (
+        $deviceDropdown = $addDeviceToGroupSubform->createElement('select', 'quoteDeviceId', array (
                 'label' => 'Devices:' 
         ));
         
@@ -73,7 +73,7 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
         $addDeviceToGroupSubform->addElement($deviceDropdown);
         
         // Groups
-        $groupDropdown = $addDeviceToGroupSubform->createElement('select', 'groups', array (
+        $groupDropdown = $addDeviceToGroupSubform->createElement('select', 'quoteDeviceGroupId', array (
                 'label' => 'Groups:' 
         ));
         
@@ -147,9 +147,12 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
         
 
         $validQuoteGroupId_DeviceId_Combinations = array ();
+        $validQuoteGroupIds = array ();
         /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
         foreach ( $this->getQuote()->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
+            
+            $validQuoteGroupIds [] = "{$quoteDeviceGroup->getId()}";
             /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
@@ -174,8 +177,25 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
             }
         }
         
+        // Delete group button
+        $deviceQuantitySubform->addElement('button', 'deleteGroup', array (
+                'buttonType' => Twitter_Bootstrap_Form_Element_Button::BUTTON_DANGER, 
+                'label' => ' ', 
+                'icon' => 'trash', 
+                'validators' => array (
+                        array (
+                                'validator' => 'InArray', 
+                                'options' => array (
+                                        'haystack' => $validQuoteGroupIds 
+                                ) 
+                        ) 
+                ), 
+                'value' => '1' 
+        ));
+        
+        // Delete device from group button
         $deviceQuantitySubform->addElement('button', 'deleteDeviceFromGroup', array (
-                'buttonType' => Twitter_Bootstrap_Form_Element_Button::BUTTON_DANGER,
+                'buttonType' => Twitter_Bootstrap_Form_Element_Button::BUTTON_DANGER, 
                 'label' => ' ', 
                 'icon' => 'trash', 
                 'validators' => array (
@@ -185,8 +205,8 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
                                         'haystack' => $validQuoteGroupId_DeviceId_Combinations 
                                 ) 
                         ) 
-                ),
-                'value' => '1'
+                ), 
+                'value' => '1' 
         ));
     }
 

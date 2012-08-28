@@ -45,14 +45,18 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                         $quoteDeviceGroup->setQuoteId($this->_quoteId);
                         $quoteDeviceGroup->setName($addGroupSubform->getValue('name'));
                         
-                        $quoteDeviceGroup->setIsDefault(FALSE);
-                        $quoteDeviceGroup->setGroupPages(FALSE);
-                        $quoteDeviceGroup->setPageMargin(0);
+                        $quoteDeviceGroup->setIsDefault(0);
+                        $quoteDeviceGroup->setGroupPages(0);
                         
                         Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->insert($quoteDeviceGroup);
                         
                         $this->_helper->flashMessenger(array (
-                                'info' => 'New Group Triggered. (NOT IMPLEMENTED YET)' 
+                                'success' => "Group '{$quoteDeviceGroup->getName()}' successfully created." 
+                        ));
+                        
+                        // Redirect to ourselves
+                        $this->_helper->redirector(null, null, null, array (
+                                'quoteId' => $this->_quoteId 
                         ));
                     }
                     else
@@ -62,17 +66,62 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                         ));
                     }
                 }
+                else if (isset($values ['deleteGroup']))
+                {
+                    if ($form->isValidPartial(array (
+                            'deleteGroup' => $values ['deleteGroup'] 
+                    )))
+                    {
+                        Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->delete($form->getSubForm('deviceQuantity')
+                            ->getValue('deleteGroup'));
+                        
+                        $this->_helper->flashMessenger(array (
+                                'success' => 'Group Deleted.' 
+                        ));
+                        
+                        // Redirect to ourselves
+                        $this->_helper->redirector(null, null, null, array (
+                                'quoteId' => $this->_quoteId 
+                        ));
+                    }
+                    else
+                    {
+                        $this->_helper->flashMessenger(array (
+                                'danger' => 'You cannot delete this group.' 
+                        ));
+                    }
+                }
                 else if (isset($values ['addDevice']))
                 {
                     // Adding a device to a group
                     $addDeviceToGroupSubform = $form->getSubForm('addDeviceToGroup');
                     if ($addDeviceToGroupSubform->isValid($values))
                     {
-                        // TODO: Add the device to the group
+                        $quoteDeviceGroupId = $addDeviceToGroupSubform->getValue('quoteDeviceGroupId');
+                        $quoteDeviceId = $addDeviceToGroupSubform->getValue('quoteDeviceId');
+                        $quantity = $addDeviceToGroupSubform->getValue('quantity');
                         
-
+                        $quoteDeviceGroupDeviceMapper = Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance();
+                        $quoteDeviceGroupDevice = $quoteDeviceGroupDeviceMapper->find(array($quoteDeviceId, $quoteDeviceGroupId));
+                        if ($quoteDeviceGroupDevice)
+                        {
+                            $quoteDeviceGroupDevice->setQuantity($quoteDeviceGroupDevice->getQuantity() + $quantity);
+                            Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->save($quoteDeviceGroupDevice);
+                        }
+                        else
+                        {
+                            $quoteDeviceGroupDevice = new Quotegen_Model_QuoteDeviceGroupDevice();
+                            $quoteDeviceGroupDevice->setMonochromePagesQuantity(0);
+                            $quoteDeviceGroupDevice->setColorPagesQuantity(0);
+                            $quoteDeviceGroupDevice->setQuantity($quantity);
+                            $quoteDeviceGroupDevice->setQuoteDeviceId($quoteDeviceId);
+                            $quoteDeviceGroupDevice->setQuoteDeviceGroupId($quoteDeviceGroupId);
+                            
+                            Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->insert($quoteDeviceGroupDevice);
+                        }
+                        
                         $this->_helper->flashMessenger(array (
-                                'info' => 'Adding a device to a group has been triggered. (NOT IMPLEMENTED YET)' 
+                                'success' => "Added the devices successfully." 
                         ));
                     }
                     else

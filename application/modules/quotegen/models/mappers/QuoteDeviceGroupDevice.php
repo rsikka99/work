@@ -154,7 +154,7 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
         }
         
         // Assuming we don't have a cached object, lets go get it.
-        $result = $this->getDbTable()->find($id);
+        $result = $this->getDbTable()->find($id [0], $id [1]);
         if (0 == count($result))
         {
             return;
