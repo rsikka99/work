@@ -8,9 +8,9 @@
 	$deleteDeviceButton = $deviceQuantitySubform->getElement('deleteDeviceFromGroup');
 	
 	// Get elements in the form 
-	$deviceElement = $addDeviceToGroupSubform->getElement('devices');
+	$deviceElement = $addDeviceToGroupSubform->getElement('quoteDeviceId');
 	$quantityElement = $addDeviceToGroupSubform->getElement('quantity');
-	$groupElement = $addDeviceToGroupSubform->getElement('groups');
+	$groupElement = $addDeviceToGroupSubform->getElement('quoteDeviceGroupId');
 ?>
 
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
@@ -32,7 +32,15 @@
 
     <?php /* @var $deviceGroup Quotegen_Model_QuoteDeviceGroup */$deviceGroups = $form->getQuote()->getQuoteDeviceGroups();?>
     <?php foreach ($deviceGroups as $deviceGroup) : ?>	
-    <h3> <?php echo $deviceGroup->getName(); ?></h3>
+    <h3><?php echo $deviceGroup->getName(); ?>
+        <?php if (!$deviceGroup->getIsDefault()) :?>
+        <small>
+            <button type="submit" name="deleteGroup" class="btn btn-danger btn-mini" value="<?php echo $deviceGroup->getId()?>">
+                <i class="icon-trash"></i>
+            </button>
+        </small>
+        <?php endif;?>
+    </h3>
     <table class='table table-bordered table-striped table-condensed'>
     	<tr>
     		<th style='width: 200px'>Device</th>
@@ -46,9 +54,7 @@
     		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getName() ?></td>
     		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getSku() ?></td>
     		<td><?php echo $deviceQuantitySubform->getElement("quantity_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}"); ?></td>
-    		<td><?php $deleteDeviceButton->setValue("{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}");
-    		    echo $deleteDeviceButton; 
-    		?></td>
+    		<td><button type="submit" name="delete" value="<?php echo "{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}"?>" class="btn btn-danger btn-mini"><i class="icon-trash"></i></button></td>
     	</tr>
     	<?php endforeach ?>
     </table>
