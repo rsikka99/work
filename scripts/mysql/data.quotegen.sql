@@ -121,8 +121,8 @@ INSERT INTO `qgen_device_options` (`masterDeviceId`, `optionId`) VALUES
 -- ---------------------------------
 -- Create a quote with some devices.
 -- ---------------------------------
-INSERT INTO `qgen_quotes` (`id`, `clientId`, `dateCreated`, `dateModified`, `quoteDate`, `userId`, `clientDisplayName`, `leaseRate`, `leaseTerm`, `pageCoverageMonochrome`, `pageCoverageColor`, `pricingConfigId`, `quoteType`) VALUES
-(1, 2, NOW(), NOW(), NOW(), 1, NULL, 0.0343, 39, 6, 24, 2, 'leased');
+INSERT INTO `qgen_quotes` (`id`, `clientId`, `dateCreated`, `dateModified`, `quoteDate`, `userId`, `clientDisplayName`, `leaseRate`, `leaseTerm`, `pageMargin`, `pageCoverageMonochrome`, `pageCoverageColor`, `pricingConfigId`, `quoteType`) VALUES
+(1, 2, NOW(), NOW(), NOW(), 1, NULL, 0.0343, 39, 20, 6, 24, 2, 'leased');
 
 INSERT INTO `qgen_quote_lease_terms` (`quoteId`, `leasingSchemaTermId`) VALUES
 (1, 4);
@@ -137,13 +137,13 @@ INSERT INTO `qgen_quote_devices` (`id`,`quoteId`, `margin`, `name`, `sku`, `oemC
 (2, 1, 20.00, 'Unsynced Device Name 2', 'Unsynced SKU 2', 999, 999, 999, 999, 999.99, 999.99, 0),
 (3, 1, 20.00, 'Unsynced Device Name 3', 'Unsynced SKU 3', 999, 999, 999, 999, 999.99, 999.99, 0);
 
-INSERT INTO `qgen_quote_device_group_devices` (`quoteDeviceId`,`quoteDeviceGroupId`,`quantity`) VALUES
-(1,1,1),
-(2,1,1),
-(3,1,1),
-(2,2,1),
-(3,2,1),
-(3,3,3);
+INSERT INTO `qgen_quote_device_group_devices` (`quoteDeviceId`,`quoteDeviceGroupId`,`quantity`,`monochromePagesQuantity`, `colorPagesQuantity`) VALUES
+(1,1,1,0,0),
+(2,1,1,0,0),
+(3,1,1,0,0),
+(2,2,1,0,0),
+(3,2,1,0,0),
+(3,3,3,0,0);
 
 INSERT INTO `qgen_quote_device_configurations` (`masterDeviceId`, `quoteDeviceId`) VALUES
 (1, 1),
