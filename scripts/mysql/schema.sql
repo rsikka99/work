@@ -1287,7 +1287,6 @@ COMMENT = 'Primary table for a quote. Stores basic information' ;
 CREATE  TABLE IF NOT EXISTS `qgen_quote_devices` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
   `quoteId` INT(11) NOT NULL ,
-  `margin` DOUBLE NOT NULL ,
   `name` VARCHAR(255) NOT NULL ,
   `sku` VARCHAR(255) NOT NULL ,
   `oemCostPerPageMonochrome` DOUBLE NOT NULL ,
@@ -1295,8 +1294,11 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_devices` (
   `compCostPerPageMonochrome` DOUBLE NOT NULL ,
   `compCostPerPageColor` DOUBLE NOT NULL ,
   `cost` DOUBLE NOT NULL ,
-  `packagePrice` DOUBLE NOT NULL ,
+  `packageCost` DOUBLE NOT NULL ,
+  `packageMarkup` DOUBLE NOT NULL ,
   `residual` DOUBLE NOT NULL ,
+  `margin` DOUBLE NOT NULL ,
+  `packagePrice` DOUBLE NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `quoteId` (`quoteId` ASC) ,
   CONSTRAINT `quotegen_quote_devices_ibfk_1`

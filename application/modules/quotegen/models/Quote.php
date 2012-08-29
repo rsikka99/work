@@ -596,10 +596,10 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $subtotal = 0;
         
-        /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
-        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+        foreach ( $this->getQuoteDevices() as $quoteDevice )
         {
-            $subtotal += $quoteDeviceGroup->calculateGroupLeaseValue();
+            $subtotal += $quoteDevice->calculateTotalLeaseValue();
         }
         return $subtotal;
     }

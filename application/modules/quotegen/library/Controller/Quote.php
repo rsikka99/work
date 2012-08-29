@@ -116,37 +116,47 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
      */
     private function recalculateLeaseData ()
     {
+        // We need the quote lease value
         $quoteLeaseValue = (float)$this->_quote->calculateQuoteLeaseValue();
         $leasingSchemaTerm = $this->_quote->getLeasingSchemaTerm();
+        
+        // Make sure we have a term selected
         if ($leasingSchemaTerm)
         {
+            // Get the leasing schema attached to the term and make sure it really exists.
             $leasingSchema = $leasingSchemaTerm->getLeasingSchema();
             if ($leasingSchema)
             {
+                // Get all the ranges for the schema, and of course check to make sure theres at least 1
                 $leasingSchemaRanges = $leasingSchema->getRanges();
                 if (count($leasingSchemaRanges) > 0)
                 {
+                    // Selected range will be set to the very last schema range if the lease value is too high.
                     $selectedRange = false;
                     /* @var $leasingSchemaRange Quotegen_Model_LeasingSchemaRange */
                     foreach ( $leasingSchemaRanges as $leasingSchemaRange )
                     {
                         $selectedRange = $leasingSchemaRange;
+                        
+                        // FIXME: The ranges are in descending order. Is this the right logic?
+                        // If we found our range, break out of the loop
                         if ((float)$leasingSchemaRange->getStartRange() <= $quoteLeaseValue)
                         {
-                            
                             break;
                         }
                     }
                     
+                    // If we found a range, set the quote up with the term and rate
                     if ($selectedRange)
                     {
                         // Get the rate
                         $leasingSchemaRate = new Quotegen_Model_LeasingSchemaRate();
                         $leasingSchemaRate->setLeasingSchemaRangeId($selectedRange->getId());
                         $leasingSchemaRate->setLeasingSchemaTermId($leasingSchemaTerm->getId());
-                        
                         $rateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
                         $leasingSchemaRate = $rateMapper->find($rateMapper->getPrimaryKeyValueForObject($leasingSchemaRate));
+                        
+                        // Set the quote lease months and lease rate so that we can just directly use the values
                         $this->_quote->setLeaseTerm($leasingSchemaTerm->getMonths());
                         $this->_quote->setLeaseRate($leasingSchemaRate->getRate());
                     }
@@ -206,6 +216,12 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         return true;
     }
 
+    protected function recalculateQuoteDevice (Quotegen_Model_QuoteDevice &$quoteDevice)
+    {
+        // Recalculate the package cost
+        $quoteDevice->setPackageCost($quoteDevice->calculatePackageCost());
+    }
+
     /**
      * Syncs a quote device with a device
      *
@@ -221,7 +237,6 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         $quoteDevice->setName($masterDevice->getFullDeviceName());
         $quoteDevice->setSku($device->getSku());
         $quoteDevice->setCost($masterDevice->getCost());
-        
         
         /**
          * *******************************************************************
