@@ -117,7 +117,7 @@ $form = $this->form;
 			<?php if ( $element->hasErrors() ) { 
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
+			<?php echo trim($element->renderViewHelper()); ?> <span class="help-inline">Note: SKU and Standard Features are required when checked.</span>
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
@@ -137,7 +137,7 @@ $form = $this->form;
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+				$element->setAttrib('style', 'height: 100px; border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
 			<?php echo $element->renderErrors(); ?>
@@ -291,7 +291,7 @@ $form = $this->form;
 			<?php if ( $element->hasErrors() ) { 
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
+			<?php echo trim($element->renderViewHelper()); ?> <span class="help-inline">Note: Leased Toner Yield is required when checked.</span>
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>

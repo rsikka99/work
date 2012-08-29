@@ -104,12 +104,13 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         */
         $this->addElement('textarea', 'description', array (
                 'label' => 'Standard Features:', 
-                'required' => false, 
                 'style' => 'height: 100px', 
+                'required' => false, 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
                 ),
+                'allowEmpty' => false, 
                 'validators' => array (
                         new Custom_Validate_FieldDependsOnValue('can_sell', '1', array (
                                 new Zend_Validate_NotEmpty()

@@ -330,15 +330,13 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
 	                        $masterDevice->populate($values);
 	                        
 	                        // Make sure device doesn't exist
-	                        $manufacturer_id = $values ['manufacturer_id'];
-	                        $printer_model = $values['printer_model'];
-	                        $checkwhere = "manufacturer_id = {$manufacturer_id} AND printer_model LIKE '%{$printer_model}%'";
+	                        $checkwhere = "manufacturer_id = {$values ['manufacturer_id']} AND printer_model LIKE '%{$values['printer_model']}%'";
 	                        $exists = $mapper->fetch($checkwhere);
 	                        
 	                        if ( $exists )
 	                        {
 		                        $this->_helper->flashMessenger(array (
-		                                'danger' => "The device you are trying to create already exists."
+		                                'danger' => "Your new device was not created because a device named {$masterDevice->getFullDeviceName()} already exists."
 		                        ));
 	                        }
 	                        else
@@ -373,7 +371,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
 		                        }
 		                        
 		                        $this->_helper->flashMessenger(array (
-		                                'success' => "MasterDevice '{$masterDevice->getFullDeviceName()}' was updated sucessfully." 
+		                                'success' => "The {$masterDevice->getFullDeviceName()} device has been updated sucessfully." 
 		                        ));
 	                            
 	                            // Redirect them here so that the form reloads
@@ -393,7 +391,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                     // Error
                     else
                     {
-                        throw new InvalidArgumentException("Please correct the errors below");
+                        throw new InvalidArgumentException("Please correct the errors below.");
                     }
                 }
                 catch ( InvalidArgumentException $e )
@@ -451,7 +449,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         if (! $masterDeviceId)
         {
             $this->_helper->flashMessenger(array (
-                    'warning' => 'Please select a masterDevice to edit first.' 
+                    'warning' => 'Please select a master device to edit first.' 
             ));
             $this->_helper->redirector('index');
         }
@@ -459,13 +457,13 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         // Get the masterDevice
         $mapper = new Proposalgen_Model_Mapper_MasterDevice();
         $masterDevice = $mapper->find($masterDeviceId);
-        $this->view->devicename = $masterDevice->getManufacturer()->getDisplayname() . ' ' . $masterDevice->getPrinterModel();
+        $this->view->devicename = $masterDevice->getFullDeviceName();
         
         // If the masterDevice doesn't exist, send them back t the view all masterDevices page
         if (! $masterDevice)
         {
             $this->_helper->flashMessenger(array (
-                    'danger' => 'There was an error selecting the masterDevice to edit.' 
+                    'danger' => 'There was an error selecting the master device to edit.' 
             ));
             $this->_helper->redirector('index');
         }
@@ -567,7 +565,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         $masterDeviceId = $mapper->save($masterDevice, $masterDeviceId);
                         
                         $this->_helper->flashMessenger(array (
-                                'success' => "MasterDevice '{$masterDevice->getFullDeviceName()}' was updated sucessfully." 
+                                'success' => "The {$masterDevice->getFullDeviceName()} device has been updated sucessfully." 
                         ));
                     }
                     
@@ -618,9 +616,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         }
         
         // Get the device name
-        $deviceManufacturer = $device->getManufacturer()->getDisplayname();
-        $deviceModel = $device->getPrinterModel();
-        $deviceName = $deviceManufacturer . ' ' . $deviceModel;
+        $deviceName = $device->getFullDeviceName();
         
         $message = "Are you sure you want to delete {$deviceName}?";
         $form = new Application_Form_Delete($message);
@@ -697,7 +693,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         // Get the master device
         $mapper = new Proposalgen_Model_Mapper_MasterDevice();
         $masterDevice = $mapper->find($masterDeviceId);
-        $this->view->devicename = $masterDevice->getManufacturer()->getDisplayname() . ' ' . $masterDevice->getPrinterModel();
+        $this->view->devicename = $masterDevice->getFullDeviceName();
         
         // If the master device doesn't exist, send them back to the view all master devices page
         if (! $masterDevice)
@@ -959,7 +955,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         if (! $masterDeviceId)
         {
             $this->_helper->flashMessenger(array (
-                    'warning' => 'Please select a masterDevice to edit first.' 
+                    'warning' => 'Please select a master device to edit first.' 
             ));
             $this->_helper->redirector('index');
         }
@@ -1107,7 +1103,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         
         // Get the device and assigned options
         $device = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
-        $this->view->devicename = $device->getManufacturer()->getDisplayname() . ' ' . $device->getPrinterModel();
+        $this->view->devicename = $device->getFullDeviceName();
         
         // Get quote device
         $quoteDevice = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
@@ -1153,16 +1149,14 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         if (! $masterDeviceId)
         {
             $this->_helper->flashMessenger(array (
-                    'warning' => 'Please select a masterDevice to edit first.' 
+                    'warning' => 'Please select a master device to edit first.' 
             ));
             $this->_helper->redirector('index');
         }
         
         // Get the device
         $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
-        $this->view->devicename = $device->getMasterDevice()
-            ->getManufacturer()
-            ->getDisplayname() . ' ' . $device->getMasterDevice()->getPrinterModel();
+        $this->view->devicename = $device->getMasterDevice()->getFullDeviceName();
         
         // Get device configurations list
         $deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAll(array (
