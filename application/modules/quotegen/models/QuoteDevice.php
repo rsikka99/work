@@ -854,9 +854,71 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         return $this->calculateLeaseValue() * $this->calculateTotalQuantity();
     }
 
-/**
- * ****************************************************************************************************************************************
- * PAGE CALCULATIONS
- * ****************************************************************************************************************************************
- */
+    /**
+     * ****************************************************************************************************************************************
+     * PAGE CALCULATIONS
+     * ****************************************************************************************************************************************
+     */
+    /**
+     * The appropirate cost per page based on toner preference choice
+     *
+     * @return number the cost per page for color
+     */
+    public function getColorCostPerPage ()
+    {
+        $getCompCostPerPage = false;
+        $costPerPageColor = 0;
+        
+        // Get the pricing config
+        switch ($this->getQuote()
+            ->getPricingConfig()
+            ->getConfigName())
+        {
+            case Proposalgen_Model_PricingConfig::COMP :
+            case Proposalgen_Model_PricingConfig::OEMMONO_COMPCOLOR :
+                $getCompCostPerPage = true;
+                break;
+        }
+        
+        // If we want to get comp prices then get them
+        if ($getCompCostPerPage)
+            $costPerPageColor = $this->getCompCostPerPageColor();
+            
+            // If not they are set to oem
+        if ($costPerPageColor <= 0)
+            $costPerPageColor = $this->getOemCostPerPageColor();
+        
+        return $costPerPageColor;
+    }
+
+    /**
+     * The appropirate cost per page based on toner preference choice
+     *
+     * @return number the cost per page for monochrome
+     */
+    public function getMonochromeCostPerPage ()
+    {
+        $getCompCostPerPage = false;
+        $costPerPageMonochrome = 0;
+        
+        switch ($this->getQuote()
+            ->getPricingConfig()
+            ->getConfigName())
+        {
+            case Proposalgen_Model_PricingConfig::COMP :
+            case Proposalgen_Model_PricingConfig::COMPMONO_OEMCOLOR :
+                $getCompCostPerPage = true;
+                break;
+        }
+        
+        // If we want to get comp prices then get them
+        if ($getCompCostPerPage)
+            $costPerPageMonochrome = $this->getCompCostPerPageMonochrome();
+            
+            // If not they are set to oem
+        if ($costPerPageMonochrome <= 0)
+            $costPerPageMonochrome = $this->getOemCostPerPageMonochrome();
+        
+        return $costPerPageMonochrome;
+    }
 }

@@ -66,6 +66,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('checkbox', 'can_sell', array (
                 'label' => 'Can Sell Device:', 
+                'description' =>  'Note: SKU is required when checked.',
                 'filters' => array (
                         'Boolean' 
                 ) 
@@ -104,16 +105,11 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         */
         $this->addElement('textarea', 'description', array (
                 'label' => 'Standard Features:', 
-                'required' => false, 
                 'style' => 'height: 100px', 
+                'required' => false, 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
-                ),
-                'validators' => array (
-                        new Custom_Validate_FieldDependsOnValue('can_sell', '1', array (
-                                new Zend_Validate_NotEmpty()
-                        )) 
                 )
         ));
         
@@ -376,6 +372,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('checkbox', 'is_leased', array (
                 'label' => 'Is Leased:', 
+                'description' =>  'Note: Leased Toner Yield is required when checked.',
                 'filters' => array (
                         'Boolean' 
                 ) 

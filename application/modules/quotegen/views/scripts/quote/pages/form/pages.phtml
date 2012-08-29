@@ -1,6 +1,8 @@
 <?php 
 	/* @var $form Quotegen_Form_Quote_Group */
-	$form = $this->element; 
+	$form = $this->element;
+	
+	/* @var $quote Quotegen_Model_Quote  */
 	$quote = $form->getQuote();
 	// Get elements in the form
 	/* 
@@ -17,16 +19,17 @@
 	<table class='table table-bordered table-striped table-condensed'>
 		<?php if(!$quoteDeviceGroup->getIsDefault()) : ?>
 		<tr>
-			<td colspan='6' style='text-align: right'><?php echo $form->getElement("groupPages_{$quoteDeviceGroup->getId()}")?></td>
+			<td colspan='7' style='text-align: right'><?php echo $form->getElement("groupPages_{$quoteDeviceGroup->getId()}")?></td>
 		</tr>
 		<?php endif ?>
 		<tr class='header-row'>
 			<th style='width: 225px;'>Device</th>
 			<th >Sku</th>
-			<th style='width: 100px;'>Black CPP</th>
-			<th style='width: 80px;'>Black Pages</th>
-			<th style='width: 100px;'>Color CPP</th>
-			<th style='width: 80px;'>Color Pages</th>
+			<th style='width: 50px;'> Quantity </th>
+			<th style='width: 100px;'> Black CPP</th>
+			<th style='width: 80px;'> Black Pages </th>
+			<th style='width: 100px;'> Color CPP </th>
+			<th style='width: 80px;'> Color Pages </th>
 		</tr>
 		<tr>
 		<?php 
@@ -35,15 +38,16 @@
 		    <?php $quoteDevice = $quoteDeviceGroupDevice->getQuoteDevice(); ?>
 		    <td><?php echo $quoteDevice->getName(); ?></td>
 		    <td><?php echo $quoteDevice->getSku(); ?></td>
-		    <td><?php echo $this->currency($quoteDevice->getCompCostPerPageMonochrome(), array('precision' => 4)); ?></td>
+		    <td><?php echo $quoteDeviceGroupDevice->getQuantity()?>
+		    <td><?php echo $this->currency($quoteDevice->getMonochromeCostPerPage(), array('precision' => 4)); ?></td>
 			<td><?php echo $form->getElement('quantity_black_' . $quoteDeviceGroup->getId() . '_' . $quoteDeviceGroupDevice->getQuoteDeviceId()) ;?> </td>
-			<td><?php echo $this->currency($quoteDevice->getCompCostPerPageColor(), array('precision' => 4)); ?></td>
+			<td><?php echo $this->currency($quoteDevice->getColorCostPerPage(), array('precision' => 4)); ?></td>
 			<td><?php echo $form->getElement('quantity_color_' . $quoteDeviceGroup->getId() . '_' . $quoteDeviceGroupDevice->getQuoteDeviceId()) ;?> </td>
 		</tr>
 		<?php endforeach;?>
 	</table>
 		<?php endforeach;?>
-		
+	<?php echo $form->getElement('pageMargin'); ?>
 	<table class='table table-bordered table-striped table-condensed'>
 		<tr>
 			<th> Type </th>
@@ -54,17 +58,24 @@
 			<th> Revenue </th>
 			<th> Profit </th>
 		</tr>
-		<?php $pagesQuantity = $this->totalPages?>
 		<tr>
-			<td>   </td>
-			<td>   </td>
-			<td>   </td>
-			<td>   </td>
-			<td>   </td>
-			<td>   </td>
-			<td>   </td>
+			<td> Monochrome </td>
+			<td> <?php echo $this->currency($quote->getQuoteMonochromeCPP(), array('precision' => 4)); ?>  </td>
+			<td> <?php echo $quote->getTotalMonochromePages();?>  </td>
+			<td> </td>
+			<td> </td>
+			<td> </td>
+			<td> </td>
 		</tr>
-		<?php ?>
+		<tr>
+			<td> Color </td>
+			<td> <?php echo $this->currency($quote->getQuoteColorCPP(), array('precision' => 4)); ?>  </td>
+			<td> <?php echo $quote->getTotalColorPages();?>  </td>
+			<td> </td>
+			<td> </td>
+			<td> </td>
+			<td> </td>
+		</tr>
 	</table>
 	<?php echo $form->getElement('save'); ?>
 </form>

@@ -47,13 +47,16 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                                 $quoteDeviceGroupDevice->setColorPagesQuantity($newQuantity);
                                 $hasQuantityChanged = true;
                             }
-                            
+
                             if ($hasQuantityChanged)
                             {
                                 $quoteDeviceGroupDeviceMapper->save($quoteDeviceGroupDevice);
                             }
                         }
                     }
+                    
+                    // Calcuate stuff
+                    
                 }
             }
             
@@ -71,7 +74,6 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
             }
         }
         
-        $this->view->totalPages = $this->getTotalPages();
         $this->view->form = $form;
     }
 }
