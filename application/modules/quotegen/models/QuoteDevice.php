@@ -181,7 +181,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
                 'oemCostPerPageColor' => $this->getOemCostPerPageColor(), 
                 'compCostPerPageMonochrome' => $this->getCompCostPerPageMonochrome(), 
                 'compCostPerPageColor' => $this->getCompCostPerPageColor(), 
-                'cost' => $this->getCost(),  
+                'cost' => $this->getCost(), 
                 'residual' => $this->getResidual(), 
                 "packageCost" => $this->getPackageCost(), 
                 "packageMarkup" => $this->getPackageMarkup() 
