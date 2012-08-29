@@ -315,7 +315,7 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
      *
      * @return number The total cost for the option
      */
-    public function getSubTotal ()
+    public function getTotalCost ()
     {
         $subtotal = 0;
         $cost = (float)$this->getCost();

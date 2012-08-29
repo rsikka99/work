@@ -126,8 +126,8 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
         else
         {
             $whereClause = array (
-                    "{$this->col_quoteDeviceId} = ?" => $object[0], 
-                    "{$this->col_quoteDeviceGroupId} = ?" => $object[1] 
+                    "{$this->col_quoteDeviceId} = ?" => $object [0], 
+                    "{$this->col_quoteDeviceGroupId} = ?" => $object [1] 
             );
         }
         
@@ -250,7 +250,7 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
     /**
      * Gets all devices associated with a quote
      *
-     * @param $quoteDeviceGroupId int
+     * @param $quoteDeviceId int
      *            The quote device group id
      * @return multitype:Quotegen_Model_QuoteDeviceGroupDevices The quote devices for the quote device group
      */
@@ -258,6 +258,20 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
     {
         return $this->fetchAll(array (
                 "{$this->col_quoteDeviceGroupId} = ?" => $quoteDeviceGroupId 
+        ));
+    }
+
+    /**
+     * Fetches all the quote device group devices associated with a quote device
+     *
+     * @param $quoteDeviceId int
+     *            The quote device id
+     * @return multitype:Quotegen_Model_QuoteDeviceGroupDevices The quote devices group devices
+     */
+    public function fetchDevicesForQuoteDevice ($quoteDeviceId)
+    {
+        return $this->fetchAll(array (
+                "{$this->col_quoteDeviceId} = ?" => $quoteDeviceId 
         ));
     }
 }
