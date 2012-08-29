@@ -94,6 +94,21 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     protected $_residual;
     
     /**
+     * The cost of the package (Can be recalculated)
+     *
+     * @var number
+     */
+    protected $_packageCost;
+    
+    /**
+     * The package markup.
+     * This is normally the same as the package cost, but the user can edit this to be what they wish.
+     *
+     * @var number
+     */
+    protected $_packageMarkup;
+    
+    /**
      * The device configuration that this quote is attached to
      *
      * @var Quotegen_Model_QuoteDeviceConfiguration
@@ -441,6 +456,48 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
+     * Gets the package cost
+     *
+     * @return number
+     */
+    public function getPackageCost ()
+    {
+        return $this->_packageCost;
+    }
+
+    /**
+     * Sets the package cost
+     *
+     * @param number $_packageCost            
+     */
+    public function setPackageCost ($_packageCost)
+    {
+        $this->_packageCost = $_packageCost;
+        return $this;
+    }
+
+    /**
+     * Gets the package markup (user cost)
+     *
+     * @return number
+     */
+    public function getPackageMarkup ()
+    {
+        return $this->_packageMarkup;
+    }
+
+    /**
+     * Sets the package markup (user cost)
+     *
+     * @param number $_packageMarkup            
+     */
+    public function setPackageMarkup ($_packageMarkup)
+    {
+        $this->_packageMarkup = $_packageMarkup;
+        return $this;
+    }
+
+    /**
      * Gets the device associated with this quote device
      *
      * @return Quotegen_Model_Device The device configuration
@@ -631,7 +688,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
          */
         
         // Get the device price
-        $cost = (float)$this->calculatePackageCost();
+        $cost = (float)$this->getPackageCost();
         $price = 0;
         
         // Tack on the margin
@@ -667,7 +724,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     public function calculateMargin ()
     {
         $margin = 0;
-        $cost = $this->calculatePackageCost();
+        $cost = $this->getPackageCost();
         $price = $this->getPackagePrice();
         
         // Only calculate if we have real numbers to return
@@ -718,7 +775,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateTotalCost ()
     {
-        return $this->calculatePackageCost() * $this->calculateTotalQuantity();
+        return $this->getPackageCost() * $this->calculateTotalQuantity();
     }
 
     /**
@@ -729,7 +786,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateTotalPrice ()
     {
-        return $this->calculatePackagePrice() * $this->calculateTotalQuantity();
+        return $this->getPackagePrice() * $this->calculateTotalQuantity();
     }
 
     /**
@@ -762,6 +819,39 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     public function calculateTotalResidual ()
     {
         return $this->getResidual() * $this->calculateTotalQuantity();
+    }
+
+    /**
+     * Calcualtes the lease value for a single instance of this configuration
+     *
+     * @return number
+     */
+    public function calculateLeaseValue ()
+    {
+        $value = $this->getPackagePrice();
+        $residual = $this->getResidual();
+        $leaseValue = 0;
+        
+        /*
+         * We need to be at or over 0 in all cases, otherwise we might as well return 0 since negative numbers make no
+         * sense for this.
+         */
+        if ($value > 0 && $residual >= 0 && ($value - $residual) >= 0)
+        {
+            $leaseValue = $value - $residual;
+        }
+        
+        return $leaseValue;
+    }
+
+    /**
+     * Calculates the total lease value for all instances of this configuration.
+     *
+     * @return number
+     */
+    public function calculateTotalLeaseValue ()
+    {
+        return $this->calculateLeaseValue() * $this->calculateTotalQuantity();
     }
 
 /**

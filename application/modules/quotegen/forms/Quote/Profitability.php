@@ -216,7 +216,7 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
                 array (
                         'ViewScript', 
                         array (
-                                'viewScript' => 'quote/profitability/form/group.phtml' 
+                                'viewScript' => 'quote/profitability/form/profitability.phtml' 
                         ) 
                 ) 
         ));

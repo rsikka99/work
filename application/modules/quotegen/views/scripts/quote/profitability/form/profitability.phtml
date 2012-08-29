@@ -21,8 +21,9 @@
             <th>Item</th>
             <th style="width: 120px;">SKU</th>
             <th style="width: 120px;">Cost</th>
+            <th style="width: 120px;">Markup</th>
             <th style="width: 50px;">Margin</th>
-            <th style="width: 100px;">Price</th>
+            <th style="width: 100px;">Device Subtotal</th>
             <th style="width: 80px;">Quantity</th>
             <th style="width: 100px;">Subtotal</th>
         </tr>
@@ -31,12 +32,20 @@
             <td><?php echo $quoteDevice->getName() ?></td>
     		<td><?php echo $quoteDevice->getSku() ?></td>
     		<td><?php echo $this->currency($quoteDevice->calculatePackageCost()); ?></td>
+    		<td>TODO: $1100</td>
     		<td><?php echo number_format($quoteDevice->getMargin()); ?>%</td>
     		<td><?php echo $this->currency($quoteDevice->getPackagePrice()); ?></td>
     		<td><?php echo number_format($quoteDevice->calculateTotalQuantity()); ?></td>
     		<td><?php echo $this->currency($quoteDevice->calculateTotalPrice()); ?></td>
         </tr>
         <?php endforeach; ?>
+        <tr>
+            <td colspan="4"></td>
+            <td>20%</td>
+            <td>$100</td>
+            <td>123</td>
+            <td>$1223</td>
+        </tr>
     </table>
 
     
