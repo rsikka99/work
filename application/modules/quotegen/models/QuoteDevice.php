@@ -80,13 +80,6 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     protected $_cost;
     
     /**
-     * The price of the entire package
-     *
-     * @var int
-     */
-    protected $_packagePrice;
-    
-    /**
      * The residual to leave on the device
      *
      * @var int
@@ -165,8 +158,6 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             $this->setCompCostPerPageColor($params->compCostPerPageColor);
         if (isset($params->cost) && ! is_null($params->cost))
             $this->setCost($params->cost);
-        if (isset($params->packagePrice) && ! is_null($params->packagePrice))
-            $this->setPackagePrice($params->packagePrice);
         if (isset($params->residual) && ! is_null($params->residual))
             $this->setResidual($params->residual);
     }
@@ -187,7 +178,6 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
                 'compCostPerPageMonochrome' => $this->getCompCostPerPageMonochrome(), 
                 'compCostPerPageColor' => $this->getCompCostPerPageColor(), 
                 'cost' => $this->getCost(), 
-                'packagePrice' => $this->getPackagePrice(), 
                 'residual' => $this->getResidual() 
         );
     }
@@ -413,27 +403,6 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Gets the package price
-     *
-     * @return number The package price
-     */
-    public function getPackagePrice ()
-    {
-        return $this->_packagePrice;
-    }
-
-    /**
-     * Sets the new package price
-     *
-     * @param number $_packagePrice            
-     */
-    public function setPackagePrice ($_packagePrice)
-    {
-        $this->_packagePrice = $_packagePrice;
-        return $this;
-    }
-
-    /**
      * Gets the residual on the device
      *
      * @return number The residual
@@ -655,9 +624,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateMargin ()
     {
-        
-        $cost = $this->getPackageCost();
-        $price = $this->getPackagePrice();
+        $cost = (float)$this->getPackageCost();
+        $price = (float)$this->calculatePackagePrice();
         
         return Tangent_Accounting::reverseEngineerMargin($cost, $price);
     }
@@ -697,7 +665,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateTotalPrice ()
     {
-        return $this->getPackagePrice() * $this->calculateTotalQuantity();
+        return $this->calculatePackagePrice() * $this->calculateTotalQuantity();
     }
 
     /**
@@ -739,7 +707,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateLeaseValue ()
     {
-        $value = $this->getPackagePrice();
+        $value = $this->calculatePackagePrice();
         $residual = $this->getResidual();
         $leaseValue = 0;
         

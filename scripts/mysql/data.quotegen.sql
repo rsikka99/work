@@ -132,10 +132,10 @@ INSERT INTO `qgen_quote_device_groups` (`id`, `quoteId`, `name`, `isDefault`) VA
 (2, 1,'Kingston Office', 0),
 (3, 1,'Head Office', 0);
 
-INSERT INTO `qgen_quote_devices` (`id`,`quoteId`, `margin`, `name`, `sku`, `oemCostPerPageMonochrome`, `oemCostPerPageColor`, `compCostPerPageMonochrome`, `compCostPerPageColor`, `cost`, `residual`, `packageCost`, `packageMarkup`, `packagePrice`) VALUES
-(1, 1, 20.00, 'Unsynced Device Name 1', 'Unsynced SKU 1', 999, 999, 999, 999, 999.99, 0, 999.99, 999.99, 999.99),
-(2, 1, 20.00, 'Unsynced Device Name 2', 'Unsynced SKU 2', 999, 999, 999, 999, 999.99, 0, 999.99, 999.99, 999.99),
-(3, 1, 20.00, 'Unsynced Device Name 3', 'Unsynced SKU 3', 999, 999, 999, 999, 999.99, 0, 999.99, 999.99, 999.99);
+INSERT INTO `qgen_quote_devices` (`id`,`quoteId`, `margin`, `name`, `sku`, `oemCostPerPageMonochrome`, `oemCostPerPageColor`, `compCostPerPageMonochrome`, `compCostPerPageColor`, `cost`, `residual`, `packageCost`, `packageMarkup`) VALUES
+(1, 1, 20.00, 'Unsynced Device Name 1', 'Unsynced SKU 1', 999, 999, 999, 999, 999.99, 0, 999.99, 999.99),
+(2, 1, 20.00, 'Unsynced Device Name 2', 'Unsynced SKU 2', 999, 999, 999, 999, 999.99, 0, 999.99, 999.99),
+(3, 1, 20.00, 'Unsynced Device Name 3', 'Unsynced SKU 3', 999, 999, 999, 999, 999.99, 0, 999.99, 999.99);
 
 INSERT INTO `qgen_quote_device_group_devices` (`quoteDeviceId`,`quoteDeviceGroupId`,`quantity`,`monochromePagesQuantity`, `colorPagesQuantity`) VALUES
 (1,1,1,0,0),

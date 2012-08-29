@@ -1298,7 +1298,6 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_devices` (
   `packageMarkup` DOUBLE NOT NULL ,
   `residual` DOUBLE NOT NULL ,
   `margin` DOUBLE NOT NULL ,
-  `packagePrice` DOUBLE NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `quoteId` (`quoteId` ASC) ,
   CONSTRAINT `quotegen_quote_devices_ibfk_1`
