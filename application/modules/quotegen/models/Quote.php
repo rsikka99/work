@@ -553,6 +553,66 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     }
 
     /**
+     * Gets the leasing schema term
+     *
+     * @return Quotegen_Model_LeasingSchemaTerm
+     */
+    public function getLeasingSchemaTerm ()
+    {
+        if (! isset($this->_leasingSchemaTerm))
+        {
+            $quoteLeaseTerm = Quotegen_Model_Mapper_QuoteLeaseTerm::getInstance()->find($this->getId());
+            if ($quoteLeaseTerm)
+            {
+                $this->_leasingSchemaTerm = $quoteLeaseTerm->getLeaseTerm();
+            }
+        }
+        return $this->_leasingSchemaTerm;
+    }
+
+    /**
+     * Sets the leasing schema term
+     *
+     * @param $_leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm            
+     */
+    public function setLeasingSchemaTerm ($_leasingSchemaTerm)
+    {
+        $this->_leasingSchemaTerm = $_leasingSchemaTerm;
+        return $this;
+    }
+
+    /**
+     * Gets all the quote device configurations for a quote
+     *
+     * @return multitype:Quotegen_Model_QuoteDevice
+     */
+    public function getQuoteDevices ()
+    {
+        if (! isset($this->_quoteDevices))
+        {
+            $this->_quoteDevices = Quotegen_Model_Mapper_QuoteDevice::getInstance()->fetchDevicesForQuote($this->getId());
+        }
+        return $this->_quoteDevices;
+    }
+
+    /**
+     * Sets all the quote device configurations for a quote
+     *
+     * @param multitype:Quotegen_Model_QuoteDevice $_quoteDevices            
+     */
+    public function setQuoteDevices ($_quoteDevices)
+    {
+        $this->_quoteDevices = $_quoteDevices;
+        return $this;
+    }
+
+    /**
+     * ****************************************************************************************************************************************
+     * DEVICE CALCULATIONS
+     * ****************************************************************************************************************************************
+     */
+    
+    /**
      * Calculates the sub total for the quote's devices.
      * This is the number used for the purchase total.
      *
@@ -680,60 +740,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         }
         
         return $margin;
-    }
-
-    /**
-     * Gets the leasing schema term
-     *
-     * @return Quotegen_Model_LeasingSchemaTerm
-     */
-    public function getLeasingSchemaTerm ()
-    {
-        if (! isset($this->_leasingSchemaTerm))
-        {
-            $quoteLeaseTerm = Quotegen_Model_Mapper_QuoteLeaseTerm::getInstance()->find($this->getId());
-            if ($quoteLeaseTerm)
-            {
-                $this->_leasingSchemaTerm = $quoteLeaseTerm->getLeaseTerm();
-            }
-        }
-        return $this->_leasingSchemaTerm;
-    }
-
-    /**
-     * Sets the leasing schema term
-     *
-     * @param $_leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm            
-     */
-    public function setLeasingSchemaTerm ($_leasingSchemaTerm)
-    {
-        $this->_leasingSchemaTerm = $_leasingSchemaTerm;
-        return $this;
-    }
-
-    /**
-     * Gets all the quote device configurations for a quote
-     *
-     * @return multitype:Quotegen_Model_QuoteDevice
-     */
-    public function getQuoteDevices ()
-    {
-        if (! isset($this->_quoteDevices))
-        {
-            $this->_quoteDevices = Quotegen_Model_Mapper_QuoteDevice::getInstance()->fetchDevicesForQuote($this->getId());
-        }
-        return $this->_quoteDevices;
-    }
-
-    /**
-     * Sets all the quote device configurations for a quote
-     *
-     * @param multitype:Quotegen_Model_QuoteDevice $_quoteDevices            
-     */
-    public function setQuoteDevices ($_quoteDevices)
-    {
-        $this->_quoteDevices = $_quoteDevices;
-        return $this;
     }
 
     /**
