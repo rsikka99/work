@@ -160,6 +160,10 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             $this->setCost($params->cost);
         if (isset($params->residual) && ! is_null($params->residual))
             $this->setResidual($params->residual);
+        if (isset($params->packageCost) && ! is_null($params->packageCost))
+            $this->setPackageCost($params->packageCost);
+        if (isset($params->packageMarkup) && ! is_null($params->packageMarkup))
+            $this->setPackageMarkup($params->packageMarkup);
     }
     
     /*
@@ -177,8 +181,10 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
                 'oemCostPerPageColor' => $this->getOemCostPerPageColor(), 
                 'compCostPerPageMonochrome' => $this->getCompCostPerPageMonochrome(), 
                 'compCostPerPageColor' => $this->getCompCostPerPageColor(), 
-                'cost' => $this->getCost(), 
-                'residual' => $this->getResidual() 
+                'cost' => $this->getCost(),  
+                'residual' => $this->getResidual(), 
+                "packageCost" => $this->getPackageCost(), 
+                "packageMarkup" => $this->getPackageMarkup() 
         );
     }
 
