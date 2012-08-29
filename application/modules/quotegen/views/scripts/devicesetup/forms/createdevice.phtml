@@ -88,8 +88,8 @@ $form = $this->form;
 <form name="createdevice" id="createdevice" class="form-horizontal" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>">
 
 <div class="well">
-	<div class="control-group">
-		<?php $element = $this->element->getElement("manufacturer_id"); ?>
+	<?php $element = $this->element->getElement("manufacturer_id"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
@@ -99,8 +99,8 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<div class="control-group">
-		<?php $element = $this->element->getElement("printer_model"); ?>
+	<?php $element = $this->element->getElement("printer_model"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
@@ -110,19 +110,20 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<div class="control-group">
-		<?php $element = $this->element->getElement("can_sell"); ?>
+	<?php $element = $this->element->getElement("can_sell"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
-			<?php echo trim($element->renderViewHelper()); ?> <span class="help-inline">Note: SKU and Standard Features are required when checked.</span>
+			<?php echo trim($element->renderViewHelper()); ?>
+			<?php echo trim($element->renderDescription()); ?>
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<div class="control-group">
-		<?php $element = $this->element->getElement("sku"); ?>
+	<?php $element = $this->element->getElement("sku"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
@@ -132,8 +133,8 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<div class="control-group">
-		<?php $element = $this->element->getElement("description"); ?>
+	<?php $element = $this->element->getElement("description"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
@@ -143,8 +144,8 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<div class="control-group">
-		<?php $element = $this->element->getElement("toner_config_id"); ?>
+	<?php $element = $this->element->getElement("toner_config_id"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
@@ -154,8 +155,8 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<div class="control-group">
-		<?php $element = $this->element->getElement("is_copier"); ?>
+	<?php $element = $this->element->getElement("is_copier"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
@@ -165,8 +166,8 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<div class="control-group">
-		<?php $element = $this->element->getElement("is_scanner"); ?>
+	<?php $element = $this->element->getElement("is_scanner"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
@@ -176,8 +177,8 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<div class="control-group">
-		<?php $element = $this->element->getElement("is_fax"); ?>
+	<?php $element = $this->element->getElement("is_fax"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
@@ -187,8 +188,8 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<div class="control-group">
-		<?php $element = $this->element->getElement("is_duplex"); ?>
+	<?php $element = $this->element->getElement("is_duplex"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
@@ -198,8 +199,8 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<div class="control-group">
-		<?php $element = $this->element->getElement("watts_power_normal"); ?>
+	<?php $element = $this->element->getElement("watts_power_normal"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
@@ -209,8 +210,8 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<div class="control-group">
-		<?php $element = $this->element->getElement("watts_power_idle"); ?>
+	<?php $element = $this->element->getElement("watts_power_idle"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
@@ -220,8 +221,8 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<div class="control-group">
-		<?php $element = $this->element->getElement("cost"); ?>
+	<?php $element = $this->element->getElement("cost"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
@@ -231,8 +232,8 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<div class="control-group">
-		<?php $element = $this->element->getElement("service_cost_per_page"); ?>
+	<?php $element = $this->element->getElement("service_cost_per_page"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
@@ -242,8 +243,8 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<div class="control-group">
-		<?php $element = $this->element->getElement("launch_date"); ?>
+	<?php $element = $this->element->getElement("launch_date"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 		    <?php echo $element->renderUiWidgetElement(); ?>
@@ -251,8 +252,8 @@ $form = $this->form;
 			<?php echo trim($element->renderDescription()); ?>
 		</div>
 	</div>
-	<div class="control-group">
-		<?php $element = $this->element->getElement("duty_cycle"); ?>
+	<?php $element = $this->element->getElement("duty_cycle"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
@@ -262,8 +263,8 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<div class="control-group">
-		<?php $element = $this->element->getElement("ppm_black"); ?>
+	<?php $element = $this->element->getElement("ppm_black"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
@@ -273,8 +274,8 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<div class="control-group">
-		<?php $element = $this->element->getElement("ppm_color"); ?>
+	<?php $element = $this->element->getElement("ppm_color"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
@@ -284,19 +285,20 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<div class="control-group">
-		<?php $element = $this->element->getElement("is_leased"); ?>
+	<?php $element = $this->element->getElement("is_leased"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
-			<?php echo trim($element->renderViewHelper()); ?> <span class="help-inline">Note: Leased Toner Yield is required when checked.</span>
+			<?php echo trim($element->renderViewHelper()); ?>
+			<?php echo trim($element->renderDescription()); ?>
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<div class="control-group">
-		<?php $element = $this->element->getElement("leased_toner_yield"); ?>
+	<?php $element = $this->element->getElement("leased_toner_yield"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
 			<?php if ( $element->hasErrors() ) { 
