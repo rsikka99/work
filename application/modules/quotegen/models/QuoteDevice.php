@@ -121,6 +121,12 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     protected $_quoteDevices;
     
+    /**
+     * Represents the quote being used
+     *
+     * @var Quotegen_Model_Quote
+     */
+    protected $_quote;
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -525,12 +531,12 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     {
         // Get the device cost
         $cost = (float)$this->getCost();
-            // Tack on the option costs
-            /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
-            foreach ( $this->getQuoteDeviceOptions() as $quoteDeviceOption )
-            {
-                $cost += $quoteDeviceOption->getSubTotal();
-            }
+        // Tack on the option costs
+        /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
+        foreach ( $this->getQuoteDeviceOptions() as $quoteDeviceOption )
+        {
+            $cost += $quoteDeviceOption->getSubTotal();
+        }
         
         return $cost;
     }
@@ -671,6 +677,67 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
+     * The appropirate cost per page based on toner preference choice
+     *
+     * @return number the cost per page for color
+     */
+    public function getColorCostPerPage ()
+    {
+        $getCompCostPerPage = false;
+        $costPerPageColor = 0;
+        
+        // Get the pricing config
+        switch ($this->getQuote()->getPricingConfig())
+        {
+            case Proposalgen_Model_PricingConfig::COMP :
+            case Proposalgen_Model_PricingConfig::OEMMONO_COMPCOLOR :
+                $getCompCostPerPage = true;
+                break;
+        }
+        
+        // If we want to get comp prices then get them
+        if ($getCompCostPerPage)
+            $costPerPageColor = $this->getCompCostPerPageColor();
+        
+        // If not they are set to oem
+        if ($costPerPageColor <= 0)
+            $costPerPageColor = $this->getOemCostPerPageColor();
+        
+        return $costPerPageColor;
+    }
+
+    /**
+     * The appropirate cost per page based on toner preference choice
+     *
+     * @return number the cost per page for monochrome
+     */
+    public function getMonochromeCostPerPage ()
+    {
+        $getCompCostPerPage = false;
+        $costPerPageMonochrome = 0;
+        // Get the pricing config
+        switch ($this->getQuote()->getPricingConfig())
+        {
+            case Proposalgen_Model_PricingConfig::COMP :
+            case Proposalgen_Model_PricingConfig::COMPMONO_OEMCOLOR :
+                $getCompCostPerPage = true;
+                break;
+            //  case Proposalgen_Model_PricingConfig::OEM :
+            //  case Proposalgen_Model_PricingConfig::OEMMONO_COMPCOLOR :
+        }
+        
+        // If we want to get comp prices then get them
+        if ($getCompCostPerPage)
+            $costPerPageMonochrome = $this->getCompCostPerPageMonochrome();
+            
+        // If not they are set to oem
+        if ($costPerPageMonochrome <= 0)
+            $costPerPageMonochrome = $this->getOemCostPerPageMonochrome();
+        
+        return $costPerPageMonochrome;
+    }
+
+    /**
      * Gets the quote for this device
      *
      * @return Quotegen_Model_QuoteDeviceGroup The quote device group
@@ -708,5 +775,18 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             $this->_quoteDevices = Quotegen_Model_Mapper_QuoteDevice::getInstance()->fetchDevicesForQuoteDeviceGroup($this->_id);
         }
         return $this->_quoteDevices;
+    }
+
+    /**
+     *
+     * @return Quotegen_Model_Quote $_quote
+     */
+    public function getQuote ()
+    {
+        if (! isset($this->_quote))
+        {
+            $this->_quote = Quotegen_Model_Mapper_Quote::getInstance()->find($this->getQuoteId());
+        }
+        return $this->_quote;
     }
 }
