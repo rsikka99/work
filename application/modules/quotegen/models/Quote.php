@@ -747,17 +747,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      * PAGE CALCULATIONS
      * ****************************************************************************************************************************************
      */
-    public function getTotalMonochromePageCost ()
-    {
-        $totalCppCost = 0;
-        
-        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
-            foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
-                $totalCppCost += $quoteDeviceGroupDevice->getQuoteDevice()->getMonochromeCostPerPage();
-        
-        return $totalCppCost;
-    }
-
+    
     /**
      * Get the number of monochrome pages attached to quote
      *
@@ -773,17 +763,33 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         
         return $quantity;
     }
+    
+    /**
+     * Get the number of color pages attached to quote
+     *
+     * @return int The number of color pages that is attached to this quote
+     */
+    public function getTotalColorPages ()
+    {
+        $quantity = 0;
+    
+        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+            foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+            $quantity += $quoteDeviceGroupDevice->getColorPagesQuantity();
+    
+        return $quantity;
+    }
 
     /**
      * Gets the cost per page for monochrome pages for the whole quote
      *
      * @var int the calcuated quote monochrome cpp
      */
-    public function getQuoteMonochromeCPP ()
+    public function getQuoteMonochromeCostPerPage ()
     {
         // Represents quote total page weigth
         $monochromePageQuantity = 0;
-        $monochromeCpp = 0;
+        $monochromeCostPerPage = 0;
         $monochromeTotal = 0;
         
         // Represents quote total costs for pages
@@ -807,10 +813,10 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         
         if ($monochromeTotal != 0)
         {
-            $monochromeCpp = $quoteDeviceGroupDeviceCost / $monochromeTotal;
+            $monochromeCostPerPage = $quoteDeviceGroupDeviceCost / $monochromeTotal;
         }
         
-        return $monochromeCpp;
+        return $monochromeCostPerPage;
     }
 
     /**
@@ -818,12 +824,12 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @var int the calcuated quote color cpp
      */
-    public function getQuoteColorCPP ()
+    public function getQuoteColorCostPerPage ()
     {
         // Quantity of pages for each grouped device (pages * deviceQuantity)
         $colorPageQuantity = 0;
         // The calculated quote CPP for color pages
-        $colorCPP = 0;
+        $colorCostPerPage = 0;
         // The quantity of color pages that have been assigned in this quote
         $colorTotal = 0;
         // The accumication of cost for coolor pages per device
@@ -841,24 +847,49 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         }
         
         if ($colorTotal != 0)
-            $colorCPP = $colorPageCostTotal / $colorTotal;
+            $colorCostPerPage = $colorPageCostTotal / $colorTotal;
         
-        return (float)$colorCPP;
+        return (float)$colorCostPerPage;
     }
 
     /**
-     * Get the number of color pages attached to quote
+     * Gets the total cost of monochrome pages
      *
-     * @return int The number of color pages that is attached to this quote
+     * @return int the total cost of monochrome pages
      */
-    public function getTotalColorPages ()
+    public function getQuoteMonochromePageCost ()
     {
-        $quantity = 0;
+        // The total cost of monochrome pages (deviceQuantity * pages * cpp)
+        $totalMonochromePageCost = 0;
         
         foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        {
+            /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
-                $quantity += $quoteDeviceGroupDevice->getColorPagesQuantity();
-        
-        return $quantity;
+            {
+                $totalMonochromePageCost += $quoteDeviceGroupDevice->getQuantity() * $quoteDeviceGroupDevice->getMonochromePagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->getMonochromeCostPerPage();
+            }
+        }
+        return $totalMonochromePageCost;
+    }
+
+    /**
+     * Calcuates the total color page cost for the qoute
+     *
+     * @return float the total color page cost for the qoute
+     */
+    public function getQuoteColorPageCost ()
+    {
+        // The total cost of color pages (deviceQuantity * pages * cpp)
+        $totalColorPageCost = 0;
+        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        {
+            /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+            foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+            {
+                $totalColorPageCost += $quoteDeviceGroupDevice->getQuantity() * $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->getColorCostPerPage();
+            }
+        }
+        return $totalColorPageCost;
     }
 }
