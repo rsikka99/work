@@ -36,7 +36,7 @@ class Quotegen_Model_QuoteDeviceOptionTest extends PHPUnit_Framework_TestCase
     public function testSubTotal ()
     {
         $expectedAnswer = 20;
-        $actualResult = $this->_quoteDeviceOption->getSubTotal();
+        $actualResult = $this->_quoteDeviceOption->getTotalCost();
         $this->assertEquals($expectedAnswer, $actualResult);
     }
 }

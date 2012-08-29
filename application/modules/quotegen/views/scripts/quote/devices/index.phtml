@@ -55,7 +55,7 @@ $this->headScript()->appendScript("$('i').popover();");
         	<td><?php echo $quoteDeviceOption->getDescription(); ?></td>
 	        <td style="text-align: right"><?php echo '$'.number_format($quoteDeviceOption->getCost(),2); ?></td>
     	    <td style="text-align: right"><?php echo number_format($quoteDeviceOption->getQuantity()); ?></td>
-        	<td style="text-align: right"><?php echo '$'.number_format($quoteDeviceOption->getSubTotal(),2); ?></td>
+        	<td style="text-align: right"><?php echo '$'.number_format($quoteDeviceOption->getTotalCost(),2); ?></td>
 	        <td></td>
 		</tr>
     <?php endforeach; ?>

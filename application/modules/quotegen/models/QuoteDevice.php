@@ -112,14 +112,14 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @var Quotegen_Model_Quote
      */
-    protected $_quoteDeviceGroup;
+    protected $_quote;
     
     /**
-     * Packages that are attached to a quote
+     * The devices attached to a group
      *
-     * @var Quotegen_Model_QuoteDevice
+     * @var Quotegen_Model_QuoteDeviceGroupDevices
      */
-    protected $_quoteDevices;
+    protected $_quoteDeviceGroupDevices;
     
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
@@ -498,41 +498,165 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Calculates the cost of a device's options
+     * Gets the quote for this device
      *
-     * @return number The cost of the options
+     * @return Quotegen_Model_Quote The quote device group
      */
-    public function calculateOptionsCost ()
+    public function getQuote ()
     {
-        $optionsCost = 0;
-        
-        // Add all the devices together
-        /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
-        foreach ( $this->getQuoteDeviceOptions() as $quoteDeviceOption )
+        if (! isset($this->_quote))
         {
-            $optionsCost += (float)$quoteDeviceOption->getCost() * (int)$quoteDeviceOption->getQuantity();
+            $this->_quote = Quotegen_Model_Mapper_Quote::getInstance()->find($this->getQuoteId());
         }
-        
-        return $optionsCost;
+        return $this->_quote;
     }
 
     /**
-     * Calculates the cost of a single device and all of its options
+     * Sets the quote for this device
      *
-     * @return number The cost
+     * @param Quotegen_Model_Quote $_quote
+     *            The quote device group
+     */
+    public function setQuote ($_quote)
+    {
+        $this->_quote = $_quote;
+        return $this;
+    }
+
+    /**
+     * Gets the quote device group devices
+     *
+     * @return multitype:Quotegen_Model_QuoteDeviceGroupDevice An array of quote device group devices
+     */
+    public function getQuoteDeviceGroupDevices ()
+    {
+        if (! isset($this->_quoteDeviceGroupDevices))
+        {
+            $this->_quoteDeviceGroupDevices = Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->fetchDevicesForQuoteDevice($this->_id);
+        }
+        return $this->_quoteDeviceGroupDevices;
+    }
+
+    /**
+     * Sets the quote device group devices
+     *
+     * @param array $_quoteDeviceGroupDevices
+     *            An array of qutoe device group devices
+     * @return Quotegen_Model_QuoteDevice
+     */
+    public function setQuoteDeviceGroupDevices ($_quoteDeviceGroupDevices)
+    {
+        $this->_quoteDeviceGroupDevices = $_quoteDeviceGroupDevices;
+        return this;
+    }
+
+    /**
+     * ****************************************************************************************************************************************
+     * DEVICE CALCULATIONS
+     * ****************************************************************************************************************************************
+     */
+    /**
+     * Calculates the cost of options for this configuration
+     *
+     * @return number The cost of the options for this configuration
+     */
+    public function calculateOptionCost ()
+    {
+        $cost = 0;
+        foreach ( $this->getQuoteDeviceOptions() as $quoteDeviceOption )
+        {
+            $cost += $quoteDeviceOption->getTotalCost();
+        }
+        return $cost;
+    }
+
+    /**
+     * Calculates the cost of the package plus it's options
      */
     public function calculatePackageCost ()
     {
-        // Get the device cost
-        $cost = (float)$this->getCost();
-            // Tack on the option costs
-            /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
-            foreach ( $this->getQuoteDeviceOptions() as $quoteDeviceOption )
-            {
-                $cost += $quoteDeviceOption->getSubTotal();
-            }
+        return $this->getCost() + $this->calculateOptionCost();
+    }
+
+    /**
+     * Calculates the price of the package.
+     *
+     * @return number The cost of the package with the margin added onto it.
+     */
+    public function calculatePackagePrice ()
+    {
+        /**
+         * *************************************************************************************************************
+         * Margin calculations
+         * *************************************************************************************************************
+         * **** Margins must always be between 0 and 100 (not inclusive).
+         * 100% margin would mean that it cost you absolutely nothing to have/make an item which could be possible but
+         * it's not realistic in a business world.
+         *
+         * **** Allowing for negative margins requires special treatment. When you have a negative margin you need to
+         * treat the number you're applying to it as if it already had a positive margin. $100 with a -20% margin will
+         * be $80, $100 with a positive margin will be $125.
+         *
+         * *************************************************************************************************************
+         * Applying margins
+         * *************************************************************************************************************
+         *
+         * To convert a margin to a decimal for use in calculations it's Margin = 1 - (ABS(MarginPercent) / 100).
+         *
+         * 20% margin = 1 - (ABS(20) / 100) = 0.8
+         *
+         * To apply a positive margin, you divide, to apply a negative margin, you multiply.
+         *
+         * $100 with 20% margin = 100 / 0.8 = $125
+         *
+         * $100 with -20% margin = 100 * 0.8 = $80
+         *
+         * *************************************************************************************************************
+         * Reverse engineering a margin
+         * *************************************************************************************************************
+         * To reverse engineer a margin we need to figure out the between the price and cost and divide it by the price.
+         * If the cost is greater than the price then the margin will be negative. In this case we devide the difference
+         * by the cost instead of the price. Be sure to check to see if the price and cost are the same as that is 0%
+         * margin.
+         *
+         * Positive: Margin = ((Price - Cost) / Price) * 100;
+         *
+         * +20% = (125 - 100) / 125 * 100
+         *
+         * Negative: $margin = ((Price - Cost) / Cost) * 100;
+         *
+         * -20% = (80 - 100) / 100 * 100
+         *
+         * *************************************************************************************************************
+         */
         
-        return $cost;
+        // Get the device price
+        $cost = (float)$this->calculatePackageCost();
+        $price = 0;
+        
+        // Tack on the margin
+        if ($cost > 0)
+        {
+            $margin = (float)$this->getMargin();
+            if ($margin > 0 && $margin < 100)
+            {
+                // When we have a positive margin, we apply it to the cost
+                $margin = 1 - (abs($margin) / 100);
+                $price = round($cost / $margin, 2);
+            }
+            else if ($margin < 0 && $margin > - 100)
+            {
+                // When we have a negative margin, we remove it from the cost
+                $margin = 1 - (abs($margin) / 100);
+                $price = round($cost * $margin, 2);
+            }
+            else
+            {
+                // If for some reason the margin was invalid, we'll set the price to the cost.
+                $price = $cost;
+            }
+        }
+        return $price;
     }
 
     /**
@@ -571,142 +695,78 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Calculates the cost of a single device and all of its options with margin
+     * Calculates the total quantity of of this configuration over the entire quote.
      *
-     * @return number The price
+     * @return number The total quantity.
      */
-    public function calculatePackagePrice ()
+    public function calculateTotalQuantity ()
     {
-        // Get the device price
-        $cost = (float)$this->calculatePackageCost();
-        $price = 0;
-        
-        // Tack on the margin
-        if ($cost > 0)
+        $quantity = 0;
+        /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
         {
-            $margin = (float)$this->getMargin();
-            if ($margin > 0 && $margin < 100)
-            {
-                // When we have a positive margin, we apply it to the cost
-                $margin = 1 - (abs($margin) / 100);
-                $price = round($cost / $margin, 2);
-            }
-            else if ($margin < 0 && $margin > - 100)
-            {
-                // When we have a negative margin, we remove it from the cost
-                $margin = 1 - (abs($margin) / 100);
-                $price = round($cost * $margin, 2);
-            }
-            else
-            {
-                $price = $cost;
-            }
+            $quantity += $quoteDeviceGroupDevice->getQuantity();
         }
-        
+        return $quantity;
+    }
+
+    /**
+     * Calculates the total cost of all configurations in this quote.
+     * (Quantity * Package cost)
+     *
+     * @return number The total cost.
+     */
+    public function calculateTotalCost ()
+    {
+        return $this->calculatePackageCost() * $this->calculateTotalQuantity();
+    }
+
+    /**
+     * Calculates the total price of all configurations in this quote.
+     * (Quantity * Package Price)
+     *
+     * @return number The total price.
+     */
+    public function calculateTotalPrice ()
+    {
+        return $this->calculatePackagePrice() * $this->calculateTotalQuantity();
+    }
+
+    /**
+     * Calculates the monthly lease price for a single instance of this configuration
+     *
+     * @return number The monthly lease price
+     */
+    public function calculateMonthlyLeasePrice ()
+    {
+        // TODO: Calculate monthly lease price
+        $price = 0;
         return $price;
     }
 
     /**
-     * Calculates the sub total with a residual ((package price - residual) * quantity)
+     * Calcualtes the monthly lease price for all instances of this configuration in the quote
      *
-     * @return number The sub total with a residual
+     * @return number
      */
-    public function calculateLeaseValue ()
+    public function calculateTotalMonthlyLeasePrice ()
     {
-        $subTotal = 0;
-        $packagePrice = (float)$this->getPackagePrice();
-        $residual = (float)$this->getResidual();
-        
-        $subTotal = ($packagePrice - $residual);
-        
-        return $subTotal;
+        return $this->calculateMonthlyLeasePrice() * $this->calculateTotalQuantity();
     }
 
     /**
-     * Calculates the lease price for the device on a monthly basis
+     * Calculates the total residual for all instances of this configuration in the quote.
      *
-     * @return number The lease price for a single device
+     * @return number
      */
-    public function calculateMonthlyLeasePrice ()
+    public function calculateTotalResidual ()
     {
-        $leasePrice = 0;
-        $leaseRate = $this->getQuoteDeviceGroup()
-            ->getQuote()
-            ->getLeaseRate();
-        $packagePrice = (float)$this->getPackagePrice();
-        $residual = (float)$this->getResidual();
-        
-        if ($leaseRate > 0 && $packagePrice > 0)
-        {
-            $leasePrice = $leaseRate * ($packagePrice - $residual);
-        }
-        
-        return round($leasePrice, 2);
+        return $this->getResidual() * $this->calculateTotalQuantity();
     }
 
-    /**
-     * Calculates the lease sub total (leasePrice * quantity)
-     *
-     * @return number The lease sub total
-     */
-    public function calculatePackageMonthlyLeasePrice ()
-    {
-        $subTotal = 0;
-        $leasePrice = (float)$this->calculateMonthlyLeasePrice();
-        
-        // FIXME: Get quanity from adjustment page
-        
-
-        //         $quantity = $this->getQuantity();
-        
-
-        // Make sure both the price and quantity are greater than 0
-        //if ($leasePrice > 0 && $quantity > 0)
-        //{
-        //    $subTotal = $leasePrice * $quantity;
-        //}
-        
-
-        return round($subTotal, 0);
-    }
-
-    /**
-     * Gets the quote for this device
-     *
-     * @return Quotegen_Model_QuoteDeviceGroup The quote device group
-     */
-    public function getQuoteDeviceGroup ()
-    {
-        if (! isset($this->_quoteDeviceGroup))
-        {
-            $this->_quoteDeviceGroup = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->find($this->getQuoteId());
-        }
-        return $this->_quoteDeviceGroup;
-    }
-
-    /**
-     * Sets the quote for this device
-     *
-     * @param Quotegen_Model_Mapper_QuoteDeviceGroup $_quoteDeviceGroup
-     *            The quote device group
-     */
-    public function setQuoteDeviceGroup ($_quoteDeviceGroup)
-    {
-        $this->_quoteDeviceGroup = $_quoteDeviceGroup;
-        return $this;
-    }
-
-    /**
-     * Gets the quoteDevices for a quote
-     *
-     * @return the $_quoteDevices
-     */
-    public function getQuoteDevices ()
-    {
-        if (! isset($this->_quoteDevices))
-        {
-            $this->_quoteDevices = Quotegen_Model_Mapper_QuoteDevice::getInstance()->fetchDevicesForQuoteDeviceGroup($this->_id);
-        }
-        return $this->_quoteDevices;
-    }
+/**
+ * ****************************************************************************************************************************************
+ * PAGE CALCULATIONS
+ * ****************************************************************************************************************************************
+ */
 }

@@ -39,7 +39,7 @@ class Quotegen_Model_QuoteTest extends PHPUnit_Framework_TestCase
         $quoteDeviceGroupPages [] = $quoteDeviceGroupPage;
         
         // Populate quote device
-        $quoteDevice->setQuoteDeviceGroup($quoteDeviceGroup);
+        $quoteDevice->setQuote($quoteDeviceGroup);
         $quoteDeviceGroup->setPages($quoteDeviceGroupPages);
         
         $quoteDevice->setQuantity(1);
@@ -135,7 +135,7 @@ class Quotegen_Model_QuoteTest extends PHPUnit_Framework_TestCase
             /* @var $quoteDevice Quotegen_Model_QuoteDevice */
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDevice )
             {
-                $this->assertNotNull($quoteDevice->getQuoteDeviceGroup());
+                $this->assertNotNull($quoteDevice->getQuote());
             }
         }
     }
