@@ -94,12 +94,14 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      * @var double
      */
     protected $_pageCoverageMonochrome;
+    
     /**
      * The default color page coverage value
      *
      * @var double
      */
     protected $_pageCoverageColor;
+    
     /**
      * The default pricing config preference
      *
@@ -746,6 +748,11 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         return $monochromeCpp;
     }
 
+    /**
+     * Gets the cost per page for color pages for the whole quote
+     *
+     * @var int the calcuated quote color cpp
+     */
     public function getQuoteColorCPP ()
     {
         // Quantity of pages for each grouped device (pages * deviceQuantity)
@@ -860,4 +867,10 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         $this->_quoteDevices = $_quoteDevices;
         return $this;
     }
+    
+    /**
+     * ****************************************************************************************************************************************
+     * PAGE CALCULATIONS
+     * ****************************************************************************************************************************************
+     */
 }
