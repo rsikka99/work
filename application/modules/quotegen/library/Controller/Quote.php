@@ -205,11 +205,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             }
         }
         
-        $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
-        if ($quoteDevice->getResidual() > $quoteDevice->getPackagePrice())
-        {
-            $quoteDevice->setResidual(0);
-        }
+        $quoteDevice->setPackageCost($quoteDevice->calculatePackageCost());
         
         Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
         
