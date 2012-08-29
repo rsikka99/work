@@ -295,7 +295,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      * Sets the date the quote was made for
      *
      * @param $_quoteDate string
-     *            The date in MySQL format
+     *            The date in MySQL formato
      */
     public function setQuoteDate ($_quoteDate)
     {
@@ -678,6 +678,49 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         }
         
         return $margin;
+    }
+
+    public function getTotalMonochromePageCost ()
+    {
+        $totalCppCost = 0;
+        
+        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+            foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+					$totalCppCost += $quoteDeviceGroupDevice->getQuoteDevice()->getMonochromeCostPerPage();
+                
+        return $totalCppCost;
+    }
+
+    /**
+     * Get the number of monochrome pages attached to quote
+     *
+     * @return int The number of monochrome pages that is attached to this quote
+     */
+    public function getTotalMonochromePages ()
+    {
+        $quantity = 0;
+        
+        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+            foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+                $quantity += $quoteDeviceGroupDevice->getMonochromePagesQuantity();
+        
+        return $quantity;
+    }
+
+    /**
+     * Get the number of color pages attached to quote
+     *
+     * @return int The number of color pages that is attached to this quote
+     */
+    public function getTotalColorPages ()
+    {
+        $quantity = 0;
+        
+        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+            foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+                $quantity += $quoteDeviceGroupDevice->getColorPagesQuantity();
+        
+        return $quantity;
     }
 
     /**
