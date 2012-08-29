@@ -148,8 +148,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             $this->setSku($params->sku);
         if (isset($params->oemCostPerPageMonochrome) && ! is_null($params->oemCostPerPageMonochrome))
             $this->setOemCostPerPageMonochrome($params->oemCostPerPageMonochrome);
-        if (isset($params->omeCostPerPageColor) && ! is_null($params->omeCostPerPageColor))
-            $this->setOemCostPerPageColor($params->omeCostPerPageColor);
+        if (isset($params->oemCostPerPageColor) && ! is_null($params->oemCostPerPageColor))
+            $this->setOemCostPerPageColor($params->oemCostPerPageColor);
         if (isset($params->compCostPerPageMonochrome) && ! is_null($params->compCostPerPageMonochrome))
             $this->setCompCostPerPageMonochrome($params->compCostPerPageMonochrome);
         if (isset($params->compCostPerPageColor) && ! is_null($params->compCostPerPageColor))
@@ -687,7 +687,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         $costPerPageColor = 0;
         
         // Get the pricing config
-        switch ($this->getQuote()->getPricingConfig())
+        switch ($this->getQuote()->getPricingConfig()->getConfigName())
         {
             case Proposalgen_Model_PricingConfig::COMP :
             case Proposalgen_Model_PricingConfig::OEMMONO_COMPCOLOR :
@@ -698,8 +698,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         // If we want to get comp prices then get them
         if ($getCompCostPerPage)
             $costPerPageColor = $this->getCompCostPerPageColor();
-        
-        // If not they are set to oem
+            
+            // If not they are set to oem
         if ($costPerPageColor <= 0)
             $costPerPageColor = $this->getOemCostPerPageColor();
         
@@ -715,22 +715,20 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     {
         $getCompCostPerPage = false;
         $costPerPageMonochrome = 0;
-        // Get the pricing config
-        switch ($this->getQuote()->getPricingConfig())
+        
+        switch ($this->getQuote()->getPricingConfig()->getConfigName())
         {
             case Proposalgen_Model_PricingConfig::COMP :
             case Proposalgen_Model_PricingConfig::COMPMONO_OEMCOLOR :
                 $getCompCostPerPage = true;
                 break;
-            //  case Proposalgen_Model_PricingConfig::OEM :
-            //  case Proposalgen_Model_PricingConfig::OEMMONO_COMPCOLOR :
         }
         
         // If we want to get comp prices then get them
         if ($getCompCostPerPage)
             $costPerPageMonochrome = $this->getCompCostPerPageMonochrome();
             
-        // If not they are set to oem
+            // If not they are set to oem
         if ($costPerPageMonochrome <= 0)
             $costPerPageMonochrome = $this->getOemCostPerPageMonochrome();
         

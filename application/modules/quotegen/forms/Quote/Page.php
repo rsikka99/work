@@ -28,15 +28,20 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Inline
             if (! $quoteDeviceGroup->getIsDefault())
             {
                 $this->addElement('checkbox', "groupPages_{$quoteDeviceGroup->getId()}", array (
-                        'label' => 'Group pages',
+                        'label' => 'Group pages', 
                         'decorators' => array (
-                                'FieldSize',
-                                'ViewHelper',
-                                'Addon',
-                                'ElementErrors',
-                                array('Label', array('class' => 'control-label')),
-                                'Wrapper',
-                        )
+                                'FieldSize', 
+                                'ViewHelper', 
+                                'Addon', 
+                                'ElementErrors', 
+                                array (
+                                        'Label', 
+                                        array (
+                                                'class' => 'control-label' 
+                                        ) 
+                                ), 
+                                'Wrapper' 
+                        ) 
                 ));
             }
             /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
@@ -46,24 +51,27 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Inline
                         'label' => 'Quantity', 
                         'required' => true, 
                         'class' => 'span1', 
-                        'value' => '0',  
+                        'value' => '0' 
                 ));
                 
                 $this->addElement('text', "quantity_color_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}", array (
                         'label' => 'Quantity', 
                         'required' => true, 
                         'class' => 'span1', 
-                        'value' => '0', 
+                        'value' => '0' 
                 ));
             }
         }
+        
+        $this->addElement('text', 'pageMargin', array (
+                'label' => 'Page Margin' 
+        ));
         
         $this->addElement('button', 'save', array (
                 'buttonType' => Twitter_Bootstrap_Form_Element_Button::BUTTON_SUCCESS, 
                 'type' => 'submit', 
                 'label' => 'Save' 
         ));
-        
     }
 
     public function loadDefaultDecorators ()
