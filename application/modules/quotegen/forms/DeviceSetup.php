@@ -66,6 +66,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('checkbox', 'can_sell', array (
                 'label' => 'Can Sell Device:', 
+                'description' =>  'Note: SKU is required when checked.',
                 'filters' => array (
                         'Boolean' 
                 ) 
@@ -104,12 +105,12 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         */
         $this->addElement('textarea', 'description', array (
                 'label' => 'Standard Features:', 
-                'required' => true, 
                 'style' => 'height: 100px', 
+                'required' => false, 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
-                ) 
+                )
         ));
         
         /*
@@ -371,6 +372,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('checkbox', 'is_leased', array (
                 'label' => 'Is Leased:', 
+                'description' =>  'Note: Leased Toner Yield is required when checked.',
                 'filters' => array (
                         'Boolean' 
                 ) 

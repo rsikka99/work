@@ -13,7 +13,7 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
      */
     public function indexAction ()
     {
-        $form = new Quotegen_Form_Quote_Group($this->_quote);
+        $form = new Quotegen_Form_Quote_Profitability($this->_quote);
         
         $request = $this->getRequest();
         if ($request->isPost())

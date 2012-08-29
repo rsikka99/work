@@ -1,0 +1,44 @@
+<?php 
+	/* @var $form Quotegen_Form_Quote_Group */
+	$form = $this->element;
+	$quote = $form->getQuote();
+	$addDeviceToGroupSubform = $form->getSubForm('addDeviceToGroup');
+	$deviceQuantitySubform = $form->getSubForm('deviceQuantity');
+	$addGroupSubform = $form->getSubForm('addGroup');
+	
+	$deleteDeviceButton = $deviceQuantitySubform->getElement('deleteDeviceFromGroup');
+	
+	// Get elements in the form 
+	$deviceElement = $addDeviceToGroupSubform->getElement('quoteDeviceId');
+	$quantityElement = $addDeviceToGroupSubform->getElement('quantity');
+	$groupElement = $addDeviceToGroupSubform->getElement('quoteDeviceGroupId');
+?>
+
+<form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+
+    <table class="table table-condensed table-striped table-bordered">
+        <tr>
+            <th>Item</th>
+            <th style="width: 120px;">SKU</th>
+            <th style="width: 120px;">Cost</th>
+            <th style="width: 50px;">Margin</th>
+            <th style="width: 100px;">Price</th>
+            <th style="width: 80px;">Quantity</th>
+            <th style="width: 100px;">Subtotal</th>
+        </tr>
+        <?php foreach ($quote->getQuoteDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
+        <tr>
+            <td><?php echo $quoteDevice->getName() ?></td>
+    		<td><?php echo $quoteDevice->getSku() ?></td>
+    		<td><?php echo $this->currency($quoteDevice->calculatePackageCost()); ?></td>
+    		<td><?php echo number_format($quoteDevice->getMargin()); ?>%</td>
+    		<td><?php echo $this->currency($quoteDevice->getPackagePrice()); ?></td>
+    		<td><?php echo number_format($quoteDevice->calculateTotalQuantity()); ?></td>
+    		<td><?php echo $this->currency($quoteDevice->calculateTotalPrice()); ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+
+    
+    <?php echo $form->getDisplayGroup('actions')->render(); ?>
+</form>
