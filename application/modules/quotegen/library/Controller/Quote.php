@@ -44,6 +44,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
      */
     public function init ()
     {
+        
         // Add the ability to have a docx context
         $this->_helper->contextSwitch()->addContext('docx', array (
                 'suffix' => 'docx', 
@@ -221,11 +222,51 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         $quoteDevice->setSku($device->getSku());
         $quoteDevice->setCost($masterDevice->getCost());
         
-        // FIXME: These need to use calculated values!
-        $quoteDevice->setOemCostPerPageMonochrome(0.016);
-        $quoteDevice->setOemCostPerPageColor(0.072);
-        $quoteDevice->setCompCostPerPageMonochrome(0.012);
-        $quoteDevice->setCompCostPerPageColor(0.056);
+        
+        /**
+         * *******************************************************************
+         * FIXME: The models need to be reworked to no longer require this!!!
+         * *******************************************************************
+         */
+        
+        $OEMpricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::OEM);
+        $COMPpricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::COMP);
+        
+        Proposalgen_Model_MasterDevice::setPricingConfig($OEMpricingConfig);
+        Proposalgen_Model_MasterDevice::setGrossMarginPricingConfig($OEMpricingConfig);
+        
+        $pageCoverageMono = $this->_quote->getPageCoverageMonochrome();
+        if ($pageCoverageMono)
+        {
+            $pageCoverageMono = $pageCoverageMono / 100;
+            Proposalgen_Model_Toner::setESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE($pageCoverageMono);
+            Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE($pageCoverageMono);
+        }
+        
+        $pageCoverageColor = $this->_quote->getPageCoverageColor();
+        if ($pageCoverageColor)
+        {
+            $pageCoverageColor = $pageCoverageColor / 100;
+            Proposalgen_Model_Toner::setESTIMATED_PAGE_COVERAGE_COLOR($pageCoverageColor);
+            Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_COLOR($pageCoverageColor);
+        }
+        
+        // Calculate CPP for OEM pricing config
+        $cpp = $masterDevice->getCostPerPage();
+        
+        // Calculate OEM only values
+        $quoteDevice->setOemCostPerPageMonochrome($cpp->Estimated->Base->BlackAndWhite);
+        $quoteDevice->setOemCostPerPageColor($cpp->Estimated->Base->Color);
+        
+        // RESET cpp and set the pricing config to be COMP
+        $masterDevice->setCostPerPage(null);
+        Proposalgen_Model_MasterDevice::setPricingConfig($COMPpricingConfig);
+        Proposalgen_Model_MasterDevice::setGrossMarginPricingConfig($COMPpricingConfig);
+        
+        $cpp = $masterDevice->getCostPerPage();
+        // Calculate COMP only values (may be the same as oem if no comp toners were available)
+        $quoteDevice->setCompCostPerPageMonochrome($cpp->Estimated->Base->BlackAndWhite);
+        $quoteDevice->setCompCostPerPageColor($cpp->Estimated->Base->Color);
         
         return $quoteDevice;
     }

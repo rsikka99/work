@@ -39,65 +39,65 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
         {
             $testarray = array ();
             $tonerOverrides ["BW"] = array (
-                    "Cost" => 0, 
-                    "Yield" => 0 
+                    "Cost" => 1, 
+                    "Yield" => 1 
             );
             $tonerOverrides ["Color"] = array (
-                    "Cost" => 0, 
-                    "Yield" => 0 
+                    "Cost" => 1, 
+                    "Yield" => 1 
             );
             $tonerOverrides ["ThreeColor"] = array (
-                    "Cost" => 0, 
-                    "Yield" => 0 
+                    "Cost" => 1, 
+                    "Yield" => 1 
             );
             $tonerOverrides ["FourColor"] = array (
-                    "Cost" => 0, 
-                    "Yield" => 0 
+                    "Cost" => 1, 
+                    "Yield" => 1 
             );
             
-            $overrideLocation ["User"] = Proposalgen_Model_User::getCurrentUser();
-            $overrideLocation ["Dc"] = Proposalgen_Model_DealerCompany::getCurrentUserCompany();
-            $overrideLocation ["Dc"] = Proposalgen_Model_DealerCompany::getMasterCompany();
+//             $overrideLocation ["User"] = Proposalgen_Model_User::getCurrentUser();
+//             $overrideLocation ["Dc"] = Proposalgen_Model_DealerCompany::getCurrentUserCompany();
+//             $overrideLocation ["Dc"] = Proposalgen_Model_DealerCompany::getMasterCompany();
             
-            foreach ( $tonerOverrides as $type => $override )
-            {
-                // This is a fancy way of looping through the objects dynamically
-                // Written by Lee Robert
+//             foreach ( $tonerOverrides as $type => $override )
+//             {
+//                 // This is a fancy way of looping through the objects dynamically
+//                 // Written by Lee Robert
                 
 
-                // For the cost
-                foreach ( $overrideLocation as $FuncPrefix => $object )
-                {
-                    $functionCall = "get" . $FuncPrefix . "Default" . $type . "TonerCost";
-                    if ($object->$functionCall())
-                    {
-                        $override ["Cost"] = $object->$functionCall();
-                        break;
-                    }
-                }
+//                 // For the cost
+//                 foreach ( $overrideLocation as $FuncPrefix => $object )
+//                 {
+//                     $functionCall = "get" . $FuncPrefix . "Default" . $type . "TonerCost";
+//                     if ($object->$functionCall())
+//                     {
+//                         $override ["Cost"] = $object->$functionCall();
+//                         break;
+//                     }
+//                 }
                 
-                if ($override ["Cost"] <= 0)
-                {
-                    throw new Exception("Cost of " . $override ["Cost"] . " detected for " . $type . " toner. Cost must be greater than zero.");
-                }
+//                 if ($override ["Cost"] <= 0)
+//                 {
+//                     throw new Exception("Cost of " . $override ["Cost"] . " detected for " . $type . " toner. Cost must be greater than zero.");
+//                 }
                 
-                // For the yield
-                foreach ( $overrideLocation as $FuncPrefix => $object )
-                {
-                    $functionCall = "get" . $FuncPrefix . "Default" . $type . "TonerYield";
-                    if ($object->$functionCall())
-                    {
-                        $override ["Yield"] = $object->$functionCall();
-                        break;
-                    }
-                }
+//                 // For the yield
+//                 foreach ( $overrideLocation as $FuncPrefix => $object )
+//                 {
+//                     $functionCall = "get" . $FuncPrefix . "Default" . $type . "TonerYield";
+//                     if ($object->$functionCall())
+//                     {
+//                         $override ["Yield"] = $object->$functionCall();
+//                         break;
+//                     }
+//                 }
                 
-                if ($override ["Yield"] <= 0)
-                {
-                    throw new Exception("Yield of " . $override ["Yield"] . " detected for " . $type . " toner. Yield must be greater than zero.");
-                }
-                $tonerOverrides [$type] = $override;
-            }
+//                 if ($override ["Yield"] <= 0)
+//                 {
+//                     throw new Exception("Yield of " . $override ["Yield"] . " detected for " . $type . " toner. Yield must be greater than zero.");
+//                 }
+//                 $tonerOverrides [$type] = $override;
+//             }
             
             $blackToner = new Proposalgen_Model_Toner();
             $blackToner->setTonerPrice($tonerOverrides ["BW"] ["Cost"]);
