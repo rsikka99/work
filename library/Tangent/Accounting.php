@@ -101,7 +101,7 @@ class Tangent_Accounting
 
     /**
      * Reverse engineers a margin based on the cost and price.
-     * 
+     *
      * @param number $cost
      *            The cost
      * @param number $price
