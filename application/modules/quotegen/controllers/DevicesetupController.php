@@ -329,44 +329,58 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             
 	                        $masterDevice->populate($values);
 	                        
-	                        // TODO: Make sure device doesn't exist
+	                        // Make sure device doesn't exist
+	                        $manufacturer_id = $values ['manufacturer_id'];
+	                        $printer_model = $values['printer_model'];
+	                        $checkwhere = "manufacturer_id = {$manufacturer_id} AND printer_model LIKE '%{$printer_model}%'";
+	                        $exists = $mapper->fetch($checkwhere);
 	                        
-	                        $masterDeviceId = $mapper->insert($masterDevice);
-	                        
-	                        // Save Toners
-	                    	foreach ($toners as $key => $value)
-	                    	{ 
-	                            $deviceTonerMapper = new Proposalgen_Model_Mapper_DeviceToner();
-	                            $deviceToner = new Proposalgen_Model_DeviceToner();
-	                            $deviceToner->setTonerId($value);
-	                            $deviceToner->setMasterDeviceId($masterDeviceId);
-	                            $deviceTonerMapper->save($deviceToner);
-	                    	}
-	                    	   
-	                        // Save Quotegen Device
-	                        $sku = $values ['sku'];
-	                        if ($masterDeviceId > 0 && strlen($sku) > 0)
+	                        if ( $exists )
 	                        {
-	                            // Save Device SKU
-	        					$devicemapper = new Quotegen_Model_Mapper_Device();
-	                            $device = new Quotegen_Model_Device();
-	                            $devicevalues = array (
-	                                    'masterDeviceId' => $masterDeviceId, 
-	                                    'sku' => $sku,
-	                                    'description' => $values ['description']
-	                            );
-	                            $device->populate($devicevalues);
-	                            $devicemapper->insert($device);
+		                        $this->_helper->flashMessenger(array (
+		                                'danger' => "The device you are trying to create already exists."
+		                        ));
 	                        }
-	                        
-	                        $this->_helper->flashMessenger(array (
-	                                'success' => "MasterDevice '{$masterDevice->getFullDeviceName()}' was updated sucessfully." 
-	                        ));
-                            
-                            // Redirect them here so that the form reloads
-                            $this->_helper->redirector('edit', null, null, array (
-                                    'id' => $masterDeviceId 
-                            ));
+	                        else
+	                        {
+	                            // Device not found... add it
+		                        $masterDeviceId = $mapper->insert($masterDevice);
+		                        
+		                        // Save Toners
+		                    	foreach ($toners as $key => $value)
+		                    	{ 
+		                            $deviceTonerMapper = new Proposalgen_Model_Mapper_DeviceToner();
+		                            $deviceToner = new Proposalgen_Model_DeviceToner();
+		                            $deviceToner->setTonerId($value);
+		                            $deviceToner->setMasterDeviceId($masterDeviceId);
+		                            $deviceTonerMapper->save($deviceToner);
+		                    	}
+		                    	   
+		                        // Save Quotegen Device
+		                        $sku = $values ['sku'];
+		                        if ($masterDeviceId > 0 && strlen($sku) > 0)
+		                        {
+		                            // Save Device SKU
+		        					$devicemapper = new Quotegen_Model_Mapper_Device();
+		                            $device = new Quotegen_Model_Device();
+		                            $devicevalues = array (
+		                                    'masterDeviceId' => $masterDeviceId, 
+		                                    'sku' => $sku,
+		                                    'description' => $values ['description']
+		                            );
+		                            $device->populate($devicevalues);
+		                            $devicemapper->insert($device);
+		                        }
+		                        
+		                        $this->_helper->flashMessenger(array (
+		                                'success' => "MasterDevice '{$masterDevice->getFullDeviceName()}' was updated sucessfully." 
+		                        ));
+	                            
+	                            // Redirect them here so that the form reloads
+	                            $this->_helper->redirector('edit', null, null, array (
+	                                    'id' => $masterDeviceId 
+	                            ));
+	                        }
                         }
                         else
                         {
