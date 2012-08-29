@@ -642,78 +642,10 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculatePackagePrice ()
     {
-        /**
-         * *************************************************************************************************************
-         * Margin calculations
-         * *************************************************************************************************************
-         * **** Margins must always be between 0 and 100 (not inclusive).
-         * 100% margin would mean that it cost you absolutely nothing to have/make an item which could be possible but
-         * it's not realistic in a business world.
-         *
-         * **** Allowing for negative margins requires special treatment. When you have a negative margin you need to
-         * treat the number you're applying to it as if it already had a positive margin. $100 with a -20% margin will
-         * be $80, $100 with a positive margin will be $125.
-         *
-         * *************************************************************************************************************
-         * Applying margins
-         * *************************************************************************************************************
-         *
-         * To convert a margin to a decimal for use in calculations it's Margin = 1 - (ABS(MarginPercent) / 100).
-         *
-         * 20% margin = 1 - (ABS(20) / 100) = 0.8
-         *
-         * To apply a positive margin, you divide, to apply a negative margin, you multiply.
-         *
-         * $100 with 20% margin = 100 / 0.8 = $125
-         *
-         * $100 with -20% margin = 100 * 0.8 = $80
-         *
-         * *************************************************************************************************************
-         * Reverse engineering a margin
-         * *************************************************************************************************************
-         * To reverse engineer a margin we need to figure out the between the price and cost and divide it by the price.
-         * If the cost is greater than the price then the margin will be negative. In this case we devide the difference
-         * by the cost instead of the price. Be sure to check to see if the price and cost are the same as that is 0%
-         * margin.
-         *
-         * Positive: Margin = ((Price - Cost) / Price) * 100;
-         *
-         * +20% = (125 - 100) / 125 * 100
-         *
-         * Negative: $margin = ((Price - Cost) / Cost) * 100;
-         *
-         * -20% = (80 - 100) / 100 * 100
-         *
-         * *************************************************************************************************************
-         */
-        
-        // Get the device price
+        $marginPercent = (float)$this->getMargin();
         $cost = (float)$this->getPackageCost();
-        $price = 0;
         
-        // Tack on the margin
-        if ($cost > 0)
-        {
-            $margin = (float)$this->getMargin();
-            if ($margin > 0 && $margin < 100)
-            {
-                // When we have a positive margin, we apply it to the cost
-                $margin = 1 - (abs($margin) / 100);
-                $price = round($cost / $margin, 2);
-            }
-            else if ($margin < 0 && $margin > - 100)
-            {
-                // When we have a negative margin, we remove it from the cost
-                $margin = 1 - (abs($margin) / 100);
-                $price = round($cost * $margin, 2);
-            }
-            else
-            {
-                // If for some reason the margin was invalid, we'll set the price to the cost.
-                $price = $cost;
-            }
-        }
-        return $price;
+        return Tangent_Accounting::applyMargin($cost, $marginPercent);
     }
 
     /**
@@ -723,32 +655,11 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateMargin ()
     {
-        $margin = 0;
+        
         $cost = $this->getPackageCost();
         $price = $this->getPackagePrice();
         
-        // Only calculate if we have real numbers to return
-        if ($cost > 0 && $price > 0)
-        {
-            if ($price > $cost)
-            {
-                // Price is greater than cost. Positive Margin time
-                // Margin % = (price - cost) / price * 100
-                $margin = (($price - $cost) / $price) * 100;
-            }
-            else if ($price < $cost)
-            {
-                // Price is less than cost. Negative margin time.
-                // Margin % = (price - cost) / cost * 100
-                $margin = (($price - $cost) / $cost) * 100;
-            }
-            else
-            {
-                // If the prices are identical, we make 0 margin.
-                $margin = 0;
-            }
-        }
-        return round($margin, 2);
+        return Tangent_Accounting::reverseEngineerMargin($cost, $price);
     }
 
     /**
