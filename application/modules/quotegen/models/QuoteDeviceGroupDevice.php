@@ -249,4 +249,14 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
         $this->_colorPagesQuantity = $_colorPagesQuantity;
         return $this;
     }
+
+    /**
+     * Calculates the sub total for this device (quantity * package price)
+     *
+     * @return number
+     */
+    public function calculateSubtotal ()
+    {
+        return $this->getQuantity() * $this->getQuoteDevice()->getPackagePrice();
+    }
 }

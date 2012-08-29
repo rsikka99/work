@@ -43,7 +43,7 @@ class Proposalgen_Model_Mapper_Toner extends Tangent_Model_Mapper_Abstract
             $object = new Proposalgen_Model_Toner();
             $object->setTonerId($row->id)
                 ->setTonerSKU($row->sku)
-                ->setTonerPrice($row->price)
+                ->setTonerPrice($row->cost)
                 ->setTonerYield($row->yield)
                 ->setPartTypeId($row->part_type_id)
                 ->setManufacturerId($row->manufacturer_id)
@@ -68,7 +68,7 @@ class Proposalgen_Model_Mapper_Toner extends Tangent_Model_Mapper_Abstract
         {
             $data ["id"] = $object->getTonerId();
             $data ["sku"] = $object->getTonerSKU();
-            $data ["price"] = $object->getTonerPrice();
+            $data ["cost"] = $object->getTonerPrice();
             $data ["yield"] = $object->getTonerYield();
             $data ["manufacturer_id"] = $object->getManufacturerId();
             $data ["part_type_id"] = $object->getPartTypeId();
