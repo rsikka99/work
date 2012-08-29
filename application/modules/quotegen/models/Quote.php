@@ -771,7 +771,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         if ($colorTotal != 0)
             $colorCPP = $colorPageCostTotal / $colorTotal;
         
-        return $colorCPP;
+        return (float)$colorCPP;
     }
 
     /**

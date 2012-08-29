@@ -142,8 +142,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             $this->setSku($params->sku);
         if (isset($params->oemCostPerPageMonochrome) && ! is_null($params->oemCostPerPageMonochrome))
             $this->setOemCostPerPageMonochrome($params->oemCostPerPageMonochrome);
-        if (isset($params->omeCostPerPageColor) && ! is_null($params->omeCostPerPageColor))
-            $this->setOemCostPerPageColor($params->omeCostPerPageColor);
+        if (isset($params->oemCostPerPageColor) && ! is_null($params->oemCostPerPageColor))
+            $this->setOemCostPerPageColor($params->oemCostPerPageColor);
         if (isset($params->compCostPerPageMonochrome) && ! is_null($params->compCostPerPageMonochrome))
             $this->setCompCostPerPageMonochrome($params->compCostPerPageMonochrome);
         if (isset($params->compCostPerPageColor) && ! is_null($params->compCostPerPageColor))
@@ -798,7 +798,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         if ($costPerPageColor <= 0)
             $costPerPageColor = $this->getOemCostPerPageColor();
         
-        return $costPerPageColor;
+        return (float)$costPerPageColor;
     }
 
     /**
