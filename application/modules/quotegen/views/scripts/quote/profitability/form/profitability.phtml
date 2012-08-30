@@ -16,8 +16,13 @@
         <th style="width: 80px;">Quantity</th>
         <th style="width: 100px;">Subtotal</th>
     </tr>
-    <?php foreach ($quote->getQuoteDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
-    <tr>
+    <?php 
+        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+        foreach ($quote->getQuoteDevices() as $quoteDevice) :
+            $rowClass = ($quoteDevice->getPackageCost() > $quoteDevice->getPackageMarkup()) ? 'alert' : '';
+        
+    ?>
+    <tr class="<?php echo $rowClass; ?>">
         <td><?php echo $quoteDevice->getName() ?></td>
 		<td><?php echo $quoteDevice->getSku() ?></td>
 		<td><?php echo $this->currency($quoteDevice->calculatePackageCost()); ?></td>
