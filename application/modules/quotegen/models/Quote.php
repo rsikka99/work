@@ -122,14 +122,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      * @var string
      */
     protected $_quoteType;
-    
-    /**
-     * The margin to make on pages!
-     *
-     * @var number
-     */
-    protected $_pageMargin;
-    
+        
     /**
      * A pricing config object
      *
@@ -566,27 +559,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     }
 
     /**
-     * Gets the page margin
-     * 
-     * @return number
-     */
-    public function getPageMargin ()
-    {
-        return $this->_pageMargin;
-    }
-
-    /**
-     * Sets the page margin
-     * 
-     * @param number $_pageMargin            
-     */
-    public function setPageMargin ($_pageMargin)
-    {
-        $this->_pageMargin = $_pageMargin;
-        return $this;
-    }
-
-    /**
      * Gets the pricing config object
      *
      * @return Proposalgen_Model_PricingConfig The pricing config object.
@@ -993,11 +965,21 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         return Tangent_Accounting::applyMargin($this->getQuoteColorPageCost(), $this->getPageMargin());
     }
 
+    /**
+     * Gets the profit for monochrome pages for the quote
+     * 
+     * @return number the total quote profit for monochrome
+     */
     public function getQuoteMonochromeProfit ()
     {
         return $this->getQuoteMonochromeRevenue() - $this->getQuoteMonochromePageCost();
     }
 
+    /**
+     * Gets the profit for color pages for the quote
+     *
+     * @return number the total quote profit for color
+     */
     public function getQuoteColorProfit ()
     {
         return $this->getQuoteColorRevenue() - $this->getQuoteColorPageCost();
