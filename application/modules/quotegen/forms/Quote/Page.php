@@ -51,20 +51,21 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Inline
                         'label' => 'Quantity', 
                         'required' => true, 
                         'class' => 'span1', 
-                        'value' => '0' 
+                        'value' => $quoteDeviceGroupDevice->getMonochromePagesQuantity()
                 ));
                 
                 $this->addElement('text', "quantity_color_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}", array (
                         'label' => 'Quantity', 
                         'required' => true, 
                         'class' => 'span1', 
-                        'value' => '0' 
+                        'value' => $quoteDeviceGroupDevice->getColorPagesQuantity()
                 ));
             }
         }
         
         $this->addElement('text', 'pageMargin', array (
-                'label' => 'Page Margin' 
+                'label' => 'Page Margin',
+                'value' => $this->_quote->getPageMargin() 
         ));
         
         $this->addElement('button', 'save', array (

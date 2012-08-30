@@ -40,23 +40,24 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                                 $quoteDeviceGroupDevice->setMonochromePagesQuantity($newQuantity);
                                 $hasQuantityChanged = true;
                             }
-                            
+
                             $newQuantity = $form->getValue("quantity_color_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}");
                             if ((int)$newQuantity !== (int)$quoteDeviceGroupDevice->getColorPagesQuantity())
                             {
                                 $quoteDeviceGroupDevice->setColorPagesQuantity($newQuantity);
                                 $hasQuantityChanged = true;
                             }
-
+                            
                             if ($hasQuantityChanged)
                             {
                                 $quoteDeviceGroupDeviceMapper->save($quoteDeviceGroupDevice);
                             }
                         }
                     }
-                    
-                    // Calcuate stuff
-                    
+                    // Set page margin for the quote object
+                    $this->_quote->setPageMargin( $values ['pageMargin']);
+                    $this->saveQuote();
+                    Quotegen_Model_Mapper_Quote::getInstance()->save($this->_quote);
                 }
             }
             

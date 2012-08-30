@@ -103,6 +103,13 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     protected $_pageCoverageColor;
     
     /**
+     * The page margin for the quote
+     *
+     * @var float
+     */
+    protected $_pageMargin;
+    
+    /**
      * The default pricing config preference
      *
      * @var int
@@ -160,6 +167,8 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             $this->setUserId($params->userId);
         if (isset($params->clientDisplayName) && ! is_null($params->clientDisplayName))
             $this->setClientDisplayName($params->clientDisplayName);
+        if (isset($params->pageMargin) && ! is_null($params->pageMargin))
+            $this->setPageMargin($params->pageMargin);
         if (isset($params->pageCoverageColor) && ! is_null($params->pageCoverageColor))
             $this->setPageCoverageColor($params->pageCoverageColor);
         if (isset($params->pageCoverageMonochrome) && ! is_null($params->pageCoverageMonochrome))
@@ -188,6 +197,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                 'userId' => $this->getUserId(), 
                 'clientDisplayName' => $this->getClientDisplayName(), 
                 'pageCoverageColor' => $this->getPageCoverageColor(), 
+                'pageMargin' => $this->getPageMargin(),
                 'pageCoverageMonochrome' => $this->getPageCoverageMonochrome(), 
                 'pricingConfigId' => $this->getPricingConfigId(), 
                 'quoteType' => $this->getQuoteType(), 
@@ -488,6 +498,25 @@ class Quotegen_Model_Quote extends My_Model_Abstract
 
     /**
      *
+     * @return the $_pageMargin
+     */
+    public function getPageMargin ()
+    {
+        return $this->_pageMargin;
+    }
+
+    /**
+     *
+     * @param number $_pageMargin            
+     */
+    public function setPageMargin ($_pageMargin)
+    {
+        $this->_pageMargin = $_pageMargin;
+        return $this;
+    }
+
+    /**
+     *
      * @return the $_pricingConfigId
      */
     public function getPricingConfigId ()
@@ -763,7 +792,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         
         return $quantity;
     }
-    
+
     /**
      * Get the number of color pages attached to quote
      *
@@ -772,11 +801,11 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function getTotalColorPages ()
     {
         $quantity = 0;
-    
+        
         foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
-            $quantity += $quoteDeviceGroupDevice->getColorPagesQuantity();
-    
+                $quantity += $quoteDeviceGroupDevice->getColorPagesQuantity();
+        
         return $quantity;
     }
 
@@ -891,5 +920,55 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             }
         }
         return $totalColorPageCost;
+    }
+
+    /**
+     * Calcuates the revenue for monocchrome pages
+     *
+     * @return float the calculated price per page
+     */
+    public function getQuoteMonochromePricePerPage ()
+    {
+        return Tangent_Accounting::applyMargin($this->getQuoteMonochromeCostPerPage(), $this->getPageMargin());
+    }
+
+    /**
+     * Calcuates the revenue for color pages
+     *
+     * @return float the calculated price per page
+     */
+    public function getQuoteColorPricePerPage ()
+    {
+        return Tangent_Accounting::applyMargin($this->getQuoteColorCostPerPage(), $this->getPageMargin());
+    }
+
+    /**
+     * Calcuates the revenue for monocchrome pages
+     *
+     * @return float the calculated price per page
+     */
+    public function getQuoteMonochromeRevenue ()
+    {
+        return Tangent_Accounting::applyMargin($this->getQuoteMonochromePageCost(), $this->getPageMargin());
+    }
+
+    /**
+     * Calcuates the revenue for color pages
+     *
+     * @return float the calculated price per page
+     */
+    public function getQuoteColorRevenue ()
+    {
+        return Tangent_Accounting::applyMargin($this->getQuoteColorPageCost(), $this->getPageMargin());
+    }
+
+    public function getQuoteMonochromeProfit ()
+    {
+        return $this->getQuoteMonochromeRevenue() - $this->getQuoteMonochromePageCost();
+    }
+
+    public function getQuoteColorProfit ()
+    {
+        return $this->getQuoteColorRevenue() - $this->getQuoteColorPageCost();
     }
 }
