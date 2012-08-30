@@ -2,10 +2,19 @@
 
 class Quotegen_Form_Quote_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
 {
+    
+    /**
+     * This represents the current quote being worked on
+     *
+     * @var Quotegen_Model_Quote
+     */
+    protected $_quote;
     protected $_leasingSchemaId;
 
-    public function __construct ($options = null)
+    public function __construct (Quotegen_Model_Quote $quote, $leasingSchemaId, $options = null)
     {
+        $this->_leasingSchemaId = $leasingSchemaId;
+        $this->_quote = $quote;
         $this->addPrefixPath('My_Form_Element', 'My/Form/Element', 'element');
         
         parent::__construct($options);
@@ -29,7 +38,9 @@ class Quotegen_Form_Quote_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
-                ) 
+                ), 
+                'placeholder' => $this->_quote->getClient()
+                    ->getName() 
         ));
         
         $minYear = (int)date('Y') - 2;
@@ -231,14 +242,34 @@ class Quotegen_Form_Quote_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
         ));
         
         $this->addDisplayGroup(array (
-                'pricingConfigId',
+                'pricingConfigId', 
                 'pageCoverageMonochrome', 
-                'pageCoverageColor',
-                'adminCostPerPage',
-                'serviceCostPerPage'
-                 
+                'pageCoverageColor', 
+                'adminCostPerPage', 
+                'serviceCostPerPage' 
         ), 'pagesGroup', array (
                 'legend' => 'Pages' 
         ));
+    }
+
+    /**
+     * Gets the quote
+     *
+     * @return Quotegen_Model_Quote
+     */
+    public function getQuote ()
+    {
+        return $this->_quote;
+    }
+
+    /**
+     * Sets the quote
+     *
+     * @param Quotegen_Model_Quote $_quote            
+     */
+    public function setQuote ($_quote)
+    {
+        $this->_quote = $_quote;
+        return this;
     }
 }
