@@ -75,6 +75,7 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                         // Only show a message when we've made changes.
                         if ($changesMade)
                         {
+                            $this->saveQuote();
                             $this->_helper->flashMessenger(array (
                                     'success' => 'Changes saved successfully.' 
                             ));

@@ -2,6 +2,8 @@
 	/* @var $form Quotegen_Form_Quote_Group */
 	$form = $this->element;
 	$quote = $form->getQuote();
+	$isLeased = ($quote->getQuoteType() === Quotegen_Model_Quote::QUOTE_TYPE_LEASED);
+	
 	$quoteHasMarkupsLowerThanCosts = false;
 
 	foreach ($quote->getQuoteDevices() as $quoteDevice)
@@ -25,9 +27,9 @@
         <th style="width: 80px;">Cost</th>
         <th style="width: 80px;">Markup</th>
         <th style="width: 80px;">Margin</th>
-        <th style="width: 80px;">Price</th>
+        <th style="width: 80px;"><?php echo ($isLeased) ? 'Monthly ' : '';?>Price</th>
         <th style="width: 60px;">Quantity</th>
-        <th style="width: 100px;">Subtotal</th>
+        <th style="width: 100px;"><?php echo ($isLeased) ? 'Monthly ' : '';?>Subtotal</th>
     </tr>
     <?php 
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
@@ -38,8 +40,6 @@
             $quoteHasMarkupsLowerThanCosts = true;
             $rowClass =  'lowProfitDevice';            
         }
-            
-        
     ?>
     <tr class="<?php echo $rowClass; ?>">
         <td><?php echo $quoteDevice->getName() ?></td>
@@ -47,14 +47,14 @@
 		<td><?php echo $this->currency($quoteDevice->calculatePackageCost()); ?></td>
 		<td><?php echo $form->getElement("packageMarkup_{$quoteDevice->getId()}"); ?></td>
 		<td><?php echo $form->getElement("margin_{$quoteDevice->getId()}"); ?></td>
-		<td><?php echo $this->currency($quoteDevice->calculatePackagePrice()); ?></td>
+		<td><?php echo $this->currency( (float) (($isLeased) ? $quoteDevice->calculateMonthlyLeasePrice() : $quoteDevice->calculatePackagePrice()) ); ?></td>
 		<td><?php echo number_format($quoteDevice->calculateTotalQuantity()); ?></td>
-		<td><?php echo $this->currency($quoteDevice->calculateTotalPrice()); ?></td>
+		<td><?php echo $this->currency( (float) (($isLeased) ? $quoteDevice->calculateTotalMonthlyLeasePrice() : $quoteDevice->calculateTotalPrice()) ); ?></td>
     </tr>
     <?php endforeach; ?>
     <tr>
         <th colspan="7" style="text-align: right">Total Price:</th>
-        <th><?php echo $this->currency((float)$quote->calculateTotalPrice()); ?></th>
+        <th><?php echo $this->currency((float) (($isLeased) ? $quote->calculateTotalMonthlyLeasePrice() : $quote->calculateTotalPrice()) ); ?></th>
     </tr>
 </table>
 

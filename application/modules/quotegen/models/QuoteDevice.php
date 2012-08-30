@@ -681,9 +681,10 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateMonthlyLeasePrice ()
     {
-        // TODO: Calculate monthly lease price
-        $price = 0;
-        return $price;
+        $packagePrice = $this->calculatePackagePrice();
+        $leaseFactor = $this->getQuote()->getLeaseRate();
+        
+        return $packagePrice * $leaseFactor;
     }
 
     /**
