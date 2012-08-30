@@ -85,19 +85,46 @@ $(function () {
     });
 });
 <?php $this->headScript()->captureEnd();?>
-<div class="row">
-    <div class="span12">
-        <div class="alert alert-warning">Please note that this section may not be ready for normal use yet.</div>
-        <div class="well">
-            Report List
-            <ul>
-                <li><a href="<?php echo $this->url(array('action' => 'purchase-quote')); ?>">Purchase Quote</a> - <a class="downloadButton" data-ext="docx" href="<?php echo $this->url(array('action' => 'purchase-quote', 'format' => 'docx')); ?>">Word Version</a></li>
-                <li><a href="<?php echo $this->url(array('action' => 'lease-quote')); ?>">Lease Quote</a> - <a class="downloadButton" data-ext="docx" href="<?php echo $this->url(array('action' => 'lease-quote', 'format' => 'docx')); ?>">Word Version</a></li>
-                <li><a href="<?php echo $this->url(array('action' => 'order-list')); ?>">Order Summary</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
+<ul class="thumbnails">
+    <?php if ($quote->getQuoteType() == Quotegen_Model_Quote::QUOTE_TYPE_PURCHASED) : ?>
+    <li class="span4">
+        <h3>Report: Quote</h3>
+        <div class="thumbnail">
+            <img src="http://placehold.it/300x200" />
+            <hr />
+            <p class="clearfix">
+                <a class="downloadButton btn btn-primary" data-ext="docx" href="<?php echo $this->url(array('action' => 'purchase-quote', 'format' => 'docx')); ?>">Download Quote</a>
+                <a class="pull-right btn" href="<?php echo $this->url(array('action' => 'purchase-quote')); ?>">HTML Preview</a>
+            </p>
+            <p>Insert a description here about a quote that is to be purchased.</p>
+        </div>                    
+    </li>
+    <?php elseif ($quote->getQuoteType() == Quotegen_Model_Quote::QUOTE_TYPE_LEASED) : ?>
+    <li class="span4">
+        <h3>Report: Quote</h3>
+        <div class="thumbnail">
+            <img src="http://placehold.it/300x200" />
+            <hr />
+            <p class="clearfix">
+                <a class="downloadButton btn btn-primary" data-ext="docx" href="<?php echo $this->url(array('action' => 'lease-quote', 'format' => 'docx')); ?>">Download Quote</a>
+                <a class="pull-right btn" href="<?php echo $this->url(array('action' => 'lease-quote')); ?>">HTML Preview</a>
+            </p>
+            <p>Insert a description here about a quote that is to be leased.</p>
+        </div>                    
+    </li>
+    <?php endif; ?>
+    <li class="span4">
+        <h3>Report: Order Summary</h3>
+        <div class="thumbnail">
+            <img src="http://placehold.it/300x200" />
+            <hr />
+            <p class="clearfix">
+                <a class="pull-right btn" href="<?php echo $this->url(array('action' => 'order-list')); ?>">HTML Preview</a>
+            </p>
+            <p>Insert a description here about the order summary.</p>
+        </div>                    
+    </li>
+</ul>
 <div class="well">
     <?php echo $this->navigationForm; ?>
 </div>
