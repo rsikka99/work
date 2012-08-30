@@ -162,43 +162,6 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             $changesMade = true;
                         }
                     }
-                    
-                    $pagesMapper = Quotegen_Model_Mapper_QuoteDeviceGroupPage::getInstance();
-                    // Save Pages
-                    foreach ( $group->quoteDeviceGroupPages as $set )
-                    {
-                        $pageHasChanges = false;
-                        /* @var $quoteDeviceGroupPage Quotegen_Model_QuoteDeviceGroupPage */
-                        $quoteDeviceGroupPage = $set->quoteDeviceGroupPage;
-                        $quoteDeviceGroupPageId = $quoteDeviceGroupPage->getId();
-                        $includedQuantity = (int)$form->getValue("includedQuantity{$quoteDeviceGroupPageId}");
-                        $includedPrice = (float)$form->getValue("includedPrice{$quoteDeviceGroupPageId}");
-                        $pricePerPage = (float)$form->getValue("pricePerPage{$quoteDeviceGroupPageId}");
-                        
-                        if ($includedQuantity !== (int)$quoteDeviceGroupPage->getIncludedQuantity())
-                        {
-                            $pageHasChanges = true;
-                            $quoteDeviceGroupPage->setIncludedQuantity($includedQuantity);
-                        }
-                        
-                        if ($includedPrice !== (float)$quoteDeviceGroupPage->getIncludedPrice())
-                        {
-                            $pageHasChanges = true;
-                            $quoteDeviceGroupPage->setIncludedPrice($includedPrice);
-                        }
-                        
-                        if ($pricePerPage !== (float)$quoteDeviceGroupPage->getPricePerPage())
-                        {
-                            $pageHasChanges = true;
-                            $quoteDeviceGroupPage->setPricePerPage($pricePerPage);
-                        }
-                        
-                        if ($pageHasChanges)
-                        {
-                            $pagesMapper->save($quoteDeviceGroupPage);
-                            $changesMade = true;
-                        }
-                    }
                 }
                 
                 // Only update the quote if we made changes
