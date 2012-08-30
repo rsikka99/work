@@ -349,6 +349,9 @@ form.form-center-actions.form-horizontal .form-actions {
 #footerLinks ul.footer-nav > li:last-child a {
   border-right: 0;
 }
+tr.lowProfitDevice td {
+  font-weight: bold;
+}
 /*
  * Quote Flow
 */

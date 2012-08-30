@@ -2,24 +2,43 @@
 	/* @var $form Quotegen_Form_Quote_Group */
 	$form = $this->element;
 	$quote = $form->getQuote();
+	$quoteHasMarkupsLowerThanCosts = false;
 
+	foreach ($quote->getQuoteDevices() as $quoteDevice)
+	{
+	    if ($quoteDevice->getPackageCost() > $quoteDevice->getPackageMarkup() || $quoteDevice->getMargin() < 0)
+	    {
+	        $quoteHasMarkupsLowerThanCosts = true;
+	        break;
+	    }
+	}
+	
 ?>
+<?php if ($quoteHasMarkupsLowerThanCosts) : ?>
+<div class="alert alert-danger"><strong>Warning:</strong> Items below that are bolded either have a markup that is lower than the cost, or  a negative margin. Please make sure to review the items to make sure they are correct.</div>
+<?php endif; ?>
 
 <table class="table table-condensed table-striped table-bordered">
     <tr>
         <th>Item</th>
         <th style="width: 120px;">SKU</th>
-        <th style="width: 120px;">Cost</th>
-        <th style="width: 120px;">Markup</th>
-        <th style="width: 50px;">Margin</th>
-        <th style="width: 100px;">Device Subtotal</th>
-        <th style="width: 80px;">Quantity</th>
+        <th style="width: 80px;">Cost</th>
+        <th style="width: 80px;">Markup</th>
+        <th style="width: 80px;">Margin</th>
+        <th style="width: 80px;">Price</th>
+        <th style="width: 60px;">Quantity</th>
         <th style="width: 100px;">Subtotal</th>
     </tr>
     <?php 
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
         foreach ($quote->getQuoteDevices() as $quoteDevice) :
-            $rowClass = ($quoteDevice->getPackageCost() > $quoteDevice->getPackageMarkup()) ? 'alert' : '';
+        $rowClass = '';
+        if ($quoteDevice->getPackageCost() > $quoteDevice->getPackageMarkup() || $quoteDevice->getMargin() < 0)
+        {
+            $quoteHasMarkupsLowerThanCosts = true;
+            $rowClass =  'lowProfitDevice';            
+        }
+            
         
     ?>
     <tr class="<?php echo $rowClass; ?>">
@@ -34,13 +53,12 @@
     </tr>
     <?php endforeach; ?>
     <tr>
-        <td colspan="4"></td>
-        <td>20%</td>
-        <td>$100</td>
-        <td>123</td>
-        <td>$1223</td>
+        <th colspan="7" style="text-align: right">Total Price:</th>
+        <th><?php echo $this->currency((float)$quote->calculateTotalPrice()); ?></th>
     </tr>
 </table>
+
+
 
 
 <?php echo $form->getDisplayGroup('actions')->render(); ?>

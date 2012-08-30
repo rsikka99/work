@@ -660,7 +660,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateTotalCost ()
     {
-        return $this->getPackageCost() * $this->calculateTotalQuantity();
+        return $this->getPackageMarkup() * $this->calculateTotalQuantity();
     }
 
     /**
