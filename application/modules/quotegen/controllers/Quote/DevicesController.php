@@ -560,7 +560,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         
                         if ($insertedOptions > 0)
                         {
-                            $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
+                            $quoteDevice->setPackageCost($quoteDevice->calculatePackageCost());
                             Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
                             
                             // Update the quote
@@ -620,7 +620,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                 
                 if ($rowsAffected > 0)
                 {
-                    $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
+                    $quoteDevice->setPackageCost($quoteDevice->calculatePackageCost());
                     Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
                     
                     // Update the quote
