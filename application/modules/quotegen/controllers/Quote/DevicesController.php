@@ -278,7 +278,8 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             // Setup some defaults that don't get synced
                             $quoteDevice->setQuoteId($quoteId);
                             $quoteDevice->setMargin($quoteSetting->getDeviceMargin());
-                            $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
+                            $quoteDevice->setPackageCost($quoteDevice->calculatePackageCost());
+                            $quoteDevice->setPackageMarkup($quoteDevice->getPackageCost());
                             $quoteDevice->setResidual(0);
                             
                             // Save our device

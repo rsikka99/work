@@ -61,6 +61,8 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
         $deviceGroup = new Quotegen_Model_QuoteDeviceGroupDevice();
         $deviceGroup->setQuoteDeviceId($deviceId);
         $deviceGroup->setQuantity(1);
+        $deviceGroup->setMonochromePagesQuantity(0);
+        $deviceGroup->setColorPagesQuantity(0);
         $deviceGroup->setQuoteDeviceGroupId(1);
         $quoteDeviceGroup = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->findDefaultGroupId($quoteId);
         $deviceGroup->setQuoteDeviceGroupId($quoteDeviceGroup->getId());
