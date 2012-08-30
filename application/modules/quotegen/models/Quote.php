@@ -122,7 +122,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      * @var string
      */
     protected $_quoteType;
-        
+    
     /**
      * A pricing config object
      *
@@ -199,13 +199,13 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                 'userId' => $this->getUserId(), 
                 'clientDisplayName' => $this->getClientDisplayName(), 
                 'pageCoverageColor' => $this->getPageCoverageColor(), 
-                'pageMargin' => $this->getPageMargin(),
+                'pageMargin' => $this->getPageMargin(), 
                 'pageCoverageMonochrome' => $this->getPageCoverageMonochrome(), 
                 'pricingConfigId' => $this->getPricingConfigId(), 
-                'quoteType' => $this->getQuoteType(),
+                'quoteType' => $this->getQuoteType(), 
                 'pageMargin' => $this->getPageMargin(), 
                 'leaseTerm' => $this->getLeaseTerm(), 
-                'leaseRate' => $this->getLeaseRate()
+                'leaseRate' => $this->getLeaseRate() 
         );
     }
 
@@ -967,7 +967,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
 
     /**
      * Gets the profit for monochrome pages for the quote
-     * 
+     *
      * @return number the total quote profit for monochrome
      */
     public function getQuoteMonochromeProfit ()
@@ -978,10 +978,70 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Gets the profit for color pages for the quote
      *
-     * @return number the total quote profit for color
+     * @return float the total quote profit for color
      */
     public function getQuoteColorProfit ()
     {
         return $this->getQuoteColorRevenue() - $this->getQuoteColorPageCost();
+    }
+
+    /**
+     * Gets the total of monochrome and color pages for the quote
+     *
+     * @return int
+     */
+    public function getQuoteTotalQuantity ()
+    {
+        return $this->getTotalMonochromePages() + $this->getTotalColorPages();
+    }
+
+    /**
+     * Gets the cost per page for monochrome and color pages for the whole quote
+     *
+     * @return float the quote cost per page
+     */
+    public function getQuoteTotalCostPerPage ()
+    {
+        return $this->getQuoteMonochromeCostPerPage() + $this->getQuoteColorCostPerPage();
+    }
+
+    /**
+     * Gets the price per page for monochrome and color pages for the whole quote
+     *
+     * @return float the quote total price per page
+     */
+    public function getQuoteTotalPricePerPage ()
+    {
+        return $this->getQuoteMonochromePricePerPage() + $this->getQuoteColorPricePerPage();
+    }
+
+    /**
+     * Gets the quote total page cost
+     *
+     * @return float the quote cost for pagews
+     */
+    public function getQuoteTotalCost ()
+    {
+        return $this->getQuoteMonochromePageCost() + $this->getQuoteColorPageCost();
+    }
+
+    /**
+     * Gets the total revenue made by pages in the quote
+     * 
+     * @return float the total revenue for the quote
+     */
+    public function getQuoteTotalRevenue ()
+    {
+        return $this->getQuoteMonochromeRevenue() + $this->getQuoteColorRevenue();
+    }
+
+    /**
+     * Gets the total quote profit
+     * 
+     * @return float the total profit for pages in the quote
+     */
+    public function getQuoteTotalProfit ()
+    {
+        return $this->getQuoteMonochromeProfit() + $this->getQuoteColorProfit();
     }
 }
