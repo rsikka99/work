@@ -640,10 +640,139 @@ class Quotegen_Model_Quote extends My_Model_Abstract
 
     /**
      * ****************************************************************************************************************************************
+     * QUOTE CALCULATIONS
+     * ****************************************************************************************************************************************
+     */
+    
+    /**
+     * Calculates the total lease value for the quote
+     */
+    public function calculateTotalLeaseValue ()
+    {
+        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        {
+        }
+        
+        // TODO: Add Pages to this calculation
+    }
+
+    /**
+     * ****************************************************************************************************************************************
      * DEVICE CALCULATIONS
      * ****************************************************************************************************************************************
      */
     
+    /**
+     * Calculates the average margin for the devices
+     *
+     * @return number The average margin
+     */
+    public function calculateAverageDeviceMargin ()
+    {
+        $margin = 0;
+        $deviceCount = count($this->getQuoteDevices);
+        
+        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        {
+            $margin += $quoteDevice->getMargin();
+        }
+        
+        if ($deviceCount > 1)
+        {
+            $margin = $margin / $deviceCount;
+        }
+        
+        return $margin;
+    }
+
+    /**
+     * Calculates what the monthly lease price of the quote is.
+     *
+     * @return number The monthly lease payment
+     */
+    public function calculateTotalMonthlyLeasePrice ()
+    {
+        $leaseValue = $this->calculateTotalLeaseValue();
+        $monthlyPayment = 0;
+        $leaseFactor = $this->getLeaseRate();
+        if (! empty($leaseFactor) && ! empty($leaseValue))
+        {
+            $monthlyPayment = $leaseFactor * $leaseValue;
+        }
+        
+        return $monthlyPayment;
+    }
+
+    /**
+     * Calculates the total cost of the quote (uses the markup value)
+     *
+     * @return number The total cost
+     */
+    public function calculateTotalCost ()
+    {
+        $totalCost = 0;
+        
+        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        {
+            $totalCost += $quoteDevice->calculateTotalCost();
+        }
+        return $totalCost;
+    }
+
+    /**
+     * Calculates the total price of the quote
+     *
+     * @return number The total price
+     */
+    public function calculateTotalPrice ()
+    {
+        $totalPrice = 0;
+        
+        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        {
+            $totalPrice += $quoteDevice->calculateTotalPrice();
+        }
+        return $totalPrice;
+    }
+
+    /**
+     * Calculates the total number of devices in the quote
+     *
+     * @return number The total residual for the quote
+     */
+    public function calculateTotalQuantity ()
+    {
+        $deviceCount = 0;
+        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        {
+            $deviceCount += $quoteDevice->calculateTotalQuantity();
+        }
+        
+        return $deviceCount;
+    }
+
+    /**
+     * Calculates the total residual
+     *
+     * @return number The total residual for the quote
+     */
+    public function calculateTotalResidual ()
+    {
+        $totalResidual = 0;
+        
+        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        {
+            $totalResidual += $quoteDevice->calculateTotalResidual();
+        }
+        return $totalResidual;
+    }
+
     /**
      * Calculates the sub total for the quote's devices.
      * This is the number used for the purchase total.
@@ -697,23 +826,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     }
 
     /**
-     * Calculates the total residual for the quote
-     *
-     * @return number
-     */
-    public function calculateTotalResidual ()
-    {
-        $totalResidual = 0;
-        
-        /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
-        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
-        {
-            $totalResidual += $quoteDeviceGroup->calculateTotalResidual();
-        }
-        return $totalResidual;
-    }
-
-    /**
      * Gives a count of the number of devices attached to the quote.
      *
      * @return number The number of devices
@@ -728,23 +840,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             $count += count($quoteDeviceGroup->getQuoteDeviceGroupDevices());
         }
         return $count;
-    }
-
-    /**
-     * Calculates the total cost of the quote
-     *
-     * @return number The total cost.
-     */
-    public function calculateTotalCost ()
-    {
-        $totalCost = 0;
-        
-        /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
-        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
-        {
-            $totalCost += $quoteDeviceGroup->calculateTotalCost();
-        }
-        return $totalCost;
     }
 
     /**
