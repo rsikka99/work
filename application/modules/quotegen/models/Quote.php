@@ -124,6 +124,13 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     protected $_quoteType;
     
     /**
+     * The margin to make on pages!
+     *
+     * @var number
+     */
+    protected $_pageMargin;
+    
+    /**
      * A pricing config object
      *
      * @var Proposalgen_Model_PricingConfig
@@ -177,6 +184,8 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             $this->setPricingConfigId($params->pricingConfigId);
         if (isset($params->quoteType) && ! is_null($params->quoteType))
             $this->setQuoteType($params->quoteType);
+        if (isset($params->pageMargin) && ! is_null($params->pageMargin))
+            $this->setPageMargin($params->pageMargin);
         if (isset($params->leaseRate) && ! is_null($params->leaseRate))
             $this->setLeaseRate($params->leaseRate);
         if (isset($params->leaseTerm) && ! is_null($params->leaseTerm))
@@ -200,9 +209,10 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                 'pageMargin' => $this->getPageMargin(),
                 'pageCoverageMonochrome' => $this->getPageCoverageMonochrome(), 
                 'pricingConfigId' => $this->getPricingConfigId(), 
-                'quoteType' => $this->getQuoteType(), 
+                'quoteType' => $this->getQuoteType(),
+                'pageMargin' => $this->getPageMargin(), 
                 'leaseTerm' => $this->getLeaseTerm(), 
-                'leaseRate' => $this->getLeaseRate() 
+                'leaseRate' => $this->getLeaseRate()
         );
     }
 
@@ -552,6 +562,27 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function setQuoteType ($_quoteType)
     {
         $this->_quoteType = $_quoteType;
+        return $this;
+    }
+
+    /**
+     * Gets the page margin
+     * 
+     * @return number
+     */
+    public function getPageMargin ()
+    {
+        return $this->_pageMargin;
+    }
+
+    /**
+     * Sets the page margin
+     * 
+     * @param number $_pageMargin            
+     */
+    public function setPageMargin ($_pageMargin)
+    {
+        $this->_pageMargin = $_pageMargin;
         return $this;
     }
 

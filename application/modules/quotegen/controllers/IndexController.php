@@ -28,6 +28,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
             
             if ($quoteForm->isValid($values))
             {
+                
                 $formValues = $quoteForm->getValues();
                 
                 //  Check the form values to see if user has left text blank, if so get from user / system defaults
@@ -49,12 +50,14 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 $this->_quote->setDateCreated(date('Y-m-d H:i:s'));
                 $this->_quote->setQuoteDate(date('Y-m-d H:i:s'));
                 $this->_quote->setUserId($this->_userId);
-                
+                $this->_quote->setPageMargin($quoteSetting->getPageMargin());
                 $quoteId = $this->saveQuote();
                 
                 // Add a default group
                 $quoteDeviceGroup = new Quotegen_Model_QuoteDeviceGroup();
-                $quoteDeviceGroup->setPageMargin($quoteSetting->getPageMargin());
+                $quoteDeviceGroup->setName('Default Group (Ungrouped)');
+                $quoteDeviceGroup->setIsDefault(1);
+                $quoteDeviceGroup->setGroupPages(0);
                 $quoteDeviceGroup->setQuoteId($quoteId);
                 $quoteDeviceGroupId = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->insert($quoteDeviceGroup);
                 
@@ -65,7 +68,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 
                 // Create the quote
                 // Redirect to the build controller
-                $this->_helper->redirector('index', 'quote_devices', null, array (
+                $this->_helper->redirector('index', 'quote_settings', null, array (
                         'quoteId' => $quoteId 
                 ));
             }

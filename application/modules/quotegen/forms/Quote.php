@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_Form_Quote extends EasyBib_Form
+class Quotegen_Form_Quote extends Twitter_Bootstrap_Form_Horizontal
 {
     protected $_leasingSchemaId;
 
@@ -147,8 +147,6 @@ class Quotegen_Form_Quote extends EasyBib_Form
         
         $adminCostPerPage = $this->createElement('text', 'adminCostPerPage', array (
                 'label' => 'Admin Cost Per Page:', 
-                
-                'required' => true, 
                 'class' => 'input-mini', 
                 'filters' => array (
                         'StringTrim', 
@@ -170,8 +168,6 @@ class Quotegen_Form_Quote extends EasyBib_Form
         
         $serviceCostPerPage = $this->createElement('text', 'serviceCostPerPage', array (
                 'label' => 'Service Cost Per Page:', 
-                
-                'required' => true, 
                 'class' => 'input-mini', 
                 'filters' => array (
                         'StringTrim', 
