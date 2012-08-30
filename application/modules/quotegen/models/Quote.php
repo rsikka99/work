@@ -649,12 +649,17 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     public function calculateTotalLeaseValue ()
     {
+        $leaseValue = 0;
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
         foreach ( $this->getQuoteDevices() as $quoteDevice )
         {
+            $leaseValue += $quoteDevice->calculateTotalLeaseValue();
         }
         
         // TODO: Add Pages to this calculation
+        
+
+        return $leaseValue;
     }
 
     /**
@@ -697,6 +702,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         $leaseValue = $this->calculateTotalLeaseValue();
         $monthlyPayment = 0;
         $leaseFactor = $this->getLeaseRate();
+        
         if (! empty($leaseFactor) && ! empty($leaseValue))
         {
             $monthlyPayment = $leaseFactor * $leaseValue;

@@ -11,10 +11,10 @@ $this->headScript()->appendScript("$('i').popover();");
 <h1>Numbers if leasing</h1>
 <pre>When leasing this quote will be leased for <?php echo $quote->getLeaseTerm(); ?> Months at a factor of <?php echo $quote->getLeaseRate(); ?>.
 The quote value is <?php echo $this->currency($quote->calculateQuoteLeaseValue()); ?>.
-The quote monthly payment is <?php echo $this->currency($quote->calculateQuoteMonthlyLeaseSubtotal()) ; ?> per month.
+The quote monthly payment is <?php echo $this->currency($quote->calculateTotalMonthlyLeasePrice()) ; ?> per month.
 
-Pages account for <?php echo $this->currency($quote->calculateTotalMonthlyPagePrice()); ?> of the <?php echo $this->currency($quote->calculateQuoteMonthlyLeaseSubtotal()) ; ?> per month.
+
 
 </pre>
-
+<h1>TODO: Add Pages</h1>
 </div>
