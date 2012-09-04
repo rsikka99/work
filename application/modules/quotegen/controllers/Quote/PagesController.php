@@ -21,7 +21,7 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
         {
             $values = $request->getPost();
             // If save button is hit process save
-            if (isset($values ['save']))
+            if (! isset($values ['goBack']))
             {
                 // Go through each device and add total pages.
                 if ($form->isValid($values))
@@ -34,13 +34,13 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                         {
                             $hasQuantityChanged = false;
                             
-                            $newQuantity = $form->getValue("quantity_black_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}");
+                            $newQuantity = $form->getValue("quantity_monochrome_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}");
                             if ((int)$newQuantity !== (int)$quoteDeviceGroupDevice->getMonochromePagesQuantity())
                             {
                                 $quoteDeviceGroupDevice->setMonochromePagesQuantity($newQuantity);
                                 $hasQuantityChanged = true;
                             }
-
+                            
                             $newQuantity = $form->getValue("quantity_color_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}");
                             if ((int)$newQuantity !== (int)$quoteDeviceGroupDevice->getColorPagesQuantity())
                             {
@@ -55,21 +55,28 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                         }
                     }
                     // Set page margin for the quote object
-                    $this->_quote->setPageMargin( $values ['pageMargin']);
+                    $this->_quote->setPageMargin($values ['pageMargin']);
                     $this->saveQuote();
                     Quotegen_Model_Mapper_Quote::getInstance()->save($this->_quote);
+                    
+                    // saveAndContinue is clicked : to to quote_profitability
+                    if (isset($values ['saveAndContinue']))
+                    {
+                        $this->_helper->redirector('index', 'quote_profitability', null, array (
+                                'quoteId' => $this->_quoteId 
+                        ));
+                    }
+                }
+                // form invalid : show error messages 
+                else
+                {
+                    $this->_helper->flashMessenger(array('danger' => 'Please correct the errors below.'));
                 }
             }
-            
-            if (isset($values ['goBack']))
+            // Go back button is clicked : got back to qoute_groups
+            else
             {
                 $this->_helper->redirector('index', 'quote_groups', null, array (
-                        'quoteId' => $this->_quoteId 
-                ));
-            }
-            else if (isset($values ['saveAndContinue']))
-            {
-                $this->_helper->redirector('index', 'quote_profitability', null, array (
                         'quoteId' => $this->_quoteId 
                 ));
             }
