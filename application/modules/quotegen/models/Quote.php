@@ -892,7 +892,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         
         foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
-                $quantity += $quoteDeviceGroupDevice->getMonochromePagesQuantity();
+                $quantity += $quoteDeviceGroupDevice->getMonochromePagesQuantity() * $quoteDeviceGroupDevice->getQuantity();
         
         return $quantity;
     }
@@ -908,7 +908,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         
         foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
-                $quantity += $quoteDeviceGroupDevice->getColorPagesQuantity();
+                $quantity += $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuantity();
         
         return $quantity;
     }
