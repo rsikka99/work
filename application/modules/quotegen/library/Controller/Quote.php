@@ -418,9 +418,9 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             $quoteDevice = $this->syncDevice(new Quotegen_Model_QuoteDevice(), $favoriteDevice->getDevice());
             $quoteDevice->setQuoteId($this->_quote->getId());
             $quoteDevice->setMargin($defaultMargin);
-            $quoteDevice->setPackagePrice($quoteDevice->calculatePackagePrice());
             $quoteDevice->setResidual(0);
-            
+			$quoteDevice->setPackageMarkup(0);
+            $quoteDevice->setPackageCost($quoteDevice->calculatePackageCost());
             $quoteDeviceId = Quotegen_Model_Mapper_QuoteDevice::getInstance()->insert($quoteDevice);
             
             // Insert link to device
