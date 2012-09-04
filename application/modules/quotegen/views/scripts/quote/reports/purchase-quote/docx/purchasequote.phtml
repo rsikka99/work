@@ -1,31 +1,19 @@
 <?php
-
-/* @var $quote Quotegen_Model_Quote */
-$quote = $this->quote;
-
 /**
  * Solution - Solution 1: PrintIQ®
  */
+
 /* @var $section PHPWord_Section */
 $section = $this->section;
-
 $section->addPageBreak();
-
 $section->addTitle($this->translate('Your PrintIQ Solution'), 1);
 $section->addText($this->translate('Below is a quote for the requested hardware:'));
-//TODO: Check wording for translate and number formats
 
-
-// List all devices per group
-$quoteDeviceGroups = $quote->getQuoteDeviceGroups();
 $groupCount = 0;
 $tcStyle = $this->styles->tables->quoteTable;
 
-/* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
-foreach ( $quoteDeviceGroups as $quoteDeviceGroup )
+foreach ( $this->quote->getQuoteDeviceGroups()as $quoteDeviceGroup )
 {
-    $quoteDevices = $quoteDeviceGroup->getQuoteDeviceGroupDevices();
-    
     $table = $section->addTable($tcStyle->tablestyle);
     
     $table->addRow($tcStyle->header->rowheight);
@@ -34,24 +22,21 @@ foreach ( $quoteDeviceGroups as $quoteDeviceGroup )
     $table->addCell($tcStyle->col3Width, $tcStyle->header->cell3->cellStyle)->addText($this->translate('Description and Features'), $tcStyle->header->cell3->fontStyle, $tcStyle->header->cell3->paragraphStyle);
     $table->addCell($tcStyle->col4Width, $tcStyle->header->cell4->cellStyle)->addText($this->translate('Quantity'), $tcStyle->header->cell4->fontStyle, $tcStyle->header->cell4->paragraphStyle);
     
-    /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-    foreach ( $quoteDevices as $quoteDevice )
+	/* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+    foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
     {
-        
-        $device = $quoteDevice->getDevice();
+        $device = $quoteDeviceGroupDevice->getQuoteDevice();
         $table->addRow($tcStyle->device->rowheight);
         // Device Name
-        $table->addCell($tcStyle->col1Width, $tcStyle->device->cell1->cellStyle)->addText($device->getMasterDevice()
-            ->getFullDeviceName(), $tcStyle->device->cell1->fontStyle, $tcStyle->device->cell1->paragraphStyle);
+        $table->addCell($tcStyle->col1Width, $tcStyle->device->cell1->cellStyle)->addText($device->getName(), $tcStyle->device->cell1->fontStyle, $tcStyle->device->cell1->paragraphStyle);
         // Sku
         $table->addCell($tcStyle->col2Width, $tcStyle->device->cell2->cellStyle)->addText($device->getSku(), $tcStyle->device->cell2->fontStyle, $tcStyle->device->cell2->paragraphStyle);
         // Description and features
         $table->addCell($tcStyle->col3Width, $tcStyle->device->cell3->cellStyle);
         // Quantity
-        $table->addCell($tcStyle->col4Width, $tcStyle->device->cell4->cellStyle)->addText(number_format($quoteDevice->getQuantity()), $tcStyle->device->cell4->fontStyle, $tcStyle->device->cell4->paragraphStyle);
-        
+        $table->addCell($tcStyle->col4Width, $tcStyle->device->cell4->cellStyle)->addText(number_format($quoteDeviceGroupDevice->getQuantity()), $tcStyle->device->cell4->fontStyle, $tcStyle->device->cell4->paragraphStyle);
         // Get quote device options
-        $quoteDeviceOptions = $quoteDevice->getQuoteDeviceOptions();
+        $quoteDeviceOptions = $quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions();
         
         /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
         foreach ( $quoteDeviceOptions as $quoteDeviceOption )
@@ -71,16 +56,6 @@ foreach ( $quoteDeviceGroups as $quoteDeviceGroup )
     $table->addCell($tcStyle->span23Width, $tcStyle->subtotal->cell2->cellStyle, 2)->addText(sprintf($this->translate('Subtotal for group %1$s'), number_format($groupCount)), $tcStyle->subtotal->cell2->fontStyle, $tcStyle->subtotal->cell2->paragraphStyle);
     $table->addCell($tcStyle->cell4Width, $tcStyle->subtotal->cell3->cellStyle)->addText($this->currency($quoteDeviceGroup->calculateGroupSubtotal()), $tcStyle->subtotal->cell3->fontStyle, $tcStyle->subtotal->cell3->paragraphStyle);
     
-    // FIXME: Verify if pages show up on purchase quote
-    foreach ( $quoteDeviceGroup->getPages() as $page )
-    {
-        // Show pages amount
-        $table->addRow($tcStyle->cpp->rowheight);
-        $table->addCell($tcStyle->col1Width, $tcStyle->cpp->cell1->cellStyle)->addText($this->translate(), $tcStyle->cpp->cell1->fontStyle, $tcStyle->cpp->cell1->paragraphStyle);
-        $table->addCell($tcStyle->span23Width, $tcStyle->cpp->cell2->cellStyle, 2)->addText(sprintf($this->translate('%1$s cost per page'), $page->getName()), $tcStyle->cpp->cell2->fontStyle, $tcStyle->cpp->cell2->paragraphStyle);
-        $table->addCell($tcStyle->col4Width, $tcStyle->cpp->cell3->cellStyle)->addText($this->currency($page->getPricePerPage()), $tcStyle->cpp->cell3->fontStyle, $tcStyle->cpp->cell3->paragraphStyle);
-    }
-    
     $section->addTextBreak();
 }
 
@@ -88,7 +63,7 @@ $table = $section->addTable($tcStyle->tablestyle);
 
 $table->addRow($tcStyle->monthlyTotal->rowheight);
 $table->addCell($tcStyle->span123Width, $tcStyle->monthlyTotal->cell1->cellStyle, 3)->addText($this->translate('Purchase Total'), $tcStyle->monthlyTotal->cell1->fontStyle, $tcStyle->monthlyTotal->cell1->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->monthlyTotal->cell2->cellStyle)->addText($this->currency($quote->calculateQuoteSubtotal()), $tcStyle->monthlyTotal->cell2->fontStyle, $tcStyle->monthlyTotal->cell2->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->monthlyTotal->cell2->cellStyle)->addText($this->currency($this->quote->calculateQuoteSubtotal()), $tcStyle->monthlyTotal->cell2->fontStyle, $tcStyle->monthlyTotal->cell2->paragraphStyle);
 
 $section->addTextBreak();
 $section->addText('This quote is valid for 7 days from the date on the cover of this document. Depending on your requirements, you may be subject to additional charges for installation, insurance, and documentation fees. Please review the contract for details.');
