@@ -186,8 +186,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             $this->setPricingConfigId($params->pricingConfigId);
         if (isset($params->quoteType) && ! is_null($params->quoteType))
             $this->setQuoteType($params->quoteType);
-        if (isset($params->pageMargin) && ! is_null($params->pageMargin))
-            $this->setPageMargin($params->pageMargin);
         if (isset($params->leaseRate) && ! is_null($params->leaseRate))
             $this->setLeaseRate($params->leaseRate);
         if (isset($params->leaseTerm) && ! is_null($params->leaseTerm))
