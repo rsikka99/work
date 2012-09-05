@@ -73,8 +73,8 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Inline
             }
         }
         
-        // pageMargin : Quotegen_Model_Quote->pageMargin
-        // pageMargin is used to determine margin on pages for the entire quote
+        // monochromePageMargin : Quotegen_Model_Quote->monochromePageMargin
+        // monochromePageMargin is used to determine margin on pages for the entire quote
         $this->addElement('text', 'monochromePageMargin', array (
                 'value' => $this->_quote->getMonochromePageMargin(),
                 'required' => true,

@@ -4,6 +4,7 @@ $devices = $this->devices;
 $this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.phtml'));
 $this->headScript()->appendScript("$('i').popover();");
 ?>
+<div class="well">
 
 <table class="table table-condensed table-bordered table-striped quoteDeviceTable">
 	<tr class="header-row">
@@ -79,6 +80,5 @@ $this->headScript()->appendScript("$('i').popover();");
         <th></th>
     </tr>
 </table>
-<div class="well">
 	<?php echo $this->navigationForm; ?>
 </div>
