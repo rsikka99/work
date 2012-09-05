@@ -117,6 +117,20 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     protected $_colorPageMargin;
     
     /**
+     * Admin cost per page to be applied to the quote
+     *
+     * @var float
+     */
+    protected $_adminCostPerPage;
+    
+    /**
+     * Service cost per page to be applied to the quote
+     *
+     * @var float
+     */
+    protected $_serviceCostPerPage;
+    
+    /**
      * The default pricing config preference
      *
      * @var int
@@ -174,6 +188,10 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             $this->setUserId($params->userId);
         if (isset($params->clientDisplayName) && ! is_null($params->clientDisplayName))
             $this->setClientDisplayName($params->clientDisplayName);
+        if (isset($params->adminCostPerPage) && ! is_null($params->adminCostPerPage))
+            $this->setAdminCostPerPage($params->adminCostPerPage);
+        if (isset($params->serviceCostPerPage) && ! is_null($params->serviceCostPerPage))
+            $this->setServiceCostPerPage($params->serviceCostPerPage);
         if (isset($params->monochromePageMargin) && ! is_null($params->monochromePageMargin))
             $this->setMonochromePageMargin($params->monochromePageMargin);
         if (isset($params->colorPageMargin) && ! is_null($params->colorPageMargin))
@@ -204,7 +222,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                 'dateModified' => $this->getDateModified(), 
                 'quoteDate' => $this->getQuoteDate(), 
                 'userId' => $this->getUserId(), 
-                'clientDisplayName' => $this->getClientDisplayName(), 
+                'clientDisplayName' => $this->getClientDisplayName(),
+                'adminCostPerPage' => $this->getAdminCostPerPage(),
+                'serviceCostPerPage' => $this->getServiceCostPerPage(),
                 'pageCoverageColor' => $this->getPageCoverageColor(), 
                 'monochromePageMargin' => $this->getMonochromePageMargin(), 
                 'colorPageMargin' => $this->getColorPageMargin(), 
@@ -665,6 +685,46 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function setMonochromePageMargin ($_monochromePageMargin)
     {
         $this->_monochromePageMargin = $_monochromePageMargin;
+    }
+
+    /**
+     * Gets the admin cost per page for the whole quote
+     *
+     * @return the $_adminCostPerPage
+     */
+    public function getAdminCostPerPage ()
+    {
+        return $this->_adminCostPerPage;
+    }
+
+    /**
+     * Sets the admin cost per page for the whole quote
+     *
+     * @param number $_adminCostPerPage            
+     */
+    public function setAdminCostPerPage ($_adminCostPerPage)
+    {
+        $this->_adminCostPerPage = $_adminCostPerPage;
+    }
+
+    /**
+     * Gets the service cost per page for the whole quote
+     *
+     * @return the $_serviceCostPerPage
+     */
+    public function getServiceCostPerPage ()
+    {
+        return $this->_serviceCostPerPage;
+    }
+
+    /**
+     * Gets the service cost per page
+     *
+     * @param number $_serviceCostPerPage            
+     */
+    public function setServiceCostPerPage ($_serviceCostPerPage)
+    {
+        $this->_serviceCostPerPage = $_serviceCostPerPage;
     }
 
     /**

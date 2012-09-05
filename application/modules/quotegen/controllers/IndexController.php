@@ -52,6 +52,8 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 $this->_quote->setUserId($this->_userId);
                 $this->_quote->setColorPageMargin($quoteSetting->getPageMargin());
                 $this->_quote->setMonochromePageMargin($quoteSetting->getPageMargin());
+                $this->_quote->setAdminCostPerPage($quoteSetting->getAdminCostPerPage());
+                $this->_quote->setServiceCostPerPage($quoteSetting->getServiceCostPerPage());
                 
                 $quoteId = $this->saveQuote();
                 
