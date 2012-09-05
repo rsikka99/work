@@ -16,7 +16,9 @@ class My_Error_Handler
             1024 => "E_USER_NOTICE", 
             2048 => "E_STRICT", 
             4096 => "E_RECOVERABLE_ERROR", 
-            6143 => "E_ALL" 
+            8192 => "E_DEPRECATED", 
+            16384 => "E_USER_DEPRECATED", 
+            32767 => "E_ALL" 
     );
     static $errorColors = array (
             1 => "alert-danger", 
@@ -32,7 +34,9 @@ class My_Error_Handler
             1024 => "alert-info", 
             2048 => "alert-danger", 
             4096 => "alert-danger", 
-            6143 => "alert-danger" 
+            8192 => "alert-warning", 
+            16384 => "alert-warning", 
+            32767 => "alert-danger" 
     );
     static $errors = array ();
 
@@ -41,13 +45,13 @@ class My_Error_Handler
         if (! error_reporting() || $errno > error_reporting())
             return;
         
-        $errorName = self::$errorNames [$errno];
+        $errorName = (array_key_exists($errno, self::$errorNames)) ? self::$errorNames [$errno] : '';
         $fileName = basename($errfile);
         
         // Create an error object
         $error = new stdClass();
         $error->message = "{$errorName} : {$errstr} in {$fileName} on line {$errline}";
-        $error->color = self::$errorColors [$errno];
+        $error->color = (array_key_exists($errno, self::$errorColors)) ? self::$errorColors [$errno] : '';
         $error->number = $errno;
         self::$errors [] = $error;
     }

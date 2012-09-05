@@ -35,6 +35,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
      */
     public static function getDefaultToners ()
     {
+        throw new BadMethodCallException('Default toners are now deprecated since master devices require at least 1 set of toners to be defined.');
         if (! isset(Proposalgen_Model_Toner::$DefaultToners))
         {
             $testarray = array ();

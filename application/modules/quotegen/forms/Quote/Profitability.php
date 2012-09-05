@@ -39,9 +39,9 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
         {
             // Package Markup
             $this->addElement('text', "packageMarkup_{$quoteDevice->getId()}", array (
-                    'label' => 'Quantity', 
+                    'label' => 'Markup', 
                     'required' => true, 
-                    'class' => 'input-mini', 
+                    'class' => 'input-mini rightAlign', 
                     'value' => $quoteDevice->getPackageMarkup(), 
                     'validators' => array (
                             'Float', 
@@ -59,7 +59,7 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
             $this->addElement('text', "margin_{$quoteDevice->getId()}", array (
                     'label' => 'Margin', 
                     'required' => true, 
-                    'class' => 'input-mini', 
+                    'class' => 'input-mini rightAlign', 
                     'value' => $quoteDevice->getMargin(), 
                     'validators' => array (
                             'Float', 
