@@ -112,6 +112,9 @@
 .form-inline .control-group {
   margin-bottom: 0;
 }
+input.rightAlign {
+  text-align: right;
+}
 /* Nav Tabs */
 .nav-tabs > li > p:hover,
 .nav-pills > li > p:hover {
