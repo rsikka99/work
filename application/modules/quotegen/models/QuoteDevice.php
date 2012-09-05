@@ -618,9 +618,21 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     public function calculatePackagePrice ()
     {
         $marginPercent = (float)$this->getMargin();
-        $cost = (float)$this->getPackageMarkup();
+        $cost = (float)$this->calculateFinalPackageCost();
         
         return Tangent_Accounting::applyMargin($cost, $marginPercent);
+    }
+
+    /**
+     * Calculates the final cost of the package.
+     * (Package Cost + Markup)
+     * (cost + markup)
+     *
+     * @return number The package cost.
+     */
+    public function calculateFinalPackageCost ()
+    {
+        return $this->getPackageCost() + $this->getPackageMarkup();
     }
 
     /**
@@ -630,7 +642,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateMargin ()
     {
-        $cost = (float)$this->getPackageMarkup();
+        $cost = (float)$this->calculateFinalPackageCost();
         $price = (float)$this->calculatePackagePrice();
         
         return Tangent_Accounting::reverseEngineerMargin($cost, $price);
@@ -660,7 +672,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateTotalCost ()
     {
-        return $this->getPackageMarkup() * $this->calculateTotalQuantity();
+        return $this->calculateFinalPackageCost() * $this->calculateTotalQuantity();
     }
 
     /**
