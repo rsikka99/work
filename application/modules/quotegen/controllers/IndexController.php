@@ -50,7 +50,9 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 $this->_quote->setDateCreated(date('Y-m-d H:i:s'));
                 $this->_quote->setQuoteDate(date('Y-m-d H:i:s'));
                 $this->_quote->setUserId($this->_userId);
-                $this->_quote->setPageMargin($quoteSetting->getPageMargin());
+                $this->_quote->setColorPageMargin($quoteSetting->getPageMargin());
+                $this->_quote->setMonochromePageMargin($quoteSetting->getPageMargin());
+                
                 $quoteId = $this->saveQuote();
                 
                 // Add a default group

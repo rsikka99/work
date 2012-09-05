@@ -29,26 +29,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Inline
         /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
         foreach ( $this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
-            if (! $quoteDeviceGroup->getIsDefault())
-            {
-                $this->addElement('checkbox', "groupPages_{$quoteDeviceGroup->getId()}", array (
-                        'label' => 'Group pages', 
-                        'id' => "groupPages_{$quoteDeviceGroup->getId()}", 
-                        'decorators' => array (
-                                'FieldSize', 
-                                'ViewHelper', 
-                                'Addon', 
-                                'ElementErrors', 
-                                array (
-                                        'Label', 
-                                        array (
-                                                'class' => 'control-label' 
-                                        ) 
-                                ), 
-                                'Wrapper' 
-                        ) 
-                ));
-            }
+          
             /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
@@ -94,18 +75,29 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Inline
         
         // pageMargin : Quotegen_Model_Quote->pageMargin
         // pageMargin is used to determine margin on pages for the entire quote
-        $this->addElement('text', 'pageMargin', array (
-                'label' => 'Page Margin', 
-                'value' => $this->_quote->getPageMargin(), 
+        $this->addElement('text', 'monochromePageMargin', array (
+                'value' => $this->_quote->getMonochromePageMargin(),
+                'required' => true,
                 'class' => 'input-mini', 
-                'decorators' => array (
-                        'FieldSize', 
-                        'ViewHelper', 
-                        'Addon', 
-                        'Label', 
-                        'ElementErrors', 
-                        'Wrapper' 
-                ), 
+                'validators' => array (
+                        'Float', 
+                        array (
+                                'validator' => 'Between', 
+                                'options' => array (
+                                        'min' => - 100, 
+                                        'max' => 100, 
+                                        'inclusive' => false 
+                                ) 
+                        ) 
+                ) 
+        ));
+        
+        // colorPageMargin : Quotegen_Model_Quote->colorPageMargin
+        // colorPageMargin is used to set a page margin for all of the color pages on the quote
+        $this->addElement('text', 'colorPageMargin', array (
+                'value' => $this->_quote->getColorPageMargin(),
+                'required' => true,
+                'class' => 'input-mini', 
                 'validators' => array (
                         'Float', 
                         array (
