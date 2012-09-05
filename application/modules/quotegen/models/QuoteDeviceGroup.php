@@ -209,6 +209,43 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     }
 
     /**
+     * Gets the quantity of monochrome pages for the group
+     *
+     * @return the quantity of monochrome pages
+     */
+    public function getGroupPagesMonochrome ()
+    {
+        $pagesMonochrome = 0;
+        
+        /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+        {
+            $pagesMonochrome += $quoteDeviceGroupDevice->getMonochromePagesQuantity();
+        }
+        
+        return $pagesMonochrome;
+    }
+
+    /**
+     * Gets the quantity of color pages for the group
+     *
+     * @return the quantity of color pages
+     */
+    
+    public function getGroupPagesColor ()
+    {
+        $pagesColor = 0;
+        
+        /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+        {
+            $pagesColor += $quoteDeviceGroupDevice->getColorPagesQuantity();
+        }
+        
+        return $pagesColor;
+    }
+
+    /**
      * Calculates the lease sub total for the quote's devices.
      *
      * @return number The sub total
@@ -223,7 +260,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
             $quantity = $quoteDeviceGroupDevice->getQuantity();
             if ($quantity > 0)
             {
-                $subtotal += $quoteDeviceGroupDevice->getQuoteDevice()->calculatePackageMonthlyLeasePrice() * $quantity;
+                $subtotal += $quoteDeviceGroupDevice->getQuoteDevice()->calculateTotalMonthlyLeasePrice() * $quantity;
             }
         }
         

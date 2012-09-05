@@ -28,8 +28,8 @@
 	<br/>
 	<?php echo $addGroupSubform->getElement('addGroup'); ?>
 	<?php echo $addGroupSubform->getElement('name'); ?> 
-
-
+	<br/>
+	
     <?php /* @var $deviceGroup Quotegen_Model_QuoteDeviceGroup */$deviceGroups = $form->getQuote()->getQuoteDeviceGroups();?>
     <?php foreach ($deviceGroups as $deviceGroup) : ?>	
     <h3><?php echo $deviceGroup->getName(); ?>

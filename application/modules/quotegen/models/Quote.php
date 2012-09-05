@@ -107,7 +107,14 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @var float
      */
-    protected $_pageMargin;
+    protected $_monochromePageMargin;
+    
+    /**
+     * The color page margin for the quote
+     *
+     * @var float
+     */
+    protected $_colorPageMargin;
     
     /**
      * The default pricing config preference
@@ -167,8 +174,10 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             $this->setUserId($params->userId);
         if (isset($params->clientDisplayName) && ! is_null($params->clientDisplayName))
             $this->setClientDisplayName($params->clientDisplayName);
-        if (isset($params->pageMargin) && ! is_null($params->pageMargin))
-            $this->setPageMargin($params->pageMargin);
+        if (isset($params->monochromePageMargin) && ! is_null($params->monochromePageMargin))
+            $this->setMonochromePageMargin($params->monochromePageMargin);
+        if (isset($params->colorPageMargin) && ! is_null($params->colorPageMargin))
+            $this->setColorPageMargin($params->colorPageMargin);
         if (isset($params->pageCoverageColor) && ! is_null($params->pageCoverageColor))
             $this->setPageCoverageColor($params->pageCoverageColor);
         if (isset($params->pageCoverageMonochrome) && ! is_null($params->pageCoverageMonochrome))
@@ -199,11 +208,11 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                 'userId' => $this->getUserId(), 
                 'clientDisplayName' => $this->getClientDisplayName(), 
                 'pageCoverageColor' => $this->getPageCoverageColor(), 
-                'pageMargin' => $this->getPageMargin(), 
+                'monochromePageMargin' => $this->getMonochromePageMargin(), 
+                'colorPageMargin' => $this->getColorPageMargin(), 
                 'pageCoverageMonochrome' => $this->getPageCoverageMonochrome(), 
                 'pricingConfigId' => $this->getPricingConfigId(), 
                 'quoteType' => $this->getQuoteType(), 
-                'pageMargin' => $this->getPageMargin(), 
                 'leaseTerm' => $this->getLeaseTerm(), 
                 'leaseRate' => $this->getLeaseRate() 
         );
@@ -501,25 +510,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
 
     /**
      *
-     * @return the $_pageMargin
-     */
-    public function getPageMargin ()
-    {
-        return $this->_pageMargin;
-    }
-
-    /**
-     *
-     * @param number $_pageMargin            
-     */
-    public function setPageMargin ($_pageMargin)
-    {
-        $this->_pageMargin = $_pageMargin;
-        return $this;
-    }
-
-    /**
-     *
      * @return the $_pricingConfigId
      */
     public function getPricingConfigId ()
@@ -636,6 +626,47 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $this->_quoteDevices = $_quoteDevices;
         return $this;
+    }
+
+    /**
+     * Gets the color page margin for the quote
+     *
+     * @return the $_colorPageMargin
+     */
+    public function getColorPageMargin ()
+    {
+        return $this->_colorPageMargin;
+    }
+
+    /**
+     * Sets the page margin for the quote
+     *
+     * @param number $_colorPageMargin            
+     */
+    public function setColorPageMargin ($_colorPageMargin)
+    {
+        $this->_colorPageMargin = $_colorPageMargin;
+        return $this;
+    }
+
+    /**
+     * Gets the monochrome page margin for the quote
+     *
+     * @return the $_monochromePageMargin
+     */
+    public function getMonochromePageMargin ()
+    {
+        return $this->_monochromePageMargin;
+    }
+
+    /**
+     * Sets the monochrome page margin for the quote
+     *
+     * @param number $_monochromePageMargin            
+     */
+    public function setMonochromePageMargin ($_monochromePageMargin)
+    {
+        $this->_monochromePageMargin = $_monochromePageMargin;
     }
 
     /**
@@ -892,7 +923,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         
         foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
-                $quantity += $quoteDeviceGroupDevice->getMonochromePagesQuantity();
+                $quantity += $quoteDeviceGroupDevice->getMonochromePagesQuantity() * $quoteDeviceGroupDevice->getQuantity();
         
         return $quantity;
     }
@@ -908,7 +939,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         
         foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
-                $quantity += $quoteDeviceGroupDevice->getColorPagesQuantity();
+                $quantity += $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuantity();
         
         return $quantity;
     }
@@ -1033,7 +1064,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     public function getQuoteMonochromePricePerPage ()
     {
-        return Tangent_Accounting::applyMargin($this->getQuoteMonochromeCostPerPage(), $this->getPageMargin());
+        return Tangent_Accounting::applyMargin($this->getQuoteMonochromeCostPerPage(), $this->getMonochromePageMargin());
     }
 
     /**
@@ -1043,7 +1074,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     public function getQuoteColorPricePerPage ()
     {
-        return Tangent_Accounting::applyMargin($this->getQuoteColorCostPerPage(), $this->getPageMargin());
+        return Tangent_Accounting::applyMargin($this->getQuoteColorCostPerPage(), $this->getColorPageMargin());
     }
 
     /**
@@ -1053,7 +1084,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     public function getQuoteMonochromeRevenue ()
     {
-        return Tangent_Accounting::applyMargin($this->getQuoteMonochromePageCost(), $this->getPageMargin());
+        return Tangent_Accounting::applyMargin($this->getQuoteMonochromePageCost(), $this->getMonochromePageMargin());
     }
 
     /**
@@ -1063,7 +1094,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     public function getQuoteColorRevenue ()
     {
-        return Tangent_Accounting::applyMargin($this->getQuoteColorPageCost(), $this->getPageMargin());
+        return Tangent_Accounting::applyMargin($this->getQuoteColorPageCost(), $this->getColorPageMargin());
     }
 
     /**
@@ -1128,7 +1159,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
 
     /**
      * Gets the total revenue made by pages in the quote
-     * 
+     *
      * @return float the total revenue for the quote
      */
     public function getQuoteTotalRevenue ()
@@ -1138,7 +1169,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
 
     /**
      * Gets the total quote profit
-     * 
+     *
      * @return float the total profit for pages in the quote
      */
     public function getQuoteTotalProfit ()
