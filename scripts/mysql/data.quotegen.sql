@@ -88,8 +88,8 @@ INSERT INTO `qgen_option_categories` (`optionId`, `categoryId`) VALUES
 (6,2),
 (6,3);
 
-INSERT INTO `qgen_quote_settings` (`id`, `pageCoverageMonochrome`, `pageCoverageColor`, `deviceMargin`, `pageMargin`, `pricingConfigId`) VALUES
-(1, 6.00, 24.00, 20, 20, 2);
+INSERT INTO `qgen_quote_settings` (`id`, `pageCoverageMonochrome`, `pageCoverageColor`, `deviceMargin`, `pageMargin`, `pricingConfigId`, `adminCostPerPage`, `serviceCostPerPage`, `monochromeOverageRatePerPage`, `colorOverageRatePerPage`) VALUES
+(1, 6.00, 24.00, 20, 20, 2, 0, 0, 0.05, 0.15);
 
 INSERT INTO `qgen_quote_settings` (`id`) VALUES
 (2),

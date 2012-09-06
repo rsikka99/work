@@ -1397,6 +1397,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_settings` (
   `pricingConfigId` INT(11) NULL DEFAULT NULL ,
   `serviceCostPerPage` DOUBLE NULL ,
   `adminCostPerPage` DOUBLE NULL ,
+  `monochromeOverageRatePerPage` DOUBLE NULL ,
+  `colorOverageRatePerPage` DOUBLE NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `quotegen_quote_settings_ibfk1` (`pricingConfigId` ASC) ,
   CONSTRAINT `quotegen_quote_settings_ibfk1`
