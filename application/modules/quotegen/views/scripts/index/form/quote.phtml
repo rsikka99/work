@@ -1,18 +1,21 @@
 <?php 
+
 /* @var $form Quotegen_Form_QuoteSetting */
 $form = $this->element;
 
-$percentageElements = array();
-$percentageElements[] = $form->getElement('pageCoverageMonochrome');
-$percentageElements[] = $form->getElement('pageCoverageColor');
-$noDefaultsElements = array();
-$noDefaultsElements[] = $form->getElement('clientDisplayName');
-$noDefaultsElements[] = $form->getElement('leasingSchemaId');
-$noDefaultsElements[] = $form->getElement('leasingSchemaTermId');
-$noDefaultsElements[] = $form->getElement('quoteDate');
-$pricingConfigId = $form->getElement('pricingConfigId');
+$formElements = array ();
+$formElements[] = 'clientDisplayName';
+$formElements[] = 'quoteDate';
+$formElements[] = 'pricingConfigId';
+$formElements[] = 'pageCoverageMonochrome';
+$formElements[] = 'pageCoverageColor';
+$formElements[] = 'leasingSchemaId';
+$formElements[] = 'leasingSchemaTermId';
+$formElements[] = 'serviceCostPerPage';
+$formElements[] = 'adminCostPerPage';
+$this->headScript()->captureStart(); 
 ?>
-<?php $this->headScript()->captureStart(); ?>
+
 $(function() 
 {
 	$('#leasingSchema').change(function()
@@ -44,8 +47,8 @@ $(function()
 		}
 	});
 });
-<?php $this->headScript()->captureEnd(); ?>
 
+<?php $this->headScript()->captureEnd(); ?>
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
 <?php echo $form->getElement('clientId'); ?>
 <?php echo $form->getElement('quoteType'); ?>
@@ -55,40 +58,14 @@ $(function()
             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse1"> Other Options </a>
         </div>
         <div id="collapse1" class="accordion-body collapse">
-            <div class="accordion-inner">
-                <!-- Show all noDefaultElements -->
-                <?php foreach ($noDefaultsElements as $element) :?>
-                <?php echo $element; ?>
-                <?php  endforeach?>
-                <!-- Show all percentElements -->
-                <?php foreach ($percentageElements as $element) : ?>
-                <div class="control-group <?php echo ($element->hasErrors()) ? 'error' : '' ?>">
-                    <?php echo $element->renderLabel(); ?>
-                    <div class="controls">
-                        <div class="input-append">
-                            <?php echo $element->renderViewHelper()?><span class="add-on"><strong>System Default: </strong><?php echo number_format($element->getDescription(), 2); ?>%</span>
-                        </div>
-                        <?php echo $element->renderErrors(); ?>
-                    </div>
-                </div>
-                <?php endforeach; ?>
-                <!-- Show all pricingConfigs choices-->
-                <div class="control-group <?php echo ($pricingConfigId->hasErrors()) ? 'error' : '' ?>">
-                    <?php echo $pricingConfigId->renderLabel()?>
-                    <div class="controls">
-                        <div class="input-append">
-                            <?php /* @var $princingConfig Proposalgen_Model_Mapper_PricingConfig */ $pricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($pricingConfigId->getDescription()); ?>
-                            <?php echo $pricingConfigId->renderViewHelper(); ?><span class="add-on"><strong>System Default: </strong><?php echo $pricingConfig->getConfigName(); ?></span>			
-                        </div>
-                        <?php echo $element->renderErrors(); ?>
-                    </div>
-                </div>
+            <div class="accordion-inner">    
+            	<?php foreach ($formElements as $element) : ?>
+	            	<?php echo $form->getElement($element); ?>
+            	<?php endforeach ?>            
             </div>
         </div>
     </div>
 </div>
-
-
 <div class="form-actions">
 	<input type="submit" name="saveAndContinue" value="Create Quote" class="btn btn-primary"/>
 </div>
