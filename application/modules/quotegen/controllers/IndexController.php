@@ -28,7 +28,6 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
             
             if ($quoteForm->isValid($values))
             {
-                
                 $formValues = $quoteForm->getValues();
                 
                 //  Check the form values to see if user has left text blank, if so get from user / system defaults
@@ -44,7 +43,14 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 {
                     $formValues ['pricingConfigId'] = $quoteSetting->getPricingConfigId();
                 }
-                
+                if (strlen($formValues ['adminCostPerPage']) === 0)
+                {
+                    $formValues ['adminCostPerPage'] = $quoteSetting->getAdminCostPerPage();
+                }
+                if (strlen($formValues ['serviceCostPerPage']) === 0)
+                {
+                    $formValues ['serviceCostPerPage'] = $quoteSetting->getServiceCostPerPage();
+                }
                 // Update current quote object and save new quote items to database
                 $this->_quote->populate($formValues);
                 $this->_quote->setDateCreated(date('Y-m-d H:i:s'));
@@ -52,8 +58,6 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 $this->_quote->setUserId($this->_userId);
                 $this->_quote->setColorPageMargin($quoteSetting->getPageMargin());
                 $this->_quote->setMonochromePageMargin($quoteSetting->getPageMargin());
-                $this->_quote->setAdminCostPerPage($quoteSetting->getAdminCostPerPage());
-                $this->_quote->setServiceCostPerPage($quoteSetting->getServiceCostPerPage());
                 
                 $quoteId = $this->saveQuote();
                 
