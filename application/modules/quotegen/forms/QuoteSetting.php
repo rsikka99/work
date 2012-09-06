@@ -82,7 +82,49 @@ class Quotegen_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
                 ) 
         ));
         $this->addElement($pageCoverageColor);
+
+        $monochromeOverageRatePerPage = $this->createElement('text', 'monochromeOverageRatePerPage', array (
+                'label' => 'Monochrome Overage Rate:',
+                'required' => true,
+                'class' => 'input-mini',
+                'filters' => array (
+                        'StringTrim',
+                        'StripTags'
+                ),
+                'validators' => array (
+                        array (
+                                'validator' => 'Between',
+                                'options' => array (
+                                        'min' => 0,
+                                        'max' => 5
+                                )
+                        ),
+                        'Float'
+                )
+        ));
+        $this->addElement($monochromeOverageRatePerPage);
         
+        $colorOverageRatePerPage = $this->createElement('text', 'colorOverageRatePerPage', array (
+                'label' => 'Color Overage Rate:',
+                'required' => true,
+                'class' => 'input-mini',
+                'filters' => array (
+                        'StringTrim',
+                        'StripTags'
+                ),
+                'validators' => array (
+                        array (
+                                'validator' => 'Between',
+                                'options' => array (
+                                        'min' => 0,
+                                        'max' => 5
+                                )
+                        ),
+                        'Float'
+                )
+        ));
+        $this->addElement($colorOverageRatePerPage);
+                
         $deviceMargin = $this->createElement('text', 'deviceMargin', array (
                 'label' => 'Device Margin:', 
                 'required' => true, 
@@ -190,7 +232,6 @@ class Quotegen_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
         /*
          * Set the defaults if the flag is enabled
          */
-        
         if ($this->_showSystemDefaults)
         {
             $systemDefaultQuoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->find(Quotegen_Model_QuoteSetting::SYSTEM_ROW_ID);
@@ -211,6 +252,11 @@ class Quotegen_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
             $pageMargin->setRequired(false);
             $pricingConfigDropdown->setAttrib('append', sprintf("System Default: %s", $systemDefaultQuoteSetting->getPricingConfig()
                 ->getConfigName()));
+            
+            $monochromeOverageRatePerPage->setAttrib('append', sprintf("System Default: %s", $this->getView()->currency((float)$systemDefaultQuoteSetting->getMonochromeOverageRatePerPage())));
+            $monochromeOverageRatePerPage->setRequired(false);
+            $colorOverageRatePerPage->setAttrib('append', sprintf("System Default: %s", $this->getView()->currency((float)$systemDefaultQuoteSetting->getColorOverageRatePerPage())));
+            $colorOverageRatePerPage->setRequired(false);
         }
     }
 }

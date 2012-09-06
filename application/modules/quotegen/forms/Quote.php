@@ -4,6 +4,12 @@ class Quotegen_Form_Quote extends Twitter_Bootstrap_Form_Horizontal
 {
     protected $_leasingSchemaId;
 
+    public function __construct ($options = null)
+    {
+        parent::__construct($options);
+        Quotegen_Form_Quote_Navigation::addFormActionsToForm(Quotegen_Form_Quote_Navigation::BUTTONS_SAVE, $this);
+    }
+
     public function init ()
     {
         // Set the method for the display form to POST
@@ -32,7 +38,7 @@ class Quotegen_Form_Quote extends Twitter_Bootstrap_Form_Horizontal
             $clientListValidator [] = $client->getId();
         }
         
-        $clients = new Zend_Form_Element_Select('clientId');
+        $clients = $this->createElement('select','clientId');
         $clients->setLabel('Select Client:');
         $clients->addMultiOptions($clientList);
         $clients->addValidator('InArray', false, array (
@@ -49,9 +55,9 @@ class Quotegen_Form_Quote extends Twitter_Bootstrap_Form_Horizontal
                 'multiOptions' => array (
                         'purchased' => 'Purchased', 
                         'leased' => 'Leased' 
-                ) 
-        )
-        );
+                ), 
+                'required' => true 
+        ));
         
         $this->addElement('text', 'clientDisplayName', array (
                 'label' => 'Display Name:', 
@@ -102,6 +108,11 @@ class Quotegen_Form_Quote extends Twitter_Bootstrap_Form_Horizontal
                 'required' => true 
         ));
         
+        // Get resolved system settings
+        $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
+        $userSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
+        $quoteSetting->applyOverride($userSetting);
+        
         $pageCoverageColor = $this->createElement('text', 'pageCoverageColor', array (
                 'label' => 'Page Covereage Color:', 
                 'class' => 'span1', 
@@ -119,7 +130,8 @@ class Quotegen_Form_Quote extends Twitter_Bootstrap_Form_Horizontal
                                 ) 
                         ), 
                         'Float' 
-                ) 
+                ),
+                'append' => sprintf("System Default: %s%%", number_format($quoteSetting->getPageCoverageMonochrome(),2))
         ));
         $this->addElement($pageCoverageColor);
         
@@ -140,7 +152,8 @@ class Quotegen_Form_Quote extends Twitter_Bootstrap_Form_Horizontal
                                 ) 
                         ), 
                         'Float' 
-                ) 
+                ),
+                'append' => sprintf("System Default: %s%%", number_format($quoteSetting->getPageCoverageColor(),2))
         ));
         
         $this->addElement($pageCoverageMonochrome);
@@ -157,11 +170,12 @@ class Quotegen_Form_Quote extends Twitter_Bootstrap_Form_Horizontal
                                 'validator' => 'Between', 
                                 'options' => array (
                                         'min' => 0, 
-                                        'max' => 5, 
+                                        'max' => 5 
                                 ) 
                         ), 
                         'Float' 
-                ) 
+                ), 
+                'append' => sprintf("System Default: %s%%", number_format($quoteSetting->getAdminCostPerPage(),2)) 
         ));
         $this->addElement($adminCostPerPage);
         
@@ -177,23 +191,16 @@ class Quotegen_Form_Quote extends Twitter_Bootstrap_Form_Horizontal
                                 'validator' => 'Between', 
                                 'options' => array (
                                         'min' => 0, 
-                                        'max' => 5, 
+                                        'max' => 5 
                                 ) 
                         ), 
                         'Float' 
-                ) 
+                ), 
+                'append' => sprintf("System Default: %s%%", number_format($quoteSetting->getServiceCostPerPage(),2))
         ));
         $this->addElement($serviceCostPerPage);
         
-        // Get resolved system settings
-        $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
-        $userSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
-        $quoteSetting->applyOverride($userSetting);
-        
-        $pageCoverageColor->setDescription($quoteSetting->getPageCoverageColor());
-        $pageCoverageMonochrome->setDescription($quoteSetting->getPageCoverageMonochrome());
-        
-        $pricingConfigDropdown = new Zend_Form_Element_Select('pricingConfigId', array (
+        $pricingConfigDropdown = $this->createElement('select', 'pricingConfigId', array (
                 'label' => 'Toner Preference:' 
         ));
         
@@ -204,18 +211,7 @@ class Quotegen_Form_Quote extends Twitter_Bootstrap_Form_Horizontal
         }
         $this->addElement($pricingConfigDropdown);
         
-        $pricingConfigDropdown->setDescription($quoteSetting->getPricingConfigId());
-        
-        // Add the submit button and cancel button
-        $this->addElement('submit', 'submit', array (
-                'ignore' => true, 
-                'label' => 'Create' 
-        ));
-        $this->addElement('submit', 'cancel', array (
-                'ignore' => true, 
-                'label' => 'Cancel' 
-        ));
-        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
+        $pricingConfigDropdown->setAttrib('append', "System Default: {$quoteSetting->getPricingConfig()->getConfigName()}");
     }
 
     public function loadDefaultDecorators ()
