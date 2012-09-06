@@ -121,8 +121,8 @@ INSERT INTO `qgen_device_options` (`masterDeviceId`, `optionId`) VALUES
 -- ---------------------------------
 -- Create a quote with some devices.
 -- ---------------------------------
-INSERT INTO `qgen_quotes` (`id`, `clientId`, `dateCreated`, `dateModified`, `quoteDate`, `userId`, `clientDisplayName`, `leaseRate`, `leaseTerm`, `monochromePageMargin`, `colorPageMargin`, `pageCoverageMonochrome`, `pageCoverageColor`, `pricingConfigId`, `quoteType`) VALUES
-(1, 2, NOW(), NOW(), NOW(), 1, NULL, 0.0343, 39, 20, 30, 6, 24, 2, 'leased');
+INSERT INTO `qgen_quotes` (`id`, `clientId`, `dateCreated`, `dateModified`, `quoteDate`, `userId`, `clientDisplayName`, `leaseRate`, `leaseTerm`, `monochromePageMargin`, `colorPageMargin`, `adminCostPerPage`,`serviceCostPerPage`, `pageCoverageMonochrome`, `pageCoverageColor`, `pricingConfigId`, `quoteType`) VALUES
+(1, 2, NOW(), NOW(), NOW(), 1, NULL, 0.0343, 39, 20, 30, 0, 0, 6, 24, 2, 'leased');
 
 INSERT INTO `qgen_quote_lease_terms` (`quoteId`, `leasingSchemaTermId`) VALUES
 (1, 4);

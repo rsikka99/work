@@ -158,7 +158,6 @@ class Quotegen_Form_Quote extends Twitter_Bootstrap_Form_Horizontal
                                 'options' => array (
                                         'min' => 0, 
                                         'max' => 5, 
-                                        'inclusive' => false 
                                 ) 
                         ), 
                         'Float' 
@@ -179,7 +178,6 @@ class Quotegen_Form_Quote extends Twitter_Bootstrap_Form_Horizontal
                                 'options' => array (
                                         'min' => 0, 
                                         'max' => 5, 
-                                        'inclusive' => false 
                                 ) 
                         ), 
                         'Float' 
