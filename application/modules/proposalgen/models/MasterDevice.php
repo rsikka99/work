@@ -305,14 +305,10 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             }
         }
         
-        // If we didn't get any toners, then use the default one
+        // If we don't have a toner, return false.
         if (! isset($cheapestToner))
         {
-            $defaultToners = Proposalgen_Model_Toner::getDefaultToners();
-            $cheapestToner = $defaultToners [$tonerColor];
-            
-            // Flag this device as using incomplete toner data
-            $this->setUsingIncompleteTonerData($tonerColor, true);
+            return false;
         }
         
         return $cheapestToner;
@@ -390,10 +386,14 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             // Color CPP = Toner Cost / Toner Yield
             foreach ( $tempTonerList as $toner )
             {
-                $tonerCPP = $toner->getCostPerPage();
-                $costPerPage->Estimated->Base->BlackAndWhite += $tonerCPP->Estimated->BlackAndWhite;
-                $costPerPage->Estimated->Base->Color += $tonerCPP->Estimated->BlackAndWhite;
-                $costPerPage->Estimated->Base->Color += $tonerCPP->Estimated->Color;
+                // If we didn't get a toner, skip it.
+                if ($toner)
+                {
+                    $tonerCPP = $toner->getCostPerPage();
+                    $costPerPage->Estimated->Base->BlackAndWhite += $tonerCPP->Estimated->BlackAndWhite;
+                    $costPerPage->Estimated->Base->Color += $tonerCPP->Estimated->BlackAndWhite;
+                    $costPerPage->Estimated->Base->Color += $tonerCPP->Estimated->Color;
+                }
             }
             
             /* Actual Cost Per Page */
@@ -407,13 +407,17 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             // Color CPP = Toner Cost / Toner Yield
             foreach ( $tempTonerList as $toner )
             {
-                $tonerCPP = $toner->getCostPerPage();
-                $costPerPage->Actual->Base->BlackAndWhite += $tonerCPP->Actual->BlackAndWhite;
-                $costPerPage->Actual->Base->Color += $tonerCPP->Actual->BlackAndWhite;
-                $costPerPage->Actual->Base->Color += $tonerCPP->Actual->Color;
-                $costPerPage->Actual->Raw->BlackAndWhite += $tonerCPP->Raw->BlackAndWhite;
-                $costPerPage->Actual->Raw->Color += $tonerCPP->Raw->BlackAndWhite;
-                $costPerPage->Actual->Raw->Color += $tonerCPP->Raw->Color;
+                // If we didn't get a toner, skip it.
+                if ($toner)
+                {
+                    $tonerCPP = $toner->getCostPerPage();
+                    $costPerPage->Actual->Base->BlackAndWhite += $tonerCPP->Actual->BlackAndWhite;
+                    $costPerPage->Actual->Base->Color += $tonerCPP->Actual->BlackAndWhite;
+                    $costPerPage->Actual->Base->Color += $tonerCPP->Actual->Color;
+                    $costPerPage->Actual->Raw->BlackAndWhite += $tonerCPP->Raw->BlackAndWhite;
+                    $costPerPage->Actual->Raw->Color += $tonerCPP->Raw->BlackAndWhite;
+                    $costPerPage->Actual->Raw->Color += $tonerCPP->Raw->Color;
+                }
             }
             
             // Apply a margin to the base cost per page
