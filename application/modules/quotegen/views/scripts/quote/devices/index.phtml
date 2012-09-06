@@ -10,10 +10,11 @@ $this->headScript()->appendScript("$('i').popover();");
 	<tr class="header-row">
     	<th colspan="12">
             <div class='pull-right'>
+                <?php echo $this->addFavoriteDeviceForm;?>
             	<a href="<?php echo $this->url(array('action' => 'sync-all-device-configurations')); ?>" title="Sync all configurations with current information." class="btn btn-info "><i class="icon-refresh"></i> Sync All Devices</a>
             </div>
     		<div>
-                <?php echo $this->form;?>
+                <?php echo $this->addDeviceForm;?>
             </div>
 		</th>
 	</tr>

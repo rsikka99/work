@@ -9,11 +9,12 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
      *
      */
     protected $_defaultDbTable = 'Quotegen_Model_DbTable_DeviceConfiguration';
-
+    
     /*
      * Define the primary key of the model association
-    */
+     */
     public $col_id = 'id';
+
     /**
      * Gets an instance of the mapper
      *
@@ -23,17 +24,17 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
     {
         return self::getCachedInstance();
     }
-    
+
     /**
      * Counts and returns the amount of rows by masterDeviceId
      *
-     * @param int $masterDeviceId
+     * @param int $masterDeviceId            
      * @return number The amount of rows in the database.
      */
     public function countByDeviceId ($masterDeviceId)
     {
         return $this->count(array (
-                'masterDeviceId = ?' => $masterDeviceId
+                'masterDeviceId = ?' => $masterDeviceId 
         ));
     }
 
@@ -132,7 +133,7 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
         $deviceConfigurations = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAllDeviceConfigurationByDeviceId($deviceId);
         
         // Loop through and delete all configuration options for each configuration
-        foreach ($deviceConfigurations as $deviceConfiguration)
+        foreach ( $deviceConfigurations as $deviceConfiguration )
         {
             Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->deleteDeviceConfigurationOptionById($deviceConfiguration->getId());
         }
@@ -232,6 +233,7 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
 
     /**
      * Fetches all deviceConfigurations by masterdeviceId
+     *
      * @param int $masterDeviceId            
      * @return multitype:Quotegen_Model_DeviceConfiguration
      */
@@ -252,6 +254,18 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
         }
         
         return $deviceConfigurations;
+    }
+
+    /**
+     * Fetchs all the devices configurations available for a user
+     *
+     * @param int $userId            
+     * @return Ambigous <multitype:Quotegen_Model_DeviceConfiguration, multitype:Quotegen_Model_DeviceConfiguration >
+     */
+    public function fetchAllDeviceConfigurationsAvailableToUser ($userId)
+    {
+        // FIXME: coding fetch all for now, needs to grab global + user configurations
+        return $this->fetchAll();
     }
 
     /**
