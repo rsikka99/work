@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_Form_AddDevice extends Twitter_Bootstrap_Form_Inline
+class Quotegen_Form_AddFavoriteDevice extends Twitter_Bootstrap_Form_Inline
 {
 
     public function init ()
@@ -9,28 +9,28 @@ class Quotegen_Form_AddDevice extends Twitter_Bootstrap_Form_Inline
         $this->setMethod('POST');
         
         // An add configuration button for the favorite devices
-        $submitButton = $this->createElement('submit', 'addDevice', array (
+        $submitButton = $this->createElement('submit', 'addDeviceConfiguration', array (
                 'ignore' => true, 
                 'label' => 'Add', 
                 'class' => 'btn btn-success' 
         ));
         
         // Get configurations from database
-        $devices = Quotegen_Model_Mapper_Device::getInstance()->fetchAll();
+        $deviceConfigurations = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAll();
         
         // Populate array with configuraions
         $data = array ();
-        $data ['-1'] = 'Select Device...';
+        $data ['-1'] = 'Select Favorite...';
         
-        /* @var $device Quotegen_Model_Device */
-        foreach ( $devices as $device )
+        /* @var $deviceConfiguration Quotegen_Model_DeviceConfiguration */
+        foreach ( $deviceConfigurations as $deviceConfiguration )
         {
-            $data [$device->getMasterDeviceId()] = $device->getMasterDevice()->getFullDeviceName();
+            $data [$deviceConfiguration->getId()] = $deviceConfiguration->getName();
         }
         
         // This is a list of favorite devices that the user can add
-        $this->addElement('select', 'masterDeviceId', array (
-                'label' => 'Add Device', 
+        $this->addElement('select', 'deviceConfigurationId', array (
+                'label' => 'Device Configuration', 
                 'multiOptions' => $data, 
                 'prepend' => $submitButton 
         ));
