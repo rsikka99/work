@@ -6,6 +6,10 @@
  * @author Lee Robert
  *        
  */
+/* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+/* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
+/* @var $quoteDevice Quotegen_Model_QuoteDevice */
+
 class Quotegen_Model_Quote extends My_Model_Abstract
 {
     const QUOTE_TYPE_LEASED = 'leased';
@@ -178,9 +182,11 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      * @var multitype:Quotegen_Model_QuoteDevice
      */
     protected $_quoteDevices;
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::populate()
+
+    /**
+     * (non-PHPdoc)
+     *
+     * @see My_Model_Abstract::populate()
      */
     public function populate ($params)
     {
@@ -813,7 +819,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function calculateTotalLeaseValue ()
     {
         $leaseValue = 0;
-        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+        
         foreach ( $this->getQuoteDevices() as $quoteDevice )
         {
             $leaseValue += $quoteDevice->calculateTotalLeaseValue();
@@ -841,7 +847,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         $margin = 0;
         $deviceCount = count($this->getQuoteDevices);
         
-        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
         foreach ( $this->getQuoteDevices() as $quoteDevice )
         {
             $margin += $quoteDevice->getMargin();
@@ -883,7 +888,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $totalCost = 0;
         
-        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
         foreach ( $this->getQuoteDevices() as $quoteDevice )
         {
             $totalCost += $quoteDevice->calculateTotalCost();
@@ -900,7 +904,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $totalPrice = 0;
         
-        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
         foreach ( $this->getQuoteDevices() as $quoteDevice )
         {
             $totalPrice += $quoteDevice->calculateTotalPrice();
@@ -916,7 +919,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function calculateTotalQuantity ()
     {
         $deviceCount = 0;
-        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+        
         foreach ( $this->getQuoteDevices() as $quoteDevice )
         {
             $deviceCount += $quoteDevice->calculateTotalQuantity();
@@ -934,7 +937,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $totalResidual = 0;
         
-        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
         foreach ( $this->getQuoteDevices() as $quoteDevice )
         {
             $totalResidual += $quoteDevice->calculateTotalResidual();
@@ -952,7 +954,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $subtotal = 0;
         
-        /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
         foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
             $subtotal += $quoteDeviceGroup->calculateGroupSubtotal();
@@ -969,7 +970,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $subtotal = 0;
         
-        /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
         foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
             $subtotal += $quoteDeviceGroup->calculateGroupMonthlyLeasePrice();
@@ -986,7 +986,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $subtotal = 0;
         
-        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
         foreach ( $this->getQuoteDevices() as $quoteDevice )
         {
             $subtotal += $quoteDevice->calculateTotalLeaseValue();
@@ -1003,7 +1002,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $count = 0;
         
-        /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
         foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
             $count += count($quoteDeviceGroup->getQuoteDeviceGroupDevices());
@@ -1049,7 +1047,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @return int The number of monochrome pages that is attached to this quote
      */
-    public function getTotalMonochromePages ()
+    public function calculateTotalMonochromePages ()
     {
         $quantity = 0;
         
@@ -1065,7 +1063,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @return int The number of color pages that is attached to this quote
      */
-    public function getTotalColorPages ()
+    public function calculateTotalColorPages ()
     {
         $quantity = 0;
         
@@ -1081,7 +1079,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @var int the calcuated quote monochrome cpp
      */
-    public function getQuoteMonochromeCostPerPage ()
+    public function calculateQuoteMonochromeCostPerPage ()
     {
         // Represents quote total page weigth
         $monochromePageQuantity = 0;
@@ -1093,7 +1091,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         
         foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
-            /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+            
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
                 // Weight for each device
@@ -1120,7 +1118,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @var int the calcuated quote color cpp
      */
-    public function getQuoteColorCostPerPage ()
+    public function calculateQuoteColorCostPerPage ()
     {
         // Quantity of pages for each grouped device (pages * deviceQuantity)
         $colorPageQuantity = 0;
@@ -1133,7 +1131,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         
         foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
-            /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+            
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
                 $colorPageQuantity = $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuantity();
@@ -1153,14 +1151,14 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @return int the total cost of monochrome pages
      */
-    public function getQuoteMonochromePageCost ()
+    public function calculateQuoteMonochromePageCost ()
     {
         // The total cost of monochrome pages (deviceQuantity * pages * cpp)
         $totalMonochromePageCost = 0;
         
         foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
-            /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+            
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
                 $totalMonochromePageCost += $quoteDeviceGroupDevice->getQuantity() * $quoteDeviceGroupDevice->getMonochromePagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->getMonochromeCostPerPage();
@@ -1174,13 +1172,12 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @return float the total color page cost for the qoute
      */
-    public function getQuoteColorPageCost ()
+    public function calculateQuoteColorPageCost ()
     {
         // The total cost of color pages (deviceQuantity * pages * cpp)
         $totalColorPageCost = 0;
         foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
-            /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
                 $totalColorPageCost += $quoteDeviceGroupDevice->getQuantity() * $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->getColorCostPerPage();
@@ -1194,9 +1191,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @return float the calculated price per page
      */
-    public function getQuoteMonochromePricePerPage ()
+    public function calculateQuoteMonochromePricePerPage ()
     {
-        return Tangent_Accounting::applyMargin($this->getQuoteMonochromeCostPerPage(), $this->getMonochromePageMargin());
+        return Tangent_Accounting::applyMargin($this->calculateQuoteMonochromeCostPerPage(), $this->getMonochromePageMargin());
     }
 
     /**
@@ -1204,9 +1201,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @return float the calculated price per page
      */
-    public function getQuoteColorPricePerPage ()
+    public function calculateQuoteColorPricePerPage ()
     {
-        return Tangent_Accounting::applyMargin($this->getQuoteColorCostPerPage(), $this->getColorPageMargin());
+        return Tangent_Accounting::applyMargin($this->calculateQuoteColorCostPerPage(), $this->getColorPageMargin());
     }
 
     /**
@@ -1214,9 +1211,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @return float the calculated price per page
      */
-    public function getQuoteMonochromeRevenue ()
+    public function calculateQuoteMonochromeRevenue ()
     {
-        return Tangent_Accounting::applyMargin($this->getQuoteMonochromePageCost(), $this->getMonochromePageMargin());
+        return Tangent_Accounting::applyMargin($this->calculateQuoteMonochromePageCost(), $this->getMonochromePageMargin());
     }
 
     /**
@@ -1224,9 +1221,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @return float the calculated price per page
      */
-    public function getQuoteColorRevenue ()
+    public function calculateQuoteColorRevenue ()
     {
-        return Tangent_Accounting::applyMargin($this->getQuoteColorPageCost(), $this->getColorPageMargin());
+        return Tangent_Accounting::applyMargin($this->calculateQuoteColorPageCost(), $this->getColorPageMargin());
     }
 
     /**
@@ -1234,9 +1231,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @return number the total quote profit for monochrome
      */
-    public function getQuoteMonochromeProfit ()
+    public function calculateQuoteMonochromeProfit ()
     {
-        return $this->getQuoteMonochromeRevenue() - $this->getQuoteMonochromePageCost();
+        return $this->calculateQuoteMonochromeRevenue() - $this->calculateQuoteMonochromePageCost();
     }
 
     /**
@@ -1244,9 +1241,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @return float the total quote profit for color
      */
-    public function getQuoteColorProfit ()
+    public function calculateQuoteColorProfit ()
     {
-        return $this->getQuoteColorRevenue() - $this->getQuoteColorPageCost();
+        return $this->calculateQuoteColorRevenue() - $this->calculateQuoteColorPageCost();
     }
 
     /**
@@ -1254,9 +1251,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @return int
      */
-    public function getQuoteTotalQuantity ()
+    public function calculateQuoteTotalQuantity ()
     {
-        return $this->getTotalMonochromePages() + $this->getTotalColorPages();
+        return $this->calculateTotalMonochromePages() + $this->calculateTotalColorPages();
     }
 
     /**
@@ -1264,9 +1261,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @return float the quote cost per page
      */
-    public function getQuoteTotalCostPerPage ()
+    public function calculateQuoteTotalCostPerPage ()
     {
-        return $this->getQuoteMonochromeCostPerPage() + $this->getQuoteColorCostPerPage();
+        return $this->calculateQuoteMonochromeCostPerPage() + $this->calculateQuoteColorCostPerPage();
     }
 
     /**
@@ -1274,9 +1271,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @return float the quote total price per page
      */
-    public function getQuoteTotalPricePerPage ()
+    public function calculateQuoteTotalPricePerPage ()
     {
-        return $this->getQuoteMonochromePricePerPage() + $this->getQuoteColorPricePerPage();
+        return $this->calculateQuoteMonochromePricePerPage() + $this->calculateQuoteColorPricePerPage();
     }
 
     /**
@@ -1284,9 +1281,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @return float the quote cost for pagews
      */
-    public function getQuoteTotalCost ()
+    public function calculateQuoteTotalCost ()
     {
-        return $this->getQuoteMonochromePageCost() + $this->getQuoteColorPageCost();
+        return $this->calculateQuoteMonochromePageCost() + $this->calculateQuoteColorPageCost();
     }
 
     /**
@@ -1294,9 +1291,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @return float the total revenue for the quote
      */
-    public function getQuoteTotalRevenue ()
+    public function calculateQuoteTotalRevenue ()
     {
-        return $this->getQuoteMonochromeRevenue() + $this->getQuoteColorRevenue();
+        return $this->calculateQuoteMonochromeRevenue() + $this->calculateQuoteColorRevenue();
     }
 
     /**
@@ -1304,8 +1301,8 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      *
      * @return float the total profit for pages in the quote
      */
-    public function getQuoteTotalProfit ()
+    public function calculateQuoteTotalProfit ()
     {
-        return $this->getQuoteMonochromeProfit() + $this->getQuoteColorProfit();
+        return $this->calculateQuoteMonochromeProfit() + $this->calculateQuoteColorProfit();
     }
 }
