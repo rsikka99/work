@@ -1,6 +1,6 @@
 <?php 
 $quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
-//$this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.phtml'));
+echo $this->render('_partials/quoteHeading.phtml');
 
 $this->headScript()->appendScript("$('i').popover();");
 
@@ -21,18 +21,18 @@ $this->headScript()->appendScript("$('i').popover();");
                     <th style="width: 70px;">Subtotal</th>
                 </tr>
                 
-                <?php foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
+                <?php foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice) : /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */ ?>
                 <tr class="deviceRow">
-                    <th><h5><?php echo $quoteDevice->getName(); ?></h5></th>
-                    <td><?php echo $quoteDevice->getSku(); ?></td>     
+                    <th><h5><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getName(); ?></h5></th>
+                    <td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getSku(); ?></td>     
                     <td></td>           
                     <td style="text-align: right;"></td>
-                    <td style="text-align: right;"><?php echo number_format($quoteDevice->getQuantity()); ?></td>
+                    <td style="text-align: right;"><?php echo number_format($quoteDeviceGroupDevice->getQuantity()); ?></td>
                     <td style="text-align: right;"></td>
                 </tr>
-                <?php if (count($quoteDevice->getQuoteDeviceOptions()) > 0) : ?>
+                <?php if (count($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions()) > 0) : ?>
                 
-                <?php foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
+                <?php foreach ($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
                 <tr class="optionRow">
                     <td><?php echo $quoteDeviceOption->getName(); ?></td>
                     <td><?php echo $quoteDeviceOption->getSku(); ?></td>
@@ -42,41 +42,36 @@ $this->headScript()->appendScript("$('i').popover();");
                     <td></td>
                 </tr>
                 <?php endforeach; ?>
-                
                 <?php endif; ?>
-                
-                
-            
         <?php endforeach; ?>
-        
-        <?php if (count($quoteDeviceGroup->getPages()) > 0) : ?>
-                
-        <?php foreach ($quoteDeviceGroup->getPages() as $quoteDeviceGroupPage) : /* @var $quoteDeviceGroupPage Quotegen_Model_QuoteDeviceGroupPage */ ?>
         <tr class="pagesRow">
-            <td><?php echo $quoteDeviceGroupPage->getName(); ?> Pages</td>
-            <td><?php echo $quoteDeviceGroupPage->getSku(); ?></td>
+            <td>Monochrome</td>
             <td></td>
             <td></td>
-            <td><?php echo number_format($quoteDeviceGroupPage->getIncludedQuantity()); ?></td>
+            <td>Pages Included</td>
+            <td><?php echo number_format($quoteDeviceGroupDevice->getMonochromePagesQuantity()); ?></td>
             <td></td>
         </tr>
-        <?php endforeach; ?>
-        
-        <?php endif; ?>
-        
+        <tr class="pagesRow">
+            <td>Color</td>
+            <td></td>
+            <td></td>
+            <td>Pages Included</td>
+            <td><?php echo number_format($quoteDeviceGroupDevice->getColorPagesQuantity()); ?></td>
+            <td></td>
+        </tr>
         <tr>
             <td colspan="5"></td>
             <th style="text-align: right;"><?php echo $this->currency($quoteDeviceGroup->calculateGroupMonthlyLeasePrice()); ?></th>
         </tr>
-        <?php if (count($quoteDeviceGroup->getPages()) > 0) : ?>
-        <?php foreach ($quoteDeviceGroup->getPages() as $quoteDeviceGroupPage) : /* @var $quoteDeviceGroupPage Quotegen_Model_QuoteDeviceGroupPage */ ?>
         <tr class="pagesRow">
-            <td style="text-align: right;" colspan="5"><?php echo $quoteDeviceGroupPage->getName(); ?> overage price</td>
-            <td style="text-align: right;"><?php echo $this->currency($quoteDeviceGroupPage->getPricePerPage()); ?></td>
+            <td style="text-align: right;" colspan="5">Monochrome overage price</td>
+            <td style="text-align: right;"><?php echo $this->currency($quote->getMonochromeOverageRatePerPage()); ?></td>
         </tr>
-        <?php endforeach; ?>
-        
-        <?php endif; ?>
+        <tr class="pagesRow">
+            <td style="text-align: right;" colspan="5">Color overage price</td>
+            <td style="text-align: right;"><?php echo $this->currency($quote->getColorOverageRatePerPage()); ?></td>
+        </tr>
         </table>
         <?php endforeach; ?>
         <h3>Quote Monthly Total: <?php echo $this->currency($quote->calculateQuoteMonthlyLeaseSubtotal()); ?></h3>
