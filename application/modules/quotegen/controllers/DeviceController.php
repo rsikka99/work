@@ -70,11 +70,9 @@ class Quotegen_DeviceController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        // TODO: Show how many of each option will be deleted
         // Get all the deviceConfiguration associated with the masterDeviceId
         $deviceConfigurations = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAllDeviceConfigurationByDeviceId($deviceId);
        
-        // TODO: Show what is being deleted in messages
         $message = "Are you sure you want to delete {$device->getMasterDeviceId()}?";
         $form = new Application_Form_Delete($message);
         

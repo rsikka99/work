@@ -243,9 +243,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                 'clientDisplayName' => $this->getClientDisplayName(), 
                 'adminCostPerPage' => $this->getAdminCostPerPage(), 
                 'serviceCostPerPage' => $this->getServiceCostPerPage(), 
-                'pageCoverageColor' => $this->getPageCoverageColor(),
-                'monochromeOverageRatePerPage' => $this->getMonochromeOverageRatePerPage(),
-                'colorOverageRatePerPage' => $this->getColorOverageRatePerPage(),
+                'pageCoverageColor' => $this->getPageCoverageColor(), 
+                'monochromeOverageRatePerPage' => $this->getMonochromeOverageRatePerPage(), 
+                'colorOverageRatePerPage' => $this->getColorOverageRatePerPage(), 
                 'monochromePageMargin' => $this->getMonochromePageMargin(), 
                 'colorPageMargin' => $this->getColorPageMargin(), 
                 'pageCoverageMonochrome' => $this->getPageCoverageMonochrome(), 
@@ -759,7 +759,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
 
     /**
      * Sets the monochrome overage rate per page for the quote
-     * 
+     *
      * @param number $_monochromeOverageRatePerPage            
      */
     public function setMonochromeOverageRatePerPage ($_monochromeOverageRatePerPage)
@@ -780,7 +780,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
 
     /**
      * Sets the color overage rate per page for the quote
-     * 
+     *
      * @param number $_colorOverageRatePerPage            
      */
     public function setColorOverageRatePerPage ($_colorOverageRatePerPage)
@@ -797,7 +797,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     
     /**
      * Returns if a quote is being leased or not.
-     * 
+     *
      * @return bool True if the quote is leased
      */
     public function isLeased ()

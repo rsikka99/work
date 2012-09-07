@@ -116,7 +116,6 @@ if ($reportHasDevicesToReplace)
                 $table->addCell($tc->col5Width, $tc->body->cell5->cellStyle)->addText('$' . number_format($replacementDevice->getMonthlyRate() * 12), $tc->body->cell5->fontStyle, $tc->body->cell5->paragraphStyle);
                 $table->addCell($tc->col6Width, $tc->body->cell6->cellStyle)->addText('$' . number_format(($device->getMonthlyRate() * 12) - ($replacementDevice->getMonthlyRate() * 12)), $tc->body->cell6->fontStyle, $tc->body->cell6->paragraphStyle);
                 
-                // TODO: This should not have caclulations in a view script. Leaving it in because it works for now.
                 $replacementSavings += ($device->getMonthlyRate() * 12) - ($replacementDevice->getMonthlyRate() * 12);
                 $currentCost += $device->getMonthlyRate() * 12;
                 $printIQCost += $replacementDevice->getMonthlyRate() * 12;

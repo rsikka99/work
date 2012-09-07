@@ -32,10 +32,9 @@ $this->headScript()->appendScript("$('i').popover();");
     	<td><h4><?php echo $device->getName(); ?></h4></td>                
         <td><h4><?php echo $device->getSku(); ?></h4></td>
         <td></td>
-        <?php // FIXME: Currency format ?>
-        <td style="text-align: right"><h4><?php echo '$'.number_format($device->getCost(),2)?></h4></td>
+        <td style="text-align: right"><h4><?php echo $this->currency((float)$device->getCost())?></h4></td>
         <td></td>
-        <td style="text-align: right"><h4><?php echo '$'.number_format($device->getCost(),2) ?></h4></td>
+        <td style="text-align: right"><h4><?php echo $this->currency((float)$device->getCost()) ?></h4></td>
         <td>
         	<div class="btn-group">
         		<a href="#" class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i></a>

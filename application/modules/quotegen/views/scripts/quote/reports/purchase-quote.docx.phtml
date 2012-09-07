@@ -12,9 +12,6 @@ $commonPartsBasePath = 'quote/reports/common/docx';
 
 $quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
 
-// TODO: Get word initializing here
-
-
 /* @var $phpword PHPWord */
 $phpword = $this->phpword;
 
@@ -738,7 +735,6 @@ $data = array (
 $this->partial("{$commonPartsBasePath}/titlepage.phtml", $titledata);
 $this->partial("{$commonPartsBasePath}/evaluatingthetruecost.phtml", $data);
 
-// TODO: Some logic about showing the right quote to the client
 $this->partial("{$basePath}/purchasequote.phtml", $data);
 $this->partial("{$commonPartsBasePath}/businessprint.phtml", $data);
 

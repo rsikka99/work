@@ -91,11 +91,6 @@ class Admin_UserController extends Zend_Controller_Action
                     $form->populate($request->getPost());
                 }
             }
-            else
-            {
-                // TODO handle cancel request
-            // User has cancelled. We could do a redirect here if we wanted.
-            }
         }
         
         $this->view->form = $form;
@@ -272,7 +267,7 @@ class Admin_UserController extends Zend_Controller_Action
                         }
                         else
                         {
-                            // TODO: This whole password area could be done in a more logical sequence
+                            // This whole password area could be done in a more logical sequence
                             if ($values ["reset_password"])
                             {
                                 throw new InvalidArgumentException("You must specify a new password");

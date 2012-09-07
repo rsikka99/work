@@ -138,7 +138,6 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
                     {
                         $selectedRange = $leasingSchemaRange;
                         
-                        // FIXME: The ranges are in descending order. Is this the right logic?
                         // If we found our range, break out of the loop
                         if ((float)$leasingSchemaRange->getStartRange() <= $quoteLeaseValue)
                         {
@@ -392,7 +391,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
 
     public function postDocxContext ()
     {
-        // TODO: Nothing to do in post yet
+        // Nothing to do in post yet
     }
 
     /**

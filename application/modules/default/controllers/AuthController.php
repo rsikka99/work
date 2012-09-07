@@ -37,8 +37,6 @@ class Default_AuthController extends Zend_Controller_Action
      * The login action authenticates a user with our system.
      * After a successful authentication we should send them back to the page
      * that they were trying to access.
-     *
-     * TODO: Make a redirect back to the page they came from.
      */
     function loginAction ()
     {
@@ -233,7 +231,7 @@ class Default_AuthController extends Zend_Controller_Action
                 }
                 else
                 {
-                    $this->_helper->redirector('index','index');
+                    $this->_helper->redirector('index', 'index');
                 }
             }
         }

@@ -517,7 +517,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         }
         catch ( Exception $e )
         {
-            // FIXME: This doesn't do anything for us when this happens.
+            My_Log::logException($e);
         }
         // encode user data to return to the client:
         $json = Zend_Json::encode($formdata);
@@ -2564,7 +2564,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $this->view->mappingArray = $result;
         $this->view->upload_count = count($result);
         
-        // FIXME: Why not a mysql count?
         // Get the excluded count
         $select = new Zend_Db_Select($db);
         $select = $db->select()

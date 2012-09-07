@@ -26,7 +26,6 @@ class Proposalgen_MasterdeviceController extends Zend_Controller_Action
 
     public function deleteAction ()
     {
-        // TODO: deleteAction
         $masterDeviceId = $this->_getParam('id', false);
         
         if (! $masterDeviceId)
@@ -77,7 +76,6 @@ class Proposalgen_MasterdeviceController extends Zend_Controller_Action
 
     public function createAction ()
     {
-        // TODO: createAction
         $request = $this->getRequest();
         $form = new Proposalgen_Form_MasterDevice();
         

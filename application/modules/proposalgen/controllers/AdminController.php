@@ -2328,6 +2328,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
     /**
      * The uploadpricingAction allows the system admin or dealer to select a .
      *
+     *
      * csv file with pricing
      * to upload into the database for a specific report. The file must be
      * formatted and contain
@@ -9024,16 +9025,12 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $reportMapper->save($report);
                     
                     // update unknown_device_instance records
-                    // FIXME: Move this into mapper
                     $udiTable = new Proposalgen_Model_DbTable_UnknownDeviceInstance();
                     $data ['user_id'] = $new_user_id;
                     $where = $udiTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
-                    $udi = $udiTable->fetchAll($where);
                     
-                    foreach ( $udi as $row )
-                    {
-                        $udiTable->update($data, $where);
-                    }
+                    // Perform the update.
+                    $udiTable->update($data, $where);
                     
                     $this->_helper->flashMessenger(array (
                             "success" => "Report Transfer Complete." 

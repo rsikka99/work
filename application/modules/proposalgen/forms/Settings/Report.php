@@ -48,7 +48,7 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
         
         $this->setMethod("POST");
         
-        // TODO: What the hell does this do?
+        // What does this currency regex validate?
         $currencyRegex = '/^\d+(?:\.\d{0,2})?$/';
         $currencyValidator = new Zend_Validate_Regex($currencyRegex);
         $currencyValidator->setMessage("Please enter a valid dollar amount.");
