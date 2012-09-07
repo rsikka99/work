@@ -38,7 +38,7 @@ class Quotegen_Form_Quote extends Twitter_Bootstrap_Form_Horizontal
             $clientListValidator [] = $client->getId();
         }
         
-        $clients = $this->createElement('select','clientId');
+        $clients = $this->createElement('select', 'clientId');
         $clients->setLabel('Select Client:');
         $clients->addMultiOptions($clientList);
         $clients->addValidator('InArray', false, array (
@@ -130,8 +130,8 @@ class Quotegen_Form_Quote extends Twitter_Bootstrap_Form_Horizontal
                                 ) 
                         ), 
                         'Float' 
-                ),
-                'append' => sprintf("System Default: %s%%", number_format($quoteSetting->getPageCoverageMonochrome(),2))
+                ), 
+                'append' => sprintf("System Default: %s%%", number_format($quoteSetting->getPageCoverageMonochrome(), 2)) 
         ));
         $this->addElement($pageCoverageColor);
         
@@ -152,8 +152,8 @@ class Quotegen_Form_Quote extends Twitter_Bootstrap_Form_Horizontal
                                 ) 
                         ), 
                         'Float' 
-                ),
-                'append' => sprintf("System Default: %s%%", number_format($quoteSetting->getPageCoverageColor(),2))
+                ), 
+                'append' => sprintf("System Default: %s%%", number_format($quoteSetting->getPageCoverageColor(), 2)) 
         ));
         
         $this->addElement($pageCoverageMonochrome);
@@ -175,7 +175,7 @@ class Quotegen_Form_Quote extends Twitter_Bootstrap_Form_Horizontal
                         ), 
                         'Float' 
                 ), 
-                'append' => sprintf("System Default: %s%%", number_format($quoteSetting->getAdminCostPerPage(),2)) 
+                'append' => sprintf("System Default: %s", $this->_view->currency($quoteSetting->getAdminCostPerPage())) 
         ));
         $this->addElement($adminCostPerPage);
         
@@ -196,43 +196,43 @@ class Quotegen_Form_Quote extends Twitter_Bootstrap_Form_Horizontal
                         ), 
                         'Float' 
                 ), 
-                'append' => sprintf("System Default: %s%%", number_format($quoteSetting->getServiceCostPerPage(),2))
+                'append' => sprintf("System Default: %s", $this->_view->currency((float)$quoteSetting->getServiceCostPerPage())) 
         ));
         $this->addElement($serviceCostPerPage);
         
         $monochromeOverageRatePerPage = $this->createElement('text', 'monochromeOverageRatePerPage', array (
-                'label' => 'Monochrome Overate Rate Per Page:',
-                'class' => 'input-mini',
+                'label' => 'Monochrome Overate Rate Per Page:', 
+                'class' => 'input-mini', 
                 'validators' => array (
-                        'Float',
+                        'Float', 
                         array (
-                                'validator' => 'Between',
+                                'validator' => 'Between', 
                                 'options' => array (
-                                        'min' => - 100,
-                                        'max' => 100,
-                                        'inclusive' => false
-                                )
-                        )
-                ),
-                'append' => sprintf("System Default: $%s", number_format($quoteSetting->getMonochromeOverageRatePerPage(),2))
+                                        'min' => - 100, 
+                                        'max' => 100, 
+                                        'inclusive' => false 
+                                ) 
+                        ) 
+                ), 
+                'append' => sprintf("System Default: %s", $this->_view->currency($quoteSetting->getMonochromeOverageRatePerPage())) 
         ));
         $this->addElement($monochromeOverageRatePerPage);
         
         $colorOverageRatePerPage = $this->createElement('text', 'colorOverageRatePerPage', array (
-                'label' => 'Color Overate Rate Per Page:',
-                'class' => 'input-mini',
+                'label' => 'Color Overate Rate Per Page:', 
+                'class' => 'input-mini', 
                 'validators' => array (
-                        'Float',
+                        'Float', 
                         array (
-                                'validator' => 'Between',
+                                'validator' => 'Between', 
                                 'options' => array (
-                                        'min' => - 100,
-                                        'max' => 100,
-                                        'inclusive' => false
-                                )
-                        )
-                ),
-                'append' => sprintf("System Default: $%s", number_format($quoteSetting->getColorOverageRatePerPage(),2))
+                                        'min' => - 100, 
+                                        'max' => 100, 
+                                        'inclusive' => false 
+                                ) 
+                        ) 
+                ), 
+                'append' => sprintf("System Default: %s", $this->_view->currency($quoteSetting->getColorOverageRatePerPage())) 
         ));
         $this->addElement($colorOverageRatePerPage);
         
