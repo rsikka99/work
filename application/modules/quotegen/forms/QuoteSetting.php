@@ -182,7 +182,7 @@ class Quotegen_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
                                 'options' => array (
                                         'min' => 0, 
                                         'max' => 5, 
-                                        'inclusive' => false 
+                                        'inclusive' => true 
                                 ) 
                         ), 
                         'Float' 
@@ -205,7 +205,7 @@ class Quotegen_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
                                 'options' => array (
                                         'min' => 0, 
                                         'max' => 5, 
-                                        'inclusive' => false 
+                                        'inclusive' => true 
                                 ) 
                         ), 
                         'Float' 
