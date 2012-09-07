@@ -31,6 +31,53 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
                 'Wrapper' 
         ));
         
+        if ($this->_quote->isLeased())
+        {
+            $leasingSchemas = array ();
+            $leasingSchemaId = null;
+            /* @var $leasingSchema Quotegen_Model_LeasingSchema */
+            foreach ( Quotegen_Model_Mapper_LeasingSchema::getInstance()->fetchAll() as $leasingSchema )
+            {
+                if (! $leasingSchemaId)
+                {
+                    $leasingSchemaId = $leasingSchema->getId();
+                }
+                $leasingSchemas [$leasingSchema->getId()] = $leasingSchema->getName();
+            }
+            
+            if ($this->_leasingSchemaId)
+            {
+                $leasingSchemaId = $this->_leasingSchemaId;
+            }
+            
+            $this->addElement('select', 'leasingSchemaId', array (
+                    'label' => 'Leasing Schema:', 
+                    'multiOptions' => $leasingSchemas, 
+                    'required' => true, 
+                    'value' => $leasingSchemaId 
+            ));
+            
+            $leasingSchema = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($leasingSchemaId);
+            $leasingSchemaTerms = array ();
+            if ($leasingSchema)
+            {
+                /* @var $leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm */
+                foreach ( $leasingSchema->getTerms() as $leasingSchemaTerm )
+                {
+                    $leasingSchemaTerms [$leasingSchemaTerm->getId()] = number_format($leasingSchemaTerm->getMonths()) . " months";
+                }
+            }
+            
+            $this->addElement('select', 'leasingSchemaTermId', array (
+                    'label' => 'Lease Term:', 
+                    'multiOptions' => $leasingSchemaTerms, 
+                    'required' => true, 
+                    'value' => $this->getQuote()
+                        ->getLeasingSchemaTerm()
+                        ->getId() 
+            ));
+        }
+        
         // ----------------------------------------------------------------------
         // Form elements for devices
         // ----------------------------------------------------------------------        
@@ -73,6 +120,28 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
                             ) 
                     ) 
             ));
+            
+            if ($this->_quote->isLeased())
+            {
+                // Residual
+                $this->addElement('text', "residual_{$quoteDevice->getId()}", array (
+                        'label' => 'Residual', 
+                        'required' => true, 
+                        'class' => 'input-mini rightAlign', 
+                        'value' => $quoteDevice->getResidual(), 
+                        'validators' => array (
+                                'Float', 
+                                array (
+                                        'validator' => 'Between', 
+                                        'options' => array (
+                                                'min' => 0, 
+                                                'max' => $quoteDevice->calculatePackagePrice(), 
+                                                'inclusive' => true 
+                                        ) 
+                                ) 
+                        ) 
+                ));
+            }
         }
     }
 
