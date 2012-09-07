@@ -64,7 +64,7 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
                 /* @var $leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm */
                 foreach ( $leasingSchema->getTerms() as $leasingSchemaTerm )
                 {
-                    $leasingSchemaTerms [$leasingSchemaTerm->getId()] = $leasingSchemaTerm->getMonths();
+                    $leasingSchemaTerms [$leasingSchemaTerm->getId()] = number_format($leasingSchemaTerm->getMonths()) . " months";
                 }
             }
             

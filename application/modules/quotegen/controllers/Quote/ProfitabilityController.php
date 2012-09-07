@@ -112,6 +112,9 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                                     Quotegen_Model_Mapper_QuoteLeaseTerm::getInstance()->insert($quoteLeaseTerm);
                                 }
                                 
+                                // Reset the leasing schema term for the quote since it has changed.
+                                $this->_quote->setLeasingSchemaTerm(null);
+                                
                                 $changesMade = true;
                             }
                         }

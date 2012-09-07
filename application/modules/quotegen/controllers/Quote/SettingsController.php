@@ -115,6 +115,9 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
                         {
                             Quotegen_Model_Mapper_QuoteLeaseTerm::getInstance()->insert($quoteLeaseTerm);
                         }
+                        
+                        // Reset the leasing schema term for the quote since it has changed.
+                        $this->_quote->setLeasingSchemaTerm(null);
                     }
                     
                     $this->saveQuote();
