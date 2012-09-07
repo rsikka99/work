@@ -73,7 +73,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             $quoteDevice->setQuoteId($this->_quoteId);
                             $quoteDevice->setMargin($quoteSetting->getDeviceMargin());
                             $quoteDevice->setPackageCost($quoteDevice->calculatePackageCost());
-                            $quoteDevice->setPackageMarkup($quoteDevice->getPackageCost());
+                            $quoteDevice->setPackageMarkup(0);
                             $quoteDevice->setResidual(0);
                             
                             // Save our device
