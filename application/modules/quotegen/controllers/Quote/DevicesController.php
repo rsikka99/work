@@ -39,8 +39,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                     $newQuoteDeviceId = $this->cloneFavoriteDeviceToQuote($deviceConfigurationId, $quoteSetting->getDeviceMargin());
                     if ($newQuoteDeviceId)
                     {
-                        $this->_helper->redirector('edit-quote-device', null, null, array (
-                                'id' => $newQuoteDeviceId, 
+                        $this->_helper->redirector(null, null, null, array ( 
                                 'quoteId' => $this->_quoteId 
                         ));
                     }
