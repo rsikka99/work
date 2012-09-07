@@ -115,14 +115,17 @@ class Quotegen_QuotesettingController extends Zend_Controller_Action
                     if ($form->isValid($values))
                     {
                         // Set nulls where needed.
-                        foreach ( $values as &$value )
+                        foreach ( $values as $key => &$value )
                         {
-                            if (empty($value) && $value !== 0)
+                            if (empty($value))
                             {
-                                $value = new Zend_Db_Expr('NULL');
+                                // Only admin and service cost per page should be allowed to be set to 0?
+                                if (! ((float)$value === 0.0 && ($key === "adminCostPerPage" || $key === "serviceCostPerPage")))
+                                {
+                                    $value = new Zend_Db_Expr('NULL');
+                                }
                             }
                         }
-                        
                         // Update quoteSetting and message to comfirm
                         $quoteSetting->populate($values);
                         $quoteSetting->setId($quoteSettingId);
@@ -143,6 +146,7 @@ class Quotegen_QuotesettingController extends Zend_Controller_Action
                 }
                 catch ( Exception $e )
                 {
+                    My_Log::logException($e);
                     $this->_helper->flashMessenger(array (
                             'danger' => 'Error saving configuration.  Please try again.' 
                     ));
