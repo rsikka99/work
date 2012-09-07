@@ -1,3 +1,6 @@
+#Ignore the vendor folder
+vendor/
+
 #Ignore the application settings since we should have a template
 application/configs/application.ini
 
