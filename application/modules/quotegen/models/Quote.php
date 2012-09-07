@@ -1055,7 +1055,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         
         foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
-                $quantity += $quoteDeviceGroupDevice->getMonochromePagesQuantity() * $quoteDeviceGroupDevice->getQuantity();
+                $quantity += $quoteDeviceGroupDevice->getMonochromePagesQuantity(); /* * $quoteDeviceGroupDevice->getQuantity(); */
         
         return $quantity;
     }
@@ -1071,7 +1071,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         
         foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
-                $quantity += $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuantity();
+                $quantity += $quoteDeviceGroupDevice->getColorPagesQuantity(); /* * $quoteDeviceGroupDevice->getQuantity(); */
         
         return $quantity;
     }
@@ -1097,7 +1097,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
                 // Weight for each device
-                $monochromePageQuantity = $quoteDeviceGroupDevice->getMonochromePagesQuantity() * $quoteDeviceGroupDevice->getQuantity();
+                $monochromePageQuantity = $quoteDeviceGroupDevice->getMonochromePagesQuantity();
                 
                 // Total weight
                 $monochromeTotal += $monochromePageQuantity;
@@ -1136,7 +1136,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
-                $colorPageQuantity = $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuantity();
+                $colorPageQuantity = $quoteDeviceGroupDevice->getColorPagesQuantity();
                 $colorTotal += $colorPageQuantity;
                 $colorPageCostTotal += $colorPageQuantity * $quoteDeviceGroupDevice->getQuoteDevice()->getColorCostPerPage();
             }
@@ -1163,9 +1163,10 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
-                $totalMonochromePageCost += $quoteDeviceGroupDevice->getQuantity() * $quoteDeviceGroupDevice->getMonochromePagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->getMonochromeCostPerPage();
+                $totalMonochromePageCost +=  $quoteDeviceGroupDevice->getMonochromePagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->getMonochromeCostPerPage();
             }
         }
+        
         return $totalMonochromePageCost;
     }
 
@@ -1183,7 +1184,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
-                $totalColorPageCost += $quoteDeviceGroupDevice->getQuantity() * $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->getColorCostPerPage();
+                $totalColorPageCost += $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->getColorCostPerPage();
             }
         }
         return $totalColorPageCost;
