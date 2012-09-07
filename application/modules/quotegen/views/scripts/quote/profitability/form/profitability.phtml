@@ -1,5 +1,5 @@
 <?php 
-	/* @var $form Quotegen_Form_Quote_Group */
+	/* @var $form Quotegen_Form_Quote_Profitability */
 	$form = $this->element;
 	$quote = $form->getQuote();
 	$isLeased = $quote->isLeased();
@@ -37,16 +37,6 @@ $(function()
 	});
 });
 <?php $this->headScript()->captureEnd(); ?>
-<?php if ($isLeased) : ?>
-<div class="clearfix">
-    <div class="pull-right">
-            <h4>Lease Provider &amp; Term:</h4>
-            <?php echo $form->getElement('leasingSchemaId'); ?>
-            <?php echo $form->getElement('leasingSchemaTermId'); ?>
-    </div>
-</div>
-<hr>
-<?php endif; ?>
 <table class="table table-condensed table-striped table-bordered">
     <tr>
         <th>Item</th>
@@ -92,4 +82,14 @@ $(function()
         <?php endif; ?>
     </tr>
 </table>
+<?php if ($isLeased) : ?>
+<div class="clearfix">
+    <div class="pull-right">
+            <h4>Lease Term:
+            <?php echo $form->getElement('leasingSchemaId')->renderViewHelper(); ?>
+            <?php echo $form->getElement('leasingSchemaTermId')->renderViewHelper(); ?></h4>
+    </div>
+</div>
+<hr>
+<?php endif; ?>
 <?php echo $form->getDisplayGroup('actions')->render(); ?>
