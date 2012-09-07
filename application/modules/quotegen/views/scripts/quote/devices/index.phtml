@@ -4,18 +4,19 @@ $devices = $this->devices;
 $this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.phtml'));
 $this->headScript()->appendScript("$('i').popover();");
 ?>
+
 <div class="well">
+<div class='pull-right' style='padding: 7px;'>
+	<a href="<?php echo $this->url(array('action' => 'sync-all-device-configurations')); ?>" title="Sync all configurations with current information." class="btn btn-info "><i class="icon-refresh"></i> Sync All Devices</a>
+</div>
 
 <table class="table table-condensed table-bordered table-striped quoteDeviceTable">
 	<tr class="header-row">
     	<th colspan="12">
-            <div class='pull-right'>
+    		<div  class='pull-right'>
                 <?php echo $this->addFavoriteDeviceForm;?>
-            	<a href="<?php echo $this->url(array('action' => 'sync-all-device-configurations')); ?>" title="Sync all configurations with current information." class="btn btn-info "><i class="icon-refresh"></i> Sync All Devices</a>
             </div>
-    		<div>
                 <?php echo $this->addDeviceForm;?>
-            </div>
 		</th>
 	</tr>
     <tr class="header-row">
@@ -81,5 +82,6 @@ $this->headScript()->appendScript("$('i').popover();");
         <th></th>
     </tr>
 </table>
+
 	<?php echo $this->navigationForm; ?>
 </div>
