@@ -207,6 +207,42 @@ class Quotegen_Form_Quote_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
         ));
         $this->addElement($serviceCostPerPage);
         
+        $monochromeOverageRatePerPage = $this->createElement('text', 'monochromeOverageRatePerPage', array (
+                'label' => 'Monochrome Overate Rate Per Page:',
+                'class' => 'input-mini',
+                'validators' => array (
+                        'Float',
+                        array (
+                                'validator' => 'Between',
+                                'options' => array (
+                                        'min' => - 100,
+                                        'max' => 100,
+                                        'inclusive' => false
+                                )
+                        )
+                ),
+                'append' => sprintf("System Default: $%s", number_format($quoteSetting->getMonochromeOverageRatePerPage(),2))
+        ));
+        $this->addElement($monochromeOverageRatePerPage);
+        
+        $colorOverageRatePerPage = $this->createElement('text', 'colorOverageRatePerPage', array (
+                'label' => 'Color Overate Rate Per Page:',
+                'class' => 'input-mini',
+                'validators' => array (
+                        'Float',
+                        array (
+                                'validator' => 'Between',
+                                'options' => array (
+                                        'min' => - 100,
+                                        'max' => 100,
+                                        'inclusive' => false
+                                )
+                        )
+                ),
+                'append' => sprintf("System Default: $%s", number_format($quoteSetting->getColorOverageRatePerPage(),2))
+        ));
+        $this->addElement($colorOverageRatePerPage);
+        
         /**
          * ------------------------------------------------------------------
          * Pricing Configuration
@@ -244,7 +280,9 @@ class Quotegen_Form_Quote_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
                 'pageCoverageMonochrome', 
                 'pageCoverageColor', 
                 'adminCostPerPage', 
-                'serviceCostPerPage' 
+                'serviceCostPerPage', 
+                'monochromeOverageRatePerPage', 
+                'colorOverageRatePerPage' 
         ), 'pagesGroup', array (
                 'legend' => 'Pages' 
         ));

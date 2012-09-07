@@ -29,7 +29,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Inline
         /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
         foreach ( $this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
-          
+            
             /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
@@ -76,8 +76,8 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Inline
         // monochromePageMargin : Quotegen_Model_Quote->monochromePageMargin
         // monochromePageMargin is used to determine margin on pages for the entire quote
         $this->addElement('text', 'monochromePageMargin', array (
-                'value' => $this->_quote->getMonochromePageMargin(),
-                'required' => true,
+                'value' => $this->_quote->getMonochromePageMargin(), 
+                'required' => true, 
                 'class' => 'input-mini', 
                 'validators' => array (
                         'Float', 
@@ -95,8 +95,46 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Inline
         // colorPageMargin : Quotegen_Model_Quote->colorPageMargin
         // colorPageMargin is used to set a page margin for all of the color pages on the quote
         $this->addElement('text', 'colorPageMargin', array (
-                'value' => $this->_quote->getColorPageMargin(),
-                'required' => true,
+                'value' => $this->_quote->getColorPageMargin(), 
+                'required' => true, 
+                'class' => 'input-mini', 
+                'validators' => array (
+                        'Float', 
+                        array (
+                                'validator' => 'Between', 
+                                'options' => array (
+                                        'min' => - 100, 
+                                        'max' => 100, 
+                                        'inclusive' => false 
+                                ) 
+                        ) 
+                ) 
+        ));
+        
+        // monochromeOverageRatePerPage : Quotegen_Model_Quote->monochromeOverageratePerPage
+        // monochromeOverageRatePerPage is used to designate an overage cost per page for the quote
+        $this->addElement('text', 'monochromeOverageRatePerPage', array (
+                'value' => $this->_quote->getMonochromeOverageRatePerPage(),
+                'required' => true, 
+                'class' => 'input-mini', 
+                'validators' => array (
+                        'Float', 
+                        array (
+                                'validator' => 'Between', 
+                                'options' => array (
+                                        'min' => - 100, 
+                                        'max' => 100, 
+                                        'inclusive' => false 
+                                ) 
+                        ) 
+                ) 
+        ));
+        
+        // colorOverageRatePerPage : Quotegen_Model_Quote->colorOverageratePerPage
+        // colorOverageRatePerPage is used to designate an overage cost per page for the quote
+        $this->addElement('text', 'colorOverageRatePerPage', array (
+                'value' => $this->_quote->getColorOverageRatePerPage(), 
+                'required' => true, 
                 'class' => 'input-mini', 
                 'validators' => array (
                         'Float', 

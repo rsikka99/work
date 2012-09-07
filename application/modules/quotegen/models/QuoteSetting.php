@@ -149,9 +149,9 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
         if (isset($settings->adminCostPerPage) && ! is_null($settings->adminCostPerPage))
             $this->setAdminCostPerPage($settings->adminCostPerPage);
         if (isset($settings->monochromeOverageRatePerPage) && ! is_null($settings->monochromeOverageRatePerPage))
-            $this->setMonochromeOverageRatePerPage($params->monochromeOverageRatePerPage);
+            $this->setMonochromeOverageRatePerPage($settings->monochromeOverageRatePerPage);
         if (isset($settings->colorOverageRatePerPage) && ! is_null($settings->colorOverageRatePerPage))
-            $this->setColorOverageRatePerPage($params->colorOverageRatePerPage);
+            $this->setColorOverageRatePerPage($settings->colorOverageRatePerPage);
         
         if (isset($settings->pricingConfigId) && ! is_null($settings->pricingConfigId))
         {

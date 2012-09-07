@@ -97,6 +97,16 @@ class Quotegen_Quote_SettingsController extends Quotegen_Library_Controller_Quot
                         $formValues ['serviceCostPerPage'] = $quoteSetting->getServiceCostPerPage();
                     }
                     
+                    if (strlen($formValues ['monochromeOveragerRatePerPage']) === 0)
+                    {
+                        $formValues ['monochromeOveragerRatePerPage'] = $quoteSetting->getMonochromeOverageRatePerPage();
+                    }
+                    
+                    if (strlen($formValues ['colorOveragerRatePerPage']) === 0)
+                    {
+                        $formValues ['colorOveragerRatePerPage'] = $quoteSetting->getColorOverageRatePerPage();
+                    }
+                    
                     // Update current quote object and save new quote items to database
                     $this->_quote->populate($formValues);
                     

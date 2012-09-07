@@ -51,6 +51,15 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 {
                     $formValues ['serviceCostPerPage'] = $quoteSetting->getServiceCostPerPage();
                 }
+                if (strlen($formValues ['monochromeOverageRatePerPage']) === 0)
+                {
+                    $formValues ['monochromeOverageRatePerPage'] = $quoteSetting->getMonochromeOverageRatePerPage();
+                }
+                if (strlen($formValues ['colorOverageRatePerPage']) === 0)
+                {
+                    $formValues ['colorOverageRatePerPage'] = $quoteSetting->getColorOverageRatePerPage();
+                }
+                
                 // Update current quote object and save new quote items to database
                 $this->_quote->populate($formValues);
                 $this->_quote->setDateCreated(date('Y-m-d H:i:s'));
@@ -58,7 +67,6 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 $this->_quote->setUserId($this->_userId);
                 $this->_quote->setColorPageMargin($quoteSetting->getPageMargin());
                 $this->_quote->setMonochromePageMargin($quoteSetting->getPageMargin());
-                
                 $quoteId = $this->saveQuote();
                 
                 // Add a default group

@@ -131,6 +131,20 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     protected $_serviceCostPerPage;
     
     /**
+     * This is the monochrome overage per page rate for the quote
+     *
+     * @var float
+     */
+    protected $_monochromeOverageRatePerPage;
+    
+    /**
+     * This is the color overager rate per page for the quote
+     *
+     * @var float
+     */
+    protected $_colorOverageRatePerPage;
+    
+    /**
      * The default pricing config preference
      *
      * @var int
@@ -200,6 +214,10 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             $this->setPageCoverageColor($params->pageCoverageColor);
         if (isset($params->pageCoverageMonochrome) && ! is_null($params->pageCoverageMonochrome))
             $this->setPageCoverageMonochrome($params->pageCoverageMonochrome);
+        if (isset($params->monochromeOverageRatePerPage) && ! is_null($params->monochromeOverageRatePerPage))
+            $this->setMonochromeOverageRatePerPage($params->monochromeOverageRatePerPage);
+        if (isset($params->colorOverageRatePerPage) && ! is_null($params->colorOverageRatePerPage))
+            $this->setColorOverageRatePerPage($params->colorOverageRatePerPage);
         if (isset($params->pricingConfigId) && ! is_null($params->pricingConfigId))
             $this->setPricingConfigId($params->pricingConfigId);
         if (isset($params->quoteType) && ! is_null($params->quoteType))
@@ -222,10 +240,12 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                 'dateModified' => $this->getDateModified(), 
                 'quoteDate' => $this->getQuoteDate(), 
                 'userId' => $this->getUserId(), 
-                'clientDisplayName' => $this->getClientDisplayName(),
-                'adminCostPerPage' => $this->getAdminCostPerPage(),
-                'serviceCostPerPage' => $this->getServiceCostPerPage(),
-                'pageCoverageColor' => $this->getPageCoverageColor(), 
+                'clientDisplayName' => $this->getClientDisplayName(), 
+                'adminCostPerPage' => $this->getAdminCostPerPage(), 
+                'serviceCostPerPage' => $this->getServiceCostPerPage(), 
+                'pageCoverageColor' => $this->getPageCoverageColor(),
+                'monochromeOverageRatePerPage' => $this->getMonochromeOverageRatePerPage(),
+                'colorOverageRatePerPage' => $this->getColorOverageRatePerPage(),
                 'monochromePageMargin' => $this->getMonochromePageMargin(), 
                 'colorPageMargin' => $this->getColorPageMargin(), 
                 'pageCoverageMonochrome' => $this->getPageCoverageMonochrome(), 
@@ -725,6 +745,48 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function setServiceCostPerPage ($_serviceCostPerPage)
     {
         $this->_serviceCostPerPage = $_serviceCostPerPage;
+    }
+
+    /**
+     * Gets the monohchrome overage rate per page for the quote
+     *
+     * @return the $_monochromeOverageRatePerPage
+     */
+    public function getMonochromeOverageRatePerPage ()
+    {
+        return $this->_monochromeOverageRatePerPage;
+    }
+
+    /**
+     * Sets the monochrome overage rate per page for the quote
+     * 
+     * @param number $_monochromeOverageRatePerPage            
+     */
+    public function setMonochromeOverageRatePerPage ($_monochromeOverageRatePerPage)
+    {
+        $this->_monochromeOverageRatePerPage = $_monochromeOverageRatePerPage;
+        return $this;
+    }
+
+    /**
+     * Gets the color overage rate per page for the quote
+     *
+     * @return the $_colorOverageRatePerPage
+     */
+    public function getColorOverageRatePerPage ()
+    {
+        return $this->_colorOverageRatePerPage;
+    }
+
+    /**
+     * Sets the color overage rate per page for the quote
+     * 
+     * @param number $_colorOverageRatePerPage            
+     */
+    public function setColorOverageRatePerPage ($_colorOverageRatePerPage)
+    {
+        $this->_colorOverageRatePerPage = $_colorOverageRatePerPage;
+        return $this;
     }
 
     /**
