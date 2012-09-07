@@ -222,9 +222,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                 'dateModified' => $this->getDateModified(), 
                 'quoteDate' => $this->getQuoteDate(), 
                 'userId' => $this->getUserId(), 
-                'clientDisplayName' => $this->getClientDisplayName(),
-                'adminCostPerPage' => $this->getAdminCostPerPage(),
-                'serviceCostPerPage' => $this->getServiceCostPerPage(),
+                'clientDisplayName' => $this->getClientDisplayName(), 
+                'adminCostPerPage' => $this->getAdminCostPerPage(), 
+                'serviceCostPerPage' => $this->getServiceCostPerPage(), 
                 'pageCoverageColor' => $this->getPageCoverageColor(), 
                 'monochromePageMargin' => $this->getMonochromePageMargin(), 
                 'colorPageMargin' => $this->getColorPageMargin(), 
@@ -734,7 +734,19 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     
     /**
+     * Returns if a quote is being leased or not.
+     * 
+     * @return bool True if the quote is leased
+     */
+    public function isLeased ()
+    {
+        return ($this->getQuoteType() === Quotegen_Model_Quote::QUOTE_TYPE_LEASED);
+    }
+
+    /**
      * Calculates the total lease value for the quote
+     *
+     * @return number The total lease value
      */
     public function calculateTotalLeaseValue ()
     {

@@ -63,9 +63,55 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                                 $quoteDeviceHasChanges = true;
                             }
                             
+                            // Leased quote only
+                            if ($this->_quote->isLeased())
+                            {
+                                $residual = $form->getValue("residual_{$quoteDevice->getId()}");
+                                
+                                // Has the residual changed?
+                                if ((float)$quoteDevice->getResidual() !== (float)$residual)
+                                {
+                                    $quoteDevice->setResidual($residual);
+                                    $quoteDeviceHasChanges = true;
+                                }
+                            }
+                            
+                            // Save changes to the device if anything changed.
                             if ($quoteDeviceHasChanges)
                             {
+                                // Last minute check to ensure that residual will be never be higher than the package price
+                                if ($quoteDevice->getResidual() > 0 && $quoteDevice->getResidual() >= $quoteDevice->calculatePackagePrice())
+                                {
+                                    $quoteDevice->setResidual(0);
+                                }
                                 $quoteDeviceMapper->save($quoteDevice);
+                                $changesMade = true;
+                            }
+                        }
+                        
+                        // Only make changes if the quote is leased.
+                        if ($this->_quote->isLeased())
+                        {
+                            // Get the leasing schema id to have the form populate the select box options properly
+                            $leasingSchemaTerm = $this->_quote->getLeasingSchemaTerm();
+                            
+                            // Save the leasing schema term
+                            if (! $leasingSchemaTerm || (int)$form->getValue('leasingSchemaTermId') != (int)$leasingSchemaTerm->getId())
+                            {
+                                $quoteLeaseTerm = new Quotegen_Model_QuoteLeaseTerm();
+                                $quoteLeaseTerm->setQuoteId($this->_quote->getId());
+                                
+                                $quoteLeaseTerm->setLeasingSchemaTermId($form->getValue('leasingSchemaTermId'));
+                                
+                                if ($leasingSchemaTerm)
+                                {
+                                    Quotegen_Model_Mapper_QuoteLeaseTerm::getInstance()->save($quoteLeaseTerm);
+                                }
+                                else
+                                {
+                                    Quotegen_Model_Mapper_QuoteLeaseTerm::getInstance()->insert($quoteLeaseTerm);
+                                }
+                                
                                 $changesMade = true;
                             }
                         }

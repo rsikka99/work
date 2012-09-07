@@ -2,19 +2,63 @@
 	/* @var $form Quotegen_Form_Quote_Group */
 	$form = $this->element;
 	$quote = $form->getQuote();
-	$isLeased = ($quote->getQuoteType() === Quotegen_Model_Quote::QUOTE_TYPE_LEASED);
+	$isLeased = $quote->isLeased();
 ?>
-
-
+<?php $this->headScript()->captureStart(); ?>
+$(function() 
+{
+	$('#leasingSchema').change(function()
+	{
+		var value = this.value;
+		$('#leasingSchemaTermId').empty().attr('disabled', 'disabled');
+		if (value != 0)
+		{
+    		$.ajax(
+    		{
+    		    url:'<?php echo $this->url(array('format' => 'json', 'action' => 'leasing-schema-terms')); ?>/leasingSchemaId/' + value,
+    		    success: function(data) 
+    		    {
+    		         var terms = data['leasingSchemaTerms'];
+    		         var html = '';
+    		         var len = terms.length;
+    		         for (var i = 0; i < len; i++)
+    		         {
+    		             html += '<option value="' + terms[i].id + '">' + terms[i].months + ' Months</option>';
+    		         }
+    		         $('#leasingSchemaTermId').append(html);
+    		         $('#leasingSchemaTermId').removeAttr('disabled');
+    		    },
+    		    error: function (data) 
+    		    {
+                    alert('Error Occured!');
+    		    }
+    		});
+		}
+	});
+});
+<?php $this->headScript()->captureEnd(); ?>
+<?php if ($isLeased) : ?>
+<div class="clearfix">
+    <div class="pull-right">
+            <h4>Lease Provider &amp; Term:</h4>
+            <?php echo $form->getElement('leasingSchemaId'); ?>
+            <?php echo $form->getElement('leasingSchemaTermId'); ?>
+    </div>
+</div>
+<hr>
+<?php endif; ?>
 <table class="table table-condensed table-striped table-bordered">
     <tr>
         <th>Item</th>
         <th style="width: 75px;">Cost</th>
         <th style="width: 80px;">Markup ($)</th>
         <th style="width: 80px;">Margin (%)</th>
-        <th style="width: 100px;">Price Per Unit</th>
+        <th style="width: 65px;">Price Per Unit</th>
+        <?php if ($isLeased) : ?>
+        <th style="width: 80px;">Residual ($)</th>
+        <?php endif; ?>
         <th style="width: 60px;">Quantity</th>
-        <th style="width: 100px;">Price</th>
+        <th style="width: 80px;">Price</th>
         <?php if ($isLeased) : ?>
         <th style="width: 100px;">Monthly Subtotal</th>
         <?php endif; ?>
@@ -26,6 +70,9 @@
 		<td style="text-align: right;"><?php echo $form->getElement("packageMarkup_{$quoteDevice->getId()}"); ?></td>
 		<td style="text-align: right;"><?php echo $form->getElement("margin_{$quoteDevice->getId()}"); ?></td>
 		<td style="text-align: right;"><?php echo $this->currency( (float) $quoteDevice->calculatePackagePrice() ); ?></td>
+		<?php if ($isLeased) : ?>
+		<td style="text-align: right;"><?php echo $form->getElement("residual_{$quoteDevice->getId()}"); ?></td>
+		<?php endif; ?>
 		<td style="text-align: right;"><?php echo number_format($quoteDevice->calculateTotalQuantity()); ?></td>
 		<td style="text-align: right;"><?php echo $this->currency( (float) $quoteDevice->calculateTotalPrice() ); ?></td>
 		<?php if ($isLeased) : ?>
@@ -34,15 +81,15 @@
     </tr>
     <?php endforeach; ?>
     <tr>
+        <?php if ($isLeased) : ?>
+        <th colspan="7" style="text-align: right">Totals:</th>
+        <?php else : ?>
         <th colspan="6" style="text-align: right">Totals:</th>
+        <?php endif; ?>
         <th style="text-align: right;"><?php echo $this->currency((float) $quote->calculateTotalPrice() ); ?></th>
         <?php if ($isLeased) : ?>
         <th style="text-align: right;"><?php echo $this->currency((float) $quote->calculateTotalMonthlyLeasePrice() ); ?></th>
         <?php endif; ?>
     </tr>
 </table>
-
-
-
-
 <?php echo $form->getDisplayGroup('actions')->render(); ?>

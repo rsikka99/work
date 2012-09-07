@@ -683,7 +683,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateTotalPrice ()
     {
-        return $this->calculatePackagePrice() * $this->calculateTotalQuantity();
+        return ($this->calculatePackagePrice() - $this->getResidual()) * $this->calculateTotalQuantity();
     }
 
     /**
@@ -693,7 +693,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateMonthlyLeasePrice ()
     {
-        $packagePrice = $this->calculatePackagePrice();
+        $packagePrice = $this->calculatePackagePrice() - $this->getResidual();
         $leaseFactor = $this->getQuote()->getLeaseRate();
         
         return $packagePrice * $leaseFactor;
