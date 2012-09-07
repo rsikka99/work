@@ -66,7 +66,6 @@ $section->addTextBreak();
 $imageTable = $section->addTable();
 $imageTable->addRow();
 $cell = $imageTable->addCell(9028, $this->styles->tables->singleimage->cell1);
-// TODO: Get image path
 $cell->addImage($this->proposal->Graphs [0]);
 
 // Textbreak fix to ensure the tables don't merge into each other
@@ -74,7 +73,7 @@ $section->addTextBreak();
 $savingsTable = $section->addTable($this->styles->tables->savings->tablestyle);
 $savingsTable->addRow(720);
 $cell = $savingsTable->addCell(9028, $this->styles->tables->savings->cell1);
-// TODO: Hardcoded variable
+
 $textrun = $cell->createTextRun('savingsParagraph');
 $textrun->addText($this->translate('Our PrintIQ® program could provide you with annual savings of up to '), 'savingsFont');
 $textrun->addText('$' . number_format($this->proposal->PrintIQSavings), 'savingsAmountFont');

@@ -101,7 +101,6 @@ class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
      */
     public function createAction ()
     {
-        // TODO: createAction
         $request = $this->getRequest();
         $form = new Quotegen_Form_DeviceConfiguration();
         

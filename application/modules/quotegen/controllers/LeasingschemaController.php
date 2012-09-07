@@ -483,12 +483,10 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                 // Get Rates for Term
                 $leasingSchemaRatesMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
                 
-                // FIXME: Make a function to fetch rates for a term, and have the term model use it to return them.
                 $leasingSchemaRate = $leasingSchemaRatesMapper->fetchAll(array (
                         'leasingSchemaTermId = ?' => $termId 
                 ));
                 
-                // FIXME: For populating the form, you could pass it in the term id and let it use the mapper to fetch the term model.
                 foreach ( $leasingSchemaRate as $rate )
                 {
                     $rangeId = $rate->getLeasingSchemaRangeId();
@@ -618,7 +616,6 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
         // Get form and pass terms for this schema
         $leasingSchemaTerms = $leasingSchema->getTerms();
         
-        // FIXME: Terms can be access from the form itself, although this is the lowest priority
         $form = new Quotegen_Form_LeasingSchemaRange($leasingSchemaTerms);
         
         // Postback
@@ -746,7 +743,6 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
         // Get form and pass terms for this schema
         $leasingSchemaTerms = $leasingSchema->getTerms();
         
-        // FIXME: Terms can be access from the form itself, although this is the lowest priority
         $form = new Quotegen_Form_LeasingSchemaRange($leasingSchemaTerms);
         
         // Postback
@@ -871,7 +867,6 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                         'leasingSchemaRangeId = ?' => $rangeId 
                 ));
                 
-                // FIXME: You could populate these elements by using the model within the mapper.
                 foreach ( $leasingSchemaRate as $rate )
                 {
                     $termId = $rate->getLeasingSchemaTermId();

@@ -74,7 +74,6 @@ class Proposalgen_Service_ReportSettings
                     'reportDate' => $reportDate 
             ));
             
-            // FIXME: This shouldn't be here
             $this->_form->setDecorators(array (
                     array (
                             'ViewScript', 

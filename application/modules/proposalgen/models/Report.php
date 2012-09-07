@@ -29,7 +29,6 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     protected $_customerCompanyName;
     
     /**
-     * FIXME: What does this do?
      * Whether or not the user has overriden pricing?
      *
      * @var boolean
@@ -65,7 +64,6 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     protected $_lastModified;
     
     /**
-     * FIXME: Should this not be last modified?
      * The mysql date this report was made for
      *
      * @var String

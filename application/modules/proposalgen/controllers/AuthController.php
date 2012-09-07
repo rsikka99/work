@@ -33,7 +33,7 @@ class Proposalgen_AuthController extends Zend_Controller_Action
 
     /**
      * Instantiates an authentication adapter
-     * 
+     *
      * @return Zend_Auth_Adapter_DbTable
      */
     protected function getAuthAdapter ()
@@ -51,8 +51,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
      * The login action authenticates a user with our system.
      * After a successful authentication we should send them back to the page
      * that they were trying to access.
-     *
-     * TODO: Make a redirect back to the page they came from.
      */
     public function loginAction ()
     {
@@ -134,8 +132,7 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                     }
                     catch ( Exception $e )
                     {
-                        // TODO insert error handling for failure to grab
-                        // privledges
+                        My_Log::logException($e);
                     }
                     
                     $authStorage = $auth->getStorage();
@@ -282,8 +279,7 @@ class Proposalgen_AuthController extends Zend_Controller_Action
                     }
                     catch ( Exception $e )
                     {
-                        // TODO insert error handling for failure to grab
-                        // privledges
+                        My_Log::logException($e);
                     }
                     
                     // write the authentication token to storage
@@ -615,7 +611,6 @@ class Proposalgen_AuthController extends Zend_Controller_Action
             }
         }
         
-        // TODO: We should probably make this page display an error if it is not valid instead of sending them on their way
         // Send them on their way if they aren't supposed to be here
         if (! $validVerification)
         {

@@ -55,17 +55,6 @@ class Admin_Form_User extends EasyBib_Form
         // Validators
         $datetimeValidator = new My_Validate_DateTime();
         
-        // Add CRSF checks to be annoying, but it prevents cross site forgery.
-        // TODO: Disabled because of unit testing. Find work around
-
-
-//         $this->addElement('hash', 'crsf_field', array (
-//                 'errorMessages' => array (
-//                         'Identical' => 'Form has timed out (probably), please submit the form again.' 
-//                 ) 
-//         ));
-        
-
         if ($this->getFormMode() !== self::MODE_USER_EDIT)
         {
             $this->addElement('text', 'username', array (

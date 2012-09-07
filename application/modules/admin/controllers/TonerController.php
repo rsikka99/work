@@ -62,7 +62,6 @@ class Admin_TonerController extends Zend_Controller_Action
                 {
                     $mapper->delete($toner);
                     
-                    // TODO: Show deletion of options relations
                     $this->_helper->flashMessenger(array (
                             'success' => "The toner was deleted successfully." 
                     ));

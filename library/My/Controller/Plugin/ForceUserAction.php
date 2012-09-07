@@ -23,10 +23,10 @@ class My_Controller_Plugin_ForceUserAction extends Zend_Controller_Plugin_Abstra
                 }
             }
             
-            // TODO: Add elseif for eula
+            // Add elseif for eula?
             
 
-            // TODO: Add elseif for resetPasswordRequest (forgotpassword)
+            // Add elseif for resetPasswordRequest (forgotpassword)?
         }
     }
 }

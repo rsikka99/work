@@ -12,8 +12,10 @@ class Quotegen_Model_Mapper_Quote extends My_Model_Mapper_Abstract
     
     /*
      * Define the primary key of the model association
-    */
+     */
     public $col_id = 'id';
+    public $col_userId = 'userId';
+    public $col_clientId = 'clientId';
 
     /**
      * Gets an instance of the mapper
@@ -193,6 +195,19 @@ class Quotegen_Model_Mapper_Quote extends My_Model_Mapper_Abstract
             $entries [] = $object;
         }
         return $entries;
+    }
+
+    /**
+     * Fetches all quotes that belong to a user
+     * 
+     * @param int $userId            
+     * @return multitype:Quotegen_Model_Quote
+     */
+    public function fetchAllForUser ($userId)
+    {
+        return $this->fetchAll(array (
+                "{$this->col_userId} = ?" => $userId 
+        ));
     }
 
     /**

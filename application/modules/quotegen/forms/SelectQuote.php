@@ -2,6 +2,18 @@
 
 class Quotegen_Form_SelectQuote extends EasyBib_Form
 {
+    /**
+     * The user id to get quotes for.
+     *
+     * @var int
+     */
+    protected $_userId;
+
+    public function __construct ($userId, $options = null)
+    {
+        $this->_userId = $userId;
+        parent::__construct($options);
+    }
 
     public function init ()
     {
@@ -25,7 +37,7 @@ class Quotegen_Form_SelectQuote extends EasyBib_Form
         $quoteList = array ();
         $quoteListValidator = array ();
         /* @var $quote Quotegen_Model_Quote */
-        foreach ( Quotegen_Model_Mapper_Quote::getInstance()->fetchAll() as $quote )
+        foreach ( Quotegen_Model_Mapper_Quote::getInstance()->fetchAllForUser($this->_userId) as $quote )
         {
             $clientName = $quote->getClient()->getName();
             $dateCreated = $quote->getDateCreated();
@@ -47,7 +59,6 @@ class Quotegen_Form_SelectQuote extends EasyBib_Form
                 'label' => 'Continue' 
         ));
         
-
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP);
     }
 }

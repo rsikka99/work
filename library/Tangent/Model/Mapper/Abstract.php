@@ -70,7 +70,6 @@ abstract class Tangent_Model_Mapper_Abstract
         }
         catch ( Exception $e )
         {
-            // TODO This really needs a better generic message
             throw new Exception("Failed finding the specified row in " . get_class($this), 0, $e);
         }
         return $object;

@@ -40,7 +40,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                     $addDeviceToGroupSubform = $form->getSubForm('addDeviceToGroup');
                     if ($addGroupSubform->isValid($values))
                     {
-                        // TODO: Add the new group
+                        // Add the new group
                         $quoteDeviceGroup = new Quotegen_Model_QuoteDeviceGroup();
                         $quoteDeviceGroup->setQuoteId($this->_quoteId);
                         $quoteDeviceGroup->setName($addGroupSubform->getValue('name'));
@@ -173,7 +173,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                 else
                 {
                     
-                    // TODO: Switch this to validate subforms instead?
+                    // Check to see if our device quantity subform is valid
                     if ($form->getSubForm('deviceQuantity')->isValid($values))
                     {
                         $db = Zend_Db_Table::getDefaultAdapter();

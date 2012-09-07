@@ -131,7 +131,6 @@ class Proposalgen_ReportController extends My_Controller_Report
      */
     public function indexAction ()
     {
-        
         $this->view->headScript()->prependFile($this->view->baseUrl("/scripts/htmlReport.js"));
         //$this->_helper->layout->setLayout('newreport');
         $this->view->formTitle = "Report Summary";
@@ -180,19 +179,19 @@ class Proposalgen_ReportController extends My_Controller_Report
                 switch ($format)
                 {
                     case "docx" :
-                        // FIXME: Add DOCX Logic here
+                        // Add DOCX Logic here
                         break;
                     case "pdf" :
-                        // FIXME: Add PDF Logic here
+                        // Add PDF Logic here
                         $proposal->setGraphs($this->cachePNGImages($proposal->getGraphs()));
                         break;
                     case "html" :
                     default :
-                        // FIXME: Add HTML Logic here
+                        // Add HTML Logic here
                         break;
                 }
                 
-                // FIXME: Remove this once formats are implemented properly
+                // If we're in a pdf, set cache the google chart images
                 if ($this->view->isPDF)
                 {
                     $proposal->setGraphs($this->cachePNGImages($proposal->getGraphs()));

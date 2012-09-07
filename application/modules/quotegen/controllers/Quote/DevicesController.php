@@ -178,7 +178,6 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         // Get the device
         $device = $quoteDevice->getDevice();
         
-        // TODO: Let them edit the quote device
         // If the device doesn't exist, we send them back to the normal page
         if (! $device)
         {

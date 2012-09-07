@@ -111,7 +111,6 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             if ($toner_id > 0)
                             {
                                 // get color and type
-                                // TODO: Fix up toners mapper... getting errors in find
                                 // $curToner = Proposalgen_Model_Mapper_Toner::getInstance()->find( (int)$toner_id );
 
                                 // get color and type from $key
@@ -137,7 +136,6 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                                 
                                 if ( $curToner )
                                 {
-                                    // TODO: Use once toners mapper has been updated
                                     // $curColor = strtolower($curToner->getColorName());
                                     // $curType = strtolower($curToner->getPartType());
                                     

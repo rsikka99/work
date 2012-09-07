@@ -2,13 +2,10 @@
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
 
-// TODO: Save file to $this->savePath
-
 $fh = fopen($this->savePath, "w+");
 
 
 // Please note that is is a hacked way around things. This should be done more properly with PHPExcel or fputcsv.
-// FIXME: This really defeats the purpose of a CSV
 fputs($fh, "INCLUDED DEVICES:\n\n");
 fputs($fh, $this->appendix_titles);
 fputs($fh, "\n");

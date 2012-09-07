@@ -94,7 +94,6 @@ echo $this->pageStart;
     					<td class="red">$<?php echo number_format(($device->getMonthlyRate() * 12) - ($replacementDevice->getMonthlyRate() * 12)); ?></td>
     				</tr>
     				<?php
-    				// TODO: This should not have caclulations in a view script. Leaving it in because it works for now.
                             $replacementSavings += ($device->getMonthlyRate() * 12) - ($replacementDevice->getMonthlyRate() * 12);
     					    $currentCost += $device->getMonthlyRate() * 12;
     					    $printIQCost += $replacementDevice->getMonthlyRate() * 12;

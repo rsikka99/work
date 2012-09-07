@@ -40,7 +40,7 @@ class Default_InfoController extends Zend_Controller_Action
      */
     public function aboutAction ()
     {
-        // TODO: Move these all into view helpers!
+        // These things could be moved into a view helper....
         $this->view->buildinfo = $this->getBuildInfo()->build;
         $this->view->changelog = $this->getChangelog();
         $this->view->databaseVersion = $this->getDatabaseVersion();
@@ -89,10 +89,10 @@ class Default_InfoController extends Zend_Controller_Action
             }
         }
         
-        // TODO: Check to see if installation has a git
-        // repository, and get the checked out commit hash if it is.
-        
-
+        /*
+         * We could check to see if we have a git repository, and display related information if that's the case. This
+         * could be used to show things during development and testing.
+         */
         return $config;
     }
 
@@ -103,7 +103,7 @@ class Default_InfoController extends Zend_Controller_Action
      */
     public function getChangelog ()
     {
-        // TODO: Make this get module specific changelog details
+        // We could fetch changelogs on a module basis if we wanted to...
         $file = APPLICATION_PATH . "/configs/changelog.txt";
         $text = 'Not Available';
         
