@@ -95,7 +95,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
     public function existingQuoteAction ()
     {
         $request = $this->getRequest();
-        $existingQuoteForm = new Quotegen_Form_SelectQuote();
+        $existingQuoteForm = new Quotegen_Form_SelectQuote($this->_userId);
         
         if ($request->isPost())
         {
