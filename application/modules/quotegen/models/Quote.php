@@ -1101,7 +1101,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                 $monochromeTotal += $monochromePageQuantity;
                 
                 // Total Cost for pages
-                $quoteDeviceGroupDeviceCost += $monochromePageQuantity * $quoteDeviceGroupDevice->getQuoteDevice()->getMonochromeCostPerPage();
+                $quoteDeviceGroupDeviceCost += $monochromePageQuantity * $quoteDeviceGroupDevice->getQuoteDevice()->calculateMonochromeCostPerPage();
             }
         }
         
@@ -1136,7 +1136,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             {
                 $colorPageQuantity = $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuantity();
                 $colorTotal += $colorPageQuantity;
-                $colorPageCostTotal += $colorPageQuantity * $quoteDeviceGroupDevice->getQuoteDevice()->getColorCostPerPage();
+                $colorPageCostTotal += $colorPageQuantity * $quoteDeviceGroupDevice->getQuoteDevice()->calculateColorCostPerPage();
             }
         }
         
@@ -1161,7 +1161,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
-                $totalMonochromePageCost += $quoteDeviceGroupDevice->getQuantity() * $quoteDeviceGroupDevice->getMonochromePagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->getMonochromeCostPerPage();
+                $totalMonochromePageCost += $quoteDeviceGroupDevice->getQuantity() * $quoteDeviceGroupDevice->getMonochromePagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->calculateMonochromeCostPerPage();
             }
         }
         return $totalMonochromePageCost;
@@ -1180,7 +1180,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         {
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
-                $totalColorPageCost += $quoteDeviceGroupDevice->getQuantity() * $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->getColorCostPerPage();
+                $totalColorPageCost += $quoteDeviceGroupDevice->getQuantity() * $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->calculateColorCostPerPage();
             }
         }
         return $totalColorPageCost;

@@ -762,7 +762,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @return number the cost per page for color
      */
-    public function getColorCostPerPage ()
+    public function calculateColorCostPerPage ()
     {
         $getCompCostPerPage = false;
         $costPerPageColor = 0;
@@ -794,7 +794,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @return number the cost per page for monochrome
      */
-    public function getMonochromeCostPerPage ()
+    public function calculateMonochromeCostPerPage ()
     {
         $getCompCostPerPage = false;
         $costPerPageMonochrome = 0;
