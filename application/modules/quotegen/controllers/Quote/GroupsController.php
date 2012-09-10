@@ -46,7 +46,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                         $quoteDeviceGroup->setName($addGroupSubform->getValue('name'));
                         
                         $quoteDeviceGroup->setIsDefault(0);
-                        $quoteDeviceGroup->setGroupPages(0);
+//                         $quoteDeviceGroup->setGroupPages(0);
                         
                         Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->insert($quoteDeviceGroup);
                         

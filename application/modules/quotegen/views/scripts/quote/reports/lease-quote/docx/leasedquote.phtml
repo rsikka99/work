@@ -54,24 +54,24 @@ foreach ( $this->quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
             $table->addCell($tcStyle->col4Width, $tcStyle->option->cell4->cellStyle)->addText();
         }
         
-        // Show page information in the rows, one for black and the other for.. you got it... color
-        $table->addRow($tcStyle->pages->rowheight);
-        $table->addCell($tcStyle->col1Width, $tcStyle->pages->cell1->cellStyle)->addText($this->translate('Monochrome'), $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
-        $table->addCell($tcStyle->col2Width, $tcStyle->pages->cell2->cellStyle)->addText($this->translate(), $tcStyle->pages->cell2->fontStyle, $tcStyle->pages->cell2->paragraphStyle);
-        $table->addCell($tcStyle->col3width, $tcStyle->pages->cell3->cellStyle)->addText($this->translate('Pages Included'), $tcStyle->pages->cell3->fontStyle, $tcStyle->pages->cell3->paragraphStyle);
-        $table->addCell($tcStyle->col4Width, $tcStyle->pages->cell4->cellStyle)->addText(number_format($quoteDeviceGroupDevice->getMonochromePagesQuantity()), $tcStyle->pages->cell4->fontStyle, $tcStyle->pages->cell4->paragraphStyle);
-        
-        $table->addRow($tcStyle->pages->rowheight);
-        $table->addCell($tcStyle->col1Width, $tcStyle->pages->cell1->cellStyle)->addText($this->translate('Color'), $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
-        $table->addCell($tcStyle->col2Width, $tcStyle->pages->cell2->cellStyle)->addText();
-        $table->addCell($tcStyle->col3Width, $tcStyle->pages->cell3->cellStyle)->addText($this->translate('Pages Included'), $tcStyle->pages->cell3->fontStyle, $tcStyle->pages->cell3->paragraphStyle);
-        $table->addCell($tcStyle->col4Width, $tcStyle->pages->cell4->cellStyle)->addText(number_format($quoteDeviceGroupDevice->getMonochromePagesQuantity()), $tcStyle->pages->cell4->fontStyle, $tcStyle->pages->cell4->paragraphStyle);
     }
+        // Show page information in the rows, one for black and the other for.. you got it... color
+    $table->addRow($tcStyle->pages->rowheight);
+    $table->addCell($tcStyle->col1Width, $tcStyle->pages->cell1->cellStyle)->addText($this->translate('Monochrome'), $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
+    $table->addCell($tcStyle->col2Width, $tcStyle->pages->cell2->cellStyle)->addText();
+    $table->addCell($tcStyle->col3width, $tcStyle->pages->cell3->cellStyle)->addText($this->translate('Pages Included'), $tcStyle->pages->cell3->fontStyle, $tcStyle->pages->cell3->paragraphStyle);
+    $table->addCell($tcStyle->col4Width, $tcStyle->pages->cell4->cellStyle)->addText(number_format($quoteDeviceGroup->calculateTotalMonochromePages()), $tcStyle->pages->cell4->fontStyle, $tcStyle->pages->cell4->paragraphStyle);
+    
+    $table->addRow($tcStyle->pages->rowheight);
+    $table->addCell($tcStyle->col1Width, $tcStyle->pages->cell1->cellStyle)->addText($this->translate('Color'), $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
+    $table->addCell($tcStyle->col2Width, $tcStyle->pages->cell2->cellStyle)->addText();
+    $table->addCell($tcStyle->col3Width, $tcStyle->pages->cell3->cellStyle)->addText($this->translate('Pages Included'), $tcStyle->pages->cell3->fontStyle, $tcStyle->pages->cell3->paragraphStyle);
+    $table->addCell($tcStyle->col4Width, $tcStyle->pages->cell4->cellStyle)->addText(number_format($quoteDeviceGroup->calculateTotalColorPages()), $tcStyle->pages->cell4->fontStyle, $tcStyle->pages->cell4->paragraphStyle);
     
     // Show subtotal line
     $table->addRow($tcStyle->subtotal->rowheight);
     $table->addCell($tcStyle->cell1Width, $tcStyle->subtotal->cell1->cellStyle)->addText();
-    $table->addCell($tcStyle->span23Width, $tcStyle->subtotal->cell2->cellStyle, 2)->addText($this->translate('Subtotal for group ' . $groupCount), $tcStyle->subtotal->cell2->fontStyle, $tcStyle->subtotal->cell2->paragraphStyle);
+    $table->addCell($tcStyle->span23Width, $tcStyle->subtotal->cell2->cellStyle, 2)->addText($this->translate('Subtotal for group ' . $quoteDeviceGroup->getName()), $tcStyle->subtotal->cell2->fontStyle, $tcStyle->subtotal->cell2->paragraphStyle);
     $table->addCell($tcStyle->cell4Width, $tcStyle->subtotal->cell3->cellStyle)->addText($this->currency($quoteDeviceGroup->calculateMonthlyLeasePrice()), $tcStyle->subtotal->cell3->fontStyle, $tcStyle->subtotal->cell3->paragraphStyle);
     
     $groupCount ++;

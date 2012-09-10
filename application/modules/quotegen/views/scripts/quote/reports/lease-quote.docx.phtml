@@ -652,7 +652,10 @@ $leaseQuoteTable = (object)array (
                                 'name' => 'Calibri', 
                                 'size' => 11 
                         ), 
-                        "paragraphStyle" => 'nospacing' 
+                        "paragraphStyle" => array (
+                                'nospacing' => true, 
+                                'spaceAfter' => 0 
+                        ) 
                 ), 
                 "cell2" => (object)array (
                         "cellStyle" => array (
@@ -668,7 +671,8 @@ $leaseQuoteTable = (object)array (
                                 'size' => 11 
                         ), 
                         "paragraphStyle" => array (
-                                'nospacing' => true 
+                                'nospacing' => true, 
+                                'spaceAfter' => 0 
                         ) 
                 ), 
                 "cell3" => (object)array (
@@ -684,7 +688,8 @@ $leaseQuoteTable = (object)array (
                                 'size' => 11 
                         ), 
                         "paragraphStyle" => array (
-                                'nospacing' => true 
+                                'nospacing' => true, 
+                                'spaceAfter' => 0 
                         ) 
                 ), 
                 "cell4" => (object)array (
@@ -701,7 +706,8 @@ $leaseQuoteTable = (object)array (
                         ), 
                         "paragraphStyle" => array (
                                 'nospacing' => true, 
-                                'align' => 'right' 
+                                'align' => 'right', 
+                                'spaceAfter' => 0 
                         ) 
                 ) 
         ) 
