@@ -177,6 +177,27 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     }
 
     /**
+     * Gets the group pages flag
+     *
+     * @return number
+     */
+    public function getGroupPages ()
+    {
+        return $this->_groupPages;
+    }
+
+    /**
+     * Sets the group pages flag
+     *
+     * @param number $_groupPages            
+     */
+    public function setGroupPages ($_groupPages)
+    {
+        $this->_groupPages = $_groupPages;
+        return $this;
+    }
+
+    /**
      * ****************************************************************************************************************************************
      * AUTO FETCH GETTERS AND SETTERS FOR RELATED MODELS
      * ****************************************************************************************************************************************
