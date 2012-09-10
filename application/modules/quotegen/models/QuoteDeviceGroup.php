@@ -136,6 +136,52 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     }
 
     /**
+     * Gets the name
+     *
+     * @return string
+     */
+    public function getName ()
+    {
+        return $this->_name;
+    }
+
+    /**
+     * Sets the new name
+     *
+     * @param string $_name
+     *            The new name
+     */
+    public function setName ($_name)
+    {
+        $this->_name = $_name;
+    }
+
+    /**
+     * Gets the isDefault flag
+     *
+     * @return boolean
+     */
+    public function getIsDefault ()
+    {
+        return $this->_isDefault;
+    }
+
+    /**
+     * Sets the isDefault flag
+     *
+     * @param boolean $_isDefault            
+     */
+    public function setIsDefault ($_isDefault)
+    {
+        $this->_isDefault = $_isDefault;
+    }
+
+    /**
+     * ****************************************************************************************************************************************
+     * AUTO FETCH GETTERS AND SETTERS FOR RELATED MODELS
+     * ****************************************************************************************************************************************
+     */
+    /**
      * Gets the quote
      *
      * @return Quotegen_Model_Quote
@@ -187,6 +233,11 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     }
 
     /**
+     * ****************************************************************************************************************************************
+     * HARDWARE CALCULATIONS
+     * ****************************************************************************************************************************************
+     */
+    /**
      * Calculates the sub total for the group's devices.
      * This is the number used for the purchase total and the number that will be used to choose a leasing factor.
      *
@@ -209,48 +260,11 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     }
 
     /**
-     * Gets the quantity of monochrome pages for the group
-     *
-     * @return the quantity of monochrome pages
-     */
-    public function getGroupPagesMonochrome ()
-    {
-        $pagesMonochrome = 0;
-        
-        /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
-        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
-        {
-            $pagesMonochrome += $quoteDeviceGroupDevice->getMonochromePagesQuantity();
-        }
-        
-        return $pagesMonochrome;
-    }
-
-    /**
-     * Gets the quantity of color pages for the group
-     *
-     * @return the quantity of color pages
-     */
-    
-    public function getGroupPagesColor ()
-    {
-        $pagesColor = 0;
-        
-        /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
-        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
-        {
-            $pagesColor += $quoteDeviceGroupDevice->getColorPagesQuantity();
-        }
-        
-        return $pagesColor;
-    }
-
-    /**
      * Calculates the lease sub total for the quote's devices.
      *
      * @return number The sub total
      */
-    public function calculateGroupMonthlyLeasePrice ()
+    public function calculateMonthlyLeasePrice ()
     {
         $subtotal = 0;
         
@@ -264,9 +278,9 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
             }
         }
         
-        // TODO: This needs pages included ?
+        // Add Pages
+        $subtotal += $this->calculateTotalPageRevenue() * $this->getQuote()->getLeaseRate();
         
-
         return $subtotal;
     }
 
@@ -275,19 +289,19 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
      *
      * @return number The sub total
      */
-    public function calculateGroupLeaseValue ()
+    public function calculateLeaseValue ()
     {
         $subtotal = 0;
         
         /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
         foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
         {
-            $subtotal += $quoteDeviceGroupDevice->getQuoteDevice()->calculateLeaseValue();
+            $subtotal += $quoteDeviceGroupDevice->getQuoteDevice()->calculateTotalLeaseValue();
         }
         
-        // TODO: Pages?
+        // Add Pages
+        $subtotal += $this->calculateTotalPageRevenue();
         
-
         return $subtotal;
     }
 
@@ -329,70 +343,6 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     }
 
     /**
-     *
-     * @return the $_name
-     */
-    public function getName ()
-    {
-        return $this->_name;
-    }
-
-    /**
-     *
-     * @param string $_name            
-     */
-    public function setName ($_name)
-    {
-        $this->_name = $_name;
-    }
-
-    /**
-     *
-     * @return the $_isDefault
-     */
-    public function getIsDefault ()
-    {
-        return $this->_isDefault;
-    }
-
-    /**
-     *
-     * @param number $_isDefault            
-     */
-    public function setIsDefault ($_isDefault)
-    {
-        $this->_isDefault = $_isDefault;
-    }
-
-    /**
-     *
-     * @return the $_groupPages
-     */
-    public function getGroupPages ()
-    {
-        return $this->_groupPages;
-    }
-
-    /**
-     *
-     * @param number $_groupPages            
-     */
-    public function setGroupPages ($_groupPages)
-    {
-        $this->_groupPages = $_groupPages;
-    }
-
-    /**
-     * ********************************************************
-     * Calculations for the quote device group
-     *
-     * Calculations here use the quote and quote devices related
-     * to this group.
-     *
-     * *********************************************************
-     */
-    
-    /**
      * Calculates the sub total (package price * quantity)
      *
      * @return number The sub total
@@ -411,5 +361,148 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         }
         
         return $subTotal;
+    }
+
+    /**
+     * ****************************************************************************************************************************************
+     * PAGE CALCULATIONS
+     * ****************************************************************************************************************************************
+     */
+    /**
+     * Gets the quantity of monochrome pages for the group
+     *
+     * @return the quantity of monochrome pages
+     */
+    public function calculateTotalMonochromePages ()
+    {
+        $pagesMonochrome = 0;
+        
+        /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+        {
+            $pagesMonochrome += $quoteDeviceGroupDevice->getMonochromePagesQuantity();
+        }
+        
+        return $pagesMonochrome;
+    }
+
+    /**
+     * Calcuates the total monochrome page cost for the group
+     *
+     * @return float The total cost
+     */
+    public function calculateMonochromePageCost ()
+    {
+        $cost = 0;
+        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+        {
+            $cost += $quoteDeviceGroupDevice->getMonochromePagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->calculateMonochromeCostPerPage();
+        }
+        
+        return $cost;
+    }
+
+    /**
+     * Calcuates the revenue for monochrome pages
+     *
+     * @return float The total revenue for monochrome pages
+     */
+    public function calculateMonochromePageRevenue ()
+    {
+        return Tangent_Accounting::applyMargin($this->calculateMonochromePageCost(), $this->getQuote()->getMonochromePageMargin());
+    }
+
+    /**
+     * Gets the profit for monochrome pages for the quote
+     *
+     * @return number the total quote profit for monochrome
+     */
+    public function calculateMonochromePageProfit ()
+    {
+        return $this->calculateMonochromePageRevenue() - $this->calculateMonochromePageCost();
+    }
+
+    /**
+     * Gets the quantity of color pages for the group
+     *
+     * @return the quantity of color pages
+     */
+    public function calculateTotalColorPages ()
+    {
+        $pagesColor = 0;
+        
+        /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+        {
+            $pagesColor += $quoteDeviceGroupDevice->getColorPagesQuantity();
+        }
+        
+        return $pagesColor;
+    }
+
+    /**
+     * Calcuates the total color page cost for the group
+     *
+     * @return float The total cost
+     */
+    public function calculateColorPageCost ()
+    {
+        $cost = 0;
+        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+        {
+            $cost += $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->calculateColorCostPerPage();
+        }
+        
+        return $cost;
+    }
+
+    /**
+     * Calcuates the revenue for color pages
+     *
+     * @return float The total revenue for color pages
+     */
+    public function calculateColorPageRevenue ()
+    {
+        return Tangent_Accounting::applyMargin($this->calculateColorPageCost(), $this->getQuote()->getColorPageMargin());
+    }
+
+    /**
+     * Gets the profit for color pages for the quote
+     *
+     * @return float the total quote profit for color
+     */
+    public function calculateColorPageProfit ()
+    {
+        return $this->calculateColorPageRevenue() - $this->calculateColorPageCost();
+    }
+
+    /**
+     * Calculates the total page cost
+     *
+     * @return number
+     */
+    public function calculateTotalPageCost ()
+    {
+        return $this->calculateMonochromePageCost() + $this->calculateColorPageCost();
+    }
+
+    /**
+     * Calculates the total revenue for pages
+     *
+     * @return number
+     */
+    public function calculateTotalPageRevenue ()
+    {
+        return $this->calculateMonochromePageRevenue() + $this->calculateColorPageRevenue();
+    }
+
+    /**
+     * Calculates the total profit for pages
+     *
+     * @return number
+     */
+    public function calculateTotalPageProfit ()
+    {
+        return $this->calculateMonochromePageProfit() + $this->calculateColorPageProfit();
     }
 }
