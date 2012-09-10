@@ -18,6 +18,25 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
 
     public function init ()
     {
+        $inlineDecorators = array (
+                array (
+                        'FieldSize' 
+                ), 
+                array (
+                        'ViewHelper' 
+                ), 
+                array (
+                        'Description', 
+                        array (
+                                'tag' => 'p', 
+                                'class' => 'help-block' 
+                        ) 
+                ), 
+                array (
+                        'Addon' 
+                ) 
+        );
+        
         // Set the method for the display form to POST
         $this->setMethod('POST');
         $this->_addClassNames('form-center-actions');
@@ -40,6 +59,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
                         'required' => true, 
                         'class' => 'span1', 
                         'value' => $quoteDeviceGroupDevice->getMonochromePagesQuantity(), 
+                        'decorators' => $inlineDecorators, 
                         'validators' => array (
                                 'Int', 
                                 array (
@@ -58,6 +78,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
                         'label' => 'Quantity', 
                         'required' => true, 
                         'class' => 'span1', 
+                        'decorators' => $inlineDecorators, 
                         'value' => $quoteDeviceGroupDevice->getColorPagesQuantity(), 
                         'validators' => array (
                                 'Int', 
@@ -149,14 +170,12 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
                 ) 
         ));
         
-        // Get resolved system settings
-        $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
-        $userSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
-        $quoteSetting->applyOverride($userSetting);
-        
+        // pageCoverageColor : Quotegen_Model_Quote->pageCoverageColor
+        // pageCoverageColor is used to set the page coverage amount in the quote
         $pageCoverageColor = $this->createElement('text', 'pageCoverageColor', array (
                 'label' => 'Page Covereage Color:', 
-                'class' => 'input-mini',
+                'class' => 'input-mini', 
+                'required' => true, 
                 'value' => $this->_quote->getPageCoverageColor(), 
                 'filters' => array (
                         'StringTrim', 
@@ -172,14 +191,17 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
                                 ) 
                         ), 
                         'Float' 
-                ), 
+                ) 
         ));
         $this->addElement($pageCoverageColor);
         
+        // pageCoverageMonochrome : Quotegen_Model_Quote->pageCoverageMonochrome
+        // pageCoverageMonochrome is used to set the page coverage amount in the quote
         $pageCoverageMonochrome = $this->createElement('text', 'pageCoverageMonochrome', array (
                 'label' => 'Page Coverage Monochrome:', 
                 'class' => 'input-mini', 
-                'value' => $this->_quote->getPageCoverageMonochrome(),
+                'required' => true, 
+                'value' => $this->_quote->getPageCoverageMonochrome(), 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -194,18 +216,16 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
                                 ) 
                         ), 
                         'Float' 
-                ),
+                ) 
         ));
         $this->addElement($pageCoverageMonochrome);
         
-        /**
-         * ------------------------------------------------------------------
-         * COST PER PAGE
-         * ------------------------------------------------------------------
-         */
+        // adminCostPerPage : Quotegen_Model_Quote->adminCostPerPage
+        // adminCostPerPage is a flat CPP that is used to add an additional charge per page to recoop admin relate fees
         $adminCostPerPage = $this->createElement('text', 'adminCostPerPage', array (
                 'label' => 'Admin Cost Per Page:', 
-                'value' => $this->_quote->getAdminCostPerPage(),
+                'value' => $this->_quote->getAdminCostPerPage(), 
+                'required' => true, 
                 'class' => 'input-mini', 
                 'filters' => array (
                         'StringTrim', 
@@ -220,13 +240,16 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
                                 ) 
                         ), 
                         'Float' 
-                ), 
+                ) 
         ));
         $this->addElement($adminCostPerPage);
         
+        // serviceCostPerPage : Quotegen_Model_Quote->serviceCostPerPage
+        // serviceCostPerPage is a flat CPP that is used to add an additional charge per page to recoop service related fees
         $serviceCostPerPage = $this->createElement('text', 'serviceCostPerPage', array (
                 'label' => 'Service Cost Per Page:', 
-                'value' => $this->_quote->getServiceCostPerPage(),
+                'value' => $this->_quote->getServiceCostPerPage(), 
+                'required' => true, 
                 'class' => 'input-mini', 
                 'filters' => array (
                         'StringTrim', 
@@ -241,17 +264,16 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
                                 ) 
                         ), 
                         'Float' 
-                ), 
+                ) 
         ));
         $this->addElement($serviceCostPerPage);
-        /**
-         * ------------------------------------------------------------------
-         * Pricing Configuration
-         * ------------------------------------------------------------------
-         */
+        
+        // pricingConfigId : Quotegen_Model_Quote->pricingConfigId
+        // pricingConfigId is used to determine the users prefernce for toners when it comes to calculating a devices CPP
         $pricingConfigDropdown = $this->createElement('select', 'pricingConfigId', array (
                 'label' => 'Toner Preference:', 
-				'value' =>  $quoteSetting->getPricingConfig()
+                'value' => $this->_quote->getPricingConfigId(), 
+                'required' => true 
         ));
         
         /* @var $princingConfig Proposalgen_Model_PricingConfig */

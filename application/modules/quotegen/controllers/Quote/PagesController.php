@@ -54,11 +54,10 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                             }
                         }
                     }
-                    // Set page margin for the quote object
-                    $this->_quote->setMonochromePageMargin($values ['monochromePageMargin']);
-                    $this->_quote->setColorPageMargin($values ['colorPageMargin']);
-                    $this->_quote->setMonochromeOverageRatePerPage($values ['monochromeOverageRatePerPage']);
-                    $this->_quote->setColorOverageRatePerPage($values ['colorOverageRatePerPage']);
+                    
+                    
+                    
+                    $this->_quote->populate($values);
                     $this->saveQuote();
                     Quotegen_Model_Mapper_Quote::getInstance()->save($this->_quote);
                     

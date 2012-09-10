@@ -73,7 +73,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 $quoteDeviceGroup = new Quotegen_Model_QuoteDeviceGroup();
                 $quoteDeviceGroup->setName('Default Group (Ungrouped)');
                 $quoteDeviceGroup->setIsDefault(1);
-                $quoteDeviceGroup->setGroupPages(0);
+//                 $quoteDeviceGroup->setGroupPages(0);
                 $quoteDeviceGroup->setQuoteId($quoteId);
                 $quoteDeviceGroupId = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->insert($quoteDeviceGroup);
                 
