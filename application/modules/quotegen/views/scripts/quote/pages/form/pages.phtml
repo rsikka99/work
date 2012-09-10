@@ -4,14 +4,25 @@
 	
 	/* @var $quote Quotegen_Model_Quote  */
 	$quote = $form->getQuote();
-	// Get elements in the form
-	/* 
-	$deviceElement = $form->getElement('devices');
-	$quantityElement = $form->getElement('quantity');
-	$groupElement = $form->getElement('groups');
-	*/
 ?>
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <h4><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse1"> Page Settings </a></h4>
+        </div>
+        <div id="collapse1" class="accordion-body collapse">
+            <div class="accordion-inner">
+            	<?php echo $form->getElement('adminCostPerPage'); ?>
+            	<?php echo $form->getElement('serviceCostPerPage'); ?>
+            	<?php echo $form->getElement('pageCoverageColor'); ?>
+            	<?php echo $form->getElement('pageCoverageMonochrome'); ?>
+            	<?php echo $form->getElement('pricingConfigId'); ?>  
+            </div>
+        </div>
+    </div>
+</div>
+	
 <?php 
 	/* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
 	foreach ($quote->getQuoteDeviceGroups() as $quoteDeviceGroup ) : ?>

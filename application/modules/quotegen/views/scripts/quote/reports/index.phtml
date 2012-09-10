@@ -86,6 +86,7 @@ $(function () {
 });
 <?php $this->headScript()->captureEnd();?>
 <div class='well'>
+	<?php echo $this->form; ?>
 	<ul class="thumbnails">
     <?php if ($quote->getQuoteType() == Quotegen_Model_Quote::QUOTE_TYPE_PURCHASED) : ?>
     	<li class="span4">

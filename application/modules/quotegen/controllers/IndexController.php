@@ -84,7 +84,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 
                 // Create the quote
                 // Redirect to the build controller
-                $this->_helper->redirector('index', 'quote_settings', null, array (
+                $this->_helper->redirector('index', 'quote_devices', null, array (
                         'quoteId' => $quoteId 
                 ));
             }

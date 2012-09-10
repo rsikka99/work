@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Inline
+class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
 {
     /**
      * This represent the current quote being in use
@@ -114,7 +114,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Inline
         // monochromeOverageRatePerPage : Quotegen_Model_Quote->monochromeOverageratePerPage
         // monochromeOverageRatePerPage is used to designate an overage cost per page for the quote
         $this->addElement('text', 'monochromeOverageRatePerPage', array (
-                'value' => $this->_quote->getMonochromeOverageRatePerPage(),
+                'value' => $this->_quote->getMonochromeOverageRatePerPage(), 
                 'required' => true, 
                 'class' => 'input-mini', 
                 'validators' => array (
@@ -148,6 +148,118 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Inline
                         ) 
                 ) 
         ));
+        
+        // Get resolved system settings
+        $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
+        $userSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
+        $quoteSetting->applyOverride($userSetting);
+        
+        $pageCoverageColor = $this->createElement('text', 'pageCoverageColor', array (
+                'label' => 'Page Covereage Color:', 
+                'class' => 'input-mini',
+                'value' => $this->_quote->getPageCoverageColor(), 
+                'filters' => array (
+                        'StringTrim', 
+                        'StripTags' 
+                ), 
+                'validators' => array (
+                        array (
+                                'validator' => 'Between', 
+                                'options' => array (
+                                        'min' => 0, 
+                                        'max' => 100, 
+                                        'inclusive' => false 
+                                ) 
+                        ), 
+                        'Float' 
+                ), 
+        ));
+        $this->addElement($pageCoverageColor);
+        
+        $pageCoverageMonochrome = $this->createElement('text', 'pageCoverageMonochrome', array (
+                'label' => 'Page Coverage Monochrome:', 
+                'class' => 'input-mini', 
+                'value' => $this->_quote->getPageCoverageMonochrome(),
+                'filters' => array (
+                        'StringTrim', 
+                        'StripTags' 
+                ), 
+                'validators' => array (
+                        array (
+                                'validator' => 'Between', 
+                                'options' => array (
+                                        'min' => 0, 
+                                        'max' => 100, 
+                                        'inclusive' => false 
+                                ) 
+                        ), 
+                        'Float' 
+                ),
+        ));
+        $this->addElement($pageCoverageMonochrome);
+        
+        /**
+         * ------------------------------------------------------------------
+         * COST PER PAGE
+         * ------------------------------------------------------------------
+         */
+        $adminCostPerPage = $this->createElement('text', 'adminCostPerPage', array (
+                'label' => 'Admin Cost Per Page:', 
+                'value' => $this->_quote->getAdminCostPerPage(),
+                'class' => 'input-mini', 
+                'filters' => array (
+                        'StringTrim', 
+                        'StripTags' 
+                ), 
+                'validators' => array (
+                        array (
+                                'validator' => 'Between', 
+                                'options' => array (
+                                        'min' => 0, 
+                                        'max' => 5 
+                                ) 
+                        ), 
+                        'Float' 
+                ), 
+        ));
+        $this->addElement($adminCostPerPage);
+        
+        $serviceCostPerPage = $this->createElement('text', 'serviceCostPerPage', array (
+                'label' => 'Service Cost Per Page:', 
+                'value' => $this->_quote->getServiceCostPerPage(),
+                'class' => 'input-mini', 
+                'filters' => array (
+                        'StringTrim', 
+                        'StripTags' 
+                ), 
+                'validators' => array (
+                        array (
+                                'validator' => 'Between', 
+                                'options' => array (
+                                        'min' => 0, 
+                                        'max' => 5 
+                                ) 
+                        ), 
+                        'Float' 
+                ), 
+        ));
+        $this->addElement($serviceCostPerPage);
+        /**
+         * ------------------------------------------------------------------
+         * Pricing Configuration
+         * ------------------------------------------------------------------
+         */
+        $pricingConfigDropdown = $this->createElement('select', 'pricingConfigId', array (
+                'label' => 'Toner Preference:', 
+				'value' =>  $quoteSetting->getPricingConfig()
+        ));
+        
+        /* @var $princingConfig Proposalgen_Model_PricingConfig */
+        foreach ( Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll() as $pricingConfig )
+        {
+            $pricingConfigDropdown->addMultiOption($pricingConfig->getPricingConfigId(), $pricingConfig->getConfigName());
+        }
+        $this->addElement($pricingConfigDropdown);
     }
 
     public function loadDefaultDecorators ()
