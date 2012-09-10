@@ -2,7 +2,7 @@
 <config>
     <nav>
         <clients>
-            <order>3000</order>
+            <order>4295</order>
             <label>Clients</label>
             <module>quotegen</module>
             <controller>client</controller>
@@ -20,7 +20,8 @@
             </pages>
         </clients>
         <managedevices>
-            <label>Manage Devices</label>
+            <order>4729</order>
+            <label>Devices</label>
             <class></class>
             <module>quotegen</module>
             <controller>devicesetup</controller>
@@ -86,13 +87,14 @@
             </pages>
         </managedevices>
         <configurations>
+            <order>4646</order>
             <label>Configurations</label>
             <class></class>
             <module>quotegen</module>
             <controller>configuration</controller>
             <action>index</action>
             <resource>quotegen__configuration__index</resource>
-          	<pages>
+            <pages>
                 <create>
                     <label>Create Configuration</label>
                     <module>quotegen</module>
@@ -119,5 +121,164 @@
                 </delete>
             </pages>
         </configurations>
+        <options>
+            <order>16809</order>
+            <label>Options</label>
+            <class>dropdown subdropdown</class>
+            <module>quotegen</module>
+            <controller>option</controller>
+            <action>index</action>
+            <resource>quotegen__option__index</resource>
+            <pages>
+                <viewall>
+                    <label>View All</label>
+                    <class></class>
+                    <module>quotegen</module>
+                    <controller>option</controller>
+                    <action>index</action>
+                    <resource>quotegen__option__index</resource>
+                </viewall>
+                <addnew>
+                    <label>Add New</label>
+                    <class></class>
+                    <module>quotegen</module>
+                    <controller>option</controller>
+                    <action>create</action>
+                    <resource>quotegen__option__create</resource>
+                </addnew>
+                <categories>
+                    <label>Categories</label>
+                    <class></class>
+                    <module>quotegen</module>
+                    <controller>category</controller>
+                    <action>index</action>
+                    <resource>quotegen__category__index</resource>
+                    <pages>
+                        <create>
+                            <label>Create</label>
+                            <module>quotegen</module>
+                            <controller>category</controller>
+                            <action>create</action>
+                            <resource>quotegen__category__create</resource>
+                            <visible>0</visible>
+                        </create>
+                        <view>
+                            <label>View</label>
+                            <module>quotegen</module>
+                            <controller>category</controller>
+                            <action>view</action>
+                            <resource>quotegen__category__view</resource>
+                            <visible>0</visible>
+                        </view>
+                        <edit>
+                            <label>Edit</label>
+                            <module>quotegen</module>
+                            <controller>category</controller>
+                            <action>edit</action>
+                            <resource>quotegen__category__edit</resource>
+                            <visible>0</visible>
+                        </edit>
+                    </pages>
+                </categories>
+                <view>
+                    <label>View</label>
+                    <module>quotegen</module>
+                    <controller>option</controller>
+                    <action>view</action>
+                    <resource>quotegen__option__view</resource>
+                    <visible>0</visible>
+                </view>
+                <edit>
+                    <label>Edit</label>
+                    <module>quotegen</module>
+                    <controller>option</controller>
+                    <action>edit</action>
+                    <resource>quotegen__option__edit</resource>
+                    <visible>0</visible>
+                </edit>
+            </pages>
+        </options>
+        <leasing>
+            <order>12529</order>
+            <label>Leasing</label>
+            <module>quotegen</module>
+            <controller>leasingschema</controller>
+            <action>index</action>
+            <resource>quotegen__leasingschema__index</resource>
+            <pages>
+                <viewschema>
+                    <label>View Schema</label>
+                    <class></class>
+                    <module>quotegen</module>
+                    <controller>leasingschema</controller>
+                    <action>index</action>
+                    <resource>quotegen__leasingschema__index</resource>
+                    <visible>0</visible>
+                </viewschema>
+                <addterm>
+                    <label>Add Term</label>
+                    <class></class>
+                    <module>quotegen</module>
+                    <controller>leasingschema</controller>
+                    <action>addterm</action>
+                    <resource>quotegen__leasingschema__addterm</resource>
+                    <visible>0</visible>
+                </addterm>
+                <editterm>
+                    <label>Edit Term</label>
+                    <class></class>
+                    <module>quotegen</module>
+                    <controller>leasingschema</controller>
+                    <action>editterm</action>
+                    <resource>quotegen__leasingschema__editterm</resource>
+                    <visible>0</visible>
+                </editterm>
+                <delterm>
+                    <label>Delete Term</label>
+                    <class></class>
+                    <module>quotegen</module>
+                    <controller>leasingschema</controller>
+                    <action>deleteterm</action>
+                    <resource>quotegen__leasingschema__deleteterm</resource>
+                    <visible>0</visible>
+                </delterm>
+                <addrange>
+                    <label>Add Range</label>
+                    <class></class>
+                    <module>quotegen</module>
+                    <controller>leasingschema</controller>
+                    <action>addrange</action>
+                    <resource>quotegen__leasingschema__addrange</resource>
+                    <visible>0</visible>
+                </addrange>
+                <editrange>
+                    <label>Edit Range</label>
+                    <class></class>
+                    <module>quotegen</module>
+                    <controller>leasingschema</controller>
+                    <action>editrange</action>
+                    <resource>quotegen__leasingschema__editrange</resource>
+                    <visible>0</visible>
+                </editrange>
+                <delrange>
+                    <label>Delete Range</label>
+                    <class></class>
+                    <module>quotegen</module>
+                    <controller>leasingschema</controller>
+                    <action>deleterange</action>
+                    <resource>quotegen__leasingschema__deleterange</resource>
+                    <visible>0</visible>
+                </delrange>
+                <resetschema>
+                    <label>Clear Schema</label>
+                    <class></class>
+                    <module>quotegen</module>
+                    <controller>leasingschema</controller>
+                    <action>resetschema</action>
+                    <resource>quotegen__leasingschema__resetschema</resource>
+                    <visible>0</visible>
+                </resetschema>
+            </pages>
+        </leasing>
     </nav>
 </config>

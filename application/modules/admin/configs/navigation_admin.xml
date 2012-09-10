@@ -2,7 +2,7 @@
 <config>
     <nav>
         <UserManagement>
-            <order>21000</order>
+            <order>22968</order>
             <label>Users</label>
             <module>admin</module>
             <controller>user</controller>
@@ -53,7 +53,7 @@
             </pages>
         </UserManagement>
         <RoleManagement>
-            <order>18000</order>
+            <order>19625</order>
             <label>Roles</label>
             <module>admin</module>
             <controller>roles</controller>

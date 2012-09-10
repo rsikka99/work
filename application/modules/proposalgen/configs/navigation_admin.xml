@@ -2,21 +2,13 @@
 <config>
     <nav>
         <manufacturers>
-            <order>13000</order>
+            <order>13261</order>
             <label>Manufacturers</label>
-            <class>dropdown subdropdown</class>
             <module>proposalgen</module>
             <controller>manufacturer</controller>
             <action>index</action>
             <resource>proposalgen__manufacturer__index</resource>
             <pages>
-                <viewall>
-                    <label>View all</label>
-                    <module>proposalgen</module>
-                    <controller>manufacturer</controller>
-                    <action>index</action>
-                    <resource>proposalgen__manufacturer__index</resource>
-                </viewall>
                 <view>
                     <label>View</label>
                     <module>proposalgen</module>
@@ -39,6 +31,7 @@
                     <controller>manufacturer</controller>
                     <action>create</action>
                     <resource>proposalgen__manufacturer__create</resource>
+                    <visible>0</visible>
                 </create>
                 <update>
                     <label>Edit</label>
@@ -50,54 +43,13 @@
                 </update>
             </pages>
         </manufacturers>
-        <masterdevices>
-            <order>13000</order>
-            <label>Master Devices</label>
-            <class>dropdown subdropdown</class>
-            <module>proposalgen</module>
-            <controller>masterdevice</controller>
+        <toners>
+            <order>21645</order>
+            <label>Toners</label>
+            <module>admin</module>
+            <controller>toner</controller>
             <action>index</action>
-            <resource>proposalgen__masterdevice__index</resource>
-            <pages>
-                <viewall>
-                    <label>View all</label>
-                    <module>proposalgen</module>
-                    <controller>masterdevice</controller>
-                    <action>index</action>
-                    <resource>proposalgen__masterdevice__index</resource>
-                </viewall>
-                <view>
-                    <label> View</label>
-                    <module>proposalgen</module>
-                    <controller>masterdevice</controller>
-                    <action>view</action>
-                    <resource>proposalgen__masterdevice__view</resource>
-                    <visible>0</visible>
-                </view>
-                <delete>
-                    <label>Delete</label>
-                    <module>proposalgen</module>
-                    <controller>masterdevice</controller>
-                    <action>delete</action>
-                    <resource>proposalgen__masterdevice__delete</resource>
-                    <visible>0</visible>
-                </delete>
-                <create>
-                    <label>Create</label>
-                    <module>proposalgen</module>
-                    <controller>masterdevice</controller>
-                    <action>create</action>
-                    <resource>proposalgen__masterdevice__create</resource>
-                </create>
-                <update>
-                    <label>Edit</label>
-                    <module>proposalgen</module>
-                    <controller>masterdevice</controller>
-                    <action>edit</action>
-                    <resource>proposalgen__masterdevice__edit</resource>
-                    <visible>0</visible>
-                </update>
-            </pages>
-        </masterdevices>
+            <resource>admin__toner__index</resource>
+        </toners>
     </nav>
 </config>
