@@ -799,6 +799,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         $getCompCostPerPage = false;
         $costPerPageMonochrome = 0;
         
+        // Figure out which pricing configuration the quote is set for
         switch ($this->getQuote()
             ->getPricingConfig()
             ->getConfigName())

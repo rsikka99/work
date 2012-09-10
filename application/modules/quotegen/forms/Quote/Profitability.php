@@ -52,6 +52,7 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
             
             $this->addElement('select', 'leasingSchemaId', array (
                     'label' => 'Leasing Schema:', 
+                    'class' => 'input-medium',
                     'multiOptions' => $leasingSchemas, 
                     'required' => true, 
                     'value' => $leasingSchemaId 
@@ -69,7 +70,8 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
             }
             
             $this->addElement('select', 'leasingSchemaTermId', array (
-                    'label' => 'Lease Term:', 
+                    'label' => 'Lease Term:',
+                    'class' => 'input-medium', 
                     'multiOptions' => $leasingSchemaTerms, 
                     'required' => true, 
                     'value' => $this->getQuote()

@@ -39,7 +39,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                     $newQuoteDeviceId = $this->cloneFavoriteDeviceToQuote($deviceConfigurationId, $quoteSetting->getDeviceMargin());
                     if ($newQuoteDeviceId)
                     {
-                        $this->_helper->redirector(null, null, null, array ( 
+                        $this->_helper->redirector(null, null, null, array (
                                 'quoteId' => $this->_quoteId 
                         ));
                     }
@@ -114,12 +114,6 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                     throw new Zend_Validate_Exception("Form Validation Failed");
                 }
             }
-            else if (isset($values ['goBack']))
-            {
-                $this->_helper->redirector('index', 'quote_settings', null, array (
-                        'quoteId' => $this->_quoteId 
-                ));
-            }
             else if (isset($values ['saveAndContinue']))
             {
                 $this->_helper->redirector('index', 'quote_groups', null, array (
@@ -130,7 +124,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         
         $this->view->addDeviceForm = $addDeviceForm;
         $this->view->addFavoriteDeviceForm = $addFavoriteDeviceForm;
-        $this->view->navigationForm = new Quotegen_Form_Quote_Navigation(Quotegen_Form_Quote_Navigation::BUTTONS_BACK_NEXT);
+        $this->view->navigationForm = new Quotegen_Form_Quote_Navigation(Quotegen_Form_Quote_Navigation::BUTTONS_NEXT);
         $this->view->devices = Quotegen_Model_Mapper_QuoteDevice::getInstance()->fetchDevicesForQuote($this->_quoteId);
     }
 

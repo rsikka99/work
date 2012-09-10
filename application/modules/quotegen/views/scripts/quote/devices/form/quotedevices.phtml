@@ -178,7 +178,7 @@ $addDeviceOptionsHtml = implode("\n", $addDeviceOptions);
         <th><?php echo $this->currency($quoteDeviceGroup->calculateGroupSubtotal()); ?></th>
         <th><?php echo $this->currency($quoteDeviceGroup->calculateTotalResidual()); ?></th>
         <th></th>
-        <th><?php echo $this->currency($quoteDeviceGroup->calculateGroupMonthlyLeasePrice()); ?></th>
+        <th><?php echo $this->currency($quoteDeviceGroup->calculateMonthlyLeasePrice()); ?></th>
         <th></th>
     </tr>
     </table>
