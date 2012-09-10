@@ -43,23 +43,23 @@ $this->headScript()->appendScript("$('i').popover();");
                 </tr>
                 <?php endforeach; ?>
                 <?php endif; ?>
+                <tr class="pagesRow">
+                    <td>Monochrome</td>
+                    <td></td>
+                    <td></td>
+                    <td>Pages Included</td>
+                    <td style="text-align: right;"><?php echo number_format($quoteDeviceGroupDevice->getMonochromePagesQuantity()); ?></td>
+                    <td></td>
+                </tr>
+                <tr class="pagesRow">
+                    <td>Color</td>
+                    <td></td>
+                    <td></td>
+                    <td>Pages Included</td>
+                    <td style="text-align: right;"><?php echo number_format($quoteDeviceGroupDevice->getColorPagesQuantity()); ?></td>
+                    <td></td>
+                </tr>
         <?php endforeach; ?>
-        <tr class="pagesRow">
-            <td>Monochrome</td>
-            <td></td>
-            <td></td>
-            <td>Pages Included</td>
-            <td><?php echo number_format($quoteDeviceGroupDevice->getMonochromePagesQuantity()); ?></td>
-            <td></td>
-        </tr>
-        <tr class="pagesRow">
-            <td>Color</td>
-            <td></td>
-            <td></td>
-            <td>Pages Included</td>
-            <td><?php echo number_format($quoteDeviceGroupDevice->getColorPagesQuantity()); ?></td>
-            <td></td>
-        </tr>
         <tr>
             <td colspan="5"></td>
             <th style="text-align: right;"><?php echo $this->currency($quoteDeviceGroup->calculateMonthlyLeasePrice()); ?></th>
