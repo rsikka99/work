@@ -780,12 +780,24 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         
         // If we want to get comp prices then get them
         if ($getCompCostPerPage)
+        {
             $costPerPageColor = $this->getCompCostPerPageColor();
-            
-            // If not they are set to oem
-        if ($costPerPageColor <= 0)
-            $costPerPageColor = $this->getOemCostPerPageColor();
+        }
         
+        // If not they are set to oem
+        if ($costPerPageColor <= 0)
+        {
+            $costPerPageColor = $this->getOemCostPerPageColor();
+        }
+        
+        /*
+         * Only add service and admin if we have a cpp > 0. This way if cpp is 0 for some reason the end user will see
+         * the problem instead of it being masked by service and admin cpp.
+         */
+        if ($costPerPageColor > 0)
+        {
+            $costPerPageColor = $this->getQuote()->getAdminCostPerPage() + $this->getQuote()->getServiceCostPerPage();
+        }
         return (float)$costPerPageColor;
     }
 
@@ -812,11 +824,24 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         
         // If we want to get comp prices then get them
         if ($getCompCostPerPage)
+        {
             $costPerPageMonochrome = $this->getCompCostPerPageMonochrome();
-            
-            // If not they are set to oem
+        }
+        
+        // If not they are set to oem
         if ($costPerPageMonochrome <= 0)
+        {
             $costPerPageMonochrome = $this->getOemCostPerPageMonochrome();
+        }
+        
+        /*
+         * Only add service and admin if we have a cpp > 0. This way if cpp is 0 for some reason the end user will see
+         * the problem instead of it being masked by service and admin cpp.
+         */
+        if ($costPerPageMonochrome > 0)
+        {
+            $costPerPageMonochrome = $this->getQuote()->getAdminCostPerPage() + $this->getQuote()->getServiceCostPerPage();
+        }
         
         return $costPerPageMonochrome;
     }
