@@ -30,37 +30,8 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
             {
                 $formValues = $quoteForm->getValues();
                 
-                //  Check the form values to see if user has left text blank, if so get from user / system defaults
-                if (strlen($formValues ['pageCoverageMonochrome']) === 0)
-                {
-                    $formValues ['pageCoverageMonochrome'] = $quoteSetting->getPageCoverageMonochrome();
-                }
-                if (strlen($formValues ['pageCoverageColor']) === 0)
-                {
-                    $formValues ['pageCoverageColor'] = $quoteSetting->getPageCoverageColor();
-                }
-                if ($formValues ['pricingConfigId'] === (string)Proposalgen_Model_PricingConfig::NONE)
-                {
-                    $formValues ['pricingConfigId'] = $quoteSetting->getPricingConfigId();
-                }
-                if (strlen($formValues ['adminCostPerPage']) === 0)
-                {
-                    $formValues ['adminCostPerPage'] = $quoteSetting->getAdminCostPerPage();
-                }
-                if (strlen($formValues ['serviceCostPerPage']) === 0)
-                {
-                    $formValues ['serviceCostPerPage'] = $quoteSetting->getServiceCostPerPage();
-                }
-                if (strlen($formValues ['monochromeOverageRatePerPage']) === 0)
-                {
-                    $formValues ['monochromeOverageRatePerPage'] = $quoteSetting->getMonochromeOverageRatePerPage();
-                }
-                if (strlen($formValues ['colorOverageRatePerPage']) === 0)
-                {
-                    $formValues ['colorOverageRatePerPage'] = $quoteSetting->getColorOverageRatePerPage();
-                }
-                
                 // Update current quote object and save new quote items to database
+                $this->_quote->populate($quoteSetting->toArray());
                 $this->_quote->populate($formValues);
                 $this->_quote->setDateCreated(date('Y-m-d H:i:s'));
                 $this->_quote->setQuoteDate(date('Y-m-d H:i:s'));
@@ -73,17 +44,26 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 $quoteDeviceGroup = new Quotegen_Model_QuoteDeviceGroup();
                 $quoteDeviceGroup->setName('Default Group (Ungrouped)');
                 $quoteDeviceGroup->setIsDefault(1);
-//                 $quoteDeviceGroup->setGroupPages(0);
+                $quoteDeviceGroup->setGroupPages(0);
                 $quoteDeviceGroup->setQuoteId($quoteId);
                 $quoteDeviceGroupId = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->insert($quoteDeviceGroup);
                 
-                $quoteLeaseTerm = new Quotegen_Model_QuoteLeaseTerm();
-                $quoteLeaseTerm->setQuoteId($this->_quote->getId());
-                $quoteLeaseTerm->setLeasingSchemaTermId($formValues ['leasingSchemaTermId']);
-                Quotegen_Model_Mapper_QuoteLeaseTerm::getInstance()->insert($quoteLeaseTerm);
+                // If this is a leased quote, select the first leasing schema term
+                if ($this->_quote->isLeased())
+                {
+                    // FIXME: Use quote settings?
+                    $leasingSchemaTerms = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->fetchAll();
+                    if (count($leasingSchemaTerms) > 0)
+                    {
+                        
+                        $quoteLeaseTerm = new Quotegen_Model_QuoteLeaseTerm();
+                        $quoteLeaseTerm->setQuoteId($this->_quote->getId());
+                        $quoteLeaseTerm->setLeasingSchemaTermId($leasingSchemaTerms [0]->getId());
+                        Quotegen_Model_Mapper_QuoteLeaseTerm::getInstance()->insert($quoteLeaseTerm);
+                    }
+                }
                 
-                // Create the quote
-                // Redirect to the build controller
+                // Redirect to the first page of the quote workflow
                 $this->_helper->redirector('index', 'quote_devices', null, array (
                         'quoteId' => $quoteId 
                 ));

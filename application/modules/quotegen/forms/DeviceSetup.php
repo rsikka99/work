@@ -21,7 +21,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
         $this->setAttrib('class', 'form-horizontal');
-
+        
         /*
          * Manufacturer
          */
@@ -34,7 +34,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         
         $this->addElement('select', 'manufacturer_id', array (
                 'label' => '* Manufacturer:', 
-                'class' => 'span3',
+                'class' => 'span3', 
                 'multiOptions' => $manufacturers 
         ));
         
@@ -43,8 +43,8 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('text', 'printer_model', array (
                 'label' => '* Model Name:', 
-                'class' => 'span3',
-                'required' => true,
+                'class' => 'span3', 
+                'required' => true, 
                 'maxlength' => 255, 
                 'filters' => array (
                         'StringTrim', 
@@ -66,43 +66,41 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('checkbox', 'can_sell', array (
                 'label' => 'Can Sell Device:', 
-                'description' =>  'Note: SKU is required when checked.',
+                'description' => 'Note: SKU is required when checked.', 
                 'filters' => array (
                         'Boolean' 
                 ) 
         ));
-
+        
         /*
          * SKU
-        */
+         */
         $this->addElement('text', 'sku', array (
-                'label' => 'SKU:',
-                'class' => 'span2',
+                'label' => 'SKU:', 
+                'class' => 'span2', 
                 'maxlength' => 255, 
-                'required' => false,
+                'required' => false, 
                 'filters' => array (
-                        'StringTrim',
-                        'StripTags'
-                ),
+                        'StringTrim', 
+                        'StripTags' 
+                ), 
                 'allowEmpty' => false, 
                 'validators' => array (
                         new Custom_Validate_FieldDependsOnValue('can_sell', '1', array (
-                                new Zend_Validate_NotEmpty()
-                        ),
-                        array (
-                                'validator' => 'StringLength',
+                                new Zend_Validate_NotEmpty() 
+                        ), array (
+                                'validator' => 'StringLength', 
                                 'options' => array (
-                                        1,
-                                        255
-                                )
+                                        1, 
+                                        255 
+                                ) 
                         )) 
-                )
+                ) 
         ));
-
-
+        
         /*
          * Description of standard features
-        */
+         */
         $this->addElement('textarea', 'description', array (
                 'label' => 'Standard Features:', 
                 'style' => 'height: 100px', 
@@ -110,7 +108,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
-                )
+                ) 
         ));
         
         /*
@@ -125,15 +123,14 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         
         $this->addElement('select', 'toner_config_id', array (
                 'label' => '* Toner Configuration:', 
-                'class' => 'span3',
+                'class' => 'span3', 
                 'required' => true, 
                 'multiOptions' => $tonerConfigs 
         ));
         
         /*
-         * Hidden Toner Configuration
-         * 
-         * This will be used when editing to hold the toner config id when the dropdown is disabled
+         * Hidden Toner Configuration This will be used when editing to hold the toner config id when the dropdown is
+         * disabled
          */
         $element = $this->createElement('hidden', "hidden_toner_config_id", array ());
         $this->addElement($element);
@@ -183,7 +180,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('text', 'watts_power_normal', array (
                 'label' => 'Watts Power Normal:', 
-                'class' => 'span1',
+                'class' => 'span1', 
                 'maxlength' => 4, 
                 'filters' => array (
                         'StringTrim', 
@@ -206,7 +203,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('text', 'watts_power_idle', array (
                 'label' => 'Watts Power Idle:', 
-                'class' => 'span1',
+                'class' => 'span1', 
                 'maxlength' => 4, 
                 'filters' => array (
                         'StringTrim', 
@@ -231,23 +228,25 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('text', 'cost', array (
                 'label' => 'Device Cost:', 
-                'class' => 'span1',
+                'class' => 'span1', 
                 'prepend' => '$', 
                 'dimension' => 1, 
                 'maxlength' => 8, 
+                'required' => false, 
+                'allowEmpty' => false, 
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
                 ), 
                 'validators' => array (
-                        'Float', 
-                        array (
-                                'validator' => 'Between', 
-                                'options' => array (
+                        new Custom_Validate_FieldDependsOnValue('can_sell', '1', array (
+                                new Zend_Validate_NotEmpty(), 
+                                new Zend_Validate_Float(), 
+                                new Zend_Validate_Between(array (
                                         'min' => 1, 
                                         'max' => 5000 
-                                ) 
-                        ) 
+                                )) 
+                        )) 
                 ) 
         ));
         
@@ -256,7 +255,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('text', 'service_cost_per_page', array (
                 'label' => 'Service Cost Per Page:', 
-                'class' => 'span1',
+                'class' => 'span1', 
                 'maxlength' => 8, 
                 'filters' => array (
                         'StringTrim', 
@@ -275,8 +274,8 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         ));
         
         /*
-         * Launch Date
-        /*/
+         * Launch Date /
+         */
         $minYear = 1950;
         $maxYear = date('Y') + 2;
         $launchDate = new ZendX_JQuery_Form_Element_DatePicker('launch_date');
@@ -290,20 +289,18 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
             ->setDescription('yyyy-mm-dd')
             ->addValidator(new My_Validate_DateTime('/\d{4}-\d{2}-\d{2}/'))
             ->setRequired(true)
-            ->setAttrib('maxlength', 10) 
-	        ->addFilters(array (
-	                'StringTrim', 
-	                'StripTags' 
-	        ));
+            ->setAttrib('maxlength', 10)
+            ->addFilters(array (
+                'StringTrim', 
+                'StripTags' 
+        ));
         $this->addElement($launchDate);
-        /*/
-        
         /*
-         * Duty Cycle
+         * / /* Duty Cycle
          */
         $this->addElement('text', 'duty_cycle', array (
                 'label' => 'Duty Cycle:', 
-                'class' => 'span1',
+                'class' => 'span1', 
                 'maxlength' => 6, 
                 'filters' => array (
                         'StringTrim', 
@@ -326,7 +323,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('text', 'ppm_black', array (
                 'label' => 'Print Speed (Mono):', 
-                'class' => 'span1',
+                'class' => 'span1', 
                 'maxlength' => 4, 
                 'filters' => array (
                         'StringTrim', 
@@ -349,7 +346,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('text', 'ppm_color', array (
                 'label' => 'Print Speed (Color):', 
-                'class' => 'span1',
+                'class' => 'span1', 
                 'maxlength' => 4, 
                 'filters' => array (
                         'StringTrim', 
@@ -360,8 +357,8 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                         array (
                                 'validator' => 'Between', 
                                 'options' => array (
-                                        'min' => 0,
-                                        'max' => 1000
+                                        'min' => 0, 
+                                        'max' => 1000 
                                 ) 
                         ) 
                 ) 
@@ -372,7 +369,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('checkbox', 'is_leased', array (
                 'label' => 'Is Leased:', 
-                'description' =>  'Note: Leased Toner Yield is required when checked.',
+                'description' => 'Note: Leased Toner Yield is required when checked.', 
                 'filters' => array (
                         'Boolean' 
                 ) 
@@ -383,7 +380,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $this->addElement('text', 'leased_toner_yield', array (
                 'label' => 'Leased Toner Yield:', 
-                'class' => 'span1',
+                'class' => 'span1', 
                 'maxlength' => 6, 
                 'filters' => array (
                         'StringTrim', 
