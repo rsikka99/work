@@ -39,8 +39,6 @@ class Admin_Model_Mapper_UserRole extends My_Model_Mapper_Abstract
         // Insert the data
         $id = $this->getDbTable()->insert($data);
         
-        $object->setId($id);
-        
         // Save the object into the cache
         $this->saveItemToCache($object);
         
