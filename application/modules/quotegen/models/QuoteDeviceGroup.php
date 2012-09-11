@@ -317,9 +317,8 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
         foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
         {
-            $subtotal += $quoteDeviceGroupDevice->getQuoteDevice()->calculateTotalLeaseValue();
+            $subtotal += $quoteDeviceGroupDevice->getQuoteDevice()->calculateLeaseValue() * $quoteDeviceGroupDevice->getQuantity();
         }
-        
         return $subtotal;
     }
     
