@@ -26,6 +26,30 @@
                             <visible>0</visible>
                             <resource>quotegen__client__create</resource>
                         </create>
+                        <editclient>
+                            <label>Edit Client</label>
+                            <module>quotegen</module>
+                            <controller>client</controller>
+                            <action>edit</action>
+                            <visible>0</visible>
+                            <resource>quotegen__client__edit</resource>
+                        </editclient>
+                        <viewclient>
+                            <label>View Client</label>
+                            <module>quotegen</module>
+                            <controller>client</controller>
+                            <action>view</action>
+                            <visible>0</visible>
+                            <resource>quotegen__client__view</resource>
+                        </viewclient>
+                        <deleteclient>
+                            <label>Delete Client</label>
+                            <module>quotegen</module>
+                            <controller>client</controller>
+                            <action>delete</action>
+                            <visible>0</visible>
+                            <resource>quotegen__client__delete</resource>
+                        </deleteclient>
                     </pages>
                 </clients>
                 <devicemanagement>
@@ -36,6 +60,14 @@
                     <action>index</action>
                     <resource>quotegen__devicesetup__index</resource>
                     <pages>
+                        <viewalldevices>
+                            <label>All Devices</label>
+                            <class>dropdown</class>
+                            <module>quotegen</module>
+                            <controller>devicesetup</controller>
+                            <action>index</action>
+                            <resource>quotegen__devicesetup__index</resource>
+                        </viewalldevices>
                         <globalconfigurations>
                             <label>Global Configurations</label>
                             <class></class>
@@ -119,14 +151,6 @@
                             <action>index</action>
                             <resource>quotegen__option__index</resource>
                             <pages>
-                                <viewall>
-                                    <label>View All</label>
-                                    <class></class>
-                                    <module>quotegen</module>
-                                    <controller>option</controller>
-                                    <action>index</action>
-                                    <resource>quotegen__option__index</resource>
-                                </viewall>
                                 <addnew>
                                     <label>Add New</label>
                                     <class></class>
@@ -135,6 +159,14 @@
                                     <action>create</action>
                                     <resource>quotegen__option__create</resource>
                                 </addnew>
+                                <viewall>
+                                    <label>View All</label>
+                                    <class></class>
+                                    <module>quotegen</module>
+                                    <controller>option</controller>
+                                    <action>index</action>
+                                    <resource>quotegen__option__index</resource>
+                                </viewall>
                                 <categories>
                                     <label>Option Categories</label>
                                     <class></class>
@@ -211,7 +243,7 @@
                             <resource>quotegen__devicesetup__create</resource>
                         </create>
                         <edit>
-                            <label>Details</label>
+                            <label>Device - Details</label>
                             <module>quotegen</module>
                             <controller>devicesetup</controller>
                             <action>edit</action>
@@ -219,7 +251,7 @@
                             <resource>quotegen__devicesetup__edit</resource>
                         </edit>
                         <delete>
-                            <label>Delete</label>
+                            <label>Delete Device</label>
                             <module>quotegen</module>
                             <controller>devicesetup</controller>
                             <action>delete</action>
@@ -227,7 +259,7 @@
                             <resource>quotegen__devicesetup__delete</resource>
                         </delete>
                         <toners>
-                            <label>Toners</label>
+                            <label>Device - Toners</label>
                             <module>quotegen</module>
                             <controller>devicesetup</controller>
                             <action>toners</action>
@@ -235,7 +267,7 @@
                             <resource>quotegen__devicesetup__toners</resource>
                         </toners>
                         <options>
-                            <label>Available Options</label>
+                            <label>Device - Available Options</label>
                             <module>quotegen</module>
                             <controller>devicesetup</controller>
                             <action>options</action>
@@ -243,7 +275,7 @@
                             <resource>quotegen__devicesetup__options</resource>
                         </options>
                         <configurations>
-                            <label>Hardware Configurations</label>
+                            <label>Device - Hardware Configurations</label>
                             <module>quotegen</module>
                             <controller>devicesetup</controller>
                             <action>configurations</action>
@@ -341,20 +373,6 @@
                     <class>dropdown</class>
                     <resource>admin__user__index</resource>
                     <pages>
-                        <RoleManagement>
-                            <label>Roles</label>
-                            <module>admin</module>
-                            <controller>roles</controller>
-                            <action>index</action>
-                            <resource>admin__roles__index</resource>
-                        </RoleManagement>
-                        <viewall>
-                            <label>View All</label>
-                            <module>admin</module>
-                            <controller>user</controller>
-                            <action>index</action>
-                            <resource>admin__user__index</resource>
-                        </viewall>
                         <create>
                             <label>Create User</label>
                             <module>admin</module>
@@ -363,6 +381,20 @@
                             <resource>admin__user__create</resource>
                             <icon>plus-sign</icon>
                         </create>
+                        <viewall>
+                            <label>View All</label>
+                            <module>admin</module>
+                            <controller>user</controller>
+                            <action>index</action>
+                            <resource>admin__user__index</resource>
+                        </viewall>
+                        <RoleManagement>
+                            <label>Roles</label>
+                            <module>admin</module>
+                            <controller>roles</controller>
+                            <action>index</action>
+                            <resource>admin__roles__index</resource>
+                        </RoleManagement>
                         <edit>
                             <label>Edit User</label>
                             <module>admin</module>
