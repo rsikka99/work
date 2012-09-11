@@ -9,25 +9,6 @@ class Quotegen_QuotesettingController extends Zend_Controller_Action
     }
 
     /**
-     * Displays all quoteSettings
-     */
-    public function indexAction ()
-    {
-        // Set up a quote setting mapper
-        $mapper = Quotegen_Model_Mapper_QuoteSetting::getInstance();
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper));
-        
-        // Set the current page that we are on
-        $paginator->setCurrentPageNumber($this->_getParam('page', 1));
-        
-        // Set how many display item
-        $paginator->setItemCountPerPage(25);
-        
-        // Get all current quote settings
-        $this->view->paginator = $paginator;
-    }
-
-    /**
      * Edits a quoteSetting
      */
     public function editAction ()

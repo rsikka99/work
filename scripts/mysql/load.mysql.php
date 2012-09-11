@@ -92,6 +92,9 @@ try
         
         echo "Loading Schema...";
         runSQLFile(dirname(__FILE__) . '/schema.sql', $conn);
+        runSQLFile(dirname(__FILE__) . '/requiredData.base.sql', $conn);
+        runSQLFile(dirname(__FILE__) . '/requiredData.proposalgenerator.sql', $conn);
+        runSQLFile(dirname(__FILE__) . '/requiredData.quotegenerator.sql', $conn);
         
         if ('testing' != APPLICATION_ENV)
         {
@@ -101,7 +104,6 @@ try
         if ($withData)
         {
             echo "Loading Data...";
-            runSQLFile(dirname(__FILE__) . '/data.base.sql', $conn);
             runSQLFile(dirname(__FILE__) . '/data.proposalgenerator.sql', $conn);
             runSQLFile(dirname(__FILE__) . '/data.quotegen.sql', $conn);
             
