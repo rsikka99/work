@@ -11,8 +11,10 @@ $section->addText($this->translate('Below is a quote for the requested hardware:
 
 $groupCount = 0;
 $tcStyle = $this->styles->tables->quoteTable;
+/* @var $quote Quotegen_Model_Quote */
+$quote = $this->quote;
 
-foreach ( $this->quote->getQuoteDeviceGroups()as $quoteDeviceGroup )
+foreach ( $quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
 {
     $table = $section->addTable($tcStyle->tablestyle);
     
@@ -22,7 +24,7 @@ foreach ( $this->quote->getQuoteDeviceGroups()as $quoteDeviceGroup )
     $table->addCell($tcStyle->col3Width, $tcStyle->header->cell3->cellStyle)->addText($this->translate('Description and Features'), $tcStyle->header->cell3->fontStyle, $tcStyle->header->cell3->paragraphStyle);
     $table->addCell($tcStyle->col4Width, $tcStyle->header->cell4->cellStyle)->addText($this->translate('Quantity'), $tcStyle->header->cell4->fontStyle, $tcStyle->header->cell4->paragraphStyle);
     
-	/* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+    /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
     foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
     {
         $device = $quoteDeviceGroupDevice->getQuoteDevice();
@@ -61,6 +63,15 @@ foreach ( $this->quote->getQuoteDeviceGroups()as $quoteDeviceGroup )
 
 $table = $section->addTable($tcStyle->tablestyle);
 
+// Show page overage rate for monochrome and color
+$table->addRow($tcStyle->pages->rowheight);
+$table->addCell($tcStyle->span123Width, $tcStyle->pages->cell1->cellStyle, 3)->addText($this->translate('Monochrome Page Overage Rate'), $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->pages->cell2->cellStyle)->addText($this->currency($quote->getMonochromeOverageRatePerPage(), array('precision' => '4')), $tcStyle->pages->cell2->fontStyle, $tcStyle->pages->cell2->paragraphStyle);
+$table->addRow($tcStyle->pages->rowheight);
+$table->addCell($tcStyle->span123Width, $tcStyle->pages->cell1->cellStyle, 3)->addText($this->translate('Color Page Overage Rate'), $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->pages->cell2->cellStyle)->addText($this->currency($quote->getMonochromeOverageRatePerPage(),array('precision' => '4')), $tcStyle->pages->cell2->fontStyle, $tcStyle->pages->cell2->paragraphStyle);
+
+// Show monthly total
 $table->addRow($tcStyle->monthlyTotal->rowheight);
 $table->addCell($tcStyle->span123Width, $tcStyle->monthlyTotal->cell1->cellStyle, 3)->addText($this->translate('Purchase Total'), $tcStyle->monthlyTotal->cell1->fontStyle, $tcStyle->monthlyTotal->cell1->paragraphStyle);
 $table->addCell($tcStyle->col4Width, $tcStyle->monthlyTotal->cell2->cellStyle)->addText($this->currency($this->quote->calculateQuoteSubtotal()), $tcStyle->monthlyTotal->cell2->fontStyle, $tcStyle->monthlyTotal->cell2->paragraphStyle);

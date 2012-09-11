@@ -776,8 +776,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             case Proposalgen_Model_PricingConfig::OEMMONO_COMPCOLOR :
                 $getCompCostPerPage = true;
                 break;
-        }
-        
+       }
+
         // If we want to get comp prices then get them
         if ($getCompCostPerPage)
         {
@@ -796,7 +796,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
          */
         if ($costPerPageColor > 0)
         {
-            $costPerPageColor = $this->getQuote()->getAdminCostPerPage() + $this->getQuote()->getServiceCostPerPage();
+            $costPerPageColor += $this->getQuote()->getAdminCostPerPage() + $this->getQuote()->getServiceCostPerPage();
         }
         return (float)$costPerPageColor;
     }
@@ -810,7 +810,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     {
         $getCompCostPerPage = false;
         $costPerPageMonochrome = 0;
-        
+
         // Figure out which pricing configuration the quote is set for
         switch ($this->getQuote()
             ->getPricingConfig()
@@ -833,14 +833,14 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         {
             $costPerPageMonochrome = $this->getOemCostPerPageMonochrome();
         }
-        
+
         /*
          * Only add service and admin if we have a cpp > 0. This way if cpp is 0 for some reason the end user will see
          * the problem instead of it being masked by service and admin cpp.
          */
         if ($costPerPageMonochrome > 0)
         {
-            $costPerPageMonochrome = $this->getQuote()->getAdminCostPerPage() + $this->getQuote()->getServiceCostPerPage();
+            $costPerPageMonochrome += $this->getQuote()->getAdminCostPerPage() + $this->getQuote()->getServiceCostPerPage();
         }
         
         return $costPerPageMonochrome;

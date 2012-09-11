@@ -55,17 +55,18 @@ foreach ( $this->quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
         }
         
     }
-        // Show page information in the rows, one for black and the other for.. you got it... color
+    
+    // Show page information in the rows, one for black and the other for.. you got it... color
     $table->addRow($tcStyle->pages->rowheight);
-    $table->addCell($tcStyle->col1Width, $tcStyle->pages->cell1->cellStyle)->addText($this->translate('Monochrome'), $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
+    $table->addCell($tcStyle->col1Width, $tcStyle->pages->cell1->cellStyle)->addText($this->translate('Monochrome Pages'), $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
     $table->addCell($tcStyle->col2Width, $tcStyle->pages->cell2->cellStyle)->addText();
-    $table->addCell($tcStyle->col3width, $tcStyle->pages->cell3->cellStyle)->addText($this->translate('Pages Included'), $tcStyle->pages->cell3->fontStyle, $tcStyle->pages->cell3->paragraphStyle);
+    $table->addCell($tcStyle->col3width, $tcStyle->pages->cell3->cellStyle)->addText($this->translate('Pages Included Per Month'), $tcStyle->pages->cell3->fontStyle, $tcStyle->pages->cell3->paragraphStyle);
     $table->addCell($tcStyle->col4Width, $tcStyle->pages->cell4->cellStyle)->addText(number_format($quoteDeviceGroup->calculateTotalMonochromePages()), $tcStyle->pages->cell4->fontStyle, $tcStyle->pages->cell4->paragraphStyle);
     
     $table->addRow($tcStyle->pages->rowheight);
-    $table->addCell($tcStyle->col1Width, $tcStyle->pages->cell1->cellStyle)->addText($this->translate('Color'), $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
+    $table->addCell($tcStyle->col1Width, $tcStyle->pages->cell1->cellStyle)->addText($this->translate('Color Pages'), $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
     $table->addCell($tcStyle->col2Width, $tcStyle->pages->cell2->cellStyle)->addText();
-    $table->addCell($tcStyle->col3Width, $tcStyle->pages->cell3->cellStyle)->addText($this->translate('Pages Included'), $tcStyle->pages->cell3->fontStyle, $tcStyle->pages->cell3->paragraphStyle);
+    $table->addCell($tcStyle->col3Width, $tcStyle->pages->cell3->cellStyle)->addText($this->translate('Pages Included Per Month'), $tcStyle->pages->cell3->fontStyle, $tcStyle->pages->cell3->paragraphStyle);
     $table->addCell($tcStyle->col4Width, $tcStyle->pages->cell4->cellStyle)->addText(number_format($quoteDeviceGroup->calculateTotalColorPages()), $tcStyle->pages->cell4->fontStyle, $tcStyle->pages->cell4->paragraphStyle);
     
     // Show subtotal line

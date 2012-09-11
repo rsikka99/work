@@ -652,8 +652,13 @@ $purchaseQuoteTable = (object)array (
                                 'name' => 'Calibri', 
                                 'size' => 11 
                         ), 
-                        "paragraphStyle" => 'nospacing' 
+                        "paragraphStyle" => array (
+                                'nospacing' => true, 
+                                'align' => 'right' 
+                        ) 
                 ), 
+                
+                /*
                 "cell2" => (object)array (
                         "cellStyle" => array (
                                 "borderTopSize" => 1, 
@@ -686,8 +691,9 @@ $purchaseQuoteTable = (object)array (
                         "paragraphStyle" => array (
                                 'nospacing' => true 
                         ) 
-                ), 
-                "cell4" => (object)array (
+                ),*/
+                 
+                "cell2" => (object)array (
                         "cellStyle" => array (
                                 "borderTopSize" => 1, 
                                 "borderRightSize" => 1, 
@@ -701,7 +707,8 @@ $purchaseQuoteTable = (object)array (
                         ), 
                         "paragraphStyle" => array (
                                 'nospacing' => true, 
-                                'align' => 'right' 
+                                'align' => 'right',
+                                'spaceAfter' => 0	
                         ) 
                 ) 
         ) 
