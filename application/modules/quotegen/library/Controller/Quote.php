@@ -432,6 +432,9 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             $quoteDeviceConfigurationOption = new Quotegen_Model_QuoteDeviceConfigurationOption();
             $quoteDeviceConfigurationOption->setMasterDeviceId($favoriteDevice->getMasterDeviceId());
             
+            // Add to the default group
+            Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->insertDeviceInDefaultGroup($this->_quote->getId(), (int)$quoteDeviceId);
+            
             /* @var $option Quotegen_Model_DeviceConfigurationOption */
             foreach ( $favoriteDevice->getOptions() as $option )
             {
