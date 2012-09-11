@@ -46,7 +46,7 @@ class Admin_Form_Privileges extends EasyBib_Form
             }
         }
         
-        $this->addElement('multicheckbox', 'privileges', array (
+        $this->addElement('MultiCheckbox', 'privileges', array (
                 'label' => 'Select Privileges:', 
                 'required' => true,
                 'multiOptions' => $multiOptions
