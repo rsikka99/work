@@ -2,15 +2,14 @@
 <config>
     <nav>
         <sysadmin>
+            <order>99999</order>
             <id>adminmenu</id>
-            <label>System Administration</label>
+            <label>Admin</label>
             <class>dropdown</class>
             <module>admin</module>
             <controller>index</controller>
             <action>index</action>
             <resource>admin__index__index</resource>
-            <visible>0</visible>
-            <order>500</order>
         </sysadmin>
     </nav>
 </config>
