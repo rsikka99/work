@@ -2,7 +2,7 @@
 <config>
     <nav>
         <menu>
-            <label>Proposal Generator</label>
+            <label>Assessment/Proposals</label>
             <class>dropdown</class>
             <module>proposalgen</module>
             <controller>index</controller>

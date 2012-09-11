@@ -39,13 +39,6 @@
                                 <a class="pull-right btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><b class="caret"></b></a>
                                 <?php echo $this->Usermenu(); ?>
                             </div>
-                                <?php if (($adminNav = $this->Adminmenu()) == true) : ?>
-                                    <div class="adminNav btn-group pull-left">
-                                        <a class="btn btn-mini btn-primary" data-toggle="dropdown" title="System Administration" href="#"><span class="icon-cog icon-white"></span> Admin</a>
-                                        <a class="pull-right btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><b class="caret"></b></a>
-                                        <?php echo $adminNav; ?>
-                                    </div>
-                                <?php endif; ?>
                             <?php else : ?>
                                 <a class="btn btn-danger" href="<?php echo $this->url(array(), 'login');?>"><i class="icon-user icon-white"></i> Login</a>
                             <?php endif; ?>

@@ -4,12 +4,393 @@
         <sysadmin>
             <order>99999</order>
             <id>adminmenu</id>
-            <label>Admin</label>
+            <label>Administration</label>
             <class>dropdown</class>
             <module>admin</module>
             <controller>index</controller>
             <action>index</action>
             <resource>admin__index__index</resource>
+            <pages>
+                <clients>
+                    <label>Clients</label>
+                    <module>quotegen</module>
+                    <controller>client</controller>
+                    <action>index</action>
+                    <resource>quotegen__client__index</resource>
+                    <pages>
+                        <create>
+                            <label>Create New</label>
+                            <module>quotegen</module>
+                            <controller>client</controller>
+                            <action>create</action>
+                            <visible>0</visible>
+                            <resource>quotegen__client__create</resource>
+                        </create>
+                    </pages>
+                </clients>
+                <devicemanagement>
+                    <label>Device Management</label>
+                    <class>dropdown</class>
+                    <module>quotegen</module>
+                    <controller>devicesetup</controller>
+                    <action>index</action>
+                    <resource>quotegen__devicesetup__index</resource>
+                    <pages>
+                        <globalconfigurations>
+                            <label>Global Configurations</label>
+                            <class></class>
+                            <module>quotegen</module>
+                            <controller>configuration</controller>
+                            <action>index</action>
+                            <resource>quotegen__configuration__index</resource>
+                            <pages>
+                                <create>
+                                    <label>Create Configuration</label>
+                                    <module>quotegen</module>
+                                    <controller>configuration</controller>
+                                    <action>create</action>
+                                    <visible>0</visible>
+                                    <resource>quotegen__configuration__create</resource>
+                                </create>
+                                <edit>
+                                    <label>Edit Configuration</label>
+                                    <module>quotegen</module>
+                                    <controller>configuration</controller>
+                                    <action>edit</action>
+                                    <visible>0</visible>
+                                    <resource>quotegen__configuration__edit</resource>
+                                </edit>
+                                <delete>
+                                    <label>Delete Configuration</label>
+                                    <module>quotegen</module>
+                                    <controller>configuration</controller>
+                                    <action>delete</action>
+                                    <visible>0</visible>
+                                    <resource>quotegen__configuration__delete</resource>
+                                </delete>
+                            </pages>
+                        </globalconfigurations>
+                        <manufacturers>
+                            <label>Manufacturers</label>
+                            <module>proposalgen</module>
+                            <controller>manufacturer</controller>
+                            <action>index</action>
+                            <resource>proposalgen__manufacturer__index</resource>
+                            <pages>
+                                <view>
+                                    <label>View</label>
+                                    <module>proposalgen</module>
+                                    <controller>manufacturer</controller>
+                                    <action>view</action>
+                                    <resource>proposalgen__manufacturer__view</resource>
+                                    <visible>0</visible>
+                                </view>
+                                <delete>
+                                    <label>Delete</label>
+                                    <module>proposalgen</module>
+                                    <controller>manufacturer</controller>
+                                    <action>delete</action>
+                                    <resource>proposalgen__manufacturer__delete</resource>
+                                    <visible>0</visible>
+                                </delete>
+                                <create>
+                                    <label>Create</label>
+                                    <module>proposalgen</module>
+                                    <controller>manufacturer</controller>
+                                    <action>create</action>
+                                    <resource>proposalgen__manufacturer__create</resource>
+                                    <visible>0</visible>
+                                </create>
+                                <update>
+                                    <label>Edit</label>
+                                    <module>proposalgen</module>
+                                    <controller>manufacturer</controller>
+                                    <action>edit</action>
+                                    <resource>proposalgen__manufacturer__edit</resource>
+                                    <visible>0</visible>
+                                </update>
+                            </pages>
+                        </manufacturers>
+                        <optionmanagement>
+                            <label>Option Management</label>
+                            <class>dropdown subdropdown</class>
+                            <module>quotegen</module>
+                            <controller>option</controller>
+                            <action>index</action>
+                            <resource>quotegen__option__index</resource>
+                            <pages>
+                                <viewall>
+                                    <label>View All</label>
+                                    <class></class>
+                                    <module>quotegen</module>
+                                    <controller>option</controller>
+                                    <action>index</action>
+                                    <resource>quotegen__option__index</resource>
+                                </viewall>
+                                <addnew>
+                                    <label>Add New</label>
+                                    <class></class>
+                                    <module>quotegen</module>
+                                    <controller>option</controller>
+                                    <action>create</action>
+                                    <resource>quotegen__option__create</resource>
+                                </addnew>
+                                <categories>
+                                    <label>Option Categories</label>
+                                    <class></class>
+                                    <module>quotegen</module>
+                                    <controller>category</controller>
+                                    <action>index</action>
+                                    <resource>quotegen__category__index</resource>
+                                    <pages>
+                                        <create>
+                                            <label>Create</label>
+                                            <module>quotegen</module>
+                                            <controller>category</controller>
+                                            <action>create</action>
+                                            <resource>quotegen__category__create</resource>
+                                            <visible>0</visible>
+                                        </create>
+                                        <view>
+                                            <label>View</label>
+                                            <module>quotegen</module>
+                                            <controller>category</controller>
+                                            <action>view</action>
+                                            <resource>quotegen__category__view</resource>
+                                            <visible>0</visible>
+                                        </view>
+                                        <edit>
+                                            <label>Edit</label>
+                                            <module>quotegen</module>
+                                            <controller>category</controller>
+                                            <action>edit</action>
+                                            <resource>quotegen__category__edit</resource>
+                                            <visible>0</visible>
+                                        </edit>
+                                    </pages>
+                                </categories>
+                                <view>
+                                    <label>View</label>
+                                    <module>quotegen</module>
+                                    <controller>option</controller>
+                                    <action>view</action>
+                                    <resource>quotegen__option__view</resource>
+                                    <visible>0</visible>
+                                </view>
+                                <edit>
+                                    <label>Edit</label>
+                                    <module>quotegen</module>
+                                    <controller>option</controller>
+                                    <action>edit</action>
+                                    <resource>quotegen__option__edit</resource>
+                                    <visible>0</visible>
+                                </edit>
+                            </pages>
+                        </optionmanagement>
+                        <tonermanagement>
+                            <label>Toners</label>
+                            <module>admin</module>
+                            <controller>toner</controller>
+                            <action>index</action>
+                            <resource>admin__toner__index</resource>
+                        </tonermanagement>
+                        <viewall>
+                            <label>View All Devices</label>
+                            <module>quotegen</module>
+                            <controller>devicesetup</controller>
+                            <action>index</action>
+                            <visible>0</visible>
+                            <resource>quotegen__devicesetup__index</resource>
+                        </viewall>
+                        <create>
+                            <label>Create New</label>
+                            <module>quotegen</module>
+                            <controller>devicesetup</controller>
+                            <action>create</action>
+                            <visible>0</visible>
+                            <resource>quotegen__devicesetup__create</resource>
+                        </create>
+                        <edit>
+                            <label>Details</label>
+                            <module>quotegen</module>
+                            <controller>devicesetup</controller>
+                            <action>edit</action>
+                            <visible>0</visible>
+                            <resource>quotegen__devicesetup__edit</resource>
+                        </edit>
+                        <delete>
+                            <label>Delete</label>
+                            <module>quotegen</module>
+                            <controller>devicesetup</controller>
+                            <action>delete</action>
+                            <visible>0</visible>
+                            <resource>quotegen__devicesetup__delete</resource>
+                        </delete>
+                        <toners>
+                            <label>Toners</label>
+                            <module>quotegen</module>
+                            <controller>devicesetup</controller>
+                            <action>toners</action>
+                            <visible>0</visible>
+                            <resource>quotegen__devicesetup__toners</resource>
+                        </toners>
+                        <options>
+                            <label>Available Options</label>
+                            <module>quotegen</module>
+                            <controller>devicesetup</controller>
+                            <action>options</action>
+                            <visible>0</visible>
+                            <resource>quotegen__devicesetup__options</resource>
+                        </options>
+                        <configurations>
+                            <label>Hardware Configurations</label>
+                            <module>quotegen</module>
+                            <controller>devicesetup</controller>
+                            <action>configurations</action>
+                            <visible>0</visible>
+                            <resource>quotegen__devicesetup__configurations</resource>
+                        </configurations>
+                    </pages>
+                </devicemanagement>
+                <leasing>
+                    <label>Leasing Schemas</label>
+                    <module>quotegen</module>
+                    <controller>leasingschema</controller>
+                    <action>index</action>
+                    <resource>quotegen__leasingschema__index</resource>
+                    <pages>
+                        <viewschema>
+                            <label>View Schema</label>
+                            <class></class>
+                            <module>quotegen</module>
+                            <controller>leasingschema</controller>
+                            <action>index</action>
+                            <resource>quotegen__leasingschema__index</resource>
+                            <visible>0</visible>
+                        </viewschema>
+                        <addterm>
+                            <label>Add Term</label>
+                            <class></class>
+                            <module>quotegen</module>
+                            <controller>leasingschema</controller>
+                            <action>addterm</action>
+                            <resource>quotegen__leasingschema__addterm</resource>
+                            <visible>0</visible>
+                        </addterm>
+                        <editterm>
+                            <label>Edit Term</label>
+                            <class></class>
+                            <module>quotegen</module>
+                            <controller>leasingschema</controller>
+                            <action>editterm</action>
+                            <resource>quotegen__leasingschema__editterm</resource>
+                            <visible>0</visible>
+                        </editterm>
+                        <delterm>
+                            <label>Delete Term</label>
+                            <class></class>
+                            <module>quotegen</module>
+                            <controller>leasingschema</controller>
+                            <action>deleteterm</action>
+                            <resource>quotegen__leasingschema__deleteterm</resource>
+                            <visible>0</visible>
+                        </delterm>
+                        <addrange>
+                            <label>Add Range</label>
+                            <class></class>
+                            <module>quotegen</module>
+                            <controller>leasingschema</controller>
+                            <action>addrange</action>
+                            <resource>quotegen__leasingschema__addrange</resource>
+                            <visible>0</visible>
+                        </addrange>
+                        <editrange>
+                            <label>Edit Range</label>
+                            <class></class>
+                            <module>quotegen</module>
+                            <controller>leasingschema</controller>
+                            <action>editrange</action>
+                            <resource>quotegen__leasingschema__editrange</resource>
+                            <visible>0</visible>
+                        </editrange>
+                        <delrange>
+                            <label>Delete Range</label>
+                            <class></class>
+                            <module>quotegen</module>
+                            <controller>leasingschema</controller>
+                            <action>deleterange</action>
+                            <resource>quotegen__leasingschema__deleterange</resource>
+                            <visible>0</visible>
+                        </delrange>
+                        <resetschema>
+                            <label>Clear Schema</label>
+                            <class></class>
+                            <module>quotegen</module>
+                            <controller>leasingschema</controller>
+                            <action>resetschema</action>
+                            <resource>quotegen__leasingschema__resetschema</resource>
+                            <visible>0</visible>
+                        </resetschema>
+                    </pages>
+                </leasing>
+                <UserManagement>
+                    <label>Users</label>
+                    <module>admin</module>
+                    <controller>user</controller>
+                    <action>index</action>
+                    <class>dropdown</class>
+                    <resource>admin__user__index</resource>
+                    <pages>
+                        <RoleManagement>
+                            <label>Roles</label>
+                            <module>admin</module>
+                            <controller>roles</controller>
+                            <action>index</action>
+                            <resource>admin__roles__index</resource>
+                        </RoleManagement>
+                        <viewall>
+                            <label>View All</label>
+                            <module>admin</module>
+                            <controller>user</controller>
+                            <action>index</action>
+                            <resource>admin__user__index</resource>
+                        </viewall>
+                        <create>
+                            <label>Create User</label>
+                            <module>admin</module>
+                            <controller>user</controller>
+                            <action>create</action>
+                            <resource>admin__user__create</resource>
+                            <icon>plus-sign</icon>
+                        </create>
+                        <edit>
+                            <label>Edit User</label>
+                            <module>admin</module>
+                            <controller>user</controller>
+                            <action>edit</action>
+                            <resource>admin__user__create</resource>
+                            <icon>pencil</icon>
+                            <visible>0</visible>
+                        </edit>
+                        <delete>
+                            <label>Delete User</label>
+                            <module>admin</module>
+                            <controller>user</controller>
+                            <action>delete</action>
+                            <resource>admin__user__delete</resource>
+                            <visible>0</visible>
+                        </delete>
+                        <view>
+                            <label>View User</label>
+                            <module>admin</module>
+                            <controller>user</controller>
+                            <action>view</action>
+                            <resource>admin__user__view</resource>
+                            <visible>0</visible>
+                        </view>
+                    </pages>
+                </UserManagement>
+            </pages>
         </sysadmin>
     </nav>
 </config>
