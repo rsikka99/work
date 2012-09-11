@@ -310,7 +310,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
      *
      * @return number The sub total
      */
-    public function calculateLeaseValue ()
+    public function calculateHardwareLeaseValue ()
     {
         $subtotal = 0;
         
@@ -320,9 +320,23 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
             $subtotal += $quoteDeviceGroupDevice->getQuoteDevice()->calculateTotalLeaseValue();
         }
         
+        return $subtotal;
+    }
+    
+    /**
+     * Calculates the lease sub total for the quote's devices.
+     *
+     * @return number The sub total
+     */
+    public function calculateLeaseValue ()
+    {
+        $subtotal = 0;
+    
+        $subtotal += $this->calculateHardwareLeaseValue();
+    
         // Add Pages
         $subtotal += $this->calculateTotalPageRevenue();
-        
+    
         return $subtotal;
     }
 

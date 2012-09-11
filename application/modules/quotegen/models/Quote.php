@@ -825,9 +825,23 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             $leaseValue += $quoteDeviceGroup->calculateLeaseValue();
         }
         
-        // TODO: Add Pages to this calculation
-        
+        return $leaseValue;
+    }
 
+    /**
+     * Calculates the total lease value for the quote's hardware (no pages included here)
+     *
+     * @return number The total lease value
+     */
+    public function calculateTotalHardwareLeaseValue ()
+    {
+        $leaseValue = 0;
+        
+        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        {
+            $leaseValue += $quoteDeviceGroup->calculateHardwareLeaseValue();
+        }
+        
         return $leaseValue;
     }
 
@@ -867,7 +881,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     public function calculateTotalMonthlyLeasePrice ()
     {
-        $leaseValue = $this->calculateTotalLeaseValue();
+        $leaseValue = $this->calculateTotalHardwareLeaseValue();
         $monthlyPayment = 0;
         $leaseFactor = $this->getLeaseRate();
         
@@ -1154,7 +1168,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         {
             $totalMonochromePageCost += $quoteDeviceGroup->calculateMonochromePageCost();
         }
-
+        
         return $totalMonochromePageCost;
     }
 
