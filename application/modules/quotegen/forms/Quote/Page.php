@@ -19,22 +19,11 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
     public function init ()
     {
         $inlineDecorators = array (
-                array (
-                        'FieldSize' 
-                ), 
-                array (
-                        'ViewHelper' 
-                ), 
-                array (
-                        'Description', 
-                        array (
-                                'tag' => 'p', 
-                                'class' => 'help-block' 
-                        ) 
-                ), 
-                array (
-                        'Addon' 
-                ) 
+                'FieldSize', 
+                'ViewHelper', 
+                'Addon', 
+                'PopoverElementErrors',
+                'Wrapper' 
         );
         
         // Set the method for the display form to POST
@@ -99,6 +88,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
         $this->addElement('text', 'monochromePageMargin', array (
                 'value' => $this->_quote->getMonochromePageMargin(), 
                 'required' => true, 
+                'decorators' => $inlineDecorators,
                 'class' => 'input-mini', 
                 'validators' => array (
                         'Float', 
@@ -118,6 +108,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
         $this->addElement('text', 'colorPageMargin', array (
                 'value' => $this->_quote->getColorPageMargin(), 
                 'required' => true, 
+                'decorators' => $inlineDecorators,
                 'class' => 'input-mini', 
                 'validators' => array (
                         'Float', 
