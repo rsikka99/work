@@ -33,9 +33,6 @@ class Admin_Model_Mapper_UserRole extends My_Model_Mapper_Abstract
         // Get an array of data to save
         $data = $object->toArray();
         
-        // Remove the id
-        unset($data ['id']);
-        
         // Insert the data
         $id = $this->getDbTable()->insert($data);
         
@@ -60,13 +57,22 @@ class Admin_Model_Mapper_UserRole extends My_Model_Mapper_Abstract
         
         if ($primaryKey === null)
         {
-            $primaryKey = $data ['id'];
+            if ($object instanceof Admin_Model_UserRole)
+            {
+                $whereClause = $this->getWhereId($this->getPrimaryKeyValueForObject($object));
+            }
+            else
+            {
+                $whereClause = $this->getWhereId($object);
+            }
+        }
+        else
+        {
+            $whereClause = $this->getWhereId($primaryKey);
         }
         
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array (
-                'id = ?' => $primaryKey 
-        ));
+        $rowsAffected = $this->getDbTable()->update($data, $whereClause);
         
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -86,15 +92,11 @@ class Admin_Model_Mapper_UserRole extends My_Model_Mapper_Abstract
     {
         if ($object instanceof Admin_Model_UserRole)
         {
-            $whereClause = array (
-                    'id = ?' => $object->getId() 
-            );
+            $whereClause = $this->getWhereId($this->getPrimaryKeyValueForObject($object));
         }
         else
         {
-            $whereClause = array (
-                    'id = ?' => $object 
-            );
+            $whereClause = $this->getWhereId($object);
         }
         
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -118,7 +120,7 @@ class Admin_Model_Mapper_UserRole extends My_Model_Mapper_Abstract
         }
         
         // Assuming we don't have a cached object, lets go get it.
-        $result = $this->getDbTable()->find($id);
+        $result = $this->getDbTable()->find($id [0], $id [1]);
         if (0 == count($result))
         {
             return;
@@ -208,8 +210,8 @@ class Admin_Model_Mapper_UserRole extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return array (
-                $object->getUserId(), 
-                $object->getRoleId() 
+                $object->getRoleId(), 
+                $object->getUserId() 
         );
     }
 }
