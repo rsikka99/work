@@ -22,18 +22,13 @@ class Quotegen_Model_Client extends My_Model_Abstract
      * @var string
      */
     protected $_name;
+    
     /**
      * The address of the client
      *
      * @var string
      */
     protected $_address;
-    /**
-     * The phone number of the client
-     *
-     * @var string
-     */
-    protected $_phoneNumber;
     
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
@@ -50,8 +45,6 @@ class Quotegen_Model_Client extends My_Model_Abstract
             $this->setName($params->name);
         if (isset($params->address) && ! is_null($params->address))
             $this->setAddress($params->address);
-        if (isset($params->phoneNumber) && ! is_null($params->phoneNumber))
-            $this->setPhoneNumber($params->phoneNumber);
     }
     
     /*
@@ -62,8 +55,7 @@ class Quotegen_Model_Client extends My_Model_Abstract
         return array (
                 'id' => $this->getId(), 
                 'name' => $this->getName(), 
-                'address' => $this->getAddress(), 
-                'phoneNumber' => $this->getPhoneNumber() 
+                'address' => $this->getAddress() 
         );
     }
 
@@ -127,27 +119,6 @@ class Quotegen_Model_Client extends My_Model_Abstract
     public function setAddress ($_address)
     {
         $this->_address = $_address;
-        return $this;
-    }
-
-    /**
-     * Gets the phone number of the object
-     *
-     * @return the $_phoneNumber
-     */
-    public function getPhoneNumber ()
-    {
-        return $this->_phoneNumber;
-    }
-
-    /**
-     *
-     * @param string $_phoneNumber
-     *            the new phone number
-     */
-    public function setPhoneNumber ($_phoneNumber)
-    {
-        $this->_phoneNumber = $_phoneNumber;
         return $this;
     }
 }
