@@ -78,9 +78,17 @@ foreach ( $this->quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
     $groupCount ++;
     $section->addTextBreak();
 }
+$table = $section->addTable($tcStyle->tablestyle);
+
+// Show CPP
+$table->addRow($tcStyle->cpp->rowheight);
+$table->addCell($tcStyle->span123Width, $tcStyle->cpp->cell1->cellStyle, 3)->addText($this->translate('Monochrome Overage Rate Per Page'), $tcStyle->cpp->cell1->fontStyle, $tcStyle->cpp->cell1->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->cpp->cell2->cellStyle)->addText($this->currency($quote->getMonochromeOverageRatePerPage()), $tcStyle->cpp->cell2->fontStyle, $tcStyle->cpp->cell2->paragraphStyle);
+$table->addRow($tcStyle->cpp->rowheight);
+$table->addCell($tcStyle->span123Width, $tcStyle->cpp->cell1->cellStyle, 3)->addText($this->translate('Color Overage Rate Per Page'), $tcStyle->cpp->cell1->fontStyle, $tcStyle->cpp->cell1->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->cpp->cell2->cellStyle)->addText($this->currency($quote->getColorOverageRatePerPage()), $tcStyle->cpp->cell2->fontStyle, $tcStyle->cpp->cell2->paragraphStyle);
 
 // Show monthly total
-$table = $section->addTable($tcStyle->tablestyle);
 $table->addRow($tcStyle->monthlyTotal->rowheight);
 $table->addCell($tcStyle->span123Width, $tcStyle->monthlyTotal->cell1->cellStyle, 3)->addText($this->translate('Monthly Total (Term: ' . $quote->getLeaseTerm() . ' Months)'), $tcStyle->monthlyTotal->cell1->fontStyle, $tcStyle->monthlyTotal->cell1->paragraphStyle);
 $table->addCell($tcStyle->col4Width, $tcStyle->monthlyTotal->cell2->cellStyle)->addText($this->currency($quote->calculateQuoteMonthlyLeaseSubtotal()), $tcStyle->monthlyTotal->cell2->fontStyle, $tcStyle->monthlyTotal->cell2->paragraphStyle);
