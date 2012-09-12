@@ -15,9 +15,9 @@
                     <id>indexmenu</id>
                     <class>dropdown</class>
                     <module>quotegen</module>
-                    <controller>quote</controller>
+                    <controller>quote_devices</controller>
                     <action>index</action>
-                    <resource>quotegen__quote__index</resource>
+                    <resource>quotegen__quote_devices__index</resource>
                     <pages>
                         <create>
                             <label>Create New Quote</label>
