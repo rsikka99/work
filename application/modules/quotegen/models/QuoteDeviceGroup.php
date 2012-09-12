@@ -295,7 +295,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
             $quantity = $quoteDeviceGroupDevice->getQuantity();
             if ($quantity > 0)
             {
-                $subtotal += $quoteDeviceGroupDevice->getQuoteDevice()->calculateTotalMonthlyLeasePrice() * $quantity;
+                $subtotal += $quoteDeviceGroupDevice->getQuoteDevice()->calculateMonthlyLeasePrice() * $quantity;
             }
         }
         
