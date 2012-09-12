@@ -244,7 +244,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                 new Zend_Validate_Float(), 
                                 new Zend_Validate_Between(array (
                                         'min' => 1, 
-                                        'max' => 5000 
+                                        'max' => 30000 
                                 )) 
                         )) 
                 ) 
