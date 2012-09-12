@@ -57,9 +57,9 @@ INSERT INTO `qgen_quote_device_groups` (`id`, `quoteId`, `name`, `isDefault`) VA
 (3, 1,'Head Office', 0);
 
 INSERT INTO `qgen_quote_devices` (`id`,`quoteId`, `margin`, `name`, `sku`, `oemCostPerPageMonochrome`, `oemCostPerPageColor`, `compCostPerPageMonochrome`, `compCostPerPageColor`, `cost`, `residual`, `packageCost`, `packageMarkup`) VALUES
-(1, 1, 20.00, 'Unsynced Device Name 1', 'Unsynced SKU 1', 999, 999, 999, 999, 999.99, 0, 999.99, 999.99),
-(2, 1, 20.00, 'Unsynced Device Name 2', 'Unsynced SKU 2', 999, 999, 999, 999, 999.99, 0, 999.99, 999.99),
-(3, 1, 20.00, 'Unsynced Device Name 3', 'Unsynced SKU 3', 999, 999, 999, 999, 999.99, 0, 999.99, 999.99);
+(1, 1, 20.00, 'HP Color Laserjet Cm3530 Mfp', 'FAKESKU3123',    0.01, 0.08, 0.01, 0.08, 2155.90, 0, 2522.90, 0),
+(2, 1, 20.00, 'HP Color Laserjet Cm2320nf', 'FAKESKU4113',      0.01, 0.08, 0.01, 0.08,  699.99, 0,  949.99, 0),
+(3, 1, 20.00, 'HP Laserjet 2200d', 'FAKESKU7553',               0.01, 0.08, 0.01, 0.08,   99.00, 0,  327.00, 0);
 
 INSERT INTO `qgen_quote_device_group_devices` (`quoteDeviceId`,`quoteDeviceGroupId`,`quantity`,`monochromePagesQuantity`, `colorPagesQuantity`) VALUES
 (1,1,1,0,0),
@@ -75,14 +75,14 @@ INSERT INTO `qgen_quote_device_configurations` (`masterDeviceId`, `quoteDeviceId
 (3, 3);
 
 INSERT INTO `qgen_quote_device_options` (`id`, `quoteDeviceId`, `sku`, `name`, `description`, `cost`, `quantity`, `includedQuantity`) VALUES
-(1, 1, 'Unsynced SKU 1', 'Unsynced Option Name 1', 'Add Description!', 999.99, 1, 0),
-(2, 1, 'Unsynced SKU 2', 'Unsynced Option Name 2', 'Add Description!', 999.99, 1, 0),
-(3, 1, 'Unsynced SKU 3', 'Unsynced Option Name 3', 'Add Description!', 999.99, 1, 0),
-(4, 2, 'Unsynced SKU 4', 'Unsynced Option Name 4', 'Add Description!', 999.99, 1, 0),
-(5, 2, 'Unsynced SKU 5', 'Unsynced Option Name 5', 'Add Description!', 999.99, 1, 0),
-(6, 2, 'Unsynced SKU 6', 'Unsynced Option Name 6', 'Add Description!', 999.99, 1, 0),
-(7, 3, 'Unsynced SKU 7', 'Unsynced Option Name 7', 'Add Description!', 999.99, 1, 0),
-(8, 3, 'Unsynced SKU 8', 'Unsynced Option Name 8', 'Add Description!', 999.99, 1, 0);
+(1, 1, 'PPRTRY-500',    '500 Sheet Paper tray', 'The standard 500 sheet paper tray',          3.00, 1, 0),
+(2, 1, 'HDD-WD40',      '40 GB Hard drive',     '40gb Hard Drive',                           44.00, 1, 0),
+(3, 1, 'FNSHRSTPLCOL',  'Stapler/Collator',     'Staples and collates pages',               320.00, 1, 0),
+(4, 2, 'PPRTRY-500',    '500 Sheet Paper tray', 'The standard 500 sheet paper tray',          3.00, 1, 0),
+(5, 2, 'HDD-WD60',      '60 GB Hard drive',     '60 GB Hard Drive',                          22.00, 1, 0),
+(6, 2, 'FNSHRSTPL',     'Stapler',              'Staples papers together to form booklets', 225.00, 1, 0),
+(7, 3, 'PPRTRY-500',    '500 Sheet Paper tray', 'The standard 500 sheet paper tray',          3.00, 1, 0),
+(8, 3, 'FNSHRSTPL',     'Stapler',              'Staples papers together to form booklets', 225.00, 1, 0);
 
 INSERT INTO `qgen_quote_device_configuration_options` (`quoteDeviceOptionId`, `optionId`, `masterDeviceId`) VALUES
 (1, 1, 1),
