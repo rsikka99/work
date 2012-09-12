@@ -60,11 +60,11 @@ INSERT INTO `log_types` (`id`, `name`) VALUES
 (4, 'Email'),
 (5, 'Security');
 
-INSERT INTO `clients` (`id`, `name`, `address`, `phoneNumber`) VALUES
-(1, 'Test Company', "123 Fake Street\nSuite 456\nFake City\nA1A 2B2", '123-456-7890'),
-(2, 'NotReal Solutions', "123 Fake Street\nSuite 9876\nFake City\nA1A 2B2", '1-123-456-7890'),
-(3, 'Company ABC', "123 Fake Street\nSuite 132\nFake City\nA1A 2B2", '01-123-456-7890'),
-(4, 'Company XYZ', "123 Fake Street\nSuite 004-84\nFake City\nA1A 2B2", '+1 123-456-7890');
+INSERT INTO `clients` (`id`, `name`, `address`) VALUES
+(1, 'Test Company', "123 Fake Street\nSuite 456\nFake City\nA1A 2B2"),
+(2, 'NotReal Solutions', "123 Fake Street\nSuite 9876\nFake City\nA1A 2B2"),
+(3, 'Company ABC', "123 Fake Street\nSuite 132\nFake City\nA1A 2B2"),
+(4, 'Company XYZ', "123 Fake Street\nSuite 004-84\nFake City\nA1A 2B2");
 
 INSERT INTO `manufacturers` (`id`, `fullname`, `displayname`) VALUES
 (1, 'Brother', 'Brother'),
