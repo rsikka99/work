@@ -69,7 +69,7 @@ $table->addCell($tcStyle->span123Width, $tcStyle->pages->cell1->cellStyle, 3)->a
 $table->addCell($tcStyle->col4Width, $tcStyle->pages->cell2->cellStyle)->addText($this->currency($quote->getMonochromeOverageRatePerPage(), array('precision' => '4')), $tcStyle->pages->cell2->fontStyle, $tcStyle->pages->cell2->paragraphStyle);
 $table->addRow($tcStyle->pages->rowheight);
 $table->addCell($tcStyle->span123Width, $tcStyle->pages->cell1->cellStyle, 3)->addText($this->translate('Color Page Overage Rate'), $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->pages->cell2->cellStyle)->addText($this->currency($quote->getMonochromeOverageRatePerPage(),array('precision' => '4')), $tcStyle->pages->cell2->fontStyle, $tcStyle->pages->cell2->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->pages->cell2->cellStyle)->addText($this->currency($quote->getColorOverageRatePerPage(),array('precision' => '4')), $tcStyle->pages->cell2->fontStyle, $tcStyle->pages->cell2->paragraphStyle);
 
 // Show monthly total
 $table->addRow($tcStyle->monthlyTotal->rowheight);
