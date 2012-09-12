@@ -52,7 +52,7 @@ INSERT INTO `qgen_quote_lease_terms` (`quoteId`, `leasingSchemaTermId`) VALUES
 (1, 4);
 
 INSERT INTO `qgen_quote_device_groups` (`id`, `quoteId`, `name`, `isDefault`) VALUES
-(1, 1,'Deafult Group (Ungrouped)', 1),
+(1, 1,'Default Group (Ungrouped)', 1),
 (2, 1,'Kingston Office', 0),
 (3, 1,'Head Office', 0);
 
