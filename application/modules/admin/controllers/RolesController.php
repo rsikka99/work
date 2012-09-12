@@ -41,42 +41,42 @@ class Admin_RolesController extends Zend_Controller_Action
         
         if ($request->isPost())
         {
-            if ($this->_getParam('cancel', FALSE))
+            $values = $request->getPost();
+            // Did the user cancel?
+            if (isset($values ['cancel']))
             {
                 $this->_helper->redirector('index');
             }
-            else
+            
+            if ($form->isValid($values))
             {
                 
-                if ($form->isValid($request->getPost()))
+                try
                 {
-                    try
+                    $role = new Admin_Model_Role();
+                    $role->populate($form->getValues());
+                    $roleId = Admin_Model_Mapper_Role::getInstance()->insert($role);
+                    if ($roleId > 0)
                     {
-                        $role = new Admin_Model_Role();
-                        $role->populate($form->getValues());
-                        $roleId = Admin_Model_Mapper_Role::getInstance()->insert($role);
-                        if ($roleId > 0)
-                        {
-                            $this->_helper->flashMessenger(array (
-                                    'success' => "Successfully deleted the role '{$role->getName()}'." 
-                            ));
-                            $this->_helper->redirector('edit', null, null, array (
-                                    'roleId' => $roleId 
-                            ));
-                        }
-                        else
-                        {
-                            $this->_helper->flashMessenger(array (
-                                    'danger' => "There was an issue creating your role. Please try again and if the problem persists contact your system administrator." 
-                            ));
-                        }
+                        $this->_helper->flashMessenger(array (
+                                'success' => "Successfully deleted the role '{$role->getName()}'." 
+                        ));
+                        $this->_helper->redirector('edit', null, null, array (
+                                'roleId' => $roleId 
+                        ));
                     }
-                    catch ( Exception $e )
+                    else
                     {
                         $this->_helper->flashMessenger(array (
                                 'danger' => "There was an issue creating your role. Please try again and if the problem persists contact your system administrator." 
                         ));
                     }
+                }
+                catch ( Exception $e )
+                {
+                    $this->_helper->flashMessenger(array (
+                            'danger' => "There was an issue creating your role. Please try again and if the problem persists contact your system administrator." 
+                    ));
                 }
             }
         }
@@ -113,7 +113,15 @@ class Admin_RolesController extends Zend_Controller_Action
         
         if ($request->isPost())
         {
-            if ($form->isValid($request->getPost()))
+            $values = $request->getPost();
+            
+            // Did the user cancel?
+            if (isset($values ['cancel']))
+            {
+                $this->_helper->redirector('index');
+            }
+            
+            if ($form->isValid($values))
             {
                 $result = Admin_Model_Mapper_Role::getInstance()->delete($role);
                 if ($result > 0)
@@ -182,7 +190,15 @@ class Admin_RolesController extends Zend_Controller_Action
         
         if ($request->isPost())
         {
-            if ($form->isValid($request->getPost()))
+            $values = $request->getPost();
+            
+            // Did the user cancel?
+            if (isset($values ['cancel']))
+            {
+                $this->_helper->redirector('index');
+            }
+            
+            if ($form->isValid($values))
             {
                 $formValues = $form->getValues();
                 $privilegeValues = $formValues ['privileges'];
