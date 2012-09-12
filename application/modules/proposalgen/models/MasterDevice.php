@@ -1269,4 +1269,14 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     {
         return "{$this->getManufacturer()->getDisplayName()} {$this->getPrinterModel()}";
     }
+
+    /**
+     * Returns whether or not a device is color.
+     * 
+     * @return boolean
+     */
+    public function isColor ()
+    {
+        return ((int)$this->getTonerConfigId() !== Proposalgen_Model_TonerConfig::BLACK_ONLY);
+    }
 }
