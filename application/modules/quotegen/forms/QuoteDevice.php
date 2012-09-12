@@ -28,6 +28,7 @@ class Quotegen_Form_QuoteDevice extends Twitter_Bootstrap_Form_Horizontal
     {
         $this->_id = $id;
         parent::__construct($options);
+        Quotegen_Form_Quote_Navigation::addFormActionsToForm(Quotegen_Form_Quote_Navigation::BUTTONS_ALL, $this);
     }
 
     public function init ()
@@ -70,11 +71,11 @@ class Quotegen_Form_QuoteDevice extends Twitter_Bootstrap_Form_Horizontal
                     'ignore' => true 
             ));
             
-            $this->addElement('text', 'totalPrice', array(
-                    'label' => 'Total Package Price',
-                    'disabled' => true,
-                    'ignore' => true,
-                    ));
+            $this->addElement('text', 'totalPrice', array (
+                    'label' => 'Total Package Price', 
+                    'disabled' => true, 
+                    'ignore' => true 
+            ));
             
             $this->addElement('text', 'margin', array (
                     'label' => 'Margin:', 
@@ -92,13 +93,12 @@ class Quotegen_Form_QuoteDevice extends Twitter_Bootstrap_Form_Horizontal
                     ) 
             ));
             
-            
             $this->addElement('text', 'cost', array (
                     'label' => 'Cost:', 
                     'disabled' => true, 
                     'ignore' => true 
             ));
-       
+            
             // For each option that is linked with the device
             /* @var $deviceConfigurationOption Quotegen_Model_QuoteDeviceOption */
             foreach ( $quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption )
@@ -108,9 +108,9 @@ class Quotegen_Form_QuoteDevice extends Twitter_Bootstrap_Form_Horizontal
                 
                 // Create and text element with its name as option-{id}-quantity
                 $optionElement = $this->createElement('text', "option-{$quoteDeviceOption->getId()}-quantity", array (
-                        'label' => $quoteDeviceOption->getName(),
-                        'value' => $quoteDeviceOption->getQuantity(),
-                        'description' => $quoteDeviceOption->getId()
+                        'label' => $quoteDeviceOption->getName(), 
+                        'value' => $quoteDeviceOption->getQuantity(), 
+                        'description' => $quoteDeviceOption->getId() 
                 ));
                 $optionElement->setAttrib('class', 'span1');
                 
@@ -154,27 +154,6 @@ class Quotegen_Form_QuoteDevice extends Twitter_Bootstrap_Form_Horizontal
                     'multiOptions' => $quoteDeviceList 
             ));
         }
-        
-        // Add the submit button
-        $this->addElement('submit', 'submit', array (
-                'ignore' => true, 
-                'label' => 'Save', 
-                'class' => 'btn btn-success' 
-        ));
-        
-        // Add the submit button
-        $this->addElement('submit', 'saveAndFinish', array (
-                'ignore' => true, 
-                'label' => 'Save & Return' 
-        ));
-        
-        // Add the cancel button
-        $this->addElement('submit', 'cancel', array (
-                'ignore' => true, 
-                'label' => 'Cancel' 
-        ));
-        
-        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'saveAndFinish', 'cancel');
     }
 
     public function loadDefaultDecorators ()

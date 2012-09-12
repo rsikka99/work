@@ -34,9 +34,5 @@ $form = $this->element;
             <input class="span2" disabled="disabled" name='packagePrice' style="padding-left: 2px" value="<?php echo $form->getQuoteDevice()->calculatePackageCost(); ?>" />
         </div>
     </div>
-    <div class="form-actions">
-        <?php echo $form->getElement('cancel')->renderViewHelper(); ?>
-        <?php echo $form->getElement('submit')->renderViewHelper(); ?>
-        <?php echo $form->getElement('saveAndFinish')->renderViewHelper(); ?>
-    </div>    
+ 	<?php echo $form->getDisplayGroup('actions')->render(); ?>
 </form>
