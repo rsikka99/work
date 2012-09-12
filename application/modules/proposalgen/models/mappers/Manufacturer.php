@@ -174,7 +174,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL LIMIT offset.
      * @return multitype:Proposalgen_Model_Manufacturer
      */
-    public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
+    public function fetchAll ($where = null, $order = null, $count = null, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
         $entries = array ();
