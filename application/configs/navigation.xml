@@ -53,7 +53,7 @@
                     </pages>
                 </clients>
                 <devicemanagement>
-                    <label>Device Management</label>
+                    <label>Hardware Library</label>
                     <class>dropdown</class>
                     <module>quotegen</module>
                     <controller>devicesetup</controller>
@@ -69,7 +69,7 @@
                             <resource>quotegen__devicesetup__index</resource>
                         </viewalldevices>
                         <globalconfigurations>
-                            <label>Global Configurations</label>
+                            <label>Hardware Configurations</label>
                             <class></class>
                             <module>quotegen</module>
                             <controller>configuration</controller>
@@ -144,29 +144,29 @@
                             </pages>
                         </manufacturers>
                         <optionmanagement>
-                            <label>Option Management</label>
+                            <label>Option Library</label>
                             <class>dropdown subdropdown</class>
                             <module>quotegen</module>
                             <controller>option</controller>
                             <action>index</action>
                             <resource>quotegen__option__index</resource>
                             <pages>
-                                <addnew>
-                                    <label>Add New</label>
-                                    <class></class>
-                                    <module>quotegen</module>
-                                    <controller>option</controller>
-                                    <action>create</action>
-                                    <resource>quotegen__option__create</resource>
-                                </addnew>
                                 <viewall>
-                                    <label>View All</label>
+                                    <label>All Options</label>
                                     <class></class>
                                     <module>quotegen</module>
                                     <controller>option</controller>
                                     <action>index</action>
                                     <resource>quotegen__option__index</resource>
                                 </viewall>
+                                <addnew>
+                                    <label>New Option</label>
+                                    <class></class>
+                                    <module>quotegen</module>
+                                    <controller>option</controller>
+                                    <action>create</action>
+                                    <resource>quotegen__option__create</resource>
+                                </addnew>
                                 <categories>
                                     <label>Option Categories</label>
                                     <class></class>
@@ -285,14 +285,14 @@
                     </pages>
                 </devicemanagement>
                 <leasing>
-                    <label>Leasing Schemas</label>
+                    <label>Leasing Rates</label>
                     <module>quotegen</module>
                     <controller>leasingschema</controller>
                     <action>index</action>
                     <resource>quotegen__leasingschema__index</resource>
                     <pages>
                         <viewschema>
-                            <label>View Schema</label>
+                            <label>View Provider</label>
                             <class></class>
                             <module>quotegen</module>
                             <controller>leasingschema</controller>
@@ -355,7 +355,7 @@
                             <visible>0</visible>
                         </delrange>
                         <resetschema>
-                            <label>Clear Schema</label>
+                            <label>Clear Provider</label>
                             <class></class>
                             <module>quotegen</module>
                             <controller>leasingschema</controller>
