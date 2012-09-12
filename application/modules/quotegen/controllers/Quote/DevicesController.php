@@ -199,7 +199,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             $values = $request->getPost();
             
             // If we cancelled we don't need to validate anything
-            if (isset($values ['cancel']))
+            if (isset($values ['goBack']))
             {
                 // User has cancelled. We could do a redirect here if we wanted.
                 $this->_helper->redirector('index', null, null, array (
@@ -262,7 +262,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             ));
                             
                             // Send back to the main list if they are finished
-                            if (isset($values ['saveAndFinish']))
+                            if (isset($values ['saveAndContinue']))
                             {
                                 $this->_helper->redirector('index', null, null, array (
                                         'quoteId' => $this->_quoteId 
