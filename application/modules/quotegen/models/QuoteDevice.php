@@ -584,9 +584,32 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
 
     /**
      * ****************************************************************************************************************************************
+     * DEVICE PROPERTIES
+     * ****************************************************************************************************************************************
+     */
+    /**
+     * Returns whether or not the device is capable of printing in color based on it's comp and oem cpp's (If they are 0
+     * it is not a color device)
+     *
+     * @return bool
+     */
+    public function isColorCapable ()
+    {
+        $isColor = false;
+        if ($this->getCompCostPerPageColor() > 0 || $this->getOemCostPerPageColor() > 0)
+        {
+            $isColor = true;
+        }
+        
+        return $isColor;
+    }
+
+    /**
+     * ****************************************************************************************************************************************
      * DEVICE CALCULATIONS
      * ****************************************************************************************************************************************
      */
+    
     /**
      * Calculates the cost of options for this configuration
      *
@@ -776,8 +799,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             case Proposalgen_Model_PricingConfig::OEMMONO_COMPCOLOR :
                 $getCompCostPerPage = true;
                 break;
-       }
-
+        }
+        
         // If we want to get comp prices then get them
         if ($getCompCostPerPage)
         {
@@ -810,7 +833,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     {
         $getCompCostPerPage = false;
         $costPerPageMonochrome = 0;
-
+        
         // Figure out which pricing configuration the quote is set for
         switch ($this->getQuote()
             ->getPricingConfig()
@@ -833,7 +856,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         {
             $costPerPageMonochrome = $this->getOemCostPerPageMonochrome();
         }
-
+        
         /*
          * Only add service and admin if we have a cpp > 0. This way if cpp is 0 for some reason the end user will see
          * the problem instead of it being masked by service and admin cpp.
