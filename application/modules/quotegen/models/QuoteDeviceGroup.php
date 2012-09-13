@@ -300,7 +300,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         }
         
         // Add Pages
-        $subtotal += $this->calculateTotalPageRevenue() * $this->getQuote()->getLeaseRate();
+        $subtotal += $this->calculateTotalPageRevenue() * $this->getQuote()->getLeaseTerm() * $this->getQuote()->getLeaseRate();
         
         return $subtotal;
     }
@@ -334,7 +334,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         $subtotal += $this->calculateHardwareLeaseValue();
     
         // Add Pages
-        $subtotal += $this->calculateTotalPageRevenue();
+        $subtotal += $this->calculateTotalPageRevenue() * $this->getQuote()->getLeaseTerm();
     
         return $subtotal;
     }
