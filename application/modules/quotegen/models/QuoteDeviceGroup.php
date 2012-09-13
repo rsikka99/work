@@ -300,7 +300,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         }
         
         // Add Pages
-        $subtotal += $this->calculateTotalPageRevenue() * $this->getQuote()->getLeaseRate();
+        $subtotal += $this->calculateTotalPageRevenue() * $this->getQuote()->getLeaseTerm() * $this->getQuote()->getLeaseRate();
         
         return $subtotal;
     }
@@ -334,7 +334,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         $subtotal += $this->calculateHardwareLeaseValue();
     
         // Add Pages
-        $subtotal += $this->calculateTotalPageRevenue();
+        $subtotal += $this->calculateTotalPageRevenue() * $this->getQuote()->getLeaseTerm();
     
         return $subtotal;
     }
@@ -414,7 +414,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
         foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
         {
-            $pagesMonochrome += $quoteDeviceGroupDevice->getMonochromePagesQuantity();
+            $pagesMonochrome += $quoteDeviceGroupDevice->getMonochromePagesQuantity() * $quoteDeviceGroupDevice->getQuantity();
         }
         
         return $pagesMonochrome;
@@ -430,7 +430,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         $cost = 0;
         foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
         {
-            $cost += $quoteDeviceGroupDevice->getMonochromePagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->calculateMonochromeCostPerPage();
+            $cost += $quoteDeviceGroupDevice->getMonochromePagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->calculateMonochromeCostPerPage() * $quoteDeviceGroupDevice->getQuantity();
         }
         
         return $cost;
@@ -468,7 +468,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
         foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
         {
-            $pagesColor += $quoteDeviceGroupDevice->getColorPagesQuantity();
+            $pagesColor += $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuantity();
         }
         
         return $pagesColor;
@@ -484,7 +484,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         $cost = 0;
         foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
         {
-            $cost += $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->calculateColorCostPerPage();
+            $cost += $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->calculateColorCostPerPage() * $quoteDeviceGroupDevice->getQuantity();
         }
         
         return $cost;

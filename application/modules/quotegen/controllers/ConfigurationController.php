@@ -450,7 +450,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                 array (
                         'ViewScript',
                         array (
-                                'viewScript' => 'configuration/forms/editDeviceConfiguration.phtml',
+                                'viewScript' => 'configuration/forms/editdeviceconfiguration.phtml',
                                 'deviceOptions' => $deviceOptions,
                                 'deviceConfigurationId' => $deviceConfigurationId
                         )

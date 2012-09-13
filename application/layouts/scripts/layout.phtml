@@ -90,7 +90,12 @@
             </div>
         </footer>
 
-        <?php echo $this->partial('phpErrorPartial.phtml', array('exceptions' => $this->exceptions, 'request' => $this->request)); ?>
+        <?php 
+            if (APPLICATION_ENV != 'production')
+            {
+                echo $this->partial('phpErrorPartial.phtml', array('exceptions' => $this->exceptions, 'request' => $this->request));
+            }
+        ?>
         
         <!-- JavaScript at the bottom for fast page loading -->
         <?php echo $this->jQuery()->enable(); ?>

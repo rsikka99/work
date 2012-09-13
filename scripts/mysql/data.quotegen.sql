@@ -1,96 +1,55 @@
--- ---------------------------------------------------
--- Insert quote devices, options and option categories
--- ---------------------------------------------------
-INSERT INTO `qgen_categories` (`id`, `name`, `description`) VALUES
-(1,'Paper Tray','Increases the paper capacity of a printer'),
-(2,'Finishers','These perform various tasks to finish off your prints'),
-(3,'Networking','Allows a printer to gain network connectivity'),
-(4,'Hard Drives','Hard Drives');
+INSERT INTO `clients` (`id`, `name`, `address`) VALUES
+(1, 'Test Company', '123 Fake Street\nSuite 456\nFake City\nA1A 2B2'),
+(2, 'NotReal Solutions', '123 Fake Street\nSuite 9876\nFake City\nA1A 2B2'),
+(3, 'Company ABC', '123 Fake Street\nSuite 132\nFake City\nA1A 2B2'),
+(4, 'Company XYZ', '123 Fake Street\nSuite 004-84\nFake City\nA1A 2B2'),
+(5, 'This is a company', 'With an address'),
+(6, 'OD Client', '1000 MPS Way Boca Raton FLA'),
+(7, 'Kingston Bar', '656 Bath Rd\r\nKingston ON\r\nK7L 9R9'),
+(8, 'EZ Link', '7000 Robie St\r\nDartmouth NS\r\nB1N 5T5');
 
-INSERT INTO `qgen_options` (`id`, `name`,`description`,`cost`,`sku`) VALUES
-(1, '500 Sheet Paper tray', 'The standard 500 sheet paper tray', 3.00,'PPRTRY-500'),
-(2, '40 GB Hard drive', '40gb Hard Drive', 44.00, 'HDD-WD40'),
-(3, '60 GB Hard drive', '60 GB Hard Drive', 22.00, 'HDD-WD60'),
-(4, 'Stapler/Collator', 'Staples and collates pages', 320.00, 'FNSHRSTPLCOL'),
-(5, 'Stapler', 'Staples papers together to form booklets', 225.00, 'FNSHRSTPL'),
-(6, 'WiFi Adapter', 'a/b/g/n WiFi adapter', 35.00, 'NTWKWIFI-ABGN-11');
 
-INSERT INTO `qgen_option_categories` (`optionId`, `categoryId`) VALUES
-(1,1),
-(1,4),
-(3,4),
-(4,2),
-(6,2),
-(6,3);
+INSERT INTO `qgen_options` (`id`, `name`, `description`, `cost`, `sku`) VALUES
+(7, 'HP 3-bin Stapler/Stacker with Output', 'Staples up to 50 pages and stacks up to 1600 sheets', 1765.15, 'CC517A'),
+(8, 'HP LaserJet MFP 3000-sheet Stapler/Stacker', 'Stacks up to 3000 sheets', 1686.4, 'C8085A'),
+(9, 'Cart, W/Storage Capacity', 'Printer Cart with Storage Capacity', 245.17, '097S03636'),
+(10, 'HP Booklet Maker/Finisher with Output', 'Capacity of 2000 sheets and 25 saddle-stitched booklets', 2711.76, 'CC516A'),
+(11, 'HP LaserJet MFP Multifunction Finisher', 'Supports up to 50 pages per minute, can staple up to 50 sheets', 2062, 'C8088B'),
+(12, 'Productivity Kit (Includes Hard Drive)', 'Expands workflow options for Xerox equipment', 420.17, '097S04141'),
+(13, 'HP LaserJet MFP Analog Fax Accessory 300', 'Support efficient information sharing and improve work team productivity.', 202.34, 'Q3701A'),
+(14, '525 Sheet Feeder, Adjustable Up To Legal', 'Capacity of 525 sheets, can support legal paper', 257.14, '097S04142'),
+(15, '8-Bin Mailbox', 'Stacks up to 250 pages per bin', 1283, 'Q5693A'),
+(16, 'Tray, Main, 525 Sheets', 'Capacity of 525 sheets', 172.28, '097S04143'),
+(17, '3,000-sheet Stacker', 'Capacity of 3000 sheets', 1499.64, 'C8084A');
 
--- Add Devices
-INSERT INTO `qgen_devices` (`masterDeviceId`, `sku`, `description`) VALUES 
-(1, 'FAKESKU3123', NULL),
-(2, 'FAKESKU4113', NULL),
-(3, 'FAKESKU7553', NULL);
 
--- Add Options To the Devices
-INSERT INTO `qgen_device_options` (`masterDeviceId`, `optionId`) VALUES
-(1, 1),
-(1, 2),
-(1, 4),
+INSERT INTO `qgen_devices` (`masterDeviceId`, `sku`, `description`) VALUES
+(4, 'Q3939A', '- Fax accessory'),
+(5, 'CC395A', ''),
+(6, 'CF116A', ''),
+(7, 'CE992A', ''),
+(8, '8870/DN', ''),
+(9, 'CE504A', '');
 
-(2, 1),
-(2, 3),
-(2, 5),
+INSERT INTO `qgen_device_options` (`masterDeviceId`, `optionId`, `includedQuantity`) VALUES
+(4, 7, 0),
+(4, 10, 0),
+(5, 8, 0),
+(5, 11, 0),
+(5, 13, 0),
+(5, 15, 0),
+(5, 17, 0),
+(8, 9, 0),
+(8, 12, 0),
+(8, 14, 0),
+(8, 16, 0);
 
-(3, 1),
-(3, 5);
+INSERT INTO `qgen_device_configurations` (`id`, `masterDeviceId`, `name`, `description`) VALUES
+(1, 4, 'Jays build', '6040 w booklet maker'),
+(2, 4, 'bobs fav', 'yaya');
 
--- ---------------------------------
--- Create a quote with some devices.
--- ---------------------------------
-INSERT INTO `qgen_quotes` (`id`, `clientId`, `dateCreated`, `dateModified`, `quoteDate`, `userId`, `clientDisplayName`, `leaseRate`, `leaseTerm`, `monochromePageMargin`, `colorPageMargin`, `adminCostPerPage`,`serviceCostPerPage`, `pageCoverageMonochrome`, `monochromeOverageRatePerPage`, `colorOverageRatePerPage`, `pageCoverageColor`, `pricingConfigId`, `quoteType`) VALUES
-(1, 2, NOW(), NOW(), NOW(), 1, NULL, 0.0343, 39, 20, 30, 0, 0, 6, 0.03, 0.05, 24, 2, 'leased');
 
-INSERT INTO `qgen_quote_lease_terms` (`quoteId`, `leasingSchemaTermId`) VALUES
-(1, 4);
-
-INSERT INTO `qgen_quote_device_groups` (`id`, `quoteId`, `name`, `isDefault`) VALUES
-(1, 1,'Default Group (Ungrouped)', 1),
-(2, 1,'Kingston Office', 0),
-(3, 1,'Head Office', 0);
-
-INSERT INTO `qgen_quote_devices` (`id`,`quoteId`, `margin`, `name`, `sku`, `oemCostPerPageMonochrome`, `oemCostPerPageColor`, `compCostPerPageMonochrome`, `compCostPerPageColor`, `cost`, `residual`, `packageCost`, `packageMarkup`) VALUES
-(1, 1, 20.00, 'HP Color Laserjet Cm3530 Mfp', 'FAKESKU3123',    0.01, 0.08, 0.01, 0.08, 2155.90, 0, 2522.90, 0),
-(2, 1, 20.00, 'HP Color Laserjet Cm2320nf', 'FAKESKU4113',      0.01, 0.08, 0.01, 0.08,  699.99, 0,  949.99, 0),
-(3, 1, 20.00, 'HP Laserjet 2200d', 'FAKESKU7553',               0.01, 0.08, 0.01, 0.08,   99.00, 0,  327.00, 0);
-
-INSERT INTO `qgen_quote_device_group_devices` (`quoteDeviceId`,`quoteDeviceGroupId`,`quantity`,`monochromePagesQuantity`, `colorPagesQuantity`) VALUES
-(1,1,1,0,0),
-(2,1,1,0,0),
-(3,1,1,0,0),
-(2,2,1,0,0),
-(3,2,1,0,0),
-(3,3,3,0,0);
-
-INSERT INTO `qgen_quote_device_configurations` (`masterDeviceId`, `quoteDeviceId`) VALUES
-(1, 1),
-(2, 2),
-(3, 3);
-
-INSERT INTO `qgen_quote_device_options` (`id`, `quoteDeviceId`, `sku`, `name`, `description`, `cost`, `quantity`, `includedQuantity`) VALUES
-(1, 1, 'PPRTRY-500',    '500 Sheet Paper tray', 'The standard 500 sheet paper tray',          3.00, 1, 0),
-(2, 1, 'HDD-WD40',      '40 GB Hard drive',     '40gb Hard Drive',                           44.00, 1, 0),
-(3, 1, 'FNSHRSTPLCOL',  'Stapler/Collator',     'Staples and collates pages',               320.00, 1, 0),
-(4, 2, 'PPRTRY-500',    '500 Sheet Paper tray', 'The standard 500 sheet paper tray',          3.00, 1, 0),
-(5, 2, 'HDD-WD60',      '60 GB Hard drive',     '60 GB Hard Drive',                          22.00, 1, 0),
-(6, 2, 'FNSHRSTPL',     'Stapler',              'Staples papers together to form booklets', 225.00, 1, 0),
-(7, 3, 'PPRTRY-500',    '500 Sheet Paper tray', 'The standard 500 sheet paper tray',          3.00, 1, 0),
-(8, 3, 'FNSHRSTPL',     'Stapler',              'Staples papers together to form booklets', 225.00, 1, 0);
-
-INSERT INTO `qgen_quote_device_configuration_options` (`quoteDeviceOptionId`, `optionId`, `masterDeviceId`) VALUES
-(1, 1, 1),
-(2, 2, 1),
-(3, 4, 1),
-(4, 1, 2),
-(5, 3, 2),
-(6, 5, 2),
-(7, 1, 3),
-(8, 5, 3);
-
+INSERT INTO `qgen_device_configuration_options` (`deviceConfigurationId`, `optionId`, `quantity`) VALUES
+(1, 10, 1),
+(2, 7, 2),
+(2, 10, 1);

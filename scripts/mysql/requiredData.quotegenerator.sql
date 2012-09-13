@@ -1,6 +1,6 @@
 -- System Quote settings
 INSERT INTO `qgen_quote_settings` (`id`, `pageCoverageMonochrome`, `pageCoverageColor`, `deviceMargin`, `pageMargin`, `pricingConfigId`, `adminCostPerPage`, `serviceCostPerPage`, `monochromeOverageRatePerPage`, `colorOverageRatePerPage`) VALUES
-(1, 6.00, 24.00, 20, 20, 2, 0, 0, 0.02, 0.09);
+(1, 4.5, 20, 15, 20, 2, 0.0035, 0.0016, 0.02, 0.09);
 
 -- ---------------------------------
 -- Create a default leasing schema
