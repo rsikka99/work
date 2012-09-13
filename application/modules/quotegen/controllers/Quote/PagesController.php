@@ -40,12 +40,16 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                                 $quoteDeviceGroupDevice->setMonochromePagesQuantity($newQuantity);
                                 $hasQuantityChanged = true;
                             }
-                            
-                            $newQuantity = $form->getValue("quantity_color_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}");
-                            if ((int)$newQuantity !== (int)$quoteDeviceGroupDevice->getColorPagesQuantity())
+							
+                            // If device is color capable
+                            if ($quoteDeviceGroupDevice->getQuoteDevice()->isColorCapable())
                             {
-                                $quoteDeviceGroupDevice->setColorPagesQuantity($newQuantity);
-                                $hasQuantityChanged = true;
+                                $newQuantity = $form->getValue("quantity_color_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}");
+                                if ((int)$newQuantity !== (int)$quoteDeviceGroupDevice->getColorPagesQuantity())
+                                {
+                                    $quoteDeviceGroupDevice->setColorPagesQuantity($newQuantity);
+                                    $hasQuantityChanged = true;
+                                }
                             }
                             
                             if ($hasQuantityChanged)
@@ -54,9 +58,6 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                             }
                         }
                     }
-                    
-                    
-                    
                     $this->_quote->populate($values);
                     $this->saveQuote();
                     Quotegen_Model_Mapper_Quote::getInstance()->save($this->_quote);
@@ -72,7 +73,9 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                 // form invalid : show error messages 
                 else
                 {
-                    $this->_helper->flashMessenger(array('danger' => 'Please correct the errors below.'));
+                    $this->_helper->flashMessenger(array (
+                            'danger' => 'Please correct the errors below.' 
+                    ));
                 }
             }
             // Go back button is clicked : got back to qoute_groups
