@@ -167,7 +167,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
         // pageCoverageColor : Quotegen_Model_Quote->pageCoverageColor
         // pageCoverageColor is used to set the page coverage amount in the quote
         $pageCoverageColor = $this->createElement('text', 'pageCoverageColor', array (
-                'label' => 'Page Covereage Color:', 
+                'label' => 'Page Coverage Color:', 
                 'class' => 'input-mini', 
                 'required' => true, 
                 'value' => $this->_quote->getPageCoverageColor(), 
