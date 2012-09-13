@@ -22,7 +22,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
                 'FieldSize', 
                 'ViewHelper', 
                 'Addon', 
-                'PopoverElementErrors',
+                'PopoverElementErrors', 
                 'Wrapper' 
         );
         
@@ -61,25 +61,28 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
                         ) 
                 ));
                 
-                // quantity_color_<quoteDeviceGroupId>_<quoteDeviceId> : Quotegen_Model_QuoteDeviceGroupDevice->colorPagesQuantity
-                // quantity_color_<quoteDeviceGroupId>_<quoteDeviceId> is used to store the amount of pages allocated per device
-                $this->addElement('text', "quantity_color_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}", array (
-                        'label' => 'Quantity', 
-                        'required' => true, 
-                        'class' => 'span1', 
-                        'decorators' => $inlineDecorators, 
-                        'value' => $quoteDeviceGroupDevice->getColorPagesQuantity(), 
-                        'validators' => array (
-                                'Int', 
-                                array (
-                                        'validator' => 'Between', 
-                                        'options' => array (
-                                                'min' => $minQuantityPages, 
-                                                'max' => $maxQuantityPages 
-                                        ) 
-                                ) 
-                        ) 
-                ));
+                if ($quoteDeviceGroupDevice->getQuoteDevice()->isColorCapable())
+                {
+                    // quantity_color_<quoteDeviceGroupId>_<quoteDeviceId> : Quotegen_Model_QuoteDeviceGroupDevice->colorPagesQuantity
+                    // quantity_color_<quoteDeviceGroupId>_<quoteDeviceId> is used to store the amount of pages allocated per device
+                    $this->addElement('text', "quantity_color_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}", array (
+                            'label' => 'Quantity', 
+                            'required' => true, 
+                            'class' => 'span1', 
+                            'decorators' => $inlineDecorators, 
+                            'value' => $quoteDeviceGroupDevice->getColorPagesQuantity(), 
+                            'validators' => array (
+                                    'Int', 
+                                    array (
+                                            'validator' => 'Between', 
+                                            'options' => array (
+                                                    'min' => $minQuantityPages, 
+                                                    'max' => $maxQuantityPages 
+                                            ) 
+                                    ) 
+                            ) 
+                    ));
+                }
             }
         }
         
@@ -88,7 +91,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
         $this->addElement('text', 'monochromePageMargin', array (
                 'value' => $this->_quote->getMonochromePageMargin(), 
                 'required' => true, 
-                'decorators' => $inlineDecorators,
+                'decorators' => $inlineDecorators, 
                 'class' => 'input-mini', 
                 'validators' => array (
                         'Float', 
@@ -108,7 +111,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
         $this->addElement('text', 'colorPageMargin', array (
                 'value' => $this->_quote->getColorPageMargin(), 
                 'required' => true, 
-                'decorators' => $inlineDecorators,
+                'decorators' => $inlineDecorators, 
                 'class' => 'input-mini', 
                 'validators' => array (
                         'Float', 
