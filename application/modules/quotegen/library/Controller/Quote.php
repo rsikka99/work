@@ -266,7 +266,13 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         
         // Calculate OEM only values
         $quoteDevice->setOemCostPerPageMonochrome($cpp->Estimated->Base->BlackAndWhite);
-        $quoteDevice->setOemCostPerPageColor($cpp->Estimated->Base->Color);
+        
+        // Reset the color cost per page and only populate if its a color device
+        $quoteDevice->setOemCostPerPageColor(0);
+        if ($masterDevice->isColor())
+        {
+            $quoteDevice->setOemCostPerPageColor($cpp->Estimated->Base->Color);
+        }
         
         // RESET cpp and set the pricing config to be COMP
         $masterDevice->setCostPerPage(null);
@@ -276,7 +282,13 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         $cpp = $masterDevice->getCostPerPage();
         // Calculate COMP only values (may be the same as oem if no comp toners were available)
         $quoteDevice->setCompCostPerPageMonochrome($cpp->Estimated->Base->BlackAndWhite);
-        $quoteDevice->setCompCostPerPageColor($cpp->Estimated->Base->Color);
+        
+        // Reset the color cost per page and only populate if its a color device
+        $quoteDevice->setCompCostPerPageColor(0);
+        if ($masterDevice->isColor())
+        {
+            $quoteDevice->setCompCostPerPageColor($cpp->Estimated->Base->Color);
+        }
         
         return $quoteDevice;
     }
@@ -418,7 +430,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             $quoteDevice->setQuoteId($this->_quote->getId());
             $quoteDevice->setMargin($defaultMargin);
             $quoteDevice->setResidual(0);
-			$quoteDevice->setPackageMarkup(0);
+            $quoteDevice->setPackageMarkup(0);
             $quoteDevice->setPackageCost($quoteDevice->calculatePackageCost());
             $quoteDeviceId = Quotegen_Model_Mapper_QuoteDevice::getInstance()->insert($quoteDevice);
             
