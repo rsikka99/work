@@ -114,10 +114,8 @@ class Tangent_PrinterMath
                 switch ($tonerConfigurationId)
                 {
                     case self::TONERCONFIG_THREE_COLOR_COMBINED :
-                        $coverage = ($coverage / 4) * 3;
-                        break;
                     case self::TONERCONFIG_THREE_COLOR_SEPARATED :
-                        $coverage = $coverage / 4;
+                        $coverage = ($coverage / 4) * 3;
                         break;
                     case self::TONERCONFIG_BLACK_ONLY :
                     case self::TONERCONFIG_FOUR_COLOR_COMBINED :
