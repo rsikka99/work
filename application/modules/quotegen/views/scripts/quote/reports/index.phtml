@@ -85,47 +85,26 @@ $(function () {
     });
 });
 <?php $this->headScript()->captureEnd();?>
-<div class='well'>
-	<?php echo $this->form; ?>
+<div class='row-fluid'>
 	<ul class="thumbnails">
-    <?php if ($quote->getQuoteType() == Quotegen_Model_Quote::QUOTE_TYPE_PURCHASED) : ?>
-    	<li class="span4">
-        	<h3>Report: Quote</h3>
-        	<div class="thumbnail">
-	            <img src="http://placehold.it/300x200" />
-    	        <hr />
-        	    <p class="clearfix">
-            	    <a class="downloadButton btn btn-primary" data-ext="docx" href="<?php echo $this->url(array('action' => 'purchase-quote', 'format' => 'docx')); ?>">Download Quote</a>
-                	<a class="pull-right btn" href="<?php echo $this->url(array('action' => 'purchase-quote')); ?>">HTML Preview</a>
-            	</p>
-            	<p>Insert a description here about a quote that is to be purchased.</p>
-        	</div>                    
-    	</li>
-    <?php elseif ($quote->getQuoteType() == Quotegen_Model_Quote::QUOTE_TYPE_LEASED) : ?>
-    	<li class="span4">
-	        <h3>Report: Quote</h3>
-        	<div class="thumbnail">
-            	<img src="http://placehold.it/300x200" />
-            	<hr />
-            	<p class="clearfix">
-	                <a class="downloadButton btn btn-primary" data-ext="docx" href="<?php echo $this->url(array('action' => 'lease-quote', 'format' => 'docx')); ?>">Download Quote</a>
-                	<a class="pull-right btn" href="<?php echo $this->url(array('action' => 'lease-quote')); ?>">HTML Preview</a>
-            	</p>
-            	<p>Insert a description here about a quote that is to be leased.</p>
-        	</div>                    
-    	</li>
-    <?php endif; ?>
-    	<li class="span4">
-	        <h3>Report: Order Summary</h3>
-    	    <div class="thumbnail">
-        	    <img src="http://placehold.it/300x200" />
-            	<hr />
-            	<p class="clearfix">
-	                <a class="pull-right btn" href="<?php echo $this->url(array('action' => 'order-list')); ?>">HTML Preview</a>
-    	        </p>
-        	    <p>Insert a description here about the order summary.</p>
-        	</div>                    
-    	</li>
+		<li class='span4'>
+	 		<h3>Download Quote</h3>
+			<p>Download a .docx version of this quote.</p>
+    		<a class="downloadButton btn btn-primary" data-ext="docx" href="<?php echo $this->url(array('action' => (($quote->isLeased()) ? 'lease' : 'purchase') . '-quote', 'format' => 'docx')); ?>"><i class='icon-download-alt icon-white'></i> Download Quote</a>
+		</li>
+		<li class='span4'>
+			<h3>Download Order List</h3>
+			<p>Download a .csv file for the items in this quote.</p>
+			<a class="btn" href='javascript:window.alert("This page has not been implemented yet.");'><i class='icon-download-alt'></i> Download Order List</a>
+		</li>
+		<li class='span4'>
+			<?php echo $this->form; ?>
+		</li>
 	</ul>
-<?php echo $this->navigationForm; ?>
 </div>
+<?php if ($quote->isLeased()) : ?>
+	<?php echo $this->render('quote/reports/lease-quote.phtml'); ?>
+<?php else : ?>
+	<?php echo $this->render('quote/reports/purchase-quote.phtml'); ?>
+<?php endif; ?>
+<?php echo $this->navigationForm; ?>
