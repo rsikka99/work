@@ -32,7 +32,7 @@
 	
     <?php /* @var $deviceGroup Quotegen_Model_QuoteDeviceGroup */$deviceGroups = $form->getQuote()->getQuoteDeviceGroups();?>
     <?php foreach ($deviceGroups as $deviceGroup) : ?>	
-    <h3><?php echo $deviceGroup->getName(); ?>
+    <h3><?php echo $form->getElement("groupName_{$deviceGroup->getId()}")?>
         <?php if (!$deviceGroup->getIsDefault()) :?>
         <small>
             <button type="submit" name="deleteGroup" class="btn btn-danger btn-mini" value="<?php echo $deviceGroup->getId()?>">
