@@ -30,8 +30,6 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
             else
             {
                 // What are we doing?
-                
-
                 if (isset($values ['addGroup']))
                 {
                     // Adding a new group
@@ -44,9 +42,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                         $quoteDeviceGroup = new Quotegen_Model_QuoteDeviceGroup();
                         $quoteDeviceGroup->setQuoteId($this->_quoteId);
                         $quoteDeviceGroup->setName($addGroupSubform->getValue('name'));
-                        
                         $quoteDeviceGroup->setIsDefault(0);
-//                         $quoteDeviceGroup->setGroupPages(0);
                         
                         Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->insert($quoteDeviceGroup);
                         
@@ -160,7 +156,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                         
                         // Redirect to ourselves
                         $this->_helper->redirector(null, null, null, array (
-                                'quoteId' => $this->_quoteId
+                                'quoteId' => $this->_quoteId 
                         ));
                     }
                     else
@@ -172,7 +168,6 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                 }
                 else
                 {
-                    
                     // Check to see if our device quantity subform is valid
                     if ($form->getSubForm('deviceQuantity')->isValid($values))
                     {
@@ -190,6 +185,12 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                             /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
                             foreach ( $this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
                             {
+                                // If the group name has been changed then save the name 
+                                if ($values ["groupName_{$quoteDeviceGroup->getId()}"] !== $quoteDeviceGroup->getName())
+                                {
+                                    $quoteDeviceGroup->setName($values ["groupName_{$quoteDeviceGroup->getId()}"]);
+                                    Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->save($quoteDeviceGroup);
+                                }
                                 /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
                                 foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
                                 {
