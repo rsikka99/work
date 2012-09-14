@@ -102,6 +102,13 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     protected $_packageMarkup;
     
     /**
+     * The toner configuration associated with this quote.
+     *
+     * @var int
+     */
+    protected $_tonerConfigId;
+    
+    /**
      * The device configuration that this quote is attached to
      *
      * @var Quotegen_Model_QuoteDeviceConfiguration
@@ -164,6 +171,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             $this->setPackageCost($params->packageCost);
         if (isset($params->packageMarkup) && ! is_null($params->packageMarkup))
             $this->setPackageMarkup($params->packageMarkup);
+        if (isset($params->tonerConfigId) && ! is_null($params->tonerConfigId))
+            $this->setTonerConfigId($params->tonerConfigId);
     }
     
     /*
@@ -184,7 +193,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
                 'cost' => $this->getCost(), 
                 'residual' => $this->getResidual(), 
                 "packageCost" => $this->getPackageCost(), 
-                "packageMarkup" => $this->getPackageMarkup() 
+                "packageMarkup" => $this->getPackageMarkup(), 
+                "tonerConfigId" => $this->getTonerConfigId() 
         );
     }
 
@@ -473,6 +483,27 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
+     * Gets the toner configuration id
+     *
+     * @return number
+     */
+    public function getTonerConfigId ()
+    {
+        return $this->_tonerConfigId;
+    }
+
+    /**
+     * Sets the toner configuration id
+     *
+     * @param number $_tonerConfigId            
+     */
+    public function setTonerConfigId ($_tonerConfigId)
+    {
+        $this->_tonerConfigId = $_tonerConfigId;
+        return $this;
+    }
+
+    /**
      * Gets the device associated with this quote device
      *
      * @return Quotegen_Model_Device The device configuration
@@ -595,13 +626,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function isColorCapable ()
     {
-        $isColor = false;
-        if ($this->getCompCostPerPageColor() > 0 || $this->getOemCostPerPageColor() > 0)
-        {
-            $isColor = true;
-        }
-        
-        return $isColor;
+        return ((int)$this->getTonerConfigId() !== Proposalgen_Model_TonerConfig::BLACK_ONLY);
     }
 
     /**
@@ -814,6 +839,11 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         }
         
         /*
+         * Adjust for coverage
+         */
+        $costPerPageColor = Tangent_PrinterMath::adjustDeviceCostPerPage($costPerPageColor, $this->getQuote()->getPageCoverageColor(), $this->getTonerConfigId());
+        
+        /*
          * Only add service and admin if we have a cpp > 0. This way if cpp is 0 for some reason the end user will see
          * the problem instead of it being masked by service and admin cpp.
          */
@@ -856,6 +886,11 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         {
             $costPerPageMonochrome = $this->getOemCostPerPageMonochrome();
         }
+        
+        /*
+         * Adjust for coverage
+         */
+        $costPerPageMonochrome = Tangent_PrinterMath::adjustDeviceCostPerPage($costPerPageMonochrome, $this->getQuote()->getPageCoverageMonochrome(), $this->getTonerConfigId());
         
         /*
          * Only add service and admin if we have a cpp > 0. This way if cpp is 0 for some reason the end user will see

@@ -232,6 +232,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         $quoteDevice->setName($masterDevice->getFullDeviceName());
         $quoteDevice->setSku($device->getSku());
         $quoteDevice->setCost($masterDevice->getCost());
+        $quoteDevice->setTonerConfigId($masterDevice->getTonerConfigId());
         
         /**
          * *******************************************************************
