@@ -85,8 +85,23 @@ $(function () {
     });
 });
 <?php $this->headScript()->captureEnd();?>
-
-<?php echo $this->form; ?>
+<div class='row-fluid'>
+	<ul class="thumbnails">
+		<li class='span4'>
+	 		<h3>Download Quote</h3>
+			<p>Download a .docx version of this quote.</p>
+    		<a class="downloadButton btn btn-primary" data-ext="docx" href="<?php echo $this->url(array('action' => (($quote->isLeased()) ? 'lease' : 'purchase') . '-quote', 'format' => 'docx')); ?>"><i class='icon-download-alt icon-white'></i> Download Quote</a>
+		</li>
+		<li class='span4'>
+			<h3>Download Order List</h3>
+			<p>Download a .csv file for the items in this quote.</p>
+			<a class="btn" href='javascript:window.alert("This page has not been implemented yet.");'><i class='icon-download-alt'></i> Download Order List</a>
+		</li>
+		<li class='span4'>
+			<?php echo $this->form; ?>
+		</li>
+	</ul>
+</div>
 <?php if ($quote->isLeased()) : ?>
 	<?php echo $this->render('quote/reports/lease-quote.phtml'); ?>
 <?php else : ?>

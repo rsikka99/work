@@ -1,7 +1,4 @@
 <?php $quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */ ?>
-<div class='pull-right'>
-    <a class="downloadButton btn btn-primary" data-ext="docx" href="<?php echo $this->url(array('action' => 'lease-quote', 'format' => 'docx')); ?>">Download Quote</a>
-</div>
 <div class="row">
     <div class="span12">
         <?php foreach ($quote->getQuoteDeviceGroups() as $quoteDeviceGroup) : /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */ ?>
