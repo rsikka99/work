@@ -153,6 +153,25 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
         {
             
             $validQuoteGroupIds [] = "{$quoteDeviceGroup->getId()}";
+            $this->addElement("text", "groupName_{$quoteDeviceGroup->getId()}",array(
+                    'required' => true,
+                    'class' => 'span4',
+                    'value' => $quoteDeviceGroup->getName(), 
+                    'filters' => array (
+                            'StringTrim',
+                            'StripTags'
+                    ),
+                    'validators' => array (
+                            array (
+                                    'validator' => 'StringLength',
+                                    'options' => array (
+                                            3,
+                                            40
+                                    )
+                            )
+                    )
+			));
+            
             /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
