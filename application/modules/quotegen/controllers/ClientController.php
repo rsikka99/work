@@ -92,7 +92,7 @@ class Quotegen_ClientController extends Zend_Controller_Action
     public function createAction ()
     {
         $clientService = new Admin_Service_Client();
-
+        
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();
@@ -125,82 +125,47 @@ class Quotegen_ClientController extends Zend_Controller_Action
 
     public function editAction ()
     {
+        // Get the passed client id
         $clientId = $this->_getParam('id', false);
+        // Get the client object from the database
+        $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
+        // Start the client service
+        $clientService = new Admin_Service_Client();
         
-        // If they haven't provided an id, send them back to the view all client page
-        if (! $clientId)
+        // Populate the client form
+        $clientService->getForm()->populate($client->toArray());
+        
+        if ($this->getRequest()->isPost())
         {
-            $this->_helper->flashMessenger(array (
-                    'warning' => 'Please select a client to edit first.' 
-            ));
-            $this->_helper->redirector('index');
-        }
-        
-        // Get the client
-        $mapper = Quotegen_Model_Mapper_Client::getInstance();
-        $client = $mapper->find($clientId);
-        
-        // If the client doesn't exist, send them back t the view all clients page
-        if (! $client)
-        {
-            $this->_helper->flashMessenger(array (
-                    'danger' => 'There was an error selecting the client to edit.' 
-            ));
-            $this->_helper->redirector('index');
-        }
-        
-        // Create a new form with the mode and roles set
-        $form = new Quotegen_Form_Client();
-        
-        // Prepare the data for the form
-        $request = $this->getRequest();
-        $form->populate($client->toArray());
-        
-        // Make sure we are posting data
-        if ($request->isPost())
-        {
-            // Get the post data
-            $values = $request->getPost();
-            
-            // If we cancelled we don't need to validate anything
-            if (! isset($values ['cancel']))
+            $values = $this->getRequest()->getPost();
+            if (isset($values ['cancel']))
             {
-                try
-                {
-                    // Validate the form
-                    if ($form->isValid($values))
-                    {
-                        $client->populate($values);
-                        $client->setId($clientId);
-                        
-                        // Save to the database with cascade insert turned on
-                        $clientId = $mapper->save($client, $clientId);
-                        
-                        $this->_helper->flashMessenger(array (
-                                'success' => "Client '{$client->getName()}' was updated sucessfully." 
-                        ));
-                    }
-                    else
-                    {
-                        $this->_helper->flashMessenger(array (
-                                'danger' => 'Please correct the errors below' 
-                        ));
-                    }
-                }
-                catch ( Exception $e )
-                {
-                    $this->_helper->flashMessenger(array (
-                            'danger' => 'There was an error saving this client.  Please try again..' 
-                    ));
-                }
-            }
-            else
-            {
-                // User has cancelled. We could do a redirect here if we wanted.
                 $this->_helper->redirector('index');
             }
+            try
+            {
+                // Create Client
+                $clientId = $clientService->update($values);
+            }
+            catch ( Exception $e )
+            {
+                $clientId = false;
+            }
+            
+            if ($clientId)
+            {
+                // Redirect with client id so that the client is preselected
+                $this->_helper->redirector('index', null, null, array (
+                        'clientId' => $clientId 
+                ));
+            }
         }
-        $this->view->form = $form;
+        $this->view->form = $clientService->getForm();
+    }
+
+    public function viewAction ()
+    {
+        $this->view->client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_getParam('id', false));
     }
 }
 

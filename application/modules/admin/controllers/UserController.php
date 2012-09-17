@@ -111,6 +111,13 @@ class Admin_UserController extends Zend_Controller_Action
             ));
             $this->_redirect('/admin/user');
         }
+        if ($userId === '1')
+        {
+            $this->_helper->flashMessenger(array (
+                    'danger' => 'Insufficient Privilege: cannot delete root user.'
+            ));
+            $this->_redirect('/admin/user');
+        }
         
         $mapper = new Application_Model_Mapper_User();
         $user = $mapper->find($userId);
