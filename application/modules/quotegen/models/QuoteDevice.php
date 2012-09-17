@@ -839,10 +839,11 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         }
         
         /*
-         * Adjust for coverage
+         * Adjust for coverage (Disabled since it's not working)
          */
-        $costPerPageColor = Tangent_PrinterMath::adjustDeviceCostPerPage($costPerPageColor, $this->getQuote()->getPageCoverageColor(), $this->getTonerConfigId());
+        //$costPerPageColor = Tangent_PrinterMath::adjustDeviceCostPerPage($costPerPageColor, $this->getQuote()->getPageCoverageColor(), $this->getTonerConfigId());
         
+
         /*
          * Only add service and admin if we have a cpp > 0. This way if cpp is 0 for some reason the end user will see
          * the problem instead of it being masked by service and admin cpp.
@@ -888,10 +889,11 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         }
         
         /*
-         * Adjust for coverage
+         * Adjust for coverage (Disabled since it's not working)
          */
-        $costPerPageMonochrome = Tangent_PrinterMath::adjustDeviceCostPerPage($costPerPageMonochrome, $this->getQuote()->getPageCoverageMonochrome(), $this->getTonerConfigId());
+        //$costPerPageMonochrome = Tangent_PrinterMath::adjustDeviceCostPerPage($costPerPageMonochrome, $this->getQuote()->getPageCoverageMonochrome(), $this->getTonerConfigId());
         
+
         /*
          * Only add service and admin if we have a cpp > 0. This way if cpp is 0 for some reason the end user will see
          * the problem instead of it being masked by service and admin cpp.
