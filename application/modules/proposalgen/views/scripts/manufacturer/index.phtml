@@ -12,7 +12,7 @@
             <th>Full Name</th>
             <th>Display Name</th>
             <th style="width: 80px;">Is Deleted</th>
-            <th style="width: 120px;">Action</th>
+            <th style="width: 80px;">Action</th>
         </tr>
     </thead>
     <tbody>
@@ -25,7 +25,6 @@
             <td><?php echo ($manufacturer->getIsDeleted()) ? "Deleted" : ""; ?></td>
             <td>
                 <div class="btn-group">
-	                <a class="btn btn-info" title="View Manufacturer" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $manufacturer->getId())); ?>"><i class="icon-eye-open"></i></a>
                     <a class="btn btn-warning" title="Edit Manufacturer" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $manufacturer->getId())); ?>"><i class="icon-pencil"></i></a>
                     <a class="btn btn-danger" title="Delete Manufacturer" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $manufacturer->getId())); ?>"><i class="icon-trash"></i></a>
                 </div>
