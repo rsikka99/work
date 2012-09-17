@@ -202,10 +202,5 @@ class Quotegen_ClientController extends Zend_Controller_Action
         }
         $this->view->form = $form;
     }
-
-    public function viewAction ()
-    {
-        $this->view->client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_getParam('id', false));
-    }
 }
 
