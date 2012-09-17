@@ -119,8 +119,8 @@ CREATE  TABLE IF NOT EXISTS `users` (
   UNIQUE INDEX `username` (`username` ASC) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 13
-DEFAULT CHARACTER SET = latin1, 
-COMMENT = 'The users table stores basic information on a user' ;
+DEFAULT CHARACTER SET = latin1
+COMMENT = 'The users table stores basic information on a user';
 
 
 -- -----------------------------------------------------
@@ -1080,7 +1080,9 @@ CREATE  TABLE IF NOT EXISTS `qgen_device_configuration_options` (
   INDEX `optionId` (`optionId` ASC) ,
   CONSTRAINT `quotegen_device_configuration_options_ibfk_1`
     FOREIGN KEY (`deviceConfigurationId` )
-    REFERENCES `qgen_device_configurations` (`id` ),
+    REFERENCES `qgen_device_configurations` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `quotegen_device_configuration_options_ibfk_2`
     FOREIGN KEY (`optionId` )
     REFERENCES `qgen_options` (`id` )
@@ -1133,8 +1135,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schemas` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8, 
-COMMENT = 'Stores information on different leasing schemas' ;
+DEFAULT CHARACTER SET = utf8
+COMMENT = 'Stores information on different leasing schemas';
 
 
 -- -----------------------------------------------------
@@ -1151,7 +1153,7 @@ CREATE  TABLE IF NOT EXISTS `qgen_global_leasing_schemas` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
-COMMENT = 'This table marks leasing schemas as global' ;
+COMMENT = 'This table marks leasing schemas as global';
 
 
 -- -----------------------------------------------------
@@ -1170,8 +1172,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_ranges` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 5
-DEFAULT CHARACTER SET = utf8, 
-COMMENT = 'Stores the available value ranges (start range) for a leasin' ;
+DEFAULT CHARACTER SET = utf8
+COMMENT = 'Stores the available value ranges (start range) for a leasin';
 
 
 -- -----------------------------------------------------
@@ -1190,8 +1192,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_terms` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 10
-DEFAULT CHARACTER SET = utf8, 
-COMMENT = 'Holds the terms available for a leasing schema' ;
+DEFAULT CHARACTER SET = utf8
+COMMENT = 'Holds the terms available for a leasing schema';
 
 
 -- -----------------------------------------------------
@@ -1215,8 +1217,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_rates` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8, 
-COMMENT = 'Stores the rates that coincide with the terms and ranges for' ;
+DEFAULT CHARACTER SET = utf8
+COMMENT = 'Stores the rates that coincide with the terms and ranges for';
 
 
 -- -----------------------------------------------------
@@ -1281,8 +1283,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_quotes` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8, 
-COMMENT = 'Primary table for a quote. Stores basic information' ;
+DEFAULT CHARACTER SET = utf8
+COMMENT = 'Primary table for a quote. Stores basic information';
 
 
 -- -----------------------------------------------------
