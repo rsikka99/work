@@ -55,16 +55,17 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
                     "Cost" => 1, 
                     "Yield" => 1 
             );
-            
+
 //             $overrideLocation ["User"] = Proposalgen_Model_User::getCurrentUser();
 //             $overrideLocation ["Dc"] = Proposalgen_Model_DealerCompany::getCurrentUserCompany();
 //             $overrideLocation ["Dc"] = Proposalgen_Model_DealerCompany::getMasterCompany();
-            
+
+
 //             foreach ( $tonerOverrides as $type => $override )
 //             {
 //                 // This is a fancy way of looping through the objects dynamically
 //                 // Written by Lee Robert
-                
+
 
 //                 // For the cost
 //                 foreach ( $overrideLocation as $FuncPrefix => $object )
@@ -76,12 +77,14 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
 //                         break;
 //                     }
 //                 }
-                
+
+
 //                 if ($override ["Cost"] <= 0)
 //                 {
 //                     throw new Exception("Cost of " . $override ["Cost"] . " detected for " . $type . " toner. Cost must be greater than zero.");
 //                 }
-                
+
+
 //                 // For the yield
 //                 foreach ( $overrideLocation as $FuncPrefix => $object )
 //                 {
@@ -92,7 +95,8 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
 //                         break;
 //                     }
 //                 }
-                
+
+
 //                 if ($override ["Yield"] <= 0)
 //                 {
 //                     throw new Exception("Yield of " . $override ["Yield"] . " detected for " . $type . " toner. Yield must be greater than zero.");
@@ -100,6 +104,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
 //                 $tonerOverrides [$type] = $override;
 //             }
             
+
             $blackToner = new Proposalgen_Model_Toner();
             $blackToner->setTonerPrice($tonerOverrides ["BW"] ["Cost"]);
             $blackToner->setTonerYield($tonerOverrides ["BW"] ["Yield"]);
@@ -409,8 +414,9 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $PartType
+     * Gets the part type
+     * 
+     * @return Proposalgen_Model_PartType
      */
     public function getPartType ()
     {
@@ -423,8 +429,9 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
+     * Sets the part type
      *
-     * @param field_type $PartType            
+     * @param Proposalgen_Model_PartType $PartType            
      */
     public function setPartType ($PartType)
     {
@@ -457,7 +464,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
 
     /**
      *
-     * @return the $TonerColor
+     * @return Proposalgen_Model_TonerColor
      */
     public function getTonerColor ()
     {
@@ -471,7 +478,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
 
     /**
      *
-     * @param field_type $TonerColor            
+     * @param Proposalgen_Model_TonerColor $TonerColor            
      */
     public function setTonerColor ($TonerColor)
     {

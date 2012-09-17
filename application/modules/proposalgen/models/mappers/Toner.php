@@ -20,6 +20,13 @@ class Proposalgen_Model_Mapper_Toner extends Tangent_Model_Mapper_Abstract
     }
     static $_toners = array ();
 
+    /**
+     * Gets a toner model
+     * (non-PHPdoc)
+     * 
+     * @see Tangent_Model_Mapper_Abstract::find()
+     * @return Proposalgen_Model_Toner
+     */
     public function find ($id)
     {
         if (! array_key_exists($id, self::$_toners))
