@@ -31,7 +31,7 @@ class Quotegen_View_Helper_Indexmenu extends Zend_View_Helper_Abstract
                 ->renderMenu($container, array (
                     'minDepth' => 0, 
                     'maxDepth' => 0, 
-                    'ulClass' => 'nav nav-tabs' 
+                    'ulClass' => 'nav nav-pills' 
             ));
             
             // Bring back it's original visibility
