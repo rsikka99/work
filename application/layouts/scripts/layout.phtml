@@ -28,14 +28,14 @@
         <!-- Prompt to upgrade browsers/install chrome frame if IE 6 -->
         <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
         <!-- Start of Navbar -->
-        <div class="navbar navbar-inverse">
+        <div class="navbar">
             <div class="navbar-inner">
                 <div class="container">
                     <div class="sidebar pull-right">
                         <div class="pull-right">
                             <?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
                             <div class="btn-group pull-right">
-                                <a class="btn btn-primary" href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'user', 'action' => 'profile'))?>"><i class="icon-user icon-white"></i> <?php echo $this->Username(); ?></a>
+                                <a class="btn btn-mini btn-primary" href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'user', 'action' => 'profile'))?>"><i class="icon-user icon-white"></i> <?php echo $this->Username(); ?></a>
                                 <a class="pull-right btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><b class="caret"></b></a>
                                 <?php echo $this->Usermenu(); ?>
                             </div>
@@ -44,7 +44,7 @@
                             <?php endif; ?>
                         </div>
                     </div>
-                    <?php echo $this->navigation()->menu()->setUlClass('nav')->setMinDepth(0)->setMaxDepth(0)->render(); ?>
+                    <?php echo $this->navigation()->menu()->setUlClass('nav nav-pills')->setMinDepth(0)->setMaxDepth(0)->render(); ?>
                 </div>
             </div>
         </div>
