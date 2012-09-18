@@ -9,7 +9,7 @@
 class Application_View_Helper_Subnav extends Zend_View_Helper_Abstract
 {
 
-    public function Subnav ()
+    public function Subnav ($navClass = "nav nav-pills", $maxDepth = 2)
     {
         $html = "";
         
@@ -33,8 +33,8 @@ class Application_View_Helper_Subnav extends Zend_View_Helper_Abstract
         {
             $html = $this->view->navigation()
                 ->menu()
-                ->setUlClass('nav nav-pills')
-                ->setMaxDepth(2)
+                ->setUlClass($navClass)
+                ->setMaxDepth($maxDepth)
                 ->render($container);
         }
         
