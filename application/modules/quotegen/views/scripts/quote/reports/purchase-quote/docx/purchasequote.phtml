@@ -14,51 +14,58 @@ $tcStyle = $this->styles->tables->quoteTable;
 /* @var $quote Quotegen_Model_Quote */
 $quote = $this->quote;
 
+/* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
 foreach ( $quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
 {
-    $table = $section->addTable($tcStyle->tablestyle);
-    
-    $table->addRow($tcStyle->header->rowheight);
-    $table->addCell($tcStyle->col1Width, $tcStyle->header->cell1->cellStyle)->addText($this->translate('Item'), $tcStyle->header->cell1->fontStyle, $tcStyle->header->cell1->paragraphStyle);
-    $table->addCell($tcStyle->col2Width, $tcStyle->header->cell2->cellStyle)->addText($this->translate('SKU'), $tcStyle->header->cell2->fontStyle, $tcStyle->header->cell2->paragraphStyle);
-    $table->addCell($tcStyle->col3Width, $tcStyle->header->cell3->cellStyle)->addText($this->translate('Description and Features'), $tcStyle->header->cell3->fontStyle, $tcStyle->header->cell3->paragraphStyle);
-    $table->addCell($tcStyle->col4Width, $tcStyle->header->cell4->cellStyle)->addText($this->translate('Quantity'), $tcStyle->header->cell4->fontStyle, $tcStyle->header->cell4->paragraphStyle);
-    
-    /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
-    foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+    if ($quoteDeviceGroup->calculateTotalQuantity() > 0)
     {
-        $device = $quoteDeviceGroupDevice->getQuoteDevice();
-        $table->addRow($tcStyle->device->rowheight);
-        // Device Name
-        $table->addCell($tcStyle->col1Width, $tcStyle->device->cell1->cellStyle)->addText($device->getName(), $tcStyle->device->cell1->fontStyle, $tcStyle->device->cell1->paragraphStyle);
-        // Sku
-        $table->addCell($tcStyle->col2Width, $tcStyle->device->cell2->cellStyle)->addText($device->getSku(), $tcStyle->device->cell2->fontStyle, $tcStyle->device->cell2->paragraphStyle);
-        // Description and features
-        $table->addCell($tcStyle->col3Width, $tcStyle->device->cell3->cellStyle);
-        // Quantity
-        $table->addCell($tcStyle->col4Width, $tcStyle->device->cell4->cellStyle)->addText(number_format($quoteDeviceGroupDevice->getQuantity()), $tcStyle->device->cell4->fontStyle, $tcStyle->device->cell4->paragraphStyle);
-        // Get quote device options
-        $quoteDeviceOptions = $quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions();
+        $table = $section->addTable($tcStyle->tablestyle);
         
-        /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
-        foreach ( $quoteDeviceOptions as $quoteDeviceOption )
+        $table->addRow($tcStyle->header->rowheight);
+        $table->addCell($tcStyle->col1Width, $tcStyle->header->cell1->cellStyle)->addText($this->translate('Item'), $tcStyle->header->cell1->fontStyle, $tcStyle->header->cell1->paragraphStyle);
+        $table->addCell($tcStyle->col2Width, $tcStyle->header->cell2->cellStyle)->addText($this->translate('SKU'), $tcStyle->header->cell2->fontStyle, $tcStyle->header->cell2->paragraphStyle);
+        $table->addCell($tcStyle->col3Width, $tcStyle->header->cell3->cellStyle)->addText($this->translate('Description and Features'), $tcStyle->header->cell3->fontStyle, $tcStyle->header->cell3->paragraphStyle);
+        $table->addCell($tcStyle->col4Width, $tcStyle->header->cell4->cellStyle)->addText($this->translate('Quantity'), $tcStyle->header->cell4->fontStyle, $tcStyle->header->cell4->paragraphStyle);
+        
+        /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+        foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
         {
-            $table->addRow($tcStyle->option->rowheight);
-            $table->addCell($tcStyle->col1Width, $tcStyle->option->cell1->cellStyle)->addText($quoteDeviceOption->getName() . ' (' . number_format($quoteDeviceOption->getQuantity()) . 'x)', $tcStyle->option->cell1->fontStyle, $tcStyle->option->cell1->paragraphStyle);
-            $table->addCell($tcStyle->col2Width, $tcStyle->option->cell2->cellStyle)->addText($quoteDeviceOption->getSku(), $tcStyle->option->cell2->fontStyle, $tcStyle->option->cell2->paragraphStyle);
-            $table->addCell($tcStyle->col3Width, $tcStyle->option->cell3->cellStyle)->addText($quoteDeviceOption->getDescription(), $tcStyle->option->cell3->fontStyle, $tcStyle->option->cell3->paragraphStyle);
-            $table->addCell($tcStyle->col4Width, $tcStyle->option->cell4->cellStyle)->addText();
+            if ($quoteDeviceGroupDevice->getQuantity() > 0)
+            {
+                $device = $quoteDeviceGroupDevice->getQuoteDevice();
+                $table->addRow($tcStyle->device->rowheight);
+                // Device Name
+                $table->addCell($tcStyle->col1Width, $tcStyle->device->cell1->cellStyle)->addText($device->getName(), $tcStyle->device->cell1->fontStyle, $tcStyle->device->cell1->paragraphStyle);
+                // Sku
+                $table->addCell($tcStyle->col2Width, $tcStyle->device->cell2->cellStyle)->addText($device->getSku(), $tcStyle->device->cell2->fontStyle, $tcStyle->device->cell2->paragraphStyle);
+                // Description and features
+                $table->addCell($tcStyle->col3Width, $tcStyle->device->cell3->cellStyle);
+                // Quantity
+                $table->addCell($tcStyle->col4Width, $tcStyle->device->cell4->cellStyle)->addText(number_format($quoteDeviceGroupDevice->getQuantity()), $tcStyle->device->cell4->fontStyle, $tcStyle->device->cell4->paragraphStyle);
+                // Get quote device options
+                $quoteDeviceOptions = $quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions();
+                
+                /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
+                foreach ( $quoteDeviceOptions as $quoteDeviceOption )
+                {
+                    $table->addRow($tcStyle->option->rowheight);
+                    $table->addCell($tcStyle->col1Width, $tcStyle->option->cell1->cellStyle)->addText($quoteDeviceOption->getName() . ' (' . number_format($quoteDeviceOption->getQuantity()) . 'x)', $tcStyle->option->cell1->fontStyle, $tcStyle->option->cell1->paragraphStyle);
+                    $table->addCell($tcStyle->col2Width, $tcStyle->option->cell2->cellStyle)->addText($quoteDeviceOption->getSku(), $tcStyle->option->cell2->fontStyle, $tcStyle->option->cell2->paragraphStyle);
+                    $table->addCell($tcStyle->col3Width, $tcStyle->option->cell3->cellStyle)->addText($quoteDeviceOption->getDescription(), $tcStyle->option->cell3->fontStyle, $tcStyle->option->cell3->paragraphStyle);
+                    $table->addCell($tcStyle->col4Width, $tcStyle->option->cell4->cellStyle)->addText();
+                }
+            }
         }
+        
+        // Show subtotal line
+        $groupCount ++;
+        $table->addRow($tcStyle->subtotal->rowheight);
+        $table->addCell($tcStyle->cell1Width, $tcStyle->subtotal->cell1->cellStyle)->addText();
+        $table->addCell($tcStyle->span23Width, $tcStyle->subtotal->cell2->cellStyle, 2)->addText(sprintf($this->translate('Subtotal for group %1$s'), number_format($groupCount)), $tcStyle->subtotal->cell2->fontStyle, $tcStyle->subtotal->cell2->paragraphStyle);
+        $table->addCell($tcStyle->cell4Width, $tcStyle->subtotal->cell3->cellStyle)->addText($this->currency($quoteDeviceGroup->calculateGroupSubtotal()), $tcStyle->subtotal->cell3->fontStyle, $tcStyle->subtotal->cell3->paragraphStyle);
+        
+        $section->addTextBreak();
     }
-    
-    // Show subtotal line
-    $groupCount ++;
-    $table->addRow($tcStyle->subtotal->rowheight);
-    $table->addCell($tcStyle->cell1Width, $tcStyle->subtotal->cell1->cellStyle)->addText();
-    $table->addCell($tcStyle->span23Width, $tcStyle->subtotal->cell2->cellStyle, 2)->addText(sprintf($this->translate('Subtotal for group %1$s'), number_format($groupCount)), $tcStyle->subtotal->cell2->fontStyle, $tcStyle->subtotal->cell2->paragraphStyle);
-    $table->addCell($tcStyle->cell4Width, $tcStyle->subtotal->cell3->cellStyle)->addText($this->currency($quoteDeviceGroup->calculateGroupSubtotal()), $tcStyle->subtotal->cell3->fontStyle, $tcStyle->subtotal->cell3->paragraphStyle);
-    
-    $section->addTextBreak();
 }
 
 $table = $section->addTable($tcStyle->tablestyle);
@@ -66,10 +73,14 @@ $table = $section->addTable($tcStyle->tablestyle);
 // Show page overage rate for monochrome and color
 $table->addRow($tcStyle->pages->rowheight);
 $table->addCell($tcStyle->span123Width, $tcStyle->pages->cell1->cellStyle, 3)->addText($this->translate('Monochrome Page Overage Rate'), $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->pages->cell2->cellStyle)->addText($this->currency($quote->getMonochromeOverageRatePerPage(), array('precision' => '4')), $tcStyle->pages->cell2->fontStyle, $tcStyle->pages->cell2->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->pages->cell2->cellStyle)->addText($this->currency($quote->getMonochromeOverageRatePerPage(), array (
+        'precision' => '4' 
+)), $tcStyle->pages->cell2->fontStyle, $tcStyle->pages->cell2->paragraphStyle);
 $table->addRow($tcStyle->pages->rowheight);
 $table->addCell($tcStyle->span123Width, $tcStyle->pages->cell1->cellStyle, 3)->addText($this->translate('Color Page Overage Rate'), $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->pages->cell2->cellStyle)->addText($this->currency($quote->getColorOverageRatePerPage(),array('precision' => '4')), $tcStyle->pages->cell2->fontStyle, $tcStyle->pages->cell2->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->pages->cell2->cellStyle)->addText($this->currency($quote->getColorOverageRatePerPage(), array (
+        'precision' => '4' 
+)), $tcStyle->pages->cell2->fontStyle, $tcStyle->pages->cell2->paragraphStyle);
 
 // Show monthly total
 $table->addRow($tcStyle->monthlyTotal->rowheight);

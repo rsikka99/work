@@ -258,6 +258,24 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
      * HARDWARE CALCULATIONS
      * ****************************************************************************************************************************************
      */
+    
+    /**
+     * Calculates the total quantity of printers for this group
+     * 
+     * @return number The number of devices to this group.F`
+     */
+    public function calculateTotalQuantity ()
+    {
+        $quantity = 0;
+        
+        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+        {
+            $quantity += $quoteDeviceGroupDevice->getQuantity();
+        }
+       
+        return $quantity;
+    }
+
     /**
      * Calculates the sub total for the group's devices.
      * This is the number used for the purchase total and the number that will be used to choose a leasing factor.
@@ -321,7 +339,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         }
         return $subtotal;
     }
-    
+
     /**
      * Calculates the lease sub total for the quote's devices.
      *
@@ -330,12 +348,12 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     public function calculateLeaseValue ()
     {
         $subtotal = 0;
-    
+        
         $subtotal += $this->calculateHardwareLeaseValue();
-    
+        
         // Add Pages
         $subtotal += $this->calculateTotalPageRevenue() * $this->getQuote()->getLeaseTerm();
-    
+        
         return $subtotal;
     }
 
