@@ -817,8 +817,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         
         // Get the pricing config
         switch ($this->getQuote()
-            ->getPricingConfig()
-            ->getConfigName())
+            ->getPricingConfigId())
         {
             case Proposalgen_Model_PricingConfig::COMP :
             case Proposalgen_Model_PricingConfig::OEMMONO_COMPCOLOR :
@@ -833,7 +832,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         }
         
         // If not they are set to oem
-        if ($costPerPageColor <= 0)
+        if ($costPerPageColor <= 0.0)
         {
             $costPerPageColor = $this->getOemCostPerPageColor();
         }
@@ -867,8 +866,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         
         // Figure out which pricing configuration the quote is set for
         switch ($this->getQuote()
-            ->getPricingConfig()
-            ->getConfigName())
+            ->getPricingConfigId())
         {
             case Proposalgen_Model_PricingConfig::COMP :
             case Proposalgen_Model_PricingConfig::COMPMONO_OEMCOLOR :
@@ -883,7 +881,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         }
         
         // If not they are set to oem
-        if ($costPerPageMonochrome <= 0)
+        if ($costPerPageMonochrome <= 0.0)
         {
             $costPerPageMonochrome = $this->getOemCostPerPageMonochrome();
         }

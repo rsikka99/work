@@ -261,7 +261,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             Proposalgen_Model_Toner::setESTIMATED_PAGE_COVERAGE_COLOR($pageCoverageColor);
             Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_COLOR($pageCoverageColor);
         }
-        
+        $masterDevice->setCostPerPage(null);
         // Calculate CPP for OEM pricing config
         $cpp = $masterDevice->getCostPerPage();
         
