@@ -54,7 +54,7 @@ class Default_Form_Login extends EasyBib_Form
                         array (
                                 'validator' => 'StringLength', 
                                 'options' => array (
-                                        6, 
+                                        1, 
                                         255 
                                 ), 
                                 'Alnum' 

@@ -731,7 +731,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateTotalPrice ()
     {
-        return ($this->calculatePackagePrice() - $this->getResidual()) * $this->calculateTotalQuantity();
+        return ($this->calculatePackagePrice() + $this->getResidual()) * $this->calculateTotalQuantity();
     }
 
     /**
@@ -741,7 +741,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateMonthlyLeasePrice ()
     {
-        $packagePrice = $this->calculatePackagePrice() - $this->getResidual();
+        $packagePrice = $this->calculatePackagePrice() + $this->getResidual();
         $leaseFactor = $this->getQuote()->getLeaseRate();
         
         return $packagePrice * $leaseFactor;
@@ -784,7 +784,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
          */
         if ($value > 0 && $residual >= 0 && ($value - $residual) >= 0)
         {
-            $leaseValue = $value - $residual;
+            $leaseValue = $value + $residual;
         }
         
         return $leaseValue;

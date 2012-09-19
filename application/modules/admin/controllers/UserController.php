@@ -301,7 +301,7 @@ class Admin_UserController extends Zend_Controller_Action
                         $user->setId($userId);
                         
                         // Save to the database with cascade insert turned on
-                        $userId = $mapper->save($user, $userId);
+                        $newUserId = $mapper->save($user, $userId);
                         
                         // Save changes to the user roles
                         if (isset($values ["userRoles"]))
@@ -359,9 +359,7 @@ class Admin_UserController extends Zend_Controller_Action
                             // If the user deselected all the boxes, delete all the roles
                             if (count($userRoles) > 0)
                             {
-                                $userrolemapper->delete(array (
-                                        'userId' => $userId 
-                                ));
+                                $result = $userrolemapper->deleteAllRolesForUser($userId);
                             }
                         }
                         
