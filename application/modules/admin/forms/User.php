@@ -217,8 +217,8 @@ class Admin_Form_User extends EasyBib_Form
                             array (
                                     'validator' => 'StringLength', 
                                     'options' => array (
-                                            4, 
-                                            80 
+                                            6, 
+                                            255 
                                     ) 
                             ) 
                     ) 
@@ -234,7 +234,7 @@ class Admin_Form_User extends EasyBib_Form
                             array (
                                     'validator' => 'StringLength', 
                                     'options' => array (
-                                            4, 
+                                            6, 
                                             255 
                                     ) 
                             ), 
