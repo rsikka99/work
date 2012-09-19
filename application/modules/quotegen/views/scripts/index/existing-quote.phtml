@@ -1,3 +1,46 @@
+<?php $this->headScript()->captureStart(); ?>
+$(function() 
+{
+	function doLoad(clientId)
+	{
+		$('#quoteId').empty().attr('disabled', 'disabled');
+		$('#clientId').attr('disabled', 'disabled');
+			$.ajax(
+    		{
+    		    url:'<?php echo $this->url(array('format' => 'json', 'controller' => 'index', 'action' => 'get-reports-for-client', )); ?>/clientId/' + clientId,
+    		    success:function(data) 
+    		    {
+    		    	var terms = data['quotes'];
+    		        var html = '';
+    		        var len = terms.length;
+    		        for(var i = 0; i < len; i++)
+			        {
+    		        	html += '<option value="' + terms[i].id + '">' + terms[i].quotedate + '</option>';
+    		        }
+    		        $('#quoteId').append(html);
+    		        $('#quoteId').removeAttr('disabled');
+    		        $('#clientId').removeAttr('disabled');
+    		    },
+    		    error:function(data) 
+    		    {
+    		    	alert('doesnt work');
+    		    }
+    		});
+	}
+	
+	doLoad($('#clientId')[0].value);
+	
+	
+	$('#clientId').change(function()
+	{
+		var clientId = this.value;
+		doLoad(clientId);
+	});
+});
+	
+
+
+<?php $this->headScript()->captureEnd()?>
 <div class="page-header">
     <h1>Quote Generator</h1>
 </div>

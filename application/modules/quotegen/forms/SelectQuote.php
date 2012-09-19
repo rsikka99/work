@@ -34,6 +34,17 @@ class Quotegen_Form_SelectQuote extends EasyBib_Form
          */
         $this->setAttrib('class', 'form-vertical form-center-actions');
         
+
+        $clientList = array ();
+        /* @var $client Quotegen_Model_Client */
+        foreach ( Quotegen_Model_Mapper_Client::getInstance()->fetchAll() as $client )
+        {
+            $clientList [$client->getId()] = $client->getName();
+        }
+        $clientSelect = new Zend_Form_Element_Select('clientId');
+        $clientSelect->addMultiOptions($clientList);
+        $this->addElement($clientSelect);
+        
         $quoteList = array ();
         $quoteListValidator = array ();
         /* @var $quote Quotegen_Model_Quote */
@@ -50,7 +61,7 @@ class Quotegen_Form_SelectQuote extends EasyBib_Form
         $quotes->addValidator('InArray', false, array (
                 $quoteListValidator 
         ));
-        $quotes->setAttrib('class', 'span5');
+        
         $this->addElement($quotes);
         
         // Add the submit button

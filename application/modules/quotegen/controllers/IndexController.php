@@ -3,6 +3,19 @@
 class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
 {
 
+    public function init ()
+    {
+        $this->_helper->contextSwitch()
+            ->addActionContext('get-reports-for-client', array (
+                'xml', 
+                'json' 
+        ))
+            ->setAutoJsonSerialization(true)
+            ->initContext();
+        
+        parent::init();
+    }
+
     public function indexAction ()
     {
         $request = $this->getRequest();
@@ -83,6 +96,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
             
             if (isset($values ['quoteId']))
             {
+                $this->getReportsForClientAction();
                 // Existing Quote
                 if ($existingQuoteForm->isValid($values))
                 {
@@ -100,6 +114,34 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
             }
         }
         $this->view->existingQuoteForm = $existingQuoteForm;
+    }
+
+    public function getReportsForClientAction ()
+    {
+        // Get the clientId and find the client
+        $clientId = $this->_getParam('clientId');
+        $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
+        
+        // Ensure that the client exist
+        if ($client instanceof Quotegen_Model_Client)
+        {
+            // If the client exist get all quotes for the client
+            $quotes = Quotegen_Model_Mapper_Quote::getInstance()->fetchAllForClientByUser($client->getId(), $this->_userId);
+        }
+        
+        $this->view->quotes = array ();
+        
+        // Create a quote array to create option data
+        /* @var $quote Quotegen_Model_Quote */
+        foreach ( $quotes as $quote )
+        {
+            $quoteArray = array (
+                    'id' => $quote->getId(), 
+                    'clientName' => $quote->getClient()->getName(), 
+                    'quotedate' => $quote->getQuoteDate() 
+            );
+            $this->view->quotes [] = $quoteArray;
+        }
     }
 
     public function createClientAction ()

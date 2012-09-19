@@ -199,7 +199,7 @@ class Quotegen_Model_Mapper_Quote extends My_Model_Mapper_Abstract
 
     /**
      * Fetches all quotes that belong to a user
-     * 
+     *
      * @param int $userId            
      * @return multitype:Quotegen_Model_Quote
      */
@@ -209,6 +209,35 @@ class Quotegen_Model_Mapper_Quote extends My_Model_Mapper_Abstract
                 "{$this->col_userId} = ?" => $userId 
         ));
     }
+
+    /**
+     * Gets all the quotes for the specific client
+     * 
+     * @param int $clientId
+     * @return Ambigous <multitype:Quotegen_Model_Quote, multitype:Quotegen_Model_Quote >
+     */
+    public function fetchAllForClient ($clientId)
+    {
+        return $this->fetchAll(array (
+                "{$this->col_clientId} = ?" => $clientId 
+        ));
+    }
+    
+    /**
+     * Gets all the quotes for a specific client that belongs to the user 
+     * 
+     * @param int $clientId
+     * @param int $userId
+     * @return Ambigous <multitype:Quotegen_Model_Quote, multitype:Quotegen_Model_Quote >
+     */
+    public function fetchAllForClientByUser ($clientId, $userId)
+    {
+        return $this->fetchAll(array (
+                "{$this->col_clientId} = ?" => $clientId,
+                "{$this->col_userId} = ?" => $userId
+        ));
+    }
+    
 
     /**
      * Gets a where clause for filtering by id
