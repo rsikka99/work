@@ -214,5 +214,18 @@ class Admin_Model_Mapper_UserRole extends My_Model_Mapper_Abstract
                 $object->getUserId() 
         );
     }
+
+    /**
+     * Deletes all the roles for a given user.
+     * 
+     * @param number $userId            
+     * @return number
+     */
+    public function deleteAllRolesForUser ($userId)
+    {
+        return $this->getDbTable()->delete(array (
+                'userId = ?' => $userId 
+        ));
+    }
 }
 
