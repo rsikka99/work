@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_Form_SelectQuote extends EasyBib_Form
+class Quotegen_Form_SelectQuote extends Twitter_Bootstrap_Form_Inline
 {
     /**
      * The user id to get quotes for.
@@ -32,9 +32,8 @@ class Quotegen_Form_SelectQuote extends EasyBib_Form
          *
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
-        $this->setAttrib('class', 'form-vertical form-center-actions');
+        $this->_addClassNames('form-center-actions');
         
-
         $clientList = array ();
         /* @var $client Quotegen_Model_Client */
         foreach ( Quotegen_Model_Mapper_Client::getInstance()->fetchAll() as $client )
@@ -43,6 +42,7 @@ class Quotegen_Form_SelectQuote extends EasyBib_Form
         }
         $clientSelect = new Zend_Form_Element_Select('clientId');
         $clientSelect->addMultiOptions($clientList);
+        $clientSelect->setLabel('Company Name');
         $this->addElement($clientSelect);
         
         $quoteList = array ();
@@ -56,20 +56,34 @@ class Quotegen_Form_SelectQuote extends EasyBib_Form
             $quoteListValidator [] = $quote->getId();
         }
         
+        // Create a select element to hold quotes for the user
         $quotes = new Zend_Form_Element_Select('quoteId');
+        
+        // Quotes element setup vars
         $quotes->addMultiOptions($quoteList);
         $quotes->addValidator('InArray', false, array (
                 $quoteListValidator 
         ));
+        $quotes->setLabel('Quote Date');
         
+        // Add the quote element to the form
         $this->addElement($quotes);
         
         // Add the submit button
         $this->addElement('submit', 'submit', array (
+                'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY, 
                 'ignore' => true, 
-                'label' => 'Continue' 
+                'label' => 'Continue', 
+                'decorators' => array (
+                        'ViewHelper', 
+                        array (
+                                'HtmlTag', 
+                                array (
+                                        'tag' => 'div', 
+                                        'class' => 'form-actions' 
+                                ) 
+                        ) 
+                ) 
         ));
-        
-        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP);
     }
 }

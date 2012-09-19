@@ -1,6 +1,8 @@
 <?php $this->headScript()->captureStart(); ?>
 $(function() 
 {
+	doLoad($('#clientId')[0].value);
+
 	function doLoad(clientId)
 	{
 		$('#quoteId').empty().attr('disabled', 'disabled');
@@ -28,9 +30,6 @@ $(function()
     		});
 	}
 	
-	doLoad($('#clientId')[0].value);
-	
-	
 	$('#clientId').change(function()
 	{
 		var clientId = this.value;
@@ -38,14 +37,11 @@ $(function()
 	});
 });
 	
-
-
 <?php $this->headScript()->captureEnd()?>
 <div class="page-header">
     <h1>Quote Generator</h1>
 </div>
 <?php echo $this->Indexmenu(); ?>
 <div class="well">
-    <p>Select an existing quote from the list below to work on it.</p>
     <?php echo $this->existingQuoteForm; ?>
 </div>
