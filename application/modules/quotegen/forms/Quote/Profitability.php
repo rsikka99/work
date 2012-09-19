@@ -137,7 +137,7 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
                                         'validator' => 'Between', 
                                         'options' => array (
                                                 'min' => 0, 
-                                                'max' => $quoteDevice->calculatePackagePrice(), 
+                                                'max' => 30000, 
                                                 'inclusive' => true 
                                         ) 
                                 ) 
