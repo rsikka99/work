@@ -739,11 +739,10 @@ $data = array (
 );
 
 // Actual document pages
-$this->partial("{$commonPartsBasePath}/titlepage.phtml", $titledata);
-$this->partial("{$commonPartsBasePath}/evaluatingthetruecost.phtml", $data);
-
+$this->partial("{$commonPartsBasePath}/docx/titlepage.phtml", $titledata);
+$this->partial("{$commonPartsBasePath}/01_prependDocuments.phtml", $data);
 $this->partial("{$basePath}/purchasequote.phtml", $data);
-$this->partial("{$commonPartsBasePath}/businessprint.phtml", $data);
+$this->partial("{$commonPartsBasePath}/02_appendDocuments.phtml", $data);
 
 $objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
 
