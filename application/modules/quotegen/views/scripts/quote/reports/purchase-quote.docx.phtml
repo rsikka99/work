@@ -8,8 +8,7 @@ $linkToFile = $this->baseUrl('/downloads/' . $filename);
 // This may not need to be removed from here
 // Base path to the files used to render the document
 $basePath = 'quote/reports/purchase-quote/docx';
-$commonPartsBasePath = 'quote/reports/common/docx';
-
+$commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
 $quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
 
 /* @var $phpword PHPWord */
