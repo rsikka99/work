@@ -12,12 +12,13 @@ $(function()
     		    url:'<?php echo $this->url(array('format' => 'json', 'controller' => 'index', 'action' => 'get-reports-for-client', )); ?>/clientId/' + clientId,
     		    success:function(data) 
     		    {
-    		    	var terms = data['quotes'];
+    		    	var quotes = data['quotes'];
     		        var html = '';
-    		        var len = terms.length;
+    		        var len = quotes.length;
     		        for(var i = 0; i < len; i++)
 			        {
-    		        	html += '<option value="' + terms[i].id + '">' + terms[i].quotedate + '</option>';
+			        	quoteType = (quotes[i].isLeased) ? 'Leased' : 'Purchased'; 
+    		        	html += '<option value="' + quotes[i].id + '">' + quotes[i].quotedate + ' - ' + quoteType + '</option>';
     		        }
     		        $('#quoteId').append(html);
     		        $('#quoteId').removeAttr('disabled');

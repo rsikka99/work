@@ -45,6 +45,7 @@
     	<tr>
     		<th style='width: 200px'>Device</th>
     		<th >Sku</th>
+    		<th> Option Sku's </th>
     		<th style='width: 150px'>Quantity</th>
     		<th style='width: 30px'></th>
     	</tr>
@@ -53,6 +54,17 @@
     	<tr>
     		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getName() ?></td>
     		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getSku() ?></td>
+    		<td>
+    		<?php if (count($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions()) > 0) : ?>
+	    		<?php 
+	    			$optionList = array();
+	    			/* @var $option Quotegen_Model_QuoteDeviceOption */
+	    			foreach ($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() as $quoteDeviceOption) 
+	    				$optionList [] = "{$quoteDeviceOption->getSku()} (x{$quoteDeviceOption->getQuantity()})";
+	    			echo implode($optionList, ", "); 
+	    			?>
+    		<?php endif; ?>
+    		</td>
     		<td><?php echo $deviceQuantitySubform->getElement("quantity_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}"); ?></td>
     		<td><button type="submit" name="deleteDeviceFromGroup" value="<?php echo "{$quoteDeviceGroupDevice->getQuoteDeviceId()}_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}"?>" class="btn btn-danger btn-mini"><i class="icon-trash"></i></button></td>
     	</tr>

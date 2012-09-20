@@ -138,7 +138,8 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
             $quoteArray = array (
                     'id' => $quote->getId(), 
                     'clientName' => $quote->getClient()->getName(), 
-                    'quotedate' => $quote->getQuoteDate() 
+                    'quotedate' => $quote->getQuoteDate(),
+                    'isLeased' => $quote->isLeased()
             );
             $this->view->quotes [] = $quoteArray;
         }
