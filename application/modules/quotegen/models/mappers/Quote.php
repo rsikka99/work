@@ -16,6 +16,7 @@ class Quotegen_Model_Mapper_Quote extends My_Model_Mapper_Abstract
     public $col_id = 'id';
     public $col_userId = 'userId';
     public $col_clientId = 'clientId';
+    public $col_quoteDate = 'quoteDate';
 
     /**
      * Gets an instance of the mapper
@@ -212,8 +213,8 @@ class Quotegen_Model_Mapper_Quote extends My_Model_Mapper_Abstract
 
     /**
      * Gets all the quotes for the specific client
-     * 
-     * @param int $clientId
+     *
+     * @param int $clientId            
      * @return Ambigous <multitype:Quotegen_Model_Quote, multitype:Quotegen_Model_Quote >
      */
     public function fetchAllForClient ($clientId)
@@ -222,22 +223,21 @@ class Quotegen_Model_Mapper_Quote extends My_Model_Mapper_Abstract
                 "{$this->col_clientId} = ?" => $clientId 
         ));
     }
-    
+
     /**
-     * Gets all the quotes for a specific client that belongs to the user 
-     * 
-     * @param int $clientId
-     * @param int $userId
+     * Gets all the quotes for a specific client that belongs to the user
+     *
+     * @param int $clientId            
+     * @param int $userId            
      * @return Ambigous <multitype:Quotegen_Model_Quote, multitype:Quotegen_Model_Quote >
      */
     public function fetchAllForClientByUser ($clientId, $userId)
     {
         return $this->fetchAll(array (
-                "{$this->col_clientId} = ?" => $clientId,
-                "{$this->col_userId} = ?" => $userId
-        ));
+                "{$this->col_clientId} = ?" => $clientId, 
+                "{$this->col_userId} = ?" => $userId 
+        ), "{$this->col_quoteDate} DESC");
     }
-    
 
     /**
      * Gets a where clause for filtering by id
