@@ -79,11 +79,6 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                             // Save changes to the device if anything changed.
                             if ($quoteDeviceHasChanges)
                             {
-                                // Last minute check to ensure that residual will be never be higher than the package price
-                                if ($quoteDevice->getResidual() > 0 && $quoteDevice->getResidual() >= $quoteDevice->calculatePackagePrice())
-                                {
-                                    $quoteDevice->setResidual(0);
-                                }
                                 $quoteDeviceMapper->save($quoteDevice);
                                 $changesMade = true;
                             }
