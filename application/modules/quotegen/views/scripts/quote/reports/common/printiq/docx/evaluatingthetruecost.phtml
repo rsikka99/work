@@ -1,0 +1,51 @@
+<?php
+/**
+ * Solution - Evaluating the True Cost of MPS Contracts and Copier Leases
+ */
+/* @var $section PHPWord_Section */
+$section = $this->section;
+
+/* @var $quote Quotegen_Model_Quote */
+$quote = $this->quote;
+
+
+$section->addTitle($this->translate('Evaluating the True Cost of MPS Contracts and Copier Leases'), 1);
+
+$section->addText($this->translate('Before you choose the hardware and managed print program that best meets your needs, make sure you are comparing apples to apples. Many contracts can be confusing or misleading. We recommend asking any vendor the following questions so you are equipped with the necessary information.'));
+
+$tcStyle = $this->styles->tables->truecosts;
+$table = $section->addTable($tcStyle->tablestyle);
+
+// Table header
+$table->addRow($tcStyle->header->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->header->cell1->cellStyle)->addText($this->translate('Question'), $tcStyle->header->cell1->fontStyle, $tcStyle->header->cell1->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->cell2->cellStyle)->addText($this->translate('Why It\'s Important to Ask'), $tcStyle->header->cell2->fontStyle, $tcStyle->header->cell2->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->cell3->cellStyle)->addText($this->translate('How Office Depot MPS Works'), $tcStyle->header->cell3->fontStyle, $tcStyle->header->cell3->paragraphStyle);
+
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->body->cell1->cellStyle)->addText($this->translate('What happens at the end of the contract?'), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->body->cell2->cellStyle)->addText($this->translate('Copier leases may carry a large residual at the end of the contract. While this can decrease the monthly payment, it may cost you thousands of dollars at the end of the contract if you want to own the hardware.'), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->body->cell3->cellStyle)->addText($this->translate('Office Depot provides a wide range of options at the end of our hardware contracts. You can upgrade to new equipment, or continue on with current hardware as is.'), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->body->cell1->cellStyle)->addText($this->translate('Who in the area can service and supply the hardware?'), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->body->cell2->cellStyle)->addText($this->translate('Many copier dealers sell hardware that can only be serviced and supplied by a limited number of authorized dealers. If you decide to purchase the hardware at the end of the lease, you may find that supplies, parts and service are not widely available from other vendors.'), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->body->cell3->cellStyle)->addText($this->translate('Office Depot provides hardware from channel friendly manufacturers, such as HP and Xerox, which means you will have many options for acquiring supplies and service. While we hope you continue with one of our managed print options, you are free to have another vendor service and supply your device at the end of the contract.'), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->body->cell1->cellStyle)->addText($this->translate('How long is the lease term?'), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->body->cell2->cellStyle)->addText($this->translate('Longer lease terms decrease the monthly payment but increase the amount you pay over the life of the contract. If the monthly payment seems small, it is likely that the lease term is long or the residual is high.'), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->body->cell3->cellStyle)->addText($this->translate('Office Depot typically recommends a 3-year term, but we can customize a contract term to meet your specific needs.'), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->body->cell1->cellStyle)->addText($this->translate('What is included and not included in the contract?'), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->body->cell2->cellStyle)->addText($this->translate('Many contracts have a variety of hidden charges. Does your rate include toner, maintenance kits, parts, service and labor? Can fuel surcharges be billed separately? Are there are minimum page charges or overage rates? Do rates increase over the lease term? Ask these questions to determine the total cost of the contract.'), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->body->cell3->cellStyle)->addText($this->translate('Our Print IQ Plus program includes hardware, supplies, parts, service and labor for a flat monthly rate. If you want us to manage your existing hardware, our Print IQ program includes supplies, parts, service and labor for a standard per-page rate. There are no minimum page charges, overage rates or fuel surcharges, and our rates do not increase over the contract term.'), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->body->cell1->cellStyle)->addText($this->translate('What features are included in the hardware?'), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->body->cell2->cellStyle)->addText($this->translate('Hardware with many features, such as tabloid printing and stapling, drive up the cost. While some businesses may require these features, many do not. Know what features you require and do not pay for anything additional that you do not need.'), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->body->cell3->cellStyle)->addText($this->translate('Office Depot works with you to determine your hardware needs, so you do not end up paying for unnecessary features.'), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+
+$section->addTextBreak();
+$section->addText($this->translate('We want you to be fully informed before choosing hardware or a managed print program. If you have any questions about our programs or contracts, please ask your Account Manager.'));

@@ -8,7 +8,7 @@ $linkToFile = $this->baseUrl('/downloads/' . $filename);
 // This may not need to be removed from here
 // Base path to the files used to render the document
 $basePath = 'quote/reports/lease-quote/docx';
-$commonPartsBasePath = 'quote/reports/common/docx';
+$commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
 
 $quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
 
@@ -720,11 +720,9 @@ $data = array (
 );
 
 // Actual document pages
-$this->partial("{$commonPartsBasePath}/titlepage.phtml", $titledata);
-$this->partial("{$commonPartsBasePath}/evaluatingthetruecost.phtml", $data);
-
+$this->partial("{$commonPartsBasePath}/01_prependDocuments.phtml", $titledata);
 $this->partial("{$basePath}/leasedquote.phtml", $data);
-$this->partial("{$commonPartsBasePath}/businessprint.phtml", $data);
+$this->partial("{$commonPartsBasePath}/01_appendDocuments.phtml", $titledata);
 
 $objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
 
