@@ -9,6 +9,7 @@ $linkToFile = $this->baseUrl('/downloads/' . $filename);
 // Base path to the files used to render the document
 $basePath = 'quote/reports/purchase-quote/docx';
 $commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
+
 $quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
 
 /* @var $phpword PHPWord */
@@ -45,6 +46,10 @@ $section = $phpword->createSection();
 //$footer = $section->createFooter();
 //$footer->addText("TEXT");
 //$footer->addImage(PUBLIC_FOLDER . $this->theme('/proposalgenerator/reports/images/officedepotLogo.jpg'), array (    'align' => 'right'));
+
+// Render our style defaults?
+$this->render("{$commonPartsBasePath}/styles.phtml");
+
 
 
 /**
@@ -120,7 +125,7 @@ $phpword->addFontStyle('savingsFont', array (
 ));
 
 $phpword->addFontStyle('savingsAmountFont', array (
-        'color' => 'F0003C', 
+        'color' => $this->docStyles->brandBaseColor, 
         'bold' => true, 
         'size' => 11 
 ));
@@ -137,7 +142,7 @@ $phpword->addFontStyle('small_italic_text', array (
 // H1 Style
 $phpword->addTitleStyle(1, array (
         'size' => 15, 
-        'color' => 'F0003C', 
+        'color' => $this->docStyles->brandBaseColor, 
         'bold' => true 
 ), array (
         'borderBottomSize' => 1 
@@ -149,7 +154,7 @@ $phpword->addTitleStyle(2, array (
         'bold' => true, 
         'italic' => true 
 ), array (
-        'bgColor' => 'F0003C' 
+        'bgColor' => $this->docStyles->brandBaseColor 
 ));
 // H3 Style #5881BC
 $phpword->addTitleStyle(3, array (
@@ -279,7 +284,7 @@ $purchaseQuoteTable = (object)array (
                                 "borderRightSize" => 1, 
                                 "borderBottomSize" => 1, 
                                 "borderLeftSize" => 1, 
-                                "bgColor" => 'F0003C', 
+                                "bgColor" => $this->docStyles->brandBaseColor, 
                                 "borderColor" => 'BFBFBF' 
                         ), 
                         "fontStyle" => array (
@@ -299,7 +304,7 @@ $purchaseQuoteTable = (object)array (
                                 "borderRightSize" => 1, 
                                 "borderBottomSize" => 1, 
                                 "borderLeftSize" => 1, 
-                                "bgColor" => 'F0003C', 
+                                "bgColor" => $this->docStyles->brandBaseColor, 
                                 "borderColor" => 'BFBFBF' 
                         ), 
                         "fontStyle" => array (
@@ -319,7 +324,7 @@ $purchaseQuoteTable = (object)array (
                                 "borderRightSize" => 1, 
                                 "borderBottomSize" => 1, 
                                 "borderLeftSize" => 1, 
-                                "bgColor" => 'F0003C', 
+                                "bgColor" => $this->docStyles->brandBaseColor, 
                                 "borderColor" => 'BFBFBF' 
                         ), 
                         "fontStyle" => array (
@@ -339,7 +344,7 @@ $purchaseQuoteTable = (object)array (
                                 "borderRightSize" => 1, 
                                 "borderBottomSize" => 1, 
                                 "borderLeftSize" => 1, 
-                                "bgColor" => 'F0003C', 
+                                "bgColor" => $this->docStyles->brandBaseColor, 
                                 "borderColor" => 'BFBFBF' 
                         ), 
                         "fontStyle" => array (

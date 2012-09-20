@@ -3,14 +3,20 @@
 /* @var $quote Quotegen_Model_Quote */
 $quote = $this->quote;
 
+// Get the path based on the theme
+$commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
+// Render the elements in the theme
+$this->render("{$commonPartsBasePath}/styles.phtml");
+
 /**
  * Solution - Solution 1: PrintIQ®
  */
 /* @var $section PHPWord_Section */
 $section = $this->section;
 $section->addPageBreak();
-$section->addTitle($this->translate('Your PrintIQ Solution'), 1);
+$section->addTitle($this->translate($this->docStrings->quoteHeader), 1);
 $section->addText($this->translate('Below is a quote for the requested hardware:'));
+
 
 $quoteDeviceGroups = $quote->getQuoteDeviceGroups();
 $groupCount = 0;
