@@ -1,0 +1,33 @@
+<?php
+/**
+ * Assessment Title Page
+ */
+/* @var $phpword PHPWord */
+$phpword = $this->phpword;
+
+/* @var $quote Quotegen_Model_Quote */
+$quote = $this->quote;
+
+$client = $quote->getClient();
+
+$quoteDate = date('F jS, Y', strtotime($quote->getQuoteDate()));
+
+/* @var $section PHPWord_Section */
+$section = $this->section;
+
+$clientName = $quote->getClientDisplayName();
+if (empty($clientName))
+{
+    $clientName = $client->getName();
+}
+
+$section->addText($this->translate('Prepared For:') . " " . $clientName, 'titlepageHeaderFont', 'titlepageHeaderParagraph');
+
+$section->addText($quoteDate, 'titlepageHeaderFont', 'titlepageHeaderParagraph');
+$section->addTextBreak(4);
+// Parse the address
+$addressLines = explode("\n", $client->getAddress());
+foreach ( $addressLines as $line )
+{
+    $section->addText($line, null, 'nospacing');
+}
