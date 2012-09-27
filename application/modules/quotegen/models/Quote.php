@@ -121,6 +121,20 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     protected $_colorPageMargin;
     
     /**
+     * Margin that is used to be applied to calculate monochrome over rate per page
+     *
+     * @var float
+     */
+    protected $_monochromeOverageMagrin;
+    
+    /**
+     * Margin that is used to be applied to calculate color over rate per page
+     *
+     * @var float
+     */
+    protected $_colorOverageMargin;
+    
+    /**
      * Admin cost per page to be applied to the quote
      *
      * @var float
@@ -133,20 +147,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      * @var float
      */
     protected $_serviceCostPerPage;
-    
-    /**
-     * This is the monochrome overage per page rate for the quote
-     *
-     * @var float
-     */
-    protected $_monochromeOverageRatePerPage;
-    
-    /**
-     * This is the color overager rate per page for the quote
-     *
-     * @var float
-     */
-    protected $_colorOverageRatePerPage;
     
     /**
      * The default pricing config preference
@@ -216,14 +216,14 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             $this->setMonochromePageMargin($params->monochromePageMargin);
         if (isset($params->colorPageMargin) && ! is_null($params->colorPageMargin))
             $this->setColorPageMargin($params->colorPageMargin);
+        if (isset($params->colorOverageMargin) && ! is_null($params->colorOverageMargin))
+            $this->setColorOverageMargin($params->colorOverageMargin);
+        if (isset($params->monochromeOverageMargin) && ! is_null($params->monochromeOverageMargin))
+            $this->setMonochromeOverageMagrin($params->monochromeOverageMargin);
         if (isset($params->pageCoverageColor) && ! is_null($params->pageCoverageColor))
             $this->setPageCoverageColor($params->pageCoverageColor);
         if (isset($params->pageCoverageMonochrome) && ! is_null($params->pageCoverageMonochrome))
             $this->setPageCoverageMonochrome($params->pageCoverageMonochrome);
-        if (isset($params->monochromeOverageRatePerPage) && ! is_null($params->monochromeOverageRatePerPage))
-            $this->setMonochromeOverageRatePerPage($params->monochromeOverageRatePerPage);
-        if (isset($params->colorOverageRatePerPage) && ! is_null($params->colorOverageRatePerPage))
-            $this->setColorOverageRatePerPage($params->colorOverageRatePerPage);
         if (isset($params->pricingConfigId) && ! is_null($params->pricingConfigId))
             $this->setPricingConfigId($params->pricingConfigId);
         if (isset($params->quoteType) && ! is_null($params->quoteType))
@@ -250,10 +250,10 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                 'adminCostPerPage' => $this->getAdminCostPerPage(), 
                 'serviceCostPerPage' => $this->getServiceCostPerPage(), 
                 'pageCoverageColor' => $this->getPageCoverageColor(), 
-                'monochromeOverageRatePerPage' => $this->getMonochromeOverageRatePerPage(), 
-                'colorOverageRatePerPage' => $this->getColorOverageRatePerPage(), 
                 'monochromePageMargin' => $this->getMonochromePageMargin(), 
                 'colorPageMargin' => $this->getColorPageMargin(), 
+                'monochromeOverageMargin' => $this->getMonochromeOverageMagrin(), 
+                'colorOverageMargin' => $this->getColorOverageMargin(), 
                 'pageCoverageMonochrome' => $this->getPageCoverageMonochrome(), 
                 'pricingConfigId' => $this->getPricingConfigId(), 
                 'quoteType' => $this->getQuoteType(), 
@@ -714,6 +714,48 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     }
 
     /**
+     * Gets the monochrome overage margin
+     *
+     * @return the $_monochromeOverageMagrin
+     */
+    public function getMonochromeOverageMagrin ()
+    {
+        return $this->_monochromeOverageMagrin;
+    }
+
+    /**
+     * Sets the monochrome overage margin
+     *
+     * @param number $_monochromeOverageMagrin            
+     */
+    public function setMonochromeOverageMagrin ($_monochromeOverageMagrin)
+    {
+        $this->_monochromeOverageMagrin = $_monochromeOverageMagrin;
+        return $this;
+    }
+
+    /**
+     * Gets the color overage margin
+     *
+     * @return the $_colorOverageMargin
+     */
+    public function getColorOverageMargin ()
+    {
+        return $this->_colorOverageMargin;
+    }
+
+    /**
+     * Sets the color overage margin
+     *
+     * @param number $_colorOverageMargin            
+     */
+    public function setColorOverageMargin ($_colorOverageMargin)
+    {
+        $this->_colorOverageMargin = $_colorOverageMargin;
+        return $this;
+    }
+
+    /**
      * Gets the admin cost per page for the whole quote
      *
      * @return the $_adminCostPerPage
@@ -751,48 +793,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function setServiceCostPerPage ($_serviceCostPerPage)
     {
         $this->_serviceCostPerPage = $_serviceCostPerPage;
-    }
-
-    /**
-     * Gets the monohchrome overage rate per page for the quote
-     *
-     * @return the $_monochromeOverageRatePerPage
-     */
-    public function getMonochromeOverageRatePerPage ()
-    {
-        return $this->_monochromeOverageRatePerPage;
-    }
-
-    /**
-     * Sets the monochrome overage rate per page for the quote
-     *
-     * @param number $_monochromeOverageRatePerPage            
-     */
-    public function setMonochromeOverageRatePerPage ($_monochromeOverageRatePerPage)
-    {
-        $this->_monochromeOverageRatePerPage = $_monochromeOverageRatePerPage;
-        return $this;
-    }
-
-    /**
-     * Gets the color overage rate per page for the quote
-     *
-     * @return the $_colorOverageRatePerPage
-     */
-    public function getColorOverageRatePerPage ()
-    {
-        return $this->_colorOverageRatePerPage;
-    }
-
-    /**
-     * Sets the color overage rate per page for the quote
-     *
-     * @param number $_colorOverageRatePerPage            
-     */
-    public function setColorOverageRatePerPage ($_colorOverageRatePerPage)
-    {
-        $this->_colorOverageRatePerPage = $_colorOverageRatePerPage;
-        return $this;
     }
 
     /**
@@ -1196,6 +1196,16 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         return Tangent_Accounting::applyMargin($this->calculateMonochromeCostPerPage(), $this->getMonochromePageMargin());
     }
+    
+    /**
+     * Calcuates the overage monochrome price per page based on color overage margin
+     *
+     * @return float the calculated overage monochrome price per page
+     */
+    public function calculateMonochromeOverageRatePerPage()
+    {
+        return Tangent_Accounting::applyMargin($this->calculateMonochromeCostPerPage(), $this->getMonochromeOverageMagrin());
+    }
 
     /**
      * Calcuates the revenue for color pages
@@ -1205,6 +1215,16 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function calculateColorPricePerPage ()
     {
         return Tangent_Accounting::applyMargin($this->calculateColorCostPerPage(), $this->getColorPageMargin());
+    }
+    
+    /**
+     * Calcuates the overage color price per page based on color overage margin
+     * 
+     * @return float the calculated overage color price per page
+     */
+    public function calculateColorOverageRatePerPage()
+    {
+        return Tangent_Accounting::applyMargin($this->calculateColorCostPerPage(), $this->getColorOverageMargin());
     }
 
     /**
