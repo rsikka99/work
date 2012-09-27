@@ -67,11 +67,11 @@
         <table class="table table-condensed table-bordered table-striped quoteDeviceTable">
             <tr class="pagesRow">
                 <td style="text-align: right;" colspan="5">Monochrome overage price</td>
-                <td style="text-align: right; width: 70px;"><?php echo $this->currency($quote->getMonochromeOverageRatePerPage()); ?></td>
+                <td style="text-align: right; width: 70px;"><?php echo $this->currency($quote->calculateMonochromeOverageRatePerPage(),array('precision' => 3)); ?></td>
             </tr>
             <tr class="pagesRow">
                 <td style="text-align: right;" colspan="5">Color overage price</td>
-                <td style="text-align: right; width: 70px"><?php echo $this->currency($quote->getColorOverageRatePerPage()); ?></td>
+                <td style="text-align: right; width: 70px"><?php echo $this->currency($quote->calculateColorOverageRatePerPage(), array('precision' => 3)); ?></td>
             </tr>
         </table>
         <div class='pull-right'>
