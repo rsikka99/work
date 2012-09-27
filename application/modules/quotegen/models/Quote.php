@@ -1100,6 +1100,12 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         // Represents quote total page weight
         $monochromeCostPerPage = 0;
         $monochromeTotal = 0;
+        // The total cpp for all quote devices, used for calcualtion with no pages
+        $totalCpp = 0;
+        // Total device count, used for calculation with no pages in quote
+        $totalDevices = 0;
+        // Flag to see if pages exist
+        $quoteHasPages = false;
         
         // Represents quote total costs for pages
         $quoteDeviceGroupDeviceCost = 0;
@@ -1112,14 +1118,20 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                 $monochromeTotal += $quoteDeviceGroupDevice->getMonochromePagesQuantity() * $quoteDeviceGroupDevice->getQuantity();
                 
                 // Total Cost for pages
-                $quoteDeviceGroupDeviceCost += $quoteDeviceGroupDevice->getMonochromePagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->calculateMonochromeCostPerPage() * $quoteDeviceGroupDevice->getQuantity();
+                if ($quoteDeviceGroupDevice->getMonochromePagesQuantity() > 0)
+                {
+                    $quoteDeviceGroupDeviceCost += $quoteDeviceGroupDevice->getMonochromePagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->calculateMonochromeCostPerPage() * $quoteDeviceGroupDevice->getQuantity();
+					$quoteHasPages = true;                    
+                }
+                $totalCpp = $quoteDeviceGroupDevice->getQuoteDevice()->calculateMonochromeCostPerPage();
+                $totalDevices++;
             }
         }
         
-        if ($monochromeTotal > 0)
-        {
+        if ($quoteHasPages)
             $monochromeCostPerPage = $quoteDeviceGroupDeviceCost / $monochromeTotal;
-        }
+        else
+            $monochromeCostPerPage = $totalCpp / $totalDevices;
         
         return $monochromeCostPerPage;
     }
@@ -1135,21 +1147,37 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         $colorCostPerPage = 0;
         // The quantity of color pages that have been assigned in this quote
         $colorTotal = 0;
-        // The accumication of cost for coolor pages per device
+        // The accumication of cost for color pages per device
         $colorPageCostTotal = 0;
+        // The total cpp for all quote devices, used for calcualtion with no pages
+        $totalCpp = 0;
+        // Total device count, used for calculation with no pages in quote
+        $totalDevices = 0;
+        // Flag to see if pages exist
+        $quoteHasPages = false;
         
         foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
                 $colorTotal += $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuantity();
-                $colorPageCostTotal += $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->calculateColorCostPerPage() * $quoteDeviceGroupDevice->getQuantity();
+                if ($quoteDeviceGroupDevice->getColorPagesQuantity() > 0)
+                {
+                    $colorPageCostTotal += $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->calculateColorCostPerPage() * $quoteDeviceGroupDevice->getQuantity();
+                    $quoteHasPages = true;
+                }
+                $totalCpp = $quoteDeviceGroupDevice->getQuoteDevice()->calculateColorCostPerPage();
+                $totalDevices ++;
             }
         }
         
-        if ($colorTotal > 0)
+        if ($quoteHasPages)
         {
             $colorCostPerPage = $colorPageCostTotal / $colorTotal;
+        }
+        else
+        {
+            $colorCostPerPage = $totalCpp / $totalDevices;
         }
         
         return (float)$colorCostPerPage;
@@ -1196,13 +1224,13 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         return Tangent_Accounting::applyMargin($this->calculateMonochromeCostPerPage(), $this->getMonochromePageMargin());
     }
-    
+
     /**
      * Calcuates the overage monochrome price per page based on color overage margin
      *
      * @return float the calculated overage monochrome price per page
      */
-    public function calculateMonochromeOverageRatePerPage()
+    public function calculateMonochromeOverageRatePerPage ()
     {
         return Tangent_Accounting::applyMargin($this->calculateMonochromeCostPerPage(), $this->getMonochromeOverageMagrin());
     }
@@ -1216,13 +1244,13 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         return Tangent_Accounting::applyMargin($this->calculateColorCostPerPage(), $this->getColorPageMargin());
     }
-    
+
     /**
      * Calcuates the overage color price per page based on color overage margin
-     * 
+     *
      * @return float the calculated overage color price per page
      */
-    public function calculateColorOverageRatePerPage()
+    public function calculateColorOverageRatePerPage ()
     {
         return Tangent_Accounting::applyMargin($this->calculateColorCostPerPage(), $this->getColorOverageMargin());
     }
