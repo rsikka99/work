@@ -51,6 +51,8 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 $this->_quote->setUserId($this->_userId);
                 $this->_quote->setColorPageMargin($quoteSetting->getPageMargin());
                 $this->_quote->setMonochromePageMargin($quoteSetting->getPageMargin());
+                $this->_quote->setColorOverageMargin($quoteSetting->getPageMargin());
+                $this->_quote->setMonochromeOverageMagrin($quoteSetting->getPageMargin());
                 $quoteId = $this->saveQuote();
                 
                 // Add a default group
@@ -138,8 +140,8 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
             $quoteArray = array (
                     'id' => $quote->getId(), 
                     'clientName' => $quote->getClient()->getName(), 
-                    'quotedate' => $quote->getQuoteDate(),
-                    'isLeased' => $quote->isLeased()
+                    'quotedate' => $quote->getQuoteDate(), 
+                    'isLeased' => $quote->isLeased() 
             );
             $this->view->quotes [] = $quoteArray;
         }

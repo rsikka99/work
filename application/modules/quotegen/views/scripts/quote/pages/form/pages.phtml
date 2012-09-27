@@ -52,41 +52,78 @@
 		<?php endforeach;?>
 	</table>
 		<?php endforeach;?>
-	<h3> Subtotal </h3>
-	<table class='table table-bordered table-striped table-condensed'>
-		<tr>
-			<th> Type </th>
-			<th style='width: 100px'> Quantity </th>
-			<th style='width: 70px'> CPP </th>
-			<th style='width: 80px'> Margin (%) </th>
-			<th style='width: 70px'> Price Per Page </th>
-			<th style='width: 90px'> Overage Rate Per Page ($) </th>
-			<th style='width: 90px'> Cost </th>
-			<th style='width: 90px'> Monthly Revenue </th>
-			<th style='width: 90px'> Monthly Profit </th>
-		</tr>
-		<tr>
-			<td> Monochrome </td>
-			<td> <?php echo $quote->calculateTotalMonochromePages();?>  </td>
-			<td> <?php echo $this->currency($quote->calculateMonochromeCostPerPage(), array('precision' => 4)); ?>  </td>
-			<td> <?php echo $form->getElement('monochromePageMargin'); ?> </td>
-			<td> <?php echo $this->currency($quote->calculateMonochromePricePerPage(), array('precision' => 4)); ?></td>
-			<td> <?php echo $form->getElement('monochromeOverageRatePerPage'); ?></td>
-			<td> <?php echo $this->currency($quote->calculateMonochromePageCost(),array('precision' => 2)); ?></td>
-			<td> <?php echo $this->currency($quote->calculateMonochromePageRevenue(),array('precision' => 2)); ?></td>
-			<td> <?php echo $this->currency($quote->calculateMonochromePageProfit(), array('precision' => 2)); ?></td>
-		</tr>
-		<tr>
-			<td> Color </td>
-			<td> <?php echo $quote->calculateTotalColorPages();?>  </td>
-			<td> <?php echo $this->currency($quote->calculateColorCostPerPage(), array('precision' => 4)); ?>  </td>
-			<td> <?php echo $form->getElement('colorPageMargin'); ?> </td>
-			<td> <?php echo $this->currency($quote->calculateColorPricePerPage(),array('precision' => 4)); ?></td>
-			<td> <?php echo $form->getElement('colorOverageRatePerPage'); ?></td>
-			<td> <?php echo $this->currency($quote->calculateColorPageCost(), array('precision' => 2)) ;?></td>
-			<td> <?php echo $this->currency($quote->calculateColorPageRevenue(),array('precision' => 2)); ?></td>
-			<td> <?php echo $this->currency($quote->calculateColorPageProfit(),array('precision' => 2)); ?></td>
-		</tr>
-	</table>
+		
+	<div class="row-fluid">
+		<div class="span6">
+			<h3> Included Pages </h3>
+			<table class="table table-condensed table-bordered">
+				<tr>
+					<th></th>
+					<th>Monochrome</th>
+					<th>Color</th>
+				</tr>
+				<tr>
+					<th>Quantity</th>
+					<td> <?php echo $quote->calculateTotalMonochromePages();?>  </td>
+					<td> <?php echo $quote->calculateTotalColorPages();?>  </td>
+				</tr>
+				<tr>
+					<th>Est. CPP</th>
+					<td> <?php echo $this->currency($quote->calculateMonochromeCostPerPage(), array('precision' => 4)); ?>  </td>
+					<td> <?php echo $this->currency($quote->calculateColorCostPerPage(), array('precision' => 4)); ?>  </td>
+				</tr>
+				<tr>
+					<th>Margin (%)</th>
+					<td> <?php echo $form->getElement('monochromePageMargin'); ?> </td>
+					<td> <?php echo $form->getElement('colorPageMargin'); ?> </td>
+				</tr>
+				<tr>
+					<th>Price Per Page</th>
+					<td> <?php echo $this->currency($quote->calculateMonochromePricePerPage(), array('precision' => 4)); ?></td>
+					<td> <?php echo $this->currency($quote->calculateColorPricePerPage(),array('precision' => 4)); ?></td>
+				</tr>
+				<tr>
+					<th>Monthly Cost</th>
+					<td> <?php echo $this->currency($quote->calculateMonochromePageCost(),array('precision' => 2)); ?></td>
+					<td> <?php echo $this->currency($quote->calculateColorPageCost(), array('precision' => 2)) ;?></td>
+				</tr>
+				<tr>
+					<th>Monthly Revenue</th>
+					<td> <?php echo $this->currency($quote->calculateMonochromePageRevenue(),array('precision' => 2)); ?></td>
+					<td> <?php echo $this->currency($quote->calculateColorPageRevenue(),array('precision' => 2)); ?></td>
+				</tr>
+				<tr>
+					<th>Monthly Profit</th>
+					<td> <?php echo $this->currency($quote->calculateMonochromePageProfit(), array('precision' => 2)); ?></td>
+					<td> <?php echo $this->currency($quote->calculateColorPageProfit(),array('precision' => 2)); ?></td>
+				</tr>
+			</table>
+		</div>
+		<div class="span6">
+			<h3> Overage Pages </h3>
+			<table class="table table-condensed table-bordered">
+				<tr>
+					<th></th>
+					<th>Monochrome</th>
+					<th>Color</th>
+				</tr>
+				<tr>
+					<th>Est. CPP</th>
+					<td> <?php echo $this->currency($quote->calculateMonochromeCostPerPage(), array('precision' => 4)); ?>  </td>
+					<td> <?php echo $this->currency($quote->calculateColorCostPerPage(), array('precision' => 4)); ?>  </td>
+				</tr>
+				<tr>
+					<th>Margin (%)</th>
+					<td><?php echo $form->getElement('monochromeOverageMargin'); ?></td>
+					<td><?php echo $form->getElement('colorOverageMargin'); ?></td>
+				</tr>
+				<tr>
+					<th>Overage Rate Per Page</th>
+					<td> <?php echo $this->currency($quote->calculateMonochromeOverageRatePerPage(), array('precision' => 3)); ?></td>
+					<td> <?php echo $this->currency($quote->calculateColorOverageRatePerPage(), array('precision' => 3)); ?></td>
+				</tr>
+			</table>	
+		</div>
+	</div>
 	<?php echo $form->getDisplayGroup('actions')->render(); ?>
 </form>

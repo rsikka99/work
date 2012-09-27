@@ -126,12 +126,13 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
                 ) 
         ));
         
-        // monochromeOverageRatePerPage : Quotegen_Model_Quote->monochromeOverageratePerPage
-        // monochromeOverageRatePerPage is used to designate an overage cost per page for the quote
-        $this->addElement('text', 'monochromeOverageRatePerPage', array (
-                'value' => $this->_quote->getMonochromeOverageRatePerPage(), 
+        // monochromeOverageMargin : Quotegen_Model_Quote->monochromeOverageMargin
+        // monochromeOverageMargin is used for the calcuation of overage rate per page for pages.
+        $this->addElement('text', 'monochromeOverageMargin', array (
+                'value' => $this->_quote->getMonochromeOverageMagrin(), 
                 'required' => true, 
                 'class' => 'input-mini', 
+                'decorators' => $inlineDecorators, 
                 'validators' => array (
                         'Float', 
                         array (
@@ -145,12 +146,13 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
                 ) 
         ));
         
-        // colorOverageRatePerPage : Quotegen_Model_Quote->colorOverageratePerPage
-        // colorOverageRatePerPage is used to designate an overage cost per page for the quote
-        $this->addElement('text', 'colorOverageRatePerPage', array (
-                'value' => $this->_quote->getColorOverageRatePerPage(), 
+        // colorOverageMargin : Quotegen_Model_Quote->colorOverageMargin
+        // colorOverageMargin is used for the calcuation of overage rate per page for pages.
+        $this->addElement('text', 'colorOverageMargin', array (
+                'value' => $this->_quote->getColorOverageMargin(), 
                 'required' => true, 
                 'class' => 'input-mini', 
+                'decorators' => $inlineDecorators, 
                 'validators' => array (
                         'Float', 
                         array (
