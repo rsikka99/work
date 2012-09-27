@@ -26,12 +26,15 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                 // Go through each device and add total pages.
                 if ($form->isValid($values))
                 {
+                    $recalculateOverageRate = false;
+                    
                     $quoteDeviceGroupDeviceMapper = Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance();
                     foreach ( $this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
                     {
                         /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
                         foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
                         {
+                            // Checks to see if the quantity has been changed per device
                             $hasQuantityChanged = false;
                             
                             $newQuantity = $form->getValue("quantity_monochrome_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}");
@@ -40,7 +43,7 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                                 $quoteDeviceGroupDevice->setMonochromePagesQuantity($newQuantity);
                                 $hasQuantityChanged = true;
                             }
-							
+                            
                             // If device is color capable
                             if ($quoteDeviceGroupDevice->getQuoteDevice()->isColorCapable())
                             {
@@ -55,12 +58,23 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                             if ($hasQuantityChanged)
                             {
                                 $quoteDeviceGroupDeviceMapper->save($quoteDeviceGroupDevice);
+                                // Set recalcuate overage rate to true
+                                $recalculateOverageRate = true;
                             }
                         }
                     }
+                    
                     $this->_quote->populate($values);
+                    
+                    if ($recalculateOverageRate)
+                    {
+                        $this->_quote->setMonochromeOverageRatePerPage(round(Tangent_Accounting::applyMargin($this->_quote->calculateMonochromePricePerPage(), $values ['monochromePageMargin']),5));
+                        $this->_quote->setColorOverageRatePerPage(round(Tangent_Accounting::applyMargin($this->_quote->calculateColorPricePerPage(), $values ['colorPageMargin']),5));
+                    }
+                    
                     $this->saveQuote();
                     Quotegen_Model_Mapper_Quote::getInstance()->save($this->_quote);
+                    $form->populate($this->_quote->toArray());
                     
                     // saveAndContinue is clicked : to to quote_profitability
                     if (isset($values ['saveAndContinue']))

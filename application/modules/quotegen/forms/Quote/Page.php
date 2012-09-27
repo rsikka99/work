@@ -125,20 +125,21 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
                         ) 
                 ) 
         ));
-        
+
         // monochromeOverageRatePerPage : Quotegen_Model_Quote->monochromeOverageratePerPage
         // monochromeOverageRatePerPage is used to designate an overage cost per page for the quote
         $this->addElement('text', 'monochromeOverageRatePerPage', array (
                 'value' => $this->_quote->getMonochromeOverageRatePerPage(), 
                 'required' => true, 
                 'class' => 'input-mini', 
+                'decorators' => $inlineDecorators,
                 'validators' => array (
                         'Float', 
                         array (
                                 'validator' => 'Between', 
                                 'options' => array (
-                                        'min' => - 100, 
-                                        'max' => 100, 
+                                        'min' => round($this->_quote->calculateMonochromeCostPerPage(),4), 
+                                        'max' => 5, 
                                         'inclusive' => false 
                                 ) 
                         ) 
@@ -150,14 +151,15 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
         $this->addElement('text', 'colorOverageRatePerPage', array (
                 'value' => $this->_quote->getColorOverageRatePerPage(), 
                 'required' => true, 
-                'class' => 'input-mini', 
+                'class' => 'input-mini',
+                'decorators' => $inlineDecorators,
                 'validators' => array (
                         'Float', 
                         array (
                                 'validator' => 'Between', 
                                 'options' => array (
-                                        'min' => - 100, 
-                                        'max' => 100, 
+                                        'min' => round($this->_quote->calculateColorCostPerPage(),4), 
+                                        'max' => 5, 
                                         'inclusive' => false 
                                 ) 
                         ) 
