@@ -31,7 +31,7 @@ $this->headScript()->appendScript("$('i').popover();");
     <?php /* @var $device Quotegen_Model_QuoteDevice */foreach ($devices as $device) : ?>
     <tr class="deviceRow">
     	<td><h4><?php echo $device->getName(); ?></h4></td>                
-        <td><h4><?php echo $device->getSku(); ?></h4></td>
+        <td><h4><?php echo $device->getOemSku(); ?></h4></td>
         <td></td>
         <td style="text-align: right"><h4><?php echo $this->currency((float)$device->getCost())?></h4></td>
         <td></td>

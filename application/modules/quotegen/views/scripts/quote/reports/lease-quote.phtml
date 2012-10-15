@@ -17,7 +17,7 @@
                     <?php if($quoteDeviceGroupDevice->getQuantity() > 0) : ?>
                     	<tr class="deviceRow">
                 	        <th><h5><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getName(); ?></h5></th>
-            	        <td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getSku(); ?></td>     
+            	        <td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getOemSku(); ?></td>     
         	            <td></td>           
     	                <td style="text-align: right;"></td>
 	                    <td style="text-align: right;"><?php echo number_format($quoteDeviceGroupDevice->getQuantity()); ?></td>
