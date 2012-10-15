@@ -28,7 +28,14 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
      *
      * @var string
      */
-    protected $_sku;
+    protected $_oemSku;
+    
+    /**
+     * the dealer sku for the object
+     *
+     * @var string
+     */
+    protected $_dealerSku;
     
     /**
      * The name of the option
@@ -67,7 +74,7 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
     
     /**
      * Inluded quantity of the option
-     * 
+     *
      * @var int
      */
     protected $_includedQuantity;
@@ -85,8 +92,10 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
             $this->setId($params->id);
         if (isset($params->quoteDeviceId) && ! is_null($params->quoteDeviceId))
             $this->setQuoteDeviceId($params->quoteDeviceId);
-        if (isset($params->sku) && ! is_null($params->sku))
-            $this->setSku($params->sku);
+        if (isset($params->oemSku) && ! is_null($params->oemSku))
+            $this->setOemSku($params->oemSku);
+        if (isset($params->dealerSku) && ! is_null($params->dealerSku))
+            $this->setDealerSku($params->dealerSku);
         if (isset($params->name) && ! is_null($params->name))
             $this->setName($params->name);
         if (isset($params->description) && ! is_null($params->description))
@@ -107,12 +116,13 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
         return array (
                 'id' => $this->getId(), 
                 'quoteDeviceId' => $this->getQuoteDeviceId(), 
-                'sku' => $this->getSku(), 
+                'oemSku' => $this->getOemSku(), 
+                'dealerSku' => $this->getDealerSku(), 
                 'name' => $this->getName(), 
                 'description' => $this->getDescription(), 
                 'cost' => $this->getCost(), 
-                'quantity' => $this->getQuantity(),
-                'includedQuantity' => $this->getIncludedQuantity()
+                'quantity' => $this->getQuantity(), 
+                'includedQuantity' => $this->getIncludedQuantity() 
         );
     }
 
@@ -165,9 +175,9 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
      *
      * @return the $_sku
      */
-    public function getSku ()
+    public function getOemSku ()
     {
-        return $this->_sku;
+        return $this->_oemSku;
     }
 
     /**
@@ -176,9 +186,31 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
      * @param string $_sky
      *            The new Sku
      */
-    public function setSku ($_sku)
+    public function setOemSku ($_sku)
     {
-        $this->_sku = $_sku;
+        $this->_oemSku = $_sku;
+        return $this;
+    }
+
+    /**
+     * Gets the current sku of the item
+     *
+     * @return string
+     */
+    public function getDealerSku ()
+    {
+        return $this->_dealerSku;
+    }
+
+    /**
+     * Sets a new sku
+     *
+     * @param string $_dealerSku
+     *            The new value
+     */
+    public function setDealerSku ($_dealerSku)
+    {
+        $this->_dealerSku = $_dealerSku;
         return $this;
     }
 
@@ -326,7 +358,9 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
         }
         return $subtotal;
     }
-	/**
+
+    /**
+     *
      * @return the $_includedQuantity
      */
     public function getIncludedQuantity ()
@@ -334,12 +368,12 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
         return $this->_includedQuantity;
     }
 
-	/**
-     * @param number $_includedQuantity
+    /**
+     *
+     * @param number $_includedQuantity            
      */
     public function setIncludedQuantity ($_includedQuantity)
     {
         $this->_includedQuantity = $_includedQuantity;
     }
-
 }

@@ -38,11 +38,18 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     protected $_name;
     
     /**
-     * String of the sku
+     * the oem sku for the object
      *
      * @var string
      */
-    protected $_sku;
+    protected $_oemSku;
+    
+    /**
+     * the dealer sku for the object
+     *
+     * @var string
+     */
+    protected $_dealerSku;
     
     /**
      * Number of oem cost per page monochrome
@@ -153,8 +160,10 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             $this->setMargin($params->margin);
         if (isset($params->name) && ! is_null($params->name))
             $this->setName($params->name);
-        if (isset($params->sku) && ! is_null($params->sku))
-            $this->setSku($params->sku);
+        if (isset($params->oemSku) && ! is_null($params->oemSku))
+            $this->setOemSku($params->oemSku);
+        if (isset($params->dealerSku) && ! is_null($params->dealerSku))
+            $this->setDealerSku($params->dealerSku);
         if (isset($params->oemCostPerPageMonochrome) && ! is_null($params->oemCostPerPageMonochrome))
             $this->setOemCostPerPageMonochrome($params->oemCostPerPageMonochrome);
         if (isset($params->oemCostPerPageColor) && ! is_null($params->oemCostPerPageColor))
@@ -185,7 +194,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
                 'quoteId' => $this->getQuoteId(), 
                 'margin' => $this->getMargin(), 
                 'name' => $this->getName(), 
-                'sku' => $this->getSku(), 
+                'oemSku' => $this->getOemSku(), 
+                'dealerSku' => $this->getDealerSku(), 
                 'oemCostPerPageMonochrome' => $this->getOemCostPerPageMonochrome(), 
                 'oemCostPerPageColor' => $this->getOemCostPerPageColor(), 
                 'compCostPerPageMonochrome' => $this->getCompCostPerPageMonochrome(), 
@@ -287,24 +297,46 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Gets the sku of the quote device
+     * Gets the current sku of the item
      *
-     * @return the $_sku
+     * @return string
      */
-    public function getSku ()
+    public function getOemSku ()
     {
-        return $this->_sku;
+        return $this->_oemSku;
     }
 
     /**
-     * Sets a new sku for the quote device
+     * Sets a new sku
      *
-     * @param string $_sku
-     *            The new sku
+     * @param string $_oemSku
+     *            The new value
      */
-    public function setSku ($_sku)
+    public function setOemSku ($_oemSku)
     {
-        $this->_sku = $_sku;
+        $this->_oemSku = $_oemSku;
+        return $this;
+    }
+
+    /**
+     * Gets the current sku of the item
+     *
+     * @return string
+     */
+    public function getDealerSku ()
+    {
+        return $this->_dealerSku;
+    }
+
+    /**
+     * Sets a new sku
+     *
+     * @param string $_dealerSku
+     *            The new value
+     */
+    public function setDealerSku ($_dealerSku)
+    {
+        $this->_dealerSku = $_dealerSku;
         return $this;
     }
 
@@ -816,8 +848,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         $costPerPageColor = 0;
         
         // Get the pricing config
-        switch ($this->getQuote()
-            ->getPricingConfigId())
+        switch ($this->getQuote()->getPricingConfigId())
         {
             case Proposalgen_Model_PricingConfig::COMP :
             case Proposalgen_Model_PricingConfig::OEMMONO_COMPCOLOR :
@@ -865,8 +896,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         $costPerPageMonochrome = 0;
         
         // Figure out which pricing configuration the quote is set for
-        switch ($this->getQuote()
-            ->getPricingConfigId())
+        switch ($this->getQuote()->getPricingConfigId())
         {
             case Proposalgen_Model_PricingConfig::COMP :
             case Proposalgen_Model_PricingConfig::COMPMONO_OEMCOLOR :
