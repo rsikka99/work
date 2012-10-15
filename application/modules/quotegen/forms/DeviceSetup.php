@@ -75,8 +75,8 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         /*
          * SKU
          */
-        $this->addElement('text', 'sku', array (
-                'label' => 'SKU:', 
+        $this->addElement('text', 'oemSku', array (
+                'label' => 'OEM SKU:', 
                 'class' => 'span2', 
                 'maxlength' => 255, 
                 'required' => false, 

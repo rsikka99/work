@@ -65,8 +65,8 @@ class Quotegen_Form_QuoteDevice extends Twitter_Bootstrap_Form_Horizontal
                     'ignore' => true 
             ));
             
-            $this->addElement('text', 'sku', array (
-                    'label' => 'Sku:', 
+            $this->addElement('text', 'oemSku', array (
+                    'label' => 'OEM Sku:', 
                     'disabled' => true, 
                     'ignore' => true 
             ));

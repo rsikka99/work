@@ -40,8 +40,8 @@ class Quotegen_Form_QuoteDeviceGroupPage extends EasyBib_Form
                 ) 
         ));
         
-        $this->addElement('text', 'sku', array (
-                'label' => 'Sku:', 
+        $this->addElement('text', 'oemSku', array (
+                'label' => 'OEM Sku	:', 
                 'required' => true, 
                 'filters' => array (
                         'StringTrim', 

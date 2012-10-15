@@ -58,8 +58,8 @@ class Quotegen_Form_Device extends EasyBib_Form
             
             $this->addElement($deviceName);
             
-            $this->addElement('text', 'sku', array (
-                    'label' => 'SKU:', 
+            $this->addElement('text', 'oemSku', array (
+                    'label' => 'OEM SKU:', 
                     'required' => true, 
                     'filters' => array (
                             'StringTrim', 
