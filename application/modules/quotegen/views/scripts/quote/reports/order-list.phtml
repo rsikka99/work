@@ -27,7 +27,7 @@ $this->headScript()->appendScript("$('i').popover();");
                 <?php foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
                 <tr class="optionRow">
                     <td><?php echo $quoteDeviceOption->getQuantity(); ?></td>
-                    <td><?php echo $quoteDeviceOption->getSku(); ?></td>
+                    <td><?php echo $quoteDeviceOption->getOemSku(); ?></td>
                     <td><?php echo $quoteDeviceOption->getName(); ?></td>
                 </tr>
                 <?php endforeach; ?>

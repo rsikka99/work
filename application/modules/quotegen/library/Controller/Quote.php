@@ -230,7 +230,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
     {
         $masterDevice = $device->getMasterDevice();
         $quoteDevice->setName($masterDevice->getFullDeviceName());
-        $quoteDevice->setSku($device->getSku());
+        $quoteDevice->setOemSku($device->getOemSku());
         $quoteDevice->setCost($masterDevice->getCost());
         $quoteDevice->setTonerConfigId($masterDevice->getTonerConfigId());
         
@@ -306,8 +306,8 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
     protected function syncOption (Quotegen_Model_QuoteDeviceOption $quoteDeviceOption, Quotegen_Model_DeviceOption $deviceOption)
     {
         // Copy the option
-        $quoteDeviceOption->setSku($deviceOption->getOption()
-            ->getSku());
+        $quoteDeviceOption->setOemSku($deviceOption->getOption()
+            ->getOemSku());
         $quoteDeviceOption->setName($deviceOption->getOption()
             ->getName());
         $quoteDeviceOption->setDescription($deviceOption->getOption()
