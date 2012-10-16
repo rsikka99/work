@@ -76,7 +76,30 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          * SKU
          */
         $this->addElement('text', 'oemSku', array (
-                'label' => 'OEM SKU:', 
+                'label' => 'OEM Sku:', 
+                'class' => 'span2', 
+                'maxlength' => 255, 
+                'required' => false, 
+                'filters' => array (
+                        'StringTrim', 
+                        'StripTags' 
+                ), 
+                'allowEmpty' => false, 
+                'validators' => array (
+                        new Custom_Validate_FieldDependsOnValue('can_sell', '1', array (
+                                new Zend_Validate_NotEmpty() 
+                        ), array (
+                                'validator' => 'StringLength', 
+                                'options' => array (
+                                        1, 
+                                        255 
+                                ) 
+                        )) 
+                ) 
+        ));
+        
+        $this->addElement('text', 'dealerSku', array (
+                'label' => 'Dealer Sku:', 
                 'class' => 'span2', 
                 'maxlength' => 255, 
                 'required' => false, 
