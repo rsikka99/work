@@ -69,10 +69,10 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         $cboCriteria = $values ['cboCriteria'];
                         $this->view->cboCriteria = $cboCriteria;
                         
-                        if ($filter == 'sku')
+                        if ($filter == 'oemSku')
                         {
                             $where = array_merge((array)$where, array (
-                                    'sku LIKE ( ? )' => '%' . $txtCriteria . '%' 
+                                    'oemSku LIKE ( ? )' => '%' . $txtCriteria . '%' 
                             ));
                         }
                         else
@@ -199,15 +199,18 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                                 }
                                 
                                 // Save Quotegen Device
-                                $sku = $values ['sku'];
-                                if ($masterDeviceId > 0 && strlen($sku) > 0)
+                                $oemSku = $values ['oemSku'];
+                                $dealerSku = $values ['dealerSku'];
+                                
+                                if ($masterDeviceId > 0 && strlen($oemSku) > 0)
                                 {
                                     // Save Device SKU
                                     $devicemapper = new Quotegen_Model_Mapper_Device();
                                     $device = new Quotegen_Model_Device();
                                     $devicevalues = array (
                                             'masterDeviceId' => $masterDeviceId, 
-                                            'sku' => $sku, 
+                                            'oemSku' => $oemSku, 
+                                            'dealerSku' => $dealerSku,
                                             'description' => $values ['description'] 
                                     );
                                     $device->populate($devicevalues);
@@ -319,15 +322,16 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $form->populate($masterDevice->toArray());
         
         // Populate SKU
-        $sku = null;
+        $oemSku = null;
         $devicemapper = new Quotegen_Model_Mapper_Device();
         $device = $devicemapper->find($masterDeviceId);
         $this->view->quotegendevice = $device;
         if ($device)
         {
-            $sku = $device->getOemSku();
+            $oemSku = $device->getOemSku();
             $form->getElement('can_sell')->setValue(true);
-            $form->getElement('sku')->setValue($sku);
+            $form->getElement('oemSku')->setValue($oemSku);
+            $form->getElement('dealerSku')->setValue($device->getDealerSku());
             
             $description = $device->getDescription();
             $form->getElement('description')->setValue($description);
@@ -358,19 +362,19 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         // Since it's disabled in edit mode, we need to assign it the value from the hidden field
                         $values ['toner_config_id'] = $values ['hidden_toner_config_id'];
                         
-                        if (strlen($values ['sku']) > 0)
+                        if (strlen($values ['oemSku']) > 0)
                         {
                             // Save Device SKU
                             $device = new Quotegen_Model_Device();
                             $devicevalues = array (
                                     'masterDeviceId' => $masterDeviceId, 
-                                    'sku' => $values ['sku'], 
+                                    'oemSku' => $values ['oemSku'], 
                                     'description' => $values ['description'] 
                             );
                             $device->populate($devicevalues);
                             
-                            // If $sku set above, then record exists to update
-                            if ($sku)
+                            // If $oemSku set above, then record exists to update
+                            if ($oemSku)
                             {
                                 $deviceId = $devicemapper->save($device, $masterDeviceId);
                             }
@@ -709,10 +713,10 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             );
                         }
                         
-                        else if ($filter == 'sku')
+                        else if ($filter == 'oemSku')
                         {
                             $where = array_merge((array)$where, array (
-                                    'sku LIKE ( ? )' => '%' . $txtCriteria . '%' 
+                                    'oemSku LIKE ( ? )' => '%' . $txtCriteria . '%' 
                             ));
                         }
                         else
