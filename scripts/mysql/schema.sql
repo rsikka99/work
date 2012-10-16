@@ -1049,7 +1049,9 @@ CREATE  TABLE IF NOT EXISTS `qgen_device_configurations` (
   INDEX `masterDeviceId` (`masterDeviceId` ASC) ,
   CONSTRAINT `quotegen_device_configurations_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
-    REFERENCES `qgen_devices` (`masterDeviceId` ))
+    REFERENCES `qgen_devices` (`masterDeviceId` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -1103,7 +1105,9 @@ CREATE  TABLE IF NOT EXISTS `qgen_device_options` (
   INDEX `optionId` (`optionId` ASC) ,
   CONSTRAINT `quotegen_device_options_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
-    REFERENCES `qgen_devices` (`masterDeviceId` ),
+    REFERENCES `qgen_devices` (`masterDeviceId` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `quotegen_device_options_ibfk_2`
     FOREIGN KEY (`optionId` )
     REFERENCES `qgen_options` (`id` )
