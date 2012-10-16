@@ -210,7 +210,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                                     $devicevalues = array (
                                             'masterDeviceId' => $masterDeviceId, 
                                             'oemSku' => $oemSku, 
-                                            'dealerSku' => $dealerSku,
+                                            'dealerSku' => $dealerSku, 
                                             'description' => $values ['description'] 
                                     );
                                     $device->populate($devicevalues);
@@ -350,7 +350,6 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         {
             // Get the post data
             $values = $request->getPost();
-            
             // If we cancelled we don't need to validate anything
             if (! isset($values ['cancel']))
             {
@@ -358,17 +357,23 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 {
                     if ($form->isValid($values))
                     {
-                        // In order to use populate, we need to make sure the toner_config_id value is set
-        // Since it's disabled in edit mode, we need to assign it the value from the hidden field
-                        $values ['toner_config_id'] = $values ['hidden_toner_config_id'];
+                        $formValues = $form->getValues();
                         
-                        if (strlen($values ['oemSku']) > 0)
+                        /*
+                         * In order to use populate, we need to make sure the toner_config_id value is set Since it's
+                         * disabled in edit mode, we need to assign it the value from the hidden field
+                         */
+                        $values ['toner_config_id'] = $formValues ['hidden_toner_config_id'];
+                        
+                        // If checkbox for can sell is checked, if not delete.
+                        if ($formValues ['can_sell'])
                         {
                             // Save Device SKU
                             $device = new Quotegen_Model_Device();
                             $devicevalues = array (
                                     'masterDeviceId' => $masterDeviceId, 
                                     'oemSku' => $values ['oemSku'], 
+                                    'dealerSku' => $values ['dealerSku'], 
                                     'description' => $values ['description'] 
                             );
                             $device->populate($devicevalues);
@@ -389,13 +394,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         }
                         else
                         {
-                            // Delete device options, configurations and configuration options
-                            Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->deleteConfigurationByDeviceId($masterDeviceId);
-                            
-                            // Delete the device options and device
-                            Quotegen_Model_Mapper_DeviceOption::getInstance()->deleteOptionsByDeviceId($masterDeviceId);
                             $devicemapper->delete($device);
-                            
                             $this->view->quotegendevice = null;
                         }
                         
@@ -564,8 +563,6 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         // Populate manufacturers dropdown
         $manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAll();
         $this->view->manufacturers = $manufacturers;
-        
-        
         
         // Make sure we are posting data
         $request = $this->getRequest();
