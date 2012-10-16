@@ -231,6 +231,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         $masterDevice = $device->getMasterDevice();
         $quoteDevice->setName($masterDevice->getFullDeviceName());
         $quoteDevice->setOemSku($device->getOemSku());
+        $quoteDevice->setDealerSku($device->getDealerSku());
         $quoteDevice->setCost($masterDevice->getCost());
         $quoteDevice->setTonerConfigId($masterDevice->getTonerConfigId());
         
@@ -308,6 +309,8 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         // Copy the option
         $quoteDeviceOption->setOemSku($deviceOption->getOption()
             ->getOemSku());
+        $quoteDeviceOption->setDealerSku($deviceOption->getOption()
+                ->getDealerSku());
         $quoteDeviceOption->setName($deviceOption->getOption()
             ->getName());
         $quoteDeviceOption->setDescription($deviceOption->getOption()
