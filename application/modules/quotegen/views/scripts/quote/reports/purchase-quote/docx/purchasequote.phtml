@@ -42,7 +42,7 @@ foreach ( $quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
                 // Device Name
                 $table->addCell($tcStyle->col1Width, $tcStyle->device->cell1->cellStyle)->addText($device->getName(), $tcStyle->device->cell1->fontStyle, $tcStyle->device->cell1->paragraphStyle);
                 // Sku
-                $table->addCell($tcStyle->col2Width, $tcStyle->device->cell2->cellStyle)->addText($device->getOemSku(), $tcStyle->device->cell2->fontStyle, $tcStyle->device->cell2->paragraphStyle);
+                $table->addCell($tcStyle->col2Width, $tcStyle->device->cell2->cellStyle)->addText($device->getReportSku(), $tcStyle->device->cell2->fontStyle, $tcStyle->device->cell2->paragraphStyle);
                 // Description and features
                 $table->addCell($tcStyle->col3Width, $tcStyle->device->cell3->cellStyle);
                 // Quantity
@@ -55,7 +55,7 @@ foreach ( $quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
                 {
                     $table->addRow($tcStyle->option->rowheight);
                     $table->addCell($tcStyle->col1Width, $tcStyle->option->cell1->cellStyle)->addText($quoteDeviceOption->getName() . ' (' . number_format($quoteDeviceOption->getQuantity()) . 'x)', $tcStyle->option->cell1->fontStyle, $tcStyle->option->cell1->paragraphStyle);
-                    $table->addCell($tcStyle->col2Width, $tcStyle->option->cell2->cellStyle)->addText($quoteDeviceOption->getOemSku(), $tcStyle->option->cell2->fontStyle, $tcStyle->option->cell2->paragraphStyle);
+                    $table->addCell($tcStyle->col2Width, $tcStyle->option->cell2->cellStyle)->addText($quoteDeviceOption->getReportSku(), $tcStyle->option->cell2->fontStyle, $tcStyle->option->cell2->paragraphStyle);
                     $table->addCell($tcStyle->col3Width, $tcStyle->option->cell3->cellStyle)->addText($quoteDeviceOption->getDescription(), $tcStyle->option->cell3->fontStyle, $tcStyle->option->cell3->paragraphStyle);
                     $table->addCell($tcStyle->col4Width, $tcStyle->option->cell4->cellStyle)->addText();
                 }
