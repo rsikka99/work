@@ -73,7 +73,7 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
         //setup zip or postal code, NO ERROR MESSAGE
         $companyZipOrPostalCode = $this->createElement('text', 'companyZipOrPostalCode')
             ->setRequired(true)
-            ->setDescription("Format : Zip Code: 12345 Postal Code: A1B2C3  ")
+            ->setDescription("Format : Zip Code: 12345 Postal Code: A1B2C3")
             ->addErrorMessage("Please enter a zip or postal code")
             ->setLabel("Zip or Postal Code:");
         //setup country
@@ -116,7 +116,7 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
                 array (
                         'Fieldset',
                         array (
-                                'style' => 'width:50%;height:100%;float:left',
+                                'class' => 'pull-left'
                         )
                          
                 ),
@@ -125,8 +125,8 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
                         array (
                                 'tag' => 'div', 
                                 'openOnly' => true,
+                                'class' => 'clearfix',
                                 'placement' => Zend_Form_Decorator_Abstract::PREPEND,
-                                'style' => 'width:100%;height:520px;'//THIS HEIGHT NEEDS FIXING
                                
                         )
                          
@@ -148,7 +148,7 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
                 array (
                         'Fieldset',
                         array (
-                                'style' => 'width:50%;height:100%;float:right;',
+                        		'class' => 'pull-right'
                         )
                          
                 ),
@@ -159,7 +159,6 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
                                 'tag' => 'div', 
                                 'closeOnly' => true,
                                 'placement' => Zend_Form_Decorator_Abstract::APPEND,
-                                'style' => 'width:100%;', 
                         )
                          
                 ) 
