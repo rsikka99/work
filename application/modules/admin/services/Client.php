@@ -139,7 +139,7 @@ class Admin_Service_Client
             $validData ['companyZipOrPostalCode'] = $code;
         }
         //If it is not a valid state or province, create error messages
-        if (! $this->isValidProvinceOrState($client->getCompanyCountry(), $client->getCompanyStateOrProv()))
+        if (! $this->isValidProvinceOrState($client->getCompanyCountry(), $client->getCompanyStateOrProvince()))
         {
             $this->getForm()
                 ->getElement('companyStateOrProv')

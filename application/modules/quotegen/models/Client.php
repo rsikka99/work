@@ -90,7 +90,7 @@ class Quotegen_Model_Client extends My_Model_Abstract
      *
      * @var string
      */
-    protected $_companyStateOrProv;
+    protected $_companyStateOrProvince;
     
     /**
      * The address2 of the client
@@ -131,7 +131,7 @@ class Quotegen_Model_Client extends My_Model_Abstract
         if (isset($params->companyCountry) && ! is_null($params->companyCountry))
             $this->setCompanyCountry($params->companyCountry);
         if (isset($params->companyStateOrProv) && ! is_null($params->companyStateOrProv))
-            $this->setCompanyStateOrProv($params->companyStateOrProv);
+            $this->setCompanyStateOrProvince($params->companyStateOrProv);
         if (isset($params->companyZipOrPostalCode) && ! is_null($params->companyZipOrPostalCode))
             $this->setCompanyZipOrPostalCode($params->companyZipOrPostalCode);
     }
@@ -153,7 +153,7 @@ class Quotegen_Model_Client extends My_Model_Abstract
                 'companyAddress2' => $this->getCompanyAddress2(), 
                 'companyCity' => $this->getCompanyCity(), 
                 'companyCountry' => $this->getCompanyCountry(), 
-                'companyStateOrProv' => $this->getCompanyStateOrProv(), 
+                'companyStateOrProv' => $this->getCompanyStateOrProvince(), 
                 'companyZipOrPostalCode' => $this->getCompanyZipOrPostalCode() 
         );
     }
@@ -274,9 +274,9 @@ class Quotegen_Model_Client extends My_Model_Abstract
      *
      * @return string
      */
-    public function getCompanyStateOrProv ()
+    public function getCompanyStateOrProvince ()
     {
-        return $this->_companyStateOrProv;
+        return $this->_companyStateOrProvince;
     }
 
     /**
@@ -391,12 +391,12 @@ class Quotegen_Model_Client extends My_Model_Abstract
     /**
      * Sets the company state or province
      *
-     * @param string $_companyStateOrProv
+     * @param string $_companyStateOrProvince
      *            The new value
      */
-    public function setCompanyStateOrProv ($_companyStateOrProv)
+    public function setCompanyStateOrProvince ($_companyStateOrProvince)
     {
-        $this->_companyStateOrProv = $_companyStateOrProv;
+        $this->_companyStateOrProvince = $_companyStateOrProvince;
     }
 
     /**
