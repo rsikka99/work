@@ -113,9 +113,18 @@ class Quotegen_ClientController extends Zend_Controller_Action
             
             if ($clientId)
             {
+                $this->_helper->flashMessenger(array (
+                        'success' => "Client successfully created." 
+                ));
                 // Redirect with client id so that the client is preselected
                 $this->_helper->redirector('index', null, null, array (
                         'clientId' => $clientId 
+                ));
+            }
+            else
+            {
+                $this->_helper->flashMessenger(array (
+                        'danger' => "Please correct the errors below." 
                 ));
             }
         }
@@ -135,7 +144,10 @@ class Quotegen_ClientController extends Zend_Controller_Action
         // Populate the client form
         if ($client)
             $clientService->getForm()->populate($client->toArray());
-        
+        else
+        {
+            $this->_helper->redirector('index');
+        }
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();
@@ -146,7 +158,7 @@ class Quotegen_ClientController extends Zend_Controller_Action
             try
             {
                 // Create Client
-                $clientId = $clientService->update($values,$clientId);
+                $clientId = $clientService->update($values, $clientId);
             }
             catch ( Exception $e )
             {
@@ -155,9 +167,18 @@ class Quotegen_ClientController extends Zend_Controller_Action
             
             if ($clientId)
             {
+                $this->_helper->flashMessenger(array (
+                        'success' => "Client {$client->getCompanyName()} successfully updated." 
+                ));
                 // Redirect with client id so that the client is preselected
                 $this->_helper->redirector('index', null, null, array (
                         'clientId' => $clientId 
+                ));
+            }
+            else
+            {
+                $this->_helper->flashMessenger(array (
+                        'danger' => "Please correct the errors below." 
                 ));
             }
         }
