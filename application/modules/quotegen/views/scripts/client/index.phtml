@@ -18,8 +18,9 @@
     	
         <?php foreach ($this->paginator->getCurrentItems() as $client) : /* @var $client Quotegen_Model_Client */ ?>
         <tr>
-            <td><?php echo $client->getId(); ?></td>
-            <td><?php echo $client->getName(); ?></td>
+            <td><?php echo $this->escape($client->getId()); ?></td>
+            <td><?php echo $this->escape($client->getCompanyName()); ?></td>
+            <td><?php echo $this->escape($client->getContactPhone()); ?></td>
             <td></td>
             <td>
                 <div class="btn-group">
