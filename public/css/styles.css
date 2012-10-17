@@ -118,6 +118,11 @@ input.rightAlign {
 fieldset.half-width {
   width: 50%;
 }
+label.control-label.required:after {
+  color: red;
+  content: "*";
+  font-weight: bold;
+}
 /* Nav Tabs */
 .nav-tabs > li > p:hover,
 .nav-pills > li > p:hover {
