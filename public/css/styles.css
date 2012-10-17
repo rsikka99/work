@@ -115,6 +115,9 @@
 input.rightAlign {
   text-align: right;
 }
+fieldset.half-width {
+  width: 50%;
+}
 /* Nav Tabs */
 .nav-tabs > li > p:hover,
 .nav-pills > li > p:hover {
