@@ -133,7 +133,8 @@ class Quotegen_ClientController extends Zend_Controller_Action
         $clientService = new Admin_Service_Client();
         
         // Populate the client form
-        $clientService->getForm()->populate($client->toArray());
+        if ($client)
+            $clientService->getForm()->populate($client->toArray());
         
         if ($this->getRequest()->isPost())
         {
@@ -145,7 +146,7 @@ class Quotegen_ClientController extends Zend_Controller_Action
             try
             {
                 // Create Client
-                $clientId = $clientService->update($values);
+                $clientId = $clientService->update($values,$clientId);
             }
             catch ( Exception $e )
             {
