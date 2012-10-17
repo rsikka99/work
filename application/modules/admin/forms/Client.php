@@ -116,7 +116,7 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
                 array (
                         'Fieldset',
                         array (
-                                'class' => 'pull-left'
+                                'class' => 'pull-left half-width'
                         )
                          
                 ),
@@ -148,7 +148,7 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
                 array (
                         'Fieldset',
                         array (
-                        		'class' => 'pull-right'
+                        		'class' => 'pull-right half-width'
                         )
                          
                 ),
