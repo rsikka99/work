@@ -51,7 +51,7 @@ class Quotegen_ClientController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        $message = "Are you sure you want to delete {$client->getName()}?";
+        $message = "Are you sure you want to delete {$client->getCompanyName()}?";
         $form = new Application_Form_Delete($message);
         
         $request = $this->getRequest();
@@ -70,13 +70,13 @@ class Quotegen_ClientController extends Zend_Controller_Action
                     catch ( Exception $e )
                     {
                         $this->_helper->flashMessenger(array (
-                                'danger' => "Client {$client->getName} cannot be deleted since there are  quote(s) attached." 
+                                'danger' => "Client {$client->getCompanyName()} cannot be deleted since there are  quote(s) attached." 
                         ));
                         $this->_helper->redirector('index');
                     }
                     
                     $this->_helper->flashMessenger(array (
-                            'success' => "Client  {$client->getName()} was deleted successfully." 
+                            'success' => "Client  {$client->getCompanyName()} was deleted successfully." 
                     ));
                     $this->_helper->redirector('index');
                 }
