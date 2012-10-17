@@ -16,7 +16,7 @@ class Quotegen_Model_Client extends My_Model_Abstract
      */
     protected $_id = 0;
     
-/**
+    /**
      * The account number of the client
      *
      * @var string
@@ -152,11 +152,10 @@ class Quotegen_Model_Client extends My_Model_Abstract
                 'companyAddress1' => $this->getCompanyAddress1(), 
                 'companyAddress2' => $this->getCompanyAddress2(), 
                 'companyCity' => $this->getCompanyCity(), 
-                'companyCountry' => $this->getCompanyCountry(),
+                'companyCountry' => $this->getCompanyCountry(), 
                 'companyStateOrProv' => $this->getCompanyStateOrProv(), 
                 'companyZipOrPostalCode' => $this->getCompanyZipOrPostalCode() 
-        )
-        ;
+        );
     }
 
     /**
@@ -178,16 +177,6 @@ class Quotegen_Model_Client extends My_Model_Abstract
     public function setId ($_id)
     {
         $this->_id = $_id;
-    }
-
-    /**
-     * Getter for $_name
-     *
-     * @return string
-     */
-    public function getName ()
-    {
-        return $this->_name;
     }
 
     /**
@@ -298,17 +287,6 @@ class Quotegen_Model_Client extends My_Model_Abstract
     public function getCompanyZipOrPostalCode ()
     {
         return $this->_companyZipOrPostalCode;
-    }
-
-    /**
-     * Sets the name of the client
-     *
-     * @param string $_name
-     *            The new value
-     */
-    public function setName ($_name)
-    {
-        $this->_name = $_name;
     }
 
     /**
@@ -431,7 +409,8 @@ class Quotegen_Model_Client extends My_Model_Abstract
     {
         $this->_companyZipOrPostalCode = $_companyZipOrPostalCode;
     }
-	/**
+
+    /**
      * Getter for $_companyCountry
      *
      * @return string
@@ -441,10 +420,11 @@ class Quotegen_Model_Client extends My_Model_Abstract
         return $this->_companyCountry;
     }
 
-	/**
+    /**
      * Setter for $_companyCountry
      *
-     * @param string $_companyCountry The new value
+     * @param string $_companyCountry
+     *            The new value
      */
     public function setCompanyCountry ($_companyCountry)
     {
