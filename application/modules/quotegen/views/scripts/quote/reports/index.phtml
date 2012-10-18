@@ -95,7 +95,7 @@ $(function () {
 		<li class='span4'>
 			<h3>Download Order List</h3>
 			<p>Download a .xlsx file for the items in this quote.</p>
-			<a class="btn btn-success" href="<?php echo $this->url(array('action' => 'order-list')); ?>"><i class='icon-download-alt icon-white'></i> Download Order List</a>
+			<a class="downloadButton btn btn-success" data-ext="xlsx" href="<?php echo $this->url(array('action' => 'order-list', 'format' => 'xlsx')); ?>"><i class='icon-download-alt icon-white'></i> Download Order List</a>
 		</li>
 		<li class='span4'>
 			<?php echo $this->form; ?>
