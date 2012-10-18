@@ -1,0 +1,151 @@
+<?php
+
+// TODO: Remove hardcoded values
+$filename = 'order-list.xlsx';
+$savePath = PUBLIC_PATH . '/downloads/' . $filename;
+$linkToFile = $this->baseUrl('/downloads/' . $filename);
+
+$quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
+$totalQuantity = 1;
+
+$titles = array (
+        "Item", 
+        "SKU (OEM)", 
+        "SKU (DEALER)", 
+        "Serial Number", 
+        "Location" 
+);
+
+$headerFill = array (
+        'type' => PHPExcel_Style_Fill::FILL_SOLID, 
+        'color' => array (
+                'rgb' => 'D8D8D8' 
+        ) 
+);
+
+$boldFont = array (
+        'font' => array (
+                'bold' => true 
+        ) 
+);
+
+$styleHeader = array (
+        'fill' => $headerFill, 
+        'font' => array (
+                'bold' => true, 
+                'size' => '16' 
+        ) 
+);
+$styleFillBold = array (
+        'fill' => $headerFill, 
+        'font' => array (
+                'bold' => true 
+        ) 
+);
+
+// Create a new PHPExcel Object * New PHPExcel objects will have one attached worksheet by default
+/* @var $objPHPExcel PHPExcel */
+$objPHPExcel = $this->phpexcel;
+$activeSheet = $objPHPExcel->getActiveSheet();
+
+// Ojbects in memory are held in php memory as serializeds objects, reduces memory footpirnt with little performance hit
+PHPExcel_CachedObjectStorageFactory::cache_in_memory_serialized;
+
+// Set properties
+$objPHPExcel->getProperties()->setTitle("Hardware Device List");
+$objPHPExcel->setActiveSheetIndex(0);
+
+// Start building the document
+$activeSheet->setCellValue('A1', 'Hardware Device List');
+$activeSheet->mergeCells('A1:E1');
+// Centre the title
+$activeSheet->getStyle("A1:E1:")
+    ->getAlignment()
+    ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$activeSheet->getStyle('A1:E1')->applyFromArray($styleHeader);
+$activeSheet->getRowDimension('1')->setRowHeight(25);
+
+// Go through each device and build and array for output
+$quoteDeviceGroups = $quote->getQuoteDeviceGroups();
+//var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
+foreach ( $quoteDeviceGroups as $quoteDeviceGroup )
+{
+    //var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+    foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+    {
+        $quoteDevice = $quoteDeviceGroupDevice->getQuoteDevice();
+        // $device builds an array used to output quote device information
+        $device = array (
+                $quoteDevice->getName(), 
+                $quoteDevice->getSku(), 
+                $quoteDevice->getSku() 
+        );
+        
+        // $deviceOptions builds an array of arrays representing quote device options
+        $deviceOptions = array ();
+        //var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
+        foreach ( $quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() as $quoteDeviceOption )
+        {
+            $deviceOptions [] = array (
+                    "name" => $quoteDeviceOption->getName(), 
+                    "oemSku" => $quoteDeviceOption->getSku(), 
+                    "dealerSku" => $quoteDeviceOption->getSku() 
+            );
+        }
+        
+        // Build the datasheet
+        // Object->getHighestRow() will return the row index where data has been entered in last.
+        // This as well applies styles that have been defined that the beginning of the funciton
+        for($deviceCount = 0; $deviceCount < $quoteDeviceGroupDevice->getQuantity(); $deviceCount ++)
+        {
+            // Device Number Row
+            $currentRow = $activeSheet->getHighestRow() + 2;
+            $activeSheet->setCellValue("A{$currentRow}", "Device {$totalQuantity}");
+            $activeSheet->mergeCells("A{$currentRow}:E{$currentRow}");
+            $activeSheet->getStyle("A{$currentRow}:E{$currentRow}")->applyFromArray($styleFillBold);
+            
+            // Title Row
+            $currentRow = $activeSheet->getHighestRow() + 1;
+            $activeSheet->fromArray($titles, null, "A{$currentRow}");
+            $activeSheet->getStyle("A{$currentRow}:E{$currentRow}")->applyFromArray($styleFillBold);
+            
+            // Deivce Row
+            $currentRow = $activeSheet->getHighestRow() + 1;
+            $activeSheet->fromArray($device, null, "A{$currentRow}");
+            $activeSheet->getStyle("A{$currentRow}")->applyFromArray($boldFont);
+            
+            // Option Row
+            // Use a foreach to go through options instead of using fromArray just in case
+            // we require to style the option rows.
+            foreach ( $deviceOptions as $option )
+            {
+                $currentRow = $activeSheet->getHighestRow() + 1;
+                $activeSheet->setCellValue("A{$currentRow}", "     {$option ['name']}");
+                $activeSheet->setCellValue("B{$currentRow}", $option ["oemSku"]);
+                $activeSheet->setCellValue("C{$currentRow}", $option ["dealerSku"]);
+            }
+            $totalQuantity ++;
+        }
+    }
+}
+
+// Set the column width to be auto sized by default
+// $activeSheet->getColumnDimension('A')->setAutoSize(true);
+$activeSheet->getColumnDimension('A')->setWidth(40);
+$activeSheet->getColumnDimension('B')->setAutoSize(true);
+$activeSheet->getColumnDimension('C')->setAutoSize(true);
+$activeSheet->getColumnDimension('D')->setAutoSize(true);
+$activeSheet->getColumnDimension('E')->setAutoSize(true);
+
+// Rename sheet
+$activeSheet->setTitle('Hardware Device List');
+
+// Save Excel 2007 file
+$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+$objWriter->save($savePath);
+
+//Clear the workbook from php's memory
+$objPHPExcel->disconnectWorksheets();
+
+echo $this->baseUrl($linkToFile);
+?>
