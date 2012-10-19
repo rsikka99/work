@@ -34,7 +34,7 @@ class Quotegen_Model_ClientContact extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
         if (isset($params->clientId) && ! is_null($params->clientId))
-            $this->setClientId($params->id);
+            $this->setClientId($params->clientId);
         if (isset($params->contactId) && ! is_null($params->contactId))
             $this->setContactId($params->contactId);
     }

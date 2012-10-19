@@ -34,12 +34,12 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
         //setup contact first name
         
 
-        $contactFirstName = $this->createElement('text', 'contactFirstName')
+        $firstName = $this->createElement('text', 'firstName')
             ->setRequired(true)
             ->addErrorMessage("Please enter a first name")
             ->setLabel("First Name:");
         //setup contact last name
-        $contactLastName = $this->createElement('text', 'contactLastName')
+        $lastName = $this->createElement('text', 'lastName')
             ->setRequired(true)
             ->addErrorMessage("Please enter a last name")
             ->setLabel("Last Name:");
@@ -48,7 +48,7 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
         
 
         //Country Code
-        $contactPhoneCountryCode = $this->createElement('text', 'contactPhoneCountryCode')
+        $countryCode = $this->createElement('text', 'countryCode')
             ->setRequired(true)
             ->addValidator('regex', true, array (
                 '/^\d{1,2}$/' 
@@ -58,7 +58,7 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
             ->addErrorMessage("Invalid country code");
         
         //Area Code
-        $contactPhoneAreaCode = $this->createElement('text', 'contactPhoneAreaCode')
+        $areaCode = $this->createElement('text', 'areaCode')
             ->setRequired(true)
             ->setAttrib('class', 'input-area-code')
             ->addValidator('regex', true, array (
@@ -68,7 +68,7 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
             ->addErrorMessage("Invalid Area code");
         
         //Exchange Code
-        $contactPhoneExchangeCode = $this->createElement('text', 'contactPhoneExchangeCode')
+        $exchangeCode = $this->createElement('text', 'exchangeCode')
             ->setRequired(true)
             ->addValidator('regex', true, array (
                 '/^\d{3}$/' 
@@ -77,7 +77,7 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
             ->addErrorMessage("Invalid Exchange code");
         
         //Number
-        $contactPhoneNumber = $this->createElement('text', 'contactPhoneNumber')
+        $number = $this->createElement('text', 'number')
             ->setRequired(true)
             ->addValidator('regex', true, array (
                 '/^\d{4}$/' 
@@ -86,7 +86,7 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
             ->addErrorMessage("Invalid phone number");
         
         //Extension
-        $contactPhoneExtension = $this->createElement('text', 'contactPhoneExtension')
+        $extension = $this->createElement('text', 'extension')
             ->setRequired(true)
             ->addValidator('regex', true, array (
                 '/^\d{4}$/' 
@@ -94,44 +94,36 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
             ->setLabel("Extension")
             ->addErrorMessage("Invalid Area code");
         
-        ///////////////////////PHONE NUMBERS/////////////////////////////////////
-        $contactPhone = $this->createElement('text', 'contactPhone')
-            ->setRequired(true)
-            ->addValidator('regex', true, array (
-                '/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/' 
-        ))
-            ->setDescription("Format: (123)123-4567")
-            ->setLabel("Phone Number:")
-            ->addErrorMessage("Invalid phone number");
+        ///////////////////////END PHONE NUMBERS/////////////////////////////////////
         //setup address 1
-        $companyAddress1 = $this->createElement('text', 'companyAddress1')
+        $addressLine1 = $this->createElement('text', 'addressLine1')
             ->setRequired(true)
             ->addErrorMessage("Please enter a address")
             ->setLabel("Address 1:");
         //setup address 2
-        $companyAddress2 = $this->createElement('text', 'companyAddress2')->setLabel("Address 2:");
+        $addressLine2 = $this->createElement('text', 'addressLine2')->setLabel("Address 2:");
         //setup company city
-        $companyCity = $this->createElement('text', 'companyCity')
+        $city = $this->createElement('text', 'city')
             ->setRequired(true)
             ->addErrorMessage("Please enter a city")
             ->setLabel("City:");
         //setup state or province, DOES NOT NEED ERROR MESSAGE
-        $companyStateOrProv = $this->createElement('text', 'companyStateOrProv')
+        $region = $this->createElement('text', 'region')
             ->setRequired(true)
             ->setLabel("State or Province:")
             ->addErrorMessage("Please enter a state or province")
             ->setDescription("Format: TX");
         //setup zip or postal code, NO ERROR MESSAGE
-        $companyZipOrPostalCode = $this->createElement('text', 'companyZipOrPostalCode')
+        $postCode = $this->createElement('text', 'postCode')
             ->setRequired(true)
             ->setDescription("Format : Zip Code: 12345 Postal Code: A1B2C3")
             ->addErrorMessage("Please enter a zip or postal code")
             ->setLabel("Zip or Postal Code:");
         //setup country
-        $companyCountry = $this->createElement('select', 'companyCountry', array (
+        $countryId = $this->createElement('select', 'countryId', array (
                 'multiOptions' => array (
-                        'Canada' => 'Canada', 
-                        'United States' => 'United States' 
+                        '1' => 'Canada', 
+                        '2' => 'United States' 
                 ), 
                 'value' => 'United States' 
         ))->setLabel("Country");
@@ -150,13 +142,13 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
                 $accountNumber, 
                 $companyName, 
                 $legalName, 
-                $companyCountry, 
-                $companyStateOrProv, 
-                $companyCity, 
-                $companyAddress1, 
-                $companyAddress2, 
+                $countryId, 
+                $region, 
+                $city, 
+                $addressLine1, 
+                $addressLine2, 
                 
-                $companyZipOrPostalCode 
+                $postCode 
         ), 'company', array (
                 'legend' => 'Company Information' 
         ));
@@ -183,8 +175,8 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
         
         //Groups the contact information onto the right side of the screen
         $this->addDisplayGroup(array (
-                $contactFirstName, 
-                $contactLastName 
+                $firstName, 
+                $lastName 
         ), 'contact', array (
                 'legend' => 'Contact Information' 
         ));
@@ -201,11 +193,11 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
         ));
         
         $this->addDisplayGroup(array (
-                $contactPhoneCountryCode, 
-                $contactPhoneAreaCode, 
-                $contactPhoneExchangeCode, 
-                $contactPhoneNumber, 
-                $contactPhoneExtension 
+                $countryCode, 
+                $areaCode, 
+                $exchangeCode, 
+                $number, 
+                $extension 
         )
         , 'phoneNumbers', array (
                 'legend' => 'Phone Number' 

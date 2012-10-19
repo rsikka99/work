@@ -40,12 +40,12 @@ class Quotegen_Model_Mapper_ClientContact extends My_Model_Mapper_Abstract
         $data = $object->toArray();
         
         // Remove the id
-        unset($data [$this->col_id]);
+        //unset($data [$this->col_id]);
         
         // Insert the data
         $id = $this->getDbTable()->insert($data);
         
-        $object->setId($id);
+        //$object->setId($id);
         
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -214,7 +214,7 @@ class Quotegen_Model_Mapper_ClientContact extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return $object->getId();
+        return $object->getClientId();
     }
 }
 

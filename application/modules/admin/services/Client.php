@@ -36,8 +36,30 @@ class Admin_Service_Client
         $data = $this->validateAndFilterData($data);
         if ($data !== FALSE)
         {
+            try {
+            	
+           
             $client = new Quotegen_Model_Client($data);
             $clientId = Quotegen_Model_Mapper_Client::getInstance()->insert($client);
+            $contact = new Quotegen_Model_Contact($data);
+            $contactId = Quotegen_Model_Mapper_Contact::getInstance()->insert($contact);
+            $address = new Quotegen_Model_Address($data);
+            $addressId = Quotegen_Model_Mapper_Address::getInstance()->insert($address);
+            $clientAddress = new Quotegen_Model_ClientAddress(array (
+                    'clientId' => $clientId, 
+                    'addressId' => $addressId 
+            ));
+            Quotegen_Model_Mapper_ClientAddress::getInstance()->insert($clientAddress);
+            $clientContact = new Quotegen_Model_ClientContact(array (
+                    'clientId' => $clientId, 
+                    'contactId' => $contactId 
+            ));
+            Quotegen_Model_Mapper_ClientContact::getInstance()->insert($clientContact);
+            } catch (Exception $e) {
+                echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
+                var_dump($e);
+                die();
+            }
         }
         
         return $clientId;
@@ -60,17 +82,19 @@ class Admin_Service_Client
             $client->setId($clientId);
             $rowsAffected = Quotegen_Model_Mapper_Client::getInstance()->save($client);
             return 1;
-        }else{
+        }
+        else
+        {
             return false;
         }
         
-       // return $success;
+        // return $success;
     }
-    
+
     /**
      * Deletes a client from the database where the id is the parameter $id
      *
-     * @param unknown_type $id
+     * @param unknown_type $id            
      */
     public function delete ($id)
     {
@@ -80,7 +104,7 @@ class Admin_Service_Client
     /**
      * Validates the code, changing it if it can to make it work, then returns the new code
      *
-     * @param unknown_type $code
+     * @param unknown_type $code            
      * @return Ambigous <valid, boolean, mixed>|unknown|boolean
      */
     protected function validateCode ($code)
@@ -96,8 +120,7 @@ class Admin_Service_Client
         }
         return false;
     }
-    
-    
+
     /**
      * Validates the data with the form
      *
@@ -107,67 +130,63 @@ class Admin_Service_Client
      */
     protected function validateAndFilterData ($formData)
     {
-		$valid = true;
+        $valid = true;
         $form = $this->getForm();
-
         
-        if (!$form->isValid($formData)){
+        if (! $form->isValid($formData))
+        {
             $valid = false;
         }
         $validData = $formData;
         //Make the state always in upper case
-        $validData ['companyStateOrProv'] = strtoupper($validData ['companyStateOrProv']);
-        
-        //create a client using the valid data
-
-        $client = new Quotegen_Model_Client($validData);
-        
+        $validData ['region'] = strtoupper($validData ['region']);
         //set the code to validated code
-        $code = $this->validateCode($client->getCompanyZipOrPostalCode());
+        $code = $this->validateCode($validData ['postCode']);
         if (! $code)
         {
             
             //Postal or Zip code was invalid, display error on form
             $this->getForm()
-                ->getElement('companyZipOrPostalCode')
+                ->getElement('postCode')
                 ->clearErrorMessages()
                 ->addError('Invalid zip or postal code');
             $valid = false;
         }
         else
         {
-            $validData ['companyZipOrPostalCode'] = $code;
+            $validData ['postCode'] = $code;
         }
         //If it is not a valid state or province, create error messages
-        if (! $this->isValidProvinceOrState($client->getCompanyCountry(), $client->getCompanyStateOrProvince()))
+        if (! $this->isValidProvinceOrState($validData ['countryId'], $validData ['region']))
         {
             $this->getForm()
-                ->getElement('companyStateOrProv')
+                ->getElement('region')
                 ->clearErrorMessages()
                 ->addError('Invalid state or province');
-            $valid= false;
+            $valid = false;
         }
-        if($valid)
-        	return $validData;
+        if ($valid)
+            return $validData;
         return false;
     }
+
     /**
      * Validates a zip code
      *
      * @param $zipcode the
      *            zip code
      * @return valid Returns whether it was valid or not
-     *
+     *        
      */
     protected function isValidZipCode ($zipCode)
     {
         $postValidator = new Zend_Validate_PostCode('us');
         if ($postValidator->isValid($zipCode))
-    
+            
             return true;
         return false;
     }
-    
+
     /**
      * Validates a Postal Code
      *
@@ -178,112 +197,112 @@ class Admin_Service_Client
     protected function isValidPostalCode ($postalcode)
     {
         $newPostalCode = str_replace(array (
-                '-',
-                ' '
+                '-', 
+                ' ' 
         ), '', $postalcode);
         if (preg_match("/^([a-ceghj-npr-tv-z]){1}[0-9]{1}[a-ceghj-npr-tv-z]{1}[0-9]{1}[a-ceghj-npr-tv-z]{1}[0-9]{1}$/i", $newPostalCode))
             return $newPostalCode;
         else
             return false;
     }
-    
+
     /**
      * Checks to see if the country has the parameter $stateOrProv
-     * @param string $country
-     * @param string $stateOrProv
+     * 
+     * @param string $country            
+     * @param string $stateOrProv            
      * @return boolean
      */
     protected function isValidProvinceOrState ($country, $stateOrProv)
     {
         //List of canadian province abbreviations
         $canada = array (
-                'AB',
-                'BC',
-                'MB',
-                'NB',
-                'NL',
-                'NT',
-                'NS',
-                'NU',
-                'ON',
-                'PE',
-                'QC',
-                'SK',
-                'YT'
+                'AB', 
+                'BC', 
+                'MB', 
+                'NB', 
+                'NL', 
+                'NT', 
+                'NS', 
+                'NU', 
+                'ON', 
+                'PE', 
+                'QC', 
+                'SK', 
+                'YT' 
         );
         //List of american state abreviations
         $usa = array (
-                "AK",
-                "AL",
-                "AR",
-                "AS",
-                "AZ",
-                "CA",
-                "CO",
-                "CT",
-                "DC",
-                "DE",
-                "FL",
-                "GA",
-                "GU",
-                "HI",
-                "IA",
-                "ID",
-                "IL",
-                "IN",
-                "KS",
-                "KY",
-                "LA",
-                "MA",
-                "MD",
-                "ME",
-                "MH",
-                "MI",
-                "MN",
-                "MO",
-                "MS",
-                "MT",
-                "NC",
-                "ND",
-                "NE",
-                "NH",
-                "NJ",
-                "NM",
-                "NV",
-                "NY",
-                "OH",
-                "OK",
-                "OR",
-                "PA",
-                "PR",
-                "PW",
-                "RI",
-                "SC",
-                "SD",
-                "TN",
-                "TX",
-                "UT",
-                "VA",
-                "VI",
-                "VT",
-                "WA",
-                "WI",
-                "WV",
-                "WY"
-                        );
-                        //determines which country is selected then returns if the code was valid or not
-                        if ($country == 'Canada')
-                        {
-                            $countryValidator = new Zend_Validate_InArray($canada);
-                            return $countryValidator->isValid($stateOrProv);
-                        }
-                        else if ($country == 'United States')
-                        {
-                            $countryValidator = new Zend_Validate_InArray($usa);
-                            return $countryValidator->isValid($stateOrProv);
-                        }
-                        return false;
+                "AK", 
+                "AL", 
+                "AR", 
+                "AS", 
+                "AZ", 
+                "CA", 
+                "CO", 
+                "CT", 
+                "DC", 
+                "DE", 
+                "FL", 
+                "GA", 
+                "GU", 
+                "HI", 
+                "IA", 
+                "ID", 
+                "IL", 
+                "IN", 
+                "KS", 
+                "KY", 
+                "LA", 
+                "MA", 
+                "MD", 
+                "ME", 
+                "MH", 
+                "MI", 
+                "MN", 
+                "MO", 
+                "MS", 
+                "MT", 
+                "NC", 
+                "ND", 
+                "NE", 
+                "NH", 
+                "NJ", 
+                "NM", 
+                "NV", 
+                "NY", 
+                "OH", 
+                "OK", 
+                "OR", 
+                "PA", 
+                "PR", 
+                "PW", 
+                "RI", 
+                "SC", 
+                "SD", 
+                "TN", 
+                "TX", 
+                "UT", 
+                "VA", 
+                "VI", 
+                "VT", 
+                "WA", 
+                "WI", 
+                "WV", 
+                "WY" 
+        );
+        //determines which country is selected then returns if the code was valid or not
+        if ($country == '1')
+        {
+            $countryValidator = new Zend_Validate_InArray($canada);
+            return $countryValidator->isValid($stateOrProv);
+        }
+        else if ($country == '2')
+        {
+            $countryValidator = new Zend_Validate_InArray($usa);
+            return $countryValidator->isValid($stateOrProv);
+        }
+        return false;
     }
-    
 }
 
