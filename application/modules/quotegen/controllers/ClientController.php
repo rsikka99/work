@@ -65,7 +65,9 @@ class Quotegen_ClientController extends Zend_Controller_Action
                     try
                     {
                         // Delete the client from the database
-                        $clientMapper->delete($client);
+                        $clientService = new Admin_Service_Client();
+                        $clientService->delete($client->getId());
+                        // $clientMapper->delete($client);
                     }
                     catch ( Exception $e )
                     {
@@ -140,10 +142,8 @@ class Quotegen_ClientController extends Zend_Controller_Action
         $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
         // Start the client service
         $clientService = new Admin_Service_Client();
-        
-        // Populate the client form
         if ($client)
-            $clientService->getForm()->populate($client->toArray());
+            $clientService->populateForm($clientId);
         else
         {
             $this->_helper->redirector('index');
@@ -151,7 +151,7 @@ class Quotegen_ClientController extends Zend_Controller_Action
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();
-            if (isset($values ['cancel']))
+            if (isset($values ['Cancel']))
             {
                 $this->_helper->redirector('index');
             }

@@ -36,26 +36,30 @@ class Admin_Service_Client
         $data = $this->validateAndFilterData($data);
         if ($data !== FALSE)
         {
-            try {
-            	
-           
-            $client = new Quotegen_Model_Client($data);
-            $clientId = Quotegen_Model_Mapper_Client::getInstance()->insert($client);
-            $contact = new Quotegen_Model_Contact($data);
-            $contactId = Quotegen_Model_Mapper_Contact::getInstance()->insert($contact);
-            $address = new Quotegen_Model_Address($data);
-            $addressId = Quotegen_Model_Mapper_Address::getInstance()->insert($address);
-            $clientAddress = new Quotegen_Model_ClientAddress(array (
-                    'clientId' => $clientId, 
-                    'addressId' => $addressId 
-            ));
-            Quotegen_Model_Mapper_ClientAddress::getInstance()->insert($clientAddress);
-            $clientContact = new Quotegen_Model_ClientContact(array (
-                    'clientId' => $clientId, 
-                    'contactId' => $contactId 
-            ));
-            Quotegen_Model_Mapper_ClientContact::getInstance()->insert($clientContact);
-            } catch (Exception $e) {
+            try
+            {
+                
+                $client = new Quotegen_Model_Client($data);
+                $clientId = Quotegen_Model_Mapper_Client::getInstance()->insert($client);
+                $contact = new Quotegen_Model_Contact($data);
+                $contactId = Quotegen_Model_Mapper_Contact::getInstance()->insert($contact);
+                $address = new Quotegen_Model_Address($data);
+                $addressId = Quotegen_Model_Mapper_Address::getInstance()->insert($address);
+                $clientAddress = new Quotegen_Model_ClientAddress(array (
+                        'clientId' => $clientId, 
+                        'addressId' => $addressId, 
+                        'primaryAddress' => 1, 
+                        'name' => '' 
+                ));
+                Quotegen_Model_Mapper_ClientAddress::getInstance()->insert($clientAddress);
+                $clientContact = new Quotegen_Model_ClientContact(array (
+                        'clientId' => $clientId, 
+                        'contactId' => $contactId 
+                ));
+                Quotegen_Model_Mapper_ClientContact::getInstance()->insert($clientContact);
+            }
+            catch ( Exception $e )
+            {
                 echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
                 var_dump($e);
                 die();
@@ -78,9 +82,69 @@ class Admin_Service_Client
         $data = $this->validateAndFilterData($data);
         if ($data !== FALSE)
         {
-            $client = new Quotegen_Model_Client($data);
-            $client->setId($clientId);
-            $rowsAffected = Quotegen_Model_Mapper_Client::getInstance()->save($client);
+            try
+            {
+                
+                //CLIENT
+                $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
+                if (! $client)
+                {
+                    $client = new Quotegen_Model_Client($data);
+                    $clientId = Quotegen_Model_Mapper_Client::getInstance()->insert($client);
+                }
+                $client->populate($data);
+                $rowsAffected = Quotegen_Model_Mapper_Client::getInstance()->save($client);
+                // END CLIENT
+                
+
+                //Contact
+                $contact = Quotegen_Model_Mapper_ClientContact::getInstance()->getContactByClientId($clientId);
+                if (! $contact)
+                {
+                    $contact = new Quotegen_Model_Contact($data);
+                    $contactId = Quotegen_Model_Mapper_Contact::getInstance()->insert($contact);
+                    $clientContact = Quotegen_Model_Mapper_ClientContact::getInstance()->findByClientIdAndContactId($clientId, $contactId);
+                    if (! $clientContact)
+                    {
+                        $clientContact = new Quotegen_Model_ClientContact(array (
+                                'clientId' => $clientId, 
+                                'contactId' => $contactId 
+                        ));
+                    }
+                    Quotegen_Model_Mapper_ClientContact::getInstance()->insert($clientContact);
+                }
+                $contact->populate($data);
+                $rowsAffected = Quotegen_Model_Mapper_Contact::getInstance()->save($contact);
+                //End Contact
+                
+
+                //Address
+                $address = Quotegen_Model_Mapper_ClientAddress::getInstance()->getAddressByClientId($clientId);
+                if (! $address)
+                {
+                    $address = new Quotegen_Model_Address($data);
+                    $addressId = Quotegen_Model_Mapper_Address::getInstance()->insert($address);
+                    $clientAddress = Quotegen_Model_Mapper_ClientAddress::getInstance()->findByClientIdAndAddressId($clientId, $addressId);
+                    if (! $clientAddress)
+                    {
+                        $clientAddress = new Quotegen_Model_ClientAddress(array (
+                                'clientId' => $clientId, 
+                                'addressId' => $addressId, 
+                                'primaryAddress' => 1, 
+                                'name' => '' 
+                        ));
+                    }
+                    Quotegen_Model_Mapper_ClientAddress::getInstance()->insert($clientAddress);
+                }
+                $address->populate($data);
+                $rowsAffected = Quotegen_Model_Mapper_Address::getInstance()->save($address);
+            }
+            catch ( Exception $e )
+            {
+            }
+            //End Address
+            
+
             return 1;
         }
         else
@@ -98,27 +162,34 @@ class Admin_Service_Client
      */
     public function delete ($id)
     {
-        Quotegen_Model_Mapper_Client::getInstance()->delete($id);
-    }
-
-    /**
-     * Validates the code, changing it if it can to make it work, then returns the new code
-     *
-     * @param unknown_type $code            
-     * @return Ambigous <valid, boolean, mixed>|unknown|boolean
-     */
-    protected function validateCode ($code)
-    {
-        $newCode = $this->isValidPostalCode($code);
-        if ($newCode != false)
+        try
         {
-            return $newCode;
+            //get all the clientAddresses
+            $addresses = Quotegen_Model_Mapper_ClientAddress::getInstance()->fetchAll(Quotegen_Model_Mapper_ClientAddress::getInstance()->getWhereId($id));
+            Quotegen_Model_Mapper_ClientAddress::getInstance()->delete($id);
+            if ($addresses)
+            {
+                //go through each clientAddress and delete them all
+                foreach ( $addresses as $address )
+                {
+                    Quotegen_Model_Mapper_Address::getInstance()->delete($address->getAddressId());
+                }
+            }
+            $contacts = Quotegen_Model_Mapper_ClientContact::getInstance()->fetchAll(Quotegen_Model_Mapper_ClientContact::getInstance()->getWhereId($id));
+            Quotegen_Model_Mapper_ClientContact::getInstance()->delete($id);
+            if ($contacts)
+                foreach ( $contacts as $contact )
+                {
+                    Quotegen_Model_Mapper_Contact::getInstance()->delete($contact->getContactId());
+                }
+            
+            Quotegen_Model_Mapper_Client::getInstance()->delete($id);
         }
-        else if ($this->isValidZipCode($code))
+        catch ( Exception $e )
         {
-            return $code;
+            return 0;
         }
-        return false;
+        return 1;
     }
 
     /**
@@ -171,6 +242,26 @@ class Admin_Service_Client
     }
 
     /**
+     * Validates the code, changing it if it can to make it work, then returns the new code
+     *
+     * @param unknown_type $code            
+     * @return Ambigous <valid, boolean, mixed>|unknown|boolean
+     */
+    protected function validateCode ($code)
+    {
+        $newCode = $this->isValidPostalCode($code);
+        if ($newCode != false)
+        {
+            return $newCode;
+        }
+        else if ($this->isValidZipCode($code))
+        {
+            return $code;
+        }
+        return false;
+    }
+
+    /**
      * Validates a zip code
      *
      * @param $zipcode the
@@ -208,7 +299,7 @@ class Admin_Service_Client
 
     /**
      * Checks to see if the country has the parameter $stateOrProv
-     * 
+     *
      * @param string $country            
      * @param string $stateOrProv            
      * @return boolean
@@ -303,6 +394,20 @@ class Admin_Service_Client
             return $countryValidator->isValid($stateOrProv);
         }
         return false;
+    }
+
+    public function populateForm ($clientId)
+    {
+        $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
+        $address = Quotegen_Model_Mapper_ClientAddress::getInstance()->getAddressByClientId($clientId);
+        $contact = Quotegen_Model_Mapper_ClientContact::getInstance()->getContactByClientId($clientId);
+        $combinedArray = $client->toArray();
+        if ($address)
+            $combinedArray = array_merge($combinedArray, $address->toArray());
+        if ($contact)
+            $combinedArray = array_merge($combinedArray, $contact->toArray());
+        $this->getForm()->populate($combinedArray);
+        //$form->populate(array_merge($client->toArray(),$address->toArray(),$contact->toArray()));
     }
 }
 

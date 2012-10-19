@@ -87,7 +87,6 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
         
         //Extension
         $extension = $this->createElement('text', 'extension')
-            ->setRequired(true)
             ->addValidator('regex', true, array (
                 '/^\d{4}$/' 
         ))
@@ -120,13 +119,14 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
             ->addErrorMessage("Please enter a zip or postal code")
             ->setLabel("Zip or Postal Code:");
         //setup country
+        //grab from database here
         $countryId = $this->createElement('select', 'countryId', array (
                 'multiOptions' => array (
                         '1' => 'Canada', 
                         '2' => 'United States' 
                 ), 
                 'value' => 'United States' 
-        ))->setLabel("Country");
+        ))->setLabel("Country:");
         //setup cancel button
         $cancel = $this->createElement('submit', 'Cancel', array (
                 'ignore' => true, 

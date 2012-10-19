@@ -42,11 +42,13 @@ class Quotegen_Model_Mapper_ClientContact extends My_Model_Mapper_Abstract
         // Remove the id
         //unset($data [$this->col_id]);
         
+
         // Insert the data
         $id = $this->getDbTable()->insert($data);
         
         //$object->setId($id);
         
+
         // Save the object into the cache
         $this->saveItemToCache($object);
         
@@ -210,11 +212,41 @@ class Quotegen_Model_Mapper_ClientContact extends My_Model_Mapper_Abstract
     }
 
     /**
+     * Finds a clientContact using a clientId and a contactId
+     *
+     * @param $id int
+     *            The id of the client to find
+     * @return Quotegen_Model_ClientContact
+     */
+    public function findByClientIdAndContactId ($clientId, $contactId)
+    {
+        // Assuming we don't have a cached object, lets go get it.
+        $result = $this->getDbTable()->fetchRow('clientId = ' . $clientId . ' and contactId = ' . $contactId);
+        if (0 == count($result))
+        {
+            return false;
+        }
+        $row = $result->current();
+        $object = new Quotegen_Model_ClientContact($row->toArray());
+        return $object;
+    }
+
+    /**
      * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
      */
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->getClientId();
+    }
+
+    public function getContactByClientId ($clientId)
+    {
+        $clientContacts = $this->fetchAll($this->getWhereId($clientId));
+        foreach ( $clientContacts as $clientContact )
+        {
+            return Quotegen_Model_Mapper_Contact::getInstance()->fetch($clientContact->getContactId());
+        }
+        return null;
     }
 }
 

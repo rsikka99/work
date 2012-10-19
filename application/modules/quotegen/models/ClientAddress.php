@@ -22,25 +22,26 @@ class Quotegen_Model_ClientAddress extends My_Model_Abstract
      * @var string
      */
     protected $_addressId;
+    
     /**
      * If this is the primary address(bool)
      *
      * @var string
      */
-    protected $_primaryAddress = true;
+    protected $_primaryAddress;
+    
     /**
      * The name of this address
      *
      * @var string
      */
-    protected $_name = "The Primary Address";
+    protected $_name;
     
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
     public function populate ($params)
     {
-
         if (is_array($params))
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
@@ -63,9 +64,9 @@ class Quotegen_Model_ClientAddress extends My_Model_Abstract
         return array (
                 
                 'clientId' => $this->getClientId(), 
-                'addressId' => $this->getAddressId(),
-                'primaryAddress' => $this->getPrimaryAddress(),
-                'name' => $this->getName()
+                'addressId' => $this->getAddressId(), 
+                'primaryAddress' => $this->getPrimaryAddress(), 
+                'name' => $this->getName() 
         );
     }
 

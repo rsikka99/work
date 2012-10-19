@@ -42,11 +42,13 @@ class Quotegen_Model_Mapper_ClientAddress extends My_Model_Mapper_Abstract
         // Remove the id
         //unset($data [$this->col_id]);
         
+
         // Insert the data
         $id = $this->getDbTable()->insert($data);
         
-       // $object->setId($id);
+        // $object->setId($id);
         
+
         // Save the object into the cache
         $this->saveItemToCache($object);
         
@@ -92,7 +94,7 @@ class Quotegen_Model_Mapper_ClientAddress extends My_Model_Mapper_Abstract
      */
     public function delete ($object)
     {
-        if ($object instanceof Quotegen_Model_ClientContact)
+        if ($object instanceof Quotegen_Model_ClientAddress)
         {
             $whereClause = array (
                     "{$this->col_id}  = ?" => $object->getId() 
@@ -120,7 +122,7 @@ class Quotegen_Model_Mapper_ClientAddress extends My_Model_Mapper_Abstract
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Quotegen_Model_ClientContact)
+        if ($result instanceof Quotegen_Model_ClientAddress)
         {
             return $result;
         }
@@ -132,7 +134,7 @@ class Quotegen_Model_Mapper_ClientAddress extends My_Model_Mapper_Abstract
             return;
         }
         $row = $result->current();
-        $object = new Quotegen_Model_ClientContact($row->toArray());
+        $object = new Quotegen_Model_ClientAddress($row->toArray());
         
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -159,7 +161,7 @@ class Quotegen_Model_Mapper_ClientAddress extends My_Model_Mapper_Abstract
             return;
         }
         
-        $object = new Quotegen_Model_ClientContact($row->toArray());
+        $object = new Quotegen_Model_ClientAddress($row->toArray());
         
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -186,7 +188,7 @@ class Quotegen_Model_Mapper_ClientAddress extends My_Model_Mapper_Abstract
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-            $object = new Quotegen_Model_ClientContact($row->toArray());
+            $object = new Quotegen_Model_ClientAddress($row->toArray());
             
             // Save the object into the cache
             $this->saveItemToCache($object);
@@ -215,6 +217,36 @@ class Quotegen_Model_Mapper_ClientAddress extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->getClientId();
+    }
+
+    /**
+     * finds a clientAddress using a clientId and a contactId
+     *
+     * @param int $clientId            
+     * @param int $contactId            
+     * @return void boolean Quotegen_Model_ClientAddress
+     */
+    public function findByClientIdAndAddressId ($clientId, $addressId)
+    {
+        // Assuming we don't have a cached object, lets go get it.
+        $result = $this->getDbTable()->fetchRow('clientId = ' . $clientId . ' and addressId = ' . $addressId);
+        if (0 == count($result))
+        {
+            return false;
+        }
+        $row = $result->current();
+        $object = new Quotegen_Model_ClientAddress($row->toArray());
+        return $object;
+    }
+
+    public function getAddressByClientId ($clientId)
+    {
+        $clientAddresses = $this->fetchAll($this->getWhereId($clientId));
+        foreach ( $clientAddresses as $clientAddress )
+        {
+            return Quotegen_Model_Mapper_Address::getInstance()->find($clientAddress->getAddressId());
+        }
+        return null;
     }
 }
 
