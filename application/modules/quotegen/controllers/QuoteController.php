@@ -43,7 +43,7 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
         }
         
         $client = Quotegen_Model_Mapper_Client::getInstance()->find($quote->getClientId());
-        $message = "Are you sure you want to delete the quote for {$client->getName()} ?";
+        $message = "Are you sure you want to delete the quote for {$client->getCompanyName()} ?";
         $form = new Application_Form_Delete($message);
         
         $request = $this->getRequest();

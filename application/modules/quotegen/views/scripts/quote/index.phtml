@@ -24,7 +24,7 @@
         <?php foreach ($this->paginator->getCurrentItems() as $quote) : /* @var $quote Quotegen_Model_Quote */ ?>
         <tr>
         <td><?php echo $quote->getId(); ?></td>
-            <td><?php echo $quote->getClient()->getName(); ?></td>
+            <td><?php echo $quote->getClient()->getCompanyName(); ?></td>
             <td><?php echo $quote->getClientDisplayName(); ?></td>
             <td><?php echo nl2br($quote->getClient()->getAddress()); ?></td>
             <td><?php echo $quote->getDateCreated(); ?></td>

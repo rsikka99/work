@@ -209,6 +209,8 @@ class Admin_Service_Client
             $valid = false;
         }
         $validData = $formData;
+        if($validData['extension'] == '')
+            $validData['extension'] = null;
         //Make the state always in upper case
         $validData ['region'] = strtoupper($validData ['region']);
         //set the code to validated code

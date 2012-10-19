@@ -109,6 +109,8 @@ class Quotegen_Model_Client extends My_Model_Abstract
     {
         return $this->_companyName;
     }
+    
+   
 
     /**
      * Gets the legal name

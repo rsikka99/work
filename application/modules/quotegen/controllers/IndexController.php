@@ -139,7 +139,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
         {
             $quoteArray = array (
                     'id' => $quote->getId(), 
-                    'clientName' => $quote->getClient()->getName(), 
+                    'clientName' => $quote->getClient()->getCompanyName(), 
                     'quotedate' => $quote->getQuoteDate(), 
                     'isLeased' => $quote->isLeased() 
             );

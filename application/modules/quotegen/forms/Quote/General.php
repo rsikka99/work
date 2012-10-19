@@ -38,7 +38,7 @@ class Quotegen_Form_Quote_General extends Twitter_Bootstrap_Form_Vertical
                         'StripTags' 
                 ), 
                 'placeholder' => $this->_quote->getClient()
-                    ->getName(), 
+                    ->getCompanyName(), 
                 'description' => 'Display Name' 
         ));
         

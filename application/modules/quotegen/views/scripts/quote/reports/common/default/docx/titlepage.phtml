@@ -18,7 +18,7 @@ $section = $this->section;
 $clientName = $quote->getClientDisplayName();
 if (empty($clientName))
 {
-    $clientName = $client->getName();
+    $clientName = $client->getCompanyName();
 }
 
 $section->addText($this->translate('Prepared For:') . " " . $clientName, 'titlepageHeaderFont', 'titlepageHeaderParagraph');

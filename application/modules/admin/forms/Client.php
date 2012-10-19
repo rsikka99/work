@@ -88,10 +88,10 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
         //Extension
         $extension = $this->createElement('text', 'extension')
             ->addValidator('regex', true, array (
-                '/^\d{4}$/' 
+                '/^\d{0,4}$/' 
         ))
             ->setLabel("Extension")
-            ->addErrorMessage("Invalid Area code");
+            ->addErrorMessage("Invalid extension");
         
         ///////////////////////END PHONE NUMBERS/////////////////////////////////////
         //setup address 1
@@ -198,8 +198,7 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
                 $exchangeCode, 
                 $number, 
                 $extension 
-        )
-        , 'phoneNumbers', array (
+        ), 'phoneNumbers', array (
                 'legend' => 'Phone Number' 
         ));
         $phoneNumbers = $this->getDisplayGroup('phoneNumbers');

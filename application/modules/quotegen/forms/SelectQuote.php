@@ -38,7 +38,7 @@ class Quotegen_Form_SelectQuote extends Twitter_Bootstrap_Form_Inline
         /* @var $client Quotegen_Model_Client */
         foreach ( Quotegen_Model_Mapper_Client::getInstance()->fetchAll() as $client )
         {
-            $clientList [$client->getId()] = $client->getName();
+            $clientList [$client->getId()] = $client->getCompanyName();
         }
         $clientSelect = new Zend_Form_Element_Select('clientId');
         $clientSelect->addMultiOptions($clientList);
@@ -50,7 +50,7 @@ class Quotegen_Form_SelectQuote extends Twitter_Bootstrap_Form_Inline
         /* @var $quote Quotegen_Model_Quote */
         foreach ( Quotegen_Model_Mapper_Quote::getInstance()->fetchAllForUser($this->_userId) as $quote )
         {
-            $clientName = $quote->getClient()->getName();
+            $clientName = $quote->getClient()->getCompanyName();
             $dateCreated = $quote->getDateCreated();
             $quoteList [$quote->getId()] = "$clientName - $dateCreated";
             $quoteListValidator [] = $quote->getId();
