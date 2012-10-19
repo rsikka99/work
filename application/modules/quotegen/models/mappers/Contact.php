@@ -217,17 +217,6 @@ class Quotegen_Model_Mapper_Contact extends My_Model_Mapper_Abstract
         return $object->getId();
     }
 
-    /**
-     * Fetches all clients available to the user
-     *
-     * @param int $userId
-     *            The user's id (May be company id in the future)
-     * @return multitype:Quotegen_Model_Contact
-     */
-    public function fetchAllClientsAvailableToUser ($userId)
-    {
-        return $this->fetchAll(null, "$this->col_name ASC");
-    }
 
 }
 
