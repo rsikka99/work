@@ -152,13 +152,16 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
             ->setLabel("Zip or Postal Code:");
         //setup country
         //grab from database here
+        $fetched = Quotegen_Model_Mapper_Country::getInstance()->fetchAll();
+        $countries = null;
+        foreach($fetched as $country){
+            $countries[$country->getId()] = $country->getName();
+        }
         $countryId = $this->createElement('select', 'countryId', array (
-                'multiOptions' => array (
-                        '1' => 'Canada', 
-                        '2' => 'United States' 
-                ), 
-                'value' => 'United States' 
+                'multiOptions' => $countries, 
+                'value' => '2' 
         ))->setLabel("Country:");
+        
         //setup cancel button
         $cancel = $this->createElement('submit', 'Cancel', array (
                 'ignore' => true, 
