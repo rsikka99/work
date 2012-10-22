@@ -209,12 +209,40 @@ class Admin_Service_Client
             $valid = false;
         }
         $validData = $formData;
-        if($validData['extension'] == '')
-            $validData['extension'] = null;
-        //Make the state always in upper case
+        if ($validData ['extension'] == '')
+            $validData ['extension'] = null;
+            //Make the state always in upper case
         $validData ['region'] = strtoupper($validData ['region']);
         //set the code to validated code
         $code = $this->validateCode($validData ['postCode']);
+        
+        $phoneErrors [] = $this->getForm()
+            ->getElement('countryCode')
+            ->getErrors();
+        $phoneErrors [] = $this->getForm()
+            ->getElement('areaCode')
+            ->getErrors();
+        $phoneErrors [] = $this->getForm()
+            ->getElement('exchangeCode')
+            ->getErrors();
+        $phoneErrors [] = $this->getForm()
+        ->getElement('number')
+        ->getErrors();
+        $phoneErrors [] = $this->getForm()
+            ->getElement('extension')
+            ->getErrors();
+        $errore = "";
+        foreach ( $phoneErrors as $error )
+        {
+            foreach ( $error as $er )
+            {
+                $errore .= $er . "<br/>";
+            }
+        }
+        $this->getForm()
+            ->getElement('phoneErrors')
+            ->addError($errore);
+        
         if (! $code)
         {
             

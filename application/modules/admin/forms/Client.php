@@ -51,13 +51,14 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
         $countryCode = $this->createElement('text', 'countryCode')
             ->setRequired(true)
             ->setAttrib('class', 'input-country-code')
+            ->setAttrib('placeholder', '01')
             ->clearDecorators()
             ->addDecorator('ViewHelper')
             ->addDecorator('Label', array (
                 'class' => 'label-phone-number-country control-label' 
         ))
             ->addValidator('regex', true, array (
-                '/^\d{1,2}$/' 
+                '/^\d{1,4}$/' 
         ))
             ->setDescription("")
             ->setLabel("Phone Number:")
@@ -107,7 +108,7 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
                 '/^\d{4}$/' 
         ))
             ->setLabel("-")
-            ->addErrorMessage("Invalid phone number");
+            ->addErrorMessage("Invalid number");
         
         //Extension
         $extension = $this->createElement('text', 'extension')
@@ -122,6 +123,7 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
             ->setLabel("Ext")
             ->setAttrib('class', 'input-extension-code')
             ->addErrorMessage("Invalid extension");
+        $phoneErrors = $this->createElement('text','phoneErrors')->removeDecorator('viewhelper');
         
         ///////////////////////END PHONE NUMBERS/////////////////////////////////////
         //setup address 1
@@ -210,32 +212,31 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
                 $areaCode, 
                 $exchangeCode, 
                 $number, 
-                $extension 
+                $extension,
+                $phoneErrors
         ), 'contact', array (
                 'legend' => 'Contact Information' 
         ));
         $contact = $this->getDisplayGroup('contact');
         $contact->setDecorators(array (
-                'FormElements',
+                'FormElements', 
                 
                 array (
-                        'Fieldset',
+                        'Fieldset', 
                         array (
-                                'class' => 'pull-right half-width'
-                        )
-                ),
+                                'class' => 'pull-right half-width' 
+                        ) 
+                ), 
                 array (
-                        'HtmlTag',
-                
+                        'HtmlTag', 
+                        
                         array (
-                                'tag' => 'div',
-                                'closeOnly' => true,
-                                'class' => 'clearfix',
-                                'placement' => Zend_Form_Decorator_Abstract::APPEND
-                        )
-                ),
-                
-               
+                                'tag' => 'div', 
+                                'closeOnly' => true, 
+                                'class' => 'clearfix', 
+                                'placement' => Zend_Form_Decorator_Abstract::APPEND 
+                        ) 
+                ) 
         ));
         
         $this->addDisplayGroup(array (
