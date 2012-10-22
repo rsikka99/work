@@ -31,7 +31,7 @@ $this->headScript()->appendScript("$('i').popover();");
     <?php /* @var $device Quotegen_Model_QuoteDevice */foreach ($devices as $device) : ?>
     <tr class="deviceRow">
     	<td><h4><?php echo $device->getName(); ?></h4></td>                
-        <td><h4><?php echo $device->getSku(); ?></h4></td>
+        <td><h4><?php echo $device->getOemSku(); ?></h4></td>
         <td></td>
         <td style="text-align: right"><h4><?php echo $this->currency((float)$device->getCost())?></h4></td>
         <td></td>
@@ -53,7 +53,7 @@ $this->headScript()->appendScript("$('i').popover();");
     	<?php foreach ($device->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
     	<tr class="optionRow">
 	    	<td style="padding-left: 25px;"><?php echo $quoteDeviceOption->getName(); ?></td>
-    	    <td><?php echo $quoteDeviceOption->getSku(); ?></td>
+    	    <td><?php echo $quoteDeviceOption->getOemSku(); ?></td>
         	<td><?php echo $quoteDeviceOption->getDescription(); ?></td>
 	        <td style="text-align: right"><?php echo '$'.number_format($quoteDeviceOption->getCost(),2); ?></td>
     	    <td style="text-align: right"><?php echo number_format($quoteDeviceOption->getQuantity()); ?></td>

@@ -24,7 +24,7 @@ class Quotegen_Form_Option extends EasyBib_Form
         
         $this->addElement('text', 'name', array (
                 'label' => 'Name:', 
-                'class' => 'span3',
+                'class' => 'span3', 
                 'required' => true, 
                 'maxlength' => 255, 
                 'filters' => array (
@@ -40,7 +40,7 @@ class Quotegen_Form_Option extends EasyBib_Form
         
         $this->addElement('textarea', 'description', array (
                 'label' => 'Description:', 
-                'class' => 'span3',
+                'class' => 'span3', 
                 'required' => true, 
                 'style' => 'height: 100px', 
                 'maxlength' => 255, 
@@ -57,7 +57,7 @@ class Quotegen_Form_Option extends EasyBib_Form
         
         $this->addElement('text', 'cost', array (
                 'label' => 'Price:', 
-                'class' => 'span1',
+                'class' => 'span1', 
                 'required' => true, 
                 'maxlength' => 8, 
                 'filters' => array (
@@ -69,9 +69,9 @@ class Quotegen_Form_Option extends EasyBib_Form
                 ) 
         ));
         
-        $this->addElement('text', 'sku', array (
-                'label' => 'SKU:', 
-                'class' => 'span3',
+        $this->addElement('text', 'oemSku', array (
+                'label' => 'OEM SKU:', 
+                'class' => 'span3', 
                 'required' => true, 
                 'maxlength' => 255, 
                 'filters' => array (
@@ -84,6 +84,23 @@ class Quotegen_Form_Option extends EasyBib_Form
                         255 
                 ) 
         ));
+        
+        $this->addElement('text', 'dealerSku', array (
+                'label' => 'Dealer SKU:',
+                'class' => 'span3',
+                'required' => true,
+                'maxlength' => 255,
+                'filters' => array (
+                        'StringTrim',
+                        'StripTags'
+                ),
+                'validator' => 'StringLength',
+                'options' => array (
+                        1,
+                        255
+                )
+        ));
+        
         
         $optionCategoryCheckBox = new Zend_Form_Element_MultiCheckbox('categories', array (
                 'label' => 'Categories:' 
@@ -110,7 +127,7 @@ class Quotegen_Form_Option extends EasyBib_Form
                 'ignore' => true, 
                 'label' => 'Cancel' 
         ));
-
+        
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }
 }

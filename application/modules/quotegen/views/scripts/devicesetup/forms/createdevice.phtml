@@ -86,7 +86,6 @@ $form = $this->form;
 <?php $this->headScript()->captureEnd() ?>
 
 <form name="createdevice" id="createdevice" class="form-horizontal" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>">
-
 <div class="well">
 	<?php $element = $this->element->getElement("manufacturer_id"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
@@ -122,7 +121,18 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<?php $element = $this->element->getElement("sku"); ?>
+	<?php $element = $this->element->getElement("oemSku"); ?>
+	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
+		<?php echo $element->renderLabel(); ?>
+		<div class="controls">
+			<?php if ( $element->hasErrors() ) { 
+				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+			} ?>
+			<?php echo trim($element->renderViewHelper()); ?>
+			<?php echo $element->renderErrors(); ?>
+		</div>
+	</div>
+		<?php $element = $this->element->getElement("dealerSku"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">

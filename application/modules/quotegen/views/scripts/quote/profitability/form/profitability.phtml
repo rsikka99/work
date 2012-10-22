@@ -56,7 +56,7 @@ $(function()
     <?php foreach ($quote->getQuoteDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
 		<?php if ($quoteDevice->calculateTotalQuantity() > 0) : ?>
 	    <tr>
-	        <td><h5><?php echo $quoteDevice->getName() ?><br/><small><?php echo $quoteDevice->getSku() ?></small></h5></td>
+	        <td><h5><?php echo $quoteDevice->getName() ?><br/><small><?php echo $quoteDevice->getOemSku() ?></small></h5></td>
 			<td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculatePackageCost()); ?></td>
 			<td style="text-align: right;"><?php echo $form->getElement("packageMarkup_{$quoteDevice->getId()}"); ?></td>
 			<td style="text-align: right;"><?php echo $form->getElement("margin_{$quoteDevice->getId()}"); ?></td>

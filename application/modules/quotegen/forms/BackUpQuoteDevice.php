@@ -64,8 +64,8 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
                     'ignore' => true 
             ));
             
-            $this->addElement('text', 'sku', array (
-                    'label' => 'Sku:', 
+            $this->addElement('text', 'oemsku', array (
+                    'label' => 'Oem Sku:', 
                     'disabled' => true, 
                     'ignore' => true 
             ));

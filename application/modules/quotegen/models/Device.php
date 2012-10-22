@@ -21,8 +21,15 @@ class Quotegen_Model_Device extends My_Model_Abstract
      *
      * @var string
      */
-    protected $_sku;
-
+    protected $_oemSku;
+    
+    /**
+     * the dealer sku for the object
+     *
+     * @var string
+     */
+    protected $_dealerSku;
+    
     /**
      * The description of the standard features
      *
@@ -55,8 +62,10 @@ class Quotegen_Model_Device extends My_Model_Abstract
         }
         if (isset($params->masterDeviceId) && ! is_null($params->masterDeviceId))
             $this->setMasterDeviceId($params->masterDeviceId);
-        if (isset($params->sku) && ! is_null($params->sku))
-            $this->setSku($params->sku);
+        if (isset($params->oemSku) && ! is_null($params->oemSku))
+            $this->setOemSku($params->oemSku);
+        if (isset($params->dealerSku) && ! is_null($params->dealerSku))
+            $this->setDealerSku($params->dealerSku);
         if (isset($params->description) && ! is_null($params->description))
             $this->setDescription($params->description);
     }
@@ -68,8 +77,9 @@ class Quotegen_Model_Device extends My_Model_Abstract
     {
         return array (
                 'masterDeviceId' => $this->getMasterDeviceId(), 
-                'sku' => $this->getSku(),
-                'description' => $this->getDescription()
+                'oemSku' => $this->getOemSku(), 
+                'dealerSku' => $this->getDealerSku(), 
+                'description' => $this->getDescription() 
         );
     }
 
@@ -100,9 +110,9 @@ class Quotegen_Model_Device extends My_Model_Abstract
      *
      * @return string The sku of the device
      */
-    public function getSku ()
+    public function getOemSku ()
     {
-        return $this->_sku;
+        return $this->_oemSku;
     }
 
     /**
@@ -111,9 +121,31 @@ class Quotegen_Model_Device extends My_Model_Abstract
      * @param string $_sku
      *            The new sku to set
      */
-    public function setSku ($_sku)
+    public function setOemSku ($_sku)
     {
-        $this->_sku = $_sku;
+        $this->_oemSku = $_sku;
+        return $this;
+    }
+
+    /**
+     * Gets the current sku of the item
+     *
+     * @return string
+     */
+    public function getDealerSku ()
+    {
+        return $this->_dealerSku;
+    }
+
+    /**
+     * Sets a new sku
+     *
+     * @param string $_dealerSku
+     *            The new value
+     */
+    public function setDealerSku ($_dealerSku)
+    {
+        $this->_dealerSku = $_dealerSku;
         return $this;
     }
 
