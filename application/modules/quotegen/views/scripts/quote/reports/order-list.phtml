@@ -1,38 +1,7 @@
-<?php 
-$quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
-//$this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.phtml'));
-
-$this->headScript()->appendScript("$('i').popover();");
-
-?>
-<div class="page-header">
-    <h1>Order List</h1>
+<div class='page-header'>
+	<h1>Order List</h1>
 </div>
-<div class="row">
-    <div class="span12">
-        <table class="table table-condensed table-bordered table-striped quoteDeviceTable">
-                <tr class="header-row">
-                    <th style="width: 40px;">Qty</th>
-                    <th style="width: 80px;">SKU</th>
-                    <th>Item</th>
-                </tr>
-                <?php foreach ($quote->getQuoteDeviceGroups() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
-                <tr class="deviceRow">
-                    <td><?php echo number_format($quoteDevice->getQuantity()); ?></td>
-                    <td><?php echo $quoteDevice->getSku(); ?></td>            
-                    <th><h5><?php echo $quoteDevice->getName(); ?></h5></th>
-                </tr>
-                <?php if (count($quoteDevice->getQuoteDeviceOptions()) > 0) : ?>
-                
-                <?php foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
-                <tr class="optionRow">
-                    <td><?php echo $quoteDeviceOption->getQuantity(); ?></td>
-                    <td><?php echo $quoteDeviceOption->getSku(); ?></td>
-                    <td><?php echo $quoteDeviceOption->getName(); ?></td>
-                </tr>
-                <?php endforeach; ?>
-                <?php endif; ?>
-        <?php endforeach; ?>
-        </table>
-    </div>
+<div class='hero-unit'>
+	<h1>Page Unavailible</h1>
+	<p>This feature is only supported as a download.</p>
 </div>

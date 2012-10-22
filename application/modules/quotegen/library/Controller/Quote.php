@@ -46,7 +46,8 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
     {
         
         // Add the ability to have a docx context
-        $this->_helper->contextSwitch()->addContext('docx', array (
+        $this->_helper->contextSwitch()
+            ->addContext('docx', array (
                 'suffix' => 'docx', 
                 'callbacks' => array (
                         'init' => array (
@@ -56,6 +57,19 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
                         'post' => array (
                                 $this, 
                                 'postDocxContext' 
+                        ) 
+                ) 
+        ))
+            ->addContext('xlsx', array (
+                'suffix' => 'xlsx', 
+                'callbacks' => array (
+                        'init' => array (
+                                $this, 
+                                'initXlsxContext' 
+                        ), 
+                        'post' => array (
+                                $this, 
+                                'postXlsxContext' 
                         ) 
                 ) 
         ));
@@ -403,6 +417,20 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
     }
 
     public function postDocxContext ()
+    {
+        // Nothing to do in post yet
+    }
+
+    /**
+     * Initializes the view to work with excel
+     */
+    public function initXlsxContext ()
+    {
+        // Include php excel and initialize a new instance
+        $this->view->phpexcel = new PHPExcel();
+    }
+
+    public function postXlsxContext ()
     {
         // Nothing to do in post yet
     }
