@@ -51,7 +51,7 @@ class Quotegen_ClientController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        $message = "Are you sure you want to delete {$client->getCompanyName()}?";
+        $message = "Are you sure you want to completely delete {$client->getCompanyName()} including all quotes, assessments and proposals? <br/>This is an irreversible operation";
         $form = new Application_Form_Delete($message);
         
         $request = $this->getRequest();

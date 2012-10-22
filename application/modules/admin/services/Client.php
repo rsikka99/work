@@ -178,11 +178,17 @@ class Admin_Service_Client
             $contacts = Quotegen_Model_Mapper_ClientContact::getInstance()->fetchAll(Quotegen_Model_Mapper_ClientContact::getInstance()->getWhereId($id));
             Quotegen_Model_Mapper_ClientContact::getInstance()->delete($id);
             if ($contacts)
+            {
                 foreach ( $contacts as $contact )
                 {
                     Quotegen_Model_Mapper_Contact::getInstance()->delete($contact->getContactId());
                 }
-            
+            }
+            $quotes = Quotegen_Model_Mapper_Quote::getInstance()->fetchAll('clientId = ' . $id);
+            foreach ( $quotes as $quote )
+            {
+                Quotegen_Model_Mapper_Quote::getInstance()->delete($quote);
+            }
             Quotegen_Model_Mapper_Client::getInstance()->delete($id);
         }
         catch ( Exception $e )
@@ -226,8 +232,8 @@ class Admin_Service_Client
             ->getElement('exchangeCode')
             ->getErrors();
         $phoneErrors [] = $this->getForm()
-        ->getElement('number')
-        ->getErrors();
+            ->getElement('number')
+            ->getErrors();
         $phoneErrors [] = $this->getForm()
             ->getElement('extension')
             ->getErrors();
