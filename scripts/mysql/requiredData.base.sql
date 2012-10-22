@@ -86,3 +86,7 @@ INSERT INTO `manufacturers` (`id`, `fullname`, `displayname`) VALUES
 (24, 'Tech Optics Inc', 'Tech Optics Inc'),
 (25, 'Toshiba', 'Toshiba'),
 (26, 'Xerox', 'Xerox');
+
+INSERT INTO `countries` (`id`, `name`) VALUES
+(1, 'Canada'),
+(2, 'United States');

@@ -1,13 +1,20 @@
-INSERT INTO `clients` (`id`, `name`, `address`) VALUES
-(1, 'Test Company', '123 Fake Street\nSuite 456\nFake City\nA1A 2B2'),
-(2, 'NotReal Solutions', '123 Fake Street\nSuite 9876\nFake City\nA1A 2B2'),
-(3, 'Company ABC', '123 Fake Street\nSuite 132\nFake City\nA1A 2B2'),
-(4, 'Company XYZ', '123 Fake Street\nSuite 004-84\nFake City\nA1A 2B2'),
-(5, 'This is a company', 'With an address'),
-(6, 'OD Client', '1000 MPS Way Boca Raton FLA'),
-(7, 'Kingston Bar', '656 Bath Rd\r\nKingston ON\r\nK7L 9R9'),
-(8, 'EZ Link', '7000 Robie St\r\nDartmouth NS\r\nB1N 5T5');
+INSERT INTO `clients` (`id`, `accountNumber`, `companyName`,`legalName`) VALUES
+(1, '0000001', 'Tangent MTW', 'Tangent MTW Incorporated'),
+(2, '0000002', 'Starbucks', 'Starbucks'),
+(3, '0000003', 'Novellis', 'Novellis co-operatives'),
+(4, '0000004', 'Samsung', 'Samsung Incorporated');
 
+INSERT INTO `contacts` (`id`,`clientId`, `firstName`, `lastName`,`countryCode`,`areaCode`,`exchangeCode`,`number`,`extension`) VALUES
+(1,1, 'Norm', 'McConkey', 1,613,507,5151,null),
+(2,2, 'Tyson', 'Riehl', 1,613,333,4444,null),
+(3,3, 'Shawn', 'Wilder', 1,613,666,6666,null),
+(4,4, 'Lee', 'Robert', 1,613,123,1234,null);
+
+INSERT INTO `addresses` (`id`, `clientId`, `addressLine1`, `addressline2`,`city`,`region`,`postCode`,`countryId`) VALUES
+(1,1, '945 Princess Street','Suite 234','Kingston','ON','K7L3N6',1),
+(2,2, 'Tyson Avenue','','Kingston','ON','k7n2s1',1),
+(3,3, 'Shawn Lane','','Kingston','ON','k2h7s6',1),
+(4,4, 'Lee Street','','Kingston','ON','k1b2s7',1);
 
 INSERT INTO `qgen_options` (`id`, `name`, `description`, `cost`, `oemSku`) VALUES
 (7, 'HP 3-bin Stapler/Stacker with Output', 'Staples up to 50 pages and stacks up to 1600 sheets', 1765.15, 'CC517A'),
