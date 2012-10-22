@@ -42,8 +42,15 @@ class Quotegen_Model_Option extends My_Model_Abstract
      *
      * @var string
      */
-    protected $_sku;
-
+    protected $_oemSku;
+    
+    /**
+     * the dealer sku for the object
+     *
+     * @var string
+     */
+    protected $_dealerSku;
+    
     /**
      * An array of Quotegen_Model_Category associated with the object
      *
@@ -79,8 +86,11 @@ class Quotegen_Model_Option extends My_Model_Abstract
         if (isset($params->cost) && ! is_null($params->cost))
             $this->setCost($params->cost);
         
-        if (isset($params->sku) && ! is_null($params->sku))
-            $this->setSku($params->sku);
+        if (isset($params->oemSku) && ! is_null($params->oemSku))
+            $this->setOemSku($params->oemSku);
+        
+        if (isset($params->dealerSku) && ! is_null($params->dealerSku))
+            $this->setDealerSku($params->dealerSku);
     }
     
     /*
@@ -93,7 +103,8 @@ class Quotegen_Model_Option extends My_Model_Abstract
                 'name' => $this->getName(), 
                 'description' => $this->getDescription(), 
                 'cost' => $this->getCost(), 
-                'sku' => $this->getSku() 
+                'dealerSku' => $this->getDealerSku(), 
+                'oemSku' => $this->getOemSku() 
         );
     }
 
@@ -189,9 +200,9 @@ class Quotegen_Model_Option extends My_Model_Abstract
      *
      * @return string The sku
      */
-    public function getSku ()
+    public function getOemSku ()
     {
-        return $this->_sku;
+        return $this->_oemSku;
     }
 
     /**
@@ -200,9 +211,31 @@ class Quotegen_Model_Option extends My_Model_Abstract
      * @param string $_sku
      *            The new sku
      */
-    public function setSku ($_sku)
+    public function setOemSku ($_sku)
     {
-        $this->_sku = $_sku;
+        $this->_oemSku = $_sku;
+        return $this;
+    }
+    
+    /**
+     * Gets the current sku of the item
+     *
+     * @return string
+     */
+    public function getDealerSku ()
+    {
+        return $this->_dealerSku;
+    }
+    
+    /**
+     * Sets a new sku
+     *
+     * @param string $_dealerSku
+     *            The new value
+     */
+    public function setDealerSku ($_dealerSku)
+    {
+        $this->_dealerSku = $_dealerSku;
         return $this;
     }
 
@@ -231,13 +264,13 @@ class Quotegen_Model_Option extends My_Model_Abstract
         $this->_categories = $_categories;
         return $this;
     }
-    
+
     /**
      * Gets the included quantity for a device option
      *
      * @return int $includedQuantity
      */
-    public function getIncludedQuantity ( $deviceId )
+    public function getIncludedQuantity ($deviceId)
     {
         if (! isset($this->_includedQuantity))
         {
@@ -253,6 +286,4 @@ class Quotegen_Model_Option extends My_Model_Abstract
         }
         return $this->_includedQuantity;
     }
-    
-    
 }

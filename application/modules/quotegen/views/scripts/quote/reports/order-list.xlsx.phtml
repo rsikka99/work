@@ -77,8 +77,8 @@ foreach ( $quoteDeviceGroups as $quoteDeviceGroup )
         // $device builds an array used to output quote device information
         $device = array (
                 $quoteDevice->getName(), 
-                $quoteDevice->getSku(), 
-                $quoteDevice->getSku() 
+                $quoteDevice->getOemSku(), 
+                $quoteDevice->getDealerSku() 
         );
         
         // $deviceOptions builds an array of arrays representing quote device options
@@ -88,8 +88,8 @@ foreach ( $quoteDeviceGroups as $quoteDeviceGroup )
         {
             $deviceOptions [] = array (
                     "name" => $quoteDeviceOption->getName(), 
-                    "oemSku" => $quoteDeviceOption->getSku(), 
-                    "dealerSku" => $quoteDeviceOption->getSku() 
+                    "oemSku" => $quoteDeviceOption->getOemSku(), 
+                    "dealerSku" => $quoteDeviceOption->getDealerSku() 
             );
         }
         

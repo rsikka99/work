@@ -69,10 +69,10 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         $cboCriteria = $values ['cboCriteria'];
                         $this->view->cboCriteria = $cboCriteria;
                         
-                        if ($filter == 'sku')
+                        if ($filter == 'oemSku')
                         {
                             $where = array_merge((array)$where, array (
-                                    'sku LIKE ( ? )' => '%' . $txtCriteria . '%' 
+                                    'oemSku LIKE ( ? )' => '%' . $txtCriteria . '%' 
                             ));
                         }
                         else
@@ -199,15 +199,18 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                                 }
                                 
                                 // Save Quotegen Device
-                                $sku = $values ['sku'];
-                                if ($masterDeviceId > 0 && strlen($sku) > 0)
+                                $oemSku = $values ['oemSku'];
+                                $dealerSku = $values ['dealerSku'];
+                                
+                                if ($masterDeviceId > 0 && strlen($oemSku) > 0)
                                 {
                                     // Save Device SKU
                                     $devicemapper = new Quotegen_Model_Mapper_Device();
                                     $device = new Quotegen_Model_Device();
                                     $devicevalues = array (
                                             'masterDeviceId' => $masterDeviceId, 
-                                            'sku' => $sku, 
+                                            'oemSku' => $oemSku, 
+                                            'dealerSku' => $dealerSku, 
                                             'description' => $values ['description'] 
                                     );
                                     $device->populate($devicevalues);
@@ -319,15 +322,16 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $form->populate($masterDevice->toArray());
         
         // Populate SKU
-        $sku = null;
+        $oemSku = null;
         $devicemapper = new Quotegen_Model_Mapper_Device();
         $device = $devicemapper->find($masterDeviceId);
         $this->view->quotegendevice = $device;
         if ($device)
         {
-            $sku = $device->getSku();
+            $oemSku = $device->getOemSku();
             $form->getElement('can_sell')->setValue(true);
-            $form->getElement('sku')->setValue($sku);
+            $form->getElement('oemSku')->setValue($oemSku);
+            $form->getElement('dealerSku')->setValue($device->getDealerSku());
             
             $description = $device->getDescription();
             $form->getElement('description')->setValue($description);
@@ -346,7 +350,6 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         {
             // Get the post data
             $values = $request->getPost();
-            
             // If we cancelled we don't need to validate anything
             if (! isset($values ['cancel']))
             {
@@ -354,23 +357,29 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 {
                     if ($form->isValid($values))
                     {
-                        // In order to use populate, we need to make sure the toner_config_id value is set
-        // Since it's disabled in edit mode, we need to assign it the value from the hidden field
-                        $values ['toner_config_id'] = $values ['hidden_toner_config_id'];
+                        $formValues = $form->getValues();
                         
-                        if (strlen($values ['sku']) > 0)
+                        /*
+                         * In order to use populate, we need to make sure the toner_config_id value is set Since it's
+                         * disabled in edit mode, we need to assign it the value from the hidden field
+                         */
+                        $values ['toner_config_id'] = $formValues ['hidden_toner_config_id'];
+                        
+                        // If checkbox for can sell is checked, if not delete.
+                        if ($formValues ['can_sell'])
                         {
                             // Save Device SKU
                             $device = new Quotegen_Model_Device();
                             $devicevalues = array (
                                     'masterDeviceId' => $masterDeviceId, 
-                                    'sku' => $values ['sku'], 
+                                    'oemSku' => $values ['oemSku'], 
+                                    'dealerSku' => $values ['dealerSku'], 
                                     'description' => $values ['description'] 
                             );
                             $device->populate($devicevalues);
                             
-                            // If $sku set above, then record exists to update
-                            if ($sku)
+                            // If $oemSku set above, then record exists to update
+                            if ($oemSku)
                             {
                                 $deviceId = $devicemapper->save($device, $masterDeviceId);
                             }
@@ -385,13 +394,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         }
                         else
                         {
-                            // Delete device options, configurations and configuration options
-                            Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->deleteConfigurationByDeviceId($masterDeviceId);
-                            
-                            // Delete the device options and device
-                            Quotegen_Model_Mapper_DeviceOption::getInstance()->deleteOptionsByDeviceId($masterDeviceId);
                             $devicemapper->delete($device);
-                            
                             $this->view->quotegendevice = null;
                         }
                         
@@ -561,8 +564,6 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAll();
         $this->view->manufacturers = $manufacturers;
         
-        
-        
         // Make sure we are posting data
         $request = $this->getRequest();
         if ($request->isPost())
@@ -709,10 +710,10 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             );
                         }
                         
-                        else if ($filter == 'sku')
+                        else if ($filter == 'oemSku')
                         {
                             $where = array_merge((array)$where, array (
-                                    'sku LIKE ( ? )' => '%' . $txtCriteria . '%' 
+                                    'oemSku LIKE ( ? )' => '%' . $txtCriteria . '%' 
                             ));
                         }
                         else

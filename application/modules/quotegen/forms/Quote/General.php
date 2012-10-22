@@ -25,23 +25,7 @@ class Quotegen_Form_Quote_General extends Twitter_Bootstrap_Form_Vertical
         $this->setMethod('POST');
         
         $this->_addClassNames('form-center-actions');
-        
-        // Get resolved system settings
-        $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
-        $userSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
-        $quoteSetting->applyOverride($userSetting);
-        
-        $this->addElement('text', 'clientDisplayName', array (
-                'label' => 'Display Name:', 
-                'filters' => array (
-                        'StringTrim', 
-                        'StripTags' 
-                ), 
-                'placeholder' => $this->_quote->getClient()
-                    ->getCompanyName(), 
-                'description' => 'Display Name' 
-        ));
-        
+               
         $minYear = (int)date('Y') - 2;
         $maxYear = $minYear + 4;
         $quoteDate = $this->createElement('DateTimePicker', 'quoteDate');

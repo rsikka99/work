@@ -22,7 +22,7 @@
             <td><?php echo $option->getName(); ?></td>
             <td><?php echo $option->getDescription(); ?></td>
             <td style="text-align: right"><?php echo $this->currency($option->getCost());?></td>
-            <td><?php echo $option->getSku();?></td>
+            <td><?php echo $option->getOemSku();?></td>
             <?php if (count($option->getCategories()) > 0 ) :
 				$categoryNames = array();
             ?>

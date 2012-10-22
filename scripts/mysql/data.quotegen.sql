@@ -9,7 +9,7 @@ INSERT INTO `clients` (`id`, `name`, `address`) VALUES
 (8, 'EZ Link', '7000 Robie St\r\nDartmouth NS\r\nB1N 5T5');
 
 
-INSERT INTO `qgen_options` (`id`, `name`, `description`, `cost`, `sku`) VALUES
+INSERT INTO `qgen_options` (`id`, `name`, `description`, `cost`, `oemSku`) VALUES
 (7, 'HP 3-bin Stapler/Stacker with Output', 'Staples up to 50 pages and stacks up to 1600 sheets', 1765.15, 'CC517A'),
 (8, 'HP LaserJet MFP 3000-sheet Stapler/Stacker', 'Stacks up to 3000 sheets', 1686.4, 'C8085A'),
 (9, 'Cart, W/Storage Capacity', 'Printer Cart with Storage Capacity', 245.17, '097S03636'),
@@ -23,7 +23,7 @@ INSERT INTO `qgen_options` (`id`, `name`, `description`, `cost`, `sku`) VALUES
 (17, '3,000-sheet Stacker', 'Capacity of 3000 sheets', 1499.64, 'C8084A');
 
 
-INSERT INTO `qgen_devices` (`masterDeviceId`, `sku`, `description`) VALUES
+INSERT INTO `qgen_devices` (`masterDeviceId`, `oemSku`, `description`) VALUES
 (4, 'Q3939A', '- Fax accessory'),
 (5, 'CC395A', ''),
 (6, 'CF116A', ''),

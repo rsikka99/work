@@ -20,7 +20,7 @@
         <tr>
             <td><?php echo $device->getMasterDeviceId(); ?></td>
             <td><?php echo $device->getMasterDevice()->getFullDeviceName(); ?></td>
-            <td><?php echo $device->getSku(); ?></td>
+            <td><?php echo $device->getOemSku(); ?></td>
             <td>
                 <div class="btn-group">
 	                <a class="btn btn-info" title="View Device" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $device->getMasterDeviceId())); ?>"><i class="icon-eye-open"></i></a>

@@ -53,14 +53,14 @@
     	<?php /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */ foreach ($quoteDeviceGroupDevices as $quoteDeviceGroupDevice) : ?>
     	<tr>
     		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getName() ?></td>
-    		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getSku() ?></td>
+    		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getOemSku() ?></td>
     		<td>
     		<?php if (count($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions()) > 0) : ?>
 	    		<?php 
 	    			$optionList = array();
 	    			/* @var $option Quotegen_Model_QuoteDeviceOption */
 	    			foreach ($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() as $quoteDeviceOption) 
-	    				$optionList [] = "{$quoteDeviceOption->getSku()} (x{$quoteDeviceOption->getQuantity()})";
+	    				$optionList [] = "{$quoteDeviceOption->getOemSku()} (x{$quoteDeviceOption->getQuantity()})";
 	    			echo implode($optionList, ", "); 
 	    			?>
     		<?php endif; ?>
