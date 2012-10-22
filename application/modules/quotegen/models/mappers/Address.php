@@ -209,12 +209,31 @@ class Quotegen_Model_Mapper_Address extends My_Model_Mapper_Abstract
         );
     }
 
+    public function getWhereClientId ($id)
+    {
+        return array (
+                "clientId  = ?" => $id 
+        );
+    }
+
     /**
      * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
      */
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->getId();
+    }
+
+    /**
+     * Gets a address using a client Id
+     * 
+     * @param int $clientId            
+     * @return Quotegen_Model_Contact
+     */
+    public function getAddressByClientId ($clientId)
+    {
+        return $this->fetch($this->getWhereClientId($clientId));
+        ;
     }
 }
 

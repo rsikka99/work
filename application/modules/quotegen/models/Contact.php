@@ -16,6 +16,12 @@ class Quotegen_Model_Contact extends My_Model_Abstract
      */
     protected $_id = 0;
     
+    /**
+     * The clientId assigned by the database
+     *
+     * @var int
+     */
+    protected $_clientId;
     
     /**
      * The first name of the contact
@@ -66,8 +72,6 @@ class Quotegen_Model_Contact extends My_Model_Abstract
      */
     protected $_extension;
     
-    
-    
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -79,6 +83,8 @@ class Quotegen_Model_Contact extends My_Model_Abstract
         }
         if (isset($params->id) && ! is_null($params->id))
             $this->setId($params->id);
+        if (isset($params->clientId) && ! is_null($params->clientId))
+            $this->setClientId($params->clientId);
         if (isset($params->firstName) && ! is_null($params->firstName))
             $this->setFirstName($params->firstName);
         if (isset($params->lastName) && ! is_null($params->lastName))
@@ -102,14 +108,14 @@ class Quotegen_Model_Contact extends My_Model_Abstract
     {
         return array (
                 'id' => $this->getId(), 
-                'firstName' => $this->getFirstName(),
-                'lastName' => $this->getLastName(),
-                'countryCode' => $this->getCountryCode(),
-                'areaCode' => $this->getAreaCode(),
-                'exchangeCode' => $this->getExchangeCode(),
-                'number' => $this->getNumber(),
-                'extension' => $this->getExtension()
-
+                'clientId' => $this->getClientId(), 
+                'firstName' => $this->getFirstName(), 
+                'lastName' => $this->getLastName(), 
+                'countryCode' => $this->getCountryCode(), 
+                'areaCode' => $this->getAreaCode(), 
+                'exchangeCode' => $this->getExchangeCode(), 
+                'number' => $this->getNumber(), 
+                'extension' => $this->getExtension() 
         );
     }
 
@@ -133,7 +139,29 @@ class Quotegen_Model_Contact extends My_Model_Abstract
     {
         $this->_id = $_id;
     }
-	/**
+
+    /**
+     * Getter for $_clientId
+     *
+     * @return number
+     */
+    public function getClientId ()
+    {
+        return $this->_clientId;
+    }
+
+    /**
+     * Setter for $_clientId
+     *
+     * @param number $_clientId
+     *            The new value
+     */
+    public function setClientId ($_clientId)
+    {
+        $this->_clientId = $_clientId;
+    }
+
+    /**
      * Getter for $_firstName
      *
      * @return string
@@ -143,7 +171,7 @@ class Quotegen_Model_Contact extends My_Model_Abstract
         return $this->_firstName;
     }
 
-	/**
+    /**
      * Getter for $_lastName
      *
      * @return string
@@ -153,7 +181,7 @@ class Quotegen_Model_Contact extends My_Model_Abstract
         return $this->_lastName;
     }
 
-	/**
+    /**
      * Getter for $_countryCode
      *
      * @return string
@@ -163,7 +191,7 @@ class Quotegen_Model_Contact extends My_Model_Abstract
         return $this->_countryCode;
     }
 
-	/**
+    /**
      * Getter for $_areaCode
      *
      * @return string
@@ -173,7 +201,7 @@ class Quotegen_Model_Contact extends My_Model_Abstract
         return $this->_areaCode;
     }
 
-	/**
+    /**
      * Getter for $_exchangeCode
      *
      * @return string
@@ -183,7 +211,7 @@ class Quotegen_Model_Contact extends My_Model_Abstract
         return $this->_exchangeCode;
     }
 
-	/**
+    /**
      * Getter for $_number
      *
      * @return string
@@ -193,7 +221,7 @@ class Quotegen_Model_Contact extends My_Model_Abstract
         return $this->_number;
     }
 
-	/**
+    /**
      * Getter for $_extension
      *
      * @return string
@@ -203,76 +231,80 @@ class Quotegen_Model_Contact extends My_Model_Abstract
         return $this->_extension;
     }
 
-	/**
+    /**
      * Setter for $_firstName
      *
-     * @param string $_firstName The new value
+     * @param string $_firstName
+     *            The new value
      */
     public function setFirstName ($_firstName)
     {
         $this->_firstName = $_firstName;
     }
 
-	/**
+    /**
      * Setter for $_lastName
      *
-     * @param string $_lastName The new value
+     * @param string $_lastName
+     *            The new value
      */
     public function setLastName ($_lastName)
     {
         $this->_lastName = $_lastName;
     }
 
-	/**
+    /**
      * Setter for $_countryCode
      *
-     * @param string $_countryCode The new value
+     * @param string $_countryCode
+     *            The new value
      */
     public function setCountryCode ($_countryCode)
     {
         $this->_countryCode = $_countryCode;
     }
 
-	/**
+    /**
      * Setter for $_areaCode
      *
-     * @param string $_areaCode The new value
+     * @param string $_areaCode
+     *            The new value
      */
     public function setAreaCode ($_areaCode)
     {
         $this->_areaCode = $_areaCode;
     }
 
-	/**
+    /**
      * Setter for $_exchangeCode
      *
-     * @param string $_exchangeCode The new value
+     * @param string $_exchangeCode
+     *            The new value
      */
     public function setExchangeCode ($_exchangeCode)
     {
         $this->_exchangeCode = $_exchangeCode;
     }
 
-	/**
+    /**
      * Setter for $_number
      *
-     * @param string $_number The new value
+     * @param string $_number
+     *            The new value
      */
     public function setNumber ($_number)
     {
         $this->_number = $_number;
     }
 
-	/**
+    /**
      * Setter for $_extension
      *
-     * @param string $_extension The new value
+     * @param string $_extension
+     *            The new value
      */
     public function setExtension ($_extension)
     {
         $this->_extension = $_extension;
     }
-
-
-    
 }

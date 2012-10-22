@@ -64,8 +64,8 @@ class Quotegen_Model_Mapper_Contact extends My_Model_Mapper_Abstract
      */
     public function save ($object, $primaryKey = null)
     {
-		//$object->setExtension(null);
-		$data = $object->toArray();
+        //$object->setExtension(null);
+        $data = $object->toArray();
         //$data = $this->unsetNullValues($object->toArray());
         if ($primaryKey === null)
         {
@@ -208,6 +208,19 @@ class Quotegen_Model_Mapper_Contact extends My_Model_Mapper_Abstract
                 "{$this->col_id}  = ?" => $id 
         );
     }
+    
+    /**
+     * Gets a where clause for filtering by clientId
+     *
+     * @param unknown_type $id
+     * @return array
+     */
+    public function getWhereClientId ($id)
+    {
+        return array (
+                "clientId  = ?" => $id
+        );
+    }
 
     /**
      * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
@@ -215,6 +228,15 @@ class Quotegen_Model_Mapper_Contact extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->getId();
+    }
+	/**
+	 * Gets a contact using a client Id
+	 * @param int $clientId
+	 * @return Quotegen_Model_Contact
+	 */
+    public function getContactByClientId ($clientId)
+    {
+        return $this->fetch($this->getWhereClientId($clientId));
     }
 }
 

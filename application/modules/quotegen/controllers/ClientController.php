@@ -191,8 +191,8 @@ class Quotegen_ClientController extends Zend_Controller_Action
         $this->view->client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_getParam('id', false));
         if (!$this->view->client)
             $this->_helper->redirector('index');
-        $this->view->address = Quotegen_Model_Mapper_ClientAddress::getInstance()->getAddressByClientId($this->_getParam('id', false));
-        $this->view->contact = Quotegen_Model_Mapper_ClientContact::getInstance()->getContactByClientId($this->_getParam('id', false));
+        $this->view->address = Quotegen_Model_Mapper_Address::getInstance()->find($this->_getParam('id', false));
+        $this->view->contact = Quotegen_Model_Mapper_Contact::getInstance()->find($this->_getParam('id', false));
     }
 }
 

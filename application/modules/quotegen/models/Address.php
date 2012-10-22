@@ -17,6 +17,13 @@ class Quotegen_Model_Address extends My_Model_Abstract
     protected $_id = 0;
     
     /**
+     * The clientId
+     *
+     * @var int
+     */
+    protected $_clientId;
+    
+    /**
      * The address line 1
      *
      * @var string
@@ -67,6 +74,8 @@ class Quotegen_Model_Address extends My_Model_Abstract
         }
         if (isset($params->id) && ! is_null($params->id))
             $this->setId($params->id);
+        if (isset($params->clientId) && ! is_null($params->clientId))
+            $this->setClientId($params->clientId);
         if (isset($params->addressLine1) && ! is_null($params->addressLine1))
             $this->setAddressLine1($params->addressLine1);
         if (isset($params->addressLine2) && ! is_null($params->addressLine2))
@@ -88,6 +97,7 @@ class Quotegen_Model_Address extends My_Model_Abstract
     {
         return array (
                 'id' => $this->getId(), 
+                'clientId' => $this->getClientId(), 
                 'addressLine1' => $this->getAddressLine1(), 
                 'addressLine2' => $this->getAddressLine2(), 
                 'city' => $this->getCity(), 
@@ -116,6 +126,27 @@ class Quotegen_Model_Address extends My_Model_Abstract
     public function setId ($_id)
     {
         $this->_id = $_id;
+    }
+
+    /**
+     * Getter for $_clientId
+     *
+     * @return number
+     */
+    public function getClientId ()
+    {
+        return $this->_clientId;
+    }
+
+    /**
+     * Setter for $_clientId
+     *
+     * @param number $_clientId
+     *            The new value
+     */
+    public function setClientId ($_clientId)
+    {
+        $this->_clientId = $_clientId;
     }
 
     /**
@@ -180,7 +211,8 @@ class Quotegen_Model_Address extends My_Model_Abstract
 
     public function getCountry ()
     {
-        return Quotegen_Model_Mapper_Country::getInstance()->find($this->getCountryId())->getName();
+        return Quotegen_Model_Mapper_Country::getInstance()->find($this->getCountryId())
+            ->getName();
     }
 
     /**
@@ -248,4 +280,5 @@ class Quotegen_Model_Address extends My_Model_Abstract
     {
         $this->_countryId = $_countryId;
     }
+
 }

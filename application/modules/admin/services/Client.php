@@ -41,22 +41,11 @@ class Admin_Service_Client
                 
                 $client = new Quotegen_Model_Client($data);
                 $clientId = Quotegen_Model_Mapper_Client::getInstance()->insert($client);
-                $contact = new Quotegen_Model_Contact($data);
+                $data ['clientId'] = $clientId;
+                $contact = new Quotegen_Model_Contact($data, $clientId);
                 $contactId = Quotegen_Model_Mapper_Contact::getInstance()->insert($contact);
-                $address = new Quotegen_Model_Address($data);
+                $address = new Quotegen_Model_Address($data, $clientId);
                 $addressId = Quotegen_Model_Mapper_Address::getInstance()->insert($address);
-                $clientAddress = new Quotegen_Model_ClientAddress(array (
-                        'clientId' => $clientId, 
-                        'addressId' => $addressId, 
-                        'primaryAddress' => 1, 
-                        'name' => '' 
-                ));
-                Quotegen_Model_Mapper_ClientAddress::getInstance()->insert($clientAddress);
-                $clientContact = new Quotegen_Model_ClientContact(array (
-                        'clientId' => $clientId, 
-                        'contactId' => $contactId 
-                ));
-                Quotegen_Model_Mapper_ClientContact::getInstance()->insert($clientContact);
             }
             catch ( Exception $e )
             {
@@ -84,7 +73,7 @@ class Admin_Service_Client
         {
             try
             {
-                
+                $data ['clientId'] = $clientId;
                 //CLIENT
                 $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
                 if (! $client)
@@ -98,20 +87,11 @@ class Admin_Service_Client
                 
 
                 //Contact
-                $contact = Quotegen_Model_Mapper_ClientContact::getInstance()->getContactByClientId($clientId);
+                $contact = Quotegen_Model_Mapper_Contact::getInstance()->getContactByClientId($clientId);
                 if (! $contact)
                 {
-                    $contact = new Quotegen_Model_Contact($data);
+                    $contact = new Quotegen_Model_Contact($data, $clientId);
                     $contactId = Quotegen_Model_Mapper_Contact::getInstance()->insert($contact);
-                    $clientContact = Quotegen_Model_Mapper_ClientContact::getInstance()->findByClientIdAndContactId($clientId, $contactId);
-                    if (! $clientContact)
-                    {
-                        $clientContact = new Quotegen_Model_ClientContact(array (
-                                'clientId' => $clientId, 
-                                'contactId' => $contactId 
-                        ));
-                    }
-                    Quotegen_Model_Mapper_ClientContact::getInstance()->insert($clientContact);
                 }
                 $contact->populate($data);
                 $rowsAffected = Quotegen_Model_Mapper_Contact::getInstance()->save($contact);
@@ -119,32 +99,20 @@ class Admin_Service_Client
                 
 
                 //Address
-                $address = Quotegen_Model_Mapper_ClientAddress::getInstance()->getAddressByClientId($clientId);
+                $address = Quotegen_Model_Mapper_Address::getInstance()->getAddressByClientId($clientId);
                 if (! $address)
                 {
                     $address = new Quotegen_Model_Address($data);
                     $addressId = Quotegen_Model_Mapper_Address::getInstance()->insert($address);
-                    $clientAddress = Quotegen_Model_Mapper_ClientAddress::getInstance()->findByClientIdAndAddressId($clientId, $addressId);
-                    if (! $clientAddress)
-                    {
-                        $clientAddress = new Quotegen_Model_ClientAddress(array (
-                                'clientId' => $clientId, 
-                                'addressId' => $addressId, 
-                                'primaryAddress' => 1, 
-                                'name' => '' 
-                        ));
-                    }
-                    Quotegen_Model_Mapper_ClientAddress::getInstance()->insert($clientAddress);
                 }
                 $address->populate($data);
                 $rowsAffected = Quotegen_Model_Mapper_Address::getInstance()->save($address);
+                //End Address
             }
             catch ( Exception $e )
             {
             }
-            //End Address
             
-
             return 1;
         }
         else
@@ -160,36 +128,11 @@ class Admin_Service_Client
      *
      * @param unknown_type $id            
      */
-    public function delete ($id)
+    public function delete ($clientId)
     {
         try
         {
-            //get all the clientAddresses
-            $addresses = Quotegen_Model_Mapper_ClientAddress::getInstance()->fetchAll(Quotegen_Model_Mapper_ClientAddress::getInstance()->getWhereId($id));
-            Quotegen_Model_Mapper_ClientAddress::getInstance()->delete($id);
-            if ($addresses)
-            {
-                //go through each clientAddress and delete them all
-                foreach ( $addresses as $address )
-                {
-                    Quotegen_Model_Mapper_Address::getInstance()->delete($address->getAddressId());
-                }
-            }
-            $contacts = Quotegen_Model_Mapper_ClientContact::getInstance()->fetchAll(Quotegen_Model_Mapper_ClientContact::getInstance()->getWhereId($id));
-            Quotegen_Model_Mapper_ClientContact::getInstance()->delete($id);
-            if ($contacts)
-            {
-                foreach ( $contacts as $contact )
-                {
-                    Quotegen_Model_Mapper_Contact::getInstance()->delete($contact->getContactId());
-                }
-            }
-            $quotes = Quotegen_Model_Mapper_Quote::getInstance()->fetchAll('clientId = ' . $id);
-            foreach ( $quotes as $quote )
-            {
-                Quotegen_Model_Mapper_Quote::getInstance()->delete($quote);
-            }
-            Quotegen_Model_Mapper_Client::getInstance()->delete($id);
+            Quotegen_Model_Mapper_Client::getInstance()->delete($clientId);
         }
         catch ( Exception $e )
         {
@@ -435,8 +378,8 @@ class Admin_Service_Client
     public function populateForm ($clientId)
     {
         $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
-        $address = Quotegen_Model_Mapper_ClientAddress::getInstance()->getAddressByClientId($clientId);
-        $contact = Quotegen_Model_Mapper_ClientContact::getInstance()->getContactByClientId($clientId);
+        $address = Quotegen_Model_Mapper_Address::getInstance()->getAddressByClientId($clientId);
+        $contact = Quotegen_Model_Mapper_Contact::getInstance()->getContactByClientId($clientId);
         $combinedArray = $client->toArray();
         if ($address)
             $combinedArray = array_merge($combinedArray, $address->toArray());
