@@ -50,39 +50,63 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
         //Country Code
         $countryCode = $this->createElement('text', 'countryCode')
             ->setRequired(true)
+            ->setAttrib('class', 'input-country-code')
+            ->clearDecorators()
+            ->addDecorator('ViewHelper')
+            ->addDecorator('Label', array (
+                'class' => 'label-phone-number-country control-label' 
+        ))
             ->addValidator('regex', true, array (
                 '/^\d{1,2}$/' 
         ))
             ->setDescription("")
-            ->setLabel("Country Code")
+            ->setLabel("Phone Number:")
             ->addErrorMessage("Invalid country code");
         
         //Area Code
         $areaCode = $this->createElement('text', 'areaCode')
             ->setRequired(true)
+            ->setAttrib('class', 'phone-text')
+            ->clearDecorators()
+            ->addDecorator('ViewHelper')
+            ->addDecorator('Label', array (
+                'class' => 'label-phone-number' 
+        ))
             ->setAttrib('class', 'input-area-code')
             ->addValidator('regex', true, array (
                 '/^\d{1,3}$/' 
         ))
-            ->setLabel("Area Code")
+            ->setLabel("(")
             ->addErrorMessage("Invalid Area code");
         
         //Exchange Code
         $exchangeCode = $this->createElement('text', 'exchangeCode')
             ->setRequired(true)
+            ->setAttrib('class', 'input-exchange-code')
+            ->clearDecorators()
+            ->addDecorator('ViewHelper')
+            ->addDecorator('Label', array (
+                'class' => 'label-phone-number' 
+        ))
             ->addValidator('regex', true, array (
                 '/^\d{3}$/' 
         ))
-            ->setLabel("3 numbers")
+            ->setLabel(")")
             ->addErrorMessage("Invalid Exchange code");
         
         //Number
         $number = $this->createElement('text', 'number')
             ->setRequired(true)
+            ->setAttrib('class', 'input-number-code')
+            ->clearDecorators()
+            ->addDecorator('ViewHelper')
+            ->addDecorator('Label', array (
+                'class' => 'label-phone-number' 
+        ))
             ->addValidator('regex', true, array (
                 '/^\d{4}$/' 
         ))
-            ->setLabel("4 Numbers")
+            ->setLabel("-")
             ->addErrorMessage("Invalid phone number");
         
         //Extension
@@ -90,7 +114,13 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
             ->addValidator('regex', true, array (
                 '/^\d{0,4}$/' 
         ))
-            ->setLabel("Extension")
+            ->clearDecorators()
+            ->addDecorator('ViewHelper')
+            ->addDecorator('Label', array (
+                'class' => 'label-phone-number' 
+        ))
+            ->setLabel("Ext")
+            ->setAttrib('class', 'input-extension-code')
             ->addErrorMessage("Invalid extension");
         
         ///////////////////////END PHONE NUMBERS/////////////////////////////////////
@@ -147,7 +177,6 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
                 $city, 
                 $addressLine1, 
                 $addressLine2, 
-                
                 $postCode 
         ), 'company', array (
                 'legend' => 'Company Information' 
@@ -176,41 +205,37 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
         //Groups the contact information onto the right side of the screen
         $this->addDisplayGroup(array (
                 $firstName, 
-                $lastName 
-        ), 'contact', array (
-                'legend' => 'Contact Information' 
-        ));
-        $contact = $this->getDisplayGroup('contact');
-        $contact->setDecorators(array (
-                
-                'FormElements', 
-                array (
-                        'Fieldset', 
-                        array (
-                                'class' => 'pull-right half-width' 
-                        ) 
-                ) 
-        ));
-        
-        $this->addDisplayGroup(array (
+                $lastName, 
                 $countryCode, 
                 $areaCode, 
                 $exchangeCode, 
                 $number, 
                 $extension 
-        ), 'phoneNumbers', array (
-                'legend' => 'Phone Number' 
+        ), 'contact', array (
+                'legend' => 'Contact Information' 
         ));
-        $phoneNumbers = $this->getDisplayGroup('phoneNumbers');
+        $contact = $this->getDisplayGroup('contact');
         $contact->setDecorators(array (
+                'FormElements',
                 
-                'FormElements', 
                 array (
-                        'Fieldset', 
+                        'Fieldset',
                         array (
-                                'class' => 'pull-right half-width' 
-                        ) 
-                ) 
+                                'class' => 'pull-right half-width'
+                        )
+                ),
+                array (
+                        'HtmlTag',
+                
+                        array (
+                                'tag' => 'div',
+                                'closeOnly' => true,
+                                'class' => 'clearfix',
+                                'placement' => Zend_Form_Decorator_Abstract::APPEND
+                        )
+                ),
+                
+               
         ));
         
         $this->addDisplayGroup(array (

@@ -91,7 +91,7 @@ class Quotegen_Model_Contact extends My_Model_Abstract
             $this->setExchangeCode($params->exchangeCode);
         if (isset($params->number) && ! is_null($params->number))
             $this->setNumber($params->number);
-        if (isset($params->extension) && ! is_null($params->extension))
+        if (isset($params->extension))
             $this->setExtension($params->extension);
     }
     

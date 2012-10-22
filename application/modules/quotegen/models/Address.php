@@ -88,14 +88,13 @@ class Quotegen_Model_Address extends My_Model_Abstract
     {
         return array (
                 'id' => $this->getId(), 
-                'addressLine1' => $this->getAddressLine1(),
-                'addressLine2' => $this->getAddressLine2(),
-                'city' => $this->getCity(),
-                'region' => $this->getRegion(),
-                'postCode' => $this->getPostCode(),
-                'countryId' => $this->getCountryId()                
-        )
-        ;
+                'addressLine1' => $this->getAddressLine1(), 
+                'addressLine2' => $this->getAddressLine2(), 
+                'city' => $this->getCity(), 
+                'region' => $this->getRegion(), 
+                'postCode' => $this->getPostCode(), 
+                'countryId' => $this->getCountryId() 
+        );
     }
 
     /**
@@ -177,6 +176,11 @@ class Quotegen_Model_Address extends My_Model_Abstract
     public function getCountryId ()
     {
         return $this->_countryId;
+    }
+
+    public function getCountry ()
+    {
+        return Quotegen_Model_Mapper_Country::getInstance()->find($this->getCountryId())->getName();
     }
 
     /**

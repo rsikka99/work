@@ -64,13 +64,13 @@ class Quotegen_Model_Mapper_Contact extends My_Model_Mapper_Abstract
      */
     public function save ($object, $primaryKey = null)
     {
-        $data = $this->unsetNullValues($object->toArray());
-        
+		//$object->setExtension(null);
+		$data = $object->toArray();
+        //$data = $this->unsetNullValues($object->toArray());
         if ($primaryKey === null)
         {
             $primaryKey = $data [$this->col_id];
         }
-        
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array (
                 "{$this->col_id}  = ?" => $primaryKey 
@@ -216,7 +216,5 @@ class Quotegen_Model_Mapper_Contact extends My_Model_Mapper_Abstract
     {
         return $object->getId();
     }
-
-
 }
 

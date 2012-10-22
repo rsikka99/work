@@ -19,7 +19,7 @@ class Quotegen_Model_Mapper_Country extends My_Model_Mapper_Abstract
     /**
      * Gets an instance of the mapper
      *
-     * @return Quotegen_Model_Mapper_Contact
+     * @return Quotegen_Model_Mapper_Country
      */
     public static function getInstance ()
     {
@@ -27,10 +27,10 @@ class Quotegen_Model_Mapper_Country extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves an instance of Quotegen_Model_Contact to the database.
+     * Saves an instance of Quotegen_Model_Country to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Quotegen_Model_Contact
+     * @param $object Quotegen_Model_Country
      *            The object to insert
      * @return mixed The primary key of the new row
      */
@@ -54,9 +54,9 @@ class Quotegen_Model_Mapper_Country extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves (updates) an instance of Quotegen_Model_Contact to the database.
+     * Saves (updates) an instance of Quotegen_Model_Country to the database.
      *
-     * @param $object Quotegen_Model_Contact
+     * @param $object Quotegen_Model_Country
      *            The client model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
@@ -86,13 +86,13 @@ class Quotegen_Model_Mapper_Country extends My_Model_Mapper_Abstract
      * Deletes rows from the database.
      *
      * @param $object mixed
-     *            This can either be an instance of Quotegen_Model_Contact or the
+     *            This can either be an instance of Quotegen_Model_Country or the
      *            primary key to delete
      * @return mixed The number of rows deleted
      */
     public function delete ($object)
     {
-        if ($object instanceof Quotegen_Model_Contact)
+        if ($object instanceof Quotegen_Model_Country)
         {
             $whereClause = array (
                     "{$this->col_id}  = ?" => $object->getId() 
@@ -114,14 +114,17 @@ class Quotegen_Model_Mapper_Country extends My_Model_Mapper_Abstract
      *
      * @param $id int
      *            The id of the client to find
-     * @return Quotegen_Model_Contact
+     * @return Quotegen_Model_Country
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Quotegen_Model_Contact)
+        if ($result instanceof Quotegen_Model_Country)
         {
+            echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
+            var_dump("hello");
+            //die();
             return $result;
         }
         
@@ -132,7 +135,7 @@ class Quotegen_Model_Mapper_Country extends My_Model_Mapper_Abstract
             return;
         }
         $row = $result->current();
-        $object = new Quotegen_Model_Contact($row->toArray());
+        $object = new Quotegen_Model_Country($row->toArray());
         
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -149,7 +152,7 @@ class Quotegen_Model_Mapper_Country extends My_Model_Mapper_Abstract
      *            OPTIONAL: A SQL ORDER clause.
      * @param $offset int
      *            OPTIONAL: A SQL OFFSET value.
-     * @return Quotegen_Model_Contact
+     * @return Quotegen_Model_Country
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -159,7 +162,7 @@ class Quotegen_Model_Mapper_Country extends My_Model_Mapper_Abstract
             return;
         }
         
-        $object = new Quotegen_Model_Contact($row->toArray());
+        $object = new Quotegen_Model_Country($row->toArray());
         
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -178,7 +181,7 @@ class Quotegen_Model_Mapper_Country extends My_Model_Mapper_Abstract
      *            OPTIONAL: A SQL LIMIT count. (Defaults to 25)
      * @param $offset int
      *            OPTIONAL: A SQL LIMIT offset.
-     * @return multitype:Quotegen_Model_Contact
+     * @return multitype:Quotegen_Model_Country
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -186,7 +189,7 @@ class Quotegen_Model_Mapper_Country extends My_Model_Mapper_Abstract
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-            $object = new Quotegen_Model_Contact($row->toArray());
+            $object = new Quotegen_Model_Country($row->toArray());
             
             // Save the object into the cache
             $this->saveItemToCache($object);
