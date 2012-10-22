@@ -33,7 +33,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         }
         
         $this->addElement('select', 'manufacturer_id', array (
-                'label' => '* Manufacturer:', 
+                'label' => 'Manufacturer:', 
                 'class' => 'span3', 
                 'multiOptions' => $manufacturers 
         ));
@@ -42,7 +42,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          * Printer Model Name
          */
         $this->addElement('text', 'printer_model', array (
-                'label' => '* Model Name:', 
+                'label' => 'Model Name:', 
                 'class' => 'span3', 
                 'required' => true, 
                 'maxlength' => 255, 
@@ -144,7 +144,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         }
         
         $this->addElement('select', 'toner_config_id', array (
-                'label' => '* Toner Configuration:', 
+                'label' => 'Toner Configuration:', 
                 'class' => 'span3', 
                 'required' => true, 
                 'multiOptions' => $tonerConfigs 
@@ -301,7 +301,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         $minYear = 1950;
         $maxYear = date('Y') + 2;
         $launchDate = new ZendX_JQuery_Form_Element_DatePicker('launch_date');
-        $launchDate->setLabel('* Launch Date:')
+        $launchDate->setLabel('Launch Date:')
             ->setAttrib('class', 'span2')
             ->setJQueryParam('dateFormat', 'yy-mm-dd')
             ->setJqueryParam('timeFormat', 'hh:mm')

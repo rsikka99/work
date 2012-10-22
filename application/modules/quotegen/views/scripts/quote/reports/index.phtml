@@ -94,8 +94,8 @@ $(function () {
 		</li>
 		<li class='span4'>
 			<h3>Download Order List</h3>
-			<p>Download a .csv file for the items in this quote.</p>
-			<a class="btn" href='javascript:window.alert("This page has not been implemented yet.");'><i class='icon-download-alt'></i> Download Order List</a>
+			<p>Download a .xlsx file for the items in this quote.</p>
+			<a class="downloadButton btn btn-success" data-ext="xlsx" href="<?php echo $this->url(array('action' => 'order-list', 'format' => 'xlsx')); ?>"><i class='icon-download-alt icon-white'></i> Download Order List</a>
 		</li>
 		<li class='span4'>
 			<?php echo $this->form; ?>

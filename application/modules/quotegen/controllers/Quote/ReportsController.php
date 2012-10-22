@@ -8,6 +8,9 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
             ), 
             'lease-quote' => array (
                     'docx' 
+            ), 
+            'order-list' => array (
+                    'xlsx' 
             ) 
     );
 
