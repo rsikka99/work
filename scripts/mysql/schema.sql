@@ -1024,7 +1024,8 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `qgen_devices` (
   `masterDeviceId` INT(11) NOT NULL ,
-  `sku` VARCHAR(255) NOT NULL ,
+  `dealerSku` VARCHAR(255) NULL ,
+  `oemSku` VARCHAR(255) NOT NULL ,
   `description` TEXT NULL ,
   PRIMARY KEY (`masterDeviceId`) ,
   INDEX `quotegen_devices_ibfk_1` (`masterDeviceId` ASC) ,
@@ -1064,7 +1065,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_options` (
   `name` VARCHAR(255) NOT NULL ,
   `description` TEXT NOT NULL ,
   `cost` DOUBLE NOT NULL ,
-  `sku` VARCHAR(255) NOT NULL ,
+  `dealerSku` VARCHAR(255) NULL ,
+  `oemSku` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 7
@@ -1298,7 +1300,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_devices` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
   `quoteId` INT(11) NOT NULL ,
   `name` VARCHAR(255) NOT NULL ,
-  `sku` VARCHAR(255) NOT NULL ,
+  `oemSku` VARCHAR(255) NOT NULL ,
+  `dealerSku` VARCHAR(255) NULL ,
   `oemCostPerPageMonochrome` DOUBLE NOT NULL ,
   `oemCostPerPageColor` DOUBLE NOT NULL ,
   `compCostPerPageMonochrome` DOUBLE NOT NULL ,
@@ -1327,7 +1330,8 @@ DEFAULT CHARACTER SET = utf8;
 CREATE  TABLE IF NOT EXISTS `qgen_quote_device_options` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
   `quoteDeviceId` INT(11) NOT NULL ,
-  `sku` VARCHAR(255) NOT NULL ,
+  `oemSku` VARCHAR(255) NOT NULL ,
+  `dealerSku` VARCHAR(255) NULL ,
   `name` VARCHAR(255) NOT NULL ,
   `description` TEXT NOT NULL ,
   `cost` DOUBLE NOT NULL ,
