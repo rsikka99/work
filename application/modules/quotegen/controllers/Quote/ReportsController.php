@@ -33,7 +33,6 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
         $request = $this->getRequest();
         
         $form = new Quotegen_Form_Quote_General($this->_quote);
-        
         $populateData = $this->_quote->toArray();
         
         if ($request->isPost())
@@ -62,7 +61,6 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
             }
         }
         
-        $form->populate($populateData);
         $this->view->form = $form;
         $this->view->navigationForm = new Quotegen_Form_Quote_Navigation(Quotegen_Form_Quote_Navigation::BUTTONS_BACK);
     }
