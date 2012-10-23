@@ -1277,7 +1277,9 @@ CREATE  TABLE IF NOT EXISTS `qgen_quotes` (
   INDEX `quotegen_quotes_ibfk_3` (`pricingConfigId` ASC) ,
   CONSTRAINT `quotegen_quotes_ibfk_1`
     FOREIGN KEY (`clientId` )
-    REFERENCES `clients` (`id` ),
+    REFERENCES `clients` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `quotegen_quotes_ibfk_2`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
