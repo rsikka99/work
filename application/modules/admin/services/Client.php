@@ -49,9 +49,7 @@ class Admin_Service_Client
             }
             catch ( Exception $e )
             {
-                echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
-                var_dump($e);
-                die();
+                return false;
             }
         }
         
