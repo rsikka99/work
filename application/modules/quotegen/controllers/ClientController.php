@@ -26,8 +26,10 @@ class Quotegen_ClientController extends Zend_Controller_Action
         // Pass the view the paginator
         $this->view->paginator = $paginator;
     }
-    
-    // Deletes a single client
+
+    /**
+     * Deletes a client
+     */
     public function deleteAction ()
     {
         $clientId = $this->_getParam('id', false);
@@ -42,7 +44,6 @@ class Quotegen_ClientController extends Zend_Controller_Action
         
         $clientMapper = Quotegen_Model_Mapper_Client::getInstance();
         $client = $clientMapper->find($clientId);
-        
         if (! $client)
         {
             $this->_helper->flashMessenger(array (
@@ -67,7 +68,6 @@ class Quotegen_ClientController extends Zend_Controller_Action
                         // Delete the client from the database
                         $clientService = new Admin_Service_Client();
                         $clientService->delete($client->getId());
-                        // $clientMapper->delete($client);
                     }
                     catch ( Exception $e )
                     {
@@ -91,10 +91,12 @@ class Quotegen_ClientController extends Zend_Controller_Action
         $this->view->form = $form;
     }
 
+    /**
+     * Create a client
+     */
     public function createAction ()
     {
         $clientService = new Admin_Service_Client();
-        
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();
@@ -143,7 +145,9 @@ class Quotegen_ClientController extends Zend_Controller_Action
         // Start the client service
         $clientService = new Admin_Service_Client();
         if ($client)
+        {
             $clientService->populateForm($clientId);
+        }
         else
         {
             $this->_helper->redirector('index');
@@ -155,9 +159,10 @@ class Quotegen_ClientController extends Zend_Controller_Action
             {
                 $this->_helper->redirector('index');
             }
+            
             try
             {
-                // Create Client
+                // Update Client
                 $clientId = $clientService->update($values, $clientId);
             }
             catch ( Exception $e )
@@ -167,7 +172,6 @@ class Quotegen_ClientController extends Zend_Controller_Action
             
             if ($clientId)
             {
-                
                 $this->_helper->flashMessenger(array (
                         'success' => "Client {$client->getCompanyName()} successfully updated." 
                 ));
@@ -185,11 +189,14 @@ class Quotegen_ClientController extends Zend_Controller_Action
         }
         $this->view->form = $clientService->getForm();
     }
-
+	
+    /**
+     * The view action
+     */
     public function viewAction ()
     {
         $this->view->client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_getParam('id', false));
-        if (!$this->view->client)
+        if (! $this->view->client)
             $this->_helper->redirector('index');
         $this->view->address = Quotegen_Model_Mapper_Address::getInstance()->find($this->_getParam('id', false));
         $this->view->contact = Quotegen_Model_Mapper_Contact::getInstance()->find($this->_getParam('id', false));

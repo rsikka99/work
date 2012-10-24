@@ -1,15 +1,13 @@
 <?php
 
 /**
- * Quotegen_Model_Country
+ * Quotegen_Model_Region
  *
  * @author Tyson Riehl
  *        
  */
-class Quotegen_Model_Country extends My_Model_Abstract
+class Quotegen_Model_Region extends My_Model_Abstract
 {
-    const COUNTRY_CANADA = 1;
-    const COUNTRY_UNITED_STATES = 2;
     /**
      * The id assigned by the database
      *
@@ -18,18 +16,18 @@ class Quotegen_Model_Country extends My_Model_Abstract
     protected $_id = 0;
     
     /**
-     * The name of the country
+     * The id of the country
      *
      * @var string
      */
-    protected $_name;
+    protected $_countryId;
     
     /**
-     * The locale of the country
+     * The region of the country
      *
      * @var string
      */
-    protected $_locale;
+    protected $_region;
     
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
@@ -44,8 +42,8 @@ class Quotegen_Model_Country extends My_Model_Abstract
             $this->setId($params->id);
         if (isset($params->name) && ! is_null($params->name))
             $this->setName($params->name);
-        if (isset($params->locale) && ! is_null($params->locale))
-            $this->setLocale($params->locale);
+        if (isset($params->region) && ! is_null($params->region))
+            $this->setRegion($params->region);
     }
     
     /*
@@ -55,7 +53,8 @@ class Quotegen_Model_Country extends My_Model_Abstract
     {
         return array (
                 'id' => $this->getId(), 
-                'name' => $this->getName()
+                'countryId' => $this->getCountryId(),
+                'region' => $this->getRegion()
         );
     }
 
@@ -102,23 +101,23 @@ class Quotegen_Model_Country extends My_Model_Abstract
     }
     
 	/**
-     * Getter for locale
+     * Getter for region
      *
      * @return string
      */
-    public function getLocale ()
+    public function getRegion ()
     {
-        return $this->_locale;
+        return $this->_region;
     }
 
 	/**
-     * Setter for locale
+     * Setter for region
      *
-     * @param string locale The new value
+     * @param string region The new value
      */
-    public function setLocale ($_locale)
+    public function setRegion ($_region)
     {
-        $this->_locale = $_locale;
+        $this->_region = $_region;
     }
 
     

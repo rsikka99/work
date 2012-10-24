@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Quotegen_Model_Client
+ * Quotegen_Model_Address
  *
- * @author Lee Robert
+ * @author Tyson Riehl
  *        
  */
 class Quotegen_Model_Address extends My_Model_Abstract

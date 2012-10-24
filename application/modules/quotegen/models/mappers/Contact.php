@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Quotegen_Model_Mapper_Contact
+ *
+ * @author Tyson Riehl
+ *
+ */
 class Quotegen_Model_Mapper_Contact extends My_Model_Mapper_Abstract
 {
     /**

@@ -22,22 +22,25 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
          */
         
         $this->setAttrib('class', 'form-horizontal form-center-actions');
-        //setup account number
+        
+        // setup account number
         $accountNumber = $this->createElement('text', 'accountNumber')->setLabel("Account Number:");
-        //setup company name, set required
+        
+        // setup company name
         $companyName = $this->createElement('text', 'companyName')
             ->setRequired(true)
             ->addErrorMessage("Please enter a company name")
             ->setLabel("Name:");
-        //setup company legal name
-        $legalName = $this->createElement('text', 'legalName')->setLabel("Legal Name:");
-        //setup contact first name
         
-
+        // setup legal name
+        $legalName = $this->createElement('text', 'legalName')->setLabel("Legal Name:");
+        
+        //setup contact first name
         $firstName = $this->createElement('text', 'firstName')
             ->setRequired(true)
             ->addErrorMessage("Please enter a first name")
             ->setLabel("First Name:");
+        
         //setup contact last name
         $lastName = $this->createElement('text', 'lastName')
             ->setRequired(true)
@@ -45,8 +48,6 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
             ->setLabel("Last Name:");
         
         ///////////////////////PHONE NUMBERS/////////////////////////////////////
-        
-
         //Country Code
         $countryCode = $this->createElement('text', 'countryCode')
             ->setRequired(true)
@@ -123,43 +124,52 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
             ->setLabel("Ext")
             ->setAttrib('class', 'input-extension-code')
             ->addErrorMessage("Invalid extension");
-        $phoneErrors = $this->createElement('text','phoneErrors')->removeDecorator('viewhelper');
-        
+        $phoneErrors = $this->createElement('text', 'phoneErrors')->removeDecorator('viewhelper');
         ///////////////////////END PHONE NUMBERS/////////////////////////////////////
+        
         //setup address 1
         $addressLine1 = $this->createElement('text', 'addressLine1')
             ->setRequired(true)
             ->addErrorMessage("Please enter a address")
             ->setLabel("Address 1:");
+        
         //setup address 2
         $addressLine2 = $this->createElement('text', 'addressLine2')->setLabel("Address 2:");
+        
         //setup company city
         $city = $this->createElement('text', 'city')
             ->setRequired(true)
             ->addErrorMessage("Please enter a city")
             ->setLabel("City:");
+        
         //setup state or province, DOES NOT NEED ERROR MESSAGE
         $region = $this->createElement('text', 'region')
             ->setRequired(true)
+            ->addFilter('StringToUpper')
             ->setLabel("State or Province:")
             ->addErrorMessage("Please enter a state or province")
             ->setDescription("Format: TX");
+        
         //setup zip or postal code, NO ERROR MESSAGE
         $postCode = $this->createElement('text', 'postCode')
             ->setRequired(true)
+            ->addFilter('StringToUpper')
             ->setDescription("Format : Zip Code: 12345 Postal Code: A1B2C3")
             ->addErrorMessage("Please enter a zip or postal code")
             ->setLabel("Zip or Postal Code:");
-        //setup country
-        //grab from database here
-        $fetched = Quotegen_Model_Mapper_Country::getInstance()->fetchAll();
-        $countries = null;
-        foreach($fetched as $country){
-            $countries[$country->getId()] = $country->getName();
+        
+        //Grab a list of all the countries
+        $countryList = Quotegen_Model_Mapper_Country::getInstance()->fetchAll();
+        $countries = array ();
+        foreach ( $countryList as $country )
+        {
+            $countries [$country->getId()] = $country->getName();
         }
+        
+        //setup country
         $countryId = $this->createElement('select', 'countryId', array (
                 'multiOptions' => $countries, 
-                'value' => '2' 
+                'value' => Quotegen_Model_Country::COUNTRY_UNITED_STATES 
         ))->setLabel("Country:");
         
         //setup cancel button
@@ -215,8 +225,8 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
                 $areaCode, 
                 $exchangeCode, 
                 $number, 
-                $extension,
-                $phoneErrors
+                $extension, 
+                $phoneErrors 
         ), 'contact', array (
                 'legend' => 'Contact Information' 
         ));
@@ -252,7 +262,5 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
                 ), 
                 'class' => 'form-actions-center' 
         ));
-        
-        // EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }
 }

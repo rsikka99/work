@@ -38,13 +38,12 @@ class Admin_Service_Client
         {
             try
             {
-                
                 $client = new Quotegen_Model_Client($data);
                 $clientId = Quotegen_Model_Mapper_Client::getInstance()->insert($client);
                 $data ['clientId'] = $clientId;
-                $contact = new Quotegen_Model_Contact($data, $clientId);
+                $contact = new Quotegen_Model_Contact($data);
                 $contactId = Quotegen_Model_Mapper_Contact::getInstance()->insert($contact);
-                $address = new Quotegen_Model_Address($data, $clientId);
+                $address = new Quotegen_Model_Address($data);
                 $addressId = Quotegen_Model_Mapper_Address::getInstance()->insert($address);
             }
             catch ( Exception $e )
@@ -61,6 +60,8 @@ class Admin_Service_Client
      *
      * @param array $data
      *            An array of data to use when creating a client. The data will be validated using the form.
+     * @param int $clientId
+     *            A clientId to be updated
      * @return boolean Whether or not the update was successful
      */
     public function update ($data, $clientId)
@@ -72,6 +73,7 @@ class Admin_Service_Client
             try
             {
                 $data ['clientId'] = $clientId;
+                
                 //CLIENT
                 $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
                 if (! $client)
@@ -79,23 +81,25 @@ class Admin_Service_Client
                     $client = new Quotegen_Model_Client($data);
                     $clientId = Quotegen_Model_Mapper_Client::getInstance()->insert($client);
                 }
-                $client->populate($data);
-                $rowsAffected = Quotegen_Model_Mapper_Client::getInstance()->save($client);
-                // END CLIENT
+                else
+                {
+                    $client->populate($data);
+                    $rowsAffected = Quotegen_Model_Mapper_Client::getInstance()->save($client);
+                }
                 
-
                 //Contact
                 $contact = Quotegen_Model_Mapper_Contact::getInstance()->getContactByClientId($clientId);
                 if (! $contact)
                 {
-                    $contact = new Quotegen_Model_Contact($data, $clientId);
+                    $contact = new Quotegen_Model_Contact($data);
                     $contactId = Quotegen_Model_Mapper_Contact::getInstance()->insert($contact);
                 }
-                $contact->populate($data);
-                $rowsAffected = Quotegen_Model_Mapper_Contact::getInstance()->save($contact);
-                //End Contact
+                else
+                {
+                    $contact->populate($data);
+                    $rowsAffected = Quotegen_Model_Mapper_Contact::getInstance()->save($contact);
+                }
                 
-
                 //Address
                 $address = Quotegen_Model_Mapper_Address::getInstance()->getAddressByClientId($clientId);
                 if (! $address)
@@ -103,40 +107,38 @@ class Admin_Service_Client
                     $address = new Quotegen_Model_Address($data);
                     $addressId = Quotegen_Model_Mapper_Address::getInstance()->insert($address);
                 }
-                $address->populate($data);
-                $rowsAffected = Quotegen_Model_Mapper_Address::getInstance()->save($address);
-                //End Address
+                else
+                {
+                    $address->populate($data);
+                    $rowsAffected = Quotegen_Model_Mapper_Address::getInstance()->save($address);
+                }
+                
+                $success = true;
             }
             catch ( Exception $e )
             {
             }
-            
-            return 1;
         }
-        else
-        {
-            return false;
-        }
-        
-        // return $success;
+        return $success;
     }
 
     /**
      * Deletes a client from the database where the id is the parameter $id
      *
-     * @param unknown_type $id            
+     * @param int $clientId
+     *            The clients id number
+     * @return boolean Returns true if deleted, false if not deleted.
      */
     public function delete ($clientId)
     {
         try
         {
-            Quotegen_Model_Mapper_Client::getInstance()->delete($clientId);
+            return Quotegen_Model_Mapper_Client::getInstance()->delete($clientId);
         }
         catch ( Exception $e )
         {
-            return 0;
         }
-        return 1;
+        return false;
     }
 
     /**
@@ -155,45 +157,40 @@ class Admin_Service_Client
         {
             $valid = false;
         }
-        $validData = $formData;
-        if ($validData ['extension'] == '')
-            $validData ['extension'] = null;
-            //Make the state always in upper case
-        $validData ['region'] = strtoupper($validData ['region']);
-        //set the code to validated code
-        $code = $this->validateCode($validData ['postCode']);
         
-        $phoneErrors [] = $this->getForm()
-            ->getElement('countryCode')
-            ->getErrors();
-        $phoneErrors [] = $this->getForm()
-            ->getElement('areaCode')
-            ->getErrors();
-        $phoneErrors [] = $this->getForm()
-            ->getElement('exchangeCode')
-            ->getErrors();
-        $phoneErrors [] = $this->getForm()
-            ->getElement('number')
-            ->getErrors();
-        $phoneErrors [] = $this->getForm()
-            ->getElement('extension')
-            ->getErrors();
-        $errore = "";
-        foreach ( $phoneErrors as $error )
+        $validData = $formData;
+        //This allows the database to update empty extensions
+        if ($validData ['extension'] == '')
         {
-            foreach ( $error as $er )
-            {
-                $errore .= $er . "<br/>";
-            }
+            $validData ['extension'] = null;
         }
+        
+        //Build an error message out of all the phone number text boxes
+        $phoneErrors [] = implode('<br/>', $this->getForm()
+            ->getElement('countryCode')
+            ->getErrors());
+        $phoneErrors [] = implode('<br/>', $this->getForm()
+            ->getElement('areaCode')
+            ->getErrors());
+        $phoneErrors [] = implode('<br/>', $this->getForm()
+            ->getElement('exchangeCode')
+            ->getErrors());
+        $phoneErrors [] = implode('<br/>', $this->getForm()
+            ->getElement('number')
+            ->getErrors());
+        $phoneErrors [] = implode('<br/>', $this->getForm()
+            ->getElement('extension')
+            ->getErrors());
+        
         $this->getForm()
             ->getElement('phoneErrors')
-            ->addError($errore);
+            ->addError(implode('<br/>', $phoneErrors));
         
-        if (! $code)
+        //validate and get the valid the postCode
+        $postCode = $this->validatePostCode($validData ['postCode'], $validData ['countryId']);
+        if (! $postCode)
         {
-            
-            //Postal or Zip code was invalid, display error on form
+            //postCode code was invalid, display error on form
             $this->getForm()
                 ->getElement('postCode')
                 ->clearErrorMessages()
@@ -202,10 +199,11 @@ class Admin_Service_Client
         }
         else
         {
-            $validData ['postCode'] = $code;
+            $validData ['postCode'] = $postCode;
         }
+        
         //If it is not a valid state or province, create error messages
-        if (! $this->isValidProvinceOrState($validData ['countryId'], $validData ['region']))
+        if (! $this->isValidRegion($validData ['countryId'], $validData ['region']))
         {
             $this->getForm()
                 ->getElement('region')
@@ -213,178 +211,86 @@ class Admin_Service_Client
                 ->addError('Invalid state or province');
             $valid = false;
         }
+        
         if ($valid)
+        {
             return $validData;
+        }
+        
         return false;
     }
 
     /**
-     * Validates the code, changing it if it can to make it work, then returns the new code
+     * Validates a post code and standardizes the format
      *
-     * @param unknown_type $code            
-     * @return Ambigous <valid, boolean, mixed>|unknown|boolean
+     * @param string $postCode            
+     * @param int $countryId            
+     * @return string | boolean
      */
-    protected function validateCode ($code)
+    protected function validatePostCode ($postCode, $countryId)
     {
-        $newCode = $this->isValidPostalCode($code);
-        if ($newCode != false)
+        $filter = new Zend_Filter_StringToUpper();
+        $postCode = $filter->filter($postCode);
+        //Filter data to have a standard for each country
+        switch ($countryId)
         {
-            return $newCode;
-        }
-        else if ($this->isValidZipCode($code))
-        {
-            return $code;
-        }
-        return false;
-    }
-
-    /**
-     * Validates a zip code
-     *
-     * @param $zipcode the
-     *            zip code
-     * @return valid Returns whether it was valid or not
-     *        
-     */
-    protected function isValidZipCode ($zipCode)
-    {
-        $postValidator = new Zend_Validate_PostCode('us');
-        if ($postValidator->isValid($zipCode))
+            //If canada remove all non alphanumeric characters
+            case Quotegen_Model_Country::COUNTRY_CANADA :
+                $filter = new Zend_Filter_Alnum(false);
+                $postCode = $filter->filter($postCode);
+                break;
             
-            return true;
+            //If united states change all spaces to - so we have a standard format of 12345-1234
+            case Quotegen_Model_Country::COUNTRY_UNITED_STATES :
+                $filter = new Zend_Filter_Word_SeparatorToDash(' ');
+                $postCode = $filter->filter($postCode);
+                break;
+        }
+        
+        $country = Quotegen_Model_Mapper_Country::getInstance()->find($countryId);
+        $postValidator = new Zend_Validate_PostCode($country->getLocale());
+        if ($postValidator->isValid($postCode))
+        {
+            return $postCode;
+        }
+        
         return false;
     }
 
     /**
-     * Validates a Postal Code
+     * Checks to see if the country has that region inside it.
      *
-     * @param $postalcode the
-     *            postal code
-     * @return valid Returns whether it was valid or not
-     */
-    protected function isValidPostalCode ($postalcode)
-    {
-        $newPostalCode = str_replace(array (
-                '-', 
-                ' ' 
-        ), '', $postalcode);
-        if (preg_match("/^([a-ceghj-npr-tv-z]){1}[0-9]{1}[a-ceghj-npr-tv-z]{1}[0-9]{1}[a-ceghj-npr-tv-z]{1}[0-9]{1}$/i", $newPostalCode))
-            return $newPostalCode;
-        else
-            return false;
-    }
-
-    /**
-     * Checks to see if the country has the parameter $stateOrProv
-     *
-     * @param string $country            
-     * @param string $stateOrProv            
+     * @param string $countryId            
+     * @param string $region            
      * @return boolean
      */
-    protected function isValidProvinceOrState ($country, $stateOrProv)
+    protected function isValidRegion ($countryId, $regionName)
     {
-        //List of canadian province abbreviations
-        $canada = array (
-                'AB', 
-                'BC', 
-                'MB', 
-                'NB', 
-                'NL', 
-                'NT', 
-                'NS', 
-                'NU', 
-                'ON', 
-                'PE', 
-                'QC', 
-                'SK', 
-                'YT' 
-        );
-        //List of american state abreviations
-        $usa = array (
-                "AK", 
-                "AL", 
-                "AR", 
-                "AS", 
-                "AZ", 
-                "CA", 
-                "CO", 
-                "CT", 
-                "DC", 
-                "DE", 
-                "FL", 
-                "GA", 
-                "GU", 
-                "HI", 
-                "IA", 
-                "ID", 
-                "IL", 
-                "IN", 
-                "KS", 
-                "KY", 
-                "LA", 
-                "MA", 
-                "MD", 
-                "ME", 
-                "MH", 
-                "MI", 
-                "MN", 
-                "MO", 
-                "MS", 
-                "MT", 
-                "NC", 
-                "ND", 
-                "NE", 
-                "NH", 
-                "NJ", 
-                "NM", 
-                "NV", 
-                "NY", 
-                "OH", 
-                "OK", 
-                "OR", 
-                "PA", 
-                "PR", 
-                "PW", 
-                "RI", 
-                "SC", 
-                "SD", 
-                "TN", 
-                "TX", 
-                "UT", 
-                "VA", 
-                "VI", 
-                "VT", 
-                "WA", 
-                "WI", 
-                "WV", 
-                "WY" 
-        );
-        //determines which country is selected then returns if the code was valid or not
-        if ($country == '1')
+        //Try to find a the region they are looking for in the specified country
+        $region = Quotegen_Model_Mapper_Region::getInstance()->getByRegionNameAndCountryId($regionName, $countryId);
+        if ($region)
         {
-            $countryValidator = new Zend_Validate_InArray($canada);
-            return $countryValidator->isValid($stateOrProv);
-        }
-        else if ($country == '2')
-        {
-            $countryValidator = new Zend_Validate_InArray($usa);
-            return $countryValidator->isValid($stateOrProv);
+            return true;
         }
         return false;
     }
 
+    /**
+     * This fills all the values out in a form.
+     *
+     * @param int $clientId            
+     */
     public function populateForm ($clientId)
     {
         $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
         $address = Quotegen_Model_Mapper_Address::getInstance()->getAddressByClientId($clientId);
         $contact = Quotegen_Model_Mapper_Contact::getInstance()->getContactByClientId($clientId);
-        $combinedArray = $client->toArray();
+        $combinedClientData = $client->toArray();
         if ($address)
-            $combinedArray = array_merge($combinedArray, $address->toArray());
+            $combinedClientData = array_merge($combinedClientData, $address->toArray());
         if ($contact)
-            $combinedArray = array_merge($combinedArray, $contact->toArray());
-        $this->getForm()->populate($combinedArray);
-        //$form->populate(array_merge($client->toArray(),$address->toArray(),$contact->toArray()));
+            $combinedClientData = array_merge($combinedClientData, $contact->toArray());
+        $this->getForm()->populate($combinedClientData);
     }
 }
 
