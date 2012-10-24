@@ -1,0 +1,74 @@
+<?php
+
+/* @var $quote Quotegen_Model_Quote */
+$quote = $this->quote;
+
+// Get the path based on the theme
+$commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
+// Render the elements in the theme
+$this->render("{$commonPartsBasePath}/styles.phtml");
+
+/**
+ * Equipment Schedule
+ */
+/* @var $section PHPWord_Section */
+$section = $this->section;
+
+$deviceTable = $section->addTable(array (
+        'cellMarginTop' => 35,
+        'cellMarginBottom' => 35,
+        'cellMarginRight' => 0,
+        'cellMarginLeft' => 100
+));
+
+$section->addTitle($this->translate('Managed Print Services'), 1);
+
+
+
+
+/*
+ * Devices table
+ */
+$deviceTable = $section->addTable(array (
+        'cellMarginTop' => 35, 
+        'cellMarginBottom' => 35, 
+        'cellMarginRight' => 0, 
+        'cellMarginLeft' => 100 
+));
+
+$gridSpan1Width = 2764;
+$gridSpan2Width = 5528;
+$gridSpan3Width = 8292;
+$gridSpan4Width = 11056;
+
+/*
+ * Title Row
+ */
+$deviceTable->addRow();
+$deviceTable->addCell($gridSpan4Width, $this->cellStyle->invertBackground, 4)->addText($this->translate('DESCRIPTION OF OUR DEVICES'), $this->fontStyle->invertBackground, $this->paragraphStyle->noSpacing);
+
+/*
+ * Heading Row
+ */
+$deviceTable->addRow(600);
+$deviceTable->addCell($gridSpan2Width, $this->cellStyle->bottomLeftBorderBAlign, 2)->addText($this->translate('MAKE, MODEL NUMBER & INCLUDED ACCESSORIES'), $this->fontStyle->label, $this->paragraphStyle->noSpacing);
+$deviceTable->addCell($gridSpan1Width, $this->cellStyle->bottomRightBorderBAlign, 1)->addText($this->translate('SERIAL NO.'), $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+$deviceTable->addCell($gridSpan1Width, $this->cellStyle->bottomRightBorderBAlign, 1)->addText($this->translate('ADDRESS'), $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+
+
+$deviceName = 'Xerox Phaser 8660';
+
+
+
+
+/*
+ * Device Rows
+ */
+/* @var $quoteDevice Quotegen_Model_QuoteDevice */
+foreach ($quote->getQuoteDevices() as $quoteDevice)
+{
+    $deviceTable->addRow(600);
+    $deviceTable->addCell($gridSpan2Width, $this->cellStyle->bottomLeftBorder, 2)->addText($quoteDevice->getName(), null, $this->paragraphStyle->noSpacing);
+    $deviceTable->addCell($gridSpan1Width, $this->cellStyle->bottomRightBorder, 1)->addText(' ', null, $this->paragraphStyle->noSpacing);
+    $deviceTable->addCell($gridSpan1Width, $this->cellStyle->bottomRightBorder, 1)->addText(' ', null, $this->paragraphStyle->noSpacing);
+}

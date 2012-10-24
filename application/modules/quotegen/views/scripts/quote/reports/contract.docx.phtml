@@ -1,0 +1,68 @@
+<?php
+
+// TODO: Remove hardcoded values
+$filename = 'contract.docx';
+$savePath = PUBLIC_PATH . '/downloads/' . $filename;
+$linkToFile = $this->baseUrl('/downloads/' . $filename);
+
+// This may not need to be removed from here
+// Base path to the files used to render the document
+$basePath = 'quote/reports/contract/docx';
+$commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
+
+$this->quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
+
+/* @var $phpword PHPWord */
+$phpword = $this->phpword;
+
+/**
+ * Document Properties
+ */
+$properties = $phpword->getProperties();
+$properties->setCreator('Demo Report');
+$properties->setCompany('Demo Report');
+$properties->setTitle('Demo Report');
+$properties->setDescription('Demo Report');
+$properties->setCategory('Demo Report');
+$properties->setLastModifiedBy('Demo Report');
+$properties->setCreated(time());
+$properties->setModified(time());
+$properties->setSubject('Demo Report');
+$properties->setKeywords('demo, assessment, report');
+
+
+$section = $phpword->createSection();
+
+$sectionStyles = $section->getSettings();
+$sectionStyles->setMarginLeft(425);
+$sectionStyles->setMarginBottom(425);
+$sectionStyles->setMarginTop(425);
+$sectionStyles->setMarginRight(425);
+
+/**
+ * Footer
+ */
+// FIXME: Footer in PHPWord is not working correctly
+//$footer = $section->createFooter();
+//$footer->addText("TEXT");
+//$footer->addImage(PUBLIC_FOLDER . $this->theme('/proposalgenerator/reports/images/officedepotLogo.jpg'), array (    'align' => 'right'));
+
+$this->section = $section;
+
+// Actual document pages
+$this->render("{$basePath}/styles.phtml");
+$this->render("{$basePath}/contract.phtml");
+
+$objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
+
+try
+{
+    $objWriter->save($savePath);
+}
+catch ( Exception $e )
+{
+    echo "Error Writing to File.";
+    die();
+}
+?>
+<?php echo $this->baseUrl($linkToFile); ?>

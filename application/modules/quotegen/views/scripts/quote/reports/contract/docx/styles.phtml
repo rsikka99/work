@@ -1,0 +1,97 @@
+<?php
+//**************************************/
+//**************CELL STYLE**************/
+//**************************************/
+$this->cellStyle = new stdClass();
+$this->cellStyle->invertBackground = array (
+        'bgColor' => '111111', 
+        'borderLeftSize' => 1 
+);
+
+// Borders
+$this->cellStyle->bottomBorder = array (
+        'borderBottomSize' => 1 
+);
+$this->cellStyle->leftRightBorder = array (
+        'borderRightSize' => 1, 
+        'borderLeftSize' => 1 
+);
+$this->cellStyle->rightBorder = array (
+        'borderRightSize' => 1 
+);
+$this->cellStyle->bottomRightBorder = array (
+        'borderBottomSize' => 1, 
+        'borderRightSize' => 1 
+);
+$this->cellStyle->bottomLeftBorder = array (
+        'borderBottomSize' => 1,
+        'borderLeftSize' => 1
+);
+
+$this->cellStyle->leftBorder = array (
+        'borderLeftSize' => 1 
+);
+
+// Border valign
+$this->cellStyle->bottomBorderBAlign = array (
+        'borderBottomSize' => 1, 
+        'valign' => 'bottom' 
+);
+$this->cellStyle->leftBorderBAlign = array (
+        'borderLeftSize' => 1, 
+        'valign' => 'bottom' 
+);
+$this->cellStyle->bottomRightBorderBAlign = array (
+        'borderBottomSize' => 1, 
+        'borderRightSize' => 1, 
+        'valign' => 'bottom' 
+);
+
+$this->cellStyle->bottomLeftBorderBAlign = array (
+        'borderBottomSize' => 1, 
+        'borderLeftSize' => 1, 
+        'valign' => 'bottom' 
+);
+
+// Valign
+$this->cellStyle->bottomAlign = array (
+        'valign' => 'bottom' 
+);
+
+//**************************************/
+//**************FONT STYLE**************/
+//**************************************/
+$this->fontStyle = new stdClass();
+$this->fontStyle->invertBackground = array (
+        'color' => 'FFFFFF', 
+        'bold' => true, 
+        'size' => "10" 
+);
+$this->fontStyle->label = array (
+        "size" => "7" 
+);
+
+$this->fontStyle->bold = array (
+        'bold' => true 
+);
+$this->fontStyle->underline = array (
+        'underline' => PHPWord_Style_Font::UNDERLINE_SINGLE 
+);
+
+//**************************************/
+//*********PARAGRAPH STYLE**************/
+/**
+ * ************************************
+ */
+$this->paragraphStyle = new stdClass();
+$this->paragraphStyle->noSpacing = array (
+        'spaceAfter' => 0 
+);
+$this->paragraphStyle->noSpacingCentered = array (
+        'spaceAfter' => 0, 
+        'align' => 'center' 
+);
+$this->paragraphStyle->noSpacingRight = array (
+        'spaceAfter' => 0, 
+        'align' => 'right' 
+);

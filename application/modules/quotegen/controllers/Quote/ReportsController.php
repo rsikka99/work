@@ -11,6 +11,9 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
             ), 
             'order-list' => array (
                     'xlsx' 
+            ), 
+            'contract' => array (
+                    'docx' 
             ) 
     );
 
@@ -65,15 +68,31 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
         $this->view->navigationForm = new Quotegen_Form_Quote_Navigation(Quotegen_Form_Quote_Navigation::BUTTONS_BACK);
     }
 
+    /**
+     * Creates a purchased quote
+     */
     public function purchaseQuoteAction ()
     {
     }
 
+    /**
+     * Creates a leased quote
+     */
     public function leaseQuoteAction ()
     {
     }
 
+    /**
+     * Creates an orderlist
+     */
     public function orderListAction ()
+    {
+    }
+
+    /**
+     * Creates a contract
+     */
+    public function contractAction ()
     {
     }
 }
