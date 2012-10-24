@@ -272,6 +272,7 @@ class Admin_Service_Client
         {
             return true;
         }
+        
         return false;
     }
 
@@ -287,9 +288,13 @@ class Admin_Service_Client
         $contact = Quotegen_Model_Mapper_Contact::getInstance()->getContactByClientId($clientId);
         $combinedClientData = $client->toArray();
         if ($address)
+        {
             $combinedClientData = array_merge($combinedClientData, $address->toArray());
+        }
         if ($contact)
+        {
             $combinedClientData = array_merge($combinedClientData, $contact->toArray());
+        }
         $this->getForm()->populate($combinedClientData);
     }
 }
