@@ -1591,6 +1591,7 @@ ENGINE = InnoDB;
 CREATE  TABLE IF NOT EXISTS `countries` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(255) NOT NULL ,
+  `locale` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
@@ -1616,6 +1617,23 @@ CREATE  TABLE IF NOT EXISTS `addresses` (
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `addresses_ibfk_2`
+    FOREIGN KEY (`countryId` )
+    REFERENCES `countries` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `regions`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `regions` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `countryId` INT NOT NULL ,
+  `region` CHAR(2) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `regions_ibfk_1` (`countryId` ASC) ,
+  CONSTRAINT `regions_ibfk_1`
     FOREIGN KEY (`countryId` )
     REFERENCES `countries` (`id` )
     ON DELETE CASCADE
