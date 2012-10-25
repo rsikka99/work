@@ -32,12 +32,12 @@ $agreementTableSpan = array (
 );
 
 $agreementTableSpan = array (
-        "span1" => 1382,
-        "span2" => 2764,
-        "span3" => 4146,
-        "span4" => 5528,
-        "span6" => 8292,
-        "span8" => 11056
+        "span1" => 1382, 
+        "span2" => 2764, 
+        "span3" => 4146, 
+        "span4" => 5528, 
+        "span6" => 8292, 
+        "span8" => 11056 
 );
 
 $noSpacing = $this->paragraphStyle->noSpacing;
@@ -47,7 +47,6 @@ $labelFont = $this->fontStyle->label;
  * Begin creation of customer table
  */
 $customerTable = $section->addTable($this->tableStyle->standard);
-
 
 $customerTable->addRow();
 $customerTable->addCell($agreementTableSpan ['span4'], null, 4)->addText($this->translate($this->header->subHeader), $this->fontStyle->subHeader, $noSpacing);
@@ -81,7 +80,6 @@ $termDetailsTable->addRow();
 $termDetailsTable->addCell($agreementTableSpan ['span1'], null, 2)->addText('TERM IN MONTHS', $labelFont, $noSpacing);
 $termDetailsTable->addCell($agreementTableSpan ['span1'], null, 2)->addText('SECURITY DEPOSIT', $labelFont, $noSpacing);
 $termDetailsTable->addCell($agreementTableSpan ['span4'], null, 4)->addText('METER FREQUENCY: MONTHLY OR SPECIFY OTHER: ___________', $labelFont, $noSpacing);
-
 
 // $section->addTextBreak();
 $leaseDetailsTable = $section->addTable($this->tableStyle->standard);
@@ -227,8 +225,8 @@ $footerTable->addCell($agreementTableSpan ['span8'], $this->cellStyle->bottomBor
 $section->addPageBreak();
 // Title of the document
 $section->addText($this->translate($this->header->pageHeader), array (
-        'size' => '18',
-        'color' => '0000FF'
+        'size' => '18', 
+        'color' => '0000FF' 
 ));
 /*
  * Devices table
@@ -261,10 +259,13 @@ $deviceName = 'Xerox Phaser 8660';
 /* @var $quoteDevice Quotegen_Model_QuoteDevice */
 foreach ( $quote->getQuoteDevices() as $quoteDevice )
 {
-    $deviceTable->addRow(600);
-    $deviceTable->addCell($deviceTableSpan ['span2'], $this->cellStyle->bottomLeftBorder, 2)->addText($quoteDevice->getName(), null, $this->paragraphStyle->noSpacing);
-    $deviceTable->addCell($deviceTableSpan ['span1'], $this->cellStyle->bottomRightBorder, 1)->addText(' ', null, $this->paragraphStyle->noSpacing);
-    $deviceTable->addCell($deviceTableSpan ['span1'], $this->cellStyle->bottomRightBorder, 1)->addText(' ', null, $this->paragraphStyle->noSpacing);
+    for($i = 0; $i < $quoteDevice->calculateTotalQuantity(); $i ++)
+    {
+        $deviceTable->addRow(600);
+        $deviceTable->addCell($deviceTableSpan ['span2'], $this->cellStyle->bottomLeftBorder, 2)->addText($quoteDevice->getName(), null, $this->paragraphStyle->noSpacing);
+        $deviceTable->addCell($deviceTableSpan ['span1'], $this->cellStyle->bottomRightBorder, 1)->addText(' ', null, $this->paragraphStyle->noSpacing);
+        $deviceTable->addCell($deviceTableSpan ['span1'], $this->cellStyle->bottomRightBorder, 1)->addText(' ', null, $this->paragraphStyle->noSpacing);
+    }
 }
 $section->addTextBreak();
 $footerTable = $section->addTable('termDetailStyle');
