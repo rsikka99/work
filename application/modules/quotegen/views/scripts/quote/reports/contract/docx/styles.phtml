@@ -101,9 +101,7 @@ $this->fontStyle->underline = array (
 
 //**************************************/
 //*********PARAGRAPH STYLE**************/
-/**
- * ************************************
- */
+//**************************************/
 $this->paragraphStyle = new stdClass();
 $this->paragraphStyle->noSpacing = array (
         'spaceAfter' => 0 
@@ -116,3 +114,17 @@ $this->paragraphStyle->noSpacingRight = array (
         'spaceAfter' => 0, 
         'align' => 'right' 
 );
+
+//**************************************/
+//*************TABLE STYLE**************/
+//**************************************/
+$this->tableStyle = new stdClass();
+
+$this->tableStyle->standard = array (
+        'cellMarginTop' => 35,
+        'cellMarginBottom' => 35,
+        'cellMarginRight' => 0,
+        'cellMarginLeft' => 100
+);
+
+
