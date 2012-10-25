@@ -77,8 +77,8 @@ $termDetailsTable = $section->addTable($this->tableStyle->standard);
 $termDetailsTable->addRow();
 $termDetailsTable->addCell($agreementTableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText("EQUIPEMENT AND PAYMENT TERMS", $this->fontStyle->invertBackground, $noSpacing);
 $termDetailsTable->addRow();
-$termDetailsTable->addCell($agreementTableSpan ['span1'], null, 2)->addText('TERM IN MONTHS', $labelFont, $noSpacing);
-$termDetailsTable->addCell($agreementTableSpan ['span1'], null, 2)->addText('SECURITY DEPOSIT', $labelFont, $noSpacing);
+$termDetailsTable->addCell($agreementTableSpan ['span1'], null, 2)->addText('TERM IN MONTHS: ' . $this->leaseDetails->termInMonths, $labelFont, $noSpacing);
+$termDetailsTable->addCell($agreementTableSpan ['span1'], null, 2)->addText('SECURITY DEPOSIT ' . $this->leaseDetails->securityDeposit, $labelFont, $noSpacing);
 $termDetailsTable->addCell($agreementTableSpan ['span4'], null, 4)->addText('METER FREQUENCY: MONTHLY OR SPECIFY OTHER: ___________', $labelFont, $noSpacing);
 
 // $section->addTextBreak();
@@ -93,7 +93,7 @@ $leaseDetailsTable->addCell($agreementTableSpan ['span1'], $this->cellStyle->bot
 $leaseDetailsTable->addCell($agreementTableSpan ['span1'], $this->cellStyle->bottomRightBorderBAlign)->addText(' COLOR', $labelFont, $noSpacing);
 $firstRowTextRun = $leaseDetailsTable->addCell($agreementTableSpan ['span4'], $this->cellStyle->leftRightBorder, 4)->createTextRun($noSpacing);
 $firstRowTextRun->addText('MONTHLY FIXED CHARGE: ', $labelFont);
-$firstRowTextRun->addText("  $ {$this->leaseDetails->monthlyCharge}         ", $this->fontStyle->underline);
+$firstRowTextRun->addText("{$this->leaseDetails->monthlyCharge}", $this->fontStyle->underline);
 $firstRowTextRun->addText("**");
 
 // Row #2

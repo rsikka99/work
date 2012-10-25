@@ -1,15 +1,25 @@
 <?php
 
+/* @var $quote Quotegen_Model_Quote */
+$quote = $this->quote;
+
 // Information speicific for the company 
 $this->company = new stdClass();
 
-$this->company->name = 'Tangent MTW';
-$this->company->legalName = 'Kernco Distribution';
-$this->company->address = '3302 E Edwin Rd, Tucson, AZ 85739';
+/*
+ * CLIENT COMPANY DETAILS
+ */
+$this->company->name = $quote->getClient()->getName();
+
+// TODO: Not Used
+$this->company->legalName = 'N/A';
+// $this->company->address = '3302 E Edwin Rd, Tucson, AZ 85739';
+$this->company->address = $quote->getClient()->getAddress();
 
 // Information speicific for the agreement
 $this->agreement = new stdClass();
 
+// FIXME: Not Dynamic
 $this->agreement->number = '123456';
 
 $this->header = new stdClass();
@@ -17,17 +27,27 @@ $this->header->subHeader = 'Managed Print Services';
 $this->header->pageHeader = $this->company->name;
 
 $this->leaseDetails = new stdClass();
-$this->leaseDetails->monthlyCharge = '249.99';
-$this->leaseDetails->monochromeAllowance = '0';
-$this->leaseDetails->colorAllowance = '100000';
-$this->leaseDetails->monochromeCPP = '.02';
-$this->leaseDetails->colorCPP = '.09';
+$this->leaseDetails->monthlyCharge = $this->currency($quote->calculateQuoteMonthlyLeaseSubtotal());
+$this->leaseDetails->monochromeAllowance = number_format($quote->calculateTotalMonochromePages());
+$this->leaseDetails->colorAllowance = number_format($quote->calculateTotalColorPages());
+$this->leaseDetails->monochromeCPP = number_format($quote->calculateMonochromeOverageRatePerPage(), 3);
+$this->leaseDetails->colorCPP = number_format($quote->calculateColorOverageRatePerPage(), 3);
+
+// FIXME: Not Dynamic
 $this->leaseDetails->programFee = '99.99';
 
+$this->leaseDetails->termInMonths = $quote->getLeaseTerm();
+$this->leaseDetails->securityDeposit = $this->currency(0);
+
+// TODO: Should be blank if it's monthly.
+$this->leaseDetails->meterFrequency = '';
+
+/*
+ * DEALER COMPANY DETAILS
+ */
 $this->leaseDetails->companyName = 'COMPANY NAME, INC.';
 $this->leaseDetails->companyOwner = 'BUGS BUNNY, CARROT CONNOISSEUR';
 $this->leaseDetails->companyAddress = '231 LOONEY PLACE, Albuquerque, 90210';
-
 
 $this->leaseDetails->p1 = "Bacon ipsum dolor sit amet boudin venison laborum jerky rump. Bacon cillum pork belly ground round ex. Qui venison leberkas sausage cow pastrami anim. Excepteur enim dolore rump, officia ad jowl esse. Hamburger aliquip pastrami tempor jerky deserunt tongue sirloin do tail fugiat commodo voluptate dolore. Duis tail laboris, cow chuck dolore ham nisi labore do cillum enim. Pastrami esse beef ribs, ham hock ground round meatball turkey duis. Ut commodo laboris elit. Strip steak salami hamburger, enim doner jowl eu chuck adipisicing tenderloin turkey sint exercitation. ";
 $this->leaseDetails->p2 = "Ut commodo laboris elit. Strip steak salami hamburger, enim doner jowl eu chuck adipisicing tenderloin turkey sint exercitation. Minim ut eiusmod short ribs ball tip tenderloin cupidatat tongue ex pork chop biltong. Officia boudin deserunt, do prosciutto ad beef. Turkey eu tenderloin et ullamco pancetta ut deserunt corned beef meatball. Commodo ea tail flank non. Pastrami pancetta aliquip consectetur excepteur biltong kielbasa dolore ad flank id bresaola in quis adipisicing.";
