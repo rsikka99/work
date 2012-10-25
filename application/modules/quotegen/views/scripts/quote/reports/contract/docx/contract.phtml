@@ -3,28 +3,24 @@
 /* @var $quote Quotegen_Model_Quote */
 $quote = $this->quote;
 
-// Get the path based on the theme
-$commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
-// Render the elements in the theme
-$this->render("{$commonPartsBasePath}/styles.phtml");
-
 /**
  * Equipment Schedule
  */
 /* @var $section PHPWord_Section */
 $section = $this->section;
+$sectionStyles = $section->getSettings();
+$sectionStyles->setMarginLeft(425);
+$sectionStyles->setMarginBottom(425);
+$sectionStyles->setMarginTop(425);
+$sectionStyles->setMarginRight(425);
 
-$deviceTable = $section->addTable(array (
-        'cellMarginTop' => 35,
-        'cellMarginBottom' => 35,
-        'cellMarginRight' => 0,
-        'cellMarginLeft' => 100
+// Title of the document 
+$section->addText($this->translate($this->header->pageHeader), array (
+        'size' => '18', 
+        'color' => 'FF0000' 
 ));
 
 $section->addTitle($this->translate('Managed Print Services'), 1);
-
-
-
 
 /*
  * Devices table
@@ -35,40 +31,75 @@ $deviceTable = $section->addTable(array (
         'cellMarginRight' => 0, 
         'cellMarginLeft' => 100 
 ));
+$deviceTableSpan = array (
+        'span1' => 2764, 
+        'span2' => 5528, 
+        'span3' => 8292, 
+        'span4' => 11056 
+);
+$agreemenentTableSpan = array (
+        "span1" => 1382, 
+        "span2" => 2764, 
+        "span3" => 4146, 
+        "span4" => 5528, 
+        "span6" => 8292, 
+        "span8" => 11056 
+);
 
-$gridSpan1Width = 2764;
-$gridSpan2Width = 5528;
-$gridSpan3Width = 8292;
-$gridSpan4Width = 11056;
+$noSpacing = $this->paragraphStyle->noSpacing;
+$labelFont = $this->fontStyle->label;
 
+/**
+ * Begin creation of customer table
+ */
+$customerTable = $section->addTable('customerStyle');
+
+$customerTable->addRow();
+$customerTable->addCell($agreemenentTableSpan ['span6'], null, 6)->addText($this->translate($this->header->subHeader), $this->fontStyle->subHeader, $noSpacing);
+$customerTable->addCell($agreemenentTableSpan ['span2'], $this->cellStyle->bottomAlign, 2)->addText($this->translate("Agreement No.:    {$this->agreement->number}"), null, $this->paragraphStyle->noSpacingRight);
+
+$customerTable->addRow();
+$customerTable->addCell($agreemenentTableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText("CUSTOMER (\"you\" or \"your\")", $this->fontStyle->invertBackground, $noSpacing);
+
+$customerTable->addRow();
+$textRun = $customerTable->addCell($agreemenentTableSpan ['span8'], $this->cellStyle->bottomBorder, 8)->createTextRun($noSpacing);
+$textRun->addText(" FULL LEGAL NAME: ", $labelFont);
+$textRun->addText(" {$this->company->name}", $this->fontStyle->bold);
+
+$customerTable->addRow();
+$textRun = $customerTable->addCell($agreemenentTableSpan ['span8'], null, 8)->createTextRun($noSpacing);
+$textRun->addText(" ADDRESS: ", $labelFont);
+$textRun->addText(" {$this->company->address}", $this->fontStyle->bold);
+
+
+
+
+// New page for devices
+$section->addPageBreak();
 /*
  * Title Row
  */
 $deviceTable->addRow();
-$deviceTable->addCell($gridSpan4Width, $this->cellStyle->invertBackground, 4)->addText($this->translate('DESCRIPTION OF OUR DEVICES'), $this->fontStyle->invertBackground, $this->paragraphStyle->noSpacing);
+$deviceTable->addCell($deviceTableSpan ['span4'], $this->cellStyle->invertBackground, 4)->addText($this->translate('DESCRIPTION OF OUR DEVICES'), $this->fontStyle->invertBackground, $this->paragraphStyle->noSpacing);
 
 /*
  * Heading Row
  */
 $deviceTable->addRow(600);
-$deviceTable->addCell($gridSpan2Width, $this->cellStyle->bottomLeftBorderBAlign, 2)->addText($this->translate('MAKE, MODEL NUMBER & INCLUDED ACCESSORIES'), $this->fontStyle->label, $this->paragraphStyle->noSpacing);
-$deviceTable->addCell($gridSpan1Width, $this->cellStyle->bottomRightBorderBAlign, 1)->addText($this->translate('SERIAL NO.'), $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
-$deviceTable->addCell($gridSpan1Width, $this->cellStyle->bottomRightBorderBAlign, 1)->addText($this->translate('ADDRESS'), $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
-
+$deviceTable->addCell($deviceTableSpan ['span2'], $this->cellStyle->bottomLeftBorderBAlign, 2)->addText($this->translate('MAKE, MODEL NUMBER & INCLUDED ACCESSORIES'), $this->fontStyle->label, $this->paragraphStyle->noSpacing);
+$deviceTable->addCell($deviceTableSpan ['span1'], $this->cellStyle->bottomRightBorderBAlign, 1)->addText($this->translate('SERIAL NO.'), $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+$deviceTable->addCell($deviceTableSpan ['span1'], $this->cellStyle->bottomRightBorderBAlign, 1)->addText($this->translate('ADDRESS'), $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
 
 $deviceName = 'Xerox Phaser 8660';
-
-
-
 
 /*
  * Device Rows
  */
 /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-foreach ($quote->getQuoteDevices() as $quoteDevice)
+foreach ( $quote->getQuoteDevices() as $quoteDevice )
 {
     $deviceTable->addRow(600);
-    $deviceTable->addCell($gridSpan2Width, $this->cellStyle->bottomLeftBorder, 2)->addText($quoteDevice->getName(), null, $this->paragraphStyle->noSpacing);
-    $deviceTable->addCell($gridSpan1Width, $this->cellStyle->bottomRightBorder, 1)->addText(' ', null, $this->paragraphStyle->noSpacing);
-    $deviceTable->addCell($gridSpan1Width, $this->cellStyle->bottomRightBorder, 1)->addText(' ', null, $this->paragraphStyle->noSpacing);
+    $deviceTable->addCell($deviceTableSpan ['span2'], $this->cellStyle->bottomLeftBorder, 2)->addText($quoteDevice->getName(), null, $this->paragraphStyle->noSpacing);
+    $deviceTable->addCell($deviceTableSpan ['span1'], $this->cellStyle->bottomRightBorder, 1)->addText(' ', null, $this->paragraphStyle->noSpacing);
+    $deviceTable->addCell($deviceTableSpan ['span1'], $this->cellStyle->bottomRightBorder, 1)->addText(' ', null, $this->paragraphStyle->noSpacing);
 }
