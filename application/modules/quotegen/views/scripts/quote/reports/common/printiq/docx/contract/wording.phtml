@@ -1,0 +1,60 @@
+<?php
+
+/* @var $quote Quotegen_Model_Quote */
+$quote = $this->quote;
+
+// Information speicific for the company 
+$this->company = new stdClass();
+
+/*
+ * CLIENT COMPANY DETAILS
+ */
+$this->company->name = $quote->getClient()->getName();
+
+// TODO: Not Used
+$this->company->legalName = 'N/A';
+// $this->company->address = '3302 E Edwin Rd, Tucson, AZ 85739';
+$this->company->address = $quote->getClient()->getAddress();
+
+// Information speicific for the agreement
+$this->agreement = new stdClass();
+
+// FIXME: Not Dynamic
+$this->agreement->number = '123456';
+
+$this->header = new stdClass();
+$this->header->subHeader = 'Managed Print Services';
+$this->header->pageHeader = $this->company->name;
+
+$this->leaseDetails = new stdClass();
+$this->leaseDetails->monthlyCharge = $this->currency($quote->calculateQuoteMonthlyLeaseSubtotal());
+$this->leaseDetails->monochromeAllowance = number_format($quote->calculateTotalMonochromePages());
+$this->leaseDetails->colorAllowance = number_format($quote->calculateTotalColorPages());
+$this->leaseDetails->monochromeCPP = number_format($quote->calculateMonochromeOverageRatePerPage(), 3);
+$this->leaseDetails->colorCPP = number_format($quote->calculateColorOverageRatePerPage(), 3);
+
+// FIXME: Not Dynamic
+$this->leaseDetails->programFee = '99.99';
+
+$this->leaseDetails->termInMonths = $quote->getLeaseTerm();
+$this->leaseDetails->securityDeposit = $this->currency(0);
+
+// TODO: Should be blank if it's monthly.
+$this->leaseDetails->meterFrequency = '';
+
+/*
+ * DEALER COMPANY DETAILS
+ */
+$this->leaseDetails->companyName = 'COMPANY NAME, INC.';
+$this->leaseDetails->companyOwner = 'BUGS BUNNY, CARROT CONNOISSEUR';
+$this->leaseDetails->companyAddress = '231 LOONEY PLACE, Albuquerque, 90210';
+
+$this->leaseDetails->p1 = "Bacon ipsum dolor sit amet boudin venison laborum jerky rump. Bacon cillum pork belly ground round ex. Qui venison leberkas sausage cow pastrami anim. Excepteur enim dolore rump, officia ad jowl esse. Hamburger aliquip pastrami tempor jerky deserunt tongue sirloin do tail fugiat commodo voluptate dolore. Duis tail laboris, cow chuck dolore ham nisi labore do cillum enim. Pastrami esse beef ribs, ham hock ground round meatball turkey duis. Ut commodo laboris elit. Strip steak salami hamburger, enim doner jowl eu chuck adipisicing tenderloin turkey sint exercitation. ";
+$this->leaseDetails->p2 = "Ut commodo laboris elit. Strip steak salami hamburger, enim doner jowl eu chuck adipisicing tenderloin turkey sint exercitation. Minim ut eiusmod short ribs ball tip tenderloin cupidatat tongue ex pork chop biltong. Officia boudin deserunt, do prosciutto ad beef. Turkey eu tenderloin et ullamco pancetta ut deserunt corned beef meatball. Commodo ea tail flank non. Pastrami pancetta aliquip consectetur excepteur biltong kielbasa dolore ad flank id bresaola in quis adipisicing.";
+$this->leaseDetails->p3 = "Reprehenderit exercitation pancetta in. Chuck spare ribs tri-tip ex. Ex sed kielbasa, dolore non dolore tenderloin enim et beef swine pork chop ad ground round. Beef ribs ut occaecat culpa ex. Pancetta fugiat sed, in ball tip eu ex ribeye shoulder swine beef ribs consectetur. Incididunt labore ribeye turducken venison nisi elit pork chop aliqua strip steak kielbasa sint flank.";
+$this->leaseDetails->p4 = "Chuck meatloaf corned beef excepteur, t-bone velit aliqua sirloin cillum aute capicola doner ribeye labore. Anim pariatur mollit, velit swine in cillum commodo incididunt sed cow sausage. Jerky exercitation pig, pancetta ex salami fugiat cupidatat eiusmod aute shoulder elit. Aute qui anim, pariatur pastrami magna aliqua do fatback.";
+$this->leaseDetails->p5 = "Adipisicing beef chuck nisi ut corned beef, beef ribs tenderloin brisket biltong tail laboris pastrami ground round non. In adipisicing cillum turducken eiusmod. Non nulla mollit duis incididunt. Sirloin shoulder quis, occaecat tail tongue consequat bresaola. Ut beef ribs t-bone irure drumstick pancetta.";
+$this->leaseDetails->p6 = "Andouille ut excepteur chicken, flank beef ribs pork est ea. Hamburger capicola nulla deserunt ham. Id filet mignon tenderloin, kielbasa bresaola ea sunt magna ut jerky andouille brisket pork belly veniam pork. Sirloin ground round tri-tip turkey exercitation tail fugiat sausage consectetur corned beef. Consequat salami pancetta shank laborum. T-bone kielbasa dolor eu capicola.";
+$this->leaseDetails->p7 = "Cillum pastrami sint biltong proident pork belly adipisicing in do boudin jerky eu jowl. Venison nulla jowl labore, dolore est officia aliqua frankfurter proident doner. Proident aliquip et capicola ut shank veniam ham hock frankfurter. Shoulder exercitation quis pariatur, eu laboris veniam pastrami flank sed dolor short ribs. Labore excepteur short ribs ex, pork chop velit boudin beef ribs drumstick aliquip. Pastrami elit mollit chicken.";
+$this->leaseDetails->p8 = "Et chicken flank anim incididunt spare ribs. Shankle id tenderloin ground round. Brisket qui sint pig aute in esse voluptate. Dolor eiusmod nulla dolore. Sed turducken reprehenderit, esse spare ribs aute fugiat magna sunt nisi. Kielbasa meatball ribeye nostrud aliquip filet mignon, culpa est eiusmod. Biltong meatloaf short loin tri-tip consectetur eu deserunt filet mignon magna.";
+$this->leaseDetails->p9 = "Tongue fugiat ut, doner drumstick pork loin consequat salami magna officia filet mignon adipisicing pariatur reprehenderit. Minim nisi nulla swine, dolor ham hock tongue fugiat shank mollit veniam ham. Anim beef consequat, esse pork chop pig brisket deserunt strip steak tempor commodo. Sirloin magna cow rump, dolore esse beef filet mignon. Ground round elit veniam, filet mignon consequat ham non. Pork chop consequat ut culpa, hamburger incididunt aute et consectetur.";

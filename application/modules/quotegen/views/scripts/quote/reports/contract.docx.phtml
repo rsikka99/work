@@ -2,13 +2,15 @@
 
 // TODO: Remove hardcoded values
 $filename = 'contract.docx';
+// /public/downloads/contract.docx
 $savePath = PUBLIC_PATH . '/downloads/' . $filename;
+//"/downloads/contract.docx"
 $linkToFile = $this->baseUrl('/downloads/' . $filename);
 
 // This may not need to be removed from here
 // Base path to the files used to render the document
 $basePath = 'quote/reports/contract/docx';
-$commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
+$commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme . '/docx/contract';
 
 $this->quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
 
@@ -50,8 +52,8 @@ $sectionStyles->setMarginRight(425);
 $this->section = $section;
 
 // Actual document pages
-$this->render("{$basePath}/styles.phtml");
-$this->render("{$basePath}/wording.phtml");
+$this->render("{$commonPartsBasePath}/styles.phtml");
+$this->render("{$commonPartsBasePath}/wording.phtml");
 $this->render("{$basePath}/contract.phtml");
 
 $objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
