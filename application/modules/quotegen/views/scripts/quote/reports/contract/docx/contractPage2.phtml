@@ -1,0 +1,31 @@
+<?php
+/* @var $quote Quotegen_Model_Quote */
+/* @var $section PHPWord_Section */
+/* @var $quoteDevice Quotegen_Model_QuoteDevice */
+$quote = $this->quote;
+$section = $this->section;
+$tableSpan = $tableSpan = $this->tableStyle->gridSpan;
+$noSpacing = $this->paragraphStyle->noSpacing;
+$labelFont = $this->fontStyle->label;
+
+// Devices table
+// Title Row
+$deviceTable = $section->addTable($this->tableStyle->standard);
+$deviceTable->addRow();
+$deviceTable->addCell($tableSpan ['span4'], $this->cellStyle->invertBackground, 8)->addText($this->header->sectionHeader[7], $this->fontStyle->invertBackground, $this->paragraphStyle->noSpacing);
+// Header Row
+$deviceTable->addRow(600);
+$deviceTable->addCell($tableSpan ['span2'], $this->cellStyle->bottomLeftBorderBAlign, 4)->addText($this->translate('MAKE, MODEL NUMBER & INCLUDED ACCESSORIES'), $this->fontStyle->label, $this->paragraphStyle->noSpacing);
+$deviceTable->addCell($tableSpan ['span1'], $this->cellStyle->bottomRightBorderBAlign, 2)->addText($this->translate('SERIAL NO.'), $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+$deviceTable->addCell($tableSpan ['span1'], $this->cellStyle->bottomRightBorderBAlign, 2)->addText($this->translate('ADDRESS'), $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+// Devices Row(s)
+foreach ( $quote->getQuoteDevices() as $quoteDevice )
+{
+    for($i = 0; $i < $quoteDevice->calculateTotalQuantity(); $i ++)
+    {
+        $deviceTable->addRow(600);
+        $deviceTable->addCell($tableSpan ['span2'], $this->cellStyle->bottomLeftBorder, 4)->addText($quoteDevice->getName(), null, $this->paragraphStyle->noSpacing);
+        $deviceTable->addCell($tableSpan ['span1'], $this->cellStyle->bottomRightBorder, 2)->addText(' ', null, $this->paragraphStyle->noSpacing);
+        $deviceTable->addCell($tableSpan ['span1'], $this->cellStyle->bottomRightBorder, 2)->addText(' ', null, $this->paragraphStyle->noSpacing);
+    }
+}

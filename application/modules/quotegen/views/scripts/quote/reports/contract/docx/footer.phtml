@@ -1,0 +1,36 @@
+<?php 
+/* @var $section PHPWord_Section */
+$section = $this->section;
+$tableSpan = $tableSpan = $this->tableStyle->gridSpan;
+$noSpacing = $this->paragraphStyle->noSpacing;
+
+$footerTable = $section->addTable($this->tableStyle->standard);
+$footerTable->addRow();
+$footerTable->addCell($tableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText($this->header->sectionHeader[5], $this->fontStyle->invertBackground, $noSpacing);
+$footerTable->addRow();
+$footerTable->addCell($tableSpan ['span8'], null, 8)->addText($this->agreement->signature , $this->fontStyle->finePrint, $noSpacing);
+$footerTable->addRow(350);
+$footerTable->addCell($tableSpan ['span2'], $this->cellStyle->bottomBorderBAlign)->addText('(As Stated Above)', null, $noSpacing);
+$footerTable->addCell($tableSpan ['span3'], $this->cellStyle->borderBAlign, 3)->addText('X', null, $noSpacing);
+$footerTable->addCell($tableSpan ['span3'], $this->cellStyle->bottomBorderBAlign, 3)->addText('', null, $noSpacing);
+$footerTable->addCell($tableSpan ['span1'], $this->cellStyle->bottomBorderBAlign)->addText('', null, $noSpacing);
+$footerTable->addRow();
+$footerTable->addCell($tableSpan ['span1'], null)->addText('CUSTOMER', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+$footerTable->addCell($tableSpan ['span3'], null, 3)->addText('SIGNATURE', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+$footerTable->addCell($tableSpan ['span3'], null, 3)->addText('PRINT NAME & TITLE', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+$footerTable->addCell($tableSpan ['span1'], null)->addText('DATE', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+
+$footerTable->addRow();
+$footerTable->addCell($tableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText($this->header->sectionHeader[6], $this->fontStyle->invertBackground, $noSpacing);
+$footerTable->addRow();
+$footerTable->addCell($tableSpan ['span2'], $this->cellStyle->bottomBorder, 2)->addText("{$this->leaseDetails->companyName}", null, $noSpacing);
+$footerTable->addCell($tableSpan ['span2'], $this->cellStyle->bottomBorder, 2)->addText('', null, $noSpacing);
+$footerTable->addCell($tableSpan ['span2'], $this->cellStyle->bottomBorder, 2)->addText("{$this->leaseDetails->companyOwner}", null, $noSpacing);
+$footerTable->addCell($tableSpan ['span2'], $this->cellStyle->bottomBorder, 2)->addText('', null, $noSpacing);
+$footerTable->addRow();
+$footerTable->addCell($tableSpan ['span1'], null)->addText('OWNER', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+$footerTable->addCell($tableSpan ['span3'], null, 3)->addText('SIGNATURE', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+$footerTable->addCell($tableSpan ['span3'], null, 3)->addText('PRINT NAME & TITLE', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+$footerTable->addCell($tableSpan ['span1'], null)->addText('DATE', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+$footerTable->addRow();
+$footerTable->addCell($tableSpan ['span8'], $this->cellStyle->bottomBorder, 8)->addText("{$this->leaseDetails->companyAddress}", $this->fontStyle->label, $noSpacing);
