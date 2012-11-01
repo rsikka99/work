@@ -18,7 +18,6 @@ $this->quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
 $phpword = $this->phpword;
 $phpword->setDefaultFontName('Inconsolata');
 
-
 /**
  * Document Properties
  */
@@ -34,31 +33,32 @@ $properties->setModified(time());
 $properties->setSubject('Demo Report');
 $properties->setKeywords('demo, assessment, report');
 
-
 $section = $phpword->createSection();
-
 $sectionStyles = $section->getSettings();
 $sectionStyles->setMarginLeft(300);
 $sectionStyles->setMarginBottom(300);
 $sectionStyles->setMarginTop(300);
 $sectionStyles->setMarginRight(300);
 
-/**
- * Footer
- */
-// FIXME: Footer in PHPWord is not working correctly
-//$footer = $section->createFooter();
-//$footer->addText("TEXT");
-//$footer->addImage(PUBLIC_FOLDER . $this->theme('/proposalgenerator/reports/images/officedepotLogo.jpg'), array (    'align' => 'right'));
-
 $this->section = $section;
 
-// Actual document pages
+// Styles hold color schema and theme specific attributes
 $this->render("{$commonPartsBasePath}/styles.phtml");
+// Section data is the holds the wording of the documents
 $this->render("{$commonPartsBasePath}/sectionData.phtml");
+// Page holds all dynamic quote data
 $this->render("{$basePath}/quoteData.phtml");
+// Page holds all the formatting for the styles used building the document
 $this->render("{$basePath}/formattingStyles.phtml");
-$this->render("{$basePath}/contract.phtml");
+
+// Render the documents
+$this->render("{$basePath}/header.phtml");
+$this->render("{$basePath}/contractPage1.phtml");
+$this->render("{$basePath}/footer.phtml");
+$section->addPageBreak();
+$this->render("{$basePath}/header.phtml");
+$this->render("{$basePath}/contractPage2.phtml");
+$this->render("{$basePath}/footer.phtml");
 
 $objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
 
