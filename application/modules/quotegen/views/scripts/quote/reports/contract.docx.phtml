@@ -1,0 +1,75 @@
+<?php
+
+// TODO: Remove hardcoded values
+$filename = 'contract.docx';
+// /public/downloads/contract.docx
+$savePath = PUBLIC_PATH . '/downloads/' . $filename;
+//"/downloads/contract.docx"
+$linkToFile = $this->baseUrl('/downloads/' . $filename);
+
+// This may not need to be removed from here
+// Base path to the files used to render the document
+$basePath = 'quote/reports/contract/docx';
+$commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme . '/docx/contract';
+
+$this->quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
+
+/* @var $phpword PHPWord */
+$phpword = $this->phpword;
+$phpword->setDefaultFontName('Inconsolata');
+
+/**
+ * Document Properties
+ */
+$properties = $phpword->getProperties();
+$properties->setCreator('Demo Report');
+$properties->setCompany('Demo Report');
+$properties->setTitle('Demo Report');
+$properties->setDescription('Demo Report');
+$properties->setCategory('Demo Report');
+$properties->setLastModifiedBy('Demo Report');
+$properties->setCreated(time());
+$properties->setModified(time());
+$properties->setSubject('Demo Report');
+$properties->setKeywords('demo, assessment, report');
+
+$section = $phpword->createSection();
+$sectionStyles = $section->getSettings();
+$sectionStyles->setMarginLeft(300);
+$sectionStyles->setMarginBottom(300);
+$sectionStyles->setMarginTop(300);
+$sectionStyles->setMarginRight(300);
+
+$this->section = $section;
+
+// Styles hold color schema and theme specific attributes
+$this->render("{$commonPartsBasePath}/styles.phtml");
+// Section data is the holds the wording of the documents
+$this->render("{$commonPartsBasePath}/sectionData.phtml");
+// Page holds all dynamic quote data
+$this->render("{$basePath}/quoteData.phtml");
+// Page holds all the formatting for the styles used building the document
+$this->render("{$basePath}/formattingStyles.phtml");
+
+// Render the documents
+$this->render("{$basePath}/header.phtml");
+$this->render("{$basePath}/contractPage1.phtml");
+$this->render("{$basePath}/footer.phtml");
+$section->addPageBreak();
+$this->render("{$basePath}/header.phtml");
+$this->render("{$basePath}/contractPage2.phtml");
+$this->render("{$basePath}/footer.phtml");
+
+$objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
+
+try
+{
+    $objWriter->save($savePath);
+}
+catch ( Exception $e )
+{
+    echo "Error Writing to File.";
+    die();
+}
+?>
+<?php echo $this->baseUrl($linkToFile); ?>

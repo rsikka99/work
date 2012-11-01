@@ -91,6 +91,9 @@ $(function () {
 	 		<h3>Download Quote</h3>
 			<p>Download a .docx version of this quote.</p>
     		<a class="downloadButton btn btn-primary" data-ext="docx" href="<?php echo $this->url(array('action' => (($quote->isLeased()) ? 'lease' : 'purchase') . '-quote', 'format' => 'docx')); ?>"><i class='icon-download-alt icon-white'></i> Download Quote</a>
+    		<br/>
+    		<br/>
+    		<a class="downloadButton btn btn-primary" data-ext="docx" href="<?php echo $this->url(array('action' => 'contract', 'format' => 'docx')); ?>"><i class='icon-download-alt icon-white'></i> Download Contract</a>
 		</li>
 		<li class='span4'>
 			<h3>Download Order List</h3>
