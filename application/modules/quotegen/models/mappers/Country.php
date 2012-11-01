@@ -199,7 +199,8 @@ class Quotegen_Model_Mapper_Country extends My_Model_Mapper_Abstract
     /**
      * Gets a where clause for filtering by id
      *
-     * @param unknown_type $id            
+     * @param int $id
+     *            the id of the country to find
      * @return array
      */
     public function getWhereId ($id)
@@ -216,7 +217,5 @@ class Quotegen_Model_Mapper_Country extends My_Model_Mapper_Abstract
     {
         return $object->getId();
     }
-
-
 }
 

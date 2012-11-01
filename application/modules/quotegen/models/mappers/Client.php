@@ -14,7 +14,6 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
      * Define the primary key of the model association
      */
     public $col_id = 'id';
-    public $col_name = 'name';
 
     /**
      * Gets an instance of the mapper

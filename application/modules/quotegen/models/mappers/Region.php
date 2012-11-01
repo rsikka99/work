@@ -14,7 +14,8 @@ class Quotegen_Model_Mapper_Region extends My_Model_Mapper_Abstract
      * Define the primary key of the model association
      */
     public $col_id = 'id';
-    public $col_name = 'name';
+    public $col_region = 'region';
+    public $col_countryId = 'countryId';
 
     /**
      * Gets an instance of the mapper
@@ -199,7 +200,7 @@ class Quotegen_Model_Mapper_Region extends My_Model_Mapper_Abstract
     /**
      * Gets a where clause for filtering by id
      *
-     * @param unknown_type $id            
+     * @param int $id            
      * @return array
      */
     public function getWhereId ($id)
@@ -226,19 +227,21 @@ class Quotegen_Model_Mapper_Region extends My_Model_Mapper_Abstract
     public function getAllRegionsWithCountryId ($countryId)
     {
         return $this->fetchAll(array (
-                'countryId = ?' => $countryId 
+                "{$this->col_countryId} = ?" => $countryId 
         ));
     }
-	/**
-	 * Gets a region that 
-	 * @param unknown_type $region
-	 * @param unknown_type $countryId
-	 */
+
+    /**
+     * Gets a region that has a region name and country id as the params
+     * 
+     * @param string $region            
+     * @param int $countryId            
+     */
     public function getByRegionNameAndCountryId ($region, $countryId)
     {
         return $this->fetch(array (
-                'region = ?' => $region, 
-                'countryId = ?' => $countryId 
+                "{$this->col_region} = ?" => $region, 
+                "{$this->col_countryId} = ?" => $countryId 
         ));
     }
 }

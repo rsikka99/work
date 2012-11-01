@@ -20,7 +20,7 @@ class Quotegen_Model_Mapper_Contact extends My_Model_Mapper_Abstract
      * Define the primary key of the model association
      */
     public $col_id = 'id';
-    public $col_name = 'name';
+    public $col_clientId = 'clientId';
 
     /**
      * Gets an instance of the mapper
@@ -205,7 +205,8 @@ class Quotegen_Model_Mapper_Contact extends My_Model_Mapper_Abstract
     /**
      * Gets a where clause for filtering by id
      *
-     * @param unknown_type $id            
+     * @param int $id
+     * 				the id of the country to find            
      * @return array
      */
     public function getWhereId ($id)
@@ -218,13 +219,14 @@ class Quotegen_Model_Mapper_Contact extends My_Model_Mapper_Abstract
     /**
      * Gets a where clause for filtering by clientId
      *
-     * @param unknown_type $id
+     * @param int $id
+     * 				the id of the client
      * @return array
      */
     public function getWhereClientId ($id)
     {
         return array (
-                "clientId  = ?" => $id
+                "{$this->col_clientId}  = ?" => $id
         );
     }
 

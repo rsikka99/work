@@ -157,7 +157,6 @@ class Admin_Service_Client
         {
             $valid = false;
         }
-        
         $validData = $formData;
         //This allows the database to update empty extensions
         if ($validData ['extension'] == '')
@@ -165,23 +164,23 @@ class Admin_Service_Client
             $validData ['extension'] = null;
         }
         
-        //Build an error message out of all the phone number text boxes
-        $phoneErrors [] = implode('<br/>', $this->getForm()
-            ->getElement('countryCode')
-            ->getErrors());
-        $phoneErrors [] = implode('<br/>', $this->getForm()
-            ->getElement('areaCode')
-            ->getErrors());
-        $phoneErrors [] = implode('<br/>', $this->getForm()
-            ->getElement('exchangeCode')
-            ->getErrors());
-        $phoneErrors [] = implode('<br/>', $this->getForm()
-            ->getElement('number')
-            ->getErrors());
-        $phoneErrors [] = implode('<br/>', $this->getForm()
-            ->getElement('extension')
-            ->getErrors());
-        
+        $phoneFields = array (
+                'countryCode',
+                'areaCode',
+                'exchangeCode',
+                'number',
+                'extension',
+        );
+        $phoneErrors = array();
+        foreach ($phoneFields as $phoneField)
+        {
+            $formElement = $form->getElement($phoneField);
+            if ($formElement->hasErrors())
+            {
+                $phoneErrors[] = implode('<br/>', $formElement->getErrors());
+            }
+        }
+
         $this->getForm()
             ->getElement('phoneErrors')
             ->addError(implode('<br/>', $phoneErrors));

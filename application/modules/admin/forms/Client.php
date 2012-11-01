@@ -109,7 +109,7 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
                 '/^\d{4}$/' 
         ))
             ->setLabel("-")
-            ->addErrorMessage("Invalid number");
+            ->addErrorMessage("Invalid phone number");
         
         //Extension
         $extension = $this->createElement('text', 'extension')
@@ -123,7 +123,7 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
         ))
             ->setLabel("Ext")
             ->setAttrib('class', 'input-extension-code')
-            ->addErrorMessage("Invalid extension");
+            ->addErrorMessage("Invalid extension number");
         $phoneErrors = $this->createElement('text', 'phoneErrors')->removeDecorator('viewhelper');
         ///////////////////////END PHONE NUMBERS/////////////////////////////////////
         

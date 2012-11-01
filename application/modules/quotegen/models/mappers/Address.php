@@ -14,7 +14,7 @@ class Quotegen_Model_Mapper_Address extends My_Model_Mapper_Abstract
      * Define the primary key of the model association
      */
     public $col_id = 'id';
-    public $col_name = 'name';
+    public $col_clientId = 'clientId';
 
     /**
      * Gets an instance of the mapper
@@ -212,7 +212,7 @@ class Quotegen_Model_Mapper_Address extends My_Model_Mapper_Abstract
     public function getWhereClientId ($id)
     {
         return array (
-                "clientId  = ?" => $id 
+                "{$this->col_clientId}  = ?" => $id 
         );
     }
 
