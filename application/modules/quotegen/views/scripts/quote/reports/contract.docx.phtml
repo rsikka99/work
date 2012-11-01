@@ -16,6 +16,8 @@ $this->quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
 
 /* @var $phpword PHPWord */
 $phpword = $this->phpword;
+$phpword->setDefaultFontName('Inconsolata');
+
 
 /**
  * Document Properties
@@ -36,10 +38,10 @@ $properties->setKeywords('demo, assessment, report');
 $section = $phpword->createSection();
 
 $sectionStyles = $section->getSettings();
-$sectionStyles->setMarginLeft(425);
-$sectionStyles->setMarginBottom(425);
-$sectionStyles->setMarginTop(425);
-$sectionStyles->setMarginRight(425);
+$sectionStyles->setMarginLeft(300);
+$sectionStyles->setMarginBottom(300);
+$sectionStyles->setMarginTop(300);
+$sectionStyles->setMarginRight(300);
 
 /**
  * Footer
@@ -53,7 +55,9 @@ $this->section = $section;
 
 // Actual document pages
 $this->render("{$commonPartsBasePath}/styles.phtml");
-$this->render("{$commonPartsBasePath}/wording.phtml");
+$this->render("{$commonPartsBasePath}/sectionData.phtml");
+$this->render("{$basePath}/quoteData.phtml");
+$this->render("{$basePath}/formattingStyles.phtml");
 $this->render("{$basePath}/contract.phtml");
 
 $objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
