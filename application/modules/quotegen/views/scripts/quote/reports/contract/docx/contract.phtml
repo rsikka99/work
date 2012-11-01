@@ -12,48 +12,43 @@ $section = $this->section;
 // Title of the document 
 $section->addText($this->translate($this->header->pageHeader), array (
         'size' => '18', 
-        'color' => '0000FF' 
+        'color' => $this->style->mainColor 
 ));
 
 $deviceTableSpan = array (
-        'span1' => 2764, 
-        'span2' => 5528, 
-        'span3' => 8292, 
-        'span4' => 11056 
+        "span1" => 2827, 
+        "span2" => 5654, 
+        "span3" => 8481, 
+        'span4' => 11306 
 );
 
 $agreementTableSpan = array (
-        "span1" => 1382, 
-        "span2" => 2764, 
-        "span3" => 4146, 
-        "span4" => 5528, 
-        "span6" => 8292, 
-        "span8" => 11056 
-);
-
-$agreementTableSpan = array (
-        "span1" => 1382, 
-        "span2" => 2764, 
-        "span3" => 4146, 
-        "span4" => 5528, 
-        "span6" => 8292, 
-        "span8" => 11056 
+        "span1" => 1413.5, 
+        "span2" => 2827, 
+        "span3" => 4240.5, 
+        "span4" => 5654, 
+        "span6" => 8481, 
+        "span8" => 11306 
 );
 
 $noSpacing = $this->paragraphStyle->noSpacing;
 $labelFont = $this->fontStyle->label;
 
-/**
- * Begin creation of customer table
- */
+
+// Change this section to render header file
 $customerTable = $section->addTable($this->tableStyle->standard);
 
 $customerTable->addRow();
 $customerTable->addCell($agreementTableSpan ['span4'], null, 4)->addText($this->translate($this->header->subHeader), $this->fontStyle->subHeader, $noSpacing);
 $customerTable->addCell($agreementTableSpan ['span4'], $this->cellStyle->bottomAlign, 4)->addText($this->translate("Agreement No.:    {$this->agreement->number}"), null, $this->paragraphStyle->noSpacingRight);
 
+/**
+ * Begin creation of customer table
+ */
+
+$customerTable = $section->addTable($this->tableStyle->standard);
 $customerTable->addRow();
-$customerTable->addCell($agreementTableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText("CUSTOMER (\"you\" or \"your\")", $this->fontStyle->invertBackground, $noSpacing);
+$customerTable->addCell($agreementTableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText($this->header->sectionHeader[0], $this->fontStyle->invertBackground, $noSpacing);
 
 $customerTable->addRow();
 $textRun = $customerTable->addCell($agreementTableSpan ['span8'], $this->cellStyle->bottomBorder, 8)->createTextRun($noSpacing);
@@ -64,6 +59,7 @@ $customerTable->addRow();
 $textRun = $customerTable->addCell($agreementTableSpan ['span8'], null, 8)->createTextRun($noSpacing);
 $textRun->addText(" ADDRESS: ", $labelFont);
 $textRun->addText(" {$this->company->address}", $this->fontStyle->bold);
+
 /**
  * End creation of customer table
  */
@@ -75,7 +71,7 @@ $textRun->addText(" {$this->company->address}", $this->fontStyle->bold);
 $section->addTextBreak();
 $termDetailsTable = $section->addTable($this->tableStyle->standard);
 $termDetailsTable->addRow();
-$termDetailsTable->addCell($agreementTableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText("EQUIPEMENT AND PAYMENT TERMS", $this->fontStyle->invertBackground, $noSpacing);
+$termDetailsTable->addCell($agreementTableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText($this->header->sectionHeader[1], $this->fontStyle->invertBackground, $noSpacing);
 $termDetailsTable->addRow();
 $termDetailsTable->addCell($agreementTableSpan ['span1'], null, 2)->addText('TERM IN MONTHS: ' . $this->leaseDetails->termInMonths, $labelFont, $noSpacing);
 $termDetailsTable->addCell($agreementTableSpan ['span1'], null, 2)->addText('SECURITY DEPOSIT ' . $this->leaseDetails->securityDeposit, $labelFont, $noSpacing);
@@ -84,8 +80,8 @@ $termDetailsTable->addCell($agreementTableSpan ['span4'], null, 4)->addText('MET
 // $section->addTextBreak();
 $leaseDetailsTable = $section->addTable($this->tableStyle->standard);
 $leaseDetailsTable->addRow();
-$leaseDetailsTable->addCell($agreementTableSpan ['span4'], $this->cellStyle->invertBackground, 4)->addText("MPS PROGRAM", $this->fontStyle->invertBackground, $noSpacing);
-$leaseDetailsTable->addCell($agreementTableSpan ['span4'], $this->cellStyle->invertBackground, 4)->addText("MPS PROGRAM PLUS", $this->fontStyle->invertBackground, $noSpacing);
+$leaseDetailsTable->addCell($agreementTableSpan ['span4'], $this->cellStyle->invertBackground, 4)->addText($this->header->sectionHeader[2], $this->fontStyle->invertBackground, $noSpacing);
+$leaseDetailsTable->addCell($agreementTableSpan ['span4'], $this->cellStyle->invertBackground, 4)->addText($this->header->sectionHeader[3], $this->fontStyle->invertBackground, $noSpacing);
 // Row #1
 $leaseDetailsTable->addRow();
 $leaseDetailsTable->addCell($agreementTableSpan ['span2'], $this->cellStyle->leftBorder, 2)->addText('', null, $noSpacing);
@@ -127,8 +123,6 @@ $leaseDetailsTable->addCell($agreementTableSpan ['span4'], $this->cellStyle->lef
 $leaseDetailsTable->addCell($agreementTableSpan ['span4'], $this->cellStyle->leftRightBorder, 4)->addText("PROGRAM SET-UP FEE {$this->leaseDetails->programFee}", $labelFont, $noSpacing);
 
 // Row #6t
-
-
 $leaseDetailsTable->addRow();
 $leaseDetailsTable->addCell($agreementTableSpan ['span4'], $this->cellStyle->leftRightBorder, 4)->addText("APPLIES TO \"YOUR DEVICES\" AS DEFINED BOLOW       (**PLUS TAX)", $labelFont, $noSpacing);
 $textRun = $leaseDetailsTable->addCell($agreementTableSpan ['span4'], $this->cellStyle->rightBorder, 4)->createTextRun($noSpacing);
@@ -146,60 +140,65 @@ $leaseDetailsTable->addCell($agreementTableSpan ['span4'], $this->cellStyle->rig
 
 // Agreement terms and coditions
 $leaseDetailsTable->addRow();
-$leaseDetailsTable->addCell($agreementTableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText("AGREEMENT TERMS AND CONDITIONS", $this->fontStyle->invertBackground, $noSpacing);
+$leaseDetailsTable->addCell($agreementTableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText($this->header->sectionHeader[4], $this->fontStyle->invertBackground, $noSpacing);
 
 $leaseDetailsTable->addRow();
 
 $cell = $leaseDetailsTable->addCell($agreementTableSpan ['span4'], null, 4);
-$textRun = $cell->createTextRun($noSpacing);
+$textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
 $textRun->addText('AGREEMENT ', $this->fontStyle->boldFinePrint);
-$textRun->addText("{$this->leaseDetails->p1}", $this->fontStyle->finePrint);
+$textRun->addText("{$this->agreement->section1}", $this->fontStyle->finePrint);
 
 $cell->addTextBreak();
-$textRun = $cell->createTextRun($noSpacing);
+$textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
 $textRun->addText('PAGE CHARGES AND OVERAGES ', $this->fontStyle->boldFinePrint);
-$textRun->addText("{$this->leaseDetails->p2}", $this->fontStyle->finePrint);
+$textRun->addText("{$this->agreement->section2}", $this->fontStyle->finePrint);
 
 $cell->addTextBreak();
-$textRun = $cell->createTextRun($noSpacing);
+$textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
 $textRun->addText('SERVICES AND SUPPLIES ', $this->fontStyle->boldFinePrint);
-$textRun->addText("{$this->leaseDetails->p3}", $this->fontStyle->finePrint);
+$textRun->addText("{$this->agreement->section3}", $this->fontStyle->finePrint);
 
 $cell->addTextBreak();
-$textRun = $cell->createTextRun($noSpacing);
+$textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
 $textRun->addText('DEVICE USAGE PAYMENTS ', $this->fontStyle->boldFinePrint);
-$textRun->addText("{$this->leaseDetails->p4}", $this->fontStyle->finePrint);
+$textRun->addText("{$this->agreement->section4}", $this->fontStyle->finePrint);
 
 $cell = $leaseDetailsTable->addCell($agreementTableSpan ['span4'], null, 4);
-$textRun = $cell->createTextRun($noSpacing);
+$textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
 $textRun->addText('REMOTE MONITORING ', $this->fontStyle->boldFinePrint);
-$textRun->addText("{$this->leaseDetails->p4}", $this->fontStyle->finePrint);
+$textRun->addText("{$this->agreement->section5}", $this->fontStyle->finePrint);
 
 $cell->addTextBreak();
-$textRun = $cell->createTextRun($noSpacing);
+$textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
 $textRun->addText('TAXES ', $this->fontStyle->boldFinePrint);
-$textRun->addText("{$this->leaseDetails->p5}", $this->fontStyle->finePrint);
+$textRun->addText("{$this->agreement->section6}", $this->fontStyle->finePrint);
 
 $cell->addTextBreak();
-$textRun = $cell->createTextRun($noSpacing);
+$textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
 $textRun->addText('DEFAULT AND REMEDIES ', $this->fontStyle->boldFinePrint);
-$textRun->addText("{$this->leaseDetails->p6}", $this->fontStyle->finePrint);
+$textRun->addText("{$this->agreement->section7}", $this->fontStyle->finePrint);
 
 $cell->addTextBreak();
-$textRun = $cell->createTextRun($noSpacing);
+$textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
 $textRun->addText('LAW/FORUM ', $this->fontStyle->boldFinePrint);
-$textRun->addText("{$this->leaseDetails->p7}", $this->fontStyle->finePrint);
+$textRun->addText("{$this->agreement->section8}", $this->fontStyle->finePrint);
+
+$cell->addTextBreak();
+$textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
+$textRun->addText('MISCELLANEOUS ', $this->fontStyle->boldFinePrint);
+$textRun->addText("{$this->agreement->section9}", $this->fontStyle->finePrint);
 
 $footerTable = $section->addTable($this->tableStyle->standard);
 $footerTable->addRow();
-$footerTable->addCell($agreementTableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText("CUSTOMER'S AUTHORIZED SIGNATURE", $this->fontStyle->invertBackground, $noSpacing);
+$footerTable->addCell($agreementTableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText($this->header->sectionHeader[5], $this->fontStyle->invertBackground, $noSpacing);
 $footerTable->addRow();
-$footerTable->addCell($agreementTableSpan ['span8'], null, 8)->addText('Bacon ipsum dolor sit amet frankfurter laborum deserunt boudin sausage. Occaecat non nulla capicola sed short ribs tri-tip minim. Corned beef labore laborum proident dolore irure tenderloin filet mignon magna duis strip steak pork loin meatloaf aliquip nisi. Duis veniam prosciutto sausage biltong andouille velit jowl tri-tip tail kielbasa adipisicing ad nulla ut. Esse sint excepteur velit enim in est sirloin. ', $this->fontStyle->finePrint);
-$footerTable->addRow();
-$footerTable->addCell($agreementTableSpan ['span2'], $this->cellStyle->bottomBorder)->addText('(As Stated Above)', null, $noSpacing);
-$footerTable->addCell($agreementTableSpan ['span3'], $this->cellStyle->border, 3)->addText('X', null, $noSpacing);
-$footerTable->addCell($agreementTableSpan ['span3'], $this->cellStyle->bottomBorder, 3)->addText('', null, $noSpacing);
-$footerTable->addCell($agreementTableSpan ['span1'], $this->cellStyle->bottomBorder)->addText('', null, $noSpacing);
+$footerTable->addCell($agreementTableSpan ['span8'], null, 8)->addText($this->agreement->signature , $this->fontStyle->finePrint, $noSpacing);
+$footerTable->addRow(350);
+$footerTable->addCell($agreementTableSpan ['span2'], $this->cellStyle->bottomBorderBAlign)->addText('(As Stated Above)', null, $noSpacing);
+$footerTable->addCell($agreementTableSpan ['span3'], $this->cellStyle->borderBAlign, 3)->addText('X', null, $noSpacing);
+$footerTable->addCell($agreementTableSpan ['span3'], $this->cellStyle->bottomBorderBAlign, 3)->addText('', null, $noSpacing);
+$footerTable->addCell($agreementTableSpan ['span1'], $this->cellStyle->bottomBorderBAlign)->addText('', null, $noSpacing);
 $footerTable->addRow();
 $footerTable->addCell($agreementTableSpan ['span1'], null)->addText('CUSTOMER', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
 $footerTable->addCell($agreementTableSpan ['span3'], null, 3)->addText('SIGNATURE', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
@@ -207,7 +206,7 @@ $footerTable->addCell($agreementTableSpan ['span3'], null, 3)->addText('PRINT NA
 $footerTable->addCell($agreementTableSpan ['span1'], null)->addText('DATE', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
 
 $footerTable->addRow();
-$footerTable->addCell($agreementTableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText("OWNER (\"we\", \"us\", \"our\")", $this->fontStyle->invertBackground, $noSpacing);
+$footerTable->addCell($agreementTableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText($this->header->sectionHeader[6], $this->fontStyle->invertBackground, $noSpacing);
 $footerTable->addRow();
 $footerTable->addCell($agreementTableSpan ['span2'], $this->cellStyle->bottomBorder, 2)->addText("{$this->leaseDetails->companyName}", null, $noSpacing);
 $footerTable->addCell($agreementTableSpan ['span2'], $this->cellStyle->bottomBorder, 2)->addText('', null, $noSpacing);
@@ -226,7 +225,7 @@ $section->addPageBreak();
 // Title of the document
 $section->addText($this->translate($this->header->pageHeader), array (
         'size' => '18', 
-        'color' => '0000FF' 
+        'color' => $this->style->mainColor 
 ));
 /*
  * Devices table
@@ -241,7 +240,7 @@ $deviceTable->addCell($deviceTableSpan ['span2'], null, 2)->addText($this->trans
 $deviceTable->addCell($deviceTableSpan ['span2'], $this->cellStyle->bottomAlign, 2)->addText($this->translate("Agreement No.:    {$this->agreement->number}"), null, $this->paragraphStyle->noSpacingRight);
 
 $deviceTable->addRow();
-$deviceTable->addCell($deviceTableSpan ['span4'], $this->cellStyle->invertBackground, 4)->addText($this->translate('DESCRIPTION OF OUR DEVICES'), $this->fontStyle->invertBackground, $this->paragraphStyle->noSpacing);
+$deviceTable->addCell($deviceTableSpan ['span4'], $this->cellStyle->invertBackground, 4)->addText($this->header->sectionHeader[7], $this->fontStyle->invertBackground, $this->paragraphStyle->noSpacing);
 
 /*
  * Heading Row
@@ -272,12 +271,12 @@ $footerTable = $section->addTable('termDetailStyle');
 $footerTable->addRow();
 $footerTable->addCell($agreementTableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText("CUSTOMER'S AUTHORIZED SIGNATURE", $this->fontStyle->invertBackground, $noSpacing);
 $footerTable->addRow();
-$footerTable->addCell($agreementTableSpan ['span8'], null, 8)->addText('Bacon ipsum dolor sit amet frankfurter laborum deserunt boudin sausage. Occaecat non nulla capicola sed short ribs tri-tip minim. Corned beef labore laborum proident dolore irure tenderloin filet mignon magna duis strip steak pork loin meatloaf aliquip nisi. Duis veniam prosciutto sausage biltong andouille velit jowl tri-tip tail kielbasa adipisicing ad nulla ut. Esse sint excepteur velit enim in est sirloin. ', $this->fontStyle->finePrint);
-$footerTable->addRow();
-$footerTable->addCell($agreementTableSpan ['span2'], $this->cellStyle->bottomBorder)->addText('(As Stated Above)', null, $noSpacing);
-$footerTable->addCell($agreementTableSpan ['span3'], $this->cellStyle->border, 3)->addText('X', null, $noSpacing);
-$footerTable->addCell($agreementTableSpan ['span3'], $this->cellStyle->bottomBorder, 3)->addText('', null, $noSpacing);
-$footerTable->addCell($agreementTableSpan ['span1'], $this->cellStyle->bottomBorder)->addText('', null, $noSpacing);
+$footerTable->addCell($agreementTableSpan ['span8'], null, 8)->addText($this->agreement->signature, $this->fontStyle->finePrint, $noSpacing);
+$footerTable->addRow(350);
+$footerTable->addCell($agreementTableSpan ['span2'], $this->cellStyle->bottomBorderBAlign)->addText('(As Stated Above)', null, $noSpacing);
+$footerTable->addCell($agreementTableSpan ['span3'], $this->cellStyle->borderBAlign, 3)->addText('X', null, $noSpacing);
+$footerTable->addCell($agreementTableSpan ['span3'], $this->cellStyle->bottomBorderBAlign, 3)->addText('', null, $noSpacing);
+$footerTable->addCell($agreementTableSpan ['span1'], $this->cellStyle->bottomBorderBAlign)->addText('', null, $noSpacing);
 $footerTable->addRow();
 $footerTable->addCell($agreementTableSpan ['span1'], null)->addText('CUSTOMER', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
 $footerTable->addCell($agreementTableSpan ['span3'], null, 3)->addText('SIGNATURE', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
@@ -287,9 +286,9 @@ $footerTable->addCell($agreementTableSpan ['span1'], null)->addText('DATE', $thi
 $footerTable->addRow();
 $footerTable->addCell($agreementTableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText("OWNER (\"we\", \"us\", \"our\")", $this->fontStyle->invertBackground, $noSpacing);
 $footerTable->addRow();
-$footerTable->addCell($agreementTableSpan ['span2'], $this->cellStyle->bottomBorder, 2)->addText("{$this->leaseDetails->companyName}", null, $noSpacing);
+$footerTable->addCell($agreementTableSpan ['span2'], $this->cellStyle->bottomBorder, 2)->addText("{$this->dealerCompany->companyName}", null, $noSpacing);
 $footerTable->addCell($agreementTableSpan ['span2'], $this->cellStyle->bottomBorder, 2)->addText('', null, $noSpacing);
-$footerTable->addCell($agreementTableSpan ['span2'], $this->cellStyle->bottomBorder, 2)->addText("{$this->leaseDetails->companyOwner}", null, $noSpacing);
+$footerTable->addCell($agreementTableSpan ['span2'], $this->cellStyle->bottomBorder, 2)->addText("{$this->dealerCompany->companyOwner}", null, $noSpacing);
 $footerTable->addCell($agreementTableSpan ['span2'], $this->cellStyle->bottomBorder, 2)->addText('', null, $noSpacing);
 $footerTable->addRow();
 $footerTable->addCell($agreementTableSpan ['span1'], null)->addText('OWNER', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
@@ -297,6 +296,6 @@ $footerTable->addCell($agreementTableSpan ['span3'], null, 3)->addText('SIGNATUR
 $footerTable->addCell($agreementTableSpan ['span3'], null, 3)->addText('PRINT NAME & TITLE', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
 $footerTable->addCell($agreementTableSpan ['span1'], null)->addText('DATE', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
 $footerTable->addRow();
-$footerTable->addCell($agreementTableSpan ['span8'], $this->cellStyle->bottomBorder, 8)->addText("{$this->leaseDetails->companyAddress}", $this->fontStyle->label, $noSpacing);
+$footerTable->addCell($agreementTableSpan ['span8'], $this->cellStyle->bottomBorder, 8)->addText("{$this->dealerCompany->companyAddress}", $this->fontStyle->label, $noSpacing);
 
 
