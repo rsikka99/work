@@ -24,8 +24,8 @@ $this->cellStyle->bottomRightBorder = array (
         'borderRightSize' => 1 
 );
 $this->cellStyle->bottomLeftBorder = array (
-        'borderBottomSize' => 1,
-        'borderLeftSize' => 1
+        'borderBottomSize' => 1, 
+        'borderLeftSize' => 1 
 );
 
 $this->cellStyle->leftBorder = array (
@@ -39,6 +39,13 @@ $this->cellStyle->border = array (
 );
 
 // Border valign
+$this->cellStyle->borderBAlign = array (
+        'borderBottomSize' => 1, 
+        'borderTopSize' => 1, 
+        'borderLeftSize' => 1, 
+        'borderRightSize' => 1, 
+        'valign' => 'bottom' 
+);
 $this->cellStyle->bottomBorderBAlign = array (
         'borderBottomSize' => 1, 
         'valign' => 'bottom' 
@@ -71,22 +78,21 @@ $this->fontStyle = new stdClass();
 $this->fontStyle->invertBackground = array (
         'color' => 'FFFFFF', 
         'bold' => true, 
-        'size' => "10" 
+        'size' => '8' 
 );
-$this->fontStyle->subHeader = array(
-        'size' => '16',
-        'bold' => true
-        
-        );
+$this->fontStyle->subHeader = array (
+        'size' => '16', 
+        'bold' => true 
+);
 $this->fontStyle->label = array (
-        "size" => "7" 
+        "size" => '7' 
 );
 $this->fontStyle->boldFinePrint = array (
         'bold' => true, 
-        'size' => '8' 
+        'size' => '6' 
 );
 $this->fontStyle->finePrint = array (
-        'size' => '8' 
+        'size' => '6' 
 );
 
 $this->fontStyle->center = array (
@@ -115,16 +121,29 @@ $this->paragraphStyle->noSpacingRight = array (
         'align' => 'right' 
 );
 
+$this->paragraphStyle->noSpacingJustified = array (
+        'spaceAfter' => 0, 
+        'align' => 'both' 
+);
+
 //**************************************/
 //*************TABLE STYLE**************/
 //**************************************/
 $this->tableStyle = new stdClass();
 
 $this->tableStyle->standard = array (
-        'cellMarginTop' => 35,
-        'cellMarginBottom' => 35,
-        'cellMarginRight' => 0,
-        'cellMarginLeft' => 100
+        'cellMarginTop' => 35, 
+        'cellMarginBottom' => 35, 
+        'cellMarginRight' => 0, 
+        'cellMarginLeft' => 100 
+);
+$this->tableStyle->gridSpan = array (
+        "span1" => 1413.5, 
+        "span2" => 2827, 
+        "span3" => 4240.5, 
+        "span4" => 5654, 
+        "span6" => 8481, 
+        "span8" => 11306 
 );
 
 
