@@ -88,7 +88,6 @@ class Quotegen_Form_Option extends EasyBib_Form
         $this->addElement('text', 'dealerSku', array (
                 'label' => 'Dealer SKU:',
                 'class' => 'span3',
-                'required' => true,
                 'maxlength' => 255,
                 'filters' => array (
                         'StringTrim',

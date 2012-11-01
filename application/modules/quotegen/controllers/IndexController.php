@@ -87,6 +87,9 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
         $this->view->quoteForm = $quoteForm;
     }
 
+    /**
+     * Allows a user to work with an existing quote
+     */
     public function existingQuoteAction ()
     {
         $request = $this->getRequest();
@@ -98,7 +101,11 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
             
             if (isset($values ['quoteId']))
             {
-                $this->getReportsForClientAction();
+                // Get the clientId and find the client
+                $clientId = $this->_getParam('clientId');
+                // Load the quotes for the current client
+                $this->view->quotes = $this->getQuotesForClient($clientId, $this->_userId);
+                
                 // Existing Quote
                 if ($existingQuoteForm->isValid($values))
                 {
@@ -118,33 +125,46 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
         $this->view->existingQuoteForm = $existingQuoteForm;
     }
 
-    public function getReportsForClientAction ()
+    /**
+     * Gets an array of quotes that belong to a user/client
+     *
+     * @param int $clientId            
+     * @param int $userId            
+     * @return array The array of quotes
+     */
+    public function getQuotesForClient ($clientId, $userId)
     {
-        // Get the clientId and find the client
-        $clientId = $this->_getParam('clientId');
         $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
         
+        $quoteList = array ();
         // Ensure that the client exist
         if ($client instanceof Quotegen_Model_Client)
         {
             // If the client exist get all quotes for the client
             $quotes = Quotegen_Model_Mapper_Quote::getInstance()->fetchAllForClientByUser($client->getId(), $this->_userId);
-        }
-        
-        $this->view->quotes = array ();
-        
-        // Create a quote array to create option data
-        /* @var $quote Quotegen_Model_Quote */
-        foreach ( $quotes as $quote )
-        {
-            $quoteArray = array (
-                    'id' => $quote->getId(), 
+            
+            // Create a quote array to create option data
+            /* @var $quote Quotegen_Model_Quote */
+            foreach ( $quotes as $quote )
+            {
+                $quoteArray = array (
+                        'id' => $quote->getId(), 
                     'clientName' => $quote->getClient()->getCompanyName(), 
-                    'quotedate' => $quote->getQuoteDate(), 
-                    'isLeased' => $quote->isLeased() 
-            );
-            $this->view->quotes [] = $quoteArray;
+                        'quotedate' => $quote->getQuoteDate(), 
+                        'isLeased' => $quote->isLeased() 
+                );
+                $quoteList [] = $quoteArray;
+            }
         }
+        
+        return $quoteList;
+    }
+
+    public function getReportsForClientAction ()
+    {
+        // Get the clientId and find the client
+        $clientId = $this->_getParam('clientId');
+        $this->view->quotes = $this->getQuotesForClient($clientId, $this->_userId);
     }
 
     public function createClientAction ()
