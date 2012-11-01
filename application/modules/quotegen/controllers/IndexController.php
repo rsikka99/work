@@ -184,6 +184,10 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
             
             if ($clientId)
             {
+                $this->_helper->flashMessenger(array (
+                        'success' => "Client was successfully created."
+                ));
+                
                 // Redirect with client id so that the client is preselected
                 $this->_helper->redirector('index', null, null, array (
                         'clientId' => $clientId 
