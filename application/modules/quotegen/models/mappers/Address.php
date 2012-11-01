@@ -208,11 +208,17 @@ class Quotegen_Model_Mapper_Address extends My_Model_Mapper_Abstract
                 "{$this->col_id}  = ?" => $id 
         );
     }
-
-    public function getWhereClientId ($id)
+    
+    /**
+     * Gets a where clause for filtering by clientId
+     *
+     * @param int $clientId
+     * @return array
+     */
+    public function getWhereClientId ($clientId)
     {
         return array (
-                "{$this->col_clientId}  = ?" => $id 
+                "{$this->col_clientId}  = ?" => $clientId 
         );
     }
 
@@ -224,12 +230,12 @@ class Quotegen_Model_Mapper_Address extends My_Model_Mapper_Abstract
         return $object->getId();
     }
 
-    /**
-     * Gets a address using a client Id
-     * 
-     * @param int $clientId            
-     * @return Quotegen_Model_Contact
-     */
+	/**
+	 * Gets a address by a client Id
+	 * 
+	 * @param int $clientId
+	 * @return Address <Quotegen_Model_Address>
+	 */
     public function getAddressByClientId ($clientId)
     {
         return $this->fetch($this->getWhereClientId($clientId));

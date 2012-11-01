@@ -154,4 +154,12 @@ class Quotegen_Model_Client extends My_Model_Abstract
     {
         $this->_legalName = $_legalName;
     }
+    
+    /**
+     * Gets the address of this client
+     * @return Address <Quotegen_Model_Address>
+     */
+    public function getAddress(){
+        return Quotegen_Model_Mapper_Address::getInstance()->getAddressByClientId($this->getId());
+    }
 }
