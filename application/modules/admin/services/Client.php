@@ -158,6 +158,7 @@ class Admin_Service_Client
             $valid = false;
         }
         $validData = $formData;
+        $validData ['region'] = strtoupper($validData['region']);
         //This allows the database to update empty extensions
         if ($validData ['extension'] == '')
         {
