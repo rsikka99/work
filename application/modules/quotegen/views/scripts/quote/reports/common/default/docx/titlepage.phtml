@@ -35,5 +35,5 @@ if (strlen($client->getAddress()->getAddressLine2()) > 0)
 	$section->addText($client->getAddress()->getAddressLine2(), null, 'nospacing');
 }
 
-$section->addText("{$client->getAddress()->getCity()}, {$client->getAddress()->getRegion()} {$client->getAddress()->getPostCode()}", null, 'nospacing');
+$section->addText("{$client->getAddress()->getCity()}, {$client->getAddress()->getRegionName()} {$client->getAddress()->getPostCode()}", null, 'nospacing');
 $section->addText($client->getAddress()->getCountry(), null, 'nospacing');

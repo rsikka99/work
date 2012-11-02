@@ -51,7 +51,7 @@ class Quotegen_Model_Address extends My_Model_Abstract
      */
     protected $_region;
     /**
-     * The region (province or state)
+     * The postcode(province or state)
      *
      * @var string
      */
@@ -82,8 +82,9 @@ class Quotegen_Model_Address extends My_Model_Abstract
             $this->setAddressLine2($params->addressLine2);
         if (isset($params->city) && ! is_null($params->city))
             $this->setCity($params->city);
-        if (isset($params->region) && ! is_null($params->region))
+        if (isset($params->region) && ! is_null($params->region)){
             $this->setRegion($params->region);
+        }
         if (isset($params->postCode) && ! is_null($params->postCode))
             $this->setPostCode($params->postCode);
         if (isset($params->countryId) && ! is_null($params->countryId))
@@ -180,7 +181,7 @@ class Quotegen_Model_Address extends My_Model_Abstract
     }
 
     /**
-     * Getter for $_region
+     * Getter for $_regionId
      *
      * @return string
      */
@@ -213,6 +214,10 @@ class Quotegen_Model_Address extends My_Model_Abstract
     {
         return Quotegen_Model_Mapper_Country::getInstance()->find($this->getCountryId())
             ->getName();
+    }
+    
+    public function getRegionName(){
+        return Quotegen_Model_Mapper_Region::getInstance()->getById($this->getRegion())->getRegion();
     }
 
     /**
@@ -249,9 +254,9 @@ class Quotegen_Model_Address extends My_Model_Abstract
     }
 
     /**
-     * Setter for $_region
+     * Setter for $_regionId
      *
-     * @param string $_region
+     * @param string $_regionId
      *            The new value
      */
     public function setRegion ($_region)
@@ -298,7 +303,7 @@ class Quotegen_Model_Address extends My_Model_Abstract
             $address .= ", ";
         }
         
-        $address .= "{$this->getCity()}, {$this->getRegion()} {$this->getPostCode()}";
+        $address .= "{$this->getCity()}, {$this->getRegionName()} {$this->getPostCode()}";
         return $address;
     }
 
@@ -319,7 +324,7 @@ class Quotegen_Model_Address extends My_Model_Abstract
             $address .= "\n";
         }
         
-        $address .= "{$this->getCity()}, {$this->getRegion()} {$this->getPostCode()}";
+        $address .= "{$this->getCity()}, {$this->getRegionName()} {$this->getPostCode()}";
         return $address;
     }
 }

@@ -158,7 +158,6 @@ class Admin_Service_Client
             $valid = false;
         }
         $validData = $formData;
-        $validData ['region'] = strtoupper($validData['region']);
         //This allows the database to update empty extensions
         if ($validData ['extension'] == '')
         {
@@ -203,13 +202,16 @@ class Admin_Service_Client
         }
         
         //If it is not a valid state or province, create error messages
-        if (! $this->isValidRegion($validData ['countryId'], $validData ['region']))
+        $regionId = $this->isValidRegion($validData ['countryId'], $validData ['region']);
+        if ($regionId==false)
         {
             $this->getForm()
                 ->getElement('region')
                 ->clearErrorMessages()
                 ->addError('Invalid state or province');
             $valid = false;
+        }else{
+            $validData['region'] = $regionId;
         }
         
         if ($valid)
@@ -267,10 +269,11 @@ class Admin_Service_Client
     protected function isValidRegion ($countryId, $regionName)
     {
         //Try to find a the region they are looking for in the specified country
+
         $region = Quotegen_Model_Mapper_Region::getInstance()->getByRegionNameAndCountryId($regionName, $countryId);
         if ($region)
         {
-            return true;
+            return $region->getId();
         }
         
         return false;
@@ -285,6 +288,9 @@ class Admin_Service_Client
     {
         $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
         $address = Quotegen_Model_Mapper_Address::getInstance()->getAddressByClientId($clientId);
+        
+        $address->setRegion(Quotegen_Model_Mapper_Region::getInstance()->getById($address->getRegion())->getRegion());
+        
         $contact = Quotegen_Model_Mapper_Contact::getInstance()->getContactByClientId($clientId);
         $combinedClientData = $client->toArray();
         if ($address)
@@ -296,6 +302,7 @@ class Admin_Service_Client
             $combinedClientData = array_merge($combinedClientData, $contact->toArray());
         }
         $this->getForm()->populate($combinedClientData);
+        
     }
 }
 

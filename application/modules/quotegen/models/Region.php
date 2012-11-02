@@ -23,7 +23,7 @@ class Quotegen_Model_Region extends My_Model_Abstract
     protected $_countryId;
     
     /**
-     * The region of the country
+     * The regionId of the country
      *
      * @var string
      */
@@ -40,8 +40,8 @@ class Quotegen_Model_Region extends My_Model_Abstract
         }
         if (isset($params->id) && ! is_null($params->id))
             $this->setId($params->id);
-        if (isset($params->name) && ! is_null($params->name))
-            $this->setName($params->name);
+        if (isset($params->countryId) && ! is_null($params->countryId))
+            $this->setCountryId($params->countryId);
         if (isset($params->region) && ! is_null($params->region))
             $this->setRegion($params->region);
     }
@@ -78,30 +78,9 @@ class Quotegen_Model_Region extends My_Model_Abstract
     {
         $this->_id = $_id;
     }
-
-    /**
-     * Getter for $_name
-     *
-     * @return string
-     */
-    public function getName ()
-    {
-        return $this->_name;
-    }
-
-    /**
-     * Setter for $_name
-     *
-     * @param string $_name
-     *            The new value
-     */
-    public function setName ($_name)
-    {
-        $this->_name = $_name;
-    }
     
 	/**
-     * Getter for region
+     * Getter for regionId
      *
      * @return string
      */
@@ -111,15 +90,35 @@ class Quotegen_Model_Region extends My_Model_Abstract
     }
 
 	/**
-     * Setter for region
+     * Setter for regionId
      *
-     * @param string region The new value
+     * @param string regionId The new value
      */
     public function setRegion ($_region)
     {
         $this->_region = $_region;
     }
+	/**
+     * Getter for $_countryId
+     *
+     * @return string
+     */
+    public function getCountryId ()
+    {
+        return $this->_countryId;
+    }
 
+	/**
+     * Setter for $_countryId
+     *
+     * @param string $_countryId The new value
+     */
+    public function setCountryId ($_countryId)
+    {
+        $this->_countryId = $_countryId;
+    }
+
+	
     
     
 }

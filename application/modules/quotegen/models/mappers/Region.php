@@ -209,7 +209,14 @@ class Quotegen_Model_Mapper_Region extends My_Model_Mapper_Abstract
                 "{$this->col_id}  = ?" => $id 
         );
     }
-
+	
+    /**
+     * Gets the region by id
+     * @param int $id
+     */
+    public function getById($id){
+        return $this->fetch($this->getWhereId($id));
+    }
     /**
      * (non-PHPdoc) @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
      */

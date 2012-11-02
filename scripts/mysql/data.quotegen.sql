@@ -11,10 +11,10 @@ INSERT INTO `contacts` (`id`,`clientId`, `firstName`, `lastName`,`countryCode`,`
 (4,4, 'Lee', 'Robert', 1,613,123,1234,null);
 
 INSERT INTO `addresses` (`id`, `clientId`, `addressLine1`, `addressline2`,`city`,`region`,`postCode`,`countryId`) VALUES
-(1,1, '945 Princess Street','Suite 234','Kingston','ON','K7L3N6',1),
-(2,2, 'Tyson Avenue','','Kingston','ON','k7n2s1',1),
-(3,3, 'Shawn Lane','','Kingston','ON','k2h7s6',1),
-(4,4, 'Lee Street','','Kingston','ON','k1b2s7',1);
+(1,1, '945 Princess Street','Suite 234','Kingston','9','K7L3N6',1),
+(2,2, 'Tyson Avenue','','Kingston','9','k7n2s1',1),
+(3,3, 'Shawn Lane','','Kingston','9','k2h7s6',1),
+(4,4, 'Lee Street','','Kingston','9','k1b2s7',1);
 
 INSERT INTO `qgen_options` (`id`, `name`, `description`, `cost`, `oemSku`) VALUES
 (7, 'HP 3-bin Stapler/Stacker with Output', 'Staples up to 50 pages and stacks up to 1600 sheets', 1765.15, 'CC517A'),

@@ -147,6 +147,7 @@ class Quotegen_ClientController extends Zend_Controller_Action
         if ($client)
         {
             $clientService->populateForm($clientId);
+            
         }
         else
         {
@@ -188,6 +189,7 @@ class Quotegen_ClientController extends Zend_Controller_Action
             }
         }
         $this->view->form = $clientService->getForm();
+        
     }
 	
     /**
