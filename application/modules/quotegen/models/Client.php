@@ -162,4 +162,12 @@ class Quotegen_Model_Client extends My_Model_Abstract
     public function getAddress(){
         return Quotegen_Model_Mapper_Address::getInstance()->getAddressByClientId($this->getId());
     }
+    
+    /**
+     * Gets the contact of this client
+     * @return Contact <Quotegen_Model_Contact>
+     */
+    public function getContact(){
+        return Quotegen_Model_Mapper_Contact::getInstance()->getContactByClientId($this->getId());
+    }
 }

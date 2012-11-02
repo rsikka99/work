@@ -281,4 +281,45 @@ class Quotegen_Model_Address extends My_Model_Abstract
         $this->_countryId = $_countryId;
     }
 
+    /**
+     * This gets all the address fields in line
+     *
+     * @return string all the address information combined
+     */
+    public function getFullAddressOneLine ()
+    {
+        $address = "{$this->getAddressLine1()}";
+        if (strlen($this->getAddressLine2())>0)
+        {
+            $address .= " {$this->getAddressLine2()}, ";
+        }
+        else
+        {
+            $address .= ", ";
+        }
+        
+        $address .= "{$this->getCity()}, {$this->getRegion()} {$this->getPostCode()}";
+        return $address;
+    }
+
+    /**
+     * This gets all the address fields with line breaks
+     *
+     * @return string all the address information combined
+     */
+    public function getFullAddressMultipleLines ()
+    {
+                $address = "{$this->getAddressLine1()}";
+        if ($this->getAddressLine2())
+        {
+            $address .= "\n{$this->getAddressLine2()}\n";
+        }
+        else
+        {
+            $address .= "\n";
+        }
+        
+        $address .= "{$this->getCity()}, {$this->getRegion()} {$this->getPostCode()}";
+        return $address;
+    }
 }
