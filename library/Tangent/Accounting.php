@@ -72,7 +72,8 @@ class Tangent_Accounting
         // Validate that margin percentage is correct
         if ($marginPercent <= - 100 || $marginPercent >= 100)
         {
-            throw new InvalidArgumentException('Margin percent must be between -100 and 100 exclusively.');
+            trigger_error('Margin percent must be between -100 and 100 exclusively.', E_USER_NOTICE);
+            return $cost;
         }
         
         // Only apply a margin on something that has a cost > 0.
