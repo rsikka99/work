@@ -43,7 +43,7 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
         }
         
         $client = Quotegen_Model_Mapper_Client::getInstance()->find($quote->getClientId());
-        $message = "Are you sure you want to delete the quote for {$client->getName()} ?";
+        $message = "Are you sure you want to delete the quote for {$client->getCompanyName()} ?";
         $form = new Application_Form_Delete($message);
         
         $request = $this->getRequest();
@@ -55,7 +55,7 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
             {
                 if ($form->isValid($values))
                 {
-            
+                    
                     $quoteMapper->delete($quote);
                     
                     $this->_helper->flashMessenger(array (
@@ -66,87 +66,6 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
             }
             else
             {
-                $this->_helper->redirector('index');
-            }
-        }
-        $this->view->form = $form;
-    }
-
-    public function createAction ()
-    {
-        $request = $this->getRequest();
-        $form = new Quotegen_Form_Quote();
-        
-        if ($request->isPost())
-        {
-            $values = $request->getPost();
-            if (! isset($values ['cancel']))
-            {
-                try
-                {
-                    if ($form->isValid($values))
-                    {
-                        $db = Zend_Db_Table::getDefaultAdapter();
-                        try
-                        {
-                            $db->beginTransaction();
-                            $userId = Zend_Auth::getInstance()->getIdentity()->id;
-                            $userQuoteSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting($userId);
-                            
-                            $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
-                            $quoteSetting->applyOverride($userQuoteSetting);
-                            
-                            $currentDate = date('Y-m-d H:i:s');
-                            $quote = new Quotegen_Model_Quote($values);
-                            
-                            $quote->setUserId($userId);
-                            $quote->setDateCreated($currentDate);
-                            $quote->setDateModified($currentDate);
-                            $quote->setQuoteDate($currentDate);
-                            
-                            $quote->setPageCoverageMonochrome($quoteSetting->getPageCoverageMonochrome());
-                            $quote->setPageCoverageColor($quoteSetting->getPageCoverageColor());
-                            $quote->setPricingConfigId($quoteSetting->getPricingConfigId());
-                            
-                            $quoteId = Quotegen_Model_Mapper_Quote::getInstance()->insert($quote);
-                            
-                            $quoteDeviceGroup = new Quotegen_Model_QuoteDeviceGroup();
-                            $quoteDeviceGroup->setQuoteId($quoteId);
-                            $quoteDeviceGroup->setPageMargin($quoteSetting->getPageMargin());
-                            $quoteDeviceGroup->setName('Default Group (Ungrouped)');
-                            $quoteDeviceGroup->setIsDefault(1);
-                            $quoteDeviceGroupId = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->insert($quoteDeviceGroup);
-                            
-                            $db->commit();
-                            
-                            // Redirect to the build controller
-                            $this->_helper->redirector('index', 'quote_devices', null, array (
-                                    'quoteId' => $quoteId 
-                            ));
-                        }
-                        catch ( Exception $e )
-                        {
-                            $db->rollBack();
-                            
-                            $this->_helper->flashMessenger(array (
-                                    'danger' => 'There was an error processing this request.  Please try again.' 
-                            ));
-                            $form->populate($request->getPost());
-                        }
-                    }
-                    else
-                    {
-                        throw new Zend_Validate_Exception("Form Validation Failed");
-                    }
-                }
-                catch ( Zend_Validate_Exception $e )
-                {
-                    $form->buildBootstrapErrorDecorators();
-                }
-            }
-            else
-            {
-                // User has cancelled. We could do a redirect here if we wanted.
                 $this->_helper->redirector('index');
             }
         }

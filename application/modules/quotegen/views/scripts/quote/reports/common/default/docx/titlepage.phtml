@@ -10,6 +10,7 @@ $quote = $this->quote;
 
 $client = $quote->getClient();
 
+
 $quoteDate = date('F jS, Y', strtotime($quote->getQuoteDate()));
 
 /* @var $section PHPWord_Section */
@@ -18,16 +19,21 @@ $section = $this->section;
 $clientName = $quote->getClientDisplayName();
 if (empty($clientName))
 {
-    $clientName = $client->getName();
+    $clientName = $client->getCompanyName();
 }
 
 $section->addText($this->translate('Prepared For:') . " " . $clientName, 'titlepageHeaderFont', 'titlepageHeaderParagraph');
 
 $section->addText($quoteDate, 'titlepageHeaderFont', 'titlepageHeaderParagraph');
 $section->addTextBreak(4);
-// Parse the address
-$addressLines = explode("\n", $client->getAddress());
-foreach ( $addressLines as $line )
+
+//add the addresses
+$section->addText($client->getAddress()->getAddressLine1(), null, 'nospacing');
+
+if (strlen($client->getAddress()->getAddressLine2()) > 0)
 {
-    $section->addText($line, null, 'nospacing');
+	$section->addText($client->getAddress()->getAddressLine2(), null, 'nospacing');
 }
+
+$section->addText("{$client->getAddress()->getCity()}, {$client->getAddress()->getRegionName()} {$client->getAddress()->getPostCode()}", null, 'nospacing');
+$section->addText($client->getAddress()->getCountry(), null, 'nospacing');

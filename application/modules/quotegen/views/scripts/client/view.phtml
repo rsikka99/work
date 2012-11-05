@@ -1,10 +1,37 @@
-<?php /* @var $client Quotegen_Model_Client */ $client = $this->client; ?>
+<?php
+/* @var $client Quotegen_Model_Client */
+$client = $this->client;
+/* @var $client Quotegen_Model_Client */
+$contact = $this->contact;
+/* @var $client Quotegen_Model_Client */
+$address = $this->address;
+?>
 <div class="page-header">
-    <h1>Client Management</h1>
+	<h1>Client Management</h1>
 </div>
 <div class="well">
-    <dl class="dl-horizontal">
-        <dt>Name</dt><dd><?php echo $client->getName(); ?></dd>
-        <dt>Address</dt><dd><?php echo nl2br($client->getAddress()); ?></dd>
-    </dl>
+	<dl class="dl-horizontal">
+		<dt>Name</dt>
+		<dd><?php echo $client->getCompanyName(); ?></dd>
+		<dt>Legal Name</dt>
+		<dd><?php echo nl2br($client->getLegalName())  . '&nbsp'; ?></dd>
+		<dt>Country</dt>
+		<dd><?php echo nl2br($address->getCountry()); ?></dd>
+		<dt>State or Province</dt>
+		<dd><?php echo nl2br($address->getRegionName()); ?></dd>
+		<dt>City</dt>
+		<dd><?php echo nl2br($address->getCity()); ?></dd>
+		<dt>Address 1</dt>
+		<dd><?php echo nl2br($address->getAddressLine1()); ?></dd>
+		<dt>Address 2</dt>
+		<dd><?php echo nl2br($address->getAddressLine2()) . '&nbsp'; ?></dd>
+		<dt>Zip or Postal Code</dt>
+		<dd><?php echo nl2br($address->getPostCode()); ?></dd>
+		<dt>Contact First Name</dt>
+		<dd><?php echo nl2br($contact->getFirstName()); ?></dd>
+		<dt>Contact Last Name</dt>
+		<dd><?php echo nl2br($contact->getLastName()); ?></dd>
+		<dt>Phone Number</dt>
+		<dd><?php echo nl2br("+" . $contact->getCountryCode() . "(" . $contact->getAreaCode() . ")" . $contact->getExchangeCode() . "-" . $contact->getNumber() . " Ext " . $contact->getExtension()); ?></dd>
+	</dl>
 </div>

@@ -17,18 +17,25 @@ class Quotegen_Model_Client extends My_Model_Abstract
     protected $_id = 0;
     
     /**
-     * Represents the client name
+     * The account number of the client
      *
      * @var string
      */
-    protected $_name;
+    protected $_accountNumber;
     
     /**
-     * The address of the client
+     * The company name
      *
      * @var string
      */
-    protected $_address;
+    protected $_companyName;
+    
+    /**
+     * The legal name of the client
+     *
+     * @var string
+     */
+    protected $_legalName;
     
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
@@ -41,10 +48,12 @@ class Quotegen_Model_Client extends My_Model_Abstract
         }
         if (isset($params->id) && ! is_null($params->id))
             $this->setId($params->id);
-        if (isset($params->name) && ! is_null($params->name))
-            $this->setName($params->name);
-        if (isset($params->address) && ! is_null($params->address))
-            $this->setAddress($params->address);
+        if (isset($params->accountNumber) && ! is_null($params->accountNumber))
+            $this->setAccountNumber($params->accountNumber);
+        if (isset($params->companyName) && ! is_null($params->companyName))
+            $this->setCompanyName($params->companyName);
+        if (isset($params->legalName) && ! is_null($params->legalName))
+            $this->setLegalName($params->legalName);
     }
     
     /*
@@ -54,8 +63,9 @@ class Quotegen_Model_Client extends My_Model_Abstract
     {
         return array (
                 'id' => $this->getId(), 
-                'name' => $this->getName(), 
-                'address' => $this->getAddress() 
+                'accountNumber' => $this->getAccountNumber(), 
+                'companyName' => $this->getCompanyName(), 
+                'legalName' => $this->getLegalName() 
         );
     }
 
@@ -81,44 +91,83 @@ class Quotegen_Model_Client extends My_Model_Abstract
     }
 
     /**
-     * Gets the name of the object
+     * Gets the account number
      *
-     * @return the $_name
+     * @return int
      */
-    public function getName ()
+    public function getAccountNumber ()
     {
-        return $this->_name;
+        return $this->_accountNumber;
     }
 
     /**
+     * Getter for $_companyName
      *
-     * @param string $_name
-     *            the new name
+     * @return string
      */
-    public function setName ($_name)
+    public function getCompanyName ()
     {
-        $this->_name = $_name;
-        return $this;
+        return $this->_companyName;
+    }
+    
+   
+
+    /**
+     * Gets the legal name
+     *
+     * @return string
+     */
+    public function getLegalName ()
+    {
+        return $this->_legalName;
     }
 
     /**
-     * Gets the address of the object
+     * Setter for $_accountNumber
      *
-     * @return the $_address
+     * @param string $_accountNumber
+     *            The new value
      */
-    public function getAddress ()
+    public function setAccountNumber ($_accountNumber)
     {
-        return $this->_address;
+        $this->_accountNumber = $_accountNumber;
     }
 
     /**
+     * Setter for $_companyName
      *
-     * @param string $_address
-     *            the new adress
+     * @param string $_companyName
+     *            The new value
      */
-    public function setAddress ($_address)
+    public function setCompanyName ($_companyName)
     {
-        $this->_address = $_address;
-        return $this;
+        $this->_companyName = $_companyName;
+    }
+
+    /**
+     * Setter for $_legalName
+     *
+     * @param string $_legalName
+     *            The new value
+     */
+    public function setLegalName ($_legalName)
+    {
+        $this->_legalName = $_legalName;
+    }
+    
+    /**
+     * Gets the address of this client
+     * @return Address <Quotegen_Model_Address>
+     */
+    public function getAddress(){
+        return Quotegen_Model_Mapper_Address::getInstance()->getAddressByClientId($this->getId());
+    }
+    
+    /**
+     * Gets the contact of this client
+     * @return Contact <Quotegen_Model_Contact>
+     */
+    public function getContact(){
+        return Quotegen_Model_Mapper_Contact::getInstance()->getContactByClientId($this->getId());
     }
 }

@@ -8,8 +8,9 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `clients` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `name` VARCHAR(255) NOT NULL ,
-  `address` VARCHAR(255) NOT NULL ,
+  `accountNumber` VARCHAR(255) NOT NULL ,
+  `companyName` VARCHAR(255) NOT NULL ,
+  `legalName` VARCHAR(255) NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 5
@@ -119,8 +120,8 @@ CREATE  TABLE IF NOT EXISTS `users` (
   UNIQUE INDEX `username` (`username` ASC) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 13
-DEFAULT CHARACTER SET = latin1
-COMMENT = 'The users table stores basic information on a user';
+DEFAULT CHARACTER SET = latin1, 
+COMMENT = 'The users table stores basic information on a user' ;
 
 
 -- -----------------------------------------------------
@@ -1141,8 +1142,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schemas` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'Stores information on different leasing schemas';
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'Stores information on different leasing schemas' ;
 
 
 -- -----------------------------------------------------
@@ -1159,7 +1160,7 @@ CREATE  TABLE IF NOT EXISTS `qgen_global_leasing_schemas` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
-COMMENT = 'This table marks leasing schemas as global';
+COMMENT = 'This table marks leasing schemas as global' ;
 
 
 -- -----------------------------------------------------
@@ -1178,8 +1179,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_ranges` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 5
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'Stores the available value ranges (start range) for a leasin';
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'Stores the available value ranges (start range) for a leasin' ;
 
 
 -- -----------------------------------------------------
@@ -1198,8 +1199,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_terms` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 10
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'Holds the terms available for a leasing schema';
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'Holds the terms available for a leasing schema' ;
 
 
 -- -----------------------------------------------------
@@ -1223,8 +1224,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_rates` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'Stores the rates that coincide with the terms and ranges for';
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'Stores the rates that coincide with the terms and ranges for' ;
 
 
 -- -----------------------------------------------------
@@ -1276,7 +1277,9 @@ CREATE  TABLE IF NOT EXISTS `qgen_quotes` (
   INDEX `quotegen_quotes_ibfk_3` (`pricingConfigId` ASC) ,
   CONSTRAINT `quotegen_quotes_ibfk_1`
     FOREIGN KEY (`clientId` )
-    REFERENCES `clients` (`id` ),
+    REFERENCES `clients` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `quotegen_quotes_ibfk_2`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
@@ -1289,8 +1292,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_quotes` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'Primary table for a quote. Stores basic information';
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'Primary table for a quote. Stores basic information' ;
 
 
 -- -----------------------------------------------------
@@ -1554,6 +1557,85 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_device_group_devices` (
   CONSTRAINT `qgen_quote_device_group_devices_ibfk2`
     FOREIGN KEY (`quoteDeviceGroupId` )
     REFERENCES `qgen_quote_device_groups` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `contacts`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `contacts` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `clientId` INT NOT NULL ,
+  `firstName` VARCHAR(255) NOT NULL ,
+  `lastName` VARCHAR(255) NOT NULL ,
+  `countryCode` SMALLINT NOT NULL ,
+  `areaCode` SMALLINT NOT NULL ,
+  `exchangeCode` SMALLINT NOT NULL ,
+  `number` SMALLINT NOT NULL ,
+  `extension` SMALLINT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `contacts_ibfk_1` (`clientId` ASC) ,
+  CONSTRAINT `contacts_ibfk_1`
+    FOREIGN KEY (`clientId` )
+    REFERENCES `clients` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `countries`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `countries` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(255) NOT NULL ,
+  `locale` VARCHAR(255) NOT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `addresses`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `addresses` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `clientId` INT NOT NULL ,
+  `addressLine1` VARCHAR(255) NOT NULL ,
+  `addressLine2` VARCHAR(255) NULL ,
+  `city` VARCHAR(255) NOT NULL ,
+  `region` VARCHAR(255) NOT NULL ,
+  `postCode` VARCHAR(255) NOT NULL ,
+  `countryId` INT NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `addresses_ibfk_1` (`clientId` ASC) ,
+  INDEX `addresses_ibfk_2` (`countryId` ASC) ,
+  CONSTRAINT `addresses_ibfk_1`
+    FOREIGN KEY (`clientId` )
+    REFERENCES `clients` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `addresses_ibfk_2`
+    FOREIGN KEY (`countryId` )
+    REFERENCES `countries` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `regions`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `regions` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `countryId` INT NOT NULL ,
+  `region` CHAR(2) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `regions_ibfk_1` (`countryId` ASC) ,
+  CONSTRAINT `regions_ibfk_1`
+    FOREIGN KEY (`countryId` )
+    REFERENCES `countries` (`id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;

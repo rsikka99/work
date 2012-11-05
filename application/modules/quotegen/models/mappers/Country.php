@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
+class Quotegen_Model_Mapper_Country extends My_Model_Mapper_Abstract
 {
     /**
      * The default db table class to use
@@ -8,17 +8,18 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Quotegen_Model_DbTable_Client';
+    protected $_defaultDbTable = 'Quotegen_Model_DbTable_Country';
     
     /*
      * Define the primary key of the model association
      */
     public $col_id = 'id';
+    public $col_name = 'name';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Quotegen_Model_Mapper_Client
+     * @return Quotegen_Model_Mapper_Country
      */
     public static function getInstance ()
     {
@@ -26,10 +27,10 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves an instance of Quotegen_Model_Client to the database.
+     * Saves an instance of Quotegen_Model_Country to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Quotegen_Model_Client
+     * @param $object Quotegen_Model_Country
      *            The object to insert
      * @return mixed The primary key of the new row
      */
@@ -53,9 +54,9 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves (updates) an instance of Quotegen_Model_Client to the database.
+     * Saves (updates) an instance of Quotegen_Model_Country to the database.
      *
-     * @param $object Quotegen_Model_Client
+     * @param $object Quotegen_Model_Country
      *            The client model to save to the database
      * @param $primaryKey mixed
      *            Optional: The original primary key, in case we're changing it
@@ -85,13 +86,13 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
      * Deletes rows from the database.
      *
      * @param $object mixed
-     *            This can either be an instance of Quotegen_Model_Client or the
+     *            This can either be an instance of Quotegen_Model_Country or the
      *            primary key to delete
      * @return mixed The number of rows deleted
      */
     public function delete ($object)
     {
-        if ($object instanceof Quotegen_Model_Client)
+        if ($object instanceof Quotegen_Model_Country)
         {
             $whereClause = array (
                     "{$this->col_id}  = ?" => $object->getId() 
@@ -113,13 +114,13 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
      *
      * @param $id int
      *            The id of the client to find
-     * @return Quotegen_Model_Client
+     * @return Quotegen_Model_Country
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Quotegen_Model_Client)
+        if ($result instanceof Quotegen_Model_Country)
         {
             return $result;
         }
@@ -131,7 +132,7 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
             return;
         }
         $row = $result->current();
-        $object = new Quotegen_Model_Client($row->toArray());
+        $object = new Quotegen_Model_Country($row->toArray());
         
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -148,7 +149,7 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
      *            OPTIONAL: A SQL ORDER clause.
      * @param $offset int
      *            OPTIONAL: A SQL OFFSET value.
-     * @return Quotegen_Model_Client
+     * @return Quotegen_Model_Country
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -158,7 +159,7 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
             return;
         }
         
-        $object = new Quotegen_Model_Client($row->toArray());
+        $object = new Quotegen_Model_Country($row->toArray());
         
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -177,7 +178,7 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
      *            OPTIONAL: A SQL LIMIT count. (Defaults to 25)
      * @param $offset int
      *            OPTIONAL: A SQL LIMIT offset.
-     * @return multitype:Quotegen_Model_Client
+     * @return multitype:Quotegen_Model_Country
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -185,7 +186,7 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
         $entries = array ();
         foreach ( $resultSet as $row )
         {
-            $object = new Quotegen_Model_Client($row->toArray());
+            $object = new Quotegen_Model_Country($row->toArray());
             
             // Save the object into the cache
             $this->saveItemToCache($object);
@@ -198,7 +199,8 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
     /**
      * Gets a where clause for filtering by id
      *
-     * @param unknown_type $id            
+     * @param int $id
+     *            the id of the country to find
      * @return array
      */
     public function getWhereId ($id)
