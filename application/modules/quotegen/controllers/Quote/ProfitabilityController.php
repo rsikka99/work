@@ -152,6 +152,12 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                         My_Log::logException($e);
                     }
                 }
+                else
+                {
+                    $this->_helper->flashMessenger(array (
+                            'danger' => 'Please correct the errors below.'
+                    ));
+                }
             }
         }
         
