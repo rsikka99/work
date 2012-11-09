@@ -52,7 +52,7 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
             
             $this->addElement('select', 'leasingSchemaId', array (
                     'label' => 'Leasing Schema:', 
-                    'class' => 'input-medium',
+                    'class' => 'input-medium', 
                     'multiOptions' => $leasingSchemas, 
                     'required' => true, 
                     'value' => $leasingSchemaId 
@@ -70,7 +70,7 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
             }
             
             $this->addElement('select', 'leasingSchemaTermId', array (
-                    'label' => 'Lease Term:',
+                    'label' => 'Lease Term:', 
                     'class' => 'input-medium', 
                     'multiOptions' => $leasingSchemaTerms, 
                     'required' => true, 
@@ -86,63 +86,66 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
         foreach ( $this->getQuote()->getQuoteDevices() as $quoteDevice )
         {
-            // Package Markup
-            $this->addElement('text', "packageMarkup_{$quoteDevice->getId()}", array (
-                    'label' => 'Markup', 
-                    'required' => true, 
-                    'class' => 'input-mini rightAlign', 
-                    'value' => $quoteDevice->getPackageMarkup(), 
-                    'validators' => array (
-                            'Float', 
-                            array (
-                                    'validator' => 'Between', 
-                                    'options' => array (
-                                            'min' => 0, 
-                                            'max' => 99999 
-                                    ) 
-                            ) 
-                    ) 
-            ));
-            
-            // Margin
-            $this->addElement('text', "margin_{$quoteDevice->getId()}", array (
-                    'label' => 'Margin', 
-                    'required' => true, 
-                    'class' => 'input-mini rightAlign', 
-                    'value' => $quoteDevice->getMargin(), 
-                    'validators' => array (
-                            'Float', 
-                            array (
-                                    'validator' => 'Between', 
-                                    'options' => array (
-                                            'min' => - 100, 
-                                            'max' => 100, 
-                                            'inclusive' => false 
-                                    ) 
-                            ) 
-                    ) 
-            ));
-            
-            if ($this->_quote->isLeased())
+            if ($quoteDevice->calculateTotalQuantity() > 0)
             {
-                // Residual
-                $this->addElement('text', "residual_{$quoteDevice->getId()}", array (
-                        'label' => 'Residual', 
+                // Package Markup
+                $this->addElement('text', "packageMarkup_{$quoteDevice->getId()}", array (
+                        'label' => 'Markup', 
                         'required' => true, 
                         'class' => 'input-mini rightAlign', 
-                        'value' => $quoteDevice->getResidual(), 
+                        'value' => $quoteDevice->getPackageMarkup(), 
                         'validators' => array (
                                 'Float', 
                                 array (
                                         'validator' => 'Between', 
                                         'options' => array (
                                                 'min' => 0, 
-                                                'max' => 30000, 
-                                                'inclusive' => true 
+                                                'max' => 99999 
                                         ) 
                                 ) 
                         ) 
                 ));
+                
+                // Margin
+                $this->addElement('text', "margin_{$quoteDevice->getId()}", array (
+                        'label' => 'Margin', 
+                        'required' => true, 
+                        'class' => 'input-mini rightAlign', 
+                        'value' => $quoteDevice->getMargin(), 
+                        'validators' => array (
+                                'Float', 
+                                array (
+                                        'validator' => 'Between', 
+                                        'options' => array (
+                                                'min' => - 100, 
+                                                'max' => 100, 
+                                                'inclusive' => false 
+                                        ) 
+                                ) 
+                        ) 
+                ));
+                
+                if ($this->_quote->isLeased())
+                {
+                    // Residual
+                    $this->addElement('text', "residual_{$quoteDevice->getId()}", array (
+                            'label' => 'Residual', 
+                            'required' => true, 
+                            'class' => 'input-mini rightAlign', 
+                            'value' => $quoteDevice->getResidual(), 
+                            'validators' => array (
+                                    'Float', 
+                                    array (
+                                            'validator' => 'Between', 
+                                            'options' => array (
+                                                    'min' => 0, 
+                                                    'max' => 30000, 
+                                                    'inclusive' => true 
+                                            ) 
+                                    ) 
+                            ) 
+                    ));
+                }
             }
         }
     }
