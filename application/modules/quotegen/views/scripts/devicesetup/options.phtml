@@ -29,7 +29,8 @@ $id = $this->id;
 				<p id="search_filter">
 					<label for="criteria_filter" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">Filter:</label>
 					<select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
-						<option value="sku" <?php if($this->search_filter == 'sku') { echo "selected"; } ?>>SKU</option>
+						<option value="oemSku" <?php if($this->search_filter == 'oemSku') { echo "selected"; } ?>>OEM SKU</option>
+						<option value="oemSku" <?php if($this->search_filter == 'oemSku') { echo "selected"; } ?>>Dealer SKU</option>
 						<option value="name" <?php if($this->search_filter == 'name') { echo "selected"; } ?>>Option</option>
 					</select>
 					<label for="txtCriteria" class="details_label" style="display: inline; padding: 0px 10px 0px 10px;">for</label>
@@ -46,13 +47,15 @@ $id = $this->id;
 			<?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
 	            <table class="table table-bordered table-striped table-condensed">
 	                <tr>
-	                    <th style="width: 200px;">SKU</th>
+	                    <th style="width: 150px;">OEM Sku</th>
+	                    <th style="width: 150px;">Dealer Sku</th>
 	                    <th>Option</th>
 						<th style="width: 120px; text-align: center;">Action</th>
 	                </tr>
 					<?php foreach ($this->paginator as $option) : /* @var $option Quotegen_Model_Option */ ?>
 	                <tr>
 	                    <td><?php echo $option->getOemSku(); ?></td>
+	                    <td><?php echo $option->getDealerSku(); ?></td>
 	                    <td><?php echo $option->getName(); ?></td>
 	                    <td style="text-align: center;">
 							<div class="" style="text-align: center;">
