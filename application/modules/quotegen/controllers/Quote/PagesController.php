@@ -61,7 +61,30 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                         }
                     }
                     
+                    // Here we need to check to see if page coverage has changed.
+                    $quotePageCoverageMono = (float)$this->_quote->getPageCoverageMonochrome();
+                    $quotePageCoverageColor = (float)$this->_quote->getPageCoverageColor();
+                    
                     $this->_quote->populate($values);
+                    
+                    // If we have a difference in page coverage we need to recalculate cpp rates for devices
+                    if ($quotePageCoverageMono !== (float)$this->_quote->getPageCoverageMonochrome() || $quotePageCoverageColor !== (float)$this->_quote->getPageCoverageColor())
+                    {
+                        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+                        foreach ( $this->_quote->getQuoteDevices() as $quoteDevice )
+                        {
+                            $device = $quoteDevice->getDevice();
+                            if ($device)
+                            {
+                                $masterDevice = $device->getMasterDevice();
+                                if ($masterDevice)
+                                {
+                                    $quoteDevice = $this->syncCostPerPageForDevice($quoteDevice, $masterDevice);
+                                    Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
+                                }
+                            }
+                        }
+                    }
                     
                     $this->saveQuote();
                     Quotegen_Model_Mapper_Quote::getInstance()->save($this->_quote);
@@ -71,6 +94,13 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                     if (isset($values ['saveAndContinue']))
                     {
                         $this->_helper->redirector('index', 'quote_profitability', null, array (
+                                'quoteId' => $this->_quoteId 
+                        ));
+                    }
+                    else
+                    {
+                        // Refresh the page
+                        $this->_helper->redirector(null, null, null, array (
                                 'quoteId' => $this->_quoteId 
                         ));
                     }

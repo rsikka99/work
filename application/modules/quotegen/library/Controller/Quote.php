@@ -249,12 +249,19 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         $quoteDevice->setCost($masterDevice->getCost());
         $quoteDevice->setTonerConfigId($masterDevice->getTonerConfigId());
         
+        // Sync Cost Per Page
+        $quoteDevice = $this->syncCostPerPageForDevice($quoteDevice, $masterDevice);
+        
+        return $quoteDevice;
+    }
+
+    public function syncCostPerPageForDevice (Quotegen_Model_QuoteDevice $quoteDevice, Proposalgen_Model_MasterDevice $masterDevice)
+    {
         /**
          * *******************************************************************
          * FIXME: The models need to be reworked to no longer require this!!!
          * *******************************************************************
          */
-        
         $OEMpricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::OEM);
         $COMPpricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::COMP);
         
@@ -276,36 +283,39 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             Proposalgen_Model_Toner::setESTIMATED_PAGE_COVERAGE_COLOR($pageCoverageColor);
             Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_COLOR($pageCoverageColor);
         }
+        
+        // Reset the cost per page
         $masterDevice->setCostPerPage(null);
+        
         // Calculate CPP for OEM pricing config
         $cpp = $masterDevice->getCostPerPage();
         
         // Calculate OEM only values
-        $quoteDevice->setOemCostPerPageMonochrome($cpp->Actual->Raw->BlackAndWhite);
+        $quoteDevice->setOemCostPerPageMonochrome($cpp->Actual->Base->BlackAndWhite);
         
         // Reset the color cost per page and only populate if its a color device
         $quoteDevice->setOemCostPerPageColor(0);
         if ($masterDevice->isColor())
         {
-            $quoteDevice->setOemCostPerPageColor($cpp->Actual->Raw->Color);
+            $quoteDevice->setOemCostPerPageColor($cpp->Actual->Base->Color);
         }
         
         // RESET cpp and set the pricing config to be COMP
         $masterDevice->setCostPerPage(null);
+        
         Proposalgen_Model_MasterDevice::setPricingConfig($COMPpricingConfig);
         Proposalgen_Model_MasterDevice::setGrossMarginPricingConfig($COMPpricingConfig);
         
         $cpp = $masterDevice->getCostPerPage();
         // Calculate COMP only values (may be the same as oem if no comp toners were available)
-        $quoteDevice->setCompCostPerPageMonochrome($cpp->Actual->Raw->BlackAndWhite);
+        $quoteDevice->setCompCostPerPageMonochrome($cpp->Actual->Base->BlackAndWhite);
         
         // Reset the color cost per page and only populate if its a color device
         $quoteDevice->setCompCostPerPageColor(0);
         if ($masterDevice->isColor())
         {
-            $quoteDevice->setCompCostPerPageColor($cpp->Actual->Raw->Color);
+            $quoteDevice->setCompCostPerPageColor($cpp->Actual->Base->Color);
         }
-        
         return $quoteDevice;
     }
 
@@ -324,7 +334,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         $quoteDeviceOption->setOemSku($deviceOption->getOption()
             ->getOemSku());
         $quoteDeviceOption->setDealerSku($deviceOption->getOption()
-                ->getDealerSku());
+            ->getDealerSku());
         $quoteDeviceOption->setName($deviceOption->getOption()
             ->getName());
         $quoteDeviceOption->setDescription($deviceOption->getOption()
@@ -479,7 +489,6 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             // Add to the default group
             Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->insertDeviceInDefaultGroup($this->_quote->getId(), (int)$quoteDeviceId);
             
-            /* @var $option Quotegen_Model_DeviceConfigurationOption */
             foreach ( $favoriteDevice->getOptions() as $option )
             {
                 // Get the device option
@@ -523,7 +532,6 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         
         foreach ( $this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
-            /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
                 $quanities ['monochromePagesQuantity'] += $quoteDeviceGroupDevice->getMonochromePagesQuantity();
