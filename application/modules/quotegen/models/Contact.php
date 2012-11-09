@@ -28,14 +28,14 @@ class Quotegen_Model_Contact extends My_Model_Abstract
      *
      * @var string
      */
-    protected $_firstName;
+    protected $_firstName = '';
     
     /**
      * The first name of the contact
      *
      * @var string
      */
-    protected $_lastName;
+    protected $_lastName = '';
     
     /**
      * The country code of the phone number
@@ -97,7 +97,7 @@ class Quotegen_Model_Contact extends My_Model_Abstract
             $this->setExchangeCode($params->exchangeCode);
         if (isset($params->number) && ! is_null($params->number))
             $this->setNumber($params->number);
-        if (isset($params->extension))
+        if (isset($params->extension) && ! is_null($params->extension))
             $this->setExtension($params->extension);
     }
     
@@ -306,5 +306,25 @@ class Quotegen_Model_Contact extends My_Model_Abstract
     public function setExtension ($_extension)
     {
         $this->_extension = $_extension;
+    }
+
+    /**
+     * Checks to see if the contact has no new data
+     * 
+     * @return boolean
+     */
+    public function isEmpty ()
+    {
+        if (strcmp($this->getFirstName(), ""))
+            return false;
+        if (strcmp($this->getLastName(), ""))
+            return false;
+        if (!($this->getAreaCode() instanceof Zend_Db_Expr))
+            return false;
+        if (!($this->getExchangeCode() instanceof Zend_Db_Expr))
+            return false;
+        if (!($this->getNumber() instanceof Zend_Db_Expr))
+            return false;
+        return true;
     }
 }

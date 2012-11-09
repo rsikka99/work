@@ -147,7 +147,6 @@ class Quotegen_ClientController extends Zend_Controller_Action
         if ($client)
         {
             $clientService->populateForm($clientId);
-            
         }
         else
         {
@@ -189,9 +188,8 @@ class Quotegen_ClientController extends Zend_Controller_Action
             }
         }
         $this->view->form = $clientService->getForm();
-        
     }
-	
+
     /**
      * The view action
      */
@@ -201,7 +199,12 @@ class Quotegen_ClientController extends Zend_Controller_Action
         if (! $this->view->client)
             $this->_helper->redirector('index');
         $this->view->address = Quotegen_Model_Mapper_Address::getInstance()->find($this->_getParam('id', false));
-        $this->view->contact = Quotegen_Model_Mapper_Contact::getInstance()->find($this->_getParam('id', false));
+        $contact = Quotegen_Model_Mapper_Contact::getInstance()->getContactByClientId($this->_getParam('id', false));
+        if (!$contact)
+        {
+            $contact = new Quotegen_Model_Contact();
+        }
+        $this->view->contact = $contact;
     }
 }
 
