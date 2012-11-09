@@ -52,7 +52,6 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
         $countryCode = $this->createElement('text', 'countryCode')
             ->setRequired(true)
             ->setAttrib('class', 'input-country-code')
-            ->setAttrib('placeholder', '01')
             ->clearDecorators()
             ->addDecorator('ViewHelper')
             ->addDecorator('Label', array (
