@@ -37,23 +37,21 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
         
         //setup contact first name
         $firstName = $this->createElement('text', 'firstName')
-            ->setRequired(true)
             ->addErrorMessage("Please enter a first name")
-            ->setLabel("First Name:");
+            ->setLabel("First Name:")
+            ->setAllowEmpty(true);
         
         //setup contact last name
         $lastName = $this->createElement('text', 'lastName')
-            ->setRequired(true)
             ->addErrorMessage("Please enter a last name")
-            ->setLabel("Last Name:");
+            ->setLabel("Last Name:")
+            ->setAllowEmpty(true);
         
         ///////////////////////PHONE NUMBERS/////////////////////////////////////
         //Country Code
         $countryCode = $this->createElement('text', 'countryCode')
-            ->setRequired(true)
             ->setAttrib('class', 'input-country-code')
             ->clearDecorators()
-            ->addDecorator('ViewHelper')
             ->addDecorator('Label', array (
                 'class' => 'label-phone-number-country control-label' 
         ))
@@ -66,7 +64,6 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
         
         //Area Code
         $areaCode = $this->createElement('text', 'areaCode')
-            ->setRequired(true)
             ->setAttrib('class', 'phone-text')
             ->clearDecorators()
             ->addDecorator('ViewHelper')
@@ -75,14 +72,13 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
         ))
             ->setAttrib('class', 'input-area-code')
             ->addValidator('regex', true, array (
-                '/^\d{1,3}$/' 
+                 '/^\d{3}$/' 
         ))
             ->setLabel("(")
             ->addErrorMessage("Invalid Area code");
         
         //Exchange Code
         $exchangeCode = $this->createElement('text', 'exchangeCode')
-            ->setRequired(true)
             ->setAttrib('class', 'input-exchange-code')
             ->clearDecorators()
             ->addDecorator('ViewHelper')
@@ -97,7 +93,6 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
         
         //Number
         $number = $this->createElement('text', 'number')
-            ->setRequired(true)
             ->setAttrib('class', 'input-number-code')
             ->clearDecorators()
             ->addDecorator('ViewHelper')
@@ -126,6 +121,7 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
         $phoneErrors = $this->createElement('text', 'phoneErrors')->removeDecorator('viewhelper');
         ///////////////////////END PHONE NUMBERS/////////////////////////////////////
         
+
         //setup address 1
         $addressLine1 = $this->createElement('text', 'addressLine1')
             ->setRequired(true)
@@ -167,6 +163,7 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
         
         //setup country
         $countryId = $this->createElement('select', 'countryId', array (
+                'required' => true, 
                 'multiOptions' => $countries, 
                 'value' => Quotegen_Model_Country::COUNTRY_UNITED_STATES 
         ))->setLabel("Country:");

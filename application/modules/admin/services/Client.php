@@ -36,18 +36,26 @@ class Admin_Service_Client
         $data = $this->validateAndFilterData($data);
         if ($data !== FALSE)
         {
+            $db = Zend_Db_Table::getDefaultAdapter();
+            $db->beginTransaction();
             try
             {
                 $client = new Quotegen_Model_Client($data);
                 $clientId = Quotegen_Model_Mapper_Client::getInstance()->insert($client);
                 $data ['clientId'] = $clientId;
                 $contact = new Quotegen_Model_Contact($data);
-                $contactId = Quotegen_Model_Mapper_Contact::getInstance()->insert($contact);
+                if (! $contact->isEmpty())
+                {
+                    $contactId = Quotegen_Model_Mapper_Contact::getInstance()->insert($contact);
+                }
+                
                 $address = new Quotegen_Model_Address($data);
                 $addressId = Quotegen_Model_Mapper_Address::getInstance()->insert($address);
+                $db->commit();
             }
             catch ( Exception $e )
             {
+                $db->rollback();
                 return false;
             }
         }
@@ -70,6 +78,8 @@ class Admin_Service_Client
         $data = $this->validateAndFilterData($data);
         if ($data !== FALSE)
         {
+            $db = Zend_Db_Table::getDefaultAdapter();
+            $db->beginTransaction();
             try
             {
                 $data ['clientId'] = $clientId;
@@ -92,12 +102,22 @@ class Admin_Service_Client
                 if (! $contact)
                 {
                     $contact = new Quotegen_Model_Contact($data);
-                    $contactId = Quotegen_Model_Mapper_Contact::getInstance()->insert($contact);
+                    if (! $contact->isEmpty())
+                    {
+                        $contactId = Quotegen_Model_Mapper_Contact::getInstance()->insert($contact);
+                    }
                 }
                 else
                 {
                     $contact->populate($data);
-                    $rowsAffected = Quotegen_Model_Mapper_Contact::getInstance()->save($contact);
+                    if ($contact->isEmpty())
+                    {
+                        Quotegen_Model_Mapper_Contact::getInstance()->delete($contact);
+                    }
+                    else
+                    {
+                        $rowsAffected = Quotegen_Model_Mapper_Contact::getInstance()->save($contact);
+                    }
                 }
                 
                 //Address
@@ -114,9 +134,11 @@ class Admin_Service_Client
                 }
                 
                 $success = true;
+                $db->commit();
             }
             catch ( Exception $e )
             {
+                $db->rollback();
             }
         }
         return $success;
@@ -158,29 +180,56 @@ class Admin_Service_Client
             $valid = false;
         }
         $validData = $formData;
-        //This allows the database to update empty extensions
-        if ($validData ['extension'] == '')
-        {
-            $validData ['extension'] = null;
-        }
         
         $phoneFields = array (
-                'countryCode',
-                'areaCode',
-                'exchangeCode',
-                'number',
-                'extension',
+                'areaCode', 
+                'exchangeCode', 
+                'number', 
+                'extension' 
         );
-        $phoneErrors = array();
-        foreach ($phoneFields as $phoneField)
+        $phoneErrors = array ();
+        $countValidNumbers = 0;
+        foreach ( $phoneFields as $phoneField )
         {
             $formElement = $form->getElement($phoneField);
+            $value = $validData [$phoneField];
+            if (! is_numeric($value))
+            {
+                $validData [$phoneField] = new Zend_Db_Expr("NULL");
+            }
+            else
+            {
+                if ($phoneField != 'extension')
+                {
+                    $countValidNumbers ++;
+                }
+            }
+            
             if ($formElement->hasErrors())
             {
-                $phoneErrors[] = implode('<br/>', $formElement->getErrors());
+                $valid = false;
+                $phoneErrors [] = implode('<br/>', $formElement->getErrors());
             }
         }
-
+        
+        /*
+         * Validate whether it is a full phone number or not
+         */
+        if (($countValidNumbers == 0 && ! ($validData ['extension'] instanceof Zend_Db_Expr)) || ($countValidNumbers > 0 && $countValidNumbers != 3))
+        {
+            
+            $valid = false;
+            $phoneErrors [] = "<br />Fill in all phone number fields";
+        }
+        else if ($countValidNumbers == 3)
+        {
+            $validData ['countryCode'] = 1;
+        }
+        else
+        {
+            $validData ['countryCode'] = new Zend_Db_Expr("NULL");
+        }
+        
         $this->getForm()
             ->getElement('phoneErrors')
             ->addError(implode('<br/>', $phoneErrors));
@@ -203,17 +252,18 @@ class Admin_Service_Client
         
         //If it is not a valid state or province, create error messages
         $regionId = $this->isValidRegion($validData ['countryId'], $validData ['region']);
-        if ($regionId==false)
+        if ($regionId == false)
         {
             $this->getForm()
                 ->getElement('region')
                 ->clearErrorMessages()
                 ->addError('Invalid state or province');
             $valid = false;
-        }else{
-            $validData['region'] = $regionId;
         }
-        
+        else
+        {
+            $validData ['region'] = $regionId;
+        }
         if ($valid)
         {
             return $validData;
@@ -269,7 +319,6 @@ class Admin_Service_Client
     protected function isValidRegion ($countryId, $regionName)
     {
         //Try to find a the region they are looking for in the specified country
-
         $region = Quotegen_Model_Mapper_Region::getInstance()->getByRegionNameAndCountryId($regionName, $countryId);
         if ($region)
         {
@@ -281,7 +330,6 @@ class Admin_Service_Client
 
     /**
      * This fills all the values out in a form.
-     *
      * @param int $clientId            
      */
     public function populateForm ($clientId)
@@ -289,7 +337,8 @@ class Admin_Service_Client
         $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
         $address = Quotegen_Model_Mapper_Address::getInstance()->getAddressByClientId($clientId);
         
-        $address->setRegion(Quotegen_Model_Mapper_Region::getInstance()->getById($address->getRegion())->getRegion());
+        $address->setRegion(Quotegen_Model_Mapper_Region::getInstance()->getById($address->getRegion())
+            ->getRegion());
         
         $contact = Quotegen_Model_Mapper_Contact::getInstance()->getContactByClientId($clientId);
         $combinedClientData = $client->toArray();
@@ -302,7 +351,6 @@ class Admin_Service_Client
             $combinedClientData = array_merge($combinedClientData, $contact->toArray());
         }
         $this->getForm()->populate($combinedClientData);
-        
     }
 }
 

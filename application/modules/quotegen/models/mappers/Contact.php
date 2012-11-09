@@ -4,7 +4,7 @@
  * Quotegen_Model_Mapper_Contact
  *
  * @author Tyson Riehl
- *
+ *        
  */
 class Quotegen_Model_Mapper_Contact extends My_Model_Mapper_Abstract
 {
@@ -72,7 +72,7 @@ class Quotegen_Model_Mapper_Contact extends My_Model_Mapper_Abstract
     {
         //$object->setExtension(null);
         $data = $object->toArray();
-        //$data = $this->unsetNullValues($object->toArray());
+        $data = $this->unsetNullValues($object->toArray());
         if ($primaryKey === null)
         {
             $primaryKey = $data [$this->col_id];
@@ -206,7 +206,7 @@ class Quotegen_Model_Mapper_Contact extends My_Model_Mapper_Abstract
      * Gets a where clause for filtering by id
      *
      * @param int $id
-     * 				the id of the country to find            
+     *            the id of the country to find
      * @return array
      */
     public function getWhereId ($id)
@@ -215,18 +215,18 @@ class Quotegen_Model_Mapper_Contact extends My_Model_Mapper_Abstract
                 "{$this->col_id}  = ?" => $id 
         );
     }
-    
+
     /**
      * Gets a where clause for filtering by clientId
      *
      * @param int $id
-     * 				the id of the client
+     *            the id of the client
      * @return array
      */
     public function getWhereClientId ($id)
     {
         return array (
-                "{$this->col_clientId}  = ?" => $id
+                "{$this->col_clientId}  = ?" => $id 
         );
     }
 
@@ -237,11 +237,13 @@ class Quotegen_Model_Mapper_Contact extends My_Model_Mapper_Abstract
     {
         return $object->getId();
     }
-	/**
-	 * Gets a contact using a client Id
-	 * @param int $clientId
-	 * @return Quotegen_Model_Contact
-	 */
+
+    /**
+     * Gets a contact using a client Id
+     * 
+     * @param int $clientId            
+     * @return Quotegen_Model_Contact
+     */
     public function getContactByClientId ($clientId)
     {
         return $this->fetch($this->getWhereClientId($clientId));
