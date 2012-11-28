@@ -43,7 +43,7 @@ INSERT INTO `privileges` (`roleId`, `module`, `controller`, `action`) VALUES
     (1, 'admin', 'user', '%'),
     (1, 'default', '%', '%'),
     (1, 'quotegen', '%', '%'),
-    (1, 'proposal', 'manufacturer', '%');        
+    (1, 'proposalgen', 'manufacturer', '%');        
     
 INSERT INTO `log_types` (`id`, `name`) VALUES
 (1, 'Application Log'),
