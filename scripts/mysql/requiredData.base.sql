@@ -7,11 +7,9 @@
 INSERT INTO `users` (`id`, `username`, `password`, `firstname`, `lastname`, `email`) VALUES
 	(1, 'root', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Root', 'User', 'lrobert@tangentmtw.com'),
 	(2, 'lrobert', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Lee', 'Robert', 'lrobert@tangentmtw.com'),
-	(3, 'cgarrah', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Chris', 'Garrah', 'cgarrah@tangentmtw.com'),
 	(4, 'swilder', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Shawn', 'Wilder', 'swilder@tangentmtw.com'),
 	(5, 'jlarochelle', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Jay', 'Larochelle', 'jlarochelle@tangentmtw.com'),
 	(6, 'nmcconkey', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Norm', 'McConkey', 'nmcconkey@tangentmtw.com'),
-	(7, 'eoffshack', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Emily', 'Offshack', 'eoffshack@tangentmtw.com'),
 	(8, 'standarduser', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Standard', 'User', 'development@tangentmtw.com');
 	
 INSERT INTO `roles` VALUES
@@ -25,9 +23,6 @@ INSERT INTO `user_roles` (`userId`, `roleId`) VALUES
     -- lrobert
     (2,1),
     
-    -- cgarrah
-    (3,1),
-    
     -- swilder
     (4,1),
     
@@ -37,20 +32,18 @@ INSERT INTO `user_roles` (`userId`, `roleId`) VALUES
     -- nmcconkey
     (6,1),
     
-    -- eoffshack
-    (7,1),
-    
     -- standarduser
     (8,1);
     
 /* Add privileges to the roles */
 INSERT INTO `privileges` (`roleId`, `module`, `controller`, `action`) VALUES
--- ROOT    
+-- ROOT
     (1, 'admin', 'index', '%'),    
     (1, 'admin', 'toner', '%'),
     (1, 'admin', 'user', '%'),
     (1, 'default', '%', '%'),
-    (1, 'quotegen', '%', '%');
+    (1, 'quotegen', '%', '%'),
+    (1, 'admin', 'manufacturer', '%');        
     
 INSERT INTO `log_types` (`id`, `name`) VALUES
 (1, 'Application Log'),
@@ -85,7 +78,8 @@ INSERT INTO `manufacturers` (`id`, `fullname`, `displayname`) VALUES
 (23, 'Sharp', 'Sharp'),
 (24, 'Tech Optics Inc', 'Tech Optics Inc'),
 (25, 'Toshiba', 'Toshiba'),
-(26, 'Xerox', 'Xerox');
+(26, 'Xerox', 'Xerox')
+(27, 'Kyocera', 'Kyocera', 0);
 
 INSERT INTO `countries` (`id`, `name`,`locale`) VALUES
 (1, 'Canada','en_CA'),
