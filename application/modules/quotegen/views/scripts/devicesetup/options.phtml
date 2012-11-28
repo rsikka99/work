@@ -47,16 +47,18 @@ $id = $this->id;
 			<?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
 	            <table class="table table-bordered table-striped table-condensed">
 	                <tr>
-	                    <th style="width: 150px;">OEM Sku</th>
-	                    <th style="width: 150px;">Dealer Sku</th>
-	                    <th>Option</th>
-						<th style="width: 120px; text-align: center;">Action</th>
+	                    <th style="width: 120px;">OEM Sku</th>
+	                    <th style="width: 120px;">Dealer Sku</th>
+	                    <th style="width: 220px;">Option</th>
+	                    <th>Description</th>
+						<th style="width: 85px; text-align: center;">Action</th>
 	                </tr>
 					<?php foreach ($this->paginator as $option) : /* @var $option Quotegen_Model_Option */ ?>
 	                <tr>
 	                    <td><?php echo $option->getOemSku(); ?></td>
 	                    <td><?php echo $option->getDealerSku(); ?></td>
 	                    <td><?php echo $option->getName(); ?></td>
+	                    <td><?php echo $option->getDescription(); ?></td>
 	                    <td style="text-align: center;">
 							<div class="" style="text-align: center;">
 								<?php if ( in_array($option->getId(), $this->assignedOptions ) ) { ?>
