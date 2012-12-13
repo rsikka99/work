@@ -796,13 +796,20 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         // Pass the view the paginator
         $this->view->paginator = $paginator;
     }
+    const OPTION_FILTER_ALL = 0;
+    const OPTION_FILTER_ASSIGNED = 1;
+    const OPTION_FILTER_UNASSIGNED = 2;
 
     /**
      * Edit device options
      */
     public function optionsAction ()
     {
+        // Default filter
+        $filterBy = self::OPTION_FILTER_ASSIGNED;
+        $view = "assigned";
         $where = null;
+        $filterWhere = null;
         $optionId = null;
         $txtCriteria = null;
         $cboCriteria = null;
@@ -818,12 +825,26 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
+        // Get the device and assigned options
+        $quoteDevice = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
+        $this->view->devicename = $quoteDevice->getMasterDevice()->getFullDeviceName();
+        
+        // Get device options list
+        $assignedOptions = array ();
+        foreach ( $quoteDevice->getDeviceOptions() as $option )
+        {
+            $assignedOptions [] = $option->getOptionId();
+        }
+        
         // Make sure we are posting data
         $request = $this->getRequest();
         if ($request->isPost())
         {
             // Get the post data
             $values = $request->getPost();
+            
+            // Filter view
+            $view = $values ['cboView'];
             
             // If we cancelled we don't need to validate anything
             if (! isset($values ['cancel']))
@@ -842,22 +863,12 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         $deviceOption->setOptionId($optionId);
                         $deviceOption->setIncludedQuantity(0);
                         
-                        // Update included quantity for Option
-                        if (isset($values ['btnUpdate']))
-                        {
-                            // Update device option
-                            $deviceOptionMapper->save($deviceOption);
-                            
-                            $this->_helper->flashMessenger(array (
-                                    'success' => "The option was updated successfully." 
-                            ));
-                        }
-                        
-                        // Assign Option
-                        else if (isset($values ['btnAssign']))
+                        if (isset($values ['btnAssign']))
                         {
                             // Save device option
                             $deviceOptionMapper->insert($deviceOption);
+                            
+                            $assignedOptions [] = $deviceOption->getOptionId();
                             
                             $this->_helper->flashMessenger(array (
                                     'success' => "The option was assigned successfully." 
@@ -870,6 +881,13 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             // Delete device option
                             $deviceOptionMapper->delete($deviceOption);
                             
+                            // Delete all occurences of this option from the array
+                            $arrayKeys = array_keys($assignedOptions, $deviceOption->getOptionId());
+                            foreach ( $arrayKeys as $key )
+                            {
+                                unset($assignedOptions [$key]);
+                            }
+                            
                             $this->_helper->flashMessenger(array (
                                     'success' => "The option was unassigned successfully." 
                             ));
@@ -879,64 +897,21 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                     // Filter
                     else if (isset($values ['btnSearch']))
                     {
-                        // Get device options list
-                        $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
-                        $assignedOptions = array ();
-                        foreach ( $device->getDeviceOptions() as $option )
-                        {
-                            $assignedOptions [] = $option->getOptionId();
-                        }
-                        
-                        // Filter view
-                        $view = $values ['cboView'];
-                        $this->view->view_filter = $view;
-                        
-                        if ($view == "assigned")
-                        {
-                            if ($assignedOptions)
-                            {
-                                $where = array (
-                                        'id IN ( ? )' => $assignedOptions 
-                                );
-                            }
-                            else
-                            {
-                                $where = array (
-                                        'id IN ( ? )' => "NULL" 
-                                );
-                            }
-                        }
-                        else if ($view == "unassigned")
-                        {
-                            if ($assignedOptions)
-                            {
-                                $where = array (
-                                        'id NOT IN ( ? )' => $assignedOptions 
-                                );
-                            }
-                            else
-                            {
-                                $where = array (
-                                        'id NOT IN ( ? )' => "NULL" 
-                                );
-                            }
-                        }
-                        
+                        // Nothing to do here?
                         // Options Search Filter
                         if (isset($values ['txtCriteria']))
                         {
-                            $filter = $values ['criteria_filter'];
-                            $criteria = $values ['txtCriteria'];
-                            $where = array_merge((array)$where, array (
-                                    "{$filter} LIKE ( ? )" => "%{$criteria}%" 
-                            ));
+                            $filterWhere = array (
+                                    "{$values ['criteria_filter']} LIKE ( ? )" => "%{$values ['txtCriteria']}%" 
+                            );
                         }
                     }
                     
                     // Clear Filter
-                    else
+                    else if (isset($values ['btnClearSearch']))
                     {
                         $this->view->view_filter = "all";
+                        $view = "assigned";
                     }
                 }
                 catch ( Exception $e )
@@ -959,22 +934,57 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             }
         }
         
-        // Get the device and assigned options
-        $device = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
-        $this->view->devicename = $device->getFullDeviceName();
-        
-        // Get quote device
-        $quoteDevice = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
-        
-        $assignedOptions = array ();
-        if ($quoteDevice)
-        {
-            foreach ( $quoteDevice->getDeviceOptions() as $option )
-            {
-                $assignedOptions [] = $option->getOptionId();
-            }
-        }
         $this->view->assignedOptions = $assignedOptions;
+        
+        $where = null;
+        
+        if ($view == "assigned")
+        {
+            // Do nothing as this is the default
+        }
+        else if ($view == "unassigned")
+        {
+            $filterBy = self::OPTION_FILTER_UNASSIGNED;
+        }
+        else
+        {
+            $filterBy = self::OPTION_FILTER_ALL;
+        }
+        
+        switch ($filterBy)
+        {
+            case self::OPTION_FILTER_ASSIGNED :
+                if (count($assignedOptions) > 0)
+                {
+                    $where = array (
+                            'id IN ( ? )' => $assignedOptions 
+                    );
+                }
+                else
+                {
+                    $where = array (
+                            'id IN ( ? )' => "NULL" 
+                    );
+                }
+                break;
+            case self::OPTION_FILTER_UNASSIGNED :
+                if (count($assignedOptions) > 0)
+                {
+                    $where = array (
+                            'id NOT IN ( ? )' => $assignedOptions 
+                    );
+                }
+                break;
+            case self::OPTION_FILTER_ALL :
+                break;
+        }
+        
+        if (is_array($filterWhere))
+        {
+            $where = array_merge((array)$where, $filterWhere);
+        }
+        
+        $this->view->view_filter = $view;
         
         // Display filterd list of options
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Quotegen_Model_Mapper_Option::getInstance(), $where));
