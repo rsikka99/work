@@ -1594,14 +1594,14 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         
         // fill manufacturers dropdown
         $manufacturersTable = new Proposalgen_Model_DbTable_Manufacturer();
-        $manufacturers = $manufacturersTable->fetchAll('is_deleted = 0', 'manufacturer_name');
+        $manufacturers = $manufacturersTable->fetchAll('isDeleted = 0', 'fullname');
         
         // add "New Manufacturer" option
         $currElement = $form->getElement('select_manufacturer');
         $currElement->addMultiOption('0', 'Add New Manufacturer');
         foreach ( $manufacturers as $row )
         {
-            $currElement->addMultiOption($row ['manufacturer_id'], ucwords(strtolower($row ['manufacturer_name'])));
+            $currElement->addMultiOption($row ['id'], ucwords(strtolower($row ['fullname'])));
         }
         
         $form->getElement('delete_manufacturer')->setAttrib('disabled', 'disabled');
@@ -1611,8 +1611,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         {
             $formData = $this->_request->getPost();
             // print_r($formData); die;
-            
-
             if (isset($formData ['form_mode']) && $formData ['form_mode'] == 'manufacturer')
             {
                 $form->getElement('form_mode')->setValue('manufacturer');
@@ -1656,10 +1654,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     {
                         $manufacturer_name = ucwords(strtolower($formData ["manufacturer_name"]));
                         $manufacturerData = array (
-                                'manufacturer_name' => $manufacturer_name, 
-                                'is_deleted' => 0 
+                                'fullname' => $manufacturer_name, 
+                                'isDeleted' => 0 
                         );
-                        $where = $manufacturersTable->getAdapter()->quoteInto('manufacturer_name = ?', $manufacturer_name);
+                        $where = $manufacturersTable->getAdapter()->quoteInto('fullName = ?', $manufacturer_name);
                         $manufacturer = $manufacturersTable->fetchAll($where);
                         
                         if (count($manufacturer) == 0)
@@ -1679,35 +1677,43 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $manufacturersTable = new Proposalgen_Model_DbTable_Manufacturer();
                 $manufacturer_id = $formData ['select_manufacturer'];
                 $manufacturer_name = strtoupper($formData ['manufacturer_name']);
-                
+
                 $db->beginTransaction();
                 try
                 {
+                    
                     if (array_key_exists('save_manufacturer', $formData) && $formData ['save_manufacturer'] == "Save")
                     {
+                        
+                        
                         $manufacturerData = array (
-                                'manufacturer_name' => $manufacturer_name 
+                                'displayName' => $manufacturer_name,
+                                'fullName' => $manufacturer_name 
                         );
                         
                         if ($manufacturer_id > 0)
                         {
-                            $where = $manufacturersTable->getAdapter()->quoteInto('manufacturer_id = ?', $manufacturer_id, 'INTEGER');
+                            
+                            $where = $manufacturersTable->getAdapter()->quoteInto('id = ?', $manufacturer_id, 'INTEGER');
                             $manufacturersTable->update($manufacturerData, $where);
+                            
                             $this->view->message = 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Updated';
+                            
                         }
                         else
                         {
-                            $where = $manufacturersTable->getAdapter()->quoteInto('manufacturer_name = ?', $manufacturer_name);
+                            
+                            $where = $manufacturersTable->getAdapter()->quoteInto('fullName = ?', $manufacturer_name);
                             $manufacturer = $manufacturersTable->fetchRow($where);
                             
                             if (count($manufacturer) > 0)
                             {
-                                if ($manufacturer ['is_deleted'] == 1)
+                                if ($manufacturer ['isDeleted'] == 1)
                                 {
                                     $manufacturerData = array (
-                                            'is_deleted' => 0 
+                                            'isDeleted' => 0 
                                     );
-                                    $where = $manufacturersTable->getAdapter()->quoteInto('manufacturer_id = ?', $manufacturer ['manufacturer_id'], 'INTEGER');
+                                    $where = $manufacturersTable->getAdapter()->quoteInto('id = ?', $manufacturer ['id'], 'INTEGER');
                                     $manufacturersTable->update($manufacturerData, $where);
                                     $this->view->message = 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Added.';
                                 }
@@ -1738,7 +1744,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             if (count($master_device) == 0)
                             {
                                 $tonerTable = new Proposalgen_Model_DbTable_Toner();
-                                $where = $tonerTable->getAdapter()->quoteInto('manufacturer_id = ?', $manufacturer_id, 'INTEGER');
+                                $where = $tonerTable->getAdapter()->quoteInto('id = ?', $manufacturer_id, 'INTEGER');
                                 $toner = $tonerTable->fetchAll($where);
                                 if (count($toner) == 0)
                                 {
@@ -1746,7 +1752,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 }
                             }
                             
-                            $where = $manufacturersTable->getAdapter()->quoteInto('manufacturer_id = ?', $manufacturer_id, 'INTEGER');
+                            $where = $manufacturersTable->getAdapter()->quoteInto('id = ?', $manufacturer_id, 'INTEGER');
                             if ($do_full_delete)
                             {
                                 $manufacturersTable->delete($where);
@@ -1754,7 +1760,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             else
                             {
                                 $manufacturerData = array (
-                                        'is_deleted' => 1 
+                                        'isDeleted' => 1 
                                 );
                                 $manufacturersTable->update($manufacturerData, $where);
                             }
@@ -1769,17 +1775,18 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     
                     // fill manufacturers dropdown
                     $manufacturersTable = new Proposalgen_Model_DbTable_Manufacturer();
-                    $manufacturers = $manufacturersTable->fetchAll('is_deleted = 0', 'manufacturer_name');
-                    
+                    $manufacturers = $manufacturersTable->fetchAll('isDeleted = 0', 'fullName');
+                   
                     // add "New Manufacturer" option
                     $currElement = $form->getElement('select_manufacturer');
                     $currElement->clearMultiOptions();
                     $currElement->addMultiOption('0', 'Add New Manufacturer');
+                   
                     foreach ( $manufacturers as $row )
                     {
-                        $currElement->addMultiOption($row ['manufacturer_id'], ucwords(strtolower($row ['manufacturer_name'])));
+                        $currElement->addMultiOption($row ['id'], ucwords(strtolower($row ['fullname'])));
                     }
-                    
+
                     // reset form
                     $currElement->setValue('');
                     $form->getElement('manufacturer_name')->setValue('');
@@ -3474,12 +3481,12 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         
         // fill companies
         $dealer_companyTable = new Proposalgen_Model_DbTable_DealerCompany();
-        $dealer_companies = $dealer_companyTable->fetchAll('is_deleted = false', 'company_name');
+        $dealer_companies = $dealer_companyTable->fetchAll('isDeleted = false', 'company_name');
         $this->view->company_list = $dealer_companies;
         
         // fill manufacturers dropdown
         $manufacturersTable = new Proposalgen_Model_DbTable_Manufacturer();
-        $manufacturers = $manufacturersTable->fetchAll('is_deleted = false', 'manufacturer_name');
+        $manufacturers = $manufacturersTable->fetchAll('isDeleted = false', 'manufacturer_name');
         $this->view->manufacturer_list = $manufacturers;
         
         // get default prices
