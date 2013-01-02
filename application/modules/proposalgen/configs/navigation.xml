@@ -164,13 +164,6 @@
                     <action>index</action>
                     <resource>proposalgen__admin__index</resource>
                     <pages>
-                        <manageusers>
-                            <label>Manage Users</label>
-                            <module>proposalgen</module>
-                            <controller>admin</controller>
-                            <action>manageusers</action>
-                            <resource>proposalgen__admin__manageusers</resource>
-                        </manageusers>
                         <managemanufacturers>
                             <label>Manage Manufacturers</label>
                             <module>proposalgen</module>
