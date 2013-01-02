@@ -15,9 +15,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $this->initView();
         $this->view->app = $this->config->app;
         $this->view->user = Zend_Auth::getInstance()->getIdentity();
-        $this->view->user_id = Zend_Auth::getInstance()->getIdentity()->user_id;
+        $this->view->user_id = Zend_Auth::getInstance()->getIdentity()->id;
         $this->view->privilege = Zend_Auth::getInstance()->getIdentity()->privileges;
-        $this->user_id = Zend_Auth::getInstance()->getIdentity()->user_id;
+        $this->user_id = Zend_Auth::getInstance()->getIdentity()->id;
         $this->privilege = Zend_Auth::getInstance()->getIdentity()->privileges;
         $this->dealer_company_id = Zend_Auth::getInstance()->getIdentity()->dealer_company_id;
         $this->MPSProgramName = $this->config->app->MPSProgramName;
