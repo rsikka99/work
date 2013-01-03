@@ -46,7 +46,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
         // fill manufacturer dropdown
         $list = "";
         $manufacturersTable = new Proposalgen_Model_DbTable_Manufacturer();
-        $manufacturers = $manufacturersTable->fetchAll('is_deleted = 0', 'manufacturer_name');
+        $manufacturers = $manufacturersTable->fetchAll('isDeleted = 0', 'fullName');
         $currElement = $form->getElement('manufacturer_id');
         $this->view->manufacturer_list = $manufacturers;
         
@@ -55,23 +55,23 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
         $currElement->addMultiOption('0', 'Select Manufacturer');
         foreach ( $manufacturers as $row )
         {
-            $currElement->addMultiOption($row ['manufacturer_id'], ucwords(strtolower($row ['manufacturer_name'])));
+            $currElement->addMultiOption($row ['id'], ucwords(strtolower($row ['fullname'])));
             if (empty($list) == false)
             {
                 $list .= ";";
             }
-            $list .= $row ['manufacturer_id'] . ":" . ucwords(strtolower($row ['manufacturer_name']));
+            $list .= $row ['id'] . ":" . ucwords(strtolower($row ['fullname']));
         }
         $this->view->manufacturers = $list;
         
         // fill toner_config dropdown
         $toner_configTable = new Proposalgen_Model_DbTable_TonerConfig();
-        $toner_configs = $toner_configTable->fetchAll(null, 'toner_config_name');
+        $toner_configs = $toner_configTable->fetchAll(null, 'name');
         $currElement = $form->getElement('toner_config_id');
         $currElement->addMultiOption('', 'Select Toner Config');
         foreach ( $toner_configs as $row )
         {
-            $currElement->addMultiOption($row ['toner_config_id'], ucwords(strtolower($row ['toner_config_name'])));
+            $currElement->addMultiOption($row ['tonerconfigid'], ucwords(strtolower($row ['name'])));
         }
         
         // return part_type list
