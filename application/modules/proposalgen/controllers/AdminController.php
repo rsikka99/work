@@ -1738,7 +1738,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             // check to see if any devices are using the
                             // manufacturer
                             $master_deviceTable = new Proposalgen_Model_DbTable_MasterDevice();
-                            $where = $master_deviceTable->getAdapter()->quoteInto('mastdevice_manufacturer = ?', $manufacturer_id, 'INTEGER');
+                            $where = $master_deviceTable->getAdapter()->quoteInto('manufacturer_id = ?', $manufacturer_id, 'INTEGER');
                             $master_device = $master_deviceTable->fetchAll($where);
                             
                             if (count($master_device) == 0)
@@ -1816,16 +1816,16 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $manufacturerID = $this->_getParam('manufacturerid', false);
         
         $manufacturerTable = new Proposalgen_Model_DbTable_Manufacturer();
-        $where = $manufacturerTable->getAdapter()->quoteInto('manufacturer_id = ?', $manufacturerID, 'INTEGER');
-        $manufacturer = $manufacturerTable->fetchRow('manufacturer_id = ' . $manufacturerID);
+        $where = $manufacturerTable->getAdapter()->quoteInto('id = ?', $manufacturerID, 'INTEGER');
+        $manufacturer = $manufacturerTable->fetchRow('id = ' . $manufacturerID);
         
         try
         {
             if (count($manufacturer) > 0)
             {
                 $formdata = array (
-                        'manufacturer_name' => Trim(ucwords(strtolower($manufacturer ['manufacturer_name']))), 
-                        'is_deleted' => ($manufacturer ['is_deleted'] == 1 ? true : false) 
+                        'manufacturer_name' => Trim(ucwords(strtolower($manufacturer ['fullname']))), 
+                        'is_deleted' => ($manufacturer ['isDeleted'] == 1 ? true : false) 
                 );
             }
             else

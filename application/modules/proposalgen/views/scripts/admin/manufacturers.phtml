@@ -36,7 +36,7 @@
 		            //disable form elements while loading new info
 		            $("#manufacturer_name").attr('disabled', 'disabled');
 		        },
-		        url: '<?php echo $this->baseUrl(); ?>/admin/manufacturerdetails?manufacturerid='+manufacturerid,
+		        url: '<?php echo $this->baseUrl("/proposalgen/admin/manufacturerdetails"); ?>?manufacturerid='+manufacturerid,
 		        success: function(data) {
 		            var obj = jQuery.parseJSON(data);
 		            $("#manufacturer_name").val(obj.manufacturer_name);
@@ -68,12 +68,12 @@
 		
 		<?php if($this->action == 'ticket') { ?>
 			document.getElementById("manufacturers_form").enctype = "";
-			document.getElementById("manufacturers_form").action = "<?php echo $this->baseUrl(); ?>/managedevices/manageticketdevices";
+			document.getElementById("manufacturers_form").action = "<?php echo $this->baseUrl("/managedevices/manageticketdevices"); ?>";
 			document.getElementById("manufacturers_form").submit();
 		<?php }?> 
 		<?php if ($this->action == 'mapping') { ?>
 			document.getElementById("manufacturers_form").enctype = "";
-			document.getElementById("manufacturers_form").action = "<?php echo $this->baseUrl(); ?>/managedevices/managemappingdevices";
+			document.getElementById("manufacturers_form").action = "<?php echo $this->baseUrl("/managedevices/managemappingdevices"); ?>";
 			document.getElementById("manufacturers_form").submit();
 		<?php }?>
 		
