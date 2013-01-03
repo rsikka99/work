@@ -3480,19 +3480,19 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $db = Zend_Db_Table::getDefaultAdapter();
         
         // fill companies
-        $dealer_companyTable = new Proposalgen_Model_DbTable_DealerCompany();
-        $dealer_companies = $dealer_companyTable->fetchAll('isDeleted = false', 'company_name');
-        $this->view->company_list = $dealer_companies;
+        //$dealer_companyTable = new Proposalgen_Model_DbTable_DealerCompany();
+        //$dealer_companies = $dealer_companyTable->fetchAll('isDeleted = false', 'company_name');
+        //$this->view->company_list = $dealer_companies;
         
         // fill manufacturers dropdown
         $manufacturersTable = new Proposalgen_Model_DbTable_Manufacturer();
-        $manufacturers = $manufacturersTable->fetchAll('isDeleted = false', 'manufacturer_name');
+        $manufacturers = $manufacturersTable->fetchAll('isDeleted = false', 'fullName');
         $this->view->manufacturer_list = $manufacturers;
         
         // get default prices
-        $dealer_companyTable = new Proposalgen_Model_DbTable_DealerCompany();
-        $where = $dealer_companyTable->getAdapter()->quoteInto('dealer_company_id = ?', $this->dealer_company_id, 'INTEGER');
-        $dealer_company = $dealer_companyTable->fetchRow($where);
+        //$dealer_companyTable = new Proposalgen_Model_DbTable_DealerCompany();
+        ////$where = $dealer_companyTable->getAdapter()->quoteInto('dealer_company_id = ?', $this->dealer_company_id, 'INTEGER');
+       // $dealer_company = $dealer_companyTable->fetchRow($where);
         
         if (count($dealer_company) > 0)
         {
@@ -3521,129 +3521,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 {
                     // $dealer_company_id = $formData ['company_filter'];
                     $dealer_company_id = 1;
-                    
-                    if ($dealer_company_id > 1)
-                    {
-                        // Save Dealer Company Overrides
-                        if ($formData ['pricing_filter'] == 'toner')
-                        {
-                            foreach ( $formData as $key => $value )
-                            {
-                                if (strstr($key, "txtDealerTonerPrice"))
-                                {
-                                    $toner_id = str_replace("txtDealerTonerPrice", "", $key);
-                                    
-                                    // check if new price is populated.
-                                    if ($formData ['txtDealerTonerPrice' . $toner_id] != $formData ['hdnDealerTonerPrice' . $toner_id])
-                                    {
-                                        $dealer_toner_overrideTable = new Proposalgen_Model_DbTable_DealerTonerOverride();
-                                        $where = $dealer_toner_overrideTable->getAdapter()->quoteInto('dealer_company_id = ' . $dealer_company_id . ' AND toner_id = ?', $toner_id, 'INTEGER');
-                                        $price = $formData ['txtDealerTonerPrice' . $toner_id];
-                                        
-                                        // delete entry if blanked out
-                                        if ($price != '' && ! is_numeric($price))
-                                        {
-                                            $passvalid = 1;
-                                            $this->view->message = "Value must be numeric. Please correct it and try again.";
-                                            break;
-                                        }
-                                        else if ($price == "0")
-                                        {
-                                            $dealer_toner_overrideTable->delete($where);
-                                        }
-                                        else if ($price > 0)
-                                        {
-                                            $dealer_toner_overrideData = array (
-                                                    'dealer_company_id' => $dealer_company_id, 
-                                                    'toner_id' => $toner_id, 
-                                                    'override_toner_price' => $price 
-                                            );
-                                            
-                                            // check to see if device override
-                                            // exists
-                                            $dealer_toner_override = $dealer_toner_overrideTable->fetchRow($where);
-                                            
-                                            if (count($dealer_toner_override) > 0)
-                                            {
-                                                $dealer_toner_overrideTable->update($dealer_toner_overrideData, $where);
-                                                $summary .= "Updated " . ucwords(strtolower($key ['manufacturer_name'])) . ' ' . ucwords(strtolower($key ['printer_model'])) . ' from ' . $key ['override_toner_price'] . ' to ' . $price . '<br />';
-                                            }
-                                            else
-                                            {
-                                                $dealer_toner_overrideTable->insert($dealer_toner_overrideData);
-                                                $summary .= "Updated " . ucwords(strtolower($key ['manufacturer_name'])) . ' ' . ucwords(strtolower($key ['printer_model'])) . ' from ' . $key ['toner_price'] . ' to ' . $price . '<br />';
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            
-                            if ($passvalid == 0)
-                            {
-                                $this->view->message = "<p>The toner pricing updates have been applied successfully.</p>";
-                            }
-                        }
-                        else
-                        {
-                            foreach ( $formData as $key => $value )
-                            {
-                                if (strstr($key, "txtDealerDevicePrice"))
-                                {
-                                    $master_device_id = str_replace("txtDealerDevicePrice", "", $key);
-                                    
-                                    // check if new price is populated.
-                                    if ($formData ['txtDealerDevicePrice' . $master_device_id] != $formData ['hdnDealerDevicePrice' . $master_device_id])
-                                    {
-                                        $dealer_device_overrideTable = new Proposalgen_Model_DbTable_DealerDeviceOverride();
-                                        $where = $dealer_device_overrideTable->getAdapter()->quoteInto('dealer_company_id = ' . $dealer_company_id . ' AND master_device_id = ?', $master_device_id, 'INTEGER');
-                                        $price = $formData ['txtDealerDevicePrice' . $master_device_id];
-                                        
-                                        // delete entry if blanked out
-                                        if ($price != '' && ! is_numeric($price))
-                                        {
-                                            $passvalid = 1;
-                                            $this->view->message = "Value must be numeric. Please correct it and try again.";
-                                            break;
-                                        }
-                                        else if ($price == "0")
-                                        {
-                                            $dealer_device_overrideTable->delete($where);
-                                        }
-                                        else if ($price > 0)
-                                        {
-                                            $dealer_device_overrideData = array (
-                                                    'dealer_company_id' => $dealer_company_id, 
-                                                    'master_device_id' => $master_device_id, 
-                                                    'override_device_price' => $price 
-                                            );
-                                            
-                                            // check to see if device override
-                                            // exists
-                                            $dealer_device_override = $dealer_device_overrideTable->fetchRow($where);
-                                            
-                                            if (count($dealer_device_override) > 0)
-                                            {
-                                                $dealer_device_overrideTable->update($dealer_device_overrideData, $where);
-                                                $summary .= "Updated " . ucwords(strtolower($key ['manufacturer_name'])) . ' ' . ucwords(strtolower($key ['printer_model'])) . ' from ' . $key ['override_device_price'] . ' to ' . $price . '<br />';
-                                            }
-                                            else
-                                            {
-                                                $dealer_device_overrideTable->insert($dealer_device_overrideData);
-                                                $summary .= "Updated " . ucwords(strtolower($key ['manufacturer_name'])) . ' ' . ucwords(strtolower($key ['printer_model'])) . ' from ' . $key ['device_price'] . ' to ' . $price . '<br />';
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            
-                            if ($passvalid == 0)
-                            {
-                                $this->view->message = "<p>The printer pricing updates have been applied successfully.</p>";
-                            }
-                        }
-                    }
-                    else
-                    {
                         // Save Master Company Pricing Changes
                         if ($formData ['pricing_filter'] == 'toner')
                         {
@@ -3793,7 +3670,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 }
                                 $this->view->repop_array = $repop_array;
                             }
-                        }
                     }
                 }
                 $db->commit();
