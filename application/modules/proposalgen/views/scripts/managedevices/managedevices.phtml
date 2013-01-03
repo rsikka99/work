@@ -125,7 +125,7 @@
 		var lastsel;
 		
 		jQuery("#applied_toners_list").jqGrid({
-			url:'<?php echo $this->baseUrl(); ?>/admin/devicetoners?deviceid='+master_device_id,
+			url:'<?php echo $this->baseUrl("/proposalgen/admin/devicetoners"); ?>?deviceid='+master_device_id,
 			datatype:'json',
 			colNames:['Toner ID', 'SKU', 'Manufacturer', 'Type', 'Color', 'Yield', 'Price', 'MasterID', 'Added', 'Action'],
 			colModel:[
@@ -189,7 +189,7 @@
 		);
 		
 		jQuery("#available_toners_list").jqGrid({
-			url:'<?php echo $this->baseUrl(); ?>/admin/tonerslist?deviceid='+master_device_id,
+			url:'<?php echo $this->baseUrl("/proposalgen/admin/tonerslist"); ?>?deviceid='+master_device_id,
 			datatype:'json',
 			colNames:['Toner ID', 'SKU', 'Manufacturer', 'Type', 'Color', 'Yield', 'Price', 'MasterID', 'Added', 'Action', 'Apply To Printer', 'Machine Compabibility'],
 			colModel:[
@@ -228,7 +228,6 @@
 						jQuery("#available_toners_list").jqGrid('setRowData',ids[i],{action:add_button});
 					}
 				}
-				update_applied();
 			},
 			editurl:'<?php echo $this->baseUrl(); ?>/admin/edittoner?deviceid='+master_device_id
 		});
@@ -326,7 +325,7 @@
 		);
 		
 		jQuery("#replacement_toners_list").jqGrid({
-			url:'<?php echo $this->baseUrl(); ?>/admin/replacementtoners?tonerid=0',
+			url:'<?php echo $this->baseUrl("/proposalgen/admin/replacementtoners"); ?>?tonerid=0',
 			datatype:'json',
 			colNames:['Toner ID', 'SKU', 'Manufacturer', 'Type', 'Color', 'Yield', 'Price', 'Num','Total'],
 			colModel:[
@@ -397,7 +396,7 @@
 			$('#applied_toners_list').clearGridData();
 			
 		    var manufacturerid = $("#manufacturer_id").val();
-		    var url = '<?php echo $this->baseUrl(); ?>/admin/printermodels?manufacturerid='+manufacturerid;
+		    var url = '<?php echo $this->baseUrl("/proposalgen/admin/printermodels"); ?>?manufacturerid='+manufacturerid;
 
 			$.ajax ({
 				type: "POST",
@@ -457,7 +456,7 @@
 		        beforeSend: function() {
 		        	disable_form();
 		        },
-		        url: '<?php echo $this->baseUrl(); ?>/admin/devicedetails?deviceid='+master_device_id,
+		        url: '<?php echo $this->baseUrl("/proposalgen/admin/devicedetails"); ?>?deviceid='+master_device_id,
 		        success: function(data) {
 		            var obj = jQuery.parseJSON(data);
 		            if(form_mode != 'add' && repop != 1) {
@@ -929,7 +928,7 @@
 			master_device_id = 0;
 		}
 		
-		$('#applied_toners_list').setGridParam({url:'<?php echo $this->baseUrl(); ?>/admin/devicetoners?deviceid='+master_device_id+'&list='+toner_array.replace(/'/gi,'')});
+		$('#applied_toners_list').setGridParam({url:'<?php echo $this->baseUrl("/proposalgen/admin/devicetoners"); ?>?deviceid='+master_device_id+'&list='+toner_array.replace(/'/gi,'')});
 	    $('#applied_toners_list').trigger('reloadGrid');
 	}
 	
@@ -951,7 +950,7 @@
 		}
 		
 		var master_device_id = $("#printer_model").val();
-		$('#available_toners_list').setGridParam({url:'<?php echo $this->baseUrl(); ?>/admin/tonerslist?deviceid='+master_device_id+params});
+		$('#available_toners_list').setGridParam({url:'<?php echo $this->baseUrl("/proposalgen/admin/tonerslist"); ?>?deviceid='+master_device_id+params});
 		$('#available_toners_list').setGridParam({editurl:'<?php echo $this->baseUrl(); ?>/admin/edittoner?deviceid='+master_device_id});
 		colModel:[
        		{width:30, name:'toner_id', index:'toner_id', sorttype:'int', hidden:true, editable:true, editoptions:{readonly:true, size:12}},

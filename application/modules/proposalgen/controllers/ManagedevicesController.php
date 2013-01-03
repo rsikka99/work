@@ -16,11 +16,11 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
         $this->initView();
         $this->view->app = $this->config->app;
         $this->view->user = Zend_Auth::getInstance()->getIdentity();
-        $this->view->user_id = Zend_Auth::getInstance()->getIdentity()->user_id;
-        $this->view->privilege = Zend_Auth::getInstance()->getIdentity()->privileges;
-        $this->user_id = Zend_Auth::getInstance()->getIdentity()->user_id;
-        $this->privilege = Zend_Auth::getInstance()->getIdentity()->privileges;
-        $this->dealer_company_id = Zend_Auth::getInstance()->getIdentity()->dealer_company_id;
+        $this->view->user_id = Zend_Auth::getInstance()->getIdentity()->id;
+//         $this->view->privilege = Zend_Auth::getInstance()->getIdentity()->privileges;
+        $this->user_id = Zend_Auth::getInstance()->getIdentity()->id;
+//         $this->privilege = Zend_Auth::getInstance()->getIdentity()->privileges;
+//         $this->dealer_company_id = Zend_Auth::getInstance()->getIdentity()->dealer_company_id;
         $this->MPSProgramName = $this->config->app->MPSProgramName;
         $this->view->MPSProgramName = $this->config->app->MPSProgramName;
         $this->ApplicationName = $this->config->app->ApplicationName;
@@ -32,7 +32,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
 
     public function managedevicesAction ()
     {
-        $this->view->headScript()->appendFile($this->view->baseUrl() . '/scripts/grid.celledit.js', 'text/javascript');
+        $this->view->headScript()->appendFile($this->view->baseUrl('/js/libs/jqgrid/plugins/grid.celledit.js'), 'text/javascript');
         $db = Zend_Db_Table::getDefaultAdapter();
         
         // add device form
@@ -71,7 +71,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
         $currElement->addMultiOption('', 'Select Toner Config');
         foreach ( $toner_configs as $row )
         {
-            $currElement->addMultiOption($row ['tonerconfigid'], ucwords(strtolower($row ['name'])));
+            $currElement->addMultiOption($row ['id'], ucwords(strtolower($row ['name'])));
         }
         
         // return part_type list
@@ -81,7 +81,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
         $part_types = $part_typeTable->fetchAll();
         foreach ( $part_types as $row )
         {
-            $part_type = ucwords(strtolower($row ['type_name']));
+            $part_type = ucwords(strtolower($row ['name']));
             if ($part_type == "Oem")
             {
                 $part_type = "OEM";
@@ -91,7 +91,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
             {
                 $list .= ";";
             }
-            $list .= $row ['part_type_id'] . ":" . $part_type;
+            $list .= $row ['id'] . ":" . $part_type;
         }
         $this->view->partTypeList = $list;
         
@@ -105,7 +105,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
             {
                 $list .= ";";
             }
-            $list .= $row ['toner_color_id'] . ":" . ucwords(strtolower($row ['toner_color_name']));
+            $list .= $row ['id'] . ":" . ucwords(strtolower($row ['name']));
         }
         $this->view->tonerColorList = $list;
         
@@ -555,7 +555,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                             $printer_model = $master_device ['printer_model'];
                             
                             // NEED TO CHECK IF REPLACEMENT DEVICE
-                            $replacement_devicesTable = new Proposalgen_Model_DbTable_ReplacementDevices();
+                            $replacement_devicesTable = new Proposalgen_Model_DbTable_ReplacementDevice();
                             $where = $replacement_devicesTable->getAdapter()->quoteInto('master_device_id = ?', $master_device_id, 'INTEGER');
                             $replacement_devices = $replacement_devicesTable->fetchAll($where);
                             
@@ -583,7 +583,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                     $reportData = array (
                                             'devices_modified' => 1 
                                     );
-                                    $reportTable = new Proposalgen_Model_DbTable_Reports();
+                                    $reportTable = new Proposalgen_Model_DbTable_Report();
                                     $where = $reportTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
                                     $reportTable->update($reportData, $where);
                                     
@@ -592,12 +592,12 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                     $udcData = array (
                                             'is_excluded' => 1 
                                     );
-                                    $udcTable = new Proposalgen_Model_DbTable_UploadDataCollector();
+                                    $udcTable = new Proposalgen_Model_DbTable_UploadDataCollectorRow();
                                     $where = $udcTable->getAdapter()->quoteInto('upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
                                     $udcTable->update($udcData, $where);
                                     
                                     // DELETE METERS
-                                    $metersTable = new Proposalgen_Model_DbTable_Meters();
+                                    $metersTable = new Proposalgen_Model_DbTable_Meter();
                                     $where = $metersTable->getAdapter()->quoteInto('device_instance_id = ?', $device_instance_id, 'INTEGER');
                                     $metersTable->delete($where);
                                     
@@ -612,7 +612,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                 $master_matchup_pfTable->delete($where);
                                 
                                 // DELETE USER MAPPINGS
-                                $pf_device_matchup_usersTable = new Proposalgen_Model_DbTable_PFMatchupUsers();
+                                $pf_device_matchup_usersTable = new Proposalgen_Model_DbTable_PFMatchupUser();
                                 $where = $pf_device_matchup_usersTable->getAdapter()->quoteInto('master_device_id = ?', $master_device_id, 'INTEGER');
                                 $pf_device_matchup_usersTable->delete($where);
                                 
@@ -622,12 +622,12 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                 $device_tonerTable->delete($where);
                                 
                                 // DELETE DEALER DEVICE OVERRIDE
-                                $dealer_device_overrideTable = new Proposalgen_Model_DbTable_PFMatchupUsers();
+                                $dealer_device_overrideTable = new Proposalgen_Model_DbTable_PFMatchupUser();
                                 $where = $dealer_device_overrideTable->getAdapter()->quoteInto('master_device_id = ?', $master_device_id, 'INTEGER');
                                 $dealer_device_overrideTable->delete($where);
                                 
                                 // DELETE USER DEVICE OVERRIDE
-                                $user_device_overrideTable = new Proposalgen_Model_DbTable_PFMatchupUsers();
+                                $user_device_overrideTable = new Proposalgen_Model_DbTable_PFMatchupUser();
                                 $where = $user_device_overrideTable->getAdapter()->quoteInto('master_device_id = ?', $master_device_id, 'INTEGER');
                                 $user_device_overrideTable->delete($where);
                                 
@@ -697,7 +697,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
 
     public function manageticketdevicesAction ()
     {
-        $this->view->headScript()->appendFile($this->view->baseUrl() . '/scripts/grid.celledit.js', 'text/javascript');
+        $this->view->headScript()->appendFile($this->view->baseUrl('/js/libs/jqgrid/plugins/grid.celledit.js'), 'text/javascript');
         $db = Zend_Db_Table::getDefaultAdapter();
         
         // add device form
@@ -1361,7 +1361,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
 
     public function managemappingdevicesAction ()
     {
-        $this->view->headScript()->appendFile($this->view->baseUrl() . '/scripts/grid.celledit.js', 'text/javascript');
+        $this->view->headScript()->appendFile($this->view->baseUrl('/js/libs/jqgrid/plugins/grid.celledit.js'), 'text/javascript');
         $db = Zend_Db_Table::getDefaultAdapter();
         
         // add device form
