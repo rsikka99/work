@@ -526,31 +526,34 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     ->where('md.id = ?', $deviceID);
                 $stmt = $db->query($select);
                 $row = $stmt->fetchAll();
-                
                 $launch_date = new Zend_Date($row [0] ['launch_date'], "yyyy/mm/dd HH:ii:ss");
                 $formdata = array (
-                        'launch_date' => $launch_date->toString('mm/dd/yyyy'), 
-                        'toner_config_id' => $row [0] ['toner_config_id'], 
-                        'is_copier' => $row [0] ['is_copier'] ? true : false, 
-                        'is_scanner' => $row [0] ['is_scanner'] ? true : false, 
-                        'is_fax' => $row [0] ['is_fax'] ? true : false, 
-                        'is_duplex' => $row [0] ['is_duplex'] ? true : false, 
-                        'is_replacement_device' => $row [0] ['is_replacement_device'], 
-                        'watts_power_normal' => $row [0] ['watts_power_normal'], 
-                        'watts_power_idle' => $row [0] ['watts_power_idle'], 
-                        'device_price' => ($row [0] ['device_price'] > 0 ? money_format('%i', ($row [0] ['device_price'])) : ""), 
-                        'is_deleted' => $row [0] ['is_deleted'], 
-                        'toner_array' => $toner_array, 
-                        'replacement_category' => $row [0] ['replacement_category'], 
-                        // 'is_letter_legal' => $row [0] ['is_letter_legal'],
-                        'print_speed' => $row [0] ['print_speed'], 
-                        'resolution' => $row [0] ['resolution'], 
-                        // 'paper_capacity' => $row [0] ['paper_capacity'],
-                        // 'cpp_above' => $row [0]
-                        // ['CPP_above_ten_thousand_pages'],
-                        'monthly_rate' => $row [0] ['monthly_rate'], 
-                        'is_leased' => $row [0] ['is_leased'] ? true : false, 
-                        'leased_toner_yield' => $row [0] ['leased_toner_yield'] 
+
+                    'launch_date' => $launch_date->toString('mm/dd/yyyy'),
+                    'toner_config_id' => $row [0] ['toner_config_id'],
+                    'is_copier' => $row [0] ['is_copier'] ? true : false,
+                    'is_scanner' => $row [0] ['is_scanner'] ? true : false,
+                    'is_fax' => $row [0] ['is_fax'] ? true : false,
+                    'is_duplex' => $row [0] ['is_duplex'] ? true : false,
+                    'is_replacement_device' => $row [0] ['is_replacement_device'],
+                    'watts_power_normal' => $row [0] ['watts_power_normal'],
+                    'watts_power_idle' => $row [0] ['watts_power_idle'],
+                    'device_price' => ($row [0] ['cost'] > 0 ? (float)$row [0] ['cost'] : ""),
+                    'is_deleted' => $row [0] ['is_deleted'],
+                    'toner_array' => $toner_array,
+                    'replacement_category' => $row [0] ['replacement_category'],
+                    // 'is_letter_legal' => $row [0] ['is_letter_legal'],
+                    'print_speed' => $row [0] ['print_speed'],
+                    'resolution' => $row [0] ['resolution'],
+                    // 'paper_capacity' => $row [0] ['paper_capacity'],
+                    // 'cpp_above' => $row [0]
+                    // ['CPP_above_ten_thousand_pages'],
+                    'monthly_rate' => $row [0] ['monthly_rate'],
+                    'is_leased' => $row [0] ['is_leased'] ? true : false,
+                    'leased_toner_yield' => $row [0] ['leased_toner_yield'],
+                    'ppm_black' => $row [0] ['ppm_black'],
+                    'ppm_color' => $row [0] ['ppm_color'],
+                    'duty_cycle' => $row [0] ['duty_cycle'],
                 );
             }
             else
@@ -617,10 +620,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $select = new Zend_Db_Select($db);
                     $select = $db->select();
                     $select->from(array (
-                            'm' => 'manufacturer' 
+                            'm' => 'manufacturers'
                     ));
-                    $select->where('is_deleted = 0');
-                    $select->order('manufacturer_name');
+                    $select->where('isDeleted = 0');
+                    $select->order('fullname');
                     $stmt = $db->query($select);
                     $result = $stmt->fetchAll();
                     $count = count($result);
@@ -630,10 +633,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         $i = 0;
                         foreach ( $result as $row )
                         {
-                            $formdata->rows [$i] ['id'] = $row ['manufacturer_id'];
+                            $formdata->rows [$i] ['id'] = $row ['id'];
                             $formdata->rows [$i] ['cell'] = array (
-                                    $row ['manufacturer_id'], 
-                                    ucwords(strtolower($row ['manufacturer_name'])) 
+                                    $row ['id'],
+                                    ucwords(strtolower($row ['fullname']))
                             );
                             $i ++;
                         }
@@ -649,9 +652,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $select = new Zend_Db_Select($db);
                     $select = $db->select();
                     $select->from(array (
-                            'tc' => 'toner_color' 
+                            'tc' => 'pgen_toner_colors'
                     ));
-                    $select->order('toner_color_name');
+                    $select->order('name');
                     $stmt = $db->query($select);
                     $result = $stmt->fetchAll();
                     $count = count($result);
@@ -661,10 +664,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         $i = 0;
                         foreach ( $result as $row )
                         {
-                            $formdata->rows [$i] ['id'] = $row ['toner_color_id'];
+                            $formdata->rows [$i] ['id'] = $row ['id'];
                             $formdata->rows [$i] ['cell'] = array (
-                                    $row ['toner_color_id'], 
-                                    ucwords(strtolower($row ['toner_color_name'])) 
+                                    $row ['id'],
+                                    ucwords(strtolower($row ['name']))
                             );
                             $i ++;
                         }
@@ -680,9 +683,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $select = new Zend_Db_Select($db);
                     $select = $db->select();
                     $select->from(array (
-                            'pt' => 'part_type' 
+                            'pt' => 'pgen_part_types'
                     ));
-                    $select->order('type_name');
+                    $select->order('name');
                     $stmt = $db->query($select);
                     $result = $stmt->fetchAll();
                     $count = count($result);
@@ -692,10 +695,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         $i = 0;
                         foreach ( $result as $row )
                         {
-                            $formdata->rows [$i] ['id'] = $row ['part_type_id'];
+                            $formdata->rows [$i] ['id'] = $row ['id'];
                             $formdata->rows [$i] ['cell'] = array (
-                                    $row ['part_type_id'], 
-                                    $row ['type_name'] 
+                                    $row ['id'],
+                                    $row ['name']
                             );
                             $i ++;
                         }
@@ -823,9 +826,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             $type_name = "OEM";
                         }
                         
-                        $formdata->rows [$i] ['id'] = $row ['toner_id'];
+                        $formdata->rows [$i] ['id'] = $row ['id'];
                         $formdata->rows [$i] ['cell'] = array (
-                                $row ['toner_id'], 
+                                $row ['id'],
                                 $row ['sku'], 
                                 ucwords(strtolower($row ['manufacturer_name'])), 
                                 $type_name, 
@@ -867,164 +870,157 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         
         $db = Zend_Db_Table::getDefaultAdapter();
         $toner_id = $this->_getParam('tonerid', 0);
-        $filter = $this->_getParam('filter', false);
-        $criteria = trim($this->_getParam('criteria', false));
-        
-        $formdata = null;
-        $page = $_GET ['page'];
-        $limit = $_GET ['rows'];
-        $sidx = $_GET ['sidx'];
-        $sord = $_GET ['sord'];
-        if (! $sidx)
-            $sidx = 'manufacturer_name';
-        
-        $where = '';
-        if (! empty($filter) && ! empty($criteria) && $filter != 'machine_compatibility')
-        {
-            if ($filter == 'toner_yield')
-            {
-                $where = ' AND ' . $filter . ' = ' . $criteria;
-            }
-            else
-            {
-                if ($filter == "manufacturer_name")
-                {
-                    $filter = "m.manufacturer_name";
+
+        $formdata = array();
+        if ($toner_id > 0) {
+            $filter = $this->_getParam('filter', false);
+            $criteria = trim($this->_getParam('criteria', false));
+
+            $formdata = new stdClass();
+            $page = $_GET ['page'];
+            $limit = $_GET ['rows'];
+            $sidx = $_GET ['sidx'];
+            $sord = $_GET ['sord'];
+            if (!$sidx)
+                $sidx = 'fullname';
+
+            $where = '';
+            if (!empty($filter) && !empty($criteria) && $filter != 'machine_compatibility') {
+                if ($filter == 'toner_yield') {
+                    $where = ' AND ' . $filter . ' = ' . $criteria;
+                } else {
+                    if ($filter == "manufacturer_name") {
+                        $filter = "m.fullname";
+                    }
+                    $where = ' AND ' . $filter . ' LIKE("%' . $criteria . '%")';
                 }
-                $where = ' AND ' . $filter . ' LIKE("%' . $criteria . '%")';
             }
-        }
-        
-        try
-        {
-            // GET TONER
-            $toner = Proposalgen_Model_Mapper_Toner::getInstance()->find($toner_id);
-            $toner_color_id = $toner->getTonerColorId();
-            
-            // GET NUMBER OF DEVICES USING THIS TONER
-            $total_devices = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchAll('toner_id = ' . $toner_id);
-            $total_devices_count = count($total_devices);
-            
-            // GET NUMBER OF DEVICES WHERE LAST TONER FOR THIS COLOR
-            $num_devices_count = 0;
-            foreach ( $total_devices as $key )
-            {
-                $master_device_id = $key->getMasterDeviceId();
-                
-                // GET ALL SAME COLOR TONERS FOR DEVICE
+
+            try {
+                // GET TONER
+                $toner = Proposalgen_Model_Mapper_Toner::getInstance()->find($toner_id);
+                $toner_color_id = $toner->getTonerColorId();
+                // GET NUMBER OF DEVICES USING THIS TONER
+                $total_devices = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchAll('toner_id = ' . $toner_id);
+                $total_devices_count = count($total_devices);
+
+                // GET NUMBER OF DEVICES WHERE LAST TONER FOR THIS COLOR
+                $num_devices_count = 0;
+                foreach ($total_devices as $key) {
+                    $master_device_id = $key->getMasterDeviceId();
+
+                    // GET ALL SAME COLOR TONERS FOR DEVICE
+                    $select = new Zend_Db_Select($db);
+                    $select = $db->select();
+                    $select->from(array(
+                        'dt' => 'pgen_device_toners'
+                    ));
+                    $select->joinLeft(array(
+                        't' => 'pgen_toners'
+                    ), 'dt.toner_id = t.toner_id');
+                    $select->where('t.toner_color_id = ' . $toner_color_id . ' AND dt.master_device_id = ' . $master_device_id);
+                    $stmt = $db->query($select);
+                    $num_devices = $stmt->fetchAll();
+
+                    if (count($num_devices) == 1) {
+                        $num_devices_count += 1;
+                    }
+                }
+
+                // GET SAME COLOR TONERS
                 $select = new Zend_Db_Select($db);
                 $select = $db->select();
-                $select->from(array (
-                        'dt' => 'device_toner' 
+                $select->from(array(
+                    't' => 'pgen_toners'
                 ));
-                $select->joinLeft(array (
-                        't' => 'toner' 
-                ), 'dt.toner_id = t.toner_id');
-                $select->where('t.toner_color_id = ' . $toner_color_id . ' AND dt.master_device_id = ' . $master_device_id);
+                $select->joinLeft(array(
+                    'pt' => 'pgen_part_types'
+                ), 'pt.id = t.part_type_id');
+                $select->joinLeft(array(
+                    'tc' => 'pgen_toner_colors'
+                ), 'tc.id = t.toner_color_id');
+                $select->joinLeft(array(
+                    'm' => 'manufacturers'
+                ), 'm.id = t.manufacturer_id');
+                $select->where('t.id != ' . $toner_id . ' AND t.toner_color_id = ' . $toner_color_id . $where);
                 $stmt = $db->query($select);
-                $num_devices = $stmt->fetchAll();
-                
-                if (count($num_devices) == 1)
-                {
-                    $num_devices_count += 1;
+                $result = $stmt->fetchAll();
+                $count = count($result);
+
+                if ($count > 0) {
+                    $total_pages = ceil($count / $limit);
+                } else {
+                    $total_pages = 0;
                 }
-            }
-            
-            // GET SAME COLOR TONERS
-            $select = new Zend_Db_Select($db);
-            $select = $db->select();
-            $select->from(array (
-                    't' => 'toner' 
-            ));
-            $select->joinLeft(array (
-                    'pt' => 'part_type' 
-            ), 'pt.part_type_id = t.part_type_id');
-            $select->joinLeft(array (
-                    'tc' => 'toner_color' 
-            ), 'tc.toner_color_id = t.toner_color_id');
-            $select->joinLeft(array (
-                    'm' => 'manufacturer' 
-            ), 'm.manufacturer_id = t.manufacturer_id');
-            $select->where('t.toner_id != ' . $toner_id . ' AND t.toner_color_id = ' . $toner_color_id . $where);
-            $stmt = $db->query($select);
-            $result = $stmt->fetchAll();
-            $count = count($result);
-            
-            if ($count > 0)
-            {
-                $total_pages = ceil($count / $limit);
-            }
-            else
-            {
-                $total_pages = 0;
-            }
-            
-            if ($page > $total_pages)
-                $page = $total_pages;
-            
-            $start = $limit * $page - $limit;
-            
-            $select = new Zend_Db_Select($db);
-            $select = $db->select();
-            $select->from(array (
-                    't' => 'toner' 
-            ));
-            $select->joinLeft(array (
-                    'pt' => 'part_type' 
-            ), 'pt.part_type_id = t.part_type_id');
-            $select->joinLeft(array (
-                    'tc' => 'toner_color' 
-            ), 'tc.toner_color_id = t.toner_color_id');
-            $select->joinLeft(array (
-                    'm' => 'manufacturer' 
-            ), 'm.manufacturer_id = t.manufacturer_id');
-            $select->where('t.toner_id != ' . $toner_id . ' AND t.toner_color_id = ' . $toner_color_id . $where);
-            $select->order($sidx . ' ' . $sord);
-            $select->limit($limit, $start);
-            $stmt = $db->query($select);
-            $result = $stmt->fetchAll();
-            
-            if ($count > 0)
-            {
-                $i = 0;
-                $type_name = '';
-                $formdata->page = $page;
-                $formdata->total = $total_pages;
-                $formdata->records = $count;
-                foreach ( $result as $row )
-                {
-                    // Always uppercase OEM, but just captialize everything else
-                    $type_name = ucwords(strtolower($row ['type_name']));
-                    if ($type_name == "Oem")
-                    {
-                        $type_name = "OEM";
+
+                if ($page > $total_pages)
+                    $page = $total_pages;
+
+                $start = $limit * $page - $limit;
+
+                $select = new Zend_Db_Select($db);
+                $select = $db->select();
+                $select->from(array(
+                    't' => 'pgen_toners'
+                ));
+                $select->joinLeft(array(
+                    'pt' => 'pgen_part_types'
+                ), 'pt.id = t.part_type_id');
+                $select->joinLeft(array(
+                    'tc' => 'pgen_toner_colors'
+                ), 'tc.id = t.toner_color_id');
+                $select->joinLeft(array(
+                    'm' => 'manufacturers'
+                ), 'm.id = t.manufacturer_id');
+                $select->where('t.id != ' . $toner_id . ' AND t.toner_color_id = ' . $toner_color_id . $where);
+                $select->order($sidx . ' ' . $sord);
+                $select->limit($limit, $start);
+                $stmt = $db->query($select);
+                $result = $stmt->fetchAll();
+
+                if ($count > 0) {
+                    $i = 0;
+                    $type_name = '';
+                    $formdata->page = $page;
+                    $formdata->total = $total_pages;
+                    $formdata->records = $count;
+                    foreach ($result as $row) {
+                        // Always uppercase OEM, but just captialize everything else
+                        $type_name = ucwords(strtolower($row ['type_name']));
+                        if ($type_name == "Oem") {
+                            $type_name = "OEM";
+                        }
+
+                        $formdata->rows [$i] ['id'] = $row ['toner_id'];
+                        $formdata->rows [$i] ['cell'] = array(
+                            $row ['toner_id'],
+                            $row ['toner_SKU'],
+                            ucwords(strtolower($row ['manufacturer_name'])),
+                            $type_name,
+                            ucwords(strtolower($row ['toner_color_name'])),
+                            $row ['toner_yield'],
+                            $row ['toner_price'],
+                                $num_devices_count,
+                                $total_devices_count
+                        );
+                        $i ++;
                     }
-                    
-                    $formdata->rows [$i] ['id'] = $row ['toner_id'];
-                    $formdata->rows [$i] ['cell'] = array (
-                            $row ['toner_id'], 
-                            $row ['toner_SKU'], 
-                            ucwords(strtolower($row ['manufacturer_name'])), 
-                            $type_name, 
-                            ucwords(strtolower($row ['toner_color_name'])), 
-                            $row ['toner_yield'], 
-                            $row ['toner_price'], 
-                            $num_devices_count, 
-                            $total_devices_count 
-                    );
-                    $i ++;
+                }
+                else
+                {
+                    // empty form values
+                    $formdata = array ();
                 }
             }
-            else
+            catch ( Exception $e )
             {
-                // empty form values
-                $formdata = array ();
+                // critical exception
+                Throw new exception("Critical Error: Unable to find device parts.", 0, $e);
             }
         }
-        catch ( Exception $e )
+        else
         {
-            // critical exception
-            Throw new exception("Critical Error: Unable to find device parts.", 0, $e);
+            $formdata = array();
         }
         
         // encode user data to return to the client:
@@ -1061,11 +1057,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $select = new Zend_Db_Select($db);
                 $select = $db->select();
                 $select->from(array (
-                        'dt' => 'device_toner' 
+                        'dt' => 'pgen_device_toners'
                 ));
                 $select->joinLeft(array (
-                        't' => 'toner' 
-                ), 'dt.toner_id = t.toner_id');
+                        't' => 'pgen_toners'
+                ), 'dt.toner_id = t.id');
                 $select->where('t.toner_color_id = ' . $toner_color_id . ' AND dt.master_device_id = ' . $master_device_id);
                 $stmt = $db->query($select);
                 $num_devices = $stmt->fetchAll();
@@ -1236,7 +1232,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         if ($oper == "del")
         {
             // check to see if toner is being used
-            $where = $device_tonerTable->getAdapter()->quoteinto("toner_id = ?", $id, "INTEGER");
+            $where = $device_tonerTable->getAdapter()->quoteinto("id = ?", $id, "INTEGER");
             $devices = $device_tonerTable->fetchAll($where);
             
             if (count($devices) > 0)
@@ -1245,7 +1241,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             }
             else
             {
-                $where = $tonerTable->getAdapter()->quoteInto("toner_id = ?", $id, "INTEGER");
+                $where = $tonerTable->getAdapter()->quoteInto("id = ?", $id, "INTEGER");
                 $tonerTable->delete($where);
                 $message = "The toner has been deleted.";
             }
@@ -1276,24 +1272,24 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 {
                     $tonerTable = new Proposalgen_Model_DbTable_Toner();
                     $tonerData = array (
-                            'toner_sku' => $toner_sku, 
+                            'sku' => $toner_sku,
                             'part_type_id' => $part_type_id, 
                             'manufacturer_id' => $manufacturer_id, 
                             'toner_color_id' => $toner_color_id, 
-                            'toner_yield' => $toner_yield, 
-                            'toner_price' => $toner_price 
+                            'yield' => $toner_yield,
+                            'cost' => $toner_price
                     );
                     
                     if ($toner_id > 0)
                     {
-                        $where = $tonerTable->getAdapter()->quoteInto('toner_id = ?', $toner_id, 'INTEGER');
+                        $where = $tonerTable->getAdapter()->quoteInto('id = ?', $toner_id, 'INTEGER');
                         $toner_id = $tonerTable->update($tonerData, $where);
                         $message = "The toner has been updated.";
                     }
                     else
                     {
                         // make sure toner does not exist
-                        $where = $tonerTable->getAdapter()->quoteInto('(toner_SKU = "' . $toner_sku . '")', null);
+                        $where = $tonerTable->getAdapter()->quoteInto('(sku = "' . $toner_sku . '")', null);
                         $toners = $tonerTable->fetchRow($where);
                         
                         if (count($toners) > 0)
@@ -1311,6 +1307,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 }
                 catch ( Exception $e )
                 {
+                    Throw new exception("Critical Error: Unable to find toners.", 0, $e);
                     $db->rollback();
                     $message = "An error has occurred and the toner was not updated.<br />";
                     // *
@@ -1438,12 +1435,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             // *****************************************************************
             // ALL MODES END UP DELETING TONER
             // *****************************************************************
-            
 
-            // REMOVE DEALER TONER OVERRIDES
-            $dealer_toner_OverrideTable = new Proposalgen_Model_DbTable_DealerTonerOverride();
-            $where = $dealer_toner_OverrideTable->getAdapter()->quoteInto('toner_id = ?', $replace_id, 'INTEGER');
-            $dealer_toner_OverrideTable->delete($where);
             
             // REMOVE USER TONER OVERRIDES
             $user_toner_OverrideTable = new Proposalgen_Model_DbTable_UserTonerOverride();
@@ -1457,7 +1449,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             
             // REMOVE TONER
             $tonerTable = new Proposalgen_Model_DbTable_Toner();
-            $where = $tonerTable->getAdapter()->quoteInto('toner_id = ?', $replace_id, 'INTEGER');
+            $where = $tonerTable->getAdapter()->quoteInto('id = ?', $replace_id, 'INTEGER');
             $tonerTable->delete($where);
             
             $db->commit();
@@ -6139,6 +6131,25 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 {
                     $filter = "tm.fullname";
                 }
+                else
+                {
+                    if ($filter == "type_name")
+                    {
+                        $filter = "pt.name";
+                    }
+                    else
+                    {
+                        if ($filter == "toner_SKU")
+                        {
+                            $filter = "t.sku";
+                        }
+                        else
+                        {
+                            if($filter == "toner_color_name")
+                                $filter = "tc.name";
+                        }
+                    }
+                }
                 $where = ' AND ' . $filter . ' LIKE("%' . $criteria . '%")';
             }
         }
@@ -6209,10 +6220,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 ->joinLeft(array (
                     'pt' => 'pgen_part_types' 
             ), 'pt.id = t.part_type_id', array (
-                    'name AS type_name' 
+                    'pt.name AS type_name'
             ))
                 ->where('t.id > 0' . $where);
-            
+
             if ($where_compatible)
             {
                 $select->where("CONCAT(mdm.fullname,' ',md.printer_model) LIKE '%" . $where_compatible . "%'");
@@ -6221,7 +6232,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             
             $stmt = $db->query($select);
             $result = $stmt->fetchAll();
-            
             $count = count($result);
             if ($count > 0)
             {
@@ -6236,7 +6246,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $start = $limit * $page - $limit;
             if ($start < 0)
                 $start = 0;
-            
+
             $select->order($sidx . ' ' . $sord);
             $select->limit($limit, $start);
             $stmt = $db->query($select);

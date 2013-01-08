@@ -211,14 +211,14 @@
 			rowNum:10,
 			rowList:[10,20,30],
 			pager:'#available_toners_pager',
-			gridComplete:function(){ 
+			gridComplete:function(){
 				var ids = jQuery("#available_toners_list").jqGrid('getDataIDs');
 				var toner_array = $("#toner_array").val();
-				
+
 				for(var i=0; i < ids.length; i++) { 
 					var cur_row = ids[i];
 					var is_added = document.getElementById("available_toners_list").rows[i+1].cells[8].innerHTML;
-					
+
 					add_button = '<input type="button" name="btnAdd'+cur_row+'" id="btnAdd'+cur_row+'" tag="Add" value="Assign" class="btn" onclick="javascript: do_add('+cur_row+');" />'; 
 					disabled_button = '<input type="button" name="btnAdd'+cur_row+'" id="btnAdd'+cur_row+'" tag="Add" value="Assign" class="btn" onclick="javascript: do_add('+cur_row+');" disabled="disabled" />';
 					
@@ -229,7 +229,7 @@
 					}
 				}
 			},
-			editurl:'<?php echo $this->baseUrl(); ?>/admin/edittoner?deviceid='+master_device_id
+			editurl:'<?php echo $this->baseUrl("/proposalgen/admin/edittoner"); ?>?deviceid='+master_device_id
 		});
 		
 		jQuery("#available_toners_list").jqGrid('navGrid','#available_toners_pager',
@@ -283,7 +283,7 @@
           			var rowid = grid.jqGrid('getGridParam', 'selrow');
           			
         			// check device toner count for color
-					var url = '<?php echo $this->baseUrl(); ?>/admin/devicetonercount?tonerid='+rowid;
+					var url = '<?php echo $this->baseUrl("/proposalgen/admin/devicetonercount"); ?>?tonerid='+rowid;
         		    $.ajax({
         		        url: url,
         		        success: function(data) {
@@ -299,7 +299,7 @@
             					
             					//return list of replacement toners for current toner
             					update_replacement();
-            					
+
         					} else {
 								//use default dialog
 								$('#replace_toner_id').val(rowid);
@@ -472,6 +472,9 @@
 						$("#toner_array").val(obj.toner_array);
 			            $("#is_leased").attr('checked', obj.is_leased);
 			            $("#leased_toner_yield").val(obj.leased_toner_yield);
+                        $("#ppm_black").val(obj.ppm_black);
+                        $("#ppm_color").val(obj.ppm_color);
+                        $("#duty_cycle").val(obj.duty_cycle);
 					}
 		        },
 		        error: function() {
@@ -532,13 +535,13 @@
 			
 			switch (this.value) {
 				case "manufacturer_name":
-					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=man';
+					url = '<?php echo $this->baseUrl("/proposalgen/admin/filterlistitems"); ?>?list=man';
 					break;
 				case "type_name":
-					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=type';
+					url = '<?php echo $this->baseUrl("/proposalgen/admin/filterlistitems"); ?>?list=type';
 					break;
 				case "toner_color_name":
-					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=color';
+					url = '<?php echo $this->baseUrl("/proposalgen/admin/filterlistitems"); ?>?list=color';
 					break;
 				default:
 					break;
@@ -583,13 +586,13 @@
 			
 			switch (this.value) {
 				case "manufacturer_name":
-					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=man';
+					url = '<?php echo $this->baseUrl("/proposalgen/admin/filterlistitems"); ?>?list=man';
 					break;
 				case "type_name":
-					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=type';
+					url = '<?php echo $this->baseUrl("/proposalgen/admin/filterlistitems"); ?>?list=type';
 					break;
 				case "toner_color_name":
-					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=color';
+					url = '<?php echo $this->baseUrl("/proposalgen/admin/filterlistitems"); ?>?list=color';
 					break;
 				default:
 					break;
@@ -847,7 +850,7 @@
 			
 		} else if(inAction == 'delete') {
 			var alert_message = "Are you sure you want to delete this printer?";
-			var url = '<?php echo $this->baseUrl(); ?>/admin/devicereports?id='+$("#printer_model").val();
+			var url = '<?php echo $this->baseUrl("/proposalgen/admin/devicereports"); ?>?id='+$("#printer_model").val();
 			var num_reports = 0;
 			
 			// get number of reports this printer belongs to
@@ -893,7 +896,7 @@
 			} else {
 				lightbox('hide');
 				$("#replacement_message").html("");
-    			var url = '<?php echo $this->baseUrl(); ?>/admin/replacetoner?replace_mode='+replace_mode+'&replace_toner_id='+replace_toner_id+'&with_toner_id='+with_toner_id+'&chkAlLToners='+apply_all;
+    			var url = '<?php echo $this->baseUrl("/proposalgen/admin/replacetoner"); ?>?replace_mode='+replace_mode+'&replace_toner_id='+replace_toner_id+'&with_toner_id='+with_toner_id+'&chkAlLToners='+apply_all;
     		    //alert(url);
     		    
     		    $.ajax({
@@ -951,7 +954,7 @@
 		
 		var master_device_id = $("#printer_model").val();
 		$('#available_toners_list').setGridParam({url:'<?php echo $this->baseUrl("/proposalgen/admin/tonerslist"); ?>?deviceid='+master_device_id+params});
-		$('#available_toners_list').setGridParam({editurl:'<?php echo $this->baseUrl(); ?>/admin/edittoner?deviceid='+master_device_id});
+		$('#available_toners_list').setGridParam({editurl:'<?php echo $this->baseUrl("/proposalgen/admin/edittoner"); ?>?deviceid='+master_device_id});
 		colModel:[
        		{width:30, name:'toner_id', index:'toner_id', sorttype:'int', hidden:true, editable:true, editoptions:{readonly:true, size:12}},
 			{width:60, name:'toner_sku', index:'toner_sku', editable:true, editoptions:{size:12, maxlength:30}},
@@ -988,7 +991,7 @@
 		var grid = $("#available_toners_list");
 		var toner_id = grid.jqGrid('getGridParam', 'selrow');
 		
-		$('#replacement_toners_list').setGridParam({url:'<?php echo $this->baseUrl(); ?>/admin/replacementtoners?tonerid='+toner_id+params});
+		$('#replacement_toners_list').setGridParam({url:'<?php echo $this->baseUrl("/proposalgen/admin/replacementtoners"); ?>?tonerid='+toner_id+params});
 	    $('#replacement_toners_list').trigger('reloadGrid');
 	}
 	
