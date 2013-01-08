@@ -25,7 +25,7 @@
 		//* DEVICES GRID
 		//*********************************************************************
 		jQuery("#devices_list").jqGrid({
-			url:'<?php echo $this->baseUrl(); ?>/admin/masterdeviceslist?type=printers&compid=1',
+			url:'<?php echo $this->baseUrl("/proposalgen/admin/masterdeviceslist"); ?>?type=printers&compid=1',
 			datatype:'json',
 			colNames:['Manufacturer','Printer Model','Printer Price','New Price'],
 			colModel:[
@@ -49,13 +49,11 @@
 				for(var i=0; i < ids.length; i++) {
 					var cur_row = ids[i];
 					var cur_price = document.getElementById("devices_list").rows[i+1].cells[3].innerHTML.replace("$","").replace(/,/gi,"").replace(/ /gi,"");
-					
 					if(cur_price == 0) {
 						document.getElementById("devices_list").rows[i+1].cells[3].innerHTML = "$ -";
 					} else {
 						document.getElementById("devices_list").rows[i+1].cells[3].innerHTML = "$ " + cur_price;
 					}
-					
 					hidden_price_element = "<input type='hidden' name='hdnDevicePrice"+cur_row+"' id='hdnDevicePrice"+cur_row+"' value='" + cur_price + "' class='span1' maxlength='8' />";
 					new_price_element = "$ <input type='text' name='txtDevicePrice"+cur_row+"' id='txtDevicePrice"+cur_row+"' class='span1' maxlength='12' style='text-align:right;' onkeypress='javascript: return numbersonly(this, event);' />"; 
 					jQuery("#devices_list").jqGrid('setRowData',ids[i],{new_device_price: hidden_price_element + new_price_element});
@@ -84,7 +82,7 @@
 		//* TONERS GRID
 		//*********************************************************************
 		jQuery("#toners_list").jqGrid({
-			url:'<?php echo $this->baseUrl(); ?>/admin/tonerslist',
+			url:'<?php echo $this->baseUrl("/proposalgen/admin/tonerslist"); ?>',
 			datatype:'json',
 			colNames:['Toner ID','SKU','Manufacturer','Type','Color','Yield','Price','New Price','MasterID','Added','Machine Compatibility'],
 			colModel:[
@@ -159,148 +157,7 @@
 				{},
 				{}
 		);
-		
-		//*********************************************************************
-		//* DEALER DEVICES GRID
-		//*********************************************************************
-		jQuery("#dealer_devices_list").jqGrid({
-			url:'<?php echo $this->baseUrl(); ?>/admin/dealerdeviceslist?compid='+$('#company_filter').val(),
-			datatype:'json',
-			colNames:['Manufacturer','Printer Model','Printer Price','Override Price','New Price'],
-			colModel:[
-				{width: 130, name:'manufacturer_name', index:'manufacturer_name', editable:true, editoptions:{disabled:true}},
-				{width: 150, name:'printer_model', index:'printer_model', editable:true, editoptions:{disabled:true}},
-				{width: 100, name:'device_price', index:'device_price', editable:true, editoptions:{disabled:true}, formatter:'currency', align:'right', formatoptions:{prefix:"$",thousandsSeparator:","}},
-				{width: 80, name:'override_device_price', index:'override_device_price', editable:true, editoptions:{disabled:true}, formatter:'currency', align:'right', formatoptions:{prefix:"$",thousandsSeparator:","}},
-				{width: 100, name:'new_dealer_device_price', index:'new_dealer_device_price', align:'right'}
-			],
-			width:940,
-			height:'auto',
-			multiselect:true,
-			rowNum:10,
-			rowList:[10,20,30],
-			pager:'#dealer_devices_pager',
-			gridComplete:function(){ 
-				var ids = jQuery("#dealer_devices_list").jqGrid('getDataIDs');
-				for(var i=0; i < ids.length; i++) { 
-					var cur_row = ids[i];
-					var admin_price = document.getElementById("dealer_devices_list").rows[i+1].cells[3].innerHTML.replace("$","").replace(/,/gi,"").replace(/ /gi,"");
-					var override_price = document.getElementById("dealer_devices_list").rows[i+1].cells[4].innerHTML.replace("$","").replace(/,/gi,"").replace(/ /gi,"");
-					var hidden_price = (override_price > 0 ? override_price : admin_price);
-					
-					if(admin_price == 0) {
-						document.getElementById("dealer_devices_list").rows[i+1].cells[3].innerHTML = "$ -";
-					} else {
-						document.getElementById("dealer_devices_list").rows[i+1].cells[3].innerHTML = "$ " + admin_price;
-					}
-					
-					if(override_price == 0) {
-						document.getElementById("dealer_devices_list").rows[i+1].cells[4].innerHTML = "$ -";
-					} else {
-						document.getElementById("dealer_devices_list").rows[i+1].cells[4].innerHTML = "$ " + override_price;
-					}
-					
-					hidden_price_element = "<input type='hidden' name='hdnDealerDevicePrice"+cur_row+"' id='hdnDealerDevicePrice"+cur_row+"' value='" + hidden_price + "' size='8' maxlength='8' />"; 
-					new_price_element = "$ <input type='text' name='txtDealerDevicePrice"+cur_row+"' id='txtDealerDevicePrice"+cur_row+"' size='8' maxlength='12' style='text-align:right;' onkeypress='javascript: return numbersonly(this, event);' />"; 
-					jQuery("#dealer_devices_list").jqGrid('setRowData',ids[i],{new_dealer_device_price: hidden_price_element + new_price_element});
-				}
-			},
-			editurl:'dummy.php'
-		});
-		
-		jQuery("#dealer_devices_list").jqGrid('navGrid','#dealer_devices_pager',
-				{add:false,del:false,edit:false,refresh:false,search:false},
-				{closeAfterEdit:true,recreateForm:true,closeOnEscape:true,width:400,top:sTop,left:sLeft},
-				{closeAfterAdd:true,recreateForm:true,closeOnEscape:true,width:400,top:sTop,left:sLeft},
-				{},
-				{},
-				{}
-		);
-		
-		//*********************************************************************
-		//* DEALER TONERS GRID
-		//*********************************************************************
-		jQuery("#dealer_toners_list").jqGrid({
-			url:'<?php echo $this->baseUrl(); ?>/admin/dealertonerlist?compid='+$('#company_filter').val(),
-			datatype:'json',
-			colNames:['Toner ID','SKU','Manufacturer','Type','Color','Yield','Machine Compatibility','Toner Price','Override Price','New Price','MasterID'],
-			colModel:[
-        		{width:30, name:'toner_id', index:'toner_id', sorttype:'int', hidden:true},
-				{width:60, name:'toner_SKU', index:'toner_SKU'},
-				{width:90, name:'manufacturer_name', index:'manufacturer_name'},
-				{width:50, name:'part_type_id', index:'part_type_id'},
-				{width:45, name:'toner_color_name', index:'toner_color_name'},
-				{width:40, name:'toner_yield', index:'toner_yield', align:'right'},
-				{width:155, name:'dealer_device_list', index:'dealer_device_list'},
-				{width:70, name:'toner_price', index:'toner_price', align:'right', formatter:'currency', formatoptions:{prefix:"$", thousandsSeparator:","}},
-				{width:90, name:'override_toner_price', index:'override_toner_price', align:'right', formatter:'currency', formatoptions:{prefix:"$", thousandsSeparator:","}},
-				{width:95, name:'new_dealer_toner_price', index:'new_dealer_toner_price', align:'right'},
-				{width:50, name:'master_device_id', index:'master_device_id', hidden:true}
-			],
-			width:940,
-			height:'auto',
-			multiselect:true,
-			rowNum:10,
-			rowList:[10,20,30],
-			pager:'#dealer_toners_pager',
-			gridComplete:function(){ 
-				var ids = jQuery("#dealer_toners_list").jqGrid('getDataIDs');
-				for(var i=0; i < ids.length; i++) {
-					var cur_row = ids[i];
-					var admin_price = document.getElementById("dealer_toners_list").rows[i+1].cells[8].innerHTML.replace("$","").replace(/,/gi,"").replace(/ /gi,"");
-					var override_price = document.getElementById("dealer_toners_list").rows[i+1].cells[9].innerHTML.replace("$","").replace(/,/gi,"").replace(/ /gi,"");
-					var hidden_price = (override_price > 0 ? override_price : admin_price);
-					
-					if(admin_price == 0) {
-						document.getElementById("dealer_toners_list").rows[i+1].cells[8].innerHTML = "$ -";
-					} else {
-						document.getElementById("dealer_toners_list").rows[i+1].cells[8].innerHTML = "$ " + admin_price;
-					}
-					
-					if(override_price == 0) {
-						document.getElementById("dealer_toners_list").rows[i+1].cells[9].innerHTML = "$ -";
-					} else {
-						document.getElementById("dealer_toners_list").rows[i+1].cells[9].innerHTML = "$ " + override_price;
-					}
-					
-					hidden_price_element = "<input type='hidden' name='hdnDealerTonerPrice"+cur_row+"' id='hdnDealerTonerPrice"+cur_row+"' value='" + hidden_price + "' size='8' maxlength='8' />"; 
-					new_price_element = "$ <input type='text' name='txtDealerTonerPrice"+cur_row+"' id='txtDealerTonerPrice"+cur_row+"' size='8' maxlength='8' style='text-align:right;' onkeypress='javascript: return numbersonly(this, event);' />"; 
-					jQuery("#dealer_toners_list").jqGrid('setRowData',ids[i],{new_dealer_toner_price:hidden_price_element+new_price_element});
-					
-					var min = 4;
-					var max = 2;
-					var output = '';
-					device_list = document.getElementById("dealer_toners_list").rows[i+1].cells[7].innerHTML;
-					var pieces = device_list.split(";");
-					output += '<div id="dealer_outer_'+ids[i]+'" style="text-align: left; width: 200px;">';
-					for(var j=0; j < pieces.length; j++) {
-						device = pieces[j].replace('Hewlett-packard','HP');
-						if(j == max) {
-							output += '<div id="dealer_inner_'+ids[i]+'" style="display: none;">';
-						}
-						output += device + '<br />';
-						if(j > max && j == pieces.length - 1) {
-							output += '</div>';
-							output += '<a id="dealer_view_link_'+ids[i]+'" href="javascript: void(0);" class="blue_link" onclick="javascript: view_device_list(\'dealer_\','+ids[i]+');">View All...</a>';
-						}
-					}
-					output += '</div>';
-					jQuery("#dealer_toners_list").jqGrid('setRowData',ids[i],{dealer_device_list:output});
-					
-				}
-			},
-			editurl:'dummy.php'
-		});
-		
-		jQuery("#dealer_toners_list").jqGrid('navGrid','#dealer_toners_pager',
-				{add:false,del:false,edit:false,refresh:false,search:false},
-				{closeAfterEdit:true,recreateForm:true,closeOnEscape:true,width:400,top:sTop,left:sLeft},
-				{closeAfterAdd:true,recreateForm:true,closeOnEscape:true,width:400,top:sTop,left:sLeft},
-				{},
-				{},
-				{}
-		);
-		
+
 		$("#pricing_filter").change(function() {
 			//reset page to 1
 			repop_page = 1;
@@ -319,20 +176,6 @@
 				$("#criteria_filter").append($('<option></option>').val('printer_model').html('Printer Model'));
 			}
 		});
-		
-		$("#company_filter").change(function() {
-			if($('#company_filter').val() > 1) {
-				//remove parts and labor costs
-				//$("#pricing_filter option[value='parts']").remove();
-				//$("#pricing_filter option[value='labor']").remove();
-				
-			} else {
-				//add parts and labor costs
-				//$("#pricing_filter").append($('<option></option>').val('parts').html('Parts Cost Per Page'));
-				//$("#pricing_filter").append($('<option></option>').val('labor').html('Labor Cost Per Page'));
-				
-			}
-		});
 				
 		$("#criteria_filter").change(function() {
 			var url = '';
@@ -343,13 +186,13 @@
 			
 			switch (this.value) {
 				case "manufacturer_name":
-					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=man';
+					url = '<?php echo $this->baseUrl("/proposalgen/admin/filterlistitems"); ?>?list=man';
 					break;
 				case "type_name":
-					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=type';
+					url = '<?php echo $this->baseUrl("/proposalgen/admin/filterlistitems"); ?>?list=type';
 					break;
 				case "toner_color_name":
-					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=color';
+					url = '<?php echo $this->baseUrl("/proposalgen/admin/filterlistitems"); ?>?list=color';
 					break;
 				default:
 					break;
@@ -406,8 +249,6 @@
 		//* Set Defaults
 		//*********************************************************************
 		$('#toners_table').hide();
-		$('#dealer_devices_table').hide();
-		$('#dealer_toners_table').hide();
 		
 		if(repop == 1) {
 			$('#devices_table').hide();
@@ -444,8 +285,6 @@
 	function update_grid(action) {
 		$('#devices_table').hide();
 		$('#toners_table').hide();
-		$('#dealer_devices_table').hide();
-		$('#dealer_toners_table').hide();
 		
 		//update column headers
 		if($('#pricing_filter').val() == 'labor') {
@@ -479,21 +318,20 @@
 			}
 			params = '?filter='+$("#criteria_filter").val()+'&criteria='+criteria;
 		} else if(action == 'clear') {
-			$("#criteria_filter").attr('selectedIndex', 0);
+			$("#criteria_filter").attr('selectedIndex', 2);
         	$("#list_criteria").hide();
         	$("#text_criteria").show();
-			$("#cboCriteria").html('');
+			//$("#cboCriteria").html('');
 			$("#txtCriteria").val('');
 			$("#criteria_filter").change();
 		}
-		
 		//refresh the grid
 		if($('#pricing_filter').val() == 'toner') {
-			$('#toners_list').setGridParam({url:'<?php echo $this->baseUrl(); ?>/admin/tonerslist'+params, page: $("#hdnPage").val()});
+			$('#toners_list').setGridParam({url:'<?php echo $this->baseUrl("/proposalgen/admin/tonerslist"); ?>'+params, page: $("#hdnPage").val()});
 			$('#toners_list').trigger("reloadGrid");
 			setTimeout("$('#toners_table').show()",200);
 		} else {
-			$('#devices_list').setGridParam({url:'<?php echo $this->baseUrl(); ?>/admin/masterdeviceslist'+params+'&type='+$('#pricing_filter').val(), page: $("#hdnPage").val()});
+			$('#devices_list').setGridParam({url:'<?php echo $this->baseUrl("/proposalgen/admin/masterdeviceslist"); ?>'+params+'&type='+$('#pricing_filter').val(), page: $("#hdnPage").val()});
 			$('#devices_list').trigger('reloadGrid');
 			setTimeout("$('#devices_table').show()",200);
 		}
@@ -515,10 +353,6 @@
 		//master or dealer?
 		var grid = '';
 		var company = '';
-		if($('#company_filter').val() > 1) {
-			grid = 'dealer_';
-			company = 'Dealer';
-		}
 		
 		//toner or device?
 		var list = 'devices';
@@ -599,22 +433,6 @@
 	</div>
 	
 	<div id="options_container" style="margin: 0px 0px 10px 5px;">
-		<!-- div id="filter_company" style="display: inline;">
-			<label for="company_filter" class="label">Company:</label>
-			<select name="company_filter" id="company_filter" class="filter_dropdown" style="width: 200px;" onchange="javascript: update_grid('company');">
-				<?php
-				foreach($this->company_list as $key) {
-					echo "<option value='" . $key['dealer_company_id'] ."'";
-					if ($key['dealer_company_id'] == $this->company_filter) {
-						echo " selected";
-					}
-					echo ">" . ucwords(strtolower($key['company_name'])) . "</option>";
-				}
-				?>
-			</select>
-		</div -->
-		<input type="hidden" name="company_filter" id="company_filter" value="1" />
-		
 		<div id="filter_pricing" style="display: inline; padding: 0px 0px 0px 0px;">
 			<label for="pricing_filter" class="details_label" style="display: inline;">Property:</label>
 			<select name="pricing_filter" id="pricing_filter" class="filter_dropdown" style="width: 180px; margin: 0px 0px 0px 15px;" onchange="javascript: update_grid('pricing');">

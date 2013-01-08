@@ -16,10 +16,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $this->view->app = $this->config->app;
         $this->view->user = Zend_Auth::getInstance()->getIdentity();
         $this->view->user_id = Zend_Auth::getInstance()->getIdentity()->id;
-        $this->view->privilege = Zend_Auth::getInstance()->getIdentity()->privileges;
+        //$this->view->privilege = Zend_Auth::getInstance()->getIdentity()->privileges;
         $this->user_id = Zend_Auth::getInstance()->getIdentity()->id;
-        $this->privilege = Zend_Auth::getInstance()->getIdentity()->privileges;
-        $this->dealer_company_id = Zend_Auth::getInstance()->getIdentity()->dealer_company_id;
+        //$this->privilege = Zend_Auth::getInstance()->getIdentity()->privileges;
+        //$this->dealer_company_id = Zend_Auth::getInstance()->getIdentity()->dealer_company_id;
         $this->MPSProgramName = $this->config->app->MPSProgramName;
         $this->view->MPSProgramName = $this->config->app->MPSProgramName;
         $this->ApplicationName = $this->config->app->ApplicationName;
@@ -3478,7 +3478,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $this->view->parts_list = array ();
         $this->view->device_list = array ();
         $db = Zend_Db_Table::getDefaultAdapter();
-        
+
+        // FIXME: Hardcoded default price and default service
+
+        $this->view->default_price = 1000;
+        $this->view->default_service = 0.0035;
         // fill companies
         //$dealer_companyTable = new Proposalgen_Model_DbTable_DealerCompany();
         //$dealer_companies = $dealer_companyTable->fetchAll('isDeleted = false', 'company_name');
@@ -3495,25 +3499,26 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         ////$where = $dealer_companyTable->getAdapter()->quoteInto('dealer_company_id = ?', $this->dealer_company_id, 'INTEGER');
         // $dealer_company = $dealer_companyTable->fetchRow($where);
         
-
+        /*
         if (count($dealer_company) > 0)
         {
             $this->view->default_price = money_format('%i', $dealer_company ['dc_default_printer_cost']);
             $this->view->default_service = money_format('%.4n', $dealer_company ['dc_service_cost_per_page']);
         }
-        
+        */
         if ($this->_request->isPost())
         {
             $summary = "";
             $passvalid = 0;
             $formData = $this->_request->getPost();
-            
+
             // check post back for update
             $db->beginTransaction();
             try
             {
+
                 // return current dropdown states
-                $this->view->company_filter = $formData ['company_filter'];
+               // $this->view->company_filter = $formData ['company_filter'];
                 $this->view->pricing_filter = $formData ['pricing_filter'];
                 $this->view->search_filter = $formData ['criteria_filter'];
                 $this->view->search_criteria = $formData ['txtCriteria'];
@@ -3521,11 +3526,13 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 
                 if ($formData ['hdnMode'] == "update")
                 {
+
                     // $dealer_company_id = $formData ['company_filter'];
                     $dealer_company_id = 1;
                     // Save Master Company Pricing Changes
                     if ($formData ['pricing_filter'] == 'toner')
                     {
+
                         // loop through $result
                         foreach ( $formData as $key => $value )
                         {
@@ -3551,17 +3558,19 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 {
                                     $tonerTable = new Proposalgen_Model_DbTable_Toner();
                                     $tonerData = array (
-                                            'toner_price' => $price 
+                                            'cost' => $price
                                     );
-                                    $where = $tonerTable->getAdapter()->quoteInto('toner_id = ?', $toner_id, 'INTEGER');
+
+                                    $where = $tonerTable->getAdapter()->quoteInto('id = ?', $toner_id, 'INTEGER');
                                     $tonerTable->update($tonerData, $where);
-                                    $summary .= "Updated part from " . $key ['toner_price'] . " to " . $price . "<br />";
+                                    $summary .= "Updated part from " . $key ['cost'] . " to " . $price . "<br />";
                                 }
                             }
                         }
                         
                         if ($passvalid == 0)
                         {
+
                             $this->view->message = "<p>The toner pricing updates have been applied successfully.</p>";
                         }
                         else
@@ -3592,11 +3601,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     {
                         foreach ( $formData as $key => $value )
                         {
+
                             if (strstr($key, "txtDevicePrice"))
                             {
                                 $master_device_id = str_replace("txtDevicePrice", "", $key);
                                 $price = $formData ['txtDevicePrice' . $master_device_id];
-                                
                                 // check if new price is populated.
                                 if ($price != '' && ! is_numeric($price))
                                 {
@@ -3611,7 +3620,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         $price = null;
                                     }
                                     $master_deviceTable = new Proposalgen_Model_DbTable_MasterDevice();
-                                    
+
                                     if ($formData ['pricing_filter'] == 'labor')
                                     {
                                         $master_deviceData = array (
@@ -3627,13 +3636,12 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                     else
                                     {
                                         $master_deviceData = array (
-                                                'device_price' => $price 
+                                                'cost' => $price
                                         );
                                     }
-                                    
-                                    $where = $master_deviceTable->getAdapter()->quoteInto('master_device_id = ?', $master_device_id, 'INTEGER');
+                                    $where = $master_deviceTable->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
                                     $master_deviceTable->update($master_deviceData, $where);
-                                    $summary .= "Updated " . $key ['manufacturer_name'] . ' ' . $key ['printer_model'] . ' from ' . $key ['device_price'] . ' to ' . $price . '<br />';
+                                    $summary .= "Updated " . $key ['fullname'] . ' ' . $key ['printer_model'] . ' from ' . $key ['cost'] . ' to ' . $price . '<br />';
                                 }
                             }
                         }
@@ -3652,7 +3660,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         else
                         {
                             $db->rollBack();
-                            
+                            die();
                             // build repop values
                             $repop_array = '';
                             foreach ( $formData as $key => $value )
@@ -3674,12 +3682,15 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         }
                     }
                 }
+
                 $db->commit();
             }
             catch ( Exception $e )
             {
+                throw new Exception("Remove me.", 0, $e);
                 $db->rollback();
                 $this->view->message = "Error: The updates were not saved.";
+
             }
         }
     }
@@ -5509,28 +5520,28 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $select = new Zend_Db_Select($db);
                     $select = $db->select()
                         ->from(array (
-                            't' => 'toner' 
+                            't' => 'toners'
                     ))
                         ->joinLeft(array (
-                            'dt' => 'device_toner' 
-                    ), 'dt.toner_id = t.toner_id', array (
+                            'dt' => 'pgen_device_toners'
+                    ), 'dt.toner_id = t.id', array (
                             'master_device_id' 
                     ))
                         ->joinLeft(array (
-                            'tm' => 'manufacturer' 
-                    ), 'tm.manufacturer_id = t.manufacturer_id', array (
-                            'manufacturer_name' 
+                            'tm' => 'manufacturers'
+                    ), 'tm.id = t.manufacturer_id', array (
+                            'fullname'
                     ))
                         ->joinLeft(array (
-                            'tc' => 'toner_color' 
-                    ), 'tc.toner_color_id = t.toner_color_id')
+                            'tc' => 'pgen_toner_colors'
+                    ), 'tc.id = t.toner_color_id')
                         ->joinLeft(array (
-                            'pt' => 'part_type' 
-                    ), 'pt.part_type_id = t.part_type_id')
-                        ->where('t.toner_id > 0')
-                        ->group('t.toner_id')
+                            'pt' => 'pgen_part_types'
+                    ), 'pt.id = t.part_type_id')
+                        ->where('t.id > 0')
+                        ->group('t.id')
                         ->order(array (
-                            'tm.manufacturer_name' 
+                            'tm.fullname'
                     ));
                     $stmt = $db->query($select);
                     $result = $stmt->fetchAll();
@@ -5684,11 +5695,15 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $sidx = $_GET ['sidx'];
         $sord = $_GET ['sord'];
         if (! $sidx)
-            $sidx = 'm.manufacturer_name';
+            $sidx = 'm.fullname';
         
         $where = '';
         if (! empty($filter) && ! empty($criteria))
         {
+            if ($filter == "manufacturer_name")
+            {
+                $filter = "fullname";
+            }
             $where = $filter . ' LIKE("%' . $criteria . '%")';
         }
         
@@ -5698,20 +5713,20 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $select = new Zend_Db_Select($db);
             $select = $db->select()
                 ->from(array (
-                    'md' => 'master_device' 
+                    'md' => 'pgen_master_devices'
             ))
                 ->joinLeft(array (
-                    'm' => 'manufacturer' 
-            ), 'm.manufacturer_id = md.mastdevice_manufacturer', array (
-                    'manufacturer_name' 
+                    'm' => 'manufacturers'
+            ), 'm.id = md.manufacturer_id', array (
+                    'fullname'
             ));
             if ($where != '')
             {
                 $select->where($where);
             }
             $select->order(array (
-                    'md.master_device_id', 
-                    'm.manufacturer_name', 
+                    'md.id',
+                    'm.fullname',
                     'md.printer_model' 
             ));
             $stmt = $db->query($select);
@@ -5736,12 +5751,12 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $select = new Zend_Db_Select($db);
             $select = $db->select()
                 ->from(array (
-                    'md' => 'master_device' 
+                    'md' => 'pgen_master_devices'
             ))
                 ->joinLeft(array (
-                    'm' => 'manufacturer' 
-            ), 'm.manufacturer_id = md.mastdevice_manufacturer', array (
-                    'manufacturer_name' 
+                    'm' => 'manufacturers'
+            ), 'm.id = md.manufacturer_id', array (
+                    'fullname'
             ));
             if ($where != '')
             {
@@ -5771,178 +5786,14 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     }
                     else
                     {
-                        $price = number_format($row ['device_price'], 2, '.', '');
+                        $price = number_format($row ['cost'], 2, '.', '');
                     }
                     
-                    $formdata->rows [$i] ['id'] = $row ['master_device_id'];
+                    $formdata->rows [$i] ['id'] = $row ['id'];
                     $formdata->rows [$i] ['cell'] = array (
-                            ucwords(strtolower($row ['manufacturer_name'])), 
+                            ucwords(strtolower($row ['fullname'])),
                             ucwords(strtolower($row ['printer_model'])), 
                             $price 
-                    );
-                    $i ++;
-                }
-            }
-            else
-            {
-                $formdata = array ();
-            }
-        }
-        catch ( Exception $e )
-        {
-            // critical exception
-            echo $e->getMessage();
-        }
-        
-        // encode user data to return to the client:
-        $json = Zend_Json::encode($formdata);
-        $this->view->data = $json;
-    }
-
-    public function dealerdeviceslistAction ()
-    {
-        // disable the default layout
-        $this->_helper->layout->disableLayout();
-        $db = Zend_Db_Table::getDefaultAdapter();
-        $type = $this->_getParam('type', 'printers');
-        $dealer_company_id = $this->_getParam('compid', $this->dealer_company_id);
-        $filter = $this->_getParam('filter', false);
-        $criteria = $this->_getParam('criteria', false);
-        
-        $page = $_GET ['page'];
-        $limit = $_GET ['rows'];
-        $sidx = $_GET ['sidx'];
-        $sord = $_GET ['sord'];
-        if (! $sidx)
-            $sidx = 'm.manufacturer_name';
-        
-        $where = '';
-        if (! empty($filter) && ! empty($criteria))
-        {
-            $where = $filter . ' LIKE("%' . $criteria . '%")';
-        }
-        
-        try
-        {
-            // select master devices
-            $select = new Zend_Db_Select($db);
-            $select = $db->select()
-                ->from(array (
-                    'md' => 'master_device' 
-            ), array (
-                    'master_device_id', 
-                    'mastdevice_manufacturer', 
-                    'printer_model', 
-                    'device_price', 
-                    'labor_cost_per_page', 
-                    'parts_cost_per_page' 
-            ))
-                ->joinLeft(array (
-                    'm' => 'manufacturer' 
-            ), 'm.manufacturer_id = md.mastdevice_manufacturer', array (
-                    'manufacturer_name' 
-            ))
-                ->joinLeft(array (
-                    'ddo' => 'dealer_device_override' 
-            ), 'ddo.master_device_id = md.master_device_id AND ddo.dealer_company_id = ' . $dealer_company_id, array (
-                    'override_device_price' 
-            ))
-                ->where($where)
-                ->order(array (
-                    'm.manufacturer_name', 
-                    'md.printer_model' 
-            ));
-            $stmt = $db->query($select);
-            $result = $stmt->fetchAll();
-            
-            $count = count($result);
-            if ($count > 0)
-            {
-                $total_pages = ceil($count / $limit);
-            }
-            else
-            {
-                $total_pages = 0;
-            }
-            if ($page > $total_pages)
-                $page = $total_pages;
-            $start = $limit * $page - $limit;
-            if ($start < 0)
-                $start = 0;
-                
-                // select master devices
-            $select = new Zend_Db_Select($db);
-            $select = $db->select()
-                ->from(array (
-                    'md' => 'master_device' 
-            ), array (
-                    'master_device_id', 
-                    'mastdevice_manufacturer', 
-                    'printer_model', 
-                    'device_price', 
-                    'labor_cost_per_page', 
-                    'parts_cost_per_page' 
-            ))
-                ->joinLeft(array (
-                    'm' => 'manufacturer' 
-            ), 'm.manufacturer_id = md.mastdevice_manufacturer', array (
-                    'manufacturer_name' 
-            ))
-                ->joinLeft(array (
-                    'ddo' => 'dealer_device_override' 
-            ), 'ddo.master_device_id = md.master_device_id AND ddo.dealer_company_id = ' . $dealer_company_id, array (
-                    'override_device_price' 
-            ))
-                ->joinLeft(array (
-                    'dlo' => 'dealer_labor_CPP_override' 
-            ), 'dlo.master_device_id = md.master_device_id AND dlo.dealer_company_id = ' . $dealer_company_id, array (
-                    'override_labor_CPP' 
-            ))
-                ->joinLeft(array (
-                    'dpo' => 'dealer_parts_CPP_override' 
-            ), 'dpo.master_device_id = md.master_device_id AND dpo.dealer_company_id = ' . $dealer_company_id, array (
-                    'override_parts_CPP' 
-            ))
-                ->where($where)
-                ->order($sidx . ' ' . $sord)
-                ->limit($limit, $start);
-            $stmt = $db->query($select);
-            $result = $stmt->fetchAll();
-            
-            $formdata->page = $page;
-            $formdata->total = $total_pages;
-            $formdata->records = $count;
-            if (count($result) > 0)
-            {
-                $i = 0;
-                $price_margin = ($this->getPricingMargin('dealer', $dealer_company_id) / 100) + 1;
-                foreach ( $result as $row )
-                {
-                    $printer_cost = 0;
-                    
-                    $price = 0;
-                    if ($type == 'labor')
-                    {
-                        $price = number_format($row ['labor_cost_per_page'], 4, '.', '');
-                        $overridePrice = number_format($row ['override_labor_CPP'], 4, '.', '');
-                    }
-                    else if ($type == 'parts')
-                    {
-                        $price = number_format($row ['parts_cost_per_page'], 4, '.', '');
-                        $overridePrice = number_format($row ['override_parts_CPP'], 4, '.', '');
-                    }
-                    else
-                    {
-                        $price = number_format(($row ['device_price'] * $price_margin), 2, '.', '');
-                        $overridePrice = number_format($row ['override_device_price'], 2, '.', '');
-                    }
-                    
-                    $formdata->rows [$i] ['id'] = $row ['master_device_id'];
-                    $formdata->rows [$i] ['cell'] = array (
-                            ucwords(strtolower($row ['manufacturer_name'])), 
-                            ucwords(strtolower($row ['printer_model'])), 
-                            $price, 
-                            ($overridePrice > 0 ? $overridePrice : null) 
                     );
                     $i ++;
                 }

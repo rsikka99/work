@@ -429,7 +429,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                 $where = $master_deviceTable->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
                                 $master_device = $master_deviceTable->fetchRow($where);
                                 $printer_model = $master_device ['printer_model'];
-                                
+
                                 // edit device
                                 $master_deviceTable->update($master_deviceData, $where);
 
