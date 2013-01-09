@@ -35,11 +35,11 @@ class Proposalgen_TicketController extends Zend_Controller_Action
         $this->view->title = 'Manage Tickets';
         
         // fill status filter
-        $ticket_statusesTable = new Proposalgen_Model_DbTable_TicketStatuses();
+        $ticket_statusesTable = new Proposalgen_Model_DbTable_TicketStatus();
         $ticket_statuses_filter = $ticket_statusesTable->fetchAll();
         foreach ( $ticket_statuses_filter as $row )
         {
-            $statuses_list_array [$row->status_id] = $row->status_name;
+            $statuses_list_array [$row->id] = $row->name;
         }
         $this->view->statuslist = $statuses_list_array;
         $this->view->defaultstatus = - 1;

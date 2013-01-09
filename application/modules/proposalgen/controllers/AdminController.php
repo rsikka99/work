@@ -621,6 +621,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
         $db = Zend_Db_Table::getDefaultAdapter();
         $list = $this->_getParam('list', 'man');
+        $formdata = new stdClass();
 
         try
         {
@@ -1507,6 +1508,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
     public function searchtonersAction ()
     {
         $db = Zend_Db_Table::getDefaultAdapter();
+        $formdata = new stdClass();
 
         // disable the default layout
         $this->_helper->layout->disableLayout();
@@ -2089,9 +2091,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             $toner_config_id = 1;
 
                             // prep date
-                            if (! empty($mapping_array->array [$key] ['dateintroduction']))
+                            if (! empty($results->array [$key] ['dateintroduction']))
                             {
-                                $launch_date = new Zend_Date($mapping_array->array [$key] ['dateintroduction'], "mm/dd/yyyy HH:ii:ss");
+                                $launch_date = new Zend_Date($results->array [$key] ['dateintroduction'], "mm/dd/yyyy HH:ii:ss");
                             }
                             else
                             {
@@ -2854,6 +2856,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
         $db = Zend_Db_Table::getDefaultAdapter();
         $deviceID = $this->_getParam('deviceid', false);
+        $formdata = new stdClass();
 
         try
         {
@@ -3331,7 +3334,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $db = Zend_Db_Table::getDefaultAdapter();
         $filter = $this->_getParam('filter', false);
-
+        $formdata = new stdClass();
         try
         {
             $where = '';
@@ -4651,8 +4654,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
                                 // check to see if it exists - no inserts in the
                                 // Master Tables
-                                $check = $table->fetchRow($where);
-                                if (count($check) > 0)
+                                $toner = $table->fetchRow($where);
+                                if (count($toner) > 0)
                                 {
                                     $exists = true;
 
@@ -4663,7 +4666,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                     }
 
                                     // don't update if values match
-                                    if ($check ['device_price'] != $device_price)
+                                    if ($toner ['device_price'] != $device_price)
                                     {
                                         $update = true;
                                     }
@@ -4697,11 +4700,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 ))
                                     ->where('md.master_device_id = ' . $master_device_id);
                                 $stmt = $db->query($select);
-                                $check = $stmt->fetchAll();
+                                $toner = $stmt->fetchAll();
 
-                                if (count($check) > 0)
+                                if (count($toner) > 0)
                                 {
-                                    if ($check [0] ['override_device_price'] > 0)
+                                    if ($toner [0] ['override_device_price'] > 0)
                                     {
                                         $exists = true;
 
@@ -4710,7 +4713,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         {
                                             $delete = true;
                                         }
-                                        else if ($check [0] ['device_price'] != $device_price)
+                                        else if ($toner [0] ['device_price'] != $device_price)
                                         {
                                             $update = true;
                                         }
@@ -4718,7 +4721,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                     else
                                     {
                                         $exists = false;
-                                        if ($device_price > 0 && $check [0] ['device_price'] != $device_price)
+                                        if ($device_price > 0 && $toner [0] ['device_price'] != $device_price)
                                         {
                                             $insert = true;
 
@@ -4756,11 +4759,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 ))
                                     ->where('md.master_device_id = ' . $master_device_id);
                                 $stmt = $db->query($select);
-                                $check = $stmt->fetchAll();
+                                $toner = $stmt->fetchAll();
 
-                                if (count($check) > 0)
+                                if (count($toner) > 0)
                                 {
-                                    if ($check [0] ['override_device_price'] > 0)
+                                    if ($toner [0] ['override_device_price'] > 0)
                                     {
                                         $exists = true;
 
@@ -4769,7 +4772,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         {
                                             $delete = true;
                                         }
-                                        else if ($check [0] ['device_price'] != $device_price)
+                                        else if ($toner [0] ['device_price'] != $device_price)
                                         {
                                             $update = true;
                                         }
@@ -4777,7 +4780,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                     else
                                     {
                                         $exists = false;
-                                        if ($device_price > 0 && $check [0] ['device_price'] != $device_price)
+                                        if ($device_price > 0 && $toner [0] ['device_price'] != $device_price)
                                         {
                                             $insert = true;
 
@@ -4807,13 +4810,13 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
                                 // check to see if it exists - no inserts in the
                                 // Master Tables
-                                $check = $table->fetchRow($where);
-                                if (count($check) > 0)
+                                $toner = $table->fetchRow($where);
+                                if (count($toner) > 0)
                                 {
                                     $exists = true;
 
                                     // don't update if values match
-                                    if (($check ['toner_price'] != $toner_price) && $toner_price > 0)
+                                    if (($toner ['toner_price'] != $toner_price) && $toner_price > 0)
                                     {
                                         $update = true;
                                     }
@@ -4847,11 +4850,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 ))
                                     ->where('t.toner_id = ?', $toner_id);
                                 $stmt = $db->query($select);
-                                $check = $stmt->fetchAll();
+                                $toner = $stmt->fetchAll();
 
-                                if (count($check) > 0)
+                                if (count($toner) > 0)
                                 {
-                                    if ($check [0] ['override_toner_price'] > 0)
+                                    if ($toner [0] ['override_toner_price'] > 0)
                                     {
                                         $exists = true;
 
@@ -4860,7 +4863,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         {
                                             $delete = true;
                                         }
-                                        else if ($check [0] ['toner_price'] != $toner_price)
+                                        else if ($toner [0] ['toner_price'] != $toner_price)
                                         {
                                             $update = true;
                                         }
@@ -4868,7 +4871,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                     else
                                     {
                                         $exists = false;
-                                        if ($toner_price > 0 && $check [0] ['toner_price'] != $toner_price)
+                                        if ($toner_price > 0 && $toner [0] ['toner_price'] != $toner_price)
                                         {
                                             $insert = true;
 
@@ -4908,9 +4911,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 $stmt = $db->query($select);
                                 $toner = $stmt->fetchAll();
 
-                                if (count($check) > 0)
+                                if (count($toner) > 0)
                                 {
-                                    if ($check [0] ['override_toner_price'] > 0)
+                                    if ($toner [0] ['override_toner_price'] > 0)
                                     {
                                         $exists = true;
 
@@ -4919,7 +4922,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         {
                                             $delete = true;
                                         }
-                                        else if ($check [0] ['toner_price'] != $toner_price)
+                                        else if ($toner [0] ['toner_price'] != $toner_price)
                                         {
                                             $update = true;
                                         }
@@ -4927,7 +4930,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                     else
                                     {
                                         $exists = false;
-                                        if ($toner_price > 0 && $check [0] ['toner_price'] != $toner_price)
+                                        if ($toner_price > 0 && $toner [0] ['toner_price'] != $toner_price)
                                         {
                                             $insert = true;
 
@@ -5693,7 +5696,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $type = $this->_getParam('type', 'printers');
         $filter = $this->_getParam('filter', false);
         $criteria = $this->_getParam('criteria', false);
-
+        $formdata = new stdClass();
         $page = $_GET ['page'];
         $limit = $_GET ['rows'];
         $sidx = $_GET ['sidx'];
@@ -5827,7 +5830,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $user_id = $this->user_id;
         $filter = $this->_getParam('filter', false);
         $criteria = $this->_getParam('criteria', false);
-
+        $formdata = new stdClass();
         $page = $_GET ['page'];
         $limit = $_GET ['rows'];
         $sidx = $_GET ['sidx'];
@@ -6165,7 +6168,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $dealer_company_id = $this->_getParam('compid', $this->dealer_company_id);
         $filter = $this->_getParam('filter', false);
         $criteria = $this->_getParam('criteria', false);
-
+        $formdata = new stdClass();
         $page = $_GET ['page'];
         $limit = $_GET ['rows'];
         $sidx = $_GET ['sidx'];
@@ -6372,6 +6375,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $user_id = $this->user_id;
         $filter = $this->_getParam('filter', false);
         $criteria = $this->_getParam('criteria', false);
+        $formdata = new stdClass();
 
         $page = $_GET ['page'];
         $limit = $_GET ['rows'];
@@ -6702,6 +6706,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $devices_pf_id = $this->_getParam('id', null);
         $filter = $this->_getParam('filter', false);
         $criteria = $this->_getParam('criteria', false);
+        $formdata = new stdClass();
 
         $page = $_GET ['page'];
         $limit = $_GET ['rows'];
@@ -7105,6 +7110,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         // disable the default layout
         $this->_helper->layout->disableLayout();
         $db = Zend_Db_Table::getDefaultAdapter();
+        $formdata = new stdClass();
 
         try
         {
@@ -7419,6 +7425,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $filtervalue = $this->_getParam('filtervalue', null);
         $startdate = $this->_getParam('startdate', null);
         $enddate = $this->_getParam('enddate', null);
+        $formdata = new stdClass();
 
         try
         {
@@ -7499,6 +7506,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $db = Zend_Db_Table::getDefaultAdapter();
         $filter = $this->_getParam('filter', 'all');
+        $formdata = new stdClass();
 
         try
         {
@@ -7567,6 +7575,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         // disable the default layout
         $this->_helper->layout->disableLayout();
         $db = Zend_Db_Table::getDefaultAdapter();
+        $formdata = new stdClass();
 
         try
         {

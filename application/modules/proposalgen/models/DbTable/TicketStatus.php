@@ -1,6 +1,6 @@
 <?php
 
-class Proposalgen_Model_DbTable_TicketStatuse extends Zend_Db_Table_Abstract
+class Proposalgen_Model_DbTable_TicketStatus extends Zend_Db_Table_Abstract
 {
     //put your code here
     protected $_name = 'pgen_ticket_statuses';

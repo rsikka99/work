@@ -1104,7 +1104,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 'ticket_id' => $ticket_id, 
                                 'user_id' => $this->user_id, 
                                 'pf_device_id' => $devices_pf_id, 
-                                'device_manufacturer' => $device_manufacturer, 
+                                'manufacturer' => $device_manufacturer,
                                 'printer_model' => $printer_model, 
                                 'launch_date' => $launch_date, 
                                 'cost' => $device_cost, 
@@ -1128,6 +1128,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 }
                 catch ( Exception $e )
                 {
+                    throw new Exception("An error occurred saving mapping.", 0, $e);
                     $db->rollBack();
                     My_Log::logException($e);
                     
