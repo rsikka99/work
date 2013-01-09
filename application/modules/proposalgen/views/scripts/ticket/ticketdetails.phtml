@@ -135,9 +135,9 @@
 			<div id="submitBtns" class="submitBar">		
 				<input type="button" class="btn btn-primary" name="btnSave" id="btnSave" value="Save" onclick="javascript: do_action('save');" />
 				<?php if(in_array("System Admin",$this->privilege)) { ?>
-				<input type="button" class="btn" value="Done" onclick="javascript: document.location.href='<?php echo $this->baseUrl()."/ticket/managetickets"?>';" />
+				<input type="button" class="btn" value="Done" onclick="javascript: document.location.href='<?php echo $this->baseUrl("/proposalgen/ticket/managetickets")?>';" />
 				<?php } else { ?>
-				<input type="button" class="btn" value="Done" onclick="javascript: document.location.href='<?php echo $this->baseUrl()."/ticket/managemytickets"?>';" />
+				<input type="button" class="btn" value="Done" onclick="javascript: document.location.href='<?php echo $this->baseUrl("/proposalgen/ticket/managemytickets")?>';" />
 				<?php } ?>
 		    </div>
 		    

@@ -224,7 +224,7 @@ class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
             $id = $this->getUserId();
             if (isset($id))
             {
-                $this->User = Proposalgen_Model_Mapper_User::getInstance()->find($id);
+                $this->User = Application_Model_Mapper_User::getInstance()->find($id);
             }
         }
         return $this->User;

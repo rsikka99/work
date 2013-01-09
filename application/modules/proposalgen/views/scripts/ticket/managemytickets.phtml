@@ -15,7 +15,7 @@
 		var sLeft = ($(window).width()/2)-200;
 		
 		jQuery("#requests_list").jqGrid({
-			url:'<?php echo $this->baseUrl(); ?>/ticket/myticketlist?status=-1',
+			url:'<?php echo $this->baseUrl("/proposalgen/ticket/myticketlist"); ?>?status=-1',
 			datatype:'json',			
 			colNames:['Ticket ID','Title','Type','Reported By', 'Reported Date', 'Status'],
 			colModel:[
@@ -58,7 +58,7 @@
 		$("#ticket_fitler").change(function() {
 			var params = "?status="+this.value;
 			
-			$('#requests_list').setGridParam({url:'<?php echo $this->baseUrl(); ?>/ticket/myticketlist'+params});
+			$('#requests_list').setGridParam({url:'<?php echo $this->baseUrl("proposalgen/ticket/myticketlist"); ?>'+params});
 			$('#requests_list').trigger("reloadGrid");
 		});
 		
@@ -90,7 +90,7 @@
 
 <h2><?php echo $this->title;?></h2>
 
-<form name="requests" id="requests" action="<?php echo $this->baseUrl(); ?>/ticket/managemytickets" method="POST">
+<form name="requests" id="requests" action="<?php echo $this->baseUrl('/proposalgen/ticket/managemytickets'); ?>" method="POST">
 <input type="hidden" name="form_mode" id="form_mode" value="request" />
 <input type="hidden" name="request_id" id="request_id" value="" />
 <input type="hidden" name="devices_pf_id" id="devices_pf_id" value="" />
@@ -124,7 +124,7 @@
 			<br/>
 			<div class="submitBar" id="submitBtns">
 				<input type="button" class="btn btn-primary" value="Delete" onclick="javascript: deletetickets();" />
-				<input type="button" class="btn" value="Done" onclick="javascript: document.location.href='<?php echo $this->baseUrl()."/admin"?>';" />
+				<input type="button" class="btn" value="Done" onclick="javascript: document.location.href='<?php echo $this->baseUrl("/proposalgen/admin")?>';" />
 		    </div>
 		</dt>
 	</dl>

@@ -20,6 +20,16 @@ class Proposalgen_Model_Mapper_DevicePf extends Tangent_Model_Mapper_Abstract
     }
 
     /**
+     * @param mixed $primaryKey
+     *
+     * @return Proposalgen_Model_DevicePf
+     */
+    public function find ($primaryKey)
+    {
+        return parent::find($primaryKey);
+    }
+
+    /**
      * Searches the database for a printfleet device that matches the device name or model id
      *
      * @param string $deviceName
@@ -39,7 +49,7 @@ class Proposalgen_Model_Mapper_DevicePf extends Tangent_Model_Mapper_Abstract
         ));
         if (! $result)
         {
-            return FALSE;
+            return false;
         }
         return $result;
     }

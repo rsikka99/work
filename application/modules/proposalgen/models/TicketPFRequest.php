@@ -101,7 +101,7 @@ class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
 
     /**
      *
-     * @return the $DevicePf
+     * @return Proposalgen_Model_DevicePf
      */
     public function getDevicePf ()
     {

@@ -384,8 +384,8 @@
                 				<div id="ticket_comment_history" class="ticket_comment_history">
                 				<?php foreach($this->ticket_comments as $key => $value) { ?>
                 					<div id="comment_user" class="ticket_comment_user"><?php echo $value['username']; ?></div>
-                					<div id="comment_date" class="ticket_comment_date"><?php echo $value['comment_date']; ?></div>
-                					<div id="comment_text" class="ticket_comment_text"><?php echo $value['comment_text']; ?></div>
+                					<div id="comment_date" class="ticket_comment_date"><?php echo $value['date_created']; ?></div>
+                					<div id="comment_text" class="ticket_comment_text"><?php echo $value['content']; ?></div>
                 				<?php } ?>
                 				</div>
                 			</div>

@@ -34,8 +34,8 @@ class Proposalgen_Model_Mapper_TicketComment extends Tangent_Model_Mapper_Abstra
             $object->setCommentId($row->id)
                 ->setTicketId($row->ticket_id)
                 ->setUserId($row->user_id)
-                ->setCommentText($row->comment_text)
-                ->setCommentDate($row->comment_date);
+                ->setCommentText($row->content)
+                ->setCommentDate($row->date_created);
         }
         catch ( Exception $e )
         {
@@ -57,8 +57,8 @@ class Proposalgen_Model_Mapper_TicketComment extends Tangent_Model_Mapper_Abstra
             $data ["id"] = $object->getCommentId();
             $data ["ticket_id"] = $object->getTicketId();
             $data ["user_id"] = $object->getUserId();
-            $data ["comment_text"] = $object->getCommentText();
-            $data ["comment_date"] = $object->getCommentDate();
+            $data ["content"] = $object->getCommentText();
+            $data ["date_created"] = $object->getCommentDate();
             
             $primaryKey = $this->saveRow($data);
         }

@@ -1033,7 +1033,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 'description'  => $request_description,
                                 'date_updated' => $date
                             );
-                            $where       = $ticketTable->getAdapter()->quoteInto('ticket_id = ?', $ticket_id, 'INTEGER');
+                            $where       = $ticketTable->getAdapter()->quoteInto('id = ?', $ticket_id, 'INTEGER');
                             $ticketTable->update($ticketData, $where);
 
                             // add comment
@@ -1043,13 +1043,12 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 $ticket_commentsData  = array(
                                     'ticket_id'    => $ticket_id,
                                     'user_id'      => $this->user_id,
-                                    'comment_text' => $ticket_comment,
-                                    'comment_date' => $date
+                                    'content' => $ticket_comment,
+                                    'date_created' => $date
                                 );
                                 $ticket_commentsTable->insert($ticket_commentsData);
                             }
 
-                            $db->commit();
                             $this->view->message = "Your ticket updates have been saved.";
                         }
                         else
@@ -1075,12 +1074,11 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         $ticket_id   = $ticketTable->insert($ticketData);
 
                         // get default pf data from upload_data_collector
-                        $select = new Zend_Db_Select($db);
                         $select = $db->select()
                             ->from(array(
                                         'udc' => 'pgen_upload_data_collector_rows'
                                    ))
-                            ->where('id = ' . $report_id . ' AND devices_pf_id = ?', $devices_pf_id, 'INTEGER');
+                            ->where('report_id = ' . $report_id . ' AND devices_pf_id = ?', $devices_pf_id, 'INTEGER');
                         $stmt   = $db->query($select);
                         $result = $stmt->fetchAll();
 
@@ -1088,6 +1086,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         // from first matching record
                         if (count($result) > 0)
                         {
+
                             $device_manufacturer   = $result [0] ['manufacturer'];
                             $printer_model         = $result [0] ['modelname'];
                             $launch_date           = $result [0] ['date_introduction'];
@@ -1127,17 +1126,18 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             'watts_power_normal'    => $watts_power_normal,
                             'watts_power_idle'      => $watts_power_idle
                         );
+
                         $printer_request_id   = $printer_requestTable->insert($printer_requestData);
 
-                        $db->commit();
                         $this->view->message = "Support Request Submitted.";
                     }
+                    $db->commit();
                 }
                 catch (Exception $e)
                 {
-                    throw new Exception("An error occurred saving mapping.", 0, $e);
                     $db->rollBack();
                     My_Log::logException($e);
+                    throw new Exception("An error occurred saving mapping.", 0, $e);
 
                     $this->view->message = "There was an error saving your support request.";
                 }
@@ -2120,7 +2120,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         $tickets                      = $ticketsMapper->find($ticket_id);
                         $this->view->ticket_number    = $tickets->TicketId;
                         $this->view->ticket_title     = $tickets->Title;
-                        $this->view->reported_by      = $tickets->User->UserName;
+                        //$this->view->reported_by      = $tickets->User->UserName;
                         $this->view->ticket_type      = $tickets->Category->CategoryName;
                         $this->view->ticket_details   = $tickets->Description;
                         $this->view->ticket_status    = ucwords(strtolower($tickets->Status->StatusName));
@@ -2136,10 +2136,11 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         foreach ($ticket_comments as $row)
                         {
                             $comment_date             = new Zend_Date($row->CommentDate, "yyyy-mm-dd HH:ii:ss");
+
                             $ticket_comments_array [] = array(
-                                'username'     => $row->User->UserName,
-                                'comment_date' => $comment_date->toString('mm/dd/yyyy'),
-                                'comment_text' => $row->CommentText
+                                'username'     => $row->User->getUsername(),
+                                'date_created' => $comment_date->toString('mm/dd/yyyy'),
+                                'content' => $row->CommentText
                             );
                         }
                         $this->view->ticket_comments = $ticket_comments_array;
@@ -2147,8 +2148,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         // find pf_device
                         $ticketpfrequestMapper           = Proposalgen_Model_Mapper_TicketPFRequest::getInstance();
                         $ticketpfrequest                 = $ticketpfrequestMapper->find($ticket_id);
-                        $this->view->devices_pf_id       = $ticketpfrequest->DevicePfId;
-                        $this->view->device_pf_name      = $ticketpfrequest->DevicePf->PfDbManufacturer . ' ' . $ticketpfrequest->DevicePf->PfDbDeviceName;
+                        $this->view->devices_pf_id       = $ticketpfrequest->getDevicePfId();
+                        $this->view->device_pf_name      = $ticketpfrequest->getDevicePf()->PfDbManufacturer . ' ' . $ticketpfrequest->DevicePf->PfDbDeviceName;
                         $this->view->user_suggested_name = $ticketpfrequest->DeviceManufacturer . ' ' . $ticketpfrequest->PrinterModel;
 
                         // ticket exists, update ticket label
@@ -2160,7 +2161,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 $mapped_to_modelname    = '';
                 $mapped_to_manufacturer = '';
                 // loop through pf_device_matchup_users to find suggested mapping
-                $select         = new Zend_Db_Select($db);
                 $select         = $db->select()
                     ->from(array(
                                 'pfdmu' => 'pgen_user_pf_device_matchups'
@@ -2180,8 +2180,10 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                                                     'displayname'
                                                                ))
                     ->where('pfdmu.pf_device_id = ' . $devices_pf_id . ' AND pfdmu.user_id = ' . $this->user_id);
+
                 $stmt           = $db->query($select);
                 $master_devices = $stmt->fetchAll();
+
 
                 if (count($master_devices) > 0)
                 {
@@ -2192,7 +2194,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 else
                 {
                     // loop through master_matchup_pf to find master mapping
-                    $select         = new Zend_Db_Select($db);
                     $select         = $db->select()
                         ->from(array(
                                     'mmpf' => 'pgen_master_pf_device_matchups'

@@ -7,7 +7,7 @@ class Proposalgen_Model_Mapper_TicketPFRequest extends Tangent_Model_Mapper_Abst
 
     /**
      *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_TicketPFRequest
      */
     public static function getInstance ()
     {
@@ -18,6 +18,17 @@ class Proposalgen_Model_Mapper_TicketPFRequest extends Tangent_Model_Mapper_Abst
         }
         return self::$_instance;
     }
+
+    /**
+     * @param mixed $primaryKey
+     *
+     * @return Proposalgen_Model_TicketPFRequest
+     */
+    public function find ($primaryKey)
+    {
+        return parent::find($primaryKey);
+    }
+
 
     /**
      * Maps a database row object to an Proposalgen_Model
@@ -32,12 +43,12 @@ class Proposalgen_Model_Mapper_TicketPFRequest extends Tangent_Model_Mapper_Abst
         {
             $object = new Proposalgen_Model_TicketPFRequest();
             $object->setTicketId($row->ticket_id)
-                ->setDevicePfId($row->devices_pf_id)
+                ->setDevicePfId($row->pf_device_id)
                 ->setUserId($row->user_id)
-                ->setDeviceManufacturer($row->device_manufacturer)
+                ->setDeviceManufacturer($row->manufacturer)
                 ->setPrinterModel($row->printer_model)
                 ->setLaunchDate($row->launch_date)
-                ->setDevicePrice($row->device_price)
+                ->setDevicePrice($row->cost)
                 ->setServiceCostPerPage($row->service_cost_per_page)
                 ->setTonerConfig($row->toner_config)
                 ->setIsCopier($row->is_copier)
@@ -68,12 +79,12 @@ class Proposalgen_Model_Mapper_TicketPFRequest extends Tangent_Model_Mapper_Abst
         try
         {
             $data ["ticket_id"] = $object->getTicketId();
-            $data ["devices_pf_id"] = $object->getDevicesPfId();
+            $data ["pf_device_id"] = $object->getDevicesPfId();
             $data ["user_id"] = $object->getUserId();
-            $data ["device_manufacturer"] = $object->getDeviceManufacturer();
+            $data ["manufacturer"] = $object->getDeviceManufacturer();
             $data ["printer_model"] = $object->getPrinterModel();
             $data ["launch_date"] = $object->getLaunchDate();
-            $data ["device_price"] = $object->getDevicePrice();
+            $data ["cost"] = $object->getDevicePrice();
             $data ["service_cost_per_page"] = $object->getServiceCostPerPage();
             $data ["toner_config"] = $object->getTonerConfig();
             $data ["is_copier"] = $object->getIsCopier();

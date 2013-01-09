@@ -759,7 +759,6 @@ CREATE  TABLE IF NOT EXISTS `pgen_ticket_pf_requests` (
   `watts_power_normal` DOUBLE NULL DEFAULT NULL ,
   `watts_power_idle` DOUBLE NULL DEFAULT NULL ,
   PRIMARY KEY (`ticket_id`) ,
-  UNIQUE INDEX `user_id` (`user_id` ASC) ,
   INDEX `pf_device_id` (`ticket_id` ASC) ,
   INDEX `proposalgenerator_ticket_pf_requests_ibfk_3` (`pf_device_id` ASC) ,
   CONSTRAINT `proposalgenerator_ticket_pf_requests_ibfk_1`

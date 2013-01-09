@@ -17,12 +17,11 @@
 		jQuery("#requests_list").jqGrid({
 			url:'<?php echo $this->baseUrl("/proposalgen/ticket/ticketlist"); ?>?status=-1',
 			datatype:'json',			
-			colNames:['Ticket ID','Title','Reported By','Company','Type','Reported Date','Status'],
+			colNames:['Ticket ID','Title','Reported By','Type','Reported Date','Status'],
 			colModel:[
         		{width:50, name:'ticket_id', index:'ticket_id', sorttype:'int'},
 				{width:140, name:'ticket_title', index:'ticket_title'},
 				{width:80, name:'reported_by', index:'reported_by'},
-				{width:80, name:'company', index:'company'},
 				{width:60, name:'ticket_type', index:'ticket_type'},
 				{width:80, name:'date_created', index:'date_created'},
 				{width:40, name:'ticket_status', index:'ticket_status'}
