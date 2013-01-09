@@ -10,10 +10,11 @@
 <?php $this->headScript()->captureStart('append','text/javascript') ?>
 	var repop = <?php echo (empty($this->repop) == true ? "false" : $this->repop); ?>;
 	var form_mode = '<?php echo $this->mode; ?>';
+
 	if(form_mode == '') {form_mode = 'edit';}
 	
     $(document).ready(function() {
-	    
+
 		//find center screen for modal popup
 		var sTop = ($(window).height()/2)-100;
 		var sLeft = ($(window).width()/2)-200;
@@ -121,7 +122,7 @@
 		})( jQuery );
 		
 		jQuery("#grid_list").jqGrid({
-			url: '<?php echo $this->baseUrl(); ?>/admin/replacementprinterslist',
+			url: '<?php echo $this->baseUrl("/proposalgen/admin/replacementprinterslist"); ?>',
 			datatype:'json',
 			colNames:['manufacturer_id','master_devcie_id','Printer Model','Replacement Category','Action'],
 			colModel:[
@@ -166,7 +167,7 @@
 
 		$("#manufacturer_id").change(function(event) {
 		    var manufacturerid = $("#manufacturer_id").val();
-		    var url = '<?php echo $this->baseUrl(); ?>/admin/printermodels?manufacturerid='+manufacturerid;
+		    var url = '<?php echo $this->baseUrl("/proposalgen/admin/printermodels"); ?>?manufacturerid='+manufacturerid;
 		    
 			$.ajax ({
 				type: "POST",
@@ -216,7 +217,7 @@
 		        beforeSend: function() {
 		        	disable_form();
 		        },
-		        url: '<?php echo $this->baseUrl(); ?>/admin/replacementdetails?deviceid='+master_device_id,
+		        url: '<?php echo $this->baseUrl("/proposalgen/admin/replacementdetails"); ?>?deviceid='+master_device_id,
 		        success: function(data) {
 		            var obj = jQuery.parseJSON(data);
 					$("#hdnOriginalCategory").val(obj.replacement_category);
@@ -289,7 +290,7 @@
 	}
 	
 	function update_grid(id) {
-		$('#grid_list').setGridParam({url:'<?php echo $this->baseUrl(); ?>/admin/replacementprinterslist'});
+		$('#grid_list').setGridParam({url:'<?php echo $this->baseUrl("/proposalgen/admin/replacementprinterslist"); ?>'});
 		$('#grid_list').trigger("reloadGrid");
 	}
 	
@@ -332,7 +333,6 @@
 			if(repop != true) {
 				empty_form();
 			}
-			
 			$("#manufacturer_id").val(man_id);
 			$("#manufacturer_id").combobox("destroy");
 			$("#manufacturer_id").change();
@@ -396,7 +396,7 @@
 			data += '&monthly_rate=' + $("#monthly_rate").val();
 			data += '&form_mode=' + $("#form_mode").val();
         
-			url = '<?php echo $this->baseUrl(); ?>/admin/savereplacementprinter'+data;
+			url = '<?php echo $this->baseUrl("/proposalgen/admin/savereplacementprinter"); ?>'+data;
 			$.ajax ({
 				type: "POST",
 				contentType: "application/json; charset=utf-8",
