@@ -13,7 +13,7 @@
 		//find center screen for modal popup
 		var sTop = ($(window).height()/2)-100;
 		var sLeft = ($(window).width()/2)-200;
-		var url = '<?php echo $this->baseUrl(); ?>/admin/matchuplist?filter=model&criteria=<?php echo $this->pf_model_id; ?>';
+		var url = '<?php echo $this->baseUrl("/proposalgen/admin/matchuplist"); ?>?filter=model&criteria=<?php echo $this->pf_model_id; ?>';
 		
 		jQuery("#grid_list").jqGrid({
 			url: url,
@@ -66,7 +66,7 @@
             		$(".autoCompleteDeviceName").autocomplete({
             			source: function (request, response) {
                             $.ajax({
-                                url: "<?=$this->baseUrl();?>/admin/getmodels", dataType: "json",
+                                url: "<?=$this->baseUrl('/proposalgen/admin/getmodels');?>", dataType: "json",
                                 data: { searchText: request.term },
                                 success: function (data) {
                                     response($.map(data, function (item) {
@@ -153,7 +153,7 @@
 			$("#txtCriteria").val('');
 		}
 		
-		$('#grid_list').setGridParam({url:'<?php echo $this->baseUrl(); ?>/admin/matchuplist'+params});
+		$('#grid_list').setGridParam({url:'<?php echo $this->baseUrl("/proposalgen/admin/matchuplist"); ?>'+params});
 		$('#grid_list').trigger("reloadGrid");
 	}
 	
@@ -163,9 +163,9 @@
 			
 		} else if(inAction == 'done') {
 			if($("#ticket_id").val() > 0) {
-				document.location.href = '<?php echo $this->baseUrl() . "/ticket/ticketdetails?id="; ?>'+$("#ticket_id").val();
+				document.location.href = '<?php echo $this->baseUrl("/proposalgen/ticket/ticketdetails") . "?id="; ?>'+$("#ticket_id").val();
 			} else {
-				document.location.href = '<?php echo $this->baseUrl() . "/admin"; ?>';
+				document.location.href = '<?php echo $this->baseUrl("/proposalgen/admin"); ?>';
 			}
 		}
 	}

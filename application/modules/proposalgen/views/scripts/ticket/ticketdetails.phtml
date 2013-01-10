@@ -15,23 +15,23 @@
 	
 	function do_action(action) {
 		if(action == 'map') {
-			document.getElementById('requests').action = "<?php echo $this->baseUrl()."/admin/managematchups"?>";
+			document.getElementById('requests').action = "<?php echo $this->baseUrl("/proposalgen/admin/managematchups")?>";
 			$("#requests").submit();
 			
 		} else if(action == 'add') {
-			document.getElementById('requests').action = "<?php echo $this->baseUrl()."/managedevices/manageticketdevices"?>";
+			document.getElementById('requests').action = "<?php echo $this->baseUrl("/proposalgen/managedevices/manageticketdevices")?>";
 			$("#requests").submit();
 			
 		} else if(action == 'save') {
-			<?php if(!in_array("System Admin", $this->privilege)) { ?>
-			if($("#txtComment").val() == '') {
-				$("#message_container").html('Please enter a comment before saving.');
-			} else {
+			<?php  //if(!in_array("System Admin", $this->privilege)) { ?>
+			// if($("#txtComment").val() == '') {
+			//	$("#message_container").html('Please enter a comment before saving.');
+			// } else {
+			//	$("#requests").submit();
+			// }
+			<?php //} else { ?>
 				$("#requests").submit();
-			}
-			<?php } else { ?>
-				$("#requests").submit();
-			<?php } ?>
+			<?php //} ?>
 		}
 	}
 	
@@ -75,7 +75,7 @@
 					<div class="ticket_item"><div class="ticket_label">Device PF ID:</div> <?php echo $this->devices_pf_id; ?></div>
 					<div class="ticket_item"><div class="ticket_label">Device PF Name:</div> <?php echo $this->device_pf_name; ?></div>
 					<div class="ticket_item"><div class="ticket_label">User Suggested Name:</div> <?php echo $this->user_suggested_name; ?></div>
-					<?php if(in_array("System Admin", $this->privilege)) { ?>
+					<?php //if(in_array("System Admin", $this->privilege)) { ?>
 					<div class="ticket_item">
 						<div class="ticket_label">Action:</div>
 						<div class="ticket_links">
@@ -97,15 +97,15 @@
 							</select>
 						</div>
 					</div>
-					<?php } else { ?>
-					<div class="ticket_item">
+					<?php //} else { ?>
+					<!--<div class="ticket_item">
 						<div class="ticket_label">Status:</div>
 						<div class="ticket_links">
 							<?php echo $this->ticket_status ?>
 							<input type="hidden" name="cboStatus" id="cboStatus" value="<?php echo $this->ticket_status_id ?>" />
 						</div>
-					</div>
-					<?php } ?>
+					</div>-->
+					<?php //} ?>
 					<br />
 					<div class="ticket_description_label">Description:</div>
 					<hr />
@@ -134,14 +134,12 @@
 			
 			<div id="submitBtns" class="submitBar">		
 				<input type="button" class="btn btn-primary" name="btnSave" id="btnSave" value="Save" onclick="javascript: do_action('save');" />
-				<?php if(in_array("System Admin",$this->privilege)) { ?>
-				<input type="button" class="btn" value="Done" onclick="javascript: document.location.href='<?php echo $this->baseUrl("/proposalgen/ticket/managetickets")?>';" />
-				<?php } else { ?>
-				<input type="button" class="btn" value="Done" onclick="javascript: document.location.href='<?php echo $this->baseUrl("/proposalgen/ticket/managemytickets")?>';" />
-				<?php } ?>
+				<?php //if(in_array("System Admin",$this->privilege)) { ?>
+				 <input type="button" class="btn" value="Done" onclick="javascript: document.location.href='<?php echo $this->baseUrl("/proposalgen/ticket/managetickets")?>';" />
+				<?php //} else { ?>
+             <!--<input type="button" class="btn" value="Done" onclick="javascript: document.location.href='<?php //echo $this->baseUrl("/proposalgen/ticket/managemytickets")?>';" /> -->
+				<?php //} ?>
 		    </div>
-		    
-		    
 		</dt>
 	</dl>
 </form>

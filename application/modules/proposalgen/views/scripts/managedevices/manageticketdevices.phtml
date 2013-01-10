@@ -126,7 +126,7 @@
 		var lastsel;
 		
 		jQuery("#applied_toners_list").jqGrid({
-			url:'<?php echo $this->baseUrl(); ?>/admin/devicetoners?deviceid='+master_device_id+'&list='+applied_toners.replace(/'/gi,''),
+			url:'<?php echo $this->baseUrl("/proposalgen/admin/devicetoners"); ?>?deviceid='+master_device_id+'&list='+applied_toners.replace(/'/gi,''),
 			datatype:'json',
 			colNames:['Toner ID', 'SKU', 'Manufacturer', 'Type', 'Color', 'Yield', 'Price', 'MasterID', 'Added', 'Action'],
 			colModel:[
@@ -182,7 +182,7 @@
 		);
 		
 		jQuery("#available_toners_list").jqGrid({
-			url:'<?php echo $this->baseUrl(); ?>/admin/tonerslist?deviceid='+master_device_id,
+			url:'<?php echo $this->baseUrl("/proposalgen/admin/tonerslist"); ?>?deviceid='+master_device_id,
 			datatype:'json',
 			colNames:['Toner ID', 'SKU', 'Manufacturer', 'Type', 'Color', 'Yield', 'Price', 'MasterID', 'Added', 'Action', 'Apply To Printer', 'Machine Compabibility'],
 			colModel:[
@@ -223,7 +223,7 @@
 				}
 				update_applied();
 			},
-			editurl:'<?php echo $this->baseUrl(); ?>/admin/edittoner?deviceid='+master_device_id
+			editurl:'<?php echo $this->baseUrl("/proposalgen/admin/edittoner"); ?>?deviceid='+master_device_id
 		});
 		
 		jQuery("#available_toners_list").jqGrid('navGrid','#available_toners_pager',
@@ -277,7 +277,7 @@
           			var rowid = grid.jqGrid('getGridParam', 'selrow');
           			
         			// check device toner count for color
-					var url = '<?php echo $this->baseUrl(); ?>/admin/devicetonercount?tonerid='+rowid;
+					var url = '<?php echo $this->baseUrl("/proposalgen/admin/devicetonercount"); ?>?tonerid='+rowid;
         		    $.ajax({
         		        url: url,
         		        success: function(data) {
@@ -324,7 +324,7 @@
 		);
 		
 		jQuery("#replacement_toners_list").jqGrid({
-			url:'<?php echo $this->baseUrl(); ?>/admin/replacementtoners?tonerid=0',
+			url:'<?php echo $this->baseUrl("/proposalgen/admin/replacementtoners"); ?>?tonerid=0',
 			datatype:'json',
 			colNames:['Toner ID', 'SKU', 'Manufacturer', 'Type', 'Color', 'Yield', 'Price', 'Num','Total'],
 			colModel:[
@@ -410,7 +410,7 @@
 		        beforeSend: function() {
 		        	disable_form();
 		        },
-		        url: '<?php echo $this->baseUrl(); ?>/admin/devicedetails?deviceid='+master_device_id,
+		        url: '<?php echo $this->baseUrl("/proposalgen/admin/devicedetails"); ?>?deviceid='+master_device_id,
 		        success: function(data) {
 		            var obj = jQuery.parseJSON(data);
 		            if(form_mode != 'add' && repop != 1) {
@@ -426,6 +426,9 @@
 						$("#toner_array").val(obj.toner_array);
 			            $("#is_leased").attr('checked', obj.is_leased);
 			            $("#leased_toner_yield").val(obj.leased_toner_yield);
+                        $("#ppm_black").val(obj.ppm_black);
+                        $("#ppm_color").val(obj.ppm_color);
+                        $("#duty_cycle").val(obj.duty_cycle);
 					}
 		        },
 		        error: function() {
@@ -486,13 +489,13 @@
 			
 			switch (this.value) {
 				case "manufacturer_name":
-					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=man';
+					url = '<?php echo $this->baseUrl("/proposalgen/admin/filterlistitems"); ?>?list=man';
 					break;
 				case "type_name":
-					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=type';
+					url = '<?php echo $this->baseUrl("/proposalgen/admin/filterlistitems"); ?>?list=type';
 					break;
 				case "toner_color_name":
-					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=color';
+					url = '<?php echo $this->baseUrl("/proposalgen/admin/filterlistitems"); ?>?list=color';
 					break;
 				default:
 					break;
@@ -538,13 +541,13 @@
 			
 			switch (this.value) {
 				case "manufacturer_name":
-					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=man';
+					url = '<?php echo $this->baseUrl("/proposalgen/admin/filterlistitems"); ?>?list=man';
 					break;
 				case "type_name":
-					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=type';
+					url = '<?php echo $this->baseUrl("/proposalgen/admin/filterlistitems"); ?>?list=type';
 					break;
 				case "toner_color_name":
-					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=color';
+					url = '<?php echo $this->baseUrl("/proposalgen/admin/filterlistitems"); ?>?list=color';
 					break;
 				default:
 					break;
@@ -753,7 +756,7 @@
 			
 		} else if(inAction == 'delete') {
 			var alert_message = "Are you sure you want to delete this printer?";
-			var url = '<?php echo $this->baseUrl(); ?>/admin/devicereports?id='+$("#printer_model").val();
+			var url = '<?php echo $this->baseUrl("/proposalgen/admin/devicereports"); ?>?id='+$("#printer_model").val();
 			var num_reports = 0;
 			
 			// get number of reports this printer belongs to
@@ -779,15 +782,15 @@
 			
 		} else if(inAction == 'done') {
 			var ticket_id = document.forms['device_form'].elements['ticket_id'].value;
-			document.location.href='../ticket/ticketdetails?id='+ticket_id;
+			document.location.href='../proposalgen/ticket/ticketdetails?id='+ticket_id;
 			
 		} else if(inAction == 'manufacturer') {
-            $("#device_form").attr('action','../admin/manufacturers');
+            $("#device_form").attr('action','../proposalgen/admin/manufacturers');
             $("#device_form").submit();
             
 		} else if(inAction == 'new_manufacturer') {
 			if($("#optNew").is(':checked')) {
-    			$("#frmManufacturer").attr('action','../admin/manufacturers');
+    			$("#frmManufacturer").attr('action','../proposalgen/admin/manufacturers');
     			$("#frmManufacturer").submit();
     			
     		} else if($("#cboManufacturers").val() > 0) {
@@ -814,7 +817,7 @@
 			} else {
 				lightbox('hide');
 				$("#replacement_message").html("");
-    			var url = '<?php echo $this->baseUrl(); ?>/admin/replacetoner?replace_mode='+replace_mode+'&replace_toner_id='+replace_toner_id+'&with_toner_id='+with_toner_id+'&chkAlLToners='+apply_all;
+    			var url = '<?php echo $this->baseUrl("/proposalgen/admin/replacetoner"); ?>?replace_mode='+replace_mode+'&replace_toner_id='+replace_toner_id+'&with_toner_id='+with_toner_id+'&chkAlLToners='+apply_all;
     		    //alert(url);
     		    
     		    $.ajax({
@@ -849,7 +852,7 @@
 			master_device_id = 0;
 		}
 		
-		$('#applied_toners_list').setGridParam({url:'<?php echo $this->baseUrl(); ?>/admin/devicetoners?deviceid='+master_device_id+'&list='+toner_array.replace(/'/gi,'')});
+		$('#applied_toners_list').setGridParam({url:'<?php echo $this->baseUrl("/proposalgen/admin/devicetoners"); ?>?deviceid='+master_device_id+'&list='+toner_array.replace(/'/gi,'')});
 	    $('#applied_toners_list').trigger('reloadGrid');
 	}
 	
@@ -871,8 +874,8 @@
 		}
 		
 		var master_device_id = $("#printer_model").val();
-		$('#available_toners_list').setGridParam({url:'<?php echo $this->baseUrl(); ?>/admin/tonerslist?deviceid='+master_device_id+params});
-		$('#available_toners_list').setGridParam({editurl:'<?php echo $this->baseUrl(); ?>/admin/edittoner?deviceid='+master_device_id});
+		$('#available_toners_list').setGridParam({url:'<?php echo $this->baseUrl("/proposalgen/admin/tonerslist"); ?>?deviceid='+master_device_id+params});
+		$('#available_toners_list').setGridParam({editurl:'<?php echo $this->baseUrl("/proposalgen/admin/edittoner"); ?>?deviceid='+master_device_id});
 		colModel:[
        		{width:30, name:'toner_id', index:'toner_id', sorttype:'int', hidden:true, editable:true, editoptions:{readonly:true, size:12}},
 			{width:60, name:'toner_sku', index:'toner_sku', editable:true, editoptions:{size:12, maxlength:30}},
@@ -909,7 +912,7 @@
 		var grid = $("#available_toners_list");
 		var toner_id = grid.jqGrid('getGridParam', 'selrow');
 		
-		$('#replacement_toners_list').setGridParam({url:'<?php echo $this->baseUrl(); ?>/admin/replacementtoners?tonerid='+toner_id+params});
+		$('#replacement_toners_list').setGridParam({url:'<?php echo $this->baseUrl("/proposalgen/admin/replacementtoners"); ?>?tonerid='+toner_id+params});
 	    $('#replacement_toners_list').trigger('reloadGrid');
 	}
 	
@@ -943,7 +946,7 @@
 		<div id="lightbox-panel" class="new_manufacturer_container">
 		
 			<div id="manufacturers_form">
-    			<form name="frmManufacturer" id="frmManufacturer" action="<?php echo $this->baseUrl(); ?>/admin/manufacturers" method="post">
+    			<form name="frmManufacturer" id="frmManufacturer" action="<?php echo $this->baseUrl('/proposalgen/admin/manufacturers'); ?>" method="post">
     				<input type="hidden" name="hdnID" id="hdnID" value="<?php echo $this->hdnID; ?>" />
     				<input type="hidden" name="hdnItem" id="hdnItem" value="" />
     				<input type="hidden" name="ticket_id" id="ticket_id" value="<?php echo $this->ticket_id; ?>" />
@@ -957,7 +960,7 @@
         				<select name="cboManufacturers" id="cboManufacturers" onfocus="javascript: document.getElementById('optExisting').checked = true;">
         					<option value="">Select Existing Manufacturer</option>
         					<?php foreach($this->manufacturer_list as $key) { ?>
-        					<option value="<?php echo $key['manufacturer_id']; ?>"><?php echo ucwords(strtolower($key['manufacturer_name'])); ?></option>
+        					<option value="<?php echo $key['id']; ?>"><?php echo ucwords(strtolower($key['fullname'])); ?></option>
         					<?php } ?>
         				</select>
         			</div>

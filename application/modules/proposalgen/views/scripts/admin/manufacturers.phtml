@@ -68,12 +68,12 @@
 		
 		<?php if($this->action == 'ticket') { ?>
 			document.getElementById("manufacturers_form").enctype = "";
-			document.getElementById("manufacturers_form").action = "<?php echo $this->baseUrl("/managedevices/manageticketdevices"); ?>";
+			document.getElementById("manufacturers_form").action = "<?php echo $this->baseUrl("/proposalgen/managedevices/manageticketdevices"); ?>";
 			document.getElementById("manufacturers_form").submit();
 		<?php }?> 
 		<?php if ($this->action == 'mapping') { ?>
 			document.getElementById("manufacturers_form").enctype = "";
-			document.getElementById("manufacturers_form").action = "<?php echo $this->baseUrl("/managedevices/managemappingdevices"); ?>";
+			document.getElementById("manufacturers_form").action = "<?php echo $this->baseUrl("/proposalgen/managedevices/managemappingdevices"); ?>";
 			document.getElementById("manufacturers_form").submit();
 		<?php }?>
 		
