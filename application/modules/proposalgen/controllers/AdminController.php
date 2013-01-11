@@ -1030,7 +1030,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         $formdata->rows [$i] ['cell'] = array(
                             $row ['toner_id'],
                             $row ['toner_SKU'],
-                            ucwords(strtolower($row ['manufacturer_name'])),
+                            ucwords(strtolower($row ['fullname'])),
                             $type_name,
                             ucwords(strtolower($row ['toner_color_name'])),
                             $row ['toner_yield'],
@@ -6660,21 +6660,21 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         // Fetch Devices like term
         $db = Zend_Db_Table::getDefaultAdapter();
 
-        $sql = "SELECT concat(manufacturer_name, ' ', printer_model) as device_name, master_device_id, manufacturer_name, printer_model FROM manufacturer
-        JOIN master_device on master_device.mastdevice_manufacturer = manufacturer.manufacturer_id
-        WHERE concat(manufacturer_name, ' ', printer_model) LIKE '%$searchTerm%' AND manufacturer.is_deleted = 0 ORDER BY device_name ASC LIMIT 10;";
+        $sql = "SELECT concat(fullname, ' ', printer_model) as device_name, pgen_master_devices.id, fullname, printer_model FROM manufacturers
+        JOIN pgen_master_devices on pgen_master_devices.manufacturer_id = manufacturers.id
+        WHERE concat(fullname, ' ', printer_model) LIKE '%$searchTerm%' AND manufacturers.isDeleted = 0 ORDER BY device_name ASC LIMIT 10;";
 
         $results = $db->fetchAll($sql);
         // $results is an array of device names
         $devices = array();
         foreach ($results as $row)
         {
-            $deviceName = $row ["manufacturer_name"] . " " . $row ["printer_model"];
+            $deviceName = $row ["fullname"] . " " . $row ["printer_model"];
             $deviceName = ucwords(strtolower($deviceName));
             $devices [] = array(
                 "label"        => $deviceName,
-                "value"        => $row ["master_device_id"],
-                "manufacturer" => ucwords(strtolower($row ["manufacturer_name"]))
+                "value"        => $row ["id"],
+                "manufacturer" => ucwords(strtolower($row ["fullname"]))
             );
         }
         $lawl = Zend_Json::encode($devices);
@@ -6690,7 +6690,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
         // fill manufacturers dropdown
         $manufacturersTable            = new Proposalgen_Model_DbTable_Manufacturer();
-        $manufacturers                 = $manufacturersTable->fetchAll('is_deleted = false', 'manufacturer_name');
+        $manufacturers                 = $manufacturersTable->fetchAll('isDeleted = false', 'fullname');
         $this->view->manufacturer_list = $manufacturers;
 
         if ($this->_request->isPost())
@@ -6725,7 +6725,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             $master_matchup_pfData ['master_device_id'] = $master_device_id;
 
                             // check to see if matchup exists for devices_pf_id
-                            $where   = $master_matchup_pfTable->getAdapter()->quoteInto('devices_pf_id = ?', $devices_pf_id, 'INTEGER');
+                            $where   = $master_matchup_pfTable->getAdapter()->quoteInto('pf_device_id = ?', $devices_pf_id, 'INTEGER');
                             $matchup = $master_matchup_pfTable->fetchRow($where);
 
                             if (count($matchup) > 0)
@@ -6734,14 +6734,14 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             }
                             else
                             {
-                                $master_matchup_pfData ['devices_pf_id'] = $devices_pf_id;
+                                $master_matchup_pfData ['pf_device_id'] = $devices_pf_id;
                                 $master_matchup_pfTable->insert($master_matchup_pfData);
                             }
                         }
                         else if ($devices_pf_id > 0)
                         {
                             // no matchup set so remove any records for device
-                            $where = $master_matchup_pfTable->getAdapter()->quoteInto('devices_pf_id = ?', $devices_pf_id, 'INTEGER');
+                            $where = $master_matchup_pfTable->getAdapter()->quoteInto('id = ?', $devices_pf_id, 'INTEGER');
                             $master_matchup_pfTable->delete($where);
                         }
                         unset($master_matchup_pfData);
@@ -6752,8 +6752,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 else
                 {
                     // set criteria = pf model id
-                    $device_pfTable = new Proposalgen_Model_DbTable_PFDevices();
-                    $device_pf      = $device_pfTable->fetchRow('devices_pf_id = ' . $formData ['devices_pf_id']);
+                    $device_pfTable = new Proposalgen_Model_DbTable_PFDevice();
+                    $device_pf      = $device_pfTable->fetchRow('id = ' . $formData ['devices_pf_id']);
 
                     if (count($device_pf) > 0)
                     {
@@ -6794,7 +6794,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $master_device_list = '';
             if ($devices_pf_id > 0)
             {
-                $where = 'dpf.devices_pf_id = ' . $devices_pf_id;
+                $where = 'dpf.id = ' . $devices_pf_id;
             }
             else if (!empty($filter) && !empty($criteria))
             {
@@ -6812,22 +6812,22 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $select = new Zend_Db_Select($db);
             $select = $db->select()
                 ->from(array(
-                            'dpf' => 'devices_pf'
+                            'dpf' => 'pgen_pf_devices'
                        ))
                 ->joinLeft(array(
-                                'mmpf' => 'master_matchup_pf'
-                           ), 'mmpf.devices_pf_id = dpf.devices_pf_id', array(
+                                'mmpf' => 'pgen_master_pf_device_matchups'
+                           ), 'mmpf.pf_device_id = dpf.id', array(
                                                                              'master_device_id'
                                                                         ))
                 ->joinLeft(array(
-                                'md' => 'master_device'
-                           ), 'md.master_device_id = mmpf.master_device_id', array(
+                                'md' => 'pgen_master_devices'
+                           ), 'md.id = mmpf.master_device_id', array(
                                                                                   'printer_model'
                                                                              ))
                 ->joinLeft(array(
-                                'm' => 'manufacturer'
-                           ), 'm.manufacturer_id = md.mastdevice_manufacturer', array(
-                                                                                     'manufacturer_name'
+                                'm' => 'manufacturers'
+                           ), 'm.id = md.manufacturer_id', array(
+                                                                                     'fullname'
                                                                                 ));
 
             if (!empty($where))
@@ -6836,7 +6836,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             }
 
             $select->group(array(
-                                'dpf.devices_pf_id'
+                                'dpf.id'
                            ));
             $select->order(array(
                                 'pf_db_manufacturer ASC'
@@ -6866,26 +6866,26 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $select = new Zend_Db_Select($db);
             $select = $db->select()
                 ->from(array(
-                            'dpf' => 'devices_pf'
+                            'dpf' => 'pgen_pf_devices'
                        ), array(
-                               'devices_pf_id',
+                               'id',
                                'pf_model_id',
                                'pf_printer' => new Zend_Db_Expr("CONCAT(pf_db_manufacturer, ' ', pf_db_devicename)")
                           ))
                 ->joinLeft(array(
-                                'mmpf' => 'master_matchup_pf'
-                           ), 'mmpf.devices_pf_id = dpf.devices_pf_id', array(
+                                'mmpf' => 'pgen_master_pf_device_matchups'
+                           ), 'mmpf.pf_device_id = dpf.id', array(
                                                                              'master_device_id'
                                                                         ))
                 ->joinLeft(array(
-                                'md' => 'master_device'
-                           ), 'md.master_device_id = mmpf.master_device_id', array(
+                                'md' => 'pgen_master_devices'
+                           ), 'md.id = mmpf.master_device_id', array(
                                                                                   'printer_model'
                                                                              ))
                 ->joinLeft(array(
-                                'm' => 'manufacturer'
-                           ), 'm.manufacturer_id = md.mastdevice_manufacturer', array(
-                                                                                     'manufacturer_name'
+                                'm' => 'manufacturers'
+                           ), 'm.id = md.manufacturer_id', array(
+                                                                                     'fullname'
                                                                                 ));
 
             if (!empty($where))
@@ -6894,7 +6894,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             }
 
             $select->group(array(
-                                'dpf.devices_pf_id'
+                                'dpf.id'
                            ));
             $select->order($sidx . ' ' . $sord);
             $select->limit($limit, $start);
@@ -6914,38 +6914,39 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $mapped_to              = '';
                     $mapped_to_id           = '';
                     $mapped_to_manufacturer = '';
-                    $devices_pf_id          = $row ['devices_pf_id'];
+                    $devices_pf_id          = $row ['id'];
 
                     // set up mapped to suggestions
                     $select         = new Zend_Db_Select($db);
                     $select         = $db->select()
                         ->from(array(
-                                    'mmpf' => 'master_matchup_pf'
+                                    'mmpf' => 'pgen_master_pf_device_matchups'
                                ))
                         ->joinLeft(array(
-                                        'md' => 'master_device'
-                                   ), 'md.master_device_id = mmpf.master_device_id')
+                                        'md' => 'pgen_master_devices'
+                                   ), 'md.id = mmpf.master_device_id'
+                )
                         ->joinLeft(array(
-                                        'm' => 'manufacturer'
-                                   ), 'm.manufacturer_id = md.mastdevice_manufacturer')
-                        ->where('mmpf.devices_pf_id = ' . $devices_pf_id);
+                                        'm' => 'manufacturers'
+                                   ), 'm.id = md.manufacturer_id')
+                        ->where('mmpf.pf_device_id = ' . $devices_pf_id);
                     $stmt           = $db->query($select);
                     $master_devices = $stmt->fetchAll();
-
                     if (count($master_devices) > 0)
                     {
                         $mapped_to              = $master_devices [0] ['printer_model'];
                         $mapped_to_id           = $master_devices [0] ['master_device_id'];
-                        $mapped_to_manufacturer = $master_devices [0] ['manufacturer_name'];
+                        $mapped_to_manufacturer = $master_devices [0] ['fullname'];
                     }
+                    //var_dump($row);
 
-                    $formdata->rows [$i] ['id']   = $row ['devices_pf_id'];
+                    $formdata->rows [$i] ['id']   = $row ['id'];
                     $formdata->rows [$i] ['cell'] = array(
                         $devices_pf_id,
-                        $row ['master_device_id'],
+                        $row ['id'],
                         $row ['pf_model_id'],
                         ucwords(strtolower($row ['pf_printer'])),
-                        ucwords(strtolower($row ['manufacturer_name'] . ' ' . $row ['printer_model'])),
+                        ucwords(strtolower($row ['fullname'] . ' ' . $row ['printer_model'])),
                         ucwords(strtolower($mapped_to)),
                         $mapped_to_id,
                         ucwords(strtolower($mapped_to_manufacturer))

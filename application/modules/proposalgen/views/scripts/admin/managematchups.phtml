@@ -85,6 +85,7 @@
             				$(this).parent().find("input.masterDeviceId")[0].value = ui.item.id;
             				$(this).parent().find("input.masterDeviceName")[0].value = ui.item.label;
             				$(this).parent().find("input.manufacturerName")[0].value = ui.item.manufacturer;
+                            alert($(this).parent().find("input.manufacturerName")[0].value);
             			},
             			open: function( event, ui ) {
                 			var termTemplate = '<strong>%s</strong>';

@@ -139,7 +139,6 @@ class Proposalgen_TicketController extends Zend_Controller_Action
         $date              = date('Y-m-d H:i:s');
         $this->view->title = 'Tickets Details';
         $ticket_id         = $this->_getParam('id', 0);
-
         // fill status filter
         $ticket_statusesTable   = new Proposalgen_Model_DbTable_TicketStatus();
         $ticket_statuses_filter = $ticket_statusesTable->fetchAll();
@@ -166,14 +165,14 @@ class Proposalgen_TicketController extends Zend_Controller_Action
 
 
                 // if not system admin and status > 2 then reset status to new
-                if (!in_array("System Admin", $this->privilege) && $formData ['cboStatus'] > 2)
-                {
-                    $ticket_status = Proposalgen_Model_TicketStatus::STATUS_OPEN;
-                }
-                else
-                {
+//                if (!in_array("System Admin", $this->privilege) && $formData ['cboStatus'] > 2)
+//                {
+//                    $ticket_status = Proposalgen_Model_TicketStatus::STATUS_OPEN;
+//                }
+//                else
+//                {
                     $ticket_status = $formData ['cboStatus'];
-                }
+//                }
 
                 // save ticket
                 $ticketTable = new Proposalgen_Model_DbTable_Ticket();
@@ -205,6 +204,7 @@ class Proposalgen_TicketController extends Zend_Controller_Action
             {
                 $db->rollback();
                 $this->view->message = "An error has occurred and the ticket was not saved.";
+                Throw new exception("Bad Error: Unable to find requests.", 0, $e);
             }
         }
 
@@ -267,7 +267,7 @@ class Proposalgen_TicketController extends Zend_Controller_Action
             if (count($row) > 1)
             {
                 $this->view->is_mapped        = true;
-                $this->view->mapped_to_device = ucwords(strtolower($row ['manufacturer_name'] . ' ' . $row ['printer_model']));
+                $this->view->mapped_to_device = ucwords(strtolower($row ['fullname'] . ' ' . $row ['printer_model']));
             }
         }
     }
