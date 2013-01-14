@@ -206,18 +206,18 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
      * @param $report Proposalgen_Model_Report            
      * @param $options array            
      */
-    public function __construct (Proposalgen_Model_User $user, Proposalgen_Model_DealerCompany $dealerCompany, Proposalgen_Model_Report $report, array $options = null)
+    public function __construct (Application_Model_User $user, Proposalgen_Model_Report $report, array $options = null)
     {
         parent::__construct($options);
         $this->User = $user;
-        $this->DealerCompany = $dealerCompany;
-        
+        $this->DealerCompany = "Office Depot Inc.";
+
         if (isset(self::$Proposal))
         {
             self::$Proposal = $this;
         }
         $this->setReport($report);
-        $this->setReportId($report->getReportId());
+        $this->setReportId($report->getId());
         
         // Initialize Settings
         
@@ -421,7 +421,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         if (! isset($this->ReportQuestions))
         {
             $questionSetMapper = Proposalgen_Model_Mapper_QuestionSet::getInstance();
-            $this->ReportQuestions = $questionSetMapper->getQuestionSetQuestions($this->getReport()->QuestionSetId, $this->ReportId);
+            $this->ReportQuestions = $questionSetMapper->getQuestionSetQuestions($this->getReport()->getQuestionSetId(), $this->getReport()->getId());
         }
         return $this->ReportQuestions;
     }
@@ -2541,7 +2541,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             // Other variables used in several places
             $pageCounts = $this->getPageCounts();
             $reportQuestions = $this->getReportQuestions();
-            $companyName = $this->getReport()->_customerCompanyName;
+            $companyName = $this->getReport()->getCustomerCompanyName();
             $employeeCount = $reportQuestions [5]->NumericAnswer;
             
             // Formatting variables

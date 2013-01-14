@@ -2,7 +2,7 @@
 
 class Proposalgen_Model_DbTable_Question extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'questions';
+    protected $_name = 'pgen_questions';
     protected $_primary = 'id';
     protected $_dependentTables = array (
             'DateAnswers', 
