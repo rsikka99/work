@@ -204,7 +204,6 @@ class Proposalgen_TicketController extends Zend_Controller_Action
             {
                 $db->rollback();
                 $this->view->message = "An error has occurred and the ticket was not saved.";
-                Throw new exception("Bad Error: Unable to find requests.", 0, $e);
             }
         }
 

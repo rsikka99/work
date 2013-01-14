@@ -14,7 +14,7 @@
 		var sTop = ($(window).height()/2)-100;
 		var sLeft = ($(window).width()/2)-200;
 		var url = '<?php echo $this->baseUrl("/proposalgen/admin/matchuplist"); ?>?filter=model&criteria=<?php echo $this->pf_model_id; ?>';
-		
+
 		jQuery("#grid_list").jqGrid({
 			url: url,
 			datatype:'json',			
@@ -35,6 +35,7 @@
 			rowList:[10,20,30],
 			pager:'#grid_pager',
 			gridComplete:function() {
+
 				var ids = jQuery("#grid_list").jqGrid('getDataIDs');
 				for(var i=0; i < ids.length; i++) {
 					var cur_row = ids[i];
@@ -85,7 +86,6 @@
             				$(this).parent().find("input.masterDeviceId")[0].value = ui.item.id;
             				$(this).parent().find("input.masterDeviceName")[0].value = ui.item.label;
             				$(this).parent().find("input.manufacturerName")[0].value = ui.item.manufacturer;
-                            alert($(this).parent().find("input.manufacturerName")[0].value);
             			},
             			open: function( event, ui ) {
                 			var termTemplate = '<strong>%s</strong>';

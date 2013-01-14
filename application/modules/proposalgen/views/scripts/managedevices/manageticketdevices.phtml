@@ -911,7 +911,7 @@
 		
 		var grid = $("#available_toners_list");
 		var toner_id = grid.jqGrid('getGridParam', 'selrow');
-		
+		alert("before set grid");
 		$('#replacement_toners_list').setGridParam({url:'<?php echo $this->baseUrl("/proposalgen/admin/replacementtoners"); ?>?tonerid='+toner_id+params});
 	    $('#replacement_toners_list').trigger('reloadGrid');
 	}
