@@ -3,7 +3,7 @@
 /**
  * AuthController - Controller to handle authentication.
  *
- * @author Voziv
+ * @author  Voziv
  * @version 1.0
  */
 class Default_AuthController extends Zend_Controller_Action
@@ -29,7 +29,7 @@ class Default_AuthController extends Zend_Controller_Action
         $authAdapter->setTableName('users');
         $authAdapter->setIdentityColumn('username');
         $authAdapter->setCredentialColumn('password');
-        
+
         return $authAdapter;
     }
 
@@ -42,47 +42,47 @@ class Default_AuthController extends Zend_Controller_Action
     {
         $this->view->layout()->setLayout('auth');
         $request = $this->getRequest();
-        $form = new Default_Form_Login();
-        
+        $form    = new Default_Form_Login();
+
         if ($this->getRequest()->isPost())
         {
             if ($request->getParam('forgotpassword', false))
             {
-                $this->_helper->getHelper('Redirector')->gotoRoute(array (
-                        'username' => $request->getParam('username', '') 
-                ), 'forgotpassword');
+                $this->_helper->getHelper('Redirector')->gotoRoute(array(
+                                                                        'username' => $request->getParam('username', '')
+                                                                   ), 'forgotpassword');
             }
             if ($form->isValid($request->getPost()))
             {
-                $auth = Zend_Auth::getInstance();
+                $auth        = Zend_Auth::getInstance();
                 $authAdapter = $this->getAuthAdapter();
                 $authAdapter->setIdentity($form->getValue("username"));
-                
+
                 $password = $form->getValue("password");
                 $authAdapter->setCredential($password);
                 //$password = $this->cryptPassword($form->getValue("password"));
-                
+
 
                 // Authenticate against the database
                 $result = $auth->authenticate($authAdapter);
-                
+
                 // If the value is valid, store the information
                 if ($result->isValid())
                 {
                     // Get all the user information and only omit the password
                     // since we don't want to store it in the session.
                     $userInfo = $authAdapter->getResultRowObject(null, 'password');
-                    
+
                     $authStorage = $auth->getStorage();
                     $authStorage->write($userInfo);
-                    
+
                     $session = new Zend_Session_Namespace("authRedirect");
                     if (isset($session->module))
                     {
-                        $module = $session->module;
+                        $module     = $session->module;
                         $controller = $session->controller;
-                        $action = $session->action;
-                        $params = $session->params;
+                        $action     = $session->action;
+                        $params     = $session->params;
                         $session->unsetAll();
                         $this->_helper->redirector($action, $controller, $module, $params);
                     }
@@ -97,22 +97,22 @@ class Default_AuthController extends Zend_Controller_Action
                     {
                         case Zend_Auth_Result::FAILURE_UNCATEGORIZED :
                             // I'm using this in the custom adapter, so messages will be user friendly coming out of it.
-                            foreach ( $result->getMessages() as $message )
+                            foreach ($result->getMessages() as $message)
                             {
-                                $this->_helper->flashMessenger(array (
-                                        'danger' => $message 
-                                ));
+                                $this->_helper->flashMessenger(array(
+                                                                    'danger' => $message
+                                                               ));
                             }
                             break;
                         default :
                             // Put a generic invalid credential message
-                            $this->_helper->flashMessenger(array (
-                                    'danger' => 'The username/password combination you entered was invalid.' 
-                            ));
-                            
+                            $this->_helper->flashMessenger(array(
+                                                                'danger' => 'The username/password combination you entered was invalid.'
+                                                           ));
+
                             break;
                     }
-                    
+
                     // Build the bootstrap error decorator
                     $form->buildBootstrapErrorDecorators();
                 }
@@ -123,11 +123,11 @@ class Default_AuthController extends Zend_Controller_Action
                 $form->buildBootstrapErrorDecorators();
             }
         }
-        
+
         $this->view->form = $form;
     } // end loginAction
 
-    
+
     /**
      * This action handles logging a user out of the system and destroying any
      * sensitive session information.
@@ -140,7 +140,7 @@ class Default_AuthController extends Zend_Controller_Action
         $this->_helper->redirector('login');
     } // end logoutAction
 
-    
+
     /**
      * This function handles logging a user out of the system and destroying any
      * sensitive session information.
@@ -163,18 +163,18 @@ class Default_AuthController extends Zend_Controller_Action
 
     public function changepasswordAction ()
     {
-        $auth = Zend_Auth::getInstance();
+        $auth     = Zend_Auth::getInstance();
         $identity = $auth->getIdentity();
-        
+
         // If customer is flaged for a reset send them to the login page layout
         if ($identity->resetPasswordOnNextLogin)
         {
             $this->view->layout()->setLayout('auth');
             $this->_helper->viewRenderer('forcechangepassword');
         }
-        $form = new Default_Form_ChangePassword();
+        $form    = new Default_Form_ChangePassword();
         $request = $this->getRequest();
-        
+
         if ($request->isPost())
         {
             $values = $request->getPost();
@@ -182,38 +182,38 @@ class Default_AuthController extends Zend_Controller_Action
             {
                 if ($form->isValid($values))
                 {
-                    
+
                     $userMapper = new Application_Model_Mapper_User();
-                    
-                    $user = $userMapper->find($identity->id);
-                    $password = crypt($form->getValue("current_password"), $user->getPassword());
-                    
+
+                    $user     = $userMapper->find($identity->id);
+                    $password = crypt($form->getValue("current_password"), $user->password);
+
                     // Check that the user has entered in the correct password
                     if (strcmp($password, $user->getPassword()) === 0)
                     {
-                        
+
                         // Process password change and remove change flag
                         $user->setPassword(crypt($form->getValue("password"), $user->getPassword()));
-                        $user->setResetPasswordOnNextLogin(0);
+                        $user->resetPasswordOnNextLogin = 0;
                         $userMapper->save($user);
-                        
+
                         // Remove flag on session
                         $identity->resetPasswordOnNextLogin = false;
                         $auth->getStorage()->write($identity);
-                        
-                        $this->_helper->flashMessenger(array (
-                                'success' => 'Password Changed Successfully' 
-                        ));
-                        
+
+                        $this->_helper->flashMessenger(array(
+                                                            'success' => 'Password Changed Successfully'
+                                                       ));
+
                         // Redirects user to logout screen to login again
                         $r = new Zend_Controller_Action_Helper_Redirector();
                         $r->gotoSimple('index', 'index', 'default');
                     }
                     else
                     {
-                        $this->_helper->flashMessenger(array (
-                                'danger' => 'You entered the incorrect current password!' 
-                        ));
+                        $this->_helper->flashMessenger(array(
+                                                            'danger' => 'You entered the incorrect current password!'
+                                                       ));
                     }
                 }
                 else
@@ -223,7 +223,7 @@ class Default_AuthController extends Zend_Controller_Action
             }
             else // is $values ['cancel'] is set 
             {
-                
+
                 if ($identity->resetPasswordOnNextLogin)
                 {
                     $this->logout();
@@ -235,7 +235,7 @@ class Default_AuthController extends Zend_Controller_Action
                 }
             }
         }
-        
+
         $this->view->form = $form;
     }
 } // end auth controller

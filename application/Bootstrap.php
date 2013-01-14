@@ -123,21 +123,25 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initNavigation ()
     {
         $this->bootstrap('view');
+        /* @var $view Zend_View */
         $view = $this->getResource('view');
         
         $this->bootstrap('acl');
         $acl = Zend_Registry::get('Zend_Acl');
-        $view->navigation()->setAcl($acl);
+
+        /* @var $navigation Zend_View_Helper_Navigation */
+        $navigation = $view->navigation();
+
+        $navigation->setAcl($acl);
         
         $auth = Zend_Auth::getInstance();
         if ($auth->hasIdentity())
         {
-            $id = $auth->getIdentity()->id;
-            $view->navigation()->setRole("$id");
+            $navigation->setRole("{$auth->getIdentity()->id}");
         }
         else
         {
-            $view->navigation()->setRole(null);
+            $navigation->setRole(null);
         }
         
         $config = new Zend_Config_Xml(__DIR__ . '/configs/navigation.xml', 'nav');
