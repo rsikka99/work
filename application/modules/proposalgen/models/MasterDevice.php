@@ -194,7 +194,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
 
     /**
      *
-     * @param field_type $PricingConfig            
+     * @param Proposalgen_Model_PricingConfig $PricingConfig
      */
     public static function setPricingConfig ($PricingConfig)
     {
@@ -216,7 +216,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
 
     /**
      *
-     * @param field_type $ReportMargin            
+     * @param number $ReportMargin
      */
     public static function setReportMargin ($ReportMargin)
     {
@@ -886,7 +886,8 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
 
     /**
      *
-     * @param field_type $AdminCostPerPage            
+     * @param number $AdminCostPerPage
+     * @return \Proposalgen_Model_MasterDevice
      */
     public function setAdminCostPerPage ($AdminCostPerPage)
     {
@@ -1021,7 +1022,8 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
 
     /**
      *
-     * @param field_type $ServiceCostPerPage            
+     * @param number $ServiceCostPerPage
+     * @return Proposalgen_Model_MasterDevice
      */
     public function setServiceCostPerPage ($ServiceCostPerPage)
     {
@@ -1045,7 +1047,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
 
     /**
      *
-     * @param field_type $GrossMarginPricingConfig            
+     * @param Proposalgen_Model_PricingConfig $GrossMarginPricingConfig
      */
     public static function setGrossMarginPricingConfig ($GrossMarginPricingConfig)
     {
@@ -1091,7 +1093,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
 
     /**
      *
-     * @param field_type $LeasedTonerYield            
+     * @param number $LeasedTonerYield
      */
     public function setLeasedTonerYield ($LeasedTonerYield)
     {

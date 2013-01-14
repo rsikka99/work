@@ -248,7 +248,7 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
     /**
      * Gets the actual monochrome page coverage
      *
-     * @return the $_actualPageCoverageMono
+     * @return float $_actualPageCoverageMono
      */
     public function getActualPageCoverageMono ()
     {
@@ -290,7 +290,7 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
     /**
      * Gets the service cost per page
      *
-     * @return the $_serviceCostPerPage
+     * @return number $_serviceCostPerPage
      */
     public function getServiceCostPerPage ()
     {
@@ -311,7 +311,7 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
     /**
      * Gets the admin cost per page
      *
-     * @return the $_adminCostPerPage
+     * @return number $_adminCostPerPage
      */
     public function getAdminCostPerPage ()
     {

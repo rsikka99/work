@@ -501,7 +501,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
 
     /**
      *
-     * @param field_type $ACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE            
+     * @param float $ACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE
      */
     public static function setACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE ($ACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE)
     {
@@ -523,7 +523,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
 
     /**
      *
-     * @param field_type $ACTUAL_PAGE_COVERAGE_COLOR            
+     * @param float $ACTUAL_PAGE_COVERAGE_COLOR
      */
     public static function setACTUAL_PAGE_COVERAGE_COLOR ($ACTUAL_PAGE_COVERAGE_COLOR)
     {
@@ -545,7 +545,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
 
     /**
      *
-     * @param field_type $ESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE            
+     * @param float $ESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE
      */
     public static function setESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE ($ESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE)
     {
@@ -567,7 +567,7 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
 
     /**
      *
-     * @param field_type $ESTIMATED_PAGE_COVERAGE_COLOR            
+     * @param float $ESTIMATED_PAGE_COVERAGE_COLOR
      */
     public static function setESTIMATED_PAGE_COVERAGE_COLOR ($ESTIMATED_PAGE_COVERAGE_COLOR)
     {

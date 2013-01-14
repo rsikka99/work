@@ -5,7 +5,7 @@ abstract class My_Controller_Report extends Zend_Controller_Action
     /**
      * The current report
      *
-     * @var Application_Model_Report
+     * @var Proposalgen_Model_Report
      */
     protected $Report;
     
@@ -22,13 +22,19 @@ abstract class My_Controller_Report extends Zend_Controller_Action
     protected $ReportCompanyName;
     protected $ReportAbsoluteCachePath;
     protected $ReportCachePath;
+    /**
+     * User that is logged into the system.
+     *
+     * @var Application_Model_User
+     */
+    protected $_user;
 
     public function init ()
     {
         $session = new Zend_Session_Namespace('proposalgenerator_report');
         
         $this->ReportId = $session->reportId;
-        $this->ReportAbsoluteCachePath = PUBLIC_FOLDER . "/cache/reports/" . $this->ReportId;
+        $this->ReportAbsoluteCachePath = PUBLIC_PATH . "/cache/reports/" . $this->ReportId;
         $this->ReportCachePath = "/cache/reports/" . $this->ReportId;
         // Make the directory if it doesnt exist
         if (! is_dir($this->ReportAbsoluteCachePath))
@@ -41,7 +47,9 @@ abstract class My_Controller_Report extends Zend_Controller_Action
         
         $this->view->ReportAbsoluteCachePath = $this->ReportAbsoluteCachePath;
         $this->view->ReportCachePath = $this->ReportCachePath;
-        
+
+        $this->_user = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
+
         if ($this->ReportId < 1)
         {
             $this->_helper->flashMessenger(array (
@@ -131,7 +139,7 @@ abstract class My_Controller_Report extends Zend_Controller_Action
             $hasError = false;
             try
             {
-                $this->Proposal = new Proposalgen_Model_Proposal_OfficeDepot(Application_Model_User::getCurrentUser(), Proposalgen_Model_DealerCompany::getCurrentUserCompany(), $this->Report);
+                $this->Proposal = new Proposalgen_Model_Proposal_OfficeDepot($this->_user, $this->Report);
                 
                 if ($this->Report->getDevicesModified())
                 {
@@ -174,12 +182,12 @@ abstract class My_Controller_Report extends Zend_Controller_Action
             $files = array ();
             
             // Get all files to delete
-            if (FALSE !== ($handle = @opendir($path)))
+            if (false !== ($handle = @opendir($path)))
             {
                 // Get rid of cache to ensure we have proper information on the
                 // files we want to delete.
                 clearstatcache();
-                while ( FALSE !== ($file = readdir($handle)) )
+                while ( false !== ($file = readdir($handle)) )
                 {
                     if ($file != "." && $file != "..")
                     {

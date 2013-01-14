@@ -68,12 +68,12 @@ class Proposalgen_Model_Mapper_QuestionSet extends Tangent_Model_Mapper_Abstract
         $dateAnswerMapper = Proposalgen_Model_Mapper_DateAnswer::getInstance();
         $numericAnswerMapper = Proposalgen_Model_Mapper_NumericAnswer::getInstance();
         $texualAnswerMapper = Proposalgen_Model_Mapper_TextualAnswer::getInstance();
-        
+
         // Get all the questions for the question set
         $results = $questionSetQuestionMapper->fetchAll(array (
-                "id = ?" => $questionSetId 
+                "questionset_id = ?" => $questionSetId
         ));
-        
+
         // Did we find them? Let's hope we did because otherwise it would be bad.
         if ($results)
         {
@@ -83,7 +83,7 @@ class Proposalgen_Model_Mapper_QuestionSet extends Tangent_Model_Mapper_Abstract
             {
                 // Get the question
                 $tempQuestion = $questionMapper->find($question->getQuestionId());
-                
+
                 // Get the answers
                 $tempQuestion->setDateAnswer($dateAnswerMapper->getQuestionAnswer($question->getQuestionId(), $reportId))
                     ->setNumericAnswer($numericAnswerMapper->getQuestionAnswer($question->getQuestionId(), $reportId))
