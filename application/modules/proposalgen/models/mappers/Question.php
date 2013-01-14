@@ -32,7 +32,7 @@ class Proposalgen_Model_Mapper_Question extends Tangent_Model_Mapper_Abstract
         {
             // NOTE: We are not pulling in answers here because we require a report id to be able to get answers
             $object = new Proposalgen_Model_Question();
-            $object->setQuestionId($row->question_id)->setQuestionDescription($row->question_desc);
+            $object->setQuestionId($row->id)->setQuestionDescription($row->description);
         }
         catch ( Exception $e )
         {

@@ -206,10 +206,10 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                                 }
                             }
                         }
+                        $masterdevice->setLeasedTonerYield($smallestYield);
                     }
-                    
-                    $masterdevice->setLeasedTonerYield($smallestYield);
-                    
+
+
                     $device->setDeviceInstanceId(null)
                         ->setReportId($row->report_id)
                         ->setMasterDevice($masterdevice)

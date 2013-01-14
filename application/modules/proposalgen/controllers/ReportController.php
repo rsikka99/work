@@ -66,6 +66,7 @@ class Proposalgen_ReportController extends My_Controller_Report
 
     function postDispatch ()
     {
+
         $this->verifyReplacementDevices();
         // If we have error messages, send them to the error page
         if (count($this->view->ErrorMessages) > 0)
@@ -74,8 +75,8 @@ class Proposalgen_ReportController extends My_Controller_Report
             {
                 $this->view->formTitle = "Error";
             }
-            $layout = Zend_Registry::get('config')->interface->layout;
-            $this->view->layout()->setLayout($layout);
+//            $layout = Zend_Registry::get('config')->interface->layout;
+//            $this->view->layout()->setLayout($layout);
             $this->_helper->viewRenderer->setRender('report.error');
         }
         else
@@ -89,36 +90,36 @@ class Proposalgen_ReportController extends My_Controller_Report
                 $this->view->pageStart = "<page style='" . $this->view->pagestyle . "' backtop='" . $this->view->backtop . "' backbottom='" . $this->view->backbottom . "' backleft='" . $this->view->backleft . "' backright='" . $this->view->backright . "'>";
                 // Footer can remain for future changes, such as logo or copyright etc
                 $this->view->pageStart .= "<page_header>" . $this->view->header . "</page_header><page_footer>" . $this->view->footer . "</page_footer>";
-                
+
                 $this->view->pageEnd = "</page>";
                 if ('download' === $this->_request->getParam('pdf'))
                 {
                     $this->view->cachePath = "/cache/reports/" . $this->ReportId;
                     $this->view->downloadFileName = str_replace(array (
-                            " ", 
-                            "/", 
-                            "\\", 
-                            ";", 
-                            "?", 
-                            "\"", 
-                            "'", 
-                            ",", 
-                            "%", 
-                            "&", 
-                            "#", 
-                            "@", 
-                            "!", 
-                            ">", 
-                            "<", 
-                            "+", 
-                            "=", 
-                            "{", 
-                            "}", 
-                            "[", 
-                            "]", 
-                            "|", 
-                            "~", 
-                            "`" 
+                            " ",
+                            "/",
+                            "\\",
+                            ";",
+                            "?",
+                            "\"",
+                            "'",
+                            ",",
+                            "%",
+                            "&",
+                            "#",
+                            "@",
+                            "!",
+                            ">",
+                            "<",
+                            "+",
+                            "=",
+                            "{",
+                            "}",
+                            "[",
+                            "]",
+                            "|",
+                            "~",
+                            "`"
                     ), "_", $this->view->downloadFileName);
                     $this->view->downloadPDF = true;
                 }
@@ -139,7 +140,7 @@ class Proposalgen_ReportController extends My_Controller_Report
 
         // Clear the cache for the report before proceeding
         $this->clearCacheForReport();
-        
+
         // proposal
         $proposal = $this->getProposal();
         $this->view->proposal = $proposal;
