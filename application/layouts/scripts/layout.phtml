@@ -40,7 +40,7 @@
                                 <?php echo $this->Usermenu(); ?>
                             </div>
                             <?php else : ?>
-                                <a class="btn btn-danger" href="<?php echo $this->url(array(), 'login');?>"><i class="icon-user icon-white"></i> Login</a>
+                                <a class="btn btn-danger" href="<?php echo $this->url(array('module' => 'default', 'controller' => 'auth', 'action' => 'login'));?>"><i class="icon-user icon-white"></i> Login</a>
                             <?php endif; ?>
                         </div>
                     </div>

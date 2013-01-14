@@ -8,6 +8,7 @@
             <controller>index</controller>
             <action>index</action>
             <resource>default__index__index</resource>
+            <privilege>View</privilege>
             <order>000</order>
             <pages>
                 <login>
