@@ -613,7 +613,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         }
         
         $form->populate($formDataFromAnswers);
-        
+
         if ($request->isPost())
         {
             $values = $request->getPost();
@@ -632,7 +632,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         
                         // Question 22 (Page Coverage Color)
                         $this->saveNumericQuestionAnswer(22, $form->getValue('pageCoverage_Color'));
-                        
+
                         // Question 23 (Percent Inkjet Printing)
                         $this->saveNumericQuestionAnswer(23, $form->getValue('printVolume'));
                         
@@ -650,7 +650,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         else
                         {
                             $this->_helper->flashMessenger(array (
-                                    'success' => "Your changes were saved sucessfully." 
+                                    'success' => "Your changes were saved successfully."
                             ));
                         }
                     }

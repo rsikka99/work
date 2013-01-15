@@ -33,7 +33,7 @@ class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
      *            The object to insert
      * @return mixed The primary key of the new row
      */
-    public function insert (Proposalgen_Model_Survey_Setting &$survey_setting)
+    public function insert (&$survey_setting)
     {
         $data = $survey_setting->toArray();
         unset($data ['id']);
@@ -54,7 +54,7 @@ class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
      *            Optional: The original primary key, in case we're changing it
      * @return int The number of rows affected
      */
-    public function save (Proposalgen_Model_Survey_Setting $survey_setting, $primaryKey = null)
+    public function save ($survey_setting, $primaryKey)
     {
         $data = $this->unsetNullValues($survey_setting->toArray());
         

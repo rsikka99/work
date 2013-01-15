@@ -69,8 +69,8 @@ class Proposalgen_Model_Survey_Setting extends My_Model_Abstract
     public function toArray ()
     {
         return array (
-                "pageCoverageColor" => $this->getPageCoverageColor(), 
-                "pageCoverageMono" => $this->getPageCoverageMono() 
+                "page_coverage_mono" => $this->getPageCoverageColor(),
+                "page_coverage_color" => $this->getPageCoverageMono()
         );
     }
 
@@ -89,6 +89,7 @@ class Proposalgen_Model_Survey_Setting extends My_Model_Abstract
      *
      * @param number $_id
      *            The new id to set
+     * @return \Proposalgen_Model_Survey_Setting
      */
     public function setId ($_id)
     {
@@ -109,7 +110,8 @@ class Proposalgen_Model_Survey_Setting extends My_Model_Abstract
     /**
      * Sets the monochrome page coverage of the survey setting
      *
-     * @param number $_pageCoverageMono            
+     * @param number $_pageCoverageMono
+     * @return \Proposalgen_Model_Survey_Setting
      */
     public function setPageCoverageMono ($_pageCoverageMono)
     {
@@ -130,7 +132,8 @@ class Proposalgen_Model_Survey_Setting extends My_Model_Abstract
     /**
      * Sets the color page coverage of the survey setting
      *
-     * @param number $_pageCoverageColor            
+     * @param number $_pageCoverageColor
+     * @return \Proposalgen_Model_Survey_Setting
      */
     public function setPageCoverageColor ($_pageCoverageColor)
     {
