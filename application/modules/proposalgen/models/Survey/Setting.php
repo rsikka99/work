@@ -69,8 +69,8 @@ class Proposalgen_Model_Survey_Setting extends My_Model_Abstract
     public function toArray ()
     {
         return array (
-                "page_coverage_mono" => $this->getPageCoverageColor(),
-                "page_coverage_color" => $this->getPageCoverageMono()
+                "pageCoverageMono" => $this->getPageCoverageColor(),
+                "pageCoverageColor" => $this->getPageCoverageMono()
         );
     }
 

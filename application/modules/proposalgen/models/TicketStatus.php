@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Model_TicketStatus extends Tangent_Model_Abstract
+class Proposalgen_Model_TicketStatus extends My_Model_Abstract
 {
     const STATUS_NEW      = 1;
     const STATUS_OPEN     = 2;

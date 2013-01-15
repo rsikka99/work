@@ -2391,32 +2391,22 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         /** @noinspection PhpUndefinedFieldInspection */
         $this->view->title = 'Manage My Settings';
         $db                = Zend_Db_Table::getDefaultAdapter();
+        $message           = '';
+        $hasErrors         = false;
 
-        $message   = '';
-        $hasErrors = false;
-
-        // Get Override Settings
-//        $userDealerCompany = Proposalgen_Model_DealerCompany::getCurrentUserCompany();
-//        $dealerName        = ucwords(strtolower($userDealerCompany->getCompanyName()));
-//
-//        $dealerCompany  = Proposalgen_Model_DealerCompany::getMasterCompany();
-//        $dealerSettings = $dealerCompany->getReportSettings();
+        // Get system overrides
+        $systemSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->find(1);
 
         $user         = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
-        $userSettings = Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->find($user->getId());
-        // settings with no
-        // overrides
+        $userSettings = Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->find($user->id);
 
-
-        // Grab the settings form
-        $form = new Proposalgen_Form_Settings_User();
-
+        $form           = new Proposalgen_Form_Settings_User();
         $pricingConfigs = Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll();
 
         // Add all the pricing configs
         foreach ($pricingConfigs as $pricingConfig)
         {
-            $form->getElement('pricing_config_id')->addMultiOption($pricingConfig->getPricingConfigId(), ($pricingConfig->getPricingConfigId() !== 1) ? $pricingConfig->getConfigName() : "");
+            $form->getElement('assessmentPricingConfigId')->addMultiOption($pricingConfig->getPricingConfigId(), ($pricingConfig->getPricingConfigId() !== 1) ? $pricingConfig->getConfigName() : "");
         }
 
         // Set form values based on the users selected settings
@@ -2442,71 +2432,52 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         {
                             $value = (empty($value)) ? null : $value;
                         }
-                        /*
-                         * Required
-                         */
-                        $user->setUserEstimatedPageCoverageMono($formData ["estimated_page_coverage_mono"]);
-                        $user->setUserEstimatedPageCoverageColor($formData ["estimated_page_coverage_color"]);
-                        $user->setUserActualPageCoverageMono($formData ["actual_page_coverage_mono"]);
-                        $user->setUserActualPageCoverageColor($formData ["actual_page_coverage_color"]);
+                        // Save user settings
+                        // Save page coverage settings (survey settings)
+                        $surveySetting = new Proposalgen_Model_Survey_Setting();
+                        $surveySetting->populate($formData);
 
-                        /*
-                         * Null is acceptable
-                         */
-                        $user->setUserMonthlyLeasePayment($formData ["monthly_lease_payment"]);
-                        $user->setUserDefaultPrinterCost($formData ["default_printer_cost"]);
-                        $user->setUserLeasedBwPerPage($formData ["leased_bw_per_page"]);
-                        $user->setUserLeasedColorPerPage($formData ["leased_color_per_page"]);
-                        $user->setUserMpsBwPerPage($formData ["mps_bw_per_page"]);
-                        $user->setUserMpsColorPerPage($formData ["mps_color_per_page"]);
-                        $user->setUserKilowattsPerHour($formData ["kilowatts_per_hour"]);
-                        $user->setPricingConfigId($formData ["pricing_config_id"]);
-                        $user->setUserServiceCostPerPage($formData ["service_cost_per_page"]);
-                        $user->setUserAdminChargePerPage($formData ["admin_charge_per_page"]);
+                        // Save report settings (all other)
+                        $reportSetting = new Proposalgen_Model_Report_Setting();
+                        $reportSetting->populate($formData);
 
-                        $user->setUserPricingMargin($formData ["pricing_margin"]);
-
-                        // Save User
+                        // Save report settings
+                        Mapper_Su::getInstance()->save('x');
+                        // Save survey settings
                         Proposalgen_Model_Mapper_User::getInstance()->save($user);
 
-                        $this->_helper->flashMessenger(array(
-                                                            "success" => "Your settings have been updated."
-                                                       ));
+                        $this->_helper->flashMessenger(array("success" => "Your settings have been updated."));
                         $db->commit();
                     }
                     catch (Zend_Db_Exception $e)
                     {
                         $db->rollback();
-                        $this->_helper->flashMessenger(array(
-                                                            "error" => "An error occured while saving your settings."
-                                                       ));
+                        $this->_helper->flashMessenger(array("error" => "An error occurred while saving your settings."));
                     }
                     catch (Exception $e)
                     {
                         $db->rollback();
-                        $this->_helper->flashMessenger(array(
-                                                            "error" => "An error occured while saving your settings."
-                                                       ));
+                        $this->_helper->flashMessenger(array("error" => "An error occurred while saving your settings."));
                     }
                 }
             }
             else
             {
-                $this->_helper->flashMessenger(array(
-                                                    "error" => "Please review the errors below."
-                                               ));
+                $this->_helper->flashMessenger(array("error" => "Please review the errors below."));
                 $form->populate($formData);
             }
         }
 
-        $defaultSettings = $dealerSettings;
-        if ($defaultSettings ["pricing_config_id"] !== 1)
+        $surveySetting = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->find(1);
+        $defaultSettings = array_merge($systemSettings->toArray(),$surveySetting->toArray());
+
+        if ($defaultSettings ["assessmentPricingConfigId"] !== Proposalgen_Model_PricingConfig::NONE)
         {
-            $defaultSettings ["pricing_config_id"] = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($defaultSettings ["pricing_config_id"])->getConfigName();
+            $defaultSettings ["assessmentPricingConfigId"] = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($defaultSettings ["assessmentPricingConfigId"])->getConfigName();
         }
         else
         {
-            $defaultSettings ["pricing_config_id"] = "";
+            $defaultSettings ["assessmentPricingConfigId"] = "";
         }
 
         // add form to page
@@ -2516,7 +2487,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                       array(
                                           'viewScript' => 'forms/settings/user.phtml',
                                           'dealerData' => $defaultSettings,
-                                          'dealerName' => $dealerName,
+//                                          'dealerName' => $dealerName,
                                           'message'    => $message
                                       )
                                   )
