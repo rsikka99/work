@@ -1,67 +1,58 @@
 <?php
-
-/**
- * Class Proposalgen_Model_PfDeviceMatchupUsers
- *
- * @author "Kevin Jervis"
- */
-class Proposalgen_Model_PfDeviceMatchupUser extends Tangent_Model_Abstract
+class Proposalgen_Model_PfDeviceMatchupUser extends My_Model_Abstract
 {
-    protected $DevicesPfId;
-    protected $MasterDeviceId;
-    protected $UserId;
+    /**
+     * @var int
+     */
+    public $devicesPfId;
 
     /**
-     *
-     * @return the $DevicesPfId
+     * @var int
      */
-    public function getDevicesPfId ()
+    public $masterDeviceId;
+
+    /**
+     * @var int
+     */
+    public $userId;
+
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
     {
-        return $this->DevicesPfId;
+        if (is_array($params))
+        {
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
+        }
+
+        if (isset($params->devicesPfId) && !is_null($params->devicesPfId))
+        {
+            $this->devicesPfId = $params->devicesPfId;
+        }
+
+        if (isset($params->masterDeviceId) && !is_null($params->masterDeviceId))
+        {
+            $this->masterDeviceId = $params->masterDeviceId;
+        }
+
+        if (isset($params->userId) && !is_null($params->userId))
+        {
+            $this->userId = $params->userId;
+        }
+
     }
 
     /**
-     *
-     * @param field_type $DevicesPfId            
+     * @return array
      */
-    public function setDevicesPfId ($DevicesPfId)
+    public function toArray ()
     {
-        $this->DevicesPfId = $DevicesPfId;
-    }
-
-    /**
-     *
-     * @return the $MasterDeviceId
-     */
-    public function getMasterDeviceId ()
-    {
-        return $this->MasterDeviceId;
-    }
-
-    /**
-     *
-     * @param field_type $MasterDeviceId            
-     */
-    public function setMasterDeviceId ($MasterDeviceId)
-    {
-        $this->MasterDeviceId = $MasterDeviceId;
-    }
-
-    /**
-     *
-     * @return the $UserId
-     */
-    public function getUserId ()
-    {
-        return $this->UserId;
-    }
-
-    /**
-     *
-     * @param field_type $UserId            
-     */
-    public function setUserId ($UserId)
-    {
-        $this->UserId = $UserId;
+        return array(
+            "devicesPfId"    => $this->devicesPfId,
+            "masterDeviceId" => $this->masterDeviceId,
+            "userId"         => $this->userId,
+        );
     }
 }

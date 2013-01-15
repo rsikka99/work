@@ -1,60 +1,47 @@
 <?php
-
-/**
- * Class Proposalgen_Model_QuestionSetQuestion
- *
- * @author "Lee Robert"
- */
 class Proposalgen_Model_QuestionSetQuestion extends Tangent_Model_Abstract
 {
-    protected $QuestionId;
-    protected $QuestionSetId;
+    /**
+     * @var int
+     */
+    public $questionId;
 
     /**
-     *
-     * @return the $QuestionId
+     * @var int
      */
-    public function getQuestionId ()
+    public $questionSetId;
+
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
     {
-        if (! isset($this->QuestionId))
+        if (is_array($params))
         {
-            
-            $this->QuestionId = null;
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        return $this->QuestionId;
-    }
 
-    /**
-     *
-     * @param field_type $QuestionId            
-     */
-    public function setQuestionId ($QuestionId)
-    {
-        $this->QuestionId = $QuestionId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $QuestionSetId
-     */
-    public function getQuestionSetId ()
-    {
-        if (! isset($this->QuestionSetId))
+        if (isset($params->questionId) && !is_null($params->questionId))
         {
-            
-            $this->QuestionSetId = null;
+            $this->questionId = $params->questionId;
         }
-        return $this->QuestionSetId;
+
+        if (isset($params->questionSetId) && !is_null($params->questionSetId))
+        {
+            $this->questionSetId = $params->questionSetId;
+        }
+
     }
 
     /**
-     *
-     * @param field_type $QuestionSetId            
+     * @return array
      */
-    public function setQuestionSetId ($QuestionSetId)
+    public function toArray ()
     {
-        $this->QuestionSetId = $QuestionSetId;
-        return $this;
+        return array(
+            "questionId"    => $this->questionId,
+            "questionSetId" => $this->questionSetId,
+        );
     }
 }

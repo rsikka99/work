@@ -19,14 +19,14 @@
     	
         <?php foreach ($this->paginator->getCurrentItems() as $manufacturer) : /* @var $manufacturer Proposalgen_Model_Manufacturer */ ?>
         <tr>
-            <td><?php echo $manufacturer->getId(); ?></td>
-            <td><?php echo $manufacturer->getFullname(); ?></td>
-            <td><?php echo $manufacturer->getDisplayname(); ?></td>
-            <td><?php echo ($manufacturer->getIsDeleted()) ? "Deleted" : ""; ?></td>
+            <td><?php echo $manufacturer->id; ?></td>
+            <td><?php echo $manufacturer->fullname; ?></td>
+            <td><?php echo $manufacturer->displayname; ?></td>
+            <td><?php echo ($manufacturer->isDeleted) ? "Deleted" : ""; ?></td>
             <td>
                 <div class="btn-group">
-                    <a class="btn btn-warning" title="Edit Manufacturer" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $manufacturer->getId())); ?>"><i class="icon-pencil"></i></a>
-                    <a class="btn btn-danger" title="Delete Manufacturer" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $manufacturer->getId())); ?>"><i class="icon-trash"></i></a>
+                    <a class="btn btn-warning" title="Edit Manufacturer" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $manufacturer->id)); ?>"><i class="icon-pencil"></i></a>
+                    <a class="btn btn-danger" title="Delete Manufacturer" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $manufacturer->id)); ?>"><i class="icon-trash"></i></a>
                 </div>
             </td>
         </tr>

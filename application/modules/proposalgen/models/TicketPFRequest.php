@@ -1,488 +1,260 @@
 <?php
-
-/**
- * Class Proposalgen_Model_TicketPFRequest
- *
- * @author "John Sadler"
- */
-class Proposalgen_Model_TicketPFRequest extends Tangent_Model_Abstract
+class Proposalgen_Model_TicketPFRequest extends My_Model_Abstract
 {
-    protected $TicketId;
-    protected $UserId;
-    protected $DevicePfId;
-    protected $DevicePf;
-    protected $DeviceManufacturer;
-    protected $PrinterModel;
-    protected $LaunchDate;
-    protected $DevicePrice;
-    protected $ServiceCostPerPage;
-    protected $TonerConfig;
-    protected $IsCopier;
-    protected $IsFax;
-    protected $IsDuplex;
-    protected $IsScanner;
-    protected $PpmBlack;
-    protected $PpmColor;
-    protected $DutyCycle;
-    protected $WattsPowerNormal;
-    protected $WattsPowerIdle;
+    /**
+     * @var int
+     */
+    public $ticketId;
 
     /**
-     *
-     * @return the $TicketId
+     * @var int
      */
-    public function getTicketId ()
+    public $userId;
+
+    /**
+     * @var int
+     */
+    public $devicePfId;
+
+    /**
+     * @var string
+     */
+    public $deviceManufacturer;
+
+    /**
+     * @var string
+     */
+    public $printerModel;
+
+    /**
+     * @var string
+     */
+    public $launchDate;
+
+    /**
+     * @var float
+     */
+    public $devicePrice;
+
+    /**
+     * @var float
+     */
+    public $serviceCostPerPage;
+
+    /**
+     * @var int
+     */
+    public $tonerConfig;
+
+    /**
+     * @var bool
+     */
+    public $isCopier;
+
+    /**
+     * @var bool
+     */
+    public $isFax;
+
+    /**
+     * @var bool
+     */
+    public $isDuplex;
+
+    /**
+     * @var bool
+     */
+    public $isScanner;
+
+    /**
+     * @var int
+     */
+    public $ppmBlack;
+
+    /**
+     * @var int
+     */
+    public $ppmColor;
+
+    /**
+     * @var int
+     */
+    public $dutyCycle;
+
+    /**
+     * @var int
+     */
+    public $wattsPowerNormal;
+
+    /**
+     * @var int
+     */
+    public $wattsPowerIdle;
+
+    /**
+     * @var Proposalgen_Model_DevicePf
+     */
+    protected $_devicePf;
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
     {
-        if (! isset($this->TicketId))
+        if (is_array($params))
         {
-            
-            $this->TicketId = null;
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        return $this->TicketId;
-    }
 
-    /**
-     *
-     * @param field_type $TicketId            
-     */
-    public function setTicketId ($TicketId)
-    {
-        $this->TicketId = $TicketId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $UserId
-     */
-    public function getUserId ()
-    {
-        if (! isset($this->UserId))
+        if (isset($params->ticketId) && !is_null($params->ticketId))
         {
-            
-            $this->UserId = null;
+            $this->ticketId = $params->ticketId;
         }
-        return $this->UserId;
-    }
 
-    /**
-     *
-     * @param field_type $UserId            
-     */
-    public function setUserId ($UserId)
-    {
-        $this->UserId = $UserId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $DevicePfId
-     */
-    public function getDevicePfId ()
-    {
-        if (! isset($this->DevicePfId))
+        if (isset($params->userId) && !is_null($params->userId))
         {
-            
-            $this->DevicePfId = null;
+            $this->userId = $params->userId;
         }
-        return $this->DevicePfId;
+
+        if (isset($params->devicePfId) && !is_null($params->devicePfId))
+        {
+            $this->devicePfId = $params->devicePfId;
+        }
+
+        if (isset($params->deviceManufacturer) && !is_null($params->deviceManufacturer))
+        {
+            $this->deviceManufacturer = $params->deviceManufacturer;
+        }
+
+        if (isset($params->printerModel) && !is_null($params->printerModel))
+        {
+            $this->printerModel = $params->printerModel;
+        }
+
+        if (isset($params->launchDate) && !is_null($params->launchDate))
+        {
+            $this->launchDate = $params->launchDate;
+        }
+
+        if (isset($params->devicePrice) && !is_null($params->devicePrice))
+        {
+            $this->devicePrice = $params->devicePrice;
+        }
+
+        if (isset($params->serviceCostPerPage) && !is_null($params->serviceCostPerPage))
+        {
+            $this->serviceCostPerPage = $params->serviceCostPerPage;
+        }
+
+        if (isset($params->tonerConfig) && !is_null($params->tonerConfig))
+        {
+            $this->tonerConfig = $params->tonerConfig;
+        }
+
+        if (isset($params->isCopier) && !is_null($params->isCopier))
+        {
+            $this->isCopier = $params->isCopier;
+        }
+
+        if (isset($params->isFax) && !is_null($params->isFax))
+        {
+            $this->isFax = $params->isFax;
+        }
+
+        if (isset($params->isDuplex) && !is_null($params->isDuplex))
+        {
+            $this->isDuplex = $params->isDuplex;
+        }
+
+        if (isset($params->isScanner) && !is_null($params->isScanner))
+        {
+            $this->isScanner = $params->isScanner;
+        }
+
+        if (isset($params->ppmBlack) && !is_null($params->ppmBlack))
+        {
+            $this->ppmBlack = $params->ppmBlack;
+        }
+
+        if (isset($params->ppmColor) && !is_null($params->ppmColor))
+        {
+            $this->ppmColor = $params->ppmColor;
+        }
+
+        if (isset($params->dutyCycle) && !is_null($params->dutyCycle))
+        {
+            $this->dutyCycle = $params->dutyCycle;
+        }
+
+        if (isset($params->wattsPowerNormal) && !is_null($params->wattsPowerNormal))
+        {
+            $this->wattsPowerNormal = $params->wattsPowerNormal;
+        }
+
+        if (isset($params->wattsPowerIdle) && !is_null($params->wattsPowerIdle))
+        {
+            $this->wattsPowerIdle = $params->wattsPowerIdle;
+        }
     }
 
     /**
-     *
-     * @param field_type $DevicePfId            
+     * @return array
      */
-    public function setDevicePfId ($DevicePfId)
+    public function toArray ()
     {
-        $this->DevicePfId = $DevicePfId;
-        return $this;
+        return array(
+            "ticketId"           => $this->ticketId,
+            "userId"             => $this->userId,
+            "devicePfId"         => $this->devicePfId,
+            "deviceManufacturer" => $this->deviceManufacturer,
+            "printerModel"       => $this->printerModel,
+            "launchDate"         => $this->launchDate,
+            "devicePrice"        => $this->devicePrice,
+            "serviceCostPerPage" => $this->serviceCostPerPage,
+            "tonerConfig"        => $this->tonerConfig,
+            "isCopier"           => $this->isCopier,
+            "isFax"              => $this->isFax,
+            "isDuplex"           => $this->isDuplex,
+            "isScanner"          => $this->isScanner,
+            "ppmBlack"           => $this->ppmBlack,
+            "ppmColor"           => $this->ppmColor,
+            "dutyCycle"          => $this->dutyCycle,
+            "wattsPowerNormal"   => $this->wattsPowerNormal,
+            "wattsPowerIdle"     => $this->wattsPowerIdle,
+        );
     }
 
     /**
+     * Gets the device pf
      *
      * @return Proposalgen_Model_DevicePf
      */
     public function getDevicePf ()
     {
-        if (! isset($this->DevicePf))
+        if (!isset($this->_devicePf))
         {
-            $id = $this->getDevicePfId();
+            $id = $this->devicePfId;
             if (isset($id))
             {
-                $this->DevicePf = Proposalgen_Model_Mapper_DevicePf::getInstance()->find($id);
+                $this->_devicePf = Proposalgen_Model_Mapper_DevicePf::getInstance()->find($id);
             }
         }
-        return $this->DevicePf;
+
+        return $this->_devicePf;
     }
 
     /**
+     * Sets the device pf
      *
-     * @param field_type $DevicePf            
+     * @param Proposalgen_Model_DevicePf $DevicePf
+     *
+     * @return Proposalgen_Model_TicketPFRequest
      */
     public function setDevicePf ($DevicePf)
     {
-        $this->DevicePf = $DevicePf;
+        $this->_devicePf = $DevicePf;
+
         return $this;
     }
 
-    /**
-     *
-     * @return the $DeviceManufacturer
-     */
-    public function getDeviceManufacturer ()
-    {
-        if (! isset($this->DeviceManufacturer))
-        {
-            
-            $this->DeviceManufacturer = null;
-        }
-        return $this->DeviceManufacturer;
-    }
-
-    /**
-     *
-     * @param field_type $DeviceManufacturer            
-     */
-    public function setDeviceManufacturer ($DeviceManufacturer)
-    {
-        $this->DeviceManufacturer = $DeviceManufacturer;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $PrinterModel
-     */
-    public function getPrinterModel ()
-    {
-        if (! isset($this->PrinterModel))
-        {
-            
-            $this->PrinterModel = null;
-        }
-        return $this->PrinterModel;
-    }
-
-    /**
-     *
-     * @param field_type $PrinterModel            
-     */
-    public function setPrinterModel ($PrinterModel)
-    {
-        $this->PrinterModel = $PrinterModel;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $LaunchDate
-     */
-    public function getLaunchDate ()
-    {
-        if (! isset($this->LaunchDate))
-        {
-            
-            $this->LaunchDate = null;
-        }
-        return $this->LaunchDate;
-    }
-
-    /**
-     *
-     * @param field_type $LaunchDate            
-     */
-    public function setLaunchDate ($LaunchDate)
-    {
-        $this->LaunchDate = $LaunchDate;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $DevicePrice
-     */
-    public function getDevicePrice ()
-    {
-        if (! isset($this->DevicePrice))
-        {
-            
-            $this->DevicePrice = null;
-        }
-        return $this->DevicePrice;
-    }
-
-    /**
-     *
-     * @param field_type $DevicePrice            
-     */
-    public function setDevicePrice ($DevicePrice)
-    {
-        $this->DevicePrice = $DevicePrice;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $TonerConfig
-     */
-    public function getTonerConfig ()
-    {
-        if (! isset($this->TonerConfig))
-        {
-            
-            $this->TonerConfig = null;
-        }
-        return $this->TonerConfig;
-    }
-
-    /**
-     *
-     * @param field_type $TonerConfig            
-     */
-    public function setTonerConfig ($TonerConfig)
-    {
-        $this->TonerConfig = $TonerConfig;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $IsCopier
-     */
-    public function getIsCopier ()
-    {
-        if (! isset($this->IsCopier))
-        {
-            
-            $this->IsCopier = null;
-        }
-        return $this->IsCopier;
-    }
-
-    /**
-     *
-     * @param field_type $IsCopier            
-     */
-    public function setIsCopier ($IsCopier)
-    {
-        $this->IsCopier = $IsCopier;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $IsFax
-     */
-    public function getIsFax ()
-    {
-        if (! isset($this->IsFax))
-        {
-            
-            $this->IsFax = null;
-        }
-        return $this->IsFax;
-    }
-
-    /**
-     *
-     * @param field_type $IsFax            
-     */
-    public function setIsFax ($IsFax)
-    {
-        $this->IsFax = $IsFax;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $IsDuplex
-     */
-    public function getIsDuplex ()
-    {
-        if (! isset($this->IsDuplex))
-        {
-            
-            $this->IsDuplex = null;
-        }
-        return $this->IsDuplex;
-    }
-
-    /**
-     *
-     * @param field_type $IsDuplex            
-     */
-    public function setIsDuplex ($IsDuplex)
-    {
-        $this->IsDuplex = $IsDuplex;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $IsScanner
-     */
-    public function getIsScanner ()
-    {
-        if (! isset($this->IsScanner))
-        {
-            
-            $this->IsScanner = null;
-        }
-        return $this->IsScanner;
-    }
-
-    /**
-     *
-     * @param field_type $IsScanner            
-     */
-    public function setIsScanner ($IsScanner)
-    {
-        $this->IsScanner = $IsScanner;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $PpmBlack
-     */
-    public function getPpmBlack ()
-    {
-        if (! isset($this->PpmBlack))
-        {
-            
-            $this->PpmBlack = null;
-        }
-        return $this->PpmBlack;
-    }
-
-    /**
-     *
-     * @param field_type $PpmBlack            
-     */
-    public function setPpmBlack ($PpmBlack)
-    {
-        $this->PpmBlack = $PpmBlack;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $PpmColor
-     */
-    public function getPpmColor ()
-    {
-        if (! isset($this->PpmColor))
-        {
-            
-            $this->PpmColor = null;
-        }
-        return $this->PpmColor;
-    }
-
-    /**
-     *
-     * @param field_type $PpmColor            
-     */
-    public function setPpmColor ($PpmColor)
-    {
-        $this->PpmColor = $PpmColor;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $DutyCycle
-     */
-    public function getDutyCycle ()
-    {
-        if (! isset($this->DutyCycle))
-        {
-            
-            $this->DutyCycle = null;
-        }
-        return $this->DutyCycle;
-    }
-
-    /**
-     *
-     * @param field_type $DutyCycle            
-     */
-    public function setDutyCycle ($DutyCycle)
-    {
-        $this->DutyCycle = $DutyCycle;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $WattsPowerNormal
-     */
-    public function getWattsPowerNormal ()
-    {
-        if (! isset($this->WattsPowerNormal))
-        {
-            
-            $this->WattsPowerNormal = null;
-        }
-        return $this->WattsPowerNormal;
-    }
-
-    /**
-     *
-     * @param field_type $WattsPowerNormal            
-     */
-    public function setWattsPowerNormal ($WattsPowerNormal)
-    {
-        $this->WattsPowerNormal = $WattsPowerNormal;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $WattsPowerIdle
-     */
-    public function getWattsPowerIdle ()
-    {
-        if (! isset($this->WattsPowerIdle))
-        {
-            
-            $this->WattsPowerIdle = null;
-        }
-        return $this->WattsPowerIdle;
-    }
-
-    /**
-     *
-     * @param field_type $WattsPowerIdle            
-     */
-    public function setWattsPowerIdle ($WattsPowerIdle)
-    {
-        $this->WattsPowerIdle = $WattsPowerIdle;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $ServiceCostPerPage
-     */
-    public function getServiceCostPerPage ()
-    {
-        if (! isset($this->ServiceCostPerPage))
-        {
-            
-            $this->ServiceCostPerPage = null;
-        }
-        return $this->ServiceCostPerPage;
-    }
-
-    /**
-     *
-     * @param field_type $ServiceCostPerPage            
-     */
-    public function setServiceCostPerPage ($ServiceCostPerPage)
-    {
-        $this->ServiceCostPerPage = $ServiceCostPerPage;
-        return $this;
-    }
 }

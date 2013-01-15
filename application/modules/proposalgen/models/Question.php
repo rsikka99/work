@@ -1,135 +1,78 @@
 <?php
-
-/**
- * Class Proposalgen_Model_Question
- *
- * @author "Lee Robert"
- */
-class Proposalgen_Model_Question extends Tangent_Model_Abstract
+class Proposalgen_Model_Question extends My_Model_Abstract
 {
-    protected $QuestionId;
-    protected $QuestionDescription;
-    protected $DateAnswer;
-    protected $NumericAnswer;
-    protected $TextualAnswer;
+    /**
+     * @var int
+     */
+    public $questionId;
 
     /**
-     *
-     * @return the $QuestionId
+     * @var string
      */
-    public function getQuestionId ()
+    public $questionDescription;
+
+    /**
+     * @var string
+     */
+    public $dateAnswer;
+
+    /**
+     * @var float
+     */
+    public $numericAnswer;
+
+    /**
+     * @var string
+     */
+    public $textualAnswer;
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
     {
-        if (! isset($this->QuestionId))
+        if (is_array($params))
         {
-            
-            $this->QuestionId = null;
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        return $this->QuestionId;
-    }
 
-    /**
-     *
-     * @param field_type $QuestionId            
-     */
-    public function setQuestionId ($QuestionId)
-    {
-        $this->QuestionId = $QuestionId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $QuestionDescription
-     */
-    public function getQuestionDescription ()
-    {
-        if (! isset($this->QuestionDescription))
+        if (isset($params->questionId) && !is_null($params->questionId))
         {
-            
-            $this->QuestionDescription = null;
+            $this->questionId = $params->questionId;
         }
-        return $this->QuestionDescription;
-    }
 
-    /**
-     *
-     * @param field_type $QuestionDescription            
-     */
-    public function setQuestionDescription ($QuestionDescription)
-    {
-        $this->QuestionDescription = $QuestionDescription;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $DateAnswer
-     */
-    public function getDateAnswer ()
-    {
-        if (! isset($this->DateAnswer))
+        if (isset($params->questionDescription) && !is_null($params->questionDescription))
         {
-            
-            $this->DateAnswer = null;
+            $this->questionDescription = $params->questionDescription;
         }
-        return $this->DateAnswer;
-    }
 
-    /**
-     *
-     * @param field_type $DateAnswer            
-     */
-    public function setDateAnswer ($DateAnswer)
-    {
-        $this->DateAnswer = $DateAnswer;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $NumericAnswer
-     */
-    public function getNumericAnswer ()
-    {
-        if (! isset($this->NumericAnswer))
+        if (isset($params->dateAnswer) && !is_null($params->dateAnswer))
         {
-            
-            $this->NumericAnswer = null;
+            $this->dateAnswer = $params->dateAnswer;
         }
-        return $this->NumericAnswer;
-    }
 
-    /**
-     *
-     * @param field_type $NumericAnswer            
-     */
-    public function setNumericAnswer ($NumericAnswer)
-    {
-        $this->NumericAnswer = $NumericAnswer;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $TextualAnswer
-     */
-    public function getTextualAnswer ()
-    {
-        if (! isset($this->TextualAnswer))
+        if (isset($params->numericAnswer) && !is_null($params->numericAnswer))
         {
-            
-            $this->TextualAnswer = null;
+            $this->numericAnswer = $params->numericAnswer;
         }
-        return $this->TextualAnswer;
+
+        if (isset($params->textualAnswer) && !is_null($params->textualAnswer))
+        {
+            $this->textualAnswer = $params->textualAnswer;
+        }
     }
 
     /**
-     *
-     * @param field_type $TextualAnswer            
+     * @return array
      */
-    public function setTextualAnswer ($TextualAnswer)
+    public function toArray ()
     {
-        $this->TextualAnswer = $TextualAnswer;
-        return $this;
+        return array(
+            "questionId"          => $this->questionId,
+            "questionDescription" => $this->questionDescription,
+            "dateAnswer"          => $this->dateAnswer,
+            "numericAnswer"       => $this->numericAnswer,
+            "textualAnswer"       => $this->textualAnswer,
+        );
     }
 }

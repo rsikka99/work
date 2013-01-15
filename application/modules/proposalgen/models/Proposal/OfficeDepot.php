@@ -390,7 +390,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     {
         $reportQuestions = $this->getReportQuestions();
 
-        return $reportQuestions [30]->getTextualAnswer();
+        return $reportQuestions [30]->textualAnswer;
     }
 
     /**
@@ -448,7 +448,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
 
     /**
      *
-     * @return the $ReportQuestions
+     * @return Proposalgen_Model_Question[]
      */
     public function getReportQuestions ()
     {
@@ -1247,7 +1247,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         if (!isset($this->PageCoverageBlackAndWhite))
         {
             $questions                       = $this->getReportQuestions();
-            $this->PageCoverageBlackAndWhite = $questions [21]->NumericAnswer;
+            $this->PageCoverageBlackAndWhite = $questions [21]->numericAnswer;
         }
 
         return $this->PageCoverageBlackAndWhite;
@@ -1273,7 +1273,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         if (!isset($this->PageCoverageColor))
         {
             $questions               = $this->getReportQuestions();
-            $this->PageCoverageColor = $questions [22]->NumericAnswer;
+            $this->PageCoverageColor = $questions [22]->numericAnswer;
         }
 
         return $this->PageCoverageColor;
@@ -2326,9 +2326,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         if (!isset($this->NumberOfRepairs))
         {
             $reportQuestions = $this->getReportQuestions();
-            if (strcasecmp($reportQuestions [24]->getTextualAnswer(), "I know the exact amount") === 0)
+            if (strcasecmp($reportQuestions [24]->textualAnswer, "I know the exact amount") === 0)
             {
-                $this->NumberOfRepairs = $reportQuestions [24]->NumericAnswer;
+                $this->NumberOfRepairs = $reportQuestions [24]->numericAnswer;
             }
             else
             {
@@ -2360,7 +2360,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         if (!isset($this->AverageTimeBetweenBreakdownAndFix))
         {
             $reportQuestions                         = $this->getReportQuestions();
-            $this->AverageTimeBetweenBreakdownAndFix = $reportQuestions [20]->getNumericAnswer();
+            $this->AverageTimeBetweenBreakdownAndFix = $reportQuestions [20]->numericAnswer;
         }
 
         return $this->AverageTimeBetweenBreakdownAndFix;
@@ -2414,7 +2414,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         if (!isset($this->NumberOfVendors))
         {
             $reportQuestions       = $this->getReportQuestions();
-            $this->NumberOfVendors = $reportQuestions [16]->getNumericAnswer();
+            $this->NumberOfVendors = $reportQuestions [16]->numericAnswer;
         }
 
         return $this->NumberOfVendors;
@@ -2490,7 +2490,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         if (!isset($this->PercentPrintingDoneOnInkjet))
         {
             $reportQuestions                   = $this->getReportQuestions();
-            $this->PercentPrintingDoneOnInkjet = $reportQuestions [23]->getNumericAnswer();
+            $this->PercentPrintingDoneOnInkjet = $reportQuestions [23]->numericAnswer;
         }
 
         return $this->PercentPrintingDoneOnInkjet;
@@ -2628,9 +2628,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         if (!isset($this->WeeklyITHours))
         {
             $reportQuestions = $this->getReportQuestions();
-            if (strcasecmp($reportQuestions [18]->getTextualAnswer(), "I know the exact amount") === 0)
+            if (strcasecmp($reportQuestions [18]->textualAnswer, "I know the exact amount") === 0)
             {
-                $this->WeeklyITHours = $reportQuestions [18]->getNumericAnswer();
+                $this->WeeklyITHours = $reportQuestions [18]->numericAnswer;
             }
             else
             {
@@ -2686,7 +2686,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         if (!isset($this->AverageITRate))
         {
             $reportQuestions     = $this->getReportQuestions();
-            $this->AverageITRate = $reportQuestions [15]->getNumericAnswer();
+            $this->AverageITRate = $reportQuestions [15]->numericAnswer;
         }
 
         return $this->AverageITRate;
@@ -2745,7 +2745,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             $pageCounts      = $this->getPageCounts();
             $reportQuestions = $this->getReportQuestions();
             $companyName     = $this->getReport()->getCustomerCompanyName();
-            $employeeCount   = $reportQuestions [5]->NumericAnswer;
+            $employeeCount   = $reportQuestions [5]->numericAnswer;
 
             // Formatting variables
             $numberValueMarker                          = "N *sz0";
@@ -3244,7 +3244,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         if (!isset($this->CostOfExecutingSuppliesOrders))
         {
             $reportQuestions                     = $this->getReportQuestions();
-            $this->CostOfExecutingSuppliesOrders = $reportQuestions [14]->getNumericAnswer() * $this->getNumberOfAnnualInkTonerOrders();
+            $this->CostOfExecutingSuppliesOrders = $reportQuestions [14]->numericAnswer * $this->getNumberOfAnnualInkTonerOrders();
         }
 
         return $this->CostOfExecutingSuppliesOrders;
@@ -3295,9 +3295,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         if (!isset($this->AnnualCostOfOutSourcing))
         {
             $reportQuestions = $this->getReportQuestions();
-            if (strcasecmp($reportQuestions [12]->getTextualAnswer(), "I know the exact amount") === 0)
+            if (strcasecmp($reportQuestions [12]->textualAnswer, "I know the exact amount") === 0)
             {
-                $this->AnnualCostOfOutSourcing = $reportQuestions [12]->getNumericAnswer();
+                $this->AnnualCostOfOutSourcing = $reportQuestions [12]->numericAnswer;
             }
             else
             {
@@ -3510,7 +3510,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         if (!isset($this->InternalAdminCost))
         {
             $reportQuestions         = $this->getReportQuestions();
-            $this->InternalAdminCost = $reportQuestions [14]->getNumericAnswer() * 12;
+            $this->InternalAdminCost = $reportQuestions [14]->numericAnswer * 12;
         }
 
         return $this->InternalAdminCost;
@@ -3586,7 +3586,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         if (!isset($this->UniqueVendorCount))
         {
             $questions               = $this->getReportQuestions();
-            $this->UniqueVendorCount = $questions [16]->NumericAnswer;
+            $this->UniqueVendorCount = $questions [16]->numericAnswer;
         }
 
         return $this->UniqueVendorCount;
@@ -3612,7 +3612,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         if (!isset($this->NumberOfOrdersPerMonth))
         {
             $reportQuestions              = $this->getReportQuestions();
-            $this->NumberOfOrdersPerMonth = $reportQuestions [17]->NumericAnswer;
+            $this->NumberOfOrdersPerMonth = $reportQuestions [17]->numericAnswer;
         }
 
         return $this->NumberOfOrdersPerMonth;
@@ -3638,7 +3638,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         if (!isset($this->EmployeeCount))
         {
             $questions           = $this->getReportQuestions();
-            $this->EmployeeCount = $questions [5]->NumericAnswer;
+            $this->EmployeeCount = $questions [5]->numericAnswer;
         }
 
         return $this->EmployeeCount;
@@ -4323,7 +4323,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         if (!isset($this->CostOfExecutingSuppliesOrder))
         {
             $reportQuestions                    = $this->getReportQuestions();
-            $this->CostOfExecutingSuppliesOrder = $reportQuestions [14]->getNumericAnswer();
+            $this->CostOfExecutingSuppliesOrder = $reportQuestions [14]->numericAnswer;
         }
 
         return $this->CostOfExecutingSuppliesOrder;

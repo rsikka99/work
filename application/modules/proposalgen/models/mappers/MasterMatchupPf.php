@@ -31,7 +31,8 @@ class Proposalgen_Model_Mapper_MasterMatchupPf extends Tangent_Model_Mapper_Abst
         try
         {
             $object = new Proposalgen_Model_MasterMatchupPf();
-            $object->setMasterDeviceId($row->master_device_id)->setDevicesPfId($row->devices_pf_id);
+            $object->masterDeviceId = $row->master_device_id;
+            $object->devicesPfId = $row->devices_pf_id;
         }
         catch ( Exception $e )
         {
@@ -45,8 +46,8 @@ class Proposalgen_Model_Mapper_MasterMatchupPf extends Tangent_Model_Mapper_Abst
         $primaryKey = false;
         try
         {
-            $data ["master_device_id"] = $object->getMasterDeviceId();
-            $data ["devices_pf_id"] = $object->getDevicesPfId();
+            $data ["master_device_id"] = $object->masterDeviceId;
+            $data ["devices_pf_id"] = $object->devicesPfId;
             
             $primaryKey = $this->saveRow($data);
         }

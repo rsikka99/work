@@ -1,60 +1,47 @@
 <?php
-
-/**
- * Class Proposalgen_Model_QuestionSet
- *
- * @author "Lee Robert"
- */
 class Proposalgen_Model_QuestionSet extends Tangent_Model_Abstract
 {
-    protected $QuestionId;
-    protected $QuestionSetName;
+    /**
+     * @var int
+     */
+    public $QuestionId;
 
     /**
-     *
-     * @return the $QuestionId
+     * @var string
      */
-    public function getQuestionId ()
+    public $QuestionSetName;
+
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
     {
-        if (! isset($this->QuestionId))
+        if (is_array($params))
         {
-            
-            $this->QuestionId = null;
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        return $this->QuestionId;
-    }
 
-    /**
-     *
-     * @param field_type $QuestionId            
-     */
-    public function setQuestionId ($QuestionId)
-    {
-        $this->QuestionId = $QuestionId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $QuestionSetName
-     */
-    public function getQuestionSetName ()
-    {
-        if (! isset($this->QuestionSetName))
+        if (isset($params->QuestionId) && !is_null($params->QuestionId))
         {
-            
-            $this->QuestionSetName = null;
+            $this->QuestionId = $params->QuestionId;
         }
-        return $this->QuestionSetName;
+
+        if (isset($params->QuestionSetName) && !is_null($params->QuestionSetName))
+        {
+            $this->QuestionSetName = $params->QuestionSetName;
+        }
+
     }
 
     /**
-     *
-     * @param field_type $QuestionSetName            
+     * @return array
      */
-    public function setQuestionSetName ($QuestionSetName)
+    public function toArray ()
     {
-        $this->QuestionSetName = $QuestionSetName;
-        return $this;
+        return array(
+            "QuestionId"      => $this->QuestionId,
+            "QuestionSetName" => $this->QuestionSetName,
+        );
     }
 }

@@ -1,172 +1,98 @@
 <?php
-
-/**
- * Class Proposalgen_Model_Meter
- *
- * @author "Lee Robert"
- */
 class Proposalgen_Model_Meter extends Tangent_Model_Abstract
 {
-    const METER_TYPE_LIFE = 'LIFE';
-    const METER_TYPE_COLOR = 'COLOR';
-    const METER_TYPE_COPY_COLOR = 'COPY COLOR';
+    const METER_TYPE_LIFE        = 'LIFE';
+    const METER_TYPE_COLOR       = 'COLOR';
+    const METER_TYPE_COPY_COLOR  = 'COPY COLOR';
     const METER_TYPE_PRINT_COLOR = 'PRINT COLOR';
-    const METER_TYPE_BLACK = 'BLACK';
-    const METER_TYPE_COPY_BLACK = 'COPY BLACK';
+    const METER_TYPE_BLACK       = 'BLACK';
+    const METER_TYPE_COPY_BLACK  = 'COPY BLACK';
     const METER_TYPE_PRINT_BLACK = 'PRINT BLACK';
-    const METER_TYPE_SCAN = 'SCAN';
-    const METER_TYPE_FAX = 'FAX';
-    
+    const METER_TYPE_SCAN        = 'SCAN';
+    const METER_TYPE_FAX         = 'FAX';
+
     // Database Fields
-    protected $MeterId;
-    protected $DeviceInstanceId;
-    protected $MeterType;
-    protected $StartMeter;
-    protected $EndMeter;
-    
+    /**
+     * @var int
+     */
+    public $meterId;
+
+    /**
+     * @var int
+     */
+    public $deviceInstanceId;
+
+    /**
+     * @var int
+     */
+    public $meterType;
+
+    /**
+     * @var int
+     */
+    public $startMeter;
+
+    /**
+     * @var int
+     */
+    public $endMeter;
+
     // Extra Fields
-    protected $GeneratedBySystem;
+    /**
+     * When set to true it means it did not come from the database
+     *
+     * @var boolean
+     */
+    public $generatedBySystem = false;
 
     /**
-     *
-     * @return the $MeterId
+     * @param array $params An array of data to populate the model with
      */
-    public function getMeterId ()
+    public function populate ($params)
     {
-        if (! isset($this->MeterId))
+        if (is_array($params))
         {
-            
-            $this->MeterId = null;
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        return $this->MeterId;
-    }
 
-    /**
-     *
-     * @param field_type $MeterId            
-     */
-    public function setMeterId ($MeterId)
-    {
-        $this->MeterId = $MeterId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $DeviceInstanceId
-     */
-    public function getDeviceInstanceId ()
-    {
-        if (! isset($this->DeviceInstanceId))
+        if (isset($params->meterId) && !is_null($params->meterId))
         {
-            
-            $this->DeviceInstanceId = null;
+            $this->meterId = $params->meterId;
         }
-        return $this->DeviceInstanceId;
-    }
 
-    /**
-     *
-     * @param field_type $DeviceInstanceId            
-     */
-    public function setDeviceInstanceId ($DeviceInstanceId)
-    {
-        $this->DeviceInstanceId = $DeviceInstanceId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $MeterType
-     */
-    public function getMeterType ()
-    {
-        if (! isset($this->MeterType))
+        if (isset($params->deviceInstanceId) && !is_null($params->deviceInstanceId))
         {
-            
-            $this->MeterType = null;
+            $this->deviceInstanceId = $params->deviceInstanceId;
         }
-        return $this->MeterType;
-    }
 
-    /**
-     *
-     * @param field_type $MeterType            
-     */
-    public function setMeterType ($MeterType)
-    {
-        $this->MeterType = $MeterType;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $StartMeter
-     */
-    public function getStartMeter ()
-    {
-        if (! isset($this->StartMeter))
+        if (isset($params->meterType) && !is_null($params->meterType))
         {
-            
-            $this->StartMeter = null;
+            $this->meterType = $params->meterType;
         }
-        return $this->StartMeter;
-    }
 
-    /**
-     *
-     * @param field_type $StartMeter            
-     */
-    public function setStartMeter ($StartMeter)
-    {
-        $this->StartMeter = $StartMeter;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $EndMeter
-     */
-    public function getEndMeter ()
-    {
-        if (! isset($this->EndMeter))
+        if (isset($params->startMeter) && !is_null($params->startMeter))
         {
-            
-            $this->EndMeter = null;
+            $this->startMeter = $params->startMeter;
         }
-        return $this->EndMeter;
-    }
 
-    /**
-     *
-     * @param field_type $EndMeter            
-     */
-    public function setEndMeter ($EndMeter)
-    {
-        $this->EndMeter = $EndMeter;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $GeneratedBySystem
-     */
-    public function getGeneratedBySystem ()
-    {
-        if (! isset($this->GeneratedBySystem))
+        if (isset($params->endMeter) && !is_null($params->endMeter))
         {
-            $this->GeneratedBySystem = false;
+            $this->endMeter = $params->endMeter;
         }
-        return $this->GeneratedBySystem;
+
     }
 
     /**
-     *
-     * @param field_type $GeneratedBySystem            
+     * @return array
      */
-    public function setGeneratedBySystem ($GeneratedBySystem)
+    public function toArray ()
     {
-        $this->GeneratedBySystem = $GeneratedBySystem;
-        return $this;
+        return array(
+            "meterId"          => $this->meterId,
+            "deviceInstanceId" => $this->deviceInstanceId,
+            "meterType"        => $this->meterType,
+            "startMeter"       => $this->startMeter,
+            "endMeter"         => $this->endMeter,
+        );
     }
 }

@@ -1,164 +1,119 @@
 <?php
-
-/**
- * Class Proposalgen_Model_TicketComment
- *
- * @author "Kevin Jervis"
- */
-class Proposalgen_Model_TicketComment extends Tangent_Model_Abstract
+class Proposalgen_Model_TicketComment extends My_Model_Abstract
 {
-    protected $CommentId;
-    protected $TicketId;
-    protected $UserId;
-    protected $CommentText;
-    protected $CommentDate;
-    protected $User;
+    /**
+     * @var int
+     */
+    public $commentId;
 
     /**
-     *
-     * @return the $CommentId
+     * @var int
      */
-    public function getCommentId ()
+    public $ticketId;
+
+    /**
+     * @var int
+     */
+    public $userId;
+
+    /**
+     * @var string
+     */
+    public $commentText;
+
+    /**
+     * @var string
+     */
+    public $commentDate;
+
+    /**
+     * @var Application_Model_User
+     */
+    protected $_user;
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
     {
-        if (! isset($this->CommentId))
+        if (is_array($params))
         {
-            
-            $this->CommentId = null;
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        return $this->CommentId;
-    }
 
-    /**
-     *
-     * @param field_type $CommentId            
-     */
-    public function setCommentId ($CommentId)
-    {
-        $this->CommentId = $CommentId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $TicketId
-     */
-    public function getTicketId ()
-    {
-        if (! isset($this->TicketId))
+        if (isset($params->commentId) && !is_null($params->commentId))
         {
-            
-            $this->TicketId = null;
+            $this->commentId = $params->commentId;
         }
-        return $this->TicketId;
-    }
 
-    /**
-     *
-     * @param field_type $TicketId            
-     */
-    public function setTicketId ($TicketId)
-    {
-        $this->TicketId = $TicketId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $UserId
-     */
-    public function getUserId ()
-    {
-        if (! isset($this->UserId))
+        if (isset($params->ticketId) && !is_null($params->ticketId))
         {
-            
-            $this->UserId = null;
+            $this->ticketId = $params->ticketId;
         }
-        return $this->UserId;
-    }
 
-    /**
-     *
-     * @param field_type $UserId            
-     */
-    public function setUserId ($UserId)
-    {
-        $this->UserId = $UserId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $CommentDate
-     */
-    public function getCommentDate ()
-    {
-        if (! isset($this->CommentDate))
+        if (isset($params->userId) && !is_null($params->userId))
         {
-            
-            $this->CommentDate = null;
+            $this->userId = $params->userId;
         }
-        return $this->CommentDate;
-    }
 
-    /**
-     *
-     * @param field_type $CommentDate            
-     */
-    public function setCommentDate ($CommentDate)
-    {
-        $this->CommentDate = $CommentDate;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $CommentText
-     */
-    public function getCommentText ()
-    {
-        if (! isset($this->CommentText))
+        if (isset($params->commentText) && !is_null($params->commentText))
         {
-            
-            $this->CommentText = null;
+            $this->commentText = $params->commentText;
         }
-        return $this->CommentText;
+
+        if (isset($params->commentDate) && !is_null($params->commentDate))
+        {
+            $this->commentDate = $params->commentDate;
+        }
+
     }
 
     /**
-     *
-     * @param field_type $CommentText            
+     * @return array
      */
-    public function setCommentText ($CommentText)
+    public function toArray ()
     {
-        $this->CommentText = $CommentText;
-        return $this;
+        return array(
+            "commentId"   => $this->commentId,
+            "ticketId"    => $this->ticketId,
+            "userId"      => $this->userId,
+            "commentText" => $this->commentText,
+            "commentDate" => $this->commentDate,
+        );
     }
 
+
     /**
+     * Gets the user
      *
-     * @return the $User
+     * @return Application_Model_User
      */
     public function getUser ()
     {
-        if (! isset($this->User))
+        if (!isset($this->_user))
         {
-            $id = $this->getUserId();
+            $id = $this->userId;
             if (isset($id))
             {
 
-                $this->User = Application_Model_Mapper_User::getInstance()->find($id);
+                $this->_user = Application_Model_Mapper_User::getInstance()->find($id);
             }
         }
-        return $this->User;
+
+        return $this->_user;
     }
 
     /**
+     * Sets the user
      *
-     * @param field_type $User            
+     * @param $User
+     *
+     * @return Proposalgen_Model_TicketComment
      */
     public function setUser ($User)
     {
-        $this->User = $User;
+        $this->_user = $User;
+
         return $this;
     }
 }

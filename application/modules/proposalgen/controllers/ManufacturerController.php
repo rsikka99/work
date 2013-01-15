@@ -105,7 +105,7 @@ class Proposalgen_ManufacturerController extends Zend_Controller_Action
                             $manufacturerId = $mapper->insert($manufacturer);
                             
                             $this->_helper->flashMessenger(array (
-                                    'success' => "Manufacturer " . $this->view->escape($manufacturer->getFullname()) . " was added successfully." 
+                                    'success' => "Manufacturer " . $this->view->escape($manufacturer->fullname) . " was added successfully."
                             ));
                             
                             // Reset the form after everything is saved successfully
@@ -208,13 +208,13 @@ class Proposalgen_ManufacturerController extends Zend_Controller_Action
                         $mapper = new Proposalgen_Model_Mapper_Manufacturer();
                         $manufacturer = new Proposalgen_Model_Manufacturer();
                         $manufacturer->populate($values);
-                        $manufacturer->setId($manufacturerId);
+                        $manufacturer->id = $manufacturerId;
                         
                         // Save to the database with cascade insert turned on
                         $manufacturerId = $mapper->save($manufacturer, $manufacturerId);
                         
                         $this->_helper->flashMessenger(array (
-                                'success' => "Manufacturer '" . $this->view->escape($manufacturer->getFullname()) . "' was updated sucessfully." 
+                                'success' => "Manufacturer '" . $this->view->escape($manufacturer->fullname) . "' was updated sucessfully."
                         ));
                     }
                     else

@@ -51,7 +51,7 @@ class Admin_Form_Toner extends EasyBib_Form
         /* @var $manufacturer Proposalgen_Model_Manufacturer */
         foreach ( Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAllAvailableManufacturers() as $manufacturer )
         {
-            $manufacturers [$manufacturer->getId()] = $manufacturer->getFullname();
+            $manufacturers [$manufacturer->id] = $manufacturer->fullname;
         }
         
         $this->addElement('select', 'manufacturer_id', array (
