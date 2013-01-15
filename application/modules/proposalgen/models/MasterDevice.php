@@ -1269,7 +1269,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getFullDeviceName ()
     {
-        return "{$this->getManufacturer()->getDisplayName()} {$this->getPrinterModel()}";
+        return "{$this->getManufacturer()->displayname} {$this->getPrinterModel()}";
     }
 
     /**

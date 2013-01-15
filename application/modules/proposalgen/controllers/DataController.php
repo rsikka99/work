@@ -3549,9 +3549,9 @@ class Proposalgen_DataController extends Zend_Controller_Action
                         // find pf_device
                         $ticketpfrequestMapper = Proposalgen_Model_Mapper_TicketPFRequest::getInstance();
                         $ticketpfrequest = $ticketpfrequestMapper->find($ticket_id);
-                        $this->view->devices_pf_id = $ticketpfrequest->DevicePfId;
-                        $this->view->device_pf_name = $ticketpfrequest->DevicePf->PfDbManufacturer . ' ' . $ticketpfrequest->DevicePf->PfDbDeviceName;
-                        $this->view->user_suggested_name = $ticketpfrequest->DeviceManufacturer . ' ' . $ticketpfrequest->PrinterModel;
+                        $this->view->devices_pf_id = $ticketpfrequest->devicePfId;
+                        $this->view->device_pf_name = $ticketpfrequest->_devicePf->PfDbManufacturer . ' ' . $ticketpfrequest->_devicePf->PfDbDeviceName;
+                        $this->view->user_suggested_name = $ticketpfrequest->deviceManufacturer . ' ' . $ticketpfrequest->printerModel;
                         
                         // ticket exists, update ticket label
                         $form->getElement('request_support')->setLabel("View Support Ticket");

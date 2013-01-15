@@ -1,66 +1,60 @@
 <?php
-
-/**
- * Class Proposalgen_Model_PartType
- *
- * @author "Lee Robert"
- */
-class Proposalgen_Model_PartType extends Tangent_Model_Abstract
+class Proposalgen_Model_PartType extends My_Model_Abstract
 {
-    const OEM = 1;
+    const OEM  = 1;
     const COMP = 2;
-    static $PartTypeNames = array (
-            self::OEM => "OEM", 
-            self::COMP => "Compatible" 
+
+    /**
+     * An array of part type names with the id as the key
+     *
+     * @var string[]
+     */
+    static $PartTypeNames = array(
+        self::OEM  => "OEM",
+        self::COMP => "Compatible"
     );
-    protected $PartTypeId;
-    protected $TypeName;
 
     /**
-     *
-     * @return the $PartTypeId
+     * @var int
      */
-    public function getPartTypeId ()
+    public $partTypeId;
+
+    /**
+     * @var string
+     */
+    public $typeName;
+
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
     {
-        if (! isset($this->PartTypeId))
+        if (is_array($params))
         {
-            
-            $this->PartTypeId = null;
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        return $this->PartTypeId;
-    }
 
-    /**
-     *
-     * @param field_type $PartTypeId            
-     */
-    public function setPartTypeId ($PartTypeId)
-    {
-        $this->PartTypeId = $PartTypeId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $TypeName
-     */
-    public function getTypeName ()
-    {
-        if (! isset($this->TypeName))
+        if (isset($params->partTypeId) && !is_null($params->partTypeId))
         {
-            
-            $this->TypeName = null;
+            $this->partTypeId = $params->partTypeId;
         }
-        return $this->TypeName;
+
+        if (isset($params->typeName) && !is_null($params->typeName))
+        {
+            $this->typeName = $params->typeName;
+        }
+
     }
 
     /**
-     *
-     * @param field_type $TypeName            
+     * @return array
      */
-    public function setTypeName ($TypeName)
+    public function toArray ()
     {
-        $this->TypeName = $TypeName;
-        return $this;
+        return array(
+            "partTypeId" => $this->partTypeId,
+            "typeName"   => $this->typeName,
+        );
     }
 }

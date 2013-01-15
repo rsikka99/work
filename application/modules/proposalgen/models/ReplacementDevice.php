@@ -1,171 +1,133 @@
 <?php
-
-/**
- * Class Proposalgen_Model_ReplacementDevices
- *
- * @author "Kevin Jervis"
- */
-class Proposalgen_Model_ReplacementDevice extends Tangent_Model_Abstract
+class Proposalgen_Model_ReplacementDevice extends My_Model_Abstract
 {
-    const REPLACMENT_BW = 1;
-    const REPLACMENT_BWMFP = 2;
-    const REPLACMENT_COLOR = 3;
+    const REPLACMENT_BW       = 1;
+    const REPLACMENT_BWMFP    = 2;
+    const REPLACMENT_COLOR    = 3;
     const REPLACMENT_COLORMFP = 4;
-    public static $replacementTypes = array (
-            self::REPLACMENT_BW => 'BLACK & WHITE', 
-            self::REPLACMENT_BWMFP => 'BLACK & WHITE MFP', 
-            self::REPLACMENT_COLOR => 'COLOR', 
-            self::REPLACMENT_COLORMFP => 'COLOR MFP' 
+
+    /**
+     * An array of replacement type names with the id as the array key
+     *
+     * @var string[]
+     */
+    public static $replacementTypes = array(
+        self::REPLACMENT_BW       => 'BLACK & WHITE',
+        self::REPLACMENT_BWMFP    => 'BLACK & WHITE MFP',
+        self::REPLACMENT_COLOR    => 'COLOR',
+        self::REPLACMENT_COLORMFP => 'COLOR MFP'
     );
-    // Database Fields
-    protected $MasterDeviceId;
-    protected $ReplacementCategory;
-    protected $PrintSpeed;
-    protected $Resolution;
-    protected $MonthlyRate;
-    protected $MasterDevice;
 
     /**
-     *
-     * @return the $MasterDeviceId
+     * @var int
      */
-    public function getMasterDeviceId ()
+    public $masterDeviceId;
+
+    /**
+     * @var int
+     */
+    public $replacementCategory;
+
+    /**
+     * @var int
+     */
+    public $printSpeed;
+
+    /**
+     * @var int
+     */
+    public $resolution;
+
+    /**
+     * @var float
+     */
+    public $monthlyRate;
+
+    /**
+     * @var Proposalgen_Model_MasterDevice
+     */
+    protected $_masterDevice;
+
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
     {
-        if (! isset($this->MasterDeviceId))
+        if (is_array($params))
         {
-            
-            $this->MasterDeviceId = null;
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        return $this->MasterDeviceId;
-    }
 
-    /**
-     *
-     * @param field_type $MasterDeviceId            
-     */
-    public function setMasterDeviceId ($MasterDeviceId)
-    {
-        $this->MasterDeviceId = $MasterDeviceId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $ReplacementCategory
-     */
-    public function getReplacementCategory ()
-    {
-        if (! isset($this->ReplacementCategory))
+        if (isset($params->masterDeviceId) && !is_null($params->masterDeviceId))
         {
-            
-            $this->ReplacementCategory = null;
+            $this->masterDeviceId = $params->masterDeviceId;
         }
-        return $this->ReplacementCategory;
-    }
 
-    /**
-     *
-     * @param field_type $ReplacementCategory            
-     */
-    public function setReplacementCategory ($ReplacementCategory)
-    {
-        $this->ReplacementCategory = $ReplacementCategory;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $PrintSpeed
-     */
-    public function getPrintSpeed ()
-    {
-        if (! isset($this->PrintSpeed))
+        if (isset($params->replacementCategory) && !is_null($params->replacementCategory))
         {
-            
-            $this->PrintSpeed = null;
+            $this->replacementCategory = $params->replacementCategory;
         }
-        return $this->PrintSpeed;
-    }
 
-    /**
-     *
-     * @param field_type $PrintSpeed            
-     */
-    public function setPrintSpeed ($PrintSpeed)
-    {
-        $this->PrintSpeed = $PrintSpeed;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $Resolution
-     */
-    public function getResolution ()
-    {
-        if (! isset($this->Resolution))
+        if (isset($params->printSpeed) && !is_null($params->printSpeed))
         {
-            
-            $this->Resolution = null;
+            $this->printSpeed = $params->printSpeed;
         }
-        return $this->Resolution;
-    }
 
-    /**
-     *
-     * @param field_type $Resolution            
-     */
-    public function setResolution ($Resolution)
-    {
-        $this->Resolution = $Resolution;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $MonthlyRate
-     */
-    public function getMonthlyRate ()
-    {
-        if (! isset($this->MonthlyRate))
+        if (isset($params->resolution) && !is_null($params->resolution))
         {
-            
-            $this->MonthlyRate = null;
+            $this->resolution = $params->resolution;
         }
-        return $this->MonthlyRate;
+
+        if (isset($params->monthlyRate) && !is_null($params->monthlyRate))
+        {
+            $this->monthlyRate = $params->monthlyRate;
+        }
+
+        if (isset($params->masterDevice) && !is_null($params->masterDevice))
+        {
+            $this->masterDevice = $params->masterDevice;
+        }
+
     }
 
     /**
-     *
-     * @param field_type $MonthlyRate            
+     * @return array
      */
-    public function setMonthlyRate ($MonthlyRate)
+    public function toArray ()
     {
-        $this->MonthlyRate = $MonthlyRate;
-        return $this;
+        return array(
+            "masterDeviceId"      => $this->masterDeviceId,
+            "replacementCategory" => $this->replacementCategory,
+            "printSpeed"          => $this->printSpeed,
+            "resolution"          => $this->resolution,
+            "monthlyRate"         => $this->monthlyRate,
+            "masterDevice"        => $this->masterDevice,
+        );
     }
 
     /**
-     *
-     * @return the $MasterDevice
+     * @return Proposalgen_Model_MasterDevice|void
      */
     public function getMasterDevice ()
     {
-        if (! isset($this->MasterDevice))
+        if (!isset($this->_masterDevice))
         {
-            $masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
-            $this->MasterDevice = $masterDeviceMapper->find($this->getMasterDeviceId());
+            $this->_masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($this->masterDeviceId);
         }
-        return $this->MasterDevice;
+
+        return $this->_masterDevice;
     }
 
     /**
+     * @param $MasterDevice
      *
-     * @param field_type $MasterDevice            
+     * @return Proposalgen_Model_ReplacementDevice
      */
     public function setMasterDevice ($MasterDevice)
     {
-        $this->MasterDevice = $MasterDevice;
+        $this->_masterDevice = $MasterDevice;
+
         return $this;
     }
 }

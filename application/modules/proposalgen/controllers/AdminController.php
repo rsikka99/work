@@ -4610,10 +4610,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $formData = $this->_request->getPost();
 
             // get company
-            if (isset($formData ['company_filter']))
-            {
-                $company = $formData ['company_filter'];
-            }
+            //if (isset($formData ['company_filter']))
+           //{
+            //    $company = $formData ['company_filter'];
+            //}
 //            else
 //            {
 //                $company = $this->dealer_company_id;
@@ -4639,11 +4639,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 // * Save Imported File To Database
                 // ************************************************************/
 
-
                 // get arrays from indexAction
                 $headers = new Zend_Session_Namespace('import_headers_array');
                 $results = new Zend_Session_Namespace('import_results_array');
-
                 $db->beginTransaction();
                 try
                 {
@@ -4681,9 +4679,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
                                 $table = new Proposalgen_Model_DbTable_MasterDevice();
                                 $data  = array(
-                                    'device_price' => $device_price
+                                    'cost' => $device_price
                                 );
-                                $where = $table->getAdapter()->quoteInto('master_device_id = ?', $master_device_id, 'INTEGER');
+                                $where = $table->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
 
                                 // check to see if it exists - no inserts in the
                                 // Master Tables
@@ -4699,7 +4697,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                     }
 
                                     // don't update if values match
-                                    if ($toner ['device_price'] != $device_price)
+                                    if ($toner ['cost'] != $device_price)
                                     {
                                         $update = true;
                                     }
@@ -4839,7 +4837,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 $data  = array(
                                     'toner_price' => $toner_price
                                 );
-                                $where = $table->getAdapter()->quoteInto('toner_id = ?', $toner_id, 'INTEGER');
+                                $where = $table->getAdapter()->quoteInto('id = ?', $toner_id, 'INTEGER');
 
                                 // check to see if it exists - no inserts in the
                                 // Master Tables
@@ -4849,7 +4847,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                     $exists = true;
 
                                     // don't update if values match
-                                    if (($toner ['toner_price'] != $toner_price) && $toner_price > 0)
+                                    if (($toner ['cost'] != $toner_price) && $toner_price > 0)
                                     {
                                         $update = true;
                                     }
@@ -4999,6 +4997,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 {
                     $db->rollback();
                     $this->view->message = "<span class=\"warning\">*</span> An error has occurred during the update and your changes were not applied. Please review your file and try again.";
+                    throw new Exception("bad File could not be opened/written for export.", 0, $e);
                 }
             }
             else
@@ -5124,13 +5123,13 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                             $columns [4] = "New Price";
 
                                             $table   = new Proposalgen_Model_DbTable_MasterDevice();
-                                            $where   = $table->getAdapter()->quoteInto('master_device_id = ?', $master_device_id, 'INTEGER');
+                                            $where   = $table->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
                                             $printer = $table->fetchRow($where);
 
                                             if (count($printer) > 0)
                                             {
                                                 // get current costs
-                                                $current_device_price = $printer ['device_price'];
+                                                $current_device_price = $printer ['cost'];
 
                                                 // save into array
                                                 $final_devices [0] = $master_device_id;
@@ -5152,31 +5151,26 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                             $select  = new Zend_Db_Select($db);
                                             $select  = $db->select()
                                                 ->from(array(
-                                                            'md' => 'master_device'
+                                                            'md' => 'pgen_master_devices'
                                                        ), array(
-                                                               'device_price'
+                                                               'cost'
                                                           ))
-                                                ->joinLeft(array(
-                                                                'ddo' => 'dealer_device_override'
-                                                           ), 'ddo.master_device_id = md.master_device_id AND ddo.dealer_company_id = ' . $company, array(
-                                                                                                                                                         'override_device_price'
-                                                                                                                                                    ))
-                                                ->where('md.master_device_id = ' . $master_device_id);
+                                                ->where('md.id = ' . $master_device_id);
                                             $stmt    = $db->query($select);
                                             $printer = $stmt->fetchAll();
 
                                             if (count($printer) > 0)
                                             {
                                                 // get current costs
-                                                $current_device_price   = $printer [0] ['device_price'];
-                                                $current_override_price = $printer [0] ['override_device_price'];
+                                                $current_device_price   = $printer [0] ['cost'];
+                                                //$current_override_price = $printer [0] ['override_device_price'];
 
                                                 // save into array
                                                 $final_devices [0] = $master_device_id;
                                                 $final_devices [1] = $devices [$key] [$key_manufacturer];
                                                 $final_devices [2] = $devices [$key] [$key_printer_model];
                                                 $final_devices [3] = $current_device_price;
-                                                $final_devices [4] = $current_override_price;
+                                                //$final_devices [4] = $current_override_price;
                                                 $final_devices [5] = $devices [$key] [$key_new_price];
                                             }
                                         }
@@ -5238,13 +5232,13 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                             $columns [7] = "New Price";
 
                                             $table = new Proposalgen_Model_DbTable_Toner();
-                                            $where = $table->getAdapter()->quoteInto('toner_id = ?', $toner_id, 'INTEGER');
+                                            $where = $table->getAdapter()->quoteInto('id = ?', $toner_id, 'INTEGER');
                                             $toner = $table->fetchRow($where);
 
                                             if (count($toner) > 0)
                                             {
                                                 // get current costs
-                                                $current_toner_price = $toner ['toner_price'];
+                                                $current_toner_price = $toner ['cost'];
 
                                                 // save into array
                                                 $final_devices [0] = $toner_id;
@@ -5272,24 +5266,19 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                             $select = new Zend_Db_Select($db);
                                             $select = $db->select()
                                                 ->from(array(
-                                                            't' => 'toner'
+                                                            't' => 'pgen_toners'
                                                        ), array(
-                                                               'toner_price'
+                                                               'cost'
                                                           ))
-                                                ->joinLeft(array(
-                                                                'dto' => 'dealer_toner_override'
-                                                           ), 'dto.toner_id = t.toner_id AND dto.dealer_company_id = ' . $company, array(
-                                                                                                                                        'override_toner_price'
-                                                                                                                                   ))
-                                                ->where('t.toner_id = ?', $toner_id);
+                                                ->where('t.id = ?', $toner_id);
                                             $stmt   = $db->query($select);
                                             $toner  = $stmt->fetchAll();
 
                                             if (count($toner) > 0)
                                             {
                                                 // get current costs
-                                                $current_toner_price    = $toner [0] ['toner_price'];
-                                                $current_override_price = $toner [0] ['override_toner_price'];
+                                                $current_toner_price    = $toner [0] ['cost'];
+                                                //$current_override_price = $toner [0] ['override_toner_price'];
 
                                                 // save into array
                                                 $final_devices [0] = $toner_id;
@@ -5299,7 +5288,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                                 $final_devices [4] = $devices [$key] [$key_color];
                                                 $final_devices [5] = $devices [$key] [$key_yield];
                                                 $final_devices [6] = $current_toner_price;
-                                                $final_devices [7] = $current_override_price;
+                                                //$final_devices [7] = $current_override_price;
                                                 $final_devices [8] = $devices [$key] [$key_new_price];
                                             }
                                         }
@@ -5378,6 +5367,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     {
                         $db->rollback();
                         $this->view->message = "<span class=\"warning\">*</span> An error has occurred during the update and your changes were not applied. Please review your file and try again.";
+                        throw new Exception("bad File could not be opened/written for export.", 0, $e);
                     }
 
                     // delete the file we just uploaded

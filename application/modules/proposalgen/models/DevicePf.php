@@ -1,160 +1,91 @@
 <?php
-
-/**
- * Class Proposalgen_Model_DevicePf
- *
- * @author "Kevin Jervis"
- */
-class Proposalgen_Model_DevicePf extends Tangent_Model_Abstract
+class Proposalgen_Model_DevicePf extends My_Model_Abstract
 {
-    protected $DevicesPfId;
-    protected $PfModelId;
-    protected $PfDbDeviceName;
-    protected $PfDbManufacturer;
-    protected $DateCreated;
-    protected $CreatedBy;
+    /**
+     * @var int
+     */
+    public $devicesPfId;
 
     /**
-     *
-     * @return the $DevicesPfId
+     * @var int
      */
-    public function getDevicesPfId ()
+    public $pfModelId;
+
+    /**
+     * @var string
+     */
+    public $pfDbDeviceName;
+
+    /**
+     * @var string
+     */
+    public $pfDbManufacturer;
+
+    /**
+     * @var string
+     */
+    public $dateCreated;
+
+    /**
+     * @var int
+     */
+    public $createdBy;
+
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
     {
-        if (! isset($this->DevicesPfId))
+        if (is_array($params))
         {
-            
-            $this->DevicesPfId = null;
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        return $this->DevicesPfId;
-    }
 
-    /**
-     *
-     * @param field_type $DevicesPfId            
-     */
-    public function setDevicesPfId ($DevicesPfId)
-    {
-        $this->DevicesPfId = $DevicesPfId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $PfModelId
-     */
-    public function getPfModelId ()
-    {
-        if (! isset($this->PfModelId))
+        if (isset($params->DevicesPfId) && !is_null($params->DevicesPfId))
         {
-            
-            $this->PfModelId = null;
+            $this->devicesPfId = $params->DevicesPfId;
         }
-        return $this->PfModelId;
-    }
 
-    /**
-     *
-     * @param field_type $PfModelId            
-     */
-    public function setPfModelId ($PfModelId)
-    {
-        $this->PfModelId = $PfModelId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $PfDbDeviceName
-     */
-    public function getPfDbDeviceName ()
-    {
-        if (! isset($this->PfDbDeviceName))
+        if (isset($params->PfModelId) && !is_null($params->PfModelId))
         {
-            
-            $this->PfDbDeviceName = null;
+            $this->pfModelId = $params->PfModelId;
         }
-        return $this->PfDbDeviceName;
-    }
 
-    /**
-     *
-     * @param field_type $PfDbDeviceName            
-     */
-    public function setPfDbDeviceName ($PfDbDeviceName)
-    {
-        $this->PfDbDeviceName = $PfDbDeviceName;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $PfDbManufacturer
-     */
-    public function getPfDbManufacturer ()
-    {
-        if (! isset($this->PfDbManufacturer))
+        if (isset($params->PfDbDeviceName) && !is_null($params->PfDbDeviceName))
         {
-            
-            $this->PfDbManufacturer = null;
+            $this->pfDbDeviceName = $params->PfDbDeviceName;
         }
-        return $this->PfDbManufacturer;
-    }
 
-    /**
-     *
-     * @param field_type $PfDbManufacturer            
-     */
-    public function setPfDbManufacturer ($PfDbManufacturer)
-    {
-        $this->PfDbManufacturer = $PfDbManufacturer;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $DateCreated
-     */
-    public function getDateCreated ()
-    {
-        if (! isset($this->DateCreated))
+        if (isset($params->PfDbManufacturer) && !is_null($params->PfDbManufacturer))
         {
-            
-            $this->DateCreated = null;
+            $this->pfDbManufacturer = $params->PfDbManufacturer;
         }
-        return $this->DateCreated;
-    }
 
-    /**
-     *
-     * @param field_type $DateCreated            
-     */
-    public function setDateCreated ($DateCreated)
-    {
-        $this->DateCreated = $DateCreated;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $CreatedBy
-     */
-    public function getCreatedBy ()
-    {
-        if (! isset($this->CreatedBy))
+        if (isset($params->DateCreated) && !is_null($params->DateCreated))
         {
-            
-            $this->CreatedBy = null;
+            $this->dateCreated = $params->DateCreated;
         }
-        return $this->CreatedBy;
+
+        if (isset($params->CreatedBy) && !is_null($params->CreatedBy))
+        {
+            $this->createdBy = $params->CreatedBy;
+        }
+
     }
 
     /**
-     *
-     * @param field_type $CreatedBy            
+     * @return array
      */
-    public function setCreatedBy ($CreatedBy)
+    public function toArray ()
     {
-        $this->CreatedBy = $CreatedBy;
-        return $this;
+        return array(
+            "devicesPfId"      => $this->devicesPfId,
+            "pfModelId"        => $this->pfModelId,
+            "pfDbDeviceName"   => $this->pfDbDeviceName,
+            "pfDbManufacturer" => $this->pfDbManufacturer,
+            "dateCreated"      => $this->dateCreated,
+            "createdBy"        => $this->createdBy,
+        );
     }
 }

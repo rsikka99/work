@@ -39,7 +39,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
         // Insert the data
         $id = $this->getDbTable()->insert($data);
         
-        $object->setId($id);
+        $object->id = $id;
         
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -89,7 +89,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
         if ($object instanceof Proposalgen_Model_Manufacturer)
         {
             $whereClause = array (
-                    'id = ?' => $object->getId() 
+                    'id = ?' => $object->id
             );
         }
         else

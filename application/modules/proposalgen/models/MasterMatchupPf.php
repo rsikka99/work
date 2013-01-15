@@ -1,60 +1,46 @@
 <?php
-
-/**
- * Class Proposalgen_Model_MasterMatchupPf
- *
- * @author "Kevin Jervis"
- */
-class Proposalgen_Model_MasterMatchupPf extends Tangent_Model_Abstract
+class Proposalgen_Model_MasterMatchupPf extends My_Model_Abstract
 {
-    protected $MasterDeviceId;
-    protected $DevicesPfId;
+    /**
+     * @var int
+     */
+    public $masterDeviceId;
 
     /**
-     *
-     * @return the $MasterDeviceId
+     * @var int
      */
-    public function getMasterDeviceId ()
+    public $devicesPfId;
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
     {
-        if (! isset($this->MasterDeviceId))
+        if (is_array($params))
         {
-            
-            $this->MasterDeviceId = null;
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        return $this->MasterDeviceId;
-    }
 
-    /**
-     *
-     * @param field_type $MasterDeviceId            
-     */
-    public function setMasterDeviceId ($MasterDeviceId)
-    {
-        $this->MasterDeviceId = $MasterDeviceId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $DevicesPfId
-     */
-    public function getDevicesPfId ()
-    {
-        if (! isset($this->DevicesPfId))
+        if (isset($params->masterDeviceId) && !is_null($params->masterDeviceId))
         {
-            
-            $this->DevicesPfId = null;
+            $this->masterDeviceId = $params->masterDeviceId;
         }
-        return $this->DevicesPfId;
+
+        if (isset($params->devicesPfId) && !is_null($params->devicesPfId))
+        {
+            $this->devicesPfId = $params->devicesPfId;
+        }
+
     }
 
     /**
-     *
-     * @param field_type $DevicesPfId            
+     * @return array
      */
-    public function setDevicesPfId ($DevicesPfId)
+    public function toArray ()
     {
-        $this->DevicesPfId = $DevicesPfId;
-        return $this;
+        return array(
+            "masterDeviceId" => $this->masterDeviceId,
+            "devicesPfId"    => $this->devicesPfId,
+        );
     }
 }

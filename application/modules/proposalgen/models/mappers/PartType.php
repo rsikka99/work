@@ -11,34 +11,38 @@ class Proposalgen_Model_Mapper_PartType extends Tangent_Model_Mapper_Abstract
      */
     public static function getInstance ()
     {
-        if (! isset(self::$_instance))
+        if (!isset(self::$_instance))
         {
-            $className = get_class();
+            $className       = get_class();
             self::$_instance = new $className();
         }
+
         return self::$_instance;
     }
-    static $_partTypes = array ();
+
+    static $_partTypes = array();
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see Tangent_Model_Mapper_Abstract::find()
      * @return Proposalgen_Model_PartType
      */
     public function find ($id)
     {
-        if (! array_key_exists($id, self::$_partTypes))
+        if (!array_key_exists($id, self::$_partTypes))
         {
             self::$_partTypes [$id] = parent::find($id);
         }
+
         return self::$_partTypes [$id];
     }
 
     /**
      * Maps a database row object to an Proposalgen_Model
      *
-     * @param Zend_Db_Table_Row $row            
+     * @param Zend_Db_Table_Row $row
+     *
      * @return Proposalgen_Model_PartType
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
@@ -46,35 +50,38 @@ class Proposalgen_Model_Mapper_PartType extends Tangent_Model_Mapper_Abstract
         $object = null;
         try
         {
-            $object = new Proposalgen_Model_PartType();
-            $object->setPartTypeId($row->id)->setTypeName($row->name);
+            $object             = new Proposalgen_Model_PartType();
+            $object->partTypeId = $row->id;
+            $object->typeName   = $row->name;
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
             throw new Exception("Failed to map a part type row", 0, $e);
         }
+
         return $object;
     }
 
     /**
      * Saved an Proposalgen_Model_ object to the database
      *
-     * @param unknown_type $object            
+     * @param unknown_type $object
      */
     public function save (Proposalgen_Model_PartType $object)
     {
         $primaryKey = 0;
         try
         {
-            $data ["id"] = $object->getPartTypeId();
-            $data ["name"] = $object->getTypeName();
-            
+            $data ["id"]   = $object->partTypeId;
+            $data ["name"] = $object->typeName;
+
             $primaryKey = $this->saveRow($data);
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
             throw new Exception("Error saving " . get_class($this) . " to the database.", 0, $e);
         }
+
         return $primaryKey;
     }
 }

@@ -1,85 +1,57 @@
 <?php
-
-/**
- * Class Proposalgen_Model_TicketViewed
- *
- * @author "Kevin Jervis"
- */
-class Proposalgen_Model_TicketViewed extends Tangent_Model_Abstract
+class Proposalgen_Model_TicketViewed extends My_Model_Abstract
 {
-    protected $TicketId;
-    protected $UserId;
-    protected $DateViewed;
+    /**
+     * @var int
+     */
+    public $ticketId;
 
     /**
-     *
-     * @return the $TicketId
+     * @var int
      */
-    public function getTicketId ()
+    public $userId;
+
+    /**
+     * @var string
+     */
+    public $dateViewed;
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
     {
-        if (! isset($this->TicketId))
+        if (is_array($params))
         {
-            
-            $this->TicketId = null;
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        return $this->TicketId;
-    }
 
-    /**
-     *
-     * @param field_type $TicketId            
-     */
-    public function setTicketId ($TicketId)
-    {
-        $this->TicketId = $TicketId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $UserId
-     */
-    public function getUserId ()
-    {
-        if (! isset($this->UserId))
+        if (isset($params->ticketId) && !is_null($params->ticketId))
         {
-            
-            $this->UserId = null;
+            $this->ticketId = $params->ticketId;
         }
-        return $this->UserId;
-    }
 
-    /**
-     *
-     * @param field_type $UserId            
-     */
-    public function setUserId ($UserId)
-    {
-        $this->UserId = $UserId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $DateViewed
-     */
-    public function getDateViewed ()
-    {
-        if (! isset($this->DateViewed))
+        if (isset($params->userId) && !is_null($params->userId))
         {
-            
-            $this->DateViewed = null;
+            $this->userId = $params->userId;
         }
-        return $this->DateViewed;
+
+        if (isset($params->dateViewed) && !is_null($params->dateViewed))
+        {
+            $this->dateViewed = $params->dateViewed;
+        }
+
     }
 
     /**
-     *
-     * @param field_type $DateViewed            
+     * @return array
      */
-    public function setDateViewed ($DateViewed)
+    public function toArray ()
     {
-        $this->DateViewed = $DateViewed;
-        return $this;
+        return array(
+            "ticketId"   => $this->ticketId,
+            "userId"     => $this->userId,
+            "dateViewed" => $this->dateViewed,
+        );
     }
 }

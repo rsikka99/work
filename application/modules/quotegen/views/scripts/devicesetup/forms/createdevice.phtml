@@ -336,7 +336,7 @@ $form = $this->form;
 		<span id="list_criteria" style="display: none;">
 			<select name="cboCriteria" id="cboCriteria" style="width: 160px; margin: 0px 10px 0px 0px;">
 			<?php foreach ( $this->manufacturers as $manufacturer ) {  /* @var $manufacturer Proposalgen_Model_Manufacturer */ ?>
-				<option value="<?php echo $manufacturer->getId(); ?>"><?php echo $manufacturer->getDisplayname(); ?></option>
+				<option value="<?php echo $manufacturer->id; ?>"><?php echo $manufacturer->displayname; ?></option>
 			<?php } ?>
 			</select>
 		</span>

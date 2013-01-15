@@ -11,18 +11,20 @@ class Proposalgen_Model_Mapper_PfDeviceMatchupUser extends Tangent_Model_Mapper_
      */
     public static function getInstance ()
     {
-        if (! isset(self::$_instance))
+        if (!isset(self::$_instance))
         {
-            $className = get_class();
+            $className       = get_class();
             self::$_instance = new $className();
         }
+
         return self::$_instance;
     }
 
     /**
      * Maps a database row object to an Proposalgen_Model
      *
-     * @param Zend_Db_Table_Row $row            
+     * @param Zend_Db_Table_Row $row
+     *
      * @return Proposalgen_Model_PfDeviceMatchupUser
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
@@ -30,15 +32,16 @@ class Proposalgen_Model_Mapper_PfDeviceMatchupUser extends Tangent_Model_Mapper_
         $object = null;
         try
         {
-            $object = new Proposalgen_Model_PfDeviceMatchupUser();
-            $object->setDevicesPfId($row->pf_device_id)
-                ->setMasterDeviceId($row->master_device_id)
-                ->setUserId($row->user_id);
+            $object                 = new Proposalgen_Model_PfDeviceMatchupUser();
+            $object->devicesPfId    = $row->pf_device_id;
+            $object->masterDeviceId = $row->master_device_id;
+            $object->userId         = $row->user_id;
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
             throw new Exception("Failed to map a pf device match up user row", 0, $e);
         }
+
         return $object;
     }
 
@@ -47,16 +50,17 @@ class Proposalgen_Model_Mapper_PfDeviceMatchupUser extends Tangent_Model_Mapper_
         $primaryKey = false;
         try
         {
-            $data ["pf_device_id"] = $object->getDevicesPfId();
-            $data ["master_device_id"] = $object->getMasterDeviceId();
-            $data ["user_id"] = $object->getUserId();
-            
+            $data ["pf_device_id"]     = $object->DevicesPfId;
+            $data ["master_device_id"] = $object->MasterDeviceId;
+            $data ["user_id"]          = $object->UserId;
+
             $primaryKey = $this->saveRow($data);
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
             throw new Exception("Error saving " . get_class($this) . " to the database.", 0, $e);
         }
+
         return $primaryKey;
     }
 }

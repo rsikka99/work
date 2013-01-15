@@ -208,7 +208,7 @@ class Quotegen_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
             $pageMargin->setAttrib('append', sprintf("System Default: %s%%", number_format($systemDefaultQuoteSetting->getPageMargin(), 2)));
             $pageMargin->setRequired(false);
             $pricingConfigDropdown->setAttrib('append', sprintf("System Default: %s", $systemDefaultQuoteSetting->getPricingConfig()
-                ->getConfigName()));
+                ->configName));
         }
     }
 }

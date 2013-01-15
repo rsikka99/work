@@ -1,60 +1,47 @@
 <?php
-
-/**
- * Class Proposalgen_Model_DeviceToner
- *
- * @author "Kevin Jervis"
- */
-class Proposalgen_Model_DeviceToner extends Tangent_Model_Abstract
+class Proposalgen_Model_DeviceToner extends My_Model_Abstract
 {
-    protected $TonerId;
-    protected $MasterDeviceId;
+    /**
+     * @var int
+     */
+    public $tonerId;
 
     /**
-     *
-     * @return the $TonerId
+     * @var int
      */
-    public function getTonerId ()
+    public $masterDeviceId;
+
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
     {
-        if (! isset($this->TonerId))
+        if (is_array($params))
         {
-            
-            $this->TonerId = null;
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        return $this->TonerId;
-    }
 
-    /**
-     *
-     * @param field_type $TonerId            
-     */
-    public function setTonerId ($TonerId)
-    {
-        $this->TonerId = $TonerId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $MasterDeviceId
-     */
-    public function getMasterDeviceId ()
-    {
-        if (! isset($this->MasterDeviceId))
+        if (isset($params->tonerId) && !is_null($params->tonerId))
         {
-            
-            $this->MasterDeviceId = null;
+            $this->tonerId = $params->tonerId;
         }
-        return $this->MasterDeviceId;
+
+        if (isset($params->masterDeviceId) && !is_null($params->masterDeviceId))
+        {
+            $this->masterDeviceId = $params->masterDeviceId;
+        }
+
     }
 
     /**
-     *
-     * @param field_type $MasterDeviceId            
+     * @return array
      */
-    public function setMasterDeviceId ($MasterDeviceId)
+    public function toArray ()
     {
-        $this->MasterDeviceId = $MasterDeviceId;
-        return $this;
+        return array(
+            "tonerId"        => $this->tonerId,
+            "masterDeviceId" => $this->masterDeviceId,
+        );
     }
 }
