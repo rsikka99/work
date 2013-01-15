@@ -1749,7 +1749,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             // get form data
                             $device_manufacturer = ucwords(trim($formData ["device_manufacturer"]));
                             $printer_model       = ucwords(trim($formData ["printer_model"]));
-                            $launch_date         = $launch_date->toString('yyyy/mm/dd HH:ss');
+                            $launch_date         = $launch_date->toString('yyyy/MM/dd HH:ss');
                             $device_cost         = ($formData ['cost'] > 0 ? $formData ['cost'] : null);
                             $toner_config        = $formData ["toner_config"];
                             $is_copier           = ($formData ['is_copier'] == true ? 1 : 0);
@@ -1764,7 +1764,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
                             // update ticket request data
                             $ticket_pf_requestData = array(
-                                'device_manufacturer' => $device_manufacturer,
+                                'manufacturer' => $device_manufacturer,
                                 'printer_model'       => $printer_model,
                                 'launch_date'         => $launch_date,
                                 'cost'                => $device_cost,
@@ -1793,6 +1793,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     {
                         $db->rollback();
                         My_Log::logException($e);
+                        throw new Exception("An error occurred saving mapping.", 0, $e);
                         $this->view->message = "There was an error saving your unknown device.";
                     }
                 }
@@ -2231,7 +2232,50 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         } // end if
         $this->view->deviceform = $form;
     }
+    public function removedeviceAction ()
+    {
+        // disable the default layout
+        $this->_helper->layout->disableLayout();
+        $db = Zend_Db_Table::getDefaultAdapter();
 
+        // get devices_pf_id
+        $devices_pf_id = $this->_getParam('key', null);
+
+        $db->beginTransaction();
+        try
+        {
+            if ($devices_pf_id > 0)
+            {
+                // delete unknown_device_instances
+                $upload_data_collectorTable = new Proposalgen_Model_DbTable_UploadDataCollectorRow();
+                $unknown_device_instanceTable = new Proposalgen_Model_DbTable_UnknownDeviceInstance();
+
+                // get all uploaded rows for device
+                $where = $upload_data_collectorTable->getAdapter()->quoteInto('devices_pf_id = ?', $devices_pf_id, 'INTEGER');
+                $upload_data_collector = $upload_data_collectorTable->fetchAll($where);
+
+                foreach ( $upload_data_collector as $key => $value )
+                {
+                    $upload_data_collector_id = $upload_data_collector [$key] ['id'];
+                    $where = $unknown_device_instanceTable->getAdapter()->quoteInto('upload_data_collector_row_id = ?', $upload_data_collector_id, 'INTEGER');
+                    $unknown_device_instances = $unknown_device_instanceTable->fetchRow($where);
+                    if (count($unknown_device_instances) > 0)
+                    {
+                        $unknown_device_instances_id = $unknown_device_instances ['id'];
+                        $unknown_device_instanceTable->delete($where);
+                    }
+                }
+            }
+            $db->commit();
+        }
+        catch ( Exception $e )
+        {
+            $db->rollback();
+            echo $e . "<br />";
+            $this->view->message = "Error removing device.";
+            throw new Exception("An error occurred saving mapping.", 0, $e);
+        }
+    }
     public function savemappingAction ()
     {
         // Mark the step we're on as active

@@ -21,17 +21,17 @@
     <tbody>
         <?php foreach ($this->users as $user) : /* @var $user Application_Model_User */ ?>
         <tr>
-            <td><?php echo $user->getId(); ?></td>
-            <td><?php echo $user->getUsername(); ?></td>
-            <td><?php echo $user->getFirstname(); ?></td>
-            <td><?php echo $user->getLastname(); ?></td>
-            <td><?php echo $user->getLoginAttempts(); ?></td>
-            <td><?php echo ($user->isFrozen()) ? $user->getFrozenUntil() : ""; ?></td>
-            <td><?php echo ($user->getLocked()) ? "Yes" : "No"; ?></td>
+            <td><?php echo $user->id; ?></td>
+            <td><?php echo $user->username; ?></td>
+            <td><?php echo $user->firstname; ?></td>
+            <td><?php echo $user->lastname; ?></td>
+            <td><?php echo $user->loginAttempts; ?></td>
+            <td><?php echo ($user->isFrozen()) ? $user->frozenUntil : ""; ?></td>
+            <td><?php echo ($user->locked) ? "Yes" : "No"; ?></td>
             <td>
                 <div class="btn-group">
-                    <a class="btn btn-warning" title="Edit User" href="<?php echo $this->baseUrl('/admin/user/edit') . "/id/{$user->getId()}" ?>"><i class="icon-pencil"></i></a>
-                    <a class="btn btn-danger" title="Delete User" href="<?php echo $this->baseUrl('/admin/user/delete') . "/id/{$user->getId()}" ?>"><i class="icon-trash"></i></a>
+                    <a class="btn btn-warning" title="Edit User" href="<?php echo $this->baseUrl('/admin/user/edit') . "/id/{$user->id}" ?>"><i class="icon-pencil"></i></a>
+                    <a class="btn btn-danger" title="Delete User" href="<?php echo $this->baseUrl('/admin/user/delete') . "/id/{$user->id}" ?>"><i class="icon-trash"></i></a>
                 </div>
             </td>
         </tr>

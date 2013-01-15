@@ -290,16 +290,12 @@
         		            var obj = jQuery.parseJSON(data);
         		            var total_devices = obj.total_count;
         		            var num_devices = obj.device_count;
-        		            
         					if (num_devices > 0 || total_devices > 0) {
                 				lightbox('show');
-                				
             					//get selected row id (toner_id)
               					$("#replace_toner_id").val(rowid);
-            					
             					//return list of replacement toners for current toner
             					update_replacement();
-
         					} else {
 								//use default dialog
 								$('#replace_toner_id').val(rowid);
@@ -353,9 +349,13 @@
 			},
 			gridComplete:function(){
 				//update statement
-				num_devices = document.getElementById("replacement_toners_list").rows[1].cells[7].innerHTML;
-				total_devices = document.getElementById("replacement_toners_list").rows[1].cells[8].innerHTML;
-				
+                if(document.getElementById("replacement_toners_list").rows[1] !== undefined){
+                    num_devices = document.getElementById("replacement_toners_list").rows[1].cells[7].innerHTML;
+                    total_devices = document.getElementById("replacement_toners_list").rows[1].cells[8].innerHTML;
+                }else{
+                    num_devices = 0;
+                    total_devices = 0;
+                }
 				if (num_devices == 0 && total_devices == 0) {
 					//should never hit this as it's handled by the confirm box instead
 					$('#replacement_toners_container').hide();
@@ -374,6 +374,7 @@
 					$('#replacement_toners_statement').html('This toner is being used by ' + total_devices + ' device(s). If you wish to assign a replacement toner to apply to all ' + total_devices + ' device(s), please select it from the list below.');
 				
 				} else {
+
 					$('#replacement_toners_container').show();
 					$('#replace_all_container').show();
 					$('#replacement_filter_container').show();
@@ -381,7 +382,9 @@
 					$('#replacement_title').html('Select Replacement Toner');
 					$('#replacement_toners_statement').html(num_devices + ' of the ' + total_devices + ' device(s) using this toner require a replacement toner to be assigned. Please select a replacement toner from the list below.');
 				}
-			}
+
+
+}
 		});
 		
 		jQuery("#replacement_toners_list").jqGrid('navGrid','#replacement_toners_pager',
@@ -897,8 +900,6 @@
 				lightbox('hide');
 				$("#replacement_message").html("");
     			var url = '<?php echo $this->baseUrl("/proposalgen/admin/replacetoner"); ?>?replace_mode='+replace_mode+'&replace_toner_id='+replace_toner_id+'&with_toner_id='+with_toner_id+'&chkAlLToners='+apply_all;
-    		    //alert(url);
-    		    
     		    $.ajax({
     		        url: url,
     		        success: function(data) {
@@ -987,10 +988,9 @@
 			$("#replacement_cboCriteria").html('');
 			$("#replacement_txtCriteria").val('');
 		}
-		
+
 		var grid = $("#available_toners_list");
 		var toner_id = grid.jqGrid('getGridParam', 'selrow');
-		
 		$('#replacement_toners_list').setGridParam({url:'<?php echo $this->baseUrl("/proposalgen/admin/replacementtoners"); ?>?tonerid='+toner_id+params});
 	    $('#replacement_toners_list').trigger('reloadGrid');
 	}

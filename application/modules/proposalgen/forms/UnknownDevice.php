@@ -1796,7 +1796,7 @@ class Proposalgen_Form_UnknownDevice extends Zend_Form
         $element->setLabel('Cancel')
             ->setOrder($elementCounter)
             ->setAttrib('class', 'btn')
-            ->setAttrib('onClick', 'javascript: document.location.href = "../data/devicemapping?grid="+document.getElementById("grid").value;')
+            ->setAttrib('onClick', 'javascript: document.location.href = "../fleet/devicemapping?grid="+document.getElementById("grid").value;')
             ->setDecorators(array (
                 'ViewHelper', 
                 'Errors', 

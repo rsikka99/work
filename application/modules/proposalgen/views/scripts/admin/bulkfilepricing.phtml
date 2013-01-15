@@ -38,11 +38,9 @@
 		
 		if(action == 'back') {
 			<?php if(in_array("System Admin", $this->privilege)) { ?>
-    		document.location.href = '<?php echo $this->baseUrl() . '/admin/bulkdevicepricing'; ?>';
-			<?php } else if(in_array("Dealer Admin", $this->privilege)) { ?>
-    		document.location.href = '<?php echo $this->baseUrl() . '/admin/bulkdealerdevicepricing'; ?>';
+    		document.location.href = '<?php echo $this->baseUrl('/proposalgen/admin/bulkdevicepricing'); ?>';
 			<?php } else  { ?>
-    		document.location.href = '<?php echo $this->baseUrl() . '/admin/bulkuserpricing'; ?>';
+    		document.location.href = '<?php echo $this->baseUrl('/proposalgen/admin/bulkuserpricing'); ?>';
 			<?php } ?>
 			
 		} else if(action == 'export_printer') {
@@ -109,14 +107,14 @@
 				<!-- div id="filter_company" style="float: left; padding: 0px 20px 0px 0px;">
 					<label for="company_filter" class="label">Company:</label>
 					<select name="company_filter" id="company_filter" class="filter_dropdown" style="width: 200px;">
-						<?php
+						<?php /*
 						foreach($this->company_list as $key) {
 							echo "<option value='" . $key['dealer_company_id'] ."'";
 							if ($key['dealer_company_id'] == $this->company_filter) {
 								echo " selected";
 							}
 							echo ">" . ucwords(strtolower($key['company_name'])) . "</option>";
-						}
+						} */
 						?>
 					</select>
 				</div -->

@@ -2,46 +2,44 @@
 
 class Application_Model_Acl extends Zend_Acl
 {
+    /**
+     * Roles
+     * These are like user groups
+     */
+    const ROLE_GUEST              = "-1";
+    const ROLE_AUTHENTICATED_USER = "0";
+    const ROLE_SYSTEM_ADMIN       = "1";
+    const ROLE_PROPOSAL_ADMIN     = "2";
+    const ROLE_PROPOSAL_USER      = "3";
+    const ROLE_QUOTE_ADMIN        = "4";
+    const ROLE_QUOTE_USER         = "5";
+
+    /**
+     * Resource parameters
+     */
+    const SEPARATOR = "__";
+    const WILDCARD  = "%";
+
+    /**
+     * Resources
+     * These are module controller action combinations
+     */
+    const RESOURCE_ADMIN_WILDCARD       = "admin__%__%";
+    const RESOURCE_DEFAULT_WILDCARD     = "default__%__%";
+    const RESOURCE_PROPOSALGEN_WILDCARD = "proposalgen__%__%";
+    const RESOURCE_QUOTEGEN_WILDCARD    = "quotegen__%__%";
+
+
+    /**
+     * This is what kind of access we want to allow. We can use this to provide dynamic pages based on acl
+     */
+    const PRIVILEGE_ADMIN = "Admin";
+    const PRIVILEGE_VIEW  = "View";
+
+    /**
+     * @var Application_Model_Acl
+     */
     protected static $_instance;
-    protected static $UnrestrictedPages = array (
-            'default' => array (
-                    'auth' => array (
-                            'changepassword' 
-                    ), 
-                    'error' => array (
-                            '%' 
-                    ) 
-            ) 
-    );
-    protected static $UnrestrictedMemberPages = array (
-            'default' => array (
-                    'auth' => array (
-                            'logout' 
-                    ), 
-                    'index' => array (
-                            '%' 
-                    ), 
-                    'info' => array (
-                            '%' 
-                    ) 
-            ), 
-            'admin' => array (
-                    'index' => array (
-                            'index' 
-                    ), 
-                    'user' => array (
-                            'profile' 
-                    ) 
-            ) 
-    );
-    protected static $UnrestrictedGuestOnlyPages = array (
-            'default' => array (
-                    'auth' => array (
-                            'login', 
-                            'forgotpassword' 
-                    ) 
-            ) 
-    );
 
     /**
      * Gets a instance of Application_Model_Acl
@@ -54,6 +52,7 @@ class Application_Model_Acl extends Zend_Acl
         {
             self::$_instance = new self();
         }
+
         return self::$_instance;
     }
 
@@ -66,269 +65,266 @@ class Application_Model_Acl extends Zend_Acl
         self::getInstance();
     }
 
+
     /**
-     * Gets privileges for a role.
-     * Checks the cache before hitting the database
-     *
-     * @param int $role_id            
-     * @return array The privileges for the given role.
+     * The constructor for our ACL
      */
-    private function getCachedPrivilegesForRole ($role_id)
+    public function __construct ()
     {
-        // Attempt to load the role from cache
-        $role = Zend_Registry::get('Zend_Cache')->load('acl_role_' . $role_id);
-        // If the cache does not have the role, lets grab it from the database
-        if ($role === false)
-        {
-            
-            // Grab all the priveleges for this role.
-            $db = Zend_Db_Table::getDefaultAdapter();
-            $stmt = $db->query('SELECT module, controller, action FROM privilege WHERE roleId = ?', array (
-                    $role_id 
-            ));
-            $privilegeList = $stmt->fetchAll();
-            
-            $role = array ();
-            foreach ( $privilegeList as $privilege )
-            {
-                $role [] = $privilege ['moduleName'] . '_' . $privilege ['controllerName'] . '_' . $privilege ['actionName'];
-            }
-            
-            // Save the role into the cache now that we've retrieved it
-            Zend_Registry::get('Zend_Cache')->save($role, 'acl_role_' . $role_id);
-        }
-        
-        return $role;
+        /**
+         * Setup our available resources
+         */
+        $this->_setupResources();
+
+        /*
+         * Add our various roles
+         */
+        $this->_setupGuestRole();
+        $this->_setupAuthenticatedUserRole();
+        $this->_setupProposalUserRole();
+        $this->_setupProposalAdminRole();
+        $this->_setupQuoteUserRole();
+        $this->_setupQuoteAdminRole();
+        $this->_setupSystemAdminRole();
     }
 
     /**
-     * Sees if a request is allowed based on a role list
+     * Returns true if and only if the Role has access to the Resource
      *
-     * @param array $roleList            
-     * @param Zend_Controller_Request_Abstract $request            
-     * @return boolean
+     * @param null|string|Zend_Acl_Role_Interface                                      $role
+     * @param null|string|Zend_Acl_Resource_Interface|Zend_Controller_Request_Abstract $resource
+     * @param null|string                                                              $privilege
+     *
+     * @see  Zend_Acl::isAllowed
+     *
+     * @return bool
      */
-    private function hasAccessForRequest ($roleList, Zend_Controller_Request_Abstract $request)
+    public function isAllowed ($role = null, $resource = null, $privilege = null)
     {
-        $hasAccess = false;
-        foreach ( $roleList as $role )
-        {
-            $privilegeList = $this->getCachedPrivilegesForRole($role ['roleId']);
-            if (in_array('%_%_%', $privilegeList) || in_array($request ["moduleName"] . '_%_%', $privilegeList) || in_array($request ["moduleName"] . '_' . $request ["controllerName"] . '_%', $privilegeList) || in_array($request ["moduleName"] . '_' . $request ["controllerName"] . '_' . $request ["actionName"], $privilegeList))
-            {
-                $hasAccess = true;
-                break;
-            }
-        }
-        return $hasAccess;
-    }
+        $isAllowed             = false;
+        $roles                 = array();
+        $resourceAssertionList = array();
 
-    /**
-     * (non-PHPdoc)
-     *
-     * @see Zend_Acl::isAllowed()
-     */
-    public function isAllowed ($role = null, $request = null, $privilege = null)
-    {
-        $isAllowed = false;
-        $isLoggedIn = ($role !== null);
-        
-        $resource ["moduleName"] = "";
-        $resource ["controllerName"] = "";
-        $resource ["actionName"] = "";
-        
-        /**
-         * If we're processing a request, not a resource
+        /*
+         * Massage roles into a workable array
          */
-        if (is_null($request) === false && $request !== false && $request instanceof Zend_Controller_Request_Abstract)
+        if (is_array($role))
         {
-            $resource ["moduleName"] = strtolower($request->getModuleName());
-            $resource ["controllerName"] = strtolower($request->getControllerName());
-            $resource ["actionName"] = strtolower($request->getActionName());
-        }
-        else
-        {
-            // We're processing a resource instead of a request object
-            $boom = explode("__", strtolower($request));
-            if (count($boom) !== 3)
+            if (count($role) > 0)
             {
-                user_error("ACL Resource did not provide exactly 3 paramters. Access will be denied to '$request'", E_USER_WARNING);
-                return false;
-            }
-            $resource ["moduleName"] = $boom [0];
-            $resource ["controllerName"] = $boom [1];
-            $resource ["actionName"] = $boom [2];
-        }
-        
-        // If it's a global page, let the user through
-        if ($this->isGlobalPage($resource, $isLoggedIn))
-        {
-            return true;
-        }
-        
-        if (! $isLoggedIn)
-        {
-            return false;
-        }
-        
-        $userId = (int)$role;
-        /**
-         * Root (User 1) always has access
-         */
-        if ($userId === 1)
-        {
-            return true;
-        }
-        
-        // Always allow access to the error controller in the default module
-        if ($resource ["moduleName"] == "default" && ($resource ["controllerName"] == "error"))
-        {
-            
-            $isAllowed = true;
-        }
-        else
-        {
-            /* If we're using Zend_Cache, we retrieve data more efficiently */
-            if (Zend_Registry::isRegistered('Zend_Cache'))
-            {
-                $roleList = Zend_Registry::get('Zend_Cache')->load('acl_user_' . $userId);
-                
-                // Fetch the roles from the database
-                if ($roleList === false)
-                {
-                    if (strcasecmp($userId, 'Guest') !== 0)
-                    {
-                        /* Looks like we haven't stored this user's roles yet */
-                        $db = Zend_Db_Table::getDefaultAdapter();
-                        $stmt = $db->query('SELECT roleId FROM user_roles WHERE userId = ?', array (
-                                $userId 
-                        ));
-                        $result = $stmt->fetchAll();
-                    }
-                    $roleList = array_merge($result, $roleList);
-                    
-                    Zend_Registry::get('Zend_Cache')->save($roleList, 'acl_user_' . $userId);
-                }
-                
-                $isAllowed = $this->hasAccessForRequest($roleList, $resource);
+                $roles = $role;
             }
             else
             {
-                /*
-                 * Without caching, we look directly for the required privileges
-                 */
-                $db = Zend_Db_Table::getDefaultAdapter();
-                
-                $stmt = $db->query("
-                            SELECT `module`, `controller`, `action` FROM `privileges`
-                            INNER JOIN `roles` ON `roles`.`id` = `privileges`.`roleId`
-                            INNER JOIN `user_roles` ON `user_roles`.`roleId` = `roles`.`id`
-                            WHERE `user_roles`.`userId` = ? AND 
-                            ( `module` = '%' OR 
-                                ( `module` = ? AND 
-                                    ( `controller` = '%' OR 
-                                        ( `controller` = ? AND 
-                                            ( `action` = '%' OR `action` = ? 
-                            ) ) ) ) );", array (
-                        $userId, 
-                        $resource ["moduleName"], 
-                        $resource ["controllerName"], 
-                        $resource ["actionName"] 
-                ));
-                
-                // If we get a row then we are allowed in
-                $stmt->execute();
-                $row = $stmt->fetch();
-                
-                if ($row)
-                {
-                    $isAllowed = true;
-                }
+                $roles[] = self::ROLE_GUEST;
             }
         }
-        return $isAllowed;
-    }
-
-    /**
-     * Checks to see if the page is unrestricted.
-     *
-     * @param string $resource
-     *            The resource to check
-     * @param boolean $isLoggedIn
-     *            Whether or not the user is logged in.
-     * @return boolean
-     */
-    protected function isGlobalPage ($resource, $isLoggedIn = false)
-    {
-        // Do we have global pages?
-        if ($this->checkResourceAgainstArray($resource, self::$UnrestrictedPages))
+        else if ($role === null)
         {
-            return true;
+            $roles[] = self::ROLE_GUEST;
         }
-        
-        if ($isLoggedIn)
+        else if ($role > 0)
         {
-            // Do we have global member pages?
-            if ($this->checkResourceAgainstArray($resource, self::$UnrestrictedMemberPages))
+            $userId = (int)$role;
+            if ($userId === 1)
             {
+                // Is Super User
                 return true;
+            }
+            else
+            {
+                $user = Application_Model_Mapper_User::getInstance()->find($userId);
+                if ($user)
+                {
+                    $userRoles = $user->getUserRoles();
+                    if ($userRoles && count($userRoles) > 0)
+                    {
+                        foreach ($userRoles as $userRole)
+                        {
+                            $roles[] = $userRole->roleId;
+                        }
+                    }
+                    else
+                    {
+                        $roles[] = self::ROLE_GUEST;
+                    }
+                }
+                else
+                {
+                    $roles[] = self::ROLE_GUEST;
+                }
             }
         }
         else
         {
-            // Do we have guest only pages?
-            if ($this->checkResourceAgainstArray($resource, self::$UnrestrictedGuestOnlyPages))
-            {
-                return true;
-            }
+            $roles[] = $role;
         }
-        
-        // Nothing found, so we don't have global access
-        return false;
-    }
 
-    /**
-     * Checks to see if a given resource is within an array
-     *
-     * @param array $resource
-     *            An array of resources {moduleName, controllerName, actionName}
-     * @param unknown_type $array
-     *            An 3d to check against [module][controller][action]
-     * @return boolean True if it is in the array
-     */
-    private function checkResourceAgainstArray ($resource, $array)
-    {
-        foreach ( $array as $module => $controllers )
+        /*
+         * Massage our resource into a list of resources to test
+         */
+        if ($resource instanceof Zend_Controller_Request_Abstract)
         {
-            // Check the module name
-            if (strcasecmp($module, $resource ['moduleName']) === 0)
+            // Module Wildcard
+            $resourceAssertionList[] = $resource->getModuleName() . self::SEPARATOR . self::WILDCARD . self::SEPARATOR . self::WILDCARD;
+
+            // Controller Wildcard
+            $resourceAssertionList[] = $resource->getModuleName() . self::SEPARATOR . $resource->getControllerName() . self::SEPARATOR . self::WILDCARD;
+
+            // Full module_controller_action
+            $resourceAssertionList[] = $resource->getModuleName() . self::SEPARATOR . $resource->getControllerName() . self::SEPARATOR . $resource->getActionName();
+        }
+        else if (is_array($resource))
+        {
+            $resourceAssertionList = $resource;
+        }
+        else
+        {
+            $resourceExplosion = explode(self::SEPARATOR, $resource);
+
+            // Module Wildcard
+            $resourceAssertionList[] = $resourceExplosion[0] . self::SEPARATOR . self::WILDCARD . self::SEPARATOR . self::WILDCARD;
+
+            // Controller Wildcard
+            $resourceAssertionList[] = $resourceExplosion[0] . self::SEPARATOR . $resourceExplosion[1] . self::SEPARATOR . self::WILDCARD;
+
+            // Full module_controller_action
+            $resourceAssertionList[] = $resourceExplosion[0] . self::SEPARATOR . $resourceExplosion[1] . self::SEPARATOR . $resourceExplosion[2];
+        }
+
+        /*
+         * Set our privilege to View if we didn't get passed a privilege
+         */
+        if ($privilege === null)
+        {
+            $privilege = self::PRIVILEGE_VIEW;
+        }
+
+
+        /*
+         * Test each resource to see if we have access
+         */
+        foreach ($roles as $roleToTest)
+        {
+            foreach ($resourceAssertionList as $resourceToTest)
             {
-                // Check the controller
-                foreach ( $controllers as $controller => $actions )
+                try
                 {
-                    // Check the controller for a wildcard
-                    if (strcasecmp($controller, '%') === 0)
+                    if (parent::isAllowed((string)$roleToTest, $resourceToTest, $privilege))
                     {
-                        return true;
+                        $isAllowed = true;
+                        break;
                     }
-                    
-                    // Check the controller
-                    if (strcasecmp($controller, $resource ['controllerName']) === 0)
-                    {
-                        foreach ( $actions as $action )
-                        {
-                            // Check the action
-                            if (strcasecmp($action, $resource ['actionName']) === 0 || strcasecmp($action, '%') === 0)
-                            {
-                                return true;
-                            }
-                        }
-                    }
+                }
+                catch (Exception $e)
+                {
+                    // Do nothing as the user is not allowed.
                 }
             }
         }
-        return false;
-    }
-}
 
-?>
+        return $isAllowed;
+    }
+
+
+    /**
+     * Handles setting up all our available resources that we will use for ACL
+     */
+    protected function _setupResources ()
+    {
+        $this->addResource(self::RESOURCE_ADMIN_WILDCARD);
+        $this->addResource(self::RESOURCE_DEFAULT_WILDCARD);
+        $this->addResource(self::RESOURCE_PROPOSALGEN_WILDCARD);
+        $this->addResource(self::RESOURCE_QUOTEGEN_WILDCARD);
+    }
+
+    /**
+     * Sets up the guest role
+     */
+    protected function _setupGuestRole ()
+    {
+        // Add our role
+        $this->addRole(self::ROLE_GUEST);
+
+        // Add our privileges
+        $this->allow(self::ROLE_GUEST, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
+    }
+
+    /**
+     * Sets up the guest role
+     */
+    protected function _setupAuthenticatedUserRole ()
+    {
+        // Add our role
+        $this->addRole(self::ROLE_AUTHENTICATED_USER);
+
+        // Add our privileges
+        $this->allow(self::ROLE_AUTHENTICATED_USER, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
+    }
+
+    /**
+     * Sets up the proposal admin role
+     */
+    protected function _setupProposalAdminRole ()
+    {
+        // Add our role
+        $this->addRole(self::ROLE_PROPOSAL_ADMIN, self::ROLE_PROPOSAL_USER);
+
+        // Add our privileges
+
+        $this->allow(self::ROLE_PROPOSAL_ADMIN, self::RESOURCE_PROPOSALGEN_WILDCARD, self::PRIVILEGE_ADMIN);
+    }
+
+    /**
+     * Sets up the proposal user role
+     */
+    protected function _setupProposalUserRole ()
+    {
+        // Add our role
+        $this->addRole(self::ROLE_PROPOSAL_USER, self::ROLE_AUTHENTICATED_USER);
+
+        // Add our privileges
+        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_WILDCARD, self::PRIVILEGE_VIEW);
+    }
+
+    /**
+     * Sets up the quote admin role
+     */
+    protected function _setupQuoteAdminRole ()
+    {
+        // Add our role
+        $this->addRole(self::ROLE_QUOTE_ADMIN, self::ROLE_QUOTE_USER);
+
+        // Add our privileges
+        $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_WILDCARD, self::PRIVILEGE_ADMIN);
+    }
+
+    /**
+     * Sets up the quote user role
+     */
+    protected function _setupQuoteUserRole ()
+    {
+        // Add our role
+        $this->addRole(self::ROLE_QUOTE_USER, self::ROLE_AUTHENTICATED_USER);
+
+        // Add our privileges
+        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_WILDCARD, self::PRIVILEGE_VIEW);
+    }
+
+    /**
+     * Sets up the system admin role
+     */
+    protected function _setupSystemAdminRole ()
+    {
+        // Add our role
+        $this->addRole(self::ROLE_SYSTEM_ADMIN, array(self::ROLE_PROPOSAL_ADMIN, self::ROLE_QUOTE_ADMIN));
+
+        // Add our privileges
+        $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
+    }
+
+
+}

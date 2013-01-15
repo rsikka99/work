@@ -1,6 +1,6 @@
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 
 -- -----------------------------------------------------
@@ -40,7 +40,7 @@ CREATE  TABLE IF NOT EXISTS `logs` (
   `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
   `userId` INT(11) NULL DEFAULT NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `logs_ibfk_1` (`logTypeId` ASC) ,
+  INDEX `logs_ibfk_1_idx` (`logTypeId` ASC) ,
   CONSTRAINT `logs_ibfk_1`
     FOREIGN KEY (`logTypeId` )
     REFERENCES `log_types` (`id` )
@@ -68,39 +68,6 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `roles`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `roles` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `name` VARCHAR(255) NOT NULL ,
-  PRIMARY KEY (`id`) )
-ENGINE = InnoDB
-AUTO_INCREMENT = 5
-DEFAULT CHARACTER SET = latin1;
-
-
--- -----------------------------------------------------
--- Table `privileges`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `privileges` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `roleId` INT(11) NOT NULL ,
-  `module` VARCHAR(255) NOT NULL ,
-  `controller` VARCHAR(255) NOT NULL ,
-  `action` VARCHAR(255) NOT NULL ,
-  PRIMARY KEY (`id`) ,
-  INDEX `privileges_ibfk_!` (`roleId` ASC) ,
-  CONSTRAINT `privileges_ibfk_!`
-    FOREIGN KEY (`roleId` )
-    REFERENCES `roles` (`id` )
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
-AUTO_INCREMENT = 9
-DEFAULT CHARACTER SET = latin1;
-
-
--- -----------------------------------------------------
 -- Table `users`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `users` (
@@ -120,8 +87,8 @@ CREATE  TABLE IF NOT EXISTS `users` (
   UNIQUE INDEX `username` (`username` ASC) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 13
-DEFAULT CHARACTER SET = latin1, 
-COMMENT = 'The users table stores basic information on a user' ;
+DEFAULT CHARACTER SET = latin1
+COMMENT = 'The users table stores basic information on a user';
 
 
 -- -----------------------------------------------------
@@ -234,7 +201,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_master_devices` (
   `leased_toner_yield` INT(11) NULL DEFAULT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `toner_config_id` (`toner_config_id` ASC) ,
-  INDEX `proposalgenerator_master_devices_ibfk_1` (`manufacturer_id` ASC) ,
+  INDEX `proposalgenerator_master_devices_ibfk_1_idx` (`manufacturer_id` ASC) ,
   CONSTRAINT `proposalgenerator_master_devices_ibfk_2`
     FOREIGN KEY (`toner_config_id` )
     REFERENCES `pgen_toner_configs` (`id` ),
@@ -410,7 +377,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_toners` (
   UNIQUE INDEX `sku_2` (`sku` ASC, `manufacturer_id` ASC, `part_type_id` ASC, `yield` ASC, `toner_color_id` ASC) ,
   INDEX `part_type_id` (`part_type_id` ASC) ,
   INDEX `toner_color_id` (`toner_color_id` ASC) ,
-  INDEX `proposalgenerator_toners_ibfk_2` (`manufacturer_id` ASC) ,
+  INDEX `proposalgenerator_toners_ibfk_2_idx` (`manufacturer_id` ASC) ,
   CONSTRAINT `proposalgenerator_toners_ibfk_1`
     FOREIGN KEY (`part_type_id` )
     REFERENCES `pgen_part_types` (`id` ),
@@ -579,6 +546,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_report_settings` (
   `kilowattsPerHour` DOUBLE NULL DEFAULT NULL ,
   `assessmentPricingConfigId` INT(11) NULL DEFAULT NULL ,
   `grossMarginPricingConfigId` INT(11) NULL DEFAULT NULL ,
+  `reportDate` DATETIME NULL DEFAULT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `assessmentPricingConfigId` (`assessmentPricingConfigId` ASC) ,
   INDEX `grossMarginPricingConfigId` (`grossMarginPricingConfigId` ASC) ,
@@ -760,7 +728,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_ticket_pf_requests` (
   `watts_power_idle` DOUBLE NULL DEFAULT NULL ,
   PRIMARY KEY (`ticket_id`) ,
   INDEX `pf_device_id` (`ticket_id` ASC) ,
-  INDEX `proposalgenerator_ticket_pf_requests_ibfk_3` (`pf_device_id` ASC) ,
+  INDEX `proposalgenerator_ticket_pf_requests_ibfk_3_idx` (`pf_device_id` ASC) ,
   CONSTRAINT `proposalgenerator_ticket_pf_requests_ibfk_1`
     FOREIGN KEY (`user_id` )
     REFERENCES `users` (`id` ),
@@ -993,7 +961,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_user_toner_overrides` (
   `cost` DOUBLE NOT NULL ,
   PRIMARY KEY (`toner_id`, `user_id`) ,
   INDEX `toner_id` (`toner_id` ASC) ,
-  INDEX `proposalgenerator_user_toner_overrides_ibfk_2` (`user_id` ASC) ,
+  INDEX `proposalgenerator_user_toner_overrides_ibfk_2_idx` (`user_id` ASC) ,
   CONSTRAINT `proposalgenerator_user_toner_overrides_ibfk_1`
     FOREIGN KEY (`toner_id` )
     REFERENCES `pgen_toners` (`id` ),
@@ -1028,7 +996,7 @@ CREATE  TABLE IF NOT EXISTS `qgen_devices` (
   `oemSku` VARCHAR(255) NOT NULL ,
   `description` TEXT NULL ,
   PRIMARY KEY (`masterDeviceId`) ,
-  INDEX `quotegen_devices_ibfk_1` (`masterDeviceId` ASC) ,
+  INDEX `quotegen_devices_ibfk_1_idx` (`masterDeviceId` ASC) ,
   CONSTRAINT `quotegen_devices_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
     REFERENCES `pgen_master_devices` (`id` )
@@ -1141,8 +1109,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schemas` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8, 
-COMMENT = 'Stores information on different leasing schemas' ;
+DEFAULT CHARACTER SET = utf8
+COMMENT = 'Stores information on different leasing schemas';
 
 
 -- -----------------------------------------------------
@@ -1151,7 +1119,7 @@ COMMENT = 'Stores information on different leasing schemas' ;
 CREATE  TABLE IF NOT EXISTS `qgen_global_leasing_schemas` (
   `leasingSchemaId` INT(11) NOT NULL AUTO_INCREMENT ,
   PRIMARY KEY (`leasingSchemaId`) ,
-  INDEX `quotegen_global_leasing_schemas_ibfk_1` (`leasingSchemaId` ASC) ,
+  INDEX `quotegen_global_leasing_schemas_ibfk_1_idx` (`leasingSchemaId` ASC) ,
   CONSTRAINT `quotegen_global_leasing_schemas_ibfk_1`
     FOREIGN KEY (`leasingSchemaId` )
     REFERENCES `qgen_leasing_schemas` (`id` )
@@ -1159,7 +1127,7 @@ CREATE  TABLE IF NOT EXISTS `qgen_global_leasing_schemas` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
-COMMENT = 'This table marks leasing schemas as global' ;
+COMMENT = 'This table marks leasing schemas as global';
 
 
 -- -----------------------------------------------------
@@ -1178,8 +1146,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_ranges` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 5
-DEFAULT CHARACTER SET = utf8, 
-COMMENT = 'Stores the available value ranges (start range) for a leasin' ;
+DEFAULT CHARACTER SET = utf8
+COMMENT = 'Stores the available value ranges (start range) for a leasin';
 
 
 -- -----------------------------------------------------
@@ -1198,8 +1166,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_terms` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 10
-DEFAULT CHARACTER SET = utf8, 
-COMMENT = 'Holds the terms available for a leasing schema' ;
+DEFAULT CHARACTER SET = utf8
+COMMENT = 'Holds the terms available for a leasing schema';
 
 
 -- -----------------------------------------------------
@@ -1223,8 +1191,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_rates` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8, 
-COMMENT = 'Stores the rates that coincide with the terms and ranges for' ;
+DEFAULT CHARACTER SET = utf8
+COMMENT = 'Stores the rates that coincide with the terms and ranges for';
 
 
 -- -----------------------------------------------------
@@ -1272,8 +1240,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_quotes` (
   `colorOverageMargin` DOUBLE NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `clientId` (`clientId` ASC) ,
-  INDEX `quotegen_quotes_ibfk_2` (`userId` ASC) ,
-  INDEX `quotegen_quotes_ibfk_3` (`pricingConfigId` ASC) ,
+  INDEX `quotegen_quotes_ibfk_2_idx` (`userId` ASC) ,
+  INDEX `quotegen_quotes_ibfk_3_idx` (`pricingConfigId` ASC) ,
   CONSTRAINT `quotegen_quotes_ibfk_1`
     FOREIGN KEY (`clientId` )
     REFERENCES `clients` (`id` )
@@ -1291,8 +1259,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_quotes` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8, 
-COMMENT = 'Primary table for a quote. Stores basic information' ;
+DEFAULT CHARACTER SET = utf8
+COMMENT = 'Primary table for a quote. Stores basic information';
 
 
 -- -----------------------------------------------------
@@ -1359,8 +1327,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_device_configuration_options` (
   `optionId` INT(11) NOT NULL ,
   `masterDeviceId` INT(11) NOT NULL ,
   PRIMARY KEY (`quoteDeviceOptionId`) ,
-  INDEX `quotegen_quote_device_option_options_ibfk_1` (`optionId` ASC, `masterDeviceId` ASC) ,
-  INDEX `quotegen_quote_device_option_options_ibfk_2` (`quoteDeviceOptionId` ASC) ,
+  INDEX `quotegen_quote_device_option_options_ibfk_1_idx` (`optionId` ASC, `masterDeviceId` ASC) ,
+  INDEX `quotegen_quote_device_option_options_ibfk_2_idx` (`quoteDeviceOptionId` ASC) ,
   CONSTRAINT `quotegen_quote_device_option_options_ibfk_1`
     FOREIGN KEY (`optionId` , `masterDeviceId` )
     REFERENCES `qgen_device_options` (`optionId` , `masterDeviceId` )
@@ -1412,7 +1380,7 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_settings` (
   `serviceCostPerPage` DOUBLE NULL ,
   `adminCostPerPage` DOUBLE NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `quotegen_quote_settings_ibfk1` (`pricingConfigId` ASC) ,
+  INDEX `quotegen_quote_settings_ibfk1_idx` (`pricingConfigId` ASC) ,
   CONSTRAINT `quotegen_quote_settings_ibfk1`
     FOREIGN KEY (`pricingConfigId` )
     REFERENCES `pgen_pricing_configs` (`id` )
@@ -1460,6 +1428,18 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
+-- Table `roles`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `roles` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(255) NOT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB
+AUTO_INCREMENT = 5
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
 -- Table `sessions`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `sessions` (
@@ -1479,7 +1459,7 @@ CREATE  TABLE IF NOT EXISTS `user_roles` (
   `userId` INT(11) NOT NULL ,
   `roleId` INT(11) NOT NULL ,
   PRIMARY KEY (`userId`, `roleId`) ,
-  INDEX `FK_userRoles_roles` (`roleId` ASC) ,
+  INDEX `FK_userRoles_roles_idx` (`roleId` ASC) ,
   CONSTRAINT `FK_userRoles_users`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
@@ -1501,8 +1481,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_lease_terms` (
   `quoteId` INT NOT NULL ,
   `leasingSchemaTermId` INT NOT NULL ,
   PRIMARY KEY (`quoteId`) ,
-  INDEX `fk_qgen_quote_lease_terms_qgen_quotes1` (`quoteId` ASC) ,
-  INDEX `fk_qgen_quote_lease_terms_qgen_leasing_schema_terms1` (`leasingSchemaTermId` ASC) ,
+  INDEX `fk_qgen_quote_lease_terms_qgen_quotes1_idx` (`quoteId` ASC) ,
+  INDEX `fk_qgen_quote_lease_terms_qgen_leasing_schema_terms1_idx` (`leasingSchemaTermId` ASC) ,
   UNIQUE INDEX `quoteId_UNIQUE` (`quoteId` ASC, `leasingSchemaTermId` ASC) ,
   CONSTRAINT `fk_qgen_quote_lease_terms_qgen_quotes1`
     FOREIGN KEY (`quoteId` )
@@ -1527,7 +1507,7 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_device_groups` (
   `isDefault` TINYINT NOT NULL DEFAULT 0 ,
   `groupPages` TINYINT NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`id`) ,
-  INDEX `quotegen_quote_device_groups_ibfk_1` (`quoteId` ASC) ,
+  INDEX `quotegen_quote_device_groups_ibfk_1_idx` (`quoteId` ASC) ,
   CONSTRAINT `quotegen_quote_device_groups_ibfk_1`
     FOREIGN KEY (`quoteId` )
     REFERENCES `qgen_quotes` (`id` )
@@ -1546,8 +1526,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_device_group_devices` (
   `monochromePagesQuantity` INT NOT NULL ,
   `colorPagesQuantity` INT NOT NULL ,
   PRIMARY KEY (`quoteDeviceGroupId`, `quoteDeviceId`) ,
-  INDEX `qgen_quote_device_group_devices_ibfk1` (`quoteDeviceId` ASC) ,
-  INDEX `qgen_quote_device_group_devices_ibfk2` (`quoteDeviceGroupId` ASC) ,
+  INDEX `qgen_quote_device_group_devices_ibfk1_idx` (`quoteDeviceId` ASC) ,
+  INDEX `qgen_quote_device_group_devices_ibfk2_idx` (`quoteDeviceGroupId` ASC) ,
   CONSTRAINT `qgen_quote_device_group_devices_ibfk1`
     FOREIGN KEY (`quoteDeviceId` )
     REFERENCES `qgen_quote_devices` (`id` )
@@ -1575,7 +1555,7 @@ CREATE  TABLE IF NOT EXISTS `contacts` (
   `number` SMALLINT NULL ,
   `extension` SMALLINT NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `contacts_ibfk_1` (`clientId` ASC) ,
+  INDEX `contacts_ibfk_1_idx` (`clientId` ASC) ,
   CONSTRAINT `contacts_ibfk_1`
     FOREIGN KEY (`clientId` )
     REFERENCES `clients` (`id` )
@@ -1608,8 +1588,8 @@ CREATE  TABLE IF NOT EXISTS `addresses` (
   `postCode` VARCHAR(255) NOT NULL ,
   `countryId` INT NOT NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `addresses_ibfk_1` (`clientId` ASC) ,
-  INDEX `addresses_ibfk_2` (`countryId` ASC) ,
+  INDEX `addresses_ibfk_1_idx` (`clientId` ASC) ,
+  INDEX `addresses_ibfk_2_idx` (`countryId` ASC) ,
   CONSTRAINT `addresses_ibfk_1`
     FOREIGN KEY (`clientId` )
     REFERENCES `clients` (`id` )
@@ -1631,7 +1611,7 @@ CREATE  TABLE IF NOT EXISTS `regions` (
   `countryId` INT NOT NULL ,
   `region` CHAR(2) NOT NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `regions_ibfk_1` (`countryId` ASC) ,
+  INDEX `regions_ibfk_1_idx` (`countryId` ASC) ,
   CONSTRAINT `regions_ibfk_1`
     FOREIGN KEY (`countryId` )
     REFERENCES `countries` (`id` )

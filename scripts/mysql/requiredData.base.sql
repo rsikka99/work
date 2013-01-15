@@ -10,40 +10,49 @@ INSERT INTO `users` (`id`, `username`, `password`, `firstname`, `lastname`, `ema
 	(4, 'swilder', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Shawn', 'Wilder', 'swilder@tangentmtw.com'),
 	(5, 'jlarochelle', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Jay', 'Larochelle', 'jlarochelle@tangentmtw.com'),
 	(6, 'nmcconkey', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Norm', 'McConkey', 'nmcconkey@tangentmtw.com'),
-	(8, 'standarduser', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Standard', 'User', 'development@tangentmtw.com');
+	(8, 'standarduser', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Standard', 'User', 'development@tangentmtw.com'),
+	(9, 'triehl', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Tyson', 'Riehl', 'triehl@tangentmtw.com');
 	
 INSERT INTO `roles` VALUES
-    (1, 'Standard User');
-    
-    
+    (1, 'System Administrator'),
+    (2, 'Assessment Administrator'),
+    (3, 'Assessment User'),
+    (4, 'Quote Administrator'),
+    (5, 'Quote User');
+
 /* Add roles to users */
 INSERT INTO `user_roles` (`userId`, `roleId`) VALUES
-    (1,1), /* root,Root */
+    -- Root User
+    (1,1),
    
     -- lrobert
-    (2,1),
-    
+    (2,3),
+    (2,5),
+
     -- swilder
-    (4,1),
-    
+    (4,3),
+    (4,5),
+
     -- jlarochelle
-    (5,1),
-    
+    (5,3),
+    (5,5),
+
     -- nmcconkey
-    (6,1),
-    
+    (6,3),
+    (6,5),
+
     -- standarduser
-    (8,1);
+    (8,5);
     
 /* Add privileges to the roles */
-INSERT INTO `privileges` (`roleId`, `module`, `controller`, `action`) VALUES
--- ROOT
-    (1, 'admin', 'index', '%'),    
-    (1, 'admin', 'toner', '%'),
-    (1, 'admin', 'user', '%'),
-    (1, 'default', '%', '%'),
-    (1, 'quotegen', '%', '%'),
-    (1, 'proposalgen', 'manufacturer', '%');        
+-- INSERT INTO `privileges` (`roleId`, `module`, `controller`, `action`) VALUES
+-- -- ROOT
+--     (1, 'admin', 'index', '%'),
+--     (1, 'admin', 'toner', '%'),
+--     (1, 'admin', 'user', '%'),
+--     (1, 'default', '%', '%'),
+--     (1, 'quotegen', '%', '%'),
+--     (1, 'proposalgen', 'manufacturer', '%');
     
 INSERT INTO `log_types` (`id`, `name`) VALUES
 (1, 'Application Log'),
