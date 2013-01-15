@@ -12,17 +12,17 @@ class Proposalgen_Model_DevicePf extends My_Model_Abstract
     public $pfModelId;
 
     /**
-     * @var int
+     * @var string
      */
     public $pfDbDeviceName;
 
     /**
-     * @var int
+     * @var string
      */
     public $pfDbManufacturer;
 
     /**
-     * @var int
+     * @var string
      */
     public $dateCreated;
 

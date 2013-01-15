@@ -138,8 +138,8 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                     $device = new Proposalgen_Model_DeviceInstance();
                     
                     $manufacturer = new Proposalgen_Model_Manufacturer();
-                    $manufacturer->setFullname($row->device_manufacturer);
-                    $manufacturer->setDisplayname($row->device_manufacturer);
+                    $manufacturer->fullname = $row->device_manufacturer;
+                    $manufacturer->displayname = $row->device_manufacturer;
                     
                     $tonerConfigMapper = Proposalgen_Model_Mapper_TonerConfig::getInstance();
                     $tonerConfig = $tonerConfigMapper->find($row->toner_config_id);
@@ -163,9 +163,9 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                     foreach ( $meterColumns as $meterColumn => $meterType )
                     {
                         $newMeter = new Proposalgen_Model_Meter();
-                        $newMeter->setMeterType($meterType)
-                            ->setStartMeter($row ["start_meter_" . $meterColumn])
-                            ->setEndMeter($row ["end_meter_" . $meterColumn]);
+                        $newMeter->meterType = $meterType;
+                        $newMeter->startMeter = $row ["start_meter_" . $meterColumn];
+                        $newMeter->endMeter = $row ["end_meter_" . $meterColumn];
                         $meters [$meterType] = $newMeter;
                     }
                     

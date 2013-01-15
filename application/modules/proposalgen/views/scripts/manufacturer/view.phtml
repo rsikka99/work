@@ -1,15 +1,18 @@
-<?php /* @var $manufacturer Proposalgen_Model_Manufacturer */ $manufacturer = $this->manufacturer; ?>
+<?php /* @var $manufacturer Proposalgen_Model_Manufacturer */
+$manufacturer = $this->manufacturer; ?>
 <div class="page-header">
     <h1>Manufacturer Management (Beta)</h1>
 </div>
 <div class="well">
     <dl class="dl-horizontal">
-        <dt>Full Name</dt><dd><?php echo $manufacturer->getName(); ?></dd>
-        <dt>Display Name</dt><dd><?php echo $manufacturer->getPhoneNumber(); ?></dd>
-        <?php if ($manufacturer->getIsDeleted()) : ?>
-        <dt>Deleted</dt><dd>This manufacturer is deleted.</dd>
+        <dt>Full Name</dt><dd><?php echo $manufacturer->fullname; ?></dd>
+        <dt>Display Name</dt><dd><?php echo $manufacturer->displayname; ?></dd>
+        <?php if ($manufacturer->isDeleted) : ?>
+        <dt>Deleted</dt>
+        <dd>This manufacturer is deleted.</dd>
         <?php else: ?>
-        <dt>Deleted</dt><dd>No.</dd>
+        <dt>Deleted</dt>
+        <dd>No.</dd>
         <?php endif; ?>
     </dl>
 </div>

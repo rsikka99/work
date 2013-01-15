@@ -686,11 +686,11 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
                     $startmeter    = $meters [Proposalgen_Model_Meter::METER_TYPE_LIFE]->getStartMeter() - $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->getStartMeter();
                     $endmeter      = $meters [Proposalgen_Model_Meter::METER_TYPE_LIFE]->getEndMeter() - $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->getEndMeter();
                     $newBlackMeter = new Proposalgen_Model_Meter();
-                    $newBlackMeter->setStartMeter($startmeter)
-                        ->setEndMeter($endmeter)
-                        ->setMeterType(Proposalgen_Model_Meter::METER_TYPE_BLACK)
-                        ->setDeviceInstanceId($this->getDeviceInstanceId())
-                        ->setGeneratedBySystem(true);
+                    $newBlackMeter->startMeter = $startmeter;
+                    $newBlackMeter->endMeter = $endmeter;
+                    $newBlackMeter->meterType = Proposalgen_Model_Meter::METER_TYPE_BLACK;
+                    $newBlackMeter->deviceInstanceId = $this->getDeviceInstanceId();
+                    $newBlackMeter->generatedBySystem = true;
                     $meters [Proposalgen_Model_Meter::METER_TYPE_BLACK] = $newBlackMeter;
                 }
             }

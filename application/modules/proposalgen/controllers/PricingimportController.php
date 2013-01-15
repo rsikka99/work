@@ -330,7 +330,8 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                         
                         // Master Matchup to DevicePf
                         $masterMatchupPf = new Proposalgen_Model_MasterMatchupPf();
-                        $masterMatchupPf->setDevicesPfId($devicePfId)->setMasterDeviceId($masterDeviceId);
+                        $masterMatchupPf->devicesPfId = $devicePfId;
+                        $masterMatchupPf->masterDeviceId = $masterDeviceId;
                         Proposalgen_Model_Mapper_MasterMatchupPf::getInstance()->save($masterMatchupPf);
                     }
                 }
