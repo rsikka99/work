@@ -1,183 +1,165 @@
 <?php
-
-/**
- * Class Proposalgen_Model_PricingConfig
- *
- * @author "Kevin Jervis"
- */
-class Proposalgen_Model_PricingConfig extends Tangent_Model_Abstract
+class Proposalgen_Model_PricingConfig extends My_Model_Abstract
 {
-    const NONE = 1;
-    const OEM = 2;
-    const COMP = 3;
+    const NONE              = 1;
+    const OEM               = 2;
+    const COMP              = 3;
     const OEMMONO_COMPCOLOR = 4;
     const COMPMONO_OEMCOLOR = 5;
-    public static $ConfigNames = array (
-            1 => "", 
-            2 => "OEM", 
-            3 => "COMP", 
-            4 => "OEM Mono, COMP Color", 
-            5 => "COMP Mono, OEM Color" 
-    );
-    protected $PricingConfigId;
-    protected $ConfigName;
-    protected $ColorTonerPartTypeId;
-    protected $MonoTonerPartTypeId;
-    
-    // Extra variables
-    protected $ColorTonerPartType;
-    protected $MonoTonerPartType;
 
+    /**
+     * An array of nice configuration names with the config id as the array key
+     *
+     * @var string[]
+     */
+    public static $ConfigNames = array(
+        1 => "",
+        2 => "OEM",
+        3 => "COMP",
+        4 => "OEM Mono, COMP Color",
+        5 => "COMP Mono, OEM Color"
+    );
+
+    /**
+     * @var int
+     */
+    public $pricingConfigId;
+
+    /**
+     * @var string
+     */
+    public $configName;
+
+    /**
+     * @var int
+     */
+    public $colorTonerPartTypeId;
+
+    /**
+     * @var int
+     */
+    public $monoTonerPartTypeId;
+
+    // Extra variables
+    /**
+     * @var Proposalgen_Model_PartType
+     */
+    protected $_colorTonerPartType;
+
+    /**
+     * @var Proposalgen_Model_PartType
+     */
+    protected $_monoTonerPartType;
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
+    {
+        if (is_array($params))
+        {
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
+        }
+
+        if (isset($params->pricingConfigId) && !is_null($params->pricingConfigId))
+        {
+            $this->pricingConfigId = $params->pricingConfigId;
+        }
+
+        if (isset($params->configName) && !is_null($params->configName))
+        {
+            $this->configName = $params->configName;
+        }
+
+        if (isset($params->colorTonerPartTypeId) && !is_null($params->colorTonerPartTypeId))
+        {
+            $this->colorTonerPartTypeId = $params->colorTonerPartTypeId;
+        }
+
+        if (isset($params->monoTonerPartTypeId) && !is_null($params->monoTonerPartTypeId))
+        {
+            $this->monoTonerPartTypeId = $params->monoTonerPartTypeId;
+        }
+
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray ()
+    {
+        return array(
+            "pricingConfigId"      => $this->pricingConfigId,
+            "configName"           => $this->configName,
+            "colorTonerPartTypeId" => $this->colorTonerPartTypeId,
+            "monoTonerPartTypeId"  => $this->monoTonerPartTypeId,
+        );
+    }
+
+    /**
+     * Gets the nice name for a pricing configuration
+     *
+     * @return string
+     */
     public function getNiceConfigName ()
     {
-        return self::$ConfigNames [$this->getPricingConfigId()];
+        return self::$ConfigNames [$this->pricingConfigId];
     }
 
-    /**
-     *
-     * @return the $PricingConfigId
-     */
-    public function getPricingConfigId ()
-    {
-        if (! isset($this->PricingConfigId))
-        {
-            
-            $this->PricingConfigId = null;
-        }
-        return $this->PricingConfigId;
-    }
 
     /**
-     *
-     * @param field_type $PricingConfigId            
-     */
-    public function setPricingConfigId ($PricingConfigId)
-    {
-        $this->PricingConfigId = $PricingConfigId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $ConfigName
-     */
-    public function getConfigName ()
-    {
-        if (! isset($this->ConfigName))
-        {
-            
-            $this->ConfigName = null;
-        }
-        return $this->ConfigName;
-    }
-
-    /**
-     *
-     * @param field_type $ConfigName            
-     */
-    public function setConfigName ($ConfigName)
-    {
-        $this->ConfigName = $ConfigName;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $ColorTonerPartTypeId
-     */
-    public function getColorTonerPartTypeId ()
-    {
-        if (! isset($this->ColorTonerPartTypeId))
-        {
-            
-            $this->ColorTonerPartTypeId = null;
-        }
-        return $this->ColorTonerPartTypeId;
-    }
-
-    /**
-     *
-     * @param field_type $ColorTonerPartTypeId            
-     */
-    public function setColorTonerPartTypeId ($ColorTonerPartTypeId)
-    {
-        $this->ColorTonerPartTypeId = $ColorTonerPartTypeId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $MonoTonerPartTypeId
-     */
-    public function getMonoTonerPartTypeId ()
-    {
-        if (! isset($this->MonoTonerPartTypeId))
-        {
-            
-            $this->MonoTonerPartTypeId = null;
-        }
-        return $this->MonoTonerPartTypeId;
-    }
-
-    /**
-     *
-     * @param field_type $MonoTonerPartTypeId            
-     */
-    public function setMonoTonerPartTypeId ($MonoTonerPartTypeId)
-    {
-        $this->MonoTonerPartTypeId = $MonoTonerPartTypeId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $ColorTonerPartType
+     * @return Proposalgen_Model_PartType
      */
     public function getColorTonerPartType ()
     {
-        if (! isset($this->ColorTonerPartType))
+        if (!isset($this->_colorTonerPartType))
         {
-            if (isset($this->ColorTonerPartTypeId))
+            if (isset($this->colorTonerPartTypeId))
             {
-                $this->ColorTonerPartType = Proposalgen_Model_Mapper_PartType::getInstance()->find($this->getColorTonerPartTypeId());
+                $this->_colorTonerPartType = Proposalgen_Model_Mapper_PartType::getInstance()->find($this->colorTonerPartTypeId);
             }
         }
-        return $this->ColorTonerPartType;
+
+        return $this->_colorTonerPartType;
     }
 
     /**
+     * @param $ColorTonerPartType
      *
-     * @param field_type $ColorTonerPartType            
+     * @return Proposalgen_Model_PricingConfig
      */
     public function setColorTonerPartType ($ColorTonerPartType)
     {
-        $this->ColorTonerPartType = $ColorTonerPartType;
+        $this->_colorTonerPartType = $ColorTonerPartType;
+
         return $this;
     }
 
     /**
-     *
-     * @return the $MonoTonerPartType
+     * @return Proposalgen_Model_PartType
      */
     public function getMonoTonerPartType ()
     {
-        if (! isset($this->MonoTonerPartType))
+        if (!isset($this->_monoTonerPartType))
         {
-            if (isset($this->MonoTonerPartTypeId))
+            if (isset($this->monoTonerPartTypeId))
             {
-                $this->MonoTonerPartType = Proposalgen_Model_Mapper_PartType::getInstance()->find($this->getMonoTonerPartTypeId());
+                $this->_monoTonerPartType = Proposalgen_Model_Mapper_PartType::getInstance()->find($this->monoTonerPartTypeId);
             }
         }
-        return $this->MonoTonerPartType;
+
+        return $this->_monoTonerPartType;
     }
 
     /**
+     * @param $MonoTonerPartType
      *
-     * @param field_type $MonoTonerPartType            
+     * @return Proposalgen_Model_PricingConfig
      */
     public function setMonoTonerPartType ($MonoTonerPartType)
     {
-        $this->MonoTonerPartType = $MonoTonerPartType;
+        $this->_monoTonerPartType = $MonoTonerPartType;
+
         return $this;
     }
 }

@@ -265,7 +265,7 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
         $pricing_config->setLabel('Toner Preference')
             ->setAttrib('class', 'span2')
             ->setAttrib('data-defaultvalue', $this->_defaultSettings->getAssessmentPricingConfig()
-            ->getConfigName())
+            ->configName)
             ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
         
         $this->addElement($pricing_config);
@@ -377,7 +377,7 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
         $gross_margin_pricing_config->setLabel('Toner Preference')
             ->setAttrib('class', 'span2')
             ->setAttrib('data-defaultvalue', $this->_defaultSettings->getGrossMarginPricingConfig()
-            ->getConfigName())
+            ->configName)
             ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
         
         $this->addElement($gross_margin_pricing_config);
@@ -390,7 +390,7 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
 
         // Save button
         $element = new Zend_Form_Element_Submit('save_settings', array (
-                'disableLoadDefaultDecorators' => true 
+                'disableLoadDefaultDecorators' => true
         ));
         $element->setLabel('Save and continue')->setAttrib('class', 'btn btn-primary');
         $this->addElement($element);
@@ -404,13 +404,13 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
         
         // Add the submit button
         $this->addElement('submit', 'submit', array (
-                'ignore' => true, 
+                'ignore' => true,
                 'label' => 'Save & Continue' 
         ));
         
         // Add the cancel button
         $this->addElement('submit', 'cancel', array (
-                'ignore' => true, 
+                'ignore' => true,
                 'label' => 'Back' 
         ));
         

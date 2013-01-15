@@ -813,10 +813,9 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
     {
         $mapper = Proposalgen_Model_Mapper_NumericAnswer::getInstance();
         $numericAnswer = new Proposalgen_Model_NumericAnswer();
-        $numericAnswer->setQuestionId($questionId);
-        $numericAnswer->setAnswer($answer);
-        $numericAnswer->setReportId($this->getReport()
-            ->getId());
+        $numericAnswer->questionId =$questionId;
+        $numericAnswer->answer = $answer;
+        $numericAnswer->reportId = $this->getReport()->getId();
         $mapper->save($numericAnswer);
     }
 
