@@ -1,64 +1,51 @@
 <?php
-
-/**
- * Class Proposalgen_Model_TicketStatus
- *
- * @author "Kevin Jervis"
- */
 class Proposalgen_Model_TicketStatus extends Tangent_Model_Abstract
 {
-    const STATUS_NEW = 1;
-    const STATUS_OPEN = 2;
-    const STATUS_CLOSED = 3;
+    const STATUS_NEW      = 1;
+    const STATUS_OPEN     = 2;
+    const STATUS_CLOSED   = 3;
     const STATUS_REJECTED = 4;
-    protected $StatusId;
-    protected $StatusName;
 
     /**
-     *
-     * @return the $StatusId
+     * @var int
      */
-    public function getStatusId ()
+    public $statusId;
+
+    /**
+     * @var string
+     */
+    public $statusName;
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
     {
-        if (! isset($this->StatusId))
+        if (is_array($params))
         {
-            
-            $this->StatusId = null;
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        return $this->StatusId;
-    }
 
-    /**
-     *
-     * @param field_type $StatusId            
-     */
-    public function setStatusId ($StatusId)
-    {
-        $this->StatusId = $StatusId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $StatusName
-     */
-    public function getStatusName ()
-    {
-        if (! isset($this->StatusName))
+        if (isset($params->statusId) && !is_null($params->statusId))
         {
-            
-            $this->StatusName = null;
+            $this->statusId = $params->statusId;
         }
-        return $this->StatusName;
+
+        if (isset($params->statusName) && !is_null($params->statusName))
+        {
+            $this->statusName = $params->statusName;
+        }
+
     }
 
     /**
-     *
-     * @param field_type $StatusName            
+     * @return array
      */
-    public function setStatusName ($StatusName)
+    public function toArray ()
     {
-        $this->StatusName = $StatusName;
-        return $this;
+        return array(
+            "statusId"   => $this->statusId,
+            "statusName" => $this->statusName,
+        );
     }
 }

@@ -1,61 +1,48 @@
 <?php
-
-/**
- * Class Proposalgen_Model_TicketCategory
- *
- * @author "Kevin Jervis"
- */
-class Proposalgen_Model_TicketCategory extends Tangent_Model_Abstract
+class Proposalgen_Model_TicketCategory extends My_Model_Abstract
 {
     const PRINTFLEET_DEVICE_SUPPORT = 1;
-    protected $CategoryId;
-    protected $CategoryName;
 
     /**
-     *
-     * @return the $CategoryId
+     * @var int
      */
-    public function getCategoryId ()
+    public $categoryId;
+
+    /**
+     * @var string
+     */
+    public $categoryName;
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
     {
-        if (! isset($this->CategoryId))
+        if (is_array($params))
         {
-            
-            $this->CategoryId = null;
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        return $this->CategoryId;
-    }
 
-    /**
-     *
-     * @param field_type $CategoryId            
-     */
-    public function setCategoryId ($CategoryId)
-    {
-        $this->CategoryId = $CategoryId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $CategoryName
-     */
-    public function getCategoryName ()
-    {
-        if (! isset($this->CategoryName))
+        if (isset($params->categoryId) && !is_null($params->categoryId))
         {
-            
-            $this->CategoryName = null;
+            $this->categoryId = $params->categoryId;
         }
-        return $this->CategoryName;
+
+        if (isset($params->categoryName) && !is_null($params->categoryName))
+        {
+            $this->categoryName = $params->categoryName;
+        }
+
     }
 
     /**
-     *
-     * @param field_type $CategoryName            
+     * @return array
      */
-    public function setCategoryName ($CategoryName)
+    public function toArray ()
     {
-        $this->CategoryName = $CategoryName;
-        return $this;
+        return array(
+            "categoryId"   => $this->categoryId,
+            "categoryName" => $this->categoryName,
+        );
     }
 }

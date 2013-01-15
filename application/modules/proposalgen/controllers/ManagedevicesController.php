@@ -834,19 +834,19 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                             // get printer details
                             $devices_pf_id       = $result->devicepfid;
                             $device_manufacturer = $result->devicemanufacturer;
-                            $printer_model       = $result->PrinterModel;
-                            $launch_date         = $result->LaunchDate;
-                            $device_price        = ($result->DevicePrice > 0 ? $result->DevicePrice : null);
-                            $toner_config        = $result->TonerConfig;
-                            $is_copier           = $result->IsCopier;
-                            $is_fax              = $result->IsFax;
-                            $is_scanner          = $result->IsScanner;
-                            $is_duplex           = $result->IsDuplex;
-                            $ppm_black           = ($result->PpmBlack > 0 ? $result->PpmBlack : null);
-                            $ppm_color           = ($result->PpmColor > 0 ? $result->PpmColor : null);
-                            $duty_cycle          = ($result->DutyCycle > 0 ? $result->DutyCycle : null);
-                            $watts_power_normal  = ($result->WattsPowerNormal > 0 ? $result->WattsPowerNormal : null);
-                            $watts_power_idle    = ($result->WattsPowerIdle > 0 ? $result->WattsPowerIdle : null);
+                            $printer_model       = $result->printerModel;
+                            $launch_date         = $result->launchDate;
+                            $device_price        = ($result->devicePrice > 0 ? $result->devicePrice : null);
+                            $toner_config        = $result->tonerConfig;
+                            $is_copier           = $result->isCopier;
+                            $is_fax              = $result->isFax;
+                            $is_scanner          = $result->isScanner;
+                            $is_duplex           = $result->isDuplex;
+                            $ppm_black           = ($result->ppmBlack > 0 ? $result->ppmBlack : null);
+                            $ppm_color           = ($result->ppmColor > 0 ? $result->ppmColor : null);
+                            $duty_cycle          = ($result->dutyCycle > 0 ? $result->dutyCycle : null);
+                            $watts_power_normal  = ($result->wattsPowerNormal > 0 ? $result->wattsPowerNormal : null);
+                            $watts_power_idle    = ($result->wattsPowerIdle > 0 ? $result->wattsPowerIdle : null);
                             $is_leased           = null;
                             $leased_toner_yield  = null;
 

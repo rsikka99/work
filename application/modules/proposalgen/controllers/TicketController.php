@@ -241,9 +241,9 @@ class Proposalgen_TicketController extends Zend_Controller_Action
             // find pf_device and unknown_device information
             $ticketpfrequestMapper           = Proposalgen_Model_Mapper_TicketPFRequest::getInstance();
             $ticketpfrequest                 = $ticketpfrequestMapper->find($ticket_id);
-            $this->view->devices_pf_id       = $ticketpfrequest->DevicePfId;
-            $this->view->device_pf_name      = ucwords(strtolower($ticketpfrequest->DevicePf->PfDbManufacturer . ' ' . $ticketpfrequest->DevicePf->PfDbDeviceName));
-            $this->view->user_suggested_name = ucwords(strtolower($ticketpfrequest->DeviceManufacturer . ' ' . $ticketpfrequest->PrinterModel));
+            $this->view->devices_pf_id       = $ticketpfrequest->devicePfId;
+            $this->view->device_pf_name      = ucwords(strtolower($ticketpfrequest->_devicePf->PfDbManufacturer . ' ' . $ticketpfrequest->_devicePf->PfDbDeviceName));
+            $this->view->user_suggested_name = ucwords(strtolower($ticketpfrequest->deviceManufacturer . ' ' . $ticketpfrequest->printerModel));
 
             // check for existing mapping
             $this->view->is_mapped = false;
@@ -259,7 +259,7 @@ class Proposalgen_TicketController extends Zend_Controller_Action
                 ->join(array(
                             'm' => 'manufacturers'
                        ), 'm.id = md.manufacturer_id')
-                ->where('pf_device_id = ?', $ticketpfrequest->DevicePfId, 'INTEGER');
+                ->where('pf_device_id = ?', $ticketpfrequest->devicePfId, 'INTEGER');
             $stmt   = $db->query($select);
             $row    = $stmt->fetch();
 

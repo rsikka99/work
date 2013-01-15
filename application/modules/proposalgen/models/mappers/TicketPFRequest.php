@@ -1,21 +1,20 @@
 <?php
-
 class Proposalgen_Model_Mapper_TicketPFRequest extends Tangent_Model_Mapper_Abstract
 {
     protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_TicketPFRequest";
     static $_instance;
 
     /**
-     *
      * @return Proposalgen_Model_Mapper_TicketPFRequest
      */
     public static function getInstance ()
     {
-        if (! isset(self::$_instance))
+        if (!isset(self::$_instance))
         {
-            $className = get_class();
+            $className       = get_class();
             self::$_instance = new $className();
         }
+
         return self::$_instance;
     }
 
@@ -33,7 +32,9 @@ class Proposalgen_Model_Mapper_TicketPFRequest extends Tangent_Model_Mapper_Abst
     /**
      * Maps a database row object to an Proposalgen_Model
      *
-     * @param Zend_Db_Table_Row $row            
+     * @param Zend_Db_Table_Row $row
+     *
+     * @throws Exception
      * @return Proposalgen_Model_TicketPFRequest
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
@@ -41,68 +42,73 @@ class Proposalgen_Model_Mapper_TicketPFRequest extends Tangent_Model_Mapper_Abst
         $object = null;
         try
         {
-            $object = new Proposalgen_Model_TicketPFRequest();
-            $object->setTicketId($row->ticket_id)
-                ->setDevicePfId($row->pf_device_id)
-                ->setUserId($row->user_id)
-                ->setDeviceManufacturer($row->manufacturer)
-                ->setPrinterModel($row->printer_model)
-                ->setLaunchDate($row->launch_date)
-                ->setDevicePrice($row->cost)
-                ->setServiceCostPerPage($row->service_cost_per_page)
-                ->setTonerConfig($row->toner_config)
-                ->setIsCopier($row->is_copier)
-                ->setIsFax($row->is_fax)
-                ->setIsDuplex($row->is_duplex)
-                ->setIsScanner($row->is_scanner)
-                ->setPpmBlack($row->PPM_black)
-                ->setPpmColor($row->PPM_color)
-                ->setDutyCycle($row->duty_cycle)
-                ->setWattsPowerNormal($row->watts_power_normal)
-                ->setWattsPowerIdle($row->watts_power_idle);
+            $object                     = new Proposalgen_Model_TicketPFRequest();
+            $object->ticketId           = $row->ticket_id;
+            $object->devicePfId         = $row->pf_device_id;
+            $object->userId             = $row->user_id;
+            $object->deviceManufacturer = $row->manufacturer;
+            $object->printerModel       = $row->printer_model;
+            $object->launchDate         = $row->launch_date;
+            $object->devicePrice        = $row->cost;
+            $object->serviceCostPerPage = $row->service_cost_per_page;
+            $object->tonerConfig        = $row->toner_config;
+            $object->isCopier           = $row->is_copier;
+            $object->isFax              = $row->is_fax;
+            $object->isDuplex           = $row->is_duplex;
+            $object->isScanner          = $row->is_scanner;
+            $object->ppmBlack           = $row->PPM_black;
+            $object->ppmColor           = $row->PPM_color;
+            $object->dutyCycle          = $row->duty_cycle;
+            $object->wattsPowerNormal   = $row->watts_power_normal;
+            $object->wattsPowerIdle     = $row->watts_power_idle;
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
             throw new Exception("Failed to map a ticket printer request row", 0, $e);
         }
+
         return $object;
     }
 
     /**
      * Saved an Proposalgen_Model_ object to the database
      *
-     * @param unknown_type $object            
+     * @param Proposalgen_Model_TicketPrinterRequest $object
+     *
+     * @throws Exception
+     * @return string
      */
     public function save (Proposalgen_Model_TicketPrinterRequest $object)
     {
         $primaryKey = 0;
         try
         {
-            $data ["ticket_id"] = $object->getTicketId();
-            $data ["pf_device_id"] = $object->getDevicesPfId();
-            $data ["user_id"] = $object->getUserId();
-            $data ["manufacturer"] = $object->getDeviceManufacturer();
-            $data ["printer_model"] = $object->getPrinterModel();
-            $data ["launch_date"] = $object->getLaunchDate();
-            $data ["cost"] = $object->getDevicePrice();
-            $data ["service_cost_per_page"] = $object->getServiceCostPerPage();
-            $data ["toner_config"] = $object->getTonerConfig();
-            $data ["is_copier"] = $object->getIsCopier();
-            $data ["is_fax"] = $object->getIsFax();
-            $data ["is_duplex"] = $object->getIsDuplex();
-            $data ["is_scanner"] = $object->getIsScanner();
-            $data ["PPM_black"] = $object->getPpmBlack();
-            $data ["PPM_color"] = $object->getPpmColor();
-            $data ["duty_cycle"] = $object->getDutyCycle();
-            $data ["watts_power_normal"] = $object->getWattsPowerNormal();
-            $data ["watts_power_idle"] = $object->getWattsPowerIdle();
-            
+            $data ["ticket_id"]             = $object->TicketId;
+            $data ["pf_device_id"]          = $object->DevicesPfId;
+            $data ["user_id"]               = $object->UserId;
+            $data ["manufacturer"]          = $object->DeviceManufacturer;
+            $data ["printer_model"]         = $object->PrinterModel;
+            $data ["launch_date"]           = $object->LaunchDate;
+            $data ["cost"]                  = $object->DevicePrice;
+            $data ["service_cost_per_page"] = $object->ServiceCostPerPage;
+            $data ["toner_config"]          = $object->TonerConfig;
+            $data ["is_copier"]             = $object->IsCopier;
+            $data ["is_fax"]                = $object->IsFax;
+            $data ["is_duplex"]             = $object->IsDuplex;
+            $data ["is_scanner"]            = $object->IsScanner;
+            $data ["PPM_black"]             = $object->PpmBlack;
+            $data ["PPM_color"]             = $object->PpmColor;
+            $data ["duty_cycle"]            = $object->DutyCycle;
+            $data ["watts_power_normal"]    = $object->WattsPowerNormal;
+            $data ["watts_power_idle"]      = $object->WattsPowerIdle;
+
             $primaryKey = $this->saveRow($data);
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
             throw new Exception("Error saving " . get_class($this) . " to the database.", 0, $e);
         }
+
         return $primaryKey;
     }
 }

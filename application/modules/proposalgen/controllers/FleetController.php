@@ -2149,9 +2149,9 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         // find pf_device
                         $ticketpfrequestMapper           = Proposalgen_Model_Mapper_TicketPFRequest::getInstance();
                         $ticketpfrequest                 = $ticketpfrequestMapper->find($ticket_id);
-                        $this->view->devices_pf_id       = $ticketpfrequest->getDevicePfId();
-                        $this->view->device_pf_name      = $ticketpfrequest->getDevicePf()->pfDbManufacturer . ' ' . $ticketpfrequest->DevicePf->PfDbDeviceName;
-                        $this->view->user_suggested_name = $ticketpfrequest->DeviceManufacturer . ' ' . $ticketpfrequest->PrinterModel;
+                        $this->view->devices_pf_id       = $ticketpfrequest->devicePfId;
+                        $this->view->device_pf_name      = $ticketpfrequest->getDevicePf()->pfDbManufacturer . ' ' . $ticketpfrequest->_devicePf->PfDbDeviceName;
+                        $this->view->user_suggested_name = $ticketpfrequest->deviceManufacturer . ' ' . $ticketpfrequest->printerModel;
 
                         // ticket exists, update ticket label
                         $form->getElement('request_support')->setLabel("View Support Ticket");
