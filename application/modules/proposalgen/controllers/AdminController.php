@@ -23,12 +23,12 @@ class Proposalgen_AdminController extends Zend_Controller_Action
     {
         $this->config = Zend_Registry::get('config');
         $this->initView();
-        $this->view->app     = $this->config->app;
-        $this->view->user    = Zend_Auth::getInstance()->getIdentity();
-        $this->view->user_id = Zend_Auth::getInstance()->getIdentity()->id;
-        $this->view->privilege = array('System Admin');//Zend_Auth::getInstance()->getIdentity()->privileges;
-        $this->user_id = Zend_Auth::getInstance()->getIdentity()->id;
-        $this->privilege = array('System Admin');//Zend_Auth::getInstance()->getIdentity()->privileges;
+        $this->view->app       = $this->config->app;
+        $this->view->user      = Zend_Auth::getInstance()->getIdentity();
+        $this->view->user_id   = Zend_Auth::getInstance()->getIdentity()->id;
+        $this->view->privilege = array('System Admin'); //Zend_Auth::getInstance()->getIdentity()->privileges;
+        $this->user_id         = Zend_Auth::getInstance()->getIdentity()->id;
+        $this->privilege       = array('System Admin'); //Zend_Auth::getInstance()->getIdentity()->privileges;
         //$this->dealer_company_id = Zend_Auth::getInstance()->getIdentity()->dealer_company_id;
         $this->MPSProgramName       = $this->config->app->MPSProgramName;
         $this->view->MPSProgramName = $this->config->app->MPSProgramName;
@@ -909,7 +909,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 if ($filter == 'toner_yield')
                 {
                     $filter = 'yield';
-                    $where = ' AND ' . $filter . ' = ' . $criteria;
+                    $where  = ' AND ' . $filter . ' = ' . $criteria;
                 }
                 else
                 {
@@ -931,7 +931,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             }
                             else
                             {
-                                if($filter == "toner_color_name")
+                                if ($filter == "toner_color_name")
                                 {
                                     $filter = 'tc.name';
                                 }
@@ -1014,7 +1014,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $select = new Zend_Db_Select($db);
                 $select = $db->select();
                 $select->from(array(
-                                   't' => 'pgen_toners'), array('id AS toners_id', 'sku', 'yield','cost')
+                                   't' => 'pgen_toners'), array('id AS toners_id', 'sku', 'yield', 'cost')
                 );
                 $select->joinLeft(array(
                                        'pt' => 'pgen_part_types'
@@ -2391,32 +2391,22 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         /** @noinspection PhpUndefinedFieldInspection */
         $this->view->title = 'Manage My Settings';
         $db                = Zend_Db_Table::getDefaultAdapter();
+        $message           = '';
+        $hasErrors         = false;
 
-        $message   = '';
-        $hasErrors = false;
+        // Get system overrides
+        $systemSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->find(1);
 
-        // Get Override Settings
-//        $userDealerCompany = Proposalgen_Model_DealerCompany::getCurrentUserCompany();
-//        $dealerName        = ucwords(strtolower($userDealerCompany->getCompanyName()));
-//
-//        $dealerCompany  = Proposalgen_Model_DealerCompany::getMasterCompany();
-//        $dealerSettings = $dealerCompany->getReportSettings();
+        $user         = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
+        $userSettings = Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->find($user->id);
 
-        $user = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
-        $userSettings = Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->find($user->getId());
-        // settings with no
-        // overrides
-
-
-        // Grab the settings form
-        $form = new Proposalgen_Form_Settings_User();
-
+        $form           = new Proposalgen_Form_Settings_User();
         $pricingConfigs = Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll();
 
         // Add all the pricing configs
         foreach ($pricingConfigs as $pricingConfig)
         {
-            $form->getElement('pricing_config_id')->addMultiOption($pricingConfig->getPricingConfigId(), ($pricingConfig->getPricingConfigId() !== 1) ? $pricingConfig->getConfigName() : "");
+            $form->getElement('assessmentPricingConfigId')->addMultiOption($pricingConfig->getPricingConfigId(), ($pricingConfig->getPricingConfigId() !== 1) ? $pricingConfig->getConfigName() : "");
         }
 
         // Set form values based on the users selected settings
@@ -2442,71 +2432,52 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         {
                             $value = (empty($value)) ? null : $value;
                         }
-                        /*
-                         * Required
-                         */
-                        $user->setUserEstimatedPageCoverageMono($formData ["estimated_page_coverage_mono"]);
-                        $user->setUserEstimatedPageCoverageColor($formData ["estimated_page_coverage_color"]);
-                        $user->setUserActualPageCoverageMono($formData ["actual_page_coverage_mono"]);
-                        $user->setUserActualPageCoverageColor($formData ["actual_page_coverage_color"]);
+                        // Save user settings
+                        // Save page coverage settings (survey settings)
+                        $surveySetting = new Proposalgen_Model_Survey_Setting();
+                        $surveySetting->populate($formData);
 
-                        /*
-                         * Null is acceptable
-                         */
-                        $user->setUserMonthlyLeasePayment($formData ["monthly_lease_payment"]);
-                        $user->setUserDefaultPrinterCost($formData ["default_printer_cost"]);
-                        $user->setUserLeasedBwPerPage($formData ["leased_bw_per_page"]);
-                        $user->setUserLeasedColorPerPage($formData ["leased_color_per_page"]);
-                        $user->setUserMpsBwPerPage($formData ["mps_bw_per_page"]);
-                        $user->setUserMpsColorPerPage($formData ["mps_color_per_page"]);
-                        $user->setUserKilowattsPerHour($formData ["kilowatts_per_hour"]);
-                        $user->setPricingConfigId($formData ["pricing_config_id"]);
-                        $user->setUserServiceCostPerPage($formData ["service_cost_per_page"]);
-                        $user->setUserAdminChargePerPage($formData ["admin_charge_per_page"]);
+                        // Save report settings (all other)
+                        $reportSetting = new Proposalgen_Model_Report_Setting();
+                        $reportSetting->populate($formData);
 
-                        $user->setUserPricingMargin($formData ["pricing_margin"]);
-
-                        // Save User
+                        // Save report settings
+                        Mapper_Su::getInstance()->save('x');
+                        // Save survey settings
                         Proposalgen_Model_Mapper_User::getInstance()->save($user);
 
-                        $this->_helper->flashMessenger(array(
-                                                            "success" => "Your settings have been updated."
-                                                       ));
+                        $this->_helper->flashMessenger(array("success" => "Your settings have been updated."));
                         $db->commit();
                     }
                     catch (Zend_Db_Exception $e)
                     {
                         $db->rollback();
-                        $this->_helper->flashMessenger(array(
-                                                            "error" => "An error occured while saving your settings."
-                                                       ));
+                        $this->_helper->flashMessenger(array("error" => "An error occurred while saving your settings."));
                     }
                     catch (Exception $e)
                     {
                         $db->rollback();
-                        $this->_helper->flashMessenger(array(
-                                                            "error" => "An error occured while saving your settings."
-                                                       ));
+                        $this->_helper->flashMessenger(array("error" => "An error occurred while saving your settings."));
                     }
                 }
             }
             else
             {
-                $this->_helper->flashMessenger(array(
-                                                    "error" => "Please review the errors below."
-                                               ));
+                $this->_helper->flashMessenger(array("error" => "Please review the errors below."));
                 $form->populate($formData);
             }
         }
 
-        $defaultSettings = $dealerSettings;
-        if ($defaultSettings ["pricing_config_id"] !== 1)
+        $surveySetting = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->find(1);
+        $defaultSettings = array_merge($systemSettings->toArray(),$surveySetting->toArray());
+
+        if ($defaultSettings ["assessmentPricingConfigId"] !== Proposalgen_Model_PricingConfig::NONE)
         {
-            $defaultSettings ["pricing_config_id"] = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($defaultSettings ["pricing_config_id"])->getConfigName();
+            $defaultSettings ["assessmentPricingConfigId"] = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($defaultSettings ["assessmentPricingConfigId"])->getConfigName();
         }
         else
         {
-            $defaultSettings ["pricing_config_id"] = "";
+            $defaultSettings ["assessmentPricingConfigId"] = "";
         }
 
         // add form to page
@@ -2516,7 +2487,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                       array(
                                           'viewScript' => 'forms/settings/user.phtml',
                                           'dealerData' => $defaultSettings,
-                                          'dealerName' => $dealerName,
+//                                          'dealerName' => $dealerName,
                                           'message'    => $message
                                       )
                                   )
@@ -5427,7 +5398,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
     public function exportpricingAction ()
     {
         $this->_helper->layout->disableLayout();
-        $db      = Zend_Db_Table::getDefaultAdapter();
+        $db = Zend_Db_Table::getDefaultAdapter();
         //$company = $this->_getParam('company', $this->dealer_company_id);
         $pricing = $this->_getParam('pricing', 'printer');
 
@@ -5478,9 +5449,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         ->joinLeft(array(
                                         'm' => 'manufacturers'
                                    ), 'm.id = md.manufacturer_id', array(
-                                                                                             'id',
-                                                                                             'fullname'
-                                                                                        ))
+                                                                        'id',
+                                                                        'fullname'
+                                                                   ))
                         ->order(array(
                                      'm.fullname',
                                      'md.printer_model'
@@ -5590,10 +5561,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $select = new Zend_Db_Select($db);
                     $select = $db->select()
                         ->from(array(
-                                    't' => 'pgen_toners'), array (
-                            'id AS toners_id','sku','yield','cost'
-                        )
-                               )
+                                    't' => 'pgen_toners'), array(
+                                                                'id AS toners_id', 'sku', 'yield', 'cost'
+                                                           )
+                    )
                         ->joinLeft(array(
                                         'dt' => 'pgen_device_toners'
                                    ), 'dt.toner_id = t.id', array(
@@ -5606,10 +5577,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                                                    ))
                         ->joinLeft(array(
                                         'tc' => 'pgen_toner_colors'
-                                   ), 'tc.id = t.toner_color_id',array('name AS toner_color'))
+                                   ), 'tc.id = t.toner_color_id', array('name AS toner_color'))
                         ->joinLeft(array(
                                         'pt' => 'pgen_part_types'
-                                   ), 'pt.id = t.part_type_id','name AS part_type')
+                                   ), 'pt.id = t.part_type_id', 'name AS part_type')
                         ->where('t.id > 0')
                         ->group('t.id')
                         ->order(array(
@@ -5638,7 +5609,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                    ), 'md.id = dt.master_device_id')
                         ->joinLeft(array(
                                         'tc' => 'pgen_toner_colors'
-                                   ), 'tc.id = t.toner_color_id',array('name AS toner_color'))
+                                   ), 'tc.id = t.toner_color_id', array('name AS toner_color'))
                         ->joinLeft(array(
                                         'pt' => 'pgen_part_types'
                                    ), 'pt.id = t.part_type_id')
@@ -5671,7 +5642,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                    ), 'md.master_device_id = dt.master_device_id')
                         ->joinLeft(array(
                                         'tc' => 'toner_color'
-                                   ), 'tc.toner_color_id = t.toner_color_id','name AS toner_color')
+                                   ), 'tc.toner_color_id = t.toner_color_id', 'name AS toner_color')
                         ->joinLeft(array(
                                         'pt' => 'part_type'
                                    ), 'pt.part_type_id = t.part_type_id')

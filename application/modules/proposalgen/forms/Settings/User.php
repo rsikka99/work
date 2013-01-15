@@ -10,10 +10,11 @@ class Proposalgen_Form_Settings_User extends Zend_Form
 
     /**
      * Constructor builds the form
-     * 
+     *
      * @param $options -
-     *            not used (required)
-     * @return HTML markup for the from is automatically returned by zend_form
+     *                 not used (required)
+     *
+     * @return \Proposalgen_Form_Settings_User markup for the from is automatically returned by zend_form
      */
     public function __construct ($options = null)
     {
@@ -42,7 +43,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         
 
         //page coverage bw
-        $page_coverage = new Zend_Form_Element_Text('estimated_page_coverage_mono');
+        $page_coverage = new Zend_Form_Element_Text('pageCoverageMono');
         $page_coverage->setLabel('Page Coverage Monochrome:')
             ->addValidator(new Zend_Validate_Float())
             ->addValidator(new Zend_Validate_Between(0, 100), false)
@@ -60,8 +61,8 @@ class Proposalgen_Form_Settings_User extends Zend_Form
                 array (
                         'Description', 
                         array (
-                                'escape' => false, 
-                                'tag' => false 
+                                'escape' => false,
+                                'tag' => false
                         ) 
                 ), 
                 'Errors', 
@@ -86,7 +87,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $formElements->addElement($page_coverage);
         
         //page coverage color
-        $page_coverageColor = new Zend_Form_Element_Text('estimated_page_coverage_color');
+        $page_coverageColor = new Zend_Form_Element_Text('pageCoverageColor');
         $page_coverageColor->setLabel('Page Coverage Color:')
             ->addValidator(new Zend_Validate_Float())
             ->addValidator(new Zend_Validate_Between(0, 100), false)
@@ -104,8 +105,8 @@ class Proposalgen_Form_Settings_User extends Zend_Form
                 array (
                         'Description', 
                         array (
-                                'escape' => false, 
-                                'tag' => false 
+                                'escape' => false,
+                                'tag' => false
                         ) 
                 ), 
                 'Errors', 
@@ -132,7 +133,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $formElements->addElement($page_coverageColor);
         
         //actual page coverage black & white
-        $actual_page_coverage = new Zend_Form_Element_Text('actual_page_coverage_mono');
+        $actual_page_coverage = new Zend_Form_Element_Text('actualPageCoverageMono');
         $actual_page_coverage->setLabel('Page Coverage Monochrome:')
             ->addValidator(new Zend_Validate_Float())
             ->addValidator(new Zend_Validate_Between(0, 100), false)
@@ -150,8 +151,8 @@ class Proposalgen_Form_Settings_User extends Zend_Form
                 array (
                         'Description', 
                         array (
-                                'escape' => false, 
-                                'tag' => false 
+                                'escape' => false,
+                                'tag' => false
                         ) 
                 ), 
                 'Errors', 
@@ -176,7 +177,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $formElements->addElement($actual_page_coverage);
         
         //actual page coverage color
-        $actual_page_coverage_color = new Zend_Form_Element_Text('actual_page_coverage_color');
+        $actual_page_coverage_color = new Zend_Form_Element_Text('actualPageCoverageColor');
         $actual_page_coverage_color->setLabel('Page Coverage Color:')
             ->addValidator(new Zend_Validate_Float())
             ->addValidator(new Zend_Validate_Between(0, 100), false)
@@ -194,8 +195,8 @@ class Proposalgen_Form_Settings_User extends Zend_Form
                 array (
                         'Description', 
                         array (
-                                'escape' => false, 
-                                'tag' => false 
+                                'escape' => false,
+                                'tag' => false
                         ) 
                 ), 
                 'Errors', 
@@ -220,7 +221,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $formElements->addElement($actual_page_coverage_color);
         
         //page pricing margin
-        $pricing_margin = new Zend_Form_Element_Text('pricing_margin');
+        $pricing_margin = new Zend_Form_Element_Text('assessmentReportMargin');
         $pricing_margin->setLabel('Pricing Margin:')
             ->addValidator(new Zend_Validate_Float())
             ->addValidator(new Zend_Validate_Between(array (
@@ -239,8 +240,8 @@ class Proposalgen_Form_Settings_User extends Zend_Form
                 array (
                         'Description', 
                         array (
-                                'escape' => false, 
-                                'tag' => false 
+                                'escape' => false,
+                                'tag' => false
                         ) 
                 ), 
                 'Errors', 
@@ -248,7 +249,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
                         'HtmlTag', 
                         array (
                                 'tag' => 'dd', 
-                                'id' => 'pricing_margin-element' 
+                                'id' => 'pricing_margin-element'
                         ) 
                 ), 
                 array (
@@ -266,7 +267,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $formElements->addElement($pricing_margin);
         
         //page service cost
-        $service_cost = new Zend_Form_Element_Text('service_cost_per_page');
+        $service_cost = new Zend_Form_Element_Text('serviceCostPerPage');
         $service_cost->setLabel('Service Cost:')
             ->addValidator(new Zend_Validate_Float())
             ->setAttrib('class', 'span2')
@@ -283,8 +284,8 @@ class Proposalgen_Form_Settings_User extends Zend_Form
                 array (
                         'Description', 
                         array (
-                                'escape' => false, 
-                                'tag' => false 
+                                'escape' => false,
+                                'tag' => false
                         ) 
                 ), 
                 'ViewHelper', 
@@ -311,7 +312,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $formElements->addElement($service_cost);
         
         //page admin charge
-        $admin_charge = new Zend_Form_Element_Text('admin_charge_per_page');
+        $admin_charge = new Zend_Form_Element_Text('adminCostPerPage');
         $admin_charge->setLabel('Admin Charge:')
             ->addValidator(new Zend_Validate_Float())
             ->setAttrib('class', 'span2')
@@ -328,8 +329,8 @@ class Proposalgen_Form_Settings_User extends Zend_Form
                 array (
                         'Description', 
                         array (
-                                'escape' => false, 
-                                'tag' => false 
+                                'escape' => false,
+                                'tag' => false
                         ) 
                 ), 
                 'ViewHelper', 
@@ -356,7 +357,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $formElements->addElement($admin_charge);
         
         //monthly lease payment
-        $element = new Zend_Form_Element_Text('monthly_lease_payment');
+        $element = new Zend_Form_Element_Text('monthlyLeasePayment');
         $element->setLabel('Average Monthly Lease Payment:')
             ->addValidator(new Zend_Validate_Float())
             ->setAttrib('class', 'span2')
@@ -372,8 +373,8 @@ class Proposalgen_Form_Settings_User extends Zend_Form
                 array (
                         'Description', 
                         array (
-                                'escape' => false, 
-                                'tag' => false 
+                                'escape' => false,
+                                'tag' => false
                         ) 
                 ), 
                 'ViewHelper', 
@@ -400,7 +401,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $formElements->addElement($element);
         
         //average non-leased printer cost
-        $element = new Zend_Form_Element_Text('default_printer_cost');
+        $element = new Zend_Form_Element_Text('defaultPrinterCost');
         $element->setLabel('Default Printer Cost:');
         
         $element->addValidator(new Zend_Validate_Float())
@@ -417,8 +418,8 @@ class Proposalgen_Form_Settings_User extends Zend_Form
                 array (
                         'Description', 
                         array (
-                                'escape' => false, 
-                                'tag' => false 
+                                'escape' => false,
+                                'tag' => false
                         ) 
                 ), 
                 'ViewHelper', 
@@ -445,7 +446,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $formElements->addElement($element);
         
         //leased bw per page
-        $element = new Zend_Form_Element_Text('leased_bw_per_page');
+        $element = new Zend_Form_Element_Text('leasedBwCostPerPage');
         $element->setLabel('Leased Monochrome Cost:')
             ->addValidator(new Zend_Validate_Float())
             ->setAttrib('class', 'span2')
@@ -462,8 +463,8 @@ class Proposalgen_Form_Settings_User extends Zend_Form
                 array (
                         'Description', 
                         array (
-                                'escape' => false, 
-                                'tag' => false 
+                                'escape' => false,
+                                'tag' => false
                         ) 
                 ), 
                 'ViewHelper', 
@@ -490,7 +491,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $formElements->addElement($element);
         
         //leased color per page
-        $element = new Zend_Form_Element_Text('leased_color_per_page');
+        $element = new Zend_Form_Element_Text('leasedColorCostPerPage');
         $element->setLabel('Leased Color Cost:')
             ->addValidator(new Zend_Validate_Float())
             ->setAttrib('class', 'span2')
@@ -507,8 +508,8 @@ class Proposalgen_Form_Settings_User extends Zend_Form
                 array (
                         'Description', 
                         array (
-                                'escape' => false, 
-                                'tag' => false 
+                                'escape' => false,
+                                'tag' => false
                         ) 
                 ), 
                 'ViewHelper', 
@@ -535,7 +536,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $formElements->addElement($element);
         
         //kilowatts per hour
-        $element = new Zend_Form_Element_Text('kilowatts_per_hour');
+        $element = new Zend_Form_Element_Text('kilowattsPerHour');
         $element->setLabel('Energy Cost:')
             ->addValidator(new Zend_Validate_Float())
             ->setAttrib('class', 'span2')
@@ -552,8 +553,8 @@ class Proposalgen_Form_Settings_User extends Zend_Form
                 array (
                         'Description', 
                         array (
-                                'escape' => false, 
-                                'tag' => false 
+                                'escape' => false,
+                                'tag' => false
                         ) 
                 ), 
                 'ViewHelper', 
@@ -580,7 +581,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $formElements->addElement($element);
         
         //BW cost per page
-        $element = new Zend_Form_Element_Text('mps_bw_per_page');
+        $element = new Zend_Form_Element_Text('mpsBwCostPerPage');
         $element->setLabel($MPSProgramName . ' Monochrome Cost:')
             ->addValidator(new Zend_Validate_Float())
             ->setAttrib('class', 'span2')
@@ -597,8 +598,8 @@ class Proposalgen_Form_Settings_User extends Zend_Form
                 array (
                         'Description', 
                         array (
-                                'escape' => false, 
-                                'tag' => false 
+                                'escape' => false,
+                                'tag' => false
                         ) 
                 ), 
                 'ViewHelper', 
@@ -625,7 +626,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $formElements->addElement($element);
         
         //BW cost per page
-        $element = new Zend_Form_Element_Text('mps_color_per_page');
+        $element = new Zend_Form_Element_Text('mpsColorCostPerPage');
         $element->setLabel($MPSProgramName . ' Color Cost:')
             ->addValidator(new Zend_Validate_Float())
             ->setAttrib('class', 'span2')
@@ -642,8 +643,8 @@ class Proposalgen_Form_Settings_User extends Zend_Form
                 array (
                         'Description', 
                         array (
-                                'escape' => false, 
-                                'tag' => false 
+                                'escape' => false,
+                                'tag' => false
                         ) 
                 ), 
                 'ViewHelper', 
@@ -670,7 +671,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $formElements->addElement($element);
         
         //pricing config
-        $pricing_config = new Zend_Form_Element_Select('pricing_config_id');
+        $pricing_config = new Zend_Form_Element_Select('assessmentPricingConfigId');
         $pricing_config->setLabel('Toner Preference:')
             ->setOrder($elementCounter)
             ->setAttrib('id', 'pricing_config_id')
@@ -683,8 +684,8 @@ class Proposalgen_Form_Settings_User extends Zend_Form
                 array (
                         'Description', 
                         array (
-                                'escape' => false, 
-                                'tag' => false 
+                                'escape' => false,
+                                'tag' => false
                         ) 
                 ), 
                 'Errors', 
@@ -709,7 +710,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         
         //save button
         $element = new Zend_Form_Element_Submit('save_settings', array (
-                'disableLoadDefaultDecorators' => true 
+                'disableLoadDefaultDecorators' => true
         ));
         $element->setLabel('Save')
             ->setOrder($elementCounter)
