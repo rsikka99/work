@@ -1,85 +1,58 @@
 <?php
-
-/**
- * Class Proposalgen_Model_DateAnswer
- *
- * @author "Lee Robert"
- */
-class Proposalgen_Model_DateAnswer extends Tangent_Model_Abstract
+class Proposalgen_Model_DateAnswer extends My_Model_Abstract
 {
-    protected $QuestionId;
-    protected $ReportId;
-    protected $Answer;
+    /**
+     * @var int
+     */
+    public $questionId;
 
     /**
-     *
-     * @return the $QuestionId
+     * @var int
      */
-    public function getQuestionId ()
+    public $reportId;
+
+    /**
+     * @var int
+     */
+    public $answer;
+
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
     {
-        if (! isset($this->QuestionId))
+        if (is_array($params))
         {
-            
-            $this->QuestionId = null;
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        return $this->QuestionId;
-    }
 
-    /**
-     *
-     * @param field_type $QuestionId            
-     */
-    public function setQuestionId ($QuestionId)
-    {
-        $this->QuestionId = $QuestionId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $ReportId
-     */
-    public function getReportId ()
-    {
-        if (! isset($this->ReportId))
+        if (isset($params->QuestionId) && !is_null($params->QuestionId))
         {
-            
-            $this->ReportId = null;
+            $this->questionId = $params->QuestionId;
         }
-        return $this->ReportId;
-    }
 
-    /**
-     *
-     * @param field_type $ReportId            
-     */
-    public function setReportId ($ReportId)
-    {
-        $this->ReportId = $ReportId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $Answer
-     */
-    public function getAnswer ()
-    {
-        if (! isset($this->Answer))
+        if (isset($params->ReportId) && !is_null($params->ReportId))
         {
-            
-            $this->Answer = null;
+            $this->reportId = $params->ReportId;
         }
-        return $this->Answer;
+
+        if (isset($params->Answer) && !is_null($params->Answer))
+        {
+            $this->answer = $params->Answer;
+        }
+
     }
 
     /**
-     *
-     * @param field_type $Answer            
+     * @return array
      */
-    public function setAnswer ($Answer)
+    public function toArray ()
     {
-        $this->Answer = $Answer;
-        return $this;
+        return array(
+            "questionId" => $this->questionId,
+            "reportId"   => $this->reportId,
+            "answer"     => $this->answer,
+        );
     }
 }

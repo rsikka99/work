@@ -301,7 +301,7 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                     // Save toners and map them to the master device
                     $deviceTonerMapper = Proposalgen_Model_Mapper_DeviceToner::getInstance();
                     $deviceToner = new Proposalgen_Model_DeviceToner();
-                    $deviceToner->setMasterDeviceId($masterDeviceId);
+                    $deviceToner->masterDeviceId = $masterDeviceId;
                     
                     foreach ( $toners as $partType => $tonersByPartType )
                     {
@@ -309,7 +309,7 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                         {
                             foreach ( $tonersByColor as $toner )
                             {
-                                $deviceToner->setTonerId($toner->getTonerId());
+                                $deviceToner->tonerId = $toner->getTonerId();
                                 $deviceTonerMapper->save($deviceToner);
                             }
                         }
@@ -320,11 +320,12 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                     {
                         $devicePf = new Proposalgen_Model_DevicePf();
                         
-                        $devicePf->setCreatedBy(Proposalgen_Model_User::getCurrentUserId())
-                            ->setPfModelId($row ["printermodelid"])
-                            ->setPfDbDeviceName($modelname)
-                            ->setPfDbManufacturer($row ["modelmfg"])
-                            ->setDateCreated(date('Y-m-d H:i:s'));
+                        $devicePf->createdBy = Proposalgen_Model_User::getCurrentUserId();
+
+                        $devicePf->pfModelId = $row ["printermodelid"];
+                        $devicePf->pfDbDeviceName = $modelname;
+                        $devicePf->pfDbManufacturer = $row ["modelmfg"];
+                        $devicePf->dateCreated = date('Y-m-d H:i:s');
                         $devicePfId = Proposalgen_Model_Mapper_DevicePf::getInstance()->save($devicePf);
                         
                         // Master Matchup to DevicePf

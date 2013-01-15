@@ -335,14 +335,14 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         if ($pfDevice === false)
                         {
                             $pfDevice = new Proposalgen_Model_DevicePf();
-                            $pfDevice->setPfModelId($deviceRow->printermodelid);
-                            $pfDevice->setPfDbDeviceName($deviceName);
-                            $pfDevice->setPfDbManufacturer($manufacturerName);
-                            $pfDevice->setCreatedBy($userId);
-                            $pfDevice->setDateCreated($currentDateTime);
+                            $pfDevice->pfModelId = $deviceRow->printermodelid;
+                            $pfDevice->pfDbDeviceName = $deviceName;
+                            $pfDevice->pfDbManufacturer = $manufacturerName;
+                            $pfDevice->createdBy = $userId;
+                            $pfDevice->dateCreated = $currentDateTime;
 
                             $insertId = Proposalgen_Model_Mapper_DevicePf::getInstance()->save($pfDevice);
-                            $pfDevice->setDevicesPfId($insertId);
+                            $pfDevice->devicesPfId = $insertId;
                         }
                     }
 
@@ -358,7 +358,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     $uploadDataCollectorRow = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->mapRowToObject($deviceRow);
                     //$uploadDataCollectorRow = new Proposalgen_Model_UploadDataCollectorRow($deviceRow);
                     $uploadDataCollectorRow->setReportId($reportId);
-                    $uploadDataCollectorRow->setDevicesPfId($pfDevice->getDevicesPfId());
+                    $uploadDataCollectorRow->setDevicesPfId($pfDevice->devicesPfId);
                     $uploadDataCollectorRow->setStartdate($startDate->toString($dateOutputFormat));
                     $uploadDataCollectorRow->setEnddate($endDate->toString($dateOutputFormat));
 
@@ -2150,7 +2150,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         $ticketpfrequestMapper           = Proposalgen_Model_Mapper_TicketPFRequest::getInstance();
                         $ticketpfrequest                 = $ticketpfrequestMapper->find($ticket_id);
                         $this->view->devices_pf_id       = $ticketpfrequest->getDevicePfId();
-                        $this->view->device_pf_name      = $ticketpfrequest->getDevicePf()->PfDbManufacturer . ' ' . $ticketpfrequest->DevicePf->PfDbDeviceName;
+                        $this->view->device_pf_name      = $ticketpfrequest->getDevicePf()->pfDbManufacturer . ' ' . $ticketpfrequest->DevicePf->PfDbDeviceName;
                         $this->view->user_suggested_name = $ticketpfrequest->DeviceManufacturer . ' ' . $ticketpfrequest->PrinterModel;
 
                         // ticket exists, update ticket label

@@ -7,7 +7,7 @@
  */
 abstract class Tangent_Model_Mapper_Abstract
 {
-    
+
     protected $_dbTable;
     protected $_defaultDbTableClassName;
 
