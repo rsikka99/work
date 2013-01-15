@@ -23,12 +23,12 @@ class Proposalgen_AdminController extends Zend_Controller_Action
     {
         $this->config = Zend_Registry::get('config');
         $this->initView();
-        $this->view->app     = $this->config->app;
-        $this->view->user    = Zend_Auth::getInstance()->getIdentity();
-        $this->view->user_id = Zend_Auth::getInstance()->getIdentity()->id;
-        $this->view->privilege = array('System Admin');//Zend_Auth::getInstance()->getIdentity()->privileges;
-        $this->user_id = Zend_Auth::getInstance()->getIdentity()->id;
-        $this->privilege = array('System Admin');//Zend_Auth::getInstance()->getIdentity()->privileges;
+        $this->view->app       = $this->config->app;
+        $this->view->user      = Zend_Auth::getInstance()->getIdentity();
+        $this->view->user_id   = Zend_Auth::getInstance()->getIdentity()->id;
+        $this->view->privilege = array('System Admin'); //Zend_Auth::getInstance()->getIdentity()->privileges;
+        $this->user_id         = Zend_Auth::getInstance()->getIdentity()->id;
+        $this->privilege       = array('System Admin'); //Zend_Auth::getInstance()->getIdentity()->privileges;
         //$this->dealer_company_id = Zend_Auth::getInstance()->getIdentity()->dealer_company_id;
         $this->MPSProgramName       = $this->config->app->MPSProgramName;
         $this->view->MPSProgramName = $this->config->app->MPSProgramName;
@@ -909,7 +909,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 if ($filter == 'toner_yield')
                 {
                     $filter = 'yield';
-                    $where = ' AND ' . $filter . ' = ' . $criteria;
+                    $where  = ' AND ' . $filter . ' = ' . $criteria;
                 }
                 else
                 {
@@ -931,7 +931,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             }
                             else
                             {
-                                if($filter == "toner_color_name")
+                                if ($filter == "toner_color_name")
                                 {
                                     $filter = 'tc.name';
                                 }
@@ -1014,7 +1014,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $select = new Zend_Db_Select($db);
                 $select = $db->select();
                 $select->from(array(
-                                   't' => 'pgen_toners'), array('id AS toners_id', 'sku', 'yield','cost')
+                                   't' => 'pgen_toners'), array('id AS toners_id', 'sku', 'yield', 'cost')
                 );
                 $select->joinLeft(array(
                                        'pt' => 'pgen_part_types'
@@ -2402,7 +2402,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 //        $dealerCompany  = Proposalgen_Model_DealerCompany::getMasterCompany();
 //        $dealerSettings = $dealerCompany->getReportSettings();
 
-        $user = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
+        $user         = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
         $userSettings = Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->find($user->getId());
         // settings with no
         // overrides
@@ -4617,9 +4617,13 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
     public function bulkfilepricingAction ()
     {
+        Zend_Session::start();
         $this->view->title = "Import & Export Pricing";
         $db                = Zend_Db_Table::getDefaultAdapter();
-
+        $columns_session   = new Zend_Session_Namespace('import_headers_array');
+        $results_session   = new Zend_Session_Namespace('import_results_array');
+        $headers           = $columns_session->array;
+        $results           = $results_session->array;
         // fill companies
         //$dealer_companyTable = new Proposalgen_Model_DbTable_DealerCompany();
         //$dealer_companies = $dealer_companyTable->fetchAll('is_deleted = false', 'company_name');
@@ -4640,7 +4644,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
             // get company
             //if (isset($formData ['company_filter']))
-           //{
+            //{
             //    $company = $formData ['company_filter'];
             //}
 //            else
@@ -4651,7 +4655,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $company                    = 1;
             $this->view->company_filter = $company;
 
-            // hdnRole is used when logged in as a dealer to differenciate
+            // hdnRole is used when logged in as a dealer to differentiate
             // between if the dealer is on "update company pricing" or "update
             // my pricing"
             $hdnRole = $formData ['hdnRole'];
@@ -4668,15 +4672,14 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 // * Save Imported File To Database
                 // ************************************************************/
 
-                // get arrays from indexAction
-                $headers = new Zend_Session_Namespace('import_headers_array');
-                $results = new Zend_Session_Namespace('import_results_array');
+
                 $db->beginTransaction();
                 try
                 {
                     // detect file type (printers or toners)
                     $import_type = "printer";
-                    foreach ($headers->array as $key => $value)
+                    var_dump($headers->array);
+                    foreach ($headers as $key => $value)
                     {
                         if (strtolower($value) == "toner id")
                         {
@@ -4686,7 +4689,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     }
 
                     // loop through file and save
-                    foreach ($results->array as $key => $value)
+                    foreach ($results as $key => $value)
                     {
                         $exists = false;
                         $insert = false;
@@ -5048,7 +5051,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 // Limit the size of all files to be uploaded to maximum 4MB and
                 // mimimum 500B
                 $upload->addValidator('FilesSize', false, array(
-                                                               'min' => '500B',
+                                                               'min' => '100B',
                                                                'max' => '4MB'
                                                           ));
                 $upload->getValidator('FilesSize')->setMessage('<span class="warning">*</span> File size must be between 500B and 4MB.');
@@ -5177,7 +5180,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                             $columns [4] = "Override Price";
                                             $columns [5] = "New Override Price";
 
-                                            $select  = new Zend_Db_Select($db);
                                             $select  = $db->select()
                                                 ->from(array(
                                                             'md' => 'pgen_master_devices'
@@ -5191,7 +5193,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                             if (count($printer) > 0)
                                             {
                                                 // get current costs
-                                                $current_device_price   = $printer [0] ['cost'];
+                                                $current_device_price = $printer [0] ['cost'];
                                                 //$current_override_price = $printer [0] ['override_device_price'];
 
                                                 // save into array
@@ -5212,7 +5214,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                             $columns [4] = "Override Price";
                                             $columns [5] = "New Override Price";
 
-                                            $select  = new Zend_Db_Select($db);
                                             $select  = $db->select()
                                                 ->from(array(
                                                             'md' => 'master_device'
@@ -5306,7 +5307,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                             if (count($toner) > 0)
                                             {
                                                 // get current costs
-                                                $current_toner_price    = $toner [0] ['cost'];
+                                                $current_toner_price = $toner [0] ['cost'];
                                                 //$current_override_price = $toner [0] ['override_toner_price'];
 
                                                 // save into array
@@ -5385,11 +5386,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             // store array in session to be used by
                             // confirmationAction to save the values to the
                             // database
-                            $columns_session        = new Zend_Session_Namespace('import_headers_array');
-                            $columns_session->array = $columns;
+                            $columns_session->array = $headers->array;
 
-                            $results_session        = new Zend_Session_Namespace('import_results_array');
                             $results_session->array = $finalDevices;
+
+
                         }
                     }
                     catch (Exception $e)
@@ -5410,14 +5411,12 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             }
             $this->view->hdnRole = $formData ['hdnRole'];
         }
-
-        return;
     }
 
     public function exportpricingAction ()
     {
         $this->_helper->layout->disableLayout();
-        $db      = Zend_Db_Table::getDefaultAdapter();
+        $db = Zend_Db_Table::getDefaultAdapter();
         //$company = $this->_getParam('company', $this->dealer_company_id);
         $pricing = $this->_getParam('pricing', 'printer');
 
@@ -5468,9 +5467,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         ->joinLeft(array(
                                         'm' => 'manufacturers'
                                    ), 'm.id = md.manufacturer_id', array(
-                                                                                             'id',
-                                                                                             'fullname'
-                                                                                        ))
+                                                                        'id',
+                                                                        'fullname'
+                                                                   ))
                         ->order(array(
                                      'm.fullname',
                                      'md.printer_model'
@@ -5580,10 +5579,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $select = new Zend_Db_Select($db);
                     $select = $db->select()
                         ->from(array(
-                                    't' => 'pgen_toners'), array (
-                            'id AS toners_id','sku','yield','cost'
-                        )
-                               )
+                                    't' => 'pgen_toners'), array(
+                                                                'id AS toners_id', 'sku', 'yield', 'cost'
+                                                           )
+                    )
                         ->joinLeft(array(
                                         'dt' => 'pgen_device_toners'
                                    ), 'dt.toner_id = t.id', array(
@@ -5596,10 +5595,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                                                    ))
                         ->joinLeft(array(
                                         'tc' => 'pgen_toner_colors'
-                                   ), 'tc.id = t.toner_color_id',array('name AS toner_color'))
+                                   ), 'tc.id = t.toner_color_id', array('name AS toner_color'))
                         ->joinLeft(array(
                                         'pt' => 'pgen_part_types'
-                                   ), 'pt.id = t.part_type_id','name AS part_type')
+                                   ), 'pt.id = t.part_type_id', 'name AS part_type')
                         ->where('t.id > 0')
                         ->group('t.id')
                         ->order(array(
@@ -5628,7 +5627,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                    ), 'md.id = dt.master_device_id')
                         ->joinLeft(array(
                                         'tc' => 'pgen_toner_colors'
-                                   ), 'tc.id = t.toner_color_id',array('name AS toner_color'))
+                                   ), 'tc.id = t.toner_color_id', array('name AS toner_color'))
                         ->joinLeft(array(
                                         'pt' => 'pgen_part_types'
                                    ), 'pt.id = t.part_type_id')
@@ -5661,7 +5660,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                    ), 'md.master_device_id = dt.master_device_id')
                         ->joinLeft(array(
                                         'tc' => 'toner_color'
-                                   ), 'tc.toner_color_id = t.toner_color_id','name AS toner_color')
+                                   ), 'tc.toner_color_id = t.toner_color_id', 'name AS toner_color')
                         ->joinLeft(array(
                                         'pt' => 'part_type'
                                    ), 'pt.part_type_id = t.part_type_id')
