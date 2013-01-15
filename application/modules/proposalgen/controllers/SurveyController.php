@@ -796,10 +796,9 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
     {
         $mapper = Proposalgen_Model_Mapper_TextualAnswer::getInstance();
         $textualAnswer = new Proposalgen_Model_TextualAnswer();
-        $textualAnswer->setQuestionId($questionId);
-        $textualAnswer->setAnswer($answer);
-        $textualAnswer->setReportId($this->getReport()
-            ->getId());
+        $textualAnswer->questionId = $questionId;
+        $textualAnswer->answer = $answer;
+        $textualAnswer->reportId = $this->getReport()->getId();
         $mapper->save($textualAnswer);
     }
 

@@ -46,9 +46,16 @@ class Proposalgen_Model_Mapper_NumericAnswer extends Tangent_Model_Mapper_Abstra
     }
 
     /**
-     * Finds an answer to a related question
      *
-     * @param unknown_type $questionId
+     * @param int $questionId
+     */
+    /**
+     * Finds an answer to a related question
+     * @param $questionId
+     * @param $reportId
+     *
+     * @return null|string
+     * @throws InvalidArgumentException
      */
     public function getQuestionAnswer ($questionId, $reportId)
     {

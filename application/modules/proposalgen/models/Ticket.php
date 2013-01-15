@@ -1,296 +1,228 @@
 <?php
-
-/**
- * Class Proposalgen_Model_Ticket
- *
- * @author "Kevin Jervis"
- */
-class Proposalgen_Model_Ticket extends Tangent_Model_Abstract
+class Proposalgen_Model_Ticket extends My_Model_Abstract
 {
-    protected $TicketId;
-    protected $UserId;
-    protected $CategoryId;
-    protected $StatusId;
-    protected $Title;
-    protected $Description;
-    protected $DateCreated;
-    protected $DateUpdated;
-    
-    // Extra fields
-    protected $User;
-    protected $Category;
-    protected $Status;
+    /**
+     * @var int
+     */
+    public $ticketId;
 
     /**
-     *
-     * @return the $TicketId
+     * @var int
      */
-    public function getTicketId ()
+    public $userId;
+
+    /**
+     * @var int
+     */
+    public $categoryId;
+
+    /**
+     * @var int
+     */
+    public $statusId;
+
+    /**
+     * @var int
+     */
+    public $title;
+
+    /**
+     * @var int
+     */
+    public $description;
+
+    /**
+     * @var int
+     */
+    public $dateCreated;
+
+    /**
+     * @var int
+     */
+    public $dateUpdated;
+
+
+    /**
+     * @var Application_Model_User
+     */
+    protected $_user;
+
+    /**
+     * @var Proposalgen_Model_TicketCategory
+     */
+    protected $_ticketCategory;
+
+    /**
+     * @var Proposalgen_Model_TicketStatus
+     */
+    protected $_ticketStatus;
+
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
     {
-        if (! isset($this->TicketId))
+        if (is_array($params))
         {
-            
-            $this->TicketId = null;
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        return $this->TicketId;
-    }
 
-    /**
-     *
-     * @param field_type $TicketId            
-     */
-    public function setTicketId ($TicketId)
-    {
-        $this->TicketId = $TicketId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $UserId
-     */
-    public function getUserId ()
-    {
-        if (! isset($this->UserId))
+        if (isset($params->ticketId) && !is_null($params->ticketId))
         {
-            
-            $this->UserId = null;
+            $this->ticketId = $params->ticketId;
         }
-        return $this->UserId;
-    }
 
-    /**
-     *
-     * @param field_type $UserId            
-     */
-    public function setUserId ($UserId)
-    {
-        $this->UserId = $UserId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $CategoryId
-     */
-    public function getCategoryId ()
-    {
-        if (! isset($this->CategoryId))
+        if (isset($params->userId) && !is_null($params->userId))
         {
-            
-            $this->CategoryId = null;
+            $this->userId = $params->userId;
         }
-        return $this->CategoryId;
-    }
 
-    /**
-     *
-     * @param field_type $CategoryId            
-     */
-    public function setCategoryId ($CategoryId)
-    {
-        $this->CategoryId = $CategoryId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $StatusId
-     */
-    public function getStatusId ()
-    {
-        if (! isset($this->StatusId))
+        if (isset($params->categoryId) && !is_null($params->categoryId))
         {
-            
-            $this->StatusId = null;
+            $this->categoryId = $params->categoryId;
         }
-        return $this->StatusId;
-    }
 
-    /**
-     *
-     * @param field_type $StatusId            
-     */
-    public function setStatusId ($StatusId)
-    {
-        $this->StatusId = $StatusId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $Title
-     */
-    public function getTitle ()
-    {
-        if (! isset($this->Title))
+        if (isset($params->statusId) && !is_null($params->statusId))
         {
-            
-            $this->Title = null;
+            $this->statusId = $params->statusId;
         }
-        return $this->Title;
-    }
 
-    /**
-     *
-     * @param field_type $Title            
-     */
-    public function setTitle ($Title)
-    {
-        $this->Title = $Title;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $Description
-     */
-    public function getDescription ()
-    {
-        if (! isset($this->Description))
+        if (isset($params->title) && !is_null($params->title))
         {
-            
-            $this->Description = null;
+            $this->title = $params->title;
         }
-        return $this->Description;
-    }
 
-    /**
-     *
-     * @param field_type $Description            
-     */
-    public function setDescription ($Description)
-    {
-        $this->Description = $Description;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $DateCreated
-     */
-    public function getDateCreated ()
-    {
-        if (! isset($this->DateCreated))
+        if (isset($params->description) && !is_null($params->description))
         {
-            
-            $this->DateCreated = null;
+            $this->description = $params->description;
         }
-        return $this->DateCreated;
-    }
 
-    /**
-     *
-     * @param field_type $DateCreated            
-     */
-    public function setDateCreated ($DateCreated)
-    {
-        $this->DateCreated = $DateCreated;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $DateUpdated
-     */
-    public function getDateUpdated ()
-    {
-        if (! isset($this->DateUpdated))
+        if (isset($params->dateCreated) && !is_null($params->dateCreated))
         {
-            
-            $this->DateUpdated = null;
+            $this->dateCreated = $params->dateCreated;
         }
-        return $this->DateUpdated;
+
+        if (isset($params->dateUpdated) && !is_null($params->dateUpdated))
+        {
+            $this->dateUpdated = $params->dateUpdated;
+        }
+
     }
 
     /**
-     *
-     * @param field_type $DateUpdated            
+     * @return array
      */
-    public function setDateUpdated ($DateUpdated)
+    public function toArray ()
     {
-        $this->DateUpdated = $DateUpdated;
-        return $this;
+        return array(
+            "ticketId"    => $this->ticketId,
+            "userId"      => $this->userId,
+            "categoryId"  => $this->categoryId,
+            "statusId"    => $this->statusId,
+            "title"       => $this->title,
+            "description" => $this->description,
+            "dateCreated" => $this->dateCreated,
+            "dateUpdated" => $this->dateUpdated,
+        );
     }
 
     /**
+     * Gets the associated user
      *
-     * @return the $User
+     * @return Application_Model_User
      */
     public function getUser ()
     {
-        if (! isset($this->User))
+        if (!isset($this->_user))
         {
-            $id = $this->getUserId();
+            $id = $this->userId;
             if (isset($id))
             {
-                $this->User = Application_Model_Mapper_User::getInstance()->find($id);
+                $this->_user = Application_Model_Mapper_User::getInstance()->find($id);
             }
         }
-        return $this->User;
+
+        return $this->_user;
     }
 
     /**
+     * Sets the user
      *
-     * @param field_type $User            
+     * @param $_user
+     *
+     * @return Proposalgen_Model_Ticket
      */
-    public function setUser ($User)
+    public function setUser ($_user)
     {
-        $this->User = $User;
+        $this->_user = $_user;
+
         return $this;
     }
 
     /**
+     * Gets the ticket category
      *
-     * @return the $Category
+     * @return Proposalgen_Model_TicketCategory
      */
-    public function getCategory ()
+    public function getTicketCategory ()
     {
-        if (! isset($this->Category))
+        if (!isset($this->_ticketCategory))
         {
-            $id = $this->getCategoryId();
+            $id = $this->categoryId;
             if (isset($id))
             {
-                $this->Category = Proposalgen_Model_Mapper_TicketCategory::getInstance()->find($id);
+                $this->_ticketCategory = Proposalgen_Model_Mapper_TicketCategory::getInstance()->find($id);
             }
         }
-        return $this->Category;
+
+        return $this->_ticketCategory;
     }
 
     /**
+     * Set the ticket category
      *
-     * @param field_type $Category            
+     * @param $_ticketCategory
+     *
+     * @return Proposalgen_Model_Ticket
      */
-    public function setCategory ($Category)
+    public function setTicketCategory ($_ticketCategory)
     {
-        $this->Category = $Category;
+        $this->_ticketCategory = $_ticketCategory;
+
         return $this;
     }
 
     /**
+     * Gets the ticket status
      *
-     * @return the $Status
+     * @return Proposalgen_Model_TicketStatus
      */
-    public function getStatus ()
+    public function getTicketStatus ()
     {
-        if (! isset($this->Status))
+        if (!isset($this->_ticketStatus))
         {
-            $id = $this->getStatusId();
+            $id = $this->statusId;
             if (isset($id))
             {
-                $this->Status = Proposalgen_Model_Mapper_TicketStatus::getInstance()->find($id);
+                $this->_ticketStatus = Proposalgen_Model_Mapper_TicketStatus::getInstance()->find($id);
             }
         }
-        return $this->Status;
+
+        return $this->_ticketStatus;
     }
 
     /**
+     * Sets the ticket status
      *
-     * @param field_type $Status            
+     * @param $_ticketStatus
+     *
+     * @return Proposalgen_Model_Ticket
      */
-    public function setStatus ($Status)
+    public function setTicketStatus ($_ticketStatus)
     {
-        $this->Status = $Status;
+        $this->_ticketStatus = $_ticketStatus;
+
         return $this;
     }
 }

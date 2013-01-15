@@ -371,11 +371,11 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
         if ($device)
         {
             $replacementDevice = new Proposalgen_Model_ReplacementDevice();
-            $replacementDevice->setMasterDeviceId($device->MasterDeviceId)
-                ->setReplacementCategory(Proposalgen_Model_ReplacementDevice::REPLACMENT_BW)
-                ->setPrintSpeed(45)
-                ->setResolution(1200)
-                ->setMonthlyRate(99);
+            $replacementDevice->masterDeviceId = $device->MasterDeviceId;
+            $replacementDevice->replacementCategory = Proposalgen_Model_ReplacementDevice::REPLACMENT_BW;
+            $replacementDevice->printSpeed = 45;
+            $replacementDevice->resolution = 1200;
+            $replacementDevice->monthlyRate = 99;
             $replacementDeviceMapper->save($replacementDevice);
         }
         
@@ -387,11 +387,11 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
         if ($device)
         {
             $replacementDevice = new Proposalgen_Model_ReplacementDevice();
-            $replacementDevice->setMasterDeviceId($device->MasterDeviceId)
-                ->setReplacementCategory(Proposalgen_Model_ReplacementDevice::REPLACMENT_BW)
-                ->setPrintSpeed(52)
-                ->setResolution(1200)
-                ->setMonthlyRate(149);
+            $replacementDevice->masterDeviceId = $device->MasterDeviceId;
+            $replacementDevice->replacementCategory = Proposalgen_Model_ReplacementDevice::REPLACMENT_BW;
+            $replacementDevice->printSpeed = 52;
+            $replacementDevice->resolution = 1200;
+            $replacementDevice->monthlyRate = 149;
             $replacementDeviceMapper->save($replacementDevice);
         }
         // BLACK AND WHITE MFP
@@ -402,11 +402,11 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
         if ($device)
         {
             $replacementDevice = new Proposalgen_Model_ReplacementDevice();
-            $replacementDevice->setMasterDeviceId($device->MasterDeviceId)
-                ->setReplacementCategory(Proposalgen_Model_ReplacementDevice::REPLACMENT_BWMFP)
-                ->setPrintSpeed(35)
-                ->setResolution(1200)
-                ->setMonthlyRate(199);
+            $replacementDevice->masterDeviceId = $device->MasterDeviceId;
+            $replacementDevice->replacementCategory = Proposalgen_Model_ReplacementDevice::REPLACMENT_BWMFP;
+            $replacementDevice->printSpeed = 35;
+            $replacementDevice->resolution = 1200;
+            $replacementDevice->monthlyRate = 199;
             $replacementDeviceMapper->save($replacementDevice);
         }
         // COLOR
@@ -417,11 +417,11 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
         if ($device)
         {
             $replacementDevice = new Proposalgen_Model_ReplacementDevice();
-            $replacementDevice->setMasterDeviceId($device->MasterDeviceId)
-                ->setReplacementCategory(Proposalgen_Model_ReplacementDevice::REPLACMENT_COLOR)
-                ->setPrintSpeed(40)
-                ->setResolution(2400)
-                ->setMonthlyRate(199);
+            $replacementDevice->setMasterDeviceId = $device->MasterDeviceId;
+            $replacementDevice->setReplacementCategory = Proposalgen_Model_ReplacementDevice::REPLACMENT_COLOR;
+            $replacementDevice->setPrintSpeed = 40;
+            $replacementDevice->setResolution = 2400;
+            $replacementDevice->setMonthlyRate = 199;
             $replacementDeviceMapper->save($replacementDevice);
         }
         // COLOR MFP
@@ -432,11 +432,11 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
         if ($device)
         {
             $replacementDevice = new Proposalgen_Model_ReplacementDevice();
-            $replacementDevice->setMasterDeviceId($device->MasterDeviceId)
-                ->setReplacementCategory(Proposalgen_Model_ReplacementDevice::REPLACMENT_COLORMFP)
-                ->setPrintSpeed(30)
-                ->setResolution(2400)
-                ->setMonthlyRate(249);
+            $replacementDevice->masterDeviceId = $device->MasterDeviceId;
+            $replacementDevice->replacementCategory = Proposalgen_Model_ReplacementDevice::REPLACMENT_COLORMFP;
+            $replacementDevice->printSpeed = 30;
+            $replacementDevice->resolution = 2400;
+            $replacementDevice->monthlyRate = 249;
             $replacementDeviceMapper->save($replacementDevice);
         }
     }

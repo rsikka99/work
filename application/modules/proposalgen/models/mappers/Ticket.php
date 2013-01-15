@@ -11,68 +11,75 @@ class Proposalgen_Model_Mapper_Ticket extends Tangent_Model_Mapper_Abstract
      */
     public static function getInstance ()
     {
-        if (! isset(self::$_instance))
+        if (!isset(self::$_instance))
         {
-            $className = get_class();
+            $className       = get_class();
             self::$_instance = new $className();
         }
+
         return self::$_instance;
     }
 
     /**
      * Maps a database row object to an Proposalgen_Model
      *
-     * @param Zend_Db_Table_Row $row            
-     * @return The appropriate Proposalgen_Model
+     * @param Zend_Db_Table_Row $row
+     *
+     * @return \Proposalgen_Model_Ticket
+     * @throws Exception
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
     {
         $object = null;
         try
         {
-            $object = new Proposalgen_Model_Ticket();
-            $object->setTicketId($row->id)
-                ->setUserId($row->user_id)
-                ->setCategoryId($row->category_id)
-                ->setStatusId($row->status_id)
-                ->setTitle($row->title)
-                ->setDescription($row->description)
-                ->setDateCreated($row->date_created)
-                ->setDateUpdated($row->date_updated);
+            $object              = new Proposalgen_Model_Ticket();
+            $object->ticketId    = $row->id;
+            $object->userId      = $row->user_id;
+            $object->categoryId  = $row->category_id;
+            $object->statusId    = $row->status_id;
+            $object->title       = $row->title;
+            $object->description = $row->description;
+            $object->dateCreated = $row->date_created;
+            $object->dateUpdated = $row->date_updated;
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
             throw new Exception("Failed to map a ticket row", 0, $e);
         }
+
         return $object;
     }
 
     /**
      * Saved an Proposalgen_Model_ object to the database
      *
-     * @param unknown_type $object            
+     * @param Proposalgen_Model_Ticket $object
+     *
+     * @throws Exception
+     * @return string
      */
     public function save (Proposalgen_Model_Ticket $object)
     {
-        $primaryKey = 0;
         try
         {
-            $data ["id"] = $object->getTicketId();
-            $data ["user_id"] = $object->getUserId();
-            $data ["user_id"] = $object->getUserId();
-            $data ["category_id"] = $object->getCategoryId();
-            $data ["status_id"] = $object->getStatusId();
-            $data ["title"] = $object->getTitle();
-            $data ["description"] = $object->getDescription();
-            $data ["date_created"] = $object->getDateCreated();
-            $data ["date_updated"] = $object->getDateUpdated();
-            
+            $data ["id"]           = $object->ticketId;
+            $data ["user_id"]      = $object->userId;
+            $data ["user_id"]      = $object->userId;
+            $data ["category_id"]  = $object->categoryId;
+            $data ["status_id"]    = $object->statusId;
+            $data ["title"]        = $object->title;
+            $data ["description"]  = $object->description;
+            $data ["date_created"] = $object->dateCreated;
+            $data ["date_updated"] = $object->dateUpdated;
+
             $primaryKey = $this->saveRow($data);
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
             throw new Exception("Error saving " . get_class($this) . " to the database.", 0, $e);
         }
+
         return $primaryKey;
     }
 }
