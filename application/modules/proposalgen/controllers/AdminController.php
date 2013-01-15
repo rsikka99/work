@@ -2365,6 +2365,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
      */
     public function managemysettingsAction ()
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         $this->view->title = 'Manage My Settings';
         $db                = Zend_Db_Table::getDefaultAdapter();
 
@@ -2372,14 +2373,14 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $hasErrors = false;
 
         // Get Override Settings
-        $userDealerCompany = Proposalgen_Model_DealerCompany::getCurrentUserCompany();
-        $dealerName        = ucwords(strtolower($userDealerCompany->getCompanyName()));
+//        $userDealerCompany = Proposalgen_Model_DealerCompany::getCurrentUserCompany();
+//        $dealerName        = ucwords(strtolower($userDealerCompany->getCompanyName()));
+//
+//        $dealerCompany  = Proposalgen_Model_DealerCompany::getMasterCompany();
+//        $dealerSettings = $dealerCompany->getReportSettings();
 
-        $dealerCompany  = Proposalgen_Model_DealerCompany::getMasterCompany();
-        $dealerSettings = $dealerCompany->getReportSettings();
-
-        $user         = Proposalgen_Model_User::getCurrentUser();
-        $userSettings = $user->getReportSettings(false); // Get the user
+        $user = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
+        $userSettings = Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->find($user->getId());
         // settings with no
         // overrides
 
