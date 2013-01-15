@@ -150,9 +150,9 @@ class Proposalgen_TicketController extends Zend_Controller_Action
 
         // update tickets viewed
         $ticket_viewedModel = new Proposalgen_Model_TicketViewed();
-        $ticket_viewedModel->setTicketId($ticket_id);
-        $ticket_viewedModel->setUserId($this->user_id);
-        $ticket_viewedModel->setDateViewed($date);
+        $ticket_viewedModel->ticketId = $ticket_id;
+        $ticket_viewedModel->userId = $this->user_id;
+        $ticket_viewedModel->dateViewed = $date;
         $ticket_viewed_id = Proposalgen_Model_Mapper_TicketViewed::getInstance()->save($ticket_viewedModel);
 
         if ($this->_request->isPost())
