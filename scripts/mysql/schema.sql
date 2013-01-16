@@ -1,6 +1,6 @@
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
 
 -- -----------------------------------------------------
@@ -68,6 +68,39 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
+-- Table `roles`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `roles` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(255) NOT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB
+AUTO_INCREMENT = 5
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `privileges`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `privileges` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `roleId` INT(11) NOT NULL ,
+  `module` VARCHAR(255) NOT NULL ,
+  `controller` VARCHAR(255) NOT NULL ,
+  `action` VARCHAR(255) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `privileges_ibfk_!_idx` (`roleId` ASC) ,
+  CONSTRAINT `privileges_ibfk_!`
+    FOREIGN KEY (`roleId` )
+    REFERENCES `roles` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 9
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
 -- Table `users`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `users` (
@@ -87,8 +120,8 @@ CREATE  TABLE IF NOT EXISTS `users` (
   UNIQUE INDEX `username` (`username` ASC) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 13
-DEFAULT CHARACTER SET = latin1
-COMMENT = 'The users table stores basic information on a user';
+DEFAULT CHARACTER SET = latin1, 
+COMMENT = 'The users table stores basic information on a user' ;
 
 
 -- -----------------------------------------------------
@@ -584,8 +617,8 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_survey_settings` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `page_coverage_mono` DOUBLE NULL DEFAULT NULL ,
-  `page_coverage_color` DOUBLE NULL DEFAULT NULL ,
+  `pageCoverageMono` DOUBLE NULL DEFAULT NULL ,
+  `pageCoverageColor` DOUBLE NULL DEFAULT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
@@ -872,11 +905,12 @@ DEFAULT CHARACTER SET = utf8;
 -- Table `pgen_user_device_overrides`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_user_device_overrides` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
   `user_id` INT(11) NOT NULL ,
   `master_device_id` INT(11) NOT NULL ,
   `cost` DOUBLE NOT NULL ,
   `is_leased` TINYINT(4) NULL DEFAULT '0' ,
-  PRIMARY KEY (`user_id`) ,
+  PRIMARY KEY (`id`) ,
   INDEX `master_device_id` (`master_device_id` ASC) ,
   CONSTRAINT `proposalgenerator_user_device_overrides_ibfk_1`
     FOREIGN KEY (`master_device_id` )
@@ -1109,8 +1143,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schemas` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'Stores information on different leasing schemas';
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'Stores information on different leasing schemas' ;
 
 
 -- -----------------------------------------------------
@@ -1127,7 +1161,7 @@ CREATE  TABLE IF NOT EXISTS `qgen_global_leasing_schemas` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
-COMMENT = 'This table marks leasing schemas as global';
+COMMENT = 'This table marks leasing schemas as global' ;
 
 
 -- -----------------------------------------------------
@@ -1146,8 +1180,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_ranges` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 5
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'Stores the available value ranges (start range) for a leasin';
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'Stores the available value ranges (start range) for a leasin' ;
 
 
 -- -----------------------------------------------------
@@ -1166,8 +1200,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_terms` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 10
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'Holds the terms available for a leasing schema';
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'Holds the terms available for a leasing schema' ;
 
 
 -- -----------------------------------------------------
@@ -1191,8 +1225,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_rates` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'Stores the rates that coincide with the terms and ranges for';
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'Stores the rates that coincide with the terms and ranges for' ;
 
 
 -- -----------------------------------------------------
@@ -1259,8 +1293,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_quotes` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'Primary table for a quote. Stores basic information';
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'Primary table for a quote. Stores basic information' ;
 
 
 -- -----------------------------------------------------
@@ -1425,18 +1459,6 @@ CREATE  TABLE IF NOT EXISTS `qgen_user_quote_settings` (
     REFERENCES `qgen_quote_settings` (`id` ))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `roles`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `roles` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `name` VARCHAR(255) NOT NULL ,
-  PRIMARY KEY (`id`) )
-ENGINE = InnoDB
-AUTO_INCREMENT = 5
-DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
