@@ -1,5 +1,4 @@
 <?php
-
 class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapper_Abstract
 {
     protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_UploadDataCollectorRow";
@@ -58,6 +57,7 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
      * Deletes all upload data collector rows for a report
      *
      * @param number $reportId
+     *
      * @return int
      */
     public function deleteAllRowsForReport ($reportId)
@@ -265,7 +265,7 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
             $masterDevice = new Proposalgen_Model_MasterDevice();
             $manufacturer = new Proposalgen_Model_Manufacturer();
 
-            $manufacturer->fullname = $result->Manufacturer;
+            $manufacturer->fullname    = $result->Manufacturer;
             $manufacturer->displayname = $result->Manufacturer;
             $masterDevice->setPrinterModel(trim(str_replace($result->Manufacturer, '', $result->ModelName)));
             $masterDevice->setManufacturer($manufacturer);

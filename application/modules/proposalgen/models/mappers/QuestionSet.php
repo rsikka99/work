@@ -1,12 +1,10 @@
 <?php
-
 class Proposalgen_Model_Mapper_QuestionSet extends Tangent_Model_Mapper_Abstract
 {
     protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_QuestionSet";
     static $_instance;
 
     /**
-     *
      * @return Proposalgen_Model_Mapper_QuestionSet
      */
     public static function getInstance ()
@@ -25,9 +23,10 @@ class Proposalgen_Model_Mapper_QuestionSet extends Tangent_Model_Mapper_Abstract
      *
      * @param Zend_Db_Table_Row $row
      *
+     * @throws Exception
      * @return Proposalgen_Model_QuestionSet
      */
-    public function mapRowToObject (Zend_Db_Table_Row $row)
+    public function mapRowToObject ($row)
     {
         $object = null;
         try
@@ -64,7 +63,7 @@ class Proposalgen_Model_Mapper_QuestionSet extends Tangent_Model_Mapper_Abstract
         // Same deal with a report model.
         if ($reportId instanceof Proposalgen_Model_Report)
         {
-            $reportId = $reportId->getReportId();
+            $reportId = $reportId->getId();
         }
 
         $questions                 = array();
@@ -72,7 +71,7 @@ class Proposalgen_Model_Mapper_QuestionSet extends Tangent_Model_Mapper_Abstract
         $questionMapper            = Proposalgen_Model_Mapper_Question::getInstance();
         $dateAnswerMapper          = Proposalgen_Model_Mapper_DateAnswer::getInstance();
         $numericAnswerMapper       = Proposalgen_Model_Mapper_NumericAnswer::getInstance();
-        $texualAnswerMapper        = Proposalgen_Model_Mapper_TextualAnswer::getInstance();
+        $textualAnswerMapper       = Proposalgen_Model_Mapper_TextualAnswer::getInstance();
 
         // Get all the questions for the question set
         $results = $questionSetQuestionMapper->fetchAll(array(
@@ -88,14 +87,16 @@ class Proposalgen_Model_Mapper_QuestionSet extends Tangent_Model_Mapper_Abstract
             {
                 // Get the question
                 $tempQuestion = $questionMapper->find($questionSetQuestion->questionId);
+                if ($tempQuestion instanceof Proposalgen_Model_Question)
+                {
+                    // Get the answers
+                    $tempQuestion->DateAnswer    = $dateAnswerMapper->getQuestionAnswer($questionSetQuestion->questionId, $reportId);
+                    $tempQuestion->NumericAnswer = $numericAnswerMapper->getQuestionAnswer($questionSetQuestion->questionId, $reportId);
+                    $tempQuestion->TextualAnswer = $textualAnswerMapper->getQuestionAnswer($questionSetQuestion->questionId, $reportId);
 
-                // Get the answers
-                $tempQuestion->DateAnswer    = $dateAnswerMapper->getQuestionAnswer($questionSetQuestion->questionId, $reportId);
-                $tempQuestion->NumericAnswer = $numericAnswerMapper->getQuestionAnswer($questionSetQuestion->questionId, $reportId);
-                $tempQuestion->TextualAnswer = $texualAnswerMapper->getQuestionAnswer($questionSetQuestion->questionId, $reportId);
-
-                // Create an array with the complete question models (key is the question id for easy references elsewhere.
-                $questions [$question->QuestionId] = $tempQuestion;
+                    // Create an array with the complete question models (key is the question id for easy references elsewhere.
+                    $questions [$questionSetQuestion->questionId] = $tempQuestion;
+                }
             }
         }
 
@@ -106,17 +107,18 @@ class Proposalgen_Model_Mapper_QuestionSet extends Tangent_Model_Mapper_Abstract
     /**
      * Saved an Proposalgen_Model_ object to the database
      *
-     * @param unknown_type $object
+     * @param \Proposalgen_Model_QuestionSet $object
+     *
+     * @throws Exception
+     * @return string
      */
-    public function save (Proposalgen_Model_QuestionSet $object)
+    public function save ($object)
     {
-        $primaryKey = 0;
         try
         {
             $data ["id"]   = $object->questionId;
             $data ["name"] = $object->questionSetName;
-
-            $primaryKey = $this->saveRow($data);
+            $primaryKey    = $this->saveRow($data);
         }
         catch (Exception $e)
         {

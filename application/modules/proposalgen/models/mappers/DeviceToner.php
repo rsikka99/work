@@ -1,12 +1,10 @@
 <?php
-
 class Proposalgen_Model_Mapper_DeviceToner extends Tangent_Model_Mapper_Abstract
 {
     protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_DeviceToner";
     static $_instance;
 
     /**
-     *
      * @return Proposalgen_Model_Mapper_DeviceToner
      */
     public static function getInstance ()
@@ -25,9 +23,10 @@ class Proposalgen_Model_Mapper_DeviceToner extends Tangent_Model_Mapper_Abstract
      *
      * @param Zend_Db_Table_Row $row
      *
-     * @return The appropriate Proposalgen_Model
+     * @throws Exception
+     * @return \Proposalgen_Model_DeviceToner
      */
-    public function mapRowToObject (Zend_Db_Table_Row $row)
+    public function mapRowToObject ($row)
     {
         $object = null;
         try
@@ -44,15 +43,19 @@ class Proposalgen_Model_Mapper_DeviceToner extends Tangent_Model_Mapper_Abstract
         return $object;
     }
 
-    public function save (Proposalgen_Model_DeviceToner $object)
+    /**
+     * @param \Proposalgen_Model_DeviceToner $object
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function save ($object)
     {
-        $primaryKey = false;
         try
         {
             $data ["toner_id"]         = $object->tonerId;
             $data ["master_device_id"] = $object->masterDeviceId;
-
-            $primaryKey = $this->saveRow($data);
+            $primaryKey                = $this->saveRow($data);
         }
         catch (Exception $e)
         {
@@ -85,5 +88,4 @@ class Proposalgen_Model_Mapper_DeviceToner extends Tangent_Model_Mapper_Abstract
 
         return $entries;
     }
-
 }

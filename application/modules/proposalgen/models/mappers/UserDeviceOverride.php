@@ -1,5 +1,4 @@
 <?php
-
 class Proposalgen_Model_Mapper_UserDeviceOverride extends Tangent_Model_Mapper_Abstract
 {
     protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_UserDeviceOverride";

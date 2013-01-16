@@ -1,5 +1,4 @@
 <?php
-
 class Proposalgen_Model_Mapper_PricingConfig extends Tangent_Model_Mapper_Abstract
 {
     protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_PricingConfig";
@@ -24,9 +23,10 @@ class Proposalgen_Model_Mapper_PricingConfig extends Tangent_Model_Mapper_Abstra
      *
      * @param Zend_Db_Table_Row $row
      *
-     * @return Proposalgen_Model_PricingConfig
+     * @throws Exception
+     * @return \Proposalgen_Model_PricingConfig
      */
-    public function mapRowToObject (Zend_Db_Table_Row $row)
+    public function mapRowToObject ($row)
     {
         $object = null;
         try
@@ -48,17 +48,18 @@ class Proposalgen_Model_Mapper_PricingConfig extends Tangent_Model_Mapper_Abstra
     /**
      * Saved an Proposalgen_Model_ object to the database
      *
-     * @param Proposalgen_Model_PricingConfig $object
+     * @param \Proposalgen_Model_PricingConfig $object
+     *
+     * @throws Exception
+     * @return string
      */
-    public function save (Proposalgen_Model_PricingConfig $object)
+    public function save ($object)
     {
-        $primaryKey = 0;
         try
         {
             $data ["id"]   = $object->pricingConfigId;
             $data ["name"] = $object->configName;
-
-            $primaryKey = $this->saveRow($data);
+            $primaryKey    = $this->saveRow($data);
         }
         catch (Exception $e)
         {

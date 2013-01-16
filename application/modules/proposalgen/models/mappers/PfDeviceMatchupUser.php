@@ -1,12 +1,10 @@
 <?php
-
 class Proposalgen_Model_Mapper_PfDeviceMatchupUser extends Tangent_Model_Mapper_Abstract
 {
     protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_PFMatchupUser";
     static $_instance;
 
     /**
-     *
      * @return Proposalgen_Model_Mapper_PfDeviceMatchupUser
      */
     public static function getInstance ()
@@ -25,9 +23,10 @@ class Proposalgen_Model_Mapper_PfDeviceMatchupUser extends Tangent_Model_Mapper_
      *
      * @param Zend_Db_Table_Row $row
      *
+     * @throws Exception
      * @return Proposalgen_Model_PfDeviceMatchupUser
      */
-    public function mapRowToObject (Zend_Db_Table_Row $row)
+    public function mapRowToObject ($row)
     {
         $object = null;
         try
@@ -45,16 +44,20 @@ class Proposalgen_Model_Mapper_PfDeviceMatchupUser extends Tangent_Model_Mapper_
         return $object;
     }
 
-    public function save (Proposalgen_Model_UserDeviceOverride $object)
+    /**
+     * @param Proposalgen_Model_PfDeviceMatchupUser $object
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function save ($object)
     {
-        $primaryKey = false;
         try
         {
             $data ["pf_device_id"]     = $object->DevicesPfId;
             $data ["master_device_id"] = $object->masterDeviceId;
             $data ["user_id"]          = $object->userId;
-
-            $primaryKey = $this->saveRow($data);
+            $primaryKey                = $this->saveRow($data);
         }
         catch (Exception $e)
         {

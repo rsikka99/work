@@ -43,7 +43,7 @@ class Proposalgen_Model_Mapper_TonerColor extends Tangent_Model_Mapper_Abstract
      * @throws Exception
      * @return Proposalgen_Model_TonerColor
      */
-    public function mapRowToObject (Zend_Db_Table_Row $row)
+    public function mapRowToObject ($row)
     {
         $object = null;
         try
@@ -68,7 +68,7 @@ class Proposalgen_Model_Mapper_TonerColor extends Tangent_Model_Mapper_Abstract
      * @throws Exception
      * @return string
      */
-    public function save (Proposalgen_Model_TonerColor $object)
+    public function save ($object)
     {
         try
         {

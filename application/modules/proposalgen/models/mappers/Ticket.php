@@ -1,5 +1,4 @@
 <?php
-
 class Proposalgen_Model_Mapper_Ticket extends Tangent_Model_Mapper_Abstract
 {
     protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_Ticket";
@@ -28,7 +27,7 @@ class Proposalgen_Model_Mapper_Ticket extends Tangent_Model_Mapper_Abstract
      * @return \Proposalgen_Model_Ticket
      * @throws Exception
      */
-    public function mapRowToObject (Zend_Db_Table_Row $row)
+    public function mapRowToObject ($row)
     {
         $object = null;
         try
@@ -59,7 +58,7 @@ class Proposalgen_Model_Mapper_Ticket extends Tangent_Model_Mapper_Abstract
      * @throws Exception
      * @return string
      */
-    public function save (Proposalgen_Model_Ticket $object)
+    public function save ($object)
     {
         try
         {

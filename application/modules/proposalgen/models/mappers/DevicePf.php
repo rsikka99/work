@@ -1,12 +1,10 @@
 <?php
-
 class Proposalgen_Model_Mapper_DevicePf extends Tangent_Model_Mapper_Abstract
 {
     protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_PFDevice";
     static $_instance;
 
     /**
-     *
      * @return Proposalgen_Model_Mapper_DevicePf
      */
     public static function getInstance ()
@@ -62,9 +60,10 @@ class Proposalgen_Model_Mapper_DevicePf extends Tangent_Model_Mapper_Abstract
      *
      * @param Zend_Db_Table_Row $row
      *
-     * @return The appropriate Proposalgen_Model
+     * @throws Exception
+     * @return \Proposalgen_Model_DevicePf
      */
-    public function mapRowToObject (Zend_Db_Table_Row $row)
+    public function mapRowToObject ($row)
     {
         $object = null;
         try
@@ -88,11 +87,13 @@ class Proposalgen_Model_Mapper_DevicePf extends Tangent_Model_Mapper_Abstract
     /**
      * Saved an Proposalgen_Model_ object to the database
      *
-     * @param unknown_type $object
+     * @param \Proposalgen_Model_DevicePf $object
+     *
+     * @throws Exception
+     * @return string
      */
-    public function save (Proposalgen_Model_DevicePf $object)
+    public function save ($object)
     {
-        $primaryKey = 0;
         try
         {
             $data ["id"]                 = $object->devicesPfId;
@@ -101,8 +102,7 @@ class Proposalgen_Model_Mapper_DevicePf extends Tangent_Model_Mapper_Abstract
             $data ["pf_db_manufacturer"] = $object->pfDbManufacturer;
             $data ["date_created"]       = $object->dateCreated;
             $data ["created_by"]         = $object->createdBy;
-
-            $primaryKey = $this->saveRow($data);
+            $primaryKey                  = $this->saveRow($data);
         }
         catch (Exception $e)
         {

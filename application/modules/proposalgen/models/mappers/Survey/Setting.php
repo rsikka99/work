@@ -50,7 +50,7 @@ class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
      *
      * @return int The number of rows affected
      */
-    public function save ($survey_setting, $primaryKey = null)
+    public function save ($primaryKey = null)
     {
         $data = $this->unsetNullValues($survey_setting->toArray());
 

@@ -1,10 +1,4 @@
 <?php
-
-/**
- * Class Proposalgen_Model_Mapper_User_Survey_Setting
- *
- * This class is a data mapper for the User_Survey_Setting model.
- */
 class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstract
 {
     /**
@@ -54,7 +48,7 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
      *
      * @return int The number of rows affected
      */
-    public function save ($user_survey_setting, $primaryKey = null)
+    public function save ($primaryKey = null)
     {
         $data = $this->unsetNullValues($user_survey_setting->toArray());
 

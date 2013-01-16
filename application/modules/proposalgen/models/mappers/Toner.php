@@ -47,16 +47,16 @@ class Proposalgen_Model_Mapper_Toner extends Tangent_Model_Mapper_Abstract
      * @throws Exception
      * @return \Proposalgen_Model_Toner
      */
-    public function mapRowToObject (Zend_Db_Table_Row $row)
+    public function mapRowToObject ($row)
     {
         $object = null;
         try
         {
             $object                 = new Proposalgen_Model_Toner();
-            $object->id        = $row->id;
-            $object->sku       = $row->sku;
-            $object->cost     = $row->cost;
-            $object->yield     = $row->yield;
+            $object->id             = $row->id;
+            $object->sku            = $row->sku;
+            $object->cost           = $row->cost;
+            $object->yield          = $row->yield;
             $object->partTypeId     = $row->part_type_id;
             $object->manufacturerId = $row->manufacturer_id;
             $object->tonerColorId   = $row->toner_color_id;
@@ -77,9 +77,8 @@ class Proposalgen_Model_Mapper_Toner extends Tangent_Model_Mapper_Abstract
      * @throws Exception
      * @return string
      */
-    public function save (Proposalgen_Model_Toner $object)
+    public function save ($object)
     {
-        $primaryKey = 0;
         try
         {
             $data ["id"]              = $object->id;
@@ -120,7 +119,7 @@ class Proposalgen_Model_Mapper_Toner extends Tangent_Model_Mapper_Abstract
                 /* @var $deviceToner Proposalgen_Model_DeviceToner */
                 foreach ($deviceToners as $deviceToner)
                 {
-                    $toner                                                                                      = $this->find($deviceToner->tonerId);
+                    $toner                                                                                 = $this->find($deviceToner->tonerId);
                     $toners [$toner->getPartType()->partTypeId] [$toner->getTonerColor()->tonerColorId] [] = $toner;
                 }
             }
