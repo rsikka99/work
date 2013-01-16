@@ -63,7 +63,7 @@ class Proposalgen_Model_Mapper_QuestionSet extends Tangent_Model_Mapper_Abstract
         // Same deal with a report model.
         if ($reportId instanceof Proposalgen_Model_Report)
         {
-            $reportId = $reportId->getId();
+            $reportId = $reportId->id;
         }
 
         $questions                 = array();

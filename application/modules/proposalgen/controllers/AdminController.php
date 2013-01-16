@@ -7332,8 +7332,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
                     $reportMapper = Proposalgen_Model_Mapper_Report::getInstance();
                     $report       = Proposalgen_Model_Mapper_Report::getInstance()->find($report_id);
-                    $report->setReportId($report_id);
-                    $report->setUserId($new_user_id);
+                    $report->id = $report_id;
+                    $report->userId = $new_user_id;
                     $reportMapper->save($report);
 
                     // update unknown_device_instance records

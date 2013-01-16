@@ -17,13 +17,13 @@
     	
         <?php foreach ($this->paginator->getCurrentItems() as $masterDevice) : /* @var $masterDevice Proposalgen_Model_MasterDevice */ ?>
         <tr>
-            <td><?php echo $masterDevice->getId(); ?></td>
+            <td><?php echo $masterDevice->id; ?></td>
             <td><?php echo $masterDevice->getFullDeviceName(); ?></td>
             <td>
                 <div class="btn-group">
-	                <a class="btn btn-info" title="View Master Device" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $masterDevice->getId())); ?>"><i class="icon-eye-open"></i></a>
-                    <a class="btn btn-warning" title="Edit Master Device" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $masterDevice->getId())); ?>"><i class="icon-pencil"></i></a>
-                    <a class="btn btn-danger" title="Delete Master Device" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $masterDevice->getId())); ?>"><i class="icon-trash"></i></a>
+	                <a class="btn btn-info" title="View Master Device" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $masterDevice->id)); ?>"><i class="icon-eye-open"></i></a>
+                    <a class="btn btn-warning" title="Edit Master Device" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $masterDevice->id)); ?>"><i class="icon-pencil"></i></a>
+                    <a class="btn btn-danger" title="Delete Master Device" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $masterDevice->id)); ?>"><i class="icon-trash"></i></a>
                 </div>
             </td>
         </tr>

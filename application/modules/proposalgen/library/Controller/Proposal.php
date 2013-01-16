@@ -22,7 +22,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     protected $_reportSession;
     protected $_reportSteps;
     protected $_userId;
-    
+
     /**
      * The current step that the user is viewing.
      *
@@ -38,9 +38,9 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
      */
     public function init ()
     {
-        $this->_reportSession = new Zend_Session_Namespace('proposalgenerator_report');
+        $this->_reportSession    = new Zend_Session_Namespace('proposalgenerator_report');
         $this->view->reportSteps = $this->getReportSteps();
-        $this->_userId = Zend_Auth::getInstance()->getIdentity()->id;
+        $this->_userId           = Zend_Auth::getInstance()->getIdentity()->id;
     }
 
     /**
@@ -51,9 +51,9 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     public function postDispatch ()
     {
         // Render our survey menu
-        $stage = ($this->getReport()->getReportStage()) ?  : Proposalgen_Model_Report_Step::STEP_SURVEY_COMPANY;
+        $stage = ($this->getReport()->reportStage) ? : Proposalgen_Model_Report_Step::STEP_SURVEY_COMPANY;
         Proposalgen_Model_Report_Step::updateAccessibleSteps($this->getReportSteps(), $stage);
-        
+
         $this->view->placeholder('ProgressionNav')->set($this->view->ProposalMenu($this->getReportSteps()));
     }
 
@@ -64,7 +64,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
      */
     protected function getReport ()
     {
-        if (! isset($this->_report))
+        if (!isset($this->_report))
         {
             // Fetch the existing report, or create a new one if the session id isnt set
             if (isset($this->_reportSession->reportId) && $this->_reportSession->reportId > 0)
@@ -77,15 +77,16 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
             }
             else
             {
-                $identity = Zend_Auth::getInstance()->getIdentity();
-                $this->_report = new Proposalgen_Model_Report();
-                $this->_report->setUserId($identity->id);
-                $this->_report->setQuestionsetId(1);
-                $this->_report->setReportStage(Proposalgen_Model_Report_Step::STEP_SURVEY_COMPANY);
-                $this->_report->setDateCreated(date('Y-m-d H:i:s'));
-                $this->_report->setReportDate(date('Y-m-d H:i:s'));
+                $identity                     = Zend_Auth::getInstance()->getIdentity();
+                $this->_report                = new Proposalgen_Model_Report();
+                $this->_report->userId        = $identity->id;
+                $this->_report->questionsetId = 1;
+                $this->_report->reportStage   = Proposalgen_Model_Report_Step::STEP_SURVEY_COMPANY;
+                $this->_report->dateCreated   = date('Y-m-d H:i:s');
+                $this->_report->reportDate    = date('Y-m-d H:i:s');
             }
         }
+
         return $this->_report;
     }
 
@@ -97,20 +98,20 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     {
         $reportMapper = Proposalgen_Model_Mapper_Report::getInstance();
         $this->_report->setLastModified(date('Y-m-d H:i:s'));
-        
+
         if ($updateReportStage)
         {
             // This updates the reports progress
             $newStep = $this->checkIfNextStepIsNew($this->_activeStep);
-            if ($newStep !== FALSE)
+            if ($newStep !== false)
             {
                 $this->_report->setReportStage($newStep->enumValue);
-                
+
                 // We need to adjust the menu just in case we're not redirecting
                 Proposalgen_Model_Report_Step::updateAccessibleSteps($this->getReportSteps(), $newStep->enumValue);
             }
         }
-        
+
         if ($this->_report->getId() === null || $this->_report->getId() < 1)
         {
             $id = $reportMapper->insert($this->_report);
@@ -120,7 +121,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
         {
             $id = $reportMapper->save($this->_report);
         }
-        
+
         $this->_reportSession->reportId = $this->_report->getId();
     }
 
@@ -131,7 +132,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
      */
     protected function getReportSteps ()
     {
-        $report = $this->getReport();
+        $report      = $this->getReport();
         $reportSteps = null;
         if ($report === null)
         {
@@ -141,13 +142,15 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
         {
             $reportSteps = $report->getReportSteps();
         }
+
         return $reportSteps;
     }
 
     /**
      * Checks to see if the next step is a new step.
      *
-     * @param Proposalgen_Model_Report_Step $currentStepName            
+     * @param Proposalgen_Model_Report_Step $currentStepName
+     *
      * @return Proposalgen_Model_Report_Step Step Name. Returns FALSE if the step is not new.
      */
     protected function checkIfNextStepIsNew (Proposalgen_Model_Report_Step $step)
@@ -157,13 +160,13 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
             $nextStep = $step->nextStep;
             if ($nextStep !== null)
             {
-                if (! $nextStep->canAccess)
+                if (!$nextStep->canAccess)
                 {
                     return $nextStep;
                 }
             }
         }
-        
+
         return false;
     }
 
@@ -175,26 +178,28 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     protected function getLatestAvailableReportStep ()
     {
         $latestStep = null;
-        
+
         /* @var $step Proposalgen_Model_Report_Step */
-        foreach ( $this->getReportSteps() as $step )
+        foreach ($this->getReportSteps() as $step)
         {
             /*
              * Just in case we don't find anything, lets set the step to the very first step.
              */
             if ($latestStep === null)
+            {
                 $latestStep = $step;
-                
-                /*
-             * If we can access the current step, and the next step either doesn't exist or is inaccessable.
-             */
-            if ($step->canAccess && ($step->nextStep === null || ! $step->nextStep->canAccess))
+            }
+
+            /*
+         * If we can access the current step, and the next step either doesn't exist or is inaccessable.
+         */
+            if ($step->canAccess && ($step->nextStep === null || !$step->nextStep->canAccess))
             {
                 $latestStep = $step;
                 break;
             }
         }
-        
+
         return $latestStep;
     }
 
@@ -208,14 +213,14 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     {
         $this->_activeStep = null;
         /* @var $step Proposalgen_Model_Report_Step */
-        foreach ( $this->getReportSteps() as $step )
+        foreach ($this->getReportSteps() as $step)
         {
             $step->active = false;
             if (strcasecmp($step->enumValue, $activeStepName) === 0)
             {
-                
+
                 $this->_activeStep = $step;
-                $step->active = true;
+                $step->active      = true;
                 break;
             }
         }
@@ -231,7 +236,9 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
         {
             $nextStep = $this->_activeStep->nextStep;
             if ($nextStep)
+            {
                 $this->_helper->redirector($nextStep->action, $nextStep->controller);
+            }
         }
     }
 
@@ -245,7 +252,9 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
         {
             $prevStep = $this->_activeStep->previousStep);
             if ($prevStep)
+            {
                 $this->_helper->redirector($prevStep->action, $prevStep->controller);
+            }
         }
     }
 }

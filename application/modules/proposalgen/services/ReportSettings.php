@@ -69,7 +69,7 @@ class Proposalgen_Service_ReportSettings
             
             // Populate with initial data?
             $this->_form->populate($this->_reportSettings->toArray());
-            $reportDate = date('m/d/Y', strtotime($this->_report->getReportDate()));
+            $reportDate = date('m/d/Y', strtotime($this->_report->reportDate));
             $this->_form->populate(array (
                     'reportDate' => $reportDate 
             ));
@@ -121,7 +121,7 @@ class Proposalgen_Service_ReportSettings
         if ($validData)
         {
             $reportDate = date('Y-m-d h:i:s', strtotime($validData ['reportDate']));
-            $this->_report->setReportDate($reportDate);
+            $this->_report->reportDate = $reportDate;
             Proposalgen_Model_Mapper_Report::getInstance()->save($this->_report);
             
             foreach ( $validData as $key => $value )

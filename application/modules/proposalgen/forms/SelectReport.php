@@ -44,13 +44,13 @@ class Proposalgen_Form_SelectReport extends EasyBib_Form
         foreach ( $this->_reports as $report )
         {
             
-            $reportName = $report->getCustomerCompanyName();
-            if ($report->getDateCreated() !== null)
+            $reportName = $report->customerCompanyName;
+            if ($report->dateCreated !== null)
             {
-                $date = strftime('%x', strtotime($report->getDateCreated()));
+                $date = strftime('%x', strtotime($report->dateCreated));
                 $reportName .= ' (' . $date . ')';
             }
-            $select->addMultiOption($report->getId(), $reportName);
+            $select->addMultiOption($report->id, $reportName);
         }
         
         $this->addElement($select);
