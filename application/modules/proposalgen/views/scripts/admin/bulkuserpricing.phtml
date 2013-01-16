@@ -23,7 +23,7 @@
 		//* DEALER DEVICES GRID
 		//*********************************************************************
 		jQuery("#devices_list").jqGrid({
-			url:'<?php echo $this->baseUrl(); ?>/admin/userdevices',
+			url:'<?php echo $this->baseUrl("/proposalgen/admin/userdevices"); ?>',
 			datatype:'json',
 			colNames:['Manufacturer','Printer Model','Printer Price','Override Price','New Price'],
 			colModel:[
@@ -89,7 +89,7 @@
 		//* DEALER TONERS GRID
 		//*********************************************************************
 		jQuery("#toners_list").jqGrid({
-			url:'<?php echo $this->baseUrl(); ?>/admin/usertoners',
+			url:'<?php echo $this->baseUrl("/proposalgen/admin/usertoners"); ?>',
 			datatype:'json',
 			colNames:['Toner ID','SKU','Manufacturer','Type','Color','Yield','Toner Price','Override Price','New Price','MasterID','Machine Compatibility'],
 			colModel:[
@@ -207,13 +207,13 @@
 			
 			switch (this.value) {
 				case "manufacturer_name":
-					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=man';
+					url = '<?php echo $this->baseUrl("/proposalgen/admin/filterlistitems"); ?>?list=man';
 					break;
 				case "type_name":
-					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=type';
+					url = '<?php echo $this->baseUrl("/proposalgen/admin/filterlistitems"); ?>?list=type';
 					break;
 				case "toner_color_name":
-					url = '<?php echo $this->baseUrl(); ?>/admin/filterlistitems?list=color';
+					url = '<?php echo $this->baseUrl("/proposalgen/admin/filterlistitems"); ?>?list=color';
 					break;
 				default:
 					break;
@@ -339,11 +339,11 @@
 		
 		//refresh the grid
 		if($('#pricing_filter').val() == 'toner') {
-			$('#toners_list').setGridParam({url:'<?php echo $this->baseUrl(); ?>/admin/usertoners?type=' + $('#pricing_filter').val()+params, page: $("#hdnPage").val()});
+			$('#toners_list').setGridParam({url:'<?php echo $this->baseUrl("/proposalgen/admin/usertoners"); ?>?type=' + $('#pricing_filter').val()+params, page: $("#hdnPage").val()});
 			$('#toners_list').trigger("reloadGrid");
 			setTimeout("$('#toners_table').show()",200);
 		} else { 
-			$('#devices_list').setGridParam({url:'<?php echo $this->baseUrl(); ?>/admin/userdevices?type=' + $('#pricing_filter').val()+params, page: $("#hdnPage").val()});
+			$('#devices_list').setGridParam({url:'<?php echo $this->baseUrl("/proposalgen/admin/userdevices"); ?>?type=' + $('#pricing_filter').val()+params, page: $("#hdnPage").val()});
 			$('#devices_list').trigger('reloadGrid');
 			setTimeout("$('#devices_table').show()",200);
 		}
@@ -501,7 +501,7 @@
 					<br/>			
 					<div class="submitBar" id="submitBtns">
 						<input type="button" class="btn btn-primary" name="btnUpdate" id="btnUpdate" value="Update" onclick="javascript: do_update();" />
-						<input type="button" class="btn" name="btnDone" id="btnDone" value="Done" onClick="javascript:  document.location.href='<?php echo $this->baseUrl()."/admin"?>';" />
+						<input type="button" class="btn" name="btnDone" id="btnDone" value="Done" onClick="javascript:  document.location.href='<?php echo $this->baseUrl("/proposalgen/admin")?>';" />
 					</div>
 					
 				</div>
