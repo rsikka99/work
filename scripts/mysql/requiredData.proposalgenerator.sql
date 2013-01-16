@@ -38,7 +38,7 @@ INSERT INTO `pgen_report_settings` (`id`,`actualPageCoverageMono`,`actualPageCov
 (1,6,24,0.0035,0.0006,20,20,250,1000,0.015,0.08,0.02,0.09,0.1,2,3);
 
 /* Default System Survey Settings */
-INSERT INTO `pgen_survey_settings` (`id`, `page_coverage_mono`, `page_coverage_color`) VALUES
+INSERT INTO `pgen_survey_settings` (`id`, `pageCoverageMono`, `pageCoverageColor`) VALUES
 (1,6,24);
 
 /*
