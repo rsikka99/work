@@ -1,41 +1,125 @@
 <?php
-
-/**
- * Class Proposalgen_Model_Device
- *
- * @author "Lee Robert"
- */
 class Proposalgen_Model_MasterDevice extends My_Model_Abstract
 {
     private static $ReportMargin;
     private static $PricingConfig;
     private static $GrossMarginPricingConfig;
-    protected $_id;
-    protected $_manufacturerId;
-    protected $_printerModel;
-    protected $_tonerConfigId;
-    protected $_isCopier;
-    protected $_isFax;
-    protected $_isScanner;
-    protected $_isDuplex;
-    protected $_isReplacementDevice;
-    protected $_wattsPowerNormal;
-    protected $_wattsPowerIdle;
-    protected $_cost;
-    protected $_serviceCostPerPage;
-    protected $_launchDate;
-    protected $_dateCreated;
-    protected $_dutyCycle;
-    protected $_ppmBlack;
-    protected $_ppmColor;
-    protected $_isLeased;
-    protected $_leasedTonerYield;
+
+    /*
+     * Database fields
+     */
+
+    /**
+     * @var int
+     */
+    public $id;
+
+    /**
+     * @var int
+     */
+    public $manufacturerId;
+
+    /**
+     * @var string
+     */
+    public $printerModel;
+
+    /**
+     * @var int
+     */
+    public $tonerConfigId;
+
+    /**
+     * @var bool
+     */
+    public $isCopier;
+
+    /**
+     * @var bool
+     */
+    public $isFax;
+
+    /**
+     * @var bool
+     */
+    public $isScanner;
+
+    /**
+     * @var bool
+     */
+    public $isDuplex;
+
+    /**
+     * @var bool
+     */
+    public $isReplacementDevice;
+
+    /**
+     * @var int
+     */
+    public $wattsPowerNormal;
+
+    /**
+     * @var int
+     */
+    public $wattsPowerIdle;
+
+    /**
+     * @var float
+     */
+    public $cost;
+
+    /**
+     * @var float
+     */
+    public $serviceCostPerPage;
+
+    /**
+     * @var string
+     */
+    public $launchDate;
+
+    /**
+     * @var string
+     */
+    public $dateCreated;
+
+    /**
+     * @var int
+     */
+    public $dutyCycle;
+
+    /**
+     * @var int
+     */
+    public $ppmBlack;
+
+    /**
+     * @var int
+     */
+    public $ppmColor;
+
+    /**
+     * @var bool
+     */
+    public $isLeased;
+
+    /**
+     * @var int
+     */
+    public $leasedTonerYield;
+
+    /*
+     * Related Objects
+     */
     protected $_toners;
     protected $_manufacturer;
     protected $_tonerConfig;
-    
-    // Extra's
-    protected $_adminCostPerPage;
+
+    /*
+     * calculated values and other things
+     */
+    public $adminCostPerPage;
     protected $_costPerPage;
     protected $_usingIncompleteBlackTonerData;
     protected $_usingIncompleteColorTonerData;
@@ -51,21 +135,21 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      * given the current pricing configuration
      * SPECIAL: Leased devices have a yield set, so we use that
      *
-     * @return the $MaximumMonthlyPageVolume
+     * @return int $MaximumMonthlyPageVolume
      */
     public function getMaximumMonthlyPageVolume ()
     {
-        if (! isset($this->_maximumMonthlyPageVolume))
+        if (!isset($this->_maximumMonthlyPageVolume))
         {
             $smallestYield = null;
-            if ($this->getIsLeased())
+            if ($this->isLeased)
             {
-                $smallestYield = $this->getLeasedTonerYield();
+                $smallestYield = $this->leasedTonerYield;
             }
             else
             {
-                $requiredToners = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($this->getTonerConfigId());
-                foreach ( $requiredToners as $tonerColor )
+                $requiredToners = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($this->tonerConfigId);
+                foreach ($requiredToners as $tonerColor)
                 {
                     $toner = $this->getCheapestToner($tonerColor, self::$PricingConfig);
                     if ($toner->yield < $smallestYield || is_null($smallestYield))
@@ -76,11 +160,12 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             }
             $this->_maximumMonthlyPageVolume = $smallestYield;
         }
+
         return $this->_maximumMonthlyPageVolume;
     }
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::populate()
+
+    /**
+     * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
     {
@@ -88,113 +173,154 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        if (isset($params->id) && ! is_null($params->id))
-            $this->setId($params->id);
-        
-        if (isset($params->manufacturer_id) && ! is_null($params->manufacturer_id))
-            $this->setManufacturerId($params->manufacturer_id);
-        
-        if (isset($params->printer_model) && ! is_null($params->printer_model))
-            $this->setPrinterModel($params->printer_model);
-        
-        if (isset($params->toner_config_id) && ! is_null($params->toner_config_id))
-            $this->setTonerConfigId($params->toner_config_id);
-        
-        if (isset($params->is_copier) && ! is_null($params->is_copier))
-            $this->setIsCopier($params->is_copier);
-        
-        if (isset($params->is_fax) && ! is_null($params->is_fax))
-            $this->setIsFax($params->is_fax);
-        
-        if (isset($params->is_scanner) && ! is_null($params->is_scanner))
-            $this->setIsScanner($params->is_scanner);
-        
-        if (isset($params->is_duplex) && ! is_null($params->is_duplex))
-            $this->setIsDuplex($params->is_duplex);
-        
-        if (isset($params->is_replacement_device) && ! is_null($params->is_replacement_device))
-            $this->setIsReplacementDevice($params->is_replacement_device);
-        
-        if (isset($params->watts_power_normal) && ! is_null($params->watts_power_normal))
-            $this->setWattsPowerNormal($params->watts_power_normal);
-        
-        if (isset($params->watts_power_idle) && ! is_null($params->watts_power_idle))
-            $this->setWattsPowerIdle($params->watts_power_idle);
-        
-        if (isset($params->cost) && ! is_null($params->cost))
-            $this->setCost($params->cost);
-        
-        if (isset($params->service_cost_per_page) && ! is_null($params->service_cost_per_page))
-            $this->setServiceCostPerPage($params->service_cost_per_page);
-        
-        if (isset($params->launch_date) && ! is_null($params->launch_date))
-            $this->setLaunchDate($params->launch_date);
-        
-        if (isset($params->date_created) && ! is_null($params->date_created))
-            $this->setDateCreated($params->date_created);
-        
-        if (isset($params->duty_cycle) && ! is_null($params->duty_cycle))
-            $this->setDutyCycle($params->duty_cycle);
-        
-        if (isset($params->ppm_black) && ! is_null($params->ppm_black))
-            $this->setPPMBlack($params->ppm_black);
-        
-        if (isset($params->ppm_color) && ! is_null($params->ppm_color))
-            $this->setPPMColor($params->ppm_color);
-        
-        if (isset($params->is_leased) && ! is_null($params->is_leased))
-            $this->setIsLeased($params->is_leased);
-        
-        if (isset($params->leased_toner_yield) && ! is_null($params->leased_toner_yield))
-            $this->setLeasedTonerYield($params->leased_toner_yield);
+
+        if (isset($params->id) && !is_null($params->id))
+        {
+            $this->id = $params->id;
+        }
+
+        if (isset($params->manufacturerId) && !is_null($params->manufacturerId))
+        {
+            $this->manufacturerId = $params->manufacturerId;
+        }
+
+        if (isset($params->printerModel) && !is_null($params->printerModel))
+        {
+            $this->printerModel = $params->printerModel;
+        }
+
+        if (isset($params->tonerConfigId) && !is_null($params->tonerConfigId))
+        {
+            $this->tonerConfigId = $params->tonerConfigId;
+        }
+
+        if (isset($params->isCopier) && !is_null($params->isCopier))
+        {
+            $this->isCopier = $params->isCopier;
+        }
+
+        if (isset($params->isFax) && !is_null($params->isFax))
+        {
+            $this->isFax = $params->isFax;
+        }
+
+        if (isset($params->isScanner) && !is_null($params->isScanner))
+        {
+            $this->isScanner = $params->isScanner;
+        }
+
+        if (isset($params->isDuplex) && !is_null($params->isDuplex))
+        {
+            $this->isDuplex = $params->isDuplex;
+        }
+
+        if (isset($params->isReplacementDevice) && !is_null($params->isReplacementDevice))
+        {
+            $this->isReplacementDevice = $params->isReplacementDevice;
+        }
+
+        if (isset($params->wattsPowerNormal) && !is_null($params->wattsPowerNormal))
+        {
+            $this->wattsPowerNormal = $params->wattsPowerNormal;
+        }
+
+        if (isset($params->wattsPowerIdle) && !is_null($params->wattsPowerIdle))
+        {
+            $this->wattsPowerIdle = $params->wattsPowerIdle;
+        }
+
+        if (isset($params->cost) && !is_null($params->cost))
+        {
+            $this->cost = $params->cost;
+        }
+
+        if (isset($params->serviceCostPerPage) && !is_null($params->serviceCostPerPage))
+        {
+            $this->serviceCostPerPage = $params->serviceCostPerPage;
+        }
+
+        if (isset($params->launchDate) && !is_null($params->launchDate))
+        {
+            $this->launchDate = $params->launchDate;
+        }
+
+        if (isset($params->dateCreated) && !is_null($params->dateCreated))
+        {
+            $this->dateCreated = $params->dateCreated;
+        }
+
+        if (isset($params->dutyCycle) && !is_null($params->dutyCycle))
+        {
+            $this->dutyCycle = $params->dutyCycle;
+        }
+
+        if (isset($params->ppmBlack) && !is_null($params->ppmBlack))
+        {
+            $this->ppmBlack = $params->ppmBlack;
+        }
+
+        if (isset($params->ppmColor) && !is_null($params->ppmColor))
+        {
+            $this->ppmColor = $params->ppmColor;
+        }
+
+        if (isset($params->isLeased) && !is_null($params->isLeased))
+        {
+            $this->isLeased = $params->isLeased;
+        }
+
+        if (isset($params->leasedTonerYield) && !is_null($params->leasedTonerYield))
+        {
+            $this->leasedTonerYield = $params->leasedTonerYield;
+        }
+
     }
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::toArray()
+
+    /**
+     * @return array
      */
     public function toArray ()
     {
-        return array (
-                "id" => $this->getId(), 
-                "manufacturer_id" => $this->getManufacturerId(), 
-                "printer_model" => $this->getPrinterModel(), 
-                "toner_config_id" => $this->getTonerConfigId(), 
-                "is_copier" => $this->getIsCopier(), 
-                "is_fax" => $this->getIsFax(), 
-                "is_scanner" => $this->getIsScanner(), 
-                "is_duplex" => $this->getIsDuplex(), 
-                "is_replacement_device" => $this->getIsReplacementDevice(), 
-                "watts_power_normal" => $this->getWattsPowerNormal(), 
-                "watts_power_idle" => $this->getWattsPowerIdle(), 
-                "cost" => $this->getCost(), 
-                "service_cost_per_page" => $this->getServiceCostPerPage(), 
-                "launch_date" => $this->getLaunchDate(), 
-                "date_created" => $this->getDateCreated(), 
-                "duty_cycle" => $this->getDutyCycle(), 
-                "ppm_black" => $this->getPPMBlack(), 
-                "ppm_color" => $this->getPPMColor(), 
-                "is_leased" => $this->getIsLeased(), 
-                "leased_toner_yield" => $this->getLeasedTonerYield() 
+        return array(
+            "id"                  => $this->id,
+            "manufacturerId"      => $this->manufacturerId,
+            "printerModel"        => $this->printerModel,
+            "tonerConfigId"       => $this->tonerConfigId,
+            "isCopier"            => $this->isCopier,
+            "isFax"               => $this->isFax,
+            "isScanner"           => $this->isScanner,
+            "isDuplex"            => $this->isDuplex,
+            "isReplacementDevice" => $this->isReplacementDevice,
+            "wattsPowerNormal"    => $this->wattsPowerNormal,
+            "wattsPowerIdle"      => $this->wattsPowerIdle,
+            "cost"                => $this->cost,
+            "serviceCostPerPage"  => $this->serviceCostPerPage,
+            "launchDate"          => $this->launchDate,
+            "dateCreated"         => $this->dateCreated,
+            "dutyCycle"           => $this->dutyCycle,
+            "ppmBlack"            => $this->ppmBlack,
+            "ppmColor"            => $this->ppmColor,
+            "isLeased"            => $this->isLeased,
+            "leasedTonerYield"    => $this->leasedTonerYield,
         );
     }
 
     /**
-     *
-     * @return the $PricingConfig
+     * @return Proposalgen_Model_PricingConfig
      */
     public static function getPricingConfig ()
     {
-        if (! isset(Proposalgen_Model_MasterDevice::$PricingConfig))
+        if (!isset(Proposalgen_Model_MasterDevice::$PricingConfig))
         {
-            
+
             Proposalgen_Model_MasterDevice::$PricingConfig = null;
         }
+
         return Proposalgen_Model_MasterDevice::$PricingConfig;
     }
 
     /**
-     *
-     * @param Proposalgen_Model_PricingConfig $PricingConfig
+     * @param Proposalgen_Model_PricingConfig Proposalgen_Model_PricingConfig $PricingConfig
      */
     public static function setPricingConfig ($PricingConfig)
     {
@@ -202,30 +328,24 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     }
 
     /**
-     *
-     * @return the $ReportMargin
+     * @return float
      */
     public static function getReportMargin ()
     {
-        if (! isset(Proposalgen_Model_MasterDevice::$ReportMargin))
+        if (!isset(Proposalgen_Model_MasterDevice::$ReportMargin))
         {
             Proposalgen_Model_MasterDevice::$ReportMargin = 1;
         }
+
         return Proposalgen_Model_MasterDevice::$ReportMargin;
     }
 
     /**
-     *
-     * @param number $ReportMargin
+     * @param float $ReportMargin
      */
     public static function setReportMargin ($ReportMargin)
     {
         Proposalgen_Model_MasterDevice::$ReportMargin = $ReportMargin;
-    }
-
-    public function isUsingIncompleteTonerData ()
-    {
-        return ($this->UsingIncompleteTonerData);
     }
 
     /**
@@ -233,15 +353,14 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      * Can specify a preferred part type to get.
      * Will return a default toner value if it does not find an appropriate toner
      *
-     * @param integer $tonerColor
-     *            (Constant value in Proposalgen_Model_TonerColor)
-     * @param integer $preferredPartType
-     *            (Constant value in Proposalgen_Model_PartType)
+     * @param int                             $tonerColor (Constant value in Proposalgen_Model_TonerColor)
+     * @param Proposalgen_Model_PricingConfig $pricingConfig
+     *
      * @return Proposalgen_Model_Toner
      */
     public function getCheapestToner ($tonerColor, $pricingConfig)
     {
-        $PricingConfigId = $pricingConfig->getPricingConfigId();
+        $PricingConfigId   = $pricingConfig->pricingConfigId;
         $preferredPartType = null;
         if (isset($PricingConfigId))
         {
@@ -254,19 +373,25 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
                 $preferredPartType = $pricingConfig->getColorTonerPartType();
             }
         }
-        $cheapestToner = null;
+        $cheapestToner    = null;
         $tonersByPartType = $this->getToners(); // Grab this devices toners
-        
+
 
         // If we have a preferred part type and the device has toners of that type
-        if (isset($preferredPartType) && is_array($tonersByPartType) && array_key_exists($preferredPartType->getPartTypeId(), $tonersByPartType) && is_array($tonersByPartType [$preferredPartType->getPartTypeId()]) && array_key_exists($tonerColor, $tonersByPartType [$preferredPartType->getPartTypeId()]))
+        if (isset($preferredPartType) &&
+            is_array($tonersByPartType) &&
+            array_key_exists($preferredPartType->partTypeId, $tonersByPartType) &&
+            is_array($tonersByPartType [$preferredPartType->partTypeId]) &&
+            array_key_exists($tonerColor, $tonersByPartType [$preferredPartType->partTypeId])
+        )
         {
             // Figure out which is the cheapest black toner
-            foreach ( $tonersByPartType [$preferredPartType->getPartTypeId()] [$tonerColor] as $toner )
+            /* @var $toner Proposalgen_Model_Toner */
+            foreach ($tonersByPartType [$preferredPartType->partTypeId] [$tonerColor] as $toner)
             {
-                if (isset($cheapestToner))
+                if ($cheapestToner instanceof Proposalgen_Model_Toner)
                 {
-                    
+
                     // Compare Toner Ranks to figure out which is the cheapest
                     if ($toner->getCostPerPage()->Rank < $cheapestToner->getCostPerPage()->Rank)
                     {
@@ -282,14 +407,15 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         else
         {
             // Since we don't have a preferred toner type, check all the toners of $tonerColor
-            foreach ( $tonersByPartType as $tonersByColor )
+            foreach ($tonersByPartType as $tonersByColor)
             {
                 if (array_key_exists($tonerColor, $tonersByColor))
                 {
-                    foreach ( $tonersByColor [$tonerColor] as $toner )
+                    /* @var $toner Proposalgen_Model_Toner */
+                    foreach ($tonersByColor [$tonerColor] as $toner)
                     {
                         // Compare Toner Ranks to figure out which is the cheapest
-                        if ($cheapestToner)
+                        if ($cheapestToner instanceof Proposalgen_Model_Toner)
                         {
                             if ($toner->getCostPerPage()->Rank < $cheapestToner->getCostPerPage()->Rank)
                             {
@@ -304,13 +430,13 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
                 }
             }
         }
-        
+
         // If we don't have a toner, return false.
-        if (! isset($cheapestToner))
+        if (!isset($cheapestToner))
         {
             return false;
         }
-        
+
         return $cheapestToner;
     }
 
@@ -318,73 +444,73 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      * Calculates the cost per page for a device based on a pricing config.
      * Once calculated if you pass a new pricing config, it will recalculate the value
      *
-     * @param stdClass $pricingConfig            
+     * @return stdClass
      */
     public function getCostPerPage ()
     {
-        if (! isset($this->_costPerPage))
+        if (!isset($this->_costPerPage))
         {
-            
+
             $costPerPage = new stdClass();
-            
+
             $ReportMargin = self::getReportMargin();
-            
+
             $costPerPage->Estimated = new stdClass();
-            $costPerPage->Actual = new stdClass();
-            
-            $costPerPage->Actual->Raw = new stdClass();
+            $costPerPage->Actual    = new stdClass();
+
+            $costPerPage->Actual->Raw                = new stdClass();
             $costPerPage->Actual->Raw->BlackAndWhite = 0;
-            $costPerPage->Actual->Raw->Color = 0;
-            
+            $costPerPage->Actual->Raw->Color         = 0;
+
             // Base CPP
-            $costPerPage->Actual->Base = new stdClass();
-            $costPerPage->Estimated->Base = new stdClass();
-            $costPerPage->Actual->Base->BlackAndWhite = 0;
-            $costPerPage->Actual->Base->Color = 0;
+            $costPerPage->Actual->Base                   = new stdClass();
+            $costPerPage->Estimated->Base                = new stdClass();
+            $costPerPage->Actual->Base->BlackAndWhite    = 0;
+            $costPerPage->Actual->Base->Color            = 0;
             $costPerPage->Estimated->Base->BlackAndWhite = 0;
-            $costPerPage->Estimated->Base->Color = 0;
-            
+            $costPerPage->Estimated->Base->Color         = 0;
+
             // Base + Margin
-            $costPerPage->Actual->BasePlusMargin = new stdClass();
-            $costPerPage->Estimated->BasePlusMargin = new stdClass();
-            $costPerPage->Actual->BasePlusMargin->BlackAndWhite = 0;
-            $costPerPage->Actual->BasePlusMargin->Color = 0;
+            $costPerPage->Actual->BasePlusMargin                   = new stdClass();
+            $costPerPage->Estimated->BasePlusMargin                = new stdClass();
+            $costPerPage->Actual->BasePlusMargin->BlackAndWhite    = 0;
+            $costPerPage->Actual->BasePlusMargin->Color            = 0;
             $costPerPage->Estimated->BasePlusMargin->BlackAndWhite = 0;
-            $costPerPage->Estimated->BasePlusMargin->Color = 0;
-            
+            $costPerPage->Estimated->BasePlusMargin->Color         = 0;
+
             // Base Plus Service and Admin CPP
-            $costPerPage->Actual->BasePlusService = new stdClass();
-            $costPerPage->Estimated->BasePlusService = new stdClass();
-            $costPerPage->Actual->BasePlusService->BlackAndWhite = 0;
-            $costPerPage->Actual->BasePlusService->Color = 0;
+            $costPerPage->Actual->BasePlusService                   = new stdClass();
+            $costPerPage->Estimated->BasePlusService                = new stdClass();
+            $costPerPage->Actual->BasePlusService->BlackAndWhite    = 0;
+            $costPerPage->Actual->BasePlusService->Color            = 0;
             $costPerPage->Estimated->BasePlusService->BlackAndWhite = 0;
-            $costPerPage->Estimated->BasePlusService->Color = 0;
-            
+            $costPerPage->Estimated->BasePlusService->Color         = 0;
+
             // Base Plus Service and Admin CPP and Margin
-            $costPerPage->Actual->BasePlusServiceAndMargin = new stdClass();
-            $costPerPage->Estimated->BasePlusServiceAndMargin = new stdClass();
-            $costPerPage->Actual->BasePlusServiceAndMargin->BlackAndWhite = 0;
-            $costPerPage->Actual->BasePlusServiceAndMargin->Color = 0;
+            $costPerPage->Actual->BasePlusServiceAndMargin                   = new stdClass();
+            $costPerPage->Estimated->BasePlusServiceAndMargin                = new stdClass();
+            $costPerPage->Actual->BasePlusServiceAndMargin->BlackAndWhite    = 0;
+            $costPerPage->Actual->BasePlusServiceAndMargin->Color            = 0;
             $costPerPage->Estimated->BasePlusServiceAndMargin->BlackAndWhite = 0;
-            $costPerPage->Estimated->BasePlusServiceAndMargin->Color = 0;
-            
-            $ServicePlusAdminCPP = $this->getServiceCostPerPage() + $this->getAdminCostPerPage();
-            $ServiceCPP = $this->getServiceCostPerPage();
-            $costPerPage->Actual->Raw->ServiceCPP = $this->getServiceCostPerPage();
-            $costPerPage->Actual->Raw->AdminCPP = $this->getAdminCostPerPage();
+            $costPerPage->Estimated->BasePlusServiceAndMargin->Color         = 0;
+
+            $ServicePlusAdminCPP                    = $this->serviceCostPerPage + $this->adminCostPerPage;
+            $ServiceCPP                             = $this->serviceCostPerPage;
+            $costPerPage->Actual->Raw->ServiceCPP   = $this->serviceCostPerPage;
+            $costPerPage->Actual->Raw->AdminCPP     = $this->adminCostPerPage;
             $costPerPage->Actual->Raw->ReportMargin = $ReportMargin;
-            
+
             /* Estimated Cost Per Page */
-            $tempTonerList = array ();
-            $tonerColors = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($this->getTonerConfigId());
-            foreach ( $tonerColors as $tonerColor )
+            $tempTonerList = array();
+            $tonerColors   = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($this->tonerConfigId);
+            foreach ($tonerColors as $tonerColor)
             {
                 $tempTonerList [$tonerColor] = $this->getCheapestToner($tonerColor, self::getPricingConfig());
             }
-            
+
             // Black Base CPP = Toner Cost / Toner Yield
             // Color CPP = Toner Cost / Toner Yield
-            foreach ( $tempTonerList as $toner )
+            foreach ($tempTonerList as $toner)
             {
                 // If we didn't get a toner, skip it.
                 if ($toner)
@@ -395,17 +521,17 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
                     $costPerPage->Estimated->Base->Color += $tonerCPP->Estimated->Color;
                 }
             }
-            
+
             /* Actual Cost Per Page */
-            $tempTonerList = array ();
-            foreach ( $tonerColors as $tonerColor )
+            $tempTonerList = array();
+            foreach ($tonerColors as $tonerColor)
             {
                 $tempTonerList [$tonerColor] = $this->getCheapestToner($tonerColor, self::getGrossMarginPricingConfig());
             }
-            
+
             // Black Base CPP = Toner Cost / Toner Yield
             // Color CPP = Toner Cost / Toner Yield
-            foreach ( $tempTonerList as $toner )
+            foreach ($tempTonerList as $toner)
             {
                 // If we didn't get a toner, skip it.
                 if ($toner)
@@ -419,37 +545,40 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
                     $costPerPage->Actual->Raw->Color += $tonerCPP->Raw->Color;
                 }
             }
-            
+
             // Apply a margin to the base cost per page
-            $costPerPage->Actual->BasePlusMargin->BlackAndWhite = $costPerPage->Actual->Base->BlackAndWhite / $ReportMargin;
-            $costPerPage->Actual->BasePlusMargin->Color = $costPerPage->Actual->Base->Color / $ReportMargin;
+            $costPerPage->Actual->BasePlusMargin->BlackAndWhite    = $costPerPage->Actual->Base->BlackAndWhite / $ReportMargin;
+            $costPerPage->Actual->BasePlusMargin->Color            = $costPerPage->Actual->Base->Color / $ReportMargin;
             $costPerPage->Estimated->BasePlusMargin->BlackAndWhite = $costPerPage->Estimated->Base->BlackAndWhite / $ReportMargin;
-            $costPerPage->Estimated->BasePlusMargin->Color = $costPerPage->Estimated->Base->Color / $ReportMargin;
-            
+            $costPerPage->Estimated->BasePlusMargin->Color         = $costPerPage->Estimated->Base->Color / $ReportMargin;
+
             // Add the device's costs to the base cost per page
             $costPerPage->Actual->BasePlusService->BlackAndWhite += $costPerPage->Actual->Base->BlackAndWhite + $ServicePlusAdminCPP;
             $costPerPage->Actual->BasePlusService->Color += $costPerPage->Actual->Base->Color + $ServicePlusAdminCPP;
             $costPerPage->Estimated->BasePlusService->BlackAndWhite += $costPerPage->Estimated->Base->BlackAndWhite + $ServiceCPP;
             $costPerPage->Estimated->BasePlusService->Color += $costPerPage->Estimated->Base->Color + $ServiceCPP;
-            
+
             // Apply the report margin to the adjusted cost per page
-            $costPerPage->Actual->BasePlusServiceAndMargin->BlackAndWhite = $costPerPage->Actual->BasePlusService->BlackAndWhite / $ReportMargin;
-            $costPerPage->Actual->BasePlusServiceAndMargin->Color = $costPerPage->Actual->BasePlusService->Color / $ReportMargin;
+            $costPerPage->Actual->BasePlusServiceAndMargin->BlackAndWhite    = $costPerPage->Actual->BasePlusService->BlackAndWhite / $ReportMargin;
+            $costPerPage->Actual->BasePlusServiceAndMargin->Color            = $costPerPage->Actual->BasePlusService->Color / $ReportMargin;
             $costPerPage->Estimated->BasePlusServiceAndMargin->BlackAndWhite = ($costPerPage->Estimated->Base->BlackAndWhite / $ReportMargin) + $ServiceCPP;
-            $costPerPage->Estimated->BasePlusServiceAndMargin->Color = ($costPerPage->Estimated->Base->Color / $ReportMargin) + $ServiceCPP;
-            
+            $costPerPage->Estimated->BasePlusServiceAndMargin->Color         = ($costPerPage->Estimated->Base->Color / $ReportMargin) + $ServiceCPP;
+
             $this->_costPerPage = $costPerPage;
         }
+
         return $this->_costPerPage;
     }
 
     /**
+     * @param stdClass $CostPerPage
      *
-     * @param field_type $CostPerPage            
+     * @return Proposalgen_Model_MasterDevice
      */
     public function setCostPerPage ($CostPerPage)
     {
         $this->_costPerPage = $CostPerPage;
+
         return $this;
     }
 
@@ -459,21 +588,23 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getId ()
     {
-        if (! isset($this->_id))
+        if (!isset($this->id))
         {
-            
-            $this->_id = null;
+
+            $this->id = null;
         }
-        return $this->_id;
+
+        return $this->id;
     }
 
     /**
      *
-     * @param field_type $Id            
+     * @param field_type $Id
      */
     public function setId ($Id)
     {
-        $this->_id = $Id;
+        $this->id = $Id;
+
         return $this;
     }
 
@@ -483,21 +614,23 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getManufacturer ()
     {
-        if (! isset($this->_manufacturer))
+        if (!isset($this->_manufacturer))
         {
-            $manufacturerMapper = Proposalgen_Model_Mapper_Manufacturer::getInstance();
-            $this->_manufacturer = $manufacturerMapper->find($this->_manufacturerId);
+            $manufacturerMapper  = Proposalgen_Model_Mapper_Manufacturer::getInstance();
+            $this->_manufacturer = $manufacturerMapper->find($this->manufacturerId);
         }
+
         return $this->_manufacturer;
     }
 
     /**
      *
-     * @param Proposalgen_Model_Manufacturer $Manufacturer            
+     * @param Proposalgen_Model_Manufacturer $Manufacturer
      */
     public function setManufacturer ($Manufacturer)
     {
         $this->_manufacturer = $Manufacturer;
+
         return $this;
     }
 
@@ -507,12 +640,13 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getPrinterModel ()
     {
-        if (! isset($this->_printerModel))
+        if (!isset($this->printerModel))
         {
-            
-            $this->_printerModel = null;
+
+            $this->printerModel = null;
         }
-        return $this->_printerModel;
+
+        return $this->printerModel;
     }
 
     /**
@@ -521,7 +655,8 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function setPrinterModel ($PrinterModel)
     {
-        $this->_printerModel = $PrinterModel;
+        $this->printerModel = $PrinterModel;
+
         return $this;
     }
 
@@ -532,22 +667,26 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getTonerConfig ()
     {
-        if (! isset($this->_tonerConfig))
+        if (!isset($this->_tonerConfig))
         {
-            $tonerConfigMapper = Proposalgen_Model_Mapper_TonerConfig::getInstance();
-            $this->_tonerConfig = $tonerConfigMapper->find($this->_tonerConfigId);
+            $tonerConfigMapper  = Proposalgen_Model_Mapper_TonerConfig::getInstance();
+            $this->_tonerConfig = $tonerConfigMapper->find($this->tonerConfigId);
         }
+
         return $this->_tonerConfig;
     }
 
     /**
      * Sets the toner config object for this device
      *
-     * @param field_type $TonerConfig            
+     * @param Proposalgen_Model_TonerConfig $TonerConfig
+     *
+     * @return \Proposalgen_Model_MasterDevice
      */
     public function setTonerConfig ($TonerConfig)
     {
         $this->_tonerConfig = $TonerConfig;
+
         return $this;
     }
 
@@ -557,21 +696,23 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getIsCopier ()
     {
-        if (! isset($this->_isCopier))
+        if (!isset($this->isCopier))
         {
-            
-            $this->_isCopier = null;
+
+            $this->isCopier = null;
         }
-        return $this->_isCopier;
+
+        return $this->isCopier;
     }
 
     /**
      *
-     * @param field_type $IsCopier            
+     * @param field_type $IsCopier
      */
     public function setIsCopier ($IsCopier)
     {
-        $this->_isCopier = $IsCopier;
+        $this->isCopier = $IsCopier;
+
         return $this;
     }
 
@@ -581,21 +722,23 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getIsFax ()
     {
-        if (! isset($this->_isFax))
+        if (!isset($this->isFax))
         {
-            
-            $this->_isFax = null;
+
+            $this->isFax = null;
         }
-        return $this->_isFax;
+
+        return $this->isFax;
     }
 
     /**
      *
-     * @param field_type $IsFax            
+     * @param field_type $IsFax
      */
     public function setIsFax ($IsFax)
     {
-        $this->_isFax = $IsFax;
+        $this->isFax = $IsFax;
+
         return $this;
     }
 
@@ -605,21 +748,23 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getIsScanner ()
     {
-        if (! isset($this->_isScanner))
+        if (!isset($this->isScanner))
         {
-            
-            $this->_isScanner = null;
+
+            $this->isScanner = null;
         }
-        return $this->_isScanner;
+
+        return $this->isScanner;
     }
 
     /**
      *
-     * @param field_type $IsScanner            
+     * @param field_type $IsScanner
      */
     public function setIsScanner ($IsScanner)
     {
-        $this->_isScanner = $IsScanner;
+        $this->isScanner = $IsScanner;
+
         return $this;
     }
 
@@ -629,21 +774,23 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getIsDuplex ()
     {
-        if (! isset($this->_isDuplex))
+        if (!isset($this->isDuplex))
         {
-            
-            $this->_isDuplex = null;
+
+            $this->isDuplex = null;
         }
-        return $this->_isDuplex;
+
+        return $this->isDuplex;
     }
 
     /**
      *
-     * @param field_type $IsDuplex            
+     * @param field_type $IsDuplex
      */
     public function setIsDuplex ($IsDuplex)
     {
-        $this->_isDuplex = $IsDuplex;
+        $this->isDuplex = $IsDuplex;
+
         return $this;
     }
 
@@ -653,21 +800,23 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getIsReplacementDevice ()
     {
-        if (! isset($this->_isReplacementDevice))
+        if (!isset($this->isReplacementDevice))
         {
-            
-            $this->_isReplacementDevice = null;
+
+            $this->isReplacementDevice = null;
         }
-        return $this->_isReplacementDevice;
+
+        return $this->isReplacementDevice;
     }
 
     /**
      *
-     * @param field_type $IsReplacementDevice            
+     * @param field_type $IsReplacementDevice
      */
     public function setIsReplacementDevice ($IsReplacementDevice)
     {
-        $this->_isReplacementDevice = $IsReplacementDevice;
+        $this->isReplacementDevice = $IsReplacementDevice;
+
         return $this;
     }
 
@@ -677,20 +826,22 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getWattsPowerNormal ()
     {
-        if (! isset($this->_wattsPowerNormal))
+        if (!isset($this->wattsPowerNormal))
         {
-            $this->_wattsPowerNormal = null;
+            $this->wattsPowerNormal = null;
         }
-        return $this->_wattsPowerNormal;
+
+        return $this->wattsPowerNormal;
     }
 
     /**
      *
-     * @param field_type $WattsPowerNormal            
+     * @param field_type $WattsPowerNormal
      */
     public function setWattsPowerNormal ($WattsPowerNormal)
     {
-        $this->_wattsPowerNormal = $WattsPowerNormal;
+        $this->wattsPowerNormal = $WattsPowerNormal;
+
         return $this;
     }
 
@@ -700,20 +851,22 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getWattsPowerIdle ()
     {
-        if (! isset($this->_wattsPowerIdle))
+        if (!isset($this->wattsPowerIdle))
         {
-            $this->_wattsPowerIdle = 10;
+            $this->wattsPowerIdle = 10;
         }
-        return $this->_wattsPowerIdle;
+
+        return $this->wattsPowerIdle;
     }
 
     /**
      *
-     * @param field_type $WattsPowerIdle            
+     * @param field_type $WattsPowerIdle
      */
     public function setWattsPowerIdle ($WattsPowerIdle)
     {
-        $this->_wattsPowerIdle = $WattsPowerIdle;
+        $this->wattsPowerIdle = $WattsPowerIdle;
+
         return $this;
     }
 
@@ -724,12 +877,13 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getCost ()
     {
-        if (! isset($this->_cost))
+        if (!isset($this->cost))
         {
-            
-            $this->_cost = null;
+
+            $this->cost = null;
         }
-        return $this->_cost;
+
+        return $this->cost;
     }
 
     /**
@@ -740,7 +894,8 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function setCost ($cost)
     {
-        $this->_cost = $cost;
+        $this->cost = $cost;
+
         return $this;
     }
 
@@ -750,21 +905,23 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getLaunchDate ()
     {
-        if (! isset($this->_launchDate))
+        if (!isset($this->launchDate))
         {
-            
-            $this->_launchDate = null;
+
+            $this->launchDate = null;
         }
-        return $this->_launchDate;
+
+        return $this->launchDate;
     }
 
     /**
      *
-     * @param field_type $LaunchDate            
+     * @param field_type $LaunchDate
      */
     public function setLaunchDate ($LaunchDate)
     {
-        $this->_launchDate = date('Y-m-d', strtotime($LaunchDate));
+        $this->launchDate = date('Y-m-d', strtotime($LaunchDate));
+
         return $this;
     }
 
@@ -774,130 +931,57 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getDateCreated ()
     {
-        if (! isset($this->_dateCreated))
+        if (!isset($this->dateCreated))
         {
-            
-            $this->_dateCreated = null;
+
+            $this->dateCreated = null;
         }
-        return $this->_dateCreated;
+
+        return $this->dateCreated;
     }
 
     /**
      *
-     * @param field_type $DateCreated            
+     * @param field_type $DateCreated
      */
     public function setDateCreated ($DateCreated)
     {
-        $this->_dateCreated = $DateCreated;
+        $this->dateCreated = $DateCreated;
+
         return $this;
     }
 
     /**
-     *
-     * @return the $Toners
+     * @return Proposalgen_Model_Toner[][][]
      */
     public function getToners ()
     {
-        if (! isset($this->_toners))
+        if (!isset($this->_toners))
         {
             // Get the toners for the device
-            /*
-             * $toners = array (); $deviceTonerMapper = Proposalgen_Model_Mapper_DeviceToner::getInstance();
-             * $tonerMapper = Proposalgen_Model_Mapper_Toner::getInstance(); $tonerRows =
-             * $deviceTonerMapper->fetchAll(array ( "master_device_id = ?" => $this->MasterDeviceId )); if ($tonerRows)
-             * { foreach ( $tonerRows as $tonerRow ) { $toner = $tonerMapper->find($tonerRow->getTonerId()); $toners
-             * [$toner->getPartType()->getPartTypeId()] [$toner->getTonerColor()->getTonerColorId()] [] = $toner; } }
-             */
-            $this->_toners = Proposalgen_Model_Mapper_Toner::getInstance()->getTonersForDevice($this->getId());
+            $this->_toners = Proposalgen_Model_Mapper_Toner::getInstance()->getTonersForDevice($this->id);
         }
+
         return $this->_toners;
     }
 
     /**
+     * @param Proposalgen_Model_Toner[][][] $Toners
      *
-     * @param field_type $Toners            
+     * @return Proposalgen_Model_MasterDevice
      */
     public function setToners ($Toners)
     {
         $this->_toners = $Toners;
+
         return $this;
     }
 
     /**
+     * @param $tonerColor
+     * @param $incomplete
      *
-     * @return the $ManufacturerId
-     */
-    public function getManufacturerId ()
-    {
-        if (! isset($this->_manufacturerId))
-        {
-            
-            $this->_manufacturerId = null;
-        }
-        return $this->_manufacturerId;
-    }
-
-    /**
-     *
-     * @param field_type $ManufacturerId            
-     */
-    public function setManufacturerId ($ManufacturerId)
-    {
-        $this->_manufacturerId = $ManufacturerId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $TonerConfigId
-     */
-    public function getTonerConfigId ()
-    {
-        if (! isset($this->_tonerConfigId))
-        {
-            
-            $this->_tonerConfigId = null;
-        }
-        return $this->_tonerConfigId;
-    }
-
-    /**
-     *
-     * @param field_type $TonerConfigId            
-     */
-    public function setTonerConfigId ($TonerConfigId)
-    {
-        $this->_tonerConfigId = $TonerConfigId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $AdminCostPerPage
-     */
-    public function getAdminCostPerPage ()
-    {
-        if (! isset($this->_adminCostPerPage))
-        {
-            $this->_adminCostPerPage = null;
-        }
-        return $this->_adminCostPerPage;
-    }
-
-    /**
-     *
-     * @param number $AdminCostPerPage
-     * @return \Proposalgen_Model_MasterDevice
-     */
-    public function setAdminCostPerPage ($AdminCostPerPage)
-    {
-        $this->_adminCostPerPage = $AdminCostPerPage;
-        return $this;
-    }
-
-    /**
-     *
-     * @param field_type $UsingIncompleteTonerData            
+     * @return Proposalgen_Model_MasterDevice
      */
     public function setUsingIncompleteTonerData ($tonerColor, $incomplete)
     {
@@ -921,125 +1005,33 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     }
 
     /**
-     *
-     * @return the $UsingIncompleteBlackTonerData
+     * @return bool
      */
     public function isUsingIncompleteBlackTonerData ()
     {
         return ($this->_usingIncompleteBlackTonerData);
     }
 
+    /**
+     * @return bool
+     */
     public function isUsingIncompleteColorTonerData ()
     {
         return ($this->_usingIncompleteColorTonerData);
     }
 
-    /**
-     *
-     * @return the $DutyCycle
-     */
-    public function getDutyCycle ()
-    {
-        if (! isset($this->_dutyCycle))
-        {
-            
-            $this->_dutyCycle = null;
-        }
-        return $this->_dutyCycle;
-    }
-
-    /**
-     *
-     * @param field_type $DutyCycle            
-     */
-    public function setDutyCycle ($DutyCycle)
-    {
-        $this->_dutyCycle = $DutyCycle;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $PPMBlack
-     */
-    public function getPPMBlack ()
-    {
-        if (! isset($this->_ppmBlack))
-        {
-            
-            $this->_ppmBlack = null;
-        }
-        return $this->_ppmBlack;
-    }
-
-    /**
-     *
-     * @param field_type $PPMBlack            
-     */
-    public function setPPMBlack ($PPMBlack)
-    {
-        $this->_ppmBlack = $PPMBlack;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $PPMColor
-     */
-    public function getPPMColor ()
-    {
-        if (! isset($this->_ppmColor))
-        {
-            
-            $this->_ppmColor = null;
-        }
-        return $this->_ppmColor;
-    }
-
-    /**
-     *
-     * @param field_type $PPMColor            
-     */
-    public function setPPMColor ($PPMColor)
-    {
-        $this->_ppmColor = $PPMColor;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $ServiceCostPerPage
-     */
-    public function getServiceCostPerPage ()
-    {
-        if (! isset($this->_serviceCostPerPage))
-        {
-            
-            $this->_serviceCostPerPage = null;
-        }
-        return $this->_serviceCostPerPage;
-    }
-
-    /**
-     * @param float $ServiceCostPerPage
-     * @return Proposalgen_Model_MasterDevice
-     */
-    public function setServiceCostPerPage ($ServiceCostPerPage)
-    {
-        $this->_serviceCostPerPage = $ServiceCostPerPage;
-        return $this;
-    }
 
     /**
      * @return Proposalgen_Model_PricingConfig
      */
     public static function getGrossMarginPricingConfig ()
     {
-        if (! isset(Proposalgen_Model_MasterDevice::$GrossMarginPricingConfig))
+        if (!isset(Proposalgen_Model_MasterDevice::$GrossMarginPricingConfig))
         {
-            
+
             Proposalgen_Model_MasterDevice::$GrossMarginPricingConfig = null;
         }
+
         return Proposalgen_Model_MasterDevice::$GrossMarginPricingConfig;
     }
 
@@ -1054,63 +1046,16 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     /**
      * @return bool
      */
-    public function getIsLeased ()
-    {
-        if (! isset($this->_isLeased))
-        {
-            
-            $this->_isLeased = null;
-        }
-        return $this->_isLeased;
-    }
-
-    /**
-     * @param bool $IsLeased
-     *
-     * @return Proposalgen_Model_MasterDevice
-     */
-    public function setIsLeased ($IsLeased)
-    {
-        $this->_isLeased = $IsLeased;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLeasedTonerYield ()
-    {
-        if (! isset($this->_leasedTonerYield))
-        {
-            $this->_leasedTonerYield = null;
-        }
-        return $this->_leasedTonerYield;
-    }
-
-    /**
-     * @param int $LeasedTonerYield
-     *
-     * @return Proposalgen_Model_MasterDevice
-     */
-    public function setLeasedTonerYield ($LeasedTonerYield)
-    {
-        $this->_leasedTonerYield = $LeasedTonerYield;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
     public function getHasValidMonoGrossMarginToners ()
     {
-        if (! isset($this->_hasValidMonoGrossMarginToners))
+        if (!isset($this->_hasValidMonoGrossMarginToners))
         {
             $usesAllValidToners = true;
-            $requiredToners = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($this->getTonerConfigId());
-            foreach ( $requiredToners as $tonerColor )
+            $requiredToners     = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($this->tonerConfigId);
+            foreach ($requiredToners as $tonerColor)
             {
                 $toner = $this->getCheapestToner($tonerColor, self::getGrossMarginPricingConfig());
-                
+
                 if ($tonerColor == Proposalgen_Model_TonerColor::BLACK && $toner->partTypeId != self::getGrossMarginPricingConfig()->monoTonerPartTypeId)
                 {
                     $usesAllValidToners = false;
@@ -1122,9 +1067,10 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
                     //break;
                 }
             }
-            
+
             $this->_hasValidMonoGrossMarginToners = $usesAllValidToners;
         }
+
         return $this->_hasValidMonoGrossMarginToners;
     }
 
@@ -1136,23 +1082,23 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     public function setHasValidMonoGrossMarginToners ($HasValidMonoGrossMarginToners)
     {
         $this->_hasValidMonoGrossMarginToners = $HasValidMonoGrossMarginToners;
+
         return $this;
     }
 
     /**
-     *
-     * @return the $HasValidColorGrossMarginToners
+     * @return bool
      */
     public function getHasValidColorGrossMarginToners ()
     {
-        if (! isset($this->_hasValidColorGrossMarginToners))
+        if (!isset($this->_hasValidColorGrossMarginToners))
         {
             $usesAllValidToners = true;
-            $requiredToners = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($this->getTonerConfigId());
-            foreach ( $requiredToners as $tonerColor )
+            $requiredToners     = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($this->tonerConfigId);
+            foreach ($requiredToners as $tonerColor)
             {
                 $toner = $this->getCheapestToner($tonerColor, self::getGrossMarginPricingConfig());
-                
+
                 if ($tonerColor == Proposalgen_Model_TonerColor::BLACK && $toner->partTypeId != self::getGrossMarginPricingConfig()->MonoTonerPartTypeId)
                 {
                     //$usesAllValidToners = false;
@@ -1164,9 +1110,10 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
                     break;
                 }
             }
-            
+
             $this->_hasValidColorGrossMarginToners = $usesAllValidToners;
         }
+
         return $this->_hasValidColorGrossMarginToners;
     }
 
@@ -1178,6 +1125,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     public function setHasValidColorGrossMarginToners ($HasValidColorGrossMarginToners)
     {
         $this->_hasValidColorGrossMarginToners = $HasValidColorGrossMarginToners;
+
         return $this;
     }
 
@@ -1186,15 +1134,16 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getTonersForAssessment ()
     {
-        if (! isset($this->_tonersForAssessment))
+        if (!isset($this->_tonersForAssessment))
         {
-            $toners = array ();
-            foreach ( $this->getRequiredTonerColors() as $tonerColor )
+            $toners = array();
+            foreach ($this->getRequiredTonerColors() as $tonerColor)
             {
                 $toners [$tonerColor] = $this->getCheapestToner($tonerColor, self::getPricingConfig());
             }
             $this->_tonersForAssessment = $toners;
         }
+
         return $this->_tonersForAssessment;
     }
 
@@ -1203,15 +1152,16 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getTonersForGrossMargin ()
     {
-        if (! isset($this->_tonersForGrossMargin))
+        if (!isset($this->_tonersForGrossMargin))
         {
-            $toners = array ();
-            foreach ( $this->getRequiredTonerColors() as $tonerColor )
+            $toners = array();
+            foreach ($this->getRequiredTonerColors() as $tonerColor)
             {
                 $toners [$tonerColor] = $this->getCheapestToner($tonerColor, self::getGrossMarginPricingConfig());
             }
             $this->_tonersForGrossMargin = $toners;
         }
+
         return $this->_tonersForGrossMargin;
     }
 
@@ -1223,6 +1173,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     public function setTonersForAssessment ($TonersForAssessment)
     {
         $this->_tonersForAssessment = $TonersForAssessment;
+
         return $this;
     }
 
@@ -1234,6 +1185,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     public function setTonersForGrossMargin ($TonersForGrossMargin)
     {
         $this->_tonersForGrossMargin = $TonersForGrossMargin;
+
         return $this;
     }
 
@@ -1242,10 +1194,11 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getRequiredTonerColors ()
     {
-        if (! isset($this->_requiredTonerColors))
+        if (!isset($this->_requiredTonerColors))
         {
-            $this->_requiredTonerColors = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($this->getTonerConfigId());
+            $this->_requiredTonerColors = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($this->tonerConfigId);
         }
+
         return $this->_requiredTonerColors;
     }
 
@@ -1257,6 +1210,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     public function setRequiredTonerColors ($RequiredTonerColors)
     {
         $this->_requiredTonerColors = $RequiredTonerColors;
+
         return $this;
     }
 
@@ -1272,11 +1226,11 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
 
     /**
      * Returns whether or not a device is color.
-     * 
+     *
      * @return boolean
      */
     public function isColor ()
     {
-        return ((int)$this->getTonerConfigId() !== Proposalgen_Model_TonerConfig::BLACK_ONLY);
+        return ((int)$this->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY);
     }
 }

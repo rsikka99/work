@@ -91,7 +91,7 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         if ($object instanceof Proposalgen_Model_MasterDevice)
         {
             $whereClause = array(
-                'id = ?' => $object->getId()
+                'id = ?' => $object->id
             );
         }
         else
@@ -251,6 +251,6 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return $object->getId();
+        return $object->id;
     }
 }

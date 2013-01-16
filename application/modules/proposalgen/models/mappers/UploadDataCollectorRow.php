@@ -34,7 +34,7 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
     {
         if ($reportId instanceof Proposalgen_Model_Report)
         {
-            $reportId = $reportId->getId();
+            $reportId = $reportId->id;
         }
 
         $dbTable   = $this->getDbTable();

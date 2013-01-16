@@ -79,8 +79,8 @@ class Proposalgen_IndexController extends Zend_Controller_Action
             ));
             // Tack on a proposal that handles creating a new one
             $newReport = new Proposalgen_Model_Report();
-            $newReport->setId(0);
-            $newReport->setCustomerCompanyName("Start New Proposal");
+            $newReport->id = 0;
+            $newReport->customerCompanyName = "Start New Proposal";
             array_unshift($reports, $newReport);
         }
         else

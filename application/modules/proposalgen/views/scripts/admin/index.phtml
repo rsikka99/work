@@ -10,36 +10,25 @@
 <div id="master-admin-console" class="margined">
 	<?php if(in_array("System Admin", $this->privilege)) { ?>
 	    <h3>System Administration</h3>
-	    <a href="<?php echo $this->baseUrl("/admin/manageusers")?>">Manage Users</a><br/>
-	    <a href="<?php echo $this->baseUrl("/admin/manufacturers")?>">Manage Manufacturers</a><br />
-	   	<a href="<?php echo $this->baseUrl("/managedevices/managedevices")?>">Manage Master Printer and Toner Properties</a><br />
-	    <a href="<?php echo $this->baseUrl("/admin/bulkdevicepricing")?>">Update Pricing</a><br />
-	    <a href="<?php echo $this->baseUrl("/ticket/managetickets")?>">Support Tickets</a><br />
-	    <a href="<?php echo $this->baseUrl("/admin/managereplacements")?>">Manage Replacement Printers</a><br />
-	    <a href="<?php echo $this->baseUrl("/admin/managematchups")?>">Manage Printer Matchups</a><br />
-	    <a href="<?php echo $this->baseUrl("/admin/managesettings")?>">Default Report Settings</a><br />
+	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/manageusers")?>">Manage Users</a><br/>
+	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/manufacturers")?>">Manage Manufacturers</a><br />
+	   	<a href="<?php echo $this->baseUrl("/proposalgen/managedevices/managedevices")?>">Manage Master Printer and Toner Properties</a><br />
+	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/bulkdevicepricing")?>">Update Pricing</a><br />
+	    <a href="<?php echo $this->baseUrl("/proposalgen/ticket/managetickets")?>">Support Tickets</a><br />
+	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/managereplacements")?>">Manage Replacement Printers</a><br />
+	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/managematchups")?>">Manage Printer Matchups</a><br />
+	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/managesettings")?>">Default Report Settings</a><br />
 	    <br />
 	    <h3>My Administration</h3>
-	    <a href="<?php echo $this->baseUrl("/admin/managemysettings")?>">My Report Settings</a><br />
-	    <a href="<?php echo $this->baseUrl("/admin/managemyreports")?>">Manage My Reports</a><br />
-	<?php } else if(in_array("Dealer Admin", $this->privilege)) { ?>
-		<h3> Company Administration</h3>
-	    <a href="<?php echo $this->baseUrl("/admin/manageusers")?>">Manage Users</a><br/>  
-	    <a href="<?php echo $this->baseUrl("/admin/bulkdealerdevicepricing")?>">Update Company Pricing</a><br />
-	    <a href="<?php echo $this->baseUrl("/admin/managedealersettings")?>">Company Report Settings</a><br />
-	    <br/>
-	    <h3>My Administration</h3>
-	    <a href="<?php echo $this->baseUrl("/admin/bulkuserpricing")?>">Update My Pricing</a><br />
-   		<a href="<?php echo $this->baseUrl("/ticket/managemytickets")?>">Support Tickets</a><br />
-	    <a href="<?php echo $this->baseUrl("/admin/managemysettings")?>">My Report Settings</a><br />
-	    <a href="<?php echo $this->baseUrl("/admin/managemyreports")?>">Manage My Reports</a><br />
+	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/managemysettings")?>">My Report Settings</a><br />
+	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/managemyreports")?>">Manage My Reports</a><br />
 	<?php } else { ?>
-	    <a href="<?php echo $this->baseUrl("/admin/bulkuserpricing")?>">Update My Pricing</a><br />
-   		<a href="<?php echo $this->baseUrl("/ticket/managemytickets")?>">Support Tickets</a><br />
-	    <a href="<?php echo $this->baseUrl("/admin/managemysettings")?>">My Report Settings</a><br />
-	    <a href="<?php echo $this->baseUrl("/admin/managemyreports")?>">Manage My Reports</a><br />
+	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/bulkuserpricing")?>">Update My Pricing</a><br />
+   		<a href="<?php echo $this->baseUrl("/proposalgen/ticket/managemytickets")?>">Support Tickets</a><br />
+	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/managemysettings")?>">My Report Settings</a><br />
+	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/managemyreports")?>">Manage My Reports</a><br />
 	<?php } ?>
-	<a href="<?php echo $this->baseUrl("/auth/changepassword")?>">Change Password</a><br/>
+	<a href="<?php echo $this->baseUrl("/proposalgen/auth/changepassword")?>">Change Password</a><br/>
 </div>
 
 <?php

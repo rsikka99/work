@@ -27,11 +27,11 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
             else
             {
                 $reportSteps = $this->getReportSteps();
-                $lastStep = null;
+                $lastStep    = null;
                 /* @var $step Proposalgen_Model_Report_Step */
-                foreach ( $reportSteps as $step )
+                foreach ($reportSteps as $step)
                 {
-                    if (! $step->canAccess)
+                    if (!$step->canAccess)
                     {
                         $lastStep = $step->previousStep;
                         break;
@@ -63,15 +63,15 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_COMPANY);
 
         $request = $this->getRequest();
-        $form = new Proposalgen_Form_Survey_Company();
+        $form    = new Proposalgen_Form_Survey_Company();
 
         // Get any saved answers
-        $formDataFromAnswers = array (
-                "company_name" => $this->getReport()->getCustomerCompanyName()
+        $formDataFromAnswers = array(
+            "company_name" => $this->getReport()->customerCompanyName
         );
 
         $formDataFromAnswers ["company_address"] = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(30, $this->getReport()
-            ->getId())) ?  : "";
+            ->id)) ? : "";
 
         $form->populate($formDataFromAnswers);
 
@@ -88,7 +88,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                 {
                     if ($form->isValid($values))
                     {
-                        $this->getReport()->setCustomerCompanyName($form->getValue('company_name'));
+                        $this->getReport()->customerCompanyName = $form->getValue('company_name');
 
                         // Everytime we save anything related to a report, we should save it (updates the modification date)
                         $this->saveReport();
@@ -103,9 +103,9 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         }
                         else
                         {
-                            $this->_helper->flashMessenger(array (
-                                    'success' => "Your changes were saved sucessfully."
-                            ));
+                            $this->_helper->flashMessenger(array(
+                                                                'success' => "Your changes were saved sucessfully."
+                                                           ));
                         }
                     }
                     else
@@ -113,7 +113,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         throw new Zend_Validate_Exception("Form Validation Failed");
                     }
                 }
-                catch ( Zend_Validate_Exception $e )
+                catch (Zend_Validate_Exception $e)
                 {
                     $form->buildBootstrapErrorDecorators();
                 }
@@ -132,25 +132,19 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_GENERAL);
 
         $request = $this->getRequest();
-        $form = new Proposalgen_Form_Survey_General();
+        $form    = new Proposalgen_Form_Survey_General();
 
-        $mpsGoalRankings [1] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(6, $this->getReport()
-            ->getId())) ?  : false;
-        $mpsGoalRankings [2] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(7, $this->getReport()
-            ->getId())) ?  : false;
-        $mpsGoalRankings [3] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(8, $this->getReport()
-            ->getId())) ?  : false;
-        $mpsGoalRankings [4] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(9, $this->getReport()
-            ->getId())) ?  : false;
-        $mpsGoalRankings [5] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(10, $this->getReport()
-            ->getId())) ?  : false;
+        $mpsGoalRankings [1] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(6, $this->getReport()->id)) ? : false;
+        $mpsGoalRankings [2] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(7, $this->getReport()->id)) ? : false;
+        $mpsGoalRankings [3] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(8, $this->getReport()->id)) ? : false;
+        $mpsGoalRankings [4] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(9, $this->getReport()->id)) ? : false;
+        $mpsGoalRankings [5] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(10, $this->getReport()->id)) ? : false;
 
         /*
          * Get saved answers.
          */
-        $formDataFromAnswers = array (
-                "numb_employees" => (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(5, $this->getReport()
-                    ->getId())) ?  : ""
+        $formDataFromAnswers = array(
+            "numb_employees" => (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(5, $this->getReport()->id)) ? : ""
         );
 
         /*
@@ -158,10 +152,10 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
          * values of 1-5. We must only set values for radio boxes that are set. $questionNumber is the way we map the
          * question to the values of each rank.
          */
-        foreach ( $mpsGoalRankings as $questionNumber => $rankNumber )
+        foreach ($mpsGoalRankings as $questionNumber => $rankNumber)
         {
             // Only set it if it's a real number.
-            if ($rankNumber !== FALSE)
+            if ($rankNumber !== false)
             {
                 $formDataFromAnswers ["rank{$rankNumber}"] = $questionNumber;
             }
@@ -192,7 +186,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         $rank [4] = $form->getValue('rank4');
                         $rank [5] = $form->getValue('rank5');
 
-                        foreach ( $rank as $rankNumber => $questionNumber )
+                        foreach ($rank as $rankNumber => $questionNumber)
                         {
                             // Right now it happens that the real question numbers are 5 above the 1-5.
                             $realQuestionNumber = $questionNumber + 5;
@@ -209,9 +203,9 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         }
                         else
                         {
-                            $this->_helper->flashMessenger(array (
-                                    'success' => "Your changes were saved sucessfully."
-                            ));
+                            $this->_helper->flashMessenger(array(
+                                                                'success' => "Your changes were saved sucessfully."
+                                                           ));
                         }
                     }
                     else
@@ -219,7 +213,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         throw new Zend_Validate_Exception("Form Validation Failed");
                     }
                 }
-                catch ( Zend_Validate_Exception $e )
+                catch (Zend_Validate_Exception $e)
                 {
                     $form->buildBootstrapErrorDecorators();
                 }
@@ -237,57 +231,51 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_FINANCE);
 
         $request = $this->getRequest();
-        $form = new Proposalgen_Form_Survey_Finance();
+        $form    = new Proposalgen_Form_Survey_Finance();
 
         // Populate the form with saved answers if we have them.
 
 
-        $formDataFromAnswers = array ();
+        $formDataFromAnswers = array();
 
-        $tonerCostRadio = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(11, $this->getReport()
-            ->getId())) ?  : FALSE;
+        $tonerCostRadio = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(11, $this->getReport()->id)) ? : false;
 
-        if ($tonerCostRadio !== FALSE)
+        if ($tonerCostRadio !== false)
         {
             $formDataFromAnswers ["toner_cost_radio"] = $tonerCostRadio;
         }
 
-        $tonerCost = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(11, $this->getReport()
-            ->getId())) ?  : FALSE;
+        $tonerCost = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(11, $this->getReport()->id)) ? : false;
 
-        if ($tonerCost !== FALSE)
+        if ($tonerCost !== false)
         {
             $formDataFromAnswers ["toner_cost"] = $tonerCost;
         }
 
-        $laborCostRadio = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(12, $this->getReport()
-            ->getId())) ?  : FALSE;
+        $laborCostRadio = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(12, $this->getReport()->id)) ? : false;
 
-        if ($laborCostRadio !== FALSE)
+        if ($laborCostRadio !== false)
         {
             $formDataFromAnswers ["labor_cost_radio"] = $laborCostRadio;
         }
 
-        $laborCost = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(12, $this->getReport()
-            ->getId())) ?  : FALSE;
+        $laborCost = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(12, $this->getReport()->id)) ? : false;
 
-        if ($laborCost !== FALSE)
+        if ($laborCost !== false)
         {
             $formDataFromAnswers ["labor_cost"] = $laborCost;
         }
 
-        $avgPurchase = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(14, $this->getReport()
-            ->getId())) ?  : FALSE;
+        $avgPurchase = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(14, $this->getReport()->id)) ? : false;
 
-        if ($avgPurchase !== FALSE)
+        if ($avgPurchase !== false)
         {
             $formDataFromAnswers ["avg_purchase"] = $avgPurchase;
         }
 
-        $itHourlyRate = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(15, $this->getReport()
-            ->getId())) ?  : FALSE;
+        $itHourlyRate = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(15, $this->getReport()->id)) ? : false;
 
-        if ($itHourlyRate !== FALSE)
+        if ($itHourlyRate !== false)
         {
             $formDataFromAnswers ["it_hourlyRate"] = $itHourlyRate;
         }
@@ -337,9 +325,9 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         }
                         else
                         {
-                            $this->_helper->flashMessenger(array (
-                                    'success' => "Your changes were saved sucessfully."
-                            ));
+                            $this->_helper->flashMessenger(array(
+                                                                'success' => "Your changes were saved sucessfully."
+                                                           ));
                         }
                     }
                     else
@@ -347,7 +335,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         throw new Zend_Validate_Exception("Form Validation Failed");
                     }
                 }
-                catch ( Zend_Validate_Exception $e )
+                catch (Zend_Validate_Exception $e)
                 {
                     $form->buildBootstrapErrorDecorators();
                 }
@@ -365,21 +353,19 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_PURCHASING);
 
         $request = $this->getRequest();
-        $form = new Proposalgen_Form_Survey_Purchasing();
+        $form    = new Proposalgen_Form_Survey_Purchasing();
 
         // Defaults
-        $dailyValue = 22;
+        $dailyValue  = 22;
         $weeklyValue = 4;
 
         // Get any saved answers
-        $formDataFromAnswers = array (
-                "numb_vendors" => (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(16, $this->getReport()
-                    ->getId())) ?  : ""
+        $formDataFromAnswers = array(
+            "numb_vendors" => (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(16, $this->getReport()->id)) ? : ""
         );
 
-        $numberOfMonthlyOrders = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(17, $this->getReport()
-            ->getId())) ?  : FALSE;
-        if ($numberOfMonthlyOrders !== FALSE)
+        $numberOfMonthlyOrders = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(17, $this->getReport()->id)) ? : false;
+        if ($numberOfMonthlyOrders !== false)
         {
             switch ($numberOfMonthlyOrders)
             {
@@ -443,9 +429,9 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         }
                         else
                         {
-                            $this->_helper->flashMessenger(array (
-                                    'success' => "Your changes were saved sucessfully."
-                            ));
+                            $this->_helper->flashMessenger(array(
+                                                                'success' => "Your changes were saved sucessfully."
+                                                           ));
                         }
                     }
                     else
@@ -453,7 +439,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         throw new Zend_Validate_Exception("Form Validation Failed");
                     }
                 }
-                catch ( Zend_Validate_Exception $e )
+                catch (Zend_Validate_Exception $e)
                 {
                     $form->buildBootstrapErrorDecorators();
                 }
@@ -471,49 +457,44 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_IT);
 
         $request = $this->getRequest();
-        $form = new Proposalgen_Form_Survey_It();
+        $form    = new Proposalgen_Form_Survey_It();
 
         // Populate the form with saved answers if we have them.
 
 
-        $formDataFromAnswers = array ();
+        $formDataFromAnswers = array();
 
-        $itHoursRadio = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(18, $this->getReport()
-            ->getId())) ?  : FALSE;
+        $itHoursRadio = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(18, $this->getReport()->id)) ? : false;
 
-        if ($itHoursRadio !== FALSE)
+        if ($itHoursRadio !== false)
         {
             $formDataFromAnswers ["itHoursRadio"] = $itHoursRadio;
         }
 
-        $itHours = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(18, $this->getReport()
-            ->getId())) ?  : FALSE;
+        $itHours = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(18, $this->getReport()->id)) ? : false;
 
-        if ($itHours !== FALSE)
+        if ($itHours !== false)
         {
             $formDataFromAnswers ["itHours"] = $itHours;
         }
 
-        $monthlyBreakdownsRadio = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(20, $this->getReport()
-            ->getId())) ?  : FALSE;
+        $monthlyBreakdownsRadio = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(20, $this->getReport()->id)) ? : false;
 
-        if ($monthlyBreakdownsRadio !== FALSE)
+        if ($monthlyBreakdownsRadio !== false)
         {
             $formDataFromAnswers ["monthlyBreakdownRadio"] = $monthlyBreakdownsRadio;
         }
 
-        $monthlyBreakdowns = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(20, $this->getReport()
-            ->getId())) ?  : FALSE;
+        $monthlyBreakdowns = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(20, $this->getReport()->id)) ? : false;
 
-        if ($monthlyBreakdowns !== FALSE)
+        if ($monthlyBreakdowns !== false)
         {
             $formDataFromAnswers ["monthlyBreakdown"] = $monthlyBreakdowns;
         }
 
-        $locationTracking = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(19, $this->getReport()
-            ->getId())) ?  : FALSE;
+        $locationTracking = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(19, $this->getReport()->id)) ? : false;
 
-        if ($locationTracking !== FALSE)
+        if ($locationTracking !== false)
         {
             $formDataFromAnswers ["location_tracking"] = $locationTracking;
         }
@@ -560,9 +541,9 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         }
                         else
                         {
-                            $this->_helper->flashMessenger(array (
-                                    'success' => "Your changes were saved sucessfully."
-                            ));
+                            $this->_helper->flashMessenger(array(
+                                                                'success' => "Your changes were saved sucessfully."
+                                                           ));
                         }
                     }
                     else
@@ -570,7 +551,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         throw new Zend_Validate_Exception("Form Validation Failed");
                     }
                 }
-                catch ( Zend_Validate_Exception $e )
+                catch (Zend_Validate_Exception $e)
                 {
                     $form->buildBootstrapErrorDecorators();
                 }
@@ -588,26 +569,22 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_USERS);
 
         $request = $this->getRequest();
-        $form = new Proposalgen_Form_Survey_Users();
+        $form    = new Proposalgen_Form_Survey_Users();
 
         // Get any saved answers
-        $formDataFromAnswers = array (
-                "pageCoverage_BW" => (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(21, $this->getReport()
-                    ->getId())) ?  : "",
-                "pageCoverage_Color" => (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(22, $this->getReport()
-                    ->getId())) ?  : ""
+        $formDataFromAnswers = array(
+            "pageCoverage_BW"    => (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(21, $this->getReport()->id)) ? : "",
+            "pageCoverage_Color" => (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(22, $this->getReport()->id)) ? : ""
         );
 
-        $percentPrintVolume = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(23, $this->getReport()
-            ->getId())) ?  : FALSE;
-        if ($percentPrintVolume !== FALSE)
+        $percentPrintVolume = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(23, $this->getReport()->id)) ? : false;
+        if ($percentPrintVolume !== false)
         {
             $formDataFromAnswers ["printVolume"] = $percentPrintVolume;
         }
 
-        $averagePrinterDowntime = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(24, $this->getReport()
-            ->getId())) ?  : FALSE;
-        if ($averagePrinterDowntime !== FALSE)
+        $averagePrinterDowntime = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(24, $this->getReport()->id)) ? : false;
+        if ($averagePrinterDowntime !== false)
         {
             $formDataFromAnswers ["repairTime"] = $averagePrinterDowntime;
         }
@@ -649,9 +626,9 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         }
                         else
                         {
-                            $this->_helper->flashMessenger(array (
-                                    'success' => "Your changes were saved successfully."
-                            ));
+                            $this->_helper->flashMessenger(array(
+                                                                'success' => "Your changes were saved successfully."
+                                                           ));
                         }
                     }
                     else
@@ -659,7 +636,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         throw new Zend_Validate_Exception("Form Validation Failed");
                     }
                 }
-                catch ( Zend_Validate_Exception $e )
+                catch (Zend_Validate_Exception $e)
                 {
                     $form->buildBootstrapErrorDecorators();
                 }
@@ -691,23 +668,23 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
             }
         }
 
-        $reportId = $this->getReport()->getId();
+        $reportId = $this->getReport()->id;
         // Populate all our view variables
         $currency = new Zend_Currency();
 
         // COMPANY
-        $this->view->companyName = $this->getReport()->getCustomerCompanyName();
+        $this->view->companyName    = $this->getReport()->customerCompanyName;
         $this->view->companyAddress = Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(30, $reportId);
 
         // GENERAL
         $this->view->numberOfEmployees = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(5, $reportId) . ' employees';
 
-        $goalArray = array (
-                1 => 'Ensure hardware matches print volume needs',
-                2 => 'Increasing uptime and productivity',
-                3 => 'Streamline logistics for supplies, service and hardware acquisition',
-                4 => 'Reduce environmental impact',
-                5 => 'Reduce costs'
+        $goalArray = array(
+            1 => 'Ensure hardware matches print volume needs',
+            2 => 'Increasing uptime and productivity',
+            3 => 'Streamline logistics for supplies, service and hardware acquisition',
+            4 => 'Reduce environmental impact',
+            5 => 'Reduce costs'
         );
 
         $mpsGoalRankings [1] = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(6, $reportId);
@@ -719,8 +696,8 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         // Sort the goal rankings
         asort($mpsGoalRankings);
 
-        $mpsGoalPriority = array ();
-        for($i = 1; $i <= 5; $i ++)
+        $mpsGoalPriority = array();
+        for ($i = 1; $i <= 5; $i++)
         {
 
             $mpsGoalPriority [] = "{$i}. " . $goalArray [$mpsGoalRankings [$i]];
@@ -750,11 +727,11 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         }
 
         $this->view->averagePurchaseOrderCost = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(14, $reportId) . ' per order';
-        $this->view->averageItWage = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(15, $reportId) . ' per hour';
+        $this->view->averageItWage            = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(15, $reportId) . ' per hour';
 
         // PURCHASING
         $this->view->numberOfSupplyVendors = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(16, $reportId) . ' vendor(s)';
-        $this->view->numberOfSupplyOrders = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(17, $reportId) . ' order(s) per month';
+        $this->view->numberOfSupplyOrders  = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(17, $reportId) . ' order(s) per month';
 
         // IT
         $itServiceHoursRadio = Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(18, $reportId);
@@ -781,56 +758,56 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
 
         // USERS
         $this->view->pageCoverageMonochrome = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(21, $reportId) . '%';
-        $this->view->pageCoverageColor = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(22, $reportId) . '%';
+        $this->view->pageCoverageColor      = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(22, $reportId) . '%';
         $this->view->inkjentPrintPercentage = Proposalgen_Form_Survey_Users::$volumeOptions [Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(23, $reportId)];
-        $this->view->averageRepairTime = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(24, $reportId) . ' Days';
+        $this->view->averageRepairTime      = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(24, $reportId) . ' Days';
     }
 
     /**
      * Saves a textual answer for a report
      *
-     * @param int $questionId
+     * @param int    $questionId
      * @param String $answer
      */
     protected function saveTextualQuestionAnswer ($questionId, $answer)
     {
-        $mapper = Proposalgen_Model_Mapper_TextualAnswer::getInstance();
-        $textualAnswer = new Proposalgen_Model_TextualAnswer();
+        $mapper                    = Proposalgen_Model_Mapper_TextualAnswer::getInstance();
+        $textualAnswer             = new Proposalgen_Model_TextualAnswer();
         $textualAnswer->questionId = $questionId;
-        $textualAnswer->answer = $answer;
-        $textualAnswer->reportId = $this->getReport()->getId();
+        $textualAnswer->answer     = $answer;
+        $textualAnswer->reportId   = $this->getReport()->id;
         $mapper->save($textualAnswer);
     }
 
     /**
      * Saves a numeric answer for a report
      *
-     * @param int $questionId
+     * @param int    $questionId
      * @param number $answer
      */
     protected function saveNumericQuestionAnswer ($questionId, $answer)
     {
-        $mapper = Proposalgen_Model_Mapper_NumericAnswer::getInstance();
-        $numericAnswer = new Proposalgen_Model_NumericAnswer();
-        $numericAnswer->questionId =$questionId;
-        $numericAnswer->answer = $answer;
-        $numericAnswer->reportId = $this->getReport()->getId();
+        $mapper                    = Proposalgen_Model_Mapper_NumericAnswer::getInstance();
+        $numericAnswer             = new Proposalgen_Model_NumericAnswer();
+        $numericAnswer->questionId = $questionId;
+        $numericAnswer->answer     = $answer;
+        $numericAnswer->reportId   = $this->getReport()->id;
         $mapper->save($numericAnswer);
     }
 
     /**
      * Saves a date answer for a report
      *
-     * @param int $questionId
+     * @param int    $questionId
      * @param String $answer
      */
     protected function saveDateQuestionAnswer ($questionId, $answer)
     {
-        $mapper = Proposalgen_Model_Mapper_DateAnswer::getInstance();
-        $dateAnswer = new Proposalgen_Model_DateAnswer();
+        $mapper                 = Proposalgen_Model_Mapper_DateAnswer::getInstance();
+        $dateAnswer             = new Proposalgen_Model_DateAnswer();
         $dateAnswer->questionId = $questionId;
-        $dateAnswer->answer = $answer;
-        $dateAnswer->reportId = $this->getReport()->getId();
+        $dateAnswer->answer     = $answer;
+        $dateAnswer->reportId   = $this->getReport()->id;
         $mapper->save($dateAnswer);
     }
 }

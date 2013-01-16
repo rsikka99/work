@@ -154,7 +154,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             self::$Proposal = $this;
         }
         $this->setReport($report);
-        $this->setReportId($report->getId());
+        $this->setReportId($report->id);
 
         // Initialize Settings
 
@@ -367,7 +367,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         if (!isset($this->ReportQuestions))
         {
             $questionSetMapper     = Proposalgen_Model_Mapper_QuestionSet::getInstance();
-            $this->ReportQuestions = $questionSetMapper->getQuestionSetQuestions($this->getReport()->getQuestionSetId(), $this->getReport()->getId());
+            $this->ReportQuestions = $questionSetMapper->getQuestionSetQuestions($this->getReport()->questionSetId, $this->getReport()->id);
         }
 
         return $this->ReportQuestions;
@@ -461,7 +461,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             $this->LeasedDevices = array();
             foreach ($this->getDevices() as $device)
             {
-                if ($device->getMasterDevice()->getIsLeased())
+                if ($device->getMasterDevice()->isLeased)
                 {
                     $this->LeasedDevices [] = $device;
                 }
@@ -497,7 +497,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             $this->PurchasedDevices = array();
             foreach ($this->getDevices() as $device)
             {
-                if ($device->getMasterDevice()->getIsLeased() === 0)
+                if ($device->getMasterDevice()->isLeased === 0)
                 {
                     $this->PurchasedDevices [] = $device;
                 }
@@ -916,7 +916,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             $numberOfDevices = 0;
             foreach ($this->getDevices() as $device)
             {
-                if ($device->getMasterDevice()->getTonerConfigId() != Proposalgen_Model_TonerConfig::BLACK_ONLY)
+                if ($device->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY)
                 {
                     $numberOfDevices++;
                 }
@@ -1287,7 +1287,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     {
         if (!isset($this->DateReportPrepared))
         {
-            $report_date              = new DateTime($this->getReport()->getReportDate());
+            $report_date              = new DateTime($this->getReport()->reportDate);
             $this->DateReportPrepared = date_format($report_date, 'F jS, Y');
         }
 
@@ -1798,7 +1798,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             // Other variables used in several places
             $pageCounts      = $this->getPageCounts();
             $reportQuestions = $this->getReportQuestions();
-            $companyName     = $this->getReport()->getCustomerCompanyName();
+            $companyName     = $this->getReport()->customerCompanyName;
             $employeeCount   = $reportQuestions [5]->numericAnswer;
 
             // Formatting variables

@@ -176,27 +176,28 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                         $meters [$meterType]  = $newMeter;
                     }
 
-                    $masterDevice = new Proposalgen_Model_MasterDevice();
-                    $masterDevice->setId(null)
-                        ->setManufacturer($manufacturer)
-                        ->setPrinterModel($row->printer_model)
-                        ->setTonerConfig($tonerConfig)
-                        ->setTonerConfigId($tonerConfig->tonerConfigId)
-                        ->setIsCopier($row->is_copier)
-                        ->setIsFax($row->is_fax)
-                        ->setIsScanner($row->is_scanner)
-                        ->setIsDuplex($row->is_duplex)
-                        ->setIsReplacementDevice(0)
-                        ->setWattsPowerNormal($row->watts_power_normal)
-                        ->setWattsPowerIdle($row->watts_power_idle)
-                        ->setCost($row->cost)
-                        ->setLaunchDate($row->launch_date)
-                        ->setDateCreated($row->date_created)
-                        ->setServiceCostPerPage($row->service_cost_per_page)
-                        ->setIsLeased($row->is_leased)
-                        ->setToners($toners);
+                    $masterDevice                      = new Proposalgen_Model_MasterDevice();
+                    $masterDevice->Id                  = null;
+                    $masterDevice->PrinterModel        = $row->printer_model;
+                    $masterDevice->TonerConfigId       = $tonerConfig->tonerConfigId;
+                    $masterDevice->IsCopier            = $row->is_copier;
+                    $masterDevice->IsFax               = $row->is_fax;
+                    $masterDevice->IsScanner           = $row->is_scanner;
+                    $masterDevice->IsDuplex            = $row->is_duplex;
+                    $masterDevice->IsReplacementDevice = 0;
+                    $masterDevice->WattsPowerNormal    = $row->watts_power_normal;
+                    $masterDevice->WattsPowerIdle      = $row->watts_power_idle;
+                    $masterDevice->Cost                = $row->cost;
+                    $masterDevice->LaunchDate          = $row->launch_date;
+                    $masterDevice->DateCreated         = $row->date_created;
+                    $masterDevice->ServiceCostPerPage  = $row->service_cost_per_page;
+                    $masterDevice->IsLeased            = $row->is_leased;
 
-                    if ($masterDevice->getIsLeased())
+                    $masterDevice->setTonerConfig($tonerConfig);
+                    $masterDevice->setManufacturer($manufacturer);
+                    $masterDevice->setToners($toners);
+
+                    if ($masterDevice->isLeased)
                     {
                         $smallestYield = null;
                         foreach ($toners as $tonersByType)
@@ -214,11 +215,11 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                                 }
                             }
                         }
-                        $masterDevice->setLeasedTonerYield($smallestYield);
+                        $masterDevice->leasedTonerYield = $smallestYield;
                     }
 
 
-                    $device->id      = null;
+                    $device->id                    = null;
                     $device->reportId              = $row->report_id;
                     $device->uploadDataCollectorId = $row->upload_data_collector_row_id;
                     $device->serialNumber          = $row->printer_serial_number;

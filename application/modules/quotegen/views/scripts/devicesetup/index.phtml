@@ -26,7 +26,7 @@
     : /* @var $device Proposalgen_Model_MasterDevice */
         $oemSku = null;
         $dealerSku = "N/A";
-        $quotegenDevice = Quotegen_Model_Mapper_Device::getInstance()->find($device->getId());
+        $quotegenDevice = Quotegen_Model_Mapper_Device::getInstance()->find($device->id);
         if ($quotegenDevice)
         {
             $oemSku = $quotegenDevice->getOemSku();
@@ -34,7 +34,7 @@
         }
         ?>
 	        <tr>
-            <td><?php echo $device->getId(); ?></td>
+            <td><?php echo $device->id; ?></td>
             <td><?php echo $device->getFullDeviceName(); ?></td>
             <td><?php echo $oemSku; ?></td>
             <td><?php echo $dealerSku; ?></td>
@@ -42,11 +42,11 @@
                 <div class="" style="text-align: center;">
                     <a class="btn btn-warning btn-mini"
                         title="Edit Device"
-                        href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $device->getId())); ?>"><i
+                        href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $device->id)); ?>"><i
                         class="icon-pencil icon-white"></i></a> <a
                         class="btn btn-danger btn-mini"
                         title="Delete Device"
-                        href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $device->getId())); ?>"><i
+                        href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $device->id)); ?>"><i
                         class="icon-trash icon-white"></i></a>
                 </div>
             </td>
