@@ -26,7 +26,7 @@ class Proposalgen_Model_Mapper_PricingConfig extends Tangent_Model_Mapper_Abstra
      *
      * @return Proposalgen_Model_PricingConfig
      */
-    public function mapRowToObject (Zend_Db_Table_Row $row)
+    public function mapRowToObject ($row)
     {
         $object = null;
         try
@@ -50,7 +50,7 @@ class Proposalgen_Model_Mapper_PricingConfig extends Tangent_Model_Mapper_Abstra
      *
      * @param Proposalgen_Model_PricingConfig $object
      */
-    public function save (Proposalgen_Model_PricingConfig $object)
+    public function save ($object)
     {
         $primaryKey = 0;
         try

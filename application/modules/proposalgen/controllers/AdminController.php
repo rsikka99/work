@@ -2399,7 +2399,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $surveySettings = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchUserSurveySetting($userId);
         $pricingConfigs = Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll();
         $form           = new Proposalgen_Form_Settings_User();
-
         // Add all the pricing configs
         /* @var $pricingConfig Proposalgen_Model_PricingConfig */
         foreach ($pricingConfigs as $pricingConfig)
@@ -2426,18 +2425,20 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     try
                     {
                         // Make all empty values = null
-                        foreach ($formData as $value)
+                       foreach ( $formData as &$value )
                         {
-                            $value = (empty($value)) ? null : $value;
+                            if (strlen($value) === 0)
+                            {
+                                $value = null;
+                            }
                         }
-                        // Save user settings
+
                         // Save page coverage settings (survey settings)
                         $surveySettings->populate($formData);
+                        Proposalgen_Model_Mapper_Survey_Setting::getInstance()->save($surveySettings, $surveySettings->id);
+
                         // Save report settings (all other)
                         $reportSettings->populate($formData);
-                        // Save report settings
-                        Proposalgen_Model_Mapper_Survey_Setting::getInstance()->save($surveySettings, $surveySettings->id);
-                        // Save survey settings
                         Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($reportSettings, $reportSettings->id);
 
                         $this->_helper->flashMessenger(array("success" => "Your settings have been updated."));
@@ -2446,7 +2447,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     catch (Zend_Db_Exception $e)
                     {
                         $db->rollback();
-                        $this->_helper->flashMessenger(array("error" => "An error occurred while saving your settings."));
+                        $this->_helper->flashMessenger(array("error" => "An error occurred while saving your settings.{$e->getMessage()}"));
                     }
                     catch (Exception $e)
                     {
@@ -2461,10 +2462,18 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $form->populate($formData);
             }
         }
+        // Populate the values in the form.
+        $form->populate($surveySettings->toArray());
+        $form->populate($reportSettings->toArray());
 
-        $systemReportSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->find(1);
-        $systemSurveySetting  = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->find(1);
-        $defaultSettings      = array_merge($systemReportSettings->toArray(), $systemSurveySetting->toArray());
+        // Get the system defaults and unset the id's.  Merge the two system settings and set the dropdowns.
+        $systemReportSettings      = Proposalgen_Model_Mapper_Report_Setting::getInstance()->find(1);
+        $systemSurveySetting       = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->find(1);
+        $systemReportSettingsArray = $systemReportSettings->toArray();
+        $systemSurveySettingArray  = $systemSurveySetting->toArray();
+        unset($systemReportSettingsArray ['id']);
+        unset($systemSurveySettingArray ['id']);
+        $defaultSettings = array_merge($systemReportSettingsArray, $systemSurveySettingArray);
 
         if ($defaultSettings ["assessmentPricingConfigId"] !== Proposalgen_Model_PricingConfig::NONE)
         {
