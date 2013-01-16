@@ -1,12 +1,10 @@
 <?php
-
 class Proposalgen_Model_Mapper_Meter extends Tangent_Model_Mapper_Abstract
 {
     protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_Meter";
     static $_instance;
 
     /**
-     *
      * @return Proposalgen_Model_Mapper_Meter
      */
     public static function getInstance ()
@@ -25,9 +23,10 @@ class Proposalgen_Model_Mapper_Meter extends Tangent_Model_Mapper_Abstract
      *
      * @param Zend_Db_Table_Row $row
      *
-     * @return The appropriate Proposalgen_Model
+     * @return \Proposalgen_Model_Meter
+     * @throws Exception
      */
-    public function mapRowToObject (Zend_Db_Table_Row $row)
+    public function mapRowToObject ($row)
     {
         $object = null;
         try
@@ -70,11 +69,13 @@ class Proposalgen_Model_Mapper_Meter extends Tangent_Model_Mapper_Abstract
     /**
      * Saved an Proposalgen_Model_ object to the database
      *
-     * @param unknown_type $object
+     * @param \Proposalgen_Model_Meter $object
+     *
+     * @throws Exception
+     * @return string
      */
-    public function save (Proposalgen_Model_Meter $object)
+    public function save ($object)
     {
-        $primaryKey = 0;
         try
         {
             $data ["id"]                 = $object->meterId;
@@ -82,8 +83,7 @@ class Proposalgen_Model_Mapper_Meter extends Tangent_Model_Mapper_Abstract
             $data ["meter_type"]         = $object->meterType;
             $data ["start_meter"]        = $object->startMeter;
             $data ["end_meter"]          = $object->endMeter;
-
-            $primaryKey = $this->saveRow($data);
+            $primaryKey                  = $this->saveRow($data);
         }
         catch (Exception $e)
         {

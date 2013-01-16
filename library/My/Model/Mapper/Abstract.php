@@ -108,7 +108,7 @@ abstract class My_Model_Mapper_Abstract
      *
      * @param array $array
      *
-     * @return boolean
+     * @return array|bool
      */
     protected function unsetNullValues ($array)
     {
@@ -231,7 +231,7 @@ abstract class My_Model_Mapper_Abstract
      */
     abstract public function getPrimaryKeyValueForObject ($object);
 
-    abstract public function save ($object, $primaryKey);
+    abstract public function save ($object, $primaryKey = null);
 
     abstract public function delete ($object);
 

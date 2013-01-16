@@ -1,111 +1,67 @@
 <?php
-
-/**
- * Class Application_Model_UserDeviceOverride
- * 
- * @author "Kevin Jervis"
- */
-class Application_Model_UserDeviceOverride extends Tangent_Model_Abstract
+class Proposalgen_Model_UserDeviceOverride extends My_Model_Abstract
 {
-    // Database Fields
-    protected $UserId;
-    protected $MasterDeviceId;
-    protected $OverrideDevicePrice;
-    protected $IsLeased;
+    /**
+     * @var int
+     */
+    public $userId;
 
     /**
-     *
-     * @return the $UserId
+     * @var int
      */
-    public function getUserId ()
+    public $masterDeviceId;
+
+    /**
+     * @var float
+     */
+    public $overrideDevicePrice;
+
+    /**
+     * @var bool
+     */
+    public $isLeased;
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
     {
-        if (! isset($this->UserId))
+        if (is_array($params))
         {
-            
-            $this->UserId = null;
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        return $this->UserId;
-    }
 
-    /**
-     *
-     * @param field_type $UserId            
-     */
-    public function setUserId ($UserId)
-    {
-        $this->UserId = $UserId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $MasterDeviceId
-     */
-    public function getMasterDeviceId ()
-    {
-        if (! isset($this->MasterDeviceId))
+        if (isset($params->userId) && !is_null($params->userId))
         {
-            
-            $this->MasterDeviceId = null;
+            $this->userId = $params->userId;
         }
-        return $this->MasterDeviceId;
-    }
 
-    /**
-     *
-     * @param field_type $MasterDeviceId            
-     */
-    public function setMasterDeviceId ($MasterDeviceId)
-    {
-        $this->MasterDeviceId = $MasterDeviceId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $OverrideDevicePrice
-     */
-    public function getOverrideDevicePrice ()
-    {
-        if (! isset($this->OverrideDevicePrice))
+        if (isset($params->masterDeviceId) && !is_null($params->masterDeviceId))
         {
-            
-            $this->OverrideDevicePrice = null;
+            $this->masterDeviceId = $params->masterDeviceId;
         }
-        return $this->OverrideDevicePrice;
-    }
 
-    /**
-     *
-     * @param field_type $OverrideDevicePrice            
-     */
-    public function setOverrideDevicePrice ($OverrideDevicePrice)
-    {
-        $this->OverrideDevicePrice = $OverrideDevicePrice;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $IsLeased
-     */
-    public function getIsLeased ()
-    {
-        if (! isset($this->IsLeased))
+        if (isset($params->overrideDevicePrice) && !is_null($params->overrideDevicePrice))
         {
-            
-            $this->IsLeased = null;
+            $this->overrideDevicePrice = $params->overrideDevicePrice;
         }
-        return $this->IsLeased;
+
+        if (isset($params->isLeased) && !is_null($params->isLeased))
+        {
+            $this->isLeased = $params->isLeased;
+        }
     }
 
     /**
-     *
-     * @param field_type $IsLeased            
+     * @return array
      */
-    public function setIsLeased ($IsLeased)
+    public function toArray ()
     {
-        $this->IsLeased = $IsLeased;
-        return $this;
+        return array(
+            "userId"              => $this->userId,
+            "masterDeviceId"      => $this->masterDeviceId,
+            "overrideDevicePrice" => $this->overrideDevicePrice,
+            "isLeased"            => $this->isLeased,
+        );
     }
 }

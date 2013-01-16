@@ -65,7 +65,7 @@ class Proposalgen_Form_MasterDevice extends EasyBib_Form
         /* @var $tonerConfig Proposalgen_Model_TonerConfig */
         foreach ( Proposalgen_Model_Mapper_TonerConfig::getInstance()->fetchAll() as $tonerConfig )
         {
-            $tonerConfigs [$tonerConfig->getTonerConfigId()] = $tonerConfig->getTonerConfigName();
+            $tonerConfigs [$tonerConfig->tonerConfigId] = $tonerConfig->tonerConfigName;
         }
         
         $this->addElement('select', 'toner_config_id', array (

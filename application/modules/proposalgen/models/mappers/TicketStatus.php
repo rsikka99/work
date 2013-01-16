@@ -5,7 +5,6 @@ class Proposalgen_Model_Mapper_TicketStatus extends Tangent_Model_Mapper_Abstrac
     static $_instance;
 
     /**
-     *
      * @return Proposalgen_Model_Mapper_TicketStatus
      */
     public static function getInstance ()
@@ -27,7 +26,7 @@ class Proposalgen_Model_Mapper_TicketStatus extends Tangent_Model_Mapper_Abstrac
      * @return \Proposalgen_Model_TicketStatus
      * @throws Exception
      */
-    public function mapRowToObject (Zend_Db_Table_Row $row)
+    public function mapRowToObject ($row)
     {
         $object = null;
         try
@@ -52,7 +51,7 @@ class Proposalgen_Model_Mapper_TicketStatus extends Tangent_Model_Mapper_Abstrac
      * @throws Exception
      * @return string
      */
-    public function save (Proposalgen_Model_TicketStatus $object)
+    public function save ($object)
     {
         try
         {

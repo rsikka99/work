@@ -26,7 +26,7 @@ class Proposalgen_Model_Mapper_TicketCategory extends Tangent_Model_Mapper_Abstr
      * @throws Exception
      * @return Proposalgen_Model_TicketCategory
      */
-    public function mapRowToObject (Zend_Db_Table_Row $row)
+    public function mapRowToObject ($row)
     {
         $object = null;
         try
@@ -51,7 +51,7 @@ class Proposalgen_Model_Mapper_TicketCategory extends Tangent_Model_Mapper_Abstr
      * @throws Exception
      * @return string
      */
-    public function save (Proposalgen_Model_TicketCategory $object)
+    public function save ($object)
     {
         try
         {

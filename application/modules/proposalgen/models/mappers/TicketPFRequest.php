@@ -37,7 +37,7 @@ class Proposalgen_Model_Mapper_TicketPFRequest extends Tangent_Model_Mapper_Abst
      * @throws Exception
      * @return Proposalgen_Model_TicketPFRequest
      */
-    public function mapRowToObject (Zend_Db_Table_Row $row)
+    public function mapRowToObject ($row)
     {
         $object = null;
         try
@@ -73,14 +73,13 @@ class Proposalgen_Model_Mapper_TicketPFRequest extends Tangent_Model_Mapper_Abst
     /**
      * Saved an Proposalgen_Model_ object to the database
      *
-     * @param Proposalgen_Model_TicketPrinterRequest $object
+     * @param Proposalgen_Model_TicketPFRequest $object
      *
      * @throws Exception
      * @return string
      */
-    public function save (Proposalgen_Model_TicketPrinterRequest $object)
+    public function save ($object)
     {
-        $primaryKey = 0;
         try
         {
             $data ["ticket_id"]             = $object->TicketId;
@@ -101,8 +100,7 @@ class Proposalgen_Model_Mapper_TicketPFRequest extends Tangent_Model_Mapper_Abst
             $data ["duty_cycle"]            = $object->DutyCycle;
             $data ["watts_power_normal"]    = $object->WattsPowerNormal;
             $data ["watts_power_idle"]      = $object->WattsPowerIdle;
-
-            $primaryKey = $this->saveRow($data);
+            $primaryKey                     = $this->saveRow($data);
         }
         catch (Exception $e)
         {

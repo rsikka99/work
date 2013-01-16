@@ -1,74 +1,67 @@
 <?php
-
-/**
- * Class Proposalgen_Model_TonerColor
- *
- * @author "Lee Robert"
- */
-class Proposalgen_Model_TonerColor extends Tangent_Model_Abstract
+class Proposalgen_Model_TonerColor extends My_Model_Abstract
 {
-    const BLACK = 1;
-    const CYAN = 2;
-    const MAGENTA = 3;
-    const YELLOW = 4;
+    const BLACK       = 1;
+    const CYAN        = 2;
+    const MAGENTA     = 3;
+    const YELLOW      = 4;
     const THREE_COLOR = 5;
-    const FOUR_COLOR = 6;
-    static $ColorNames = array (
-            self::BLACK => "Black", 
-            self::CYAN => "Cyan", 
-            self::MAGENTA => "Magenta", 
-            self::YELLOW => "Yellow", 
-            self::THREE_COLOR => "Three Color", 
-            self::FOUR_COLOR => "Four Color" 
+    const FOUR_COLOR  = 6;
+
+    /**
+     * Friendly toner color names with the toner color id as the array key
+     *
+     * @var string[]
+     */
+    static $ColorNames = array(
+        self::BLACK       => "Black",
+        self::CYAN        => "Cyan",
+        self::MAGENTA     => "Magenta",
+        self::YELLOW      => "Yellow",
+        self::THREE_COLOR => "Three Color",
+        self::FOUR_COLOR  => "Four Color"
     );
-    protected $TonerColorId;
-    protected $TonerColorName;
 
     /**
-     *
-     * @return the $TonerColorId
+     * @var int
      */
-    public function getTonerColorId ()
+    public $tonerColorId;
+
+    /**
+     * @var string
+     */
+    public $tonerColorName;
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
     {
-        if (! isset($this->TonerColorId))
+        if (is_array($params))
         {
-            
-            $this->TonerColorId = null;
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        return $this->TonerColorId;
-    }
 
-    /**
-     *
-     * @param field_type $TonerColorId            
-     */
-    public function setTonerColorId ($TonerColorId)
-    {
-        $this->TonerColorId = $TonerColorId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $TonerColorName
-     */
-    public function getTonerColorName ()
-    {
-        if (! isset($this->TonerColorName))
+        if (isset($params->tonerColorId) && !is_null($params->tonerColorId))
         {
-            
-            $this->TonerColorName = null;
+            $this->tonerColorId = $params->tonerColorId;
         }
-        return $this->TonerColorName;
+
+        if (isset($params->tonerColorName) && !is_null($params->tonerColorName))
+        {
+            $this->tonerColorName = $params->tonerColorName;
+        }
+
     }
 
     /**
-     *
-     * @param field_type $TonerColorName            
+     * @return array
      */
-    public function setTonerColorName ($TonerColorName)
+    public function toArray ()
     {
-        $this->TonerColorName = $TonerColorName;
-        return $this;
+        return array(
+            "tonerColorId"   => $this->tonerColorId,
+            "tonerColorName" => $this->tonerColorName,
+        );
     }
 }

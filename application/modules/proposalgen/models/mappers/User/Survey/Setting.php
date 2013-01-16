@@ -1,10 +1,4 @@
 <?php
-
-/**
- * Class Proposalgen_Model_Mapper_User_Survey_Setting
- *
- * This class is a data mapper for the User_Survey_Setting model.
- */
 class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstract
 {
     /**
@@ -54,7 +48,7 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
      *
      * @return int The number of rows affected
      */
-    public function save ($user_survey_setting, $primaryKey)
+    public function save ($object, $primaryKey = null)
     {
         $data = $this->unsetNullValues($user_survey_setting->toArray());
 
@@ -93,7 +87,7 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
     {
         if ($user_survey_setting instanceof Proposalgen_Model_User_Survey_Setting)
         {
-            $data = $user_survey_setting->toArray();
+            $user_survey_setting = $user_survey_setting->toArray();
         }
 
         $whereClause = array();
@@ -116,40 +110,20 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
      * @param $id int
      *            The id of the user_survey_setting to find
      *
-     * @return void Proposalgen_Model_User_Survey_Setting
+     * @return Proposalgen_Model_User_Survey_Setting
      */
     public function find ($id)
     {
         $result = $this->getDbTable()->find($id);
         if (0 == count($result))
         {
-            return;
+            return false;
         }
         $row = $result->current();
 
         return new Proposalgen_Model_User_Survey_Setting($row->toArray());
     }
 
-    /**
-     * @param $userId
-     *
-     * @return Proposalgen_Model_Survey_Setting
-     */
-    public function findUserSurveySettingByUserId ($userId)
-    {
-        try
-        {
-            // Get the joining table to get all possible results
-            $userSurvey         = Proposalgen_Model_Mapper_User_Survey_Setting::getInstance()->fetchAll(array("{$this->col_userId} = ?" => $userId));
-            $userSurveySettings = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->find($userSurvey[0]->getSurveySettingId());
-        }
-        catch (Exception $e)
-        {
-            $userSurveySettings = null;
-        }
-
-        return $userSurveySettings;
-    }
 
     /**
      * Fetches a user_survey_setting
@@ -161,14 +135,14 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
      * @param $offset int
      *                OPTIONAL An SQL OFFSET value.
      *
-     * @return void Proposalgen_Model_User_Survey_Setting
+     * @return Proposalgen_Model_User_Survey_Setting
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
         $row = $this->getDbTable()->fetchRow($where, $order, $offset);
         if (is_null($row))
         {
-            return;
+            return false;
         }
 
         return new Proposalgen_Model_User_Survey_Setting($row->toArray());
@@ -186,7 +160,7 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
      * @param $offset int
      *                OPTIONAL An SQL LIMIT offset.
      *
-     * @return multitype:Proposalgen_Model_User_Survey_Setting
+     * @return Proposalgen_Model_User_Survey_Setting[]
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -200,15 +174,37 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
         return $entries;
     }
 
+    public function findUserSurveySettingByUserId ($userId)
+    {
+        $surveySetting = array();
+
+        try
+        {
+            // Get all rows that with this user id
+            $userSurveySettings = $this->fetchAll(array("{$this->col_userId} = {$userId}"));
+            foreach ($userSurveySettings as $userSurveySetting)
+            {
+                $surveySetting [] = $userSurveySetting;
+            }
+        }
+        catch (Exception $e)
+        {
+            $surveySetting = null;
+        }
+
+        return $surveySetting;
+    }
+
     /**
-     * (non-PHPdoc)
-     * @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     * @param Proposalgen_Model_User_Survey_Setting $object
+     *
+     * @return array
      */
     public function getPrimaryKeyValueForObject ($object)
     {
         return array(
-            $object->getUserId(),
-            $object->getSurveySettingId()
+            $object->userId,
+            $object->surveySettingId
         );
     }
 }

@@ -5,8 +5,7 @@ class Proposalgen_Model_Mapper_Question extends Tangent_Model_Mapper_Abstract
     static $_instance;
 
     /**
-     *
-     * @return Tangent_Model_Mapper_Abstract
+     * @return Proposalgen_Model_Mapper_Question
      */
     public static function getInstance ()
     {
@@ -24,9 +23,10 @@ class Proposalgen_Model_Mapper_Question extends Tangent_Model_Mapper_Abstract
      *
      * @param Zend_Db_Table_Row $row
      *
-     * @return The appropriate Proposalgen_Model
+     * @throws Exception
+     * @return \Proposalgen_Model_Question
      */
-    public function mapRowToObject (Zend_Db_Table_Row $row)
+    public function mapRowToObject ($row)
     {
         $object = null;
         try
@@ -47,17 +47,18 @@ class Proposalgen_Model_Mapper_Question extends Tangent_Model_Mapper_Abstract
     /**
      * Saved an Proposalgen_Model_ object to the database
      *
-     * @param unknown_type $object
+     * @param \Proposalgen_Model_Question $object
+     *
+     * @throws Exception
+     * @return string
      */
-    public function save (Proposalgen_Model_Question $object)
+    public function save ($object)
     {
-        $primaryKey = 0;
         try
         {
             $data ["question_id"]   = $object->questionId;
             $data ["question_desc"] = $object->questionDescription;
-
-            $primaryKey = $this->saveRow($data);
+            $primaryKey             = $this->saveRow($data);
         }
         catch (Exception $e)
         {

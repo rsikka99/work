@@ -1,5 +1,4 @@
 <?php
-
 class Proposalgen_Model_Mapper_ReplacementDevice extends Tangent_Model_Mapper_Abstract
 {
     protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_ReplacementDevices";
@@ -27,7 +26,7 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends Tangent_Model_Mapper_Ab
      * @return Proposalgen_Model_ReplacementDevice
      * @throws Exception
      */
-    public function mapRowToObject (Zend_Db_Table_Row $row)
+    public function mapRowToObject ($row)
     {
         $object = null;
         try
@@ -55,9 +54,8 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends Tangent_Model_Mapper_Ab
      * @return string
      * @throws Exception
      */
-    public function save (Proposalgen_Model_ReplacementDevice $object)
+    public function save ($object)
     {
-        $primaryKey = 0;
         try
         {
             $data ["master_device_id"]     = $object->masterDeviceId;
@@ -65,8 +63,7 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends Tangent_Model_Mapper_Ab
             $data ["print_speed"]          = $object->printSpeed;
             $data ["resolution"]           = $object->resolution;
             $data ["monthly_rate"]         = $object->monthlyRate;
-
-            $primaryKey = $this->saveRow($data);
+            $primaryKey                    = $this->saveRow($data);
         }
         catch (Exception $e)
         {

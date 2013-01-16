@@ -1,50 +1,84 @@
 <?php
-
-/**
- * Class Proposalgen_Model_TonerConfig
- *
- * @author "Lee Robert"
- */
-class Proposalgen_Model_TonerConfig extends Tangent_Model_Abstract
+class Proposalgen_Model_TonerConfig extends My_Model_Abstract
 {
-    const BLACK_ONLY = 1;
+    const BLACK_ONLY            = 1;
     const THREE_COLOR_SEPARATED = 2;
-    const THREE_COLOR_COMBINED = 3;
-    const FOUR_COLOR_COMBINED = 4;
-    static $TonerConfigNames = array (
-            self::BLACK_ONLY => "Black Only", 
-            self::THREE_COLOR_SEPARATED => "3 Color Separated", 
-            self::THREE_COLOR_COMBINED => "3 Color Combined", 
-            self::FOUR_COLOR_COMBINED => "4 Color Combined" 
+    const THREE_COLOR_COMBINED  = 3;
+    const FOUR_COLOR_COMBINED   = 4;
+    static $TonerConfigNames = array(
+        self::BLACK_ONLY            => "Black Only",
+        self::THREE_COLOR_SEPARATED => "3 Color Separated",
+        self::THREE_COLOR_COMBINED  => "3 Color Combined",
+        self::FOUR_COLOR_COMBINED   => "4 Color Combined"
     );
-    protected $TonerConfigId;
-    protected $TonerConfigName;
+
+    /**
+     * @var int
+     */
+    public $tonerConfigId;
+
+    /**
+     * @var int
+     */
+    public $tonerConfigName;
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
+    {
+        if (is_array($params))
+        {
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
+        }
+
+        if (isset($params->tonerConfigId) && !is_null($params->tonerConfigId))
+        {
+            $this->tonerConfigId = $params->tonerConfigId;
+        }
+
+        if (isset($params->tonerConfigName) && !is_null($params->tonerConfigName))
+        {
+            $this->tonerConfigName = $params->tonerConfigName;
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray ()
+    {
+        return array(
+            "tonerConfigId"   => $this->tonerConfigId,
+            "tonerConfigName" => $this->tonerConfigName,
+        );
+    }
 
     /**
      * Gets an array of toner colors associated with a specific toner config.
      *
-     * @param $$tonerConfigId The
-     *            toner config id to use
+     * @param int $tonerConfigId The toner config id to use
+     *
      * @return array An array of TonerColorId's associated with a specified toner config
      */
     public static function getRequiredTonersForTonerConfig ($tonerConfigId)
     {
-        $tonerColors = array ();
+        $tonerColors = array();
         // Get the colors, default to black as a last resort
         switch ($tonerConfigId)
         {
-            
+
             case self::BLACK_ONLY :
                 $tonerColors ["black"] = Proposalgen_Model_TonerColor::BLACK;
                 break;
             case self::THREE_COLOR_SEPARATED :
-                $tonerColors ["black"] = Proposalgen_Model_TonerColor::BLACK;
-                $tonerColors ["cyan"] = Proposalgen_Model_TonerColor::CYAN;
+                $tonerColors ["black"]   = Proposalgen_Model_TonerColor::BLACK;
+                $tonerColors ["cyan"]    = Proposalgen_Model_TonerColor::CYAN;
                 $tonerColors ["magenta"] = Proposalgen_Model_TonerColor::MAGENTA;
-                $tonerColors ["yellow"] = Proposalgen_Model_TonerColor::YELLOW;
+                $tonerColors ["yellow"]  = Proposalgen_Model_TonerColor::YELLOW;
                 break;
             case self::THREE_COLOR_COMBINED :
-                $tonerColors ["black"] = Proposalgen_Model_TonerColor::BLACK;
+                $tonerColors ["black"]   = Proposalgen_Model_TonerColor::BLACK;
                 $tonerColors ["3 color"] = Proposalgen_Model_TonerColor::THREE_COLOR;
                 break;
             case self::FOUR_COLOR_COMBINED :
@@ -54,54 +88,9 @@ class Proposalgen_Model_TonerConfig extends Tangent_Model_Abstract
                 $tonerColors ["black"] = Proposalgen_Model_TonerColor::BLACK;
                 break;
         }
+
         return $tonerColors;
     }
 
-    /**
-     *
-     * @return the $TonerConfigId
-     */
-    public function getTonerConfigId ()
-    {
-        if (! isset($this->TonerConfigId))
-        {
-            
-            $this->TonerConfigId = null;
-        }
-        return $this->TonerConfigId;
-    }
 
-    /**
-     *
-     * @param field_type $TonerConfigId            
-     */
-    public function setTonerConfigId ($TonerConfigId)
-    {
-        $this->TonerConfigId = $TonerConfigId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $TonerConfigName
-     */
-    public function getTonerConfigName ()
-    {
-        if (! isset($this->TonerConfigName))
-        {
-            
-            $this->TonerConfigName = null;
-        }
-        return $this->TonerConfigName;
-    }
-
-    /**
-     *
-     * @param field_type $TonerConfigName            
-     */
-    public function setTonerConfigName ($TonerConfigName)
-    {
-        $this->TonerConfigName = $TonerConfigName;
-        return $this;
-    }
 }

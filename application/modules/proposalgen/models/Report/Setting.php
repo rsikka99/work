@@ -1,10 +1,4 @@
 <?php
-
-/**
- * Class Application_Model_Report_Setting
- *
- * These rows store settings for a proposal. We're able to use the heirarchy this way.
- */
 class Proposalgen_Model_Report_Setting extends My_Model_Abstract
 {
     /**
@@ -12,125 +6,125 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      *
      * @var int
      */
-    protected $_id;
-    
+    public $id;
+
     /**
      * The actual monochrome page coverage as a whole number
      *
      * @var int
      */
-    protected $_actualPageCoverageMono;
-    
+    public $actualPageCoverageMono;
+
     /**
      * The actual color page coverage as a whole number
      *
      * @var int
      */
-    protected $_actualPageCoverageColor;
-    
+    public $actualPageCoverageColor;
+
     /**
      * The service cost per page
      *
      * @var int
      */
-    protected $_serviceCostPerPage;
-    
+    public $serviceCostPerPage;
+
     /**
      * The admin cost per page
      *
      * @var int
      */
-    protected $_adminCostPerPage;
-    
+    public $adminCostPerPage;
+
     /**
      * The margin applied to the assessment
      *
      * @var int
      */
-    protected $_assessmentReportMargin;
-    
+    public $assessmentReportMargin;
+
     /**
      * The margin applied to the gross margin
      *
      * @var int
      */
-    protected $_grossMarginReportMargin;
-    
+    public $grossMarginReportMargin;
+
     /**
      * The monthly lease payment for calculation with leased printers
      *
      * @var int
      */
-    protected $_monthlyLeasePayment;
-    
+    public $monthlyLeasePayment;
+
     /**
      * The default printer cost to use when a printer does not have a cost
      *
      * @var int
      */
-    protected $_defaultPrinterCost;
-    
+    public $defaultPrinterCost;
+
     /**
      * The monochrome cost per page for a leased printer
      *
      * @var int
      */
-    protected $_leasedBwCostPerPage;
-    
+    public $leasedBwCostPerPage;
+
     /**
      * The color cost per page for a leased printer
      *
      * @var int
      */
-    protected $_leasedColorCostPerPage;
-    
+    public $leasedColorCostPerPage;
+
     /**
      * The MPS monochrome cost per page
      *
      * @var int
      */
-    protected $_mpsBwCostPerPage;
-    
+    public $mpsBwCostPerPage;
+
     /**
      * The MPS color cost per page
      *
      * @var int
      */
-    protected $_mpsColorCostPerPage;
-    
+    public $mpsColorCostPerPage;
+
     /**
-     * The cost of electricty
+     * The cost of electricity
      *
      * @var int
      */
-    protected $_kilowattsPerHour;
-    
+    public $kilowattsPerHour;
+
     /**
      * The id of the assessment pricing configuration
      *
      * @var int
      */
-    protected $_assessmentPricingConfigId;
-    
+    public $assessmentPricingConfigId;
+
     /**
      * The id of the gross margin pricing configuration
      *
      * @var int
      */
-    protected $_grossMarginPricingConfigId;
-    
+    public $grossMarginPricingConfigId;
+
     /**
      * The assessment pricing configuration
      *
      * @var Proposalgen_Model_PricingConfig
      */
-    protected $AssessmentPricingConfig;
+    protected $_assessmentPricingConfig;
     /**
      * The gross margin pricing configuration
      *
      * @var Proposalgen_Model_PricingConfig
      */
-    protected $GrossMarginPricingConfig;
+    protected $_grossMarginPricingConfig;
 
     /**
      * Overrides all the settings.
@@ -145,443 +139,154 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
         {
             $settings = $settings->toArray();
         }
-        
+
         $this->populate($settings);
     }
 
     /**
-     * Populates the model with data from an array
-     *
-     * @see My_Model_Abstract::populate()
+     * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
     {
-        // Convert the array into an object
         if (is_array($params))
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        
-        // Set the fields if they were passed in
-        if (isset($params->id) && $params->id !== null)
-            $this->setId($params->id);
-        if (isset($params->actualPageCoverageMono) && $params->actualPageCoverageMono !== null)
-            $this->setActualPageCoverageMono($params->actualPageCoverageMono);
-        if (isset($params->actualPageCoverageColor) && $params->actualPageCoverageColor !== null)
-            $this->setActualPageCoverageColor($params->actualPageCoverageColor);
-        if (isset($params->serviceCostPerPage) && $params->serviceCostPerPage !== null)
-            $this->setServiceCostPerPage($params->serviceCostPerPage);
-        if (isset($params->adminCostPerPage) && $params->adminCostPerPage !== null)
-            $this->setAdminCostPerPage($params->adminCostPerPage);
-        if (isset($params->assessmentReportMargin) && $params->assessmentReportMargin !== null)
-            $this->setAssessmentReportMargin($params->assessmentReportMargin);
-        if (isset($params->grossMarginReportMargin) && $params->grossMarginReportMargin !== null)
-            $this->setGrossMarginReportMargin($params->grossMarginReportMargin);
-        if (isset($params->monthlyLeasePayment) && $params->monthlyLeasePayment !== null)
-            $this->setMonthlyLeasePayment($params->monthlyLeasePayment);
-        if (isset($params->defaultPrinterCost) && $params->defaultPrinterCost !== null)
-            $this->setDefaultPrinterCost($params->defaultPrinterCost);
-        if (isset($params->leasedBwCostPerPage) && $params->leasedBwCostPerPage !== null)
-            $this->setLeasedBwCostPerPage($params->leasedBwCostPerPage);
-        if (isset($params->leasedColorCostPerPage) && $params->leasedColorCostPerPage !== null)
-            $this->setLeasedColorCostPerPage($params->leasedColorCostPerPage);
-        if (isset($params->mpsBwCostPerPage) && $params->mpsBwCostPerPage !== null)
-            $this->setMpsBwCostPerPage($params->mpsBwCostPerPage);
-        if (isset($params->mpsColorCostPerPage) && $params->mpsColorCostPerPage !== null)
-            $this->setMpsColorCostPerPage($params->mpsColorCostPerPage);
-        if (isset($params->kilowattsPerHour) && $params->kilowattsPerHour !== null)
-            $this->setKilowattsPerHour($params->kilowattsPerHour);
-        if (isset($params->assessmentPricingConfigId) && $params->assessmentPricingConfigId !== null)
-            $this->setAssessmentPricingConfigId($params->assessmentPricingConfigId);
-        if (isset($params->grossMarginPricingConfigId) && $params->grossMarginPricingConfigId !== null)
-            $this->setGrossMarginPricingConfigId($params->grossMarginPricingConfigId);
+
+        if (isset($params->id) && !is_null($params->id))
+        {
+            $this->id = $params->id;
+        }
+
+        if (isset($params->actualPageCoverageMono) && !is_null($params->actualPageCoverageMono))
+        {
+            $this->actualPageCoverageMono = $params->actualPageCoverageMono;
+        }
+
+        if (isset($params->actualPageCoverageColor) && !is_null($params->actualPageCoverageColor))
+        {
+            $this->actualPageCoverageColor = $params->actualPageCoverageColor;
+        }
+
+        if (isset($params->serviceCostPerPage) && !is_null($params->serviceCostPerPage))
+        {
+            $this->serviceCostPerPage = $params->serviceCostPerPage;
+        }
+
+        if (isset($params->adminCostPerPage) && !is_null($params->adminCostPerPage))
+        {
+            $this->adminCostPerPage = $params->adminCostPerPage;
+        }
+
+        if (isset($params->assessmentReportMargin) && !is_null($params->assessmentReportMargin))
+        {
+            $this->assessmentReportMargin = $params->assessmentReportMargin;
+        }
+
+        if (isset($params->grossMarginReportMargin) && !is_null($params->grossMarginReportMargin))
+        {
+            $this->grossMarginReportMargin = $params->grossMarginReportMargin;
+        }
+
+        if (isset($params->monthlyLeasePayment) && !is_null($params->monthlyLeasePayment))
+        {
+            $this->monthlyLeasePayment = $params->monthlyLeasePayment;
+        }
+
+        if (isset($params->defaultPrinterCost) && !is_null($params->defaultPrinterCost))
+        {
+            $this->defaultPrinterCost = $params->defaultPrinterCost;
+        }
+
+        if (isset($params->leasedBwCostPerPage) && !is_null($params->leasedBwCostPerPage))
+        {
+            $this->leasedBwCostPerPage = $params->leasedBwCostPerPage;
+        }
+
+        if (isset($params->leasedColorCostPerPage) && !is_null($params->leasedColorCostPerPage))
+        {
+            $this->leasedColorCostPerPage = $params->leasedColorCostPerPage;
+        }
+
+        if (isset($params->mpsBwCostPerPage) && !is_null($params->mpsBwCostPerPage))
+        {
+            $this->mpsBwCostPerPage = $params->mpsBwCostPerPage;
+        }
+
+        if (isset($params->mpsColorCostPerPage) && !is_null($params->mpsColorCostPerPage))
+        {
+            $this->mpsColorCostPerPage = $params->mpsColorCostPerPage;
+        }
+
+        if (isset($params->kilowattsPerHour) && !is_null($params->kilowattsPerHour))
+        {
+            $this->kilowattsPerHour = $params->kilowattsPerHour;
+        }
+
+        if (isset($params->assessmentPricingConfigId) && !is_null($params->assessmentPricingConfigId))
+        {
+            $this->assessmentPricingConfigId = $params->assessmentPricingConfigId;
+        }
+
+        if (isset($params->grossMarginPricingConfigId) && !is_null($params->grossMarginPricingConfigId))
+        {
+            $this->grossMarginPricingConfigId = $params->grossMarginPricingConfigId;
+        }
+
     }
 
     /**
-     * Converts the model into an array
-     *
-     * @see My_Model_Abstract::toArray()
+     * @return array
      */
     public function toArray ()
     {
-        return array (
-                "id" => $this->getId(), 
-                "actualPageCoverageMono" => $this->getActualPageCoverageMono(), 
-                "actualPageCoverageColor" => $this->getActualPageCoverageColor(), 
-                "serviceCostPerPage" => $this->getServiceCostPerPage(), 
-                "adminCostPerPage" => $this->getAdminCostPerPage(), 
-                "assessmentReportMargin" => $this->getAssessmentReportMargin(), 
-                "grossMarginReportMargin" => $this->getGrossMarginReportMargin(), 
-                "monthlyLeasePayment" => $this->getMonthlyLeasePayment(), 
-                "defaultPrinterCost" => $this->getDefaultPrinterCost(), 
-                "leasedBwCostPerPage" => $this->getLeasedBwCostPerPage(), 
-                "leasedColorCostPerPage" => $this->getLeasedColorCostPerPage(), 
-                "mpsBwCostPerPage" => $this->getMpsBwCostPerPage(), 
-                "mpsColorCostPerPage" => $this->getMpsColorCostPerPage(), 
-                "kilowattsPerHour" => $this->getKilowattsPerHour(), 
-                "assessmentPricingConfigId" => $this->getAssessmentPricingConfigId(), 
-                "grossMarginPricingConfigId" => $this->getGrossMarginPricingConfigId() 
+        return array(
+            "id"                         => $this->id,
+            "actualPageCoverageMono"     => $this->actualPageCoverageMono,
+            "actualPageCoverageColor"    => $this->actualPageCoverageColor,
+            "serviceCostPerPage"         => $this->serviceCostPerPage,
+            "adminCostPerPage"           => $this->adminCostPerPage,
+            "assessmentReportMargin"     => $this->assessmentReportMargin,
+            "grossMarginReportMargin"    => $this->grossMarginReportMargin,
+            "monthlyLeasePayment"        => $this->monthlyLeasePayment,
+            "defaultPrinterCost"         => $this->defaultPrinterCost,
+            "leasedBwCostPerPage"        => $this->leasedBwCostPerPage,
+            "leasedColorCostPerPage"     => $this->leasedColorCostPerPage,
+            "mpsBwCostPerPage"           => $this->mpsBwCostPerPage,
+            "mpsColorCostPerPage"        => $this->mpsColorCostPerPage,
+            "kilowattsPerHour"           => $this->kilowattsPerHour,
+            "assessmentPricingConfigId"  => $this->assessmentPricingConfigId,
+            "grossMarginPricingConfigId" => $this->grossMarginPricingConfigId,
         );
     }
 
     /**
-     * Gets the id
-     *
-     * @return the $_id
-     */
-    public function getId ()
-    {
-        return $this->_id;
-    }
-
-    /**
-     * Sets the id
-     *
-     * @param number $_id            
-     */
-    public function setId ($_id)
-    {
-        $this->_id = $_id;
-        return $this;
-    }
-
-    /**
-     * Gets the actual monochrome page coverage
-     *
-     * @return float $_actualPageCoverageMono
-     */
-    public function getActualPageCoverageMono ()
-    {
-        return $this->_actualPageCoverageMono;
-    }
-
-    /**
-     * Sets the actual monochrome page coverage
-     *
-     * @param number $_actualPageCoverageMono            
-     */
-    public function setActualPageCoverageMono ($_actualPageCoverageMono)
-    {
-        $this->_actualPageCoverageMono = $_actualPageCoverageMono;
-        return $this;
-    }
-
-    /**
-     * Gets the actual color page coverage
-     *
-     * @return the $_actualPageCoverageColor
-     */
-    public function getActualPageCoverageColor ()
-    {
-        return $this->_actualPageCoverageColor;
-    }
-
-    /**
-     * Sets the actual color page coverage
-     *
-     * @param number $_actualPageCoverageColor            
-     */
-    public function setActualPageCoverageColor ($_actualPageCoverageColor)
-    {
-        $this->_actualPageCoverageColor = $_actualPageCoverageColor;
-        return $this;
-    }
-
-    /**
-     * Gets the service cost per page
-     *
-     * @return number $_serviceCostPerPage
-     */
-    public function getServiceCostPerPage ()
-    {
-        return $this->_serviceCostPerPage;
-    }
-
-    /**
-     * Sets the service cost per page
-     *
-     * @param number $_serviceCostPerPage            
-     */
-    public function setServiceCostPerPage ($_serviceCostPerPage)
-    {
-        $this->_serviceCostPerPage = $_serviceCostPerPage;
-        return $this;
-    }
-
-    /**
-     * Gets the admin cost per page
-     *
-     * @return number $_adminCostPerPage
-     */
-    public function getAdminCostPerPage ()
-    {
-        return $this->_adminCostPerPage;
-    }
-
-    /**
-     * Sets the admin cost per page
-     *
-     * @param number $_adminCostPerPage            
-     */
-    public function setAdminCostPerPage ($_adminCostPerPage)
-    {
-        $this->_adminCostPerPage = $_adminCostPerPage;
-        return $this;
-    }
-
-    /**
-     * Gets the assessment report margin
-     *
-     * @return the $_assessmentReportMargin
-     */
-    public function getAssessmentReportMargin ()
-    {
-        return $this->_assessmentReportMargin;
-    }
-
-    /**
-     * Sets the assessment report margin
-     *
-     * @param number $_assessmentReportMargin            
-     */
-    public function setAssessmentReportMargin ($_assessmentReportMargin)
-    {
-        $this->_assessmentReportMargin = $_assessmentReportMargin;
-        return $this;
-    }
-
-    /**
-     * Gets the gross margin report margin
-     *
-     * @return the $_grossMarginReportMargin
-     */
-    public function getGrossMarginReportMargin ()
-    {
-        return $this->_grossMarginReportMargin;
-    }
-
-    /**
-     * Sets the gross margin report margin
-     *
-     * @param number $_grossMarginReportMargin            
-     */
-    public function setGrossMarginReportMargin ($_grossMarginReportMargin)
-    {
-        $this->_grossMarginReportMargin = $_grossMarginReportMargin;
-        return $this;
-    }
-
-    /**
-     * Gets the monthly lease payment
-     *
-     * @return the $_monthlyLeasePayment
-     */
-    public function getMonthlyLeasePayment ()
-    {
-        return $this->_monthlyLeasePayment;
-    }
-
-    /**
-     * Sets the monthly lease payment
-     *
-     * @param number $_monthlyLeasePayment            
-     */
-    public function setMonthlyLeasePayment ($_monthlyLeasePayment)
-    {
-        $this->_monthlyLeasePayment = $_monthlyLeasePayment;
-        return $this;
-    }
-
-    /**
-     * Gets the default printer cost
-     *
-     * @return the $_defaultPrinterCost
-     */
-    public function getDefaultPrinterCost ()
-    {
-        return $this->_defaultPrinterCost;
-    }
-
-    /**
-     * Sets the default printer cost
-     *
-     * @param number $_defaultPrinterCost            
-     */
-    public function setDefaultPrinterCost ($_defaultPrinterCost)
-    {
-        $this->_defaultPrinterCost = $_defaultPrinterCost;
-        return $this;
-    }
-
-    /**
-     * Gets the leased monochrome cost per page
-     *
-     * @return the $_leasedBwCostPerPage
-     */
-    public function getLeasedBwCostPerPage ()
-    {
-        return $this->_leasedBwCostPerPage;
-    }
-
-    /**
-     * Sets the leased monochrome cost per page
-     *
-     * @param number $_leasedBwCostPerPage            
-     */
-    public function setLeasedBwCostPerPage ($_leasedBwCostPerPage)
-    {
-        $this->_leasedBwCostPerPage = $_leasedBwCostPerPage;
-        return $this;
-    }
-
-    /**
-     * Gets the leased color cost per page
-     *
-     * @return the $_leasedColorCostPerPage
-     */
-    public function getLeasedColorCostPerPage ()
-    {
-        return $this->_leasedColorCostPerPage;
-    }
-
-    /**
-     * Sets the leased color cost per page
-     *
-     * @param number $_leasedColorCostPerPage            
-     */
-    public function setLeasedColorCostPerPage ($_leasedColorCostPerPage)
-    {
-        $this->_leasedColorCostPerPage = $_leasedColorCostPerPage;
-        return $this;
-    }
-
-    /**
-     * Gets the MPS monochrome cost per page
-     *
-     * @return the $_mpsBwCostPerPage
-     */
-    public function getMpsBwCostPerPage ()
-    {
-        return $this->_mpsBwCostPerPage;
-    }
-
-    /**
-     * Sets the MPS monochrome cost per page
-     *
-     * @param number $_mpsBwCostPerPage            
-     */
-    public function setMpsBwCostPerPage ($_mpsBwCostPerPage)
-    {
-        $this->_mpsBwCostPerPage = $_mpsBwCostPerPage;
-        return $this;
-    }
-
-    /**
-     * Gets the MPS color cost per page
-     *
-     * @return the $_mpsColorCostPerPage
-     */
-    public function getMpsColorCostPerPage ()
-    {
-        return $this->_mpsColorCostPerPage;
-    }
-
-    /**
-     * Sets the MPS color cost per page
-     *
-     * @param number $_mpsColorCostPerPage            
-     */
-    public function setMpsColorCostPerPage ($_mpsColorCostPerPage)
-    {
-        $this->_mpsColorCostPerPage = $_mpsColorCostPerPage;
-        return $this;
-    }
-
-    /**
-     * Gets the cost of enegery
-     *
-     * @return the $_kilowattsPerHour
-     */
-    public function getKilowattsPerHour ()
-    {
-        return $this->_kilowattsPerHour;
-    }
-
-    /**
-     * Sets the cost of energy
-     *
-     * @param number $_kilowattsPerHour            
-     */
-    public function setKilowattsPerHour ($_kilowattsPerHour)
-    {
-        $this->_kilowattsPerHour = $_kilowattsPerHour;
-        return $this;
-    }
-
-    /**
-     * Gets the pricing config id for the assessment
-     *
-     * @return the $_assessmentPricingConfigId
-     */
-    public function getAssessmentPricingConfigId ()
-    {
-        return $this->_assessmentPricingConfigId;
-    }
-
-    /**
-     * Sets the pricing config id for the assessment
-     *
-     * @param number $_assessmentPricingConfigId            
-     */
-    public function setAssessmentPricingConfigId ($_assessmentPricingConfigId)
-    {
-        $this->_assessmentPricingConfigId = $_assessmentPricingConfigId;
-        return $this;
-    }
-
-    /**
-     * Gets the pricing config id for the gross margin report
-     *
-     * @return the $_grossMarginPricingConfigId
-     */
-    public function getGrossMarginPricingConfigId ()
-    {
-        return $this->_grossMarginPricingConfigId;
-    }
-
-    /**
-     * Sets the pricing config id for the gross margin report
-     *
-     * @param number $_grossMarginPricingConfigId            
-     */
-    public function setGrossMarginPricingConfigId ($_grossMarginPricingConfigId)
-    {
-        $this->_grossMarginPricingConfigId = $_grossMarginPricingConfigId;
-        return $this;
-    }
-
-    /**
-     * Gets the asessment pricing configuration object
+     * Gets the assessment pricing configuration object
      *
      * @return Proposalgen_Model_PricingConfig
      */
     public function getAssessmentPricingConfig ()
     {
-        if (! isset($this->AssessmentPricingConfig))
+        if (!isset($this->_assessmentPricingConfig))
         {
-            $this->AssessmentPricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->getAssessmentPricingConfigId());
+            $this->_assessmentPricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->assessmentPricingConfigId);
         }
-        return $this->AssessmentPricingConfig;
+
+        return $this->_assessmentPricingConfig;
     }
 
     /**
+     * Sets the assessment pricing configuration object
      *
      * @param $AssessmentPricingConfig Proposalgen_Model_PricingConfig
-     *            The pricing configuration to set
+     *                                 The pricing configuration to set
+     *
+     * @return \Proposalgen_Model_Report_Setting
      */
     public function setAssessmentPricingConfig ($AssessmentPricingConfig)
     {
-        $this->AssessmentPricingConfig = $AssessmentPricingConfig;
+        $this->_assessmentPricingConfig = $AssessmentPricingConfig;
+
         return $this;
     }
 
@@ -592,22 +297,26 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      */
     public function getGrossMarginPricingConfig ()
     {
-        if (! isset($this->GrossMarginPricingConfig))
+        if (!isset($this->_grossMarginPricingConfig))
         {
-            $this->GrossMarginPricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->getGrossMarginPricingConfigId());
+            $this->_grossMarginPricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->grossMarginPricingConfigId);
         }
-        return $this->GrossMarginPricingConfig;
+
+        return $this->_grossMarginPricingConfig;
     }
 
     /**
-     * Sets the gross margin pricing configutarion object
+     * Sets the gross margin pricing configuration object
      *
      * @param $GrossMarginPricingConfig Proposalgen_Model_PricingConfig
-     *            The pricing configuration to set
+     *                                  The pricing configuration to set
+     *
+     * @return \Proposalgen_Model_Report_Setting
      */
     public function setGrossMarginPricingConfig ($GrossMarginPricingConfig)
     {
-        $this->GrossMarginPricingConfig = $GrossMarginPricingConfig;
+        $this->_grossMarginPricingConfig = $GrossMarginPricingConfig;
+
         return $this;
     }
 }

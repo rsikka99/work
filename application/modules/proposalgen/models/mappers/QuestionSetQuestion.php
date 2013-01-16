@@ -1,5 +1,4 @@
 <?php
-
 class Proposalgen_Model_Mapper_QuestionSetQuestion extends Tangent_Model_Mapper_Abstract
 {
     protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_QuestionSetQuestion";
@@ -25,15 +24,16 @@ class Proposalgen_Model_Mapper_QuestionSetQuestion extends Tangent_Model_Mapper_
      *
      * @param Zend_Db_Table_Row $row
      *
-     * @return The appropriate Proposalgen_Model
+     * @return \Proposalgen_Model_QuestionSetQuestion
+     * @throws Exception
      */
-    public function mapRowToObject (Zend_Db_Table_Row $row)
+    public function mapRowToObject ($row)
     {
         $object = null;
         try
         {
-            $object = new Proposalgen_Model_QuestionSetQuestion();
-            $object->questionId = $row->question_id;
+            $object                = new Proposalgen_Model_QuestionSetQuestion();
+            $object->questionId    = $row->question_id;
             $object->questionSetId = $row->questionset_id;
         }
         catch (Exception $e)
@@ -47,17 +47,18 @@ class Proposalgen_Model_Mapper_QuestionSetQuestion extends Tangent_Model_Mapper_
     /**
      * Saved an Proposalgen_Model_ object to the database
      *
-     * @param unknown_type $object
+     * @param \Proposalgen_Model_QuestionSetQuestion $object
+     *
+     * @throws Exception
+     * @return string
      */
-    public function save (Proposalgen_Model_QuestionSet $object)
+    public function save ($object)
     {
-        $primaryKey = 0;
         try
         {
             $data ["question_id"]    = $object->questionId;
             $data ["questionset_id"] = $object->questionSetName;
-
-            $primaryKey = $this->saveRow($data);
+            $primaryKey              = $this->saveRow($data);
         }
         catch (Exception $e)
         {

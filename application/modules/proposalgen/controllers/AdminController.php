@@ -946,7 +946,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 // GET TONER
                 $toner          = Proposalgen_Model_Mapper_Toner::getInstance()->find($toner_id);
-                $toner_color_id = $toner->getTonerColorId();
+                $toner_color_id = $toner->tonerColorId;
                 // GET NUMBER OF DEVICES USING THIS TONER
                 $total_devices       = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchAll('toner_id = ' . $toner_id);
                 $total_devices_count = count($total_devices);
@@ -1098,7 +1098,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         {
             // GET TONER
             $toner          = Proposalgen_Model_Mapper_Toner::getInstance()->find($toner_id);
-            $toner_color_id = $toner->getTonerColorId();
+            $toner_color_id = $toner->tonerColorId;
 
             // GET NUMBER OF DEVICES USING THIS TONER
             $total_devices       = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchAll('toner_id = ' . $toner_id);
@@ -1404,7 +1404,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
         // GET TONER
         $toner          = Proposalgen_Model_Mapper_Toner::getInstance()->find($replace_id);
-        $toner_color_id = $toner->getTonerColorId();
+        $toner_color_id = $toner->tonerColorId;
 
         // GET ALL DEVICES USING THIS TONER
         $total_devices = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchAll('toner_id = ' . $replace_id);
@@ -2392,28 +2392,25 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $this->view->title = 'Manage My Settings';
         $db                = Zend_Db_Table::getDefaultAdapter();
         $message           = '';
-        $hasErrors         = false;
 
         // Get system overrides
-        $systemSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->find(1);
-
-        $user         = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
-        $userSettings = Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->find($user->id);
-
-        $form           = new Proposalgen_Form_Settings_User();
+        $userId         = Zend_Auth::getInstance()->getIdentity()->id;
+        $reportSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchUserReportSetting($userId);
+        $surveySettings = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchUserSurveySetting($userId);
         $pricingConfigs = Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll();
-
+        $form           = new Proposalgen_Form_Settings_User();
         // Add all the pricing configs
+        /* @var $pricingConfig Proposalgen_Model_PricingConfig */
         foreach ($pricingConfigs as $pricingConfig)
         {
-            $form->getElement('assessmentPricingConfigId')->addMultiOption($pricingConfig->getPricingConfigId(), ($pricingConfig->getPricingConfigId() !== 1) ? $pricingConfig->getConfigName() : "");
+            $form->getElement('assessmentPricingConfigId')->addMultiOption($pricingConfig->pricingConfigId, ($pricingConfig->pricingConfigId !== 1) ? $pricingConfig->configName : "");
         }
 
-        // Set form values based on the users selected settings
-        foreach ($userSettings as $setting => $value)
-        {
-            $form->getElement($setting)->setValue((empty($value) ? "" : $value));
-        }
+//        // Set form values based on the users selected settings
+//        foreach ($userSettings as $setting => $value)
+//        {
+//            $form->getElement($setting)->setValue((empty($value) ? "" : $value));
+//        }
 
         if ($this->_request->isPost())
         {
@@ -2428,23 +2425,21 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     try
                     {
                         // Make all empty values = null
-                        foreach ($formData as $value)
+                       foreach ( $formData as &$value )
                         {
-                            $value = (empty($value)) ? null : $value;
+                            if (strlen($value) === 0)
+                            {
+                                $value = null;
+                            }
                         }
-                        // Save user settings
+
                         // Save page coverage settings (survey settings)
-                        $surveySetting = new Proposalgen_Model_Survey_Setting();
-                        $surveySetting->populate($formData);
+                        $surveySettings->populate($formData);
+                        Proposalgen_Model_Mapper_Survey_Setting::getInstance()->save($surveySettings, $surveySettings->id);
 
                         // Save report settings (all other)
-                        $reportSetting = new Proposalgen_Model_Report_Setting();
-                        $reportSetting->populate($formData);
-
-                        // Save report settings
-                        Mapper_Su::getInstance()->save('x');
-                        // Save survey settings
-                        Proposalgen_Model_Mapper_User::getInstance()->save($user);
+                        $reportSettings->populate($formData);
+                        Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($reportSettings, $reportSettings->id);
 
                         $this->_helper->flashMessenger(array("success" => "Your settings have been updated."));
                         $db->commit();
@@ -2452,7 +2447,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     catch (Zend_Db_Exception $e)
                     {
                         $db->rollback();
-                        $this->_helper->flashMessenger(array("error" => "An error occurred while saving your settings."));
+                        $this->_helper->flashMessenger(array("error" => "An error occurred while saving your settings.{$e->getMessage()}"));
                     }
                     catch (Exception $e)
                     {
@@ -2467,13 +2462,22 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $form->populate($formData);
             }
         }
+        // Populate the values in the form.
+        $form->populate($surveySettings->toArray());
+        $form->populate($reportSettings->toArray());
 
-        $surveySetting = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->find(1);
-        $defaultSettings = array_merge($systemSettings->toArray(),$surveySetting->toArray());
+        // Get the system defaults and unset the id's.  Merge the two system settings and set the dropdowns.
+        $systemReportSettings      = Proposalgen_Model_Mapper_Report_Setting::getInstance()->find(1);
+        $systemSurveySetting       = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->find(1);
+        $systemReportSettingsArray = $systemReportSettings->toArray();
+        $systemSurveySettingArray  = $systemSurveySetting->toArray();
+        unset($systemReportSettingsArray ['id']);
+        unset($systemSurveySettingArray ['id']);
+        $defaultSettings = array_merge($systemReportSettingsArray, $systemSurveySettingArray);
 
         if ($defaultSettings ["assessmentPricingConfigId"] !== Proposalgen_Model_PricingConfig::NONE)
         {
-            $defaultSettings ["assessmentPricingConfigId"] = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($defaultSettings ["assessmentPricingConfigId"])->getConfigName();
+            $defaultSettings ["assessmentPricingConfigId"] = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($defaultSettings ["assessmentPricingConfigId"])->configName;
         }
         else
         {
