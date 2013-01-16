@@ -2828,7 +2828,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
                         if (count($unknown_device_instance) > 0)
                         {
-                            $ampv = number_format($unknown_device_instance [0]->AverageMonthlyPageCount);
+                            $ampv = number_format($unknown_device_instance [0]->_averageMonthlyPageCount);
                         }
                     }
                     else if ($result [$key] ['di_device_instance_id'] > 0)

@@ -31,18 +31,18 @@ class Proposalgen_Model_Mapper_DeviceInstance extends Tangent_Model_Mapper_Abstr
         $object = null;
         try
         {
-            $object = new Proposalgen_Model_DeviceInstance();
-            $object->setDeviceInstanceId($row->id);
-            $object->setReportId($row->report_id);
-            $object->setMasterDeviceId($row->master_device_id);
-            $object->setUploadDataCollectorId($row->upload_data_collector_id);
-            $object->setSerialNumber($row->serial_number);
-            $object->setMPSMonitorStartDate($row->mps_monitor_startdate);
-            $object->setMPSMonitorEndDate($row->mps_monitor_enddate);
-            $object->setMPSDiscoveryDate($row->mps_discovery_date);
-            $object->setIsExcluded($row->is_excluded);
-            $object->setIpAddress($row->ip_address);
-            $object->setJITSuppliesSupported($row->jit_supplies_supported);
+            $object                        = new Proposalgen_Model_DeviceInstance();
+            $object->id      = $row->id;
+            $object->reportId              = $row->report_id;
+            $object->masterDeviceId        = $row->master_device_id;
+            $object->uploadDataCollectorId = $row->upload_data_collector_id;
+            $object->serialNumber          = $row->serial_number;
+            $object->mpsMonitorStartDate   = $row->mps_monitor_startdate;
+            $object->mpsMonitorEndDate     = $row->mps_monitor_enddate;
+            $object->mpsDiscoveryDate      = $row->mps_discovery_date;
+            $object->isExcluded            = $row->is_excluded;
+            $object->ipAddress             = $row->ip_address;
+            $object->jitSuppliesSupported  = $row->jit_supplies_supported;
         }
         catch (Exception $e)
         {
@@ -65,17 +65,17 @@ class Proposalgen_Model_Mapper_DeviceInstance extends Tangent_Model_Mapper_Abstr
         $primaryKey = 0;
         try
         {
-            $data ["id"]                       = $object->getDeviceInstanceId();
-            $data ["report_id"]                = $object->getReportId();
-            $data ["master_device_id"]         = $object->getMasterDeviceId();
-            $data ["upload_data_collector_id"] = $object->getUploadDataCollectorId();
-            $data ["serial_number"]            = $object->getSerialNumber();
-            $data ["mps_monitor_startdate"]    = $object->getMPSMonitorStartDate();
-            $data ["mps_monitor_enddate"]      = $object->getMPSMonitorEndDate();
-            $data ["mps_discovery_date"]       = $object->getMPSDiscoveryDate();
-            $data ["is_excluded"]              = $object->getIsExcluded();
-            $data ["ip_address"]               = $object->getIpAddress();
-            $data ["jit_supplies_supported"]   = $object->getJITSuppliesSupported();
+            $data ["id"]                       = $object->id;
+            $data ["report_id"]                = $object->reportId;
+            $data ["master_device_id"]         = $object->masterDeviceId;
+            $data ["upload_data_collector_id"] = $object->uploadDataCollectorId;
+            $data ["serial_number"]            = $object->serialNumber;
+            $data ["mps_monitor_startdate"]    = $object->mpsMonitorStartDate;
+            $data ["mps_monitor_enddate"]      = $object->mpsMonitorEndDate;
+            $data ["mps_discovery_date"]       = $object->mpsDiscoveryDate;
+            $data ["is_excluded"]              = $object->isExcluded;
+            $data ["ip_address"]               = $object->ipAddress;
+            $data ["jit_supplies_supported"]   = $object->jitSuppliesSupported;
 
             $primaryKey = $this->saveRow($data);
         }

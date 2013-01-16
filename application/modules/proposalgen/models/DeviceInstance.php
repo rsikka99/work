@@ -1,94 +1,317 @@
 <?php
-
-/**
- * Class Proposalgen_Model_DeviceInstance
- *
- * @author "Lee Robert"
- */
-class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
+class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 {
-
-    // Static Fields
+    /**
+     * An array used to determine how many hours a device is running based on its average volume per day
+     *
+     * @var array
+     */
     static $RUNNING_HOUR_ARRAY = array(
         500 => 8,
         100 => 4,
         0   => 2
     );
+
+    /**
+     * The cost of electricity
+     *
+     * @var float
+     */
     static $KWH_Cost = 0;
-    static $ITCPP = 0;
 
-    // Database Fields
-    protected $DeviceInstanceId;
-    protected $ReportId;
-    protected $MasterDeviceId;
-    protected $UploadDataCollectorId;
-    protected $SerialNumber;
-    protected $MPSMonitorStartDate;
-    protected $MPSMonitorEndDate;
-    protected $MPSDiscoveryDate;
-    protected $IsExcluded;
-    protected $IsUnknown;
-    protected $IpAddress;
-    protected $JITSuppliesSupported;
+    /**
+     * The IT cost per page
+     *
+     * @var float
+     */
+    static $ITCostPerPage = 0;
 
-    // Related Objects
-    protected $Meters; // An array of all the meters
-    protected $MasterDevice;
+    /*
+     * ********************************************************************************
+     * Database Fields
+     * ********************************************************************************
+     */
 
-    // Calculated Fields
-    protected $Age;
-    protected $MPSMonitorInterval;
-    protected $AverageDailyPowerConsumption;
-    protected $AverageMonthlyPowerConsumption;
-    protected $LifePageCount;
-    protected $LifeBlackAndWhitePageCount;
-    protected $LifeColorPageCount;
-    protected $AverageDailyBlackAndWhitePageCount;
-    protected $AverageDailyColorPageCount;
-    protected $AverageDailyPageCount;
-    protected $AverageMonthlyBlackAndWhitePageCount;
-    protected $AverageMonthlyColorPageCount;
-    protected $AverageMonthlyPageCount;
-    protected $AverageYearlyBlackAndWhitePageCount;
-    protected $AverageYearlyColorPageCount;
-    protected $AverageYearlyPageCount;
-    protected $CostOfInkAndToner;
-    protected $CostOfBlackAndWhiteInkAndToner;
-    protected $CostOfColorInkAndToner;
-    protected $Usage;
-    protected $LifeUsage;
-    protected $DeviceName;
-    protected $GrossMarginMonthlyBlackAndWhiteCost;
-    protected $GrossMarginMonthlyColorCost;
-    protected $MonthlyRate;
-    protected $AverageMonthlyPowerCost;
-    protected $AverageDailyPowerCost;
+    /**
+     * @var int
+     */
+    public $id;
 
-    // Non calculated fields
-    protected $AgeRank;
-    protected $LifeUsageRank;
-    protected $RiskRank;
-    protected $UploadDataCollector;
-    protected $ReplacementDevice;
-    protected $ExclusionReason;
+    /**
+     * @var int
+     */
+    public $reportId;
+
+    /**
+     * @var int
+     */
+    public $masterDeviceId;
+
+    /**
+     * @var int
+     */
+    public $uploadDataCollectorId;
+
+    /**
+     * @var string
+     */
+    public $serialNumber;
+
+    /**
+     * @var string
+     */
+    public $mpsMonitorStartDate;
+
+    /**
+     * @var string
+     */
+    public $mpsMonitorEndDate;
+
+    /**
+     * @var string
+     */
+    public $mpsDiscoveryDate;
+
+    /**
+     * @var bool
+     */
+    public $isExcluded;
+
+
+    /**
+     * @var string
+     */
+    public $ipAddress;
+
+    /**
+     * @var bool
+     */
+    public $jitSuppliesSupported;
+
+
+    /*
+     * ********************************************************************************
+     * Related Objects
+     * ********************************************************************************
+     */
+    /**
+     * An array of all the meters
+     *
+     * @var Proposalgen_Model_Meter[]
+     */
+    protected $_meters;
+
+    /**
+     * @var Proposalgen_Model_MasterDevice
+     */
+    protected $_masterDevice;
+
+    /*
+     * ********************************************************************************
+     * Calculated fields
+     * ********************************************************************************
+     */
+
+    /**
+     * @var float
+     */
+    protected $_age;
+
+    /**
+     * @var DateInterval
+     */
+    protected $_mpsMonitorInterval;
+
+    /**
+     * @var float
+     */
+    protected $_averageDailyPowerConsumption;
+
+    /**
+     * @var float
+     */
+    protected $_averageMonthlyPowerConsumption;
+
+    /**
+     * @var int
+     */
+    protected $lifePageCount;
+
+    /**
+     * @var int
+     */
+    protected $_lifeBlackAndWhitePageCount;
+
+    /**
+     * @var int
+     */
+    protected $_lifeColorPageCount;
+
+    /**
+     * @var int
+     */
+    protected $_averageDailyBlackAndWhitePageCount;
+
+    /**
+     * @var int
+     */
+    protected $_averageDailyColorPageCount;
+
+    /**
+     * @var int
+     */
+    protected $_averageDailyPageCount;
+
+    /**
+     * @var int
+     */
+    protected $_averageMonthlyBlackAndWhitePageCount;
+
+    /**
+     * @var int
+     */
+    protected $_averageMonthlyColorPageCount;
+
+    /**
+     * @var int
+     */
+    protected $_averageMonthlyPageCount;
+
+    /**
+     * @var int
+     */
+    protected $_averageYearlyBlackAndWhitePageCount;
+
+    /**
+     * @var int
+     */
+    protected $_averageYearlyColorPageCount;
+
+    /**
+     * @var int
+     */
+    protected $_averageYearlyPageCount;
+
+    /**
+     * @var float
+     */
+    protected $_costOfInkAndToner;
+
+    /**
+     * @var float
+     */
+    protected $_costOfBlackAndWhiteInkAndToner;
+
+    /**
+     * @var float
+     */
+    protected $_costOfColorInkAndToner;
+
+    /**
+     * @var float
+     */
+    protected $_usage;
+
+    /**
+     * @var float
+     */
+    protected $_lifeUsage;
+
+    /**
+     * @var string
+     */
+    protected $_deviceName;
+
+    /**
+     * @var float
+     */
+    protected $_grossMarginMonthlyBlackAndWhiteCost;
+
+    /**
+     * @var float
+     */
+    protected $_grossMarginMonthlyColorCost;
+
+    /**
+     * @var float
+     */
+    protected $_monthlyRate;
+
+    /**
+     * @var float
+     */
+    protected $_averageMonthlyPowerCost;
+
+    /**
+     * @var float
+     */
+    protected $_averageDailyPowerCost;
+
+    /*
+     * ********************************************************************************
+     * Non calculated fields
+     * ********************************************************************************
+     */
+
+    /**
+     * @var float
+     */
+    protected $_ageRank;
+
+    /**
+     * @var float
+     */
+    protected $_lifeUsageRank;
+
+    /**
+     * @var float
+     */
+    protected $_riskRank;
+
+    /**
+     * @var Proposalgen_Model_UploadDataCollectorRow
+     */
+    protected $_uploadDataCollectorRow;
+
+    /**
+     * @var Proposalgen_Model_ReplacementDevice
+     */
+    protected $_replacementDevice;
+
+    /**
+     * @var string
+     */
+    public $_exclusionReason;
+
+    /**
+     * @var bool
+     */
+    public $isUnknown = false;
+
+    /**
+     * @var Proposalgen_Model_Toner[]
+     */
     static $uniqueTonerArray = array();
 
     /**
-     * @param $device        Proposalgen_Model_DeviceInstance
-     * @param $report        Proposalgen_Model_Report
-     * @param $reportMargin  number
-     * @param $companyMargin number
+     * Applies overrides to device costs and toner costs.
+     * Also adds a margin on the costs that were not overridden
+     *
+     * @param Proposalgen_Model_DeviceInstance $device
+     * @param Proposalgen_Model_Report         $report
+     * @param float                            $reportMargin
+     * @param float                            $companyMargin
      */
     static function processOverrides ($device, $report, $reportMargin, $companyMargin)
     {
 //        $dealerDeviceOverrideMapper = Proposalgen_Model_Mapper_DealerDeviceOverride::getInstance();
 //        $dealerTonerOverrideMapper  = Proposalgen_Model_Mapper_DealerTonerOverride::getInstance();
-        $userDeviceOverrideMapper   = Proposalgen_Model_Mapper_UserDeviceOverride::getInstance();
-        $userTonerOverrideMapper    = Proposalgen_Model_Mapper_UserTonerOverride::getInstance();
-        $deviceOverride             = null;
+        $userDeviceOverrideMapper = Proposalgen_Model_Mapper_UserDeviceOverride::getInstance();
+        $userTonerOverrideMapper  = Proposalgen_Model_Mapper_UserTonerOverride::getInstance();
+        $deviceOverride           = null;
 
         // Known Device, override
-        if (!$device->IsUnknown)
+        if (!$device->isUnknown)
         {
 //            // Dealer
 //            $deviceOverride = $dealerDeviceOverrideMapper->fetchRow(array (
@@ -99,7 +322,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 //            if (! $deviceOverride)
 //            {
             $deviceOverride = $userDeviceOverrideMapper->fetchRow(array(
-                                                                       "master_device_id = ?" => $device->getMasterDeviceId(),
+                                                                       "master_device_id = ?" => $device->masterDeviceId,
                                                                        "user_id = ?"          => Proposalgen_Model_User::getCurrentUserId()
                                                                   ));
 //            }
@@ -114,19 +337,18 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
         }
         else // If we found a device override, apply it
         {
-            $device->getMasterDevice()->setCost($device->getMasterDevice()
-                                                           ->getCost() / $companyMargin);
+            $device->getMasterDevice()->setCost($device->getMasterDevice()->getCost() / $companyMargin);
         }
 
         // Apply Report Margin to the device price
-        $device->getMasterDevice()->setCost($device->getMasterDevice()
-                                                       ->getCost() / $reportMargin);
+        $device->getMasterDevice()->setCost($device->getMasterDevice()->getCost() / $reportMargin);
 
         // Toner Overrides + Margin
         foreach ($device->getMasterDevice()->getToners() as $tonersByPartType)
         {
             foreach ($tonersByPartType as $tonersByColor)
             {
+                /* @var $toner Proposalgen_Model_Toner */
                 foreach ($tonersByColor as $toner)
                 {
                     if (!in_array($toner->TonerSKU, self::$uniqueTonerArray))
@@ -134,7 +356,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
                         self::$uniqueTonerArray [] = $toner->TonerSKU;
                         $tonerOverride             = null;
                         // Known Device, override
-                        if (!$device->IsUnknown)
+                        if (!$device->isUnknown)
                         {
                             // Toner Overrides
 //                            $tonerOverride = $dealerTonerOverrideMapper->fetchRow(array (
@@ -143,21 +365,22 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 //                            ));
 //                            if (!$tonerOverride)
 //                            {
-                                $tonerOverride = $userTonerOverrideMapper->fetchRow(array(
-                                                                                         "toner_id = ?" => $toner->getTonerId(),
-                                                                                         "user_id = ?"  => Proposalgen_Model_User::getCurrentUserId()
-                                                                                    ));
+                            /* @var $tonerOverride Proposalgen_Model_UserTonerOverride */
+                            $tonerOverride = $userTonerOverrideMapper->fetchRow(array(
+                                                                                     "toner_id = ?" => $toner->id,
+                                                                                     "user_id = ?"  => Proposalgen_Model_User::getCurrentUserId()
+                                                                                ));
 //                            }
                         }
 
                         // If we found a toner override, apply it
                         if ($tonerOverride)
                         {
-                            $toner->setTonerPrice($tonerOverride->OverrideTonerPrice);
+                            $toner->cost = $tonerOverride->overrideTonerPrice;
                         }
                         else // Apply Company Margin if no overrides
                         {
-                            $toner->setTonerPrice($toner->getTonerPrice() / $companyMargin);
+                            $toner->cost = $toner->cost / $companyMargin;
                         }
                     }
                 } // endforeach
@@ -173,62 +396,154 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
         $device->getMasterDevice()->setAdminCostPerPage($report->getReportSettings()->adminCostPerPage);
     }
 
+
     /**
-     *
-     * @return the $AverageDailyPageCount
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
+    {
+        if (is_array($params))
+        {
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
+        }
+
+        if (isset($params->deviceInstanceId) && !is_null($params->deviceInstanceId))
+        {
+            $this->deviceInstanceId = $params->deviceInstanceId;
+        }
+
+        if (isset($params->reportId) && !is_null($params->reportId))
+        {
+            $this->reportId = $params->reportId;
+        }
+
+        if (isset($params->masterDeviceId) && !is_null($params->masterDeviceId))
+        {
+            $this->masterDeviceId = $params->masterDeviceId;
+        }
+
+        if (isset($params->uploadDataCollectorId) && !is_null($params->uploadDataCollectorId))
+        {
+            $this->uploadDataCollectorId = $params->uploadDataCollectorId;
+        }
+
+        if (isset($params->serialNumber) && !is_null($params->serialNumber))
+        {
+            $this->serialNumber = $params->serialNumber;
+        }
+
+        if (isset($params->mpsMonitorStartDate) && !is_null($params->mpsMonitorStartDate))
+        {
+            $this->mpsMonitorStartDate = $params->mpsMonitorStartDate;
+        }
+
+        if (isset($params->mpsMonitorEndDate) && !is_null($params->mpsMonitorEndDate))
+        {
+            $this->mpsMonitorEndDate = $params->mpsMonitorEndDate;
+        }
+
+        if (isset($params->mpsDiscoveryDate) && !is_null($params->mpsDiscoveryDate))
+        {
+            $this->mpsDiscoveryDate = $params->mpsDiscoveryDate;
+        }
+
+        if (isset($params->isExcluded) && !is_null($params->isExcluded))
+        {
+            $this->isExcluded = $params->isExcluded;
+        }
+
+        if (isset($params->ipAddress) && !is_null($params->ipAddress))
+        {
+            $this->ipAddress = $params->ipAddress;
+        }
+
+        if (isset($params->jitSuppliesSupported) && !is_null($params->jitSuppliesSupported))
+        {
+            $this->jitSuppliesSupported = $params->jitSuppliesSupported;
+        }
+
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray ()
+    {
+        return array(
+            "deviceInstanceId"      => $this->deviceInstanceId,
+            "reportId"              => $this->reportId,
+            "masterDeviceId"        => $this->masterDeviceId,
+            "uploadDataCollectorId" => $this->uploadDataCollectorId,
+            "serialNumber"          => $this->serialNumber,
+            "mpsMonitorStartDate"   => $this->mpsMonitorStartDate,
+            "mpsMonitorEndDate"     => $this->mpsMonitorEndDate,
+            "mpsDiscoveryDate"      => $this->mpsDiscoveryDate,
+            "isExcluded"            => $this->isExcluded,
+            "ipAddress"             => $this->ipAddress,
+            "jitSuppliesSupported"  => $this->jitSuppliesSupported,
+        );
+    }
+
+    /**
+     * @return float
      */
     public function getAverageDailyPageCount ()
     {
-        if (!isset($this->AverageDailyPageCount))
+        if (!isset($this->_averageDailyPageCount))
         {
-            $this->AverageDailyPageCount = $this->getAverageDailyBlackAndWhitePageCount() + $this->getAverageDailyColorPageCount();
+            $this->_averageDailyPageCount = $this->getAverageDailyBlackAndWhitePageCount() + $this->getAverageDailyColorPageCount();
         }
 
-        return $this->AverageDailyPageCount;
+        return $this->_averageDailyPageCount;
     }
 
     /**
+     * Gets the average monthly page count
      *
-     * @return the $AverageMonthlyPageCount
+     * @return float
      */
     public function getAverageMonthlyPageCount ()
     {
-        if (!isset($this->AverageMonthlyPageCount))
+        if (!isset($this->_averageMonthlyPageCount))
         {
-            $this->AverageMonthlyPageCount = $this->getAverageMonthlyBlackAndWhitePageCount() + $this->getAverageMonthlyColorPageCount();
+            $this->_averageMonthlyPageCount = $this->getAverageMonthlyBlackAndWhitePageCount() + $this->getAverageMonthlyColorPageCount();
         }
 
-        return $this->AverageMonthlyPageCount;
+        return $this->_averageMonthlyPageCount;
     }
 
     /**
+     * Gets the average power consumption for the device
      *
-     * @return the $AverageMonthlyPowerConsumption in KWH
+     * @return int
      */
     public function getAverageMonthlyPowerConsumption ()
     {
-        if (!isset($this->AverageMonthlyPowerConsumption))
+        if (!isset($this->_averageMonthlyPowerConsumption))
         {
-            $this->AverageMonthlyPowerConsumption = $this->getAverageDailyPowerConsumption() * 30;
+            $this->_averageMonthlyPowerConsumption = $this->getAverageDailyPowerConsumption() * 30;
         }
 
-        return $this->AverageMonthlyPowerConsumption;
+        return $this->_averageMonthlyPowerConsumption;
     }
 
     /**
-     * The average daily power consumption for a device is caluclated based on a
+     * The average daily power consumption for a device is calculated based on a
      * running hour basis
      * If a printer prints over x amount of pages per day, then it is likely to
      * be operating for y hours
-     * You can cehck the running hour array to see the specific values
+     * You can check the running hour array to see the specific values
      *
-     * @return the $AverageDailyPowerConsumption in KWH
+     * @return float $AverageDailyPowerConsumption in KWH
      */
     public function getAverageDailyPowerConsumption ()
     {
-        if (!isset($this->AverageDailyPowerConsumption))
+        if (!isset($this->_averageDailyPowerConsumption))
         {
-            $powerUsage = 0;
+            $powerUsage   = 0;
+            $runningHours = 0;
+
+
             foreach (self::$RUNNING_HOUR_ARRAY as $pages => $runningHours)
             {
                 if ($this->getAverageDailyPageCount() >= $pages)
@@ -236,201 +551,189 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
                     break;
                 }
             }
+
             $idleHours = 24 - $runningHours;
             $powerUsage += $idleHours * $this->getMasterDevice()->WattsPowerIdle;
             $powerUsage += $runningHours * $this->getMasterDevice()->WattsPowerNormal;
-            $powerUsage                         = $powerUsage / 1000;
-            $this->AverageDailyPowerConsumption = $powerUsage;
+            $powerUsage                          = $powerUsage / 1000;
+            $this->_averageDailyPowerConsumption = $powerUsage;
         }
 
-        return $this->AverageDailyPowerConsumption;
+        return $this->_averageDailyPowerConsumption;
     }
 
     /**
-     *
-     * @return the $LifePageCount
+     * @return int
      */
     public function getLifePageCount ()
     {
-        if (!isset($this->LifePageCount))
+        if (!isset($this->lifePageCount))
         {
-            $meters    = $this->getMeters();
             $lifeCount = 0;
             $lifeCount += $this->getLifeBlackAndWhitePageCount();
             $lifeCount += $this->getLifeColorPageCount();
-            $this->LifePageCount = $lifeCount;
+            $this->lifePageCount = $lifeCount;
         }
 
-        return $this->LifePageCount;
+        return $this->lifePageCount;
     }
 
     /**
-     *
-     * @return the $LifeBlackAndWhitePageCount
+     * @return int
+     * @throws Exception
      */
     public function getLifeBlackAndWhitePageCount ()
     {
-        if (!isset($this->LifeBlackAndWhitePageCount))
+        if (!isset($this->_lifeBlackAndWhitePageCount))
         {
-            $meters    = $this->getMeters();
-            $pagecount = 0;
+            $meters = $this->getMeters();
             if (!isset($meters [Proposalgen_Model_Meter::METER_TYPE_BLACK]))
             {
                 // if no life or color then throw exception
-                throw new Exception("Device does not have a BLACK meter! " . $this->DeviceInstanceId);
+                throw new Exception("Device does not have a BLACK meter! " . $this->id);
             }
-            else
-            {
-                $pagecount = $meters [Proposalgen_Model_Meter::METER_TYPE_BLACK]->getEndMeter();
-            }
-            $this->LifeBlackAndWhitePageCount = $pagecount;
+
+            $pageCount = $meters [Proposalgen_Model_Meter::METER_TYPE_BLACK]->endMeter;
+
+            $this->_lifeBlackAndWhitePageCount = $pageCount;
         }
 
-        return $this->LifeBlackAndWhitePageCount;
+        return $this->_lifeBlackAndWhitePageCount;
     }
 
     /**
-     *
-     * @return the $LifeColorPageCount
+     * @return int
      */
     public function getLifeColorPageCount ()
     {
-        if (!isset($this->LifeColorPageCount))
+        if (!isset($this->_lifeColorPageCount))
         {
             $meters    = $this->getMeters();
-            $pagecount = 0;
+            $pageCount = 0;
             if (isset($meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]))
             {
-                $pagecount = $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->getEndMeter();
+                $pageCount = $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->endMeter;
             }
-            $this->LifeColorPageCount = $pagecount;
+            $this->_lifeColorPageCount = $pageCount;
         }
 
-        return $this->LifeColorPageCount;
+        return $this->_lifeColorPageCount;
     }
 
     /**
-     *
-     * @return the $AverageDailyBlackAndWhitePageCount
+     * @return float
+     * @throws Exception
      */
     public function getAverageDailyBlackAndWhitePageCount ()
     {
-        if (!isset($this->AverageDailyBlackAndWhitePageCount))
+        if (!isset($this->_averageDailyBlackAndWhitePageCount))
         {
-            $meters    = $this->getMeters();
-            $pagecount = 0;
+            $meters = $this->getMeters();
             if (!isset($meters [Proposalgen_Model_Meter::METER_TYPE_BLACK]))
             {
                 // If we do not have a black meter, throw an exception
-                throw new Exception("Device does not have a BLACK meter! " . $this->DeviceInstanceId);
-            }
-            else
-            {
-                $startmeter = $meters [Proposalgen_Model_Meter::METER_TYPE_BLACK]->getStartMeter();
-                $endmeter   = $meters [Proposalgen_Model_Meter::METER_TYPE_BLACK]->getEndMeter();
-                $pagecount  = $endmeter - $startmeter;
+                throw new Exception("Device does not have a BLACK meter! " . $this->id);
             }
 
-            if ($this->getMPSMonitorInterval()->days > 0)
+            $startMeter = $meters [Proposalgen_Model_Meter::METER_TYPE_BLACK]->startMeter;
+            $endMeter   = $meters [Proposalgen_Model_Meter::METER_TYPE_BLACK]->endMeter;
+            $pageCount  = $endMeter - $startMeter;
+
+            if ($this->getMpsMonitorInterval()->days > 0)
             {
-                $this->AverageDailyBlackAndWhitePageCount = $pagecount / $this->getMPSMonitorInterval()->days;
+                $this->_averageDailyBlackAndWhitePageCount = $pageCount / $this->getMpsMonitorInterval()->days;
             }
             else
             {
-                $this->AverageDailyBlackAndWhitePageCount = 0;
+                $this->_averageDailyBlackAndWhitePageCount = 0;
             }
         }
 
-        return $this->AverageDailyBlackAndWhitePageCount;
+        return $this->_averageDailyBlackAndWhitePageCount;
     }
 
     /**
-     *
-     * @return the $AverageMonthlyBlackAndWhiteCount
+     * @return float
      */
     public function getAverageMonthlyBlackAndWhitePageCount ()
     {
-        if (!isset($this->AverageMonthlyBlackAndWhitePageCount))
+        if (!isset($this->_averageMonthlyBlackAndWhitePageCount))
         {
-            $this->AverageMonthlyBlackAndWhitePageCount = $this->getAverageDailyBlackAndWhitePageCount() * 30;
+            $this->_averageMonthlyBlackAndWhitePageCount = $this->getAverageDailyBlackAndWhitePageCount() * 30;
         }
 
-        return $this->AverageMonthlyBlackAndWhitePageCount;
+        return $this->_averageMonthlyBlackAndWhitePageCount;
     }
 
     /**
-     *
-     * @return the $AverageDailyColorPageCount
+     * @return float
      */
     public function getAverageDailyColorPageCount ()
     {
-        if (!isset($this->AverageDailyColorPageCount))
+        if (!isset($this->_averageDailyColorPageCount))
         {
             $meters       = $this->getMeters();
-            $pagecount    = 0;
             $avgPageCount = 0;
 
-            if (!isset($this->MasterDevice))
+            if (!isset($this->_masterDevice))
             {
-                $this->MasterDevice = $this->getMasterDevice();
+                $this->_masterDevice = $this->getMasterDevice();
             }
 
             if (isset($meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]) && $this->getMasterDevice()->getTonerConfigId() !== Proposalgen_Model_TonerConfig::BLACK_ONLY)
             {
-                $startmeter = $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->getStartMeter();
-                $endmeter   = $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->getEndMeter();
-                $pagecount  = $endmeter - $startmeter;
+                $startMeter = $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->startMeter;
+                $endMeter   = $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->endMeter;
+                $pageCount  = $endMeter - $startMeter;
 
-                if ($this->getMPSMonitorInterval()->days > 0)
+                if ($this->getMpsMonitorInterval()->days > 0)
                 {
-                    $avgPageCount = $pagecount / $this->getMPSMonitorInterval()->days;
+                    $avgPageCount = $pageCount / $this->getMpsMonitorInterval()->days;
                 }
             }
-            $this->AverageDailyColorPageCount = $avgPageCount;
+            $this->_averageDailyColorPageCount = $avgPageCount;
         }
 
-        return $this->AverageDailyColorPageCount;
+        return $this->_averageDailyColorPageCount;
     }
 
     /**
-     *
-     * @return the $AverageMonthlyColorPageCount
+     * @return float
      */
     public function getAverageMonthlyColorPageCount ()
     {
-        if (!isset($this->AverageMonthlyColorPageCount))
+        if (!isset($this->_averageMonthlyColorPageCount))
         {
-            $this->AverageMonthlyColorPageCount = $this->getAverageDailyColorPageCount() * 30;
+            $this->_averageMonthlyColorPageCount = $this->getAverageDailyColorPageCount() * 30;
         }
 
-        return $this->AverageMonthlyColorPageCount;
+        return $this->_averageMonthlyColorPageCount;
     }
 
     /**
-     *
-     * @return the $MPSMonitorInterval
+     * @return DateInterval
      */
-    public function getMPSMonitorInterval ()
+    public function getMpsMonitorInterval ()
     {
-        if (!isset($this->MPSMonitorInterval))
+        if (!isset($this->_mpsMonitorInterval))
         {
-            $startDate     = new DateTime($this->getMPSMonitorStartDate());
-            $endDate       = new DateTime($this->getMPSMonitorEndDate());
-            $discoveryDate = new DateTime($this->getMPSDiscoveryDate());
+            $startDate     = new DateTime($this->mpsMonitorStartDate);
+            $endDate       = new DateTime($this->mpsMonitorEndDate);
+            $discoveryDate = new DateTime($this->mpsDiscoveryDate);
             $interval1     = $startDate->diff($endDate);
             $interval2     = $discoveryDate->diff($endDate);
 
             if (!$interval1->invert)
             {
-                $this->MPSMonitorInterval = $interval1;
+                $this->_mpsMonitorInterval = $interval1;
                 if ($interval1->days > $interval2->days && !$interval2->invert)
                 {
-                    $this->MPSMonitorInterval = $interval2;
+                    $this->_mpsMonitorInterval = $interval2;
                 }
             }
             else if (!$interval2->invert)
             {
-                $this->MPSMonitorInterval = $interval2;
+                $this->_mpsMonitorInterval = $interval2;
             }
             else
             {
@@ -438,237 +741,38 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
             }
         }
 
-        return $this->MPSMonitorInterval;
+        return $this->_mpsMonitorInterval;
     }
 
     /**
-     *
-     * @return the Calculated device age in years
+     * @return float
      */
     public function getAge ()
     {
-        if (!isset($this->Age))
+        if (!isset($this->_age))
         {
             // Get the time difference in seconds
             $launchDate          = time() - strtotime($this->getMasterDevice()->getLaunchDate());
             $correctedLaunchDate = ($launchDate > 31556926) ? ($launchDate - 31556926) : $launchDate;
-            $this->Age           = floor($correctedLaunchDate / 31556926);
-            if ($this->Age == 0)
+            $this->_age          = floor($correctedLaunchDate / 31556926);
+            if ($this->_age == 0)
             {
-                $this->Age = 1;
+                $this->_age = 1;
             }
         }
 
-        return $this->Age;
+        return $this->_age;
     }
 
     /**
-     *
-     * @return the $DeviceInstanceId
-     */
-    public function getDeviceInstanceId ()
-    {
-        return $this->DeviceInstanceId;
-    }
-
-    /**
-     *
-     * @param $DeviceInstanceId field_type
-     */
-    public function setDeviceInstanceId ($DeviceInstanceId)
-    {
-        $this->DeviceInstanceId = $DeviceInstanceId;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $ReportId
-     */
-    public function getReportId ()
-    {
-        return $this->ReportId;
-    }
-
-    /**
-     *
-     * @param $ReportId field_type
-     */
-    public function setReportId ($ReportId)
-    {
-        $this->ReportId = $ReportId;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return Proposalgen_Model_MasterDevice
-     */
-    public function getMasterDevice ()
-    {
-        if (!isset($this->MasterDevice))
-        {
-            $masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
-            $this->MasterDevice = $masterDeviceMapper->find($this->getMasterDeviceId());
-        }
-
-        return $this->MasterDevice;
-    }
-
-    /**
-     * @param Proposalgen_Model_MasterDevice $MasterDevice
-     *
-     * @return Proposalgen_Model_DeviceInstance
-     */
-    public function setMasterDevice ($MasterDevice)
-    {
-        $this->MasterDevice = $MasterDevice;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $UploadDataCollectorId
-     */
-    public function getUploadDataCollectorId ()
-    {
-        return $this->UploadDataCollectorId;
-    }
-
-    /**
-     *
-     * @param $UploadDataCollectorId field_type
-     */
-    public function setUploadDataCollectorId ($UploadDataCollectorId)
-    {
-        $this->UploadDataCollectorId = $UploadDataCollectorId;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $SerialNumber
-     */
-    public function getSerialNumber ()
-    {
-        if (!isset($this->SerialNumber))
-        {
-            $this->SerialNumber = "Unknown";
-        }
-
-        return $this->SerialNumber;
-    }
-
-    /**
-     *
-     * @param $SerialNumber field_type
-     */
-    public function setSerialNumber ($SerialNumber)
-    {
-        $this->SerialNumber = $SerialNumber;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $MPSMonitorStartDate
-     */
-    public function getMPSMonitorStartDate ()
-    {
-        return $this->MPSMonitorStartDate;
-    }
-
-    /**
-     *
-     * @param $MPSMonitorStartDate field_type
-     */
-    public function setMPSMonitorStartDate ($MPSMonitorStartDate)
-    {
-        $this->MPSMonitorStartDate = $MPSMonitorStartDate;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $MPSMonitorEndDate
-     */
-    public function getMPSMonitorEndDate ()
-    {
-        return $this->MPSMonitorEndDate;
-    }
-
-    /**
-     *
-     * @param $MPSMonitorEndDate field_type
-     */
-    public function setMPSMonitorEndDate ($MPSMonitorEndDate)
-    {
-        $this->MPSMonitorEndDate = $MPSMonitorEndDate;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $IsExcluded
-     */
-    public function getIsExcluded ()
-    {
-        return $this->IsExcluded;
-    }
-
-    /**
-     *
-     * @param bool $IsExcluded
-     */
-    public function setIsExcluded ($IsExcluded)
-    {
-        $this->IsExcluded = $IsExcluded;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $IpAddress
-     */
-    public function getIpAddress ()
-    {
-        if (!isset($this->IpAddress))
-        {
-            $this->IpAddress = "";
-        }
-
-        return $this->IpAddress;
-    }
-
-    /**
-     *
-     * @param $IpAddress field_type
-     */
-    public function setIpAddress ($IpAddress)
-    {
-        $this->IpAddress = $IpAddress;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $Meters
+     * @return Proposalgen_Model_Meter[]
      */
     public function getMeters ()
     {
-        if (!isset($this->Meters))
+        if (!isset($this->_meters))
         {
             $meterMapper = Proposalgen_Model_Mapper_Meter::getInstance();
-            $meters      = $meterMapper->fetchAllForDevice($this->getDeviceInstanceId());
+            $meters      = $meterMapper->fetchAllForDevice($this->id);
 
             // If we do not have a BLACK meter, then we should try and calculate
             // it
@@ -684,314 +788,225 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
                  */
                 if (isset($meters [Proposalgen_Model_Meter::METER_TYPE_LIFE]) && isset($meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]))
                 {
-                    $startmeter    = $meters [Proposalgen_Model_Meter::METER_TYPE_LIFE]->getStartMeter() - $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->getStartMeter();
-                    $endmeter      = $meters [Proposalgen_Model_Meter::METER_TYPE_LIFE]->getEndMeter() - $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->getEndMeter();
-                    $newBlackMeter = new Proposalgen_Model_Meter();
-                    $newBlackMeter->startMeter = $startmeter;
-                    $newBlackMeter->endMeter = $endmeter;
-                    $newBlackMeter->meterType = Proposalgen_Model_Meter::METER_TYPE_BLACK;
-                    $newBlackMeter->deviceInstanceId = $this->getDeviceInstanceId();
-                    $newBlackMeter->generatedBySystem = true;
+                    $startMeter                                         = $meters [Proposalgen_Model_Meter::METER_TYPE_LIFE]->startMeter - $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->startMeter;
+                    $endMeter                                           = $meters [Proposalgen_Model_Meter::METER_TYPE_LIFE]->endMeter - $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->endMeter;
+                    $newBlackMeter                                      = new Proposalgen_Model_Meter();
+                    $newBlackMeter->startMeter                          = $startMeter;
+                    $newBlackMeter->endMeter                            = $endMeter;
+                    $newBlackMeter->meterType                           = Proposalgen_Model_Meter::METER_TYPE_BLACK;
+                    $newBlackMeter->deviceInstanceId                    = $this->id;
+                    $newBlackMeter->generatedBySystem                   = true;
                     $meters [Proposalgen_Model_Meter::METER_TYPE_BLACK] = $newBlackMeter;
                 }
             }
-            $this->Meters = $meters;
+            $this->_meters = $meters;
         }
 
-        return $this->Meters;
+        return $this->_meters;
     }
 
-    /**
-     *
-     * @param $Meters field_type
-     */
-    public function setMeters ($Meters)
-    {
-        $this->Meters = $Meters;
-
-        return $this;
-    }
 
     /**
-     *
-     * @return the $MasterDeviceId
-     */
-    public function getMasterDeviceId ()
-    {
-        if (!isset($this->MasterDeviceId))
-        {
-            $this->MasterDeviceId = 0;
-        }
-
-        return $this->MasterDeviceId;
-    }
-
-    /**
-     *
-     * @param $MasterDeviceId field_type
-     */
-    public function setMasterDeviceId ($MasterDeviceId)
-    {
-        $this->MasterDeviceId = $MasterDeviceId;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $AverageMonthlyPowerCost
+     * @return float
      */
     public function getAverageMonthlyPowerCost ()
     {
-        if (!isset($this->AverageMonthlyPowerCost))
+        if (!isset($this->_averageMonthlyPowerCost))
         {
-            $this->AverageMonthlyPowerCost = $this->getAverageDailyPowerCost() * 30;
+            $this->_averageMonthlyPowerCost = $this->getAverageDailyPowerCost() * 30;
         }
 
-        return $this->AverageMonthlyPowerCost;
+        return $this->_averageMonthlyPowerCost;
     }
 
     /**
-     *
-     * @param $AverageMonthlyPowerCost field_type
-     */
-    public function setAverageMonthlyPowerCost ($AverageMonthlyPowerCost)
-    {
-        $this->AverageMonthlyPowerCost = $AverageMonthlyPowerCost;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $AverageDailyPowerCost
+     * @return float
      */
     public function getAverageDailyPowerCost ()
     {
-        if (!isset($this->AverageDailyPowerCost))
+        if (!isset($this->_averageDailyPowerCost))
         {
-            $this->AverageDailyPowerCost = $this->getAverageDailyPowerConsumption() * self::$KWH_Cost;
+            $this->_averageDailyPowerCost = $this->getAverageDailyPowerConsumption() * self::$KWH_Cost;
         }
 
-        return $this->AverageDailyPowerCost;
+        return $this->_averageDailyPowerCost;
     }
 
     /**
-     *
-     * @param $AverageDailyPowerCost field_type
-     */
-    public function setAverageDailyPowerCost ($AverageDailyPowerCost)
-    {
-        $this->AverageDailyPowerCost = $AverageDailyPowerCost;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $CostOfInkAndToner
+     * @return float
      */
     public function getCostOfInkAndToner ()
     {
-        if (!isset($this->CostOfInkAndToner))
+        if (!isset($this->_costOfInkAndToner))
         {
-            $this->CostOfInkAndToner = $this->getCostOfBlackAndWhiteInkAndToner() + $this->getCostOfColorInkAndToner();
+            $this->_costOfInkAndToner = $this->getCostOfBlackAndWhiteInkAndToner() + $this->getCostOfColorInkAndToner();
         }
 
-        return $this->CostOfInkAndToner;
+        return $this->_costOfInkAndToner;
     }
 
     /**
-     *
-     * @return the $CostOfBlackAndWhiteInkAndToner
+     * @return float
      */
     public function getCostOfBlackAndWhiteInkAndToner ()
     {
-        if (!isset($this->CostOfBlackAndWhiteInkAndToner))
+        if (!isset($this->_costOfBlackAndWhiteInkAndToner))
         {
-            $this->CostOfBlackAndWhiteInkAndToner = $this->getMasterDevice()->getCostPerPage()->Estimated->BasePlusMargin->BlackAndWhite * $this->getAverageMonthlyBlackAndWhitePageCount();
+            $this->_costOfBlackAndWhiteInkAndToner = $this->getMasterDevice()->getCostPerPage()->Estimated->BasePlusMargin->BlackAndWhite * $this->getAverageMonthlyBlackAndWhitePageCount();
         }
 
-        return $this->CostOfBlackAndWhiteInkAndToner;
+        return $this->_costOfBlackAndWhiteInkAndToner;
     }
 
     /**
-     *
-     * @return the $CostOfColorInkAndToner
+     * @return float
      */
     public function getCostOfColorInkAndToner ()
     {
-        if (!isset($this->CostOfColorInkAndToner))
+        if (!isset($this->_costOfColorInkAndToner))
         {
-            $this->CostOfColorInkAndToner = $this->getMasterDevice()->getCostPerPage()->Estimated->BasePlusMargin->Color * $this->getAverageMonthlyColorPageCount();
+            $this->_costOfColorInkAndToner = $this->getMasterDevice()->getCostPerPage()->Estimated->BasePlusMargin->Color * $this->getAverageMonthlyColorPageCount();
         }
 
-        return $this->CostOfColorInkAndToner;
+        return $this->_costOfColorInkAndToner;
     }
 
     /**
-     *
-     * @return the $DeviceName
+     * @return string
      */
     public function getDeviceName ()
     {
-        if (!isset($this->DeviceName))
+        if (!isset($this->_deviceName))
         {
-            $this->DeviceName = $this->getMasterDevice()
-                                    ->getManufacturer()
-                                    ->getManufacturerName() . " " . $this->getMasterDevice()->getPrinterModel();
+            $this->_deviceName = $this->getMasterDevice()->getManufacturer()->fullname . " " . $this->getMasterDevice()->getPrinterModel();
         }
 
-        return $this->DeviceName;
+        return $this->_deviceName;
     }
 
     /**
+     * @param string $DeviceName
      *
-     * @param $DeviceName field_type
+     * @return Proposalgen_Model_DeviceInstance
      */
     public function setDeviceName ($DeviceName)
     {
-        $this->DeviceName = $DeviceName;
+        $this->_deviceName = $DeviceName;
 
         return $this;
     }
 
     /**
-     *
-     * @return the $Usage
+     * @return float
      */
     public function getUsage ()
     {
-        if (!isset($this->Usage))
+        if (!isset($this->_usage))
         {
             // Calculate device usage by dividing it's current monthly volume by
             // its maximum
-            $this->Usage = $this->getAverageMonthlyPageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume();
+            $this->_usage = $this->getAverageMonthlyPageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume();
         }
 
-        return $this->Usage;
+        return $this->_usage;
     }
 
     /**
-     *
-     * @param $Usage field_type
-     */
-    public function setUsage ($Usage)
-    {
-        $this->Usage = $Usage;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $Usage
+     * @return float
      */
     public function getLifeUsage ()
     {
-        if (!isset($this->LifeUsage))
+        if (!isset($this->_lifeUsage))
         {
             // Calculate device life usage by dividing it's current life count
             // by it's estimated max life page count (maximum monthly page
             // volume * 36 months)
-            $this->LifeUsage = $this->getLifePageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume() * 36;
+            $this->_lifeUsage = $this->getLifePageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume() * 36;
         }
 
-        return $this->LifeUsage;
+        return $this->_lifeUsage;
     }
 
     /**
-     *
-     * @param $LifeUsage field_type
-     */
-    public function setLifeUsage ($LifeUsage)
-    {
-        $this->LifeUsage = $LifeUsage;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $AgeRank
+     * @return float
      */
     public function getAgeRank ()
     {
-        if (!isset($this->AgeRank))
+        if (!isset($this->_ageRank))
         {
 
-            $this->AgeRank = null;
+            $this->_ageRank = null;
         }
 
-        return $this->AgeRank;
+        return $this->_ageRank;
     }
 
     /**
+     * @param float $AgeRank
      *
-     * @param $AgeRank field_type
+     * @return Proposalgen_Model_DeviceInstance
      */
     public function setAgeRank ($AgeRank)
     {
-        $this->AgeRank = $AgeRank;
+        $this->_ageRank = $AgeRank;
 
         return $this;
     }
 
     /**
-     *
-     * @return the $LifeUsageRank
+     * @return float
      */
     public function getLifeUsageRank ()
     {
-        if (!isset($this->LifeUsageRank))
+        if (!isset($this->_lifeUsageRank))
         {
 
-            $this->LifeUsageRank = null;
+            $this->_lifeUsageRank = null;
         }
 
-        return $this->LifeUsageRank;
+        return $this->_lifeUsageRank;
     }
 
     /**
+     * @param float $LifeUsageRank
      *
-     * @param $LifeUsageRank field_type
+     * @return Proposalgen_Model_DeviceInstance
      */
     public function setLifeUsageRank ($LifeUsageRank)
     {
-        $this->LifeUsageRank = $LifeUsageRank;
+        $this->_lifeUsageRank = $LifeUsageRank;
 
         return $this;
     }
 
     /**
-     *
-     * @return the $RiskRank
+     * @return float
      */
     public function getRiskRank ()
     {
-        if (!isset($this->RiskRank))
+        if (!isset($this->_riskRank))
         {
 
-            $this->RiskRank = null;
+            $this->_riskRank = null;
         }
 
-        return $this->RiskRank;
+        return $this->_riskRank;
     }
 
     /**
+     * @param float $RiskRank
      *
-     * @param $RiskRank field_type
+     * @return Proposalgen_Model_DeviceInstance
      */
     public function setRiskRank ($RiskRank)
     {
-        $this->RiskRank = $RiskRank;
+        $this->_riskRank = $RiskRank;
 
         return $this;
     }
 
     /**
-     *
-     * @return the $KWH_Cost
+     * @return float
      */
     public static function getKWH_Cost ()
     {
@@ -1005,266 +1020,119 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param float $KWH_Cost
+     * @return Proposalgen_Model_UploadDataCollectorRow
      */
-    public static function setKWH_Cost ($KWH_Cost)
+    public function getUploadDataCollectorRow ()
     {
-        Proposalgen_Model_DeviceInstance::$KWH_Cost = $KWH_Cost;
-    }
-
-    /**
-     *
-     * @return the $JITSuppliesSupported
-     */
-    public function getJITSuppliesSupported ()
-    {
-        if (!isset($this->JITSuppliesSupported))
+        if (!isset($this->_uploadDataCollectorRow))
         {
-
-            $this->JITSuppliesSupported = null;
+            $this->_uploadDataCollectorRow = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($this->uploadDataCollectorId);
         }
 
-        return $this->JITSuppliesSupported;
+        return $this->_uploadDataCollectorRow;
     }
 
     /**
+     * @param Proposalgen_Model_UploadDataCollectorRow $UploadDataCollector
      *
-     * @param bool $JITSuppliesSupported
-     * @return \Proposalgen_Model_DeviceInstance
+     * @return Proposalgen_Model_DeviceInstance
      */
-    public function setJITSuppliesSupported ($JITSuppliesSupported)
+    public function setUploadDataCollectorRow ($UploadDataCollector)
     {
-        $this->JITSuppliesSupported = $JITSuppliesSupported;
+        $this->_uploadDataCollectorRow = $UploadDataCollector;
 
         return $this;
     }
 
     /**
-     *
-     * @return the $IsUnknown
-     */
-    public function getIsUnknown ()
-    {
-        if (!isset($this->IsUnknown))
-        {
-            $this->IsUnknown = false;
-        }
-
-        return $this->IsUnknown;
-    }
-
-    /**
-     *
-     * @param $IsUnknown field_type
-     */
-    public function setIsUnknown ($IsUnknown)
-    {
-        $this->IsUnknown = $IsUnknown;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $MPSDiscoveryDate
-     */
-    public function getMPSDiscoveryDate ()
-    {
-        if (!isset($this->MPSDiscoveryDate))
-        {
-
-            $this->MPSDiscoveryDate = null;
-        }
-
-        return $this->MPSDiscoveryDate;
-    }
-
-    /**
-     *
-     * @param $MPSDiscoveryDate field_type
-     */
-    public function setMPSDiscoveryDate ($MPSDiscoveryDate)
-    {
-        $this->MPSDiscoveryDate = $MPSDiscoveryDate;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $UploadDataCollector
-     */
-    public function getUploadDataCollector ()
-    {
-        if (!isset($this->UploadDataCollector))
-        {
-            $this->UploadDataCollector = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($this->getUploadDataCollectorId());
-        }
-
-        return $this->UploadDataCollector;
-    }
-
-    /**
-     *
-     * @param $UploadDataCollector field_type
-     */
-    public function setUploadDataCollector ($UploadDataCollector)
-    {
-        $this->UploadDataCollector = $UploadDataCollector;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $AverageYearlyBlackAndWhitePageCount
+     * @return float
      */
     public function getAverageYearlyBlackAndWhitePageCount ()
     {
-        if (!isset($this->AverageYearlyBlackAndWhitePageCount))
+        if (!isset($this->_averageYearlyBlackAndWhitePageCount))
         {
-            $this->AverageYearlyBlackAndWhitePageCount = $this->getAverageMonthlyBlackAndWhitePageCount() * 12;
+            $this->_averageYearlyBlackAndWhitePageCount = $this->getAverageMonthlyBlackAndWhitePageCount() * 12;
         }
 
-        return $this->AverageYearlyBlackAndWhitePageCount;
+        return $this->_averageYearlyBlackAndWhitePageCount;
     }
 
     /**
-     *
-     * @param $AverageYearlyBlackAndWhitePageCount field_type
-     */
-    public function setAverageYearlyBlackAndWhitePageCount ($AverageYearlyBlackAndWhitePageCount)
-    {
-        $this->AverageYearlyBlackAndWhitePageCount = $AverageYearlyBlackAndWhitePageCount;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $AverageYearlyColorPageCount
+     * @return float
      */
     public function getAverageYearlyColorPageCount ()
     {
-        if (!isset($this->AverageYearlyColorPageCount))
+        if (!isset($this->_averageYearlyColorPageCount))
         {
-            $this->AverageYearlyColorPageCount = $this->getAverageMonthlyColorPageCount() * 12;
+            $this->_averageYearlyColorPageCount = $this->getAverageMonthlyColorPageCount() * 12;
         }
 
-        return $this->AverageYearlyColorPageCount;
+        return $this->_averageYearlyColorPageCount;
     }
 
     /**
-     *
-     * @param $AverageYearlyColorPageCount field_type
-     */
-    public function setAverageYearlyColorPageCount ($AverageYearlyColorPageCount)
-    {
-        $this->AverageYearlyColorPageCount = $AverageYearlyColorPageCount;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $AverageYearlyPageCount
+     * @return float
      */
     public function getAverageYearlyPageCount ()
     {
-        if (!isset($this->AverageYearlyPageCount))
+        if (!isset($this->_averageYearlyPageCount))
         {
-            $this->AverageYearlyPageCount = $this->getAverageYearlyBlackAndWhitePageCount() + $this->getAverageYearlyColorPageCount();
+            $this->_averageYearlyPageCount = $this->getAverageYearlyBlackAndWhitePageCount() + $this->getAverageYearlyColorPageCount();
         }
 
-        return $this->AverageYearlyPageCount;
+        return $this->_averageYearlyPageCount;
     }
 
     /**
-     *
-     * @param $AverageYearlyPageCount field_type
-     */
-    public function setAverageYearlyPageCount ($AverageYearlyPageCount)
-    {
-        $this->AverageYearlyPageCount = $AverageYearlyPageCount;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $ReplacementDevice
+     * @return Proposalgen_Model_ReplacementDevice
      */
     public function getReplacementDevice ()
     {
-        if (!isset($this->ReplacementDevice))
+        if (!isset($this->_replacementDevice))
         {
 
-            $this->ReplacementDevice = null;
+            $this->_replacementDevice = null;
         }
 
-        return $this->ReplacementDevice;
+        return $this->_replacementDevice;
     }
 
     /**
+     * @param Proposalgen_Model_ReplacementDevice $ReplacementDevice
      *
-     * @param $ReplacementDevice field_type
+     * @return Proposalgen_Model_DeviceInstance
      */
     public function setReplacementDevice ($ReplacementDevice)
     {
-        $this->ReplacementDevice = $ReplacementDevice;
+        $this->_replacementDevice = $ReplacementDevice;
 
         return $this;
     }
 
     /**
-     *
-     * @return the $GrossMarginMonthlyBlackAndWhiteCost
+     * @return float
      */
     public function getGrossMarginMonthlyBlackAndWhiteCost ()
     {
-        if (!isset($this->GrossMarginMonthlyBlackAndWhiteCost))
+        if (!isset($this->_grossMarginMonthlyBlackAndWhiteCost))
         {
-            $this->GrossMarginMonthlyBlackAndWhiteCost = ($this->getMasterDevice()->getCostPerPage()->Actual->BasePlusService->BlackAndWhite * $this->getAverageMonthlyBlackAndWhitePageCount());
+            $this->_grossMarginMonthlyBlackAndWhiteCost = ($this->getMasterDevice()->getCostPerPage()->Actual->BasePlusService->BlackAndWhite * $this->getAverageMonthlyBlackAndWhitePageCount());
         }
 
-        return $this->GrossMarginMonthlyBlackAndWhiteCost;
+        return $this->_grossMarginMonthlyBlackAndWhiteCost;
     }
 
     /**
-     *
-     * @param $GrossMarginMonthlyBlackAndWhiteCost field_type
-     */
-    public function setGrossMarginMonthlyBlackAndWhiteCost ($GrossMarginMonthlyBlackAndWhiteCost)
-    {
-        $this->GrossMarginMonthlyBlackAndWhiteCost = $GrossMarginMonthlyBlackAndWhiteCost;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $GrossMarginMonthlyColorCost
+     * @return float
      */
     public function getGrossMarginMonthlyColorCost ()
     {
-        if (!isset($this->GrossMarginMonthlyColorCost))
+        if (!isset($this->_grossMarginMonthlyColorCost))
         {
-            $this->GrossMarginMonthlyColorCost = ($this->getMasterDevice()->getCostPerPage()->Actual->BasePlusService->Color * $this->getAverageMonthlyColorPageCount());
+            $this->_grossMarginMonthlyColorCost = ($this->getMasterDevice()->getCostPerPage()->Actual->BasePlusService->Color * $this->getAverageMonthlyColorPageCount());
         }
 
-        return $this->GrossMarginMonthlyColorCost;
-    }
-
-    /**
-     *
-     * @param $GrossMarginMonthlyColorCost field_type
-     */
-    public function setGrossMarginMonthlyColorCost ($GrossMarginMonthlyColorCost)
-    {
-        $this->GrossMarginMonthlyColorCost = $GrossMarginMonthlyColorCost;
-
-        return $this;
+        return $this->_grossMarginMonthlyColorCost;
     }
 
     /**
@@ -1275,72 +1143,62 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
      */
     public function getMonthlyRate ()
     {
-        if (!isset($this->MonthlyRate))
+        if (!isset($this->_monthlyRate))
         {
-            $this->MonthlyRate = 0;
-            $this->MonthlyRate += ($this->getMasterDevice()->getCostPerPage()->Estimated->BasePlusMargin->BlackAndWhite * $this->getAverageMonthlyBlackAndWhitePageCount());
-            $this->MonthlyRate += ($this->getMasterDevice()->getCostPerPage()->Estimated->BasePlusMargin->Color * $this->getAverageMonthlyColorPageCount());
-            $this->MonthlyRate += ($this->getAverageMonthlyPageCount() * self::getITCPP());
+            $this->_monthlyRate = 0;
+            $this->_monthlyRate += ($this->getMasterDevice()->getCostPerPage()->Estimated->BasePlusMargin->BlackAndWhite * $this->getAverageMonthlyBlackAndWhitePageCount());
+            $this->_monthlyRate += ($this->getMasterDevice()->getCostPerPage()->Estimated->BasePlusMargin->Color * $this->getAverageMonthlyColorPageCount());
+            $this->_monthlyRate += ($this->getAverageMonthlyPageCount() * self::getITCostPerPage());
         }
 
-        return $this->MonthlyRate;
+        return $this->_monthlyRate;
     }
 
     /**
-     *
-     * @param $MonthlyRate field_type
+     * @return float
      */
-    public function setMonthlyRate ($MonthlyRate)
+    public static function getITCostPerPage ()
     {
-        $this->MonthlyRate = $MonthlyRate;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $ITCPP
-     */
-    public static function getITCPP ()
-    {
-        if (!isset(Proposalgen_Model_DeviceInstance::$ITCPP))
+        if (!isset(Proposalgen_Model_DeviceInstance::$ITCostPerPage))
         {
-            Proposalgen_Model_DeviceInstance::$ITCPP = 0;
+            Proposalgen_Model_DeviceInstance::$ITCostPerPage = 0;
         }
 
-        return Proposalgen_Model_DeviceInstance::$ITCPP;
+        return Proposalgen_Model_DeviceInstance::$ITCostPerPage;
     }
 
     /**
-     *
-     * @param $ITCPP field_type
+     * @param float $ITCostPerPage
      */
-    public static function setITCPP ($ITCPP)
+    public static function setITCostPerPage ($ITCostPerPage)
     {
-        Proposalgen_Model_DeviceInstance::$ITCPP = $ITCPP;
+        Proposalgen_Model_DeviceInstance::$ITCostPerPage = $ITCostPerPage;
     }
 
     /**
+     * Gets the master device
      *
-     * @return the $ExclusionReason
+     * @return Proposalgen_Model_MasterDevice
      */
-    public function getExclusionReason ()
+    public function getMasterDevice ()
     {
-        if (!isset($this->ExclusionReason))
+        if (!isset($this->_masterDevice))
         {
-            $this->ExclusionReason = "Manually excluded";
+            $masterDeviceMapper  = Proposalgen_Model_Mapper_MasterDevice::getInstance();
+            $this->_masterDevice = $masterDeviceMapper->find($this->masterDeviceId);
         }
 
-        return $this->ExclusionReason;
+        return $this->_masterDevice;
     }
 
     /**
+     * @param Proposalgen_Model_MasterDevice $MasterDevice
      *
-     * @param string $ExclusionReason
+     * @return Proposalgen_Model_DeviceInstance
      */
-    public function setExclusionReason ($ExclusionReason)
+    public function setMasterDevice ($MasterDevice)
     {
-        $this->ExclusionReason = $ExclusionReason;
+        $this->_masterDevice = $MasterDevice;
 
         return $this;
     }

@@ -44,9 +44,9 @@ foreach ( $this->proposal->HighPowerConsumptionDevices as $device )
 {
     $highEnergyTable->addRow();
     $highEnergyTable->addCell($cellWidths [0], $this->styles->tables->highriskdevices->cell1)->addText($device->getDeviceName(), null, 'nospacing');
-    $highEnergyTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText(($device->SerialNumber) ?  : "Unknown", null, 'nospacing_centeralign');
-    $highEnergyTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText(number_format($device->AverageMonthlyPowerConsumption) . ' kWh', null, 'nospacing_centeralign');
-    $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText('$' . number_format($device->AverageMonthlyPowerCost), null, 'nospacing_centeralign');
+    $highEnergyTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText(($device->serialNumber) ?  : "Unknown", null, 'nospacing_centeralign');
+    $highEnergyTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText(number_format($device->_averageMonthlyPowerConsumption) . ' kWh', null, 'nospacing_centeralign');
+    $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText('$' . number_format($device->_averageMonthlyPowerCost), null, 'nospacing_centeralign');
     $rowCount ++;
     if ($rowCount >= 3)
         break;

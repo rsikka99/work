@@ -1,11 +1,4 @@
 <?php
-
-/**
- * Proposalgen_Model_Proposal_OfficeDepot
- *
- * @author  Lee Robert
- * @version v1.0
- */
 class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
 {
     public static $Proposal;
@@ -146,70 +139,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     protected $UniquePurchasedDeviceList;
 
     /**
-     * ALWAYS LEAVE THIS AT THE TOP OF THE FUNCTION
-     *
-     * @see Proposalgen_Model_Abstract::echoAll()
-     */
-    public function echoAll ()
-    {
-        echo "<pre style='font-size: 14px;'>";
-        $methods = get_class_methods($this);
-        foreach ($methods as $method)
-        {
-            if (strpos($method, "get") === 0 && strpos($method, "getDebug") !== 0)
-            {
-                $key   = substr($method, 3);
-                $value = $this->$method();
-                if ($key == "PageCounts" || $key == "Percentages")
-                {
-                    echo "$key = ";
-                    print_r($value);
-                    echo "\n";
-                    continue;
-                }
-                if (isset($value))
-                {
-                    echo "<strong>";
-                }
-                echo "$key => ";
-
-                if ($value instanceof stdClass)
-                {
-                    echo "stdClass";
-                }
-                else if (is_array($value))
-                {
-                    echo " =>";
-                    foreach ($value as $subkey => $subvalue)
-                    {
-                        echo "\n\t\t\t";
-                        echo "$subkey => ";
-                        echo "$subvalue";
-                    }
-                }
-                else
-                {
-                    echo "$value";
-                }
-
-                echo "\n";
-                if (isset($value))
-                {
-                    echo "</strong>";
-                }
-            }
-        }
-        echo "</pre>";
-    }
-
-    /**
-     * Initialize the proposal
-     *
-     * @param \Application_Model_User|\Proposalgen_Model_User $user          Proposalgen_Model_User
-     * @param                                                 $report        Proposalgen_Model_Report
-     * @param                                                 $options       array
-     *
-     * @internal param \Proposalgen_Model_DealerCompany $dealerCompany
+     * @param Application_Model_User   $user
+     * @param Proposalgen_Model_Report $report
+     * @param array                    $options
      */
     public function __construct (Application_Model_User $user, Proposalgen_Model_Report $report, array $options = null)
     {
@@ -244,8 +176,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $Ranking
+     * @return Proposalgen_Model_Proposal_Ranking
      */
     public function getRanking ()
     {
@@ -258,25 +189,13 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $Ranking field_type
-     */
-    public function setRanking ($Ranking)
-    {
-        $this->Ranking = $Ranking;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $YearlyBlackAndWhitePercentage
+     * @return float
      */
     public function getYearlyBlackAndWhitePercentage ()
     {
         if (!isset($this->YearlyBlackAndWhitePercentage))
         {
-            $percentage = 0;
+            $percentage = 0.0;
             if ($this->getPageCounts()->Total->Combined->Yearly > 0)
             {
                 $percentage = $this->getPageCounts()->Total->BlackAndWhite->Yearly / $this->getPageCounts()->Total->Combined->Yearly;
@@ -288,14 +207,13 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $YearlyColorPercentage
+     * @return float
      */
     public function getYearlyColorPercentage ()
     {
         if (!isset($this->YearlyColorPercentage))
         {
-            $percentage = 0;
+            $percentage = 0.0;
             if ($this->getPageCounts()->Total->Combined->Yearly > 0)
             {
                 $percentage = $this->getPageCounts()->Total->Color->Yearly / $this->getPageCounts()->Total->Combined->Yearly;
@@ -307,14 +225,13 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $YearlyPurchasedBlackAndWhitePercentage
+     * @return float
      */
     public function getYearlyPurchasedBlackAndWhitePercentage ()
     {
         if (!isset($this->YearlyPurchasedBlackAndWhitePercentage))
         {
-            $percentage = 0;
+            $percentage = 0.0;
             if ($this->getPageCounts()->Total->Combined->Yearly > 0)
             {
                 $percentage = $this->getPageCounts()->Purchased->BlackAndWhite->Yearly / $this->getPageCounts()->Total->Combined->Yearly;
@@ -326,14 +243,13 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $YearlyPurchasedColorPercentage
+     * @return float
      */
     public function getYearlyPurchasedColorPercentage ()
     {
         if (!isset($this->YearlyPurchasedColorPercentage))
         {
-            $percentage = 0;
+            $percentage = 0.0;
             if ($this->getPageCounts()->Total->Combined->Yearly > 0)
             {
                 $percentage = $this->getPageCounts()->Purchased->Color->Yearly / $this->getPageCounts()->Total->Combined->Yearly;
@@ -345,14 +261,13 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $YearlyLeasedBlackAndWhitePercentage
+     * @return float
      */
     public function getYearlyLeasedBlackAndWhitePercentage ()
     {
         if (!isset($this->YearlyLeasedBlackAndWhitePercentage))
         {
-            $percentage = 0;
+            $percentage = 0.0;
             if ($this->getPageCounts()->Total->Combined->Yearly > 0)
             {
                 $percentage = $this->getPageCounts()->Leased->BlackAndWhite->Yearly / $this->getPageCounts()->Total->Combined->Yearly;
@@ -364,14 +279,13 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $YearlyLeasedColorPercentage
+     * @return float
      */
     public function getYearlyLeasedColorPercentage ()
     {
         if (!isset($this->YearlyLeasedColorPercentage))
         {
-            $percentage = 0;
+            $percentage = 0.0;
             if ($this->getPageCounts()->Total->Combined->Yearly > 0)
             {
                 $percentage = $this->getPageCounts()->Leased->Color->Yearly / $this->getPageCounts()->Total->Combined->Yearly;
@@ -383,8 +297,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the Customer Address
+     * @return string
      */
     public function getCustomerAddress ()
     {
@@ -394,8 +307,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return Proposalgen_Model_Report $Report
+     * @return Proposalgen_Model_Report
+     * @throws Exception
      */
     public function getReport ()
     {
@@ -408,8 +321,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
+     * @param Proposalgen_Model_Report $Report
      *
-     * @param $Report Proposalgen_Model_Report
+     * @return Proposalgen_Model_Proposal_OfficeDepot
      */
     public function setReport ($Report)
     {
@@ -419,8 +333,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $ReportId
+     * @return int
+     * @throws Exception
      */
     public function getReportId ()
     {
@@ -434,10 +348,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
+     * @param int $ReportId
      *
-     * @param $ReportId number
-     *
-     * @return \Proposalgen_Model_Proposal_OfficeDepot
+     * @return Proposalgen_Model_Proposal_OfficeDepot
      */
     public function setReportId ($ReportId)
     {
@@ -447,7 +360,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @return Proposalgen_Model_Question[]
      */
     public function getReportQuestions ()
@@ -462,19 +374,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $ReportQuestions field_type
-     */
-    public function setReportQuestions ($ReportQuestions)
-    {
-        $this->ReportQuestions = $ReportQuestions;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return Proposalgen_Model_DeviceInstance[] $Devices
+     * @return Proposalgen_Model_DeviceInstance[]
+     * @throws Exception
      */
     public function getDevices ()
     {
@@ -494,8 +395,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
                                                     ));
 
             // Unknown Devices
-            $unknowndeviceMapper = Proposalgen_Model_Mapper_UnknownDeviceInstance::getInstance();
-            $unknownDevices      = $unknowndeviceMapper->fetchAllUnknownDevicesAsKnownDevices($this->ReportId, array(
+            $unknownDeviceMapper = Proposalgen_Model_Mapper_UnknownDeviceInstance::getInstance();
+            $unknownDevices      = $unknownDeviceMapper->fetchAllUnknownDevicesAsKnownDevices($this->ReportId, array(
                                                                                                                     "report_id = ?"   => $this->ReportId,
                                                                                                                     "is_excluded = ?" => 0
                                                                                                                ));
@@ -508,7 +409,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
                 throw new Exception("There were no devices associated with this report.");
             }
 
-            // Get any overriden prices
+            // Get any overridden prices
             foreach ($this->Devices as $device)
             {
                 Proposalgen_Model_DeviceInstance::processOverrides($device, $report, $reportMargin, $companyMargin);
@@ -518,14 +419,13 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             /**
              * * Calculate IT CPP **
              */
-            Proposalgen_Model_DeviceInstance::setITCPP(($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getPageCounts()->Purchased->Combined->Yearly);
+            Proposalgen_Model_DeviceInstance::setITCostPerPage(($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getPageCounts()->Purchased->Combined->Yearly);
         } // endif
         return $this->Devices;
     }
 
     /**
-     *
-     * @return the $Devices
+     * @return Proposalgen_Model_DeviceInstance[]
      */
     public function getExcludedDevices ()
     {
@@ -538,8 +438,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
                                                          "is_excluded = ?" => 1
                                                     ));
 
-            $unknowndeviceMapper = Proposalgen_Model_Mapper_UnknownDeviceInstance::getInstance();
-            $unknownDevices      = $unknowndeviceMapper->fetchAllUnknownDevicesAsKnownDevices($this->ReportId, array(
+            $unknownDeviceMapper = Proposalgen_Model_Mapper_UnknownDeviceInstance::getInstance();
+            $unknownDevices      = $unknownDeviceMapper->fetchAllUnknownDevicesAsKnownDevices($this->ReportId, array(
                                                                                                                     "report_id = ?" => $this->ReportId,
                                                                                                                     "is_excluded = 1"
                                                                                                                ));
@@ -552,19 +452,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $Devices field_type
-     */
-    public function setDevices ($Devices)
-    {
-        $this->Devices = $Devices;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $LeasedDevices
+     * @return Proposalgen_Model_DeviceInstance[]
      */
     public function getLeasedDevices ()
     {
@@ -584,19 +472,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $LeasedDevices field_type
-     */
-    public function setLeasedDevices ($LeasedDevices)
-    {
-        $this->LeasedDevices = $LeasedDevices;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return Count of Devices
+     * @return int
      */
     public function getDeviceCount ()
     {
@@ -604,8 +480,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return Count of LeasedDevices
+     * @return int
      */
     public function getLeasedDeviceCount ()
     {
@@ -613,8 +488,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $PurchasedDevices
+     * @return Proposalgen_Model_DeviceInstance[]
      */
     public function getPurchasedDevices ()
     {
@@ -634,19 +508,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $PurchasedDevices field_type
-     */
-    public function setPurchasedDevices ($PurchasedDevices)
-    {
-        $this->PurchasedDevices = $PurchasedDevices;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return Count of PurchasedDevices
+     * @return int
      */
     public function getPurchasedDeviceCount ()
     {
@@ -654,8 +516,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $LeasedEstimatedBlackAndWhiteCPP
+     * @return float
      */
     public function getLeasedEstimatedBlackAndWhiteCPP ()
     {
@@ -668,19 +529,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $LeasedEstimatedBlackAndWhiteCPP field_type
-     */
-    public function setLeasedEstimatedBlackAndWhiteCPP ($LeasedEstimatedBlackAndWhiteCPP)
-    {
-        $this->LeasedEstimatedBlackAndWhiteCPP = $LeasedEstimatedBlackAndWhiteCPP;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $LeasedEstimatedColorCPP
+     * @return float
      */
     public function getLeasedEstimatedColorCPP ()
     {
@@ -693,25 +542,13 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $LeasedEstimatedColorCPP field_type
-     */
-    public function setLeasedEstimatedColorCPP ($LeasedEstimatedColorCPP)
-    {
-        $this->LeasedEstimatedColorCPP = $LeasedEstimatedColorCPP;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $PurchasedEstimatedBlackAndWhiteCPP
+     * @return float
      */
     public function getPurchasedEstimatedBlackAndWhiteCPP ()
     {
         if (!isset($this->PurchasedEstimatedBlackAndWhiteCPP))
         {
-            // TODO: hardcoding for now
+            // FIXME: hard coding for now
             $this->PurchasedEstimatedBlackAndWhiteCPP = 0.05;
         }
 
@@ -719,25 +556,13 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $PurchasedEstimatedBlackAndWhiteCPP field_type
-     */
-    public function setPurchasedEstimatedBlackAndWhiteCPP ($PurchasedEstimatedBlackAndWhiteCPP)
-    {
-        $this->PurchasedEstimatedBlackAndWhiteCPP = $PurchasedEstimatedBlackAndWhiteCPP;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $PurchasedEstimatedColorCPP
+     * @return float
      */
     public function getPurchasedEstimatedColorCPP ()
     {
         if (!isset($this->PurchasedEstimatedColorCPP))
         {
-            // TODO: hardcoding for now
+            // FIXME: hard coding for now
             $this->PurchasedEstimatedColorCPP = 0.08;
         }
 
@@ -745,19 +570,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $PurchasedEstimatedColorCPP field_type
-     */
-    public function setPurchasedEstimatedColorCPP ($PurchasedEstimatedColorCPP)
-    {
-        $this->PurchasedEstimatedColorCPP = $PurchasedEstimatedColorCPP;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $CombinedAnnualLeasePayments
+     * @return float
      */
     public function getCombinedAnnualLeasePayments ()
     {
@@ -770,19 +583,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $CombinedAnnualLeasePayments field_type
-     */
-    public function setCombinedAnnualLeasePayments ($CombinedAnnualLeasePayments)
-    {
-        $this->CombinedAnnualLeasePayments = $CombinedAnnualLeasePayments;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $PerPageLeaseCost
+     * @return float
      */
     public function getPerPageLeaseCost ()
     {
@@ -798,19 +599,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $PerPageLeaseCost field_type
-     */
-    public function setPerPageLeaseCost ($PerPageLeaseCost)
-    {
-        $this->PerPageLeaseCost = $PerPageLeaseCost;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $User
+     * @return Application_Model_User|null
      */
     public function getUser ()
     {
@@ -824,8 +613,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
+     * @param Application_Model_User $User
      *
-     * @param $User field_type
+     * @return Proposalgen_Model_Proposal_OfficeDepot
      */
     public function setUser ($User)
     {
@@ -836,7 +626,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
 
     /**
      * @deprecated
-     * @return the $DealerCompany
+     *
+     * @return null
      */
     public function getDealerCompany ()
     {
@@ -850,45 +641,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     * @deprecated
-     *
-     * @param $DealerCompany field_type
-     */
-    public function setDealerCompany ($DealerCompany)
-    {
-        $this->DealerCompany = $DealerCompany;
-
-        return $this;
-    }
-
-    /**
-     * @deprecated
-     * @return the $CompanyMargin
-     */
-    public function getCompanyMargin ()
-    {
-        if (!isset($this->CompanyMargin))
-        {
-            $this->CompanyMargin = 1 - (((int)$this->getDealerCompany()->getDcPricingMargin()) / 100);
-        }
-
-        return $this->CompanyMargin;
-    }
-
-    /**
-     *
-     * @param $CompanyMargin field_type
-     */
-    public function setCompanyMargin ($CompanyMargin)
-    {
-        $this->CompanyMargin = $CompanyMargin;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $ReportMargin
+     * @return float
      */
     public function getReportMargin ()
     {
@@ -901,19 +654,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $ReportMargin field_type
-     */
-    public function setReportMargin ($ReportMargin)
-    {
-        $this->ReportMargin = $ReportMargin;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $LeasedBlackAndWhiteCharge
+     * @return float
      */
     public function getLeasedBlackAndWhiteCharge ()
     {
@@ -926,19 +667,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $LeasedBlackAndWhiteCharge field_type
-     */
-    public function setLeasedBlackAndWhiteCharge ($LeasedBlackAndWhiteCharge)
-    {
-        $this->LeasedBlackAndWhiteCharge = $LeasedBlackAndWhiteCharge;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $LeasedColorCharge
+     * @return float
      */
     public function getLeasedColorCharge ()
     {
@@ -951,19 +680,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $LeasedColorCharge field_type
-     */
-    public function setLeasedColorCharge ($LeasedColorCharge)
-    {
-        $this->LeasedColorCharge = $LeasedColorCharge;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $EstimatedAnnualCostOfLeaseMachines
+     * @return float
      */
     public function getEstimatedAnnualCostOfLeaseMachines ()
     {
@@ -976,30 +693,19 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $EstimatedAnnualCostOfLeaseMachines field_type
-     */
-    public function setEstimatedAnnualCostOfLeaseMachines ($EstimatedAnnualCostOfLeaseMachines)
-    {
-        $this->EstimatedAnnualCostOfLeaseMachines = $EstimatedAnnualCostOfLeaseMachines;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $AnnualCostOfHardwarePurchases
+     * @return float
      */
     public function getAnnualCostOfHardwarePurchases ()
     {
         if (!isset($this->AnnualCostOfHardwarePurchases))
         {
-            $averageAge = 0;
-            $totalAge   = 0;
+            $totalAge = 0;
+
             foreach ($this->getPurchasedDevices() as $device)
             {
                 $totalAge += $device->getAge();
             }
+
             if ($this->getPurchasedDeviceCount())
             {
                 $averageAge                          = $totalAge / $this->getPurchasedDeviceCount();
@@ -1014,20 +720,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         return $this->AnnualCostOfHardwarePurchases;
     }
 
-    /**
-     *
-     * @param $AnnualCostOfHardwarePurchases field_type
-     */
-    public function setAnnualCostOfHardwarePurchases ($AnnualCostOfHardwarePurchases)
-    {
-        $this->AnnualCostOfHardwarePurchases = $AnnualCostOfHardwarePurchases;
-
-        return $this;
-    }
 
     /**
-     *
-     * @return the $CostOfInkAndTonerMonthly
+     * @return float
      */
     public function getCostOfInkAndTonerMonthly ()
     {
@@ -1046,8 +741,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $CostOfInkAndToner
+     * @return float
      */
     public function getCostOfInkAndToner ()
     {
@@ -1060,8 +754,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $NumberOfScanCapableDevices
+     * @return int
      */
     public function getNumberOfScanCapableDevices ()
     {
@@ -1082,19 +775,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $NumberOfScanCapableDevices field_type
-     */
-    public function setNumberOfScanCapableDevices ($NumberOfScanCapableDevices)
-    {
-        $this->NumberOfScanCapableDevices = $NumberOfScanCapableDevices;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $NumberOfDuplexCapableDevices
+     * @return int
      */
     public function getNumberOfDuplexCapableDevices ()
     {
@@ -1115,19 +796,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $NumberOfDuplexCapableDevices field_type
-     */
-    public function setNumberOfDuplexCapableDevices ($NumberOfDuplexCapableDevices)
-    {
-        $this->NumberOfDuplexCapableDevices = $NumberOfDuplexCapableDevices;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $NumberOfFaxCapableDevices
+     * @return int
      */
     public function getNumberOfFaxCapableDevices ()
     {
@@ -1148,8 +817,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $NumberOfUniqueModels
+     * @return int
      */
     public function getNumberOfUniqueModels ()
     {
@@ -1162,30 +830,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $NumberOfUniqueModels field_type
-     */
-    public function setNumberOfUniqueModels ($NumberOfUniqueModels)
-    {
-        $this->NumberOfUniqueModels = $NumberOfUniqueModels;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @param $NumberOfFaxCapableDevices field_type
-     */
-    public function setNumberOfFaxCapableDevices ($NumberOfFaxCapableDevices)
-    {
-        $this->NumberOfFaxCapableDevices = $NumberOfFaxCapableDevices;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $NumberOfUniqueToners
+     * @return int
      */
     public function getNumberOfUniqueToners ()
     {
@@ -1198,49 +843,25 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $NumberOfUniqueToners field_type
-     */
-    public function setNumberOfUniqueToners ($NumberOfUniqueToners)
-    {
-        $this->NumberOfUniqueToners = $NumberOfUniqueToners;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $CashHeldInInventory
+     * @return float
      */
     public function getCashHeldInInventory ()
     {
         if (!isset($this->CashHeldInInventory))
         {
-            $inventoryCash = 0;
+            $inventoryCash = 0.0;
             foreach ($this->getUniquePurchasedTonerList() as $toner)
             {
-                $inventoryCash += $toner->TonerPrice;
+                $inventoryCash += $toner->cost;
             }
+            $this->CashHeldInInventory = $inventoryCash * 2;
         }
-        $this->CashHeldInInventory = $inventoryCash * 2;
 
         return $this->CashHeldInInventory;
     }
 
     /**
-     *
-     * @param $CashHeldInInventory field_type
-     */
-    public function setCashHeldInInventory ($CashHeldInInventory)
-    {
-        $this->CashHeldInInventory = $CashHeldInInventory;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $PageCoverageBlackAndWhite
+     * @return float
      */
     public function getPageCoverageBlackAndWhite ()
     {
@@ -1254,19 +875,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $PageCoverageBlackAndWhite field_type
-     */
-    public function setPageCoverageBlackAndWhite ($PageCoverageBlackAndWhite)
-    {
-        $this->PageCoverageBlackAndWhite = $PageCoverageBlackAndWhite;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return float $PageCoverageColor
+     * @return float
      */
     public function getPageCoverageColor ()
     {
@@ -1280,19 +889,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $PageCoverageColor field_type
-     */
-    public function setPageCoverageColor ($PageCoverageColor)
-    {
-        $this->PageCoverageColor = $PageCoverageColor;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $MaximumMonthlyPrintVolume
+     * @return int
      */
     public function getMaximumMonthlyPrintVolume ()
     {
@@ -1301,7 +898,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             $maxVolume = 0;
             foreach ($this->getDevices() as $device)
             {
-                $maxVolume += $device->getMaximumMonthlyPageVolume();
+                $maxVolume += $device->getMasterDevice()->getMaximumMonthlyPageVolume();
             }
             $this->MaximumMonthlyPrintVolume = $maxVolume;
         }
@@ -1310,8 +907,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $NumberOfColorCapableDevices
+     * @return int
      */
     public function getNumberOfColorCapableDevices ()
     {
@@ -1332,17 +928,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $NumberOfColorCapableDevices field_type
-     */
-    public function setNumberOfColorCapableDevices ($NumberOfColorCapableDevices)
-    {
-        $this->NumberOfColorCapableDevices = $NumberOfColorCapableDevices;
-
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getNumberOfBlackAndWhiteCapableDevices ()
@@ -1356,19 +941,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     * @param int $NumberOfBlackAndWhiteCapableDevices
-     *
-     * @return Proposalgen_Model_Proposal_OfficeDepot
-     */
-    public function setNumberOfBlackAndWhiteCapableDevices ($NumberOfBlackAndWhiteCapableDevices)
-    {
-        $this->NumberOfBlackAndWhiteCapableDevices = $NumberOfBlackAndWhiteCapableDevices;
-
-        return $this;
-    }
-
-    /**
      * Gets fleet percentages
+     *
      * @return stdClass
      */
     public function getPercentages ()
@@ -1405,6 +979,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
 
     /**
      * Gets fleet page counts
+     *
      * @return stdClass
      */
     public function getPageCounts ()
@@ -1468,22 +1043,10 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     {
         if (!isset($this->AverageCostOfDevices))
         {
-            $this->AverageCostOfDevices = $this->getReport()->getReportAverageNonLeasePrinterCost();
+            $this->AverageCostOfDevices = $this->getReport()->getReportSettings()->defaultPrinterCost;
         }
 
         return $this->AverageCostOfDevices;
-    }
-
-    /**
-     * @param float $AverageCostOfDevices
-     *
-     * @return Proposalgen_Model_Proposal_OfficeDepot
-     */
-    public function setAverageCostOfDevices ($AverageCostOfDevices)
-    {
-        $this->AverageCostOfDevices = $AverageCostOfDevices;
-
-        return $this;
     }
 
     /**
@@ -1508,17 +1071,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     * @param float $PercentDevicesUnderused
-     * @return \Proposalgen_Model_Proposal_OfficeDepot
-     */
-    public function setPercentDevicesUnderused ($PercentDevicesUnderused)
-    {
-        $this->PercentDevicesUnderused = $PercentDevicesUnderused;
-
-        return $this;
-    }
-
-    /**
      * @return float
      */
     public function getPercentDevicesOverused ()
@@ -1537,18 +1089,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         }
 
         return $this->PercentDevicesOverused;
-    }
-
-    /**
-     *
-     * @param $PercentDevicesOverused float
-     * @return \Proposalgen_Model_Proposal_OfficeDepot
-     */
-    public function setPercentDevicesOverused ($PercentDevicesOverused)
-    {
-        $this->PercentDevicesOverused = $PercentDevicesOverused;
-
-        return $this;
     }
 
     /**
@@ -1575,19 +1115,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $LeastUsedDevices \Proposalgen_Model_DeviceInstance[]
-     * @return \Proposalgen_Model_Proposal_OfficeDepot
-     */
-    public function setLeastUsedDevices ($LeastUsedDevices)
-    {
-        $this->LeastUsedDevices = $LeastUsedDevices;
-
-        return $this;
-    }
-
-    /**
-     * Callback function for usort when we want to sort a device based on usage
+     * Callback function for uSort when we want to sort a device based on usage
      *
      * @param $deviceA \Proposalgen_Model_DeviceInstance
      * @param $deviceB \Proposalgen_Model_DeviceInstance
@@ -1622,148 +1150,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         return ($deviceA->getUsage() > $deviceB->getUsage()) ? -1 : 1;
     }
 
-    /**
-     * Gets a set of default toners
-     *
-     * @deprecated
-     * @return array
-     * @throws Exception
-     */
-    public function getDefaultToners ()
-    {
-        if (!isset($this->DefaultToners))
-        {
-            $tonerOverrides ["BW"]         = array(
-                "Cost"  => 0,
-                "Yield" => 0
-            );
-            $tonerOverrides ["Color"]      = array(
-                "Cost"  => 0,
-                "Yield" => 0
-            );
-            $tonerOverrides ["ThreeColor"] = array(
-                "Cost"  => 0,
-                "Yield" => 0
-            );
-            $tonerOverrides ["FourColor"]  = array(
-                "Cost"  => 0,
-                "Yield" => 0
-            );
-
-            $overrideLocation ["Report"] = $this->getReport();
-            $overrideLocation ["User"]   = $this->getUser();
-            $overrideLocation ["Dc"]     = $this->getDealerCompany();
-            $overrideLocation ["Dc"]     = Proposalgen_Model_DealerCompany::getMasterCompany();
-
-            foreach ($tonerOverrides as $type => $override)
-            {
-                // This is a fancy way of looping through the objects
-                // dynamically
-                // Written by Lee
-
-
-                // For the cost
-                foreach ($overrideLocation as $FuncPrefix => $object)
-                {
-                    $functionCall = "get" . $FuncPrefix . "Default" . $type . "TonerCost";
-                    if ($object->$functionCall())
-                    {
-                        $override ["Cost"] = $object->$functionCall();
-                        break;
-                    }
-                }
-
-                if ($override ["Cost"] <= 0)
-                {
-                    throw new Exception("Cost of " . $override ["Cost"] . " detected for " . $type . " toner. Cost must be greater than zero.");
-                }
-
-                // For the yield
-                foreach ($overrideLocation as $FuncPrefix => $object)
-                {
-                    $functionCall = "get" . $FuncPrefix . "Default" . $type . "TonerYield";
-                    if ($object->$functionCall())
-                    {
-                        $override ["Yield"] = $object->$functionCall();
-                        break;
-                    }
-                }
-
-                if ($override ["Yield"] <= 0)
-                {
-                    throw new Exception("Yield of " . $override ["Yield"] . " detected for " . $type . " toner. Yield must be greater than zero.");
-                }
-            }
-
-            $blackToner               = new Proposalgen_Model_Toner();
-            $blackToner->cost   = $tonerOverrides ["BW"] ["Cost"];
-            $blackToner->yield   = $tonerOverrides ["BW"] ["Yield"];
-            $blackToner->tonerColorId = Proposalgen_Model_TonerColor::BLACK;
-
-            $cyanToner               = new Proposalgen_Model_Toner();
-            $cyanToner->cost   = $tonerOverrides ["Color"] ["Cost"];
-            $cyanToner->yield   = $tonerOverrides ["Color"] ["Yield"];
-            $cyanToner->tonerColorId = Proposalgen_Model_TonerColor::CYAN;
-
-            $magentaToner               = new Proposalgen_Model_Toner();
-            $magentaToner->cost   = $tonerOverrides ["Color"] ["Cost"];
-            $magentaToner->yield   = $tonerOverrides ["Color"] ["Yield"];
-            $magentaToner->tonerColorId = Proposalgen_Model_TonerColor::MAGENTA;
-
-            $yellowToner               = new Proposalgen_Model_Toner();
-            $yellowToner->cost   = $tonerOverrides ["Color"] ["Cost"];
-            $yellowToner->yield   = $tonerOverrides ["Color"] ["Yield"];
-            $yellowToner->tonerColorId = Proposalgen_Model_TonerColor::YELLOW;
-
-            $threeColorToner               = new Proposalgen_Model_Toner();
-            $threeColorToner->cost   = $tonerOverrides ["ThreeColor"] ["Cost"];
-            $threeColorToner->yield   = $tonerOverrides ["ThreeColor"] ["Yield"];
-            $threeColorToner->tonerColorId = Proposalgen_Model_TonerColor::THREE_COLOR;
-
-            $fourColorToner               = new Proposalgen_Model_Toner();
-            $fourColorToner->cost   = $tonerOverrides ["FourColor"] ["Cost"];
-            $fourColorToner->yield   = $tonerOverrides ["FourColor"] ["Yield"];
-            $fourColorToner->tonerColorId = Proposalgen_Model_TonerColor::FOUR_COLOR;
-
-            $defaultToners                                                        = array();
-            $defaultToners [Proposalgen_Model_TonerConfig::BLACK_ONLY]            = array(
-                $blackToner
-            );
-            $defaultToners [Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED] = array(
-                $blackToner->tonerColorId   => $blackToner,
-                $cyanToner->tonerColorId    => $cyanToner,
-                $magentaToner->tonerColorId => $magentaToner,
-                $yellowToner->tonerColorId  => $yellowToner
-            );
-            $defaultToners [Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED]  = array(
-                $blackToner->tonerColorId      => $blackToner,
-                $threeColorToner->tonerColorId => $threeColorToner
-            );
-            $defaultToners [Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED]   = array(
-                $fourColorToner->tonerColorId => $fourColorToner
-            );
-
-            $this->DefaultToners = $defaultToners;
-        }
-
-        return $this->DefaultToners;
-    }
 
     /**
-     * @param $DefaultToners
-     *
-     * @return Proposalgen_Model_Proposal_OfficeDepot
-     */
-    public function setDefaultToners ($DefaultToners)
-    {
-        $this->DefaultToners = $DefaultToners;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $MostUsedDevices
+     * @return Proposalgen_Model_DeviceInstance[]
      */
     public function getMostUsedDevices ()
     {
@@ -1786,19 +1175,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $MostUsedDevices field_type
-     */
-    public function setMostUsedDevices ($MostUsedDevices)
-    {
-        $this->MostUsedDevices = $MostUsedDevices;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $PercentColorDevices
+     * @return float
      */
     public function getPercentColorDevices ()
     {
@@ -1811,19 +1188,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $PercentColorDevices field_type
-     */
-    public function setPercentColorDevices ($PercentColorDevices)
-    {
-        $this->PercentColorDevices = $PercentColorDevices;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $AverageAgeOfDevices
+     * @return float
      */
     public function getAverageAgeOfDevices ()
     {
@@ -1841,19 +1206,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $AverageAgeOfDevices field_type
-     */
-    public function setAverageAgeOfDevices ($AverageAgeOfDevices)
-    {
-        $this->AverageAgeOfDevices = $AverageAgeOfDevices;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $HighPowerConsumptionDevices
+     * @return Proposalgen_Model_DeviceInstance[]
      */
     public function getHighPowerConsumptionDevices ()
     {
@@ -1871,22 +1224,13 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $HighPowerConsumptionDevices field_type
-     */
-    public function setHighPowerConsumptionDevices ($HighPowerConsumptionDevices)
-    {
-        $this->HighPowerConsumptionDevices = $HighPowerConsumptionDevices;
-
-        return $this;
-    }
-
-    /**
-     * Callback function for usort when we want to sort a device based on power
+     * Callback function for uSort when we want to sort a device based on power
      * consumption
      *
-     * @param $a Proposalgen_Model_DeviceInstance
-     * @param $b Proposalgen_Model_DeviceInstance
+     * @param Proposalgen_Model_DeviceInstance $deviceA
+     * @param Proposalgen_Model_DeviceInstance $deviceB
+     *
+     * @return int
      */
     public function ascendingSortDevicesByPowerConsumption ($deviceA, $deviceB)
     {
@@ -1899,8 +1243,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $MostExpensiveDevices
+     * @return Proposalgen_Model_DeviceInstance[]
      */
     public function getMostExpensiveDevices ()
     {
@@ -1919,22 +1262,13 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $MostExpensiveDevices field_type
-     */
-    public function setMostExpensiveDevices ($MostExpensiveDevices)
-    {
-        $this->MostExpensiveDevices = $MostExpensiveDevices;
-
-        return $this;
-    }
-
-    /**
-     * Callback function for usort when we want to sort a device based on
+     * Callback function for uSort when we want to sort a device based on
      * monthly cost
      *
-     * @param $a Proposalgen_Model_DeviceInstance
-     * @param $b Proposalgen_Model_DeviceInstance
+     * @param Proposalgen_Model_DeviceInstance $deviceA
+     * @param Proposalgen_Model_DeviceInstance $deviceB
+     *
+     * @return int
      */
     public function ascendingSortDevicesByMonthlyCost ($deviceA, $deviceB)
     {
@@ -1947,15 +1281,13 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $DateReportPrepared
+     * @return string
      */
     public function getDateReportPrepared ()
     {
         if (!isset($this->DateReportPrepared))
         {
-            // $today = date("F jS, Y");
-            $report_date              = new DateTime($this->Report->getReportDate());
+            $report_date              = new DateTime($this->getReport()->getReportDate());
             $this->DateReportPrepared = date_format($report_date, 'F jS, Y');
         }
 
@@ -1963,19 +1295,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $DateReportPrepared field_type
-     */
-    public function setDateReportPrepared ($DateReportPrepared)
-    {
-        $this->DateReportPrepared = $DateReportPrepared;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $AveragePowerUsagePerMonth
+     * @return float
      */
     public function getAveragePowerUsagePerMonth ()
     {
@@ -1999,53 +1319,29 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             {
                 $totalPowerUsage = ($totalPowerUsage / $devicesReportingPower) * $this->getDeviceCount();
             }
-            $this->setNumberOfDevicesReportingPower($devicesReportingPower);
-            $this->AveragePowerUsagePerMonth = $totalPowerUsage;
+            $this->NumberOfDevicesReportingPower = $devicesReportingPower;
+            $this->AveragePowerUsagePerMonth     = $totalPowerUsage;
         }
 
         return $this->AveragePowerUsagePerMonth;
     }
 
     /**
-     *
-     * @param $AveragePowerUsagePerMonth field_type
-     */
-    public function setAveragePowerUsagePerMonth ($AveragePowerUsagePerMonth)
-    {
-        $this->AveragePowerUsagePerMonth = $AveragePowerUsagePerMonth;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $AveragePowerCostPerMonth
+     * @return float
      */
     public function getAveragePowerCostPerMonth ()
     {
         if (!isset($this->AveragePowerCostPerMonth))
         {
             $this->AveragePowerCostPerMonth = $this->getAveragePowerUsagePerMonth() * Proposalgen_Model_DeviceInstance::getKWH_Cost();
-            ;
+
         }
 
         return $this->AveragePowerCostPerMonth;
     }
 
     /**
-     *
-     * @param $AveragePowerCostPerMonth field_type
-     */
-    public function setAveragePowerCostPerMonth ($AveragePowerCostPerMonth)
-    {
-        $this->AveragePowerCostPerMonth = $AveragePowerCostPerMonth;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $LeastUsedDeviceCount
+     * @return int
      */
     public function getLeastUsedDeviceCount ()
     {
@@ -2058,19 +1354,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $LeastUsedDeviceCount field_type
-     */
-    public function setLeastUsedDeviceCount ($LeastUsedDeviceCount)
-    {
-        $this->LeastUsedDeviceCount = $LeastUsedDeviceCount;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $LeastUsedDevicePercentage
+     * @return float
      */
     public function getLeastUsedDevicePercentage ()
     {
@@ -2083,19 +1367,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $LeastUsedDevicePercentage field_type
-     */
-    public function setLeastUsedDevicePercentage ($LeastUsedDevicePercentage)
-    {
-        $this->LeastUsedDevicePercentage = $LeastUsedDevicePercentage;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $MostUsedDeviceCount
+     * @return int
      */
     public function getMostUsedDeviceCount ()
     {
@@ -2108,19 +1380,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $MostUsedDeviceCount field_type
-     */
-    public function setMostUsedDeviceCount ($MostUsedDeviceCount)
-    {
-        $this->MostUsedDeviceCount = $MostUsedDeviceCount;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $MostUsedDevicePercentage
+     * @return float
      */
     public function getMostUsedDevicePercentage ()
     {
@@ -2133,19 +1393,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $MostUsedDevicePercentage field_type
-     */
-    public function setMostUsedDevicePercentage ($MostUsedDevicePercentage)
-    {
-        $this->MostUsedDevicePercentage = $MostUsedDevicePercentage;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $AverageDeviceAge
+     * @return float
      */
     public function getAverageDeviceAge ()
     {
@@ -2155,7 +1403,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             $cumulativeAge = 0;
             foreach ($this->getDevices() as $device)
             {
-                $cumulativeAge += $device->Age;
+                $cumulativeAge += $device->getAge();
             }
             if ($cumulativeAge > 0)
             {
@@ -2168,19 +1416,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $AverageDeviceAge field_type
-     */
-    public function setAverageDeviceAge ($AverageDeviceAge)
-    {
-        $this->AverageDeviceAge = $AverageDeviceAge;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $NumberOfUniquePurchasedModels
+     * @return int
      */
     public function getNumberOfUniquePurchasedModels ()
     {
@@ -2203,19 +1439,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $NumberOfUniquePurchasedModels field_type
-     */
-    public function setNumberOfUniquePurchasedModels ($NumberOfUniquePurchasedModels)
-    {
-        $this->NumberOfUniquePurchasedModels = $NumberOfUniquePurchasedModels;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $PercentageOfDevicesReportingPower
+     * @return float
      */
     public function getPercentageOfDevicesReportingPower ()
     {
@@ -2228,22 +1452,11 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $PercentageOfDevicesReportingPower field_type
-     */
-    public function setPercentageOfDevicesReportingPower ($PercentageOfDevicesReportingPower)
-    {
-        $this->PercentageOfDevicesReportingPower = $PercentageOfDevicesReportingPower;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $NumberOfDevicesReportingPower
+     * @return mixed
      */
     public function getNumberOfDevicesReportingPower ()
     {
+        // FIXME: This obviously doesn't do what it's supposed to.
         if (!isset($this->NumberOfDevicesReportingPower))
         {
             $this->getAveragePowerUsagePerMonth();
@@ -2252,20 +1465,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         return $this->NumberOfDevicesReportingPower;
     }
 
-    /**
-     *
-     * @param $NumberOfDevicesReportingPower field_type
-     */
-    public function setNumberOfDevicesReportingPower ($NumberOfDevicesReportingPower)
-    {
-        $this->NumberOfDevicesReportingPower = $NumberOfDevicesReportingPower;
-
-        return $this;
-    }
 
     /**
-     *
-     * @return the $GrossMarginTotalMonthlyCost
+     * @return stdClass
      */
     public function getGrossMarginTotalMonthlyCost ()
     {
@@ -2277,8 +1479,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             $totalCost->Combined      = 0;
             foreach ($this->getPurchasedDevices() as $device)
             {
-                $totalCost->BlackAndWhite += $device->GrossMarginMonthlyBlackAndWhiteCost;
-                $totalCost->Color += $device->GrossMarginMonthlyColorCost;
+                $totalCost->BlackAndWhite += $device->getGrossMarginMonthlyBlackAndWhiteCost();
+                $totalCost->Color += $device->getGrossMarginMonthlyColorCost();
             }
             $totalCost->Combined               = $totalCost->BlackAndWhite + $totalCost->Color;
             $this->GrossMarginTotalMonthlyCost = $totalCost;
@@ -2288,19 +1490,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $GrossMarginTotalMonthlyCost field_type
-     */
-    public function setGrossMarginTotalMonthlyCost ($GrossMarginTotalMonthlyCost)
-    {
-        $this->GrossMarginTotalMonthlyCost = $GrossMarginTotalMonthlyCost;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $GrossMarginTotalMonthlyRevenue
+     * @return stdClass
      */
     public function getGrossMarginTotalMonthlyRevenue ()
     {
@@ -2318,19 +1508,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $GrossMarginTotalMonthlyRevenue field_type
-     */
-    public function setGrossMarginTotalMonthlyRevenue ($GrossMarginTotalMonthlyRevenue)
-    {
-        $this->GrossMarginTotalMonthlyRevenue = $GrossMarginTotalMonthlyRevenue;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $NumberOfRepairs
+     * @return float
      */
     public function getNumberOfRepairs ()
     {
@@ -2343,7 +1521,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             }
             else
             {
-                // Device count / 20 (which is the same as device count * .05)
+                /*
+                 * The calculation is # of devices / 20. We do *.05 to avoid issues with division
+                 */
                 $this->NumberOfRepairs = $this->getDeviceCount() * 0.05;
             }
         }
@@ -2352,19 +1532,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $NumberOfRepairs field_type
-     */
-    public function setNumberOfRepairs ($NumberOfRepairs)
-    {
-        $this->NumberOfRepairs = $NumberOfRepairs;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $AverageTimeBetweenBreakdownAndFix
+     * @return float
      */
     public function getAverageTimeBetweenBreakdownAndFix ()
     {
@@ -2378,26 +1546,14 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $AverageTimeBetweenBreakdownAndFix field_type
-     */
-    public function setAverageTimeBetweenBreakdownAndFix ($AverageTimeBetweenBreakdownAndFix)
-    {
-        $this->AverageTimeBetweenBreakdownAndFix = $AverageTimeBetweenBreakdownAndFix;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $AnnualDowntimeFromBreakdowns
+     * @return float
      */
     public function getAnnualDowntimeFromBreakdowns ()
     {
         if (!isset($this->AnnualDowntimeFromBreakdowns))
         {
             // convert to hours (8hrs = 1day : 4hrs = 1/2day) breakdowns *
-            // (repairtime * 8)
+            // (repair time * 8)
             $downtime                           = $this->getNumberOfRepairs() * ($this->getAverageTimeBetweenBreakdownAndFix() * 8) * 12;
             $this->AnnualDowntimeFromBreakdowns = $downtime;
         }
@@ -2406,19 +1562,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $AnnualDowntimeFromBreakdowns field_type
-     */
-    public function setAnnualDowntimeFromBreakdowns ($AnnualDowntimeFromBreakdowns)
-    {
-        $this->AnnualDowntimeFromBreakdowns = $AnnualDowntimeFromBreakdowns;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $NumberOfVendors
+     * @return float
      */
     public function getNumberOfVendors ()
     {
@@ -2432,19 +1576,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $NumberOfVendors field_type
-     */
-    public function setNumberOfVendors ($NumberOfVendors)
-    {
-        $this->NumberOfVendors = $NumberOfVendors;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $NumberOfAnnualInkTonerOrders
+     * @return float
      */
     public function getNumberOfAnnualInkTonerOrders ()
     {
@@ -2457,19 +1589,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $NumberOfAnnualInkTonerOrders field_type
-     */
-    public function setNumberOfAnnualInkTonerOrders ($NumberOfAnnualInkTonerOrders)
-    {
-        $this->NumberOfAnnualInkTonerOrders = $NumberOfAnnualInkTonerOrders;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $NumberOfUniquePurchasedToners
+     * @return int
      */
     public function getNumberOfUniquePurchasedToners ()
     {
@@ -2481,20 +1601,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         return $this->NumberOfUniquePurchasedToners;
     }
 
-    /**
-     *
-     * @param $NumberOfUniquePurchasedToners field_type
-     */
-    public function setNumberOfUniquePurchasedToners ($NumberOfUniquePurchasedToners)
-    {
-        $this->NumberOfUniquePurchasedToners = $NumberOfUniquePurchasedToners;
-
-        return $this;
-    }
 
     /**
-     *
-     * @return the $PercentPrintingDoneOnInkjet
+     * @return float
      */
     public function getPercentPrintingDoneOnInkjet ()
     {
@@ -2508,19 +1617,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $PercentPrintingDoneOnInkjet field_type
-     */
-    public function setPercentPrintingDoneOnInkjet ($PercentPrintingDoneOnInkjet)
-    {
-        $this->PercentPrintingDoneOnInkjet = $PercentPrintingDoneOnInkjet;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $HighRiskDevices
+     * @return Proposalgen_Model_DeviceInstance[]
      */
     public function getHighRiskDevices ()
     {
@@ -2570,22 +1667,13 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $HighRiskDevices field_type
-     */
-    public function setHighRiskDevices ($HighRiskDevices)
-    {
-        $this->HighRiskDevices = $HighRiskDevices;
-
-        return $this;
-    }
-
-    /**
-     * Callback function for usort when we want to sort devices based on life
+     * Callback function for uSort when we want to sort devices based on life
      * usage
      *
-     * @param $a Proposalgen_Model_DeviceInstance
-     * @param $b Proposalgen_Model_DeviceInstance
+     * @param Proposalgen_Model_DeviceInstance $deviceA
+     * @param Proposalgen_Model_DeviceInstance $deviceB
+     *
+     * @return int
      */
     public function sortDevicesByLifeUsage ($deviceA, $deviceB)
     {
@@ -2598,10 +1686,12 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     * Callback function for usort when we want to sort devices based on age
+     * Callback function for uSort when we want to sort devices based on age
      *
-     * @param $a Proposalgen_Model_DeviceInstance
-     * @param $b Proposalgen_Model_DeviceInstance
+     * @param Proposalgen_Model_DeviceInstance $deviceA
+     * @param Proposalgen_Model_DeviceInstance $deviceB
+     *
+     * @return int
      */
     public function sortDevicesByAge ($deviceA, $deviceB)
     {
@@ -2614,25 +1704,26 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     * Callback function for usort when we want to sort devices based their risk
+     * Callback function for uSort when we want to sort devices based their risk
      * ranking
      *
-     * @param $a Proposalgen_Model_DeviceInstance
-     * @param $b Proposalgen_Model_DeviceInstance
+     * @param Proposalgen_Model_DeviceInstance $deviceA
+     * @param Proposalgen_Model_DeviceInstance $deviceB
+     *
+     * @return int
      */
     public function sortDevicesByRiskRanking ($deviceA, $deviceB)
     {
-        if ($deviceA->RiskRank == $deviceB->RiskRank)
+        if ($deviceA->getRiskRank() == $deviceB->getRiskRank())
         {
             return 0;
         }
 
-        return ($deviceA->RiskRank > $deviceB->RiskRank) ? -1 : 1;
+        return ($deviceA->getRiskRank() > $deviceB->getRiskRank()) ? -1 : 1;
     }
 
     /**
-     *
-     * @return the $WeeklyITHours
+     * @return float
      */
     public function getWeeklyITHours ()
     {
@@ -2653,19 +1744,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $WeeklyITHours field_type
-     */
-    public function setWeeklyITHours ($WeeklyITHours)
-    {
-        $this->WeeklyITHours = $WeeklyITHours;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $AnnualITHours
+     * @return float
      */
     public function getAnnualITHours ()
     {
@@ -2678,19 +1757,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $AnnualITHours field_type
-     */
-    public function setAnnualITHours ($AnnualITHours)
-    {
-        $this->AnnualITHours = $AnnualITHours;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $AverageITRate
+     * @return float
      */
     public function getAverageITRate ()
     {
@@ -2704,19 +1771,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $AverageITRate field_type
-     */
-    public function setAverageITRate ($AverageITRate)
-    {
-        $this->AverageITRate = $AverageITRate;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $AnnualITCost
+     * @return float
      */
     public function getAnnualITCost ()
     {
@@ -2729,19 +1784,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $AnnualITCost field_type
-     */
-    public function setAnnualITCost ($AnnualITCost)
-    {
-        $this->AnnualITCost = $AnnualITCost;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $Graphs
+     * @return array
      */
     public function getGraphs ()
     {
@@ -2760,7 +1803,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
 
             // Formatting variables
             $numberValueMarker                          = "N *sz0";
-            $currencyValueMarker                        = "N $*sz2";
             $PrintIQSavingsBarGraph_currencyValueMarker = "N $*sz0";
 
             /**
@@ -2870,8 +1912,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             /**
              * -- UniqueDevicesGraph
              */
-            $legendItems      = Array();
-            $numberOfModels   = 0;
             $uniqueModelArray = array();
             foreach ($this->getPurchasedDevices() as $device)
             {
@@ -3021,12 +2061,12 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
                 $colorPercentage = round((($this->getNumberOfColorCapableDevices() / $this->getDeviceCount()) * 100), 2);
             }
 
-            $notcolorPercentage = 100 - $colorPercentage;
+            $notColorPercentage = 100 - $colorPercentage;
             $colorCapableGraph  = new gchart\gPie3DChart(305, 210);
             $colorCapableGraph->setTitle("Color-Capable Printing Devices");
             $colorCapableGraph->addDataSet(array(
                                                 $colorPercentage,
-                                                $notcolorPercentage
+                                                $notColorPercentage
                                            ));
             $colorCapableGraph->setLegend(array(
                                                "Color-capable",
@@ -3084,15 +2124,15 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             );
             foreach ($this->getPurchasedDevices() as $device)
             {
-                if ($device->Age < 5)
+                if ($device->getAge() < 5)
                 {
                     $deviceAges ["Less than 5 years old"]++;
                 }
-                else if ($device->Age <= 6)
+                else if ($device->getAge() <= 6)
                 {
                     $deviceAges ["5-6 years old"]++;
                 }
-                else if ($device->Age <= 8)
+                else if ($device->getAge() <= 8)
                 {
                     $deviceAges ["7-8 years old"]++;
                 }
@@ -3101,21 +2141,22 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
                     $deviceAges ["More than 8 years old"]++;
                 }
             }
-            $dataset     = array();
+            $dataSet     = array();
             $legendItems = array();
+            $labels      = array();
 
             foreach ($deviceAges as $legendItem => $count)
             {
                 if ($count > 0)
                 {
-                    $dataset []     = $count;
+                    $dataSet []     = $count;
                     $legendItems [] = $legendItem;
                     $percentage     = round(($count / $this->getPurchasedDeviceCount()) * 100, 2);
                     $labels []      = "$percentage%";
                 }
             }
             $deviceAgeGraph = new gchart\gPie3DChart(350, 200);
-            $deviceAgeGraph->addDataSet($dataset);
+            $deviceAgeGraph->addDataSet($dataSet);
             $deviceAgeGraph->setLegend($legendItems);
             $deviceAgeGraph->setLabels($labels);
             $deviceAgeGraph->addColors(array(
@@ -3168,12 +2209,12 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
                 $faxPercentage = round((($this->getNumberOfFaxCapableDevices() / $this->getDeviceCount()) * 100), 2);
             }
 
-            $notfaxPercentage = 100 - $faxPercentage;
+            $notFaxPercentage = 100 - $faxPercentage;
             $faxCapable       = new gchart\gPie3DChart(200, 160);
             $faxCapable->setTitle("Fax-Capable Printing Devices");
             $faxCapable->addDataSet(array(
                                          $faxPercentage,
-                                         $notfaxPercentage
+                                         $notFaxPercentage
                                     ));
             $faxCapable->setLegend(array(
                                         "Fax capable",
@@ -3204,12 +2245,12 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
                 $duplexPercentage = round((($this->getNumberOfDuplexCapableDevices() / $this->getDeviceCount()) * 100), 2);
             }
 
-            $notduplexPercentage = 100 - $duplexPercentage;
+            $notDuplexPercentage = 100 - $duplexPercentage;
             $duplexCapableGraph  = new gchart\gPie3DChart(305, 210);
             $duplexCapableGraph->setTitle("Duplex-Capable Printing Devices");
             $duplexCapableGraph->addDataSet(array(
                                                  $duplexPercentage,
-                                                 $notduplexPercentage
+                                                 $notDuplexPercentage
                                             ));
             $duplexCapableGraph->setLegend(array(
                                                 "Duplex capable",
@@ -3236,8 +2277,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
+     * @param array $Graphs
      *
-     * @param $Graphs field_type
+     * @return Proposalgen_Model_Proposal_OfficeDepot
      */
     public function setGraphs ($Graphs)
     {
@@ -3247,8 +2289,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $CostOfExecutingSuppliesOrders
+     * @return float
      */
     public function getCostOfExecutingSuppliesOrders ()
     {
@@ -3262,19 +2303,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $CostOfExecutingSuppliesOrders field_type
-     */
-    public function setCostOfExecutingSuppliesOrders ($CostOfExecutingSuppliesOrders)
-    {
-        $this->CostOfExecutingSuppliesOrders = $CostOfExecutingSuppliesOrders;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $EstimatedAnnualSupplyRelatedExpense
+     * @return float
      */
     public function getEstimatedAnnualSupplyRelatedExpense ()
     {
@@ -3287,19 +2316,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $EstimatedAnnualSupplyRelatedExpense field_type
-     */
-    public function setEstimatedAnnualSupplyRelatedExpense ($EstimatedAnnualSupplyRelatedExpense)
-    {
-        $this->EstimatedAnnualSupplyRelatedExpense = $EstimatedAnnualSupplyRelatedExpense;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $AnnualCostOfOutSourcing
+     * @return float
      */
     public function getAnnualCostOfOutSourcing ()
     {
@@ -3320,19 +2337,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $AnnualCostOfOutSourcing field_type
-     */
-    public function setAnnualCostOfOutSourcing ($AnnualCostOfOutSourcing)
-    {
-        $this->AnnualCostOfOutSourcing = $AnnualCostOfOutSourcing;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $EstimatedAnnualCostOfService
+     * @return float
      */
     public function getEstimatedAnnualCostOfService ()
     {
@@ -3345,19 +2350,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $EstimatedAnnualCostOfService field_type
-     */
-    public function setEstimatedAnnualCostOfService ($EstimatedAnnualCostOfService)
-    {
-        $this->EstimatedAnnualCostOfService = $EstimatedAnnualCostOfService;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $TotalPurchasedAnnualCost
+     * @return float
      */
     public function getTotalPurchasedAnnualCost ()
     {
@@ -3370,26 +2363,14 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $TotalPurchasedAnnualCost field_type
-     */
-    public function setTotalPurchasedAnnualCost ($TotalPurchasedAnnualCost)
-    {
-        $this->TotalPurchasedAnnualCost = $TotalPurchasedAnnualCost;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $EstimatedAllInBlackAndWhiteCPP
+     * @return float
      */
     public function getEstimatedAllInBlackAndWhiteCPP ()
     {
         if (!isset($this->EstimatedAllInBlackAndWhiteCPP))
         {
             $workingCPP                     = 0;
-            $BWCPP                          = 0;
+            $monochromeCostPerPage          = 0;
             $costOfBlackAndWhiteInkAndToner = 0;
             $costWithNoInkToner             = $this->getTotalPurchasedAnnualCost() - $this->getCostOfInkAndToner();
             if ($this->getPageCounts()->Purchased->Combined->Yearly)
@@ -3402,28 +2383,16 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             }
             if ($this->getPageCounts()->Purchased->BlackAndWhite->Yearly)
             {
-                $BWCPP = $workingCPP + ($costOfBlackAndWhiteInkAndToner / ($this->getPageCounts()->Purchased->BlackAndWhite->Yearly / 12));
+                $monochromeCostPerPage = $workingCPP + ($costOfBlackAndWhiteInkAndToner / ($this->getPageCounts()->Purchased->BlackAndWhite->Yearly / 12));
             }
-            $this->EstimatedAllInBlackAndWhiteCPP = $BWCPP;
+            $this->EstimatedAllInBlackAndWhiteCPP = $monochromeCostPerPage;
         }
 
         return $this->EstimatedAllInBlackAndWhiteCPP;
     }
 
     /**
-     *
-     * @param $EstimatedAllInBlackAndWhiteCPP field_type
-     */
-    public function setEstimatedAllInBlackAndWhiteCPP ($EstimatedAllInBlackAndWhiteCPP)
-    {
-        $this->EstimatedAllInBlackAndWhiteCPP = $EstimatedAllInBlackAndWhiteCPP;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $EstimatedAllInColorCPP
+     * @return float
      */
     public function getEstimatedAllInColorCPP ()
     {
@@ -3452,69 +2421,33 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $EstimatedAllInColorCPP field_type
-     */
-    public function setEstimatedAllInColorCPP ($EstimatedAllInColorCPP)
-    {
-        $this->EstimatedAllInColorCPP = $EstimatedAllInColorCPP;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $MPSBlackAndWhiteCPP
+     * @return float
      */
     public function getMPSBlackAndWhiteCPP ()
     {
         if (!isset($this->MPSBlackAndWhiteCPP))
         {
-            $this->MPSBlackAndWhiteCPP = $this->getReport()->getReportMPSBWPerPage();
+            $this->MPSBlackAndWhiteCPP = $this->getReport()->getReportSettings()->mpsBwCostPerPage;
         }
 
         return $this->MPSBlackAndWhiteCPP;
     }
 
     /**
-     *
-     * @param $MPSBlackAndWhiteCPP field_type
-     */
-    public function setMPSBlackAndWhiteCPP ($MPSBlackAndWhiteCPP)
-    {
-        $this->MPSBlackAndWhiteCPP = $MPSBlackAndWhiteCPP;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $MPSColorCPP
+     * @return float
      */
     public function getMPSColorCPP ()
     {
         if (!isset($this->MPSColorCPP))
         {
-            $this->MPSColorCPP = $this->getReport()->getReportMPSColorPerPage();
+            $this->MPSColorCPP = $this->getReport()->getReportSettings()->mpsColorCostPerPage;
         }
 
         return $this->MPSColorCPP;
     }
 
     /**
-     *
-     * @param $MPSColorCPP field_type
-     */
-    public function setMPSColorCPP ($MPSColorCPP)
-    {
-        $this->MPSColorCPP = $MPSColorCPP;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $InternalAdminCost
+     * @return float
      */
     public function getInternalAdminCost ()
     {
@@ -3528,19 +2461,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $InternalAdminCost field_type
-     */
-    public function setInternalAdminCost ($InternalAdminCost)
-    {
-        $this->InternalAdminCost = $InternalAdminCost;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $PrintIQTotalCost
+     * @return float
      */
     public function getPrintIQTotalCost ()
     {
@@ -3553,19 +2474,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $PrintIQTotalCost field_type
-     */
-    public function setPrintIQTotalCost ($PrintIQTotalCost)
-    {
-        $this->PrintIQTotalCost = $PrintIQTotalCost;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $PrintIQSavings
+     * @return float
      */
     public function getPrintIQSavings ()
     {
@@ -3578,19 +2487,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $PrintIQSavings field_type
-     */
-    public function setPrintIQSavings ($PrintIQSavings)
-    {
-        $this->PrintIQSavings = $PrintIQSavings;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $UniqueVendorCount
+     * @return float
      */
     public function getUniqueVendorCount ()
     {
@@ -3604,19 +2501,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $UniqueVendorCount field_type
-     */
-    public function setUniqueVendorCount ($UniqueVendorCount)
-    {
-        $this->UniqueVendorCount = $UniqueVendorCount;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $NumberOfOrdersPerMonth
+     * @return float
      */
     public function getNumberOfOrdersPerMonth ()
     {
@@ -3630,19 +2515,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $NumberOfOrdersPerMonth field_type
-     */
-    public function setNumberOfOrdersPerMonth ($NumberOfOrdersPerMonth)
-    {
-        $this->NumberOfOrdersPerMonth = $NumberOfOrdersPerMonth;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $EmployeeCount
+     * @return float
      */
     public function getEmployeeCount ()
     {
@@ -3656,19 +2529,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $EmployeeCount field_type
-     */
-    public function setEmployeeCount ($EmployeeCount)
-    {
-        $this->EmployeeCount = $EmployeeCount;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $AverageOperatingWatts
+     * @return float
      */
     public function getAverageOperatingWatts ()
     {
@@ -3677,7 +2538,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             $totalWatts = 0;
             foreach ($this->getDevices() as $device)
             {
-                $totalWatts += $device->MasterDevice->WattsPowerNormal;
+                $totalWatts += $device->getMasterDevice()->getWattsPowerNormal();
             }
             $this->AverageOperatingWatts = ($totalWatts > 0) ? $totalWatts / $this->getDeviceCount() : 0;
         }
@@ -3686,19 +2547,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $AverageOperatingWatts field_type
-     */
-    public function setAverageOperatingWatts ($AverageOperatingWatts)
-    {
-        $this->AverageOperatingWatts = $AverageOperatingWatts;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $ReplacementDevices
+     * @return Proposalgen_Model_ReplacementDevice[]
      */
     public function getReplacementDevices ()
     {
@@ -3711,19 +2560,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $ReplacementDevices field_type
-     */
-    public function setReplacementDevices ($ReplacementDevices)
-    {
-        $this->ReplacementDevices = $ReplacementDevices;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $ReplacementDeviceCount
+     * @return int
      */
     public function getReplacementDeviceCount ()
     {
@@ -3736,26 +2573,20 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
+     * @param $type
      *
-     * @param $ReplacementDeviceCount field_type
+     * @return Proposalgen_Model_ReplacementDevice
      */
-    public function setReplacementDeviceCount ($ReplacementDeviceCount)
-    {
-        $this->ReplacementDeviceCount = $ReplacementDeviceCount;
-
-        return $this;
-    }
-
     public function getReplacement ($type)
     {
         $replacementDevice = null;
         $monthlyRate       = 0;
         foreach ($this->getReplacementDevices() as $device)
         {
-            if ($device->ReplacementCategory == $type && ($device->getMonthlyRate() < $monthlyRate || $monthlyRate == 0))
+            if ($device->ReplacementCategory == $type && ($device->monthlyRate < $monthlyRate || $monthlyRate == 0))
             {
                 $replacementDevice = $device;
-                $monthlyRate       = $device->getMonthlyRate();
+                $monthlyRate       = $device->monthlyRate;
             }
         }
 
@@ -3763,15 +2594,14 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $DevicesToBeReplaced
+     * @return stdClass
      */
     public function getDevicesToBeReplaced ()
     {
         if (!isset($this->DevicesToBeReplaced))
         {
             $minimumSavings = 20;
-            $ampvThreshhold = 7000;
+            $ampvThreshold  = 7000;
 
             $replacedDevices                   = new stdClass();
             $replacedDevices->BlackAndWhite    = array();
@@ -3788,7 +2618,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             foreach ($this->getPurchasedDevices() as $device)
             {
                 $deviceReplaced = false;
-                if ($device->getAverageMonthlyPageCount() >= $ampvThreshhold)
+                if ($device->getAverageMonthlyPageCount() >= $ampvThreshold)
                 {
                     $replacedDevices->OverMaxLeasedCapacity [] = $device;
                 }
@@ -3800,7 +2630,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
                         case Proposalgen_Model_TonerConfig::BLACK_ONLY :
                             if ($device->getMasterDevice()->IsFax || $device->getMasterDevice()->IsScanner || $device->getMasterDevice()->IsCopier)
                             {
-                                $savings = $device->getMonthlyRate() - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACMENT_BWMFP]->getMonthlyRate();
+                                $savings = $device->getMonthlyRate() - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACMENT_BWMFP]->monthlyRate;
                                 // MFP
                                 if ($savings >= $minimumSavings)
                                 {
@@ -3810,7 +2640,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
                             }
                             else
                             {
-                                $savings = $device->getMonthlyRate() - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACMENT_BW]->getMonthlyRate();
+                                $savings = $device->getMonthlyRate() - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACMENT_BW]->monthlyRate;
                                 if ($savings >= $minimumSavings)
                                 {
                                     $replacedDevices->BlackAndWhite [] = $device;
@@ -3824,7 +2654,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
                             if ($device->getMasterDevice()->IsFax || $device->getMasterDevice()->IsScanner || $device->getMasterDevice()->IsCopier)
                             {
                                 // MFP
-                                $savings = $device->getMonthlyRate() - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACMENT_COLORMFP]->getMonthlyRate();
+                                $savings = $device->getMonthlyRate() - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACMENT_COLORMFP]->monthlyRate;
                                 if ($savings >= $minimumSavings)
                                 {
                                     $replacedDevices->ColorMFP [] = $device;
@@ -3833,7 +2663,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
                             }
                             else
                             {
-                                $savings = $device->getMonthlyRate() - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACMENT_COLOR]->getMonthlyRate();
+                                $savings = $device->getMonthlyRate() - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACMENT_COLOR]->monthlyRate;
                                 if ($savings >= $minimumSavings)
                                 {
                                     $replacedDevices->Color [] = $device;
@@ -3845,7 +2675,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
                 }
                 if (!$deviceReplaced)
                 {
-                    if (!$device->JITSuppliesSupported)
+                    if (!$device->jitSuppliesSupported)
                     {
                         $replacedDevices->NoTonerLevels [] = $device;
                     }
@@ -3859,28 +2689,17 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $DevicesToBeReplaced field_type
-     */
-    public function setDevicesToBeReplaced ($DevicesToBeReplaced)
-    {
-        $this->DevicesToBeReplaced = $DevicesToBeReplaced;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $LeftOverBlackAndWhitePageCount
+     * @return int
      */
     public function getLeftOverBlackAndWhitePageCount ()
     {
         if (!isset($this->LeftOverBlackAndWhitePageCount))
         {
             $pageCount = 0;
-            foreach ($this->getDevicesToBeReplaced()->LeftOver as $device)
+            /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
+            foreach ($this->getDevicesToBeReplaced()->LeftOver as $deviceInstance)
             {
-                $pageCount += $device->getAverageMonthlyBlackAndWhitePageCount();
+                $pageCount += $deviceInstance->getAverageMonthlyBlackAndWhitePageCount();
             }
             $this->LeftOverBlackAndWhitePageCount = $pageCount * 12;
         }
@@ -3889,28 +2708,17 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $LeftOverBlackAndWhitePageCount field_type
-     */
-    public function setLeftOverBlackAndWhitePageCount ($LeftOverBlackAndWhitePageCount)
-    {
-        $this->LeftOverBlackAndWhitePageCount = $LeftOverBlackAndWhitePageCount;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $LeftOverColorPageCount
+     * @return int
      */
     public function getLeftOverColorPageCount ()
     {
         if (!isset($this->LeftOverColorPageCount))
         {
             $pageCount = 0;
-            foreach ($this->getDevicesToBeReplaced()->LeftOver as $device)
+            /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
+            foreach ($this->getDevicesToBeReplaced()->LeftOver as $deviceInstance)
             {
-                $pageCount += $device->getAverageMonthlyColorPageCount();
+                $pageCount += $deviceInstance->getAverageMonthlyColorPageCount();
             }
             $this->LeftOverColorPageCount = $pageCount * 12;
         }
@@ -3919,19 +2727,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $LeftOverColorPageCount field_type
-     */
-    public function setLeftOverColorPageCount ($LeftOverColorPageCount)
-    {
-        $this->LeftOverColorPageCount = $LeftOverColorPageCount;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $LeftOverPrintIQCost
+     * @return float
      */
     public function getLeftOverPrintIQCost ()
     {
@@ -3944,32 +2740,22 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $LeftOverPrintIQCost field_type
-     */
-    public function setLeftOverPrintIQCost ($LeftOverPrintIQCost)
-    {
-        $this->LeftOverPrintIQCost = $LeftOverPrintIQCost;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $LeftOverCostOfColorDevices
+     * @return float
      */
     public function getLeftOverCostOfColorDevices ()
     {
         if (!isset($this->LeftOverCostOfColorDevices))
         {
             $cost = 0;
-            foreach ($this->getDevicesToBeReplaced()->BlackAndWhite as $device)
+            /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
+            foreach ($this->getDevicesToBeReplaced()->BlackAndWhite as $deviceInstance)
             {
-                $cost += $device->getMonthlyCost();
+                $cost += $deviceInstance->getMonthlyRate();
             }
-            foreach ($this->getDevicesToBeReplaced()->BlackAndWhiteMFP as $device)
+
+            foreach ($this->getDevicesToBeReplaced()->BlackAndWhiteMFP as $deviceInstance)
             {
-                $cost += $device->getMonthlyCost();
+                $cost += $deviceInstance->getMonthlyRate();
             }
             $this->LeftOverCostOfColorDevices = $cost * 12;
         }
@@ -3978,32 +2764,21 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $LeftOverCostOfColorDevices field_type
-     */
-    public function setLeftOverCostOfColorDevices ($LeftOverCostOfColorDevices)
-    {
-        $this->LeftOverCostOfColorDevices = $LeftOverCostOfColorDevices;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $LeftOverCostOfBlackAndWhiteDevices
+     * @return float
      */
     public function getLeftOverCostOfBlackAndWhiteDevices ()
     {
         if (!isset($this->LeftOverCostOfBlackAndWhiteDevices))
         {
             $cost = 0;
-            foreach ($this->getDevicesToBeReplaced()->Color as $device)
+            /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
+            foreach ($this->getDevicesToBeReplaced()->Color as $deviceInstance)
             {
-                $cost += $device->getMonthlyCost();
+                $cost += $deviceInstance->getMonthlyRate();
             }
-            foreach ($this->getDevicesToBeReplaced()->ColorMFP as $device)
+            foreach ($this->getDevicesToBeReplaced()->ColorMFP as $deviceInstance)
             {
-                $cost += $device->getMonthlyCost();
+                $cost += $deviceInstance->getMonthlyRate();
             }
             $this->LeftOverCostOfBlackAndWhiteDevices = $cost * 12;
         }
@@ -4012,19 +2787,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $LeftOverCostOfBlackAndWhiteDevices field_type
-     */
-    public function setLeftOverCostOfBlackAndWhiteDevices ($LeftOverCostOfBlackAndWhiteDevices)
-    {
-        $this->LeftOverCostOfBlackAndWhiteDevices = $LeftOverCostOfBlackAndWhiteDevices;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $CostOfRemainingDevices
+     * @return float
      */
     public function getCostOfRemainingDevices ()
     {
@@ -4037,28 +2800,17 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $CostOfRemainingDevices field_type
-     */
-    public function setCostOfRemainingDevices ($CostOfRemainingDevices)
-    {
-        $this->CostOfRemainingDevices = $CostOfRemainingDevices;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $CurrentCostOfReplacedColorMFPPrinters
+     * @return float
      */
     public function getCurrentCostOfReplacedColorMFPPrinters ()
     {
         if (!isset($this->CurrentCostOfReplacedColorMFPPrinters))
         {
             $cost = 0;
-            foreach ($this->getDevicesToBeReplaced()->ColorMFP as $device)
+            /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
+            foreach ($this->getDevicesToBeReplaced()->ColorMFP as $deviceInstance)
             {
-                $cost += $device->getMonthlyRate();
+                $cost += $deviceInstance->getMonthlyRate();
             }
             $this->CurrentCostOfReplacedColorMFPPrinters = $cost * 12;
         }
@@ -4067,17 +2819,17 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $CurrentCostOfReplacedBlackAndWhiteMFPPrinters
+     * @return float
      */
     public function getCurrentCostOfReplacedBlackAndWhiteMFPPrinters ()
     {
         if (!isset($this->CurrentCostOfReplacedBlackAndWhiteMFPPrinters))
         {
             $cost = 0;
-            foreach ($this->getDevicesToBeReplaced()->BlackAndWhiteMFP as $device)
+            /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
+            foreach ($this->getDevicesToBeReplaced()->BlackAndWhiteMFP as $deviceInstance)
             {
-                $cost += $device->getMonthlyRate();
+                $cost += $deviceInstance->getMonthlyRate();
             }
             $this->CurrentCostOfReplacedBlackAndWhiteMFPPrinters = $cost * 12;
         }
@@ -4086,15 +2838,14 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $ProposedCostOfReplacedBlackAndWhiteMFPPrinters
+     * @return float
      */
     public function getProposedCostOfReplacedBlackAndWhiteMFPPrinters ()
     {
         if (!isset($this->ProposedCostOfReplacedBlackAndWhiteMFPPrinters))
         {
             $countOfReplacedDevices                               = count($this->getDevicesToBeReplaced()->BlackAndWhiteMFP);
-            $cost                                                 = $countOfReplacedDevices * $this->getReplacement('BLACK & WHITE MFP')->getMonthlyRate();
+            $cost                                                 = $countOfReplacedDevices * $this->getReplacement('BLACK & WHITE MFP')->monthlyRate;
             $this->ProposedCostOfReplacedBlackAndWhiteMFPPrinters = $cost * 12;
         }
 
@@ -4102,15 +2853,14 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $ProposedCostOfReplacedColorMFPPrinters
+     * @return float
      */
     public function getProposedCostOfReplacedColorMFPPrinters ()
     {
         if (!isset($this->ProposedCostOfReplacedColorMFPPrinters))
         {
             $countOfReplacedDevices                       = count($this->getDevicesToBeReplaced()->ColorMFP);
-            $cost                                         = $countOfReplacedDevices * $this->getReplacement('COLOR MFP')->getMonthlyRate();
+            $cost                                         = $countOfReplacedDevices * $this->getReplacement('COLOR MFP')->monthlyRate;
             $this->ProposedCostOfReplacedColorMFPPrinters = $cost * 12;
         }
 
@@ -4118,61 +2868,17 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $CurrentCostOfReplacedColorMFPPrinters field_type
-     */
-    public function setCurrentCostOfReplacedColorMFPPrinters ($CurrentCostOfReplacedColorMFPPrinters)
-    {
-        $this->CurrentCostOfReplacedColorMFPPrinters = $CurrentCostOfReplacedColorMFPPrinters;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @param $CurrentCostOfReplacedBlackAndWhiteMFPPrinters field_type
-     */
-    public function setCurrentCostOfReplacedBlackAndWhiteMFPPrinters ($CurrentCostOfReplacedBlackAndWhiteMFPPrinters)
-    {
-        $this->CurrentCostOfReplacedBlackAndWhiteMFPPrinters = $CurrentCostOfReplacedBlackAndWhiteMFPPrinters;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @param $ProposedCostOfReplacedBlackAndWhiteMFPPrinters field_type
-     */
-    public function setProposedCostOfReplacedBlackAndWhiteMFPPrinters ($ProposedCostOfReplacedBlackAndWhiteMFPPrinters)
-    {
-        $this->ProposedCostOfReplacedBlackAndWhiteMFPPrinters = $ProposedCostOfReplacedBlackAndWhiteMFPPrinters;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @param $ProposedCostOfReplacedColorMFPPrinters field_type
-     */
-    public function setProposedCostOfReplacedColorMFPPrinters ($ProposedCostOfReplacedColorMFPPrinters)
-    {
-        $this->ProposedCostOfReplacedColorMFPPrinters = $ProposedCostOfReplacedColorMFPPrinters;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $CurrentCostOfReplacedColorPrinters
+     * @return float
      */
     public function getCurrentCostOfReplacedColorPrinters ()
     {
         if (!isset($this->CurrentCostOfReplacedColorPrinters))
         {
             $cost = 0;
-            foreach ($this->getDevicesToBeReplaced()->Color as $device)
+            /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
+            foreach ($this->getDevicesToBeReplaced()->Color as $deviceInstance)
             {
-                $cost += $device->getMonthlyRate();
+                $cost += $deviceInstance->getMonthlyRate();
             }
             $this->CurrentCostOfReplacedColorPrinters = $cost * 12;
         }
@@ -4181,28 +2887,17 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $CurrentCostOfReplacedColorPrinters field_type
-     */
-    public function setCurrentCostOfReplacedColorPrinters ($CurrentCostOfReplacedColorPrinters)
-    {
-        $this->CurrentCostOfReplacedColorPrinters = $CurrentCostOfReplacedColorPrinters;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $CurrentCostOfReplacedBlackAndWhitePrinters
+     * @return float
      */
     public function getCurrentCostOfReplacedBlackAndWhitePrinters ()
     {
         if (!isset($this->CurrentCostOfReplacedBlackAndWhitePrinters))
         {
             $cost = 0;
-            foreach ($this->getDevicesToBeReplaced()->BlackAndWhite as $device)
+            /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
+            foreach ($this->getDevicesToBeReplaced()->BlackAndWhite as $deviceInstance)
             {
-                $cost += $device->getMonthlyRate();
+                $cost += $deviceInstance->getMonthlyRate();
             }
             $this->CurrentCostOfReplacedBlackAndWhitePrinters = $cost * 12;
         }
@@ -4211,26 +2906,14 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $CurrentCostOfReplacedBlackAndWhitePrinters field_type
-     */
-    public function setCurrentCostOfReplacedBlackAndWhitePrinters ($CurrentCostOfReplacedBlackAndWhitePrinters)
-    {
-        $this->CurrentCostOfReplacedBlackAndWhitePrinters = $CurrentCostOfReplacedBlackAndWhitePrinters;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $ProposedCostOfReplacedBlackAndWhitePrinters
+     * @return float
      */
     public function getProposedCostOfReplacedBlackAndWhitePrinters ()
     {
         if (!isset($this->ProposedCostOfReplacedBlackAndWhitePrinters))
         {
             $countOfReplacedDevices                            = count($this->getDevicesToBeReplaced()->BlackAndWhite);
-            $cost                                              = $countOfReplacedDevices * $this->getReplacement('BLACK & WHITE')->getMonthlyRate();
+            $cost                                              = $countOfReplacedDevices * $this->getReplacement('BLACK & WHITE')->monthlyRate;
             $this->ProposedCostOfReplacedBlackAndWhitePrinters = $cost * 12;
         }
 
@@ -4238,26 +2921,14 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $ProposedCostOfReplacedBlackAndWhitePrinters field_type
-     */
-    public function setProposedCostOfReplacedBlackAndWhitePrinters ($ProposedCostOfReplacedBlackAndWhitePrinters)
-    {
-        $this->ProposedCostOfReplacedBlackAndWhitePrinters = $ProposedCostOfReplacedBlackAndWhitePrinters;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $ProposedCostOfReplacedColorPrinters
+     * @return float
      */
     public function getProposedCostOfReplacedColorPrinters ()
     {
         if (!isset($this->ProposedCostOfReplacedColorPrinters))
         {
             $countOfReplacedDevices                    = count($this->getDevicesToBeReplaced()->Color);
-            $cost                                      = $countOfReplacedDevices * $this->getReplacement('COLOR')->getMonthlyRate();
+            $cost                                      = $countOfReplacedDevices * $this->getReplacement('COLOR')->monthlyRate;
             $this->ProposedCostOfReplacedColorPrinters = $cost * 12;
         }
 
@@ -4265,19 +2936,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $ProposedCostOfReplacedColorPrinters field_type
-     */
-    public function setProposedCostOfReplacedColorPrinters ($ProposedCostOfReplacedColorPrinters)
-    {
-        $this->ProposedCostOfReplacedColorPrinters = $ProposedCostOfReplacedColorPrinters;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $TotalProposedAnnualCost
+     * @return float
      */
     public function getTotalProposedAnnualCost ()
     {
@@ -4290,19 +2949,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $TotalProposedAnnualCost field_type
-     */
-    public function setTotalProposedAnnualCost ($TotalProposedAnnualCost)
-    {
-        $this->TotalProposedAnnualCost = $TotalProposedAnnualCost;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $TotalAnnualSavings
+     * @return float
      */
     public function getTotalAnnualSavings ()
     {
@@ -4315,19 +2962,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $TotalAnnualSavings field_type
-     */
-    public function setTotalAnnualSavings ($TotalAnnualSavings)
-    {
-        $this->TotalAnnualSavings = $TotalAnnualSavings;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $CostOfExecutingSuppliesOrder
+     * @return float
      */
     public function getCostOfExecutingSuppliesOrder ()
     {
@@ -4341,19 +2976,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $CostOfExecutingSuppliesOrder field_type
-     */
-    public function setCostOfExecutingSuppliesOrder ($CostOfExecutingSuppliesOrder)
-    {
-        $this->CostOfExecutingSuppliesOrder = $CostOfExecutingSuppliesOrder;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $DevicesReportingPowerThreshold
+     * @return float
      */
     public function getDevicesReportingPowerThreshold ()
     {
@@ -4366,19 +2989,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $DevicesReportingPowerThreshold field_type
-     */
-    public function setDevicesReportingPowerThreshold ($DevicesReportingPowerThreshold)
-    {
-        $this->DevicesReportingPowerThreshold = $DevicesReportingPowerThreshold;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $GrossMarginMonthlyProfit
+     * @return float
      */
     public function getGrossMarginMonthlyProfit ()
     {
@@ -4391,19 +3002,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $GrossMarginMonthlyProfit field_type
-     */
-    public function setGrossMarginMonthlyProfit ($GrossMarginMonthlyProfit)
-    {
-        $this->GrossMarginMonthlyProfit = $GrossMarginMonthlyProfit;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $GrossMarginOverallMargin
+     * @return float
      */
     public function getGrossMarginOverallMargin ()
     {
@@ -4416,19 +3015,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $GrossMarginOverallMargin field_type
-     */
-    public function setGrossMarginOverallMargin ($GrossMarginOverallMargin)
-    {
-        $this->GrossMarginOverallMargin = $GrossMarginOverallMargin;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $GrossMarginWeightedCPP
+     * @return stdClass
      */
     public function getGrossMarginWeightedCPP ()
     {
@@ -4451,19 +3038,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $GrossMarginWeightedCPP field_type
-     */
-    public function setGrossMarginWeightedCPP ($GrossMarginWeightedCPP)
-    {
-        $this->GrossMarginWeightedCPP = $GrossMarginWeightedCPP;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $GrossMarginBlackAndWhiteMargin
+     * @return float
      */
     public function getGrossMarginBlackAndWhiteMargin ()
     {
@@ -4476,19 +3051,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $GrossMarginBlackAndWhiteMargin field_type
-     */
-    public function setGrossMarginBlackAndWhiteMargin ($GrossMarginBlackAndWhiteMargin)
-    {
-        $this->GrossMarginBlackAndWhiteMargin = $GrossMarginBlackAndWhiteMargin;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $GrossMarginColorMargin
+     * @return float
      */
     public function getGrossMarginColorMargin ()
     {
@@ -4502,19 +3065,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $GrossMarginColorMargin field_type
-     */
-    public function setGrossMarginColorMargin ($GrossMarginColorMargin)
-    {
-        $this->GrossMarginColorMargin = $GrossMarginColorMargin;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $UniqueTonerList
+     * @return Proposalgen_Model_Toner[]
      */
     public function getUniqueTonerList ()
     {
@@ -4539,19 +3090,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $UniqueTonerList field_type
-     */
-    public function setUniqueTonerList ($UniqueTonerList)
-    {
-        $this->UniqueTonerList = $UniqueTonerList;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $UniquePurchasedDeviceList
+     * @return Proposalgen_Model_MasterDevice[]
      */
     public function getUniquePurchasedDeviceList ()
     {
@@ -4560,9 +3099,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             $masterDevices = array();
             foreach ($this->getPurchasedDevices() as $device)
             {
-                if (!in_array($device->MasterDevice, $masterDevices))
+                if (!in_array($device->getMasterDevice(), $masterDevices))
                 {
-                    $masterDevices [] = $device->MasterDevice;
+                    $masterDevices [] = $device->getMasterDevice();
                 }
             }
             $this->UniquePurchasedDeviceList = $masterDevices;
@@ -4572,19 +3111,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $UniquePurchasedDeviceList field_type
-     */
-    public function setUniquePurchasedDeviceList ($UniquePurchasedDeviceList)
-    {
-        $this->UniquePurchasedDeviceList = $UniquePurchasedDeviceList;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $UniquePurchasedTonerList
+     * @return Proposalgen_Model_Toner[]
      */
     public function getUniquePurchasedTonerList ()
     {
@@ -4609,19 +3136,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $UniquePurchasedTonerList field_type
-     */
-    public function setUniquePurchasedTonerList ($UniquePurchasedTonerList)
-    {
-        $this->UniquePurchasedTonerList = $UniquePurchasedTonerList;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $UniqueDeviceList
+     * @return Proposalgen_Model_MasterDevice[]
      */
     public function getUniqueDeviceList ()
     {
@@ -4630,25 +3145,14 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             $masterDevices = array();
             foreach ($this->getDevices() as $device)
             {
-                if (!in_array($device->MasterDevice, $masterDevices))
+                if (!in_array($device->getMasterDevice(), $masterDevices))
                 {
-                    $masterDevices [] = $device->MasterDevice;
+                    $masterDevices [] = $device->getMasterDevice();
                 }
             }
             $this->UniqueDeviceList = $masterDevices;
         }
 
         return $this->UniqueDeviceList;
-    }
-
-    /**
-     *
-     * @param $UniqueDeviceList field_type
-     */
-    public function setUniqueDeviceList ($UniqueDeviceList)
-    {
-        $this->UniqueDeviceList = $UniqueDeviceList;
-
-        return $this;
     }
 }

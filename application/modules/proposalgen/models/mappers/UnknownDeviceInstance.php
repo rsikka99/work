@@ -218,19 +218,20 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                     }
 
 
-                    $device->setDeviceInstanceId(null)
-                        ->setReportId($row->report_id)
-                        ->setMasterDevice($masterDevice)
-                        ->setUploadDataCollectorId($row->upload_data_collector_row_id)
-                        ->setSerialNumber($row->printer_serial_number)
-                        ->setMPSMonitorStartDate($row->mps_monitor_startdate)
-                        ->setMPSMonitorEndDate($row->mps_monitor_enddate)
-                        ->setMPSDiscoveryDate($row->mps_discovery_date)
-                        ->setIsExcluded($row->is_excluded)
-                        ->setMeters($meters)
-                        ->setIsUnknown(true)
-                        ->setJitSuppliesSupported($row->jit_supplies_supported)
-                        ->setIpAddress($row->ip_address);
+                    $device->id      = null;
+                    $device->reportId              = $row->report_id;
+                    $device->uploadDataCollectorId = $row->upload_data_collector_row_id;
+                    $device->serialNumber          = $row->printer_serial_number;
+                    $device->mpsMonitorStartDate   = $row->mps_monitor_startdate;
+                    $device->mpsMonitorEndDate     = $row->mps_monitor_enddate;
+                    $device->mpsDiscoveryDate      = $row->mps_discovery_date;
+                    $device->isExcluded            = $row->is_excluded;
+                    $device->isUnknown             = true;
+                    $device->JitSuppliesSupported  = $row->jit_supplies_supported;
+                    $device->ipAddress             = $row->ip_address;
+
+                    $device->setMeters($meters);
+                    $device->setMasterDevice($masterDevice);
 
                     $deviceList [] = $device;
                 }
