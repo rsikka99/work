@@ -243,7 +243,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     {
         if (isset($this->_activeStep))
         {
-            $prevStep = $this->_activeStep->previousStep);
+            $prevStep = $this->_activeStep->previousStep;
             if ($prevStep)
                 $this->_helper->redirector($prevStep->action, $prevStep->controller);
         }
