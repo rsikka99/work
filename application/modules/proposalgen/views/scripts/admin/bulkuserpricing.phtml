@@ -95,13 +95,13 @@
 			colModel:[
         		{tag:1, width:30, name:'toner_id', index:'toner_id', sorttype:'int', hidden:true},
 				{tag:2, width:60, name:'toner_SKU', index:'toner_SKU'},
-				{tag:3, width:90, name:'manufacturer_name', index:'manufacturer_name'},
+				{tag:3, width:120, name:'manufacturer_name', index:'manufacturer_name'},
 				{tag:4, width:50, name:'part_type_id', index:'part_type_id'},
-				{tag:5, width:45, name:'toner_color_name', index:'toner_color_name'},
-				{tag:6, width:40, name:'toner_yield', index:'toner_yield', align:'right'},
-				{tag:7, width:70, name:'toner_price', index:'toner_price', align:'right', formatter:'currency', formatoptions:{prefix:"$", thousandsSeparator:","}},
-				{tag:8, width:85, name:'override_toner_price', index:'override_toner_price', align:'right', formatter:'currency', formatoptions:{prefix:"$", thousandsSeparator:","}},
-				{tag:9, width:95, name:'new_toner_price', index:'new_toner_price', align:'right'},
+				{tag:5, width:60, name:'toner_color_name', index:'toner_color_name'},
+				{tag:6, width:60, name:'toner_yield', index:'toner_yield', align:'right'},
+				{tag:7, width:90, name:'toner_price', index:'toner_price', align:'right', formatter:'currency', formatoptions:{prefix:"$", thousandsSeparator:","}},
+				{tag:8, width:100, name:'override_toner_price', index:'override_toner_price', align:'right', formatter:'currency', formatoptions:{prefix:"$", thousandsSeparator:","}},
+				{tag:9, width:160, name:'new_toner_price', index:'new_toner_price', align:'right'},
 				{tag:10, width:50, name:'master_device_id', index:'master_device_id', hidden:true},
 				{tag:11, width:155, name:'device_list', index:'device_list'}
 			],
@@ -136,7 +136,7 @@
 					}
 					
 					hidden_price_element = "<input type='hidden' name='hdnTonerPrice"+cur_row+"' id='hdnTonerPrice"+cur_row+"' value='" + hidden_price + "' size='8' maxlength='8' />"; 
-					new_price_element = "$ <input type='text' name='txtTonerPrice"+cur_row+"' id='txtTonerPrice"+cur_row+"' size='8' maxlength='8' style='text-align:right;' onkeypress='javascript: return numbersonly(this, event);' />"; 
+					new_price_element = "$ <input type='text' name='txtTonerPrice"+cur_row+"' id='txtTonerPrice"+cur_row+"' class='span2' maxlength='8' style='text-align:right;' onkeypress='javascript: return numbersonly(this, event);' />";
 					jQuery("#toners_list").jqGrid('setRowData',ids[i],{new_toner_price:hidden_price_element+new_price_element});
 					
 					var min = 4;
@@ -350,6 +350,7 @@
 	}
 	
 	function apply_percentage() {
+
 		var id = 0;
 		var old_price = 0;
 		var new_price = 0;
@@ -369,17 +370,15 @@
 			list = 'toners';
 			type = 'Toner';
 		}
-		
+
 		if(percentage > 0) {
 			var ids = jQuery("#"+list+"_list").jqGrid('getDataIDs');
-			for(var i=0; i < ids.length; i++) { 
+			for(var i=0; i < ids.length; i++) {
 				var cur_row = ids[i];
 				var old_price = $("#hdn"+type+"Price"+cur_row).val();
-				
 				if(old_price == 0) {
 					old_price = default_price;
 				}
-				
 				if ($("#jqg_"+list+"_list_"+cur_row).is(':checked') && old_price > 0) {
 					if(sign == "-") {
 						new_price = old_price - (old_price * (percentage/100));
