@@ -1,7 +1,7 @@
 <?php
-class Proposalgen_Model_Toner extends Tangent_Model_Abstract
+class Proposalgen_Model_Toner extends My_Model_Abstract
 {
-    const EMILY_RANDOM_NUMBER = 0.05;
+    const MANUFACTURER_ASSUMED_COVERAGE = 0.05;
     static $ACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE;
     static $ACTUAL_PAGE_COVERAGE_COLOR;
     static $ESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE;
@@ -9,21 +9,121 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     static $DefaultToners;
 
     // Database fields
-    protected $TonerId;
-    protected $TonerSKU;
-    protected $TonerPrice;
-    protected $TonerYield;
-    protected $PartTypeId;
-    protected $ManufacturerId;
-    protected $TonerColorId;
+    /**
+     * @var int
+     */
+    public $id;
 
-    // Related Objects
-    protected $PartType;
-    protected $Manufacturer;
-    protected $TonerColor;
+    /**
+     * @var string
+     */
+    public $sku;
+
+    /**
+     * @var float
+     */
+    public $cost;
+
+    /**
+     * @var int
+     */
+    public $yield;
+
+    /**
+     * @var int
+     */
+    public $partTypeId;
+
+    /**
+     * @var int
+     */
+    public $manufacturerId;
+
+    /**
+     * @var int
+     */
+    public $tonerColorId;
+
+    /**
+     * @var Proposalgen_Model_PartType
+     */
+    protected $_partType;
+
+    /**
+     * @var Proposalgen_Model_Manufacturer
+     */
+    protected $_manufacturer;
+
+    /**
+     * @var Proposalgen_Model_TonerColor
+     */
+    protected $_tonerColor;
 
     // Calculated Fields
-    protected $CostPerPage;
+    protected $_costPerPage;
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
+    {
+        if (is_array($params))
+        {
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
+        }
+
+        if (isset($params->id) && !is_null($params->id))
+        {
+            $this->id = $params->id;
+        }
+
+        if (isset($params->sku) && !is_null($params->sku))
+        {
+            $this->sku = $params->sku;
+        }
+
+        if (isset($params->cost) && !is_null($params->cost))
+        {
+            $this->cost = $params->cost;
+        }
+
+        if (isset($params->yield) && !is_null($params->yield))
+        {
+            $this->yield = $params->yield;
+        }
+
+        if (isset($params->partTypeId) && !is_null($params->partTypeId))
+        {
+            $this->partTypeId = $params->partTypeId;
+        }
+
+        if (isset($params->manufacturerId) && !is_null($params->manufacturerId))
+        {
+            $this->manufacturerId = $params->manufacturerId;
+        }
+
+        if (isset($params->tonerColorId) && !is_null($params->tonerColorId))
+        {
+            $this->tonerColorId = $params->tonerColorId;
+        }
+
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray ()
+    {
+        return array(
+            "id"             => $this->id,
+            "sku"            => $this->sku,
+            "cost"           => $this->cost,
+            "yield"          => $this->yield,
+            "partTypeId"     => $this->partTypeId,
+            "manufacturerId" => $this->manufacturerId,
+            "tonerColorId"   => $this->tonerColorId,
+        );
+    }
 
 
     /**
@@ -39,29 +139,18 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param field_type $DefaultToners
-     */
-    public static function setDefaultToners ($DefaultToners)
-    {
-        Proposalgen_Model_Toner::$DefaultToners = $DefaultToners;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $CostPerPage
+     * @return stdClass
+     * @throws Exception
      */
     public function getCostPerPage ()
     {
-        if (!isset($this->CostPerPage))
+        if (!isset($this->_costPerPage))
         {
             $actualBlackCoverage    = 0;
             $actualColorCoverage    = 0;
             $estimatedBlackCoverage = 0;
             $estimatedColorCoverage = 0;
-            switch ($this->getTonerColor()->getTonerColorId())
+            switch ($this->getTonerColor()->tonerColorId)
             {
                 case Proposalgen_Model_TonerColor::BLACK :
                     $actualBlackCoverage    = self::getACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE();
@@ -99,227 +188,49 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
             $costPerPage->Estimated->BlackAndWhite = 0;
             $costPerPage->Estimated->Color         = 0;
             // We must have a toner yield
-            if ($this->getTonerYield())
+            if ($this->yield)
             {
                 // Check to make sure we have a black coverage
                 if ($actualBlackCoverage && $estimatedBlackCoverage)
                 {
-                    $costPerPage->Actual->BlackAndWhite    = $this->getTonerPrice() / ($this->getTonerYield() * (self::EMILY_RANDOM_NUMBER / $actualBlackCoverage));
-                    $costPerPage->Raw->BlackAndWhite       = $this->getTonerPrice() / $this->getTonerYield();
-                    $costPerPage->Estimated->BlackAndWhite = $this->getTonerPrice() / ($this->getTonerYield() * (self::EMILY_RANDOM_NUMBER / $estimatedBlackCoverage));
+                    $costPerPage->Actual->BlackAndWhite    = $this->cost / ($this->yield * (self::MANUFACTURER_ASSUMED_COVERAGE / $actualBlackCoverage));
+                    $costPerPage->Raw->BlackAndWhite       = $this->cost / $this->yield;
+                    $costPerPage->Estimated->BlackAndWhite = $this->cost / ($this->yield * (self::MANUFACTURER_ASSUMED_COVERAGE / $estimatedBlackCoverage));
                 }
                 // Check to make sure we have a color coverage
                 if ($actualColorCoverage && $estimatedColorCoverage)
                 {
-                    $costPerPage->Actual->Color    = $this->getTonerPrice() / ($this->getTonerYield() * (self::EMILY_RANDOM_NUMBER / $actualColorCoverage));
-                    $costPerPage->Raw->Color       = $this->getTonerPrice() / $this->getTonerYield();
-                    $costPerPage->Estimated->Color = $this->getTonerPrice() / ($this->getTonerYield() * (self::EMILY_RANDOM_NUMBER / $estimatedColorCoverage));
+                    $costPerPage->Actual->Color    = $this->cost / ($this->yield * (self::MANUFACTURER_ASSUMED_COVERAGE / $actualColorCoverage));
+                    $costPerPage->Raw->Color       = $this->cost / $this->yield;
+                    $costPerPage->Estimated->Color = $this->cost / ($this->yield * (self::MANUFACTURER_ASSUMED_COVERAGE / $estimatedColorCoverage));
                 }
             }
             else
             {
-                throw new Exception("Toner has a yield of zero! ID:" . $this->TonerYield);
+                throw new Exception("Toner has a yield of zero! ID:" . $this->yield);
             }
 
             // This is a ranking to be able to compare a toner with other toners of the same kind
             $costPerPage->Rank = $costPerPage->Estimated->BlackAndWhite + $costPerPage->Estimated->Color;
 
-            $this->CostPerPage = $costPerPage;
+            $this->_costPerPage = $costPerPage;
         }
 
-        return $this->CostPerPage;
+        return $this->_costPerPage;
     }
 
     /**
+     * @param $CostPerPage
      *
-     * @param field_type $CostPerPage
+     * @return Proposalgen_Model_Toner
      */
     public function setCostPerPage ($CostPerPage)
     {
-        $this->CostPerPage = $CostPerPage;
+        $this->_costPerPage = $CostPerPage;
 
         return $this;
     }
 
-    /**
-     *
-     * @return the $TonerId
-     */
-    public function getTonerId ()
-    {
-        if (!isset($this->TonerId))
-        {
-
-            $this->TonerId = null;
-        }
-
-        return $this->TonerId;
-    }
-
-    /**
-     *
-     * @param field_type $TonerId
-     */
-    public function setTonerId ($TonerId)
-    {
-        $this->TonerId = $TonerId;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $TonerSKU
-     */
-    public function getTonerSKU ()
-    {
-        if (!isset($this->TonerSKU))
-        {
-            $this->TonerSKU = "DefaultTonerSKU";
-        }
-
-        return $this->TonerSKU;
-    }
-
-    /**
-     *
-     * @param field_type $TonerSKU
-     */
-    public function setTonerSKU ($TonerSKU)
-    {
-        $this->TonerSKU = $TonerSKU;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $TonerPrice
-     */
-    public function getTonerPrice ()
-    {
-        if (!isset($this->TonerPrice))
-        {
-
-            $this->TonerPrice = null;
-        }
-
-        return $this->TonerPrice;
-    }
-
-    /**
-     *
-     * @param field_type $TonerPrice
-     */
-    public function setTonerPrice ($TonerPrice)
-    {
-        $this->TonerPrice = $TonerPrice;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $TonerYield
-     */
-    public function getTonerYield ()
-    {
-        if (!isset($this->TonerYield))
-        {
-
-            $this->TonerYield = null;
-        }
-
-        return $this->TonerYield;
-    }
-
-    /**
-     *
-     * @param field_type $TonerYield
-     */
-    public function setTonerYield ($TonerYield)
-    {
-        $this->TonerYield = $TonerYield;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $PartTypeId
-     */
-    public function getPartTypeId ()
-    {
-        if (!isset($this->PartTypeId))
-        {
-            $this->PartTypeId = Proposalgen_Model_PartType::OEM;
-        }
-
-        return $this->PartTypeId;
-    }
-
-    /**
-     *
-     * @param field_type $PartTypeId
-     */
-    public function setPartTypeId ($PartTypeId)
-    {
-        $this->PartTypeId = $PartTypeId;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $ManufacturerId
-     */
-    public function getManufacturerId ()
-    {
-        if (!isset($this->ManufacturerId))
-        {
-
-            $this->ManufacturerId = null;
-        }
-
-        return $this->ManufacturerId;
-    }
-
-    /**
-     *
-     * @param field_type $ManufacturerId
-     */
-    public function setManufacturerId ($ManufacturerId)
-    {
-        $this->ManufacturerId = $ManufacturerId;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $TonerColorId
-     */
-    public function getTonerColorId ()
-    {
-        if (!isset($this->TonerColorId))
-        {
-
-            $this->TonerColorId = null;
-        }
-
-        return $this->TonerColorId;
-    }
-
-    /**
-     *
-     * @param field_type $TonerColorId
-     */
-    public function setTonerColorId ($TonerColorId)
-    {
-        $this->TonerColorId = $TonerColorId;
-
-        return $this;
-    }
 
     /**
      * Gets the part type
@@ -328,81 +239,83 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
      */
     public function getPartType ()
     {
-        if (!isset($this->PartType))
+        if (!isset($this->_partType))
         {
-            $partTypeMapper = Proposalgen_Model_Mapper_PartType::getInstance();
-            $this->PartType = $partTypeMapper->find($this->getPartTypeId());
+            $partTypeMapper  = Proposalgen_Model_Mapper_PartType::getInstance();
+            $this->_partType = $partTypeMapper->find($this->partTypeId);
         }
 
-        return $this->PartType;
+        return $this->_partType;
     }
 
     /**
      * Sets the part type
      *
      * @param Proposalgen_Model_PartType $PartType
+     *
+     * @return \Proposalgen_Model_Toner
      */
     public function setPartType ($PartType)
     {
-        $this->PartType = $PartType;
+        $this->_partType = $PartType;
 
         return $this;
     }
 
     /**
-     *
-     * @return the $Manufacturer
+     * @return Proposalgen_Model_Manufacturer
      */
     public function getManufacturer ()
     {
-        if (!isset($this->Manufacturer))
+        if (!isset($this->_manufacturer))
         {
-            $this->Manufacturer = Proposalgen_Model_Mapper_Manufacturer::getInstance()->find($this->getManufacturerId());
+            $this->_manufacturer = Proposalgen_Model_Mapper_Manufacturer::getInstance()->find($this->manufacturerId);
         }
 
-        return $this->Manufacturer;
+        return $this->_manufacturer;
     }
 
     /**
+     * @param Proposalgen_Model_Manufacturer $Manufacturer
      *
-     * @param field_type $Manufacturer
+     * @return Proposalgen_Model_Toner
      */
     public function setManufacturer ($Manufacturer)
     {
-        $this->Manufacturer = $Manufacturer;
+        $this->_manufacturer = $Manufacturer;
 
         return $this;
     }
 
     /**
-     *
      * @return Proposalgen_Model_TonerColor
      */
     public function getTonerColor ()
     {
-        if (!isset($this->TonerColor))
+        if (!isset($this->_tonerColor))
         {
-            $tonerColorMapper = Proposalgen_Model_Mapper_TonerColor::getInstance();
-            $this->TonerColor = $tonerColorMapper->find($this->getTonerColorId());
+            $tonerColorMapper  = Proposalgen_Model_Mapper_TonerColor::getInstance();
+            $this->_tonerColor = $tonerColorMapper->find($this->tonerColorId);
         }
 
-        return $this->TonerColor;
+        return $this->_tonerColor;
     }
 
     /**
-     *
      * @param Proposalgen_Model_TonerColor $TonerColor
+     *
+     * @return \Proposalgen_Model_Toner
      */
     public function setTonerColor ($TonerColor)
     {
-        $this->TonerColor = $TonerColor;
+        $this->_tonerColor = $TonerColor;
 
         return $this;
     }
 
     /**
-     *
-     * @return the $ACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE
+     * @throws Exception
+     * @return float
      */
     public static function getACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE ()
     {
@@ -415,7 +328,6 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @param float $ACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE
      */
     public static function setACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE ($ACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE)
@@ -424,8 +336,8 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $ACTUAL_PAGE_COVERAGE_COLOR
+     * @throws Exception
+     * @return float
      */
     public static function getACTUAL_PAGE_COVERAGE_COLOR ()
     {
@@ -438,7 +350,6 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @param float $ACTUAL_PAGE_COVERAGE_COLOR
      */
     public static function setACTUAL_PAGE_COVERAGE_COLOR ($ACTUAL_PAGE_COVERAGE_COLOR)
@@ -447,8 +358,8 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $ESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE
+     * @throws Exception
+     * @return float
      */
     public static function getESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE ()
     {
@@ -461,7 +372,6 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @param float $ESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE
      */
     public static function setESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE ($ESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE)
@@ -470,8 +380,8 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $ESTIMATED_PAGE_COVERAGE_COLOR
+     * @throws Exception
+     * @return float
      */
     public static function getESTIMATED_PAGE_COVERAGE_COLOR ()
     {
@@ -484,7 +394,6 @@ class Proposalgen_Model_Toner extends Tangent_Model_Abstract
     }
 
     /**
-     *
      * @param float $ESTIMATED_PAGE_COVERAGE_COLOR
      */
     public static function setESTIMATED_PAGE_COVERAGE_COLOR ($ESTIMATED_PAGE_COVERAGE_COLOR)

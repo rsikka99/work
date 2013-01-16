@@ -946,7 +946,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 // GET TONER
                 $toner          = Proposalgen_Model_Mapper_Toner::getInstance()->find($toner_id);
-                $toner_color_id = $toner->getTonerColorId();
+                $toner_color_id = $toner->tonerColorId;
                 // GET NUMBER OF DEVICES USING THIS TONER
                 $total_devices       = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchAll('toner_id = ' . $toner_id);
                 $total_devices_count = count($total_devices);
@@ -1098,7 +1098,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         {
             // GET TONER
             $toner          = Proposalgen_Model_Mapper_Toner::getInstance()->find($toner_id);
-            $toner_color_id = $toner->getTonerColorId();
+            $toner_color_id = $toner->tonerColorId;
 
             // GET NUMBER OF DEVICES USING THIS TONER
             $total_devices       = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchAll('toner_id = ' . $toner_id);
@@ -1404,7 +1404,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
         // GET TONER
         $toner          = Proposalgen_Model_Mapper_Toner::getInstance()->find($replace_id);
-        $toner_color_id = $toner->getTonerColorId();
+        $toner_color_id = $toner->tonerColorId;
 
         // GET ALL DEVICES USING THIS TONER
         $total_devices = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchAll('toner_id = ' . $replace_id);

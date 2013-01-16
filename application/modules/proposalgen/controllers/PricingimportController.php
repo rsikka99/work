@@ -170,21 +170,21 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                     {
                         foreach ( $tonersByColor as $tonerColorId => $tonerArray )
                         {
-                            foreach ( $tonerArray as $tonerrow )
+                            foreach ( $tonerArray as $tonerRow )
                             
                             {
-                                $row ["$tonerrow yield"] = str_replace(",", "", $row ["$tonerrow yield"]);
-                                $row ["$tonerrow cost"] = str_replace(",", "", $row ["$tonerrow cost"]);
-                                if (strlen($row ["$tonerrow sku"]) > 1 && $row ["$tonerrow cost"] > 0 && $row ["$tonerrow yield"] > 0)
+                                $row ["$tonerRow yield"] = str_replace(",", "", $row ["$tonerRow yield"]);
+                                $row ["$tonerRow cost"] = str_replace(",", "", $row ["$tonerRow cost"]);
+                                if (strlen($row ["$tonerRow sku"]) > 1 && $row ["$tonerRow cost"] > 0 && $row ["$tonerRow yield"] > 0)
                                 {
                                     $toner = new Proposalgen_Model_Toner();
                                     $tonerMfgId = $manufacturerId;
-                                    if (array_key_exists("$tonerrow man.", $row))
+                                    if (array_key_exists("$tonerRow man.", $row))
                                     {
-                                        if (strlen($row ["$tonerrow man."]) > 1)
+                                        if (strlen($row ["$tonerRow man."]) > 1)
                                         {
                                             // Toner Manufacturer
-                                            $tonerTempMfg = strtolower($row ["$tonerrow man."]);
+                                            $tonerTempMfg = strtolower($row ["$tonerRow man."]);
                                             if (array_key_exists($tonerTempMfg, $manufacturers))
                                             {
                                                 $tonerMfgId = $manufacturers [$tonerTempMfg];
@@ -192,7 +192,7 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                                             else
                                             {
                                                 $manufacturer = new Proposalgen_Model_Manufacturer();
-                                                $manufacturer->setManufacturerName($row ["$tonerrow man."])->setIsDeleted(false);
+                                                $manufacturer->setManufacturerName($row ["$tonerRow man."])->setIsDeleted(false);
                                                 $tonerMfgId = Proposalgen_Model_Mapper_Manufacturer::getInstance()->save($manufacturer);
                                                 $manufacturers [$tonerTempMfg] = $tonerMfgId;
                                             }
@@ -207,7 +207,9 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                                             else
                                             {
                                                 $manufacturer = new Proposalgen_Model_Manufacturer();
-                                                $manufacturer->setManufacturerName(ucwords($OEMMfg))->setIsDeleted(false);
+                                                $manufacturer->fullname = ucwords($OEMMfg);
+                                                $manufacturer->displayname = ucwords($OEMMfg);
+                                                $manufacturer->isDeleted = false;
                                                 $tonerMfgId = Proposalgen_Model_Mapper_Manufacturer::getInstance()->save($manufacturer);
                                                 $manufacturers [$OEMMfg] = $tonerMfgId;
                                             }
@@ -220,18 +222,18 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                                     
                                     // Create and cache the toner if it doenst
                                     // already exist
-                                    if (! array_key_exists($row ["$tonerrow sku"], $globalToners))
+                                    if (! array_key_exists($row ["$tonerRow sku"], $globalToners))
                                     {
-                                        $toner->setTonerSKU($row ["$tonerrow sku"])
-                                            ->setTonerPrice($row ["$tonerrow cost"])
-                                            ->setTonerYield($row ["$tonerrow yield"])
-                                            ->setPartTypeId($partTypeId)
-                                            ->setManufacturerId($tonerMfgId)
-                                            ->setTonerColorId($tonerColorId);
-                                        $toner->setTonerId($tonerMapper->save($toner));
-                                        $globalToners [$row ["$tonerrow sku"]] = $toner;
+                                        $toner->sku = $row ["$tonerRow sku"];
+                                        $toner->cost = $row ["$tonerRow cost"];
+                                        $toner->yield = $row ["$tonerRow yield"];
+                                        $toner->partTypeId = $partTypeId;
+                                        $toner->manufacturerId = $tonerMfgId;
+                                        $toner->tonerColorId = $tonerColorId;
+                                        $toner->id = $tonerMapper->save($toner);
+                                        $globalToners [$row ["$tonerRow sku"]] = $toner;
                                     }
-                                    $toners [$partTypeId] [$tonerColorId] [] = $globalToners [$row ["$tonerrow sku"]];
+                                    $toners [$partTypeId] [$tonerColorId] [] = $globalToners [$row ["$tonerRow sku"]];
                                 }
                             }
                         }

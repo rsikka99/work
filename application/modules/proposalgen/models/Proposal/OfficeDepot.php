@@ -481,8 +481,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         if (!isset($this->Devices))
         {
             // Calculating margin:
-            $report        = $this->getReport();
-            $reportMargin  = $this->getReportMargin();
+            $report       = $this->getReport();
+            $reportMargin = $this->getReportMargin();
             // FIXME: Remove company margin from process overrides
             $companyMargin = 1;
             $deviceMapper  = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
@@ -1343,8 +1343,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $NumberOfBlackAndWhiteCapableDevices
+     * @return int
      */
     public function getNumberOfBlackAndWhiteCapableDevices ()
     {
@@ -1357,8 +1356,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
+     * @param int $NumberOfBlackAndWhiteCapableDevices
      *
-     * @param $NumberOfBlackAndWhiteCapableDevices field_type
+     * @return Proposalgen_Model_Proposal_OfficeDepot
      */
     public function setNumberOfBlackAndWhiteCapableDevices ($NumberOfBlackAndWhiteCapableDevices)
     {
@@ -1367,6 +1367,10 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         return $this;
     }
 
+    /**
+     * Gets fleet percentages
+     * @return stdClass
+     */
     public function getPercentages ()
     {
         if (!isset($this->Percentages))
@@ -1400,8 +1404,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $PageCounts
+     * Gets fleet page counts
+     * @return stdClass
      */
     public function getPageCounts ()
     {
@@ -1458,8 +1462,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $AverageCostOfDevices
+     * @return float
      */
     public function getAverageCostOfDevices ()
     {
@@ -1472,8 +1475,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
+     * @param float $AverageCostOfDevices
      *
-     * @param $AverageCostOfDevices field_type
+     * @return Proposalgen_Model_Proposal_OfficeDepot
      */
     public function setAverageCostOfDevices ($AverageCostOfDevices)
     {
@@ -1483,8 +1487,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $PercentDevicesUnderused
+     * @return float
      */
     public function getPercentDevicesUnderused ()
     {
@@ -1505,8 +1508,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $PercentDevicesUnderused field_type
+     * @param float $PercentDevicesUnderused
+     * @return \Proposalgen_Model_Proposal_OfficeDepot
      */
     public function setPercentDevicesUnderused ($PercentDevicesUnderused)
     {
@@ -1516,8 +1519,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $PercentDevicesOverused
+     * @return float
      */
     public function getPercentDevicesOverused ()
     {
@@ -1539,7 +1541,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $PercentDevicesOverused field_type
+     * @param $PercentDevicesOverused float
+     * @return \Proposalgen_Model_Proposal_OfficeDepot
      */
     public function setPercentDevicesOverused ($PercentDevicesOverused)
     {
@@ -1549,8 +1552,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $LeastUsedDevices
+     * @return \Proposalgen_Model_DeviceInstance[]
      */
     public function getLeastUsedDevices ()
     {
@@ -1574,7 +1576,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $LeastUsedDevices field_type
+     * @param $LeastUsedDevices \Proposalgen_Model_DeviceInstance[]
+     * @return \Proposalgen_Model_Proposal_OfficeDepot
      */
     public function setLeastUsedDevices ($LeastUsedDevices)
     {
@@ -1586,8 +1589,10 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     /**
      * Callback function for usort when we want to sort a device based on usage
      *
-     * @param $a Proposalgen_Model_DeviceInstance
-     * @param $b Proposalgen_Model_DeviceInstance
+     * @param $deviceA \Proposalgen_Model_DeviceInstance
+     * @param $deviceB \Proposalgen_Model_DeviceInstance
+     *
+     * @return int
      */
     public function ascendingSortDevicesByUsage ($deviceA, $deviceB)
     {
@@ -1600,10 +1605,12 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     * Callback function for usort when we want to sort a device based on usage
+     * Callback function for uSort when we want to sort a device based on usage
      *
-     * @param $a Proposalgen_Model_DeviceInstance
-     * @param $b Proposalgen_Model_DeviceInstance
+     * @param \Proposalgen_Model_DeviceInstance $deviceA
+     * @param \Proposalgen_Model_DeviceInstance $deviceB
+     *
+     * @return int
      */
     public function descendingSortDevicesByUsage ($deviceA, $deviceB)
     {
@@ -1616,8 +1623,11 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
+     * Gets a set of default toners
      *
-     * @return the $DefaultToners
+     * @deprecated
+     * @return array
+     * @throws Exception
      */
     public function getDefaultToners ()
     {
@@ -1685,52 +1695,52 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
                 }
             }
 
-            $blackToner = new Proposalgen_Model_Toner();
-            $blackToner->setTonerPrice($tonerOverrides ["BW"] ["Cost"]);
-            $blackToner->setTonerYield($tonerOverrides ["BW"] ["Yield"]);
-            $blackToner->setTonerColorId(Proposalgen_Model_TonerColor::BLACK);
+            $blackToner               = new Proposalgen_Model_Toner();
+            $blackToner->cost   = $tonerOverrides ["BW"] ["Cost"];
+            $blackToner->yield   = $tonerOverrides ["BW"] ["Yield"];
+            $blackToner->tonerColorId = Proposalgen_Model_TonerColor::BLACK;
 
-            $cyanToner = new Proposalgen_Model_Toner();
-            $cyanToner->setTonerPrice($tonerOverrides ["Color"] ["Cost"]);
-            $cyanToner->setTonerYield($tonerOverrides ["Color"] ["Yield"]);
-            $cyanToner->setTonerColorId(Proposalgen_Model_TonerColor::CYAN);
+            $cyanToner               = new Proposalgen_Model_Toner();
+            $cyanToner->cost   = $tonerOverrides ["Color"] ["Cost"];
+            $cyanToner->yield   = $tonerOverrides ["Color"] ["Yield"];
+            $cyanToner->tonerColorId = Proposalgen_Model_TonerColor::CYAN;
 
-            $magentaToner = new Proposalgen_Model_Toner();
-            $magentaToner->setTonerPrice($tonerOverrides ["Color"] ["Cost"]);
-            $magentaToner->setTonerYield($tonerOverrides ["Color"] ["Yield"]);
-            $magentaToner->setTonerColorId(Proposalgen_Model_TonerColor::MAGENTA);
+            $magentaToner               = new Proposalgen_Model_Toner();
+            $magentaToner->cost   = $tonerOverrides ["Color"] ["Cost"];
+            $magentaToner->yield   = $tonerOverrides ["Color"] ["Yield"];
+            $magentaToner->tonerColorId = Proposalgen_Model_TonerColor::MAGENTA;
 
-            $yellowToner = new Proposalgen_Model_Toner();
-            $yellowToner->setTonerPrice($tonerOverrides ["Color"] ["Cost"]);
-            $yellowToner->setTonerYield($tonerOverrides ["Color"] ["Yield"]);
-            $yellowToner->setTonerColorId(Proposalgen_Model_TonerColor::YELLOW);
+            $yellowToner               = new Proposalgen_Model_Toner();
+            $yellowToner->cost   = $tonerOverrides ["Color"] ["Cost"];
+            $yellowToner->yield   = $tonerOverrides ["Color"] ["Yield"];
+            $yellowToner->tonerColorId = Proposalgen_Model_TonerColor::YELLOW;
 
-            $threeColorToner = new Proposalgen_Model_Toner();
-            $threeColorToner->setTonerPrice($tonerOverrides ["ThreeColor"] ["Cost"]);
-            $threeColorToner->setTonerYield($tonerOverrides ["ThreeColor"] ["Yield"]);
-            $threeColorToner->setTonerColorId(Proposalgen_Model_TonerColor::THREE_COLOR);
+            $threeColorToner               = new Proposalgen_Model_Toner();
+            $threeColorToner->cost   = $tonerOverrides ["ThreeColor"] ["Cost"];
+            $threeColorToner->yield   = $tonerOverrides ["ThreeColor"] ["Yield"];
+            $threeColorToner->tonerColorId = Proposalgen_Model_TonerColor::THREE_COLOR;
 
-            $fourColorToner = new Proposalgen_Model_Toner();
-            $fourColorToner->setTonerPrice($tonerOverrides ["FourColor"] ["Cost"]);
-            $fourColorToner->setTonerYield($tonerOverrides ["FourColor"] ["Yield"]);
-            $fourColorToner->setTonerColorId(Proposalgen_Model_TonerColor::FOUR_COLOR);
+            $fourColorToner               = new Proposalgen_Model_Toner();
+            $fourColorToner->cost   = $tonerOverrides ["FourColor"] ["Cost"];
+            $fourColorToner->yield   = $tonerOverrides ["FourColor"] ["Yield"];
+            $fourColorToner->tonerColorId = Proposalgen_Model_TonerColor::FOUR_COLOR;
 
             $defaultToners                                                        = array();
             $defaultToners [Proposalgen_Model_TonerConfig::BLACK_ONLY]            = array(
                 $blackToner
             );
             $defaultToners [Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED] = array(
-                $blackToner->getTonerColorId()   => $blackToner,
-                $cyanToner->getTonerColorId()    => $cyanToner,
-                $magentaToner->getTonerColorId() => $magentaToner,
-                $yellowToner->getTonerColorId()  => $yellowToner
+                $blackToner->tonerColorId   => $blackToner,
+                $cyanToner->tonerColorId    => $cyanToner,
+                $magentaToner->tonerColorId => $magentaToner,
+                $yellowToner->tonerColorId  => $yellowToner
             );
             $defaultToners [Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED]  = array(
-                $blackToner->getTonerColorId()      => $blackToner,
-                $threeColorToner->getTonerColorId() => $threeColorToner
+                $blackToner->tonerColorId      => $blackToner,
+                $threeColorToner->tonerColorId => $threeColorToner
             );
             $defaultToners [Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED]   = array(
-                $fourColorToner->getTonerColorId() => $fourColorToner
+                $fourColorToner->tonerColorId => $fourColorToner
             );
 
             $this->DefaultToners = $defaultToners;
@@ -1740,8 +1750,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
+     * @param $DefaultToners
      *
-     * @param $DefaultToners field_type
+     * @return Proposalgen_Model_Proposal_OfficeDepot
      */
     public function setDefaultToners ($DefaultToners)
     {

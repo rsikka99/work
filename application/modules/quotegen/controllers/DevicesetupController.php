@@ -119,7 +119,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             // Validate that the toner exists in our database
                             if (($curToner = Proposalgen_Model_Mapper_Toner::getInstance()->find((int)$toner_id)) != false)
                             {
-                                $tonerCounts [$curToner->getTonerColorId()] ++;
+                                $tonerCounts [$curToner->tonerColorId] ++;
                             }
                         }
 
