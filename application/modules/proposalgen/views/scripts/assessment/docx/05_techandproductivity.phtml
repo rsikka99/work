@@ -61,11 +61,11 @@ foreach ( $this->proposal->HighRiskDevices as $device )
 {
     $highRiskDevicesTable->addRow();
     $highRiskDevicesTable->addCell($cellWidths [0], $this->styles->tables->highriskdevices->cell1)->addText($device->getDeviceName(), null, 'nospacing');
-    $highRiskDevicesTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText(($device->SerialNumber) ?  : "Unknown", null, 'nospacing');
-    $highRiskDevicesTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText(number_format($device->Age) . " year(s)", null, 'nospacing_centeralign');
-    $highRiskDevicesTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText(number_format($device->AverageMonthlyPageCount), null, 'nospacing_centeralign');
-    $highRiskDevicesTable->addCell($cellWidths [4], $this->styles->tables->highriskdevices->cell5)->addText(number_format($device->LifePageCount), null, 'nospacing_centeralign');
-    $highRiskDevicesTable->addCell($cellWidths [5], $this->styles->tables->highriskdevices->cell6)->addText(number_format($device->MasterDevice->MaximumMonthlyPageVolume * 36), null, 'nospacing_centeralign');
+    $highRiskDevicesTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText(($device->serialNumber) ?  : "Unknown", null, 'nospacing');
+    $highRiskDevicesTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText(number_format($device->_age) . " year(s)", null, 'nospacing_centeralign');
+    $highRiskDevicesTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText(number_format($device->_averageMonthlyPageCount), null, 'nospacing_centeralign');
+    $highRiskDevicesTable->addCell($cellWidths [4], $this->styles->tables->highriskdevices->cell5)->addText(number_format($device->lifePageCount), null, 'nospacing_centeralign');
+    $highRiskDevicesTable->addCell($cellWidths [5], $this->styles->tables->highriskdevices->cell6)->addText(number_format($device->_masterDevice->MaximumMonthlyPageVolume * 36), null, 'nospacing_centeralign');
     $rowCount ++;
     if ($rowCount >= 3)
         break;

@@ -272,30 +272,31 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
             $device->setMasterDevice($masterDevice);
 
             $device->setDeviceName($result->ModelName);
-            $device->setIpAddress($result->IpAddress);
-            $device->setSerialNumber($result->SerialNumber);
+            $device->ipAddress = $result->IpAddress;
+            $device->serialNumber = $result->SerialNumber;
 
             //device must be at least 4 days old
             if ($days->days < 4)
             {
-                $device->setExclusionReason('Insufficient Monitor Data');
+                $device->_exclusionReason = 'Insufficient Monitor Data';
             }
             else if ($result->IsExcluded == true)
             {
-                $device->setIsExcluded(true);
+                $device->isExcluded = true;
             }
             else if (strlen($result->Manufacturer) == 0)
             {
-                $device->setExclusionReason('Missing mfg information');
+                $device->_exclusionReason = 'Missing mfg information';
             }
             else if (strlen($result->ModelName) == 0)
             {
-                $device->setExclusionReason('Missing model information');
+                $device->_exclusionReason = 'Missing model information';
             }
             else
             {
-                $device->setExclusionReason('Incompatible with PrintIQ ');
+                $device->_exclusionReason = 'Incompatible with PrintIQ ';
             }
+
             $devices [] = $device;
         }
 

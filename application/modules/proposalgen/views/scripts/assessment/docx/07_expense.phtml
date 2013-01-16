@@ -20,7 +20,7 @@ $gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($propo
 $gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number_format($proposal->Ranking->Expense->Rank, 1), "gradeFont", "gradeParagraph");
 
 $section->addTextBreak();
-$section->addText($this->translate('Gartner Group called office printing the last great hidden expense in the office. They estimate the companies spend 1% to 3% of their revenue on office printing. Based on data collected from your printing devices and your questionnaire responses, we have estimated your annual printing expenses. We have separated your expenses into the cost of your leased printing devices and the cost of your purchased devices. Your leased devices are typically large multifunction devices and are assumed to be on an existing service contract. Your purchased devices are ones that can typically be transferred to our PrintIQ® program and be managed by Office Depot.'));
+$section->addText($this->translate('Gartner Group called office printing the last great hidden expense in the office. They estimate the companies spend 1% to 3% of their revenue on office printing. Based on data collected from your printing devices and your questionnaire responses, we have estimated your annual printing expenses. We have separated your expenses into the cost of your leased printing devices and the cost of your purchased devices. Your leased devices are typically large multifunction devices and are assumed to be on an existing service contract. Your purchased devices are ones that can typically be transferred to our PrintIQï¿½ program and be managed by Office Depot.'));
 
 $section->addTitle($this->translate('Total Estimated Annual Printing Costs'), 2);
 $section->addText($this->translate('Combining all costs, your current estimated annual printing expenses are as follows. Please note that our estimated costs may not match your actual purchases, due to factors including inventory on hand, returns, timing of the assessment, etc., but our estimates should be a good representation of your average costs since they are based on actual observed usage.'));
@@ -160,9 +160,9 @@ foreach ( $this->proposal->MostExpensiveDevices as $device )
 {
     $expensiveTable->addRow();
     $expensiveTable->addCell($this->styles->tables->mostexpensive->col1Width, $this->styles->tables->mostexpensive->cell1)->addText($device->getDeviceName(), null, 'nospacing');
-    $expensiveTable->addCell($this->styles->tables->mostexpensive->col2Width, $this->styles->tables->mostexpensive->cell2)->addText(($device->SerialNumber) ?  : "Unknown", null, 'nospacing_centeralign');
-    $expensiveTable->addCell($this->styles->tables->mostexpensive->col3Width, $this->styles->tables->mostexpensive->cell3)->addText(number_format($device->AverageMonthlyPageCount), null, 'nospacing_centeralign');
-    $expensiveTable->addCell($this->styles->tables->mostexpensive->col4Width, $this->styles->tables->mostexpensive->cell4)->addText('$' . number_format($device->MonthlyRate), null, 'nospacing_centeralign');
+    $expensiveTable->addCell($this->styles->tables->mostexpensive->col2Width, $this->styles->tables->mostexpensive->cell2)->addText(($device->serialNumber) ?  : "Unknown", null, 'nospacing_centeralign');
+    $expensiveTable->addCell($this->styles->tables->mostexpensive->col3Width, $this->styles->tables->mostexpensive->cell3)->addText(number_format($device->_averageMonthlyPageCount), null, 'nospacing_centeralign');
+    $expensiveTable->addCell($this->styles->tables->mostexpensive->col4Width, $this->styles->tables->mostexpensive->cell4)->addText('$' . number_format($device->_monthlyRate), null, 'nospacing_centeralign');
     $rowCounter ++;
     if ($rowCounter >= 3)
         break;

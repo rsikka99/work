@@ -111,29 +111,29 @@ class Proposalgen_GrossmarginController extends My_Controller_Report
             /* @var $device Proposalgen_Model_DeviceInstance() */
             foreach ( $proposal->PurchasedDevices as $device )
             {
-                $tonerConfig = $device->MasterDevice->TonerConfigId;
+                $tonerConfig = $device->_masterDevice->TonerConfigId;
                 $grossMarginPricingConfig = Proposalgen_Model_MasterDevice::getGrossMarginPricingConfig();
-                $completeMonoToners = $device->MasterDevice->HasValidMonoGrossMarginToners;
-                $completeColorToners = $device->MasterDevice->HasValidColorGrossMarginToners;
+                $completeMonoToners = $device->_masterDevice->HasValidMonoGrossMarginToners;
+                $completeColorToners = $device->_masterDevice->HasValidColorGrossMarginToners;
                 $blackToner = null;
                 $colorToner = null;
                 
                 switch ($tonerConfig)
                 {
                     case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED :
-                        $blackToner = $device->MasterDevice->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
-                        $colorToner = $device->MasterDevice->getCheapestToner(Proposalgen_Model_TonerColor::CYAN, $grossMarginPricingConfig);
+                        $blackToner = $device->_masterDevice->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
+                        $colorToner = $device->_masterDevice->getCheapestToner(Proposalgen_Model_TonerColor::CYAN, $grossMarginPricingConfig);
                         break;
                     case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED :
-                        $blackToner = $device->MasterDevice->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
-                        $colorToner = $device->MasterDevice->getCheapestToner(Proposalgen_Model_TonerColor::THREE_COLOR, $grossMarginPricingConfig);
+                        $blackToner = $device->_masterDevice->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
+                        $colorToner = $device->_masterDevice->getCheapestToner(Proposalgen_Model_TonerColor::THREE_COLOR, $grossMarginPricingConfig);
                         break;
                     case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED :
-                        $blackToner = $device->MasterDevice->getCheapestToner(Proposalgen_Model_TonerColor::FOUR_COLOR, $grossMarginPricingConfig);
+                        $blackToner = $device->_masterDevice->getCheapestToner(Proposalgen_Model_TonerColor::FOUR_COLOR, $grossMarginPricingConfig);
                         $colorToner = $blackToner;
                         break;
                     default :
-                        $blackToner = $device->MasterDevice->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
+                        $blackToner = $device->_masterDevice->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
                         break;
                 }
                 
@@ -154,17 +154,17 @@ class Proposalgen_GrossmarginController extends My_Controller_Report
                 
                 // Create an array of purchased devices (this will be the dynamic CSV body)
                 $fieldList = array ();
-                $fieldList [] = str_ireplace("hewlett-packard", "HP", $device->DeviceName) . " (" . $device->IPAddress . " - " . $device->SerialNumber . ")";
-                $fieldList [] = number_format($device->AverageMonthlyBlackAndWhitePageCount, 0, '.', '');
+                $fieldList [] = str_ireplace("hewlett-packard", "HP", $device->_deviceName) . " (" . $device->IPAddress . " - " . $device->serialNumber . ")";
+                $fieldList [] = number_format($device->_averageMonthlyBlackAndWhitePageCount, 0, '.', '');
                 $fieldList [] = $blackCost;
                 $fieldList [] = $blackYield;
-                $fieldList [] = number_format($device->MasterDevice->CostPerPage->Actual->BasePlusService->BlackAndWhite, 4, '.', '');
-                $fieldList [] = "$" . number_format($device->GrossMarginMonthlyBlackAndWhiteCost, 2, '.', '');
-                $fieldList [] = $isColor ? number_format($device->AverageMonthlyColorPageCount, 0, '.', '') : "-";
+                $fieldList [] = number_format($device->_masterDevice->CostPerPage->Actual->BasePlusService->BlackAndWhite, 4, '.', '');
+                $fieldList [] = "$" . number_format($device->_grossMarginMonthlyBlackAndWhiteCost, 2, '.', '');
+                $fieldList [] = $isColor ? number_format($device->_averageMonthlyColorPageCount, 0, '.', '') : "-";
                 $fieldList [] = $colorCost;
                 $fieldList [] = $colorYield;
-                $fieldList [] = $isColor ? "$" . number_format($device->MasterDevice->CostPerPage->Actual->BasePlusService->Color, 4, '.', '') : "-";
-                $fieldList [] = $isColor ? "$" . number_format($device->GrossMarginMonthlyColorCost, 2, '.', '') : "-";
+                $fieldList [] = $isColor ? "$" . number_format($device->_masterDevice->CostPerPage->Actual->BasePlusService->Color, 4, '.', '') : "-";
+                $fieldList [] = $isColor ? "$" . number_format($device->_grossMarginMonthlyColorCost, 2, '.', '') : "-";
                 $fieldList_Values .= implode(",", $fieldList) . "\n";
             }
             

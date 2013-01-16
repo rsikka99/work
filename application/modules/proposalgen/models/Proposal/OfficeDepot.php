@@ -419,7 +419,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             /**
              * * Calculate IT CPP **
              */
-            Proposalgen_Model_DeviceInstance::setITCPP(($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getPageCounts()->Purchased->Combined->Yearly);
+            Proposalgen_Model_DeviceInstance::setITCostPerPage(($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getPageCounts()->Purchased->Combined->Yearly);
         } // endif
         return $this->Devices;
     }
@@ -2675,7 +2675,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
                 }
                 if (!$deviceReplaced)
                 {
-                    if (!$device->JITSuppliesSupported)
+                    if (!$device->jitSuppliesSupported)
                     {
                         $replacedDevices->NoTonerLevels [] = $device;
                     }
