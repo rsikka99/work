@@ -1,41 +1,120 @@
 <?php
-
-/**
- * Class Proposalgen_Model_DeviceInstance
- *
- * @author "Lee Robert"
- */
 class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 {
-
-    // Static Fields
+    /**
+     * An array used to determine how many hours a device is running based on its average volume per day
+     *
+     * @var array
+     */
     static $RUNNING_HOUR_ARRAY = array(
         500 => 8,
         100 => 4,
         0   => 2
     );
+
+    /**
+     * The cost of electricity
+     *
+     * @var float
+     */
     static $KWH_Cost = 0;
+
+    /**
+     * The IT cost per page
+     *
+     * @var float
+     */
     static $ITCPP = 0;
 
-    // Database Fields
-    protected $DeviceInstanceId;
-    protected $ReportId;
-    protected $MasterDeviceId;
-    protected $UploadDataCollectorId;
-    protected $SerialNumber;
-    protected $MPSMonitorStartDate;
-    protected $MPSMonitorEndDate;
-    protected $MPSDiscoveryDate;
-    protected $IsExcluded;
-    protected $IsUnknown;
-    protected $IpAddress;
-    protected $JITSuppliesSupported;
+    /*
+     * ****************************************
+     * Database Fields
+     * ****************************************
+     */
 
-    // Related Objects
-    protected $Meters; // An array of all the meters
+    /**
+     * @var int
+     */
+    public $DeviceInstanceId;
+
+    /**
+     * @var int
+     */
+    public $ReportId;
+
+    /**
+     * @var int
+     */
+    public $MasterDeviceId;
+
+    /**
+     * @var int
+     */
+    public $UploadDataCollectorId;
+
+    /**
+     * @var string
+     */
+    public $SerialNumber;
+
+    /**
+     * @var string
+     */
+    public $MPSMonitorStartDate;
+
+    /**
+     * @var string
+     */
+    public $MPSMonitorEndDate;
+
+    /**
+     * @var string
+     */
+    public $MPSDiscoveryDate;
+
+    /**
+     * @var bool
+     */
+    public $IsExcluded;
+
+    /**
+     * @var bool
+     */
+    public $IsUnknown;
+
+    /**
+     * @var string
+     */
+    public $IpAddress;
+
+    /**
+     * @var bool
+     */
+    public $JITSuppliesSupported;
+
+
+    /*
+     * ****************************************
+     * Related Objects
+     * ****************************************
+     */
+    /**
+     * An array of all the meters
+     *
+     * @var Proposalgen_Model_Meter[]
+     */
+    protected $Meters;
+
+    /**
+     * @var The master device
+     */
     protected $MasterDevice;
 
-    // Calculated Fields
+    /*
+     * ****************************************
+     * Calculated fields
+     * ****************************************
+     */
     protected $Age;
     protected $MPSMonitorInterval;
     protected $AverageDailyPowerConsumption;
@@ -64,7 +143,11 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
     protected $AverageMonthlyPowerCost;
     protected $AverageDailyPowerCost;
 
-    // Non calculated fields
+    /*
+     * ****************************************
+     * Non calculated fields
+     * ****************************************
+     */
     protected $AgeRank;
     protected $LifeUsageRank;
     protected $RiskRank;
@@ -74,18 +157,21 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
     static $uniqueTonerArray = array();
 
     /**
-     * @param $device        Proposalgen_Model_DeviceInstance
-     * @param $report        Proposalgen_Model_Report
-     * @param $reportMargin  number
-     * @param $companyMargin number
+     * Applies overrides to device costs and toner costs.
+     * Also adds a margin on the costs that were not overridden
+     *
+     * @param Proposalgen_Model_DeviceInstance $device
+     * @param Proposalgen_Model_Report         $report
+     * @param float                            $reportMargin
+     * @param float                            $companyMargin
      */
     static function processOverrides ($device, $report, $reportMargin, $companyMargin)
     {
 //        $dealerDeviceOverrideMapper = Proposalgen_Model_Mapper_DealerDeviceOverride::getInstance();
 //        $dealerTonerOverrideMapper  = Proposalgen_Model_Mapper_DealerTonerOverride::getInstance();
-        $userDeviceOverrideMapper   = Proposalgen_Model_Mapper_UserDeviceOverride::getInstance();
-        $userTonerOverrideMapper    = Proposalgen_Model_Mapper_UserTonerOverride::getInstance();
-        $deviceOverride             = null;
+        $userDeviceOverrideMapper = Proposalgen_Model_Mapper_UserDeviceOverride::getInstance();
+        $userTonerOverrideMapper  = Proposalgen_Model_Mapper_UserTonerOverride::getInstance();
+        $deviceOverride           = null;
 
         // Known Device, override
         if (!$device->IsUnknown)
@@ -115,12 +201,12 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
         else // If we found a device override, apply it
         {
             $device->getMasterDevice()->setCost($device->getMasterDevice()
-                                                           ->getCost() / $companyMargin);
+                                                    ->getCost() / $companyMargin);
         }
 
         // Apply Report Margin to the device price
         $device->getMasterDevice()->setCost($device->getMasterDevice()
-                                                       ->getCost() / $reportMargin);
+                                                ->getCost() / $reportMargin);
 
         // Toner Overrides + Margin
         foreach ($device->getMasterDevice()->getToners() as $tonersByPartType)
@@ -143,10 +229,10 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 //                            ));
 //                            if (!$tonerOverride)
 //                            {
-                                $tonerOverride = $userTonerOverrideMapper->fetchRow(array(
-                                                                                         "toner_id = ?" => $toner->getTonerId(),
-                                                                                         "user_id = ?"  => Proposalgen_Model_User::getCurrentUserId()
-                                                                                    ));
+                            $tonerOverride = $userTonerOverrideMapper->fetchRow(array(
+                                                                                     "toner_id = ?" => $toner->getTonerId(),
+                                                                                     "user_id = ?"  => Proposalgen_Model_User::getCurrentUserId()
+                                                                                ));
 //                            }
                         }
 
@@ -188,8 +274,9 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
+     * Gets the average monthly page count
      *
-     * @return the $AverageMonthlyPageCount
+     * @return float
      */
     public function getAverageMonthlyPageCount ()
     {
@@ -202,8 +289,9 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
+     * Gets the average power consumption for the device
      *
-     * @return the $AverageMonthlyPowerConsumption in KWH
+     * @return int
      */
     public function getAverageMonthlyPowerConsumption ()
     {
@@ -502,32 +590,6 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
         return $this;
     }
 
-    /**
-     *
-     * @return Proposalgen_Model_MasterDevice
-     */
-    public function getMasterDevice ()
-    {
-        if (!isset($this->MasterDevice))
-        {
-            $masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
-            $this->MasterDevice = $masterDeviceMapper->find($this->getMasterDeviceId());
-        }
-
-        return $this->MasterDevice;
-    }
-
-    /**
-     * @param Proposalgen_Model_MasterDevice $MasterDevice
-     *
-     * @return Proposalgen_Model_DeviceInstance
-     */
-    public function setMasterDevice ($MasterDevice)
-    {
-        $this->MasterDevice = $MasterDevice;
-
-        return $this;
-    }
 
     /**
      *
@@ -668,7 +730,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
         if (!isset($this->Meters))
         {
             $meterMapper = Proposalgen_Model_Mapper_Meter::getInstance();
-            $meters      = $meterMapper->fetchAllForDevice($this->getDeviceInstanceId());
+            $meters      = $meterMapper->fetchAllForDevice($this->DeviceInstanceId);
 
             // If we do not have a BLACK meter, then we should try and calculate
             // it
@@ -684,14 +746,14 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
                  */
                 if (isset($meters [Proposalgen_Model_Meter::METER_TYPE_LIFE]) && isset($meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]))
                 {
-                    $startmeter    = $meters [Proposalgen_Model_Meter::METER_TYPE_LIFE]->getStartMeter() - $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->getStartMeter();
-                    $endmeter      = $meters [Proposalgen_Model_Meter::METER_TYPE_LIFE]->getEndMeter() - $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->getEndMeter();
-                    $newBlackMeter = new Proposalgen_Model_Meter();
-                    $newBlackMeter->startMeter = $startmeter;
-                    $newBlackMeter->endMeter = $endmeter;
-                    $newBlackMeter->meterType = Proposalgen_Model_Meter::METER_TYPE_BLACK;
-                    $newBlackMeter->deviceInstanceId = $this->getDeviceInstanceId();
-                    $newBlackMeter->generatedBySystem = true;
+                    $startmeter                                         = $meters [Proposalgen_Model_Meter::METER_TYPE_LIFE]->startMeter - $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->startMeter;
+                    $endmeter                                           = $meters [Proposalgen_Model_Meter::METER_TYPE_LIFE]->endMeter - $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->endMeter;
+                    $newBlackMeter                                      = new Proposalgen_Model_Meter();
+                    $newBlackMeter->startMeter                          = $startmeter;
+                    $newBlackMeter->endMeter                            = $endmeter;
+                    $newBlackMeter->meterType                           = Proposalgen_Model_Meter::METER_TYPE_BLACK;
+                    $newBlackMeter->deviceInstanceId                    = $this->DeviceInstanceId;
+                    $newBlackMeter->generatedBySystem                   = true;
                     $meters [Proposalgen_Model_Meter::METER_TYPE_BLACK] = $newBlackMeter;
                 }
             }
@@ -912,8 +974,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $AgeRank
+     * @return float
      */
     public function getAgeRank ()
     {
@@ -927,8 +988,9 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
+     * @param float $AgeRank
      *
-     * @param $AgeRank field_type
+     * @return Proposalgen_Model_DeviceInstance
      */
     public function setAgeRank ($AgeRank)
     {
@@ -938,8 +1000,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $LifeUsageRank
+     * @return float
      */
     public function getLifeUsageRank ()
     {
@@ -953,8 +1014,9 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
+     * @param float $LifeUsageRank
      *
-     * @param $LifeUsageRank field_type
+     * @return Proposalgen_Model_DeviceInstance
      */
     public function setLifeUsageRank ($LifeUsageRank)
     {
@@ -964,8 +1026,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $RiskRank
+     * @return float
      */
     public function getRiskRank ()
     {
@@ -979,8 +1040,9 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
+     * @param float $RiskRank
      *
-     * @param $RiskRank field_type
+     * @return Proposalgen_Model_DeviceInstance
      */
     public function setRiskRank ($RiskRank)
     {
@@ -1031,6 +1093,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
     /**
      *
      * @param bool $JITSuppliesSupported
+     *
      * @return \Proposalgen_Model_DeviceInstance
      */
     public function setJITSuppliesSupported ($JITSuppliesSupported)
@@ -1093,7 +1156,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @return the $UploadDataCollector
+     * @return Proposalgen_Model_UploadDataCollectorRow
      */
     public function getUploadDataCollector ()
     {
@@ -1298,8 +1361,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $ITCPP
+     * @return float
      */
     public static function getITCPP ()
     {
@@ -1312,8 +1374,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @param $ITCPP field_type
+     * @param float $ITCPP
      */
     public static function setITCPP ($ITCPP)
     {
@@ -1341,6 +1402,35 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
     public function setExclusionReason ($ExclusionReason)
     {
         $this->ExclusionReason = $ExclusionReason;
+
+        return $this;
+    }
+
+
+    /**
+     * Gets the master device
+     *
+     * @return Proposalgen_Model_MasterDevice
+     */
+    public function getMasterDevice ()
+    {
+        if (!isset($this->MasterDevice))
+        {
+            $masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
+            $this->MasterDevice = $masterDeviceMapper->find($this->getMasterDeviceId());
+        }
+
+        return $this->MasterDevice;
+    }
+
+    /**
+     * @param Proposalgen_Model_MasterDevice $MasterDevice
+     *
+     * @return Proposalgen_Model_DeviceInstance
+     */
+    public function setMasterDevice ($MasterDevice)
+    {
+        $this->MasterDevice = $MasterDevice;
 
         return $this;
     }

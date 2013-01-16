@@ -80,13 +80,13 @@ if ($reportHasDevicesToReplace)
             $textRun->addText(' ' . number_format(count($devicesToBeReplaced [$ctr])) . ' ', 'bold_text');
             $textRun->addText($printerTypes [$ctr] . ' ');
             $textRun->addText($this->translate('listed below with the'));
-            $textRun->addText(' ' . $replacementDevice->_masterDevice->Manufacturer->ManufacturerName . ' ' . $replacementDevice->_masterDevice->PrinterModel . ' ', 'bold_text');
+            $textRun->addText(' ' . $replacementDevice->getMasterDevice()->Manufacturer->ManufacturerName . ' ' . $replacementDevice->getMasterDevice()->PrinterModel . ' ', 'bold_text');
             $textRun->addText($this->translate(', which offers the following benefits:'));
             
             $section->addListItem(sprintf($this->translate('Flat monthly rate of $%1$s for up to 10,000 pages'), number_format($replacementDevice->monthlyRate)), 0, 'bold_text', null, $listParagraphStyle);
             $section->addListItem(sprintf($this->translate('Prints up to %1$s pages per minute in monochrome'), $replacementDevice->printSpeed), 0, 'bold_text', null, $listParagraphStyle);
             $section->addListItem(sprintf($this->translate('Up to %1$s resolution'), $replacementDevice->resolution), 0, 'bold_text', null, $listParagraphStyle);
-            if ($replacementDevice->_masterDevice->IsDuplex)
+            if ($replacementDevice->getMasterDevice()->IsDuplex)
             {
                 $section->addListItem($this->translate('Standard duplexing'), 0, 'bold_text', null, $listParagraphStyle);
             }
@@ -108,15 +108,14 @@ if ($reportHasDevicesToReplace)
             foreach ( $devicesToBeReplaced [$ctr] as $device )
             {
                 $table->addRow($tc->body->rowheight);
-                $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText($device->getUploadDataCollector()
-                    ->getModelName(), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
-                $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText(($device->getSerialNumber()) ?  : "Unknown", $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
+                $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText($device->getUploadDataCollector()->modelName, $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
+                $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText(($device->SerialNumber) ?  : "Unknown", $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
                 $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText(number_format($device->getAverageMonthlyPageCount()), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
                 $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($device->getMonthlyRate() * 12), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
                 $table->addCell($tc->col5Width, $tc->body->cell5->cellStyle)->addText('$' . number_format($replacementDevice->monthlyRate * 12), $tc->body->cell5->fontStyle, $tc->body->cell5->paragraphStyle);
                 $table->addCell($tc->col6Width, $tc->body->cell6->cellStyle)->addText('$' . number_format(($device->getMonthlyRate() * 12) - ($replacementDevice->monthlyRate * 12)), $tc->body->cell6->fontStyle, $tc->body->cell6->paragraphStyle);
                 
-                $replacementSavings += ($device->getMonthlyRate() * 12) - ($replacementDevice->monthlyRate) * 12);
+                $replacementSavings += ($device->getMonthlyRate() * 12) - ($replacementDevice->monthlyRate * 12);
                 $currentCost += $device->getMonthlyRate() * 12;
                 $printIQCost += $replacementDevice->monthlyRate * 12;
             }
@@ -145,11 +144,11 @@ if ($reportHasDevicesToReplace)
     
     $table->addRow($tc->row->rowheight);
     $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText($this->translate('Monochrome cost per page'), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
-    $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($proposal->MPSBlackAndWhiteCPP, 3), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($proposal->getMPSBlackAndWhiteCPP(), 3), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
     
     $table->addRow($tc->row->rowheight);
     $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText($this->translate('Color cost per page'), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
-    $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($proposal->MPSColorCPP, 3), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($proposal->getMPSColorCPP(), 3), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
     
     $table->addRow($tc->row->rowheight);
     $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText($this->translate('Estimated monochrome pages'), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);

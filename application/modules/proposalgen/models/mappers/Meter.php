@@ -45,6 +45,12 @@ class Proposalgen_Model_Mapper_Meter extends Tangent_Model_Mapper_Abstract
         return $object;
     }
 
+    /**
+     * @param int $DeviceInstanceID
+     *
+     * @return Proposalgen_Model_Meter[]
+     * @throws Exception
+     */
     public function fetchAllForDevice ($DeviceInstanceID)
     {
         $entries = array();
