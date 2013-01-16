@@ -11,18 +11,20 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
      */
     public static function getInstance ()
     {
-        if (! isset(self::$_instance))
+        if (!isset(self::$_instance))
         {
-            $className = get_class();
+            $className       = get_class();
             self::$_instance = new $className();
         }
+
         return self::$_instance;
     }
 
     /**
      * Maps a database row object to an Proposalgen_Model
      *
-     * @param Zend_Db_Table_Row $row            
+     * @param Zend_Db_Table_Row $row
+     *
      * @return Proposalgen_Model_UnknownDeviceInstance
      */
     public function mapRowToObject (Zend_Db_Table_Row $row)
@@ -113,62 +115,63 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                 ->setIpAddress($row->ip_address)
                 ->setServiceCostPerPage($row->service_cost_per_page);
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
             throw new Exception("Failed to map an unknown device instance row", 0, $e);
         }
+
         return $object;
     }
 
     /**
      * Fetches all unknown devices and puts them in the same format as normal devices
      *
-     * @param unknown_type $reportId            
+     * @param unknown_type $reportId
      */
     public function fetchAllUnknownDevicesAsKnownDevices ($reportId, $whereClause)
     {
-        $deviceList = array ();
+        $deviceList = array();
         try
         {
             $unknowndevices = $this->getDbTable()->fetchAll($whereClause);
             if ($unknowndevices)
             {
-                foreach ( $unknowndevices as $row )
+                foreach ($unknowndevices as $row)
                 {
                     $device = new Proposalgen_Model_DeviceInstance();
-                    
-                    $manufacturer = new Proposalgen_Model_Manufacturer();
-                    $manufacturer->fullname = $row->device_manufacturer;
+
+                    $manufacturer              = new Proposalgen_Model_Manufacturer();
+                    $manufacturer->fullname    = $row->device_manufacturer;
                     $manufacturer->displayname = $row->device_manufacturer;
-                    
+
                     $tonerConfigMapper = Proposalgen_Model_Mapper_TonerConfig::getInstance();
-                    $tonerConfig = $tonerConfigMapper->find($row->toner_config_id);
-                    
+                    $tonerConfig       = $tonerConfigMapper->find($row->toner_config_id);
+
                     // Get toner list based on the config
                     $toners = $this->getUnknownDeviceToners($row, $manufacturer);
-                    
-                    $meters = array ();
+
+                    $meters = array();
                     // Form a list of meters
-                    $meterColumns = array (
-                            "life" => Proposalgen_Model_Meter::METER_TYPE_LIFE, 
-                            "color" => Proposalgen_Model_Meter::METER_TYPE_COLOR, 
-                            "copycolor" => Proposalgen_Model_Meter::METER_TYPE_COPY_COLOR, 
-                            "printcolor" => Proposalgen_Model_Meter::METER_TYPE_PRINT_COLOR, 
-                            "black" => Proposalgen_Model_Meter::METER_TYPE_BLACK, 
-                            "copyblack" => Proposalgen_Model_Meter::METER_TYPE_COPY_BLACK, 
-                            "printblack" => Proposalgen_Model_Meter::METER_TYPE_PRINT_BLACK, 
-                            "scan" => Proposalgen_Model_Meter::METER_TYPE_SCAN, 
-                            "fax" => Proposalgen_Model_Meter::METER_TYPE_FAX 
+                    $meterColumns = array(
+                        "life"       => Proposalgen_Model_Meter::METER_TYPE_LIFE,
+                        "color"      => Proposalgen_Model_Meter::METER_TYPE_COLOR,
+                        "copycolor"  => Proposalgen_Model_Meter::METER_TYPE_COPY_COLOR,
+                        "printcolor" => Proposalgen_Model_Meter::METER_TYPE_PRINT_COLOR,
+                        "black"      => Proposalgen_Model_Meter::METER_TYPE_BLACK,
+                        "copyblack"  => Proposalgen_Model_Meter::METER_TYPE_COPY_BLACK,
+                        "printblack" => Proposalgen_Model_Meter::METER_TYPE_PRINT_BLACK,
+                        "scan"       => Proposalgen_Model_Meter::METER_TYPE_SCAN,
+                        "fax"        => Proposalgen_Model_Meter::METER_TYPE_FAX
                     );
-                    foreach ( $meterColumns as $meterColumn => $meterType )
+                    foreach ($meterColumns as $meterColumn => $meterType)
                     {
-                        $newMeter = new Proposalgen_Model_Meter();
-                        $newMeter->meterType = $meterType;
+                        $newMeter             = new Proposalgen_Model_Meter();
+                        $newMeter->meterType  = $meterType;
                         $newMeter->startMeter = $row ["start_meter_" . $meterColumn];
-                        $newMeter->endMeter = $row ["end_meter_" . $meterColumn];
-                        $meters [$meterType] = $newMeter;
+                        $newMeter->endMeter   = $row ["end_meter_" . $meterColumn];
+                        $meters [$meterType]  = $newMeter;
                     }
-                    
+
                     $masterdevice = new Proposalgen_Model_MasterDevice();
                     $masterdevice->setId(null)
                         ->setManufacturer($manufacturer)
@@ -188,15 +191,15 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                         ->setServiceCostPerPage($row->service_cost_per_page)
                         ->setIsLeased($row->is_leased)
                         ->setToners($toners);
-                    
+
                     if ($masterdevice->getIsLeased())
                     {
                         $smallestYield = null;
-                        foreach ( $toners as $tonersbytype )
+                        foreach ($toners as $tonersbytype)
                         {
-                            foreach ( $tonersbytype as $tonersbycolor )
+                            foreach ($tonersbytype as $tonersbycolor)
                             {
-                                foreach ( $tonersbycolor as $toner )
+                                foreach ($tonersbycolor as $toner)
                                 {
                                     // Ensure toner yield > 0 and pick the smallest possible yield
                                     if (($toner->getTonerYield() > 0 && $toner->getTonerYield() < $smallestYield) || is_null($smallestYield))
@@ -223,262 +226,266 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                         ->setIsUnknown(true)
                         ->setJitSuppliesSupported($row->jit_supplies_supported)
                         ->setIpAddress($row->ip_address);
-                    
+
                     $deviceList [] = $device;
                 }
             }
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
             throw new Exception("There was an error getting all unknown devices as devices for a report", 0, $e);
         }
+
         return $deviceList;
     }
 
     public function getUnknownDeviceToners ($row, $manufacturer)
     {
-        $toners = array ();
-        $oemtoners = array ();
-        $comptoners = array ();
-        $hasValidCOMPToners = false;
-        
+        $toners             = array();
+        $oemToners          = array();
+        $compatibleToners         = array();
+        $hasValidCompatibleToners = false;
+
         switch ($row->toner_config_id)
         {
             case Proposalgen_Model_TonerConfig::BLACK_ONLY :
-                $oemtoners [Proposalgen_Model_TonerColor::BLACK] [] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::BLACK, $manufacturer, Proposalgen_Model_PartType::OEM, "_toner");
+                $oemToners [Proposalgen_Model_TonerColor::BLACK] [] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::BLACK, $manufacturer, Proposalgen_Model_PartType::OEM, "_toner");
                 break;
             case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED :
-                $oemtoners [Proposalgen_Model_TonerColor::BLACK] [] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::BLACK, $manufacturer, Proposalgen_Model_PartType::OEM, "_toner");
-                $oemtoners [Proposalgen_Model_TonerColor::CYAN] [] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::CYAN, $manufacturer, Proposalgen_Model_PartType::OEM, "_toner");
-                $oemtoners [Proposalgen_Model_TonerColor::MAGENTA] [] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::MAGENTA, $manufacturer, Proposalgen_Model_PartType::OEM, "_toner");
-                $oemtoners [Proposalgen_Model_TonerColor::YELLOW] [] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::YELLOW, $manufacturer, Proposalgen_Model_PartType::OEM, "_toner");
+                $oemToners [Proposalgen_Model_TonerColor::BLACK] []   = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::BLACK, $manufacturer, Proposalgen_Model_PartType::OEM, "_toner");
+                $oemToners [Proposalgen_Model_TonerColor::CYAN] []    = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::CYAN, $manufacturer, Proposalgen_Model_PartType::OEM, "_toner");
+                $oemToners [Proposalgen_Model_TonerColor::MAGENTA] [] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::MAGENTA, $manufacturer, Proposalgen_Model_PartType::OEM, "_toner");
+                $oemToners [Proposalgen_Model_TonerColor::YELLOW] []  = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::YELLOW, $manufacturer, Proposalgen_Model_PartType::OEM, "_toner");
                 break;
             case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED :
-                $oemtoners [Proposalgen_Model_TonerColor::BLACK] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::BLACK, $manufacturer, Proposalgen_Model_PartType::OEM, "_toner");
-                $oemtoners [Proposalgen_Model_TonerColor::THREE_COLOR] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::THREE_COLOR, $manufacturer, Proposalgen_Model_PartType::OEM, "_toner");
+                $oemToners [Proposalgen_Model_TonerColor::BLACK]       = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::BLACK, $manufacturer, Proposalgen_Model_PartType::OEM, "_toner");
+                $oemToners [Proposalgen_Model_TonerColor::THREE_COLOR] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::THREE_COLOR, $manufacturer, Proposalgen_Model_PartType::OEM, "_toner");
                 break;
             case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED :
-                $oemtoners [Proposalgen_Model_TonerColor::FOUR_COLOR] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::FOUR_COLOR, $manufacturer, Proposalgen_Model_PartType::OEM, "_toner");
+                $oemToners [Proposalgen_Model_TonerColor::FOUR_COLOR] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::FOUR_COLOR, $manufacturer, Proposalgen_Model_PartType::OEM, "_toner");
                 break;
             default :
                 throw new Exception("Unknown Device has an unknown or invalid TonerConfig");
                 break;
         }
-        $toners [Proposalgen_Model_PartType::OEM] = $oemtoners;
-        
+        $toners [Proposalgen_Model_PartType::OEM] = $oemToners;
+
         switch ($row->toner_config_id)
         {
             case Proposalgen_Model_TonerConfig::BLACK_ONLY :
                 if ($this->validateCOMPTonerFields($row, "black_comp"))
                 {
-                    $comptoners [Proposalgen_Model_TonerColor::BLACK] [] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::BLACK, $manufacturer, Proposalgen_Model_PartType::COMP, "_comp");
-                    $hasValidCOMPToners = true;
+                    $compatibleToners [Proposalgen_Model_TonerColor::BLACK] [] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::BLACK, $manufacturer, Proposalgen_Model_PartType::COMP, "_comp");
+                    $hasValidCompatibleToners                                  = true;
                 }
                 break;
             case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED :
                 if ($this->validateCOMPTonerFields($row, "black_comp") && $this->validateCOMPTonerFields($row, "cyan_comp") && $this->validateCOMPTonerFields($row, "magenta_comp") && $this->validateCOMPTonerFields($row, "yellow_comp"))
                 {
-                    $comptoners [Proposalgen_Model_TonerColor::BLACK] [] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::BLACK, $manufacturer, Proposalgen_Model_PartType::COMP, "_comp");
-                    $comptoners [Proposalgen_Model_TonerColor::CYAN] [] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::CYAN, $manufacturer, Proposalgen_Model_PartType::COMP, "_comp");
-                    $comptoners [Proposalgen_Model_TonerColor::MAGENTA] [] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::MAGENTA, $manufacturer, Proposalgen_Model_PartType::COMP, "_comp");
-                    $comptoners [Proposalgen_Model_TonerColor::YELLOW] [] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::YELLOW, $manufacturer, Proposalgen_Model_PartType::COMP, "_comp");
-                    $hasValidCOMPToners = true;
+                    $compatibleToners [Proposalgen_Model_TonerColor::BLACK] []   = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::BLACK, $manufacturer, Proposalgen_Model_PartType::COMP, "_comp");
+                    $compatibleToners [Proposalgen_Model_TonerColor::CYAN] []    = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::CYAN, $manufacturer, Proposalgen_Model_PartType::COMP, "_comp");
+                    $compatibleToners [Proposalgen_Model_TonerColor::MAGENTA] [] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::MAGENTA, $manufacturer, Proposalgen_Model_PartType::COMP, "_comp");
+                    $compatibleToners [Proposalgen_Model_TonerColor::YELLOW] []  = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::YELLOW, $manufacturer, Proposalgen_Model_PartType::COMP, "_comp");
+                    $hasValidCompatibleToners                                    = true;
                 }
                 break;
             case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED :
                 if ($this->validateCOMPTonerFields($row, "black_comp") && $this->validateCOMPTonerFields($row, "three_color_comp"))
                 {
-                    $comptoners [Proposalgen_Model_TonerColor::BLACK] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::BLACK, $manufacturer, Proposalgen_Model_PartType::COMP, "_comp");
-                    $comptoners [Proposalgen_Model_TonerColor::THREE_COLOR] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::THREE_COLOR, $manufacturer, Proposalgen_Model_PartType::COMP, "_comp");
-                    $hasValidCOMPToners = true;
+                    $compatibleToners [Proposalgen_Model_TonerColor::BLACK]       = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::BLACK, $manufacturer, Proposalgen_Model_PartType::COMP, "_comp");
+                    $compatibleToners [Proposalgen_Model_TonerColor::THREE_COLOR] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::THREE_COLOR, $manufacturer, Proposalgen_Model_PartType::COMP, "_comp");
+                    $hasValidCompatibleToners                                     = true;
                 }
                 break;
             case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED :
                 if ($this->validateCOMPTonerFields($row, "four_color_comp"))
                 {
-                    $comptoners [Proposalgen_Model_TonerColor::FOUR_COLOR] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::FOUR_COLOR, $manufacturer, Proposalgen_Model_PartType::COMP, "_comp");
-                    $hasValidCOMPToners = true;
+                    $compatibleToners [Proposalgen_Model_TonerColor::FOUR_COLOR] = $this->mapUnknownDeviceToner($row, Proposalgen_Model_TonerColor::FOUR_COLOR, $manufacturer, Proposalgen_Model_PartType::COMP, "_comp");
+                    $hasValidCompatibleToners                                    = true;
                 }
                 break;
             default :
                 throw new Exception("Unknown Device has an unknown or invalid TonerConfig");
                 break;
         }
-        
-        if ($hasValidCOMPToners)
+
+        if ($hasValidCompatibleToners)
         {
-            $toners [Proposalgen_Model_PartType::COMP] = $comptoners;
+            $toners [Proposalgen_Model_PartType::COMP] = $compatibleToners;
         }
+
         return $toners;
     }
 
     public function validateCOMPTonerFields ($row, $rowName)
     {
         $valid = false;
-        if (! is_null($row [$rowName . "_sku"]) && ! is_null($row [$rowName . "_cost"]) && ! is_null($row [$rowName . "_yield"]))
+        if (!is_null($row [$rowName . "_sku"]) && !is_null($row [$rowName . "_cost"]) && !is_null($row [$rowName . "_yield"]))
         {
             if (strlen($row [$rowName . "_sku"]) > 0 && $row [$rowName . "_cost"] > 0 && $row [$rowName . "_yield"] > 0)
             {
                 $valid = true;
             }
         }
-        
+
         return $valid;
     }
 
     public function mapUnknownDeviceToner ($row, $color, $manufacturer, $partType, $colorSuffix = "") //$tonerSKU, $tonerPrice, $tonerYield, $partTypeId, $manufacturerId, $tonerColorId)
     {
+        $colorText = '';
         switch ($color)
         {
             case Proposalgen_Model_TonerColor::BLACK :
-                $colortext = "black";
+                $colorText = "black";
                 break;
             case Proposalgen_Model_TonerColor::CYAN :
-                $colortext = "cyan";
+                $colorText = "cyan";
                 break;
             case Proposalgen_Model_TonerColor::MAGENTA :
-                $colortext = "magenta";
+                $colorText = "magenta";
                 break;
             case Proposalgen_Model_TonerColor::YELLOW :
-                $colortext = "yellow";
+                $colorText = "yellow";
                 break;
             case Proposalgen_Model_TonerColor::THREE_COLOR :
-                $colortext = "three_color";
+                $colorText = "three_color";
                 break;
             case Proposalgen_Model_TonerColor::FOUR_COLOR :
-                $colortext = "four_color";
+                $colorText = "four_color";
                 break;
         }
-        $colortext .= $colorSuffix;
-        $partTypeMapper = Proposalgen_Model_Mapper_PartType::getInstance();
-        $manufacturerMapper = Proposalgen_Model_Mapper_Manufacturer::getInstance();
-        $tonerColorMapper = Proposalgen_Model_Mapper_TonerColor::getInstance();
-        
+        $colorText .= $colorSuffix;
+        $partTypeMapper     = Proposalgen_Model_Mapper_PartType::getInstance();
+        $tonerColorMapper   = Proposalgen_Model_Mapper_TonerColor::getInstance();
+
         $toner = new Proposalgen_Model_Toner();
         if ($row->is_excluded)
         {
-            $toner->setTonerSKU("INVALID")
-                ->setTonerPrice(1)
-                ->setTonerYield(100)
-                ->setPartType($partTypeMapper->find($partType))
-                ->setTonerColor($tonerColorMapper->find($color));
+            $toner->tonerSku   = "INVALID";
+            $toner->tonerPrice = 1;
+            $toner->tonerYield = 100;
+            $toner->setPartType($partTypeMapper->find($partType));
+            $toner->setTonerColor($tonerColorMapper->find($color));
         }
         else
         {
-            if (isset($row [$colortext . "_sku"]))
+            if (isset($row [$colorText . "_sku"]))
             {
-                $toner->setTonerSKU($row [$colortext . "_sku"])
-                    ->setTonerPrice($row [$colortext . "_cost"])
-                    ->setTonerYield($row [$colortext . "_yield"])
-                    ->setPartType($partTypeMapper->find($partType))
-                    ->setManufacturer($manufacturer)
-                    ->setTonerColor($tonerColorMapper->find($color));
+                $toner->tonerSku = $row [$colorText . "_sku"];
+                $toner->tonerPrice = $row [$colorText . "_cost"];
+                $toner->tonerYield = $row [$colorText . "_yield"];
+                $toner->setPartType($partTypeMapper->find($partType));
+                $toner->setManufacturer($manufacturer);
+                $toner->setTonerColor($tonerColorMapper->find($color));
             }
         }
+
         return $toner;
     }
 
     /**
      * Saved an Proposalgen_Model_ object to the database
      *
-     * @param unknown_type $object            
+     * @param unknown_type $object
      */
     public function save (Proposalgen_Model_UnknownDeviceInstance $object)
     {
         $primaryKey = 0;
         try
         {
-            $data ["id"] = $object->getId();
-            $data ["user_id"] = $object->getUserId();
-            $data ["report_id"] = $object->getReportId();
+            $data ["id"]                           = $object->getId();
+            $data ["user_id"]                      = $object->getUserId();
+            $data ["report_id"]                    = $object->getReportId();
             $data ["upload_data_collector_row_id"] = $object->getUploadDataCollectorRowId();
-            $data ["printermodelid"] = $object->getDataCollectorModelid();
-            $data ["mps_monitor_startdate"] = $object->getMpsMonitorStartdate();
-            $data ["mps_monitor_enddate"] = $object->getMpsMonitorEnddate();
-            $data ["mps_discovery_date"] = $object->getMpsDiscoveryDate();
-            $data ["install_date"] = $object->getInstallDate();
-            $data ["device_manufacturer"] = $object->getDeviceManufacturer();
-            $data ["printer_model"] = $object->getPrinterModel();
-            $data ["printer_serial_number"] = $object->getPrinterSerialNumber();
-            $data ["toner_config_id"] = $object->getTonerConfig();
-            $data ["is_copier"] = $object->getIsCopier();
-            $data ["is_fax"] = $object->getIsFax();
-            $data ["is_duplex"] = $object->getIsDuplex();
-            $data ["is_scanner"] = $object->getIsScanner();
-            $data ["jit_supplies_supported"] = $object->getJitSuppliesSupported();
-            $data ["watts_power_normal"] = $object->getWattsPowerNormal();
-            $data ["watts_power_idle"] = $object->getWattsPowerIdle();
-            $data ["cost"] = $object->getDevicePrice();
-            $data ["launch_date"] = $object->getLaunchDate();
-            $data ["date_created"] = $object->getDateCreated();
-            $data ["black_toner_sku"] = $object->getBlackTonerSKU();
-            $data ["black_toner_cost"] = $object->getBlackTonerPrice();
-            $data ["black_toner_yield"] = $object->getBlackTonerYield();
-            $data ["cyan_toner_sku"] = $object->getCyanTonerSKU();
-            $data ["cyan_toner_cost"] = $object->getCyanTonerPrice();
-            $data ["cyan_toner_yield"] = $object->getCyanTonerYield();
-            $data ["magenta_toner_sku"] = $object->getMagentaTonerSKU();
-            $data ["magenta_toner_cost"] = $object->getMagentaTonerPrice();
-            $data ["magenta_toner_yield"] = $object->getMagentaTonerYield();
-            $data ["yellow_toner_sku"] = $object->getYellowTonerSKU();
-            $data ["yellow_toner_cost"] = $object->getYellowTonerPrice();
-            $data ["yellow_toner_yield"] = $object->getYellowTonerYield();
-            $data ["three_color_toner_sku"] = $object->getThreeColorTonerSKU();
-            $data ["three_color_toner_sku"] = $object->getThreeColorTonerSKU();
-            $data ["three_color_toner_cost"] = $object->getThreeColorTonerPrice();
-            $data ["three_color_toner_yield"] = $object->getThreeColorTonerYield();
-            $data ["four_color_toner_sku"] = $object->getFourColorTonerSKU();
-            $data ["four_color_toner_cost"] = $object->getFourColorTonerPrice();
-            $data ["four_color_toner_yield"] = $object->getFourColorTonerYield();
-            
-            $data ["black_comp_sku"] = $object->getBlackCompSKU();
-            $data ["black_comp_cost"] = $object->getBlackCompPrice();
-            $data ["black_comp_yield"] = $object->getBlackCompYield();
-            $data ["cyan_comp_sku"] = $object->getCyanCompSKU();
-            $data ["cyan_comp_cost"] = $object->getCyanCompPrice();
-            $data ["cyan_comp_yield"] = $object->getCyanCompYield();
-            $data ["magenta_comp_sku"] = $object->getMagentaCompSKU();
-            $data ["magenta_comp_cost"] = $object->getMagentaCompPrice();
-            $data ["magenta_comp_yield"] = $object->getMagentaCompYield();
-            $data ["yellow_comp_sku"] = $object->getYellowCompSKU();
-            $data ["yellow_comp_cost"] = $object->getYellowCompPrice();
-            $data ["yellow_comp_yield"] = $object->getYellowCompYield();
-            $data ["three_color_comp_sku"] = $object->getThreeColorCompSKU();
-            $data ["three_color_comp_sku"] = $object->getThreeColorCompSKU();
-            $data ["three_color_comp_cost"] = $object->getThreeColorCompPrice();
+            $data ["printermodelid"]               = $object->getDataCollectorModelid();
+            $data ["mps_monitor_startdate"]        = $object->getMpsMonitorStartdate();
+            $data ["mps_monitor_enddate"]          = $object->getMpsMonitorEnddate();
+            $data ["mps_discovery_date"]           = $object->getMpsDiscoveryDate();
+            $data ["install_date"]                 = $object->getInstallDate();
+            $data ["device_manufacturer"]          = $object->getDeviceManufacturer();
+            $data ["printer_model"]                = $object->getPrinterModel();
+            $data ["printer_serial_number"]        = $object->getPrinterSerialNumber();
+            $data ["toner_config_id"]              = $object->getTonerConfig();
+            $data ["is_copier"]                    = $object->getIsCopier();
+            $data ["is_fax"]                       = $object->getIsFax();
+            $data ["is_duplex"]                    = $object->getIsDuplex();
+            $data ["is_scanner"]                   = $object->getIsScanner();
+            $data ["jit_supplies_supported"]       = $object->getJitSuppliesSupported();
+            $data ["watts_power_normal"]           = $object->getWattsPowerNormal();
+            $data ["watts_power_idle"]             = $object->getWattsPowerIdle();
+            $data ["cost"]                         = $object->getDevicePrice();
+            $data ["launch_date"]                  = $object->getLaunchDate();
+            $data ["date_created"]                 = $object->getDateCreated();
+            $data ["black_toner_sku"]              = $object->getBlackTonerSKU();
+            $data ["black_toner_cost"]             = $object->getBlackTonerPrice();
+            $data ["black_toner_yield"]            = $object->getBlackTonerYield();
+            $data ["cyan_toner_sku"]               = $object->getCyanTonerSKU();
+            $data ["cyan_toner_cost"]              = $object->getCyanTonerPrice();
+            $data ["cyan_toner_yield"]             = $object->getCyanTonerYield();
+            $data ["magenta_toner_sku"]            = $object->getMagentaTonerSKU();
+            $data ["magenta_toner_cost"]           = $object->getMagentaTonerPrice();
+            $data ["magenta_toner_yield"]          = $object->getMagentaTonerYield();
+            $data ["yellow_toner_sku"]             = $object->getYellowTonerSKU();
+            $data ["yellow_toner_cost"]            = $object->getYellowTonerPrice();
+            $data ["yellow_toner_yield"]           = $object->getYellowTonerYield();
+            $data ["three_color_toner_sku"]        = $object->getThreeColorTonerSKU();
+            $data ["three_color_toner_sku"]        = $object->getThreeColorTonerSKU();
+            $data ["three_color_toner_cost"]       = $object->getThreeColorTonerPrice();
+            $data ["three_color_toner_yield"]      = $object->getThreeColorTonerYield();
+            $data ["four_color_toner_sku"]         = $object->getFourColorTonerSKU();
+            $data ["four_color_toner_cost"]        = $object->getFourColorTonerPrice();
+            $data ["four_color_toner_yield"]       = $object->getFourColorTonerYield();
+
+            $data ["black_comp_sku"]         = $object->getBlackCompSKU();
+            $data ["black_comp_cost"]        = $object->getBlackCompPrice();
+            $data ["black_comp_yield"]       = $object->getBlackCompYield();
+            $data ["cyan_comp_sku"]          = $object->getCyanCompSKU();
+            $data ["cyan_comp_cost"]         = $object->getCyanCompPrice();
+            $data ["cyan_comp_yield"]        = $object->getCyanCompYield();
+            $data ["magenta_comp_sku"]       = $object->getMagentaCompSKU();
+            $data ["magenta_comp_cost"]      = $object->getMagentaCompPrice();
+            $data ["magenta_comp_yield"]     = $object->getMagentaCompYield();
+            $data ["yellow_comp_sku"]        = $object->getYellowCompSKU();
+            $data ["yellow_comp_cost"]       = $object->getYellowCompPrice();
+            $data ["yellow_comp_yield"]      = $object->getYellowCompYield();
+            $data ["three_color_comp_sku"]   = $object->getThreeColorCompSKU();
+            $data ["three_color_comp_sku"]   = $object->getThreeColorCompSKU();
+            $data ["three_color_comp_cost"]  = $object->getThreeColorCompPrice();
             $data ["three_color_comp_yield"] = $object->getThreeColorCompYield();
-            $data ["four_color_comp_sku"] = $object->getFourColorCompSKU();
-            $data ["four_color_comp_cost"] = $object->getFourColorCompPrice();
-            $data ["four_color_comp_yield"] = $object->getFourColorCompYield();
-            
-            $data ["start_meter_life"] = $object->getStartMeterLife();
-            $data ["end_meter_life"] = $object->getEndMeterLife();
-            $data ["start_meter_black"] = $object->getStartMeterBlack();
-            $data ["end_meter_black"] = $object->getEndMeterBlack();
-            $data ["start_meter_color"] = $object->getStartMeterColor();
-            $data ["end_meter_color"] = $object->getEndMeterColor();
+            $data ["four_color_comp_sku"]    = $object->getFourColorCompSKU();
+            $data ["four_color_comp_cost"]   = $object->getFourColorCompPrice();
+            $data ["four_color_comp_yield"]  = $object->getFourColorCompYield();
+
+            $data ["start_meter_life"]       = $object->getStartMeterLife();
+            $data ["end_meter_life"]         = $object->getEndMeterLife();
+            $data ["start_meter_black"]      = $object->getStartMeterBlack();
+            $data ["end_meter_black"]        = $object->getEndMeterBlack();
+            $data ["start_meter_color"]      = $object->getStartMeterColor();
+            $data ["end_meter_color"]        = $object->getEndMeterColor();
             $data ["start_meter_printblack"] = $object->getStartMeterBlack();
-            $data ["end_meter_printblack"] = $object->getEndMeterBlack();
+            $data ["end_meter_printblack"]   = $object->getEndMeterBlack();
             $data ["start_meter_printcolor"] = $object->getStartMeterPrintcolor();
-            $data ["end_meter_printcolor"] = $object->getEndtMeterPrintcolor();
-            $data ["start_meter_copyblack"] = $object->getStartMeterCopyblack();
-            $data ["end_meter_copyblack"] = $object->getEndMeterCopyblack();
-            $data ["start_meter_copycolor"] = $object->getStartMeterCopycolor();
-            $data ["start_meter_copycolor"] = $object->getEndMeterCopycolor();
-            $data ["start_meter_fax"] = $object->getStartMeterFax();
-            $data ["end_meter_fax"] = $object->getEndMeterFax();
-            $data ["start_meter_scan"] = $object->getStartMeterScan();
-            $data ["end_meter_scan"] = $object->getEndMeterScan();
-            $data ["is_excluded"] = $object->getIsExcluded();
-            $data ["is_leased"] = $object->getLoginRestrictedUntilDate();
-            $data ["service_cost_per_page"] = $object->getServiceCostPerPage();
-            
+            $data ["end_meter_printcolor"]   = $object->getEndtMeterPrintcolor();
+            $data ["start_meter_copyblack"]  = $object->getStartMeterCopyblack();
+            $data ["end_meter_copyblack"]    = $object->getEndMeterCopyblack();
+            $data ["start_meter_copycolor"]  = $object->getStartMeterCopycolor();
+            $data ["start_meter_copycolor"]  = $object->getEndMeterCopycolor();
+            $data ["start_meter_fax"]        = $object->getStartMeterFax();
+            $data ["end_meter_fax"]          = $object->getEndMeterFax();
+            $data ["start_meter_scan"]       = $object->getStartMeterScan();
+            $data ["end_meter_scan"]         = $object->getEndMeterScan();
+            $data ["is_excluded"]            = $object->getIsExcluded();
+            $data ["is_leased"]              = $object->getLoginRestrictedUntilDate();
+            $data ["service_cost_per_page"]  = $object->getServiceCostPerPage();
+
             $primaryKey = $this->saveRow($data);
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
             throw new Exception("Error saving " . get_class($this) . " to the database.", 0, $e);
         }
+
         return $primaryKey;
     }
 }
