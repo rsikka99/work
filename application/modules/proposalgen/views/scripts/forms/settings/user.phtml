@@ -5,7 +5,48 @@ $form = new Zend_Form();
 <div class="settingsPage">
 <form id="<?php echo $formID?>" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>" enctype="multipart/form-data">
 	<a name="top"></a>
-	
+
+    <h4>Survey Settings</h4>
+	<div class="well">
+    <table id="<?php echo $formID?>" style="width: 100%;">
+		<col style='width: auto;' />
+		<col style='width: 150px;' />
+		<col style='width: 150px;' />
+		<col style='width: 150px;' />
+		<thead>
+			<tr>
+				<th class="forms_heading" align="left" valign="top"><strong>Property</strong></th>
+				<th class="forms_heading" align="center" valign="top"><strong><?php echo $this->dealerName; ?> Default</strong></th>
+				<th class="forms_heading" align="center" valign="top" colspan="2"><strong>Override</strong></th>
+			</tr>
+		</thead>
+        <tbody>
+	        <!-- Estimated Page Coverage MONO  % --------------------------------------------------------------------------------------- -->
+	        <tr>
+                <td><?php echo $this->element->pageCoverageMono->renderLabel();?></td>
+                <td align="left" style="padding-left: 10"><?php echo ($this->dealerData["pageCoverageMono"]) ? $this->dealerData["pageCoverageMono"] . "%" : ""; ?></td>
+                <td <?php echo ($this->element->pageCoverageMono->hasErrors()) ? "class='error'" : ""; ?> align="right"><?php echo $this->element->pageCoverageMono->renderViewHelper(); ?></td>
+				<td>%</td>
+            </tr>
+            <?php if ($this->element->pageCoverageMono->hasErrors()) : ?>
+            <tr><td colspan="2"></td><td colspan="2"><ul class="errors"><li>Must be between 1 and 100</li></ul></td>
+                <?php endif; ?>
+
+                <!-- Estimated Page Coverage COLOR  % --------------------------------------------------------------------------------------- -->
+	        <tr>
+                <td><?php echo $this->element->pageCoverageColor->renderLabel();?></td>
+                <td align="left" style="padding-left: 10"><?php echo ($this->dealerData["pageCoverageColor"]) ? $this->dealerData["pageCoverageColor"] . "%" : ""; ?></td>
+                <td <?php echo ($this->element->pageCoverageColor->hasErrors()) ? "class='error'" : ""; ?> align="right"><?php echo $this->element->pageCoverageColor->renderViewHelper(); ?></td>
+				<td>%</td>
+            </tr>
+            <?php if ($this->element->pageCoverageColor->hasErrors()) : ?>
+            <tr><td colspan="2"></td><td colspan="2"><ul class="errors"><li>Must be between 1 and 100</li></ul></td>
+                <?php endif; ?>
+        </tbody>
+    </table>
+    </div>
+
+
 	<h4>Assessment Settings</h4>
 	<div class="well">
     <table id="<?php echo $formID?>" style="width: 100%;">
@@ -30,29 +71,9 @@ $form = new Zend_Form();
             </tr>
             <?php if ($this->element->assessmentReportMargin->hasErrors()) : ?>
             <tr><td colspan="2"></td><td colspan="2"><ul class="errors"><li>Must be between 1 and 100</li></ul></td>
-            <?php endif; ?>
-            
-        	<!-- Estimated Page Coverage MONO  % --------------------------------------------------------------------------------------- -->
-	        <tr>
-                <td><?php echo $this->element->pageCoverageMono->renderLabel();?></td>
-                <td align="left" style="padding-left: 10"><?php echo ($this->dealerData["pageCoverageMono"]) ? $this->dealerData["pageCoverageMono"] . "%" : ""; ?></td>
-                <td <?php echo ($this->element->pageCoverageMono->hasErrors()) ? "class='error'" : ""; ?> align="right"><?php echo $this->element->pageCoverageMono->renderViewHelper(); ?></td>
-				<td>%</td>
-            </tr>
-            <?php if ($this->element->pageCoverageMono->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><ul class="errors"><li>Must be between 1 and 100</li></ul></td>
-            <?php endif; ?>
+            <?php endif ?>
 
-            <!-- Estimated Page Coverage COLOR  % --------------------------------------------------------------------------------------- -->
-	        <tr>
-                <td><?php echo $this->element->pageCoverageColor->renderLabel();?></td>
-                <td align="left" style="padding-left: 10"><?php echo ($this->dealerData["pageCoverageColor"]) ? $this->dealerData["pageCoverageColor"] . "%" : ""; ?></td>
-                <td <?php echo ($this->element->pageCoverageColor->hasErrors()) ? "class='error'" : ""; ?> align="right"><?php echo $this->element->pageCoverageColor->renderViewHelper(); ?></td>
-				<td>%</td>
-            </tr>
-            <?php if ($this->element->pageCoverageColor->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><ul class="errors"><li>Must be between 1 and 100</li></ul></td>
-            <?php endif; ?>
+
 
             <!-- Monthly Lease Payment $ --------------------------------------------------------------------------------------- -->
             <tr>

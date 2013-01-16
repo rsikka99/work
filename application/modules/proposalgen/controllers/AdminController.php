@@ -2261,43 +2261,15 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $this->view->title = 'Manage Settings';
         $db                = Zend_Db_Table::getDefaultAdapter();
 
-        // Get Override Settings
-        $dealerCompany  = Proposalgen_Model_DealerCompany::getMasterCompany();
-        $dealerSettings = $dealerCompany->getReportSettings(false); // Get the
-        // settings
-        // without
-        // any
-        // overrides
-        // for the
-        // values on
-        // the form
-
-
-        // Grab the settings form
-        $form = new Proposalgen_Form_Settings_SystemAdmin();
-
-        // Add all the pricing configs
-        $pricingConfigs = Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll();
-        foreach ($pricingConfigs as $pricingConfig)
-        {
-            if ($pricingConfig->getPricingConfigId() !== 1)
-            {
-                $form->getElement('pricing_config_id')->addMultiOption($pricingConfig->getPricingConfigId(), $pricingConfig->getConfigName());
-            }
-        }
-
-        // Set form values based on the system selected settings
-        foreach ($dealerSettings as $setting => $value)
-        {
-            $form->getElement($setting)->setValue((empty($value) ? "" : $value));
-        }
+        // Row #1 of Report Settings has all the system defaults
+        $systemReportSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->find(1);
+        $systemSurveySettings = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->find(1);
+        $form                 = new Proposalgen_Form_Settings_SystemAdmin();
 
         if ($this->_request->isPost())
         {
-            // get form values
+            // Get the data that has been posted
             $formData = $this->_request->getPost();
-            //print_r($formData); die;
-
 
             if ($form->isValid($formData))
             {
@@ -2307,56 +2279,32 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     try
                     {
                         // Make all empty values = null
-                        foreach ($formData as $value)
+                        foreach ($formData as &$value)
                         {
-                            $value = (empty($value)) ? null : $value;
+                            if (strlen($value) === 0)
+                            {
+                                $value = null;
+                            }
                         }
+                        // Save page coverage settings (survey settings)
+                        $systemSurveySettings->populate($formData);
+                        Proposalgen_Model_Mapper_Survey_Setting::getInstance()->save($systemSurveySettings, $systemSurveySettings->id);
+                        // Save report settings (all other)
+                        $systemReportSettings->populate($formData);
+                        Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($systemReportSettings, $systemReportSettings->id);
 
-                        /*
-                         * Required
-                         */
-                        $dealerCompany->setDcEstimatedPageCoverageMono($formData ["estimated_page_coverage_mono"]);
-                        $dealerCompany->setDcEstimatedPageCoverageColor($formData ["estimated_page_coverage_color"]);
-                        $dealerCompany->setDcActualPageCoverageMono($formData ["actual_page_coverage_mono"]);
-                        $dealerCompany->setDcActualPageCoverageColor($formData ["actual_page_coverage_color"]);
-
-                        /*
-                         * Null is acceptable
-                         */
-                        $dealerCompany->setDcMonthlyLeasePayment($formData ["monthly_lease_payment"]);
-                        $dealerCompany->setDcDefaultPrinterCost($formData ["default_printer_cost"]);
-                        $dealerCompany->setDcLeasedBwPerPage($formData ["leased_bw_per_page"]);
-                        $dealerCompany->setDcLeasedColorPerPage($formData ["leased_color_per_page"]);
-                        $dealerCompany->setDcMpsBwPerPage($formData ["mps_bw_per_page"]);
-                        $dealerCompany->setDcMpsColorPerPage($formData ["mps_color_per_page"]);
-                        $dealerCompany->setDcKilowattsPerHour($formData ["kilowatts_per_hour"]);
-                        $dealerCompany->setPricingConfigId($formData ["pricing_config_id"]);
-                        $dealerCompany->setDcServiceCostPerPage($formData ["service_cost_per_page"]);
-                        $dealerCompany->setDcAdminChargePerPage($formData ["admin_charge_per_page"]);
-
-                        $dealerCompany->setDcReportMargin($formData ["pricing_margin"]);
-
-                        // Save User
-                        Proposalgen_Model_Mapper_DealerCompany::getInstance()->save($dealerCompany);
-
-                        $this->_helper->flashMessenger(array(
-                                                            "success" => "Your settings have been updated."
-                                                       ));
+                        $this->_helper->flashMessenger(array("success" => "Your settings have been updated."));
                         $db->commit();
                     }
                     catch (Zend_Db_Exception $e)
                     {
                         $db->rollback();
-                        $this->_helper->flashMessenger(array(
-                                                            "error" => "An error occured while saving your settings."
-                                                       ));
+                        $this->_helper->flashMessenger(array("error" => "An error occured while saving your settings."));
                     }
                     catch (Exception $e)
                     {
                         $db->rollback();
-                        $this->_helper->flashMessenger(array(
-                                                            "error" => "An error occured while saving your settings."
-                                                       ));
+                        $this->_helper->flashMessenger(array("error" => "An error occured while saving your settings."));
                     }
                 }
             }
@@ -2369,16 +2317,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             }
         }
 
-        // add form to page
-        $form->setDecorators(array(
-                                  array(
-                                      'ViewScript',
-                                      array(
-                                          'viewScript' => 'forms/settings/systemadmin.phtml'
-                                      )
-                                  )
-                             ));
-
+        // Add form to page
+        $form->setDecorators(array(array('ViewScript', array('viewScript' => 'forms/settings/systemadmin.phtml'))));
+        // Populate the form wif data
+        $form->populate($systemReportSettings->toArray());
+        $form->populate($systemSurveySettings->toArray());
         $this->view->settingsForm = $form;
     }
 
@@ -2406,12 +2349,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $form->getElement('assessmentPricingConfigId')->addMultiOption($pricingConfig->pricingConfigId, ($pricingConfig->pricingConfigId !== 1) ? $pricingConfig->configName : "");
         }
 
-//        // Set form values based on the users selected settings
-//        foreach ($userSettings as $setting => $value)
-//        {
-//            $form->getElement($setting)->setValue((empty($value) ? "" : $value));
-//        }
-
         if ($this->_request->isPost())
         {
             // get form values
@@ -2425,7 +2362,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     try
                     {
                         // Make all empty values = null
-                       foreach ( $formData as &$value )
+                        foreach ($formData as &$value)
                         {
                             if (strlen($value) === 0)
                             {
