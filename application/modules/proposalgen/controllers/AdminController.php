@@ -2392,28 +2392,26 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $this->view->title = 'Manage My Settings';
         $db                = Zend_Db_Table::getDefaultAdapter();
         $message           = '';
-        $hasErrors         = false;
 
         // Get system overrides
-        $systemSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->find(1);
-
-        $user         = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
-        $userSettings = Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->find($user->id);
-
-        $form           = new Proposalgen_Form_Settings_User();
+        $userId         = Zend_Auth::getInstance()->getIdentity()->id;
+        $reportSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchUserReportSetting($userId);
+        $surveySettings = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchUserSurveySetting($userId);
         $pricingConfigs = Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll();
+        $form           = new Proposalgen_Form_Settings_User();
 
         // Add all the pricing configs
+        /* @var $pricingConfig Proposalgen_Model_PricingConfig */
         foreach ($pricingConfigs as $pricingConfig)
         {
-            $form->getElement('assessmentPricingConfigId')->addMultiOption($pricingConfig->getPricingConfigId(), ($pricingConfig->getPricingConfigId() !== 1) ? $pricingConfig->getConfigName() : "");
+            $form->getElement('assessmentPricingConfigId')->addMultiOption($pricingConfig->pricingConfigId, ($pricingConfig->pricingConfigId !== 1) ? $pricingConfig->configName : "");
         }
 
-        // Set form values based on the users selected settings
-        foreach ($userSettings as $setting => $value)
-        {
-            $form->getElement($setting)->setValue((empty($value) ? "" : $value));
-        }
+//        // Set form values based on the users selected settings
+//        foreach ($userSettings as $setting => $value)
+//        {
+//            $form->getElement($setting)->setValue((empty($value) ? "" : $value));
+//        }
 
         if ($this->_request->isPost())
         {
@@ -2434,17 +2432,13 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         }
                         // Save user settings
                         // Save page coverage settings (survey settings)
-                        $surveySetting = new Proposalgen_Model_Survey_Setting();
-                        $surveySetting->populate($formData);
-
+                        $surveySettings->populate($formData);
                         // Save report settings (all other)
-                        $reportSetting = new Proposalgen_Model_Report_Setting();
-                        $reportSetting->populate($formData);
-
+                        $reportSettings->populate($formData);
                         // Save report settings
-                        Mapper_Su::getInstance()->save('x');
+                        Proposalgen_Model_Mapper_Survey_Setting::getInstance()->save($surveySettings, $surveySettings->getId());
                         // Save survey settings
-                        Proposalgen_Model_Mapper_User::getInstance()->save($user);
+                        Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($reportSettings, $reportSettings->getId());
 
                         $this->_helper->flashMessenger(array("success" => "Your settings have been updated."));
                         $db->commit();
@@ -2468,12 +2462,13 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             }
         }
 
-        $surveySetting = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->find(1);
-        $defaultSettings = array_merge($systemSettings->toArray(),$surveySetting->toArray());
+        $systemReportSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->find(1);
+        $systemSurveySetting  = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->find(1);
+        $defaultSettings      = array_merge($systemReportSettings->toArray(), $systemSurveySetting->toArray());
 
         if ($defaultSettings ["assessmentPricingConfigId"] !== Proposalgen_Model_PricingConfig::NONE)
         {
-            $defaultSettings ["assessmentPricingConfigId"] = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($defaultSettings ["assessmentPricingConfigId"])->getConfigName();
+            $defaultSettings ["assessmentPricingConfigId"] = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($defaultSettings ["assessmentPricingConfigId"])->configName;
         }
         else
         {

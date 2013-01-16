@@ -116,7 +116,7 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
      * @param $id int
      *            The id of the user_survey_setting to find
      *
-     * @return void Proposalgen_Model_User_Survey_Setting
+     * @return Proposalgen_Model_User_Survey_Setting
      */
     public function find ($id)
     {
@@ -130,26 +130,6 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
         return new Proposalgen_Model_User_Survey_Setting($row->toArray());
     }
 
-    /**
-     * @param $userId
-     *
-     * @return Proposalgen_Model_Survey_Setting
-     */
-    public function findUserSurveySettingByUserId ($userId)
-    {
-        try
-        {
-            // Get the joining table to get all possible results
-            $userSurvey         = Proposalgen_Model_Mapper_User_Survey_Setting::getInstance()->fetchAll(array("{$this->col_userId} = ?" => $userId));
-            $userSurveySettings = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->find($userSurvey[0]->getSurveySettingId());
-        }
-        catch (Exception $e)
-        {
-            $userSurveySettings = null;
-        }
-
-        return $userSurveySettings;
-    }
 
     /**
      * Fetches a user_survey_setting
@@ -200,8 +180,29 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
         return $entries;
     }
 
+    public function findUserSurveySettingByUserId ($userId)
+    {
+        $surveySetting = array();
+
+        try
+        {
+            // Get all rows that with this user id
+            $userSurveySettings = $this->fetchAll(array("{$this->col_userId} = {$userId}"));
+            foreach ($userSurveySettings as $userSurveySetting)
+            {
+                $surveySetting [] = $userSurveySetting;
+            }
+        }
+        catch (Exception $e)
+        {
+            $surveySetting = null;
+        }
+        return $surveySetting;
+    }
+
     /**
      * (non-PHPdoc)
+     *
      * @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
      */
     public function getPrimaryKeyValueForObject ($object)

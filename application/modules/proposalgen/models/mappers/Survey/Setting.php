@@ -102,7 +102,7 @@ class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
      *
      * @param $id int
      *            The id of the survey_setting to find
-     * @return void Proposalgen_Model_Survey_Setting
+     * @return Proposalgen_Model_Survey_Setting
      */
     public function find ($id)
     {
@@ -158,6 +158,39 @@ class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
             $entries [] = new Proposalgen_Model_Survey_Setting($row->toArray());
         }
         return $entries;
+    }
+
+    public function fetchUserSurveySetting($userId)
+    {
+        $surveySetting = false;
+        $userSurveySetting = Proposalgen_Model_Mapper_User_Survey_Setting::getInstance()->find($userId);
+        if ($userSurveySetting)
+        {
+            $surveySetting = $this->find($userSurveySetting->getSurveySettingId());
+        }
+
+        // If we don't have a setting yet, make a blank one
+        if (! $surveySetting)
+        {
+            $surveySetting = new Proposalgen_Model_Survey_Setting();
+            $surveySettingId = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->insert($surveySetting);
+
+            if ($userSurveySetting)
+            {
+                $userSurveySetting->setSurveySettingId($surveySettingId);
+                Proposalgen_Model_Mapper_User_Survey_Setting::getInstance()->save($userSurveySetting, null);
+            }
+            else
+            {
+                $userSurveySetting = new Proposalgen_Model_User_Survey_Setting();
+                $userSurveySetting->setUserId($userId);
+                $userSurveySetting->setSurveySettingId($surveySettingId);
+                Proposalgen_Model_Mapper_User_Survey_Setting::getInstance()->insert($userSurveySetting);
+            }
+        }
+
+        return $surveySetting;
+
     }
 
     /**
