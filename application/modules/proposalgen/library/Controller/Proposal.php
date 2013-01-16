@@ -104,10 +104,10 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
             $newStep = $this->checkIfNextStepIsNew($this->_activeStep);
             if ($newStep !== FALSE)
             {
-                $this->_report->setReportStage($newStep->getEnumValue());
+                $this->_report->setReportStage($newStep->enumValue);
                 
                 // We need to adjust the menu just in case we're not redirecting
-                Proposalgen_Model_Report_Step::updateAccessibleSteps($this->getReportSteps(), $newStep->getEnumValue());
+                Proposalgen_Model_Report_Step::updateAccessibleSteps($this->getReportSteps(), $newStep->enumValue);
             }
         }
         
@@ -154,10 +154,10 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     {
         if ($step !== null)
         {
-            $nextStep = $step->getNextStep();
+            $nextStep = $step->nextStep;
             if ($nextStep !== null)
             {
-                if (! $nextStep->getCanAccess())
+                if (! $nextStep->canAccess)
                 {
                     return $nextStep;
                 }
@@ -188,7 +188,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
                 /*
              * If we can access the current step, and the next step either doesn't exist or is inaccessable.
              */
-            if ($step->getCanAccess() && ($step->getNextStep() === null || ! $step->getNextStep()->getCanAccess()))
+            if ($step->canAccess && ($step->nextStep === null || ! $step->nextStep->canAccess))
             {
                 $latestStep = $step;
                 break;
@@ -210,12 +210,12 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
         /* @var $step Proposalgen_Model_Report_Step */
         foreach ( $this->getReportSteps() as $step )
         {
-            $step->setActive(false);
-            if (strcasecmp($step->getEnumValue(), $activeStepName) === 0)
+            $step->active = false;
+            if (strcasecmp($step->enumValue, $activeStepName) === 0)
             {
                 
                 $this->_activeStep = $step;
-                $step->setActive(true);
+                $step->active = true;
                 break;
             }
         }
@@ -229,9 +229,9 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     {
         if (isset($this->_activeStep))
         {
-            $nextStep = $this->_activeStep->getNextStep();
+            $nextStep = $this->_activeStep->nextStep;
             if ($nextStep)
-                $this->_helper->redirector($nextStep->getAction(), $nextStep->getController());
+                $this->_helper->redirector($nextStep->action, $nextStep->controller);
         }
     }
 
@@ -243,9 +243,9 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     {
         if (isset($this->_activeStep))
         {
-            $prevStep = $this->_activeStep->getPreviousStep();
+            $prevStep = $this->_activeStep->previousStep);
             if ($prevStep)
-                $this->_helper->redirector($prevStep->getAction(), $prevStep->getController());
+                $this->_helper->redirector($prevStep->action, $prevStep->controller);
         }
     }
 }

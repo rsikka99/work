@@ -31,16 +31,16 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                 /* @var $step Proposalgen_Model_Report_Step */
                 foreach ( $reportSteps as $step )
                 {
-                    if (! $step->getCanAccess())
+                    if (! $step->canAccess)
                     {
-                        $lastStep = $step->getPreviousStep();
+                        $lastStep = $step->previousStep;
                         break;
                     }
                 }
                 if ($lastStep !== null)
                 {
                     // Send to latest page
-                    $this->_helper->redirector($lastStep->getAction(), $lastStep->getController());
+                    $this->_helper->redirector($lastStep->action, $lastStep->controller);
                 }
                 else
                 {

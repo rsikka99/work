@@ -17,7 +17,7 @@ class Proposalgen_View_Helper_ProposalMenu extends Zend_View_Helper_Abstract
             $lastGroup = "";
             foreach ( $reportSteps as $step )
             {
-                if ($step->getActive())
+                if ($step->active)
                 {
                     $html [] = "<li class='active'>";
                 }
@@ -28,12 +28,12 @@ class Proposalgen_View_Helper_ProposalMenu extends Zend_View_Helper_Abstract
                 
                 // Get the url and name
                 $url = $this->view->url(array (
-                        'controller' => $step->getController(), 
-                        'action' => $step->getAction() 
+                        'controller' => $step->controller,
+                        'action' => $step->action
                 ));
-                $name = $step->getName();
+                $name = $step->name;
                 
-                if ($step->getCanAccess())
+                if ($step->canAccess)
                 {
                     $html [] = "<a href='{$url}'>{$name}</a>";
                 }
@@ -46,7 +46,7 @@ class Proposalgen_View_Helper_ProposalMenu extends Zend_View_Helper_Abstract
                 
                 $html [] = "<li>";
                 
-                if ($step->getNextStep() !== null && ! $step->getCanAccess())
+                if ($step->nextStep !== null && ! $step->canAccess)
                 {
                     //break;
                 }
