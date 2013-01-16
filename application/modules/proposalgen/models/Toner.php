@@ -150,7 +150,7 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
             $actualColorCoverage    = 0;
             $estimatedBlackCoverage = 0;
             $estimatedColorCoverage = 0;
-            switch ($this->getTonerColor()->getTonerColorId())
+            switch ($this->getTonerColor()->tonerColorId)
             {
                 case Proposalgen_Model_TonerColor::BLACK :
                     $actualBlackCoverage    = self::getACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE();

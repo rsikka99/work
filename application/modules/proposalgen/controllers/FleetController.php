@@ -312,7 +312,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     // The model name coming in often has the manufacturer attached to it. Remove it.
                     $deviceName = str_replace("{$manufacturerName} ", '', strtolower($deviceRow->modelname));
 
-                    // Hotfix for HP Printers
+                    // HotFix for HP Printers
                     if (strcmp('hewlett-packard', $manufacturerName) === 0)
                     {
                         $deviceName = str_replace('hp ', '', $deviceName);
@@ -334,14 +334,14 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         // If it doesn't then we make one.
                         if ($pfDevice === false)
                         {
-                            $pfDevice = new Proposalgen_Model_DevicePf();
-                            $pfDevice->pfModelId = $deviceRow->printermodelid;
-                            $pfDevice->pfDbDeviceName = $deviceName;
+                            $pfDevice                   = new Proposalgen_Model_DevicePf();
+                            $pfDevice->pfModelId        = $deviceRow->printermodelid;
+                            $pfDevice->pfDbDeviceName   = $deviceName;
                             $pfDevice->pfDbManufacturer = $manufacturerName;
-                            $pfDevice->createdBy = $userId;
-                            $pfDevice->dateCreated = $currentDateTime;
+                            $pfDevice->createdBy        = $userId;
+                            $pfDevice->dateCreated      = $currentDateTime;
 
-                            $insertId = Proposalgen_Model_Mapper_DevicePf::getInstance()->save($pfDevice);
+                            $insertId              = Proposalgen_Model_Mapper_DevicePf::getInstance()->save($pfDevice);
                             $pfDevice->devicesPfId = $insertId;
                         }
                     }
@@ -357,15 +357,15 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     // Prepare the upload data collector model
                     $uploadDataCollectorRow = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->mapRowToObject($deviceRow);
                     //$uploadDataCollectorRow = new Proposalgen_Model_UploadDataCollectorRow($deviceRow);
-                    $uploadDataCollectorRow->setReportId($reportId);
-                    $uploadDataCollectorRow->setDevicesPfId($pfDevice->devicesPfId);
-                    $uploadDataCollectorRow->setStartdate($startDate->toString($dateOutputFormat));
-                    $uploadDataCollectorRow->setEnddate($endDate->toString($dateOutputFormat));
+                    $uploadDataCollectorRow->reportId    = $reportId;
+                    $uploadDataCollectorRow->devicesPfId = $pfDevice->devicesPfId;
+                    $uploadDataCollectorRow->startDate   = $startDate->toString($dateOutputFormat);
+                    $uploadDataCollectorRow->endDate     = $endDate->toString($dateOutputFormat);
 
                     // Validate the row
-                    $deviceHasBadData = $uploadDataCollectorRow->IsValid();
-                    $uploadDataCollectorRow->setInvalidData($deviceHasBadData);
-                    $this->view->has_bad_data = $deviceHasBadData;
+                    $deviceHasBadData                    = $uploadDataCollectorRow->IsValid();
+                    $uploadDataCollectorRow->invalidData = $deviceHasBadData;
+                    $this->view->has_bad_data            = $deviceHasBadData;
 
                     $rowsToSave [] = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->mapObjectToRow($uploadDataCollectorRow);
                 }
@@ -815,8 +815,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
         $this->user_id = Zend_Auth::getInstance()->getIdentity()->id;
         $report_id     = $this->getReport()->getId();
+        $formdata      = new stdClass();
 
-        $select = new Zend_Db_Select($db);
         $select = $db->select()
             ->from(array(
                         'udc' => 'pgen_upload_data_collector_rows'
@@ -1043,7 +1043,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 $ticket_commentsData  = array(
                                     'ticket_id'    => $ticket_id,
                                     'user_id'      => $this->user_id,
-                                    'content' => $ticket_comment,
+                                    'content'      => $ticket_comment,
                                     'date_created' => $date
                                 );
                                 $ticket_commentsTable->insert($ticket_commentsData);
@@ -1127,7 +1127,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             'watts_power_idle'      => $watts_power_idle
                         );
 
-                        $printer_request_id   = $printer_requestTable->insert($printer_requestData);
+                        $printer_request_id = $printer_requestTable->insert($printer_requestData);
 
                         $this->view->message = "Support Request Submitted.";
                     }
@@ -1764,20 +1764,20 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
                             // update ticket request data
                             $ticket_pf_requestData = array(
-                                'manufacturer' => $device_manufacturer,
-                                'printer_model'       => $printer_model,
-                                'launch_date'         => $launch_date,
-                                'cost'                => $device_cost,
-                                'toner_config'        => $toner_config,
-                                'is_copier'           => $is_copier,
-                                'is_fax'              => $is_fax,
-                                'is_duplex'           => $is_duplex,
-                                'is_scanner'          => $is_scanner,
-                                'PPM_black'           => $PPM_black,
-                                'PPM_color'           => $PPM_color,
-                                'duty_cycle'          => $duty_cycle,
-                                'watts_power_normal'  => $watts_power_normal,
-                                'watts_power_idle'    => $watts_power_idle
+                                'manufacturer'       => $device_manufacturer,
+                                'printer_model'      => $printer_model,
+                                'launch_date'        => $launch_date,
+                                'cost'               => $device_cost,
+                                'toner_config'       => $toner_config,
+                                'is_copier'          => $is_copier,
+                                'is_fax'             => $is_fax,
+                                'is_duplex'          => $is_duplex,
+                                'is_scanner'         => $is_scanner,
+                                'PPM_black'          => $ppm_black,
+                                'PPM_color'          => $ppm_color,
+                                'duty_cycle'         => $duty_cycle,
+                                'watts_power_normal' => $watts_power_normal,
+                                'watts_power_idle'   => $watts_power_idle
                             );
                             $where                 = $ticket_pf_requestTable->getAdapter()->quoteInto('ticket_id = ?', $ticket_id, 'INTEGER');
                             $ticket_pf_requestTable->update($ticket_pf_requestData, $where);
@@ -2117,10 +2117,10 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         $this->view->edit_description = true;
 
                         // load details for ticket
-                        $ticketsMapper                = Proposalgen_Model_Mapper_Ticket::getInstance();
-                        $tickets                      = $ticketsMapper->find($ticket_id);
-                        $this->view->ticket_number    = $tickets->TicketId;
-                        $this->view->ticket_title     = $tickets->Title;
+                        $ticketsMapper             = Proposalgen_Model_Mapper_Ticket::getInstance();
+                        $tickets                   = $ticketsMapper->find($ticket_id);
+                        $this->view->ticket_number = $tickets->TicketId;
+                        $this->view->ticket_title  = $tickets->Title;
                         //$this->view->reported_by      = $tickets->User->UserName;
                         $this->view->ticket_type      = $tickets->Category->CategoryName;
                         $this->view->ticket_details   = $tickets->Description;
@@ -2136,22 +2136,22 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
                         foreach ($ticket_comments as $row)
                         {
-                            $comment_date             = new Zend_Date($row->CommentDate, "yyyy-mm-dd HH:ii:ss");
+                            $comment_date = new Zend_Date($row->CommentDate, "yyyy-mm-dd HH:ii:ss");
 
                             $ticket_comments_array [] = array(
                                 'username'     => $row->User->getUsername(),
                                 'date_created' => $comment_date->toString('mm/dd/yyyy'),
-                                'content' => $row->CommentText
+                                'content'      => $row->CommentText
                             );
                         }
                         $this->view->ticket_comments = $ticket_comments_array;
 
                         // find pf_device
-                        $ticketpfrequestMapper           = Proposalgen_Model_Mapper_TicketPFRequest::getInstance();
-                        $ticketpfrequest                 = $ticketpfrequestMapper->find($ticket_id);
-                        $this->view->devices_pf_id       = $ticketpfrequest->devicePfId;
-                        $this->view->device_pf_name      = $ticketpfrequest->getDevicePf()->pfDbManufacturer . ' ' . $ticketpfrequest->_devicePf->PfDbDeviceName;
-                        $this->view->user_suggested_name = $ticketpfrequest->deviceManufacturer . ' ' . $ticketpfrequest->printerModel;
+                        $ticketPfRequestMapper           = Proposalgen_Model_Mapper_TicketPFRequest::getInstance();
+                        $ticketPfRequest                 = $ticketPfRequestMapper->find($ticket_id);
+                        $this->view->devices_pf_id       = $ticketPfRequest->devicePfId;
+                        $this->view->device_pf_name      = $ticketPfRequest->getDevicePf()->pfDbManufacturer . ' ' . $ticketPfRequest->getDevicePf()->PfDbDeviceName;
+                        $this->view->user_suggested_name = $ticketPfRequest->deviceManufacturer . ' ' . $ticketPfRequest->printerModel;
 
                         // ticket exists, update ticket label
                         $form->getElement('request_support')->setLabel("View Support Ticket");
@@ -2162,7 +2162,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 $mapped_to_modelname    = '';
                 $mapped_to_manufacturer = '';
                 // loop through pf_device_matchup_users to find suggested mapping
-                $select         = $db->select()
+                $select = $db->select()
                     ->from(array(
                                 'pfdmu' => 'pgen_user_pf_device_matchups'
                            ), array(
@@ -2232,6 +2232,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         } // end if
         $this->view->deviceform = $form;
     }
+
     public function removedeviceAction ()
     {
         // disable the default layout
@@ -2247,17 +2248,17 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             if ($devices_pf_id > 0)
             {
                 // delete unknown_device_instances
-                $upload_data_collectorTable = new Proposalgen_Model_DbTable_UploadDataCollectorRow();
+                $upload_data_collectorTable   = new Proposalgen_Model_DbTable_UploadDataCollectorRow();
                 $unknown_device_instanceTable = new Proposalgen_Model_DbTable_UnknownDeviceInstance();
 
                 // get all uploaded rows for device
-                $where = $upload_data_collectorTable->getAdapter()->quoteInto('devices_pf_id = ?', $devices_pf_id, 'INTEGER');
+                $where                 = $upload_data_collectorTable->getAdapter()->quoteInto('devices_pf_id = ?', $devices_pf_id, 'INTEGER');
                 $upload_data_collector = $upload_data_collectorTable->fetchAll($where);
 
-                foreach ( $upload_data_collector as $key => $value )
+                foreach ($upload_data_collector as $key => $value)
                 {
                     $upload_data_collector_id = $upload_data_collector [$key] ['id'];
-                    $where = $unknown_device_instanceTable->getAdapter()->quoteInto('upload_data_collector_row_id = ?', $upload_data_collector_id, 'INTEGER');
+                    $where                    = $unknown_device_instanceTable->getAdapter()->quoteInto('upload_data_collector_row_id = ?', $upload_data_collector_id, 'INTEGER');
                     $unknown_device_instances = $unknown_device_instanceTable->fetchRow($where);
                     if (count($unknown_device_instances) > 0)
                     {
@@ -2268,7 +2269,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             }
             $db->commit();
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
             $db->rollback();
             echo $e . "<br />";
@@ -2276,6 +2277,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             throw new Exception("An error occurred saving mapping.", 0, $e);
         }
     }
+
     public function savemappingAction ()
     {
         // Mark the step we're on as active
@@ -2683,14 +2685,14 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $this->_helper->layout->disableLayout();
         $db           = Zend_Db_Table::getDefaultAdapter();
         $invalid_data = $this->_getParam('filter', 0);
-
-        $page  = $_GET ['page'];
-        $limit = $_GET ['rows'];
-        $sidx  = $_GET ['sidx'];
-        $sord  = $_GET ['sord'];
-        if (!$sidx)
+        $formData     = new stdClass();
+        $page         = $_GET ['page'];
+        $limit        = $_GET ['rows'];
+        $sortIndex    = $_GET ['sidx'];
+        $sortOrder    = $_GET ['sord'];
+        if (!$sortIndex)
         {
-            $sidx = 9;
+            $sortIndex = 9;
         }
 
         // get report id from session
@@ -2789,7 +2791,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             ->where('udc.report_id = ?', $report_id, 'INTEGER')
             ->where('udc.invalid_data = ?', $invalid_data, 'INTEGER')
             ->where('udc.is_excluded = 0')
-            ->order($sidx . ' ' . $sord)
+            ->order($sortIndex . ' ' . $sortOrder)
             ->limit($limit, $start);
         $stmt   = $db->query($select);
         $result = $stmt->fetchAll();
@@ -2798,9 +2800,9 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             if (count($result) > 0)
             {
                 $i                 = 0;
-                $formdata->page    = $page;
-                $formdata->total   = $total_pages;
-                $formdata->records = $count;
+                $formData->page    = $page;
+                $formData->total   = $total_pages;
+                $formData->records = $count;
                 foreach ($result as $key => $value)
                 {
                     // set up mapped to suggestions
@@ -2848,8 +2850,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     {
                         $is_excluded = 0;
                     }
-                    $formdata->rows [$i] ['id']   = $upload_data_collector_row_id;
-                    $formdata->rows [$i] ['cell'] = array(
+                    $formData->rows [$i] ['id']   = $upload_data_collector_row_id;
+                    $formData->rows [$i] ['cell'] = array(
                         $upload_data_collector_row_id,
                         $result [$key] ['devices_pf_id'],
                         ucwords(strtolower($result [$key] ['modelname'])) . "<br />(" . $result [$key] ['ipaddress'] . ")",
@@ -2864,7 +2866,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             }
             else
             {
-                $formdata = array();
+                $formData = array();
             }
         }
         catch (Exception $e)
@@ -2874,7 +2876,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         }
 
         // encode user data to return to the client:
-        $json             = Zend_Json::encode($formdata);
+        $json             = Zend_Json::encode($formData);
         $this->view->data = $json;
     }
 
@@ -2882,12 +2884,12 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     {
         // disable the default layout
         $this->_helper->layout->disableLayout();
-        $db = Zend_Db_Table::getDefaultAdapter();
-
-        $page  = $_GET ['page'];
-        $limit = $_GET ['rows'];
-        $sidx  = $_GET ['sidx'];
-        $sord  = $_GET ['sord'];
+        $db       = Zend_Db_Table::getDefaultAdapter();
+        $formData = new stdClass();
+        $page     = $_GET ['page'];
+        $limit    = $_GET ['rows'];
+        $sidx     = $_GET ['sidx'];
+        $sord     = $_GET ['sord'];
         if (!$sidx)
         {
             $sidx = 9;
@@ -2941,9 +2943,9 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             if (count($result) > 0)
             {
                 $i                 = 0;
-                $formdata->page    = $page;
-                $formdata->total   = $total_pages;
-                $formdata->records = $count;
+                $formData->page    = $page;
+                $formData->total   = $total_pages;
+                $formData->records = $count;
                 foreach ($result as $key => $value)
                 {
                     // device must be at least 4 days old
@@ -2984,8 +2986,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         $reason = 'Bad Meter Data';
                     }
 
-                    $formdata->rows [$i] ['id']   = $upload_data_collector_row_id;
-                    $formdata->rows [$i] ['cell'] = array(
+                    $formData->rows [$i] ['id']   = $upload_data_collector_row_id;
+                    $formData->rows [$i] ['cell'] = array(
                         $upload_data_collector_row_id,
                         $result [$key] ['devices_pf_id'],
                         ucwords(strtolower($result [$key] ['modelname'])) . " (" . $result [$key] ['ipaddress'] . ")",
@@ -2996,7 +2998,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             }
             else
             {
-                $formdata = array();
+                $formData = array();
             }
         }
         catch (Exception $e)
@@ -3005,7 +3007,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         }
 
         // encode user data to return to the client:
-        $json             = Zend_Json::encode($formdata);
+        $json             = Zend_Json::encode($formData);
         $this->view->data = $json;
     }
 

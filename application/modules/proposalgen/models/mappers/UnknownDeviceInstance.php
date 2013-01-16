@@ -177,7 +177,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                         ->setManufacturer($manufacturer)
                         ->setPrinterModel($row->printer_model)
                         ->setTonerConfig($tonerConfig)
-                        ->setTonerConfigId($tonerConfig->TonerConfigId)
+                        ->setTonerConfigId($tonerConfig->tonerConfigId)
                         ->setIsCopier($row->is_copier)
                         ->setIsFax($row->is_fax)
                         ->setIsScanner($row->is_scanner)

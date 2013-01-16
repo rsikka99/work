@@ -517,7 +517,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
 
     /**
      *
-     * @param field_type $PrinterModel            
+     * @param string $PrinterModel
      */
     public function setPrinterModel ($PrinterModel)
     {

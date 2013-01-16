@@ -121,7 +121,7 @@ class Proposalgen_Model_Mapper_Toner extends Tangent_Model_Mapper_Abstract
                 foreach ($deviceToners as $deviceToner)
                 {
                     $toner                                                                                      = $this->find($deviceToner->tonerId);
-                    $toners [$toner->getPartType()->partTypeId] [$toner->getTonerColor()->getTonerColorId()] [] = $toner;
+                    $toners [$toner->getPartType()->partTypeId] [$toner->getTonerColor()->tonerColorId] [] = $toner;
                 }
             }
         }

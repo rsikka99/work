@@ -8,7 +8,7 @@
         <dt>Name</dt><dd><?php echo $masterDevice->getPrinterModel(); ?></dd>
         <dt>Full Name</dt><dd><?php echo $masterDevice->getFullDeviceName(); ?></dd>
         
-        <dt>Toner Config</dt><dd><?php echo $masterDevice->getTonerConfig()->getTonerConfigName(); ?></dd>
+        <dt>Toner Config</dt><dd><?php echo $masterDevice->getTonerConfig()->tonerConfigName; ?></dd>
         <dt>Is Copier</dt><dd><?php echo ($masterDevice->getIsCopier()) ? "Yes" : "No"; ?></dd>
         <dt>Is Fax</dt><dd><?php echo ($masterDevice->getIsFax()) ? "Yes" : "No"; ?></dd>
         <dt>Is Scanner</dt><dd><?php echo ($masterDevice->getIsScanner()) ? "Yes" : "No"; ?></dd>

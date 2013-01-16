@@ -518,8 +518,9 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
     }
 
     /**
+     * @param Proposalgen_Model_MasterDevice $MasterDevice
      *
-     * @param $MasterDevice field_type
+     * @return Proposalgen_Model_DeviceInstance
      */
     public function setMasterDevice ($MasterDevice)
     {
@@ -624,7 +625,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $IsExcluded field_type
+     * @param bool $IsExcluded
      */
     public function setIsExcluded ($IsExcluded)
     {
@@ -1334,7 +1335,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $ExclusionReason field_type
+     * @param string $ExclusionReason
      */
     public function setExclusionReason ($ExclusionReason)
     {
