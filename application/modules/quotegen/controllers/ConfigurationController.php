@@ -140,7 +140,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
             // Get first master device id from list
 	        foreach ( Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAll() as $masterDevice )
 	        {
-            	$masterDeviceId = $masterDevice->getId();
+            	$masterDeviceId = $masterDevice->id;
             	break;
 	        }
         }

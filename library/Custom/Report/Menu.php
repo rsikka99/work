@@ -85,34 +85,34 @@ class Custom_Report_Menu
      */
     public function currentPage ()
     {
-        if (is_null($this->report->getReportStage()))
+        if (is_null($this->report->reportStage))
         {
             $this->reportMenuItems ['company'] ['url'];
         }
         else
         {
-            return $this->reportMenuItems [$this->report->getReportStage()] ['url'];
+            return $this->reportMenuItems [$this->report->reportStage] ['url'];
         }
     }
 
     /**
      * Determines whether or not we are allowed to access the currentstage
      *
-     * @param $currentstage string           
+     * @param $currentStage string
      * @return boolean
      */
-    public function canAccessPage ($currentstage)
+    public function canAccessPage ($currentStage)
     {
         $isAllowed = false;
-        if (! is_null($this->report->getReportStage()))
+        if (! is_null($this->report->reportStage))
         {
             foreach ( $this->reportMenuItems as $stage => $menuItem )
             {
-                if ($currentstage === $stage)
+                if ($currentStage === $stage)
                 {
                     $isAllowed = true;
                 }
-                if ($stage === $this->report->getReportStage())
+                if ($stage === $this->report->reportStage)
                 {
                     break;
                 }
@@ -132,7 +132,7 @@ class Custom_Report_Menu
         
         if (is_null($stage))
         {
-            $stage = $this->report->getReportStage();
+            $stage = $this->report->reportStage;
         }
         
         if (! is_null($stage))
@@ -142,7 +142,7 @@ class Custom_Report_Menu
             foreach ( $this->reportMenuItems as $stage => $menuItem )
             {
                 $menu .= "<li><a href='" . $baseUrl->baseUrl($menuItem ['url']) . "'>$menuItem[title]</a></li>";
-                if ($stage === $this->report->getReportStage())
+                if ($stage === $this->report->reportStage)
                 {
                     break;
                 }

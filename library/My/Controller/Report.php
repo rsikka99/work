@@ -141,7 +141,7 @@ abstract class My_Controller_Report extends Zend_Controller_Action
             {
                 $this->Proposal = new Proposalgen_Model_Proposal_OfficeDepot($this->_user, $this->Report);
                 
-                if ($this->Report->getDevicesModified())
+                if ($this->Report->devicesModified)
                 {
                     $this->_redirect('/data/modificationwarning');
                 }

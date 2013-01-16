@@ -11,9 +11,9 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
 
     public function indexAction ()
     {
-        $uploadFileForm = new Tangent_Form_UploadFile(array (
-                "csv" 
-        ), 'forms/uploadFile.phtml');
+        $uploadFileForm = new Tangent_Form_UploadFile(array(
+                                                           "csv"
+                                                      ), 'forms/uploadFile.phtml');
         if ($this->_request->isPost())
         {
             $formData = $this->getRequest()->getPost();
@@ -21,7 +21,7 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
             {
                 // File is uploaded - Now we should validate it before moving
                 // on.
-                $piSession = new Zend_Session_Namespace('pricingImport');
+                $piSession           = new Zend_Session_Namespace('pricingImport');
                 $piSession->filename = $uploadFileForm->upload_file->getFileName();
                 $this->_redirect('/pricingimport/confirm');
             }
@@ -39,7 +39,7 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
         if (isset($piSession->filename))
         {
             $this->view->filename = $piSession->filename;
-            $csv = new Proposalgen_Model_CSV_PricingImport_OfficeDepot();
+            $csv                  = new Proposalgen_Model_CSV_PricingImport_OfficeDepot();
             $csv->importCSV($piSession->filename);
             $this->view->csv = $csv;
         }
@@ -55,18 +55,18 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
         if (isset($piSession->filename))
         {
             $this->view->filename = $piSession->filename;
-            $csv = new Proposalgen_Model_CSV_PricingImport_OfficeDepot();
+            $csv                  = new Proposalgen_Model_CSV_PricingImport_OfficeDepot();
             $csv->importCSV($piSession->filename);
-            $rows = $csv->getData();
+            $rows                  = $csv->getData();
             $this->view->csvHeader = implode(",", array_keys($rows [0]));
-            
-            $csvRows = "";
+
+            $csvRows  = "";
             $firstRun = true;
-            foreach ( $rows as $row )
+            foreach ($rows as $row)
             {
                 $csvRows .= ($firstRun) ? "" : "\n";
                 $firstColumn = true;
-                foreach ( $row as $column )
+                foreach ($row as $column)
                 {
                     if ($firstColumn)
                     {
@@ -76,7 +76,7 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                     {
                         $csvRows .= ",";
                     }
-                    if (strpos($column, ",") !== FALSE)
+                    if (strpos($column, ",") !== false)
                     {
                         $csvRows .= "\"$column\"";
                     }
@@ -86,9 +86,11 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                     }
                 }
                 if ($firstRun)
+                {
                     $firstRun = false;
+                }
             }
-            
+
             $this->view->csvRows = $csvRows;
             Tangent_Functions::setHeadersForDownload("NEW PRICING IMPORT.csv");
             $this->view->Layout()->disableLayout();
@@ -106,9 +108,9 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
         {
             // Load the CSV
             $this->view->filename = $piSession->filename;
-            $csv = new Proposalgen_Model_CSV_PricingImport_OfficeDepot();
+            $csv                  = new Proposalgen_Model_CSV_PricingImport_OfficeDepot();
             $csv->importCSV($piSession->filename);
-            
+
             // Database Section
             $db = Zend_Db_Table::getDefaultAdapter();
             try
@@ -126,8 +128,8 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                 Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->delete("TRUE");
                 Proposalgen_Model_Mapper_UserDeviceOverride::getInstance()->delete("TRUE");
                 Proposalgen_Model_Mapper_UserTonerOverride::getInstance()->delete("TRUE");
-                Proposalgen_Model_Mapper_DealerDeviceOverride::getInstance()->delete("TRUE");
-                Proposalgen_Model_Mapper_DealerTonerOverride::getInstance()->delete("TRUE");
+//                Proposalgen_Model_Mapper_DealerDeviceOverride::getInstance()->delete("TRUE");
+//                Proposalgen_Model_Mapper_DealerTonerOverride::getInstance()->delete("TRUE");
                 Proposalgen_Model_Mapper_DeviceToner::getInstance()->delete("TRUE");
                 Proposalgen_Model_Mapper_Toner::getInstance()->delete("TRUE");
                 Proposalgen_Model_Mapper_TextualAnswer::getInstance()->delete("TRUE");
@@ -140,44 +142,46 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                 Proposalgen_Model_Mapper_MasterDevice::getInstance()->delete("TRUE");
                 Proposalgen_Model_Mapper_Manufacturer::getInstance()->delete("TRUE");
                 Proposalgen_Model_Mapper_Report::getInstance()->delete("TRUE");
-                
-                $manufacturers = array ();
-                $globalToners = array ();
-                $tonerMapper = Proposalgen_Model_Mapper_Toner::getInstance();
-                $OEMMfg = "clover technologies group";
+
+                $manufacturers = array();
+                $globalToners  = array();
+                $tonerMapper   = Proposalgen_Model_Mapper_Toner::getInstance();
+                $OEMMfg        = "clover technologies group";
                 // Import device and toner information from the CSV
-                foreach ( $csv->getData() as $row )
+                foreach ($csv->getData() as $row)
                 {
-                    $modelname = trim(substr($row ["modelname"], strpos($row ['modelmfg'], $row ["modelname"]) + strlen($row ['modelmfg'])));
-                    
+                    $modelName = trim(substr($row ["modelname"], strpos($row ['modelmfg'], $row ["modelname"]) + strlen($row ['modelmfg'])));
+
                     // Manufacturer
                     $tempMfg = strtolower($row ['modelmfg']);
-                    
+
                     if (array_key_exists($tempMfg, $manufacturers))
                     {
                         $manufacturerId = $manufacturers [$tempMfg];
                     }
                     else
                     {
-                        $manufacturer = new Proposalgen_Model_Manufacturer();
-                        $manufacturer->setManufacturerName($row ['modelmfg'])->setIsDeleted(false);
-                        $manufacturerId = Proposalgen_Model_Mapper_Manufacturer::getInstance()->save($manufacturer);
-                        $manufacturers [$tempMfg] = $manufacturerId;
+                        $manufacturer              = new Proposalgen_Model_Manufacturer();
+                        $manufacturer->fullname    = ($row ['modelmfg']);
+                        $manufacturer->displayname = ($row ['modelmfg']);
+                        $manufacturer->isDeleted   = false;
+                        $manufacturerId            = Proposalgen_Model_Mapper_Manufacturer::getInstance()->save($manufacturer);
+                        $manufacturers [$tempMfg]  = $manufacturerId;
                     }
-                    
-                    $toners = array ();
-                    foreach ( Proposalgen_Model_CSV_PricingImport_OfficeDepot::$validToners as $partTypeId => $tonersByColor )
+
+                    $toners = array();
+                    foreach (Proposalgen_Model_CSV_PricingImport_OfficeDepot::$validToners as $partTypeId => $tonersByColor)
                     {
-                        foreach ( $tonersByColor as $tonerColorId => $tonerArray )
+                        foreach ($tonersByColor as $tonerColorId => $tonerArray)
                         {
-                            foreach ( $tonerArray as $tonerRow )
-                            
+                            foreach ($tonerArray as $tonerRow)
+
                             {
                                 $row ["$tonerRow yield"] = str_replace(",", "", $row ["$tonerRow yield"]);
-                                $row ["$tonerRow cost"] = str_replace(",", "", $row ["$tonerRow cost"]);
+                                $row ["$tonerRow cost"]  = str_replace(",", "", $row ["$tonerRow cost"]);
                                 if (strlen($row ["$tonerRow sku"]) > 1 && $row ["$tonerRow cost"] > 0 && $row ["$tonerRow yield"] > 0)
                                 {
-                                    $toner = new Proposalgen_Model_Toner();
+                                    $toner      = new Proposalgen_Model_Toner();
                                     $tonerMfgId = $manufacturerId;
                                     if (array_key_exists("$tonerRow man.", $row))
                                     {
@@ -191,9 +195,11 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                                             }
                                             else
                                             {
-                                                $manufacturer = new Proposalgen_Model_Manufacturer();
-                                                $manufacturer->setManufacturerName($row ["$tonerRow man."])->setIsDeleted(false);
-                                                $tonerMfgId = Proposalgen_Model_Mapper_Manufacturer::getInstance()->save($manufacturer);
+                                                $manufacturer                  = new Proposalgen_Model_Manufacturer();
+                                                $manufacturer->fullname        = $row ["$tonerRow man."];
+                                                $manufacturer->displayname     = $row ["$tonerRow man."];
+                                                $manufacturer->isDeleted       = false;
+                                                $tonerMfgId                    = Proposalgen_Model_Mapper_Manufacturer::getInstance()->save($manufacturer);
                                                 $manufacturers [$tonerTempMfg] = $tonerMfgId;
                                             }
                                         }
@@ -206,12 +212,12 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                                             }
                                             else
                                             {
-                                                $manufacturer = new Proposalgen_Model_Manufacturer();
-                                                $manufacturer->fullname = ucwords($OEMMfg);
+                                                $manufacturer              = new Proposalgen_Model_Manufacturer();
+                                                $manufacturer->fullname    = ucwords($OEMMfg);
                                                 $manufacturer->displayname = ucwords($OEMMfg);
-                                                $manufacturer->isDeleted = false;
-                                                $tonerMfgId = Proposalgen_Model_Mapper_Manufacturer::getInstance()->save($manufacturer);
-                                                $manufacturers [$OEMMfg] = $tonerMfgId;
+                                                $manufacturer->isDeleted   = false;
+                                                $tonerMfgId                = Proposalgen_Model_Mapper_Manufacturer::getInstance()->save($manufacturer);
+                                                $manufacturers [$OEMMfg]   = $tonerMfgId;
                                             }
                                         }
                                     }
@@ -219,18 +225,18 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                                     {
                                         $tonerMfgId = $manufacturerId;
                                     }
-                                    
+
                                     // Create and cache the toner if it doenst
                                     // already exist
-                                    if (! array_key_exists($row ["$tonerRow sku"], $globalToners))
+                                    if (!array_key_exists($row ["$tonerRow sku"], $globalToners))
                                     {
-                                        $toner->sku = $row ["$tonerRow sku"];
-                                        $toner->cost = $row ["$tonerRow cost"];
-                                        $toner->yield = $row ["$tonerRow yield"];
-                                        $toner->partTypeId = $partTypeId;
-                                        $toner->manufacturerId = $tonerMfgId;
-                                        $toner->tonerColorId = $tonerColorId;
-                                        $toner->id = $tonerMapper->save($toner);
+                                        $toner->sku                            = $row ["$tonerRow sku"];
+                                        $toner->cost                           = $row ["$tonerRow cost"];
+                                        $toner->yield                          = $row ["$tonerRow yield"];
+                                        $toner->partTypeId                     = $partTypeId;
+                                        $toner->manufacturerId                 = $tonerMfgId;
+                                        $toner->tonerColorId                   = $tonerColorId;
+                                        $toner->id                             = $tonerMapper->save($toner);
                                         $globalToners [$row ["$tonerRow sku"]] = $toner;
                                     }
                                     $toners [$partTypeId] [$tonerColorId] [] = $globalToners [$row ["$tonerRow sku"]];
@@ -240,8 +246,8 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                     }
                     // Get toner config based on the toners we've found
                     $tonerConfigId = $row ["tonerConfig"];
-                    
-                    foreach ( $toners as $partType => $tonersByPartType )
+
+                    foreach ($toners as $partType => $tonersByPartType)
                     {
                         if (array_key_exists(Proposalgen_Model_TonerColor::FOUR_COLOR, $tonersByPartType))
                         {
@@ -259,19 +265,19 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                             break;
                         }
                     }
-                    
+
                     // See if the printer is duplex capable
                     $duplex = false;
                     // If our duplex row was not set, we check the names to see
                     // if we can guess
                     if (is_null($row ["is_duplex"]))
                     {
-                        
-                        if (preg_match('/MF[PC]/i', $modelname) > 0)
+
+                        if (preg_match('/MF[PC]/i', $modelName) > 0)
                         {
                             $duplex = true;
                         }
-                        else if (preg_match('/^.*[DX](?!.*[\d ].*)/i', $modelname) > 0)
+                        else if (preg_match('/^.*[DX](?!.*[\d ].*)/i', $modelName) > 0)
                         {
                             $duplex = true;
                         }
@@ -280,67 +286,68 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                     {
                         $duplex = (bool)$row ["is_duplex"];
                     }
-                    
+
                     // Master Device
-                    $launchDate = new DateTime($row ["dateintroduction"]);
-                    $masterDevice = new Proposalgen_Model_MasterDevice();
-                    $masterDevice->setManufacturerId($manufacturerId)
-                        ->setPrinterModel($modelname)
-                        ->setTonerConfigId($tonerConfigId)
-                        ->setIsCopier($row ["is_copier"])
-                        ->setIsFax($row ["is_fax"])
-                        ->setIsScanner($row ["is_scanner"])
-                        ->setIsDuplex($duplex)
-                        ->setIsReplacementDevice(FALSE)
-                        ->setWattsPowerNormal($row ["wattspowernormal"])
-                        ->setWattsPowerIdle($row ["wattspowersave"])
-                        ->setLaunchDate(date('Y-m-d H:i:s', $launchDate->getTimestamp()))
-                        ->setDateCreated(date('Y-m-d H:i:s'))
-                        ->setIsLeased(0)
-                        ->setLeasedTonerYield(null);
-                    $masterDeviceId = Proposalgen_Model_Mapper_MasterDevice::getInstance()->save($masterDevice);
-                    
+                    $launchDate                        = new DateTime($row ["dateintroduction"]);
+                    $masterDevice                      = new Proposalgen_Model_MasterDevice();
+                    $masterDevice->ManufacturerId      = $manufacturerId;
+                    $masterDevice->PrinterModel        = $modelName;
+                    $masterDevice->TonerConfigId       = $tonerConfigId;
+                    $masterDevice->IsCopier            = $row ["is_copier"];
+                    $masterDevice->IsFax               = $row ["is_fax"];
+                    $masterDevice->IsScanner           = $row ["is_scanner"];
+                    $masterDevice->IsDuplex            = $duplex;
+                    $masterDevice->IsReplacementDevice = false;
+                    $masterDevice->WattsPowerNormal    = $row ["wattspowernormal"];
+                    $masterDevice->WattsPowerIdle      = $row ["wattspowersave"];
+                    $masterDevice->LaunchDate          = date('Y-m-d H:i:s', $launchDate->getTimestamp());
+                    $masterDevice->DateCreated         = date('Y-m-d H:i:s');
+                    $masterDevice->IsLeased            = 0;
+                    $masterDevice->LeasedTonerYield    = null;
+                    $masterDeviceId                    = Proposalgen_Model_Mapper_MasterDevice::getInstance()->save($masterDevice);
+
                     // Save toners and map them to the master device
-                    $deviceTonerMapper = Proposalgen_Model_Mapper_DeviceToner::getInstance();
-                    $deviceToner = new Proposalgen_Model_DeviceToner();
+                    $deviceTonerMapper           = Proposalgen_Model_Mapper_DeviceToner::getInstance();
+                    $deviceToner                 = new Proposalgen_Model_DeviceToner();
                     $deviceToner->masterDeviceId = $masterDeviceId;
-                    
-                    foreach ( $toners as $partType => $tonersByPartType )
+
+                    foreach ($toners as $partType => $tonersByPartType)
                     {
-                        foreach ( $tonersByPartType as $tonerColor => $tonersByColor )
+                        foreach ($tonersByPartType as $tonerColor => $tonersByColor)
                         {
-                            foreach ( $tonersByColor as $toner )
+                            /* @var $toner Proposalgen_Model_Toner */
+                            foreach ($tonersByColor as $toner)
                             {
-                                $deviceToner->tonerId = $toner->getTonerId();
+                                $deviceToner->tonerId = $toner->id;
                                 $deviceTonerMapper->save($deviceToner);
                             }
                         }
                     }
-                    
+
                     // Printfleet Device
                     if (isset($row ["printermodelid"]))
                     {
                         $devicePf = new Proposalgen_Model_DevicePf();
-                        
+
                         $devicePf->createdBy = Proposalgen_Model_User::getCurrentUserId();
 
-                        $devicePf->pfModelId = $row ["printermodelid"];
-                        $devicePf->pfDbDeviceName = $modelname;
+                        $devicePf->pfModelId        = $row ["printermodelid"];
+                        $devicePf->pfDbDeviceName   = $modelName;
                         $devicePf->pfDbManufacturer = $row ["modelmfg"];
-                        $devicePf->dateCreated = date('Y-m-d H:i:s');
-                        $devicePfId = Proposalgen_Model_Mapper_DevicePf::getInstance()->save($devicePf);
-                        
+                        $devicePf->dateCreated      = date('Y-m-d H:i:s');
+                        $devicePfId                 = Proposalgen_Model_Mapper_DevicePf::getInstance()->save($devicePf);
+
                         // Master Matchup to DevicePf
-                        $masterMatchupPf = new Proposalgen_Model_MasterMatchupPf();
-                        $masterMatchupPf->devicesPfId = $devicePfId;
+                        $masterMatchupPf                 = new Proposalgen_Model_MasterMatchupPf();
+                        $masterMatchupPf->devicesPfId    = $devicePfId;
                         $masterMatchupPf->masterDeviceId = $masterDeviceId;
                         Proposalgen_Model_Mapper_MasterMatchupPf::getInstance()->save($masterMatchupPf);
                     }
                 }
-                
+
                 $db->commit();
             }
-            catch ( Exception $e )
+            catch (Exception $e)
             {
                 $db->rollback();
                 throw new Exception("Error Importing Pricing!", 0, $e);
@@ -354,91 +361,91 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
 
     public function addreplacementsAction ()
     {
-        $masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
-        $manufacturerMapper = Proposalgen_Model_Mapper_Manufacturer::getInstance();
+        $masterDeviceMapper      = Proposalgen_Model_Mapper_MasterDevice::getInstance();
+        $manufacturerMapper      = Proposalgen_Model_Mapper_Manufacturer::getInstance();
         $replacementDeviceMapper = Proposalgen_Model_Mapper_ReplacementDevice::getInstance();
-        
-        $hp = $manufacturerMapper->fetchRow(array (
-                "manufacturer_name = ?" => "Hewlett-packard" 
-        ))->ManufacturerId;
-        $xerox = $manufacturerMapper->fetchRow(array (
-                "manufacturer_name = ?" => "Xerox" 
-        ))->ManufacturerId;
-        
+
+        $hp    = $manufacturerMapper->fetchRow(array(
+                                                    "manufacturer_name = ?" => "Hewlett-packard"
+                                               ))->ManufacturerId;
+        $xerox = $manufacturerMapper->fetchRow(array(
+                                                    "manufacturer_name = ?" => "Xerox"
+                                               ))->ManufacturerId;
+
         // BLACK AND WHITE
-        $device = $masterDeviceMapper->fetchRow(array (
-                "mastdevice_manufacturer = ?" => $hp, 
-                "printer_model = ?" => "Laserjet 4250dtn" 
-        ));
+        $device = $masterDeviceMapper->fetchRow(array(
+                                                     "mastdevice_manufacturer = ?" => $hp,
+                                                     "printer_model = ?"           => "Laserjet 4250dtn"
+                                                ));
         if ($device)
         {
-            $replacementDevice = new Proposalgen_Model_ReplacementDevice();
-            $replacementDevice->masterDeviceId = $device->MasterDeviceId;
+            $replacementDevice                      = new Proposalgen_Model_ReplacementDevice();
+            $replacementDevice->masterDeviceId      = $device->MasterDeviceId;
             $replacementDevice->replacementCategory = Proposalgen_Model_ReplacementDevice::REPLACMENT_BW;
-            $replacementDevice->printSpeed = 45;
-            $replacementDevice->resolution = 1200;
-            $replacementDevice->monthlyRate = 99;
+            $replacementDevice->printSpeed          = 45;
+            $replacementDevice->resolution          = 1200;
+            $replacementDevice->monthlyRate         = 99;
             $replacementDeviceMapper->save($replacementDevice);
         }
-        
+
         // BLACK AND WHITE
-        $device = $masterDeviceMapper->fetchRow(array (
-                "mastdevice_manufacturer = ?" => $hp, 
-                "printer_model = ?" => "Laserjet P4015dn" 
-        ));
+        $device = $masterDeviceMapper->fetchRow(array(
+                                                     "mastdevice_manufacturer = ?" => $hp,
+                                                     "printer_model = ?"           => "Laserjet P4015dn"
+                                                ));
         if ($device)
         {
-            $replacementDevice = new Proposalgen_Model_ReplacementDevice();
-            $replacementDevice->masterDeviceId = $device->MasterDeviceId;
+            $replacementDevice                      = new Proposalgen_Model_ReplacementDevice();
+            $replacementDevice->masterDeviceId      = $device->MasterDeviceId;
             $replacementDevice->replacementCategory = Proposalgen_Model_ReplacementDevice::REPLACMENT_BW;
-            $replacementDevice->printSpeed = 52;
-            $replacementDevice->resolution = 1200;
-            $replacementDevice->monthlyRate = 149;
+            $replacementDevice->printSpeed          = 52;
+            $replacementDevice->resolution          = 1200;
+            $replacementDevice->monthlyRate         = 149;
             $replacementDeviceMapper->save($replacementDevice);
         }
         // BLACK AND WHITE MFP
-        $device = $masterDeviceMapper->fetchRow(array (
-                "mastdevice_manufacturer = ?" => $hp, 
-                "printer_model = ?" => "Laserjet M3035xs Mfp" 
-        ));
+        $device = $masterDeviceMapper->fetchRow(array(
+                                                     "mastdevice_manufacturer = ?" => $hp,
+                                                     "printer_model = ?"           => "Laserjet M3035xs Mfp"
+                                                ));
         if ($device)
         {
-            $replacementDevice = new Proposalgen_Model_ReplacementDevice();
-            $replacementDevice->masterDeviceId = $device->MasterDeviceId;
+            $replacementDevice                      = new Proposalgen_Model_ReplacementDevice();
+            $replacementDevice->masterDeviceId      = $device->MasterDeviceId;
             $replacementDevice->replacementCategory = Proposalgen_Model_ReplacementDevice::REPLACMENT_BWMFP;
-            $replacementDevice->printSpeed = 35;
-            $replacementDevice->resolution = 1200;
-            $replacementDevice->monthlyRate = 199;
+            $replacementDevice->printSpeed          = 35;
+            $replacementDevice->resolution          = 1200;
+            $replacementDevice->monthlyRate         = 199;
             $replacementDeviceMapper->save($replacementDevice);
         }
         // COLOR
-        $device = $masterDeviceMapper->fetchRow(array (
-                "mastdevice_manufacturer = ?" => $xerox, 
-                "printer_model = ?" => "ColorQube 8870dn" 
-        ));
+        $device = $masterDeviceMapper->fetchRow(array(
+                                                     "mastdevice_manufacturer = ?" => $xerox,
+                                                     "printer_model = ?"           => "ColorQube 8870dn"
+                                                ));
         if ($device)
         {
-            $replacementDevice = new Proposalgen_Model_ReplacementDevice();
-            $replacementDevice->setMasterDeviceId = $device->MasterDeviceId;
+            $replacementDevice                         = new Proposalgen_Model_ReplacementDevice();
+            $replacementDevice->setMasterDeviceId      = $device->MasterDeviceId;
             $replacementDevice->setReplacementCategory = Proposalgen_Model_ReplacementDevice::REPLACMENT_COLOR;
-            $replacementDevice->setPrintSpeed = 40;
-            $replacementDevice->setResolution = 2400;
-            $replacementDevice->setMonthlyRate = 199;
+            $replacementDevice->setPrintSpeed          = 40;
+            $replacementDevice->setResolution          = 2400;
+            $replacementDevice->setMonthlyRate         = 199;
             $replacementDeviceMapper->save($replacementDevice);
         }
         // COLOR MFP
-        $device = $masterDeviceMapper->fetchRow(array (
-                "mastdevice_manufacturer = ?" => $xerox, 
-                "printer_model = ?" => "Phaser 8860 Mfp" 
-        ));
+        $device = $masterDeviceMapper->fetchRow(array(
+                                                     "mastdevice_manufacturer = ?" => $xerox,
+                                                     "printer_model = ?"           => "Phaser 8860 Mfp"
+                                                ));
         if ($device)
         {
-            $replacementDevice = new Proposalgen_Model_ReplacementDevice();
-            $replacementDevice->masterDeviceId = $device->MasterDeviceId;
+            $replacementDevice                      = new Proposalgen_Model_ReplacementDevice();
+            $replacementDevice->masterDeviceId      = $device->MasterDeviceId;
             $replacementDevice->replacementCategory = Proposalgen_Model_ReplacementDevice::REPLACMENT_COLORMFP;
-            $replacementDevice->printSpeed = 30;
-            $replacementDevice->resolution = 2400;
-            $replacementDevice->monthlyRate = 249;
+            $replacementDevice->printSpeed          = 30;
+            $replacementDevice->resolution          = 2400;
+            $replacementDevice->monthlyRate         = 249;
             $replacementDeviceMapper->save($replacementDevice);
         }
     }

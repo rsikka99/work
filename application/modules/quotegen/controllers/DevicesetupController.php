@@ -554,7 +554,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $tonerConfig = $masterDevice->getTonerConfig()->getTonerConfigName();
 
         // Get the toner colors that we require
-        $requiredTonerColors = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($masterDevice->getTonerConfigId());
+        $requiredTonerColors = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($masterDevice->tonerConfigId);
 
         // Get quotegen device
         $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);

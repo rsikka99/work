@@ -388,12 +388,13 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         } // endforeach
 
         // Service Cost Per Page Cost
-        if ($device->getMasterDevice()->getServiceCostPerPage() <= 0)
+        if ($device->getMasterDevice()->serviceCostPerPage <= 0)
         {
-            $device->getMasterDevice()->setServiceCostPerPage($report->getReportSettings()->serviceCostPerPage);
+            $device->getMasterDevice()->serviceCostPerPage = $report->getReportSettings()->serviceCostPerPage;
         }
+
         // Admin Charge
-        $device->getMasterDevice()->setAdminCostPerPage($report->getReportSettings()->adminCostPerPage);
+        $device->getMasterDevice()->adminCostPerPage = $report->getReportSettings()->adminCostPerPage;
     }
 
 
@@ -680,7 +681,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
                 $this->_masterDevice = $this->getMasterDevice();
             }
 
-            if (isset($meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]) && $this->getMasterDevice()->getTonerConfigId() !== Proposalgen_Model_TonerConfig::BLACK_ONLY)
+            if (isset($meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]) && $this->getMasterDevice()->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY)
             {
                 $startMeter = $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->startMeter;
                 $endMeter   = $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->endMeter;
