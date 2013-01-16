@@ -43,16 +43,16 @@ class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Proposalgen_Model_Survey_Setting to the database.
      *
-     * @param $survey_setting Proposalgen_Model_Survey_Setting
+     * @param $object Proposalgen_Model_Survey_Setting
      *                        The survey_setting model to save to the database
      * @param $primaryKey     mixed
      *                        Optional: The original primary key, in case we're changing it
      *
      * @return int The number of rows affected
      */
-    public function save ($primaryKey = null)
+    public function save ($object, $primaryKey = null)
     {
-        $data = $this->unsetNullValues($survey_setting->toArray());
+        $data = $this->unsetNullValues($object->toArray());
 
         if ($primaryKey === null)
         {

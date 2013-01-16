@@ -65,7 +65,7 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
      *
      * @return int The number of rows affected
      */
-    public function save ($primaryKey = null)
+    public function save ($object, $primaryKey = null)
     {
         $data = $this->unsetNullValues($object->toArray());
 
