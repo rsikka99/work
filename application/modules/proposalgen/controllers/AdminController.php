@@ -26,9 +26,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $this->view->app       = $this->config->app;
         $this->view->user      = Zend_Auth::getInstance()->getIdentity();
         $this->view->user_id   = Zend_Auth::getInstance()->getIdentity()->id;
-        $this->view->privilege = array('System Admin'); //Zend_Auth::getInstance()->getIdentity()->privileges;
+        $this->view->privilege = array('Standard User'); //Zend_Auth::getInstance()->getIdentity()->privileges;
         $this->user_id         = Zend_Auth::getInstance()->getIdentity()->id;
-        $this->privilege       = array('System Admin'); //Zend_Auth::getInstance()->getIdentity()->privileges;
+        $this->privilege       = array('Standard User'); //Zend_Auth::getInstance()->getIdentity()->privileges;
         //$this->dealer_company_id = Zend_Auth::getInstance()->getIdentity()->dealer_company_id;
         $this->MPSProgramName       = $this->config->app->MPSProgramName;
         $this->view->MPSProgramName = $this->config->app->MPSProgramName;
@@ -4840,7 +4840,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
                     $db->rollback();
                     $this->view->message = "<span class=\"warning\">*</span> An error has occurred during the update and your changes were not applied. Please review your file and try again.";
-                    throw new Exception("bad File could not be opened/written for export.", 0, $e);
                 }
 
             }
@@ -6257,8 +6256,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         $type_name,
                         ucwords(strtolower($row ['color_name'])),
                         $row ['yield'],
-                        number_format($row ['toner_cost'] * $price_margin,2),
-                        ($row ['override_cost'] > 0 ? number_format($row ['override_cost'],2) : null),
+                        $row ['toner_cost'] * $price_margin,
+                        ($row ['override_cost'] > 0 ? (float)$row ['override_cost'] : null),
                         null,
                         $row ['master_id'],
                         ucwords(strtolower($row ['machine_compatibility']))
