@@ -54,7 +54,7 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
      *
      * @return int The number of rows affected
      */
-    public function save ($user_survey_setting, $primaryKey)
+    public function save ($user_survey_setting, $primaryKey = null)
     {
         $data = $this->unsetNullValues($user_survey_setting->toArray());
 
@@ -93,7 +93,7 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
     {
         if ($user_survey_setting instanceof Proposalgen_Model_User_Survey_Setting)
         {
-            $data = $user_survey_setting->toArray();
+            $user_survey_setting = $user_survey_setting->toArray();
         }
 
         $whereClause = array();
@@ -123,7 +123,7 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
         $result = $this->getDbTable()->find($id);
         if (0 == count($result))
         {
-            return;
+            return false;
         }
         $row = $result->current();
 
@@ -141,14 +141,14 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
      * @param $offset int
      *                OPTIONAL An SQL OFFSET value.
      *
-     * @return void Proposalgen_Model_User_Survey_Setting
+     * @return Proposalgen_Model_User_Survey_Setting
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
         $row = $this->getDbTable()->fetchRow($where, $order, $offset);
         if (is_null($row))
         {
-            return;
+            return false;
         }
 
         return new Proposalgen_Model_User_Survey_Setting($row->toArray());
@@ -166,7 +166,7 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
      * @param $offset int
      *                OPTIONAL An SQL LIMIT offset.
      *
-     * @return multitype:Proposalgen_Model_User_Survey_Setting
+     * @return Proposalgen_Model_User_Survey_Setting[]
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -197,19 +197,20 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
         {
             $surveySetting = null;
         }
+
         return $surveySetting;
     }
 
     /**
-     * (non-PHPdoc)
+     * @param Proposalgen_Model_User_Survey_Setting $object
      *
-     * @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     * @return array
      */
     public function getPrimaryKeyValueForObject ($object)
     {
         return array(
-            $object->getUserId(),
-            $object->getSurveySettingId()
+            $object->userId,
+            $object->surveySettingId
         );
     }
 }

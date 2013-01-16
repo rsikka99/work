@@ -167,10 +167,10 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
         // Service Cost Per Page Cost
         if ($device->getMasterDevice()->getServiceCostPerPage() <= 0)
         {
-            $device->getMasterDevice()->setServiceCostPerPage($report->getReportSettings()->getServiceCostPerPage());
+            $device->getMasterDevice()->setServiceCostPerPage($report->getReportSettings()->serviceCostPerPage);
         }
         // Admin Charge
-        $device->getMasterDevice()->setAdminCostPerPage($report->getReportSettings()->getAdminCostPerPage());
+        $device->getMasterDevice()->setAdminCostPerPage($report->getReportSettings()->adminCostPerPage);
     }
 
     /**
@@ -1006,7 +1006,7 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $KWH_Cost field_type
+     * @param float $KWH_Cost
      */
     public static function setKWH_Cost ($KWH_Cost)
     {
@@ -1030,7 +1030,8 @@ class Proposalgen_Model_DeviceInstance extends Tangent_Model_Abstract
 
     /**
      *
-     * @param $JITSuppliesSupported field_type
+     * @param bool $JITSuppliesSupported
+     * @return \Proposalgen_Model_DeviceInstance
      */
     public function setJITSuppliesSupported ($JITSuppliesSupported)
     {

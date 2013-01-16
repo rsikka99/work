@@ -108,7 +108,7 @@ abstract class My_Model_Mapper_Abstract
      *
      * @param array $array
      *
-     * @return boolean
+     * @return array|bool
      */
     protected function unsetNullValues ($array)
     {

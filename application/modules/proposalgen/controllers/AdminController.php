@@ -2436,9 +2436,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         // Save report settings (all other)
                         $reportSettings->populate($formData);
                         // Save report settings
-                        Proposalgen_Model_Mapper_Survey_Setting::getInstance()->save($surveySettings, $surveySettings->getId());
+                        Proposalgen_Model_Mapper_Survey_Setting::getInstance()->save($surveySettings, $surveySettings->id);
                         // Save survey settings
-                        Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($reportSettings, $reportSettings->getId());
+                        Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($reportSettings, $reportSettings->id);
 
                         $this->_helper->flashMessenger(array("success" => "Your settings have been updated."));
                         $db->commit();

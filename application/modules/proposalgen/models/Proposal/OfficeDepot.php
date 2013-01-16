@@ -234,13 +234,13 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         Proposalgen_Model_Toner::setESTIMATED_PAGE_COVERAGE_COLOR($this->getPageCoverageColor() / 100);
 
         // Gross Margin Report Page Coverage
-        Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE($reportSettings->getActualPageCoverageMono() / 100);
-        Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_COLOR($reportSettings->getActualPageCoverageColor() / 100);
+        Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE($reportSettings->actualPageCoverageMono / 100);
+        Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_COLOR($reportSettings->actualPageCoverageColor / 100);
 
-        Proposalgen_Model_DeviceInstance::setKWH_Cost($reportSettings->getKilowattsPerHour());
+        Proposalgen_Model_DeviceInstance::setKWH_Cost($reportSettings->kilowattsPerHour);
         Proposalgen_Model_MasterDevice::setPricingConfig($reportSettings->getAssessmentPricingConfig());
         Proposalgen_Model_MasterDevice::setGrossMarginPricingConfig($reportSettings->getGrossMarginPricingConfig());
-        Proposalgen_Model_MasterDevice::setReportMargin(1 - ((((int)$reportSettings->getAssessmentReportMargin())) / 100));
+        Proposalgen_Model_MasterDevice::setReportMargin(1 - ((((int)$reportSettings->assessmentReportMargin)) / 100));
     }
 
     /**
@@ -894,7 +894,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     {
         if (!isset($this->ReportMargin))
         {
-            $this->ReportMargin = 1 - ((((int)$this->getReport()->getReportSettings()->getAssessmentReportMargin())) / 100);
+            $this->ReportMargin = 1 - ((((int)$this->getReport()->getReportSettings()->assessmentReportMargin)) / 100);
         }
 
         return $this->ReportMargin;

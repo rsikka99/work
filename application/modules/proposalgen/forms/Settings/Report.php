@@ -117,7 +117,7 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
             ->setAttrib('style', 'text-align: right')
             ->setDescription('%')
             ->setValue('20')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getAssessmentReportMargin(), 2))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->assessmentReportMargin, 2))
             ->setAttrib('inputappend', '%');
         $pricing_margin->getValidator('Float')->setMessage('Please enter a number.');
         $pricing_margin->getValidator('Between')->setMessage('Must be greater than 0 and less than 100.');
@@ -133,7 +133,7 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getMonthlyLeasePayment(), 2))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->monthlyLeasePayment, 2))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / device')
             ->addValidator('greaterThan', true, array (
@@ -152,7 +152,7 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getDefaultPrinterCost(), 2))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->defaultPrinterCost, 2))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / device')
             ->addValidator('greaterThan', true, array (
@@ -171,7 +171,7 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getLeasedBwCostPerPage(), 4))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->leasedBwCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
             ->addValidator('greaterThan', true, array (
@@ -190,7 +190,7 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getLeasedColorCostPerPage(), 4))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->leasedColorCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
             ->addValidator('greaterThan', true, array (
@@ -209,7 +209,7 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getMpsBwCostPerPage(), 4))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->mpsBwCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
             ->addValidator('greaterThan', true, array (
@@ -230,7 +230,7 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
             ->setAttrib('style', 'text-align: right')
             ->setAttrib('id', 'mps_color_per_page')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getMpsColorCostPerPage(), 4))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->mpsColorCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
             ->addValidator('greaterThan', true, array (
@@ -249,7 +249,7 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getKilowattsPerHour(), 2))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->kilowattsPerHour, 2))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / KWh')
             ->addValidator('greaterThan', true, array (
@@ -289,7 +289,7 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
             ->setAttrib('style', 'text-align: right')
             ->setDescription('%')
             ->setValue('20')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getGrossMarginReportMargin(), 2))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->grossMarginReportMargin, 2))
             ->setAttrib('inputappend', '%');
         $gross_margin_pricing_margin->getValidator('Float')->setMessage('Please enter a number.');
         $gross_margin_pricing_margin->getValidator('Between')->setMessage('Must be greater than 0 and less than 100.');
@@ -309,7 +309,7 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('%')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getActualPageCoverageMono(), 2))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->actualPageCoverageMono, 2))
             ->setAttrib('inputappend', '%');
         
         $this->addElement($actual_page_coverage);
@@ -328,7 +328,7 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
             ->setAttrib('style', 'text-align: right')
             ->setAttrib('id', 'actualPageCoverageColor')
             ->setDescription('%')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getActualPageCoverageColor(), 2))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->actualPageCoverageColor, 2))
             ->setAttrib('inputappend', '%');
         
         $this->addElement($actual_page_coverage_color);
@@ -342,7 +342,7 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getAdminCostPerPage(), 4))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->adminCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
             ->addValidator('greaterThan', true, array (
@@ -361,7 +361,7 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->getServiceCostPerPage(), 4))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->serviceCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
             ->addValidator('greaterThan', true, array (

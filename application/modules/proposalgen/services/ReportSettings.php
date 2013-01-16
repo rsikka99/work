@@ -132,13 +132,13 @@ class Proposalgen_Service_ReportSettings
                 }
             }
             // Save the id as it will get erased
-            $reportSettingsId = $this->_reportSettings->getId();
+            $reportSettingsId = $this->_reportSettings->id;
             
             $this->_reportSettings->populate($this->_defaultSettings->toArray());
             $this->_reportSettings->populate($validData);
             
             // Restore the ID
-            $this->_reportSettings->setId($reportSettingsId);
+            $this->_reportSettings->id = $reportSettingsId;
             
             Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($this->_reportSettings);
             $this->getForm()->populate($this->_reportSettings->toArray());
