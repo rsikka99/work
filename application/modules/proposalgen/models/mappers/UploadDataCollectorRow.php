@@ -186,7 +186,7 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
         $data ["devices_pf_id"]        = $object->devicesPfId;
         $data ["startdate"]            = $object->startDate;
         $data ["enddate"]              = $object->endDate;
-        $data ["printermodelid"]       = $object->printerModelid;
+        $data ["printermodelid"]       = $object->printerModelId;
         $data ["ipaddress"]            = $object->ipAddress;
         $data ["serialnumber"]         = $object->serialNumber;
         $data ["modelname"]            = $object->modelName;

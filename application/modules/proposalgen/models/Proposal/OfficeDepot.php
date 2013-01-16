@@ -1696,33 +1696,33 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             }
 
             $blackToner               = new Proposalgen_Model_Toner();
-            $blackToner->tonerPrice   = $tonerOverrides ["BW"] ["Cost"];
-            $blackToner->tonerYield   = $tonerOverrides ["BW"] ["Yield"];
+            $blackToner->cost   = $tonerOverrides ["BW"] ["Cost"];
+            $blackToner->yield   = $tonerOverrides ["BW"] ["Yield"];
             $blackToner->tonerColorId = Proposalgen_Model_TonerColor::BLACK;
 
             $cyanToner               = new Proposalgen_Model_Toner();
-            $cyanToner->tonerPrice   = $tonerOverrides ["Color"] ["Cost"];
-            $cyanToner->tonerYield   = $tonerOverrides ["Color"] ["Yield"];
+            $cyanToner->cost   = $tonerOverrides ["Color"] ["Cost"];
+            $cyanToner->yield   = $tonerOverrides ["Color"] ["Yield"];
             $cyanToner->tonerColorId = Proposalgen_Model_TonerColor::CYAN;
 
             $magentaToner               = new Proposalgen_Model_Toner();
-            $magentaToner->tonerPrice   = $tonerOverrides ["Color"] ["Cost"];
-            $magentaToner->tonerYield   = $tonerOverrides ["Color"] ["Yield"];
+            $magentaToner->cost   = $tonerOverrides ["Color"] ["Cost"];
+            $magentaToner->yield   = $tonerOverrides ["Color"] ["Yield"];
             $magentaToner->tonerColorId = Proposalgen_Model_TonerColor::MAGENTA;
 
             $yellowToner               = new Proposalgen_Model_Toner();
-            $yellowToner->tonerPrice   = $tonerOverrides ["Color"] ["Cost"];
-            $yellowToner->tonerYield   = $tonerOverrides ["Color"] ["Yield"];
+            $yellowToner->cost   = $tonerOverrides ["Color"] ["Cost"];
+            $yellowToner->yield   = $tonerOverrides ["Color"] ["Yield"];
             $yellowToner->tonerColorId = Proposalgen_Model_TonerColor::YELLOW;
 
             $threeColorToner               = new Proposalgen_Model_Toner();
-            $threeColorToner->tonerPrice   = $tonerOverrides ["ThreeColor"] ["Cost"];
-            $threeColorToner->tonerYield   = $tonerOverrides ["ThreeColor"] ["Yield"];
+            $threeColorToner->cost   = $tonerOverrides ["ThreeColor"] ["Cost"];
+            $threeColorToner->yield   = $tonerOverrides ["ThreeColor"] ["Yield"];
             $threeColorToner->tonerColorId = Proposalgen_Model_TonerColor::THREE_COLOR;
 
             $fourColorToner               = new Proposalgen_Model_Toner();
-            $fourColorToner->tonerPrice   = $tonerOverrides ["FourColor"] ["Cost"];
-            $fourColorToner->tonerYield   = $tonerOverrides ["FourColor"] ["Yield"];
+            $fourColorToner->cost   = $tonerOverrides ["FourColor"] ["Cost"];
+            $fourColorToner->yield   = $tonerOverrides ["FourColor"] ["Yield"];
             $fourColorToner->tonerColorId = Proposalgen_Model_TonerColor::FOUR_COLOR;
 
             $defaultToners                                                        = array();

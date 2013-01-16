@@ -68,9 +68,9 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
                 foreach ( $requiredToners as $tonerColor )
                 {
                     $toner = $this->getCheapestToner($tonerColor, self::$PricingConfig);
-                    if ($toner->tonerYield < $smallestYield || is_null($smallestYield))
+                    if ($toner->yield < $smallestYield || is_null($smallestYield))
                     {
-                        $smallestYield = $toner->tonerYield;
+                        $smallestYield = $toner->yield;
                     }
                 }
             }

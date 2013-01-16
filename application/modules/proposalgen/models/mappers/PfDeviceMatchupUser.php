@@ -51,8 +51,8 @@ class Proposalgen_Model_Mapper_PfDeviceMatchupUser extends Tangent_Model_Mapper_
         try
         {
             $data ["pf_device_id"]     = $object->DevicesPfId;
-            $data ["master_device_id"] = $object->MasterDeviceId;
-            $data ["user_id"]          = $object->UserId;
+            $data ["master_device_id"] = $object->masterDeviceId;
+            $data ["user_id"]          = $object->userId;
 
             $primaryKey = $this->saveRow($data);
         }

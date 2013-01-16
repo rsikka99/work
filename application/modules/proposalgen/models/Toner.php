@@ -12,22 +12,22 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
     /**
      * @var int
      */
-    public $tonerId;
+    public $id;
 
     /**
      * @var string
      */
-    public $tonerSku;
+    public $sku;
 
     /**
      * @var float
      */
-    public $tonerPrice;
+    public $cost;
 
     /**
      * @var int
      */
-    public $tonerYield;
+    public $yield;
 
     /**
      * @var int
@@ -72,24 +72,24 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->tonerId) && !is_null($params->tonerId))
+        if (isset($params->id) && !is_null($params->id))
         {
-            $this->tonerId = $params->tonerId;
+            $this->id = $params->id;
         }
 
-        if (isset($params->tonerSKU) && !is_null($params->tonerSKU))
+        if (isset($params->sku) && !is_null($params->sku))
         {
-            $this->tonerSKU = $params->tonerSKU;
+            $this->sku = $params->sku;
         }
 
-        if (isset($params->tonerPrice) && !is_null($params->tonerPrice))
+        if (isset($params->cost) && !is_null($params->cost))
         {
-            $this->tonerPrice = $params->tonerPrice;
+            $this->cost = $params->cost;
         }
 
-        if (isset($params->tonerYield) && !is_null($params->tonerYield))
+        if (isset($params->yield) && !is_null($params->yield))
         {
-            $this->tonerYield = $params->tonerYield;
+            $this->yield = $params->yield;
         }
 
         if (isset($params->partTypeId) && !is_null($params->partTypeId))
@@ -115,10 +115,10 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "tonerId"        => $this->tonerId,
-            "tonerSKU"       => $this->tonerSKU,
-            "tonerPrice"     => $this->tonerPrice,
-            "tonerYield"     => $this->tonerYield,
+            "id"             => $this->id,
+            "sku"            => $this->sku,
+            "cost"           => $this->cost,
+            "yield"          => $this->yield,
             "partTypeId"     => $this->partTypeId,
             "manufacturerId" => $this->manufacturerId,
             "tonerColorId"   => $this->tonerColorId,
@@ -188,26 +188,26 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
             $costPerPage->Estimated->BlackAndWhite = 0;
             $costPerPage->Estimated->Color         = 0;
             // We must have a toner yield
-            if ($this->tonerYield)
+            if ($this->yield)
             {
                 // Check to make sure we have a black coverage
                 if ($actualBlackCoverage && $estimatedBlackCoverage)
                 {
-                    $costPerPage->Actual->BlackAndWhite    = $this->tonerPrice / ($this->tonerYield * (self::MANUFACTURER_ASSUMED_COVERAGE / $actualBlackCoverage));
-                    $costPerPage->Raw->BlackAndWhite       = $this->tonerPrice / $this->tonerYield;
-                    $costPerPage->Estimated->BlackAndWhite = $this->tonerPrice / ($this->tonerYield * (self::MANUFACTURER_ASSUMED_COVERAGE / $estimatedBlackCoverage));
+                    $costPerPage->Actual->BlackAndWhite    = $this->cost / ($this->yield * (self::MANUFACTURER_ASSUMED_COVERAGE / $actualBlackCoverage));
+                    $costPerPage->Raw->BlackAndWhite       = $this->cost / $this->yield;
+                    $costPerPage->Estimated->BlackAndWhite = $this->cost / ($this->yield * (self::MANUFACTURER_ASSUMED_COVERAGE / $estimatedBlackCoverage));
                 }
                 // Check to make sure we have a color coverage
                 if ($actualColorCoverage && $estimatedColorCoverage)
                 {
-                    $costPerPage->Actual->Color    = $this->tonerPrice / ($this->tonerYield * (self::MANUFACTURER_ASSUMED_COVERAGE / $actualColorCoverage));
-                    $costPerPage->Raw->Color       = $this->tonerPrice / $this->tonerYield;
-                    $costPerPage->Estimated->Color = $this->tonerPrice / ($this->tonerYield * (self::MANUFACTURER_ASSUMED_COVERAGE / $estimatedColorCoverage));
+                    $costPerPage->Actual->Color    = $this->cost / ($this->yield * (self::MANUFACTURER_ASSUMED_COVERAGE / $actualColorCoverage));
+                    $costPerPage->Raw->Color       = $this->cost / $this->yield;
+                    $costPerPage->Estimated->Color = $this->cost / ($this->yield * (self::MANUFACTURER_ASSUMED_COVERAGE / $estimatedColorCoverage));
                 }
             }
             else
             {
-                throw new Exception("Toner has a yield of zero! ID:" . $this->tonerYield);
+                throw new Exception("Toner has a yield of zero! ID:" . $this->yield);
             }
 
             // This is a ranking to be able to compare a toner with other toners of the same kind

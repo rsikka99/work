@@ -224,13 +224,13 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                                     // already exist
                                     if (! array_key_exists($row ["$tonerRow sku"], $globalToners))
                                     {
-                                        $toner->tonerSku = $row ["$tonerRow sku"];
-                                        $toner->tonerPrice = $row ["$tonerRow cost"];
-                                        $toner->tonerYield = $row ["$tonerRow yield"];
+                                        $toner->sku = $row ["$tonerRow sku"];
+                                        $toner->cost = $row ["$tonerRow cost"];
+                                        $toner->yield = $row ["$tonerRow yield"];
                                         $toner->partTypeId = $partTypeId;
                                         $toner->manufacturerId = $tonerMfgId;
                                         $toner->tonerColorId = $tonerColorId;
-                                        $toner->tonerId = $tonerMapper->save($toner);
+                                        $toner->id = $tonerMapper->save($toner);
                                         $globalToners [$row ["$tonerRow sku"]] = $toner;
                                     }
                                     $toners [$partTypeId] [$tonerColorId] [] = $globalToners [$row ["$tonerRow sku"]];

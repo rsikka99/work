@@ -53,10 +53,10 @@ class Proposalgen_Model_Mapper_Toner extends Tangent_Model_Mapper_Abstract
         try
         {
             $object                 = new Proposalgen_Model_Toner();
-            $object->tonerId        = $row->id;
-            $object->tonerSku       = $row->sku;
-            $object->tonerPrice     = $row->cost;
-            $object->tonerYield     = $row->yield;
+            $object->id        = $row->id;
+            $object->sku       = $row->sku;
+            $object->cost     = $row->cost;
+            $object->yield     = $row->yield;
             $object->partTypeId     = $row->part_type_id;
             $object->manufacturerId = $row->manufacturer_id;
             $object->tonerColorId   = $row->toner_color_id;
@@ -82,10 +82,10 @@ class Proposalgen_Model_Mapper_Toner extends Tangent_Model_Mapper_Abstract
         $primaryKey = 0;
         try
         {
-            $data ["id"]              = $object->tonerId;
-            $data ["sku"]             = $object->tonerSku;
-            $data ["cost"]            = $object->tonerPrice;
-            $data ["yield"]           = $object->tonerYield;
+            $data ["id"]              = $object->id;
+            $data ["sku"]             = $object->sku;
+            $data ["cost"]            = $object->cost;
+            $data ["yield"]           = $object->yield;
             $data ["manufacturer_id"] = $object->manufacturerId;
             $data ["part_type_id"]    = $object->partTypeId;
             $data ["toner_color_id"]  = $object->tonerColorId;

@@ -1,86 +1,56 @@
 <?php
-
-/**
- * Class Proposalgen_Model_UserTonerOverride
- *
- * @author "Kevin Jervis"
- */
-class Proposalgen_Model_UserTonerOverride extends Tangent_Model_Abstract
+class Proposalgen_Model_UserTonerOverride extends My_Model_Abstract
 {
-    // Database Fields
-    protected $UserId;
-    protected $TonerId;
-    protected $OverrideTonerPrice;
+    /**
+     * @var int
+     */
+    public $userId;
 
     /**
-     *
-     * @return the $UserId
+     * @var int
      */
-    public function getUserId ()
+    public $tonerId;
+
+    /**
+     * @var int
+     */
+    public $overrideTonerPrice;
+
+    /**
+     * @param array $params An array of data to populate the model with
+     */
+    public function populate ($params)
     {
-        if (! isset($this->UserId))
+        if (is_array($params))
         {
-            
-            $this->UserId = null;
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        return $this->UserId;
-    }
 
-    /**
-     *
-     * @param field_type $UserId            
-     */
-    public function setUserId ($UserId)
-    {
-        $this->UserId = $UserId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $TonerId
-     */
-    public function getTonerId ()
-    {
-        if (! isset($this->TonerId))
+        if (isset($params->userId) && !is_null($params->userId))
         {
-            
-            $this->TonerId = null;
+            $this->userId = $params->userId;
         }
-        return $this->TonerId;
-    }
 
-    /**
-     *
-     * @param field_type $TonerId            
-     */
-    public function setTonerId ($TonerId)
-    {
-        $this->TonerId = $TonerId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $OverrideTonerPrice
-     */
-    public function getOverrideTonerPrice ()
-    {
-        if (! isset($this->OverrideTonerPrice))
+        if (isset($params->tonerId) && !is_null($params->tonerId))
         {
-            
-            $this->OverrideTonerPrice = null;
+            $this->tonerId = $params->tonerId;
         }
-        return $this->OverrideTonerPrice;
+
+        if (isset($params->overrideTonerPrice) && !is_null($params->overrideTonerPrice))
+        {
+            $this->overrideTonerPrice = $params->overrideTonerPrice;
+        }
     }
 
     /**
-     *
-     * @param field_type $OverrideTonerPrice            
+     * @return array
      */
-    public function setOverrideTonerPrice ($OverrideTonerPrice)
+    public function toArray ()
     {
-        $this->OverrideTonerPrice = $OverrideTonerPrice;
-        return $this;
+        return array(
+            "userId"             => $this->userId,
+            "tonerId"            => $this->tonerId,
+            "overrideTonerPrice" => $this->overrideTonerPrice,
+        );
     }
 }

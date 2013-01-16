@@ -362,9 +362,9 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
         $toner = new Proposalgen_Model_Toner();
         if ($row->is_excluded)
         {
-            $toner->tonerSku   = "INVALID";
-            $toner->tonerPrice = 1;
-            $toner->tonerYield = 100;
+            $toner->sku   = "INVALID";
+            $toner->cost = 1;
+            $toner->yield = 100;
             $toner->setPartType($partTypeMapper->find($partType));
             $toner->setTonerColor($tonerColorMapper->find($color));
         }
@@ -372,9 +372,9 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
         {
             if (isset($row [$colorText . "_sku"]))
             {
-                $toner->tonerSku = $row [$colorText . "_sku"];
-                $toner->tonerPrice = $row [$colorText . "_cost"];
-                $toner->tonerYield = $row [$colorText . "_yield"];
+                $toner->sku = $row [$colorText . "_sku"];
+                $toner->cost = $row [$colorText . "_cost"];
+                $toner->yield = $row [$colorText . "_yield"];
                 $toner->setPartType($partTypeMapper->find($partType));
                 $toner->setManufacturer($manufacturer);
                 $toner->setTonerColor($tonerColorMapper->find($color));

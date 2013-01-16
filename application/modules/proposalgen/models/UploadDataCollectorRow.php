@@ -17,57 +17,57 @@ class Proposalgen_Model_UploadDataCollectorRow extends My_Model_Abstract
     public $devicesPfId;
 
     /**
-     * @var int
+     * @var string
      */
     public $startDate;
 
     /**
-     * @var int
+     * @var string
      */
     public $endDate;
 
     /**
      * @var int
      */
-    public $printerModelid;
+    public $printerModelId;
 
     /**
-     * @var int
+     * @var string
      */
     public $ipAddress;
 
     /**
-     * @var int
+     * @var string
      */
     public $serialNumber;
 
     /**
-     * @var int
+     * @var string
      */
     public $modelName;
 
     /**
-     * @var int
+     * @var string
      */
     public $manufacturer;
 
     /**
-     * @var int
+     * @var bool
      */
     public $isColor;
 
     /**
-     * @var int
+     * @var bool
      */
     public $isCopier;
 
     /**
-     * @var int
+     * @var bool
      */
     public $isScanner;
 
     /**
-     * @var int
+     * @var bool
      */
     public $isFax;
 
@@ -82,22 +82,22 @@ class Proposalgen_Model_UploadDataCollectorRow extends My_Model_Abstract
     public $ppmColor;
 
     /**
-     * @var int
+     * @var string
      */
     public $dateIntroduction;
 
     /**
-     * @var int
+     * @var string
      */
     public $dateAdoption;
 
     /**
-     * @var int
+     * @var string
      */
     public $discoveryDate;
 
     /**
-     * @var int
+     * @var string
      */
     public $blackProdCodeOem;
 
@@ -112,7 +112,7 @@ class Proposalgen_Model_UploadDataCollectorRow extends My_Model_Abstract
     public $blackProdCostOem;
 
     /**
-     * @var int
+     * @var string
      */
     public $cyanProdCodeOem;
 
@@ -127,7 +127,7 @@ class Proposalgen_Model_UploadDataCollectorRow extends My_Model_Abstract
     public $cyanProdCostOem;
 
     /**
-     * @var int
+     * @var string
      */
     public $magentaProdCodeOem;
 
@@ -142,7 +142,7 @@ class Proposalgen_Model_UploadDataCollectorRow extends My_Model_Abstract
     public $magentaProdCostOem;
 
     /**
-     * @var int
+     * @var string
      */
     public $yellowProdCodeOem;
 
@@ -262,12 +262,12 @@ class Proposalgen_Model_UploadDataCollectorRow extends My_Model_Abstract
     public $endMeterFax;
 
     /**
-     * @var int
+     * @var bool
      */
     public $invalidData;
 
     /**
-     * @var int
+     * @var bool
      */
     public $isExcluded;
 
@@ -314,7 +314,7 @@ class Proposalgen_Model_UploadDataCollectorRow extends My_Model_Abstract
 
         if (isset($params->printerModelid) && !is_null($params->printerModelid))
         {
-            $this->printerModelid = $params->printerModelid;
+            $this->printerModelId = $params->printerModelid;
         }
 
         if (isset($params->ipAddress) && !is_null($params->ipAddress))
@@ -570,7 +570,7 @@ class Proposalgen_Model_UploadDataCollectorRow extends My_Model_Abstract
             "devicesPfId"           => $this->devicesPfId,
             "startDate"             => $this->startDate,
             "endDate"               => $this->endDate,
-            "printerModelid"        => $this->printerModelid,
+            "printerModelid"        => $this->printerModelId,
             "ipAddress"             => $this->ipAddress,
             "serialNumber"          => $this->serialNumber,
             "modelName"             => $this->modelName,
