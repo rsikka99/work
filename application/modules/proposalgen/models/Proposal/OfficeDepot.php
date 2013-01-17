@@ -169,7 +169,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE($reportSettings->actualPageCoverageMono / 100);
         Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_COLOR($reportSettings->actualPageCoverageColor / 100);
 
-        Proposalgen_Model_DeviceInstance::setKWH_Cost($reportSettings->kilowattsPerHour);
+        Proposalgen_Model_DeviceInstance::$KWH_Cost = $reportSettings->kilowattsPerHour;
         Proposalgen_Model_MasterDevice::setPricingConfig($reportSettings->getAssessmentPricingConfig());
         Proposalgen_Model_MasterDevice::setGrossMarginPricingConfig($reportSettings->getGrossMarginPricingConfig());
         Proposalgen_Model_MasterDevice::setReportMargin(1 - ((((int)$reportSettings->assessmentReportMargin)) / 100));

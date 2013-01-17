@@ -174,6 +174,11 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
         return $entries;
     }
 
+    /**
+     * @param $userId Application_Model_User
+     *
+     * @return Proposalgen_Model_User_Survey_Setting
+     */
     public function findUserSurveySettingByUserId ($userId)
     {
         $surveySetting = array();

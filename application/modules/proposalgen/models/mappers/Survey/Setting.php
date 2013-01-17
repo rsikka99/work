@@ -107,7 +107,7 @@ class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
         $result = $this->getDbTable()->find($id);
         if (0 == count($result))
         {
-            return false;
+            return null;
         }
         $row = $result->current();
 
