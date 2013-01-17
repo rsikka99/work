@@ -2118,13 +2118,14 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         // load details for ticket
                         $ticketsMapper             = Proposalgen_Model_Mapper_Ticket::getInstance();
                         $tickets                   = $ticketsMapper->find($ticket_id);
-                        $this->view->ticket_number = $tickets->TicketId;
-                        $this->view->ticket_title  = $tickets->Title;
-                        //$this->view->reported_by      = $tickets->User->UserName;
-                        $this->view->ticket_type      = $tickets->Category->CategoryName;
-                        $this->view->ticket_details   = $tickets->Description;
-                        $this->view->ticket_status    = ucwords(strtolower($tickets->Status->StatusName));
-                        $this->view->ticket_status_id = ucwords(strtolower($tickets->Status->StatusId));
+
+                        $this->view->ticket_number = $tickets->ticketId;
+                        $this->view->ticket_title  = $tickets->title;
+                        $this->view->reported_by      = $tickets->getUser()->username;
+                        $this->view->ticket_type      = $tickets->getTicketCategory()->categoryName;//->categoryName
+                        $this->view->ticket_details   = $tickets->description;
+                        $this->view->ticket_status    = ucwords(strtolower($tickets->getTicketStatus()->statusName));
+                        $this->view->ticket_status_id = ucwords(strtolower($tickets->statusId));
 
                         // get comment history
                         $ticket_comments_array = array();
@@ -2135,12 +2136,11 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
                         foreach ($ticket_comments as $row)
                         {
-                            $comment_date = new Zend_Date($row->CommentDate, "yyyy-mm-dd HH:ii:ss");
-
+                            $comment_date = new Zend_Date($row->commentDate, "yyyy-mm-dd HH:ii:ss");
                             $ticket_comments_array [] = array(
-                                'username'     => $row->User->getUsername(),
+                                'username'     => $row->getUser()->username,
                                 'date_created' => $comment_date->toString('mm/dd/yyyy'),
-                                'content'      => $row->CommentText
+                                'content'      => $row->commentText
                             );
                         }
                         $this->view->ticket_comments = $ticket_comments_array;
@@ -2149,7 +2149,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         $ticketPfRequestMapper           = Proposalgen_Model_Mapper_TicketPFRequest::getInstance();
                         $ticketPfRequest                 = $ticketPfRequestMapper->find($ticket_id);
                         $this->view->devices_pf_id       = $ticketPfRequest->devicePfId;
-                        $this->view->device_pf_name      = $ticketPfRequest->getDevicePf()->pfDbManufacturer . ' ' . $ticketPfRequest->getDevicePf()->PfDbDeviceName;
+                        $this->view->device_pf_name      = $ticketPfRequest->getDevicePf()->pfDbManufacturer . ' ' . $ticketPfRequest->getDevicePf()->pfDbDeviceName;
                         $this->view->user_suggested_name = $ticketPfRequest->deviceManufacturer . ' ' . $ticketPfRequest->printerModel;
 
                         // ticket exists, update ticket label

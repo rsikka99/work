@@ -33,7 +33,7 @@ class Proposalgen_Model_Mapper_DeviceToner extends Tangent_Model_Mapper_Abstract
         {
             $object               = new Proposalgen_Model_DeviceToner();
             $object->tonerId      = $row->toner_id;
-            $object->MasterDevice = $row->master_device_id;
+            $object->masterDeviceId = $row->master_device_id;
         }
         catch (Exception $e)
         {
