@@ -1,2034 +1,949 @@
 <?php
-
-/**
- * Class Proposalgen_Model_UnknownDeviceInstance
- *
- * @author "Lee Robert"
- */
-class Proposalgen_Model_UnknownDeviceInstance extends Tangent_Model_Abstract
+class Proposalgen_Model_UnknownDeviceInstance extends My_Model_Abstract
 {
-    protected $UnknownDeviceInstanceId;
-    protected $UserId;
-    protected $ReportId;
-    protected $UploadDataCollectorRowId;
-    protected $PrinterModelid;
-    protected $MpsMonitorStartdate;
-    protected $MpsMonitorEnddate;
-    protected $MpsDiscoveryDate;
-    protected $InstallDate;
-    protected $DeviceManufacturer;
-    protected $PrinterModel;
-    protected $PrinterSerialNumber;
-    protected $TonerConfig;
-    protected $IsCopier;
-    protected $IsFax;
-    protected $IsDuplex;
-    protected $IsScanner;
-    protected $JitSuppliesSupported;
-    protected $WattsPowerNormal;
-    protected $WattsPowerIdle;
-    protected $DevicePrice;
-    protected $LaunchDate;
-    protected $DateCreated;
-    protected $BlackTonerSKU;
-    protected $BlackTonerPrice;
-    protected $BlackTonerYield;
-    protected $CyanTonerSKU;
-    protected $CyanTonerPrice;
-    protected $CyanTonerYield;
-    protected $MagentaTonerSKU;
-    protected $MagentaTonerPrice;
-    protected $MagentaTonerYield;
-    protected $YellowTonerSKU;
-    protected $YellowTonerPrice;
-    protected $YellowTonerYield;
-    protected $ThreeColorTonerSKU;
-    protected $ThreeColorTonerPrice;
-    protected $ThreeColorTonerYield;
-    protected $FourColorTonerSKU;
-    protected $FourColorTonerPrice;
-    protected $FourColorTonerYield;
-    protected $BlackCompSKU;
-    protected $BlackCompPrice;
-    protected $BlackCompYield;
-    protected $CyanCompSKU;
-    protected $CyanCompPrice;
-    protected $CyanCompYield;
-    protected $MagentaCompSKU;
-    protected $MagentaCompPrice;
-    protected $MagentaCompYield;
-    protected $YellowCompSKU;
-    protected $YellowCompPrice;
-    protected $YellowCompYield;
-    protected $ThreeColorCompSKU;
-    protected $ThreeColorCompPrice;
-    protected $ThreeColorCompYield;
-    protected $FourColorCompSKU;
-    protected $FourColorCompPrice;
-    protected $FourColorCompYield;
-    protected $StartMeterLife;
-    protected $EndMeterLife;
-    protected $StartMeterBlack;
-    protected $EndMeterBlack;
-    protected $StartMeterColor;
-    protected $EndMeterColor;
-    protected $StartMeterPrintblack;
-    protected $EndMeterPrintblack;
-    protected $StartMeterPrintcolor;
-    protected $EndMeterPrintcolor;
-    protected $StartMeterCopyblack;
-    protected $EndMeterCopyblack;
-    protected $StartMeterCopycolor;
-    protected $EndMeterCopycolor;
-    protected $StartMeterFax;
-    protected $EndMeterFax;
-    protected $StartMeterScan;
-    protected $EndMeterScan;
-    protected $IsExcluded;
-    protected $IsLeased;
-    protected $IpAddress;
-    protected $ServiceCostPerPage;
-
-    /**
-     *
-     * @return the $Id
-     */
-    public function getId ()
-    {
-        if (! isset($this->Id))
-        {
-            
-            $this->Id = null;
-        }
-        return $this->Id;
-    }
+    /**
+     * @var int
+     */
+    public $id;
 
     /**
-     *
-     * @param field_type $Id      
+     * @var int
      */
-    public function setId ($Id)
-    {
-        $this->Id = $Id;
-        return $this;
-    }
+    public $userId;
 
     /**
-     *
-     * @return the $UserId
+     * @var int
      */
-    public function getUserId ()
-    {
-        if (! isset($this->UserId))
-        {
-            
-            $this->UserId = null;
-        }
-        return $this->UserId;
-    }
+    public $reportId;
 
     /**
-     *
-     * @param field_type $UserId            
+     * @var int
      */
-    public function setUserId ($UserId)
-    {
-        $this->UserId = $UserId;
-        return $this;
-    }
+    public $uploadDataCollectorRowId;
 
     /**
-     *
-     * @return the $ReportId
+     * @var int
      */
-    public function getReportId ()
-    {
-        if (! isset($this->ReportId))
-        {
-            
-            $this->ReportId = null;
-        }
-        return $this->ReportId;
-    }
+    public $printerModelId;
 
     /**
-     *
-     * @param field_type $ReportId            
+     * @var string
      */
-    public function setReportId ($ReportId)
-    {
-        $this->ReportId = $ReportId;
-        return $this;
-    }
+    public $mpsMonitorStartDate;
 
     /**
-     *
-     * @return the $UploadDataCollectorRowId
+     * @var string
      */
-    public function getUploadDataCollectorRowId ()
-    {
-        if (! isset($this->UploadDataCollectorRowId))
-        {
-            
-            $this->UploadDataCollectorRowId = null;
-        }
-        return $this->UploadDataCollectorRowId;
-    }
+    public $mpsMonitorEndDate;
 
     /**
-     *
-     * @param field_type $UploadDataCollectorRowId            
+     * @var string
      */
-    public function setUploadDataCollectorRowId ($UploadDataCollectorRowId)
-    {
-        $this->UploadDataCollectorRowId = $UploadDataCollectorRowId;
-        return $this;
-    }
+    public $mpsDiscoveryDate;
 
     /**
-     *
-     * @return the $PrinterModelid
+     * @var string
      */
-    public function getPrinterModelid ()
-    {
-        if (! isset($this->PrinterModelid))
-        {
-            
-            $this->PrinterModelid = null;
-        }
-        return $this->PrinterModelid;
-    }
+    public $installDate;
 
     /**
-     *
-     * @param field_type $PrinterModelid            
+     * @var string
      */
-    public function setPrinterModelid ($PrinterModelid)
-    {
-        $this->PrinterModelid = $PrinterModelid;
-        return $this;
-    }
+    public $deviceManufacturer;
 
     /**
-     *
-     * @return the $MpsMonitorStartdate
+     * @var string
      */
-    public function getMpsMonitorStartdate ()
-    {
-        if (! isset($this->MpsMonitorStartdate))
-        {
-            
-            $this->MpsMonitorStartdate = null;
-        }
-        return $this->MpsMonitorStartdate;
-    }
+    public $printerModel;
 
     /**
-     *
-     * @param field_type $MpsMonitorStartdate            
+     * @var string
      */
-    public function setMpsMonitorStartdate ($MpsMonitorStartdate)
-    {
-        $this->MpsMonitorStartdate = $MpsMonitorStartdate;
-        return $this;
-    }
+    public $printerSerialNumber;
 
     /**
-     *
-     * @return the $MpsMonitorEnddate
+     * @var int
      */
-    public function getMpsMonitorEnddate ()
-    {
-        if (! isset($this->MpsMonitorEnddate))
-        {
-            
-            $this->MpsMonitorEnddate = null;
-        }
-        return $this->MpsMonitorEnddate;
-    }
+    public $tonerConfigId;
 
     /**
-     *
-     * @param field_type $MpsMonitorEnddate            
+     * @var bool
      */
-    public function setMpsMonitorEnddate ($MpsMonitorEnddate)
-    {
-        $this->MpsMonitorEnddate = $MpsMonitorEnddate;
-        return $this;
-    }
+    public $isCopier;
 
     /**
-     *
-     * @return the $MpsDiscoveryDate
+     * @var bool
      */
-    public function getMpsDiscoveryDate ()
-    {
-        if (! isset($this->MpsDiscoveryDate))
-        {
-            
-            $this->MpsDiscoveryDate = null;
-        }
-        return $this->MpsDiscoveryDate;
-    }
+    public $isFax;
 
     /**
-     *
-     * @param field_type $MpsDiscoveryDate            
+     * @var bool
      */
-    public function setMpsDiscoveryDate ($MpsDiscoveryDate)
-    {
-        $this->MpsDiscoveryDate = $MpsDiscoveryDate;
-        return $this;
-    }
+    public $isDuplex;
 
     /**
-     *
-     * @return the $InstallDate
+     * @var bool
      */
-    public function getInstallDate ()
-    {
-        if (! isset($this->InstallDate))
-        {
-            
-            $this->InstallDate = null;
-        }
-        return $this->InstallDate;
-    }
+    public $isScanner;
 
     /**
-     *
-     * @param field_type $InstallDate            
+     * @var int
      */
-    public function setInstallDate ($InstallDate)
-    {
-        $this->InstallDate = $InstallDate;
-        return $this;
-    }
+    public $wattsPowerNormal;
 
     /**
-     *
-     * @return the $DeviceManufacturer
+     * @var int
      */
-    public function getDeviceManufacturer ()
-    {
-        if (! isset($this->DeviceManufacturer))
-        {
-            
-            $this->DeviceManufacturer = null;
-        }
-        return $this->DeviceManufacturer;
-    }
+    public $wattsPowerIdle;
 
     /**
-     *
-     * @param field_type $DeviceManufacturer            
+     * @var float
      */
-    public function setDeviceManufacturer ($DeviceManufacturer)
-    {
-        $this->DeviceManufacturer = $DeviceManufacturer;
-        return $this;
-    }
+    public $cost;
 
     /**
-     *
-     * @return the $PrinterModel
+     * @var string
      */
-    public function getPrinterModel ()
-    {
-        if (! isset($this->PrinterModel))
-        {
-            
-            $this->PrinterModel = null;
-        }
-        return $this->PrinterModel;
-    }
+    public $launchDate;
 
     /**
-     *
-     * @param field_type $PrinterModel            
+     * @var string
      */
-    public function setPrinterModel ($PrinterModel)
-    {
-        $this->PrinterModel = $PrinterModel;
-        return $this;
-    }
+    public $dateCreated;
 
     /**
-     *
-     * @return the $PrinterSerialNumber
+     * @var string
      */
-    public function getPrinterSerialNumber ()
-    {
-        if (! isset($this->PrinterSerialNumber))
-        {
-            
-            $this->PrinterSerialNumber = null;
-        }
-        return $this->PrinterSerialNumber;
-    }
+    public $blackTonerSku;
 
     /**
-     *
-     * @param field_type $PrinterSerialNumber            
+     * @var float
      */
-    public function setPrinterSerialNumber ($PrinterSerialNumber)
-    {
-        $this->PrinterSerialNumber = $PrinterSerialNumber;
-        return $this;
-    }
+    public $blackTonerPrice;
 
     /**
-     *
-     * @return the $TonerConfig
+     * @var int
      */
-    public function getTonerConfig ()
-    {
-        if (! isset($this->TonerConfig))
-        {
-            
-            $this->TonerConfig = null;
-        }
-        return $this->TonerConfig;
-    }
+    public $blackTonerYield;
 
     /**
-     *
-     * @param field_type $TonerConfig            
+     * @var string
      */
-    public function setTonerConfig ($TonerConfig)
-    {
-        $this->TonerConfig = $TonerConfig;
-        return $this;
-    }
+    public $cyanTonerSku;
 
     /**
-     *
-     * @return the $IsCopier
+     * @var float
      */
-    public function getIsCopier ()
-    {
-        if (! isset($this->IsCopier))
-        {
-            
-            $this->IsCopier = null;
-        }
-        return $this->IsCopier;
-    }
+    public $cyanTonerPrice;
 
     /**
-     *
-     * @param field_type $IsCopier            
+     * @var int
      */
-    public function setIsCopier ($IsCopier)
-    {
-        $this->IsCopier = $IsCopier;
-        return $this;
-    }
+    public $cyanTonerYield;
 
     /**
-     *
-     * @return the $IsFax
+     * @var string
      */
-    public function getIsFax ()
-    {
-        if (! isset($this->IsFax))
-        {
-            
-            $this->IsFax = null;
-        }
-        return $this->IsFax;
-    }
+    public $magentaTonerSku;
 
     /**
-     *
-     * @param field_type $IsFax            
+     * @var float
      */
-    public function setIsFax ($IsFax)
-    {
-        $this->IsFax = $IsFax;
-        return $this;
-    }
+    public $magentaTonerPrice;
 
     /**
-     *
-     * @return the $IsDuplex
+     * @var int
      */
-    public function getIsDuplex ()
-    {
-        if (! isset($this->IsDuplex))
-        {
-            
-            $this->IsDuplex = null;
-        }
-        return $this->IsDuplex;
-    }
+    public $magentaTonerYield;
 
     /**
-     *
-     * @param field_type $IsDuplex            
+     * @var string
      */
-    public function setIsDuplex ($IsDuplex)
-    {
-        $this->IsDuplex = $IsDuplex;
-        return $this;
-    }
+    public $yellowTonerSku;
 
     /**
-     *
-     * @return the $IsScanner
+     * @var float
      */
-    public function getIsScanner ()
-    {
-        if (! isset($this->IsScanner))
-        {
-            
-            $this->IsScanner = null;
-        }
-        return $this->IsScanner;
-    }
+    public $yellowTonerPrice;
 
     /**
-     *
-     * @param field_type $IsScanner            
+     * @var int
      */
-    public function setIsScanner ($IsScanner)
-    {
-        $this->IsScanner = $IsScanner;
-        return $this;
-    }
+    public $yellowTonerYield;
 
     /**
-     *
-     * @return the $JitSuppliesSupported
+     * @var string
      */
-    public function getJitSuppliesSupported ()
-    {
-        if (! isset($this->JitSuppliesSupported))
-        {
-            
-            $this->JitSuppliesSupported = null;
-        }
-        return $this->JitSuppliesSupported;
-    }
+    public $threeColorTonerSku;
 
     /**
-     *
-     * @param field_type $JitSuppliesSupported            
+     * @var float
      */
-    public function setJitSuppliesSupported ($JitSuppliesSupported)
-    {
-        $this->JitSuppliesSupported = $JitSuppliesSupported;
-        return $this;
-    }
+    public $threeColorTonerPrice;
 
     /**
-     *
-     * @return the $WattsPowerNormal
+     * @var int
      */
-    public function getWattsPowerNormal ()
-    {
-        if (! isset($this->WattsPowerNormal))
-        {
-            
-            $this->WattsPowerNormal = null;
-        }
-        return $this->WattsPowerNormal;
-    }
+    public $threeColorTonerYield;
 
     /**
-     *
-     * @param field_type $WattsPowerNormal            
+     * @var string
      */
-    public function setWattsPowerNormal ($WattsPowerNormal)
-    {
-        $this->WattsPowerNormal = $WattsPowerNormal;
-        return $this;
-    }
+    public $fourColorTonerSku;
 
     /**
-     *
-     * @return the $WattsPowerIdle
+     * @var float
      */
-    public function getWattsPowerIdle ()
-    {
-        if (! isset($this->WattsPowerIdle))
-        {
-            
-            $this->WattsPowerIdle = null;
-        }
-        return $this->WattsPowerIdle;
-    }
+    public $fourColorTonerPrice;
 
     /**
-     *
-     * @param field_type $WattsPowerIdle            
+     * @var int
      */
-    public function setWattsPowerIdle ($WattsPowerIdle)
-    {
-        $this->WattsPowerIdle = $WattsPowerIdle;
-        return $this;
-    }
+    public $fourColorTonerYield;
 
     /**
-     *
-     * @return the $DevicePrice
+     * @var string
      */
-    public function getDevicePrice ()
-    {
-        if (! isset($this->DevicePrice))
-        {
-            
-            $this->DevicePrice = null;
-        }
-        return $this->DevicePrice;
-    }
+    public $blackCompSku;
 
     /**
-     *
-     * @param field_type $DevicePrice            
+     * @var float
      */
-    public function setDevicePrice ($DevicePrice)
-    {
-        $this->DevicePrice = $DevicePrice;
-        return $this;
-    }
+    public $blackCompPrice;
 
     /**
-     *
-     * @return the $LaunchDate
+     * @var int
      */
-    public function getLaunchDate ()
-    {
-        if (! isset($this->LaunchDate))
-        {
-            
-            $this->LaunchDate = null;
-        }
-        return $this->LaunchDate;
-    }
+    public $blackCompYield;
 
     /**
-     *
-     * @param field_type $LaunchDate            
+     * @var string
      */
-    public function setLaunchDate ($LaunchDate)
-    {
-        $this->LaunchDate = $LaunchDate;
-        return $this;
-    }
+    public $cyanCompSku;
 
     /**
-     *
-     * @return the $DateCreated
+     * @var float
      */
-    public function getDateCreated ()
-    {
-        if (! isset($this->DateCreated))
-        {
-            
-            $this->DateCreated = null;
-        }
-        return $this->DateCreated;
-    }
+    public $cyanCompPrice;
 
     /**
-     *
-     * @param field_type $DateCreated            
+     * @var int
      */
-    public function setDateCreated ($DateCreated)
-    {
-        $this->DateCreated = $DateCreated;
-        return $this;
-    }
+    public $cyanCompYield;
 
     /**
-     *
-     * @return the $BlackTonerSKU
+     * @var string
      */
-    public function getBlackTonerSKU ()
-    {
-        if (! isset($this->BlackTonerSKU))
-        {
-            
-            $this->BlackTonerSKU = null;
-        }
-        return $this->BlackTonerSKU;
-    }
+    public $magentaCompSku;
 
     /**
-     *
-     * @param field_type $BlackTonerSKU            
+     * @var float
      */
-    public function setBlackTonerSKU ($BlackTonerSKU)
-    {
-        $this->BlackTonerSKU = $BlackTonerSKU;
-        return $this;
-    }
+    public $magentaCompPrice;
 
     /**
-     *
-     * @return the $BlackTonerPrice
+     * @var int
      */
-    public function getBlackTonerPrice ()
-    {
-        if (! isset($this->BlackTonerPrice))
-        {
-            
-            $this->BlackTonerPrice = null;
-        }
-        return $this->BlackTonerPrice;
-    }
+    public $magentaCompYield;
 
     /**
-     *
-     * @param field_type $BlackTonerPrice            
+     * @var string
      */
-    public function setBlackTonerPrice ($BlackTonerPrice)
-    {
-        $this->BlackTonerPrice = $BlackTonerPrice;
-        return $this;
-    }
+    public $yellowCompSku;
 
     /**
-     *
-     * @return the $BlackTonerYield
+     * @var float
      */
-    public function getBlackTonerYield ()
-    {
-        if (! isset($this->BlackTonerYield))
-        {
-            
-            $this->BlackTonerYield = null;
-        }
-        return $this->BlackTonerYield;
-    }
+    public $yellowCompPrice;
 
     /**
-     *
-     * @param field_type $BlackTonerYield            
+     * @var int
      */
-    public function setBlackTonerYield ($BlackTonerYield)
-    {
-        $this->BlackTonerYield = $BlackTonerYield;
-        return $this;
-    }
+    public $yellowCompYield;
 
     /**
-     *
-     * @return the $CyanTonerSKU
+     * @var string
      */
-    public function getCyanTonerSKU ()
-    {
-        if (! isset($this->CyanTonerSKU))
-        {
-            
-            $this->CyanTonerSKU = null;
-        }
-        return $this->CyanTonerSKU;
-    }
+    public $threeColorCompSku;
 
     /**
-     *
-     * @param field_type $CyanTonerSKU            
+     * @var float
      */
-    public function setCyanTonerSKU ($CyanTonerSKU)
-    {
-        $this->CyanTonerSKU = $CyanTonerSKU;
-        return $this;
-    }
+    public $threeColorCompPrice;
 
     /**
-     *
-     * @return the $CyanTonerPrice
+     * @var int
      */
-    public function getCyanTonerPrice ()
-    {
-        if (! isset($this->CyanTonerPrice))
-        {
-            
-            $this->CyanTonerPrice = null;
-        }
-        return $this->CyanTonerPrice;
-    }
+    public $threeColorCompYield;
 
     /**
-     *
-     * @param field_type $CyanTonerPrice            
+     * @var string
      */
-    public function setCyanTonerPrice ($CyanTonerPrice)
-    {
-        $this->CyanTonerPrice = $CyanTonerPrice;
-        return $this;
-    }
+    public $fourColorCompSku;
 
     /**
-     *
-     * @return the $CyanTonerYield
+     * @var float
      */
-    public function getCyanTonerYield ()
-    {
-        if (! isset($this->CyanTonerYield))
-        {
-            
-            $this->CyanTonerYield = null;
-        }
-        return $this->CyanTonerYield;
-    }
+    public $fourColorCompPrice;
 
     /**
-     *
-     * @param field_type $CyanTonerYield            
+     * @var int
      */
-    public function setCyanTonerYield ($CyanTonerYield)
-    {
-        $this->CyanTonerYield = $CyanTonerYield;
-        return $this;
-    }
+    public $fourColorCompYield;
 
     /**
-     *
-     * @return the $MagentaTonerSKU
+     * @var int
      */
-    public function getMagentaTonerSKU ()
-    {
-        if (! isset($this->MagentaTonerSKU))
-        {
-            
-            $this->MagentaTonerSKU = null;
-        }
-        return $this->MagentaTonerSKU;
-    }
+    public $startMeterLife;
 
     /**
-     *
-     * @param field_type $MagentaTonerSKU            
+     * @var int
      */
-    public function setMagentaTonerSKU ($MagentaTonerSKU)
-    {
-        $this->MagentaTonerSKU = $MagentaTonerSKU;
-        return $this;
-    }
+    public $endMeterLife;
 
     /**
-     *
-     * @return the $MagentaTonerPrice
+     * @var int
      */
-    public function getMagentaTonerPrice ()
-    {
-        if (! isset($this->MagentaTonerPrice))
-        {
-            
-            $this->MagentaTonerPrice = null;
-        }
-        return $this->MagentaTonerPrice;
-    }
+    public $startMeterBlack;
 
     /**
-     *
-     * @param field_type $MagentaTonerPrice            
+     * @var int
      */
-    public function setMagentaTonerPrice ($MagentaTonerPrice)
-    {
-        $this->MagentaTonerPrice = $MagentaTonerPrice;
-        return $this;
-    }
+    public $endMeterBlack;
 
     /**
-     *
-     * @return the $MagentaTonerYield
+     * @var int
      */
-    public function getMagentaTonerYield ()
-    {
-        if (! isset($this->MagentaTonerYield))
-        {
-            
-            $this->MagentaTonerYield = null;
-        }
-        return $this->MagentaTonerYield;
-    }
+    public $startMeterColor;
 
     /**
-     *
-     * @param field_type $MagentaTonerYield            
+     * @var int
      */
-    public function setMagentaTonerYield ($MagentaTonerYield)
-    {
-        $this->MagentaTonerYield = $MagentaTonerYield;
-        return $this;
-    }
+    public $endMeterColor;
 
     /**
-     *
-     * @return the $YellowTonerSKU
+     * @var int
      */
-    public function getYellowTonerSKU ()
-    {
-        if (! isset($this->YellowTonerSKU))
-        {
-            
-            $this->YellowTonerSKU = null;
-        }
-        return $this->YellowTonerSKU;
-    }
+    public $startMeterPrintBlack;
 
     /**
-     *
-     * @param field_type $YellowTonerSKU            
+     * @var int
      */
-    public function setYellowTonerSKU ($YellowTonerSKU)
-    {
-        $this->YellowTonerSKU = $YellowTonerSKU;
-        return $this;
-    }
+    public $endMeterPrintBlack;
 
     /**
-     *
-     * @return the $YellowTonerPrice
+     * @var int
      */
-    public function getYellowTonerPrice ()
-    {
-        if (! isset($this->YellowTonerPrice))
-        {
-            
-            $this->YellowTonerPrice = null;
-        }
-        return $this->YellowTonerPrice;
-    }
+    public $startMeterPrintColor;
 
     /**
-     *
-     * @param field_type $YellowTonerPrice            
+     * @var int
      */
-    public function setYellowTonerPrice ($YellowTonerPrice)
-    {
-        $this->YellowTonerPrice = $YellowTonerPrice;
-        return $this;
-    }
+    public $endMeterPrintColor;
 
     /**
-     *
-     * @return the $YellowTonerYield
+     * @var int
      */
-    public function getYellowTonerYield ()
-    {
-        if (! isset($this->YellowTonerYield))
-        {
-            
-            $this->YellowTonerYield = null;
-        }
-        return $this->YellowTonerYield;
-    }
+    public $startMeterCopyBlack;
 
     /**
-     *
-     * @param field_type $YellowTonerYield            
+     * @var int
      */
-    public function setYellowTonerYield ($YellowTonerYield)
-    {
-        $this->YellowTonerYield = $YellowTonerYield;
-        return $this;
-    }
+    public $endMeterCopyBlack;
 
     /**
-     *
-     * @return the $ThreeColorTonerSKU
+     * @var int
      */
-    public function getThreeColorTonerSKU ()
-    {
-        if (! isset($this->ThreeColorTonerSKU))
-        {
-            
-            $this->ThreeColorTonerSKU = null;
-        }
-        return $this->ThreeColorTonerSKU;
-    }
+    public $startMeterCopyColor;
 
     /**
-     *
-     * @param field_type $ThreeColorTonerSKU            
+     * @var int
      */
-    public function setThreeColorTonerSKU ($ThreeColorTonerSKU)
-    {
-        $this->ThreeColorTonerSKU = $ThreeColorTonerSKU;
-        return $this;
-    }
+    public $endMeterCopyColor;
 
     /**
-     *
-     * @return the $ThreeColorTonerPrice
+     * @var int
      */
-    public function getThreeColorTonerPrice ()
-    {
-        if (! isset($this->ThreeColorTonerPrice))
-        {
-            
-            $this->ThreeColorTonerPrice = null;
-        }
-        return $this->ThreeColorTonerPrice;
-    }
+    public $startMeterFax;
 
     /**
-     *
-     * @param field_type $ThreeColorTonerPrice            
+     * @var int
      */
-    public function setThreeColorTonerPrice ($ThreeColorTonerPrice)
-    {
-        $this->ThreeColorTonerPrice = $ThreeColorTonerPrice;
-        return $this;
-    }
+    public $endMeterFax;
 
     /**
-     *
-     * @return the $ThreeColorTonerYield
+     * @var int
      */
-    public function getThreeColorTonerYield ()
-    {
-        if (! isset($this->ThreeColorTonerYield))
-        {
-            
-            $this->ThreeColorTonerYield = null;
-        }
-        return $this->ThreeColorTonerYield;
-    }
+    public $startMeterScan;
 
     /**
-     *
-     * @param field_type $ThreeColorTonerYield            
+     * @var int
      */
-    public function setThreeColorTonerYield ($ThreeColorTonerYield)
-    {
-        $this->ThreeColorTonerYield = $ThreeColorTonerYield;
-        return $this;
-    }
+    public $endMeterScan;
 
     /**
-     *
-     * @return the $FourColorTonerSKU
+     * @var bool
      */
-    public function getFourColorTonerSKU ()
-    {
-        if (! isset($this->FourColorTonerSKU))
-        {
-            
-            $this->FourColorTonerSKU = null;
-        }
-        return $this->FourColorTonerSKU;
-    }
+    public $jitSuppliesSupported;
 
     /**
-     *
-     * @param field_type $FourColorTonerSKU            
+     * @var bool
      */
-    public function setFourColorTonerSKU ($FourColorTonerSKU)
-    {
-        $this->FourColorTonerSKU = $FourColorTonerSKU;
-        return $this;
-    }
+    public $isExcluded;
 
     /**
-     *
-     * @return the $FourColorTonerPrice
+     * @var bool
      */
-    public function getFourColorTonerPrice ()
-    {
-        if (! isset($this->FourColorTonerPrice))
-        {
-            
-            $this->FourColorTonerPrice = null;
-        }
-        return $this->FourColorTonerPrice;
-    }
+    public $isLeased;
 
     /**
-     *
-     * @param field_type $FourColorTonerPrice            
+     * @var string
      */
-    public function setFourColorTonerPrice ($FourColorTonerPrice)
-    {
-        $this->FourColorTonerPrice = $FourColorTonerPrice;
-        return $this;
-    }
+    public $ipAddress;
 
     /**
-     *
-     * @return the $FourColorTonerYield
+     * @var int
      */
-    public function getFourColorTonerYield ()
-    {
-        if (! isset($this->FourColorTonerYield))
-        {
-            
-            $this->FourColorTonerYield = null;
-        }
-        return $this->FourColorTonerYield;
-    }
+    public $dutyCycle;
 
     /**
-     *
-     * @param field_type $FourColorTonerYield            
+     * @var int
      */
-    public function setFourColorTonerYield ($FourColorTonerYield)
-    {
-        $this->FourColorTonerYield = $FourColorTonerYield;
-        return $this;
-    }
+    public $ppmBlack;
 
     /**
-     *
-     * @return the $BlackCompSKU
+     * @var int
      */
-    public function getBlackCompSKU ()
-    {
-        if (! isset($this->BlackCompSKU))
-        {
-            
-            $this->BlackCompSKU = null;
-        }
-        return $this->BlackCompSKU;
-    }
+    public $ppmColor;
 
     /**
-     *
-     * @param field_type $BlackCompSKU            
+     * @var float
      */
-    public function setBlackCompSKU ($BlackCompSKU)
-    {
-        $this->BlackCompSKU = $BlackCompSKU;
-        return $this;
-    }
+    public $serviceCostPerPage;
 
+
     /**
-     *
-     * @return the $BlackCompPrice
+     * @param array $params An array of data to populate the model with
      */
-    public function getBlackCompPrice ()
+    public function populate ($params)
     {
-        if (! isset($this->BlackCompPrice))
+        if (is_array($params))
         {
-            
-            $this->BlackCompPrice = null;
+            $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        return $this->BlackCompPrice;
-    }
 
-    /**
-     *
-     * @param field_type $BlackCompPrice            
-     */
-    public function setBlackCompPrice ($BlackCompPrice)
-    {
-        $this->BlackCompPrice = $BlackCompPrice;
-        return $this;
-    }
+        if (isset($params->id) && !is_null($params->id))
+        {
+            $this->id = $params->id;
+        }
 
-    /**
-     *
-     * @return the $BlackCompYield
-     */
-    public function getBlackCompYield ()
-    {
-        if (! isset($this->BlackCompYield))
+        if (isset($params->userId) && !is_null($params->userId))
         {
-            
-            $this->BlackCompYield = null;
+            $this->userId = $params->userId;
         }
-        return $this->BlackCompYield;
-    }
 
-    /**
-     *
-     * @param field_type $BlackCompYield            
-     */
-    public function setBlackCompYield ($BlackCompYield)
-    {
-        $this->BlackCompYield = $BlackCompYield;
-        return $this;
-    }
+        if (isset($params->reportId) && !is_null($params->reportId))
+        {
+            $this->reportId = $params->reportId;
+        }
 
-    /**
-     *
-     * @return the $CyanCompSKU
-     */
-    public function getCyanCompSKU ()
-    {
-        if (! isset($this->CyanCompSKU))
+        if (isset($params->uploadDataCollectorRowId) && !is_null($params->uploadDataCollectorRowId))
         {
-            
-            $this->CyanCompSKU = null;
+            $this->uploadDataCollectorRowId = $params->uploadDataCollectorRowId;
         }
-        return $this->CyanCompSKU;
-    }
 
-    /**
-     *
-     * @param field_type $CyanCompSKU            
-     */
-    public function setCyanCompSKU ($CyanCompSKU)
-    {
-        $this->CyanCompSKU = $CyanCompSKU;
-        return $this;
-    }
+        if (isset($params->printerModelId) && !is_null($params->printerModelId))
+        {
+            $this->printerModelId = $params->printerModelId;
+        }
 
-    /**
-     *
-     * @return the $CyanCompPrice
-     */
-    public function getCyanCompPrice ()
-    {
-        if (! isset($this->CyanCompPrice))
+        if (isset($params->mpsMonitorStartDate) && !is_null($params->mpsMonitorStartDate))
         {
-            
-            $this->CyanCompPrice = null;
+            $this->mpsMonitorStartDate = $params->mpsMonitorStartDate;
         }
-        return $this->CyanCompPrice;
-    }
 
-    /**
-     *
-     * @param field_type $CyanCompPrice            
-     */
-    public function setCyanCompPrice ($CyanCompPrice)
-    {
-        $this->CyanCompPrice = $CyanCompPrice;
-        return $this;
-    }
+        if (isset($params->mpsMonitorEndDate) && !is_null($params->mpsMonitorEndDate))
+        {
+            $this->mpsMonitorEndDate = $params->mpsMonitorEndDate;
+        }
 
-    /**
-     *
-     * @return the $CyanCompYield
-     */
-    public function getCyanCompYield ()
-    {
-        if (! isset($this->CyanCompYield))
+        if (isset($params->mpsDiscoveryDate) && !is_null($params->mpsDiscoveryDate))
         {
-            
-            $this->CyanCompYield = null;
+            $this->mpsDiscoveryDate = $params->mpsDiscoveryDate;
         }
-        return $this->CyanCompYield;
-    }
 
-    /**
-     *
-     * @param field_type $CyanCompYield            
-     */
-    public function setCyanCompYield ($CyanCompYield)
-    {
-        $this->CyanCompYield = $CyanCompYield;
-        return $this;
-    }
+        if (isset($params->installDate) && !is_null($params->installDate))
+        {
+            $this->installDate = $params->installDate;
+        }
 
-    /**
-     *
-     * @return the $MagentaCompSKU
-     */
-    public function getMagentaCompSKU ()
-    {
-        if (! isset($this->MagentaCompSKU))
+        if (isset($params->deviceManufacturer) && !is_null($params->deviceManufacturer))
         {
-            
-            $this->MagentaCompSKU = null;
+            $this->deviceManufacturer = $params->deviceManufacturer;
         }
-        return $this->MagentaCompSKU;
-    }
 
-    /**
-     *
-     * @param field_type $MagentaCompSKU            
-     */
-    public function setMagentaCompSKU ($MagentaCompSKU)
-    {
-        $this->MagentaCompSKU = $MagentaCompSKU;
-        return $this;
-    }
+        if (isset($params->printerModel) && !is_null($params->printerModel))
+        {
+            $this->printerModel = $params->printerModel;
+        }
 
-    /**
-     *
-     * @return the $MagentaCompPrice
-     */
-    public function getMagentaCompPrice ()
-    {
-        if (! isset($this->MagentaCompPrice))
+        if (isset($params->printerSerialNumber) && !is_null($params->printerSerialNumber))
         {
-            
-            $this->MagentaCompPrice = null;
+            $this->printerSerialNumber = $params->printerSerialNumber;
         }
-        return $this->MagentaCompPrice;
-    }
 
-    /**
-     *
-     * @param field_type $MagentaCompPrice            
-     */
-    public function setMagentaCompPrice ($MagentaCompPrice)
-    {
-        $this->MagentaCompPrice = $MagentaCompPrice;
-        return $this;
-    }
+        if (isset($params->tonerConfigId) && !is_null($params->tonerConfigId))
+        {
+            $this->tonerConfigId = $params->tonerConfigId;
+        }
 
-    /**
-     *
-     * @return the $MagentaCompYield
-     */
-    public function getMagentaCompYield ()
-    {
-        if (! isset($this->MagentaCompYield))
+        if (isset($params->isCopier) && !is_null($params->isCopier))
         {
-            
-            $this->MagentaCompYield = null;
+            $this->isCopier = $params->isCopier;
         }
-        return $this->MagentaCompYield;
-    }
 
-    /**
-     *
-     * @param field_type $MagentaCompYield            
-     */
-    public function setMagentaCompYield ($MagentaCompYield)
-    {
-        $this->MagentaCompYield = $MagentaCompYield;
-        return $this;
-    }
+        if (isset($params->isFax) && !is_null($params->isFax))
+        {
+            $this->isFax = $params->isFax;
+        }
 
-    /**
-     *
-     * @return the $YellowCompSKU
-     */
-    public function getYellowCompSKU ()
-    {
-        if (! isset($this->YellowCompSKU))
+        if (isset($params->isDuplex) && !is_null($params->isDuplex))
         {
-            
-            $this->YellowCompSKU = null;
+            $this->isDuplex = $params->isDuplex;
         }
-        return $this->YellowCompSKU;
-    }
 
-    /**
-     *
-     * @param field_type $YellowCompSKU            
-     */
-    public function setYellowCompSKU ($YellowCompSKU)
-    {
-        $this->YellowCompSKU = $YellowCompSKU;
-        return $this;
-    }
+        if (isset($params->isScanner) && !is_null($params->isScanner))
+        {
+            $this->isScanner = $params->isScanner;
+        }
 
-    /**
-     *
-     * @return the $YellowCompPrice
-     */
-    public function getYellowCompPrice ()
-    {
-        if (! isset($this->YellowCompPrice))
+        if (isset($params->wattsPowerNormal) && !is_null($params->wattsPowerNormal))
         {
-            
-            $this->YellowCompPrice = null;
+            $this->wattsPowerNormal = $params->wattsPowerNormal;
         }
-        return $this->YellowCompPrice;
-    }
 
-    /**
-     *
-     * @param field_type $YellowCompPrice            
-     */
-    public function setYellowCompPrice ($YellowCompPrice)
-    {
-        $this->YellowCompPrice = $YellowCompPrice;
-        return $this;
-    }
+        if (isset($params->wattsPowerIdle) && !is_null($params->wattsPowerIdle))
+        {
+            $this->wattsPowerIdle = $params->wattsPowerIdle;
+        }
 
-    /**
-     *
-     * @return the $YellowCompYield
-     */
-    public function getYellowCompYield ()
-    {
-        if (! isset($this->YellowCompYield))
+        if (isset($params->cost) && !is_null($params->cost))
         {
-            
-            $this->YellowCompYield = null;
+            $this->cost = $params->cost;
         }
-        return $this->YellowCompYield;
-    }
 
-    /**
-     *
-     * @param field_type $YellowCompYield            
-     */
-    public function setYellowCompYield ($YellowCompYield)
-    {
-        $this->YellowCompYield = $YellowCompYield;
-        return $this;
-    }
+        if (isset($params->launchDate) && !is_null($params->launchDate))
+        {
+            $this->launchDate = $params->launchDate;
+        }
 
-    /**
-     *
-     * @return the $ThreeColorCompSKU
-     */
-    public function getThreeColorCompSKU ()
-    {
-        if (! isset($this->ThreeColorCompSKU))
+        if (isset($params->dateCreated) && !is_null($params->dateCreated))
         {
-            
-            $this->ThreeColorCompSKU = null;
+            $this->dateCreated = $params->dateCreated;
         }
-        return $this->ThreeColorCompSKU;
-    }
 
-    /**
-     *
-     * @param field_type $ThreeColorCompSKU            
-     */
-    public function setThreeColorCompSKU ($ThreeColorCompSKU)
-    {
-        $this->ThreeColorCompSKU = $ThreeColorCompSKU;
-        return $this;
-    }
+        if (isset($params->blackTonerSku) && !is_null($params->blackTonerSku))
+        {
+            $this->blackTonerSku = $params->blackTonerSku;
+        }
 
-    /**
-     *
-     * @return the $ThreeColorCompPrice
-     */
-    public function getThreeColorCompPrice ()
-    {
-        if (! isset($this->ThreeColorCompPrice))
+        if (isset($params->blackTonerPrice) && !is_null($params->blackTonerPrice))
         {
-            
-            $this->ThreeColorCompPrice = null;
+            $this->blackTonerPrice = $params->blackTonerPrice;
         }
-        return $this->ThreeColorCompPrice;
-    }
 
-    /**
-     *
-     * @param field_type $ThreeColorCompPrice            
-     */
-    public function setThreeColorCompPrice ($ThreeColorCompPrice)
-    {
-        $this->ThreeColorCompPrice = $ThreeColorCompPrice;
-        return $this;
-    }
+        if (isset($params->blackTonerYield) && !is_null($params->blackTonerYield))
+        {
+            $this->blackTonerYield = $params->blackTonerYield;
+        }
 
-    /**
-     *
-     * @return the $ThreeColorCompYield
-     */
-    public function getThreeColorCompYield ()
-    {
-        if (! isset($this->ThreeColorCompYield))
+        if (isset($params->cyanTonerSku) && !is_null($params->cyanTonerSku))
         {
-            
-            $this->ThreeColorCompYield = null;
+            $this->cyanTonerSku = $params->cyanTonerSku;
         }
-        return $this->ThreeColorCompYield;
-    }
 
-    /**
-     *
-     * @param field_type $ThreeColorCompYield            
-     */
-    public function setThreeColorCompYield ($ThreeColorCompYield)
-    {
-        $this->ThreeColorCompYield = $ThreeColorCompYield;
-        return $this;
-    }
+        if (isset($params->cyanTonerPrice) && !is_null($params->cyanTonerPrice))
+        {
+            $this->cyanTonerPrice = $params->cyanTonerPrice;
+        }
 
-    /**
-     *
-     * @return the $FourColorCompSKU
-     */
-    public function getFourColorCompSKU ()
-    {
-        if (! isset($this->FourColorCompSKU))
+        if (isset($params->cyanTonerYield) && !is_null($params->cyanTonerYield))
         {
-            
-            $this->FourColorCompSKU = null;
+            $this->cyanTonerYield = $params->cyanTonerYield;
         }
-        return $this->FourColorCompSKU;
-    }
 
-    /**
-     *
-     * @param field_type $FourColorCompSKU            
-     */
-    public function setFourColorCompSKU ($FourColorCompSKU)
-    {
-        $this->FourColorCompSKU = $FourColorCompSKU;
-        return $this;
-    }
+        if (isset($params->magentaTonerSku) && !is_null($params->magentaTonerSku))
+        {
+            $this->magentaTonerSku = $params->magentaTonerSku;
+        }
 
-    /**
-     *
-     * @return the $FourColorCompPrice
-     */
-    public function getFourColorCompPrice ()
-    {
-        if (! isset($this->FourColorCompPrice))
+        if (isset($params->magentaTonerPrice) && !is_null($params->magentaTonerPrice))
         {
-            
-            $this->FourColorCompPrice = null;
+            $this->magentaTonerPrice = $params->magentaTonerPrice;
         }
-        return $this->FourColorCompPrice;
-    }
 
-    /**
-     *
-     * @param field_type $FourColorCompPrice            
-     */
-    public function setFourColorCompPrice ($FourColorCompPrice)
-    {
-        $this->FourColorCompPrice = $FourColorCompPrice;
-        return $this;
-    }
+        if (isset($params->magentaTonerYield) && !is_null($params->magentaTonerYield))
+        {
+            $this->magentaTonerYield = $params->magentaTonerYield;
+        }
 
-    /**
-     *
-     * @return the $FourColorCompYield
-     */
-    public function getFourColorCompYield ()
-    {
-        if (! isset($this->FourColorCompYield))
+        if (isset($params->yellowTonerSku) && !is_null($params->yellowTonerSku))
         {
-            
-            $this->FourColorCompYield = null;
+            $this->yellowTonerSku = $params->yellowTonerSku;
         }
-        return $this->FourColorCompYield;
-    }
 
-    /**
-     *
-     * @param field_type $FourColorCompYield            
-     */
-    public function setFourColorCompYield ($FourColorCompYield)
-    {
-        $this->FourColorCompYield = $FourColorCompYield;
-        return $this;
-    }
+        if (isset($params->yellowTonerPrice) && !is_null($params->yellowTonerPrice))
+        {
+            $this->yellowTonerPrice = $params->yellowTonerPrice;
+        }
 
-    /**
-     *
-     * @return the $StartMeterLife
-     */
-    public function getStartMeterLife ()
-    {
-        if (! isset($this->StartMeterLife))
+        if (isset($params->yellowTonerYield) && !is_null($params->yellowTonerYield))
         {
-            
-            $this->StartMeterLife = null;
+            $this->yellowTonerYield = $params->yellowTonerYield;
         }
-        return $this->StartMeterLife;
-    }
 
-    /**
-     *
-     * @param field_type $StartMeterLife            
-     */
-    public function setStartMeterLife ($StartMeterLife)
-    {
-        $this->StartMeterLife = $StartMeterLife;
-        return $this;
-    }
+        if (isset($params->threeColorTonerSku) && !is_null($params->threeColorTonerSku))
+        {
+            $this->threeColorTonerSku = $params->threeColorTonerSku;
+        }
 
-    /**
-     *
-     * @return the $EndMeterLife
-     */
-    public function getEndMeterLife ()
-    {
-        if (! isset($this->EndMeterLife))
+        if (isset($params->threeColorTonerPrice) && !is_null($params->threeColorTonerPrice))
         {
-            
-            $this->EndMeterLife = null;
+            $this->threeColorTonerPrice = $params->threeColorTonerPrice;
         }
-        return $this->EndMeterLife;
-    }
 
-    /**
-     *
-     * @param field_type $EndMeterLife            
-     */
-    public function setEndMeterLife ($EndMeterLife)
-    {
-        $this->EndMeterLife = $EndMeterLife;
-        return $this;
-    }
+        if (isset($params->threeColorTonerYield) && !is_null($params->threeColorTonerYield))
+        {
+            $this->threeColorTonerYield = $params->threeColorTonerYield;
+        }
 
-    /**
-     *
-     * @return the $StartMeterBlack
-     */
-    public function getStartMeterBlack ()
-    {
-        if (! isset($this->StartMeterBlack))
+        if (isset($params->fourColorTonerSku) && !is_null($params->fourColorTonerSku))
         {
-            
-            $this->StartMeterBlack = null;
+            $this->fourColorTonerSku = $params->fourColorTonerSku;
         }
-        return $this->StartMeterBlack;
-    }
 
-    /**
-     *
-     * @param field_type $StartMeterBlack            
-     */
-    public function setStartMeterBlack ($StartMeterBlack)
-    {
-        $this->StartMeterBlack = $StartMeterBlack;
-        return $this;
-    }
+        if (isset($params->fourColorTonerPrice) && !is_null($params->fourColorTonerPrice))
+        {
+            $this->fourColorTonerPrice = $params->fourColorTonerPrice;
+        }
 
-    /**
-     *
-     * @return the $EndMeterBlack
-     */
-    public function getEndMeterBlack ()
-    {
-        if (! isset($this->EndMeterBlack))
+        if (isset($params->fourColorTonerYield) && !is_null($params->fourColorTonerYield))
         {
-            
-            $this->EndMeterBlack = null;
+            $this->fourColorTonerYield = $params->fourColorTonerYield;
         }
-        return $this->EndMeterBlack;
-    }
 
-    /**
-     *
-     * @param field_type $EndMeterBlack            
-     */
-    public function setEndMeterBlack ($EndMeterBlack)
-    {
-        $this->EndMeterBlack = $EndMeterBlack;
-        return $this;
-    }
+        if (isset($params->blackCompSku) && !is_null($params->blackCompSku))
+        {
+            $this->blackCompSku = $params->blackCompSku;
+        }
 
-    /**
-     *
-     * @return the $StartMeterColor
-     */
-    public function getStartMeterColor ()
-    {
-        if (! isset($this->StartMeterColor))
+        if (isset($params->blackCompPrice) && !is_null($params->blackCompPrice))
         {
-            
-            $this->StartMeterColor = null;
+            $this->blackCompPrice = $params->blackCompPrice;
         }
-        return $this->StartMeterColor;
-    }
 
-    /**
-     *
-     * @param field_type $StartMeterColor            
-     */
-    public function setStartMeterColor ($StartMeterColor)
-    {
-        $this->StartMeterColor = $StartMeterColor;
-        return $this;
-    }
+        if (isset($params->blackCompYield) && !is_null($params->blackCompYield))
+        {
+            $this->blackCompYield = $params->blackCompYield;
+        }
 
-    /**
-     *
-     * @return the $EndMeterColor
-     */
-    public function getEndMeterColor ()
-    {
-        if (! isset($this->EndMeterColor))
+        if (isset($params->cyanCompSku) && !is_null($params->cyanCompSku))
         {
-            
-            $this->EndMeterColor = null;
+            $this->cyanCompSku = $params->cyanCompSku;
         }
-        return $this->EndMeterColor;
-    }
 
-    /**
-     *
-     * @param field_type $EndMeterColor            
-     */
-    public function setEndMeterColor ($EndMeterColor)
-    {
-        $this->EndMeterColor = $EndMeterColor;
-        return $this;
-    }
+        if (isset($params->cyanCompPrice) && !is_null($params->cyanCompPrice))
+        {
+            $this->cyanCompPrice = $params->cyanCompPrice;
+        }
 
-    /**
-     *
-     * @return the $StartMeterPrintblack
-     */
-    public function getStartMeterPrintblack ()
-    {
-        if (! isset($this->StartMeterPrintblack))
+        if (isset($params->cyanCompYield) && !is_null($params->cyanCompYield))
         {
-            
-            $this->StartMeterPrintblack = null;
+            $this->cyanCompYield = $params->cyanCompYield;
         }
-        return $this->StartMeterPrintblack;
-    }
 
-    /**
-     *
-     * @param field_type $StartMeterPrintblack            
-     */
-    public function setStartMeterPrintblack ($StartMeterPrintblack)
-    {
-        $this->StartMeterPrintblack = $StartMeterPrintblack;
-        return $this;
-    }
+        if (isset($params->magentaCompSku) && !is_null($params->magentaCompSku))
+        {
+            $this->magentaCompSku = $params->magentaCompSku;
+        }
 
-    /**
-     *
-     * @return the $EndMeterPrintblack
-     */
-    public function getEndMeterPrintblack ()
-    {
-        if (! isset($this->EndMeterPrintblack))
+        if (isset($params->magentaCompPrice) && !is_null($params->magentaCompPrice))
         {
-            
-            $this->EndMeterPrintblack = null;
+            $this->magentaCompPrice = $params->magentaCompPrice;
         }
-        return $this->EndMeterPrintblack;
-    }
 
-    /**
-     *
-     * @param field_type $EndMeterPrintblack            
-     */
-    public function setEndMeterPrintblack ($EndMeterPrintblack)
-    {
-        $this->EndMeterPrintblack = $EndMeterPrintblack;
-        return $this;
-    }
+        if (isset($params->magentaCompYield) && !is_null($params->magentaCompYield))
+        {
+            $this->magentaCompYield = $params->magentaCompYield;
+        }
 
-    /**
-     *
-     * @return the $StartMeterPrintcolor
-     */
-    public function getStartMeterPrintcolor ()
-    {
-        if (! isset($this->StartMeterPrintcolor))
+        if (isset($params->yellowCompSku) && !is_null($params->yellowCompSku))
         {
-            
-            $this->StartMeterPrintcolor = null;
+            $this->yellowCompSku = $params->yellowCompSku;
         }
-        return $this->StartMeterPrintcolor;
-    }
 
-    /**
-     *
-     * @param field_type $StartMeterPrintcolor            
-     */
-    public function setStartMeterPrintcolor ($StartMeterPrintcolor)
-    {
-        $this->StartMeterPrintcolor = $StartMeterPrintcolor;
-        return $this;
-    }
+        if (isset($params->yellowCompPrice) && !is_null($params->yellowCompPrice))
+        {
+            $this->yellowCompPrice = $params->yellowCompPrice;
+        }
 
-    /**
-     *
-     * @return the $EndMeterPrintcolor
-     */
-    public function getEndMeterPrintcolor ()
-    {
-        if (! isset($this->EndMeterPrintcolor))
+        if (isset($params->yellowCompYield) && !is_null($params->yellowCompYield))
         {
-            
-            $this->EndMeterPrintcolor = null;
+            $this->yellowCompYield = $params->yellowCompYield;
         }
-        return $this->EndMeterPrintcolor;
-    }
 
-    /**
-     *
-     * @param field_type $EndMeterPrintcolor            
-     */
-    public function setEndMeterPrintcolor ($EndMeterPrintcolor)
-    {
-        $this->EndMeterPrintcolor = $EndMeterPrintcolor;
-        return $this;
-    }
+        if (isset($params->threeColorCompSku) && !is_null($params->threeColorCompSku))
+        {
+            $this->threeColorCompSku = $params->threeColorCompSku;
+        }
 
-    /**
-     *
-     * @return the $StartMeterCopyblack
-     */
-    public function getStartMeterCopyblack ()
-    {
-        if (! isset($this->StartMeterCopyblack))
+        if (isset($params->threeColorCompPrice) && !is_null($params->threeColorCompPrice))
         {
-            
-            $this->StartMeterCopyblack = null;
+            $this->threeColorCompPrice = $params->threeColorCompPrice;
         }
-        return $this->StartMeterCopyblack;
-    }
 
-    /**
-     *
-     * @param field_type $StartMeterCopyblack            
-     */
-    public function setStartMeterCopyblack ($StartMeterCopyblack)
-    {
-        $this->StartMeterCopyblack = $StartMeterCopyblack;
-        return $this;
-    }
+        if (isset($params->threeColorCompYield) && !is_null($params->threeColorCompYield))
+        {
+            $this->threeColorCompYield = $params->threeColorCompYield;
+        }
 
-    /**
-     *
-     * @return the $EndMeterCopyblack
-     */
-    public function getEndMeterCopyblack ()
-    {
-        if (! isset($this->EndMeterCopyblack))
+        if (isset($params->fourColorCompSku) && !is_null($params->fourColorCompSku))
         {
-            
-            $this->EndMeterCopyblack = null;
+            $this->fourColorCompSku = $params->fourColorCompSku;
         }
-        return $this->EndMeterCopyblack;
-    }
 
-    /**
-     *
-     * @param field_type $EndMeterCopyblack            
-     */
-    public function setEndMeterCopyblack ($EndMeterCopyblack)
-    {
-        $this->EndMeterCopyblack = $EndMeterCopyblack;
-        return $this;
-    }
+        if (isset($params->fourColorCompPrice) && !is_null($params->fourColorCompPrice))
+        {
+            $this->fourColorCompPrice = $params->fourColorCompPrice;
+        }
 
-    /**
-     *
-     * @return the $StartMeterCopycolor
-     */
-    public function getStartMeterCopycolor ()
-    {
-        if (! isset($this->StartMeterCopycolor))
+        if (isset($params->fourColorCompYield) && !is_null($params->fourColorCompYield))
         {
-            
-            $this->StartMeterCopycolor = null;
+            $this->fourColorCompYield = $params->fourColorCompYield;
         }
-        return $this->StartMeterCopycolor;
-    }
 
-    /**
-     *
-     * @param field_type $StartMeterCopycolor            
-     */
-    public function setStartMeterCopycolor ($StartMeterCopycolor)
-    {
-        $this->StartMeterCopycolor = $StartMeterCopycolor;
-        return $this;
-    }
+        if (isset($params->startMeterLife) && !is_null($params->startMeterLife))
+        {
+            $this->startMeterLife = $params->startMeterLife;
+        }
 
-    /**
-     *
-     * @return the $EndMeterCopycolor
-     */
-    public function getEndMeterCopycolor ()
-    {
-        if (! isset($this->EndMeterCopycolor))
+        if (isset($params->endMeterLife) && !is_null($params->endMeterLife))
         {
-            
-            $this->EndMeterCopycolor = null;
+            $this->endMeterLife = $params->endMeterLife;
         }
-        return $this->EndMeterCopycolor;
-    }
 
-    /**
-     *
-     * @param field_type $EndMeterCopycolor            
-     */
-    public function setEndMeterCopycolor ($EndMeterCopycolor)
-    {
-        $this->EndMeterCopycolor = $EndMeterCopycolor;
-        return $this;
-    }
+        if (isset($params->startMeterBlack) && !is_null($params->startMeterBlack))
+        {
+            $this->startMeterBlack = $params->startMeterBlack;
+        }
 
-    /**
-     *
-     * @return the $StartMeterFax
-     */
-    public function getStartMeterFax ()
-    {
-        if (! isset($this->StartMeterFax))
+        if (isset($params->endMeterBlack) && !is_null($params->endMeterBlack))
         {
-            
-            $this->StartMeterFax = null;
+            $this->endMeterBlack = $params->endMeterBlack;
         }
-        return $this->StartMeterFax;
-    }
 
-    /**
-     *
-     * @param field_type $StartMeterFax            
-     */
-    public function setStartMeterFax ($StartMeterFax)
-    {
-        $this->StartMeterFax = $StartMeterFax;
-        return $this;
-    }
+        if (isset($params->startMeterColor) && !is_null($params->startMeterColor))
+        {
+            $this->startMeterColor = $params->startMeterColor;
+        }
 
-    /**
-     *
-     * @return the $EndMeterFax
-     */
-    public function getEndMeterFax ()
-    {
-        if (! isset($this->EndMeterFax))
+        if (isset($params->endMeterColor) && !is_null($params->endMeterColor))
         {
-            
-            $this->EndMeterFax = null;
+            $this->endMeterColor = $params->endMeterColor;
         }
-        return $this->EndMeterFax;
-    }
 
-    /**
-     *
-     * @param field_type $EndMeterFax            
-     */
-    public function setEndMeterFax ($EndMeterFax)
-    {
-        $this->EndMeterFax = $EndMeterFax;
-        return $this;
-    }
+        if (isset($params->startMeterPrintBlack) && !is_null($params->startMeterPrintBlack))
+        {
+            $this->startMeterPrintBlack = $params->startMeterPrintBlack;
+        }
 
-    /**
-     *
-     * @return the $StartMeterScan
-     */
-    public function getStartMeterScan ()
-    {
-        if (! isset($this->StartMeterScan))
+        if (isset($params->endMeterPrintBlack) && !is_null($params->endMeterPrintBlack))
         {
-            
-            $this->StartMeterScan = null;
+            $this->endMeterPrintBlack = $params->endMeterPrintBlack;
         }
-        return $this->StartMeterScan;
-    }
 
-    /**
-     *
-     * @param field_type $StartMeterScan            
-     */
-    public function setStartMeterScan ($StartMeterScan)
-    {
-        $this->StartMeterScan = $StartMeterScan;
-        return $this;
-    }
+        if (isset($params->startMeterPrintColor) && !is_null($params->startMeterPrintColor))
+        {
+            $this->startMeterPrintColor = $params->startMeterPrintColor;
+        }
 
-    /**
-     *
-     * @return the $EndMeterScan
-     */
-    public function getEndMeterScan ()
-    {
-        if (! isset($this->EndMeterScan))
+        if (isset($params->endMeterPrintColor) && !is_null($params->endMeterPrintColor))
         {
-            
-            $this->EndMeterScan = null;
+            $this->endMeterPrintColor = $params->endMeterPrintColor;
         }
-        return $this->EndMeterScan;
-    }
 
-    /**
-     *
-     * @param field_type $EndMeterScan            
-     */
-    public function setEndMeterScan ($EndMeterScan)
-    {
-        $this->EndMeterScan = $EndMeterScan;
-        return $this;
-    }
+        if (isset($params->startMeterCopyBlack) && !is_null($params->startMeterCopyBlack))
+        {
+            $this->startMeterCopyBlack = $params->startMeterCopyBlack;
+        }
 
-    /**
-     *
-     * @return the $IsExcluded
-     */
-    public function getIsExcluded ()
-    {
-        if (! isset($this->IsExcluded))
+        if (isset($params->endMeterCopyBlack) && !is_null($params->endMeterCopyBlack))
         {
-            
-            $this->IsExcluded = null;
+            $this->endMeterCopyBlack = $params->endMeterCopyBlack;
         }
-        return $this->IsExcluded;
-    }
 
-    /**
-     *
-     * @param field_type $IsExcluded            
-     */
-    public function setIsExcluded ($IsExcluded)
-    {
-        $this->IsExcluded = $IsExcluded;
-        return $this;
-    }
+        if (isset($params->startMeterCopyColor) && !is_null($params->startMeterCopyColor))
+        {
+            $this->startMeterCopyColor = $params->startMeterCopyColor;
+        }
 
-    /**
-     *
-     * @return the $IsLeased
-     */
-    public function getIsLeased ()
-    {
-        if (! isset($this->IsLeased))
+        if (isset($params->endMeterCopyColor) && !is_null($params->endMeterCopyColor))
         {
-            
-            $this->IsLeased = null;
+            $this->endMeterCopyColor = $params->endMeterCopyColor;
         }
-        return $this->IsLeased;
-    }
 
-    /**
-     *
-     * @param field_type $IsLeased            
-     */
-    public function setIsLeased ($IsLeased)
-    {
-        $this->IsLeased = $IsLeased;
-        return $this;
-    }
+        if (isset($params->startMeterFax) && !is_null($params->startMeterFax))
+        {
+            $this->startMeterFax = $params->startMeterFax;
+        }
 
-    /**
-     *
-     * @return the $IpAddress
-     */
-    public function getIpAddress ()
-    {
-        if (! isset($this->IpAddress))
+        if (isset($params->endMeterFax) && !is_null($params->endMeterFax))
         {
-            $this->IpAddress = "";
+            $this->endMeterFax = $params->endMeterFax;
         }
-        return $this->IpAddress;
-    }
 
-    /**
-     *
-     * @param field_type $IpAddress            
-     */
-    public function setIpAddress ($IpAddress)
-    {
-        $this->IpAddress = $IpAddress;
-        return $this;
-    }
+        if (isset($params->startMeterScan) && !is_null($params->startMeterScan))
+        {
+            $this->startMeterScan = $params->startMeterScan;
+        }
 
-    /**
-     *
-     * @return the $ServiceCostPerPage
-     */
-    public function getServiceCostPerPage ()
-    {
-        if (! isset($this->ServiceCostPerPage))
+        if (isset($params->endMeterScan) && !is_null($params->endMeterScan))
+        {
+            $this->endMeterScan = $params->endMeterScan;
+        }
+
+        if (isset($params->jitSuppliesSupported) && !is_null($params->jitSuppliesSupported))
+        {
+            $this->jitSuppliesSupported = $params->jitSuppliesSupported;
+        }
+
+        if (isset($params->isExcluded) && !is_null($params->isExcluded))
+        {
+            $this->isExcluded = $params->isExcluded;
+        }
+
+        if (isset($params->isLeased) && !is_null($params->isLeased))
+        {
+            $this->isLeased = $params->isLeased;
+        }
+
+        if (isset($params->ipAddress) && !is_null($params->ipAddress))
         {
-            
-            $this->ServiceCostPerPage = null;
+            $this->ipAddress = $params->ipAddress;
         }
-        return $this->ServiceCostPerPage;
+
+        if (isset($params->dutyCycle) && !is_null($params->dutyCycle))
+        {
+            $this->dutyCycle = $params->dutyCycle;
+        }
+
+        if (isset($params->ppmBlack) && !is_null($params->ppmBlack))
+        {
+            $this->ppmBlack = $params->ppmBlack;
+        }
+
+        if (isset($params->ppmColor) && !is_null($params->ppmColor))
+        {
+            $this->ppmColor = $params->ppmColor;
+        }
+
+        if (isset($params->serviceCostPerPage) && !is_null($params->serviceCostPerPage))
+        {
+            $this->serviceCostPerPage = $params->serviceCostPerPage;
+        }
+
     }
 
     /**
-     *
-     * @param field_type $ServiceCostPerPage            
+     * @return array
      */
-    public function setServiceCostPerPage ($ServiceCostPerPage)
+    public function toArray ()
     {
-        $this->ServiceCostPerPage = $ServiceCostPerPage;
-        return $this;
+        return array(
+            "id"                       => $this->id,
+            "userId"                   => $this->userId,
+            "reportId"                 => $this->reportId,
+            "uploadDataCollectorRowId" => $this->uploadDataCollectorRowId,
+            "printerModelId"           => $this->printerModelId,
+            "mpsMonitorStartDate"      => $this->mpsMonitorStartDate,
+            "mpsMonitorEndDate"        => $this->mpsMonitorEndDate,
+            "mpsDiscoveryDate"         => $this->mpsDiscoveryDate,
+            "installDate"              => $this->installDate,
+            "deviceManufacturer"       => $this->deviceManufacturer,
+            "printerModel"             => $this->printerModel,
+            "printerSerialNumber"      => $this->printerSerialNumber,
+            "tonerConfigId"            => $this->tonerConfigId,
+            "isCopier"                 => $this->isCopier,
+            "isFax"                    => $this->isFax,
+            "isDuplex"                 => $this->isDuplex,
+            "isScanner"                => $this->isScanner,
+            "wattsPowerNormal"         => $this->wattsPowerNormal,
+            "wattsPowerIdle"           => $this->wattsPowerIdle,
+            "cost"                     => $this->cost,
+            "launchDate"               => $this->launchDate,
+            "dateCreated"              => $this->dateCreated,
+            "blackTonerSku"            => $this->blackTonerSku,
+            "blackTonerPrice"          => $this->blackTonerPrice,
+            "blackTonerYield"          => $this->blackTonerYield,
+            "cyanTonerSku"             => $this->cyanTonerSku,
+            "cyanTonerPrice"           => $this->cyanTonerPrice,
+            "cyanTonerYield"           => $this->cyanTonerYield,
+            "magentaTonerSku"          => $this->magentaTonerSku,
+            "magentaTonerPrice"        => $this->magentaTonerPrice,
+            "magentaTonerYield"        => $this->magentaTonerYield,
+            "yellowTonerSku"           => $this->yellowTonerSku,
+            "yellowTonerPrice"         => $this->yellowTonerPrice,
+            "yellowTonerYield"         => $this->yellowTonerYield,
+            "threeColorTonerSku"       => $this->threeColorTonerSku,
+            "threeColorTonerPrice"     => $this->threeColorTonerPrice,
+            "threeColorTonerYield"     => $this->threeColorTonerYield,
+            "fourColorTonerSku"        => $this->fourColorTonerSku,
+            "fourColorTonerPrice"      => $this->fourColorTonerPrice,
+            "fourColorTonerYield"      => $this->fourColorTonerYield,
+            "blackCompSku"             => $this->blackCompSku,
+            "blackCompPrice"           => $this->blackCompPrice,
+            "blackCompYield"           => $this->blackCompYield,
+            "cyanCompSku"              => $this->cyanCompSku,
+            "cyanCompPrice"            => $this->cyanCompPrice,
+            "cyanCompYield"            => $this->cyanCompYield,
+            "magentaCompSku"           => $this->magentaCompSku,
+            "magentaCompPrice"         => $this->magentaCompPrice,
+            "magentaCompYield"         => $this->magentaCompYield,
+            "yellowCompSku"            => $this->yellowCompSku,
+            "yellowCompPrice"          => $this->yellowCompPrice,
+            "yellowCompYield"          => $this->yellowCompYield,
+            "threeColorCompSku"        => $this->threeColorCompSku,
+            "threeColorCompPrice"      => $this->threeColorCompPrice,
+            "threeColorCompYield"      => $this->threeColorCompYield,
+            "fourColorCompSku"         => $this->fourColorCompSku,
+            "fourColorCompPrice"       => $this->fourColorCompPrice,
+            "fourColorCompYield"       => $this->fourColorCompYield,
+            "startMeterLife"           => $this->startMeterLife,
+            "endMeterLife"             => $this->endMeterLife,
+            "startMeterBlack"          => $this->startMeterBlack,
+            "endMeterBlack"            => $this->endMeterBlack,
+            "startMeterColor"          => $this->startMeterColor,
+            "endMeterColor"            => $this->endMeterColor,
+            "startMeterPrintBlack"     => $this->startMeterPrintBlack,
+            "endMeterPrintBlack"       => $this->endMeterPrintBlack,
+            "startMeterPrintColor"     => $this->startMeterPrintColor,
+            "endMeterPrintColor"       => $this->endMeterPrintColor,
+            "startMeterCopyBlack"      => $this->startMeterCopyBlack,
+            "endMeterCopyBlack"        => $this->endMeterCopyBlack,
+            "startMeterCopyColor"      => $this->startMeterCopyColor,
+            "endMeterCopyColor"        => $this->endMeterCopyColor,
+            "startMeterFax"            => $this->startMeterFax,
+            "endMeterFax"              => $this->endMeterFax,
+            "startMeterScan"           => $this->startMeterScan,
+            "endMeterScan"             => $this->endMeterScan,
+            "jitSuppliesSupported"     => $this->jitSuppliesSupported,
+            "isExcluded"               => $this->isExcluded,
+            "isLeased"                 => $this->isLeased,
+            "ipAddress"                => $this->ipAddress,
+            "dutyCycle"                => $this->dutyCycle,
+            "ppmBlack"                 => $this->ppmBlack,
+            "ppmColor"                 => $this->ppmColor,
+            "serviceCostPerPage"       => $this->serviceCostPerPage,
+        );
     }
 }

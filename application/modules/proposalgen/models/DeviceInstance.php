@@ -806,6 +806,18 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         return $this->_meters;
     }
 
+    /**
+     * @param Proposalgen_Model_Meter[] $Meters
+     *
+     * @return Proposalgen_Model_DeviceInstance
+     */
+    public function setMeters ($Meters)
+    {
+        $this->Meters = $Meters;
+
+        return $this;
+    }
+
 
     /**
      * @return float
