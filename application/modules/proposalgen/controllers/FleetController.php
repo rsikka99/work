@@ -258,13 +258,16 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 // Loop through all the lines.
                 foreach ($devices as $deviceRow)
                 {
-                    // Convert some fields that may have the text 'false' to a boolean value
+                    /*
+                     * Convert some fields that may have the text 'false' to a boolean value
+                     * Convert some rows to null if they are 0 (empty)
+                     */
+                    $deviceRow->id         = null;
+                    $deviceRow->report_id = $reportId;
                     $deviceRow->is_color   = (strcasecmp($deviceRow->is_color, 'false') === 0) ? 0 : 1;
                     $deviceRow->is_copier  = (strcasecmp($deviceRow->is_copier, 'false') === 0) ? 0 : 1;
                     $deviceRow->is_scanner = (strcasecmp($deviceRow->is_scanner, 'false') === 0) ? 0 : 1;
                     $deviceRow->is_fax     = (strcasecmp($deviceRow->is_fax, 'false') === 0) ? 0 : 1;
-
-                    // Convert some rows to null if they are 0 (empty)
                     $deviceRow->duty_cycle           = (empty($deviceRow->duty_cycle)) ? null : $deviceRow->duty_cycle;
                     $deviceRow->ppm_black            = (empty($deviceRow->ppm_black)) ? null : $deviceRow->ppm_black;
                     $deviceRow->ppm_color            = (empty($deviceRow->ppm_color)) ? null : $deviceRow->ppm_color;
@@ -300,6 +303,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     $deviceRow->endmeterscan         = (empty($deviceRow->endmeterscan)) ? null : $deviceRow->endmeterscan;
                     $deviceRow->startmeterfax        = (empty($deviceRow->startmeterfax)) ? null : $deviceRow->startmeterfax;
                     $deviceRow->endmeterfax          = (empty($deviceRow->endmeterfax)) ? null : $deviceRow->endmeterfax;
+
+
 
                     $manufacturerName = strtolower(trim($deviceRow->manufacturer));
 
@@ -354,11 +359,15 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     $adoptionDate     = (empty($deviceRow->dateadoption)) ? null : new Zend_Date($deviceRow->dateadoption, $dateInputFormat);
                     $discoveryDate    = (empty($deviceRow->discoverydate)) ? null : new Zend_Date($deviceRow->discoverydate, $dateInputFormat);
 
+                    $deviceRow->date_introduction = $introductionDate->toString($dateOutputFormat);
+                    $deviceRow->discovery_date = $discoveryDate->toString($dateOutputFormat);
+
+                    $deviceRow->devices_pf_id = $pfDevice->devicesPfId;
+
                     // Prepare the upload data collector model
-                    $uploadDataCollectorRow = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->mapRowToObject($deviceRow);
+                    $uploadDataCollectorRow = @Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->mapRowToObject($deviceRow);
                     //$uploadDataCollectorRow = new Proposalgen_Model_UploadDataCollectorRow($deviceRow);
-                    $uploadDataCollectorRow->reportId    = $reportId;
-                    $uploadDataCollectorRow->devicesPfId = $pfDevice->devicesPfId;
+
                     $uploadDataCollectorRow->startDate   = $startDate->toString($dateOutputFormat);
                     $uploadDataCollectorRow->endDate     = $endDate->toString($dateOutputFormat);
 
@@ -772,7 +781,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
      */
     protected function getmodelsAction ()
     {
-        //$this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
         $terms      = explode(" ", trim($_REQUEST ["searchText"]));
         $searchTerm = "%";
@@ -785,23 +793,23 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
         $sql = "SELECT concat(fullname, ' ', printer_model) as device_name, pgen_master_devices.id as master_device_id, fullname, printer_model FROM manufacturers
         JOIN pgen_master_devices on pgen_master_devices.manufacturer_id = manufacturers.id
-        WHERE concat(fullname, ' ', printer_model) LIKE '%$searchTerm%' AND manufacturers.is_deleted = 0 ORDER BY device_name ASC LIMIT 10;";
+        WHERE concat(fullname, ' ', printer_model) LIKE '%$searchTerm%' AND manufacturers.isDeleted = 0 ORDER BY device_name ASC LIMIT 10;";
 
         $results = $db->fetchAll($sql);
         // $results is an array of device names
         $devices = array();
         foreach ($results as $row)
         {
-            $deviceName = $row ["manufacturer_name"] . " " . $row ["printer_model"];
+            $deviceName = $row ["fullname"] . " " . $row ["printer_model"];
             $deviceName = ucwords(strtolower($deviceName));
             $devices [] = array(
                 "label"        => $deviceName,
                 "value"        => $row ["master_device_id"],
-                "manufacturer" => ucwords(strtolower($row ["manufacturer_name"]))
+                "manufacturer" => ucwords(strtolower($row ["fullname"]))
             );
         }
-        $lawl = Zend_Json::encode($devices);
-        print $lawl;
+
+        $this->_helper->json($devices);
     }
 
     /**
@@ -1731,7 +1739,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             }
 
                             // FIXME: (Lee Robert) - This was a quick hack to get this update working with the Tangent Mapper. It would be better to do a simple update using the new My_Model_Mapper_Abstract type of mapper. 
-                            $uploadDataCollectorRow = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($upload_data_collector_row_id);
+                            $uploadDataCollectorRow             = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($upload_data_collector_row_id);
                             $uploadDataCollectorRow->isExcluded = 0;
                             Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->save($uploadDataCollectorRow);
                         }
@@ -2117,15 +2125,16 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         $this->view->edit_description = true;
 
                         // load details for ticket
-                        $ticketsMapper             = Proposalgen_Model_Mapper_Ticket::getInstance();
-                        $tickets                   = $ticketsMapper->find($ticket_id);
-                        $this->view->ticket_number = $tickets->TicketId;
-                        $this->view->ticket_title  = $tickets->Title;
-                        //$this->view->reported_by      = $tickets->User->UserName;
-                        $this->view->ticket_type      = $tickets->Category->CategoryName;
-                        $this->view->ticket_details   = $tickets->Description;
-                        $this->view->ticket_status    = ucwords(strtolower($tickets->Status->StatusName));
-                        $this->view->ticket_status_id = ucwords(strtolower($tickets->Status->StatusId));
+                        $ticketsMapper = Proposalgen_Model_Mapper_Ticket::getInstance();
+                        $tickets       = $ticketsMapper->find($ticket_id);
+
+                        $this->view->ticket_number    = $tickets->ticketId;
+                        $this->view->ticket_title     = $tickets->title;
+                        $this->view->reported_by      = $tickets->getUser()->username;
+                        $this->view->ticket_type      = $tickets->getTicketCategory()->categoryName; //->categoryName
+                        $this->view->ticket_details   = $tickets->description;
+                        $this->view->ticket_status    = ucwords(strtolower($tickets->getTicketStatus()->statusName));
+                        $this->view->ticket_status_id = ucwords(strtolower($tickets->statusId));
 
                         // get comment history
                         $ticket_comments_array = array();
@@ -2136,12 +2145,11 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
                         foreach ($ticket_comments as $row)
                         {
-                            $comment_date = new Zend_Date($row->CommentDate, "yyyy-mm-dd HH:ii:ss");
-
+                            $comment_date             = new Zend_Date($row->commentDate, "yyyy-mm-dd HH:ii:ss");
                             $ticket_comments_array [] = array(
-                                'username'     => $row->User->getUsername(),
+                                'username'     => $row->getUser()->username,
                                 'date_created' => $comment_date->toString('mm/dd/yyyy'),
-                                'content'      => $row->CommentText
+                                'content'      => $row->commentText
                             );
                         }
                         $this->view->ticket_comments = $ticket_comments_array;
@@ -2150,7 +2158,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         $ticketPfRequestMapper           = Proposalgen_Model_Mapper_TicketPFRequest::getInstance();
                         $ticketPfRequest                 = $ticketPfRequestMapper->find($ticket_id);
                         $this->view->devices_pf_id       = $ticketPfRequest->devicePfId;
-                        $this->view->device_pf_name      = $ticketPfRequest->getDevicePf()->pfDbManufacturer . ' ' . $ticketPfRequest->getDevicePf()->PfDbDeviceName;
+                        $this->view->device_pf_name      = $ticketPfRequest->getDevicePf()->pfDbManufacturer . ' ' . $ticketPfRequest->getDevicePf()->pfDbDeviceName;
                         $this->view->user_suggested_name = $ticketPfRequest->deviceManufacturer . ' ' . $ticketPfRequest->printerModel;
 
                         // ticket exists, update ticket label
@@ -2419,15 +2427,15 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         $deviceArray []       = $devices_instanceData;
 
                         // FIXME: (Lee Robert) - This was a quick hack to get this update working with the Tangent Mapper. It would be better to do a simple update using the new My_Model_Mapper_Abstract type of mapper. 
-                        $uploadDataCollectorRow = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($upload_data_collector_row_id);
-                        $uploadDataCollectorRow->setIsExcluded(0);
+                        $uploadDataCollectorRow             = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($upload_data_collector_row_id);
+                        $uploadDataCollectorRow->isExcluded = 0;
                         Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->save($uploadDataCollectorRow);
                     }
                     else
                     {
                         // FIXME: (Lee Robert) - This was a quick hack to get this update working with the Tangent Mapper. It would be better to do a simple update using the new My_Model_Mapper_Abstract type of mapper. 
-                        $uploadDataCollectorRow = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($upload_data_collector_row_id);
-                        $uploadDataCollectorRow->setIsExcluded(1);
+                        $uploadDataCollectorRow             = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($upload_data_collector_row_id);
+                        $uploadDataCollectorRow->isExcluded = 1;
                         Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->save($uploadDataCollectorRow);
                     }
                 }
@@ -2828,7 +2836,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
                         if (count($unknown_device_instance) > 0)
                         {
-                            $ampv = number_format($unknown_device_instance [0]->_averageMonthlyPageCount);
+                            $ampv = number_format($unknown_device_instance [0]->getAverageMonthlyPageCount());
                         }
                     }
                     else if ($result [$key] ['di_device_instance_id'] > 0)

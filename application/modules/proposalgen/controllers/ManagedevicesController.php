@@ -205,12 +205,12 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                            ))
                                     ->join(array(
                                                 'tc' => 'pgen_toner_colors'
-                                           ), 'tc.id = t.toner_color_id', array(
+                                           ), 'tc.id = t.tonerColorId', array(
                                                                                'name AS toner_color_name'
                                                                           ))
                                     ->join(array(
                                                 'pt' => 'pgen_part_types'
-                                           ), 'pt.id = t.part_type_id', array(
+                                           ), 'pt.id = t.partTypeId', array(
                                                                              'name AS type_name'
                                                                         ))->where('t.id = ?', $toner_id);
                                 $stmt     = $db->query($select);
@@ -832,8 +832,8 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                         if ($result)
                         {
                             // get printer details
-                            $devices_pf_id       = $result->devicepfid;
-                            $device_manufacturer = $result->devicemanufacturer;
+                            $devices_pf_id       = $result->devicePfId;
+                            $device_manufacturer = $result->deviceManufacturer;
                             $printer_model       = $result->printerModel;
                             $launch_date         = $result->launchDate;
                             $device_price        = ($result->devicePrice > 0 ? $result->devicePrice : null);
@@ -979,12 +979,12 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                                ))
                                         ->join(array(
                                                     'tc' => 'pgen_toner_colors'
-                                               ), 'tc.id = t.toner_color_id', array(
+                                               ), 'tc.id = t.tonerColorId', array(
                                                                                    'name AS toner_color_name'
                                                                               ))
                                         ->join(array(
                                                     'pt' => 'pgen_part_types'
-                                               ), 'pt.id = t.part_type_id', array(
+                                               ), 'pt.id = t.partTypeId', array(
                                                                                  'name AS type_name'
                                                                             ))->where('t.id = ?', $toner_id);
                                     $stmt     = $db->query($select);
@@ -1253,8 +1253,8 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
 
                                         if (count($master_device_flagged) > 0)
                                         {
-                                            $master_device_id    = $master_device_flagged ['master_device_id'];
-                                            $where               = $master_deviceTable->getAdapter()->quoteInto('master_device_id = ?' . $master_device_id, 'INTEGER');
+                                            $master_device_id    = $master_device_flagged ['id'];
+                                            $where               = $master_deviceTable->getAdapter()->quoteInto('id = ?' . $master_device_id, 'INTEGER');
                                             $this->view->message = "The printer you're trying to add already exists.";
                                         }
                                         else
@@ -1326,6 +1326,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                         {
                             $db->rollback();
                             $this->view->message = 'Database Error: "' . $formData ["new_printer"] . '" could not be saved. Make sure the printer does not already exist.<br />';
+                            Throw new exception("Bad Device Update Error.", 0, $e);
                             //echo $e; die;
                         }
                         catch (Exception $e)
@@ -1453,7 +1454,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
             {
                 $list .= ";";
             }
-            $list .= $row ['part_type_id'] . ":" . $part_type;
+            $list .= $row ['partTypeId'] . ":" . $part_type;
         }
         $this->view->partTypeList = $list;
 
@@ -1726,10 +1727,10 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                                ))
                                         ->join(array(
                                                     'tc' => 'toner_color'
-                                               ), 'tc.toner_color_id = t.toner_color_id')
+                                               ), 'tc.toner_color_id = t.tonerColorId')
                                         ->join(array(
                                                     'pt' => 'part_type'
-                                               ), 'pt.part_type_id = t.part_type_id')
+                                               ), 'pt.part_type_id = t.partTypeId')
                                         ->where('t.toner_id = ?', $toner_id);
                                     $stmt     = $db->query($select);
                                     $curToner = $stmt->fetchAll();

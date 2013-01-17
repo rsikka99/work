@@ -15,7 +15,7 @@
 		var sLeft = ($(window).width()/2)-200;
 		
 		jQuery("#reports_list").jqGrid({
-			url:'<?php echo $this->baseUrl(); ?>/admin/myreportslist',
+			url:'<?php echo $this->baseUrl('/proposalgen/admin/myreportslist'); ?>',
 			datatype:'json',
 			colNames:['Report ID', 'User', 'Company Name', 'Date Created', 'Last Modified', 'Finished', 'View'],
 			colModel:[
@@ -65,7 +65,7 @@
     });
 	
 	function update_grid() {
-		$('#reports_list').setGridParam({url:'<?php echo $this->baseUrl(); ?>/admin/myreportslist?filter='+$("#reports_fitler").val()});
+		$('#reports_list').setGridParam({url:'<?php echo $this->baseUrl('/proposalgen/admin/myreportslist'); ?>?filter='+$("#reports_fitler").val()});
     	$('#reports_list').setGridWidth(940);
 		$('#reports_list').trigger("reloadGrid");
 	}
@@ -103,7 +103,7 @@
 
 <?php echo $this->form ?>
 
-<form name="requests" id="requests" action="<?php echo $this->baseUrl(); ?>/admin/managemyreports" method="POST">
+<form name="requests" id="requests" action="<?php echo $this->baseUrl('/proposalgen/admin/managemyreports'); ?>" method="POST">
 	<input type="hidden" name="form_mode" id="form_mode" value="request" />
 	<input type="hidden" name="request_id" id="request_id" value="" />
 	<input type="hidden" name="devices_pf_id" id="devices_pf_id" value="" />

@@ -212,13 +212,13 @@ class Proposalgen_TicketController extends Zend_Controller_Action
             // load details for ticket
             $ticketsMapper                = Proposalgen_Model_Mapper_Ticket::getInstance();
             $tickets                      = $ticketsMapper->find($ticket_id);
-            $this->view->ticket_number    = $tickets->TicketId;
-            $this->view->ticket_title     = $tickets->Title;
-            $this->view->reported_by      = $tickets->User->getUsername();
-            $this->view->ticket_type      = $tickets->Category->CategoryName;
-            $this->view->ticket_details   = $tickets->Description;
-            $this->view->ticket_status    = ucwords(strtolower($tickets->Status->StatusName));
-            $this->view->ticket_status_id = ucwords(strtolower($tickets->Status->StatusId));
+            $this->view->ticket_number    = $tickets->ticketId;
+            $this->view->ticket_title     = $tickets->title;
+            $this->view->reported_by      = $tickets->getUser()->username;
+            $this->view->ticket_type      = $tickets->getTicketCategory()->categoryName;
+            $this->view->ticket_details   = $tickets->description;
+            $this->view->ticket_status    = ucwords(strtolower($tickets->getTicketStatus()->statusName));
+            $this->view->ticket_status_id = ucwords(strtolower($tickets->statusId));
 
             // get comment history
             $ticket_comments_array = array();
@@ -229,11 +229,11 @@ class Proposalgen_TicketController extends Zend_Controller_Action
 
             foreach ($ticket_comments as $row)
             {
-                $comment_date             = new Zend_Date($row->CommentDate, "yyyy-mm-dd HH:ii:ss");
+                $comment_date             = new Zend_Date($row->commentDate, "yyyy-mm-dd HH:ii:ss");
                 $ticket_comments_array [] = array(
-                    'username'     => $row->User->getUsername(),
+                    'username'     => $row->getUser()->username,
                     'comment_date' => $comment_date->toString('mm/dd/yyyy'),
-                    'comment_text' => $row->CommentText
+                    'comment_text' => $row->commentText
                 );
             }
             $this->view->ticket_comments = $ticket_comments_array;
@@ -242,7 +242,7 @@ class Proposalgen_TicketController extends Zend_Controller_Action
             $ticketpfrequestMapper           = Proposalgen_Model_Mapper_TicketPFRequest::getInstance();
             $ticketpfrequest                 = $ticketpfrequestMapper->find($ticket_id);
             $this->view->devices_pf_id       = $ticketpfrequest->devicePfId;
-            $this->view->device_pf_name      = ucwords(strtolower($ticketpfrequest->_devicePf->PfDbManufacturer . ' ' . $ticketpfrequest->_devicePf->PfDbDeviceName));
+            $this->view->device_pf_name      = ucwords(strtolower($ticketpfrequest->getDevicePf()->pfDbManufacturer . ' ' . $ticketpfrequest->getDevicePf()->pfDbDeviceName));
             $this->view->user_suggested_name = ucwords(strtolower($ticketpfrequest->deviceManufacturer . ' ' . $ticketpfrequest->printerModel));
 
             // check for existing mapping
@@ -343,14 +343,14 @@ class Proposalgen_TicketController extends Zend_Controller_Action
 //                    $dealer_company      = $dealer_companyTable->fetchRow($where);
 //                    $company_name        = $dealer_company ['company_name'];
 
-                    $formdata->rows [$i] ['id']   = $row->TicketId;
+                    $formdata->rows [$i] ['id']   = $row->ticketId;
                     $formdata->rows [$i] ['cell'] = array(
-                        $row->TicketId,
-                        $row->Title,
-                        $row->User->getUsername(),
-                        $row->Category->CategoryName,
-                        $this->convertDate($row->DateCreated),
-                        ucwords(strtolower($row->Status->StatusName))
+                        $row->ticketId,
+                        $row->title,
+                        $row->getUser()->username,
+                        $row->getTicketCategory()->categoryName,
+                        $this->convertDate($row->dateCreated),
+                        ucwords(strtolower($row->getTicketStatus()->statusName))
                     );
                     $i++;
                 }

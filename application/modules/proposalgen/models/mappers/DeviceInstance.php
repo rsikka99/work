@@ -35,7 +35,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends Tangent_Model_Mapper_Abstr
             $object->id      = $row->id;
             $object->reportId              = $row->report_id;
             $object->masterDeviceId        = $row->master_device_id;
-            $object->uploadDataCollectorId = $row->upload_data_collector_id;
+            $object->uploadDataCollectorId = $row->upload_data_collector_row_id;
             $object->serialNumber          = $row->serial_number;
             $object->mpsMonitorStartDate   = $row->mps_monitor_startdate;
             $object->mpsMonitorEndDate     = $row->mps_monitor_enddate;

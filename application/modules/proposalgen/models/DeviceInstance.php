@@ -323,7 +323,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 //            {
             $deviceOverride = $userDeviceOverrideMapper->fetchRow(array(
                                                                        "master_device_id = ?" => $device->masterDeviceId,
-                                                                       "user_id = ?"          => Proposalgen_Model_User::getCurrentUserId()
+                                                                       "user_id = ?"          => $report->userId
                                                                   ));
 //            }
         }
@@ -368,7 +368,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
                             /* @var $tonerOverride Proposalgen_Model_UserTonerOverride */
                             $tonerOverride = $userTonerOverrideMapper->fetchRow(array(
                                                                                      "toner_id = ?" => $toner->id,
-                                                                                     "user_id = ?"  => Proposalgen_Model_User::getCurrentUserId()
+                                                                                     "user_id = ?"  => $report->userId
                                                                                 ));
 //                            }
                         }
