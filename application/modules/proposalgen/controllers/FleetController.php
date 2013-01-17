@@ -258,13 +258,16 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 // Loop through all the lines.
                 foreach ($devices as $deviceRow)
                 {
-                    // Convert some fields that may have the text 'false' to a boolean value
+                    /*
+                     * Convert some fields that may have the text 'false' to a boolean value
+                     * Convert some rows to null if they are 0 (empty)
+                     */
+                    $deviceRow->id         = null;
+                    $deviceRow->report_id = $reportId;
                     $deviceRow->is_color   = (strcasecmp($deviceRow->is_color, 'false') === 0) ? 0 : 1;
                     $deviceRow->is_copier  = (strcasecmp($deviceRow->is_copier, 'false') === 0) ? 0 : 1;
                     $deviceRow->is_scanner = (strcasecmp($deviceRow->is_scanner, 'false') === 0) ? 0 : 1;
                     $deviceRow->is_fax     = (strcasecmp($deviceRow->is_fax, 'false') === 0) ? 0 : 1;
-
-                    // Convert some rows to null if they are 0 (empty)
                     $deviceRow->duty_cycle           = (empty($deviceRow->duty_cycle)) ? null : $deviceRow->duty_cycle;
                     $deviceRow->ppm_black            = (empty($deviceRow->ppm_black)) ? null : $deviceRow->ppm_black;
                     $deviceRow->ppm_color            = (empty($deviceRow->ppm_color)) ? null : $deviceRow->ppm_color;
@@ -300,6 +303,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     $deviceRow->endmeterscan         = (empty($deviceRow->endmeterscan)) ? null : $deviceRow->endmeterscan;
                     $deviceRow->startmeterfax        = (empty($deviceRow->startmeterfax)) ? null : $deviceRow->startmeterfax;
                     $deviceRow->endmeterfax          = (empty($deviceRow->endmeterfax)) ? null : $deviceRow->endmeterfax;
+
+
 
                     $manufacturerName = strtolower(trim($deviceRow->manufacturer));
 
@@ -354,11 +359,15 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     $adoptionDate     = (empty($deviceRow->dateadoption)) ? null : new Zend_Date($deviceRow->dateadoption, $dateInputFormat);
                     $discoveryDate    = (empty($deviceRow->discoverydate)) ? null : new Zend_Date($deviceRow->discoverydate, $dateInputFormat);
 
+                    $deviceRow->date_introduction = $introductionDate->toString($dateOutputFormat);
+                    $deviceRow->discovery_date = $discoveryDate->toString($dateOutputFormat);
+
+                    $deviceRow->devices_pf_id = $pfDevice->devicesPfId;
+
                     // Prepare the upload data collector model
-                    $uploadDataCollectorRow = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->mapRowToObject($deviceRow);
+                    $uploadDataCollectorRow = @Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->mapRowToObject($deviceRow);
                     //$uploadDataCollectorRow = new Proposalgen_Model_UploadDataCollectorRow($deviceRow);
-                    $uploadDataCollectorRow->reportId    = $reportId;
-                    $uploadDataCollectorRow->devicesPfId = $pfDevice->devicesPfId;
+
                     $uploadDataCollectorRow->startDate   = $startDate->toString($dateOutputFormat);
                     $uploadDataCollectorRow->endDate     = $endDate->toString($dateOutputFormat);
 
@@ -1730,7 +1739,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             }
 
                             // FIXME: (Lee Robert) - This was a quick hack to get this update working with the Tangent Mapper. It would be better to do a simple update using the new My_Model_Mapper_Abstract type of mapper. 
-                            $uploadDataCollectorRow = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($upload_data_collector_row_id);
+                            $uploadDataCollectorRow             = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($upload_data_collector_row_id);
                             $uploadDataCollectorRow->isExcluded = 0;
                             Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->save($uploadDataCollectorRow);
                         }
@@ -2116,13 +2125,13 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         $this->view->edit_description = true;
 
                         // load details for ticket
-                        $ticketsMapper             = Proposalgen_Model_Mapper_Ticket::getInstance();
-                        $tickets                   = $ticketsMapper->find($ticket_id);
+                        $ticketsMapper = Proposalgen_Model_Mapper_Ticket::getInstance();
+                        $tickets       = $ticketsMapper->find($ticket_id);
 
-                        $this->view->ticket_number = $tickets->ticketId;
-                        $this->view->ticket_title  = $tickets->title;
+                        $this->view->ticket_number    = $tickets->ticketId;
+                        $this->view->ticket_title     = $tickets->title;
                         $this->view->reported_by      = $tickets->getUser()->username;
-                        $this->view->ticket_type      = $tickets->getTicketCategory()->categoryName;//->categoryName
+                        $this->view->ticket_type      = $tickets->getTicketCategory()->categoryName; //->categoryName
                         $this->view->ticket_details   = $tickets->description;
                         $this->view->ticket_status    = ucwords(strtolower($tickets->getTicketStatus()->statusName));
                         $this->view->ticket_status_id = ucwords(strtolower($tickets->statusId));
@@ -2136,7 +2145,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
                         foreach ($ticket_comments as $row)
                         {
-                            $comment_date = new Zend_Date($row->commentDate, "yyyy-mm-dd HH:ii:ss");
+                            $comment_date             = new Zend_Date($row->commentDate, "yyyy-mm-dd HH:ii:ss");
                             $ticket_comments_array [] = array(
                                 'username'     => $row->getUser()->username,
                                 'date_created' => $comment_date->toString('mm/dd/yyyy'),
@@ -2418,14 +2427,14 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         $deviceArray []       = $devices_instanceData;
 
                         // FIXME: (Lee Robert) - This was a quick hack to get this update working with the Tangent Mapper. It would be better to do a simple update using the new My_Model_Mapper_Abstract type of mapper. 
-                        $uploadDataCollectorRow = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($upload_data_collector_row_id);
+                        $uploadDataCollectorRow             = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($upload_data_collector_row_id);
                         $uploadDataCollectorRow->isExcluded = 0;
                         Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->save($uploadDataCollectorRow);
                     }
                     else
                     {
                         // FIXME: (Lee Robert) - This was a quick hack to get this update working with the Tangent Mapper. It would be better to do a simple update using the new My_Model_Mapper_Abstract type of mapper. 
-                        $uploadDataCollectorRow = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($upload_data_collector_row_id);
+                        $uploadDataCollectorRow             = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($upload_data_collector_row_id);
                         $uploadDataCollectorRow->isExcluded = 1;
                         Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->save($uploadDataCollectorRow);
                     }
@@ -2827,7 +2836,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
                         if (count($unknown_device_instance) > 0)
                         {
-                            $ampv = number_format($unknown_device_instance [0]->_averageMonthlyPageCount);
+                            $ampv = number_format($unknown_device_instance [0]->getAverageMonthlyPageCount());
                         }
                     }
                     else if ($result [$key] ['di_device_instance_id'] > 0)
