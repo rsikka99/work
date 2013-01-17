@@ -419,7 +419,10 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             /**
              * * Calculate IT CPP **
              */
-            Proposalgen_Model_DeviceInstance::setITCostPerPage(($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getPageCounts()->Purchased->Combined->Yearly);
+            if ($this->getPageCounts()->Purchased->Combined->Yearly > 0)
+            {
+                Proposalgen_Model_DeviceInstance::setITCostPerPage(($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getPageCounts()->Purchased->Combined->Yearly);
+            }
         } // endif
         return $this->Devices;
     }

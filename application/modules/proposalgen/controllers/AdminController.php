@@ -3254,7 +3254,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
         if ($this->_request->isPost())
         {
-            $reportTable = new Proposalgen_Model_DbTable_Reports();
             $formData    = $this->_request->getPost();
 
             $db->beginTransaction();
@@ -3297,158 +3296,115 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         }
     }
 
+    /**
+     * Creates a json report list
+     *
+     * @throws Exception
+     */
     public function myreportslistAction ()
     {
-        // disable the default layout
-        $this->_helper->layout->disableLayout();
-        $db       = Zend_Db_Table::getDefaultAdapter();
         $filter   = $this->_getParam('filter', false);
-        $formdata = new stdClass();
+        $formData = new stdClass();
+
+        /*
+         * Valid filter options:
+         * 1 - Lists finished reports that the logged in user owns
+         * 2 - Lists unfinished reports that the logged in user owns
+         * 3- DEPRECATED (All reports within a company)
+         * Default: All reports (both finished and unfinished) that the logged in user owns
+         */
+
         try
         {
-            $where = '';
+            $reportsMapper = Proposalgen_Model_Mapper_Report::getInstance();
             if ($filter == '1')
             {
-                $where = 'r.user_id = ' . $this->user_id . ' AND r.report_stage = "finished"';
+                $reports = $reportsMapper->fetchAllFinishedReportsForUser($this->user_id);
             }
             elseif ($filter == '2')
             {
-                $where = 'r.user_id = ' . $this->user_id . ' AND (r.report_stage != "finished" OR r.report_stage IS NULL)';
-            }
-            elseif ($filter == '3')
-            {
-                $userTable = new Proposalgen_Model_DbTable_Users();
-                $users     = $userTable->fetchAll('dealer_company_id = ' . $this->dealer_company_id);
-                foreach ($users as $row)
-                {
-                    if (!empty($where))
-                    {
-                        $where .= ' OR ';
-                    }
-                    $where .= 'r.user_id = ' . $row ['user_id'];
-                }
+                $reports = $reportsMapper->fetchAllUnfinishedReportsForUser($this->user_id);
             }
             else
             {
-                $where = 'r.user_id = ' . $this->user_id;
+                $reports = $reportsMapper->fetchAllReportsForUser($this->user_id);
             }
 
-            // select reports
-            $select = new Zend_Db_Select($db);
-            $select = $db->select()
-                ->from(array(
-                            'r' => 'reports'
-                       ))
-                ->joinLeft(array(
-                                'u' => 'users'
-                           ), 'u.user_id = r.user_id', array(
-                                                            'username'
-                                                       ))
-                ->where($where);
-            $stmt   = $db->query($select);
-            $result = $stmt->fetchAll();
-
-            if (count($result) > 0)
+            /*
+             * Massage our list of reports into a json response that can be used by jqGrid
+             */
+            if (count($reports) > 0)
             {
-                $i = 0;
-                foreach ($result as $row)
+                foreach ($reports as $report)
                 {
-                    $dateCreated                  = $this->convertDate($row ['date_created']);
-                    $dateModified                 = $this->convertDate($row ['last_modified']);
-                    $formdata->rows [$i] ['id']   = $row ['report_id'];
-                    $formdata->rows [$i] ['cell'] = array(
-                        $row ['report_id'],
-                        $row ['username'],
-                        ucwords(strtolower($row ['customer_company_name'])),
-                        $dateCreated,
-                        $dateModified,
-                        ($row ['report_stage'] == "finished" ? "Yes" : "No"),
-                        null
+                    $finishedString = (strcasecmp($report->reportStage, Proposalgen_Model_Report_Step::STEP_FINISHED) === 0) ? "YES" : "NO";
+
+                    $row = array(
+                        'id'   => $report->id,
+                        'cell' => array(
+                            $report->id,
+                            $report->getUser()->username,
+                            $report->customerCompanyName,
+                            $this->convertDate($report->dateCreated),
+                            $this->convertDate($report->lastModified),
+                            $finishedString,
+                            null
+                        )
                     );
-                    $i++;
+
+                    $formData->rows[] = $row;
                 }
-            }
-            else
-            {
-                $formdata = array();
             }
         }
         catch (Exception $e)
         {
-            // critical exception
-            echo $e->getMessage();
+            My_Log::logException($e);
+            throw new Exception("Passing exception up the chain.", 0, $e);
         }
 
-        // encode user data to return to the client:
-        $json             = Zend_Json::encode($formdata);
-        $this->view->data = $json;
+        /*
+         * Send json response
+         */
+        $this->_helper->json($formData);
     }
 
-    public function deleteReport ($report_id)
+    /**
+     * Deletes a report.
+     *
+     * @param int $reportId
+     *
+     * @return int
+     * @throws Exception
+     */
+    public function deleteReport ($reportId)
     {
         $db = Zend_Db_Table::getDefaultAdapter();
 
-        $db->beginTransaction();
-        if ($report_id > 0)
+        $reportMapper        = Proposalgen_Model_Mapper_Report::getInstance();
+        $reportSettingMapper = Proposalgen_Model_Mapper_Report_Setting::getInstance();
+        $report              = $reportMapper->find($reportId);
+
+        if ($report)
         {
+            $db->beginTransaction();
             try
             {
-                // delete answers
-                $textAnswersTable    = new Proposalgen_Model_DbTable_TextAnswers();
-                $numericAnswersTable = new Proposalgen_Model_DbTable_NumericAnswers();
-                $dateAnswersTable    = new Proposalgen_Model_DbTable_DateAnswers();
-
-                // delete all answers for report
-                $where = $numericAnswersTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
-                $numericAnswersTable->delete($where);
-                $where = $textAnswersTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
-                $textAnswersTable->delete($where);
-                $where = $dateAnswersTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
-                $dateAnswersTable->delete($where);
-
-                // delete any meters, device_instances, unknown_device_instances
-                // and requests for report
-                $metersTable          = new Proposalgen_Model_DbTable_Meters();
-                $device_instanceTable = new Proposalgen_Model_DbTable_DeviceInstance();
-
-                $where            = $device_instanceTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
-                $device_instances = $device_instanceTable->fetchAll($where);
-                foreach ($device_instances as $key => $value)
-                {
-                    $where = $metersTable->getAdapter()->quoteInto('device_instance_id = ?', $device_instances [$key] ['device_instance_id'], 'INTEGER');
-                    $metersTable->delete($where);
-
-                    $where = $device_instanceTable->getAdapter()->quoteInto('device_instance_id = ?', $device_instances [$key] ['device_instance_id'], 'INTEGER');
-                    $device_instanceTable->delete('device_instance_id = ' . $device_instances [$key] ['device_instance_id']);
-                }
-
-                // delete unknown_device_instances for report_id
-                $unknown_device_instanceTable = new Proposalgen_Model_DbTable_UnknownDeviceInstance();
-                $where                        = $unknown_device_instanceTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
-                $unknown_device_instanceTable->delete($where);
-
-                // delete any upload data
-                $upload_data_collectorTable = new Proposalgen_Model_DbTable_UploadDataCollector();
-                $where                      = $upload_data_collectorTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
-                $upload_data_collectorTable->delete($where);
-
-                // delete the report
-                $reportsTable = new Proposalgen_Model_DbTable_Reports();
-                $where        = $reportsTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
-                $reportsTable->delete($where);
+                /*
+                 * When we delete a report, the following should get deleted before trying to delete the report.
+                 * Report Report Settings
+                 * Report Settings
+                 */
+                $reportSettingMapper->delete($report->getReportSettings());
+                $reportMapper->delete($report);
                 $db->commit();
 
                 return 1;
             }
-            catch (Zend_Db_Exception $e)
-            {
-                $db->rollback();
-                throw new Exception("Unknown Database Error.", 0, $e);
-            }
             catch (Exception $e)
             {
+                My_Log::logException($e);
                 $db->rollback();
-                throw new Exception("Unknown Database Error.", 0, $e);
+                throw new Exception("Error Deleting Report.", 0, $e);
             }
         }
     }
@@ -4211,9 +4167,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                     else if ($price > 0)
                                     {
                                         $user_toner_overrideData = array(
-                                            'user_id'              => $this->user_id,
-                                            'toner_id'             => $toner_id,
-                                            'cost' => $price
+                                            'user_id'  => $this->user_id,
+                                            'toner_id' => $toner_id,
+                                            'cost'     => $price
                                         );
 
                                         // check to see if device override
@@ -4296,9 +4252,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                     {
 
                                         $user_device_overrideData = array(
-                                            'user_id'               => $this->user_id,
-                                            'master_device_id'      => $master_device_id,
-                                            'cost' => $price
+                                            'user_id'          => $this->user_id,
+                                            'master_device_id' => $master_device_id,
+                                            'cost'             => $price
                                         );
 
                                         // check to see if device override
@@ -4803,7 +4759,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $upload->addValidator('FilesSize', false, array(
                                                                'min' => '100B',
                                                                'max' => '4MB'
-                                                         ));
+                                                          ));
 
                 $upload->getValidator('FilesSize')->setMessage('<span class="warning">*</span> File size must be between 100B and 4MB.');
                 if ($upload->receive())
@@ -4947,7 +4903,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                             if (count($printer) > 0)
                                             {
                                                 // get current costs
-                                                $current_device_price = $printer [0] ['cost'];
+                                                $current_device_price   = $printer [0] ['cost'];
                                                 $current_override_price = $printer [0] ['override_device_price'];
 
                                                 // save into array
@@ -4978,8 +4934,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                                 ->joinLeft(array(
                                                                 'udo' => 'pgen_user_device_overrides'
                                                            ), 'udo.master_device_id = md.id AND udo.user_id = ' . $this->user_id, array(
-                                                                                                                                                     'cost AS overideCost'
-                                                                                                                                                ))
+                                                                                                                                       'cost AS overideCost'
+                                                                                                                                  ))
                                                 ->where('md.id = ' . $master_device_id);
                                             $stmt    = $db->query($select);
                                             $printer = $stmt->fetchAll();
@@ -5064,7 +5020,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                             if (count($toner) > 0)
                                             {
                                                 // get current costs
-                                                $current_toner_price = $toner [0] ['cost'];
+                                                $current_toner_price    = $toner [0] ['cost'];
                                                 $current_override_price = $toner [0] ['override_toner_price'];
 
                                                 // save into array
@@ -5279,14 +5235,14 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         ->joinLeft(array(
                                         'm' => 'manufacturers'
                                    ), 'm.id = md.manufacturer_id', array(
-                                                                                             'id AS manufacturer_id',
-                                                                                             'fullname'
-                                                                                        ))
+                                                                        'id AS manufacturer_id',
+                                                                        'fullname'
+                                                                   ))
                         ->joinLeft(array(
                                         'udo' => 'pgen_user_device_overrides'
                                    ), 'udo.master_device_id = md.id AND udo.user_id = ' . $this->user_id, array(
-                                                                                                                             'cost AS override_cost'
-                                                                                                                        ))
+                                                                                                               'cost AS override_cost'
+                                                                                                          ))
                         ->order(array(
                                      'm.fullname',
                                      'md.printer_model'
@@ -5651,7 +5607,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $where = '';
         if (!empty($filter) && !empty($criteria))
         {
-            if($filter == 'manufacturer_name'){
+            if ($filter == 'manufacturer_name')
+            {
                 $filter = "fullname";
             }
             $where = $filter . ' LIKE("%' . $criteria . '%")';
@@ -5673,13 +5630,13 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 ->joinLeft(array(
                                 'm' => 'manufacturers'
                            ), 'm.id = md.manufacturer_id', array(
-                                                                                     'fullname'
-                                                                                ))
+                                                                'fullname'
+                                                           ))
                 ->joinLeft(array(
                                 'udo' => 'pgen_user_device_overrides'
                            ), 'udo.master_device_id = md.id AND udo.user_id = ' . $user_id, array(
-                                                                                                               'cost as override_cost'
-                                                                                                          ));
+                                                                                                 'cost as override_cost'
+                                                                                            ));
             if ($where != '')
             {
                 $select->where($where);
@@ -5724,13 +5681,13 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 ->joinLeft(array(
                                 'm' => 'manufacturers'
                            ), 'm.id = md.manufacturer_id', array(
-                                                                                     'fullname'
-                                                                                ))
+                                                                'fullname'
+                                                           ))
                 ->joinLeft(array(
                                 'udo' => 'pgen_user_device_overrides'
                            ), 'udo.master_device_id = md.id AND udo.user_id = ' . $user_id, array(
-                                                                                                               'cost as override_cost'
-                                                                                                          ));
+                                                                                                 'cost as override_cost'
+                                                                                            ));
             if ($where != '')
             {
                 $select->where($where);
@@ -5746,9 +5703,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
             if (count($result) > 0)
             {
-                $i            = 0;
+                $i = 0;
 
-                $price_margin = 1;//($this->getPricingMargin('dealer', $this->dealer_company_id) / 100) + 1;
+                $price_margin = 1; //($this->getPricingMargin('dealer', $this->dealer_company_id) / 100) + 1;
                 foreach ($result as $row)
                 {
                     $printer_cost = 0;
@@ -6011,17 +5968,17 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         if (!empty($filter) && !empty($criteria) && $filter != 'machine_compatibility')
         {
 
-                if ($filter == "manufacturer_name")
+            if ($filter == "manufacturer_name")
+            {
+                $filter = "tm.fullname";
+            }
+            else
+            {
+                if ($filter == "toner_sku")
                 {
-                    $filter = "tm.fullname";
+                    $filter = "t.sku";
                 }
-                else
-                {
-                        if ($filter == "toner_sku")
-                        {
-                            $filter = "t.sku";
-                        }
-                }
+            }
 
 
             $where = $filter . ' LIKE("%' . $criteria . '%")';
@@ -6051,8 +6008,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 ->joinLeft(array(
                                 'tm' => 'manufacturers'
                            ), 'tm.id = t.manufacturer_id', array(
-                                                                             'tm.fullname AS toner_manufacturer'
-                                                                        ))
+                                                                'tm.fullname AS toner_manufacturer'
+                                                           ))
                 ->joinLeft(array(
                                 'dt' => 'pgen_device_toners'
                            ), 'dt.toner_id = t.id')
@@ -6062,8 +6019,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 ->joinLeft(array(
                                 'mdm' => 'manufacturers'
                            ), 'mdm.id = md.manufacturer_id', array(
-                                                                                       'mdm.fullname'
-                                                                                  ))
+                                                                  'mdm.fullname'
+                                                             ))
                 ->joinLeft(array(
                                 'tc' => 'pgen_toner_colors'
                            ), 'tc.id = t.toner_color_id')
@@ -6073,9 +6030,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 ->joinLeft(array(
                                 'uto' => 'pgen_user_toner_overrides'
                            ), 'uto.toner_id = t.id AND uto.user_id = ' . $user_id, array(
-                                                                                              'user_id',
-                                                                                              'cost AS override_cost'
-                                                                                         ));
+                                                                                        'user_id',
+                                                                                        'cost AS override_cost'
+                                                                                   ));
             if ($where != '')
             {
                 $select->where($where);
@@ -6133,9 +6090,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                            ), 'dt.toner_id = t.id')
                 ->joinLeft(array(
                                 'md' => 'pgen_master_devices'
-                           ), 'md.id = dt.master_device_id',array(
-                                                                 'md.id AS master_id'
-                                                            ))
+                           ), 'md.id = dt.master_device_id', array(
+                                                                  'md.id AS master_id'
+                                                             ))
                 ->joinLeft(array(
                                 'mdm' => 'manufacturers'
                            ), 'mdm.id = md.manufacturer_id', array(
@@ -6143,9 +6100,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                                              ))
                 ->joinLeft(array(
                                 'tc' => 'pgen_toner_colors'
-                           ), 'tc.id = t.toner_color_id',array(
-                                                              'tc.name AS color_name'
-                                                         ))
+                           ), 'tc.id = t.toner_color_id', array(
+                                                               'tc.name AS color_name'
+                                                          ))
                 ->joinLeft(array(
                                 'pt' => 'pgen_part_types'
                            ), 'pt.id = t.part_type_id', array(
@@ -6176,9 +6133,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $formdata->records = $count;
             if (count($result) > 0)
             {
-                $i            = 0;
+                $i = 0;
                 // FIXME: Hardcoded price margin
-                $price_margin = 1;//($this->getPricingMargin('dealer', $this->dealer_company_id) / 100) + 1;
+                $price_margin = 1; //($this->getPricingMargin('dealer', $this->dealer_company_id) / 100) + 1;
                 foreach ($result as $row)
                 {
                     $type_name = ucwords(strtolower($row ['type_name']));
@@ -6194,8 +6151,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         $type_name,
                         ucwords(strtolower($row ['color_name'])),
                         $row ['yield'],
-                        number_format($row ['toner_cost'] * $price_margin,2),
-                        ($row ['override_cost'] > 0 ? number_format($row ['override_cost'],2) : null),
+                        number_format($row ['toner_cost'] * $price_margin, 2),
+                        ($row ['override_cost'] > 0 ? number_format($row ['override_cost'], 2) : null),
                         null,
                         $row ['master_id'],
                         ucwords(strtolower($row ['machine_compatibility']))
@@ -6921,9 +6878,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     // update report
 
 
-                    $reportMapper = Proposalgen_Model_Mapper_Report::getInstance();
-                    $report       = Proposalgen_Model_Mapper_Report::getInstance()->find($report_id);
-                    $report->id = $report_id;
+                    $reportMapper   = Proposalgen_Model_Mapper_Report::getInstance();
+                    $report         = Proposalgen_Model_Mapper_Report::getInstance()->find($report_id);
+                    $report->id     = $report_id;
                     $report->userId = $new_user_id;
                     $reportMapper->save($report);
 

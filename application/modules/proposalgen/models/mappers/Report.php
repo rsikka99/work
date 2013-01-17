@@ -5,6 +5,8 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
      * Column name definitions. Define all columns up here and use them down below.
      */
     public $col_id = 'id';
+    public $col_userId = 'userId';
+    public $col_reportStage = 'reportStage';
 
     /*
      * Mapper Definitions
@@ -206,6 +208,50 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
     }
 
     /**
+     * Fetches all reports for a given user regardless of the report stage
+     *
+     * @param int $userId
+     *
+     * @return Proposalgen_Model_Report[]
+     */
+    public function fetchAllReportsForUser ($userId)
+    {
+        return $this->fetchAll(array(
+                                    "{$this->col_userId} = ?" => $userId
+                               ));
+    }
+
+    /**
+     * Fetches all finished reports for a given user
+     *
+     * @param int $userId
+     *
+     * @return Proposalgen_Model_Report[]
+     */
+    public function fetchAllFinishedReportsForUser ($userId)
+    {
+        return $this->fetchAll(array(
+                                    "{$this->col_userId} = ?"      => $userId,
+                                    "{$this->col_reportStage} = ?" => Proposalgen_Model_Report_Step::STEP_FINISHED
+                               ));
+    }
+
+    /**
+     * Fetches all unfinished reports for a given user
+     *
+     * @param int $userId
+     *
+     * @return Proposalgen_Model_Report[]
+     */
+    public function fetchAllUnfinishedReportsForUser ($userId)
+    {
+        return $this->fetchAll(array(
+                                    "{$this->col_userId} = ?"       => $userId,
+                                    "{$this->col_reportStage} <> ?" => Proposalgen_Model_Report_Step::STEP_FINISHED
+                               ));
+    }
+
+    /**
      * Gets a where clause for filtering by id
      *
      * @param int $id
@@ -214,9 +260,7 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
-            "{$this->col_id} = ?" => $id
-        );
+        return array("{$this->col_id} = ?" => $id);
     }
 
     /**

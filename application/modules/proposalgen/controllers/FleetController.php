@@ -772,7 +772,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
      */
     protected function getmodelsAction ()
     {
-        //$this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
         $terms      = explode(" ", trim($_REQUEST ["searchText"]));
         $searchTerm = "%";
@@ -785,23 +784,23 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
         $sql = "SELECT concat(fullname, ' ', printer_model) as device_name, pgen_master_devices.id as master_device_id, fullname, printer_model FROM manufacturers
         JOIN pgen_master_devices on pgen_master_devices.manufacturer_id = manufacturers.id
-        WHERE concat(fullname, ' ', printer_model) LIKE '%$searchTerm%' AND manufacturers.is_deleted = 0 ORDER BY device_name ASC LIMIT 10;";
+        WHERE concat(fullname, ' ', printer_model) LIKE '%$searchTerm%' AND manufacturers.isDeleted = 0 ORDER BY device_name ASC LIMIT 10;";
 
         $results = $db->fetchAll($sql);
         // $results is an array of device names
         $devices = array();
         foreach ($results as $row)
         {
-            $deviceName = $row ["manufacturer_name"] . " " . $row ["printer_model"];
+            $deviceName = $row ["fullname"] . " " . $row ["printer_model"];
             $deviceName = ucwords(strtolower($deviceName));
             $devices [] = array(
                 "label"        => $deviceName,
                 "value"        => $row ["master_device_id"],
-                "manufacturer" => ucwords(strtolower($row ["manufacturer_name"]))
+                "manufacturer" => ucwords(strtolower($row ["fullname"]))
             );
         }
-        $lawl = Zend_Json::encode($devices);
-        print $lawl;
+
+        $this->_helper->json($devices);
     }
 
     /**
@@ -2420,14 +2419,14 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
                         // FIXME: (Lee Robert) - This was a quick hack to get this update working with the Tangent Mapper. It would be better to do a simple update using the new My_Model_Mapper_Abstract type of mapper. 
                         $uploadDataCollectorRow = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($upload_data_collector_row_id);
-                        $uploadDataCollectorRow->setIsExcluded(0);
+                        $uploadDataCollectorRow->isExcluded = 0;
                         Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->save($uploadDataCollectorRow);
                     }
                     else
                     {
                         // FIXME: (Lee Robert) - This was a quick hack to get this update working with the Tangent Mapper. It would be better to do a simple update using the new My_Model_Mapper_Abstract type of mapper. 
                         $uploadDataCollectorRow = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($upload_data_collector_row_id);
-                        $uploadDataCollectorRow->setIsExcluded(1);
+                        $uploadDataCollectorRow->isExcluded = 1;
                         Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->save($uploadDataCollectorRow);
                     }
                 }

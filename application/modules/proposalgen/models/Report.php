@@ -67,6 +67,11 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     protected $_reportSteps;
 
     /**
+     * @var Application_Model_User
+     */
+    protected $_user;
+
+    /**
      * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
@@ -206,5 +211,30 @@ class Proposalgen_Model_Report extends My_Model_Abstract
         $this->_reportSteps = $ReportSteps;
 
         return $this;
+    }
+
+    /**
+     * Getter for _user
+     *
+     * @return \Application_Model_User
+     */
+    public function getUser ()
+    {
+        if (!isset($this->_user) && $this->userId > 0)
+        {
+            $this->_user = Application_Model_Mapper_User::getInstance()->find($this->userId);
+        }
+
+        return $this->_user;
+    }
+
+    /**
+     * Setter for _user
+     *
+     * @param \Application_Model_User $user
+     */
+    public function setUser ($user)
+    {
+        $this->_user = $user;
     }
 }

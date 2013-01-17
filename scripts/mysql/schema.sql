@@ -187,10 +187,14 @@ CREATE  TABLE IF NOT EXISTS `pgen_date_answers` (
   INDEX `report_id` (`report_id` ASC) ,
   CONSTRAINT `proposalgenerator_date_answers_ibfk_1`
     FOREIGN KEY (`report_id` )
-    REFERENCES `pgen_reports` (`id` ),
+    REFERENCES `pgen_reports` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `proposalgenerator_date_answers_ibfk_2`
     FOREIGN KEY (`question_id` )
-    REFERENCES `pgen_questions` (`id` ))
+    REFERENCES `pgen_questions` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -314,7 +318,9 @@ CREATE  TABLE IF NOT EXISTS `pgen_upload_data_collector_rows` (
   INDEX `report_id` (`report_id` ASC) ,
   CONSTRAINT `proposalgenerator_upload_data_collector_rows_ibfk_1`
     FOREIGN KEY (`report_id` )
-    REFERENCES `pgen_reports` (`id` ))
+    REFERENCES `pgen_reports` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 477
 DEFAULT CHARACTER SET = utf8;
@@ -341,13 +347,19 @@ CREATE  TABLE IF NOT EXISTS `pgen_device_instances` (
   INDEX `upload_data_collector_id` (`upload_data_collector_row_id` ASC) ,
   CONSTRAINT `proposalgenerator_device_instances_ibfk_1`
     FOREIGN KEY (`report_id` )
-    REFERENCES `pgen_reports` (`id` ),
+    REFERENCES `pgen_reports` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `proposalgenerator_device_instances_ibfk_2`
     FOREIGN KEY (`master_device_id` )
-    REFERENCES `pgen_master_devices` (`id` ),
+    REFERENCES `pgen_master_devices` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `proposalgenerator_device_instances_ibfk_3`
     FOREIGN KEY (`upload_data_collector_row_id` )
-    REFERENCES `pgen_upload_data_collector_rows` (`id` ))
+    REFERENCES `pgen_upload_data_collector_rows` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -365,7 +377,9 @@ CREATE  TABLE IF NOT EXISTS `pgen_device_instance_meters` (
   UNIQUE INDEX `device_instance_id` (`device_instance_id` ASC, `meter_type` ASC) ,
   CONSTRAINT `proposalgenerator_device_instance_meters_ibfk_1`
     FOREIGN KEY (`device_instance_id` )
-    REFERENCES `pgen_device_instances` (`id` ))
+    REFERENCES `pgen_device_instances` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -492,10 +506,14 @@ CREATE  TABLE IF NOT EXISTS `pgen_numeric_answers` (
   INDEX `report_id` (`report_id` ASC) ,
   CONSTRAINT `proposalgenerator_numeric_answers_ibfk_1`
     FOREIGN KEY (`report_id` )
-    REFERENCES `pgen_reports` (`id` ),
+    REFERENCES `pgen_reports` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `proposalgenerator_numeric_answers_ibfk_2`
     FOREIGN KEY (`question_id` )
-    REFERENCES `pgen_questions` (`id` ))
+    REFERENCES `pgen_questions` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -604,10 +622,14 @@ CREATE  TABLE IF NOT EXISTS `pgen_report_report_settings` (
   INDEX `report_setting_id` (`reportSettingId` ASC) ,
   CONSTRAINT `proposalgenerator_report_report_settings_ibfk_1`
     FOREIGN KEY (`reportId` )
-    REFERENCES `pgen_reports` (`id` ),
+    REFERENCES `pgen_reports` (`id` )
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
   CONSTRAINT `proposalgenerator_report_report_settings_ibfk_2`
     FOREIGN KEY (`reportSettingId` )
-    REFERENCES `pgen_report_settings` (`id` ))
+    REFERENCES `pgen_report_settings` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -654,10 +676,14 @@ CREATE  TABLE IF NOT EXISTS `pgen_textual_answers` (
   INDEX `report_id` (`report_id` ASC) ,
   CONSTRAINT `proposalgenerator_textual_answers_ibfk_1`
     FOREIGN KEY (`report_id` )
-    REFERENCES `pgen_reports` (`id` ),
+    REFERENCES `pgen_reports` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `proposalgenerator_textual_answers_ibfk_2`
     FOREIGN KEY (`question_id` )
-    REFERENCES `pgen_questions` (`id` ))
+    REFERENCES `pgen_questions` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -890,13 +916,19 @@ CREATE  TABLE IF NOT EXISTS `pgen_unknown_device_instances` (
   INDEX `upload_data_collector_row_id` (`upload_data_collector_row_id` ASC) ,
   CONSTRAINT `proposalgenerator_unknown_device_instances_ibfk_1`
     FOREIGN KEY (`report_id` )
-    REFERENCES `pgen_reports` (`id` ),
+    REFERENCES `pgen_reports` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `proposalgenerator_unknown_device_instances_ibfk_2`
     FOREIGN KEY (`user_id` )
-    REFERENCES `users` (`id` ),
+    REFERENCES `users` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `proposalgenerator_unknown_device_instances_ibfk_3`
     FOREIGN KEY (`upload_data_collector_row_id` )
-    REFERENCES `pgen_upload_data_collector_rows` (`id` ))
+    REFERENCES `pgen_upload_data_collector_rows` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
