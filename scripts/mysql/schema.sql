@@ -1,6 +1,6 @@
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 
 -- -----------------------------------------------------
@@ -120,8 +120,8 @@ CREATE  TABLE IF NOT EXISTS `users` (
   UNIQUE INDEX `username` (`username` ASC) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 13
-DEFAULT CHARACTER SET = latin1, 
-COMMENT = 'The users table stores basic information on a user' ;
+DEFAULT CHARACTER SET = latin1
+COMMENT = 'The users table stores basic information on a user';
 
 
 -- -----------------------------------------------------
@@ -402,23 +402,23 @@ CREATE  TABLE IF NOT EXISTS `pgen_toners` (
   `sku` VARCHAR(255) NOT NULL ,
   `cost` DOUBLE NOT NULL ,
   `yield` INT(11) NOT NULL ,
-  `part_type_id` INT(11) NOT NULL ,
-  `manufacturer_id` INT(11) NOT NULL ,
-  `toner_color_id` INT(11) NOT NULL ,
+  `partTypeId` INT(11) NOT NULL ,
+  `manufacturerId` INT(11) NOT NULL ,
+  `tonerColorId` INT(11) NOT NULL ,
   PRIMARY KEY (`id`) ,
   UNIQUE INDEX `sku` (`sku` ASC) ,
-  UNIQUE INDEX `sku_2` (`sku` ASC, `manufacturer_id` ASC, `part_type_id` ASC, `yield` ASC, `toner_color_id` ASC) ,
-  INDEX `part_type_id` (`part_type_id` ASC) ,
-  INDEX `toner_color_id` (`toner_color_id` ASC) ,
-  INDEX `proposalgenerator_toners_ibfk_2_idx` (`manufacturer_id` ASC) ,
+  UNIQUE INDEX `sku_2` (`sku` ASC, `manufacturerId` ASC, `partTypeId` ASC, `yield` ASC, `tonerColorId` ASC) ,
+  INDEX `part_type_id` (`partTypeId` ASC) ,
+  INDEX `toner_color_id` (`tonerColorId` ASC) ,
+  INDEX `proposalgenerator_toners_ibfk_2_idx` (`manufacturerId` ASC) ,
   CONSTRAINT `proposalgenerator_toners_ibfk_1`
-    FOREIGN KEY (`part_type_id` )
+    FOREIGN KEY (`partTypeId` )
     REFERENCES `pgen_part_types` (`id` ),
   CONSTRAINT `proposalgenerator_toners_ibfk_3`
-    FOREIGN KEY (`toner_color_id` )
+    FOREIGN KEY (`tonerColorId` )
     REFERENCES `pgen_toner_colors` (`id` ),
   CONSTRAINT `proposalgenerator_toners_ibfk_2`
-    FOREIGN KEY (`manufacturer_id` )
+    FOREIGN KEY (`manufacturerId` )
     REFERENCES `manufacturers` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -1143,8 +1143,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schemas` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8, 
-COMMENT = 'Stores information on different leasing schemas' ;
+DEFAULT CHARACTER SET = utf8
+COMMENT = 'Stores information on different leasing schemas';
 
 
 -- -----------------------------------------------------
@@ -1161,7 +1161,7 @@ CREATE  TABLE IF NOT EXISTS `qgen_global_leasing_schemas` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
-COMMENT = 'This table marks leasing schemas as global' ;
+COMMENT = 'This table marks leasing schemas as global';
 
 
 -- -----------------------------------------------------
@@ -1180,8 +1180,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_ranges` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 5
-DEFAULT CHARACTER SET = utf8, 
-COMMENT = 'Stores the available value ranges (start range) for a leasin' ;
+DEFAULT CHARACTER SET = utf8
+COMMENT = 'Stores the available value ranges (start range) for a leasin';
 
 
 -- -----------------------------------------------------
@@ -1200,8 +1200,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_terms` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 10
-DEFAULT CHARACTER SET = utf8, 
-COMMENT = 'Holds the terms available for a leasing schema' ;
+DEFAULT CHARACTER SET = utf8
+COMMENT = 'Holds the terms available for a leasing schema';
 
 
 -- -----------------------------------------------------
@@ -1225,8 +1225,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_rates` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8, 
-COMMENT = 'Stores the rates that coincide with the terms and ranges for' ;
+DEFAULT CHARACTER SET = utf8
+COMMENT = 'Stores the rates that coincide with the terms and ranges for';
 
 
 -- -----------------------------------------------------
@@ -1293,8 +1293,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_quotes` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8, 
-COMMENT = 'Primary table for a quote. Stores basic information' ;
+DEFAULT CHARACTER SET = utf8
+COMMENT = 'Primary table for a quote. Stores basic information';
 
 
 -- -----------------------------------------------------
