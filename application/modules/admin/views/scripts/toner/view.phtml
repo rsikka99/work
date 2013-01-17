@@ -1,15 +1,15 @@
-<?php /* @var $toner Admin_Model_Toner */ $toner = $this->toner; ?>
+<?php /* @var $toner Proposalgen_Model_Toner */ $toner = $this->toner; ?>
 <div class="page-header">
     <h1>Toner Management (Beta)</h1>
 </div>
 <div class="well">
     <dl class="dl-horizontal">
-        <dt>SKU:</dt><dd><?php echo $toner->getSku(); ?></dd>
-        <dt>Manufacturer:</dt><dd><?php echo $toner->getManufacturer()->getDisplayname(); ?></dd>
-        <dt>Part Type:</dt><dd><?php echo $toner->getPartType()->getTypeName(); ?></dd>
-        <dt>Color:</dt><dd style="text-transform: capitalize;"><?php echo strToLower($toner->getTonerColor()->getTonerColorName()); ?></dd>
-        <dt>Yield:</dt><dd><?php echo number_format($toner->getYield(), 0, '', ','); ?></dd>
-        <dt>Price:</dt><dd><?php echo "$" . number_format($toner->getCost(), 2, '.', ','); ?></dd>
+        <dt>SKU:</dt><dd><?php echo $toner->sku; ?></dd>
+        <dt>Manufacturer:</dt><dd><?php echo $toner->getManufacturer()->displayname; ?></dd>
+        <dt>Part Type:</dt><dd><?php echo $toner->getPartType()->typeName; ?></dd>
+        <dt>Color:</dt><dd style="text-transform: capitalize;"><?php echo strToLower($toner->getTonerColor()->tonerColorName); ?></dd>
+        <dt>Yield:</dt><dd><?php echo number_format($toner->yield, 0, '', ','); ?></dd>
+        <dt>Price:</dt><dd><?php echo "$" . number_format($toner->cost, 2, '.', ','); ?></dd>
     </dl>
     
 	<div>

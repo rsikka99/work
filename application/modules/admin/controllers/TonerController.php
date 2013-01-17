@@ -1,106 +1,116 @@
 <?php
-
 class Admin_TonerController extends Zend_Controller_Action
 {
-
-    public function init ()
-    {
-        /* Initialize action controller here */
-    }
-    
-    // Shows all the toners in a table
+    /**
+     * Displays all the toners in the system in  a table
+     */
     public function indexAction ()
     {
         // Get all toners
         $tonerMapper = Proposalgen_Model_Mapper_Toner::getInstance();
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($tonerMapper));
-        
+        $paginator   = new Zend_Paginator(new My_Paginator_MapperAdapter($tonerMapper));
+
         // Set current page
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
-        
+
         // Set max items per page
         $paginator->setItemCountPerPage(25);
-        
+
         // Save entries to view paginatior
         $this->view->paginator = $paginator;
     }
 
+    /**
+     * Handles deletion of a toner
+     */
     public function deleteAction ()
     {
         $tonerId = $this->_getParam('id', false);
-        
-        if (! $tonerId)
+
+        if (!$tonerId)
         {
-            $this->_helper->flashMessenger(array (
-                    'warning' => 'Please select a toner to delete first.' 
-            ));
+            $this->_helper->flashMessenger(array(
+                                                'warning' => 'Please select a toner to delete first.'
+                                           ));
             $this->_helper->redirector('index');
         }
-        
+
         $tonerMapper = Proposalgen_Model_Mapper_Toner::getInstance();
-        $toner = $tonerMapper->find($tonerId);
-        
-        if (! $toner)
+        $toner       = $tonerMapper->find($tonerId);
+
+        if (!$toner)
         {
-            $this->_helper->flashMessenger(array (
-                    'danger' => 'There was an error selecting the toner to delete.' 
-            ));
+            $this->_helper->flashMessenger(array(
+                                                'danger' => 'There was an error selecting the toner to delete.'
+                                           ));
             $this->_helper->redirector('index');
         }
-        
-        $message = "Are you sure you want to delete toner SKU {$toner->sku} ({$toner->getManufacturer()->displayname} {$toner->getPartType()->typeName} {$toner->getTonerColor()->tonerColorName} {$toner->yield})?";
-        $form = new Application_Form_Delete($message);
-        
-        $request = $this->getRequest();
-        if ($request->isPost())
+
+        $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchDeviceTonersByTonerId($tonerId);
+
+        if ($deviceToners && count($deviceToners) < 1)
         {
-            $values = $request->getPost();
-            if (! isset($values ['cancel']))
+            $message = "Are you sure you want to delete toner SKU {$toner->sku} ({$toner->getManufacturer()->displayname} {$toner->getPartType()->typeName} {$toner->getTonerColor()->tonerColorName} {$toner->yield})?";
+            $form    = new Application_Form_Delete($message);
+
+            $request = $this->getRequest();
+            if ($request->isPost())
             {
-                // delete toner from database
-                if ($form->isValid($values))
+                $values = $request->getPost();
+                if (!isset($values ['cancel']))
                 {
-                    $tonerMapper->delete($toner);
-                    
-                    $this->_helper->flashMessenger(array (
-                            'success' => "The toner was deleted successfully." 
-                    ));
+                    if ($form->isValid($values))
+                    {
+                        $tonerMapper->delete($toner);
+
+                        $this->_helper->flashMessenger(array('success' => "The toner was deleted successfully."));
+                        $this->_helper->redirector('index');
+                    }
+                }
+                else // go back
+                {
                     $this->_helper->redirector('index');
                 }
             }
-            else // go back
-            {
-                $this->_helper->redirector('index');
-            }
+            $this->view->form = $form;
         }
-        $this->view->form = $form;
+        else
+        {
+            $this->_helper->flashMessenger(array('warning' => "This toner is being used by devices. Please remove it from devices before proceeding."));
+            $this->_helper->redirector('index');
+        }
     }
 
+    /**
+     * Handles creation of a toner
+     *
+     * @throws InvalidArgumentException
+     */
     public function createAction ()
     {
         // Show the form 
         $form = new Admin_Form_Toner();
-        
+
         // If the form is on post insert data 
         $request = $this->getRequest();
-        
+
         if ($request->isPost())
         {
             // Get values from the form
             $values = $request->getPost();
-            if (! isset($values ['cancel']))
+            if (!isset($values ['cancel']))
             {
                 try
                 {
                     if ($form->isValid($values))
                     {
                         // Persist data to database
-                        $mapper = new Admin_Model_Mapper_Toner();
-                        $toner = new Admin_Model_Toner();
+                        $mapper = new Proposalgen_Model_Mapper_Toner();
+                        $toner  = new Proposalgen_Model_Toner();
                         $toner->populate($values);
-                        
+
                         $mapper->insert($toner);
-                        
+
                         // Redirect client back to index
                         $this->_helper->redirector('index');
                     }
@@ -109,11 +119,11 @@ class Admin_TonerController extends Zend_Controller_Action
                         throw new InvalidArgumentException('Please correct the fields below');
                     }
                 }
-                catch ( Exception $e )
+                catch (Exception $e)
                 {
-                    $this->_helper->flashMessenger(array (
-                            'danger' => $e->getMessage() 
-                    ));
+                    $this->_helper->flashMessenger(array(
+                                                        'danger' => $e->getMessage()
+                                                   ));
                 }
             }
             else // Cancel was hit: redirect user
@@ -121,36 +131,41 @@ class Admin_TonerController extends Zend_Controller_Action
                 $this->_helper->redirector('index');
             }
         }
-        
+
         $this->view->form = $form;
     }
 
+    /**
+     * Handles editing toner data
+     *
+     * @throws InvalidArgumentException
+     */
     public function editAction ()
     {
         $tonerId = $this->_getParam('id', false);
-        
+
         // If not idea is set then back to index page
-        if (! $tonerId)
+        if (!$tonerId)
         {
-            $this->_helper->flashMessenger(array (
-                    'warning' => 'Please select a toner first' 
-            ));
+            $this->_helper->flashMessenger(array(
+                                                'warning' => 'Please select a toner first'
+                                           ));
             // Redirect
             $this->_helper->redirector('index');
         }
-        
+
         // Find client and pass form object
-        $form = new Admin_Form_Toner();
-        $mapper = new Admin_Model_Mapper_Toner();
-        $toner = $mapper->find($tonerId);
-        
+        $form   = new Admin_Form_Toner();
+        $mapper = new Proposalgen_Model_Mapper_Toner();
+        $toner  = $mapper->find($tonerId);
+
         $form->populate($toner->toArray());
         // update record if post
         $request = $this->getRequest();
         if ($request->isPost())
         {
             $values = $request->getPost();
-            if (! isset($values ['cancel']))
+            if (!isset($values ['cancel']))
             {
                 try
                 {
@@ -158,16 +173,16 @@ class Admin_TonerController extends Zend_Controller_Action
                     if ($form->isValid($values))
                     {
                         // Update toner
-                        $mapper = new Admin_Model_Mapper_Toner;
-                        $toner = new Admin_Model_Toner();
+                        $mapper = new Proposalgen_Model_Mapper_Toner;
+                        $toner  = new Proposalgen_Model_Toner();
                         $toner->populate($values);
                         $toner->setId($tonerId);
-                        
+
                         $mapper->save($toner, $tonerId);
-                        $this->_helper->flashMessenger(array (
-                                'success' => "The toner was updated sucessfully." 
-                        ));
-                        
+                        $this->_helper->flashMessenger(array(
+                                                            'success' => "The toner was updated sucessfully."
+                                                       ));
+
                         $this->_helper->redirector('index');
                     }
                     else
@@ -175,11 +190,11 @@ class Admin_TonerController extends Zend_Controller_Action
                         throw new InvalidArgumentException("Please correct the errors below");
                     }
                 }
-                catch ( InvalidArgumentException $e )
+                catch (InvalidArgumentException $e)
                 {
-                    $this->_helper->flashMessenger(array (
-                            'danger' => $e->getMessage() 
-                    ));
+                    $this->_helper->flashMessenger(array(
+                                                        'danger' => $e->getMessage()
+                                                   ));
                 }
             }
             else // Client hit cancel redicect
@@ -188,14 +203,16 @@ class Admin_TonerController extends Zend_Controller_Action
                 $this->_helper->redirector('index');
             }
         }
-        
+
         $this->view->form = $form;
     }
 
+    /**
+     * Lets the user view a toner
+     */
     public function viewAction ()
     {
         // Get Toner Details
-        $this->view->toner = Admin_Model_Mapper_Toner::getInstance()->find($this->_getParam('id', false));
+        $this->view->toner = Proposalgen_Model_Mapper_Toner::getInstance()->find($this->_getParam('id', false));
     }
 }
-
