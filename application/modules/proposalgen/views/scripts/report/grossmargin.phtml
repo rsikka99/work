@@ -1,8 +1,8 @@
 <?php 
 if ($this->isPDF)
 {
-    echo '<link rel="stylesheet" type="text/css" href="' . $this->FullUrl($this->theme("proposalgenerator/reports/common_all.css")) . '" />';
-    echo '<link rel="stylesheet" type="text/css" href="' . $this->FullUrl($this->theme("proposalgenerator/reports/grossmargin/grossmargin_pdf.css")) . '" />';
+    echo '<link rel="stylesheet" type="text/css" href="' . $this->serverUrl($this->theme("proposalgenerator/reports/common_all.css")) . '" />';
+    echo '<link rel="stylesheet" type="text/css" href="' . $this->serverUrl($this->theme("proposalgenerator/reports/grossmargin/grossmargin_pdf.css")) . '" />';
 }
 else
     $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/grossmargin/grossmargin_html.css"));

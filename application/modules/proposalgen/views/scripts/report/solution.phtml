@@ -1,8 +1,8 @@
 <?php
 if ($this->isPDF)
 {
-    echo '<link rel="stylesheet" type="text/css" href="' . $this->FullUrl($this->theme("proposalgenerator/reports/common_all.css")) . '" />';
-    echo '<link rel="stylesheet" type="text/css" href="' . $this->FullUrl($this->theme("proposalgenerator/reports/solution/solution_pdf.css")) . '" />';
+    echo '<link rel="stylesheet" type="text/css" href="' . $this->serverUrl($this->theme("proposalgenerator/reports/common_all.css")) . '" />';
+    echo '<link rel="stylesheet" type="text/css" href="' . $this->serverUrl($this->theme("proposalgenerator/reports/solution/solution_pdf.css")) . '" />';
 }
 else
 {

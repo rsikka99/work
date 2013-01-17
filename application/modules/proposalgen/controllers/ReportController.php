@@ -22,22 +22,22 @@ class Proposalgen_ReportController extends My_Controller_Report
                 "Assessment" => (object)array (
                         "pagetitle" => "Assessment", 
                         "active" => false, 
-                        "url" => $this->view->baseUrl('/report/assessment') 
+                        "url" => $this->view->baseUrl('/proposalgen/report/assessment')
                 ), 
                 "Solution" => (object)array (
                         "pagetitle" => "Solution", 
                         "active" => false, 
-                        "url" => $this->view->baseUrl('/report/solution') 
+                        "url" => $this->view->baseUrl('/proposalgen/report/solution')
                 ), 
                 "GrossMargin" => (object)array (
                         "pagetitle" => "Gross Margin", 
                         "active" => false, 
-                        "url" => $this->view->baseUrl('/report/grossmargin') 
+                        "url" => $this->view->baseUrl('/proposalgen/report/grossmargin')
                 ), 
                 "PrintingDeviceList" => (object)array (
                         "pagetitle" => "Printing Device List", 
                         "active" => false, 
-                        "url" => $this->view->baseUrl('/report/printingdevicelist') 
+                        "url" => $this->view->baseUrl('/proposalgen/report/printingdevicelist')
                 ) 
         );
     } // end init
@@ -132,7 +132,7 @@ class Proposalgen_ReportController extends My_Controller_Report
      */
     public function indexAction ()
     {
-        $this->view->headScript()->prependFile($this->view->baseUrl("/scripts/htmlReport.js"));
+        $this->view->headScript()->prependFile($this->view->baseUrl("/js/htmlReport.js"));
         //$this->_helper->layout->setLayout('newreport');
         $this->view->formTitle = "Report Summary";
         //$this->view->availableReports->ReportIndex->active = true;
@@ -158,21 +158,18 @@ class Proposalgen_ReportController extends My_Controller_Report
     public function assessmentAction ()
     {
         $this->view->availableReports->Assessment->active = true;
-        
         $this->view->formats = array (
-                
-                "/proposal/assessment/generate/format/docx" => $this->wordFormat 
+                "/proposal/assessment/generate/format/docx" => $this->wordFormat
         );
         $this->view->reportTitle = "Assessment";
         
         $format = $this->_getParam("format", "html");
-        
         try
         {
             // Clear the cache for the report before proceeding
             $this->clearCacheForReport();
-            
-            $url = $this->view->FullUrl();
+
+            $url = $this->view->serverUrl('/proposalgen/report/assessment');
             $this->view->url = $url;
             
             if (FALSE !== ($proposal = $this->getProposal()))
@@ -191,7 +188,6 @@ class Proposalgen_ReportController extends My_Controller_Report
                         // Add HTML Logic here
                         break;
                 }
-                
                 // If we're in a pdf, set cache the google chart images
                 if ($this->view->isPDF)
                 {
@@ -213,9 +209,9 @@ class Proposalgen_ReportController extends My_Controller_Report
             $this->view->backright = 8;
             $this->view->backtop = 5;
             $this->view->backbottom = 20;
-            $this->view->footer = "<div class='center'><table cellspacing='0' class='footertable'><tr><td class='col1'></td><td class='col2'>[[page_cu]]</td><td class='col3'><img src='" . $this->view->FullUrl('/themes/' . $this->view->App()->theme . '/proposalgenerator/reports/images/officedepotLogo.jpg') . "'/></td></tr></table></div>";
+            $this->view->footer = "<div class='center'><table cellspacing='0' class='footertable'><tr><td class='col1'></td><td class='col2'>[[page_cu]]</td><td class='col3'><img src='" . $this->view->serverUrl('/themes/' . $this->view->App()->theme . '/proposalgenerator/reports/images/officedepotLogo.jpg') . "'/></td></tr></table></div>";
             $this->view->pagestyle = "font-family: Arial; font-size: 11pt; line-height: 16pt;";
-            $this->view->titlePageStart = "<page style='" . $this->view->pagestyle . "' backtop='" . $this->view->backtop . "' backbottom='" . $this->view->backbottom . "' backleft='" . $this->view->backleft . "' backright='" . $this->view->backright . "' backimg='" . $this->view->FullUrl('/themes/' . $this->view->App()->theme . '/proposalgenerator/reports/images/assessment.jpg') . "' backimgx='0'  backimgw='100%'>";
+            $this->view->titlePageStart = "<page style='" . $this->view->pagestyle . "' backtop='" . $this->view->backtop . "' backbottom='" . $this->view->backbottom . "' backleft='" . $this->view->backleft . "' backright='" . $this->view->backright . "' backimg='" . $this->view->serverUrl('/themes/' . $this->view->App()->theme . '/proposalgenerator/reports/images/assessment.jpg') . "' backimgx='0'  backimgw='100%'>";
             $this->view->titlePageStart .= "<page_header>" . $this->view->header . "</page_header><page_footer>" . $this->view->footer . "</page_footer>";
         }
         else
@@ -246,7 +242,7 @@ class Proposalgen_ReportController extends My_Controller_Report
             $proposal = $this->getProposal();
             $this->view->proposal = $proposal;
             
-            $url = $this->view->FullUrl();
+            $url = $this->view->serverUrl();
             $this->view->url = $url;
         }
         catch ( Exception $e )
@@ -261,9 +257,9 @@ class Proposalgen_ReportController extends My_Controller_Report
             $this->view->backright = 8;
             $this->view->backtop = 5;
             $this->view->backbottom = 20;
-            $this->view->footer = "<div class='center'><table cellspacing='0' class='footertable'><tr><td class='col1'></td><td class='col2'>[[page_cu]]</td><td class='col3'><img src='" . $this->view->FullUrl('/themes/' . $this->view->App()->theme . '/proposalgenerator/reports/images/officedepotLogo.jpg') . "'/></td></tr></table></div>";
+            $this->view->footer = "<div class='center'><table cellspacing='0' class='footertable'><tr><td class='col1'></td><td class='col2'>[[page_cu]]</td><td class='col3'><img src='" . $this->view->serverUrl('/themes/' . $this->view->App()->theme . '/proposalgenerator/reports/images/officedepotLogo.jpg') . "'/></td></tr></table></div>";
             $this->view->pagestyle = "font-family: Arial; font-size: 10pt; line-height: 16pt;";
-            $this->view->titlePageStart = "<page style='" . $this->view->pagestyle . "' backtop='" . $this->view->backtop . "' backbottom='" . $this->view->backbottom . "' backleft='" . $this->view->backleft . "' backright='" . $this->view->backright . "' backimg='" . $this->view->FullUrl('/themes/' . $this->view->App()->theme . '/proposalgenerator/reports/images/solution.jpg') . "' backimgx='0'  backimgw='100%'>";
+            $this->view->titlePageStart = "<page style='" . $this->view->pagestyle . "' backtop='" . $this->view->backtop . "' backbottom='" . $this->view->backbottom . "' backleft='" . $this->view->backleft . "' backright='" . $this->view->backright . "' backimg='" . $this->view->serverUrl('/themes/' . $this->view->App()->theme . '/proposalgenerator/reports/images/solution.jpg') . "' backimgx='0'  backimgw='100%'>";
             $this->view->titlePageStart .= "<page_header>" . $this->view->header . "</page_header><page_footer>" . $this->view->footer . "</page_footer>";
         }
         else
@@ -292,7 +288,7 @@ class Proposalgen_ReportController extends My_Controller_Report
             $proposal = $this->getProposal();
             $this->view->proposal = $proposal;
             
-            $url = $this->view->FullUrl();
+            $url = $this->view->serverUrl();
             $this->view->url = $url;
         }
         catch ( Exception $e )
@@ -335,7 +331,7 @@ class Proposalgen_ReportController extends My_Controller_Report
             $proposal = $this->getProposal();
             $this->view->proposal = $proposal;
             
-            $url = $this->view->FullUrl();
+            $url = $this->view->serverUrl();
             $this->view->url = $url;
         }
         catch ( Exception $e )

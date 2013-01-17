@@ -59,7 +59,7 @@ class Proposalgen_PrintingdevicelistController extends My_Controller_Report
         {
             $proposal = $this->getProposal();
             
-            $url = $this->view->FullUrl();
+            $url = $this->view->serverUrl();
             $this->view->url = $url;
         }
         catch ( Exception $e )
