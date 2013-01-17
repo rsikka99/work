@@ -352,8 +352,13 @@
 			},
 			gridComplete:function(){
 				//update statement
-				num_devices = document.getElementById("replacement_toners_list").rows[1].cells[7].innerHTML;
-				total_devices = document.getElementById("replacement_toners_list").rows[1].cells[8].innerHTML;
+                if(document.getElementById("replacement_toners_list").rows[1] !== undefined){
+                    num_devices = document.getElementById("replacement_toners_list").rows[1].cells[7].innerHTML;
+                    total_devices = document.getElementById("replacement_toners_list").rows[1].cells[8].innerHTML;
+                }else{
+                    num_devices = 0;
+                    total_devices = 0;
+                }
 				
 				if (num_devices == 0 && total_devices == 0) {
 					//should never hit this as it's handled by the confirm box instead
@@ -818,7 +823,6 @@
 				lightbox('hide');
 				$("#replacement_message").html("");
     			var url = '<?php echo $this->baseUrl("/proposalgen/admin/replacetoner"); ?>?replace_mode='+replace_mode+'&replace_toner_id='+replace_toner_id+'&with_toner_id='+with_toner_id+'&chkAlLToners='+apply_all;
-    		    //alert(url);
     		    
     		    $.ajax({
     		        url: url,
@@ -911,7 +915,6 @@
 		
 		var grid = $("#available_toners_list");
 		var toner_id = grid.jqGrid('getGridParam', 'selrow');
-		alert("before set grid");
 		$('#replacement_toners_list').setGridParam({url:'<?php echo $this->baseUrl("/proposalgen/admin/replacementtoners"); ?>?tonerid='+toner_id+params});
 	    $('#replacement_toners_list').trigger('reloadGrid');
 	}
