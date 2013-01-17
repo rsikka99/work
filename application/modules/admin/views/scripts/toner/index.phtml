@@ -19,19 +19,19 @@
     </thead>
     <tbody>
     	
-        <?php foreach ($this->paginator->getCurrentItems() as $toner) : /* @var $toner Admin_Model_Toner */ ?>
+        <?php foreach ($this->paginator->getCurrentItems() as $toner) : /* @var $toner Proposalgen_Model_Toner */ ?>
         <tr>
-            <td><?php echo $toner->getSku(); ?></td>
-            <td><?php echo $toner->getManufacturer()->getDisplayname(); ?></td>
-            <td><?php echo $toner->getPartType()->getTypeName(); ?></td>
-            <td style="text-transform: capitalize;"><?php echo strToLower($toner->getTonerColor()->getTonerColorName()); ?></td>
-            <td style="text-align: right;"><?php echo number_format($toner->getYield(), 0, '', ','); ?></td>
-            <td style="text-align: right;"><?php echo "$" . number_format($toner->getCost(), 2, '.', ','); ?></td>
+            <td><?php echo $toner->sku; ?></td>
+            <td><?php echo $toner->getManufacturer()->displayname; ?></td>
+            <td><?php echo $toner->getPartType()->typeName; ?></td>
+            <td style="text-transform: capitalize;"><?php echo strToLower($toner->getTonerColor()->tonerColorName); ?></td>
+            <td style="text-align: right;"><?php echo number_format($toner->yield, 0, '', ','); ?></td>
+            <td style="text-align: right;"><?php echo "$" . number_format($toner->cost, 2, '.', ','); ?></td>
             <td>
                 <div class="btn-group">
-	                <a class="btn btn-info" title="View" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $toner->getId())); ?>"><i class="icon-eye-open"></i></a>
-                    <a class="btn btn-warning" title="Edit" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $toner->getId())); ?>"><i class="icon-pencil"></i></a>
-                    <a class="btn btn-danger" title="Delete" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $toner->getId())); ?>"><i class="icon-trash"></i></a>
+	                <a class="btn btn-info" title="View" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $toner->id)); ?>"><i class="icon-eye-open"></i></a>
+                    <a class="btn btn-warning" title="Edit" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $toner->id)); ?>"><i class="icon-pencil"></i></a>
+                    <a class="btn btn-danger" title="Delete" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $toner->id)); ?>"><i class="icon-trash"></i></a>
                 </div>
             </td>
         </tr>
@@ -42,4 +42,3 @@
 <?php else : ?>
     <h1>There are no toners</h1>
 <?php endif; ?>
-

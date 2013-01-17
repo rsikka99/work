@@ -12,7 +12,7 @@ class Admin_TonerController extends Zend_Controller_Action
     public function indexAction ()
     {
         // Get all toners
-        $tonerMapper = new Admin_Model_Mapper_Toner();
+        $tonerMapper = Proposalgen_Model_Mapper_Toner::getInstance();
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($tonerMapper));
         
         // Set current page
@@ -37,8 +37,8 @@ class Admin_TonerController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        $mapper = new Admin_Model_Mapper_Toner();
-        $toner = $mapper->find($tonerId);
+        $tonerMapper = Proposalgen_Model_Mapper_Toner::getInstance();
+        $toner = $tonerMapper->find($tonerId);
         
         if (! $toner)
         {
@@ -48,7 +48,7 @@ class Admin_TonerController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        $message = "Are you sure you want to delete toner SKU {$toner->getSku()} ({$toner->getManufacturer()->getDisplayname()} {$toner->getPartType()->getTypeName()} {$toner->getTonerColor()->getTonerColorName()} {$toner->getYield()})?";
+        $message = "Are you sure you want to delete toner SKU {$toner->sku} ({$toner->getManufacturer()->displayname} {$toner->getPartType()->typeName} {$toner->getTonerColor()->tonerColorName} {$toner->yield})?";
         $form = new Application_Form_Delete($message);
         
         $request = $this->getRequest();
@@ -60,7 +60,7 @@ class Admin_TonerController extends Zend_Controller_Action
                 // delete toner from database
                 if ($form->isValid($values))
                 {
-                    $mapper->delete($toner);
+                    $tonerMapper->delete($toner);
                     
                     $this->_helper->flashMessenger(array (
                             'success' => "The toner was deleted successfully." 
