@@ -10,7 +10,7 @@ INSERT INTO `pgen_master_devices` (`id`, `manufacturer_id`, `printer_model`, `to
 (13, 27, 'TASKalfa 5500i', 1, 1, 0, 1, 1, 0, NULL, 10, 4941, NULL, '2011-01-01 00:00:00', '2012-11-28 09:52:29', NULL, 55, NULL, 0, NULL),
 (14, 27, 'TASKalfa 6550ci', 2, 1, 0, 1, 1, 0, NULL, 10, 14500, NULL, '2011-01-01 00:00:00', '2012-11-28 10:03:46', NULL, 65, 65, 0, NULL);
 
-INSERT INTO `pgen_toners` (`id`, `sku`, `cost`, `yield`, `part_type_id`, `manufacturer_id`, `toner_color_id`) VALUES
+INSERT INTO `pgen_toners` (`id`, `sku`, `cost`, `yield`, `partTypeId`, `manufacturerId`, `tonerColorId`) VALUES
 (15, '444670', 339.99, 21000, 1, 7, 2),
 (16, '444705', 339.99, 21000, 1, 7, 3),
 (17, '444690', 339.99, 21000, 1, 7, 4),

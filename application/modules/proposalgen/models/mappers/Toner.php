@@ -1,101 +1,229 @@
 <?php
-class Proposalgen_Model_Mapper_Toner extends Tangent_Model_Mapper_Abstract
+class Proposalgen_Model_Mapper_Toner extends My_Model_Mapper_Abstract
 {
-    protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_Toner";
-    static $_instance;
+    /**
+     * The default db table class to use
+     *
+     * @var String
+     *
+     */
+    protected $_defaultDbTable = 'Proposalgen_Model_DbTable_Toner';
+
+    /*
+     * Define the primary key of the model association
+    */
+    public $col_id = 'id';
 
     /**
+     * Gets an instance of the mapper
+     *
      * @return Proposalgen_Model_Mapper_Toner
      */
     public static function getInstance ()
     {
-        if (!isset(self::$_instance))
-        {
-            $className       = get_class();
-            self::$_instance = new $className();
-        }
-
-        return self::$_instance;
+        return self::getCachedInstance();
     }
 
-    static $_toners = array();
+    /**
+     * Saves an instance of Proposalgen_Model_Toner to the database.
+     * If the id is null then it will insert a new row
+     *
+     * @param $object Proposalgen_Model_Toner
+     *                The object to insert
+     *
+     * @return mixed The primary key of the new row
+     */
+    public function insert (&$object)
+    {
+        // Get an array of data to save
+        $data = $object->toArray();
+
+        // Remove the id
+        unset($data [$this->col_id]);
+
+        // Insert the data
+        $id = $this->getDbTable()->insert($data);
+
+        $object->id = $id;
+
+        // Save the object into the cache
+        $this->saveItemToCache($object);
+
+        return $id;
+    }
 
     /**
-     * Gets a toner model
+     * Saves (updates) an instance of Proposalgen_Model_Toner to the database.
      *
-     * @see Tangent_Model_Mapper_Abstract::find()
+     * @param $object     Proposalgen_Model_Toner
+     *                    The toner to save to the database
+     * @param $primaryKey mixed
+     *                    Optional: The original primary key, in case we're changing it
      *
-     * @param int $id
+     * @return int The number of rows affected
+     */
+    public function save ($object, $primaryKey = null)
+    {
+        $data = $this->unsetNullValues($object->toArray());
+
+        if ($primaryKey === null)
+        {
+            $primaryKey = $data [$this->col_id];
+        }
+
+        // Update the row
+        $rowsAffected = $this->getDbTable()->update($data, array(
+                                                                "{$this->col_id} = ?" => $primaryKey
+                                                           ));
+
+        // Save the object into the cache
+        $this->saveItemToCache($object);
+
+        return $rowsAffected;
+    }
+
+    /**
+     * Deletes rows from the database.
+     *
+     * @param $object mixed
+     *                This can either be an instance of Proposalgen_Model_Toner or the
+     *                primary key to delete
+     *
+     * @return mixed The number of rows deleted
+     */
+    public function delete ($object)
+    {
+        if ($object instanceof Proposalgen_Model_Toner)
+        {
+            $whereClause = array(
+                "{$this->col_id} = ?" => $object->id
+            );
+        }
+        else
+        {
+            $whereClause = array(
+                "{$this->col_id} = ?" => $object
+            );
+        }
+
+        $rowsAffected = $this->getDbTable()->delete($whereClause);
+
+        return $rowsAffected;
+    }
+
+    /**
+     * Finds a toner based on it's primaryKey
+     *
+     * @param $id int
+     *            The id of the toner to find
      *
      * @return Proposalgen_Model_Toner
      */
     public function find ($id)
     {
-        if (!array_key_exists($id, self::$_toners))
+        // Get the item from the cache and return it if we find it.
+        $result = $this->getItemFromCache($id);
+        if ($result instanceof Proposalgen_Model_Toner)
         {
-            self::$_toners [$id] = parent::find($id);
+            return $result;
         }
 
-        return self::$_toners [$id];
-    }
+        // Assuming we don't have a cached object, lets go get it.
+        $result = $this->getDbTable()->find($id);
+        if (0 == count($result))
+        {
+            return false;
+        }
+        $row    = $result->current();
+        $object = new Proposalgen_Model_Toner($row->toArray());
 
-    /**
-     * Maps a database row object to an Proposalgen_Model
-     *
-     * @param Zend_Db_Table_Row $row
-     *
-     * @throws Exception
-     * @return \Proposalgen_Model_Toner
-     */
-    public function mapRowToObject ($row)
-    {
-        $object = null;
-        try
-        {
-            $object                 = new Proposalgen_Model_Toner();
-            $object->id             = $row->id;
-            $object->sku            = $row->sku;
-            $object->cost           = $row->cost;
-            $object->yield          = $row->yield;
-            $object->partTypeId     = $row->part_type_id;
-            $object->manufacturerId = $row->manufacturer_id;
-            $object->tonerColorId   = $row->toner_color_id;
-        }
-        catch (Exception $e)
-        {
-            throw new Exception("Failed to map a toner row", 0, $e);
-        }
+        // Save the object into the cache
+        $this->saveItemToCache($object);
 
         return $object;
     }
 
     /**
-     * Saved an Proposalgen_Model_ object to the database
+     * Fetches a toner
      *
-     * @param \Proposalgen_Model_Toner $object
+     * @param $where  string|array|Zend_Db_Table_Select
+     *                OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
+     * @param $order  string|array
+     *                OPTIONAL: A SQL ORDER clause.
+     * @param $offset int
+     *                OPTIONAL: A SQL OFFSET value.
      *
-     * @throws Exception
-     * @return string
+     * @return Proposalgen_Model_Toner
      */
-    public function save ($object)
+    public function fetch ($where = null, $order = null, $offset = null)
     {
-        try
+        $row = $this->getDbTable()->fetchRow($where, $order, $offset);
+        if (is_null($row))
         {
-            $data ["id"]              = $object->id;
-            $data ["sku"]             = $object->sku;
-            $data ["cost"]            = $object->cost;
-            $data ["yield"]           = $object->yield;
-            $data ["manufacturer_id"] = $object->manufacturerId;
-            $data ["part_type_id"]    = $object->partTypeId;
-            $data ["toner_color_id"]  = $object->tonerColorId;
-            $primaryKey               = $this->saveRow($data);
-        }
-        catch (Exception $e)
-        {
-            throw new Exception("Error saving " . get_class($this) . " to the database.", 0, $e);
+            return false;
         }
 
-        return $primaryKey;
+        $object = new Proposalgen_Model_Toner($row->toArray());
+
+        // Save the object into the cache
+        $this->saveItemToCache($object);
+
+        return $object;
+    }
+
+    /**
+     * Fetches all toners
+     *
+     * @param $where  string|array|Zend_Db_Table_Select
+     *                OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
+     * @param $order  string|array
+     *                OPTIONAL: A SQL ORDER clause.
+     * @param $count  int
+     *                OPTIONAL: A SQL LIMIT count. (Defaults to 25)
+     * @param $offset int
+     *                OPTIONAL: A SQL LIMIT offset.
+     *
+     * @return Proposalgen_Model_Toner[]
+     */
+    public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
+    {
+        $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
+        $entries   = array();
+        foreach ($resultSet as $row)
+        {
+            $object = new Proposalgen_Model_Toner($row->toArray());
+
+            // Save the object into the cache
+            $this->saveItemToCache($object);
+
+            $entries [] = $object;
+        }
+
+        return $entries;
+    }
+
+    /**
+     * Gets a where clause for filtering by id
+     *
+     * @param int $id
+     *
+     * @return array
+     */
+    public function getWhereId ($id)
+    {
+        return array(
+            "{$this->col_id} = ?" => $id
+        );
+    }
+
+    /**
+     * @param Proposalgen_Model_Toner $object
+     *
+     * @return mixed
+     */
+    public function getPrimaryKeyValueForObject ($object)
+    {
+        return $object->id;
     }
 
     /**
@@ -131,4 +259,5 @@ class Proposalgen_Model_Mapper_Toner extends Tangent_Model_Mapper_Abstract
 
         return $toners;
     }
+
 }
