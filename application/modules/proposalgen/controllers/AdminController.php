@@ -26,9 +26,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $this->view->app       = $this->config->app;
         $this->view->user      = Zend_Auth::getInstance()->getIdentity();
         $this->view->user_id   = Zend_Auth::getInstance()->getIdentity()->id;
-        $this->view->privilege = array('Standard User'); //Zend_Auth::getInstance()->getIdentity()->privileges;
+        $this->view->privilege = array('System Admin'); //Zend_Auth::getInstance()->getIdentity()->privileges;
         $this->user_id         = Zend_Auth::getInstance()->getIdentity()->id;
-        $this->privilege       = array('Standard User'); //Zend_Auth::getInstance()->getIdentity()->privileges;
+        $this->privilege       = array('System Admin'); //Zend_Auth::getInstance()->getIdentity()->privileges;
         //$this->dealer_company_id = Zend_Auth::getInstance()->getIdentity()->dealer_company_id;
         $this->MPSProgramName       = $this->config->app->MPSProgramName;
         $this->view->MPSProgramName = $this->config->app->MPSProgramName;
@@ -5231,37 +5231,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $result = $stmt->fetchAll();
 
                 }
-                else if (!in_array("Standard User", $this->privilege) && $company > 1)
-                {
-                    $select = new Zend_Db_Select($db);
-                    $select = $db->select()
-                        ->from(array(
-                                    'md' => 'master_device'
-                               ), array(
-                                       'master_device_id',
-                                       'mastdevice_manufacturer',
-                                       'printer_model',
-                                       'device_price'
-                                  ))
-                        ->joinLeft(array(
-                                        'm' => 'manufacturer'
-                                   ), 'm.manufacturer_id = md.mastdevice_manufacturer', array(
-                                                                                             'manufacturer_id',
-                                                                                             'manufacturer_name'
-                                                                                        ))
-                        ->joinLeft(array(
-                                        'ddo' => 'dealer_device_override'
-                                   ), 'ddo.master_device_id = md.master_device_id AND ddo.dealer_company_id = ' . $company, array(
-                                                                                                                                 'override_device_price'
-                                                                                                                            ))
-                        ->order(array(
-                                     'm.manufacturer_name',
-                                     'md.printer_model'
-                                ));
-                    $stmt   = $db->query($select);
-                    $result = $stmt->fetchAll();
-
-                }
                 else if (in_array("Standard User", $this->privilege))
                 {
                     $select = new Zend_Db_Select($db);
@@ -5269,7 +5238,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         ->from(array(
                                     'md' => 'pgen_master_devices'
                                ), array(
-                                       'id',
+                                       'id AS master_id',
                                        'manufacturer_id',
                                        'printer_model',
                                        'cost'
@@ -5307,7 +5276,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         $price = $value ['override_cost'];
                     }
                     $fieldList [] = array(
-                        $value ['id'],
+                        $value ['master_id'],
                         $value ['fullname'],
                         $value ['printer_model'],
                         $price
@@ -5326,7 +5295,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     'Price'
                 );
 
-                if (in_array("System Admin", $this->privilege) && $company == 1)
+                if (in_array("System Admin", $this->privilege))
                 {
                     // get count
                     $select = new Zend_Db_Select($db);
@@ -5360,40 +5329,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $stmt   = $db->query($select);
                     $result = $stmt->fetchAll();
                 }
-                else if (!in_array("Standard User", $this->privilege))
-                {
-                    $select = new Zend_Db_Select($db);
-                    $select = $db->select()
-                        ->from(array(
-                                    't' => 'pgen_toners'
-                               ))
-                        ->joinLeft(array(
-                                        'tm' => 'manufacturers'
-                                   ), 'tm.manufacturer_id = t.manufacturerId', array(
-                                                                                     'fullname'
-                                                                                ))
-                        ->joinLeft(array(
-                                        'dt' => 'pgen_device_toners'
-                                   ), 'dt.toner_id = t.toner_id')
-                        ->joinLeft(array(
-                                        'md' => 'pgen_master_devices'
-                                   ), 'md.id = dt.master_device_id')
-                        ->joinLeft(array(
-                                        'tc' => 'pgen_toner_colors'
-                                   ), 'tc.id = t.tonerColorId', array('name AS toner_color'))
-                        ->joinLeft(array(
-                                        'pt' => 'pgen_part_types'
-                                   ), 'pt.id = t.partTypeId')
-                        ->group('t.toner_id')
-                        ->order(array(
-                                     'tm.fullname',
-                                     'md.printer_model',
-                                     't.sku'
-                                ));
-                    $stmt   = $db->query($select);
-                    $result = $stmt->fetchAll();
-                }
-                else if (in_array("Standard User", $this->privilege || $hdnRole == "user"))
+                else if (in_array("Standard User", $this->privilege))
                 {
                     $select = new Zend_Db_Select($db);
                     $select = $db->select()
