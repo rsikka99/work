@@ -27,7 +27,7 @@ class Admin_Form_Toner extends EasyBib_Form
         */
         $this->addElement('text', 'sku', array (
                 'label' => 'SKU:', 
-                'required' => true, 
+                'required' => true,
                 'class' => 'span2',
                 'filters' => array (
                         'StringTrim', 
@@ -54,7 +54,7 @@ class Admin_Form_Toner extends EasyBib_Form
             $manufacturers [$manufacturer->id] = $manufacturer->fullname;
         }
         
-        $this->addElement('select', 'manufacturer_id', array (
+        $this->addElement('select', 'manufacturerId', array (
                 'label' => 'Manufacturer:', 
                 'multiOptions' => $manufacturers 
         ));
@@ -64,7 +64,7 @@ class Admin_Form_Toner extends EasyBib_Form
          */
         $this->addElement('text', 'cost', array (
                 'label' => 'Cost:', 
-                'required' => true, 
+                'required' => true,
                 'class' => 'span1',
                 'filters' => array (
                         'StringTrim', 
@@ -80,7 +80,7 @@ class Admin_Form_Toner extends EasyBib_Form
          */
         $this->addElement('text', 'yield', array (
                 'label' => 'Yield:', 
-                'required' => true, 
+                'required' => true,
                 'class' => 'span1',
                 'filters' => array (
                         'StringTrim', 
@@ -95,13 +95,13 @@ class Admin_Form_Toner extends EasyBib_Form
          * Color
         */
         $colors = array ();
-        /* @var $color Proposalgen_Model_Toner_Colors */
+        /* @var $color Proposalgen_Model_TonerColor */
         foreach ( Proposalgen_Model_Mapper_TonerColor::getInstance()->fetchAll() as $color )
         {
-            $colors [$color->getTonerColorId()] = $color->getTonerColorName();
+            $colors [$color->tonerColorId] = $color->tonerColorName;
         }
         
-        $this->addElement('select', 'toner_color_id', array (
+        $this->addElement('select', 'tonerColorId', array (
                 'label' => 'Color:',
                 'class' => 'span2',
                 'multiOptions' => $colors
@@ -110,17 +110,17 @@ class Admin_Form_Toner extends EasyBib_Form
         /*
          * Part Type
         */
-        $parttypes = array ();
-        /* @var $parttypes Proposalgen_Model_PartType */
-        foreach ( Proposalgen_Model_Mapper_PartType::getInstance()->fetchAll() as $parttype)
+        $partTypes = array ();
+        /* @var $partType Proposalgen_Model_PartType */
+        foreach ( Proposalgen_Model_Mapper_PartType::getInstance()->fetchAll() as $partType)
         {
-            $parttypes [$parttype->getPartTypeId()] = $parttype->getTypeName();
+            $partTypes [$partType->partTypeId] = $partType->typeName;
         }
         
-        $this->addElement('select', 'part_type_id', array (
+        $this->addElement('select', 'partTypeId', array (
                 'label' => 'Part Type:',
                 'class' => 'span2',
-                'multiOptions' => $parttypes
+                'multiOptions' => $partTypes
         ));
         
         // Add the submit button

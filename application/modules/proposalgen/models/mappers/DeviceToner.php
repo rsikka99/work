@@ -74,7 +74,7 @@ class Proposalgen_Model_Mapper_DeviceToner extends Tangent_Model_Mapper_Abstract
      */
     public function getDeviceToners ($masterDeviceId)
     {
-        $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchAll(array('master_device_id = ?' => $masterDeviceId));
+        $deviceToners = $this->fetchAll(array('master_device_id = ?' => $masterDeviceId));
         $entries      = array();
         foreach ($deviceToners as $deviceToner)
         {
@@ -87,5 +87,17 @@ class Proposalgen_Model_Mapper_DeviceToner extends Tangent_Model_Mapper_Abstract
         }
 
         return $entries;
+    }
+
+    /**
+     * Fetches all device toner entries for a toner id
+     *
+     * @param int $tonerId The toner id to lookup
+     *
+     * @return Proposalgen_Model_DeviceToner[]
+     */
+    public function fetchDeviceTonersByTonerId ($tonerId)
+    {
+        return $this->fetchAll(array('toner_id = ?' => $tonerId));
     }
 }
