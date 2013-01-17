@@ -166,6 +166,8 @@ class Proposalgen_Model_Report extends My_Model_Abstract
      * Sets the report settings for the report
      *
      * @param Proposalgen_Model_Report_Setting $_reportSettings
+     *
+     * @return \Proposalgen_Model_Report
      */
     public function setReportSettings ($_reportSettings)
     {
@@ -195,7 +197,9 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     /**
      * Sets the report steps for this report
      *
-     * @param field_type $ReportSteps
+     * @param Proposalgen_Model_Report_Step $ReportSteps
+     *
+     * @return \Proposalgen_Model_Report
      */
     public function setReportSteps ($ReportSteps)
     {

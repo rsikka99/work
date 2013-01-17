@@ -351,9 +351,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
                 /* @var $toner Proposalgen_Model_Toner */
                 foreach ($tonersByColor as $toner)
                 {
-                    if (!in_array($toner->TonerSKU, self::$uniqueTonerArray))
+                    if (!in_array($toner->sku, self::$uniqueTonerArray))
                     {
-                        self::$uniqueTonerArray [] = $toner->TonerSKU;
+                        self::$uniqueTonerArray [] = $toner->sku;
                         $tonerOverride             = null;
                         // Known Device, override
                         if (!$device->isUnknown)
@@ -813,7 +813,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function setMeters ($Meters)
     {
-        $this->Meters = $Meters;
+        $this->_meters = $Meters;
 
         return $this;
     }

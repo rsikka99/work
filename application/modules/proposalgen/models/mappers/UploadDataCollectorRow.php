@@ -20,6 +20,17 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
     }
 
     /**
+     * @param int $primaryKey
+     *
+     * @return Proposalgen_Model_UploadDataCollectorRow
+     */
+    public function find ($primaryKey)
+    {
+        return parent::find($primaryKey);
+    }
+
+
+    /**
      * Counts how many csv rows have been uploaded for a given report
      *
      * @param int     $reportId
@@ -89,9 +100,9 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
             $object->uploadDataCollectorId = $row->id;
             $object->reportId              = $row->report_id;
             $object->devicesPfId           = $row->devices_pf_id;
-            $object->StartDate             = $row->startdate;
-            $object->EndDate               = $row->enddate;
-            $object->PrinterModelId        = $row->printermodelid;
+            $object->startDate             = $row->startdate;
+            $object->endDate               = $row->enddate;
+            $object->printerModelId        = $row->printermodelid;
             $object->ipAddress             = $row->ipaddress;
             $object->serialNumber          = $row->serialnumber;
             $object->modelName             = $row->modelname;

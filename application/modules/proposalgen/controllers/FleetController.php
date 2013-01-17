@@ -1732,7 +1732,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
                             // FIXME: (Lee Robert) - This was a quick hack to get this update working with the Tangent Mapper. It would be better to do a simple update using the new My_Model_Mapper_Abstract type of mapper. 
                             $uploadDataCollectorRow = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($upload_data_collector_row_id);
-                            $uploadDataCollectorRow->setIsExcluded(0);
+                            $uploadDataCollectorRow->isExcluded = 0;
                             Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->save($uploadDataCollectorRow);
                         }
 

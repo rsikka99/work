@@ -567,14 +567,24 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
     public function usersAction ()
     {
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_USERS);
-
         $request = $this->getRequest();
         $form    = new Proposalgen_Form_Survey_Users();
 
-        // Get any saved answers
+        // Get the user survey settings for overrides
+        $userSurveySetting = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchUserSurveySetting(Zend_Auth::getInstance()->getIdentity()->id);
+
+        // Override with user settings
+        $pageCoverageBW    = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(21, $this->getReport()->id);
+        $pageCoverageColor = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(22, $this->getReport()->id);
+
+        // Override the settings with user settings
+        $pageCoverageBW    = (!$pageCoverageBW) ? $userSurveySetting->pageCoverageMono : $pageCoverageBW;
+        $pageCoverageColor = (!$pageCoverageColor) ? $userSurveySetting->pageCoverageColor : $pageCoverageColor;
+
+
         $formDataFromAnswers = array(
-            "pageCoverage_BW"    => (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(21, $this->getReport()->id)) ? : "",
-            "pageCoverage_Color" => (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(22, $this->getReport()->id)) ? : ""
+            "pageCoverage_BW"    => $pageCoverageBW,
+            "pageCoverage_Color" => $pageCoverageColor,
         );
 
         $percentPrintVolume = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(23, $this->getReport()->id)) ? : false;
@@ -606,17 +616,14 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                     {
                         // Question 21 (Page Coverage BW)
                         $this->saveNumericQuestionAnswer(21, $form->getValue('pageCoverage_BW'));
-
                         // Question 22 (Page Coverage Color)
                         $this->saveNumericQuestionAnswer(22, $form->getValue('pageCoverage_Color'));
-
                         // Question 23 (Percent Inkjet Printing)
                         $this->saveNumericQuestionAnswer(23, $form->getValue('printVolume'));
-
                         // Question 24 (Average Printer downtime)
                         $this->saveNumericQuestionAnswer(24, $form->getValue('repairTime'));
 
-                        // Everytime we save anything related to a report, we should save it (updates the modification date)
+                        // Every time we save anything related to a report, we should save it (updates the modification date)
                         $this->saveReport();
 
                         if (isset($values ["saveAndContinue"]))

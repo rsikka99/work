@@ -17,10 +17,26 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
      *
      * @var number
      */
-    const QUESTIONSET_ID = 1;
+    const QUESTION_SET_ID = 1;
+
+    /**
+     * @var Proposalgen_Model_Report
+     */
     protected $_report;
+
+    /**
+     * @var Zend_Session_Namespace
+     */
     protected $_reportSession;
+
+    /**
+     * @var Proposalgen_Model_Report_Step
+     */
     protected $_reportSteps;
+
+    /**
+     * @var Application_Model_User
+     */
     protected $_userId;
 
     /**
@@ -80,7 +96,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
                 $identity                     = Zend_Auth::getInstance()->getIdentity();
                 $this->_report                = new Proposalgen_Model_Report();
                 $this->_report->userId        = $identity->id;
-                $this->_report->questionsetId = 1;
+                $this->_report->questionSetId = self::QUESTION_SET_ID;
                 $this->_report->reportStage   = Proposalgen_Model_Report_Step::STEP_SURVEY_COMPANY;
                 $this->_report->dateCreated   = date('Y-m-d H:i:s');
                 $this->_report->reportDate    = date('Y-m-d H:i:s');
@@ -97,7 +113,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     protected function saveReport ($updateReportStage = true)
     {
         $reportMapper = Proposalgen_Model_Mapper_Report::getInstance();
-        $this->_report->setLastModified(date('Y-m-d H:i:s'));
+        $this->_report->lastModified = date('Y-m-d H:i:s');
 
         if ($updateReportStage)
         {
@@ -105,24 +121,24 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
             $newStep = $this->checkIfNextStepIsNew($this->_activeStep);
             if ($newStep !== false)
             {
-                $this->_report->setReportStage($newStep->enumValue);
+                $this->_report->reportStage = $newStep->enumValue;
 
                 // We need to adjust the menu just in case we're not redirecting
                 Proposalgen_Model_Report_Step::updateAccessibleSteps($this->getReportSteps(), $newStep->enumValue);
             }
         }
 
-        if ($this->_report->getId() === null || $this->_report->getId() < 1)
+        if ($this->_report->id === null || $this->_report->id < 1)
         {
             $id = $reportMapper->insert($this->_report);
-            $this->_report->setId($id);
+            $this->_report->id = $id;
         }
         else
         {
             $id = $reportMapper->save($this->_report);
         }
 
-        $this->_reportSession->reportId = $this->_report->getId();
+        $this->_reportSession->reportId = $this->_report->id;
     }
 
     /**
