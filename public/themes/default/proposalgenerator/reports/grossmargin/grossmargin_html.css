@@ -1,14 +1,17 @@
 /* 
     Styles specific to the gross margin report 
-    Last revised: December 1, 2011
+    Last revised: January 18, 2013
 */
+html, body {
+    background-color: #FFF;
+}
 
 body {
 	width: 842px;
-	margin: auto;
+    min-width: 842px;
 	font-size: 9.5pt;
-	font-family: arial, verdana, arial, tahoma, verdana;
-	margin-bottom: 500px;
+    font-family: arial, verdana, arial, tahoma, verdana, serif;
+    margin : auto auto 500px auto;
 }
 
 .right {
@@ -41,7 +44,7 @@ h2.reportTitle {
 }
 
 #grossMarginDeviceSummary td {
-	padding: 0px 3px;
+	padding: 0 3px;
 }
 
 #grossMarginDeviceSummary tr.nonCompliantMono td.mono,
@@ -72,7 +75,7 @@ h2.reportTitle {
 */
 #grossMarginInformation {
 	margin: auto;
-	border-spacing: 0px;
+	border-spacing: 0;
 }
 
 #grossMarginInformation tr td {
@@ -85,7 +88,7 @@ h2.reportTitle {
 	font-weight: bold;
 }
 
-#grossMarginInformation td..column1 div {
+#grossMarginInformation td.column1 div {
     width: 200px;   
 }
 #grossMarginInformation td.column2 div {

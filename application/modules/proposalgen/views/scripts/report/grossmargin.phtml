@@ -1,4 +1,6 @@
-<?php 
+<?php
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
 if ($this->isPDF)
 {
     echo '<link rel="stylesheet" type="text/css" href="' . $this->serverUrl($this->theme("proposalgenerator/reports/common_all.css")) . '" />';
@@ -19,33 +21,33 @@ else
 	<tbody>
 		<tr>
 			<td class="column1"><div class="heading">PrintIQ Black And White CPP:</div></td>
-			<td class="column2"><div>$<?php echo number_format($this->proposal->MPSBlackAndWhiteCPP, 4); ?></div></td>
+			<td class="column2"><div>$<?php echo number_format($proposal->getMPSBlackAndWhiteCPP(), 4); ?></div></td>
 			<td class="column3"><div class="heading">Total Cost:</div></td>
-			<td class="column4"><div>$<?php echo number_format($this->proposal->GrossMarginTotalMonthlyCost->Combined, 2);?></div></td>
+			<td class="column4"><div>$<?php echo number_format($proposal->getGrossMarginTotalMonthlyCost()->Combined, 2);?></div></td>
 		</tr>
 		<tr>
 			<td class="column1"><div class="heading">PrintIQ Color CPP:</div></td>
-			<td class="column2"><div>$<?php echo number_format($this->proposal->MPSColorCPP, 4); ?></div></td>
+			<td class="column2"><div>$<?php echo number_format($proposal->getMPSColorCPP(), 4); ?></div></td>
 			<td class="column3"><div class="heading">Total Revenue:</div></td>
-			<td class="column4"><div>$<?php echo number_format($this->proposal->GrossMarginTotalMonthlyRevenue->Combined, 2);?></div></td>
+			<td class="column4"><div>$<?php echo number_format($proposal->getGrossMarginTotalMonthlyRevenue()->Combined, 2);?></div></td>
 		</tr>
 		<tr>
 			<td class="column1"><div class="heading">Weighted Black And White CPP:</div></td>
-			<td class="column2"><div>$<?php echo number_format($this->proposal->GrossMarginWeightedCPP->BlackAndWhite, 4);?></div></td>
+			<td class="column2"><div>$<?php echo number_format($proposal->getGrossMarginWeightedCPP()->BlackAndWhite, 4);?></div></td>
 			<td class="column3"><div class="heading">Monthly Profit:</div></td>
-			<td class="column4"><div>$<?php echo number_format($this->proposal->GrossMarginMonthlyProfit, 2);?></div></td>
+			<td class="column4"><div>$<?php echo number_format($proposal->getGrossMarginMonthlyProfit(), 2);?></div></td>
 		</tr>
 		<tr>
 			<td class="column1"><div class="heading">Weighted Color CPP:</div></td>
-			<td class="column2"><div>$<?php echo number_format($this->proposal->GrossMarginWeightedCPP->Color, 4);?></div></td>
+			<td class="column2"><div>$<?php echo number_format($proposal->getGrossMarginWeightedCPP()->Color, 4);?></div></td>
 			<td class="column3"><div class="heading">Overall Margin:</div></td>
-			<td class="column4"><div><?php echo number_format($this->proposal->GrossMarginOverallMargin);?>%</div></td>
+			<td class="column4"><div><?php echo number_format($proposal->getGrossMarginOverallMargin());?>%</div></td>
 		</tr>
 		<tr>
 			<td class="column1"><div class="heading">Black And White Margin:</div></td>
-			<td class="column2"><div><?php echo number_format($this->proposal->GrossMarginBlackAndWhiteMargin);?>%</div></td>
+			<td class="column2"><div><?php echo number_format($proposal->getGrossMarginBlackAndWhiteMargin());?>%</div></td>
 			<td class="column3"><div class="heading">Color Margin:</div></td>
-			<td class="column4"><?php echo number_format($this->proposal->GrossMarginColorMargin);?>%</td>
+			<td class="column4"><?php echo number_format($proposal->getGrossMarginColorMargin());?>%</td>
 		</tr>
 	</tbody>
 </table>
@@ -53,7 +55,7 @@ else
 <br/>
 
 <div class="center">
-    <em class="center">Yellow highlighted rows indicate devices that have not been assigned toners matching your selected preference of <strong><?php echo $this->proposal->Report->GrossMarginPricingConfig->NiceConfigName; ?></strong>. <br/> For these devices the system has selected the best available alternative.</em>
+    <em class="center">Yellow highlighted rows indicate devices that have not been assigned toners matching your selected preference of <strong><?php echo $proposal->getReport()->getReportSettings()->getGrossMarginPricingConfig()->getNiceConfigName(); ?></strong>. <br/> For these devices the system has selected the best available alternative.</em>
     <br/><br/>
 </div>
 
@@ -78,38 +80,38 @@ else
 		</tr>
 	</thead>
 	<tbody>
-		<?php foreach ($this->proposal->PurchasedDevices as $device) : ?>
+		<?php foreach ($proposal->getPurchasedDevices() as $deviceInstance) : ?>
 		<?php
             // This is only here for zend content assist
 		    //$device = new Proposalgen_Model_DeviceInstance();
-		    $tonerConfig = $device->MasterDevice->TonerConfigId;
+		    $tonerConfig = $deviceInstance->getMasterDevice()->tonerConfigId;
 		    $grossMarginPricingConfig = Proposalgen_Model_MasterDevice::getGrossMarginPricingConfig();
-		    $completeMonoToners = $device->MasterDevice->HasValidMonoGrossMarginToners;
-		    $completeColorToners = $device->MasterDevice->HasValidColorGrossMarginToners;
+		    $completeMonoToners = $deviceInstance->getMasterDevice()->getHasValidMonoGrossMarginToners();
+		    $completeColorToners = $deviceInstance->getMasterDevice()->getHasValidColorGrossMarginToners();
 		    $blackToner = null;
 		    $colorToner = null;
 		    switch ($tonerConfig)
 		    {
 		        case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED:
-		            $blackToner = $device->MasterDevice->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
-		            $colorToner = $device->MasterDevice->getCheapestToner(Proposalgen_Model_TonerColor::CYAN, $grossMarginPricingConfig);
+		            $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
+		            $colorToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::CYAN, $grossMarginPricingConfig);
 		            break;
 	            case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED:
-	                $blackToner = $device->MasterDevice->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
-	                $colorToner = $device->MasterDevice->getCheapestToner(Proposalgen_Model_TonerColor::THREE_COLOR, $grossMarginPricingConfig);
+	                $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
+	                $colorToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::THREE_COLOR, $grossMarginPricingConfig);
 		            break;
 	            case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED:
-	                $blackToner = $device->MasterDevice->getCheapestToner(Proposalgen_Model_TonerColor::FOUR_COLOR, $grossMarginPricingConfig);
+	                $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::FOUR_COLOR, $grossMarginPricingConfig);
 	                $colorToner = $blackToner;
 		            break;
 	            default:
-	                $blackToner = $device->MasterDevice->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
+	                $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
 	                break;
 		    }
 		    
 		    // Black Toner
-		    $blackCost = "$" . number_format($blackToner->TonerPrice, 2);
-		    $blackYield = number_format($blackToner->TonerYield);
+		    $blackCost = "$" . number_format($blackToner->cost, 2);
+		    $blackYield = number_format($blackToner->yield);
 
 		    // Color Toner
 		    $colorCost = "-";
@@ -118,40 +120,40 @@ else
 		    $isColor = false;
 		    if ($colorToner)
 		    {
-	            $colorCost = "$" . number_format($colorToner->TonerPrice, 2);
-	            $colorYield = number_format($colorToner->TonerYield);
+	            $colorCost = "$" . number_format($colorToner->cost, 2);
+	            $colorYield = number_format($colorToner->yield);
 	            $colorStyle = 'right';
 	            $isColor = true;
 		    }
 		?>
 		<tr class="<?php echo ($completeMonoToners) ? "" : "nonCompliantMono"?> <?php echo ($completeColorToners) ? "" : "nonCompliantColor"?>">
 			<!-- Monochrome -->
-			<td class="column1"><div><?php echo str_ireplace("hewlett-packard", "HP", $device->DeviceName) . "<br />(" . $device->IPAddress . " - " . $device->SerialNumber . ")";?></div></td>
-			<td class="column2 mono"><div class="right"><?php echo number_format($device->AverageMonthlyBlackAndWhitePageCount);?></div></td>
+			<td class="column1"><div><?php echo str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()) . "<br />(" . $deviceInstance->ipAddress . " - " . $deviceInstance->serialNumber . ")";?></div></td>
+			<td class="column2 mono"><div class="right"><?php echo number_format($deviceInstance->getAverageMonthlyBlackAndWhitePageCount());?></div></td>
 
 			<td class="column3 mono"><div class="right"><?php echo $blackCost ?></div></td>
 			<td class="column4 mono"><div class="right"><?php echo $blackYield ?></div></td>
-			<td class="column5 mono"><div class="right"><?php echo number_format($device->MasterDevice->CostPerPage->Actual->BasePlusService->BlackAndWhite, 4);?></div></td>
-			<td class="column6 mono"><div class="right">$<?php echo number_format($device->GrossMarginMonthlyBlackAndWhiteCost, 2);?></div></td>
+			<td class="column5 mono"><div class="right"><?php echo number_format($deviceInstance->getMasterDevice()->getCostPerPage()->Actual->BasePlusService->BlackAndWhite, 4);?></div></td>
+			<td class="column6 mono"><div class="right">$<?php echo number_format($deviceInstance->getGrossMarginMonthlyBlackAndWhiteCost(), 2);?></div></td>
 			
 			<!-- Color -->
-			<td class="column7 color"><div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? number_format($device->AverageMonthlyColorPageCount) : "-";?></div></td>
+			<td class="column7 color"><div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? number_format($deviceInstance->getAverageMonthlyColorPageCount()) : "-";?></div></td>
 			<td class="column8 color"><div class="<?php echo $colorStyle; ?>"><?php echo $colorCost ?></div></td>
 			<td class="column9 color"><div class="<?php echo $colorStyle; ?>"><?php echo $colorYield ?></div></td>
 			
-			<td class="column10 color"><div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? number_format($device->MasterDevice->CostPerPage->Actual->BasePlusService->Color, 4) : "-";?></div></td>
+			<td class="column10 color"><div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? number_format($deviceInstance->getMasterDevice()->getCostPerPage()->Actual->BasePlusService->Color, 4) : "-";?></div></td>
 			
-			<td class="column11 color"><div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? "$" . number_format($device->GrossMarginMonthlyColorCost, 2) : "-";?></div></td>
+			<td class="column11 color"><div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? "$" . number_format($deviceInstance->getGrossMarginMonthlyColorCost(), 2) : "-";?></div></td>
 		</tr>
 		<?php endforeach; ?>
 		<tr class="totals">
-			<td class="column1"><div>Totals for <?php echo $this->proposal->PurchasedDeviceCount; ?> devices:</div></td>
-			<td><div class="right"><?php echo number_format($this->proposal->PageCounts->Purchased->BlackAndWhite->Monthly);?></div></td>
+			<td class="column1"><div>Totals for <?php echo $proposal->getPurchasedDeviceCount(); ?> devices:</div></td>
+			<td><div class="right"><?php echo number_format($proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly);?></div></td>
 			<td colspan="3"></td>
-			<td class="column2"><div class="right">$<?php echo number_format($this->proposal->GrossMarginTotalMonthlyCost->BlackAndWhite, 2);?></div></td>			
-			<td ><div class="center"><?php echo number_format($this->proposal->PageCounts->Purchased->Color->Monthly);?></div></td>
+			<td class="column2"><div class="right">$<?php echo number_format($proposal->getGrossMarginTotalMonthlyCost()->BlackAndWhite, 2);?></div></td>
+			<td ><div class="center"><?php echo number_format($proposal->getPageCounts()->Purchased->Color->Monthly);?></div></td>
 			<td colspan="3"></td>
-			<td ><div class="right">$<?php echo number_format($this->proposal->GrossMarginTotalMonthlyCost->Color, 2);?></div></td>
+			<td ><div class="right">$<?php echo number_format($proposal->getGrossMarginTotalMonthlyCost()->Color, 2);?></div></td>
 		</tr>
 	</tbody>
 </table>
