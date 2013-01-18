@@ -1,0 +1,77 @@
+/* Styles specific to the assessment report */
+
+/* GRADE TABLE */
+table.gradesTable {
+    background-color: #F0F0F0;
+    border-left: 1px solid #000000;
+    border-top: 1px solid #000000;
+}
+table.gradesTable td {
+    border-bottom: 1px solid #000000;
+    border-right: 1px solid #000000;
+}
+table.gradesTable td.gradeDescription {
+    width: 570px;
+    padding-left: 10px;
+}
+table.gradesTable td.gradeDescription h4{
+    margin: 0px;
+    padding: 0px;
+}
+table.gradesTable td.gradeNumber {
+    padding: 0px;
+    font-size: 20pt;
+    font-weight: bold;
+    text-align: center;
+    width: 75px;
+}
+
+/**
+ * Least/Most Used Devices
+ */
+#MostUsedDevicesTable .column1 div,
+#LeastUsedDevicesTable .column1 div {
+    width: 260px;
+}
+
+#MostUsedDevicesTable .column2 div,
+#LeastUsedDevicesTable .column2 div {
+    width: 105px;
+}
+
+#MostUsedDevicesTable .column3 div,
+#LeastUsedDevicesTable .column3 div {
+    width: 115px;
+}
+
+#MostUsedDevicesTable .column4 div,
+#LeastUsedDevicesTable .column4 div {
+    width: 115px;
+}
+
+/**
+ * High risk device table
+ */
+#HighRiskDevicesTable .column1 div {
+    width: 160px;
+}
+
+#HighRiskDevicesTable .column2 div {
+    width: 110px;
+}
+
+#HighRiskDevicesTable .column3 div {
+    width: 50px;
+}
+
+#HighRiskDevicesTable .column4 div {
+    width: 80px;
+}
+
+#HighRiskDevicesTable .column5 div {
+    width: 75px;
+}
+
+#HighRiskDevicesTable .column6 div {
+    width: 75px;
+}

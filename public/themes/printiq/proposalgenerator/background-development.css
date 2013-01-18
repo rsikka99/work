@@ -1,0 +1,6 @@
+@charset "UTF-8";
+
+body,html {
+	background-image: url(./images/index/background_repeat.png);
+	background-repeat: repeat-x;
+}

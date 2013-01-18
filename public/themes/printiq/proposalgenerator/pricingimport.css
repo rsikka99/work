@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+body {
+	margin-bottom: 150px;
+}
+
+#validResults {
+	border: 1px solid black;
+	height: 200px;
+	overflow: auto;
+}
+
+#excludedResults {
+	border: 1px solid black;
+	height: 200px;
+	overflow: auto;
+}
+
+#invalidResults {
+	border: 1px solid black;
+	height: 200px;
+	overflow: auto;
+}

@@ -277,7 +277,7 @@ abstract class My_Controller_Report extends Zend_Controller_Action
                 fclose($file [$i]);
                 if ($local)
                 {
-                    $imageUrl = PUBLIC_FOLDER . "/cache/reports/$reportId/" . $randomSalt . "_$i.png";
+                    $imageUrl = PUBLIC_PATH . "/cache/reports/$reportId/" . $randomSalt . "_$i.png";
                 }
                 else
                 {

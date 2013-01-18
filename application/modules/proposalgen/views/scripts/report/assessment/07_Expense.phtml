@@ -170,12 +170,14 @@
                 </tr>
             </thead>
             <tbody>
-            	<?php $ctr = 0; foreach ($this->proposal->getMostExpensiveDevices() as $device) : $ctr++; if ($ctr > 3) { break; } ?>
+
+            	<?php $ctr = 0; foreach ($this->proposal->getMostExpensiveDevices() as $deviceInstance) : /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
+                    $ctr++; if ($ctr > 3) { break; } ?>
                 <tr>
-                	<td><div style="width: 225px; padding: 0px;"><?php echo $device->getDeviceName(); ?></div></td>
-                	<td class="center"><?php if ($device->getSerialNumber()) echo $device->getSerialNumber(); else echo 'Unknown'; ?></td>
-                	<td class="center"><?php echo number_format($device->getAverageMonthlyPageCount()); ?> pages</td>
-                	<td class="center">$<?php echo number_format($device->getMonthlyRate()); ?></td>
+                	<td><div style="width: 225px; padding: 0px;"><?php echo $deviceInstance->getDeviceName(); ?></div></td>
+                	<td class="center"><?php echo ($deviceInstance->serialNumber) ? : 'Unknown'; ?></td>
+                	<td class="center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()); ?> pages</td>
+                	<td class="center">$<?php echo number_format($deviceInstance->getMonthlyRate()); ?></td>
             	</tr>
             	<?php endforeach; ?>
             </tbody>

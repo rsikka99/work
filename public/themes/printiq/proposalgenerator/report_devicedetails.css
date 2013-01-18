@@ -1,0 +1,19 @@
+table {
+	border-bottom: 1px solid black;
+	border-left: 1px solid black;
+	border-top: 1px solid black;
+}
+
+table td, 
+table th {
+    border-right: 1px solid black;
+}
+
+table tr td {
+    border-top: 1px solid black;
+}
+
+table caption {
+    background-color: transparent;
+	padding: 0px;
+}
