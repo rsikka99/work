@@ -54,3 +54,9 @@ INSERT INTO `pgen_device_toners` (`toner_id`, `master_device_id`) VALUES
 (37, 14),
 (38, 14),
 (39, 14);
+
+INSERT INTO `pgen_replacement_devices` (`master_device_id`, `replacement_category`, `print_speed`, `resolution`, `monthly_rate`) VALUES
+(4, 'COLOR MFP', 1, 1, 249),
+(5, 'BLACK & WHITE', 1, 1, 49.99),
+(6, 'BLACK & WHITE MFP', 1, 1, 99),
+(7, 'COLOR', 1, 1, 149.99);
