@@ -45,7 +45,7 @@ class Admin_UserController extends Zend_Controller_Action
                         $mapper = new Application_Model_Mapper_User();
                         $user   = new Application_Model_User();
                         $user->populate($values);
-                        $user->setPassword($this->cryptPassword($user->password));
+                        $user->password = $this->cryptPassword($user->password);
                         $userId = $mapper->insert($user);
 
                         $this->_helper->flashMessenger(array(
@@ -191,11 +191,11 @@ class Admin_UserController extends Zend_Controller_Action
         $user   = $mapper->find($userId);
 
         // Get all available roles. In theory this should be a managable amount
-        $rolemapper = new Admin_Model_Mapper_Role();
-        $roles      = $rolemapper->fetchAll();
+        $roleMapper = new Admin_Model_Mapper_Role();
+        $roles      = $roleMapper->fetchAll();
 
-        $userrolemapper = new Admin_Model_Mapper_UserRole();
-        $userRoles      = $userrolemapper->fetchAll(array(
+        $userRoleMapper = new Admin_Model_Mapper_UserRole();
+        $userRoles      = $userRoleMapper->fetchAll(array(
                                                          'userId = ?' => $userId
                                                     ));
 
@@ -203,7 +203,7 @@ class Admin_UserController extends Zend_Controller_Action
         $currentUserRoles = array();
         foreach ($userRoles as $userRole)
         {
-            $currentUserRoles [] = $userRole->getRoleId();
+            $currentUserRoles [] = $userRole->roleId;
         }
 
         // If the user doesn't exist, send them back t the view all users page
@@ -323,7 +323,7 @@ class Admin_UserController extends Zend_Controller_Action
                                 if (!$hasRole)
                                 {
                                     $userRole->roleId = $roleId;
-                                    $userrolemapper->insert($userRole);
+                                    $userRoleMapper->insert($userRole);
                                 }
                             }
 
@@ -335,7 +335,7 @@ class Admin_UserController extends Zend_Controller_Action
 
                                 foreach ($values ["userRoles"] as $roleId)
                                 {
-                                    if ($userRole->getRoleId() == $roleId)
+                                    if ($userRole->roleId == $roleId)
                                     {
                                         $hasRole = true;
                                         break;
@@ -346,7 +346,7 @@ class Admin_UserController extends Zend_Controller_Action
                                 if (!$hasRole)
                                 {
                                     // Delete role
-                                    $userrolemapper->delete($userRole);
+                                    $userRoleMapper->delete($userRole);
                                 }
                             }
                         }
@@ -355,7 +355,7 @@ class Admin_UserController extends Zend_Controller_Action
                             // If the user deselected all the boxes, delete all the roles
                             if (count($userRoles) > 0)
                             {
-                                $result = $userrolemapper->deleteAllRolesForUser($userId);
+                                $result = $userRoleMapper->deleteAllRolesForUser($userId);
                             }
                         }
 

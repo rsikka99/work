@@ -93,7 +93,7 @@ class Application_Model_User extends My_Model_Abstract
 
     public function isFrozen ()
     {
-        $frozenDate  = new DateTime($this->_frozenUntil);
+        $frozenDate  = new DateTime($this->frozenUntil);
         $currentDate = new DateTime();
         $diff        = $currentDate->diff($frozenDate);
 
