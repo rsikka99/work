@@ -25,7 +25,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             }
             else if (isset($values ["uploadData"]))
             {
-                // Validate and recieve the file.
+                // Validate and receive the file.
                 $upload = new Zend_File_Transfer_Adapter_Http();
                 $upload->setDestination($this->view->App()->uploadPath);
 
@@ -141,7 +141,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     /**
      * Parses the uploaded csv data and saves it to the database if needed.
      *
-     * @param string $lines
+     * @param array $lines
      *            (All the lines from the file)
      */
     public function parseCSVUpload ($lines)
@@ -161,7 +161,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
         // Count the number of valid rows in the file
         $devices = array();
-        foreach ($lines as $key => $value)
+        foreach ($lines as $value)
         {
             // Parse the line. If the first two values aren't empty then add it to the list
             $line = str_getcsv($value);
@@ -548,7 +548,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         // Mark the step we're on as active
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FLEETDATA_MAPDEVICES);
 
-        $this->user_id = Zend_Auth::getInstance()->getIdentity()->id;
+        $this->_userId = Zend_Auth::getInstance()->getIdentity()->id;
 
         Tangent_Timer::Milestone("Device Mapping Action Start");
         $db               = Zend_Db_Table::getDefaultAdapter();
@@ -569,7 +569,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                                                    ))
             ->joinLeft(array(
                             'pfdmu' => 'pgen_user_pf_device_matchups'
-                       ), 'udc.devices_pf_id = pfdmu.pf_device_id AND pfdmu.user_id = ' . $this->user_id, array(
+                       ), 'udc.devices_pf_id = pfdmu.pf_device_id AND pfdmu.user_id = ' . $this->_userId, array(
                                                                                                                'pfdmu.master_device_id'
                                                                                                           ))
             ->joinLeft(array(
@@ -608,7 +608,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                    ))
             ->joinLeft(array(
                             'pfdmu' => 'pgen_user_pf_device_matchups'
-                       ), 'udc.devices_pf_id = pfdmu.pf_device_id AND pfdmu.user_id = ' . $this->user_id, array(
+                       ), 'udc.devices_pf_id = pfdmu.pf_device_id AND pfdmu.user_id = ' . $this->_userId, array(
                                                                                                                'pfdmu.master_device_id'
                                                                                                           ))
             ->joinLeft(array(
@@ -659,7 +659,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $this->_helper->layout->disableLayout();
         $db = Zend_Db_Table::getDefaultAdapter();
 
-        $this->user_id = Zend_Auth::getInstance()->getIdentity()->id;
+        $this->_userId = Zend_Auth::getInstance()->getIdentity()->id;
         $report_id     = $this->getReport()->id;
 
         $select = new Zend_Db_Select($db);
@@ -682,7 +682,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                                                    ))
             ->joinLeft(array(
                             'pfdmu' => 'pgen_user_pf_device_matchups'
-                       ), 'udc.devices_pf_id = pfdmu.pf_device_id AND pfdmu.user_id = ' . $this->user_id, array(
+                       ), 'udc.devices_pf_id = pfdmu.pf_device_id AND pfdmu.user_id = ' . $this->_userId, array(
                                                                                                                'pfdmu.master_device_id'
                                                                                                           ))
             ->joinLeft(array(
@@ -777,6 +777,63 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     }
 
     /**
+     * Handles mapping a device
+     * @throws Exception
+     */
+    public function setmappedtoAction ()
+    {
+        // disable the default layout
+        $this->_helper->layout->disableLayout();
+        $db = Zend_Db_Table::getDefaultAdapter();
+
+        // get params
+        $devices_pf_id    = $this->_getParam('devices_pf_id', 0);
+        $master_device_id = $this->_getParam('master_device_id', 0);
+
+        $db->beginTransaction();
+        try
+        {
+            // add pf_device_matchup_users record
+            $pf_device_matchup_usersTable = new Proposalgen_Model_DbTable_PFMatchupUsers();
+            if ($devices_pf_id > 0)
+            {
+                $where  = $pf_device_matchup_usersTable->getAdapter()->quoteInto('pf_device_id = ' . $devices_pf_id . ' AND user_id = ' . $this->_userId, null);
+                $result = $pf_device_matchup_usersTable->fetchRow($where);
+
+                $pf_device_matchup_usersData = array(
+                    'master_device_id' => $master_device_id
+                );
+
+                if ($result && count($result->toArray()) > 0)
+                {
+                    if ($master_device_id > 0)
+                    {
+                        $pf_device_matchup_usersTable->update($pf_device_matchup_usersData, $where);
+                    }
+                    else
+                    {
+                        $pf_device_matchup_usersTable->delete($where);
+                    }
+                }
+                else
+                {
+                    $pf_device_matchup_usersData ['pf_device_id'] = $devices_pf_id;
+                    $pf_device_matchup_usersData ['user_id']       = $this->_userId;
+                    $pf_device_matchup_usersTable->insert($pf_device_matchup_usersData);
+                }
+            }
+            $db->commit();
+        }
+        catch (Exception $e)
+        {
+            My_Log::logException($e);
+            $db->rollback();
+            $this->_helper->json(array("success" => false, "message" => "Error mapping device"));
+        }
+        $this->_helper->json(array("success" => true, "message" => "Device mapped successfully"));
+    }
+
+    /**
      * Gets a list of models for mapping auto complete
      */
     protected function getmodelsAction ()
@@ -821,7 +878,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $this->_helper->layout->disableLayout();
         $db = Zend_Db_Table::getDefaultAdapter();
 
-        $this->user_id = Zend_Auth::getInstance()->getIdentity()->id;
+        $this->_userId = Zend_Auth::getInstance()->getIdentity()->id;
         $report_id     = $this->getReport()->id;
         $formdata      = new stdClass();
 
@@ -840,7 +897,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                       ))
             ->joinLeft(array(
                             'pfdmu' => 'pgen_user_pf_device_matchups'
-                       ), 'udc.devices_pf_id = pfdmu.pf_device_id AND pfdmu.user_id = ' . $this->user_id, array(
+                       ), 'udc.devices_pf_id = pfdmu.pf_device_id AND pfdmu.user_id = ' . $this->_userId, array(
                                                                                                                'master_device_id AS user_matchup_id'
                                                                                                           ))
             ->joinLeft(array(
@@ -975,7 +1032,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $db                    = Zend_Db_Table::getDefaultAdapter();
         $this->view->formTitle = 'Add Unknown Printer';
 
-        $this->user_id = Zend_Auth::getInstance()->getIdentity()->id;
+        $this->_userId = Zend_Auth::getInstance()->getIdentity()->id;
         $report_id     = $this->getReport()->id;
 
         // add device form
@@ -1050,7 +1107,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 $ticket_commentsTable = new Proposalgen_Model_DbTable_TicketComment();
                                 $ticket_commentsData  = array(
                                     'ticket_id'    => $ticket_id,
-                                    'user_id'      => $this->user_id,
+                                    'user_id'      => $this->_userId,
                                     'content'      => $ticket_comment,
                                     'date_created' => $date
                                 );
@@ -1071,7 +1128,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         // save ticket
                         $ticketTable = new Proposalgen_Model_DbTable_Ticket();
                         $ticketData  = array(
-                            'user_id'      => $this->user_id,
+                            'user_id'      => $this->_userId,
                             'category_id'  => Proposalgen_Model_TicketCategory::PRINTFLEET_DEVICE_SUPPORT,
                             'status_id'    => Proposalgen_Model_TicketStatus::STATUS_NEW,
                             'title'        => $request_title,
@@ -1116,7 +1173,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         $printer_requestTable = new Proposalgen_Model_DbTable_TicketPFRequest();
                         $printer_requestData  = array(
                             'ticket_id'             => $ticket_id,
-                            'user_id'               => $this->user_id,
+                            'user_id'               => $this->_userId,
                             'pf_device_id'          => $devices_pf_id,
                             'manufacturer'          => $device_manufacturer,
                             'printer_model'         => $printer_model,
@@ -1746,7 +1803,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
                         // check for ticket for user/device_pf_id
                         $ticket_pf_requestTable = new Proposalgen_Model_DbTable_TicketPFRequest();
-                        $where                  = $ticket_pf_requestTable->getAdapter()->quoteInto('user_id = ' . $this->user_id . ' AND pf_device_id = ?', $devices_pf_id, 'INTEGER');
+                        $where                  = $ticket_pf_requestTable->getAdapter()->quoteInto('user_id = ' . $this->_userId . ' AND pf_device_id = ?', $devices_pf_id, 'INTEGER');
                         $ticket_pf_request      = $ticket_pf_requestTable->fetchRow($where);
 
                         if (count($ticket_pf_request) > 0)
@@ -2112,7 +2169,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 // if user has previously requested support for this device,
                 // disable checkbox
                 $tickets_pf_requestsTable = new Proposalgen_Model_DbTable_TicketPFRequest();
-                $where                    = $tickets_pf_requestsTable->getAdapter()->quoteInto('user_id = ' . $this->user_id . ' AND pf_device_id = ?', $devices_pf_id, 'INTEGER');
+                $where                    = $tickets_pf_requestsTable->getAdapter()->quoteInto('user_id = ' . $this->_userId . ' AND pf_device_id = ?', $devices_pf_id, 'INTEGER');
                 $ticket_pf_request        = $tickets_pf_requestsTable->fetchRow($where);
 
                 if (count($ticket_pf_request) > 0)
@@ -2188,7 +2245,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                ), 'm.id = md.manufacturer_id', array(
                                                                     'displayname'
                                                                ))
-                    ->where('pfdmu.pf_device_id = ' . $devices_pf_id . ' AND pfdmu.user_id = ' . $this->user_id);
+                    ->where('pfdmu.pf_device_id = ' . $devices_pf_id . ' AND pfdmu.user_id = ' . $this->_userId);
 
                 $stmt           = $db->query($select);
                 $master_devices = $stmt->fetchAll();
@@ -2298,7 +2355,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $report_id = $this->getReport()->id;
 
         $date          = date('Y-m-d H:i:s T');
-        $this->user_id = Zend_Auth::getInstance()->getIdentity()->id;
+        $this->_userId = Zend_Auth::getInstance()->getIdentity()->id;
 
         $this->view->formTitle   = 'Upload Confirmation';
         $this->view->companyName = $this->getReportCompanyName();
@@ -2341,7 +2398,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                                                            ))
                     ->joinLeft(array(
                                     'pfdmu' => 'pgen_user_pf_device_matchups'
-                               ), 'udc.devices_pf_id = pfdmu.pf_device_id AND pfdmu.user_id = ' . $this->user_id, array(
+                               ), 'udc.devices_pf_id = pfdmu.pf_device_id AND pfdmu.user_id = ' . $this->_userId, array(
                                                                                                                        'master_device_id AS user_matchup_id'
                                                                                                                   ))
                     ->joinLeft(array(
@@ -2690,7 +2747,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     public function deviceleasinglistAction ()
     {
         // disable the default layout
-        $this->_helper->layout->disableLayout();
         $db           = Zend_Db_Table::getDefaultAdapter();
         $invalid_data = $this->_getParam('filter', 0);
         $formData     = new stdClass();
@@ -2706,7 +2762,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         // get report id from session
         $report_id = $this->getReport()->id;
 
-        $select = new Zend_Db_Select($db);
         $select = $db->select()
             ->from(array(
                         'udc' => 'pgen_upload_data_collector_rows'
@@ -2847,7 +2902,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
                         // get average monthly page volume
                         $device_instanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
-                        $device_instance       = $device_instanceMapper->fetchRow('device_instance_id = ' . $result [$key] ['di_device_instance_id']);
+                        $device_instance       = $device_instanceMapper->fetchRow('id = ' . $result [$key] ['di_device_instance_id']);
 
                         if (count($device_instance) > 0)
                         {
@@ -2879,13 +2934,11 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         }
         catch (Exception $e)
         {
-            // critical exception
             My_Log::logException($e);
         }
 
         // encode user data to return to the client:
-        $json             = Zend_Json::encode($formData);
-        $this->view->data = $json;
+        $this->_helper->json($formData);
     }
 
     public function deviceleasingexcludedlistAction ()
