@@ -72,6 +72,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     protected $DateReportPrepared;
     protected $AveragePowerUsagePerMonth;
     protected $AveragePowerCostPerMonth;
+    protected $AverageOperatingWatts;
     protected $AverageDeviceAge;
     protected $PercentageOfDevicesReportingPower;
     protected $NumberOfDevicesReportingPower;

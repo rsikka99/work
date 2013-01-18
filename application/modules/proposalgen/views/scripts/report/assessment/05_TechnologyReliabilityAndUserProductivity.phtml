@@ -33,14 +33,14 @@
                 </tr>
             </thead>
             <tbody>
-            <?php $ctr= 0; foreach ($this->proposal->HighRiskDevices as $device) : ?>
+            <?php $ctr= 0; foreach ($this->proposal->HighRiskDevices as $deviceInstance) : /* @var $deviceInstance Proposalgen_Model_DeviceInstance */ ?>
                 <tr>
-                	<td class="column1"><div class=" left"><?php echo $device->getDeviceName(); ?></div></td>
-                	<td class="column2"><div class=" center"><?php if ($device->getSerialNumber()) echo $device->getSerialNumber(); else echo 'Unknown';?></div></td>
-                	<td class="column3"><div class=" center"><?php echo $device->Age; ?> years</div></td>
-                	<td class="column4"><div class=" center"><?php echo number_format($device->getAverageMonthlyPageCount()); ?></div></td>
-                	<td class="column5"><div class=" center"><?php echo number_format($device->getLifePageCount()); ?></div></td>
-                	<td class="column6"><div class=" center"><?php echo number_format($device->MasterDevice->MaximumMonthlyPageVolume * 36); ?></div></td>
+                	<td class="column1"><div class=" left"><?php echo $deviceInstance->getDeviceName(); ?></div></td>
+                	<td class="column2"><div class=" center"><?php echo ($deviceInstance->serialNumber) ? : 'Unknown';?></div></td>
+                	<td class="column3"><div class=" center"><?php echo $deviceInstance->getAge(); ?> years</div></td>
+                	<td class="column4"><div class=" center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()); ?></div></td>
+                	<td class="column5"><div class=" center"><?php echo number_format($deviceInstance->getLifePageCount()); ?></div></td>
+                	<td class="column6"><div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume() * 36); ?></div></td>
             	</tr>
             <?php $ctr++; if ($ctr > 2) break; endforeach; ?>
             </tbody>
