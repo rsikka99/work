@@ -246,7 +246,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         $quoteDevice->setName($masterDevice->getFullDeviceName());
         $quoteDevice->setOemSku($device->getOemSku());
         $quoteDevice->setDealerSku($device->getDealerSku());
-        $quoteDevice->setCost($masterDevice->getCost());
+        $quoteDevice->setCost($masterDevice->cost);
         $quoteDevice->setTonerConfigId($masterDevice->tonerConfigId);
         
         // Sync Cost Per Page

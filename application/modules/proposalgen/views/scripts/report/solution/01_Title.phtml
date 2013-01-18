@@ -1,4 +1,6 @@
 <?php
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
     echo $this->titlePageStart;
 ?>
     <?php echo $this->noBreakStart; ?>
@@ -6,15 +8,15 @@
         	<div class="header">
             	<h3>Prepared for:
             	<?php
-            		if(strlen($this->proposal->Report->CustomerCompanyName) > 26)
+            		if(strlen($proposal->getReport()->customerCompanyName) > 26)
             			echo "<br/>";
-            		echo $this->proposal->Report->CustomerCompanyName;
+            		echo $proposal->getReport()->customerCompanyName;
             	?>
             	</h3>
-            	<h3><?php echo $this->proposal->DateReportPrepared; ?></h3>
+            	<h3><?php echo $proposal->getDateReportPrepared(); ?></h3>
             </div> <!-- End div header -->
             <div class="customerdetails">
-                <p><?php echo nl2br($this->proposal->CustomerAddress); ?></p>
+                <p><?php echo nl2br($proposal->getCustomerAddress()); ?></p>
             </div>
         </div> <!-- End div titlepage -->
     <?php echo $this->noBreakEnd; ?>

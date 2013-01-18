@@ -98,7 +98,7 @@ class Proposalgen_MasterdeviceController extends Zend_Controller_Action
                             $mapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
                             $masterDevice = new Proposalgen_Model_MasterDevice();
                             $currentDate = date('Y-m-d H:i:s');
-                            $masterDevice->setDateCreated($currentDate);
+                            $masterDevice->dateCreated = $currentDate;
                             
                             foreach ( $values as &$value )
                             {
@@ -200,7 +200,7 @@ class Proposalgen_MasterdeviceController extends Zend_Controller_Action
                                 $value = null;
                         }
                         $masterDevice->populate($values);
-                        $masterDevice->setId($masterDeviceId);
+                        $masterDevice->id = $masterDeviceId;
                         
                         // Save to the database with cascade insert turned on
                         $masterDeviceId = $mapper->save($masterDevice, $masterDeviceId);

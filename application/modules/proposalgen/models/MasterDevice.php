@@ -407,6 +407,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         else
         {
             // Since we don't have a preferred toner type, check all the toners of $tonerColor
+            /* @var $tonersByColor Proposalgen_Model_Toner[] */
             foreach ($tonersByPartType as $tonersByColor)
             {
                 if (array_key_exists($tonerColor, $tonersByColor))
@@ -510,6 +511,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
 
             // Black Base CPP = Toner Cost / Toner Yield
             // Color CPP = Toner Cost / Toner Yield
+            /* @var $toner Proposalgen_Model_Toner */
             foreach ($tempTonerList as $toner)
             {
                 // If we didn't get a toner, skip it.
@@ -531,6 +533,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
 
             // Black Base CPP = Toner Cost / Toner Yield
             // Color CPP = Toner Cost / Toner Yield
+            /* @var $toner Proposalgen_Model_Toner */
             foreach ($tempTonerList as $toner)
             {
                 // If we didn't get a toner, skip it.
@@ -583,33 +586,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     }
 
     /**
-     *
-     * @return the $MasterDeviceId
-     */
-    public function getId ()
-    {
-        if (!isset($this->id))
-        {
-
-            $this->id = null;
-        }
-
-        return $this->id;
-    }
-
-    /**
-     *
-     * @param field_type $Id
-     */
-    public function setId ($Id)
-    {
-        $this->id = $Id;
-
-        return $this;
-    }
-
-    /**
-     *
      * @return Proposalgen_Model_Manufacturer
      */
     public function getManufacturer ()
@@ -624,38 +600,13 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     }
 
     /**
-     *
      * @param Proposalgen_Model_Manufacturer $Manufacturer
+     *
+     * @return Proposalgen_Model_MasterDevice
      */
     public function setManufacturer ($Manufacturer)
     {
         $this->_manufacturer = $Manufacturer;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $PrinterModel
-     */
-    public function getPrinterModel ()
-    {
-        if (!isset($this->printerModel))
-        {
-
-            $this->printerModel = null;
-        }
-
-        return $this->printerModel;
-    }
-
-    /**
-     *
-     * @param string $PrinterModel
-     */
-    public function setPrinterModel ($PrinterModel)
-    {
-        $this->printerModel = $PrinterModel;
 
         return $this;
     }
@@ -691,268 +642,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     }
 
     /**
-     *
-     * @return the $IsCopier
-     */
-    public function getIsCopier ()
-    {
-        if (!isset($this->isCopier))
-        {
-
-            $this->isCopier = null;
-        }
-
-        return $this->isCopier;
-    }
-
-    /**
-     *
-     * @param field_type $IsCopier
-     */
-    public function setIsCopier ($IsCopier)
-    {
-        $this->isCopier = $IsCopier;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $IsFax
-     */
-    public function getIsFax ()
-    {
-        if (!isset($this->isFax))
-        {
-
-            $this->isFax = null;
-        }
-
-        return $this->isFax;
-    }
-
-    /**
-     *
-     * @param field_type $IsFax
-     */
-    public function setIsFax ($IsFax)
-    {
-        $this->isFax = $IsFax;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $IsScanner
-     */
-    public function getIsScanner ()
-    {
-        if (!isset($this->isScanner))
-        {
-
-            $this->isScanner = null;
-        }
-
-        return $this->isScanner;
-    }
-
-    /**
-     *
-     * @param field_type $IsScanner
-     */
-    public function setIsScanner ($IsScanner)
-    {
-        $this->isScanner = $IsScanner;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $IsDuplex
-     */
-    public function getIsDuplex ()
-    {
-        if (!isset($this->isDuplex))
-        {
-
-            $this->isDuplex = null;
-        }
-
-        return $this->isDuplex;
-    }
-
-    /**
-     *
-     * @param field_type $IsDuplex
-     */
-    public function setIsDuplex ($IsDuplex)
-    {
-        $this->isDuplex = $IsDuplex;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $IsReplacementDevice
-     */
-    public function getIsReplacementDevice ()
-    {
-        if (!isset($this->isReplacementDevice))
-        {
-
-            $this->isReplacementDevice = null;
-        }
-
-        return $this->isReplacementDevice;
-    }
-
-    /**
-     *
-     * @param field_type $IsReplacementDevice
-     */
-    public function setIsReplacementDevice ($IsReplacementDevice)
-    {
-        $this->isReplacementDevice = $IsReplacementDevice;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $WattsPowerNormal
-     */
-    public function getWattsPowerNormal ()
-    {
-        if (!isset($this->wattsPowerNormal))
-        {
-            $this->wattsPowerNormal = null;
-        }
-
-        return $this->wattsPowerNormal;
-    }
-
-    /**
-     *
-     * @param field_type $WattsPowerNormal
-     */
-    public function setWattsPowerNormal ($WattsPowerNormal)
-    {
-        $this->wattsPowerNormal = $WattsPowerNormal;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $WattsPowerIdle
-     */
-    public function getWattsPowerIdle ()
-    {
-        if (!isset($this->wattsPowerIdle))
-        {
-            $this->wattsPowerIdle = 10;
-        }
-
-        return $this->wattsPowerIdle;
-    }
-
-    /**
-     *
-     * @param field_type $WattsPowerIdle
-     */
-    public function setWattsPowerIdle ($WattsPowerIdle)
-    {
-        $this->wattsPowerIdle = $WattsPowerIdle;
-
-        return $this;
-    }
-
-    /**
-     * Gets the cost of the device
-     *
-     * @return number The cost of the device
-     */
-    public function getCost ()
-    {
-        if (!isset($this->cost))
-        {
-
-            $this->cost = null;
-        }
-
-        return $this->cost;
-    }
-
-    /**
-     * Sets a new cost for the device
-     *
-     * @param number $cost
-     *            The new cost of the device
-     */
-    public function setCost ($cost)
-    {
-        $this->cost = $cost;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $LaunchDate
-     */
-    public function getLaunchDate ()
-    {
-        if (!isset($this->launchDate))
-        {
-
-            $this->launchDate = null;
-        }
-
-        return $this->launchDate;
-    }
-
-    /**
-     *
-     * @param field_type $LaunchDate
-     */
-    public function setLaunchDate ($LaunchDate)
-    {
-        $this->launchDate = date('Y-m-d', strtotime($LaunchDate));
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $DateCreated
-     */
-    public function getDateCreated ()
-    {
-        if (!isset($this->dateCreated))
-        {
-
-            $this->dateCreated = null;
-        }
-
-        return $this->dateCreated;
-    }
-
-    /**
-     *
-     * @param field_type $DateCreated
-     */
-    public function setDateCreated ($DateCreated)
-    {
-        $this->dateCreated = $DateCreated;
-
-        return $this;
-    }
-
-    /**
-     * @return Proposalgen_Model_Toner[][][]
+     * @return Proposalgen_Model_Toner[]
      */
     public function getToners ()
     {
@@ -1221,7 +911,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getFullDeviceName ()
     {
-        return "{$this->getManufacturer()->displayname} {$this->getPrinterModel()}";
+        return "{$this->getManufacturer()->displayname} {$this->printerModel}";
     }
 
     /**

@@ -278,7 +278,7 @@ class Proposalgen_Model_Mapper_UploadDataCollectorRow extends Tangent_Model_Mapp
 
             $manufacturer->fullname    = $result->Manufacturer;
             $manufacturer->displayname = $result->Manufacturer;
-            $masterDevice->setPrinterModel(trim(str_replace($result->Manufacturer, '', $result->ModelName)));
+            $masterDevice->printerModel = trim(str_replace($result->Manufacturer, '', $result->ModelName));
             $masterDevice->setManufacturer($manufacturer);
             $device->setMasterDevice($masterDevice);
 
