@@ -159,7 +159,7 @@ class Proposalgen_ReportController extends My_Controller_Report
     {
         $this->view->availableReports->Assessment->active = true;
         $this->view->formats = array (
-                "/proposal/assessment/generate/format/docx" => $this->wordFormat
+                "/proposalgen/assessment/generate/format/docx" => $this->wordFormat
         );
         $this->view->reportTitle = "Assessment";
         
@@ -231,7 +231,7 @@ class Proposalgen_ReportController extends My_Controller_Report
         $this->view->availableReports->Solution->active = true;
         
         $this->view->formats = array (
-                "/proposal/solution/generate/format/docx" => $this->wordFormat 
+                "/proposalgen/solution/generate/format/docx" => $this->wordFormat
         );
         
         try
@@ -276,8 +276,8 @@ class Proposalgen_ReportController extends My_Controller_Report
     {
         $this->view->availableReports->GrossMargin->active = true;
         $this->view->formats = array (
-                "/proposal/grossmargin/generate/format/csv" => $this->csvFormat, 
-                "/proposal/grossmargin/generate/format/docx" => $this->wordFormat 
+                "/proposalgen/grossmargin/generate/format/csv" => $this->csvFormat,
+                "/proposalgen/grossmargin/generate/format/docx" => $this->wordFormat
         );
         
         try
@@ -319,8 +319,8 @@ class Proposalgen_ReportController extends My_Controller_Report
         $this->view->availableReports->PrintingDeviceList->active = true;
         $this->view->reportTitle = "Printing Device List";
         $this->view->formats = array (
-                "/proposal/printingdevicelist/generate/format/csv" => $this->csvFormat, 
-                "/proposal/printingdevicelist/generate/format/docx" => $this->wordFormat 
+                "/proposalgen/printingdevicelist/generate/format/csv" => $this->csvFormat,
+                "/proposalgen/printingdevicelist/generate/format/docx" => $this->wordFormat
         );
         
         try
