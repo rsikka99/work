@@ -250,8 +250,8 @@ $data = array (
 /**
  * Render each of the view scripts for different parts of the document
  */
-$this->partial("grossmargin/docx/01_header.phtml", $data);
-$this->partial("grossmargin/docx/02_maintable.phtml", $data);
+$this->partial("report/grossmargin/docx/01_header.phtml", $data);
+$this->partial("report/grossmargin/docx/02_maintable.phtml", $data);
 
 $objWriter = PHPWord_IOFactory::createWriter($this->phpword, 'Word2007');
 $objWriter->save($this->savePath);

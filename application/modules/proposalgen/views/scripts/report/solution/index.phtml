@@ -1,0 +1,41 @@
+<?php
+$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
+$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
+$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/solution/solution_html.css"));
+// Title page image
+echo '<style type="text/css">
+        div.titlepage {
+            height: 500px;
+            padding-left: 300px;
+            padding-top: 350px;
+            background-image: url(' . $this->theme("proposalgenerator/reports/images/solution.jpg") . ');
+            background-repeat: no-repeat;
+        }
+     </style>';
+
+
+$data = array(
+    "proposal"       => $this->proposal,
+    "isPDF"          => $this->isPDF,
+    "backleft"       => $this->backleft,
+    "backright"      => $this->backright,
+    "backtop"        => $this->backtop,
+    "backbottom"     => $this->backbottom,
+    "footer"         => $this->footer,
+    "pagestyle"      => $this->pagestyle,
+    "titlePageStart" => $this->titlePageStart,
+    "pageStart"      => $this->pageStart,
+    "pageEnd"        => $this->pageEnd,
+    "noBreakStart"   => $this->noBreakStart,
+    "noBreakEnd"     => $this->noBreakEnd,
+    "orientation"    => $this->orientation
+);
+echo $this->partial('report/solution/html/01_Title.phtml', $data);
+echo $this->partial('report/solution/html/02_Description.phtml', $data);
+echo $this->partial('report/solution/html/03_PrintIQ.phtml', $data);
+echo $this->partial('report/solution/html/04_PrintIQPlus_Replacements.phtml', $data);
+/* 
+	PrintIQ Plus Summary, does not appear in newest solution
+	echo $this->partial('report/solution/05_PrintIQPlus_Summary.phtml', $data);
+*/
+echo $this->partial('report/solution/html/06_Summary.phtml', $data);

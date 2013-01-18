@@ -1,0 +1,81 @@
+<?php
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
+?>
+<div class="h1">Analysis: Technology Reliability and User Productivity</div>
+<table cellspacing="0" class="gradesTable">
+    <tr>
+        <td class="gradeDescription">
+            <p><?php echo $proposal->getRanking()->getTechnologyReliabilityAndUserProductivity()->RankingText; ?></p>
+        </td>
+        <td class="gradeNumber"><?php echo number_format($proposal->getRanking()->getTechnologyReliabilityAndUserProductivity()->Rank, 1); ?></td>
+    </tr>
+</table>
+<br />
+<div class="pheader">Age of Printing Devices</div>
+<p>The average age of printing devices in your office is <strong><?php echo number_format($proposal->getAverageAgeOfDevices(), 1); ?></strong> year(s) old. Printers under 5 years old are the most reliable machines. As printing devices get older, the risk of frequent breakdowns increases. Printers over 8 years old have a high risk of frequent breakdowns and there is a risk that supplies and parts for these machines may be discontinued.</p>
+<p>The breakdown of the age of your printing devices is shown below:</p>
+<div class="center">
+    <img src="<?php echo $proposal->Graphs[9]; ?>" />
+</div>
+<br />
+<p>The devices listed below have a high risk of breaking down, because of a combination of their age and the total amount of pages they have printed throughout their life.</p>
+<br />
+  <table cellspacing="0" class="genericTable" id="HighRiskDevicesTable">
+    <thead>
+        <tr class="center">
+            <th class="column1 left">High Risk Devices</th>
+            <th class="column2">Serial No.</th>
+            <th class="column3">Age</th>
+            <th class="column4">AMPV</th>
+            <th class="column5">Current Life<br/>Page Count</th>
+            <th class="column6">Est. Max Life<br/>Page Count</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php $ctr= 0; foreach ($proposal->getHighRiskDevices() as $deviceInstance) : ?>
+        <tr>
+            <td class="column1"><div class=" left"><?php echo $deviceInstance->getDeviceName(); ?></div></td>
+            <td class="column2"><div class=" center"><?php echo ($deviceInstance->serialNumber) ? : 'Unknown';?></div></td>
+            <td class="column3"><div class=" center"><?php echo $deviceInstance->getAge(); ?> years</div></td>
+            <td class="column4"><div class=" center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()); ?></div></td>
+            <td class="column5"><div class=" center"><?php echo number_format($deviceInstance->getLifePageCount()); ?></div></td>
+            <td class="column6"><div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume() * 36); ?></div></td>
+        </tr>
+    <?php $ctr++; if ($ctr > 2) break; endforeach; ?>
+    </tbody>
+</table>
+<p><em>Only takes into account devices for which release dates and expected cartridge yields are known. Age is based on the assumption that the device was installed approximately 1 year after the release date.</em></p>
+<br />
+<?php echo $this->noBreakEnd; ?>
+<?php echo $this->noBreakStart; ?>
+<div class="pheader">IT Time Spent Supporting Printing Devices</div>
+<p>Based on your questionnaire responses, your internal IT personnel spend an average of <strong><?php echo number_format($proposal->getWeeklyITHours());?></strong> hours per week supporting printing devices. This results in the following:</p>
+<br />
+<table cellspacing="0" class="bold fontChange">
+    <tr>
+        <td style="width: 470px;">Annual internal IT hours spent servicing and supporting printers</td>
+        <td style="width: 175px;" class="right"><?php echo $proposal->getAnnualITHours(); ?></td>
+    </tr>
+    <tr>
+        <td>Average hourly IT rate</td>
+        <td class="right">$<?php echo $proposal->getAverageITRate(); ?></td>
+    </tr>
+    <tr>
+        <td>Annual cost for internal IT staff to service and support printers</td>
+        <td class="right">$<?php echo number_format($proposal->getAnnualITCost()); ?></td>
+    </tr>
+</table>
+<br />
+<p>The Gartner Group stated that 30% to 40% of all IT and help desk calls are related to issues with printing and copying. The time that your IT personnel spend managing printers reduces the resources available for your core technology projects. Office Depot can help you manage your printers efficiently and free up the time of your IT staff.</p>
+<br />
+<div class="pheader">Technology Features and Functionality</div>
+<p>The ability to scan and fax documents from convenient locations helps to improve document workflow and productivity, and scanning can also help reduce the amount of pages printed. Color printing capabilities are important if you are generating client-facing or other important documents in-house.</p>
+<p>The charts below show the percent of your printing devices that are capable of scanning, faxing, and color printing.</p>
+<div class="center">
+        <img src="<?php echo $proposal->Graphs[10]; ?>" style="width: 190px; height: 150px;" /> <!-- Scan capable devices -->
+        <img src="<?php echo $proposal->Graphs[11]; ?>" style="width: 190px; height: 150px;" /> <!-- Fax capable devices -->
+        <img src="<?php echo $proposal->Graphs[12]; ?>" style="width: 190px; height: 150px;" /> <!-- Color capable devices -->
+</div>
+<br />
+<p>If you are in need of additional features and functionality to improve workflow and print quality, Office Depot has a variety of printing devices that can meet your specific business needs. If you already have everything you need, we can manage the printing assets you have.</p>

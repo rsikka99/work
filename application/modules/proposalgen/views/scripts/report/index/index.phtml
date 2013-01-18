@@ -1,18 +1,7 @@
-<?php 
-/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-$proposal = $this->proposal;
-?>
-<table style="width: 100%;border-collapse: collapse; table-layout: fixed">
-	<tr>
-		<td class = "Title"><u><?php echo $this->formTitle?></u></td>
-		<?php if ($this->companyName) :?>
-		<td class = "PreparedFor"><i>Prepared For:</i></td>
-		<td class = "PreparedForText"><i><?php echo $this->companyName; ?></i></td>
-		<?php endif?>
-	</tr>
-</table>
-
-<br>
+<div class="page-header">
+    <h1>Fleet<small> - Report Settings</small></h1>
+    <p class="pull-right" style="text-align: right;"><strong>Prepared For:</strong> <?php echo $this->companyName; ?></p>
+</div>
 <p style="text-align: left">
 <em>Please select a report from the list below.  After verifying the contents of your reports, you may download <br>
 a copy by selecting your desired output format from top right corner of each report. </em>

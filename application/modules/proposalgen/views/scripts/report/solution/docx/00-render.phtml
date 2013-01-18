@@ -1028,15 +1028,15 @@ $data = array (
     "styles" => $styles 
 );
 // Actual document pages
-$this->partial("solution/docx/01_titlepage.phtml", $titledata);
+$this->partial("report/solution/docx/01_titlepage.phtml", $titledata);
 
-$this->partial("solution/docx/02_yourprintiq.phtml", $data);
-$this->partial("solution/docx/03_evaluatingthetruecost.phtml", $data);
-$this->partial("solution/docx/04_solution1.phtml", $data);
-$this->partial("solution/docx/05_solution2.phtml", $data);
-$this->partial("solution/docx/06_additionalreplacements.phtml", $data);
-$this->partial("solution/docx/07_businessprint.phtml", $data);
-$this->partial("solution/docx/08_nextsteps.phtml", $data);
+$this->partial("report/solution/docx/02_yourprintiq.phtml", $data);
+$this->partial("report/solution/docx/03_evaluatingthetruecost.phtml", $data);
+$this->partial("report/solution/docx/04_solution1.phtml", $data);
+$this->partial("report/solution/docx/05_solution2.phtml", $data);
+$this->partial("report/solution/docx/06_additionalreplacements.phtml", $data);
+$this->partial("report/solution/docx/07_businessprint.phtml", $data);
+$this->partial("report/solution/docx/08_nextsteps.phtml", $data);
 
 $objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
 $objWriter->save($this->savePath);
