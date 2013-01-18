@@ -1,5 +1,4 @@
 <?php
-
 class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposal
 {
 
@@ -2449,7 +2448,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     {
                         // get jit support
                         $is_color    = $result [$key] ['is_color'];
-                        $tonerLevels = array();
                         if ($is_color == 0)
                         {
                             $tonerLevels = array(
@@ -2468,7 +2466,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         $jit_supplies_supported = $this->determineJITSupport($is_color, $tonerLevels);
 
                         // save to device instance
-                        $device_instanceTable = new Proposalgen_Model_DbTable_DeviceInstance();
                         $devices_instanceData = array(
                             'id'                           => $result [$key] ['device_instance_id'],
                             'report_id'                    => $report_id,
@@ -2496,7 +2493,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->save($uploadDataCollectorRow);
                     }
                 }
-                $devicesMsg = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->saveRows($deviceArray);
+
+                Proposalgen_Model_Mapper_DeviceInstance::getInstance()->saveRows($deviceArray);
 
                 // *************************************************************
                 // save meters
