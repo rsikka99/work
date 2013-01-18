@@ -1,0 +1,43 @@
+@charset "UTF-8";
+/* CSS Document
+   Stylesheet for errors
+
+   @author Lee Robert
+*/
+
+pre {
+    text-align: left;
+    word-wrap: break-word;
+}
+
+div.errorPageContent {
+    border: 1px solid #CECECE;
+    background-color: #FEFEFE;
+    box-shadow: 2px 2px 5px #000000;
+    left: 50%;
+    margin: 0px 0px 0px -325px;
+    padding: 10px;
+    position: absolute;
+    text-align: center;
+    top: 15%;
+    width: 650px;
+    z-index: 10;
+}
+
+.userErrorMessage {
+    color: #CC0000;
+    font-weight: bold;
+}
+
+.errormessage {
+    color: #CC0000;
+    font-weight: bold;
+    text-align: left;
+}
+
+pre.stackTrace {
+    height: 200px;
+    border: 1px solid black;
+    overflow: auto; 
+    padding: 10px;
+}

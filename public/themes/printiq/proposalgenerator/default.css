@@ -1,0 +1,404 @@
+@charset "UTF-8";
+
+/* CSS Document
+   This stylesheet is applied to all pages to set default values for
+   many tags.
+
+   @author Marc Rogall
+*/
+/* Removing default browser styles */
+/* Global Defaults */
+html,body {
+	margin: 0px;
+	padding: 0px;
+	border: 0px;
+	height: 100%;
+}
+
+body {
+	font: 13px/17px Helvetica, arial, sans-serif;
+}
+
+/* Headlines */
+h1,h2,h3,h4,h5,h6 {
+	margin: 0;
+	padding: 0;
+	font-weight: normal;
+	font-family: Helvetica, arial, sans-serif;
+}
+
+/* Text Styles */
+p,th,td,dd,dt,ol,blockquote,q,acronym,abbr,a,select,textarea {
+	margin: 0;
+	padding: 0;
+	font: normal normal normal 1em/1.25 Helvetica, arial, sans-serif;
+}
+
+ul {
+	margin: 10px 0px 10px 0px;
+}
+
+li {
+	margin: 0px 0px 0px 0px;
+}
+
+ul.errors {
+	padding: 0px 0px 0px 20px;	
+}
+
+textarea {
+	position: relative;
+	margin: 2px;
+}
+
+blockquote {
+	margin: 1.25em;
+	padding: 1.25em
+}
+
+q {
+	font-style: italic;
+}
+
+acronym,abbr {
+	cursor: help;
+	border-bottom: 1px dashed;
+}
+
+small {
+	font-size: .85em;
+}
+
+big {
+	font-size: 1.2em;
+}
+
+/* Links and Images */
+a,a:link,a:visited,a:active,a:hover {	
+	text-decoration: underline;
+}
+
+img {
+	border: none;
+}
+
+/* Tables */
+table {
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+
+/* Forms */
+form {
+	margin: 0;
+	padding: 0;
+	display: inline;
+}
+
+form dt,dd {
+	font-family: Helvetica, arial, sans-serif;
+	font-size: 12px;
+	width: 240px;
+}
+
+form dd { 
+	/*height: 30px;*/
+	position: relative;
+	width: 350px;
+	left: 250px;
+	top: -17px;
+}
+
+form dd.botMenu {
+	top: 0px;
+	position: relative;
+	margin: 10px 0px 0px 0px;
+}
+
+form p {
+	font-family: Helvetica, arial, sans-serif;
+	font-size: 12px;
+	margin: 10px 0px 10px 0px;	
+}
+
+form.outlined {
+	margin: 0px 0px 0px 0px;
+	padding: 15px 10px 0px 10px;
+	display: block;
+	border-bottom-right-radius: 6px;
+	border-bottom-left-radius: 6px;
+	border-top-right-radius: 6px;
+	border-top-left-radius: 6px;
+	border: 1px solid #eeeeee;	
+}
+
+label {
+	cursor: pointer;
+}
+table.button_menu {
+	position: relative;
+	left: 38%;
+	top: -15px;
+}
+/* End Form Styling */
+
+/* Common Classes */
+.clear {
+	clear: both;
+}
+
+.floatLeft {
+	float: left;
+}
+
+.floatRight {
+	float: right;
+}
+
+.textLeft {
+	text-align: left;
+}
+
+.textRight {
+	text-align: right;
+}
+
+.textCenter {
+	text-align: center;
+}
+
+.textJustify {
+	text-align: justify;
+}
+
+.blockCenter {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}  /* remember to set width */
+
+.bold {
+	font-weight: bold;
+}
+
+.italic {
+	font-style: italic;
+}
+
+.underline {
+	text-decoration: underline;
+}
+
+.noindent {
+	margin-left: 0;
+	padding-left: 0;
+}
+
+.nomargin {
+	margin: 0;
+}
+
+.nopadding {
+	padding: 0;
+}
+
+.nobullet {
+	list-style: none;
+	list-style-image: none;
+}
+
+blockquote:before,blockquote:after,q:before,q:after {
+	content: "";
+}
+
+blockquote,q {
+	quotes: "" "";
+}
+
+.botMenu {
+	display: inline;
+}
+
+.warning {
+	color: red;
+	font-weight: bold;
+}
+
+/* Overrides jqgrid style */
+.ui-widget-content a.blue_link {
+	color: blue;
+}
+.change_password {
+	font-size: 1.4em;
+	font-weight: bold;
+}
+
+/* End Removing default browser styles */
+
+/* Ticket System */
+.ticket_header {
+	float: left;
+	font-size: 18px;
+	font-weight: bold;
+	padding: 0px 0px 5px 0px;
+	margin: 0px 0px 0px 5px;
+}
+
+.ticket_title {
+	font-size: 16px;
+	font-weight: bold;
+	text-align: left;
+}
+
+#ticket_container {
+	clear: both;
+	margin: 0px 0px 10px 0px;
+	padding: 5px 5px 0px 5px;
+	border-bottom-right-radius: 6px;
+	border-bottom-left-radius: 6px;
+	border-top-right-radius: 6px;
+	border-top-left-radius: 6px;
+	border: 1px solid #000000;
+	background-color: #e8e8e8;
+}
+
+#comments_container {
+	
+}
+
+.ticket_item {
+	clear: both;
+	height: 20px;
+	padding: 5px 0px 0px 5px;	
+}
+
+.ticket_item_tall {
+	clear: both;
+	height: 30px;
+	padding: 5px 0px 5px 5px;	
+}
+
+.ticket_label {
+	color: #004276;
+	color: #000000;
+	width: 150px;
+	float: left;
+	font-weight: bold;
+}
+
+.ticket_links {
+	float: left; 
+	text-align: left;
+}
+
+.ticket_description_label {
+	clear: both;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 10px 0px 0px 5px;
+}
+
+.ticket_comments_label {
+	clear: both;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 0px 0px 0px 5px;
+}
+
+.ticket_comments_label a {
+	padding: 5px 0px 5px 2px;
+}
+
+.ticket_description {
+	clear: both;
+	margin: 0px 0px 5px 0px;
+}
+
+.ticket_comment_history {
+	display: none;
+	margin: 10px 0px 10px 0px;
+	padding: 5px 5px 5px 5px;
+	border: solid 1px #000000;
+}
+
+.ticket_comment_user {
+	color: #999999;
+	clear: both; 
+	float: left;
+	padding: 0px 0px 5px 0px;
+}
+
+.ticket_comment_date {
+	color: #999999;	
+	float: right; 
+	text-align: right;
+	padding: 0px 0px 5px 0px;
+}
+
+.ticket_comment_text {
+	clear: both;
+	padding: 10px 10px 20px 10px;
+	border-top: 1px solid #999999;
+}
+
+/* End Ticket System */
+
+/* jqGrid select box fix */
+.ui-jqgrid select {
+	padding: 0px;
+}
+/* Settings page */
+#settingContainer {
+	width: 220px;
+}
+#settingColumnOne {
+	display: inline-block;
+	position: relative;
+	width: 25%;
+	text-align:right;
+}
+#settingColumnTwo {
+	display: inline-block;
+	position: relative;
+	width: 45%;
+	text-align:right;
+}
+#settingColumnThree {
+	display: inline-block;
+	position: relative;
+	width: 25%;
+}
+
+div.timingTables {
+	background-color: #EEE;
+	overflow: scroll;
+}
+
+div.timingTables table td,
+div.timingTables table th {
+	font-family: consolas;
+}
+
+div.timingTables table {
+	width: 300px;
+}
+
+div.timingTables table thead th,
+div.timingTables table tfoot td {
+	font-weight: bold;
+}
+
+div.timingTables table tbody tr:hover {
+    background-color: #F7F781;
+}
+
+div.timingTables table td:nth-child(2),
+div.timingTables table td:nth-child(3) {
+	text-align: right;
+    width: 60px;
+}
+
+div#elements_container {
+	min-height: 420px;
+}

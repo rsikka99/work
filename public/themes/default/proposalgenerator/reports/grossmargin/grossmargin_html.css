@@ -1,0 +1,99 @@
+/* 
+    Styles specific to the gross margin report 
+    Last revised: December 1, 2011
+*/
+
+body {
+	width: 842px;
+	margin: auto;
+	font-size: 9.5pt;
+	font-family: arial, verdana, arial, tahoma, verdana;
+	margin-bottom: 500px;
+}
+
+.right {
+	text-align: right;
+}
+
+.center {
+	text-align: center;
+}
+
+
+h2.reportTitle {
+	color: red;
+    margin-bottom: 0;
+	letter-spacing: 2px;
+	font-style: italic;
+    text-decoration: underline;
+}
+
+
+/*
+    Gross Margin Device Summary
+*/
+#grossMarginDeviceSummary {
+	border-collapse: collapse;
+}
+
+#grossMarginDeviceSummary,#grossMarginDeviceSummary td,#grossMarginDeviceSummary th {
+	border: 1px solid #ccc;
+}
+
+#grossMarginDeviceSummary td {
+	padding: 0px 3px;
+}
+
+#grossMarginDeviceSummary tr.nonCompliantMono td.mono,
+#grossMarginDeviceSummary tr.nonCompliantColor td.color {
+    background-color: #F6FF8F;
+}
+
+#grossMarginDeviceSummary th {
+	padding: 2px;
+	background-color: #f2f2f2;
+}
+
+#grossMarginDeviceSummary tr.totals {
+	color: red;
+	font-weight: bold;
+	background-color: #f2f2f2;
+}
+
+#grossMarginDeviceSummary thead,#grossMarginDeviceSummary tfoot {
+	font-weight: bold;
+}
+
+
+
+
+/*
+    Gross Margin Information
+*/
+#grossMarginInformation {
+	margin: auto;
+	border-spacing: 0px;
+}
+
+#grossMarginInformation tr td {
+	padding: 2px;
+}
+
+#grossMarginInformation .heading {
+	text-align: right;
+	padding-right: 10px;
+	font-weight: bold;
+}
+
+#grossMarginInformation td..column1 div {
+    width: 200px;   
+}
+#grossMarginInformation td.column2 div {
+    width: 70px;   
+}
+#grossMarginInformation td.column3 div {
+    width: 200px;   
+}
+#grossMarginInformation td.column4 div {
+    width: 70px;   
+}
