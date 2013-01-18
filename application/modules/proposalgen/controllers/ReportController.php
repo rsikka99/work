@@ -1,16 +1,4 @@
 <?php
-
-/**
- * ReportController - This controller handles building all reports in the
- * proposal generator syteem.
- * Actions correspond to specific reports. Each
- * report is constucted from SQL queries to the DBMS. The user must have
- * completed the questionnaire as well as uploaded fleet data prior to
- * navigating
- * to any of the actions contained in this controller.
- *
- * @author Chris Garrah
- */
 class Proposalgen_ReportController extends My_Controller_Report
 {
 
@@ -383,4 +371,4 @@ class Proposalgen_ReportController extends My_Controller_Report
         $this->view->devices = $device;
         $this->_helper->layout->setLayout('blueprint');
     }
-} //end report controller
+}
