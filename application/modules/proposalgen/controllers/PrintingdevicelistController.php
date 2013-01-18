@@ -76,18 +76,19 @@ class Proposalgen_PrintingdevicelistController extends My_Controller_Report
         $appendix_values = "";
         try
         {
-            foreach ( $this->view->proposal->getDevices() as $device )
+            /* @var $device Proposalgen_Model_DeviceInstance */
+            foreach ( $proposal->getDevices() as $device )
             {
                 $row = array ();
                 $row [] = $device->getMasterDevice()
                     ->getManufacturer()
-                    ->getManufacturerName();
-                $row [] = $device->getMasterDevice()->getPrinterModel();
-                $row [] = ($device->getIpAddress()) ? $device->getIpAddress() : "Unknown";
-                $row [] = ($device->getSerialNumber()) ? $device->getSerialNumber() : "Unknown";
+                    ->fullname;
+                $row [] = $device->getMasterDevice()->printerModel;
+                $row [] = ($device->ipAddress) ? $device->ipAddress : "Unknown";
+                $row [] = ($device->serialNumber) ? $device->serialNumber : "Unknown";
                 $row [] = ($device->MasterDevice->IsLeased) ? "Leased" : "Purchased";
                 $row [] = $device->AverageMonthlyPageCount;
-                $row [] = ($device->getJITSuppliesSupported()) ? "Yes" : "No";
+                $row [] = ($device->jitSuppliesSupported) ? "Yes" : "No";
                 $appendix_values .= implode(",", $row) . "\n";
             } // end Purchased Devices foreach
         }
