@@ -1,5 +1,4 @@
 <?php
-
 class Admin_Model_Mapper_UserRole extends My_Model_Mapper_Abstract
 {
     /**
@@ -113,7 +112,7 @@ class Admin_Model_Mapper_UserRole extends My_Model_Mapper_Abstract
      * @param $id int
      *            The id of the userRole to find
      *
-     * @return void Admin_Model_UserRole
+     * @return Admin_Model_UserRole
      */
     public function find ($id)
     {
@@ -128,7 +127,7 @@ class Admin_Model_Mapper_UserRole extends My_Model_Mapper_Abstract
         $result = $this->getDbTable()->find($id [0], $id [1]);
         if (0 == count($result))
         {
-            return;
+            return false;
         }
         $row    = $result->current();
         $object = new Admin_Model_UserRole($row->toArray());
@@ -149,14 +148,14 @@ class Admin_Model_Mapper_UserRole extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL An SQL OFFSET value.
      *
-     * @return void Admin_Model_UserRole
+     * @return Admin_Model_UserRole
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
         $row = $this->getDbTable()->fetchRow($where, $order, $offset);
         if (is_null($row))
         {
-            return;
+            return false;
         }
 
         $object = new Admin_Model_UserRole($row->toArray());
@@ -179,7 +178,7 @@ class Admin_Model_Mapper_UserRole extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL An SQL LIMIT offset.
      *
-     * @return multitype:Admin_Model_UserRole
+     * @return Admin_Model_UserRole[]
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -201,7 +200,7 @@ class Admin_Model_Mapper_UserRole extends My_Model_Mapper_Abstract
     /**
      * Gets a where clause for filtering by id
      *
-     * @param unknown_type $id
+     * @param int $id
      *
      * @return array
      */
@@ -214,9 +213,9 @@ class Admin_Model_Mapper_UserRole extends My_Model_Mapper_Abstract
     }
 
     /**
-     * (non-PHPdoc)
+     * @param Admin_Model_UserRole $object
      *
-     * @see My_Model_Mapper_Abstract::getPrimaryKeyValueForObject()
+     * @return array
      */
     public function getPrimaryKeyValueForObject ($object)
     {
@@ -254,4 +253,3 @@ class Admin_Model_Mapper_UserRole extends My_Model_Mapper_Abstract
                                            ));
     }
 }
-

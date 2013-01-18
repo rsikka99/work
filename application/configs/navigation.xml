@@ -415,39 +415,6 @@
                         </view>
                     </pages>
                 </UserManagement>
-                <RoleManagement>
-                    <label>Roles</label>
-                    <module>admin</module>
-                    <controller>roles</controller>
-                    <action>index</action>
-                    <resource>admin__roles__index</resource>
-                    <pages>
-                        <create>
-                            <label>Create New</label>
-                            <module>admin</module>
-                            <controller>roles</controller>
-                            <action>create</action>
-                            <resource>admin__roles__create</resource>
-                            <visible>0</visible>
-                        </create>
-                        <edit>
-                            <label>Edit</label>
-                            <module>admin</module>
-                            <controller>roles</controller>
-                            <action>edit</action>
-                            <resource>admin__roles__edit</resource>
-                            <visible>0</visible>
-                        </edit>
-                        <delete>
-                            <label>Delete Role</label>
-                            <module>admin</module>
-                            <controller>roles</controller>
-                            <action>delete</action>
-                            <resource>admin__roles__delete</resource>
-                            <visible>0</visible>
-                        </delete>
-                    </pages>
-                </RoleManagement>
             </pages>
         </sysadmin>
     </nav>

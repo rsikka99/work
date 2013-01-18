@@ -68,39 +68,6 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `roles`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `roles` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `name` VARCHAR(255) NOT NULL ,
-  PRIMARY KEY (`id`) )
-ENGINE = InnoDB
-AUTO_INCREMENT = 5
-DEFAULT CHARACTER SET = latin1;
-
-
--- -----------------------------------------------------
--- Table `privileges`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `privileges` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `roleId` INT(11) NOT NULL ,
-  `module` VARCHAR(255) NOT NULL ,
-  `controller` VARCHAR(255) NOT NULL ,
-  `action` VARCHAR(255) NOT NULL ,
-  PRIMARY KEY (`id`) ,
-  INDEX `privileges_ibfk_!_idx` (`roleId` ASC) ,
-  CONSTRAINT `privileges_ibfk_!`
-    FOREIGN KEY (`roleId` )
-    REFERENCES `roles` (`id` )
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
-AUTO_INCREMENT = 9
-DEFAULT CHARACTER SET = latin1;
-
-
--- -----------------------------------------------------
 -- Table `users`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `users` (
@@ -1491,6 +1458,18 @@ CREATE  TABLE IF NOT EXISTS `qgen_user_quote_settings` (
     REFERENCES `qgen_quote_settings` (`id` ))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `roles`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `roles` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(255) NOT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB
+AUTO_INCREMENT = 5
+DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------

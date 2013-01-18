@@ -1,16 +1,4 @@
 <?php
-
-/**
- * ReportController - This controller handles building all reports in the
- * proposal generator syteem.
- * Actions correspond to specific reports. Each
- * report is constucted from SQL queries to the DBMS. The user must have
- * completed the questionnaire as well as uploaded fleet data prior to
- * navigating
- * to any of the actions contained in this controller.
- *
- * @author Chris Garrah
- */
 class Proposalgen_ReportController extends My_Controller_Report
 {
 
@@ -159,7 +147,7 @@ class Proposalgen_ReportController extends My_Controller_Report
     {
         $this->view->availableReports->Assessment->active = true;
         $this->view->formats = array (
-                "/proposal/assessment/generate/format/docx" => $this->wordFormat
+                "/proposalgen/assessment/generate/format/docx" => $this->wordFormat
         );
         $this->view->reportTitle = "Assessment";
         
@@ -231,7 +219,7 @@ class Proposalgen_ReportController extends My_Controller_Report
         $this->view->availableReports->Solution->active = true;
         
         $this->view->formats = array (
-                "/proposal/solution/generate/format/docx" => $this->wordFormat 
+                "/proposalgen/solution/generate/format/docx" => $this->wordFormat
         );
         
         try
@@ -276,8 +264,8 @@ class Proposalgen_ReportController extends My_Controller_Report
     {
         $this->view->availableReports->GrossMargin->active = true;
         $this->view->formats = array (
-                "/proposal/grossmargin/generate/format/csv" => $this->csvFormat, 
-                "/proposal/grossmargin/generate/format/docx" => $this->wordFormat 
+                "/proposalgen/grossmargin/generate/format/csv" => $this->csvFormat,
+                "/proposalgen/grossmargin/generate/format/docx" => $this->wordFormat
         );
         
         try
@@ -319,8 +307,8 @@ class Proposalgen_ReportController extends My_Controller_Report
         $this->view->availableReports->PrintingDeviceList->active = true;
         $this->view->reportTitle = "Printing Device List";
         $this->view->formats = array (
-                "/proposal/printingdevicelist/generate/format/csv" => $this->csvFormat, 
-                "/proposal/printingdevicelist/generate/format/docx" => $this->wordFormat 
+                "/proposalgen/printingdevicelist/generate/format/csv" => $this->csvFormat,
+                "/proposalgen/printingdevicelist/generate/format/docx" => $this->wordFormat
         );
         
         try
@@ -383,4 +371,4 @@ class Proposalgen_ReportController extends My_Controller_Report
         $this->view->devices = $device;
         $this->_helper->layout->setLayout('blueprint');
     }
-} //end report controller
+}

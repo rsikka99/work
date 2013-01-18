@@ -1,0 +1,40 @@
+@charset "UTF-8";
+/* CSS Document
+   Stylesheet for the main login page
+
+   @author Marc Rogall
+*/
+
+
+body, html {
+	height: 100%;
+	background-image: url(../../images/officedepot/background_repeat.jpg);
+}
+#wrapper {
+	
+	margin: auto;
+	height: 750px;
+	width: 100%;
+	margin-top: 100px;
+}
+
+#login {
+	background-image: url(../../images/officedepot/logo.png);
+	background-repeat: no-repeat;
+	width: 801px;
+	height: 45px;
+	margin: auto;
+	position: relative;
+}
+
+#form {
+	position: relative;
+	top: 80px;
+	text-align: center;
+	font-weight: bold;
+}
+
+#form textarea {
+	width: 800px;
+	height: 500px;
+}

@@ -1,9 +1,11 @@
 <?php
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
     //echo $this->pageStart;
 ?>
 <?php echo $this->noBreakStart; ?>
 	<h4 class="paraHeader">Other Printing Devices Not Included in Assessment:</h4>
-	<?php if (count($this->proposal->getExcludedDevices()) > 0) :?>
+	<?php if (count($proposal->getExcludedDevices()) > 0) :?>
     	<table class="genericTable" id="ExcludedDevicesTable" style="font-size: 9pt;">
     		<thead>
     			<tr>
@@ -15,12 +17,12 @@
     			</tr>
     		</thead>
     		<tbody>
-    		<?php foreach($this->proposal->getExcludedDevices() as $device): 
+    		<?php foreach($proposal->getExcludedDevices() as $device): 
     			/* @var $device Proposalgen_Model_DeviceInstance */ ?>
     			<?php $SerialNumber = (strlen($device->serialNumber) == 0) ? 'Unknown Serial' : $device->serialNumber; ?>
     				<tr>
-    					<td><div class=" left"><?php echo $device->getMasterDevice()->getManufacturer()->getManufacturerName(); ?></div></td>
-    					<td><div class=" left"><?php echo $device->getMasterDevice()->getPrinterModel(); ?></div></td>
+    					<td><div class=" left"><?php echo $device->getMasterDevice()->getManufacturer()->displayname; ?></div></td>
+    					<td><div class=" left"><?php echo $device->getMasterDevice()->printerModel; ?></div></td>
     					<td><div class=" center"><?php echo $SerialNumber; ?></div></td>
     					<td><div class=" left"><?php if ($device->ipAddress) echo $device->ipAddress; else echo 'Unknown IP';?></div></td>
     					<td><div class=" left"><?php echo $device->_exclusionReason; ?></div></td>

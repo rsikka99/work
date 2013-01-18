@@ -163,7 +163,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             // Save Master Device
                             $masterDeviceMapper = new Proposalgen_Model_Mapper_MasterDevice();
                             $masterDevice = new Proposalgen_Model_MasterDevice();
-                            $masterDevice->setDateCreated(date('Y-m-d H:i:s'));
+                            $masterDevice->dateCreated = date('Y-m-d H:i:s');
 
                             foreach ( $values as &$value )
                             {
@@ -407,7 +407,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                                 $value = null;
                         }
                         $masterDevice->populate($values);
-                        $masterDevice->setId($masterDeviceId);
+                        $masterDevice->id = $masterDeviceId;
 
                         // Save to the database with cascade insert turned on
                         $masterDeviceId = $mapper->save($masterDevice, $masterDeviceId);

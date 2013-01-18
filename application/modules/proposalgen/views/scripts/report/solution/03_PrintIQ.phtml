@@ -1,4 +1,6 @@
 <?php
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
   	echo $this->pageStart;
 ?>
 	<?php echo $this->noBreakStart; ?>
@@ -9,8 +11,8 @@
 		<div class="pheader">Program Components</div>
 		<p>Pay by the page with the PrintIQ&reg; program:</p>
 		<ul class="bold" style="margin-bottom: 0pt;">			
-			<li>$<?php echo $this->NumberFormat($this->proposal->MPSBlackAndWhiteCPP,8); ?> for monochrome pages</li>		
-			<li>$<?php echo $this->NumberFormat($this->proposal->MPSColorCPP,8); ?> for color pages</li>		
+			<li>$<?php echo $this->NumberFormat($proposal->getMPSBlackAndWhiteCPP(),8); ?> for monochrome pages</li>
+			<li>$<?php echo $this->NumberFormat($proposal->getMPSColorCPP(),8); ?> for color pages</li>
 			<li>Includes supplies and service for your existing equipment</li>
 		</ul>
 		<p style="margin-top: 0pt;">The PrintIQ&reg; program uses remote monitoring software to provide you with:</p>
@@ -32,52 +34,52 @@
 			<tbody>
 				<tr>
 					<td>Ink and toner</td>
-					<td class="right">$<?php echo number_format($this->proposal->CostOfInkAndToner); ?></td>
+					<td class="right">$<?php echo number_format($proposal->getCostOfInkAndToner()); ?></td>
 
 					<td>Monochrome cost per page</td>
-					<td class="right">$<?php echo number_format($this->proposal->MPSBlackAndWhiteCPP,4); ?></td>
+					<td class="right">$<?php echo number_format($proposal->getMPSBlackAndWhiteCPP(),4); ?></td>
 				</tr>
 				<tr>
 					<td>Executing supplies orders</td>
-					<td class="right">$<?php echo number_format($this->proposal->CostOfExecutingSuppliesOrders); ?></td>
+					<td class="right">$<?php echo number_format($proposal->getCostOfExecutingSuppliesOrder()); ?></td>
 
 					<td>Color cost per page</td>
-					<td class="right">$<?php echo number_format($this->proposal->MPSColorCPP,4); ?></td>
+					<td class="right">$<?php echo number_format($proposal->getMPSColorCPP(),4); ?></td>
 				</tr>
 				<tr>
 					<td>External service</td>
-					<td class="right">$<?php echo number_format($this->proposal->AnnualCostOfOutSourcing); ?></td>
+					<td class="right">$<?php echo number_format($proposal->getAnnualCostOfOutSourcing()); ?></td>
 
 					<td>Estimated monochrome pages</td>
-					<td class="right"><?php echo number_format($this->proposal->getPageCounts()->Purchased->BlackAndWhite->Yearly); ?></td>
+					<td class="right"><?php echo number_format($proposal->getPageCounts()->Purchased->BlackAndWhite->Yearly); ?></td>
 				</tr>
 				<tr>
 					<td>Internal IT support for printers</td>
-					<td class="right">$<?php echo number_format($this->proposal->AnnualITCost); ?></td>
+					<td class="right">$<?php echo number_format($proposal->getAnnualITCost()); ?></td>
 
 					<td>Estimated color pages</td>
-					<td class="right"><?php echo number_format($this->proposal->getPageCounts()->Purchased->Color->Yearly); ?></td>
+					<td class="right"><?php echo number_format($proposal->getPageCounts()->Purchased->Color->Yearly); ?></td>
 				</tr>
 				<tr>
 					<td>Hardware purchases</td>
-					<td class="right">$<?php echo number_format($this->proposal->AnnualCostOfHardwarePurchases); ?></td>
+					<td class="right">$<?php echo number_format($proposal->getAnnualCostOfHardwarePurchases()); ?></td>
 
 					<td width="233">Cost of monochrome pages</td> <!-- Simply stretched table to width of page (temp workaround) -->
-					<td width="60" class="right">$<?php echo number_format($this->proposal->getPageCounts()->Purchased->BlackAndWhite->Yearly * $this->proposal->MPSBlackAndWhiteCPP); ?></td>
+					<td width="60" class="right">$<?php echo number_format($proposal->getPageCounts()->Purchased->BlackAndWhite->Yearly * $proposal->getMPSBlackAndWhiteCPP()); ?></td>
 				</tr>
 				<tr>
 					<td width="233"></td> <!-- Stretched table to width of page (temp workaround) -->
 					<td width="60"></td>
 					
 					<td>Cost of color pages</td>
-					<td class="right">$<?php echo number_format($this->proposal->getPageCounts()->Purchased->Color->Yearly * $this->proposal->MPSColorCPP); ?></td>
+					<td class="right">$<?php echo number_format($proposal->getPageCounts()->Purchased->Color->Yearly * $proposal->getMPSColorCPP()); ?></td>
 				</tr>
 				<tr>
 					<td></td>
 					<td></td>
 					
-					<td>Processing 1 invoice/month @ $<?php echo $this->proposal->CostOfExecutingSuppliesOrder?></td>
-					<td class="right">$<?php echo number_format($this->proposal->InternalAdminCost); ?></td>
+					<td>Processing 1 invoice/month @ $<?php echo $proposal->getCostOfExecutingSuppliesOrder()?></td>
+					<td class="right">$<?php echo number_format($proposal->getInternalAdminCost()); ?></td>
 				</tr>
 				<tr>
 					<td></td>
@@ -91,21 +93,21 @@
 					<td></td>
 
 					<td>Internal IT support for printers</td>
-					<td class="right">$<?php echo number_format($this->proposal->AnnualITCost * 0.5); ?></td>
+					<td class="right">$<?php echo number_format($proposal->getAnnualITCost() * 0.5); ?></td>
 				</tr>
 				<tr>
 					<td></td>
 					<td></td>
 
 					<td>Hardware purchases</td>
-					<td class="right">$<?php echo number_format($this->proposal->AnnualCostOfHardwarePurchases); ?></td>
+					<td class="right">$<?php echo number_format($proposal->getAnnualCostOfHardwarePurchases()); ?></td>
 				</tr>
 				<tr class="bold">
 					<td>Total Cost</td>
-					<td class="right">$<?php echo number_format($this->proposal->TotalPurchasedAnnualCost); ?></td>
+					<td class="right">$<?php echo number_format($proposal->getTotalPurchasedAnnualCost()); ?></td>
 
 					<td>Total Cost</td>
-					<td class="right">$<?php echo number_format($this->proposal->PrintIQTotalCost); ?></td>
+					<td class="right">$<?php echo number_format($proposal->getPrintIQTotalCost()); ?></td>
 				</tr>
 			</tbody>
 		</table>
@@ -117,7 +119,7 @@
 				<tbody>
 					<tr>
 						<td width="490" class="left""><strong>Total annual savings with PrintIQ&reg;</strong></td>
-						<td width="125" class="right""><strong>$<?php echo number_format($this->proposal->PrintIQSavings); ?></strong></td>
+						<td width="125" class="right""><strong>$<?php echo number_format($proposal->getPrintIQSavings()); ?></strong></td>
 					</tr>
 				</tbody>
 			</table>

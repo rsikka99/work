@@ -4,18 +4,16 @@
  */
 $auth = Zend_Auth::getInstance();
 // CSS
-$this->headLink()->prependStylesheet($this->theme("/proposalgenerator/htmlreports.css"));
-$this->headLink()->prependStylesheet($this->theme("/proposalgenerator/pageBreaks.css"));
-$this->headLink()->prependStylesheet($this->theme("/css/styles.css"));
-$this->headLink()->prependStylesheet($this->theme("/jquery/ui/jquery-ui-1.8.16.custom.css"));
-$this->headLink()->prependStylesheet($this->theme("/bootstrap/css/bootstrap.min.css"));
+
+$this->headLink()->appendStylesheet($this->theme("/proposalgenerator/htmlreports.css"));
+$this->headLink()->appendStylesheet($this->theme("/proposalgenerator/pageBreaks.css"));
 // JavaScript
-$this->headScript()->prependFile($this->theme("/bootstrap/js/bootstrap.min.js"));
 $this->headScript()->prependFile($this->baseUrl("/js/htmlReport.js"));
+$this->headScript()->prependFile($this->baseUrl("/js/libs/bootstrap.min.js"));
 $this->headScript()->prependFile($this->baseUrl("/js/libs/jquery-ui-1.8.20.custom.min.js"));
 $this->headScript()->prependFile($this->baseUrl("/js/libs/jquery-1.7.1.min.js"));
-
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>

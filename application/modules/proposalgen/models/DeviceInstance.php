@@ -332,16 +332,15 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         if ($deviceOverride)
         {
             // Cost
-            $device->getMasterDevice()->setCost($deviceOverride->OverrideDevicePrice);
-//            $device->getMasterDevice()->setDevicePrice($deviceOverride->OverrideDevicePrice);
+            $device->getMasterDevice()->cost = $deviceOverride->OverrideDevicePrice;
         }
         else // If we found a device override, apply it
         {
-            $device->getMasterDevice()->setCost($device->getMasterDevice()->getCost() / $companyMargin);
+            $device->getMasterDevice()->cost = $device->getMasterDevice()->cost / $companyMargin;
         }
 
         // Apply Report Margin to the device price
-        $device->getMasterDevice()->setCost($device->getMasterDevice()->getCost() / $reportMargin);
+        $device->getMasterDevice()->cost = $device->getMasterDevice()->cost / $reportMargin;
 
         // Toner Overrides + Margin
         foreach ($device->getMasterDevice()->getToners() as $tonersByPartType)
@@ -753,7 +752,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         if (!isset($this->_age))
         {
             // Get the time difference in seconds
-            $launchDate          = time() - strtotime($this->getMasterDevice()->getLaunchDate());
+            $launchDate          = time() - strtotime($this->getMasterDevice()->launchDate);
             $correctedLaunchDate = ($launchDate > 31556926) ? ($launchDate - 31556926) : $launchDate;
             $this->_age          = floor($correctedLaunchDate / 31556926);
             if ($this->_age == 0)
@@ -891,7 +890,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_deviceName))
         {
-            $this->_deviceName = $this->getMasterDevice()->getManufacturer()->fullname . " " . $this->getMasterDevice()->getPrinterModel();
+            $this->_deviceName = $this->getMasterDevice()->getManufacturer()->fullname . " " . $this->getMasterDevice()->printerModel;
         }
 
         return $this->_deviceName;

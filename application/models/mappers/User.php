@@ -1,7 +1,9 @@
 <?php
-
 class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
 {
+    // Column Names
+    public $col_id = "id";
+
     /**
      * The default db table class to use
      *
@@ -35,7 +37,7 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
         $data = $object->toArray();
 
         // Remove the id
-        unset($data ['id']);
+        unset($data [$this->col_id]);
 
         // Insert the data
         $id = $this->getDbTable()->insert($data);
@@ -64,12 +66,12 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
 
         if ($primaryKey === null)
         {
-            $primaryKey = $data ['id'];
+            $primaryKey = $data [$this->col_id];
         }
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                'id = ?' => $primaryKey
+                                                                '{$this->col_id} = ?' => $primaryKey
                                                            ));
 
         // Save the object into the cache
@@ -92,13 +94,13 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
         if ($object instanceof Application_Model_User)
         {
             $whereClause = array(
-                'id = ?' => $object->id
+                "{$this->col_id} = ?" => $object->id
             );
         }
         else
         {
             $whereClause = array(
-                'id = ?' => $object
+                "{$this->col_id} = ?" => $object
             );
         }
 
@@ -128,7 +130,7 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
         $result = $this->getDbTable()->find($id);
         if (0 == count($result))
         {
-            return;
+            return false;
         }
         $row    = $result->current();
         $object = new Application_Model_User($row->toArray());
@@ -156,7 +158,7 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
         $row = $this->getDbTable()->fetchRow($where, $order, $offset);
         if (is_null($row))
         {
-            return;
+            return false;
         }
 
         $object = new Application_Model_User($row->toArray());
@@ -198,6 +200,11 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
         return $entries;
     }
 
+    public function fetchAllExceptRoot ()
+    {
+        return $this->fetchAll(array("{$this->col_id} != 1"));
+    }
+
     /**
      * Gets a where clause for filtering by id
      *
@@ -208,7 +215,7 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array(
-            'id = ?' => $id
+            "{$this->col_id} = ?" => $id
         );
     }
 
