@@ -129,7 +129,7 @@ abstract class My_Controller_Report extends Zend_Controller_Action
      * Gets the proposal object for reports to use
      *
      * @throws Zend_Exception
-     * @return Application_Model_Proposal_OfficeDepot
+     * @return Proposalgen_Model_Proposal_OfficeDepot
      */
     public function getProposal ()
     {
@@ -215,7 +215,7 @@ abstract class My_Controller_Report extends Zend_Controller_Action
 
     /**
      * Downloads images ahead of time using curl.
-     * Uses multithreading
+     * Uses multi threading
      *
      * @param $imageArray array
      *            An array of URL's to images. Currently only saves .png files
@@ -223,7 +223,7 @@ abstract class My_Controller_Report extends Zend_Controller_Action
      *            Whether or not the change the image path to a local path or a
      *            web accessible path
      * @throws Exception
-     * @return unknown
+     * @return array
      */
     public function cachePNGImages ($imageArray, $local = true)
     {
