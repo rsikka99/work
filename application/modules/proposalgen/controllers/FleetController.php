@@ -2509,7 +2509,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                            ))
                     ->joinLeft(array(
                                     'di' => 'pgen_device_instances'
-                               ), 'di.id = udc.id', array(
+                               ), 'di.upload_data_collector_row_id = udc.id', array(
                                                          'di.id AS device_instance_id'
                                                     ))
                     ->where('udc.report_id = ?', $report_id, 'INTEGER')
@@ -2529,6 +2529,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     'scan',
                     'fax'
                 );
+
 
                 $metersTable = new Proposalgen_Model_DbTable_Meter();
                 foreach ($result as $key => $value)
