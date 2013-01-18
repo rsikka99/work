@@ -29,8 +29,8 @@
         $quotegenDevice = Quotegen_Model_Mapper_Device::getInstance()->find($device->id);
         if ($quotegenDevice)
         {
-            $oemSku = $quotegenDevice->getOemSku();
-            $dealerSku = $quotegenDevice->getDealerSku();
+            $oemSku = $quotegenDevice->oemSku;
+            $dealerSku = $quotegenDevice->dealerSku;
         }
         ?>
 	        <tr>

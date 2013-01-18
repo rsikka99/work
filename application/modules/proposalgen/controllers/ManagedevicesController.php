@@ -1326,7 +1326,6 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                         {
                             $db->rollback();
                             $this->view->message = 'Database Error: "' . $formData ["new_printer"] . '" could not be saved. Make sure the printer does not already exist.<br />';
-                            Throw new exception("Bad Device Update Error.", 0, $e);
                             //echo $e; die;
                         }
                         catch (Exception $e)

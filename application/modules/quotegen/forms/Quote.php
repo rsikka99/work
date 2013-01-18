@@ -34,8 +34,8 @@ class Quotegen_Form_Quote extends Twitter_Bootstrap_Form_Horizontal
         /* @var $client Quotegen_Model_Client */
         foreach ( Quotegen_Model_Mapper_Client::getInstance()->fetchAll() as $client )
         {
-            $clientList [$client->getId()] = $client->getCompanyName();
-            $clientListValidator [] = $client->getId();
+            $clientList [$client->id] = $client->companyName;
+            $clientListValidator [] = $client->id;
         }
         
         $clients = $this->createElement('select', 'clientId');

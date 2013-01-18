@@ -146,7 +146,7 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_Category)
         {
             $whereClause = array (
-                    "{$this->col_categoryId} = ?" => $object->getId() 
+                    "{$this->col_categoryId} = ?" => $object->id
             );
         }
         else

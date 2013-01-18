@@ -1,11 +1,4 @@
 <?php
-
-/**
- * Quotegen_Model_DeviceConfigurationOption
- *
- * @author Lee Robert
- *        
- */
 class Quotegen_Model_DeviceConfigurationOption extends My_Model_Abstract
 {
     

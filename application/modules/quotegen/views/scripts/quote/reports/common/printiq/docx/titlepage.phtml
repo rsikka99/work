@@ -28,7 +28,7 @@ $cell->addTextBreak(5);
 $clientName = $quote->getClientDisplayName();
 if (empty($clientName))
 {
-    $clientName = $client->getCompanyName();
+    $clientName = $client->companyName;
 }
 
 $cell->addText($this->translate('Prepared For:') . " " . $clientName, 'titlepageHeaderFont', 'titlepageHeaderParagraph');

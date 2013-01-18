@@ -182,7 +182,7 @@ class Quotegen_OptionController extends Zend_Controller_Action
         /* @var $category Quotegen_Model_Category */
         foreach ( $option->getCategories() as $category )
         {
-            $optionValues ['categories'] [] = $category->getId();
+            $optionValues ['categories'] [] = $category->id;
         }
         
         $form->populate($optionValues);
@@ -213,14 +213,14 @@ class Quotegen_OptionController extends Zend_Controller_Action
                         foreach ( $option->getCategories() as $category )
                         {
                             
-                            if (array_search((string)$category->getId(), $values ['categories']) === false)
+                            if (array_search((string)$category->id, $values ['categories']) === false)
                             {
-                                $optionCategory->setCategoryId($category->getId());
+                                $optionCategory->setCategoryId($category->id);
                                 $optionCategoryMapper->delete($optionCategory);
                             }
                             else
                             {
-                                $categoryIds [] = $category->getId();
+                                $categoryIds [] = $category->id;
                             }
                         }
                         

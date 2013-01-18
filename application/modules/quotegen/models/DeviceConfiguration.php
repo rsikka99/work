@@ -1,28 +1,26 @@
 <?php
-
-/**
- * Quotegen_Model_DeviceConfiguration
- *
- * @author Lee Robert
- *        
- */
 class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
 {
-    
     /**
-     * The id assigned by the database
-     *
      * @var int
      */
-    protected $_id = 0;
-    
+    public $id = 0;
+
     /**
-     * The device id (quotegen device, but uses masterDeviceId as the id)
-     *
      * @var int
      */
-    protected $_masterDeviceId = 0;
-    
+    public $masterDeviceId;
+
+    /**
+     * @var string
+     */
+    public $name;
+
+    /**
+     * @var string
+     */
+    public $description;
+
     /**
      * The quote device associated with this configuration
      *
@@ -36,23 +34,9 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
      * @var multitype: Quotegen_Model_DeviceOption
      */
     protected $_options;
-    
+
     /**
-     * The name of the user configuration
-     *
-     * @var string
-     */
-    protected $_name;
-    
-    /**
-     * The description of the configuration
-     *
-     * @var string
-     */
-    protected $_description;
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::populate()
+     * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
     {
@@ -60,70 +44,32 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
+
         if (isset($params->id) && ! is_null($params->id))
-            $this->setId($params->id);
+            $this->id = $params->id;
+
         if (isset($params->masterDeviceId) && ! is_null($params->masterDeviceId))
-            $this->setMasterDeviceId($params->masterDeviceId);
+            $this->masterDeviceId = $params->masterDeviceId;
+
         if (isset($params->name) && ! is_null($params->name))
-            $this->setName($params->name);
+            $this->name = $params->name;
+
         if (isset($params->description) && ! is_null($params->description))
-            $this->setDescription($params->description);
+            $this->description = $params->description;
+
     }
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::toArray()
+
+    /**
+     * @return array
      */
     public function toArray ()
     {
         return array (
-                'id' => $this->getId(), 
-                'masterDeviceId' => $this->getMasterDeviceId(), 
-                'name' => $this->getName(), 
-                'description' => $this->getDescription() 
+            "id" => $this->id,
+            "masterDeviceId" => $this->masterDeviceId,
+            "name" => $this->name,
+            "description" => $this->description,
         );
-    }
-
-    /**
-     * Gets the id of the object
-     *
-     * @return number The id of the object
-     */
-    public function getId ()
-    {
-        return $this->_id;
-    }
-
-    /**
-     * Sets the id of the object
-     *
-     * @param number $_id
-     *            the new id
-     */
-    public function setId ($_id)
-    {
-        $this->_id = $_id;
-    }
-
-    /**
-     * Gets the master device id
-     *
-     * @return number
-     */
-    public function getMasterDeviceId ()
-    {
-        return $this->_masterDeviceId;
-    }
-
-    /**
-     * Sets a new master device id
-     *
-     * @param number $_masterDeviceId
-     *            The new id
-     */
-    public function setMasterDeviceId ($_masterDeviceId)
-    {
-        $this->_masterDeviceId = $_masterDeviceId;
-        return $this;
     }
 
     /**
@@ -135,67 +81,9 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
     {
         if (! isset($this->_device))
         {
-            $this->_device = Quotegen_Model_Mapper_Device::getInstance()->find($this->getMasterDeviceId());
+            $this->_device = Quotegen_Model_Mapper_Device::getInstance()->find($this->masterDeviceId);
         }
         return $this->_device;
-    }
-
-    /**
-     * Sets the quote device associated with this configuration
-     *
-     * @param Quotegen_Model_Device $_device            
-     */
-    public function setDevice ($_device)
-    {
-        $this->_device = $_device;
-        return $this;
-    }
-
-    
-
-    /**
-     * Get the name of the device configuration
-     *
-     * @return the $_name
-     *         The name of the device configuration
-     */
-    public function getName ()
-    {
-        return $this->_name;
-    }
-
-    /**
-     * Sets the new name of the object
-     *
-     * @param string $_name
-     *            the new name
-     */
-    public function setName ($_name)
-    {
-        $this->_name = $_name;
-        return $this;
-    }
-
-    /**
-     * Get the description of the device configuration
-     *
-     * @return the $_description
-     */
-    public function getDescription ()
-    {
-        return $this->_description;
-    }
-
-    /**
-     * Gets the description of the object
-     *
-     * @param string $_description
-     *            the new description
-     */
-    public function setDescription ($_description)
-    {
-        $this->_description = $_description;
-        return $this;
     }
     
     /**
@@ -207,19 +95,8 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
     {
         if (! isset($this->_options))
         {
-            $this->_options = Quotegen_Model_Mapper_Option::getInstance()->fetchAllOptionsForDeviceConfiguration($this->getId());
+            $this->_options = Quotegen_Model_Mapper_Option::getInstance()->fetchAllOptionsForDeviceConfiguration($this->id);
         }
         return $this->_options;
-    }
-    
-    /**
-     * Set a new array of options for the device
-     *
-     * @param multitype:Quotegen_Model_DeviceOption $_options
-     */
-    public function setOptions ($_options)
-    {
-        $this->_options = $_options;
-        return $this;
     }
 }

@@ -28,7 +28,7 @@
             ?>
             <td>
             <?php foreach ($option->getCategories() as $category) : /* @var $category Quotegen_Model_Category */?>
-            	<?php $categoryNames [] = $category->getName(); ?>
+            	<?php $categoryNames [] = $category->name; ?>
             <?php endforeach; ?>
             <?php echo implode(', ', $categoryNames);?>
             </td>

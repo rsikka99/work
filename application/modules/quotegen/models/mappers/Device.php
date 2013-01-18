@@ -95,7 +95,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_Device)
         {
             $whereClause = array (
-                    "{$this->col_masterDeviceId} = ?" => $object->getMasterDeviceId() 
+                    "{$this->col_masterDeviceId} = ?" => $object->masterDeviceId
             );
         }
         else
@@ -213,7 +213,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return $object->getMasterDeviceId();
+        return $object->masterDeviceId;
     }
 }
 

@@ -80,7 +80,7 @@ class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
             /* @var $device Quotegen_Model_Device */
             foreach ( Quotegen_Model_Mapper_Device::getInstance()->fetchAll() as $device )
             {
-                $quoteDeviceList [$device->getMasterDeviceId()] = $device->getMasterDevice()->getFullDeviceName();
+                $quoteDeviceList [$device->masterDeviceId] = $device->getMasterDevice()->getFullDeviceName();
             }
             $this->addElement('select', 'masterDeviceId', array (
                     'label' => 'Available Devices:', 

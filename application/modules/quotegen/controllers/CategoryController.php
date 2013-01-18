@@ -48,7 +48,7 @@ class Quotegen_CategoryController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        $message = "Are you sure you want to delete {$category->getName()}?";
+        $message = "Are you sure you want to delete {$category->name}?";
         $form = new Application_Form_Delete($message);
         $request = $this->getRequest();
         
@@ -67,7 +67,7 @@ class Quotegen_CategoryController extends Zend_Controller_Action
                         Quotegen_Model_Mapper_Category::getInstance()->delete($category);
                         
                         $this->_helper->flashMessenger(array (
-                                'success' => "Category  {$this->view->escape ( $category->getName() )} was deleted successfully." 
+                                'success' => "Category  {$this->view->escape ( $category->name )} was deleted successfully."
                         ));
                         
                         // Redirect the user back to index action of this controller.
@@ -165,7 +165,7 @@ class Quotegen_CategoryController extends Zend_Controller_Action
                     {
                         // Update quotesetting and message to comfirm
                         $category->populate($values);
-                        $category->setId($categoryId);
+                        $category->id = $categoryId;
                         Quotegen_Model_Mapper_Category::getInstance()->save($category, $categoryId);
                         
                         $this->_helper->flashMessenger(array (

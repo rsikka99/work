@@ -244,8 +244,8 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
     {
         $masterDevice = $device->getMasterDevice();
         $quoteDevice->setName($masterDevice->getFullDeviceName());
-        $quoteDevice->setOemSku($device->getOemSku());
-        $quoteDevice->setDealerSku($device->getDealerSku());
+        $quoteDevice->setOemSku($device->oemSku);
+        $quoteDevice->setDealerSku($device->dealerSku);
         $quoteDevice->setCost($masterDevice->getCost());
         $quoteDevice->setTonerConfigId($masterDevice->tonerConfigId);
         
@@ -478,13 +478,13 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             
             // Insert link to device
             $quoteDeviceConfiguration = new Quotegen_Model_QuoteDeviceConfiguration();
-            $quoteDeviceConfiguration->setMasterDeviceId($favoriteDevice->getMasterDeviceId());
+            $quoteDeviceConfiguration->setMasterDeviceId($favoriteDevice->masterDeviceId);
             $quoteDeviceConfiguration->setQuoteDeviceId($quoteDeviceId);
             Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->insert($quoteDeviceConfiguration);
             
             // Prepare option link
             $quoteDeviceConfigurationOption = new Quotegen_Model_QuoteDeviceConfigurationOption();
-            $quoteDeviceConfigurationOption->setMasterDeviceId($favoriteDevice->getMasterDeviceId());
+            $quoteDeviceConfigurationOption->setMasterDeviceId($favoriteDevice->masterDeviceId);
             
             // Add to the default group
             Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->insertDeviceInDefaultGroup($this->_quote->getId(), (int)$quoteDeviceId);
@@ -493,7 +493,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             {
                 // Get the device option
                 $deviceOption = Quotegen_Model_Mapper_DeviceOption::getInstance()->find(array (
-                        $favoriteDevice->getMasterDeviceId(), 
+                        $favoriteDevice->masterDeviceId,
                         $option->getOptionId() 
                 ));
                 

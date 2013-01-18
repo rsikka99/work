@@ -25,7 +25,7 @@ class Quotegen_Form_AddDevice extends Twitter_Bootstrap_Form_Inline
         /* @var $device Quotegen_Model_Device */
         foreach ( $devices as $device )
         {
-            $data [$device->getMasterDeviceId()] = $device->getMasterDevice()->getFullDeviceName();
+            $data [$device->masterDeviceId] = $device->getMasterDevice()->getFullDeviceName();
         }
         
         // This is a list of favorite devices that the user can add

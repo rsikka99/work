@@ -481,9 +481,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function setClient (Quotegen_Model_Client $_client)
     {
         $this->_client = $_client;
-        if ($_client->getId() !== null)
+        if ($_client->id !== null)
         {
-            $this->setClientId($_client->getId());
+            $this->setClientId($_client->id);
         }
         return $this;
     }

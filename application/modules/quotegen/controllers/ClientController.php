@@ -52,7 +52,7 @@ class Quotegen_ClientController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        $message = "Are you sure you want to completely delete {$client->getCompanyName()} including all quotes, assessments and proposals? <br/>This is an irreversible operation";
+        $message = "Are you sure you want to completely delete {$client->companyName} including all quotes, assessments and proposals? <br/>This is an irreversible operation";
         $form = new Application_Form_Delete($message);
         
         $request = $this->getRequest();
@@ -67,18 +67,18 @@ class Quotegen_ClientController extends Zend_Controller_Action
                     {
                         // Delete the client from the database
                         $clientService = new Admin_Service_Client();
-                        $clientService->delete($client->getId());
+                        $clientService->delete($client->id);
                     }
                     catch ( Exception $e )
                     {
                         $this->_helper->flashMessenger(array (
-                                'danger' => "Client {$client->getCompanyName()} cannot be deleted since there are  quote(s) attached." 
+                                'danger' => "Client {$client->companyName} cannot be deleted since there are  quote(s) attached."
                         ));
                         $this->_helper->redirector('index');
                     }
                     
                     $this->_helper->flashMessenger(array (
-                            'success' => "Client  {$client->getCompanyName()} was deleted successfully." 
+                            'success' => "Client  {$client->companyName} was deleted successfully."
                     ));
                     $this->_helper->redirector('index');
                 }
@@ -173,7 +173,7 @@ class Quotegen_ClientController extends Zend_Controller_Action
             if ($clientId)
             {
                 $this->_helper->flashMessenger(array (
-                        'success' => "Client {$client->getCompanyName()} successfully updated." 
+                        'success' => "Client {$client->companyName} successfully updated."
                 ));
                 // Redirect with client id so that the client is preselected
                 $this->_helper->redirector('index', null, null, array (

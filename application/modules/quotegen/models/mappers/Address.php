@@ -45,7 +45,7 @@ class Quotegen_Model_Mapper_Address extends My_Model_Mapper_Abstract
         // Insert the data
         $id = $this->getDbTable()->insert($data);
         
-        $object->setId($id);
+        $object->id = $id;
         
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -95,7 +95,7 @@ class Quotegen_Model_Mapper_Address extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_Address)
         {
             $whereClause = array (
-                    "{$this->col_id}  = ?" => $object->getId() 
+                    "{$this->col_id}  = ?" => $object->id
             );
         }
         else
@@ -227,15 +227,16 @@ class Quotegen_Model_Mapper_Address extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return $object->getId();
+        return $object->id;
     }
 
-	/**
-	 * Gets a address by a client Id
-	 * 
-	 * @param int $clientId
-	 * @return Address <Quotegen_Model_Address>
-	 */
+    /**
+     * Gets a address by a client Id
+     *
+     * @param int $clientId
+     *
+     * @return \Quotegen_Model_Address
+     */
     public function getAddressByClientId ($clientId)
     {
         return $this->fetch($this->getWhereClientId($clientId));

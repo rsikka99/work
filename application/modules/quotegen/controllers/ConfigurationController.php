@@ -67,7 +67,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
             }
         }
         
-        $message = "Are you sure you want to delete the &quot;{$deviceConfiguration->getName()}&quot; configuration?";
+        $message = "Are you sure you want to delete the &quot;{$deviceConfiguration->name}&quot; configuration?";
         $form = new Application_Form_Delete($message);
         
         $request = $this->getRequest();
@@ -81,7 +81,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                 {
                     $mapper->delete($deviceConfiguration);
                     $this->_helper->flashMessenger(array (
-                            'success' => "Device configuration \"{$deviceConfiguration->getName()}\" was deleted successfully." 
+                            'success' => "Device configuration \"{$deviceConfiguration->name}\" was deleted successfully."
                     ));
             
 		            if ($page == "configurations")
@@ -490,7 +490,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
         }
         
         $deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($configurationId);
-        $this->view->name = $deviceConfiguration->getName();
+        $this->view->name = $deviceConfiguration->name;
         
         // Prepare the data for the form
         $form = new Quotegen_Form_SelectOptions($availableOptions);
@@ -523,7 +523,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                     {
                         $deviceConfigurationOptionMapper = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance();
                         $deviceConfigurationOption = new Quotegen_Model_DeviceConfigurationOption();
-                        $deviceConfigurationOption->setDeviceConfigurationId($deviceConfiguration->getId());
+                        $deviceConfigurationOption->setDeviceConfigurationId($deviceConfiguration->id);
                         
                         try
                         {
@@ -548,7 +548,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                             ));
                         }
                         $this->_helper->flashMessenger(array (
-                                'success' => "Successfully added {$insertedOptions} options to {$deviceConfiguration->getName()}." 
+                                'success' => "Successfully added {$insertedOptions} options to {$deviceConfiguration->name}."
                         ));
 			            
 			            if ($page == "configurations")

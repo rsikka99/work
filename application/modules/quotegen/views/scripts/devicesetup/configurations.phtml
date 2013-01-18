@@ -36,13 +36,13 @@ $id = $this->id;
 				    	
 				        <?php foreach ($this->paginator as $configuration) : /* @var $configuration Quotegen_Model_DeviceConfiguration */ ?>
 				        <tr>
-				            <td><?php echo $configuration->getId(); ?></td>
-				            <td><?php echo $configuration->getName(); ?></td>
-				            <td><?php echo $configuration->getDescription(); ?></td>
+				            <td><?php echo $configuration->id); ?></td>
+				            <td><?php echo $configuration->name; ?></td>
+				            <td><?php echo $configuration->description; ?></td>
 				            <td>
 				                <div class="" style="text-align: center;">
-				                    <a class="btn btn-warning btn-mini" title="Edit Configuration" href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'configuration', 'action' => 'edit', 'id' => $id, 'configurationid' => $configuration->getId(), 'page' => 'configurations')); ?>"><i class="icon-pencil icon-white"></i></a>
-				                    <a class="btn btn-danger btn-mini" title="Delete Configuration" href="<?php echo $this->url(array ( 'module' => 'quotegen', 'controller' => 'configuration', 'action' => 'delete', 'id' => $id, 'configurationid' => $configuration->getId(), 'page' => 'configurations')); ?>"><i class="icon-trash icon-white"></i></a>
+				                    <a class="btn btn-warning btn-mini" title="Edit Configuration" href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'configuration', 'action' => 'edit', 'id' => $id, 'configurationid' => $configuration->id, 'page' => 'configurations')); ?>"><i class="icon-pencil icon-white"></i></a>
+				                    <a class="btn btn-danger btn-mini" title="Delete Configuration" href="<?php echo $this->url(array ( 'module' => 'quotegen', 'controller' => 'configuration', 'action' => 'delete', 'id' => $id, 'configurationid' => $configuration->id, 'page' => 'configurations')); ?>"><i class="icon-trash icon-white"></i></a>
 				                </div>
 				            </td>
 				        </tr>

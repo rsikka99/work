@@ -328,12 +328,12 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $this->view->quotegendevice = $device;
         if ($device)
         {
-            $oemSku = $device->getOemSku();
+            $oemSku = $device->oemSku;
             $form->getElement('can_sell')->setValue(true);
             $form->getElement('oemSku')->setValue($oemSku);
-            $form->getElement('dealerSku')->setValue($device->getDealerSku());
+            $form->getElement('dealerSku')->setValue($device->dealerSku);
 
-            $description = $device->getDescription();
+            $description = $device->description;
             $form->getElement('description')->setValue($description);
         }
 

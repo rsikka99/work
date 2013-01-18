@@ -1,38 +1,26 @@
 <?php
-
-/**
- * Quotegen_Model_Country
- *
- * @author Tyson Riehl
- *        
- */
 class Quotegen_Model_Country extends My_Model_Abstract
 {
     const COUNTRY_CANADA = 1;
     const COUNTRY_UNITED_STATES = 2;
     /**
-     * The id assigned by the database
-     *
      * @var int
      */
-    protected $_id = 0;
-    
+    public $id = 0;
+
     /**
-     * The name of the country
-     *
-     * @var string
+     * @var int
      */
-    protected $_name;
-    
+    public $name;
+
     /**
-     * The locale of the country
-     *
-     * @var string
+     * @var int
      */
-    protected $_locale;
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::populate()
+    public $locale;
+
+
+    /**
+     * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
     {
@@ -40,87 +28,27 @@ class Quotegen_Model_Country extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
+
         if (isset($params->id) && ! is_null($params->id))
-            $this->setId($params->id);
+            $this->id = $params->id;
+
         if (isset($params->name) && ! is_null($params->name))
-            $this->setName($params->name);
+            $this->name = $params->name;
+
         if (isset($params->locale) && ! is_null($params->locale))
-            $this->setLocale($params->locale);
+            $this->locale = $params->locale;
+
     }
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::toArray()
+
+    /**
+     * @return array
      */
     public function toArray ()
     {
         return array (
-                'id' => $this->getId(), 
-                'name' => $this->getName()
+            "id" => $this->id,
+            "name" => $this->name,
+            "locale" => $this->locale,
         );
     }
-
-    /**
-     * Gets the id of the object
-     *
-     * @return number The id of the object
-     */
-    public function getId ()
-    {
-        return $this->_id;
-    }
-
-    /**
-     * Sets the id of the object
-     *
-     * @param number $_id
-     *            the new id
-     */
-    public function setId ($_id)
-    {
-        $this->_id = $_id;
-    }
-
-    /**
-     * Getter for $_name
-     *
-     * @return string
-     */
-    public function getName ()
-    {
-        return $this->_name;
-    }
-
-    /**
-     * Setter for $_name
-     *
-     * @param string $_name
-     *            The new value
-     */
-    public function setName ($_name)
-    {
-        $this->_name = $_name;
-    }
-    
-	/**
-     * Getter for locale
-     *
-     * @return string
-     */
-    public function getLocale ()
-    {
-        return $this->_locale;
-    }
-
-	/**
-     * Setter for locale
-     *
-     * @param string locale The new value
-     */
-    public function setLocale ($_locale)
-    {
-        $this->_locale = $_locale;
-    }
-
-    
-    
 }

@@ -17,13 +17,13 @@
     	
         <?php foreach ($this->paginator->getCurrentItems() as $categories) : /* @var $categories Quotegen_Model_Category */ ?>
         <tr>
-            <td><?php echo $categories->getName(); ?></td>
-            <td><?php echo $categories->getDescription(); ?></td>
+            <td><?php echo $categories->name; ?></td>
+            <td><?php echo $categories->description; ?></td>
             <td>
                 <div class="btn-group">
-                	<a class="btn btn-info" title="View" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $categories->getId())); ?>"><i class="icon-eye-open"></i></a>
-                    <a class="btn btn-warning" title="Edit" href="<?php echo $this->url(array ( 'action' => 'edit', 'id' => $categories->getId())); ?>"><i class="icon-pencil"></i></a>
-                    <a class="btn btn-danger" title="Delete" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $categories->getId())); ?>"><i class="icon-trash"></i></a>
+                	<a class="btn btn-info" title="View" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $categories->id)); ?>"><i class="icon-eye-open"></i></a>
+                    <a class="btn btn-warning" title="Edit" href="<?php echo $this->url(array ( 'action' => 'edit', 'id' => $categories->id)); ?>"><i class="icon-pencil"></i></a>
+                    <a class="btn btn-danger" title="Delete" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $categories->id)); ?>"><i class="icon-trash"></i></a>
                 </div>
             </td>
         </tr>

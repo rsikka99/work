@@ -18,7 +18,7 @@ $this->leaseDetails->meterFrequency = '';
 
 // Information speicific for the company 
 $this->company = new stdClass();
-$this->company->name = ($quote->getClient()->getLegalName() ? $quote->getClient()->getLegalName() : $quote->getClient()->getCompanyName());
+$this->company->name = ($quote->getClient()->legalName ? $quote->getClient()->legalName : $quote->getClient()->companyName);
 $this->company->address = "{$quote->getClient()->getAddress()->getFullAddressOneLine()}";
 
 // Dealer company details

@@ -6,7 +6,7 @@ $addDeviceOptions[] = '<option value="-1">New Device</option>';
 /* @var $quoteDeviceConfiguration Quotegen_Model_DeviceConfiguration */
 foreach (Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAll() as $quoteDeviceConfiguration)
 {
-    $addDeviceOptions[] = "<option value='{$quoteDeviceConfiguration->getId()}'>{$quoteDeviceConfiguration->getName()}</option>";   
+    $addDeviceOptions[] = "<option value='{$quoteDeviceConfiguration->id}'>{$quoteDeviceConfiguration->name}</option>";
 }
 $addDeviceOptionsHtml = implode("\n", $addDeviceOptions);
 

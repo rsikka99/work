@@ -141,7 +141,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
         if ($client instanceof Quotegen_Model_Client)
         {
             // If the client exist get all quotes for the client
-            $quotes = Quotegen_Model_Mapper_Quote::getInstance()->fetchAllForClientByUser($client->getId(), $this->_userId);
+            $quotes = Quotegen_Model_Mapper_Quote::getInstance()->fetchAllForClientByUser($client->id, $this->_userId);
             
             // Create a quote array to create option data
             /* @var $quote Quotegen_Model_Quote */
@@ -149,7 +149,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
             {
                 $quoteArray = array (
                         'id' => $quote->getId(), 
-                    'clientName' => $quote->getClient()->getCompanyName(), 
+                    'clientName' => $quote->getClient()->companyName,
                         'quotedate' => $quote->getQuoteDate(), 
                         'isLeased' => $quote->isLeased() 
                 );
