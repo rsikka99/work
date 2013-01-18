@@ -3201,6 +3201,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();
+
             if (isset($values ['cancel']))
             {
                 $this->gotoPreviousStep();
