@@ -1,9 +1,13 @@
 /* Styles specific to the assessment report */
+html, body {
+    background-color: #FFF;
+}
 
 body {
-	width: 595px;
-	font-family: Arial;
-	padding-bottom: 150px;
+    width: 595px;
+    min-width: 595px;
+    font-family: Arial;
+    padding-bottom: 150px;
 }
 
 p, span, li {
