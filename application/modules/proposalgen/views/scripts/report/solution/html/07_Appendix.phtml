@@ -27,12 +27,12 @@ $proposal = $this->proposal;
 		<?php foreach($proposal->getDevices() as $deviceInstance) : /* @var $deviceInstance Proposalgen_Model_DeviceInstance */ ?>
 			<tr>
 				<td class="column1"><div><?php echo $deviceInstance->getMasterDevice()->getManufacturer()->displayname; ?></div></td>
-				<td class="column2"><div><?php echo $deviceInstance->getMasterDevice()->printerModel; ?></div></td>
+				<td class="column2"><div><?php echo $deviceInstance->getMasterDevice()->modelName; ?></div></td>
 				<td class="column3"><div class="center"><?php echo ($deviceInstance->ipAddress) ?: "Unknown"; ?></div></td>
 				<td class="column3"><div class="center"><?php echo ($deviceInstance->serialNumber) ?: "Unknown"; ?></div></td>
 				<td class="column4"><div class="center"><?php echo ($deviceInstance->getMasterDevice()->isLeased) ? "Leased" : "Purchased"; ?></div></td>
 				<td class="column5"><div class="right"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()); ?></div></td>
-				<td class="column6"><div class="center"><?php echo ($deviceInstance->jitSuppliesSupported) ? "Yes" : "No"; ?></div></td>
+				<td class="column6"><div class="center"><?php echo ($deviceInstance->reportsTonerLevels) ? "Yes" : "No"; ?></div></td>
 			</tr>
 		<?php endforeach; ?>
 		</tbody>

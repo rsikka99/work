@@ -22,7 +22,7 @@ $proposal = $this->proposal;
     			<?php $SerialNumber = (strlen($device->serialNumber) == 0) ? 'Unknown Serial' : $device->serialNumber; ?>
     				<tr>
     					<td><div class=" left"><?php echo $device->getMasterDevice()->getManufacturer()->displayname; ?></div></td>
-    					<td><div class=" left"><?php echo $device->getMasterDevice()->printerModel; ?></div></td>
+    					<td><div class=" left"><?php echo $device->getMasterDevice()->modelName; ?></div></td>
     					<td><div class=" center"><?php echo $SerialNumber; ?></div></td>
     					<td><div class=" left"><?php if ($device->ipAddress) echo $device->ipAddress; else echo 'Unknown IP';?></div></td>
     					<td><div class=" left"><?php echo $device->_exclusionReason; ?></div></td>

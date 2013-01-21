@@ -160,19 +160,19 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                     $meters = array();
                     // Form a list of meters
                     $meterColumns = array(
-                        "life"       => Proposalgen_Model_Meter::METER_TYPE_LIFE,
-                        "color"      => Proposalgen_Model_Meter::METER_TYPE_COLOR,
-                        "copycolor"  => Proposalgen_Model_Meter::METER_TYPE_COPY_COLOR,
-                        "printcolor" => Proposalgen_Model_Meter::METER_TYPE_PRINT_COLOR,
-                        "black"      => Proposalgen_Model_Meter::METER_TYPE_BLACK,
-                        "copyblack"  => Proposalgen_Model_Meter::METER_TYPE_COPY_BLACK,
-                        "printblack" => Proposalgen_Model_Meter::METER_TYPE_PRINT_BLACK,
-                        "scan"       => Proposalgen_Model_Meter::METER_TYPE_SCAN,
-                        "fax"        => Proposalgen_Model_Meter::METER_TYPE_FAX
+                        "life"       => Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_LIFE,
+                        "color"      => Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR,
+                        "copycolor"  => Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COPY_COLOR,
+                        "printcolor" => Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_PRINT_COLOR,
+                        "black"      => Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK,
+                        "copyblack"  => Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COPY_BLACK,
+                        "printblack" => Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_PRINT_BLACK,
+                        "scan"       => Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_SCAN,
+                        "fax"        => Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_FAX
                     );
                     foreach ($meterColumns as $meterColumn => $meterType)
                     {
-                        $newMeter             = new Proposalgen_Model_Meter();
+                        $newMeter             = new Proposalgen_Model_DeviceInstanceMeter();
                         $newMeter->meterType  = $meterType;
                         $newMeter->startMeter = $row ["start_meter_" . $meterColumn];
                         $newMeter->endMeter   = $row ["end_meter_" . $meterColumn];
@@ -181,7 +181,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
 
                     $masterDevice                      = new Proposalgen_Model_MasterDevice();
                     $masterDevice->id                  = null;
-                    $masterDevice->printerModel        = $row->printer_model;
+                    $masterDevice->modelName        = $row->printer_model;
                     $masterDevice->tonerConfigId       = $tonerConfig->tonerConfigId;
                     $masterDevice->isCopier            = $row->is_copier;
                     $masterDevice->isFax               = $row->is_fax;
@@ -224,14 +224,14 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
 
                     $device->id                    = null;
                     $device->reportId              = $row->report_id;
-                    $device->uploadDataCollectorId = $row->upload_data_collector_row_id;
+                    $device->rmsUploadRowId = $row->upload_data_collector_row_id;
                     $device->serialNumber          = $row->printer_serial_number;
                     $device->mpsMonitorStartDate   = $row->mps_monitor_startdate;
                     $device->mpsMonitorEndDate     = $row->mps_monitor_enddate;
                     $device->mpsDiscoveryDate      = $row->mps_discovery_date;
                     $device->isExcluded            = $row->is_excluded;
                     $device->isUnknown             = true;
-                    $device->jitSuppliesSupported  = $row->jit_supplies_supported;
+                    $device->reportsTonerLevels  = $row->jit_supplies_supported;
                     $device->ipAddress             = $row->ip_address;
 
                     $device->setMeters($meters);

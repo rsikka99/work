@@ -83,12 +83,12 @@ class Proposalgen_PrintingdevicelistController extends My_Controller_Report
                 $row [] = $device->getMasterDevice()
                     ->getManufacturer()
                     ->fullname;
-                $row [] = $device->getMasterDevice()->printerModel;
+                $row [] = $device->getMasterDevice()->modelName;
                 $row [] = ($device->ipAddress) ? $device->ipAddress : "Unknown";
                 $row [] = ($device->serialNumber) ? $device->serialNumber : "Unknown";
                 $row [] = ($device->MasterDevice->IsLeased) ? "Leased" : "Purchased";
                 $row [] = $device->AverageMonthlyPageCount;
-                $row [] = ($device->jitSuppliesSupported) ? "Yes" : "No";
+                $row [] = ($device->reportsTonerLevels) ? "Yes" : "No";
                 $appendix_values .= implode(",", $row) . "\n";
             } // end Purchased Devices foreach
         }
@@ -111,7 +111,7 @@ class Proposalgen_PrintingdevicelistController extends My_Controller_Report
                 $row [] = $device->getMasterDevice()
                     ->getManufacturer()
                     ->fullname;
-                $row [] = $device->getMasterDevice()->printerModel;
+                $row [] = $device->getMasterDevice()->modelName;
                 $row [] = (strlen($device->serialNumber) > 0) ? $device->serialNumber : "Unknown";
                 $row [] = ($device->IpAddress) ? $device->IpAddress : "Unknown IP";
                 $row [] = $device->ExclusionReason;

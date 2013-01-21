@@ -27,19 +27,19 @@ class Proposalgen_Model_DateAnswer extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->QuestionId) && !is_null($params->QuestionId))
+        if (isset($params->questionId) && !is_null($params->questionId))
         {
-            $this->questionId = $params->QuestionId;
+            $this->questionId = $params->questionId;
         }
 
-        if (isset($params->ReportId) && !is_null($params->ReportId))
+        if (isset($params->reportId) && !is_null($params->reportId))
         {
-            $this->reportId = $params->ReportId;
+            $this->reportId = $params->reportId;
         }
 
-        if (isset($params->Answer) && !is_null($params->Answer))
+        if (isset($params->answer) && !is_null($params->answer))
         {
-            $this->answer = $params->Answer;
+            $this->answer = $params->answer;
         }
 
     }

@@ -1788,7 +1788,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 $device_instance_id = $device_instance->getDeviceInstanceId();
 
                                 // delete meters
-                                $meter = Proposalgen_Model_Mapper_Meter::getInstance()->delete('device_instance_id = ' . $device_instance_id);
+                                $meter = Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance()->delete('device_instance_id = ' . $device_instance_id);
 
                                 // delete device_instance
                                 Proposalgen_Model_Mapper_DeviceInstance::getInstance()->delete('device_instance_id = ' . $device_instance_id);
@@ -2529,7 +2529,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 );
 
 
-                $metersTable = new Proposalgen_Model_DbTable_Meter();
+                $metersTable = new Proposalgen_Model_DbTable_DeviceInstanceMeter();
                 foreach ($result as $key => $value)
                 {
                     $device_instance_id = $result [$key] ['device_instance_id'];
@@ -2581,7 +2581,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         }
                     }
                 }
-                $metersMsg = Proposalgen_Model_Mapper_Meter::getInstance()->saveRows($metersDataArray);
+                $metersMsg = Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance()->saveRows($metersDataArray);
 
                 // reset report stage flag
                 $reportTable = new Proposalgen_Model_DbTable_Report();

@@ -167,127 +167,103 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `pgen_toner_configs`
+-- Table `pgen_rms_providers`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_toner_configs` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+CREATE  TABLE IF NOT EXISTS `pgen_rms_providers` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(255) NOT NULL ,
-  PRIMARY KEY (`id`) ,
-  UNIQUE INDEX `name` (`name` ASC) )
-ENGINE = InnoDB
-AUTO_INCREMENT = 5
-DEFAULT CHARACTER SET = utf8;
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `pgen_master_devices`
+-- Table `pgen_rms_devices`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_master_devices` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `manufacturerId` INT(11) NOT NULL ,
-  `printerModel` VARCHAR(255) NOT NULL ,
-  `tonerConfigId` INT(11) NOT NULL ,
-  `isCopier` TINYINT(4) NOT NULL DEFAULT '0' ,
-  `isFax` TINYINT(4) NOT NULL DEFAULT '0' ,
-  `isScanner` TINYINT(4) NOT NULL DEFAULT '0' ,
-  `isDuplex` TINYINT(4) NOT NULL DEFAULT '0' ,
-  `isReplacementDevice` TINYINT(4) NOT NULL DEFAULT '0' ,
-  `wattsPowerNormal` DOUBLE NULL DEFAULT NULL ,
-  `wattsPowerIdle` DOUBLE NULL DEFAULT NULL ,
-  `cost` DOUBLE NULL DEFAULT NULL ,
-  `serviceCostPerPage` DOUBLE NULL DEFAULT NULL ,
-  `launchDate` DATETIME NOT NULL ,
+CREATE  TABLE IF NOT EXISTS `pgen_rms_devices` (
+  `rmsProviderId` INT(11) NOT NULL ,
+  `rmsModelId` INT(11) NOT NULL ,
+  `manufacturer` VARCHAR(255) NULL ,
+  `modelName` VARCHAR(255) NULL ,
   `dateCreated` DATETIME NOT NULL ,
-  `dutyCycle` INT(11) NULL DEFAULT NULL ,
-  `ppmBlack` DOUBLE NULL DEFAULT NULL ,
-  `ppmColor` DOUBLE NULL DEFAULT NULL ,
-  `isLeased` TINYINT(4) NOT NULL DEFAULT '0' ,
-  `leasedTonerYield` INT(11) NULL DEFAULT NULL ,
-  PRIMARY KEY (`id`) ,
-  INDEX `tonerConfigId` (`tonerConfigId` ASC) ,
-  INDEX `proposalgenerator_master_devices_ibfk_1_idx` (`manufacturerId` ASC) ,
-  CONSTRAINT `proposalgenerator_master_devices_ibfk_2`
-    FOREIGN KEY (`tonerConfigId` )
-    REFERENCES `pgen_toner_configs` (`id` ),
-  CONSTRAINT `proposalgenerator_master_devices_ibfk_1`
-    FOREIGN KEY (`manufacturerId` )
-    REFERENCES `manufacturers` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 4
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `pgen_upload_data_collector_rows`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_upload_data_collector_rows` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `report_id` INT(11) NOT NULL ,
-  `devices_pf_id` INT(11) NOT NULL ,
-  `startdate` DATETIME NOT NULL ,
-  `enddate` DATETIME NOT NULL ,
-  `printermodelid` INT(11) NOT NULL ,
-  `ipaddress` VARCHAR(255) NULL DEFAULT NULL ,
-  `serialnumber` VARCHAR(255) NULL DEFAULT NULL ,
-  `modelname` VARCHAR(255) NOT NULL ,
-  `manufacturer` VARCHAR(255) NOT NULL ,
-  `is_color` TINYINT(4) NOT NULL DEFAULT '0' ,
-  `is_copier` TINYINT(4) NOT NULL DEFAULT '0' ,
-  `is_scanner` TINYINT(4) NOT NULL DEFAULT '0' ,
-  `is_fax` TINYINT(4) NOT NULL DEFAULT '0' ,
-  `ppm_black` DOUBLE NULL DEFAULT NULL ,
-  `ppm_color` DOUBLE NULL DEFAULT NULL ,
-  `date_introduction` DATETIME NULL DEFAULT NULL ,
-  `date_adoption` DATETIME NULL DEFAULT NULL ,
-  `discovery_date` DATETIME NULL DEFAULT NULL ,
-  `black_prodcodeoem` VARCHAR(255) NULL DEFAULT NULL ,
-  `black_yield` INT(11) NULL DEFAULT NULL ,
-  `black_prodcostoem` DOUBLE NULL DEFAULT NULL ,
-  `cyan_prodcodeoem` VARCHAR(255) NULL DEFAULT NULL ,
-  `cyan_yield` INT(11) NULL DEFAULT NULL ,
-  `cyan_prodcostoem` DOUBLE NULL DEFAULT NULL ,
-  `magenta_prodcodeoem` VARCHAR(255) NULL DEFAULT NULL ,
-  `magenta_yield` INT(11) NULL DEFAULT NULL ,
-  `magenta_prodcostoem` DOUBLE NULL DEFAULT NULL ,
-  `yellow_prodcodeoem` VARCHAR(255) NULL DEFAULT NULL ,
-  `yellow_yield` INT(11) NULL DEFAULT NULL ,
-  `yellow_prodcostoem` DOUBLE NULL DEFAULT NULL ,
-  `duty_cycle` INT(11) NULL DEFAULT NULL ,
-  `wattspowernormal` DOUBLE NULL DEFAULT NULL ,
-  `wattspoweridle` DOUBLE NULL DEFAULT NULL ,
-  `startmeterlife` INT(11) NULL DEFAULT NULL ,
-  `endmeterlife` INT(11) NULL DEFAULT NULL ,
-  `startmeterblack` INT(11) NULL DEFAULT NULL ,
-  `endmeterblack` INT(11) NULL DEFAULT NULL ,
-  `startmetercolor` INT(11) NULL DEFAULT NULL ,
-  `endmetercolor` INT(11) NULL DEFAULT NULL ,
-  `startmeterprintblack` INT(11) NULL DEFAULT NULL ,
-  `endmeterprintblack` INT(11) NULL DEFAULT NULL ,
-  `startmeterprintcolor` INT(11) NULL DEFAULT NULL ,
-  `endmeterprintcolor` INT(11) NULL DEFAULT NULL ,
-  `startmetercopyblack` INT(11) NULL DEFAULT NULL ,
-  `endmetercopyblack` INT(11) NULL DEFAULT NULL ,
-  `startmetercopycolor` INT(11) NULL DEFAULT NULL ,
-  `endmetercopycolor` INT(11) NULL DEFAULT NULL ,
-  `startmeterscan` INT(11) NULL DEFAULT NULL ,
-  `endmeterscan` INT(11) NULL DEFAULT NULL ,
-  `startmeterfax` INT(11) NULL DEFAULT NULL ,
-  `endmeterfax` INT(11) NULL DEFAULT NULL ,
-  `tonerlevel_black` VARCHAR(255) NULL DEFAULT NULL ,
-  `tonerlevel_cyan` VARCHAR(255) NULL DEFAULT NULL ,
-  `tonerlevel_magenta` VARCHAR(255) NULL DEFAULT NULL ,
-  `tonerlevel_yellow` VARCHAR(255) NULL DEFAULT NULL ,
-  `invalid_data` TINYINT(4) NULL DEFAULT '0' ,
-  `is_excluded` TINYINT(4) NULL DEFAULT '0' ,
-  PRIMARY KEY (`id`) ,
-  INDEX `report_id` (`report_id` ASC) ,
-  CONSTRAINT `proposalgenerator_upload_data_collector_rows_ibfk_1`
-    FOREIGN KEY (`report_id` )
-    REFERENCES `pgen_reports` (`id` )
+  `userId` INT(11) NULL ,
+  PRIMARY KEY (`rmsProviderId`, `rmsModelId`) ,
+  INDEX `rms_devices_ibfk_1_idx` (`userId` ASC) ,
+  INDEX `rms_devices_ibfk_2_idx` (`rmsProviderId` ASC) ,
+  CONSTRAINT `rms_devices_ibfk_1`
+    FOREIGN KEY (`userId` )
+    REFERENCES `users` (`id` )
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
+  CONSTRAINT `rms_devices_ibfk_2`
+    FOREIGN KEY (`rmsProviderId` )
+    REFERENCES `pgen_rms_providers` (`id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 103
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `pgen_rms_upload_rows`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `pgen_rms_upload_rows` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `rmsProviderId` INT(11) NOT NULL ,
+  `rmsModelId` INT(11) NULL ,
+  `hasCompleteInformation` TINYINT(4) NOT NULL DEFAULT 0 ,
+  `modelName` VARCHAR(255) NOT NULL DEFAULT '' ,
+  `manufacturer` VARCHAR(255) NOT NULL DEFAULT '' ,
+  `cost` DOUBLE NULL ,
+  `dutyCycle` INT(11) NULL ,
+  `isColor` TINYINT(4) NOT NULL DEFAULT 0 ,
+  `isCopier` TINYINT(4) NOT NULL DEFAULT 0 ,
+  `isFax` TINYINT(4) NOT NULL DEFAULT 0 ,
+  `isLeased` TINYINT(4) NOT NULL DEFAULT 0 ,
+  `isScanner` TINYINT(4) NOT NULL DEFAULT 0 ,
+  `launchDate` DATETIME NULL ,
+  `leasedTonerYield` INT(11) NULL ,
+  `ppmBlack` DOUBLE NULL ,
+  `ppmColor` DOUBLE NULL ,
+  `serviceCostPerPage` DOUBLE NULL ,
+  `tonerConfigId` INT(11) NOT NULL DEFAULT 1 ,
+  `wattsPowerNormal` DOUBLE NULL ,
+  `wattsPowerIdle` DOUBLE NULL ,
+  `blackTonerSku` VARCHAR(255) NULL ,
+  `blackTonerYield` INT(11) NULL ,
+  `blackTonerCost` DOUBLE NULL ,
+  `cyanTonerSku` VARCHAR(255) NULL ,
+  `cyanTonerYield` INT(11) NULL ,
+  `cyanTonerCost` DOUBLE NULL ,
+  `magentaTonerSku` VARCHAR(255) NULL ,
+  `magentaTonerYield` INT(11) NULL ,
+  `magentaTonerCost` DOUBLE NULL ,
+  `yellowTonerSku` VARCHAR(255) NULL ,
+  `yellowTonerYield` INT(11) NULL ,
+  `yellowTonerCost` DOUBLE NULL ,
+  `threeColorSku` VARCHAR(255) NULL ,
+  `threeColorYield` INT(11) NULL ,
+  `threeColorCost` DOUBLE NULL ,
+  `fourColorSku` VARCHAR(255) NULL ,
+  `fourColorYield` INT(11) NULL ,
+  `fourColorCost` DOUBLE NULL ,
+  `tonerLevelBlack` VARCHAR(255) NULL ,
+  `tonerLevelCyan` VARCHAR(255) NULL ,
+  `tonerLevelMagenta` VARCHAR(255) NULL ,
+  `tonerLevelYellow` VARCHAR(255) NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `pgen_rms_upload_rows_ibfk_1_idx` (`rmsProviderId` ASC) ,
+  INDEX `pgen_rms_upload_rows_ibfk_2_idx` (`rmsModelId` ASC) ,
+  CONSTRAINT `pgen_rms_upload_rows_ibfk_1`
+    FOREIGN KEY (`rmsProviderId` )
+    REFERENCES `pgen_rms_providers` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `pgen_rms_upload_rows_ibfk_2`
+    FOREIGN KEY (`rmsModelId` )
+    REFERENCES `pgen_rms_devices` (`rmsProviderId` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 477
 DEFAULT CHARACTER SET = utf8;
@@ -298,33 +274,25 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_device_instances` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `report_id` INT(11) NOT NULL ,
-  `master_device_id` INT(11) NOT NULL ,
-  `upload_data_collector_row_id` INT(11) NOT NULL ,
-  `serial_number` VARCHAR(255) NULL DEFAULT NULL ,
-  `mps_monitor_startdate` DATETIME NOT NULL ,
-  `mps_monitor_enddate` DATETIME NOT NULL ,
-  `mps_discovery_date` DATETIME NULL DEFAULT NULL ,
-  `jit_supplies_supported` TINYINT(4) NULL DEFAULT '0' ,
-  `ip_address` VARCHAR(255) NULL DEFAULT NULL ,
-  `is_excluded` TINYINT(4) NULL DEFAULT '0' ,
+  `reportId` INT(11) NOT NULL ,
+  `rmsUploadRowId` INT(11) NOT NULL ,
+  `ipAddress` VARCHAR(255) NOT NULL DEFAULT '' ,
+  `isExcluded` TINYINT(4) NOT NULL DEFAULT 0 ,
+  `mpsDiscoveryDate` DATETIME NULL ,
+  `reportsTonerLevels` TINYINT(4) NOT NULL DEFAULT 0 ,
+  `serialNumber` VARCHAR(255) NOT NULL DEFAULT '' ,
+  `useUserData` TINYINT(4) NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`id`) ,
-  INDEX `report_id` (`report_id` ASC) ,
-  INDEX `master_device_id` (`master_device_id` ASC) ,
-  INDEX `upload_data_collector_id` (`upload_data_collector_row_id` ASC) ,
+  INDEX `report_id` (`reportId` ASC) ,
+  INDEX `upload_data_collector_id` (`rmsUploadRowId` ASC) ,
   CONSTRAINT `proposalgenerator_device_instances_ibfk_1`
-    FOREIGN KEY (`report_id` )
+    FOREIGN KEY (`reportId` )
     REFERENCES `pgen_reports` (`id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `proposalgenerator_device_instances_ibfk_2`
-    FOREIGN KEY (`master_device_id` )
-    REFERENCES `pgen_master_devices` (`id` )
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
   CONSTRAINT `proposalgenerator_device_instances_ibfk_3`
-    FOREIGN KEY (`upload_data_collector_row_id` )
-    REFERENCES `pgen_upload_data_collector_rows` (`id` )
+    FOREIGN KEY (`rmsUploadRowId` )
+    REFERENCES `pgen_rms_upload_rows` (`id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -336,14 +304,16 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_device_instance_meters` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `device_instance_id` INT(11) NOT NULL ,
-  `meter_type` ENUM('LIFE','COLOR','COPY BLACK','BLACK','PRINT BLACK','PRINT COLOR','COPY COLOR','SCAN','FAX') NULL DEFAULT NULL ,
-  `start_meter` INT(11) NOT NULL ,
-  `end_meter` INT(11) NOT NULL ,
+  `deviceInstanceId` INT(11) NOT NULL ,
+  `meterType` ENUM('LIFE','COLOR','COPY BLACK','BLACK','PRINT BLACK','PRINT COLOR','COPY COLOR','SCAN','FAX') NULL ,
+  `startMeter` INT(11) NOT NULL ,
+  `endMeter` INT(11) NOT NULL ,
+  `monitorStartDate` DATETIME NOT NULL ,
+  `monitorEndDate` DATETIME NOT NULL ,
   PRIMARY KEY (`id`) ,
-  UNIQUE INDEX `device_instance_id` (`device_instance_id` ASC, `meter_type` ASC) ,
+  UNIQUE INDEX `device_instance_id` (`deviceInstanceId` ASC, `meterType` ASC) ,
   CONSTRAINT `proposalgenerator_device_instance_meters_ibfk_1`
-    FOREIGN KEY (`device_instance_id` )
+    FOREIGN KEY (`deviceInstanceId` )
     REFERENCES `pgen_device_instances` (`id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
@@ -409,6 +379,59 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
+-- Table `pgen_toner_configs`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `pgen_toner_configs` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(255) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `name` (`name` ASC) )
+ENGINE = InnoDB
+AUTO_INCREMENT = 5
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `pgen_master_devices`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `pgen_master_devices` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `cost` DOUBLE NULL ,
+  `dateCreated` DATETIME NOT NULL ,
+  `dutyCycle` INT(11) NULL ,
+  `isCopier` TINYINT(4) NOT NULL DEFAULT 0 ,
+  `isDuplex` TINYINT(4) NOT NULL DEFAULT 0 ,
+  `isFax` TINYINT(4) NOT NULL DEFAULT 0 ,
+  `isLeased` TINYINT(4) NOT NULL DEFAULT 0 ,
+  `isReplacementDevice` TINYINT(4) NOT NULL DEFAULT 0 ,
+  `isScanner` TINYINT(4) NOT NULL DEFAULT 0 ,
+  `launchDate` DATETIME NOT NULL ,
+  `manufacturerId` INT(11) NOT NULL ,
+  `modelName` VARCHAR(255) NOT NULL ,
+  `leasedTonerYield` INT(11) NULL ,
+  `ppmBlack` DOUBLE NULL ,
+  `ppmColor` DOUBLE NULL ,
+  `serviceCostPerPage` DOUBLE NULL ,
+  `tonerConfigId` INT(11) NOT NULL ,
+  `wattsPowerNormal` DOUBLE NULL ,
+  `wattsPowerIdle` DOUBLE NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `toner_config_id` (`tonerConfigId` ASC) ,
+  INDEX `proposalgenerator_master_devices_ibfk_1_idx` (`manufacturerId` ASC) ,
+  CONSTRAINT `proposalgenerator_master_devices_ibfk_2`
+    FOREIGN KEY (`tonerConfigId` )
+    REFERENCES `pgen_toner_configs` (`id` ),
+  CONSTRAINT `proposalgenerator_master_devices_ibfk_1`
+    FOREIGN KEY (`manufacturerId` )
+    REFERENCES `manufacturers` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 4
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
 -- Table `pgen_device_toners`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_device_toners` (
@@ -418,46 +441,36 @@ CREATE  TABLE IF NOT EXISTS `pgen_device_toners` (
   INDEX `master_device_id` (`master_device_id` ASC) ,
   CONSTRAINT `proposalgenerator_device_toners_ibfk_1`
     FOREIGN KEY (`toner_id` )
-    REFERENCES `pgen_toners` (`id` ),
+    REFERENCES `pgen_toners` (`id` )
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
   CONSTRAINT `proposalgenerator_device_toners_ibfk_2`
     FOREIGN KEY (`master_device_id` )
-    REFERENCES `pgen_master_devices` (`id` ))
+    REFERENCES `pgen_master_devices` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `pgen_pf_devices`
+-- Table `pgen_rms_master_matchups`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_pf_devices` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `pf_model_id` INT(11) NOT NULL ,
-  `pf_db_devicename` VARCHAR(255) NOT NULL ,
-  `pf_db_manufacturer` VARCHAR(255) NULL DEFAULT NULL ,
-  `date_created` DATETIME NOT NULL ,
-  `created_by` INT(11) NULL DEFAULT NULL ,
-  PRIMARY KEY (`id`) ,
-  UNIQUE INDEX `pf_model_id` (`pf_model_id` ASC) ,
-  INDEX `created_by` (`created_by` ASC) )
-ENGINE = InnoDB
-AUTO_INCREMENT = 103
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `pgen_master_pf_device_matchups`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_master_pf_device_matchups` (
-  `master_device_id` INT(11) NOT NULL ,
-  `pf_device_id` INT(11) NOT NULL ,
-  PRIMARY KEY (`master_device_id`, `pf_device_id`) ,
-  UNIQUE INDEX `pf_device_id` (`pf_device_id` ASC) ,
-  CONSTRAINT `proposalgenerator_master_pf_device_matchups_ibfk_1`
-    FOREIGN KEY (`master_device_id` )
-    REFERENCES `pgen_master_devices` (`id` ),
-  CONSTRAINT `proposalgenerator_master_pf_device_matchups_ibfk_2`
-    FOREIGN KEY (`pf_device_id` )
-    REFERENCES `pgen_pf_devices` (`id` ))
+CREATE  TABLE IF NOT EXISTS `pgen_rms_master_matchups` (
+  `rmsProviderId` INT(11) NOT NULL ,
+  `rmsModelId` INT(11) NOT NULL ,
+  `masterDeviceId` INT(11) NOT NULL ,
+  PRIMARY KEY (`rmsProviderId`, `rmsModelId`) ,
+  CONSTRAINT `pgen_rms_master_matchups_ibfk_1`
+    FOREIGN KEY (`masterDeviceId` )
+    REFERENCES `pgen_master_devices` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `pgen_rms_master_matchups_ibfk_2`
+    FOREIGN KEY (`rmsProviderId` , `rmsModelId` )
+    REFERENCES `pgen_rms_devices` (`rmsProviderId` , `rmsModelId` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -763,7 +776,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_ticket_pf_requests` (
     REFERENCES `pgen_tickets` (`id` ),
   CONSTRAINT `proposalgenerator_ticket_pf_requests_ibfk_3`
     FOREIGN KEY (`pf_device_id` )
-    REFERENCES `pgen_pf_devices` (`id` )
+    REFERENCES `pgen_rms_devices` (`rmsProviderId` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -785,117 +798,6 @@ CREATE  TABLE IF NOT EXISTS `pgen_tickets_viewed` (
   CONSTRAINT `proposalgenerator_tickets_viewed_ibfk_2`
     FOREIGN KEY (`user_id` )
     REFERENCES `users` (`id` ))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `pgen_unknown_device_instances`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_unknown_device_instances` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `user_id` INT(11) NOT NULL ,
-  `report_id` INT(11) NOT NULL ,
-  `upload_data_collector_row_id` INT(11) NOT NULL ,
-  `printermodelid` INT(11) NOT NULL ,
-  `mps_monitor_startdate` DATETIME NOT NULL ,
-  `mps_monitor_enddate` DATETIME NOT NULL ,
-  `mps_discovery_date` DATETIME NULL DEFAULT NULL ,
-  `install_date` DATETIME NULL DEFAULT NULL ,
-  `device_manufacturer` VARCHAR(255) NOT NULL ,
-  `printer_model` VARCHAR(255) NOT NULL ,
-  `printer_serial_number` VARCHAR(255) NULL DEFAULT NULL ,
-  `toner_config_id` VARCHAR(255) NOT NULL ,
-  `is_copier` TINYINT(4) NOT NULL DEFAULT '0' ,
-  `is_fax` TINYINT(4) NOT NULL DEFAULT '0' ,
-  `is_duplex` TINYINT(4) NOT NULL DEFAULT '0' ,
-  `is_scanner` TINYINT(4) NOT NULL DEFAULT '0' ,
-  `watts_power_normal` DOUBLE NULL DEFAULT NULL ,
-  `watts_power_idle` DOUBLE NULL DEFAULT NULL ,
-  `cost` DOUBLE NULL DEFAULT NULL ,
-  `launch_date` DATETIME NULL DEFAULT NULL ,
-  `date_created` DATETIME NOT NULL ,
-  `black_toner_sku` VARCHAR(255) NULL DEFAULT NULL ,
-  `black_toner_cost` DOUBLE NULL DEFAULT NULL ,
-  `black_toner_yield` INT(11) NULL DEFAULT NULL ,
-  `cyan_toner_sku` VARCHAR(255) NULL DEFAULT NULL ,
-  `cyan_toner_cost` DOUBLE NULL DEFAULT NULL ,
-  `cyan_toner_yield` INT(11) NULL DEFAULT NULL ,
-  `magenta_toner_sku` VARCHAR(255) NULL DEFAULT NULL ,
-  `magenta_toner_cost` DOUBLE NULL DEFAULT NULL ,
-  `magenta_toner_yield` INT(11) NULL DEFAULT NULL ,
-  `yellow_toner_sku` VARCHAR(255) NULL DEFAULT NULL ,
-  `yellow_toner_cost` DOUBLE NULL DEFAULT NULL ,
-  `yellow_toner_yield` INT(11) NULL DEFAULT NULL ,
-  `three_color_toner_sku` VARCHAR(255) NULL DEFAULT NULL ,
-  `three_color_toner_cost` DOUBLE NULL DEFAULT NULL ,
-  `three_color_toner_yield` INT(11) NULL DEFAULT NULL ,
-  `four_color_toner_sku` VARCHAR(255) NULL DEFAULT NULL ,
-  `four_color_toner_cost` DOUBLE NULL DEFAULT NULL ,
-  `four_color_toner_yield` INT(11) NULL DEFAULT NULL ,
-  `black_comp_sku` VARCHAR(255) NULL DEFAULT NULL ,
-  `black_comp_cost` DOUBLE NULL DEFAULT NULL ,
-  `black_comp_yield` INT(11) NULL DEFAULT NULL ,
-  `cyan_comp_sku` VARCHAR(255) NULL DEFAULT NULL ,
-  `cyan_comp_cost` DOUBLE NULL DEFAULT NULL ,
-  `cyan_comp_yield` INT(11) NULL DEFAULT NULL ,
-  `magenta_comp_sku` VARCHAR(255) NULL DEFAULT NULL ,
-  `magenta_comp_cost` DOUBLE NULL DEFAULT NULL ,
-  `magenta_comp_yield` INT(11) NULL DEFAULT NULL ,
-  `yellow_comp_sku` VARCHAR(255) NULL DEFAULT NULL ,
-  `yellow_comp_cost` DOUBLE NULL DEFAULT NULL ,
-  `yellow_comp_yield` INT(11) NULL DEFAULT NULL ,
-  `three_color_comp_sku` VARCHAR(255) NULL DEFAULT NULL ,
-  `three_color_comp_cost` DOUBLE NULL DEFAULT NULL ,
-  `three_color_comp_yield` INT(11) NULL DEFAULT NULL ,
-  `four_color_comp_sku` VARCHAR(255) NULL DEFAULT NULL ,
-  `four_color_comp_cost` DOUBLE NULL DEFAULT NULL ,
-  `four_color_comp_yield` INT(11) NULL DEFAULT NULL ,
-  `start_meter_life` INT(11) NULL DEFAULT NULL ,
-  `end_meter_life` INT(11) NULL DEFAULT NULL ,
-  `start_meter_black` INT(11) NULL DEFAULT NULL ,
-  `end_meter_black` INT(11) NULL DEFAULT NULL ,
-  `start_meter_color` INT(11) NULL DEFAULT NULL ,
-  `end_meter_color` INT(11) NULL DEFAULT NULL ,
-  `start_meter_printblack` INT(11) NULL DEFAULT NULL ,
-  `end_meter_printblack` INT(11) NULL DEFAULT NULL ,
-  `start_meter_printcolor` INT(11) NULL DEFAULT NULL ,
-  `end_meter_printcolor` INT(11) NULL DEFAULT NULL ,
-  `start_meter_copyblack` INT(11) NULL DEFAULT NULL ,
-  `end_meter_copyblack` INT(11) NULL DEFAULT NULL ,
-  `start_meter_copycolor` INT(11) NULL DEFAULT NULL ,
-  `end_meter_copycolor` INT(11) NULL DEFAULT NULL ,
-  `start_meter_fax` INT(11) NULL DEFAULT NULL ,
-  `end_meter_fax` INT(11) NULL DEFAULT NULL ,
-  `start_meter_scan` INT(11) NULL DEFAULT NULL ,
-  `end_meter_scan` INT(11) NULL DEFAULT NULL ,
-  `jit_supplies_supported` TINYINT(4) NULL DEFAULT '0' ,
-  `is_excluded` TINYINT(4) NULL DEFAULT '0' ,
-  `is_leased` TINYINT(4) NULL DEFAULT '0' ,
-  `ip_address` VARCHAR(255) NULL DEFAULT NULL ,
-  `duty_cycle` INT(11) NULL DEFAULT NULL ,
-  `ppm_black` DOUBLE NULL DEFAULT NULL ,
-  `ppm_color` DOUBLE NULL DEFAULT NULL ,
-  `service_cost_per_page` DOUBLE NULL DEFAULT NULL ,
-  PRIMARY KEY (`id`) ,
-  INDEX `report_id` (`report_id` ASC) ,
-  INDEX `user_id` (`user_id` ASC) ,
-  INDEX `upload_data_collector_row_id` (`upload_data_collector_row_id` ASC) ,
-  CONSTRAINT `proposalgenerator_unknown_device_instances_ibfk_1`
-    FOREIGN KEY (`report_id` )
-    REFERENCES `pgen_reports` (`id` )
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `proposalgenerator_unknown_device_instances_ibfk_2`
-    FOREIGN KEY (`user_id` )
-    REFERENCES `users` (`id` )
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `proposalgenerator_unknown_device_instances_ibfk_3`
-    FOREIGN KEY (`upload_data_collector_row_id` )
-    REFERENCES `pgen_upload_data_collector_rows` (`id` )
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -924,27 +826,31 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `pgen_user_pf_device_matchups`
+-- Table `pgen_rms_user_matchups`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_user_pf_device_matchups` (
-  `pf_device_id` INT(11) NOT NULL ,
-  `master_device_id` INT(11) NOT NULL ,
-  `user_id` INT(11) NOT NULL ,
-  PRIMARY KEY (`pf_device_id`, `master_device_id`, `user_id`) ,
-  UNIQUE INDEX `pf_device_id` (`pf_device_id` ASC, `user_id` ASC) ,
-  INDEX `master_device_id` (`master_device_id` ASC) ,
-  INDEX `user_id` (`user_id` ASC) ,
-  CONSTRAINT `proposalgenerator_user_pf_device_matchups_ibfk_1`
-    FOREIGN KEY (`master_device_id` )
-    REFERENCES `pgen_master_devices` (`id` ),
-  CONSTRAINT `proposalgenerator_user_pf_device_matchups_ibfk_2`
-    FOREIGN KEY (`pf_device_id` )
-    REFERENCES `pgen_pf_devices` (`id` )
+CREATE  TABLE IF NOT EXISTS `pgen_rms_user_matchups` (
+  `rmsProviderId` INT(11) NOT NULL ,
+  `rmsModelId` INT(11) NOT NULL ,
+  `masterDeviceId` INT(11) NOT NULL ,
+  `userId` INT(11) NOT NULL ,
+  PRIMARY KEY (`rmsProviderId`, `rmsModelId`) ,
+  INDEX `user_id` (`userId` ASC) ,
+  INDEX `pgen_rms_user_matchups_ibfk_1_idx` (`masterDeviceId` ASC) ,
+  CONSTRAINT `pgen_rms_user_matchups_ibfk_2`
+    FOREIGN KEY (`rmsProviderId` , `rmsModelId` )
+    REFERENCES `pgen_rms_devices` (`rmsProviderId` , `rmsModelId` )
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `proposalgenerator_user_pf_device_matchups_ibfk_3`
-    FOREIGN KEY (`user_id` )
-    REFERENCES `users` (`id` ))
+  CONSTRAINT `pgen_rms_user_matchups_ibfk_3`
+    FOREIGN KEY (`userId` )
+    REFERENCES `users` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `pgen_rms_user_matchups_ibfk_1`
+    FOREIGN KEY (`masterDeviceId` )
+    REFERENCES `pgen_master_devices` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -1649,6 +1555,57 @@ CREATE  TABLE IF NOT EXISTS `regions` (
     FOREIGN KEY (`countryId` )
     REFERENCES `countries` (`id` )
     ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `pgen_device_instance_master_devices`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `pgen_device_instance_master_devices` (
+  `deviceInstanceId` INT NOT NULL ,
+  `masterDeviceId` INT NOT NULL ,
+  PRIMARY KEY (`deviceInstanceId`) ,
+  INDEX `device_instance_master_devices_ibfk_1_idx` (`deviceInstanceId` ASC) ,
+  INDEX `device_instance_master_devices_ibfk_2_idx` (`masterDeviceId` ASC) ,
+  CONSTRAINT `device_instance_master_devices_ibfk_1`
+    FOREIGN KEY (`deviceInstanceId` )
+    REFERENCES `pgen_device_instances` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `device_instance_master_devices_ibfk_2`
+    FOREIGN KEY (`masterDeviceId` )
+    REFERENCES `pgen_master_devices` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `pgen_rms_excluded_rows`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `pgen_rms_excluded_rows` (
+  `id` INT NOT NULL ,
+  `reportId` INT NOT NULL ,
+  `rmsProviderId` INT NULL ,
+  `rmsModelId` INT NULL ,
+  `serialNumber` VARCHAR(255) NULL ,
+  `ipAddress` VARCHAR(255) NULL ,
+  `modelName` VARCHAR(255) NULL ,
+  `manufacturerName` VARCHAR(255) NULL ,
+  `reason` VARCHAR(255) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `rms_e_idx` (`reportId` ASC) ,
+  INDEX `pgen_rms_excluded_rows_ibfk_2_idx` (`rmsProviderId` ASC, `rmsModelId` ASC) ,
+  CONSTRAINT `pgen_rms_excluded_rows_ibfk_1`
+    FOREIGN KEY (`reportId` )
+    REFERENCES `pgen_reports` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `pgen_rms_excluded_rows_ibfk_2`
+    FOREIGN KEY (`rmsProviderId` , `rmsModelId` )
+    REFERENCES `pgen_rms_devices` (`rmsProviderId` , `rmsModelId` )
+    ON DELETE SET NULL
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 

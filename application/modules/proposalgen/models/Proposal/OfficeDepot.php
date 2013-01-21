@@ -2679,7 +2679,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
                 }
                 if (!$deviceReplaced)
                 {
-                    if (!$device->jitSuppliesSupported)
+                    if (!$device->reportsTonerLevels)
                     {
                         $replacedDevices->NoTonerLevels [] = $device;
                     }

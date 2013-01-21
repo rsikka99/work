@@ -610,7 +610,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                     $udcTable->update($udcData, $where);
 
                                     // DELETE METERS
-                                    $metersTable = new Proposalgen_Model_DbTable_Meter();
+                                    $metersTable = new Proposalgen_Model_DbTable_DeviceInstanceMeter();
                                     $where       = $metersTable->getAdapter()->quoteInto('device_instance_id = ?', $device_instance_id, 'INTEGER');
                                     $metersTable->delete($where);
 

@@ -45,48 +45,37 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * @var int
      */
-    public $masterDeviceId;
+    public $rmsUploadRowId;
 
     /**
      * @var int
      */
-    public $uploadDataCollectorId;
+    public $ipAddress;
 
     /**
-     * @var string
+     * @var int
      */
-    public $serialNumber;
+    public $isExcluded;
 
     /**
-     * @var string
-     */
-    public $mpsMonitorStartDate;
-
-    /**
-     * @var string
-     */
-    public $mpsMonitorEndDate;
-
-    /**
-     * @var string
+     * @var int
      */
     public $mpsDiscoveryDate;
 
     /**
-     * @var bool
+     * @var int
      */
-    public $isExcluded;
-
-
-    /**
-     * @var string
-     */
-    public $ipAddress;
+    public $reportsTonerLevels;
 
     /**
-     * @var bool
+     * @var int
      */
-    public $jitSuppliesSupported;
+    public $serialNumber;
+
+    /**
+     * @var int
+     */
+    public $useUserData;
 
 
     /*
@@ -97,7 +86,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * An array of all the meters
      *
-     * @var Proposalgen_Model_Meter[]
+     * @var Proposalgen_Model_DeviceInstanceMeter[]
      */
     protected $_meters;
 
@@ -297,53 +286,43 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * Applies overrides to device costs and toner costs.
      * Also adds a margin on the costs that were not overridden
      *
-     * @param Proposalgen_Model_DeviceInstance $device
+     * @param Proposalgen_Model_DeviceInstance $deviceInstance
      * @param Proposalgen_Model_Report         $report
      * @param float                            $reportMargin
      * @param float                            $companyMargin
      */
-    static function processOverrides ($device, $report, $reportMargin, $companyMargin)
+    static function processOverrides ($deviceInstance, $report, $reportMargin, $companyMargin)
     {
-//        $dealerDeviceOverrideMapper = Proposalgen_Model_Mapper_DealerDeviceOverride::getInstance();
-//        $dealerTonerOverrideMapper  = Proposalgen_Model_Mapper_DealerTonerOverride::getInstance();
         $userDeviceOverrideMapper = Proposalgen_Model_Mapper_UserDeviceOverride::getInstance();
         $userTonerOverrideMapper  = Proposalgen_Model_Mapper_UserTonerOverride::getInstance();
         $deviceOverride           = null;
 
         // Known Device, override
-        if (!$device->isUnknown)
+        if ($deviceInstance->getIsMappedToMasterDevice())
         {
-//            // Dealer
-//            $deviceOverride = $dealerDeviceOverrideMapper->fetchRow(array (
-//                    "master_device_id = ?" => $device->getMasterDeviceId(),
-//                    "dealer_company_id = ?" => Proposalgen_Model_DealerCompany::getCurrentUserCompany()->getDealerCompanyId()
-//            ));
-//            // If no dealer, check user
-//            if (! $deviceOverride)
-//            {
             $deviceOverride = $userDeviceOverrideMapper->fetchRow(array(
-                                                                       "master_device_id = ?" => $device->masterDeviceId,
+                                                                       "master_device_id = ?" => $deviceInstance->getMasterDevice()->id,
                                                                        "user_id = ?"          => $report->userId
                                                                   ));
-//            }
+
         }
 
         // Apply Company Margin if no overrides
         if ($deviceOverride)
         {
             // Cost
-            $device->getMasterDevice()->cost = $deviceOverride->OverrideDevicePrice;
+            $deviceInstance->getMasterDevice()->cost = $deviceOverride->OverrideDevicePrice;
         }
         else // If we found a device override, apply it
         {
-            $device->getMasterDevice()->cost = $device->getMasterDevice()->cost / $companyMargin;
+            $deviceInstance->getMasterDevice()->cost = $deviceInstance->getMasterDevice()->cost / $companyMargin;
         }
 
         // Apply Report Margin to the device price
-        $device->getMasterDevice()->cost = $device->getMasterDevice()->cost / $reportMargin;
+        $deviceInstance->getMasterDevice()->cost = $deviceInstance->getMasterDevice()->cost / $reportMargin;
 
         // Toner Overrides + Margin
-        foreach ($device->getMasterDevice()->getToners() as $tonersByPartType)
+        foreach ($deviceInstance->getMasterDevice()->getToners() as $tonersByPartType)
         {
             foreach ($tonersByPartType as $tonersByColor)
             {
@@ -355,21 +334,13 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
                         self::$uniqueTonerArray [] = $toner->sku;
                         $tonerOverride             = null;
                         // Known Device, override
-                        if (!$device->isUnknown)
+                        if (!$deviceInstance->isUnknown)
                         {
-                            // Toner Overrides
-//                            $tonerOverride = $dealerTonerOverrideMapper->fetchRow(array (
-//                                    "toner_id = ?" => $toner->getTonerId(),
-//                                    "dealer_company_id = ?" => Proposalgen_Model_DealerCompany::getCurrentUserCompany()->getDealerCompanyId()
-//                            ));
-//                            if (!$tonerOverride)
-//                            {
                             /* @var $tonerOverride Proposalgen_Model_UserTonerOverride */
                             $tonerOverride = $userTonerOverrideMapper->fetchRow(array(
                                                                                      "toner_id = ?" => $toner->id,
                                                                                      "user_id = ?"  => $report->userId
                                                                                 ));
-//                            }
                         }
 
                         // If we found a toner override, apply it
@@ -382,18 +353,18 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
                             $toner->cost = $toner->cost / $companyMargin;
                         }
                     }
-                } // endforeach
-            } // endforeach
-        } // endforeach
+                }
+            }
+        }
 
         // Service Cost Per Page Cost
-        if ($device->getMasterDevice()->serviceCostPerPage <= 0)
+        if ($deviceInstance->getMasterDevice()->serviceCostPerPage <= 0)
         {
-            $device->getMasterDevice()->serviceCostPerPage = $report->getReportSettings()->serviceCostPerPage;
+            $deviceInstance->getMasterDevice()->serviceCostPerPage = $report->getReportSettings()->serviceCostPerPage;
         }
 
         // Admin Charge
-        $device->getMasterDevice()->adminCostPerPage = $report->getReportSettings()->adminCostPerPage;
+        $deviceInstance->getMasterDevice()->adminCostPerPage = $report->getReportSettings()->adminCostPerPage;
     }
 
 
@@ -407,9 +378,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->deviceInstanceId) && !is_null($params->deviceInstanceId))
+        if (isset($params->id) && !is_null($params->id))
         {
-            $this->deviceInstanceId = $params->deviceInstanceId;
+            $this->id = $params->id;
         }
 
         if (isset($params->reportId) && !is_null($params->reportId))
@@ -417,39 +388,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $this->reportId = $params->reportId;
         }
 
-        if (isset($params->masterDeviceId) && !is_null($params->masterDeviceId))
+        if (isset($params->rmsUploadRowId) && !is_null($params->rmsUploadRowId))
         {
-            $this->masterDeviceId = $params->masterDeviceId;
-        }
-
-        if (isset($params->uploadDataCollectorId) && !is_null($params->uploadDataCollectorId))
-        {
-            $this->uploadDataCollectorId = $params->uploadDataCollectorId;
-        }
-
-        if (isset($params->serialNumber) && !is_null($params->serialNumber))
-        {
-            $this->serialNumber = $params->serialNumber;
-        }
-
-        if (isset($params->mpsMonitorStartDate) && !is_null($params->mpsMonitorStartDate))
-        {
-            $this->mpsMonitorStartDate = $params->mpsMonitorStartDate;
-        }
-
-        if (isset($params->mpsMonitorEndDate) && !is_null($params->mpsMonitorEndDate))
-        {
-            $this->mpsMonitorEndDate = $params->mpsMonitorEndDate;
-        }
-
-        if (isset($params->mpsDiscoveryDate) && !is_null($params->mpsDiscoveryDate))
-        {
-            $this->mpsDiscoveryDate = $params->mpsDiscoveryDate;
-        }
-
-        if (isset($params->isExcluded) && !is_null($params->isExcluded))
-        {
-            $this->isExcluded = $params->isExcluded;
+            $this->rmsUploadRowId = $params->rmsUploadRowId;
         }
 
         if (isset($params->ipAddress) && !is_null($params->ipAddress))
@@ -457,9 +398,29 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $this->ipAddress = $params->ipAddress;
         }
 
-        if (isset($params->jitSuppliesSupported) && !is_null($params->jitSuppliesSupported))
+        if (isset($params->isExcluded) && !is_null($params->isExcluded))
         {
-            $this->jitSuppliesSupported = $params->jitSuppliesSupported;
+            $this->isExcluded = $params->isExcluded;
+        }
+
+        if (isset($params->mpsDiscoveryDate) && !is_null($params->mpsDiscoveryDate))
+        {
+            $this->mpsDiscoveryDate = $params->mpsDiscoveryDate;
+        }
+
+        if (isset($params->reportsTonerLevels) && !is_null($params->reportsTonerLevels))
+        {
+            $this->reportsTonerLevels = $params->reportsTonerLevels;
+        }
+
+        if (isset($params->serialNumber) && !is_null($params->serialNumber))
+        {
+            $this->serialNumber = $params->serialNumber;
+        }
+
+        if (isset($params->useUserData) && !is_null($params->useUserData))
+        {
+            $this->useUserData = $params->useUserData;
         }
 
     }
@@ -470,17 +431,15 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "deviceInstanceId"      => $this->deviceInstanceId,
-            "reportId"              => $this->reportId,
-            "masterDeviceId"        => $this->masterDeviceId,
-            "uploadDataCollectorId" => $this->uploadDataCollectorId,
-            "serialNumber"          => $this->serialNumber,
-            "mpsMonitorStartDate"   => $this->mpsMonitorStartDate,
-            "mpsMonitorEndDate"     => $this->mpsMonitorEndDate,
-            "mpsDiscoveryDate"      => $this->mpsDiscoveryDate,
-            "isExcluded"            => $this->isExcluded,
-            "ipAddress"             => $this->ipAddress,
-            "jitSuppliesSupported"  => $this->jitSuppliesSupported,
+            "id"                 => $this->id,
+            "reportId"           => $this->reportId,
+            "rmsUploadRowId"     => $this->rmsUploadRowId,
+            "ipAddress"          => $this->ipAddress,
+            "isExcluded"         => $this->isExcluded,
+            "mpsDiscoveryDate"   => $this->mpsDiscoveryDate,
+            "reportsTonerLevels" => $this->reportsTonerLevels,
+            "serialNumber"       => $this->serialNumber,
+            "useUserData"        => $this->useUserData,
         );
     }
 
@@ -587,13 +546,13 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         if (!isset($this->_lifeBlackAndWhitePageCount))
         {
             $meters = $this->getMeters();
-            if (!isset($meters [Proposalgen_Model_Meter::METER_TYPE_BLACK]))
+            if (!isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK]))
             {
                 // if no life or color then throw exception
                 throw new Exception("Device does not have a BLACK meter! " . $this->id);
             }
 
-            $pageCount = $meters [Proposalgen_Model_Meter::METER_TYPE_BLACK]->endMeter;
+            $pageCount = $meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK]->endMeter;
 
             $this->_lifeBlackAndWhitePageCount = $pageCount;
         }
@@ -610,9 +569,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         {
             $meters    = $this->getMeters();
             $pageCount = 0;
-            if (isset($meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]))
+            if (isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]))
             {
-                $pageCount = $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->endMeter;
+                $pageCount = $meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]->endMeter;
             }
             $this->_lifeColorPageCount = $pageCount;
         }
@@ -629,24 +588,15 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         if (!isset($this->_averageDailyBlackAndWhitePageCount))
         {
             $meters = $this->getMeters();
-            if (!isset($meters [Proposalgen_Model_Meter::METER_TYPE_BLACK]))
+            if (!isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK]))
             {
                 // If we do not have a black meter, throw an exception
                 throw new Exception("Device does not have a BLACK meter! " . $this->id);
             }
 
-            $startMeter = $meters [Proposalgen_Model_Meter::METER_TYPE_BLACK]->startMeter;
-            $endMeter   = $meters [Proposalgen_Model_Meter::METER_TYPE_BLACK]->endMeter;
-            $pageCount  = $endMeter - $startMeter;
-
-            if ($this->getMpsMonitorInterval()->days > 0)
-            {
-                $this->_averageDailyBlackAndWhitePageCount = $pageCount / $this->getMpsMonitorInterval()->days;
-            }
-            else
-            {
-                $this->_averageDailyBlackAndWhitePageCount = 0;
-            }
+            /* @var $meter Proposalgen_Model_DeviceInstanceMeter */
+            $meter                                     = $meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK];
+            $this->_averageDailyBlackAndWhitePageCount = $meter->calculateAverageDailyPageVolume();
         }
 
         return $this->_averageDailyBlackAndWhitePageCount;
@@ -673,23 +623,14 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         if (!isset($this->_averageDailyColorPageCount))
         {
             $meters       = $this->getMeters();
-            $avgPageCount = 0;
+            $avgPageCount = 0.0;
 
-            if (!isset($this->_masterDevice))
+            if (isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]) && $this->getMasterDevice()->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY)
             {
-                $this->_masterDevice = $this->getMasterDevice();
-            }
+                /* @var $meter Proposalgen_Model_DeviceInstanceMeter */
+                $meter        = $meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR];
+                $avgPageCount = $meter->calculateAverageDailyPageVolume();
 
-            if (isset($meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]) && $this->getMasterDevice()->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY)
-            {
-                $startMeter = $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->startMeter;
-                $endMeter   = $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->endMeter;
-                $pageCount  = $endMeter - $startMeter;
-
-                if ($this->getMpsMonitorInterval()->days > 0)
-                {
-                    $avgPageCount = $pageCount / $this->getMpsMonitorInterval()->days;
-                }
             }
             $this->_averageDailyColorPageCount = $avgPageCount;
         }
@@ -708,40 +649,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         }
 
         return $this->_averageMonthlyColorPageCount;
-    }
-
-    /**
-     * @return DateInterval
-     */
-    public function getMpsMonitorInterval ()
-    {
-        if (!isset($this->_mpsMonitorInterval))
-        {
-            $startDate     = new DateTime($this->mpsMonitorStartDate);
-            $endDate       = new DateTime($this->mpsMonitorEndDate);
-            $discoveryDate = new DateTime($this->mpsDiscoveryDate);
-            $interval1     = $startDate->diff($endDate);
-            $interval2     = $discoveryDate->diff($endDate);
-
-            if (!$interval1->invert)
-            {
-                $this->_mpsMonitorInterval = $interval1;
-                if ($interval1->days > $interval2->days && !$interval2->invert)
-                {
-                    $this->_mpsMonitorInterval = $interval2;
-                }
-            }
-            else if (!$interval2->invert)
-            {
-                $this->_mpsMonitorInterval = $interval2;
-            }
-            else
-            {
-                trigger_error("Device was discovered on the after or on the monitor end date.");
-            }
-        }
-
-        return $this->_mpsMonitorInterval;
     }
 
     /**
@@ -765,18 +672,18 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_Meter[]
+     * @return Proposalgen_Model_DeviceInstanceMeter[]
      */
     public function getMeters ()
     {
         if (!isset($this->_meters))
         {
-            $meterMapper = Proposalgen_Model_Mapper_Meter::getInstance();
+            $meterMapper = Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance();
             $meters      = $meterMapper->fetchAllForDevice($this->id);
 
             // If we do not have a BLACK meter, then we should try and calculate
             // it
-            if (!isset($meters [Proposalgen_Model_Meter::METER_TYPE_BLACK]))
+            if (!isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK]))
             {
                 /**
                  * BLACK METER Calculation:
@@ -786,17 +693,17 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
                  * To calculate the BLACK METER we need to have a LIFE meter AND
                  * a COLOR Meter
                  */
-                if (isset($meters [Proposalgen_Model_Meter::METER_TYPE_LIFE]) && isset($meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]))
+                if (isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_LIFE]) && isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]))
                 {
-                    $startMeter                                         = $meters [Proposalgen_Model_Meter::METER_TYPE_LIFE]->startMeter - $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->startMeter;
-                    $endMeter                                           = $meters [Proposalgen_Model_Meter::METER_TYPE_LIFE]->endMeter - $meters [Proposalgen_Model_Meter::METER_TYPE_COLOR]->endMeter;
-                    $newBlackMeter                                      = new Proposalgen_Model_Meter();
-                    $newBlackMeter->startMeter                          = $startMeter;
-                    $newBlackMeter->endMeter                            = $endMeter;
-                    $newBlackMeter->meterType                           = Proposalgen_Model_Meter::METER_TYPE_BLACK;
-                    $newBlackMeter->deviceInstanceId                    = $this->id;
-                    $newBlackMeter->generatedBySystem                   = true;
-                    $meters [Proposalgen_Model_Meter::METER_TYPE_BLACK] = $newBlackMeter;
+                    $startMeter                                                       = $meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_LIFE]->startMeter - $meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]->startMeter;
+                    $endMeter                                                         = $meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_LIFE]->endMeter - $meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]->endMeter;
+                    $newBlackMeter                                                    = new Proposalgen_Model_DeviceInstanceMeter();
+                    $newBlackMeter->startMeter                                        = $startMeter;
+                    $newBlackMeter->endMeter                                          = $endMeter;
+                    $newBlackMeter->meterType                                         = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK;
+                    $newBlackMeter->deviceInstanceId                                  = $this->id;
+                    $newBlackMeter->generatedBySystem                                 = true;
+                    $meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK] = $newBlackMeter;
                 }
             }
             $this->_meters = $meters;
@@ -806,7 +713,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
-     * @param Proposalgen_Model_Meter[] $Meters
+     * @param Proposalgen_Model_DeviceInstanceMeter[] $Meters
      *
      * @return Proposalgen_Model_DeviceInstance
      */
@@ -890,7 +797,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_deviceName))
         {
-            $this->_deviceName = $this->getMasterDevice()->getManufacturer()->fullname . " " . $this->getMasterDevice()->printerModel;
+            $this->_deviceName = $this->getMasterDevice()->getManufacturer()->fullname . " " . $this->getMasterDevice()->modelName;
         }
 
         return $this->_deviceName;
@@ -1038,7 +945,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_uploadDataCollectorRow))
         {
-            $this->_uploadDataCollectorRow = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($this->uploadDataCollectorId);
+            $this->_uploadDataCollectorRow = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($this->rmsUploadRowId);
         }
 
         return $this->_uploadDataCollectorRow;
@@ -1213,5 +1120,22 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         $this->_masterDevice = $MasterDevice;
 
         return $this;
+    }
+
+    public function getDeviceInstanceMasterDevice ()
+    {
+        $deviceInstanceMasterDevice = false;
+
+        return $deviceInstanceMasterDevice;
+    }
+
+    /**
+     * True is the device instance is mapped to a master device
+     *
+     * @return bool
+     */
+    public function getIsMappedToMasterDevice ()
+    {
+        return (!$this->useUserData && $this->getDeviceInstanceMasterDevice() instanceof Proposalgen_Model_MasterDevice);
     }
 }

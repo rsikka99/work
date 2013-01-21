@@ -22,7 +22,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     /**
      * @var string
      */
-    public $printerModel;
+    public $modelName;
 
     /**
      * @var int
@@ -184,9 +184,9 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $this->manufacturerId = $params->manufacturerId;
         }
 
-        if (isset($params->printerModel) && !is_null($params->printerModel))
+        if (isset($params->modelName) && !is_null($params->modelName))
         {
-            $this->printerModel = $params->printerModel;
+            $this->modelName = $params->modelName;
         }
 
         if (isset($params->tonerConfigId) && !is_null($params->tonerConfigId))
@@ -284,7 +284,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         return array(
             "id"                  => $this->id,
             "manufacturerId"      => $this->manufacturerId,
-            "printerModel"        => $this->printerModel,
+            "modelName"           => $this->modelName,
             "tonerConfigId"       => $this->tonerConfigId,
             "isCopier"            => $this->isCopier,
             "isFax"               => $this->isFax,
@@ -911,7 +911,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getFullDeviceName ()
     {
-        return "{$this->getManufacturer()->displayname} {$this->printerModel}";
+        return "{$this->getManufacturer()->displayname} {$this->modelName}";
     }
 
     /**

@@ -123,7 +123,7 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                 Proposalgen_Model_Mapper_TicketPFRequest::getInstance()->delete("TRUE");
                 Proposalgen_Model_Mapper_Ticket::getInstance()->delete("TRUE");
                 Proposalgen_Model_Mapper_UnknownDeviceInstance::getInstance()->delete("TRUE");
-                Proposalgen_Model_Mapper_Meter::getInstance()->delete("TRUE");
+                Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance()->delete("TRUE");
                 Proposalgen_Model_Mapper_DeviceInstance::getInstance()->delete("TRUE");
                 Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->delete("TRUE");
                 Proposalgen_Model_Mapper_UserDeviceOverride::getInstance()->delete("TRUE");

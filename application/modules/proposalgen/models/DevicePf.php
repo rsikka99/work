@@ -42,34 +42,34 @@ class Proposalgen_Model_DevicePf extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->DevicesPfId) && !is_null($params->DevicesPfId))
+        if (isset($params->devicesPfId) && !is_null($params->devicesPfId))
         {
-            $this->devicesPfId = $params->DevicesPfId;
+            $this->devicesPfId = $params->devicesPfId;
         }
 
-        if (isset($params->PfModelId) && !is_null($params->PfModelId))
+        if (isset($params->pfModelId) && !is_null($params->pfModelId))
         {
-            $this->pfModelId = $params->PfModelId;
+            $this->pfModelId = $params->pfModelId;
         }
 
-        if (isset($params->PfDbDeviceName) && !is_null($params->PfDbDeviceName))
+        if (isset($params->pfDbDeviceName) && !is_null($params->pfDbDeviceName))
         {
-            $this->pfDbDeviceName = $params->PfDbDeviceName;
+            $this->pfDbDeviceName = $params->pfDbDeviceName;
         }
 
-        if (isset($params->PfDbManufacturer) && !is_null($params->PfDbManufacturer))
+        if (isset($params->pfDbManufacturer) && !is_null($params->pfDbManufacturer))
         {
-            $this->pfDbManufacturer = $params->PfDbManufacturer;
+            $this->pfDbManufacturer = $params->pfDbManufacturer;
         }
 
-        if (isset($params->DateCreated) && !is_null($params->DateCreated))
+        if (isset($params->dateCreated) && !is_null($params->dateCreated))
         {
-            $this->dateCreated = $params->DateCreated;
+            $this->dateCreated = $params->dateCreated;
         }
 
-        if (isset($params->CreatedBy) && !is_null($params->CreatedBy))
+        if (isset($params->createdBy) && !is_null($params->createdBy))
         {
-            $this->createdBy = $params->CreatedBy;
+            $this->createdBy = $params->createdBy;
         }
 
     }
