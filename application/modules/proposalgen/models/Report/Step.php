@@ -92,7 +92,7 @@ class Proposalgen_Model_Report_Step extends My_Model_Abstract
         self::STEP_FINISHED             => array(
             'name'       => 'Reports',
             'group'      => null,
-            'controller' => 'report',
+            'controller' => 'report_index',
             'action'     => 'index'
         )
     );

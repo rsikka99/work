@@ -1,13 +1,8 @@
 <?php
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
-if ($this->isPDF)
-{
-    echo '<link rel="stylesheet" type="text/css" href="' . $this->serverUrl($this->theme("proposalgenerator/reports/common_all.css")) . '" />';
-    echo '<link rel="stylesheet" type="text/css" href="' . $this->serverUrl($this->theme("proposalgenerator/reports/grossmargin/grossmargin_pdf.css")) . '" />';
-}
-else
-    $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/grossmargin/grossmargin_html.css"));
+
+$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/grossmargin/grossmargin_html.css"));
 ?>
 
 <div>

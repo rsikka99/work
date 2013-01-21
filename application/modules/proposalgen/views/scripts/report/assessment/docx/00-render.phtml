@@ -450,15 +450,15 @@ $data = array (
     "styles" => $styles 
 );
 // Actual document pages
-$this->partial("assessment/docx/01_titlepage.phtml", $titledata);
+$this->partial("report/assessment/docx/01_titlepage.phtml", $titledata);
 
-$this->partial("assessment/docx/02_reportcard.phtml", $data);
-$this->partial("assessment/docx/03_serviceandsupplieslogistics.phtml", $data);
-$this->partial("assessment/docx/04_printinghardwareusage.phtml", $data);
-$this->partial("assessment/docx/05_techandproductivity.phtml", $data);
-$this->partial("assessment/docx/06_environmental.phtml", $data);
-$this->partial("assessment/docx/07_expense.phtml", $data);
-$this->partial("assessment/docx/08_summary.phtml", $data);
+$this->partial("report/assessment/docx/02_reportcard.phtml", $data);
+$this->partial("report/assessment/docx/03_serviceandsupplieslogistics.phtml", $data);
+$this->partial("report/assessment/docx/04_printinghardwareusage.phtml", $data);
+$this->partial("report/assessment/docx/05_techandproductivity.phtml", $data);
+$this->partial("report/assessment/docx/06_environmental.phtml", $data);
+$this->partial("report/assessment/docx/07_expense.phtml", $data);
+$this->partial("report/assessment/docx/08_summary.phtml", $data);
 
 
 $objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');

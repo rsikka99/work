@@ -580,7 +580,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     {
         if (!isset($this->CombinedAnnualLeasePayments))
         {
-            $this->CombinedAnnualLeasePayments = $this->getReport()->ReportMonthlyLeasePayment * $this->getLeasedDeviceCount() * 12;
+            $this->CombinedAnnualLeasePayments = $this->getReport()->getReportSettings()->monthlyLeasePayment * $this->getLeasedDeviceCount() * 12;
         }
 
         return $this->CombinedAnnualLeasePayments;

@@ -123,7 +123,7 @@ class Proposalgen_Service_ReportSettings
             $reportDate = date('Y-m-d h:i:s', strtotime($validData ['reportDate']));
             $this->_report->reportDate = $reportDate;
             Proposalgen_Model_Mapper_Report::getInstance()->save($this->_report);
-            
+
             foreach ( $validData as $key => $value )
             {
                 if (empty($value))
@@ -131,16 +131,27 @@ class Proposalgen_Service_ReportSettings
                     unset($validData [$key]);
                 }
             }
+            // Check the valid data to see if toner preferences drop downs have been set.
+            if((int)$validData ['assessmentPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
+            {
+                unset($validData ['assessmentPricingConfigId']);
+            }
+            if((int)$validData ['grossMarginPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
+            {
+                unset($validData ['grossMarginPricingConfigId']);
+            }
+
             // Save the id as it will get erased
             $reportSettingsId = $this->_reportSettings->id;
-            
+
             $this->_reportSettings->populate($this->_defaultSettings->toArray());
             $this->_reportSettings->populate($validData);
             
             // Restore the ID
             $this->_reportSettings->id = $reportSettingsId;
-            
+
             Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($this->_reportSettings);
+
             $this->getForm()->populate($this->_reportSettings->toArray());
             
             return true;
@@ -148,5 +159,3 @@ class Proposalgen_Service_ReportSettings
         return false;
     }
 }
-
-?>
