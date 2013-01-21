@@ -41,8 +41,8 @@
 		    /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
 		    foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice ) : ?>
 		    <?php $quoteDevice = $quoteDeviceGroupDevice->getQuoteDevice(); ?>
-		    <td><?php echo $quoteDevice->getName(); ?></td>
-		    <td><?php echo $quoteDevice->getOemSku(); ?></td>
+		    <td><?php echo $quoteDevice->name; ?></td>
+		    <td><?php echo $quoteDevice->oemSku; ?></td>
 		    <td><?php echo $quoteDeviceGroupDevice->getQuantity()?>
 		    <td><?php echo $this->currency($quoteDevice->calculateMonochromeCostPerPage(), array('precision' => 4)); ?></td>
 			<td><?php echo $form->getElement('quantity_monochrome_' . $quoteDeviceGroup->getId() . '_' . $quoteDeviceGroupDevice->getQuoteDeviceId()) ;?> </td>

@@ -67,7 +67,7 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
         foreach ( $this->_quote->getQuoteDevices() as $quoteDevice )
         {
-            $deviceDropdown->addMultiOption($quoteDevice->getId(), $quoteDevice->getName());
+            $deviceDropdown->addMultiOption($quoteDevice->id, $quoteDevice->name);
         }
         
         $addDeviceToGroupSubform->addElement($deviceDropdown);

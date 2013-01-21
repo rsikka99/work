@@ -833,7 +833,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $assignedOptions = array ();
         foreach ( $quoteDevice->getDeviceOptions() as $option )
         {
-            $assignedOptions [] = $option->getOptionId();
+            $assignedOptions [] = $option->optionId;
         }
 
         // Make sure we are posting data

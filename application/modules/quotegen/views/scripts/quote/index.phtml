@@ -21,18 +21,18 @@
     	
         <?php foreach ($this->paginator->getCurrentItems() as $quote) : /* @var $quote Quotegen_Model_Quote */ ?>
         <tr>
-        <td><?php echo $quote->getId(); ?></td>
+        <td><?php echo $quote->id; ?></td>
             <td><?php echo $quote->getClient()->companyName; ?></td>
-            <td><?php echo $quote->getClientDisplayName(); ?></td>
+            <td><?php echo $quote->clientDisplayName; ?></td>
             <td><?php echo nl2br($quote->getClient()->getAddress()->getFullAddressMultipleLines()); ?></td>
-            <td><?php echo $quote->getDateCreated(); ?></td>
-            <td><?php echo $quote->getDateModified(); ?></td>
-            <td><?php echo $quote->getQuoteDate(); ?></td>
-            <td><?php echo $quote->getUserId(); ?></td>
+            <td><?php echo $quote->dateCreated; ?></td>
+            <td><?php echo $quote->dateModified; ?></td>
+            <td><?php echo $quote->quoteDate; ?></td>
+            <td><?php echo $quote->userId; ?></td>
             <td>
                 <div class="btn-group">
-                    <a class="btn btn-warning" title="Edit Quote" href="<?php echo $this->url( array ( 'action' => 'index', 'controller' => 'quote_devices', 'quoteId' => $quote->getId())); ?>"><i class="icon-pencil"></i></a>
-                    <a class="btn btn-danger" title="Delete Quote" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $quote->getId())); ?>"><i class="icon-trash"></i></a>
+                    <a class="btn btn-warning" title="Edit Quote" href="<?php echo $this->url( array ( 'action' => 'index', 'controller' => 'quote_devices', 'quoteId' => $quote->id)); ?>"><i class="icon-pencil"></i></a>
+                    <a class="btn btn-danger" title="Delete Quote" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $quote->id)); ?>"><i class="icon-trash"></i></a>
                 </div>
             </td>
         </tr>

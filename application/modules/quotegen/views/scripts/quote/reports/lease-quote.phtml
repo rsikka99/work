@@ -16,8 +16,8 @@
                 <?php foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice) : /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */ ?>
                     <?php if($quoteDeviceGroupDevice->getQuantity() > 0) : ?>
                     	<tr class="deviceRow">
-                	        <th><h5><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getName(); ?></h5></th>
-            	        <td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getOemSku(); ?></td>     
+                	        <th><h5><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->name; ?></h5></th>
+            	        <td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->oemSku; ?></td>
         	            <td></td>           
     	                <td style="text-align: right;"></td>
 	                    <td style="text-align: right;"><?php echo number_format($quoteDeviceGroupDevice->getQuantity()); ?></td>

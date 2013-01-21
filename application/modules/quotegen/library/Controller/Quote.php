@@ -108,7 +108,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
     protected function saveQuote ()
     {
         // We always want the modified date to reflect our last change
-        $this->_quote->setDateModified(date('Y-m-d H:i:s'));
+        $this->_quote->dateModified = date('Y-m-d H:i:s');
         
         // We always want to update our lease rate if available
         $this->recalculateLeaseData();
@@ -170,8 +170,8 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
                         $leasingSchemaRate = $rateMapper->find($rateMapper->getPrimaryKeyValueForObject($leasingSchemaRate));
                         
                         // Set the quote lease months and lease rate so that we can just directly use the values
-                        $this->_quote->setLeaseTerm($leasingSchemaTerm->months);
-                        $this->_quote->setLeaseRate($leasingSchemaRate->rate);
+                        $this->_quote->leaseTerm = $leasingSchemaTerm->months;
+                        $this->_quote->leaseRate = $leasingSchemaRate->rate;
                     }
                 }
             }
@@ -218,7 +218,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             }
         }
         
-        $quoteDevice->setPackageCost($quoteDevice->calculatePackageCost());
+        $quoteDevice->packageCost = $quoteDevice->calculatePackageCost();
         
         Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
         
@@ -228,7 +228,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
     protected function recalculateQuoteDevice (Quotegen_Model_QuoteDevice &$quoteDevice)
     {
         // Recalculate the package cost
-        $quoteDevice->setPackageCost($quoteDevice->calculatePackageCost());
+        $quoteDevice->packageCost = $quoteDevice->calculatePackageCost();
     }
 
     /**
@@ -243,12 +243,12 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
     protected function syncDevice (Quotegen_Model_QuoteDevice $quoteDevice, Quotegen_Model_Device $device)
     {
         $masterDevice = $device->getMasterDevice();
-        $quoteDevice->setName($masterDevice->getFullDeviceName());
-        $quoteDevice->setOemSku($device->oemSku);
-        $quoteDevice->setDealerSku($device->dealerSku);
-        $quoteDevice->setCost($masterDevice->cost);
-        $quoteDevice->setTonerConfigId($masterDevice->tonerConfigId);
-        
+        $quoteDevice->name = $masterDevice->getFullDeviceName();
+        $quoteDevice->oemSku = $device->oemSku;
+        $quoteDevice->dealerSku = $device->dealerSku;
+        $quoteDevice->cost = $masterDevice->cost;
+        $quoteDevice->tonerConfigId = $masterDevice->tonerConfigId;
+
         // Sync Cost Per Page
         $quoteDevice = $this->syncCostPerPageForDevice($quoteDevice, $masterDevice);
         
@@ -268,7 +268,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         Proposalgen_Model_MasterDevice::setPricingConfig($OEMpricingConfig);
         Proposalgen_Model_MasterDevice::setGrossMarginPricingConfig($OEMpricingConfig);
         
-        $pageCoverageMono = $this->_quote->getPageCoverageMonochrome();
+        $pageCoverageMono = $this->_quote->pageCoverageMonochrome;
         if ($pageCoverageMono)
         {
             $pageCoverageMono = $pageCoverageMono / 100;
@@ -276,7 +276,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE($pageCoverageMono);
         }
         
-        $pageCoverageColor = $this->_quote->getPageCoverageColor();
+        $pageCoverageColor = $this->_quote->pageCoverageColor;
         if ($pageCoverageColor)
         {
             $pageCoverageColor = $pageCoverageColor / 100;
@@ -291,13 +291,13 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         $cpp = $masterDevice->getCostPerPage();
         
         // Calculate OEM only values
-        $quoteDevice->setOemCostPerPageMonochrome($cpp->Actual->Base->BlackAndWhite);
+        $quoteDevice->oemCostPerPageMonochrome = $cpp->Actual->Base->BlackAndWhite;
         
         // Reset the color cost per page and only populate if its a color device
-        $quoteDevice->setOemCostPerPageColor(0);
+        $quoteDevice->oemCostPerPageColor = 0;
         if ($masterDevice->isColor())
         {
-            $quoteDevice->setOemCostPerPageColor($cpp->Actual->Base->Color);
+            $quoteDevice->oemCostPerPageColor = $cpp->Actual->Base->Color;
         }
         
         // RESET cpp and set the pricing config to be COMP
@@ -308,13 +308,13 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         
         $cpp = $masterDevice->getCostPerPage();
         // Calculate COMP only values (may be the same as oem if no comp toners were available)
-        $quoteDevice->setCompCostPerPageMonochrome($cpp->Actual->Base->BlackAndWhite);
+        $quoteDevice->compCostPerPageMonochrome = $cpp->Actual->Base->BlackAndWhite;
         
         // Reset the color cost per page and only populate if its a color device
-        $quoteDevice->setCompCostPerPageColor(0);
+        $quoteDevice->compCostPerPageColor = 0;
         if ($masterDevice->isColor())
         {
-            $quoteDevice->setCompCostPerPageColor($cpp->Actual->Base->Color);
+            $quoteDevice->compCostPerPageColor = $cpp->Actual->Base->Color;
         }
         return $quoteDevice;
     }
@@ -332,16 +332,16 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
     {
         // Copy the option
         $quoteDeviceOption->setOemSku($deviceOption->getOption()
-            ->getOemSku());
+            ->oemSku);
         $quoteDeviceOption->setDealerSku($deviceOption->getOption()
-            ->getDealerSku());
+            ->dealerSku);
         $quoteDeviceOption->setName($deviceOption->getOption()
-            ->getName());
+            ->name);
         $quoteDeviceOption->setDescription($deviceOption->getOption()
-            ->getDescription());
+            ->description);
         $quoteDeviceOption->setCost($deviceOption->getOption()
-            ->getCost());
-        $quoteDeviceOption->setIncludedQuantity($deviceOption->getIncludedQuantity());
+            ->cost);
+        $quoteDeviceOption->setIncludedQuantity($deviceOption->includedQuantity);
         
         return $quoteDeviceOption;
     }
@@ -352,7 +352,8 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
      *
      * @param $quoteDeviceId number
      *            The quote device id
-     * @return Ambigous <Quotegen_Model_QuoteDevice, void>
+     *
+     * @return \Quotegen_Model_QuoteDevice
      */
     public function getQuoteDevice ($paramIdField = 'id')
     {
@@ -372,7 +373,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         $quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($quoteDeviceId);
         
         // Validate that we have a quote device that is associated with the quote
-        if (! $quoteDevice || $quoteDevice->getQuoteId() !== $this->_quoteId)
+        if (! $quoteDevice || $quoteDevice->quoteId !== $this->_quoteId)
         {
             $this->_helper->flashMessenger(array (
                     'warning' => 'You may only edit devices associated with this quote.' 
@@ -469,11 +470,11 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             
             // Get a new device and sync the device properties
             $quoteDevice = $this->syncDevice(new Quotegen_Model_QuoteDevice(), $favoriteDevice->getDevice());
-            $quoteDevice->setQuoteId($this->_quote->getId());
-            $quoteDevice->setMargin($defaultMargin);
-            $quoteDevice->setResidual(0);
-            $quoteDevice->setPackageMarkup(0);
-            $quoteDevice->setPackageCost($quoteDevice->calculatePackageCost());
+            $quoteDevice->quoteId = $this->_quote->id;
+            $quoteDevice->margin = $defaultMargin;
+            $quoteDevice->residual = 0;
+            $quoteDevice->packageMarkup = 0;
+            $quoteDevice->packageCost = $quoteDevice->calculatePackageCost();
             $quoteDeviceId = Quotegen_Model_Mapper_QuoteDevice::getInstance()->insert($quoteDevice);
             
             // Insert link to device
@@ -487,25 +488,25 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             $quoteDeviceConfigurationOption->setMasterDeviceId($favoriteDevice->masterDeviceId);
             
             // Add to the default group
-            Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->insertDeviceInDefaultGroup($this->_quote->getId(), (int)$quoteDeviceId);
+            Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->insertDeviceInDefaultGroup($this->_quote->id, (int)$quoteDeviceId);
             
             foreach ( $favoriteDevice->getOptions() as $option )
             {
                 // Get the device option
                 $deviceOption = Quotegen_Model_Mapper_DeviceOption::getInstance()->find(array (
                         $favoriteDevice->masterDeviceId,
-                        $option->getOptionId() 
+                        $option->optionId
                 ));
                 
                 // Insert quote device option
                 $quoteDeviceOption = $this->syncOption(new Quotegen_Model_QuoteDeviceOption(), $deviceOption);
                 $quoteDeviceOption->setQuoteDeviceId($quoteDeviceId);
-                $quoteDeviceOption->setQuantity($option->getQuantity());
+                $quoteDeviceOption->setQuantity($option->quantity);
                 $quoteDeviceOptionId = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->insert($quoteDeviceOption);
                 
                 // Insert link
                 $quoteDeviceConfigurationOption->setQuoteDeviceOptionId($quoteDeviceOptionId);
-                $quoteDeviceConfigurationOption->setOptionId($option->getOptionId());
+                $quoteDeviceConfigurationOption->setOptionId($option->optionId);
                 Quotegen_Model_Mapper_QuoteDeviceConfigurationOption::getInstance()->insert($quoteDeviceConfigurationOption);
             }
         }

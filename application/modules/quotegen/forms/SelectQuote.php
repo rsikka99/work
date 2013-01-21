@@ -51,9 +51,9 @@ class Quotegen_Form_SelectQuote extends Twitter_Bootstrap_Form_Inline
         foreach ( Quotegen_Model_Mapper_Quote::getInstance()->fetchAllForUser($this->_userId) as $quote )
         {
             $clientName = $quote->getClient()->companyName;
-            $dateCreated = $quote->getDateCreated();
-            $quoteList [$quote->getId()] = "$clientName - $dateCreated";
-            $quoteListValidator [] = $quote->getId();
+            $dateCreated = $quote->dateCreated;
+            $quoteList [$quote->id] = "$clientName - $dateCreated";
+            $quoteListValidator [] = $quote->id;
         }
         
         // Create a select element to hold quotes for the user

@@ -85,8 +85,8 @@ class Quotegen_Form_Device extends EasyBib_Form
 
                 if (! $deviceOption->includedQuantity)
                     $deviceOption->includedQuantity = 0;
-                $optionElement = $this->createElement('text', "option-{$deviceOption->getOption()->getId()}", array (
-                        'label' => $deviceOption->getOption()->getName(), 
+                $optionElement = $this->createElement('text', "option-{$deviceOption->getOption()->id}", array (
+                        'label' => $deviceOption->getOption()->name,
                         'value' => $deviceOption->includedQuantity,
                         'class' => 'span1' 
                 ));

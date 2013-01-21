@@ -35,7 +35,7 @@ class Quotegen_Form_SelectOptions extends EasyBib_Form
         {
             foreach ( $this->_availableOptions as $option )
             {
-                $optionList [$option->getId()] = $option->getName();
+                $optionList [$option->id] = $option->name;
             }
             
             $this->addElement('multiCheckbox', 'options', array (

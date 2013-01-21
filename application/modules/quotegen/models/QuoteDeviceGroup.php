@@ -352,7 +352,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         $subtotal += $this->calculateHardwareLeaseValue();
         
         // Add Pages
-        $subtotal += $this->calculateTotalPageRevenue() * $this->getQuote()->getLeaseTerm();
+        $subtotal += $this->calculateTotalPageRevenue() * $this->getQuote()->leaseTerm;
         
         return $subtotal;
     }
@@ -369,7 +369,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
         foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDevice )
         {
-            $totalResidual += $quoteDevice->getResidual();
+            $totalResidual += $quoteDevice->residual();
         }
         return $totalResidual;
     }
@@ -461,7 +461,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
      */
     public function calculateMonochromePageRevenue ()
     {
-        return Tangent_Accounting::applyMargin($this->calculateMonochromePageCost(), $this->getQuote()->getMonochromePageMargin());
+        return Tangent_Accounting::applyMargin($this->calculateMonochromePageCost(), $this->getQuote()->monochromePageMargin);
     }
 
     /**
@@ -515,7 +515,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
      */
     public function calculateColorPageRevenue ()
     {
-        return Tangent_Accounting::applyMargin($this->calculateColorPageCost(), $this->getQuote()->getColorPageMargin());
+        return Tangent_Accounting::applyMargin($this->calculateColorPageCost(), $this->getQuote()->colorPageMargin);
     }
 
     /**

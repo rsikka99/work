@@ -30,21 +30,21 @@ $this->headScript()->appendScript("$('i').popover();");
 	</tr>
     <?php /* @var $device Quotegen_Model_QuoteDevice */foreach ($devices as $device) : ?>
     <tr class="deviceRow">
-    	<td><h4><?php echo $device->getName(); ?></h4></td>                
-        <td><h4><?php echo $device->getOemSku(); ?></h4></td>
+    	<td><h4><?php echo $device->name; ?></h4></td>
+        <td><h4><?php echo $device->oemSku; ?></h4></td>
         <td></td>
-        <td style="text-align: right"><h4><?php echo $this->currency((float)$device->getCost())?></h4></td>
+        <td style="text-align: right"><h4><?php echo $this->currency((float)$device->cost)?></h4></td>
         <td></td>
-        <td style="text-align: right"><h4><?php echo $this->currency((float)$device->getCost()) ?></h4></td>
+        <td style="text-align: right"><h4><?php echo $this->currency((float)$device->cost) ?></h4></td>
         <td>
         	<div class="btn-group">
         		<a href="#" class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i></a>
         		<ul class="dropdown-menu pull-right">
         		<?php if ($device->getDevice()) : ?>
-	            	<li><a href="<?php echo $this->url(array('action' => 'sync-device-configuration', 'id' => $device->getId())); ?>"><i class="icon-refresh"></i> Sync Device</a>
+	            	<li><a href="<?php echo $this->url(array('action' => 'sync-device-configuration', 'id' => $device->id)); ?>"><i class="icon-refresh"></i> Sync Device</a>
             	<?php endif; ?>
-	            	<li><a href="<?php echo $this->url(array('action' => 'edit-quote-device', 'id' => $device->getId())); ?>"><i class="icon-pencil"></i> Edit Device</a>
-            		<li><a href="<?php echo $this->url(array('action' => 'delete-quote-device', 'id' => $device->getId())); ?>"><i class="icon-trash"></i> Delete Device</a>
+	            	<li><a href="<?php echo $this->url(array('action' => 'edit-quote-device', 'id' => $device->id)); ?>"><i class="icon-pencil"></i> Edit Device</a>
+            		<li><a href="<?php echo $this->url(array('action' => 'delete-quote-device', 'id' => $device->id)); ?>"><i class="icon-trash"></i> Delete Device</a>
 				</ul>
 			</div>
         </td>

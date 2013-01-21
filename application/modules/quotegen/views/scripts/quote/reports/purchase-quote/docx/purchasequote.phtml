@@ -6,7 +6,7 @@ $commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
 $this->render("{$commonPartsBasePath}/styles.phtml");
 
 /**
- * Solution - Solution 1: PrintIQ®
+ * Solution - Solution 1: PrintIQï¿½
  */
 /* @var $section PHPWord_Section */
 $section = $this->section;
@@ -40,7 +40,7 @@ foreach ( $quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
                 $device = $quoteDeviceGroupDevice->getQuoteDevice();
                 $table->addRow($tcStyle->device->rowheight);
                 // Device Name
-                $table->addCell($tcStyle->col1Width, $tcStyle->device->cell1->cellStyle)->addText($device->getName(), $tcStyle->device->cell1->fontStyle, $tcStyle->device->cell1->paragraphStyle);
+                $table->addCell($tcStyle->col1Width, $tcStyle->device->cell1->cellStyle)->addText($device->name, $tcStyle->device->cell1->fontStyle, $tcStyle->device->cell1->paragraphStyle);
                 // Sku
                 $table->addCell($tcStyle->col2Width, $tcStyle->device->cell2->cellStyle)->addText($device->getReportSku(), $tcStyle->device->cell2->fontStyle, $tcStyle->device->cell2->paragraphStyle);
                 // Description and features

@@ -54,7 +54,7 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
             $quoteDevice = $this->getQuoteDevice();
             
             $deviceName = new My_Form_Element_Paragraph('deviceName');
-            $deviceName->setValue($quoteDevice->getName());
+            $deviceName->setValue($quoteDevice->name);
             $deviceName->setIgnore(true);
             $this->addElement($deviceName);
             
