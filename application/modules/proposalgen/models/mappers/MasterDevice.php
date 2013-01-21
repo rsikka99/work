@@ -1,6 +1,11 @@
 <?php
 class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
 {
+    /*
+     * Column Definitions
+     */
+    public $col_id = 'id';
+
     /**
      * The default db table class to use
      *
@@ -34,7 +39,7 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         $data = $this->unsetNullValues($object->toArray());
 
         // Remove the id
-        unset($data ['id']);
+        unset($data ["{$this->col_id}"]);
 
         // Insert the data
         $id = $this->getDbTable()->insert($data);
@@ -63,12 +68,12 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
 
         if ($primaryKey === null)
         {
-            $primaryKey = $data ['id'];
+            $primaryKey = $data [$this->col_id];
         }
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                'id = ?' => $primaryKey
+                                                                "{$this->col_id} = ?" => $primaryKey
                                                            ));
 
         // Save the object into the cache
@@ -91,13 +96,13 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         if ($object instanceof Proposalgen_Model_MasterDevice)
         {
             $whereClause = array(
-                'id = ?' => $object->id
+                "{$this->col_id} = ?" => $object->id
             );
         }
         else
         {
             $whereClause = array(
-                'id = ?' => $object
+                "{$this->col_id} = ?" => $object
             );
         }
 
@@ -207,7 +212,7 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array(
-            'id = ?' => $id
+            "{$this->col_id} = ?" => $id
         );
     }
 
