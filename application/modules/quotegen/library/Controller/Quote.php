@@ -164,14 +164,14 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
                     {
                         // Get the rate
                         $leasingSchemaRate = new Quotegen_Model_LeasingSchemaRate();
-                        $leasingSchemaRate->setLeasingSchemaRangeId($selectedRange->id);
-                        $leasingSchemaRate->setLeasingSchemaTermId($leasingSchemaTerm->getId());
+                        $leasingSchemaRate->leasingSchemaRangeId = $selectedRange->id;
+                        $leasingSchemaRate->leasingSchemaTermId = $leasingSchemaTerm->id;
                         $rateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
                         $leasingSchemaRate = $rateMapper->find($rateMapper->getPrimaryKeyValueForObject($leasingSchemaRate));
                         
                         // Set the quote lease months and lease rate so that we can just directly use the values
-                        $this->_quote->setLeaseTerm($leasingSchemaTerm->getMonths());
-                        $this->_quote->setLeaseRate($leasingSchemaRate->getRate());
+                        $this->_quote->setLeaseTerm($leasingSchemaTerm->months);
+                        $this->_quote->setLeaseRate($leasingSchemaRate->rate);
                     }
                 }
             }

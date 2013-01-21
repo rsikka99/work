@@ -91,7 +91,7 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                             $leasingSchemaTerm = $this->_quote->getLeasingSchemaTerm();
                             
                             // Save the leasing schema term
-                            if (! $leasingSchemaTerm || (int)$form->getValue('leasingSchemaTermId') != (int)$leasingSchemaTerm->getId())
+                            if (! $leasingSchemaTerm || (int)$form->getValue('leasingSchemaTermId') != (int)$leasingSchemaTerm->id)
                             {
                                 $quoteLeaseTerm = new Quotegen_Model_QuoteLeaseTerm();
                                 $quoteLeaseTerm->setQuoteId($this->_quote->getId());

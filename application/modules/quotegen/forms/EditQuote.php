@@ -62,7 +62,7 @@ class Quotegen_Form_EditQuote extends EasyBib_Form
             /* @var $leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm */
             foreach ( $leasingSchema->getTerms() as $leasingSchemaTerm )
             {
-                $leasingSchemaTerms [$leasingSchemaTerm->getId()] = $leasingSchemaTerm->getMonths();
+                $leasingSchemaTerms [$leasingSchemaTerm->id] = $leasingSchemaTerm->months;
             }
         }
         

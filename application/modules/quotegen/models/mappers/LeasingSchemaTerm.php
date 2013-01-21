@@ -44,7 +44,7 @@ class Quotegen_Model_Mapper_LeasingSchemaTerm extends My_Model_Mapper_Abstract
         // Insert the data
         $id = $this->getDbTable()->insert($data);
         
-        $object->setId($id);
+        $object->id = $id;
         
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -95,7 +95,7 @@ class Quotegen_Model_Mapper_LeasingSchemaTerm extends My_Model_Mapper_Abstract
         if ($leasingSchemaTerm instanceof Quotegen_Model_LeasingSchemaTerm)
         {
             $whereClause = array (
-                    "{$this->col_id} = ?" => $leasingSchemaTerm->getId() 
+                    "{$this->col_id} = ?" => $leasingSchemaTerm->id
             );
         }
         else
@@ -220,7 +220,7 @@ class Quotegen_Model_Mapper_LeasingSchemaTerm extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return $object->getLeasingSchemaId();
+        return $object->leasingSchemaId;
     }
 }
 

@@ -74,7 +74,9 @@ class Quotegen_Model_LeasingSchemaRange extends My_Model_Abstract
     /**
      * Sets the leasing schema
      *
-     * @param Quotegen_Model_LeasingSchema $_leasingSchema            
+     * @param Quotegen_Model_LeasingSchema $_leasingSchema
+     *
+     * @return Quotegen_Model_LeasingSchemaRange
      */
     public function setLeasingSchema ($_leasingSchema)
     {

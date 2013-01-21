@@ -65,7 +65,7 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
                 /* @var $leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm */
                 foreach ( $leasingSchema->getTerms() as $leasingSchemaTerm )
                 {
-                    $leasingSchemaTerms [$leasingSchemaTerm->getId()] = number_format($leasingSchemaTerm->getMonths()) . " months";
+                    $leasingSchemaTerms [$leasingSchemaTerm->id] = number_format($leasingSchemaTerm->months) . " months";
                 }
             }
             
@@ -76,7 +76,7 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
                     'required' => true, 
                     'value' => $this->getQuote()
                         ->getLeasingSchemaTerm()
-                        ->getId() 
+                        ->id
             ));
         }
         

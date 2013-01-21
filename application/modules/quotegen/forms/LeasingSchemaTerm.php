@@ -51,10 +51,12 @@ class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
                         ) 
                 ) 
         ));
-        
+        /*
+         * @var $leasingSchemaRanges Quotegen_Model_LeasingSchemaRange
+         */
         foreach ( $leasingSchemaRanges as $range )
         {
-            $rangeid = $range->getId();
+            $rangeid = $range->id;
             
             $this->addElement('text', "rate{$rangeid}", array (
                     'label' => 'Rate:', 
