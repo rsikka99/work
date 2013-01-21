@@ -175,14 +175,14 @@ class Quotegen_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
                 'label' => 'Toner Preference:' 
         ));
         
-        /* @var $princingConfig Proposalgen_Model_PricingConfig */
+        /* @var $pricingConfig Proposalgen_Model_PricingConfig */
         foreach ( Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll() as $pricingConfig )
         {
-            if ($pricingConfig->getPricingConfigId() === Proposalgen_Model_PricingConfig::NONE && ! $this->_showSystemDefaults)
+            if ($pricingConfig->pricingConfigId === Proposalgen_Model_PricingConfig::NONE && ! $this->_showSystemDefaults)
             {
                 continue;
             }
-            $pricingConfigDropdown->addMultiOption($pricingConfig->getPricingConfigId(), $pricingConfig->getConfigName());
+            $pricingConfigDropdown->addMultiOption($pricingConfig->pricingConfigId, $pricingConfig->configName);
         }
         $this->addElement($pricingConfigDropdown);
         
