@@ -859,16 +859,16 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                     // Save if option and device id
                     if ($optionId && $masterDeviceId)
                     {
-                        $deviceOption->setMasterDeviceId($masterDeviceId);
-                        $deviceOption->setOptionId($optionId);
-                        $deviceOption->setIncludedQuantity(0);
+                        $deviceOption->masterDeviceId = $masterDeviceId;
+                        $deviceOption->optionId = $optionId;
+                        $deviceOption->includedQuantity = 0;
 
                         if (isset($values ['btnAssign']))
                         {
                             // Save device option
                             $deviceOptionMapper->insert($deviceOption);
 
-                            $assignedOptions [] = $deviceOption->getOptionId();
+                            $assignedOptions [] = $deviceOption->optionId;
 
                             $this->_helper->flashMessenger(array (
                                     'success' => "The option was assigned successfully."
@@ -882,7 +882,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             $deviceOptionMapper->delete($deviceOption);
 
                             // Delete all occurences of this option from the array
-                            $arrayKeys = array_keys($assignedOptions, $deviceOption->getOptionId());
+                            $arrayKeys = array_keys($assignedOptions, $deviceOption->optionId);
                             foreach ( $arrayKeys as $key )
                             {
                                 unset($assignedOptions [$key]);

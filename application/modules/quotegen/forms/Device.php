@@ -83,11 +83,11 @@ class Quotegen_Form_Device extends EasyBib_Form
 
                 // Create a unique element with a unique id
 
-                if (! $deviceOption->getIncludedQuantity())
-                    $deviceOption->setIncludedQuantity(0);
+                if (! $deviceOption->includedQuantity)
+                    $deviceOption->includedQuantity = 0;
                 $optionElement = $this->createElement('text', "option-{$deviceOption->getOption()->getId()}", array (
                         'label' => $deviceOption->getOption()->getName(), 
-                        'value' => $deviceOption->getIncludedQuantity(), 
+                        'value' => $deviceOption->includedQuantity,
                         'class' => 'span1' 
                 ));
                 

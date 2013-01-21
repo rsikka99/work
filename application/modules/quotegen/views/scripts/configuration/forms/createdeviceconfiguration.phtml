@@ -74,7 +74,7 @@ $deviceOptions = $this->deviceOptions;
 						<?php foreach ( $deviceOptions as $option ) {  /* @var $option Quotegen_Model_DeviceOption */ ?>
 						<tr>
 							<td style="text-align: left; padding-top: 13px;"><?php echo $option->getOption()->getName(); ?></td>
-							<td style="text-align: center;"><input type="text" class="span1" name="quantity<?php echo $option->getOptionId(); ?>" id="quantity<?php echo $option->getOptionId(); ?>" value="0" maxlength="3" /></td>
+							<td style="text-align: center;"><input type="text" class="span1" name="quantity<?php echo $option->optionId; ?>" id="quantity<?php echo $option->optionId; ?>" value="0" maxlength="3" /></td>
 						</tr>
 						<?php } ?>
 					</tbody>

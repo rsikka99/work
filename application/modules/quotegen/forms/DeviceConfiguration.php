@@ -54,11 +54,11 @@ class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
             /* @var $deviceConfigurationOption Quotegen_Model_DeviceConfigurationOption */
             foreach ( $device->getOptions() as $deviceConfigurationOption )
             {
-                $optionElement = $this->createElement('text', "option-{$deviceConfigurationOption->getOptionId()}", array (
+                $optionElement = $this->createElement('text', "option-{$deviceConfigurationOption->optionId}", array (
                         'label' => $deviceConfigurationOption->getOption()
                             ->getName(), 
-                        'value' => $deviceConfigurationOption->getQuantity(), 
-                        'description' => $deviceConfigurationOption->getOptionId() 
+                        'value' => $deviceConfigurationOption->quantity,
+                        'description' => $deviceConfigurationOption->optionId
                 )
                 );
                 $optionElement->setAttrib('class', 'span1');

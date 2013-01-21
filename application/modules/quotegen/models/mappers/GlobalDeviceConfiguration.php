@@ -107,7 +107,7 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
         if ($object instanceof Quotegen_Model_GlobalDeviceConfiguration)
         {
             $whereClause = array (
-                    "{$this->col_deviceConfigurationId} = ?" => $object->getDeviceConfigurationId() 
+                    "{$this->col_deviceConfigurationId} = ?" => $object->deviceConfigurationId
             );
         }
         else
@@ -226,7 +226,7 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return $object->getDeviceConfigurationId();
+        return $object->deviceConfigurationId;
     }
 }
 

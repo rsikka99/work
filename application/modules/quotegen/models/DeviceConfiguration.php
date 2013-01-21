@@ -9,7 +9,7 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
     /**
      * @var int
      */
-    public $masterDeviceId;
+    public $masterDeviceId = 0;
 
     /**
      * @var string
@@ -85,7 +85,18 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
         }
         return $this->_device;
     }
-    
+
+    /**
+     * Sets the quote device associated with this configuration
+     *
+     * @param Quotegen_Model_Device $_device
+     */
+    public function setDevice ($_device)
+    {
+        $this->_device = $_device;
+        return $this;
+    }
+
     /**
      * Get the array of options for the device
      *
@@ -99,4 +110,16 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
         }
         return $this->_options;
     }
+
+    /**
+     * Set a new array of options for the device
+     *
+     * @param multitype:Quotegen_Model_DeviceOption $_options
+     */
+    public function setOptions ($_options)
+    {
+        $this->_options = $_options;
+        return $this;
+    }
+
 }

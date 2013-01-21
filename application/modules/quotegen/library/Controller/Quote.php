@@ -153,7 +153,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
                         $selectedRange = $leasingSchemaRange;
                         
                         // If we found our range, break out of the loop
-                        if ((float)$leasingSchemaRange->getStartRange() <= $quoteLeaseValue)
+                        if ((float)$leasingSchemaRange->startRange <= $quoteLeaseValue)
                         {
                             break;
                         }
@@ -164,7 +164,7 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
                     {
                         // Get the rate
                         $leasingSchemaRate = new Quotegen_Model_LeasingSchemaRate();
-                        $leasingSchemaRate->setLeasingSchemaRangeId($selectedRange->getId());
+                        $leasingSchemaRate->setLeasingSchemaRangeId($selectedRange->id);
                         $leasingSchemaRate->setLeasingSchemaTermId($leasingSchemaTerm->getId());
                         $rateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
                         $leasingSchemaRate = $rateMapper->find($rateMapper->getPrimaryKeyValueForObject($leasingSchemaRate));

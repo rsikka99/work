@@ -80,8 +80,8 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                                         if (! $rangeExists)
                                         {
                                             // Build array of range id's
-                                            $leasingSchemaRangeModel->setLeasingSchemaId($leasingSchemaId);
-                                            $leasingSchemaRangeModel->setStartRange($range);
+                                            $leasingSchemaRangeModel->leasingSchemaId = $leasingSchemaId;
+                                            $leasingSchemaRangeModel->startRange = $range;
                                             $rangeIds [] = $leasingSchemaRangeMapper->insert($leasingSchemaRangeModel);
                                         }
                                         else
@@ -637,8 +637,8 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                         // Insert (Add)
                         $leasingSchemaRangeMapper = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance();
                         $leasingSchemaRangeModel = new Quotegen_Model_LeasingSchemaRange();
-                        $leasingSchemaRangeModel->setLeasingSchemaId($leasingSchemaId);
-                        $leasingSchemaRangeModel->setStartRange($startRange);
+                        $leasingSchemaRangeModel->leasingSchemaId = $leasingSchemaId;
+                        $leasingSchemaRangeModel->startRange = $startRange;
                         
                         // Validate Range doesn't exist
                         $leasingSchemaRange = $leasingSchemaRangeMapper->fetch(array (
@@ -777,9 +777,9 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                                 if (! $leasingSchemaRange)
                                 {
                                     $leasingSchemaRangeModel = new Quotegen_Model_LeasingSchemaRange();
-                                    $leasingSchemaRangeModel->setId($rangeId);
-                                    $leasingSchemaRangeModel->setLeasingSchemaId($leasingSchemaId);
-                                    $leasingSchemaRangeModel->setStartRange($startRange);
+                                    $leasingSchemaRangeModel->id = $rangeId;
+                                    $leasingSchemaRangeModel->leasingSchemaId = $leasingSchemaId;
+                                    $leasingSchemaRangeModel->startRange = $startRange;
                                     $leasingSchemaRangeMapper->save($leasingSchemaRangeModel);
                                     
                                     $leasingSchemaRateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
@@ -858,7 +858,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                     $this->_helper->redirector('index');
                 }
                 
-                $form->getElement('range')->setValue($leasingSchemaRange->getStartRange());
+                $form->getElement('range')->setValue($leasingSchemaRange->startRange);
                 
                 // Get Rates for Range
                 $leasingSchemaRatesMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
@@ -925,13 +925,13 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
         if (count($leasingSchemaRanges) <= 1)
         {
             $this->_helper->flashMessenger(array (
-                    'danger' => "You cannot delete the range \${$range->getStartRange()}  as it is the last range for this Leasing Schema." 
+                    'danger' => "You cannot delete the range \${$range->startRange}  as it is the last range for this Leasing Schema."
             ));
             $this->_helper->redirector('index');
         }
         else
         {
-            $message = "Are you sure you want to delete the range \${$range->getStartRange()}?";
+            $message = "Are you sure you want to delete the range \${$range->startRange}?";
         }
         $form = new Application_Form_Delete($message);
         
@@ -950,7 +950,7 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                         $mapper->delete($range);
                         $db->commit();
                         $this->_helper->flashMessenger(array (
-                                'success' => "The range \${$this->view->escape ( $range->getStartRange() )} was deleted successfully." 
+                                'success' => "The range \${$this->view->escape ( $range->startRange )} was deleted successfully."
                         ));
                         $this->_helper->redirector('index');
                     }
@@ -1020,8 +1020,8 @@ class Quotegen_LeasingschemaController extends Zend_Controller_Action
                         $termId = $leasingSchemaTermMapper->insert($leasingSchemaTermModel);
                         
                         // Save Range
-                        $leasingSchemaRangeModel->setLeasingSchemaId($leasingSchemaId);
-                        $leasingSchemaRangeModel->setStartRange($range);
+                        $leasingSchemaRangeModel->leasingSchemaId = $leasingSchemaId;
+                        $leasingSchemaRangeModel->startRange = $range;
                         $rangeId = $leasingSchemaRangeMapper->insert($leasingSchemaRangeModel);
                         
                         // Save Rate 

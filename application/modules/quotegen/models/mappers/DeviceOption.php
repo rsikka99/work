@@ -92,8 +92,8 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_DeviceOption)
         {
             $whereClause = array (
-                    "{$this->col_masterDeviceId} = ?" => $object->getMasterDeviceId(), 
-                    "{$this->col_optionId} = ?" => $object->getOptionId() 
+                    "{$this->col_masterDeviceId} = ?" => $object->masterDeviceId,
+                    "{$this->col_optionId} = ?" => $object->optionId
             );
         }
         else
@@ -147,8 +147,8 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_DeviceOption($row->toArray());
         
         // Save the object into the cache
-        $primaryKey [0] = $object->getMasterDeviceId();
-        $primaryKey [1] = $object->getOptionId();
+        $primaryKey [0] = $object->masterDeviceId;
+        $primaryKey [1] = $object->optionId;
         $this->saveItemToCache($object);
         
         return $object;
@@ -176,8 +176,8 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_DeviceOption($row->toArray());
         
         // Save the object into the cache
-        $primaryKey [0] = $object->getMasterDeviceId();
-        $primaryKey [1] = $object->getOptionId();
+        $primaryKey [0] = $object->masterDeviceId;
+        $primaryKey [1] = $object->optionId;
         $this->saveItemToCache($object);
         
         return $object;
@@ -205,8 +205,8 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
             $object = new Quotegen_Model_DeviceOption($row->toArray());
             
             // Save the object into the cache
-            $primaryKey [0] = $object->getMasterDeviceId();
-            $primaryKey [1] = $object->getOptionId();
+            $primaryKey [0] = $object->masterDeviceId;
+            $primaryKey [1] = $object->optionId;
             $this->saveItemToCache($object);
             
             $entries [] = $object;
@@ -229,7 +229,7 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
         foreach ( $resultSet as $row )
         {
             $object = new Quotegen_Model_DeviceOption($row->toArray());
-            $option = Quotegen_Model_Mapper_Option::getInstance()->find($object->getOptionId());
+            $option = Quotegen_Model_Mapper_Option::getInstance()->find($object->optionId);
             $entries [] = $option;
         }
         return $entries;
@@ -255,8 +255,8 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return array (
-                $object->getMasterDeviceId(), 
-                $object->getOptionId() 
+                $object->masterDeviceId,
+                $object->optionId
         );
     }
 }

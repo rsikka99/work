@@ -320,7 +320,7 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
             
             $option = new Quotegen_Model_Option($row);
             
-            $deviceConfigurationOption->setOption($option);
+            $deviceConfigurationOption->option = $option;
             
             // Save the device configuration option to cache
             Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->saveItemToCache($deviceConfigurationOption);

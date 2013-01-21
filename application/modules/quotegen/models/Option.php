@@ -277,7 +277,7 @@ class Quotegen_Model_Option extends My_Model_Abstract
             $includedQuantity = Quotegen_Model_Mapper_DeviceOption::getInstance()->fetch("masterDeviceId = {$deviceId} AND optionid = {$this->getId()}");
             if ($includedQuantity)
             {
-                $this->_includedQuantity = $includedQuantity->getIncludedQuantity();
+                $this->_includedQuantity = $includedQuantity->includedQuantity;
             }
             else
             {

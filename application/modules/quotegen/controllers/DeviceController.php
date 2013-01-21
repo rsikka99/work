@@ -320,14 +320,14 @@ class Quotegen_DeviceController extends Zend_Controller_Action
                     {
                         $deviceOptionMapper = Quotegen_Model_Mapper_DeviceOption::getInstance();
                         $deviceOption = new Quotegen_Model_DeviceOption();
-                        $deviceOption->setMasterDeviceId($device->masterDeviceId);
+                        $deviceOption->masterDeviceId = $device->masterDeviceId;
                         
                         $insertedOptions = 0;
                         
                         foreach ( $values ['options'] as $optionId )
                         {
-                            $deviceOption->setOptionId((int)$optionId);
-							$deviceOption->setIncludedQuantity(0);
+                            $deviceOption->optionId = (int)$optionId;
+							$deviceOption->includedQuantity = 0;
                             try
                             {
                                 $deviceOptionMapper->insert($deviceOption);
@@ -382,8 +382,8 @@ class Quotegen_DeviceController extends Zend_Controller_Action
         try
         {
             $deviceOption = new Quotegen_Model_DeviceOption();
-            $deviceOption->setMasterDeviceId($id);
-            $deviceOption->setOptionId($optionId);
+            $deviceOption->masterDeviceId = $id;
+            $deviceOption->optionId = $optionId;
             Quotegen_Model_Mapper_DeviceOption::getInstance()->delete($deviceOption);
             $this->_helper->flashMessenger(array (
                     'success' => "Option deleted successfully." 

@@ -38,9 +38,9 @@ class Quotegen_Form_EditQuote extends EasyBib_Form
         {
             if (! $leasingSchemaId)
             {
-                $leasingSchemaId = $leasingSchema->getId();
+                $leasingSchemaId = $leasingSchema->id;
             }
-            $leasingSchemas [$leasingSchema->getId()] = $leasingSchema->getName();
+            $leasingSchemas [$leasingSchema->id] = $leasingSchema->name;
         }
         
         if ($this->_leasingSchemaId)

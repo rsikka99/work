@@ -40,9 +40,9 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
             {
                 if (! $leasingSchemaId)
                 {
-                    $leasingSchemaId = $leasingSchema->getId();
+                    $leasingSchemaId = $leasingSchema->id;
                 }
-                $leasingSchemas [$leasingSchema->getId()] = $leasingSchema->getName();
+                $leasingSchemas [$leasingSchema->id] = $leasingSchema->name;
             }
             
             if ($this->_leasingSchemaId)

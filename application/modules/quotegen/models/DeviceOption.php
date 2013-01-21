@@ -1,34 +1,20 @@
 <?php
-
-/**
- * Quotegen_Model_DeviceOption
- *
- * @author Lee Robert
- *        
- */
 class Quotegen_Model_DeviceOption extends My_Model_Abstract
 {
-    
     /**
-     * The master device id (quote device id)
-     *
      * @var int
      */
-    protected $_masterDeviceId;
-    
-    /**
-     * The option id
-     *
-     * @var string
-     */
-    protected $_optionId;
+    public $masterDeviceId;
 
     /**
-     * The quanity of the item that is included
-     *
      * @var int
      */
-    protected $_includedQuantity;
+    public $optionId;
+
+    /**
+     * @var int
+     */
+    public $includedQuantity;
     
     /**
      * The option associated with this device option
@@ -43,9 +29,9 @@ class Quotegen_Model_DeviceOption extends My_Model_Abstract
      * @var Quotegen_Model_DeviceConfigurationOption
      */
     protected $_deviceConfigurationOption;
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::populate()
+
+    /**
+     * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
     {
@@ -53,90 +39,28 @@ class Quotegen_Model_DeviceOption extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
+
         if (isset($params->masterDeviceId) && ! is_null($params->masterDeviceId))
-            $this->setMasterDeviceId($params->masterDeviceId);
+            $this->masterDeviceId = $params->masterDeviceId;
+
         if (isset($params->optionId) && ! is_null($params->optionId))
-            $this->setOptionId($params->optionId);
+            $this->optionId = $params->optionId;
+
         if (isset($params->includedQuantity) && ! is_null($params->includedQuantity))
-            $this->setIncludedQuantity($params->includedQuantity);
+            $this->includedQuantity = $params->includedQuantity;
+
     }
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::toArray()
+
+    /**
+     * @return array
      */
     public function toArray ()
     {
         return array (
-                'masterDeviceId' => $this->getMasterDeviceId(), 
-                'optionId' => $this->getOptionId(), 
-                'includedQuantity' => $this->getIncludedQuantity() 
+            "masterDeviceId" => $this->masterDeviceId,
+            "optionId" => $this->optionId,
+            "includedQuantity" => $this->includedQuantity,
         );
-    }
-
-    /**
-     * Gets the master device id of the object (Which is also the primary key for this object)
-     *
-     * @return number
-     */
-    public function getMasterDeviceId ()
-    {
-        return $this->_masterDeviceId;
-    }
-
-    /**
-     * Sets a new master device id for the object
-     *
-     * @param number $_masterDeviceId
-     *            The new master device id to set
-     */
-    public function setMasterDeviceId ($_masterDeviceId)
-    {
-        $this->_masterDeviceId = $_masterDeviceId;
-        return $this;
-    }
-
-    /**
-     * Gets the optionId of the device
-     *
-     * @return string The optionId of the device
-     */
-    public function getOptionId ()
-    {
-        return $this->_optionId;
-    }
-
-    /**
-     * Sets a new optionId for the device
-     *
-     * @param string $_optionId
-     *            The new optionId to set
-     */
-    public function setOptionId ($_optionId)
-    {
-        $this->_optionId = $_optionId;
-        return $this;
-    }
-
-    /**
-     * Gets the included quantity of the option
-     *
-     * @return the $_includedQuantity the new quantity
-     */
-    public function getIncludedQuantity ()
-    {
-        return $this->_includedQuantity;
-    }
-
-    /**
-     * Sets the included quantity
-     *
-     * @param number $_includedQuantity
-     *            the new included quantity
-     */
-    public function setIncludedQuantity ($_includedQuantity)
-    {
-        $this->_includedQuantity = $_includedQuantity;
-        return $this;
     }
 
     /**
@@ -148,7 +72,7 @@ class Quotegen_Model_DeviceOption extends My_Model_Abstract
     {
         if (! isset($this->_option))
         {
-            $this->_option = Quotegen_Model_Mapper_Option::getInstance()->find($this->getOptionId());
+            $this->_option = Quotegen_Model_Mapper_Option::getInstance()->find($this->optionId);
         }
         return $this->_option;
     }
@@ -174,7 +98,7 @@ class Quotegen_Model_DeviceOption extends My_Model_Abstract
     {
         if (! isset($this->_deviceConfigurationOption))
         {
-            $where = "deviceConfigurationId = {$deviceConfigurationId} AND optionId = {$this->getOptionId()}";
+            $where = "deviceConfigurationId = {$deviceConfigurationId} AND optionId = {$this->optionId}";
             $this->_deviceConfigurationOption = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->fetch($where);
             
             if (! isset( $this->_deviceConfigurationOption))

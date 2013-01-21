@@ -158,7 +158,7 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
         $countries = array ();
         foreach ( $countryList as $country )
         {
-            $countries [$country->getId()] = $country->getName();
+            $countries [$country->id] = $country->name;
         }
         
         //setup country

@@ -1,23 +1,14 @@
 <?php
-
-/**
- * Quotegen_Model_GlobalDeviceConfiguration
- *
- * @author Shawn Wilder
- *        
- */
 class Quotegen_Model_GlobalDeviceConfiguration extends My_Model_Abstract
 {
-    
+
     /**
-     * The device configuration id
-     *
      * @var int
      */
-    protected $_deviceConfigurationId = 0;
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::populate()
+    public $deviceConfigurationId = 0;
+
+    /**
+     * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
     {
@@ -25,38 +16,19 @@ class Quotegen_Model_GlobalDeviceConfiguration extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
+
         if (isset($params->deviceConfigurationId) && ! is_null($params->deviceConfigurationId))
-            $this->setDeviceConfigurationId($params->deviceConfigurationId);    }
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::toArray()
+            $this->deviceConfigurationId = $params->deviceConfigurationId;
+
+    }
+
+    /**
+     * @return array
      */
     public function toArray ()
     {
         return array (
-                'deviceConfigurationId' => $this->getDeviceConfigurationId() 
+            "deviceConfigurationId" => $this->deviceConfigurationId,
         );
-    }
-
-    /**
-     * Gets the id of the object
-     *
-     * @return number The id of the object
-     */
-    public function getDeviceConfigurationId ()
-    {
-        return $this->_deviceConfigurationId;
-    }
-
-    /**
-     * Sets the id of the object
-     *
-     * @param number $_id
-     *            the new id
-     */
-    public function setDeviceConfigurationId ($_deviceConfigurationId)
-    {
-        $this->_deviceConfigurationId = $_deviceConfigurationId;
-        return $this;
     }
 }
