@@ -1,4 +1,4 @@
-INSERT INTO `pgen_master_devices` (`id`, `manufacturer_id`, `printer_model`, `toner_config_id`, `is_copier`, `is_fax`, `is_scanner`, `is_duplex`, `is_replacement_device`, `watts_power_normal`, `watts_power_idle`, `cost`, `service_cost_per_page`, `launch_date`, `date_created`, `duty_cycle`, `ppm_black`, `ppm_color`, `is_leased`, `leased_toner_yield`) VALUES
+INSERT INTO `pgen_master_devices` (`id`, `manufacturerId`, `printerModel`, `tonerConfigId`, `isCopier`, `isFax`, `isScanner`, `isDuplex`, `isReplacementDevice`, `wattsPowerNormal`, `wattsPowerIdle`, `cost`, `serviceCostPerPage`, `launchDate`, `dateCreated`, `dutyCycle`, `ppmBlack`, `ppmColor`, `isLeased`, `leasedTonerYield`) VALUES
 (4, 7, 'Color LaserJet CM6040f', 2, 1, 1, 1, 1, 0, NULL, 10, 8899.99, NULL, '2011-02-26 00:00:00', '2012-09-12 11:04:21', NULL, NULL, NULL, 0, NULL),
 (5, 7, 'LaserJet M9050', 1, 1, 0, 1, 1, 0, NULL, 10, 10399.99, NULL, '2012-07-10 00:00:00', '2012-09-12 11:07:43', NULL, NULL, NULL, 0, NULL),
 (6, 7, 'LaserJet Enterprise 500 M525dn MFP', 1, 1, 0, 1, 1, 0, NULL, 10, 1899.99, NULL, '2012-09-01 00:00:00', '2012-09-12 11:10:01', NULL, NULL, NULL, 0, NULL),

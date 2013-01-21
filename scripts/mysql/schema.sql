@@ -184,33 +184,33 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_master_devices` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `manufacturer_id` INT(11) NOT NULL ,
-  `printer_model` VARCHAR(255) NOT NULL ,
-  `toner_config_id` INT(11) NOT NULL ,
-  `is_copier` TINYINT(4) NOT NULL DEFAULT '0' ,
-  `is_fax` TINYINT(4) NOT NULL DEFAULT '0' ,
-  `is_scanner` TINYINT(4) NOT NULL DEFAULT '0' ,
-  `is_duplex` TINYINT(4) NOT NULL DEFAULT '0' ,
-  `is_replacement_device` TINYINT(4) NOT NULL DEFAULT '0' ,
-  `watts_power_normal` DOUBLE NULL DEFAULT NULL ,
-  `watts_power_idle` DOUBLE NULL DEFAULT NULL ,
+  `manufacturerId` INT(11) NOT NULL ,
+  `printerModel` VARCHAR(255) NOT NULL ,
+  `tonerConfigId` INT(11) NOT NULL ,
+  `isCopier` TINYINT(4) NOT NULL DEFAULT '0' ,
+  `isFax` TINYINT(4) NOT NULL DEFAULT '0' ,
+  `isScanner` TINYINT(4) NOT NULL DEFAULT '0' ,
+  `isDuplex` TINYINT(4) NOT NULL DEFAULT '0' ,
+  `isReplacementDevice` TINYINT(4) NOT NULL DEFAULT '0' ,
+  `wattsPowerNormal` DOUBLE NULL DEFAULT NULL ,
+  `wattsPowerIdle` DOUBLE NULL DEFAULT NULL ,
   `cost` DOUBLE NULL DEFAULT NULL ,
-  `service_cost_per_page` DOUBLE NULL DEFAULT NULL ,
-  `launch_date` DATETIME NOT NULL ,
-  `date_created` DATETIME NOT NULL ,
-  `duty_cycle` INT(11) NULL DEFAULT NULL ,
-  `ppm_black` DOUBLE NULL DEFAULT NULL ,
-  `ppm_color` DOUBLE NULL DEFAULT NULL ,
-  `is_leased` TINYINT(4) NOT NULL DEFAULT '0' ,
-  `leased_toner_yield` INT(11) NULL DEFAULT NULL ,
+  `serviceCostPerPage` DOUBLE NULL DEFAULT NULL ,
+  `launchDate` DATETIME NOT NULL ,
+  `dateCreated` DATETIME NOT NULL ,
+  `dutyCycle` INT(11) NULL DEFAULT NULL ,
+  `ppmBlack` DOUBLE NULL DEFAULT NULL ,
+  `ppmColor` DOUBLE NULL DEFAULT NULL ,
+  `isLeased` TINYINT(4) NOT NULL DEFAULT '0' ,
+  `leasedTonerYield` INT(11) NULL DEFAULT NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `toner_config_id` (`toner_config_id` ASC) ,
-  INDEX `proposalgenerator_master_devices_ibfk_1_idx` (`manufacturer_id` ASC) ,
+  INDEX `tonerConfigId` (`tonerConfigId` ASC) ,
+  INDEX `proposalgenerator_master_devices_ibfk_1_idx` (`manufacturerId` ASC) ,
   CONSTRAINT `proposalgenerator_master_devices_ibfk_2`
-    FOREIGN KEY (`toner_config_id` )
+    FOREIGN KEY (`tonerConfigId` )
     REFERENCES `pgen_toner_configs` (`id` ),
   CONSTRAINT `proposalgenerator_master_devices_ibfk_1`
-    FOREIGN KEY (`manufacturer_id` )
+    FOREIGN KEY (`manufacturerId` )
     REFERENCES `manufacturers` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
