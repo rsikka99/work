@@ -191,21 +191,22 @@ class Quotegen_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
          */
         if ($this->_showSystemDefaults)
         {
+            /* @var $systemDefaultQuoteSetting Quotegen_Model_QuoteSetting   */
             $systemDefaultQuoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->find(Quotegen_Model_QuoteSetting::SYSTEM_ROW_ID);
-            $pageCoverageMonochrome->setAttrib('append', sprintf("System Default: %s%%", number_format($systemDefaultQuoteSetting->getPageCoverageMonochrome(), 2)));
+            $pageCoverageMonochrome->setAttrib('append', sprintf("System Default: %s%%", number_format($systemDefaultQuoteSetting->pageCoverageMonochrome, 2)));
             $pageCoverageMonochrome->setRequired(false);
-            $pageCoverageColor->setAttrib('append', sprintf("System Default: %s%%", number_format($systemDefaultQuoteSetting->getPageCoverageColor(), 2)));
+            $pageCoverageColor->setAttrib('append', sprintf("System Default: %s%%", number_format($systemDefaultQuoteSetting->pageCoverageColor, 2)));
             $pageCoverageColor->setRequired(false);
             $adminCostPerPage->setAttrib('append', sprintf("System Default: %s", $this->getView()
-                ->currency((float)$systemDefaultQuoteSetting->getAdminCostPerPage())));
+                ->currency((float)$systemDefaultQuoteSetting->adminCostPerPage)));
             $adminCostPerPage->setRequired(false);
             $serviceCostPerPage->setAttrib('append', sprintf("System Default: %s", $this->getView()
-                ->currency((float)$systemDefaultQuoteSetting->getServiceCostPerPage())));
+                ->currency((float)$systemDefaultQuoteSetting->serviceCostPerPage)));
             $serviceCostPerPage->setRequired(false);
             
-            $deviceMargin->setAttrib('append', sprintf("System Default: %s%%", number_format($systemDefaultQuoteSetting->getDeviceMargin(), 2)));
+            $deviceMargin->setAttrib('append', sprintf("System Default: %s%%", number_format($systemDefaultQuoteSetting->deviceMargin, 2)));
             $deviceMargin->setRequired(false);
-            $pageMargin->setAttrib('append', sprintf("System Default: %s%%", number_format($systemDefaultQuoteSetting->getPageMargin(), 2)));
+            $pageMargin->setAttrib('append', sprintf("System Default: %s%%", number_format($systemDefaultQuoteSetting->pageMargin, 2)));
             $pageMargin->setRequired(false);
             $pricingConfigDropdown->setAttrib('append', sprintf("System Default: %s", $systemDefaultQuoteSetting->getPricingConfig()
                 ->configName));

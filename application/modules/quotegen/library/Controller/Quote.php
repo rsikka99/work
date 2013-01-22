@@ -331,17 +331,17 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
     protected function syncOption (Quotegen_Model_QuoteDeviceOption $quoteDeviceOption, Quotegen_Model_DeviceOption $deviceOption)
     {
         // Copy the option
-        $quoteDeviceOption->setOemSku($deviceOption->getOption()
-            ->oemSku);
-        $quoteDeviceOption->setDealerSku($deviceOption->getOption()
-            ->dealerSku);
-        $quoteDeviceOption->setName($deviceOption->getOption()
-            ->name);
-        $quoteDeviceOption->setDescription($deviceOption->getOption()
-            ->description);
-        $quoteDeviceOption->setCost($deviceOption->getOption()
-            ->cost);
-        $quoteDeviceOption->setIncludedQuantity($deviceOption->includedQuantity);
+        $quoteDeviceOption->oemSku = $deviceOption->getOption()
+            ->oemSku;
+        $quoteDeviceOption->dealerSku = $deviceOption->getOption()
+            ->dealerSku;
+        $quoteDeviceOption->name = $deviceOption->getOption()
+            ->name;
+        $quoteDeviceOption->description = $deviceOption->getOption()
+            ->description;
+        $quoteDeviceOption->cost = $deviceOption->getOption()
+            ->cost;
+        $quoteDeviceOption->includedQuantity = $deviceOption->includedQuantity;
         
         return $quoteDeviceOption;
     }
@@ -479,13 +479,13 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
             
             // Insert link to device
             $quoteDeviceConfiguration = new Quotegen_Model_QuoteDeviceConfiguration();
-            $quoteDeviceConfiguration->setMasterDeviceId($favoriteDevice->masterDeviceId);
-            $quoteDeviceConfiguration->setQuoteDeviceId($quoteDeviceId);
+            $quoteDeviceConfiguration->masterDeviceId = $favoriteDevice->masterDeviceId;
+            $quoteDeviceConfiguration->quoteDeviceId = $quoteDeviceId;
             Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->insert($quoteDeviceConfiguration);
             
             // Prepare option link
             $quoteDeviceConfigurationOption = new Quotegen_Model_QuoteDeviceConfigurationOption();
-            $quoteDeviceConfigurationOption->setMasterDeviceId($favoriteDevice->masterDeviceId);
+            $quoteDeviceConfigurationOption->masterDeviceId = $favoriteDevice->masterDeviceId;
             
             // Add to the default group
             Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->insertDeviceInDefaultGroup($this->_quote->id, (int)$quoteDeviceId);
@@ -500,13 +500,13 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
                 
                 // Insert quote device option
                 $quoteDeviceOption = $this->syncOption(new Quotegen_Model_QuoteDeviceOption(), $deviceOption);
-                $quoteDeviceOption->setQuoteDeviceId($quoteDeviceId);
-                $quoteDeviceOption->setQuantity($option->quantity);
+                $quoteDeviceOption->quoteDeviceId = $quoteDeviceId;
+                $quoteDeviceOption->quantity = $option->quantity;
                 $quoteDeviceOptionId = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->insert($quoteDeviceOption);
                 
                 // Insert link
-                $quoteDeviceConfigurationOption->setQuoteDeviceOptionId($quoteDeviceOptionId);
-                $quoteDeviceConfigurationOption->setOptionId($option->optionId);
+                $quoteDeviceConfigurationOption->quoteDeviceOptionId = $quoteDeviceOptionId;
+                $quoteDeviceConfigurationOption->optionId = $option->optionId;
                 Quotegen_Model_Mapper_QuoteDeviceConfigurationOption::getInstance()->insert($quoteDeviceConfigurationOption);
             }
         }
@@ -535,8 +535,8 @@ class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
         {
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
-                $quanities ['monochromePagesQuantity'] += $quoteDeviceGroupDevice->getMonochromePagesQuantity();
-                $quanities ['colorPagesQuantity'] += $quoteDeviceGroupDevice->getColorPagesQuantity();
+                $quanities ['monochromePagesQuantity'] += $quoteDeviceGroupDevice->monochromePagesQuantity;
+                $quanities ['colorPagesQuantity'] += $quoteDeviceGroupDevice->colorPagesQuantity;
             }
         }
         

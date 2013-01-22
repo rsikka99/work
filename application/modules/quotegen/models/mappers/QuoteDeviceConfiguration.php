@@ -109,8 +109,8 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
         if ($object instanceof Quotegen_Model_QuoteDeviceConfiguration)
         {
             $whereClause = array (
-                    "{$this->col_quoteDeviceId} = ?" => $object->getQuoteDeviceId(), 
-                    "{$this->col_masterDeviceId} = ?" => $object->getMasterDeviceId() 
+                    "{$this->col_quoteDeviceId} = ?" => $object->quoteDeviceId,
+                    "{$this->col_masterDeviceId} = ?" => $object->masterDeviceId
             );
         }
         else
@@ -273,8 +273,8 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
     public function getPrimaryKeyValueForObject ($object)
     {
         return array (
-                $object->getQuoteDeviceId(), 
-                $object->getMasterDeviceId() 
+                $object->quoteDeviceId,
+                $object->masterDeviceId
         );
     }
 }

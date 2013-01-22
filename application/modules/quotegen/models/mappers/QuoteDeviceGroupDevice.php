@@ -59,13 +59,13 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
     public function insertDeviceInDefaultGroup ($quoteId, $deviceId)
     {
         $deviceGroup = new Quotegen_Model_QuoteDeviceGroupDevice();
-        $deviceGroup->setQuoteDeviceId($deviceId);
-        $deviceGroup->setQuantity(1);
-        $deviceGroup->setMonochromePagesQuantity(0);
-        $deviceGroup->setColorPagesQuantity(0);
-        $deviceGroup->setQuoteDeviceGroupId(1);
+        $deviceGroup->quoteDeviceId = $deviceId;
+        $deviceGroup->quantity = 1;
+        $deviceGroup->monochromePagesQuantity = 0;
+        $deviceGroup->colorPagesQuantity = 0;
+        $deviceGroup->quoteDeviceGroupId = 1;
         $quoteDeviceGroup = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->findDefaultGroupId($quoteId);
-        $deviceGroup->setQuoteDeviceGroupId($quoteDeviceGroup->getId());
+        $deviceGroup->quoteDeviceGroupId = $quoteDeviceGroup->id;
         
         $data = $deviceGroup->toArray();
         
@@ -121,8 +121,8 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
         if ($object instanceof Quotegen_Model_QuoteDeviceGroupDevice)
         {
             $whereClause = array (
-                    "{$this->col_quoteDeviceId} = ?" => $object->getQuoteDeviceId(), 
-                    "{$this->col_quoteDeviceGroupId} = ?" => $object->getQuoteDeviceGroupId() 
+                    "{$this->col_quoteDeviceId} = ?" => $object->quoteDeviceId,
+                    "{$this->col_quoteDeviceGroupId} = ?" => $object->quoteDeviceGroupId
             );
         }
         else
@@ -244,8 +244,8 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
     public function getPrimaryKeyValueForObject ($object)
     {
         return array (
-                $object->getQuoteDeviceId(), 
-                $object->getQuoteDeviceGroupId() 
+                $object->quoteDeviceId,
+                $object->quoteDeviceGroupId
         );
     }
 
@@ -254,7 +254,7 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
      *
      * @param $quoteDeviceId int
      *            The quote device group id
-     * @return multitype:Quotegen_Model_QuoteDeviceGroupDevices The quote devices for the quote device group
+     *
      */
     public function fetchDevicesForQuoteDeviceGroup ($quoteDeviceGroupId)
     {

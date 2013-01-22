@@ -36,20 +36,20 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                             // Checks to see if the quantity has been changed per device
                             $hasQuantityChanged = false;
                             
-                            $newQuantity = $form->getValue("quantity_monochrome_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}");
-                            if ((int)$newQuantity !== (int)$quoteDeviceGroupDevice->getMonochromePagesQuantity())
+                            $newQuantity = $form->getValue("quantity_monochrome_{$quoteDeviceGroupDevice->quoteDeviceGroupId}_{$quoteDeviceGroupDevice->quoteDeviceId}");
+                            if ((int)$newQuantity !== (int)$quoteDeviceGroupDevice->monochromePagesQuantity)
                             {
-                                $quoteDeviceGroupDevice->setMonochromePagesQuantity($newQuantity);
+                                $quoteDeviceGroupDevice->monochromePagesQuantity = $newQuantity;
                                 $hasQuantityChanged = true;
                             }
                             
                             // If device is color capable
                             if ($quoteDeviceGroupDevice->getQuoteDevice()->isColorCapable())
                             {
-                                $newQuantity = $form->getValue("quantity_color_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}");
-                                if ((int)$newQuantity !== (int)$quoteDeviceGroupDevice->getColorPagesQuantity())
+                                $newQuantity = $form->getValue("quantity_color_{$quoteDeviceGroupDevice->quoteDeviceGroupId}_{$quoteDeviceGroupDevice->quoteDeviceId}");
+                                if ((int)$newQuantity !== (int)$quoteDeviceGroupDevice->colorPagesQuantity)
                                 {
-                                    $quoteDeviceGroupDevice->setColorPagesQuantity($newQuantity);
+                                    $quoteDeviceGroupDevice->colorPagesQuantity = $newQuantity;
                                     $hasQuantityChanged = true;
                                 }
                             }

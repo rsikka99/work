@@ -43,11 +43,11 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
             {
                 // quantity_monochrome_<quoteDeviceGroupId>_<quoteDeviceId> : Quotegen_Model_QuoteDeviceGroupDevice->monochromePagesQuantity
                 // quantity_monochrome_<quoteDeviceGroupId>_<quoteDeviceId> is used to store the amount of pages allocated per device
-                $this->addElement('text', "quantity_monochrome_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}", array (
+                $this->addElement('text', "quantity_monochrome_{$quoteDeviceGroupDevice->quoteDeviceGroupId}_{$quoteDeviceGroupDevice->quoteDeviceId}", array (
                         'label' => 'Quantity', 
                         'required' => true, 
                         'class' => 'span1', 
-                        'value' => $quoteDeviceGroupDevice->getMonochromePagesQuantity(), 
+                        'value' => $quoteDeviceGroupDevice->monochromePagesQuantity,
                         'decorators' => $inlineDecorators, 
                         'validators' => array (
                                 'Int', 
@@ -65,12 +65,12 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
                 {
                     // quantity_color_<quoteDeviceGroupId>_<quoteDeviceId> : Quotegen_Model_QuoteDeviceGroupDevice->colorPagesQuantity
                     // quantity_color_<quoteDeviceGroupId>_<quoteDeviceId> is used to store the amount of pages allocated per device
-                    $this->addElement('text', "quantity_color_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}", array (
+                    $this->addElement('text', "quantity_color_{$quoteDeviceGroupDevice->quoteDeviceGroupId}_{$quoteDeviceGroupDevice->quoteDeviceId}", array (
                             'label' => 'Quantity', 
                             'required' => true, 
                             'class' => 'span1', 
                             'decorators' => $inlineDecorators, 
-                            'value' => $quoteDeviceGroupDevice->getColorPagesQuantity(), 
+                            'value' => $quoteDeviceGroupDevice->colorPagesQuantity,
                             'validators' => array (
                                     'Int', 
                                     array (

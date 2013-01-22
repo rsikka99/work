@@ -26,7 +26,7 @@
 <?php 
 	/* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
 	foreach ($quote->getQuoteDeviceGroups() as $quoteDeviceGroup ) : ?>
-	<h3><?php echo $quoteDeviceGroup->getName(); ?></h3>
+	<h3><?php echo $quoteDeviceGroup->name; ?></h3>
 	<table class='table table-bordered table-striped table-condensed'>
 		<tr class='header-row'>
 			<th style='width: 225px;'>Device</th>
@@ -43,11 +43,11 @@
 		    <?php $quoteDevice = $quoteDeviceGroupDevice->getQuoteDevice(); ?>
 		    <td><?php echo $quoteDevice->name; ?></td>
 		    <td><?php echo $quoteDevice->oemSku; ?></td>
-		    <td><?php echo $quoteDeviceGroupDevice->getQuantity()?>
+		    <td><?php echo $quoteDeviceGroupDevice->quantity?>
 		    <td><?php echo $this->currency($quoteDevice->calculateMonochromeCostPerPage(), array('precision' => 4)); ?></td>
-			<td><?php echo $form->getElement('quantity_monochrome_' . $quoteDeviceGroup->getId() . '_' . $quoteDeviceGroupDevice->getQuoteDeviceId()) ;?> </td>
+			<td><?php echo $form->getElement('quantity_monochrome_' . $quoteDeviceGroup->id . '_' . $quoteDeviceGroupDevice->quoteDeviceId) ;?> </td>
 			<td><?php echo (($quoteDeviceGroupDevice->getQuoteDevice()->isColorCapable()) ? $this->currency($quoteDevice->calculateColorCostPerPage(), array('precision' => 4)) : 'N/A' ); ?></td>
-			<td><?php echo $form->getElement('quantity_color_' . $quoteDeviceGroup->getId() . '_' . $quoteDeviceGroupDevice->getQuoteDeviceId()) ;?> </td>
+			<td><?php echo $form->getElement('quantity_color_' . $quoteDeviceGroup->id . '_' . $quoteDeviceGroupDevice->quoteDeviceId) ;?> </td>
 		</tr>
 		<?php endforeach;?>
 	</table>

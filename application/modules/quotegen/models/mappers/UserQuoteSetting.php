@@ -92,7 +92,7 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_UserQuoteSetting)
         {
             $whereClause = array (
-                    "{$this->col_userId} = ?" => $object->getUserId(), 
+                    "{$this->col_userId} = ?" => $object->userId,
                     "{$this->col_userQuoteSettingId} = ?" => $object->getUserQuoteSettingId() 
             );
         }
@@ -161,8 +161,8 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_UserQuoteSetting($row->toArray());
         
         // Save the object into the cache
-        $primaryKey [0] = $object->getUserId();
-        $primaryKey [1] = $object->getQuoteSettingId();
+        $primaryKey [0] = $object->userId;
+        $primaryKey [1] = $object->quoteSettingId;
         $this->saveItemToCache($object);
         
         return $object;
@@ -190,8 +190,8 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
             $object = new Quotegen_Model_UserQuoteSetting($row->toArray());
             
             // Save the object into the cache
-            $primaryKey [0] = $object->getUserId();
-            $primaryKey [1] = $object->getQuoteSettingId();
+            $primaryKey [0] = $object->userId;
+            $primaryKey [1] = $object->quoteSettingId;
             $this->saveItemToCache($object);
             
             $entries [] = $object;
@@ -231,13 +231,13 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
         {
             // Create a new QuoteSetting
             $quoteSetting = new Quotegen_Model_QuoteSetting();
-            $quoteSetting->setPricingConfigId(Proposalgen_Model_PricingConfig::NONE);
+            $quoteSetting->pricingConfigId = Proposalgen_Model_PricingConfig::NONE;
             $quoteSettingId = Quotegen_Model_Mapper_QuoteSetting::getInstance()->insert($quoteSetting);
             
             // Create a new UserQuoteSetting 
             $userQuoteSetting = new Quotegen_Model_UserQuoteSetting();
-            $userQuoteSetting->setUserId($userId);
-            $userQuoteSetting->setQuoteSettingId($quoteSettingId);
+            $userQuoteSetting->userId = $userId;
+            $userQuoteSetting->quoteSettingId = $quoteSettingId;
             $this->insert($userQuoteSetting);
         }
         
@@ -250,8 +250,8 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return array (
-                $object->getUserId(), 
-                $object->getQuoteSettingId() 
+                $object->userId,
+                $object->quoteSettingId
         );
     }
 }

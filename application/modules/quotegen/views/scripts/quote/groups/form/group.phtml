@@ -32,10 +32,10 @@
 	
     <?php /* @var $deviceGroup Quotegen_Model_QuoteDeviceGroup */$deviceGroups = $form->getQuote()->getQuoteDeviceGroups();?>
     <?php foreach ($deviceGroups as $deviceGroup) : ?>	
-    <h3><?php echo $form->getElement("groupName_{$deviceGroup->getId()}")?>
-        <?php if (!$deviceGroup->getIsDefault()) :?>
+    <h3><?php echo $form->getElement("groupName_{$deviceGroup->id}")?>
+        <?php if (!$deviceGroup->isDefault) :?>
         <small>
-            <button type="submit" name="deleteGroup" class="btn btn-danger btn-mini" value="<?php echo $deviceGroup->getId()?>">
+            <button type="submit" name="deleteGroup" class="btn btn-danger btn-mini" value="<?php echo $deviceGroup->id?>">
                 <i class="icon-trash"></i>
             </button>
         </small>
@@ -58,15 +58,15 @@
     		<?php if (count($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions()) > 0) : ?>
 	    		<?php 
 	    			$optionList = array();
-	    			/* @var $option Quotegen_Model_QuoteDeviceOption */
+	    			/* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
 	    			foreach ($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() as $quoteDeviceOption) 
-	    				$optionList [] = "{$quoteDeviceOption->getOemSku()} (x{$quoteDeviceOption->getQuantity()})";
+	    				$optionList [] = "{$quoteDeviceOption->oemSku} (x{$quoteDeviceOption->quantity})";
 	    			echo implode($optionList, ", "); 
 	    			?>
     		<?php endif; ?>
     		</td>
-    		<td><?php echo $deviceQuantitySubform->getElement("quantity_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}"); ?></td>
-    		<td><button type="submit" name="deleteDeviceFromGroup" value="<?php echo "{$quoteDeviceGroupDevice->getQuoteDeviceId()}_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}"?>" class="btn btn-danger btn-mini"><i class="icon-trash"></i></button></td>
+    		<td><?php echo $deviceQuantitySubform->getElement("quantity_{$quoteDeviceGroupDevice->quoteDeviceGroupId}_{$quoteDeviceGroupDevice->quoteDeviceId}"); ?></td>
+    		<td><button type="submit" name="deleteDeviceFromGroup" value="<?php echo "{$quoteDeviceGroupDevice->quoteDeviceId}_{$quoteDeviceGroupDevice->quoteDeviceGroupId}"?>" class="btn btn-danger btn-mini"><i class="icon-trash"></i></button></td>
     	</tr>
     	<?php endforeach ?>
     </table>

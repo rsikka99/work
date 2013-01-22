@@ -149,17 +149,17 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
             ));
             
             // For each option that is linked with the device
-            /* @var $deviceConfigurationOption Quotegen_Model_QuoteDeviceOption */
+            /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
             foreach ( $quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption )
             {
                 $object = new stdClass();
                 $object->quoteDeviceOption = $quoteDeviceOption;
                 
                 // Create and text element with its name as option-{id}-quantity
-                $optionElement = $this->createElement('text', "option-{$quoteDeviceOption->getId()}-quantity", array (
-                        'label' => $quoteDeviceOption->getName(), 
-                        'value' => $quoteDeviceOption->getQuantity(), 
-                        'description' => $quoteDeviceOption->getId() 
+                $optionElement = $this->createElement('text', "option-{$quoteDeviceOption->id}-quantity", array (
+                        'label' => $quoteDeviceOption->name,
+                        'value' => $quoteDeviceOption->quantity,
+                        'description' => $quoteDeviceOption->id
                 ));
                 $optionElement->setAttrib('class', 'span1');
                 
@@ -170,10 +170,10 @@ class Quotegen_Form_QuoteDevice extends EasyBib_Form
                 $object->quantity = $optionElement;
                     
                 /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
-                $optionElement = $this->createElement('text', "option-{$quoteDeviceOption->getId()}-cost", array (
-                        'label' => $quoteDeviceOption->getName(), 
-                        'value' => $quoteDeviceOption->getCost(), 
-                        'description' => $quoteDeviceOption->getId() 
+                $optionElement = $this->createElement('text', "option-{$quoteDeviceOption->id}-cost", array (
+                        'label' => $quoteDeviceOption->name,
+                        'value' => $quoteDeviceOption->cost,
+                        'description' => $quoteDeviceOption->id
                 ));
                 $optionElement->setAttrib('class', 'span1');
                 $this->addElement($optionElement);

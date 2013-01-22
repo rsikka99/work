@@ -87,16 +87,16 @@ foreach ( $quoteDeviceGroups as $quoteDeviceGroup )
         foreach ( $quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() as $quoteDeviceOption )
         {
             $deviceOptions [] = array (
-                    "name" => $quoteDeviceOption->getName(), 
-                    "oemSku" => $quoteDeviceOption->getOemSku(), 
-                    "dealerSku" => $quoteDeviceOption->getDealerSku() 
+                    "name" => $quoteDeviceOption->name,
+                    "oemSku" => $quoteDeviceOption->oemSku,
+                    "dealerSku" => $quoteDeviceOption->dealerSku
             );
         }
         
         // Build the datasheet
         // Object->getHighestRow() will return the row index where data has been entered in last.
         // This as well applies styles that have been defined that the beginning of the funciton
-        for($deviceCount = 0; $deviceCount < $quoteDeviceGroupDevice->getQuantity(); $deviceCount ++)
+        for($deviceCount = 0; $deviceCount < $quoteDeviceGroupDevice->quantity; $deviceCount ++)
         {
             // Device Number Row
             $currentRow = $activeSheet->getHighestRow() + 2;

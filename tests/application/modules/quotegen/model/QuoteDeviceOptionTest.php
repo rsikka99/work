@@ -13,9 +13,9 @@ class Quotegen_Model_QuoteDeviceOptionTest extends PHPUnit_Framework_TestCase
     {
         // Create option
         $this->_quoteDeviceOption = new Quotegen_Model_QuoteDeviceOption();
-        $this->_quoteDeviceOption->setQuantity(1);
-        $this->_quoteDeviceOption->setIncludedQuantity(1);
-        $this->_quoteDeviceOption->setCost(20);
+        $this->_quoteDeviceOption->quantity = 1;
+        $this->_quoteDeviceOption->includedQuantity = 1;
+        $this->_quoteDeviceOption->cost = 20;
         
         parent::setUp();
     }

@@ -112,7 +112,7 @@ class Quotegen_Model_Address extends My_Model_Abstract
      * @return string
      */
     public function getRegionName(){
-        return Quotegen_Model_Mapper_Region::getInstance()->getById($this->region)->getRegion();
+        return Quotegen_Model_Mapper_Region::getInstance()->getById($this->region)->region;
     }
 
     /**

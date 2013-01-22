@@ -49,7 +49,7 @@ class Quotegen_Model_Mapper_QuoteDeviceGroup extends My_Model_Mapper_Abstract
         // Insert the data
         $id = $this->getDbTable()->insert($data);
         
-        $object->setId($id);
+        $object->id =$id;
         
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -66,15 +66,15 @@ class Quotegen_Model_Mapper_QuoteDeviceGroup extends My_Model_Mapper_Abstract
     public function insertDefaultGroupByQuoteId ($quoteId)
     {
         $deviceGroup = new Quotegen_Model_QuoteDeviceGroup();
-        $deviceGroup->setQuoteId($quoteId);
-        $deviceGroup->setIsDefault(1);
-        $deviceGroup->setName('Default Group (Ungrouped)');
+        $deviceGroup->quoteId = $quoteId;
+        $deviceGroup->isDefault = 1;
+        $deviceGroup->name = 'Default Group (Ungrouped)';
         
         $data = $deviceGroup->toArray();
         
         $id = $this->getDbTable()->insert($data);
         
-        $deviceGroup->setId($id);
+        $deviceGroup->id = $id;
         
         // Save the object into the cache
         $this->saveItemToCache($deviceGroup);
@@ -138,7 +138,7 @@ class Quotegen_Model_Mapper_QuoteDeviceGroup extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_QuoteDeviceGroup)
         {
             $whereClause = array (
-                    "{$this->col_id} = ?" => $object->getId() 
+                    "{$this->col_id} = ?" => $object->id
             );
         }
         else
@@ -257,7 +257,7 @@ class Quotegen_Model_Mapper_QuoteDeviceGroup extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return $object->getId();
+        return $object->id;
     }
 
     /**

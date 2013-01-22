@@ -199,7 +199,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             $quoteDeviceConfiguration = Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->findByQuoteDeviceId($this->id);
             if ($quoteDeviceConfiguration)
             {
-                $this->_device = Quotegen_Model_Mapper_Device::getInstance()->find($quoteDeviceConfiguration->getMasterDeviceId());
+                $this->_device = Quotegen_Model_Mapper_Device::getInstance()->find($quoteDeviceConfiguration->masterDeviceId);
             }
         }
         return $this->_device;
@@ -400,7 +400,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
         foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
         {
-            $quantity += $quoteDeviceGroupDevice->getQuantity();
+            $quantity += $quoteDeviceGroupDevice->quantity;
         }
         return $quantity;
     }

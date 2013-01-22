@@ -59,8 +59,8 @@ class Quotegen_Model_Mapper_QuoteDeviceConfigurationOption extends My_Model_Mapp
     public function getPrimaryKeyValueForObject ($object)
     {
         return array (
-                $object->getQuoteDeviceOptionId(), 
-                $object->getOptionId() 
+                $object->quoteDeviceOptionId,
+                $object->optionId
         );
     }
 
@@ -106,7 +106,7 @@ class Quotegen_Model_Mapper_QuoteDeviceConfigurationOption extends My_Model_Mapp
         if ($object instanceof Quotegen_Model_QuoteDeviceConfigurationOption)
         {
             $whereClause = array (
-                    "{$this->col_quoteDeviceOptionId} = ?" => $object->getQuoteDeviceOptionId() 
+                    "{$this->col_quoteDeviceOptionId} = ?" => $object->quoteDeviceOptionId
             );
         }
         else

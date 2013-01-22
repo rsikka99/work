@@ -104,8 +104,8 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
         if ($userDeviceConfiguration instanceof Quotegen_Model_UserDeviceConfiguration)
         {
             $whereClause = array (
-                    "{$this->col_deviceConfigurationId} = ?" => $userDeviceConfiguration->getDeviceConfigurationId(), 
-                    "{$this->col_userId} = ?" => $userDeviceConfiguration->getUserId() 
+                    "{$this->col_deviceConfigurationId} = ?" => $userDeviceConfiguration->deviceConfigurationId,
+                    "{$this->col_userId} = ?" => $userDeviceConfiguration->userId
             );
         }
         else
@@ -186,8 +186,8 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
         $object = new Quotegen_Model_UserDeviceConfiguration($row->toArray());
         
         // Save the object into the cache
-        $primaryKey [0] = $object->getDeviceConfigurationId();
-        $primaryKey [1] = $object->getUserId();
+        $primaryKey [0] = $object->deviceConfigurationId;
+        $primaryKey [1] = $object->userId;
         $this->saveItemToCache($object);
         
         return $object;
@@ -215,8 +215,8 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
             $object = new Quotegen_Model_UserDeviceConfiguration($row->toArray());
             
             // Save the object into the cache          
-            $primaryKey [0] = $object->getDeviceConfigurationId();
-            $primaryKey [1] = $object->getUserId();
+            $primaryKey [0] = $object->deviceConfigurationId;
+            $primaryKey [1] = $object->userId;
             $this->saveItemToCache($object);
             
             $entries [] = $object;
@@ -245,8 +245,8 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
     public function getPrimaryKeyValueForObject ($object)
     {
         return array (
-                $object->getUserId(), 
-                $object->getDeviceConfigurationId() 
+                $object->userId,
+                $object->deviceConfigurationId
         );
     }
 }

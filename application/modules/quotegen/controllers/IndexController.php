@@ -49,18 +49,18 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 $this->_quote->dateCreated = date('Y-m-d H:i:s');
                 $this->_quote->quoteDate = date('Y-m-d H:i:s');
                 $this->_quote->userId = $this->_userId;
-                $this->_quote->colorPageMargin = $quoteSetting->getPageMargin();
-                $this->_quote->monochromePageMargin = $quoteSetting->getPageMargin();
-                $this->_quote->colorOverageMargin = $quoteSetting->getPageMargin();
-                $this->_quote->monochromeOverageMargin = $quoteSetting->getPageMargin();
+                $this->_quote->colorPageMargin = $quoteSetting->pageMargin;
+                $this->_quote->monochromePageMargin = $quoteSetting->pageMargin;
+                $this->_quote->colorOverageMargin = $quoteSetting->pageMargin;
+                $this->_quote->monochromeOverageMargin = $quoteSetting->pageMargin;
                 $quoteId = $this->saveQuote();
                 
                 // Add a default group
                 $quoteDeviceGroup = new Quotegen_Model_QuoteDeviceGroup();
-                $quoteDeviceGroup->setName('Default Group (Ungrouped)');
-                $quoteDeviceGroup->setIsDefault(1);
+                $quoteDeviceGroup->name = 'Default Group (Ungrouped)';
+                $quoteDeviceGroup->isDefault = 1;
                 $quoteDeviceGroup->setGroupPages(0);
-                $quoteDeviceGroup->setQuoteId($quoteId);
+                $quoteDeviceGroup->quoteId = $quoteId;
                 $quoteDeviceGroupId = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->insert($quoteDeviceGroup);
                 
                 // If this is a leased quote, select the first leasing schema term
@@ -72,8 +72,8 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                     {
                         
                         $quoteLeaseTerm = new Quotegen_Model_QuoteLeaseTerm();
-                        $quoteLeaseTerm->setQuoteId($this->_quote->id);
-                        $quoteLeaseTerm->setLeasingSchemaTermId($leasingSchemaTerms [0]->id);
+                        $quoteLeaseTerm->quoteId = $this->_quote->id;
+                        $quoteLeaseTerm->leasingSchemaTermId = $leasingSchemaTerms [0]->id;
                         Quotegen_Model_Mapper_QuoteLeaseTerm::getInstance()->insert($quoteLeaseTerm);
                     }
                 }
