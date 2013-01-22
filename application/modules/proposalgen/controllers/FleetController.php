@@ -687,12 +687,12 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             ->joinLeft(array(
                             'md' => 'pgen_master_devices'
                        ), 'md.id = pfdmu.master_device_id', array(
-                                                                 'printer_model',
-                                                                 'is_leased'
+                                                                 'printerModel',
+                                                                 'isLeased'
                                                             ))
             ->joinLeft(array(
                             'm' => 'manufacturers'
-                       ), 'm.id = md.manufacturer_id', array(
+                       ), 'm.id = md.manufacturerId', array(
                                                             'fullname'
                                                        ))
             ->where('udc.report_id = ' . $report_id . ' AND udc.invalid_data = 0 AND mmpf.master_device_id IS NULL AND (pfdmu.master_device_id > 0 || pfdmu.master_device_id IS NULL)')
