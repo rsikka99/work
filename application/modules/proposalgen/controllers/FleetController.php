@@ -33,7 +33,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         /*
                          * Process the csv file
                          */
-                        $formData = $form->getValues();
+                        $formData         = $form->getValues();
                         $importSuccessful = false;
 
                         // Get the appropriate service based on the rms provider
@@ -56,6 +56,26 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                                                     'success' => "Invalid RMS Provider Selected"
                                                                ));
                                 break;
+                        }
+
+                        $db = Zend_Db_Table::getDefaultAdapter();
+                        $db->beginTransaction();
+                        try
+                        {
+                            /*
+                             * TODO: Delete all lines
+                             */
+
+                            /*
+                             * Process the new data
+                             */
+                            $uploadCsvService->processCsvFile($filename);
+                            $db->commit();
+                            $importSuccessful = true;
+                        }
+                        catch (Exception $e)
+                        {
+                            $db->rollBack();
                         }
 
                         // Only when we are successful will we display a success message

@@ -44,7 +44,6 @@ class Proposalgen_Form_ImportRmsCsv extends Twitter_Bootstrap_Form_Horizontal
 
         $this->addElement('file', 'uploadFile', array(
                                                      'label'       => 'Choose a file to upload',
-                                                     'description' => "THIS IS A DESCRIPTION!",
                                                      'destination' => $this->getView()->App()->uploadPath,
                                                      'required'    => true,
                                                      'validators'  => array(

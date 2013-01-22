@@ -1,5 +1,4 @@
 <?php
-
 abstract class Proposalgen_Service_Rms_Upload_Abstract
 {
     /**
@@ -29,83 +28,68 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
      * @var array
      */
     protected $_requiredHeaders = array(
-        'rmsModelId'                     => true,
-        'monitorStartDate'               => true,
-        'monitorEndDate'                 => true,
-        'discoveryDate'                  => true,
-        'adoptionDate'                   => true,
-        'dutyCycle'                      => true,
-        'introductionDate'               => true,
-        'ipAddress'                      => true,
-        'isColor'                        => true,
-        'isCopier'                       => true,
-        'isScanner'                      => true,
-        'isFax'                          => true,
-        'manufacturer'                   => true,
-        'modelName'                      => true,
-        'ppmBlack'                       => true,
-        'ppmColor'                       => true,
-        'serialNumber'                   => true,
-        'wattsOperating'                 => true,
-        'wattsIdle'                      => true,
-        'compatibleTonerBlackSku'        => false,
-        'compatibleTonerBlackYield'      => false,
-        'compatibleTonerBlackCost'       => false,
-        'compatibleTonerCyanSku'         => false,
-        'compatibleTonerCyanYield'       => false,
-        'compatibleTonerCyanCost'        => false,
-        'compatibleTonerMagentaSku'      => false,
-        'compatibleTonerMagentaYield'    => false,
-        'compatibleTonerMagentaCost'     => false,
-        'compatibleTonerYellowSku'       => false,
-        'compatibleTonerYellowYield'     => false,
-        'compatibleTonerYellowCost'      => false,
-        'compatibleTonerThreeColorSku'   => false,
-        'compatibleTonerThreeColorYield' => false,
-        'compatibleTonerThreeColorCost'  => false,
-        'compatibleTonerFourColorSku'    => false,
-        'compatibleTonerFourColorYield'  => false,
-        'compatibleTonerFourColorCost'   => false,
-        'oemTonerBlackSku'               => true,
-        'oemTonerBlackYield'             => true,
-        'oemTonerBlackCost'              => true,
-        'oemTonerCyanSku'                => true,
-        'oemTonerCyanYield'              => true,
-        'oemTonerCyanCost'               => true,
-        'oemTonerMagentaSku'             => true,
-        'oemTonerMagentaYield'           => true,
-        'oemTonerMagentaCost'            => true,
-        'oemTonerYellowSku'              => true,
-        'oemTonerYellowYield'            => true,
-        'oemTonerYellowCost'             => true,
-        'oemTonerThreeColorSku'          => false,
-        'oemTonerThreeColorYield'        => false,
-        'oemTonerThreeColorCost'         => false,
-        'oemTonerFourColorSku'           => false,
-        'oemTonerFourColorYield'         => false,
-        'oemTonerFourColorCost'          => false,
-        'startMeterBlack'                => true,
-        'endMeterBlack'                  => true,
-        'startMeterColor'                => true,
-        'endMeterColor'                  => true,
-        'startMeterLife'                 => true,
-        'endMeterLife'                   => true,
-        'startMeterPrintBlack'           => true,
-        'endMeterPrintBlack'             => true,
-        'startMeterPrintColor'           => true,
-        'endMeterPrintColor'             => true,
-        'startMeterCopyBlack'            => true,
-        'endMeterCopyBlack'              => true,
-        'startMeterCopyColor'            => true,
-        'endMeterCopyColor'              => true,
-        'startMeterScan'                 => true,
-        'endMeterScan'                   => true,
-        'startMeterFax'                  => true,
-        'endMeterFax'                    => true,
-        'tonerLevelBlack'                => true,
-        'tonerLevelCyan'                 => true,
-        'tonerLevelMagenta'              => true,
-        'tonerLevelYellow'               => true
+        'rmsModelId'           => false,
+        'assetId'              => false,
+        'monitorStartDate'     => true,
+        'monitorEndDate'       => true,
+        'adoptionDate'         => false,
+        'cost'                 => false,
+        'discoveryDate'        => false,
+        'launchDate'           => false,
+        'dutyCycle'            => false,
+        'ipAddress'            => false,
+        'isColor'              => false,
+        'isCopier'             => false,
+        'isScanner'            => false,
+        'isFax'                => false,
+        'manufacturer'         => true,
+        'modelName'            => true,
+        'ppmBlack'             => false,
+        'ppmColor'             => false,
+        'serialNumber'         => false,
+        'wattsOperating'       => false,
+        'wattsIdle'            => false,
+        'blackTonerSku'        => false,
+        'blackTonerYield'      => false,
+        'blackTonerCost'       => false,
+        'cyanTonerSku'         => false,
+        'cyanTonerYield'       => false,
+        'cyanTonerCost'        => false,
+        'magentaTonerSku'      => false,
+        'magentaTonerYield'    => false,
+        'magentaTonerCost'     => false,
+        'yellowTonerSku'       => false,
+        'yellowTonerYield'     => false,
+        'yellowTonerCost'      => false,
+        'threeColorTonerSku'   => false,
+        'threeColorTonerYield' => false,
+        'threeColorTonerCost'  => false,
+        'fourColorTonerSku'    => false,
+        'fourColorTonerYield'  => false,
+        'fourColorTonerCost'   => false,
+        'startMeterBlack'      => true,
+        'endMeterBlack'        => true,
+        'startMeterColor'      => false,
+        'endMeterColor'        => false,
+        'startMeterLife'       => false,
+        'endMeterLife'         => false,
+        'startMeterPrintBlack' => false,
+        'endMeterPrintBlack'   => false,
+        'startMeterPrintColor' => false,
+        'endMeterPrintColor'   => false,
+        'startMeterCopyBlack'  => false,
+        'endMeterCopyBlack'    => false,
+        'startMeterCopyColor'  => false,
+        'endMeterCopyColor'    => false,
+        'startMeterScan'       => false,
+        'endMeterScan'         => false,
+        'startMeterFax'        => false,
+        'endMeterFax'          => false,
+        'reportsTonerLevels'   => false,
+        'tonerLevelBlack'      => false,
+        'tonerLevelCyan'       => false,
+        'tonerLevelMagenta'    => false,
+        'tonerLevelYellow'     => false,
     );
 
     /**
@@ -236,6 +220,14 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
         $this->_inputFilter->setDefaultEscapeFilter(new Zend_Filter_StringTrim());
     }
 
+    /**
+     * Processes the csv file and inserts the data into the database
+     *
+     * @param     $filename
+     * @param int $maxLineCount
+     *
+     * @return bool|string
+     */
     public function processCsvFile ($filename, $maxLineCount = 1000)
     {
         if (file_exists($filename))
@@ -259,13 +251,17 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
                 return "The uploaded file contains {$lineCount} printers. The maximum number of printers supported in a single report is {$maxLineCount}. Please modify your file and try again.";
             }
 
-            //Pop off the first line since they are headers
+            /*
+             * Pop off the first line since they are headers
+             */
             $this->_csvHeaders = array();
             foreach (str_getcsv(array_shift($fileLines)) as $header)
             {
                 $lowerCaseHeader = strtolower($header);
-                // We'll build the array of headers ourselves and ensure that they are normalized.
-                // We could map column names here for different reports
+                /*
+                 * We'll build the array of headers ourselves and ensure that they are normalized.
+                 * We could map column names here for different reports
+                */
                 $this->_csvHeaders [] = $lowerCaseHeader;
 
                 /*
@@ -288,7 +284,9 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
                 }
             }
 
-            // Make sure our headers are valid
+            /*
+             * Now we validate our lines and assign them in the areas we deem necessary
+             */
             if ($this->validateHeaders($this->_fieldsPresent))
             {
                 // Get normalized data
@@ -297,23 +295,26 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
                     // Turn the line into an assoc array for us
                     $csvLine = array_combine($this->_mappedHeaders, str_getcsv($line));
 
-                    // Only validate lines that were combined properly (meaning they werent empty and had the same column count as the headers)
+                    // Only validate lines that were combined properly (meaning they weren't empty and had the same column count as the headers)
                     if ($csvLine !== false)
                     {
-                        $result = $this->validateLine($csvLine);
+                        /*
+                         * Process our data and massage it into our upload line
+                         */
+                        $uploadLine = new Proposalgen_Service_Rms_Upload_Line($this->processData($csvLine));
 
-                        $uploadRow = new Proposalgen_Model_Rms_Upload_Row($csvLine);
-                        // Line was valid
-                        if ($result === true)
+                        $validationMessage = $uploadLine->isValid();
+
+                        if ($validationMessage === true)
                         {
-                            $this->_validCsvLines [] = $uploadRow;
-                            $this->_csvLines []      = $uploadRow;
+                            $this->_validCsvLines [] = $uploadLine;
+                            $this->_csvLines []      = $uploadLine;
                         }
                         else
                         {
-                            $uploadRow->setValidationErrorMessage($result);
-                            $this->_csvLines []        = $uploadRow;
-                            $this->_invalidCsvLines [] = $uploadRow;
+                            $uploadLine->validationErrorMessage = $validationMessage;
+                            $this->_csvLines []                 = $uploadLine;
+                            $this->_invalidCsvLines []          = $uploadLine;
                         }
                     }
                 }
@@ -337,10 +338,10 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
     public function validateHeaders ($csvHeaders)
     {
         // Loop through our standard headers
-        foreach ($this->_requiredHeaders as $fieldname => $isRequired)
+        foreach ($this->_requiredHeaders as $fieldName => $isRequired)
         {
             // If the header is required and doesn't exist in the array, return false
-            if ($isRequired && !in_array($fieldname, $csvHeaders))
+            if ($isRequired && !in_array($fieldName, $csvHeaders))
             {
                 return false;
             }
@@ -552,6 +553,8 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
      * Filters the data into desired formats
      *
      * @param array $csvData
+     *
+     * @return array
      */
     public function processData ($csvData)
     {
@@ -657,4 +660,3 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
         return $this;
     }
 }
-

@@ -46,6 +46,10 @@ class Proposalgen_Model_Rms_Excluded_Row extends My_Model_Abstract
      */
     public $reason;
 
+    /**
+     * @var number
+     */
+    public $csvLineNumber;
 
     /**
      * @param array $params An array of data to populate the model with
@@ -102,6 +106,10 @@ class Proposalgen_Model_Rms_Excluded_Row extends My_Model_Abstract
             $this->reason = $params->reason;
         }
 
+        if (isset($params->csvLineNumber) && !is_null($params->csvLineNumber))
+        {
+            $this->csvLineNumber = $params->csvLineNumber;
+        }
     }
 
     /**
@@ -119,6 +127,7 @@ class Proposalgen_Model_Rms_Excluded_Row extends My_Model_Abstract
             "modelName"        => $this->modelName,
             "manufacturerName" => $this->manufacturerName,
             "reason"           => $this->reason,
+            "csvLineNumber"    => $this->csvLineNumber,
         );
     }
 }
