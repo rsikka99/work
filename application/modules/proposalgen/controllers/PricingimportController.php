@@ -125,7 +125,7 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                 Proposalgen_Model_Mapper_UnknownDeviceInstance::getInstance()->delete("TRUE");
                 Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance()->delete("TRUE");
                 Proposalgen_Model_Mapper_DeviceInstance::getInstance()->delete("TRUE");
-                Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->delete("TRUE");
+                Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance()->delete("TRUE");
                 Proposalgen_Model_Mapper_UserDeviceOverride::getInstance()->delete("TRUE");
                 Proposalgen_Model_Mapper_UserTonerOverride::getInstance()->delete("TRUE");
 //                Proposalgen_Model_Mapper_DealerDeviceOverride::getInstance()->delete("TRUE");

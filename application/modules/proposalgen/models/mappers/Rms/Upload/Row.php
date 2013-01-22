@@ -5,6 +5,7 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
      * Column Definitions
      */
     public $col_id = 'id';
+    public $col_reportId = 'id';
 
     /**
      * The default db table class to use

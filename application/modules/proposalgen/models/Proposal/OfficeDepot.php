@@ -448,7 +448,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
                                                                                                                     "is_excluded = 1"
                                                                                                                ));
 
-            $uploadDevices         = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->getExcludedAsDeviceInstance($this->ReportId);
+            $uploadDevices         = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance()->getExcludedAsDeviceInstance($this->ReportId);
             $this->ExcludedDevices = array_merge($knownDevices, $unknownDevices, $uploadDevices);
         }
 

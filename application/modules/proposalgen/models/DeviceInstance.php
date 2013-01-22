@@ -258,7 +258,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     protected $_riskRank;
 
     /**
-     * @var Proposalgen_Model_UploadDataCollectorRow
+     * @var Proposalgen_Model_Rms_Upload_Row
      */
     protected $_uploadDataCollectorRow;
 
@@ -939,20 +939,20 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_UploadDataCollectorRow
+     * @return Proposalgen_Model_Rms_Upload_Row
      */
     public function getUploadDataCollectorRow ()
     {
         if (!isset($this->_uploadDataCollectorRow))
         {
-            $this->_uploadDataCollectorRow = Proposalgen_Model_Mapper_UploadDataCollectorRow::getInstance()->find($this->rmsUploadRowId);
+            $this->_uploadDataCollectorRow = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance()->find($this->rmsUploadRowId);
         }
 
         return $this->_uploadDataCollectorRow;
     }
 
     /**
-     * @param Proposalgen_Model_UploadDataCollectorRow $UploadDataCollector
+     * @param Proposalgen_Model_Rms_Upload_Row $UploadDataCollector
      *
      * @return Proposalgen_Model_DeviceInstance
      */
