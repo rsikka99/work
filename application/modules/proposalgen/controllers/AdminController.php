@@ -6518,8 +6518,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
     public function savereplacementprinterAction ()
     {
-        // disable the default layout
-        $this->_helper->layout->disableLayout();
         $db = Zend_Db_Table::getDefaultAdapter();
 
         $form     = new Proposalgen_Form_ReplacementPrinter(null, '');
@@ -6535,6 +6533,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $resolution           = $formData ['resolution'];
         $monthly_rate         = $formData ['monthly_rate'];
         $form_mode            = $formData ['form_mode'];
+
 
         // validation
         $validation = '';
@@ -6572,7 +6571,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 $replacementTable         = new Proposalgen_Model_DbTable_ReplacementDevices();
                 $replacement_devicesTable = new Proposalgen_Model_DbTable_ReplacementDevices();
-                $replacement_devicesData  = array(
+                $replacementTableMapper   = Proposalgen_Model_Mapper_ReplacementDevice::getInstance();
+
+                $replacement_devicesData = array(
                     'replacement_category' => strtoupper($replacement_category),
                     'print_speed'          => $print_speed,
                     'resolution'           => $resolution,
@@ -6583,7 +6584,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 {
                     // check to see if replacement device exists
                     $where               = $replacement_devicesTable->getAdapter()->quoteInto('master_device_id = ?', $printer_model, 'INTEGER');
-                    $replacement_devices = $replacement_devicesTable->fetchRow($where);
+                    $replacement_devices = $replacementTableMapper->fetchRow($where);
                     if (count($replacement_devices) > 0)
                     {
                         $replacement_devicesTable->update($replacement_devicesData, $where);
@@ -6599,11 +6600,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 else if ($form_mode == "edit")
                 {
                     $is_valid = true;
-                    if (strtoupper($hdnOriginalCategory) != strtoupper($replacement_category))
+                    if (strtoupper($hdnOriginalCategory) !== strtoupper($replacement_category))
                     {
                         $where       = $replacementTable->getAdapter()->quoteInto('replacement_category = ?', $hdnOriginalCategory);
-                        $replacement = $replacementTable->fetchAll($where);
-
+                        $replacement = $replacementTableMapper->fetchAll($where);
                         if (count($replacement) > 1)
                         {
                             $is_valid = true;
@@ -6611,11 +6611,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         else
                         {
                             $is_valid = false;
-                            $message  = "<p>You are not able to update the Replacement Category on this printer as it's the last printer of the " . ucwords(strtolower($hdnOriginalCategory)) . " category.</p>";
+                            $message  = "<p>You are not able to update the Replacement Category on <br/> this printer as it's the last printer of the " . ucwords(strtolower($hdnOriginalCategory)) . " category.</p>";
                         }
                     }
 
-                    if ($is_valid == true)
+                    if ($is_valid === true)
                     {
                         $where = $replacement_devicesTable->getAdapter()->quoteInto('master_device_id = ?', $printer_model, 'INTEGER');
                         $replacement_devicesTable->update($replacement_devicesData, $where);
@@ -6623,7 +6623,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     }
                 }
 
-                if ($message == "")
+                if ($message === "")
                 {
                     $db->commit();
                 }
@@ -6645,7 +6645,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             // validations are automatically added)
             $this->view->message = $validation;
         }
-        $this->view->data = $this->view->message;
+        $this->_helper->json($this->view->message);
     }
 
     public function replacementprinterslistAction ()
