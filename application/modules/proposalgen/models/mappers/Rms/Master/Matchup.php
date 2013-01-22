@@ -105,8 +105,7 @@ class Proposalgen_Model_Mapper_Rms_Master_Matchup extends My_Model_Mapper_Abstra
     /**
      * Finds a Rms_Master_Matchup based on it's primaryKey
      *
-     * @param $id int
-     *            The id of the Rms_Master_Matchup to find
+     * @param array $id The id of the Rms_Master_Matchup to find
      *
      * @return Proposalgen_Model_Rms_Master_Matchup
      */
@@ -120,7 +119,7 @@ class Proposalgen_Model_Mapper_Rms_Master_Matchup extends My_Model_Mapper_Abstra
         }
 
         // Assuming we don't have a cached object, lets go get it.
-        $result = $this->getDbTable()->find($id);
+        $result = $this->getDbTable()->find($id[0], $id[1]);
         if (0 == count($result))
         {
             return false;
@@ -204,8 +203,7 @@ class Proposalgen_Model_Mapper_Rms_Master_Matchup extends My_Model_Mapper_Abstra
     {
         return array(
             "{$this->col_rmsProviderId} = ?"  => $id[0],
-            "{$this->col_rmsModelId} = ?"     => $id[1],
-            "{$this->col_masterDeviceId} = ?" => $id[2]
+            "{$this->col_rmsModelId} = ?"     => $id[1]
         );
     }
 
@@ -216,6 +214,6 @@ class Proposalgen_Model_Mapper_Rms_Master_Matchup extends My_Model_Mapper_Abstra
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array($object->rmsProviderId, $object->rmsModelId, $object->masterDeviceId);
+        return array($object->rmsProviderId, $object->rmsModelId);
     }
 }

@@ -1,3 +1,8 @@
+INSERT INTO `pgen_rms_providers` (`id`, `name`) VALUES
+(1, 'PrintFleet'),
+(2, 'FM Audit'),
+(3, 'Xerox');
+
 INSERT INTO `pgen_part_types` (`id`, `name`) VALUES
 (1, 'OEM'   ),
 (2, 'COMP'  );

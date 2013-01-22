@@ -104,8 +104,7 @@ class Proposalgen_Model_Mapper_Rms_Device extends My_Model_Mapper_Abstract
     /**
      * Finds a Rms_Device based on it's primaryKey
      *
-     * @param $id int
-     *            The id of the Rms_Device to find
+     * @param array $id The id of the Rms_Device to find
      *
      * @return Proposalgen_Model_Rms_Device
      */
@@ -119,7 +118,7 @@ class Proposalgen_Model_Mapper_Rms_Device extends My_Model_Mapper_Abstract
         }
 
         // Assuming we don't have a cached object, lets go get it.
-        $result = $this->getDbTable()->find($id);
+        $result = $this->getDbTable()->find($id[0], $id[1]);
         if (0 == count($result))
         {
             return false;
@@ -215,5 +214,126 @@ class Proposalgen_Model_Mapper_Rms_Device extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return array($object->rmsProviderId, $object->rmsModelId);
+    }
+
+    /**
+     * This function fetches match up devices
+     *
+     * @param string  $sortColumn
+     *            The column to sort by
+     * @param string  $sortDirection
+     *            The direction to sort
+     * @param string  $filterByColumn
+     *            The column to filter by
+     * @param string  $filterValue
+     *            The value to filter with
+     * @param number  $limit
+     *            The number of records to retrieve
+     * @param number  $offset
+     *            The record to start at
+     * @param boolean $justCount
+     *            If set to true this function will return an integer of the row count of all available rows
+     *
+     * @return number|array Returns an array, or if justCount is true then it will count how many rows are
+     *         available
+     */
+    public function getMatchupDevices ($sortColumn, $sortDirection, $filterByColumn = null, $filterValue = null, $limit = null, $offset = null, $justCount = false)
+    {
+        $db                         = Zend_Db_Table::getDefaultAdapter();
+        $rmsDevicesTableName        = $this->getTableName();
+        $rmsMasterMatchupsTableName = Proposalgen_Model_Mapper_Rms_Master_Matchup::getInstance()->getTableName();
+        $rmsProvidersTableName      = Proposalgen_Model_Mapper_Rms_Provider::getInstance()->getTableName();
+        $masterDevicesTableName     = Proposalgen_Model_Mapper_MasterDevice::getInstance()->getTableName();
+        $manufacturersTableName     = Proposalgen_Model_Mapper_Manufacturer::getInstance()->getTableName();
+
+        $whereClause = array();
+        if (strcasecmp($filterByColumn, 'printer') === 0 && $filterValue !== null)
+        {
+            $whereClause ["CONCAT({$rmsDevicesTableName}.manufacturer, \" \", {$rmsDevicesTableName}.modelName) LIKE ?"] = "%{$filterValue}%";
+        }
+        else if (strcasecmp($filterByColumn, 'model') === 0 && $filterValue !== null)
+        {
+            $whereClause ["{$rmsDevicesTableName}.rmsModelId = ?"] = $filterValue;
+        }
+        else if (strcasecmp($filterByColumn, 'onlyUnmapped') === 0 && $filterValue !== null)
+        {
+            $whereClause ["{$rmsMasterMatchupsTableName}.masterDeviceId IS ?"] = new Zend_Db_Expr('NULL');
+        }
+
+        /*
+         * Based on what we want to do, we may only want the count
+         */
+        if ($justCount)
+        {
+            $rmsDeviceColumns = array(
+                'count' => 'COUNT(*)'
+            );
+
+            // Make sure we don't select any other columns
+            $rmsProviderColumns      = array();
+            $rmsMasterMatchupColumns = array();
+            $masterDeviceColumns     = array();
+            $manufacturerColumns     = array();
+        }
+        else
+        {
+            // These are all the columns we want to be selecting
+            $rmsDeviceColumns        = array(
+                'rmsProviderId',
+                'rmsModelId',
+                'rmsProviderDeviceName' => "CONCAT({$rmsDevicesTableName}.manufacturer, \" \", {$rmsDevicesTableName}.modelName)",
+                'is_mapped'             => "IF({$rmsMasterMatchupsTableName}.masterDeviceId IS NOT NULL, 1, 0)"
+            );
+            $rmsProviderColumns      = array(
+                'rmsProviderName' => 'name'
+            );
+            $rmsMasterMatchupColumns = array();
+            $masterDeviceColumns     = array(
+                'modelName',
+                'masterDeviceId' => 'id'
+            );
+            $manufacturerColumns     = array(
+                'displayname'
+            );
+        }
+
+        /*
+         * Here we create our select statement
+         */
+        $zendDbSelect = $db->select()
+            ->from($rmsDevicesTableName, $rmsDeviceColumns)
+            ->join($rmsProvidersTableName, "{$rmsDevicesTableName}.`rmsProviderId` = {$rmsProvidersTableName}.`id`", $rmsProviderColumns)
+            ->joinLeft($rmsMasterMatchupsTableName, "{$rmsDevicesTableName}.`rmsProviderId` = {$rmsMasterMatchupsTableName}.`rmsProviderId` AND {$rmsDevicesTableName}.`rmsModelId` = {$rmsMasterMatchupsTableName}.`rmsModelId`", $rmsMasterMatchupColumns)
+            ->joinLeft($masterDevicesTableName, "{$rmsMasterMatchupsTableName}.`masterDeviceId` = {$masterDevicesTableName}.`id`", $masterDeviceColumns)
+            ->joinLeft($manufacturersTableName, "{$masterDevicesTableName}.`manufacturerId` = {$manufacturersTableName}.`id`", $manufacturerColumns);
+
+        // Apply our where clause
+        foreach ($whereClause as $cond => $value)
+        {
+            $zendDbSelect->where($cond, $value);
+        }
+
+        if ($limit > 0)
+        {
+            $offset = ($offset > 0) ? $offset : null;
+            $zendDbSelect->limit($limit, $offset);
+        }
+        // TODO: Process a where clause here
+
+
+        // If we're just counting we only need to return the count
+        if ($justCount)
+        {
+            $zendDbStatement = $db->query($zendDbSelect);
+
+            return $zendDbStatement->fetchColumn();
+        }
+        else
+        {
+            $zendDbSelect->order("{$rmsProvidersTableName}.name ASC")->order("{$sortColumn} {$sortDirection}");
+            $zendDbStatement = $db->query($zendDbSelect);
+
+            return $zendDbStatement->fetchAll();
+        }
     }
 }

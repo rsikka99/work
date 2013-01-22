@@ -121,7 +121,7 @@ class Proposalgen_Model_Mapper_Rms_User_Matchup extends My_Model_Mapper_Abstract
         }
 
         // Assuming we don't have a cached object, lets go get it.
-        $result = $this->getDbTable()->find($id);
+        $result = $this->getDbTable()->find($id[0], $id[1], $id[2]);
         if (0 == count($result))
         {
             return false;
@@ -204,10 +204,9 @@ class Proposalgen_Model_Mapper_Rms_User_Matchup extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array(
-            "{$this->col_rmsProviderId} = ?"  => $id[0],
-            "{$this->col_rmsModelId} = ?"     => $id[1],
-            "{$this->col_masterDeviceId} = ?" => $id[2],
-            "{$this->col_masterDeviceId} = ?" => $id[3]
+            "{$this->col_rmsProviderId} = ?" => $id[0],
+            "{$this->col_rmsModelId} = ?"    => $id[1],
+            "{$this->col_userId} = ?"        => $id[2],
         );
     }
 
@@ -218,6 +217,6 @@ class Proposalgen_Model_Mapper_Rms_User_Matchup extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array($object->rmsProviderId, $object->rmsModelId, $object->masterDeviceId, $object->userId);
+        return array($object->rmsProviderId, $object->rmsModelId, $object->userId);
     }
 }
