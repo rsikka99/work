@@ -1,6 +1,6 @@
 <?php
 
-class Proposalgen_Form_UploadFile extends Twitter_Bootstrap_Form_Horizontal
+class Proposalgen_Form_ImportRmsCsv extends Twitter_Bootstrap_Form_Horizontal
 {
     /**
      * @var array
@@ -30,6 +30,18 @@ class Proposalgen_Form_UploadFile extends Twitter_Bootstrap_Form_Horizontal
         // Set the method for the display form to POST
         $this->setMethod('POST');
 
+        $rmsProviderList = array();
+        foreach (Proposalgen_Model_Mapper_Rms_Provider::getInstance()->fetchAll() as $rmsProvider)
+        {
+            $rmsProviderList[$rmsProvider->id] = $rmsProvider->name;
+        }
+
+        $this->addElement('select', 'rmsProviderId', array(
+                                                          'label' => 'RMS Provider',
+                                                          'required' => true,
+                                                          'multiOptions' => $rmsProviderList
+                                                     ));
+
         $this->addElement('file', 'uploadFile', array(
                                                      'label'       => 'Choose a file to upload:',
                                                      'description' => "THIS IS A DESCRIPTION!",
@@ -41,6 +53,8 @@ class Proposalgen_Form_UploadFile extends Twitter_Bootstrap_Form_Horizontal
                                                          'File_Size' => array('min' => '1B', 'max' => '2B')
                                                      )
                                                 ));
+
+
 
 
         $this->addElement('button', 'performUpload', array(

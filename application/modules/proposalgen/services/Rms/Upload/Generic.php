@@ -1,6 +1,6 @@
 <?php
 
-class Default_Service_Rms_Upload_Generic extends Default_Service_Rms_Upload_Abstract
+class Proposalgen_Service_Rms_Upload_Generic extends Proposalgen_Service_Rms_Upload_Abstract
 {
     /**
      * How to read the date coming in from the csv

@@ -1,6 +1,6 @@
 <?php
 
-abstract class Default_Service_Rms_Upload_Abstract
+abstract class Proposalgen_Service_Rms_Upload_Abstract
 {
     /**
      * Input filter
@@ -111,7 +111,7 @@ abstract class Default_Service_Rms_Upload_Abstract
     /**
      * A list of fields that are present in the csv file
      *
-     * @var unknown_type
+     * @var array
      */
     protected $_fieldsPresent = array();
 
@@ -302,7 +302,7 @@ abstract class Default_Service_Rms_Upload_Abstract
                     {
                         $result = $this->validateLine($csvLine);
 
-                        $uploadRow = new Default_Model_Rms_Upload_Row($csvLine);
+                        $uploadRow = new Proposalgen_Model_Rms_Upload_Row($csvLine);
                         // Line was valid
                         if ($result === true)
                         {
@@ -352,7 +352,7 @@ abstract class Default_Service_Rms_Upload_Abstract
     /**
      * Validates a csv line
      *
-     * @param unknown_type $csvLine
+     * @param array $csvLine
      *
      * @return boolean Returns true when line is valid, or returns an error message.
      */
@@ -585,7 +585,7 @@ abstract class Default_Service_Rms_Upload_Abstract
     /**
      * Getter for $_validCsvLines
      *
-     * @return multitype:
+     * @return array
      */
     public function getValidCsvLines ()
     {
@@ -595,8 +595,10 @@ abstract class Default_Service_Rms_Upload_Abstract
     /**
      * Setter for $_validCsvLines
      *
-     * @param multitype: $_validCsvLines
+     * @param array $_validCsvLines
      *                 The new value
+     *
+     * @return \Proposalgen_Service_Rms_Upload_Abstract
      */
     public function setValidCsvLines ($_validCsvLines)
     {
@@ -608,7 +610,7 @@ abstract class Default_Service_Rms_Upload_Abstract
     /**
      * Getter for $_csvLines
      *
-     * @return multitype:
+     * @return array
      */
     public function getCsvLines ()
     {
@@ -618,8 +620,10 @@ abstract class Default_Service_Rms_Upload_Abstract
     /**
      * Setter for $_csvLines
      *
-     * @param multitype: $_csvLines
+     * @param array $_csvLines
      *                 The new value
+     *
+     * @return \Proposalgen_Service_Rms_Upload_Abstract
      */
     public function setCsvLines ($_csvLines)
     {
@@ -631,7 +635,7 @@ abstract class Default_Service_Rms_Upload_Abstract
     /**
      * Getter for $_invalidCsvLines
      *
-     * @return multitype:
+     * @return array
      */
     public function getInvalidCsvLines ()
     {
@@ -641,8 +645,10 @@ abstract class Default_Service_Rms_Upload_Abstract
     /**
      * Setter for $_invalidCsvLines
      *
-     * @param multitype: $_invalidCsvLines
+     * @param array $_invalidCsvLines
      *                 The new value
+     *
+     * @return \Proposalgen_Service_Rms_Upload_Abstract
      */
     public function setInvalidCsvLines ($_invalidCsvLines)
     {

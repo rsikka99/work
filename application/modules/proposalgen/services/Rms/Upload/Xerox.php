@@ -1,6 +1,6 @@
 <?php
 
-class Proposalgen_Service_Rms_Upload_FmAudit extends Proposalgen_Service_Rms_Upload_Abstract
+class Proposalgen_Service_Rms_Upload_Xerox extends Proposalgen_Service_Rms_Upload_Abstract
 {
     /**
      * How to read the date coming in from the csv

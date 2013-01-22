@@ -11,7 +11,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FLEETDATA_UPLOAD);
 
         $report = $this->getReport();
-        $form   = new Proposalgen_Form_UploadFile(array('csv'), "1B", "8MB");
+        $form   = new Proposalgen_Form_ImportRmsCsv(array('csv'), "1B", "8MB");
 
         if ($this->getRequest()->isPost())
         {
@@ -30,16 +30,48 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     $filename = $form->getUploadedFilename();
                     if ($filename !== false)
                     {
+                        /*
+                         * Process the csv file
+                         */
+                        $formData = $form->getValues();
+                        $importSuccessful = false;
 
+                        // Get the appropriate service based on the rms provider
+                        switch ((int)$formData ["rmsProviderId"])
+                        {
+                            case Proposalgen_Model_Rms_Provider::RMS_PROVIDER_PRINTFLEET :
+                                $uploadProviderId = Proposalgen_Model_Rms_Provider::RMS_PROVIDER_PRINTFLEET;
+                                $uploadCsvService = new Proposalgen_Service_Rms_Upload_PrintFleet();
+                                break;
+                            case Proposalgen_Model_Rms_Provider::RMS_PROVIDER_FMAUDIT :
+                                $uploadProviderId = Proposalgen_Model_Rms_Provider::RMS_PROVIDER_FMAUDIT;
+                                $uploadCsvService = new Proposalgen_Service_Rms_Upload_FmAudit();
+                                break;
+                            case Proposalgen_Model_Rms_Provider::RMS_PROVIDER_XEROX:
+                                $uploadProviderId = Proposalgen_Model_Rms_Provider::RMS_PROVIDER_XEROX;
+                                $uploadCsvService = new Proposalgen_Service_Rms_Upload_Xerox();
+                                break;
+                            default :
+                                $this->_helper->flashMessenger(array(
+                                                                    'success' => "Invalid RMS Provider Selected"
+                                                               ));
+                                break;
+                        }
+
+                        // Only when we are successful will we display a success message
+                        if ($importSuccessful === true)
+                        {
+                            $this->_helper->flashMessenger(array(
+                                                                'success' => "Your file was imported successfully."
+                                                           ));
+                        }
                     }
-                    $formData = $form->getValues();
-
-                    echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
-                    var_dump($formData);
-                    die();
-                    $this->_helper->flashMessenger(array(
-                                                        'success' => "Your file was imported successfully."
-                                                   ));
+                    else
+                    {
+                        $this->_helper->flashMessenger(array(
+                                                            'danger' => "Upload Failed. Please try again."
+                                                       ));
+                    }
                 }
                 else
                 {
@@ -640,8 +672,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             ->joinLeft(array(
                             'm' => 'manufacturers'
                        ), 'm.id = md.manufacturerId', array(
-                                                            'fullname'
-                                                       ))
+                                                           'fullname'
+                                                      ))
             ->where('udc.report_id = ?', $report_id)
             ->where('udc.invalid_data = 0')
             ->where('mmpf.master_device_id IS NULL')
@@ -684,8 +716,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             ->joinLeft(array(
                             'm' => 'manufacturers'
                        ), 'm.id = md.manufacturerId', array(
-                                                            'fullname'
-                                                       ))
+                                                           'fullname'
+                                                      ))
             ->where('udc.report_id = ?', $report_id, 'INTEGER')
             ->where('udc.invalid_data = 0')
             ->where('pfdmu.master_device_id IS NULL')
@@ -754,8 +786,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             ->joinLeft(array(
                             'm' => 'manufacturers'
                        ), 'm.id = md.manufacturerId', array(
-                                                            'fullname'
-                                                       ))
+                                                           'fullname'
+                                                      ))
             ->where('udc.report_id = ' . $report_id . ' AND udc.invalid_data = 0 AND mmpf.master_device_id IS NULL AND (pfdmu.master_device_id > 0 || pfdmu.master_device_id IS NULL)')
             ->group('udc.devices_pf_id')
             ->order('udc.modelname');
