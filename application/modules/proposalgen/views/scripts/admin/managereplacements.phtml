@@ -402,14 +402,19 @@
 				contentType: "application/json; charset=utf-8",
 		        url: url,
 		        data: data,
-				error: function() {
+				error: function()
+                {
 					$('#message_container').html("Error setting mapped device!");
 				},
-				success: function(data) {
+				success: function(data)
+                {
 					temp = data.split(',');
-					if(temp.length == 1) {
+					if(temp.length == 1)
+                    {
 						$("#modal_message_container").html(temp[0]);
-					} else {
+					}
+                    else
+                    {
 						$("#modal_message_container").html('<p>Please review the error below.</p>');
 						$("#"+temp[0]+"-element").html($("#"+temp[0]+"-element").html()+"<ul id='"+temp[0]+"-error' class='error'><li>"+temp[1]+"</li></ul>");
 					}

@@ -19,6 +19,30 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends Tangent_Model_Mapper_Ab
     }
 
     /**
+     * @param mixed $primaryKey
+     *
+     * @return Proposalgen_Model_ReplacementDevice
+     */
+    public function find ($primaryKey)
+    {
+        return parent::find($primaryKey);
+    }
+
+    /**
+     * @param null $whereClause
+     * @param null $order
+     * @param null $count
+     * @param null $offset
+     *
+     * @return Proposalgen_Model_ReplacementDevice[]
+     */
+    public function fetchAll ($whereClause = null, $order = null, $count = null, $offset = null)
+    {
+        return parent::fetchAll($whereClause, $order, $count, $offset);
+    }
+
+
+    /**
      * Maps a database row object to an Proposalgen_Model
      *
      * @param Zend_Db_Table_Row $row
