@@ -103,23 +103,23 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
     /**
      * Valid csv lines
      *
-     * @var array
+     * @var Proposalgen_Service_Rms_Upload_Line[]
      */
-    protected $_csvLines = array();
+    public $csvLines = array();
 
     /**
      * Valid csv lines
      *
-     * @var array
+     * @var Proposalgen_Service_Rms_Upload_Line[]
      */
-    protected $_validCsvLines = array();
+    public $validCsvLines = array();
 
     /**
      * Invalid csv lines
      *
-     * @var array
+     * @var Proposalgen_Service_Rms_Upload_Line[]
      */
-    protected $_invalidCsvLines = array();
+    public $invalidCsvLines = array();
 
     /**
      * Raw csv header
@@ -226,10 +226,10 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
         if (file_exists($filename))
         {
             // Reset arrays
-            $this->_csvLines        = array();
-            $this->_validCsvLines   = array();
-            $this->_invalidCsvLines = array();
-            $this->_csvHeaders      = array();
+            $this->csvLines        = array();
+            $this->validCsvLines   = array();
+            $this->invalidCsvLines = array();
+            $this->_csvHeaders     = array();
 
             $fileLines = file($filename, FILE_IGNORE_NEW_LINES);
             $lineCount = count($fileLines) - 1;
@@ -243,6 +243,7 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
             {
                 return "The uploaded file contains {$lineCount} printers. The maximum number of printers supported in a single report is {$maxLineCount}. Please modify your file and try again.";
             }
+
 
             /*
              * Pop off the first line since they are headers
@@ -282,6 +283,7 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
              */
             if ($this->validateHeaders($this->_fieldsPresent))
             {
+                $csvLineNumber = 2;
                 // Get normalized data
                 foreach ($fileLines as $line)
                 {
@@ -291,6 +293,8 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
                     // Only validate lines that were combined properly (meaning they weren't empty and had the same column count as the headers)
                     if ($csvLine !== false)
                     {
+                        $csvLine["csvLineNumber"] = $csvLineNumber;
+
                         /*
                          * Process our data and massage it into our upload line
                          */
@@ -300,16 +304,17 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
 
                         if ($validationMessage === true)
                         {
-                            $this->_validCsvLines [] = $uploadLine;
-                            $this->_csvLines []      = $uploadLine;
+                            $this->validCsvLines [] = $uploadLine;
+                            $this->csvLines []      = $uploadLine;
                         }
                         else
                         {
                             $uploadLine->validationErrorMessage = $validationMessage;
-                            $this->_csvLines []                 = $uploadLine;
-                            $this->_invalidCsvLines []          = $uploadLine;
+                            $this->csvLines []                  = $uploadLine;
+                            $this->invalidCsvLines []           = $uploadLine;
                         }
                     }
+                    $csvLineNumber++;
                 }
             }
             else
@@ -362,80 +367,5 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
         }
 
         return $csvData;
-    }
-
-    /**
-     * Getter for $_validCsvLines
-     *
-     * @return array
-     */
-    public function getValidCsvLines ()
-    {
-        return $this->_validCsvLines;
-    }
-
-    /**
-     * Setter for $_validCsvLines
-     *
-     * @param array $_validCsvLines
-     *                 The new value
-     *
-     * @return \Proposalgen_Service_Rms_Upload_Abstract
-     */
-    public function setValidCsvLines ($_validCsvLines)
-    {
-        $this->_validCsvLines = $_validCsvLines;
-
-        return $this;
-    }
-
-    /**
-     * Getter for $_csvLines
-     *
-     * @return array
-     */
-    public function getCsvLines ()
-    {
-        return $this->_csvLines;
-    }
-
-    /**
-     * Setter for $_csvLines
-     *
-     * @param array $_csvLines
-     *                 The new value
-     *
-     * @return \Proposalgen_Service_Rms_Upload_Abstract
-     */
-    public function setCsvLines ($_csvLines)
-    {
-        $this->_csvLines = $_csvLines;
-
-        return $this;
-    }
-
-    /**
-     * Getter for $_invalidCsvLines
-     *
-     * @return array
-     */
-    public function getInvalidCsvLines ()
-    {
-        return $this->_invalidCsvLines;
-    }
-
-    /**
-     * Setter for $_invalidCsvLines
-     *
-     * @param array $_invalidCsvLines
-     *                 The new value
-     *
-     * @return \Proposalgen_Service_Rms_Upload_Abstract
-     */
-    public function setInvalidCsvLines ($_invalidCsvLines)
-    {
-        $this->_invalidCsvLines = $_invalidCsvLines;
-
-        return $this;
     }
 }

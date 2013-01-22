@@ -5,6 +5,7 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
      * Column Definitions
      */
     public $col_id = 'id';
+    public $col_reportId = 'reportId';
 
     /**
      * The default db table class to use
@@ -224,5 +225,17 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->id;
+    }
+
+    /**
+     * Deletes all rows related to a report
+     *
+     * @param int $reportId The report id
+     *
+     * @return int The number of rows  deleted
+     */
+    public function deleteAllForReport ($reportId)
+    {
+        return $this->getDbTable()->delete(array("{$this->col_reportId} = ?" => $reportId));
     }
 }

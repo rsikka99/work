@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Service_Rms_Upload_Line
+class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
 {
     /**
      * The minimum number of days that we need to monitor a device before we can get a decent average page count

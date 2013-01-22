@@ -52,30 +52,202 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 $uploadCsvService = new Proposalgen_Service_Rms_Upload_Xerox();
                                 break;
                             default :
+                                $uploadCsvService = null;
+                                $uploadProviderId = null;
                                 $this->_helper->flashMessenger(array(
                                                                     'success' => "Invalid RMS Provider Selected"
                                                                ));
                                 break;
                         }
 
-                        $db = Zend_Db_Table::getDefaultAdapter();
-                        $db->beginTransaction();
-                        try
+                        if ($uploadCsvService instanceof Proposalgen_Service_Rms_Upload_Abstract)
                         {
-                            /*
-                             * TODO: Delete all lines
-                             */
+                            $db = Zend_Db_Table::getDefaultAdapter();
+                            $db->beginTransaction();
+                            try
+                            {
+                                $deviceInstanceMapper      = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
+                                $rmsUploadRowMapper        = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance();
+                                $deviceInstanceMeterMapper = Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance();
+                                $rmsExcludedRowMapper      = Proposalgen_Model_Mapper_Rms_Excluded_Row::getInstance();
+                                $rmsDeviceMapper = Proposalgen_Model_Mapper_Rms_Device::getInstance();
 
-                            /*
-                             * Process the new data
-                             */
-                            $uploadCsvService->processCsvFile($filename);
-                            $db->commit();
-                            $importSuccessful = true;
-                        }
-                        catch (Exception $e)
-                        {
-                            $db->rollBack();
+                                /*
+                                 * Delete all previously uploaded lines
+                                 */
+                                $rmsUploadRowMapper->deleteAllForReport($report->id);
+                                $rmsExcludedRowMapper->deleteAllForReport($report->id);
+
+
+                                /*
+                                 * Process the new data
+                                 */
+                                $processCsvMessage = $uploadCsvService->processCsvFile($filename);
+                                if ($processCsvMessage === true)
+                                {
+                                    /**
+                                     * Valid Lines
+                                     */
+                                    foreach ($uploadCsvService->validCsvLines as $line)
+                                    {
+                                        /*
+                                         * Convert line into device instance, upload row, and meters
+                                         */
+                                        $lineArray = $line->toArray();
+
+                                        /*
+                                         * Check and insert rms device
+                                         */
+                                        $rmsDevice = $rmsDeviceMapper->find(array($uploadProviderId, $line->rmsModelId));
+                                        if (!$rmsDevice instanceof Proposalgen_Model_Rms_Device)
+                                        {
+                                            $rmsDevice = new Proposalgen_Model_Rms_Device($lineArray);
+                                            $rmsDevice->rmsProviderId = $uploadProviderId;
+                                            $rmsDevice->dateCreated = new Zend_Db_Expr("NOW()");
+                                            $rmsDevice->userId = $this->_userId;
+                                            $rmsDeviceMapper->insert($rmsDevice);
+                                        }
+
+                                        /*
+                                         * Save Rms Upload Row
+                                         */
+                                        $rmsUploadRow                = new Proposalgen_Model_Rms_Upload_Row($lineArray);
+                                        $rmsUploadRow->rmsProviderId = $uploadProviderId;
+                                        $rmsUploadRowMapper->insert($rmsUploadRow);
+
+                                        /*
+                                         * Save Device Instance
+                                         */
+                                        $deviceInstance                 = new Proposalgen_Model_DeviceInstance($lineArray);
+                                        $deviceInstance->reportId       = $report->id;
+                                        $deviceInstance->rmsUploadRowId = $rmsUploadRow->id;
+                                        $deviceInstanceMapper->insert($deviceInstance);
+
+                                        /*
+                                         * Save Meters
+                                         */
+
+                                        $meter                   = new Proposalgen_Model_DeviceInstanceMeter();
+                                        $meter->deviceInstanceId = $deviceInstance->id;
+                                        $meter->monitorStartDate = $line->monitorStartDate;
+                                        $meter->monitorEndDate   = $line->monitorEndDate;
+
+                                        // Black Meter
+                                        $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK;
+                                        $meter->startMeter = $line->startMeterBlack;
+                                        $meter->endMeter   = $line->endMeterBlack;
+                                        $deviceInstanceMeterMapper->insert($meter);
+
+                                        // Color Meter
+                                        if ($line->endMeterColor > 0)
+                                        {
+                                            $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR;
+                                            $meter->startMeter = $line->startMeterColor;
+                                            $meter->endMeter   = $line->endMeterColor;
+                                            $deviceInstanceMeterMapper->insert($meter);
+                                        }
+
+                                        // Life Meter
+                                        if ($line->endMeterLife > 0)
+                                        {
+                                            $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_LIFE;
+                                            $meter->startMeter = $line->startMeterLife;
+                                            $meter->endMeter   = $line->endMeterLife;
+                                            $deviceInstanceMeterMapper->insert($meter);
+                                        }
+
+                                        // Print Black
+                                        if ($line->endMeterPrintBlack > 0)
+                                        {
+                                            $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_PRINT_BLACK;
+                                            $meter->startMeter = $line->startMeterPrintBlack;
+                                            $meter->endMeter   = $line->endMeterPrintBlack;
+                                            $deviceInstanceMeterMapper->insert($meter);
+                                        }
+
+                                        // Print Color
+                                        if ($line->endMeterPrintColor > 0)
+                                        {
+                                            $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_PRINT_COLOR;
+                                            $meter->startMeter = $line->startMeterPrintColor;
+                                            $meter->endMeter   = $line->endMeterPrintColor;
+                                            $deviceInstanceMeterMapper->insert($meter);
+                                        }
+
+
+                                        // Copy Black
+                                        if ($line->endMeterCopyBlack > 0)
+                                        {
+                                            $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COPY_BLACK;
+                                            $meter->startMeter = $line->startMeterCopyBlack;
+                                            $meter->endMeter   = $line->endMeterCopyBlack;
+                                            $deviceInstanceMeterMapper->insert($meter);
+                                        }
+
+                                        // Copy Color
+                                        if ($line->endMeterCopyColor > 0)
+                                        {
+                                            $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COPY_COLOR;
+                                            $meter->startMeter = $line->startMeterCopyColor;
+                                            $meter->endMeter   = $line->endMeterCopyColor;
+                                            $deviceInstanceMeterMapper->insert($meter);
+                                        }
+
+                                        // Scan Meter
+                                        if ($line->endMeterScan > 0)
+                                        {
+                                            $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_SCAN;
+                                            $meter->startMeter = $line->startMeterScan;
+                                            $meter->endMeter   = $line->endMeterScan;
+                                            $deviceInstanceMeterMapper->insert($meter);
+                                        }
+
+                                        // Fax Meter
+                                        if ($line->endMeterFax > 0)
+                                        {
+                                            $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_FAX;
+                                            $meter->startMeter = $line->startMeterFax;
+                                            $meter->endMeter   = $line->endMeterFax;
+                                            $deviceInstanceMeterMapper->insert($meter);
+                                        }
+                                    }
+
+                                    /**
+                                     * Invalid Lines
+                                     */
+                                    foreach ($uploadCsvService->invalidCsvLines as $line)
+                                    {
+                                        $rmsExcludedRow                = new Proposalgen_Model_Rms_Excluded_Row($line->toArray());
+
+                                        // Set values that have different names than in $line
+                                        $rmsExcludedRow->manufacturerName = $line->manufacturer;
+                                        $rmsExcludedRow->reportId      = $report->id;
+                                        $rmsExcludedRow->reason        = $line->validationErrorMessage;
+
+                                        // Set values that are none existent in $line
+                                        $rmsExcludedRow->rmsProviderId = $uploadProviderId;
+
+                                        $rmsExcludedRowMapper->insert($rmsExcludedRow);
+                                    }
+                                }
+                                else
+                                {
+                                    $this->_helper->flashMessenger(array(
+                                                                        'error' => "There was an error importing your file. $processCsvMessage"
+                                                                   ));
+                                }
+                                $db->commit();
+                                $importSuccessful = true;
+                            }
+                            catch (Exception $e)
+                            {
+                                My_Log::logException($e);
+                                $db->rollBack();
+
+                                $this->_helper->flashMessenger(array(
+                                                                    'danger' => "There was an error parsing your file. If this continues to happen please reference this id when requesting support: " . My_Log::getUniqueId()
+                                                               ));
+                            }
                         }
 
                         // Only when we are successful will we display a success message
@@ -256,6 +428,9 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
      *
      * @param array $lines
      *            (All the lines from the file)
+     *
+     * @throws Exception
+     * @return bool
      */
     public function parseCSVUpload ($lines)
     {

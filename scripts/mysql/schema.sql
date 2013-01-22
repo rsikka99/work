@@ -253,15 +253,15 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_upload_rows` (
   `tonerLevelYellow` VARCHAR(255) NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `pgen_rms_upload_rows_ibfk_1_idx` (`rmsProviderId` ASC) ,
-  INDEX `pgen_rms_upload_rows_ibfk_2_idx` (`rmsModelId` ASC) ,
+  INDEX `pgen_rms_upload_rows_ibfk_2_idx` (`rmsProviderId` ASC, `rmsModelId` ASC) ,
   CONSTRAINT `pgen_rms_upload_rows_ibfk_1`
     FOREIGN KEY (`rmsProviderId` )
     REFERENCES `pgen_rms_providers` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `pgen_rms_upload_rows_ibfk_2`
-    FOREIGN KEY (`rmsModelId` )
-    REFERENCES `pgen_rms_devices` (`rmsProviderId` )
+    FOREIGN KEY (`rmsProviderId` , `rmsModelId` )
+    REFERENCES `pgen_rms_devices` (`rmsProviderId` , `rmsModelId` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -1585,7 +1585,7 @@ ENGINE = InnoDB;
 -- Table `pgen_rms_excluded_rows`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_rms_excluded_rows` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `reportId` INT NOT NULL ,
   `rmsProviderId` INT NULL ,
   `rmsModelId` INT NULL ,
@@ -1594,18 +1594,13 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_excluded_rows` (
   `modelName` VARCHAR(255) NULL ,
   `manufacturerName` VARCHAR(255) NULL ,
   `reason` VARCHAR(255) NOT NULL ,
+  `csvLineNumber` INT(11) NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `rms_e_idx` (`reportId` ASC) ,
-  INDEX `pgen_rms_excluded_rows_ibfk_2_idx` (`rmsProviderId` ASC, `rmsModelId` ASC) ,
   CONSTRAINT `pgen_rms_excluded_rows_ibfk_1`
     FOREIGN KEY (`reportId` )
     REFERENCES `pgen_reports` (`id` )
     ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `pgen_rms_excluded_rows_ibfk_2`
-    FOREIGN KEY (`rmsProviderId` , `rmsModelId` )
-    REFERENCES `pgen_rms_devices` (`rmsProviderId` , `rmsModelId` )
-    ON DELETE SET NULL
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
