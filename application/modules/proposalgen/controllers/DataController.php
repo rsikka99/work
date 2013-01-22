@@ -573,6 +573,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $db           = Zend_Db_Table::getDefaultAdapter();
         $invalid_data = $this->_getParam('filter', 0);
+        $formdata     = new stdClass();
 
         $page  = $_GET ['page'];
         $limit = $_GET ['rows'];
@@ -870,13 +871,13 @@ class Proposalgen_DataController extends Zend_Controller_Action
     {
         // disable the default layout
         $this->_helper->layout->disableLayout();
-        $db = Zend_Db_Table::getDefaultAdapter();
+        $db       = Zend_Db_Table::getDefaultAdapter();
+        $formdata = new stdClass();
 
         // get report id from session
         $session   = new Zend_Session_Namespace('report');
         $report_id = $session->report_id;
 
-        $select = new Zend_Db_Select($db);
         $select = $db->select()
             ->from(array(
                         'udc' => 'proposalgenerator_upload_data_collector_rows'
@@ -995,7 +996,8 @@ class Proposalgen_DataController extends Zend_Controller_Action
     {
         // disable the default layout
         $this->_helper->layout->disableLayout();
-        $db = Zend_Db_Table::getDefaultAdapter();
+        $db       = Zend_Db_Table::getDefaultAdapter();
+        $formdata = new stdClass();
 
         // get report id from session
         $session   = new Zend_Session_Namespace('report');
@@ -1727,6 +1729,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $db           = Zend_Db_Table::getDefaultAdapter();
         $invalid_data = $this->_getParam('filter', 0);
+        $formdata     = new stdClass();
 
         $page  = $_GET ['page'];
         $limit = $_GET ['rows'];
@@ -1870,7 +1873,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
 
                         if (count($unknown_device_instance) > 0)
                         {
-                            $ampv = number_format($unknown_device_instance [0]->_averageMonthlyPageCount);
+                            $ampv = number_format($unknown_device_instance [0]->getAverageMonthlyPageCount());
                         }
                     }
                     else if ($result [$key] ['di_device_instance_id'] > 0)
@@ -1926,7 +1929,8 @@ class Proposalgen_DataController extends Zend_Controller_Action
     {
         // disable the default layout
         $this->_helper->layout->disableLayout();
-        $db = Zend_Db_Table::getDefaultAdapter();
+        $db       = Zend_Db_Table::getDefaultAdapter();
+        $formdata = new stdClass();
 
         $page  = $_GET ['page'];
         $limit = $_GET ['rows'];
@@ -2270,6 +2274,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $db       = Zend_Db_Table::getDefaultAdapter();
         $deviceID = $this->_getParam('deviceid', false);
+        $formdata = new stdClass();
 
         try
         {
@@ -2369,6 +2374,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $db       = Zend_Db_Table::getDefaultAdapter();
         $deviceID = $this->_getParam('deviceid', false);
+        $formdata = new stdClass();
 
         try
         {
@@ -3191,8 +3197,8 @@ class Proposalgen_DataController extends Zend_Controller_Action
                                 'is_fax'              => $is_fax,
                                 'is_duplex'           => $is_duplex,
                                 'is_scanner'          => $is_scanner,
-                                'PPM_black'           => $PPM_black,
-                                'PPM_color'           => $PPM_color,
+                                'PPM_black'           => $ppm_black,
+                                'PPM_color'           => $ppm_color,
                                 'duty_cycle'          => $duty_cycle,
                                 'watts_power_normal'  => $watts_power_normal,
                                 'watts_power_idle'    => $watts_power_idle
@@ -3566,7 +3572,7 @@ class Proposalgen_DataController extends Zend_Controller_Action
                         $ticketpfrequestMapper           = Proposalgen_Model_Mapper_TicketPFRequest::getInstance();
                         $ticketpfrequest                 = $ticketpfrequestMapper->find($ticket_id);
                         $this->view->devices_pf_id       = $ticketpfrequest->devicePfId;
-                        $this->view->device_pf_name      = $ticketpfrequest->_devicePf->PfDbManufacturer . ' ' . $ticketpfrequest->_devicePf->PfDbDeviceName;
+                        $this->view->device_pf_name      = $ticketpfrequest->getDevicePf()->PfDbManufacturer . ' ' . $ticketpfrequest->getDevicePf()->PfDbDeviceName;
                         $this->view->user_suggested_name = $ticketpfrequest->deviceManufacturer . ' ' . $ticketpfrequest->printerModel;
 
                         // ticket exists, update ticket label
