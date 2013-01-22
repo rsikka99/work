@@ -2,6 +2,28 @@
 class Proposalgen_Service_Rms_Upload_Line
 {
     /**
+     * The minimum number of days that we need to monitor a device before we can get a decent average page count
+     *
+     * @var int
+     */
+    const MINIMUM_MONITOR_INTERVAL_DAYS = 4;
+
+    /**
+     * The maximum age for the introduction date
+     *
+     * @var int
+     */
+    const MAXIMUM_DEVICE_AGE_YEARS = 5;
+
+    /**
+     * The format needed to change a Zend_Date object into a MySQL compatible time
+     *
+     * @var string
+     */
+    const ZEND_TO_MYSQL_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
+
+    /**
      * @var int
      */
     public $rmsModelId;
@@ -747,32 +769,10 @@ class Proposalgen_Service_Rms_Upload_Line
         );
     }
 
-    public function isValid($incomingDateFormat)
+    public function isValid ($incomingDateFormat)
     {
         // Settings
-        $requiredDaysOfInformation     = 4;
-        $maximumAgeInYears             = 5;
-        $minimumDeviceIntroductionDate = new Zend_Date(strtotime("-{$maximumAgeInYears} years"));
-
-
-        // Make sure required data is there
-
-        
-        // Turn all the dates into Zend_Date objects
-        $monitorStartDate = (empty($this->monitorStartDate)) ? null : new Zend_Date($this->monitorStartDate, $incomingDateFormat);
-        $monitorEndDate   = (empty($this->monitorEndDate)) ? null : new Zend_Date($this->monitorEndDate, $incomingDateFormat);
-        $discoveryDate    = (empty($this->discoveryDate)) ? null : new Zend_Date($this->discoveryDate, $incomingDateFormat);
-        $introductionDate = (empty($this->launchDate)) ? null : new Zend_Date($this->launchDate, $incomingDateFormat);
-        $adoptionDate     = (empty($this->adoptionDate)) ? null : new Zend_Date($this->adoptionDate, $incomingDateFormat);
-
-        $outputFormat = "yyyy-MM-dd HH:mm:ss";
-
-        // Convert all the dates back to mysql dates
-        $this->monitorStartDate = ($monitorStartDate === null) ? null : $monitorStartDate->toString($outputFormat);
-        $this->monitorEndDate   = ($monitorEndDate === null) ? null : $monitorEndDate->toString($outputFormat);
-        $this->discoveryDate    = ($discoveryDate === null) ? null : $discoveryDate->toString($outputFormat);
-        $this->launchDate = ($introductionDate === null) ? null : $introductionDate->toString($outputFormat);
-        $this->adoptionDate     = ($adoptionDate === null) ? null : $adoptionDate->toString($outputFormat);
+        $minimumDeviceIntroductionDate = new Zend_Date(strtotime("-" . self::MAXIMUM_DEVICE_AGE_YEARS . " years"));
 
         // Validate that certain fields are present
         if (empty($this->rmsModelId))
@@ -824,16 +824,26 @@ class Proposalgen_Service_Rms_Upload_Line
         $this->manufacturer = ucwords($manufacturer);
 
         // Check the meter columns
-        $checkMetersValidation = $this->validateMetersForLine($csvLine);
+        $checkMetersValidation = $this->validateMeters();
         if ($checkMetersValidation !== true)
         {
             return $checkMetersValidation;
         }
 
+        // Turn all the dates into Zend_Date objects
+        $monitorStartDate = (empty($this->monitorStartDate)) ? null : new Zend_Date($this->monitorStartDate, $incomingDateFormat);
+        $monitorEndDate   = (empty($this->monitorEndDate)) ? null : new Zend_Date($this->monitorEndDate, $incomingDateFormat);
+        $discoveryDate    = (empty($this->discoveryDate)) ? null : new Zend_Date($this->discoveryDate, $incomingDateFormat);
+        $introductionDate = (empty($this->launchDate)) ? null : new Zend_Date($this->launchDate, $incomingDateFormat);
+        $adoptionDate     = (empty($this->adoptionDate)) ? null : new Zend_Date($this->adoptionDate, $incomingDateFormat);
+
 
         // If the discovery date is after the start date, use the discovery date
         if ($discoveryDate !== null && $discoveryDate->compare($monitorStartDate) === 1)
         {
+            // Set the monitor start date to the discovery date
+            $monitorStartDate = $discoveryDate;
+
             // Use Discovery Date
             $dateMonitoringStarted = new DateTime("@" . $discoveryDate->toString(Zend_Date::TIMESTAMP));
         }
@@ -847,29 +857,34 @@ class Proposalgen_Service_Rms_Upload_Line
         // Figure out how long we've been monitoring this device
         $monitoringInterval = $dateMonitoringStarted->diff($dateMonitoringEnded);
 
-        // Monitoring should not be inverted (means start date occured after end date)
-        if ($monitoringInterval->invert || $monitoringInterval->days < $requiredDaysOfInformation)
+        // Monitoring should not be inverted (means start date occurred after end date)
+        if ($monitoringInterval->invert || $monitoringInterval->days < self::MINIMUM_MONITOR_INTERVAL_DAYS)
         {
-            return "Device was monitored for less than {$requiredDaysOfInformation} days.";
+            return "Device was monitored for less than " . self::MINIMUM_MONITOR_INTERVAL_DAYS . " days.";
         }
 
         // Check to make sure our start date is not more than 5 years old
         if ($minimumDeviceIntroductionDate->compare($monitorStartDate) == 1)
         {
-            return "Start date is greater than {$maximumAgeInYears} years old.";
+            return "Start date is greater than " . self::MAXIMUM_DEVICE_AGE_YEARS . " years old.";
         }
+
+        // Convert all the dates back to mysql dates
+        $this->monitorStartDate = ($monitorStartDate === null) ? null : $monitorStartDate->toString(self::ZEND_TO_MYSQL_DATE_FORMAT);
+        $this->monitorEndDate   = ($monitorEndDate === null) ? null : $monitorEndDate->toString(self::ZEND_TO_MYSQL_DATE_FORMAT);
+        $this->discoveryDate    = ($discoveryDate === null) ? null : $discoveryDate->toString(self::ZEND_TO_MYSQL_DATE_FORMAT);
+        $this->launchDate       = ($introductionDate === null) ? null : $introductionDate->toString(self::ZEND_TO_MYSQL_DATE_FORMAT);
+        $this->adoptionDate     = ($adoptionDate === null) ? null : $adoptionDate->toString(self::ZEND_TO_MYSQL_DATE_FORMAT);
 
         return true;
     }
 
     /**
-     * Validates the meters for a csv line
-     *
-     * @param array $csvLine
+     * Validates the meters
      *
      * @return boolean True if the meters are ok or returns an error message
      */
-    public function validateMetersForLine ($csvLine)
+    public function validateMeters ()
     {
         /*
          * The start meter of any meter should never be greater than the end meter.
