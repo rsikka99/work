@@ -555,7 +555,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
         $report_id = $this->getReport()->id;
 
-        // get unmapped counts
+        // Get devices that are not mapped.
         $select                     = new Zend_Db_Select($db);
         $select                     = $db->select()
             ->from(array(
@@ -574,11 +574,11 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             ->joinLeft(array(
                             'md' => 'pgen_master_devices'
                        ), 'md.id = pfdmu.master_device_id', array(
-                                                                 'printer_model'
+                                                                 'printerModel'
                                                             ))
             ->joinLeft(array(
                             'm' => 'manufacturers'
-                       ), 'm.id = md.manufacturer_id', array(
+                       ), 'm.id = md.manufacturerId', array(
                                                             'fullname'
                                                        ))
             ->where('udc.report_id = ?', $report_id)
@@ -618,11 +618,11 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             ->joinLeft(array(
                             'md' => 'pgen_master_devices'
                        ), 'md.id = mmpf.master_device_id', array(
-                                                                'printer_model'
+                                                                'printerModel'
                                                            ))
             ->joinLeft(array(
                             'm' => 'manufacturers'
-                       ), 'm.id = md.manufacturer_id', array(
+                       ), 'm.id = md.manufacturerId', array(
                                                             'fullname'
                                                        ))
             ->where('udc.report_id = ?', $report_id, 'INTEGER')
