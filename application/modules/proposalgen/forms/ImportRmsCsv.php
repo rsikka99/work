@@ -37,25 +37,22 @@ class Proposalgen_Form_ImportRmsCsv extends Twitter_Bootstrap_Form_Horizontal
         }
 
         $this->addElement('select', 'rmsProviderId', array(
-                                                          'label' => 'RMS Provider',
-                                                          'required' => true,
+                                                          'label'        => 'RMS Provider',
+                                                          'required'     => true,
                                                           'multiOptions' => $rmsProviderList
                                                      ));
 
         $this->addElement('file', 'uploadFile', array(
-                                                     'label'       => 'Choose a file to upload:',
+                                                     'label'       => 'Choose a file to upload',
                                                      'description' => "THIS IS A DESCRIPTION!",
                                                      'destination' => $this->getView()->App()->uploadPath,
                                                      'required'    => true,
                                                      'validators'  => array(
                                                          'Extension' => array('extension' => 'csv'),
                                                          'Count'     => array('count' => 1),
-                                                         'File_Size' => array('min' => '1B', 'max' => '2B')
+                                                         'File_Size' => array('min' => $this->_minFileSize, 'max' => $this->_maxFileSize)
                                                      )
                                                 ));
-
-
-
 
         $this->addElement('button', 'performUpload', array(
                                                           'label' => 'Upload File',
