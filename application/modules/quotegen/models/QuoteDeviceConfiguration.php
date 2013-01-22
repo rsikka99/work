@@ -1,26 +1,15 @@
 <?php
-
-/**
- * Quotegen_Model_QuoteDeviceConfiguration
- *
- * @author Shawn Wilder
- *        
- */
 class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
 {
     /**
-     * The quote device id
-     *
      * @var int
      */
-    protected $_quoteDeviceId;
-    
+    public $quoteDeviceId;
+
     /**
-     * The device id
-     *
      * @var int
      */
-    protected $_masterDeviceId;
+    public $masterDeviceId;
     
     /**
      * The device
@@ -35,9 +24,9 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
      * @var Quotegen_Model_QuoteDevice
      */
     protected $_quoteDevice;
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::populate()
+
+    /**
+     * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
     {
@@ -45,65 +34,24 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
+
         if (isset($params->quoteDeviceId) && ! is_null($params->quoteDeviceId))
-            $this->setQuoteDeviceId($params->quoteDeviceId);
+            $this->quoteDeviceId = $params->quoteDeviceId;
+
         if (isset($params->masterDeviceId) && ! is_null($params->masterDeviceId))
-            $this->setMasterDeviceId($params->masterDeviceId);
+            $this->masterDeviceId = $params->masterDeviceId;
+
     }
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::toArray()
+
+    /**
+     * @return array
      */
     public function toArray ()
     {
         return array (
-                'quoteDeviceId' => $this->getQuoteDeviceId(), 
-                'masterDeviceId' => $this->getMasterDeviceId() 
+            "quoteDeviceId" => $this->quoteDeviceId,
+            "masterDeviceId" => $this->masterDeviceId,
         );
-    }
-
-    /**
-     * Gets the quoteDeviceId
-     *
-     * @return the $_quoteDeviceId
-     */
-    public function getQuoteDeviceId ()
-    {
-        return $this->_quoteDeviceId;
-    }
-
-    /**
-     * Sets the new quote device Id
-     *
-     * @param int $_quoteDeviceId
-     *            the new quote device id
-     */
-    public function setQuoteDeviceId ($_quoteDeviceId)
-    {
-        $this->_quoteDeviceId = $_quoteDeviceId;
-        return $this;
-    }
-
-    /**
-     * Gets the device id
-     *
-     * @return number
-     */
-    public function getMasterDeviceId ()
-    {
-        return $this->_masterDeviceId;
-    }
-
-    /**
-     * Sets the new device id
-     *
-     * @param int $_deviceId
-     *            The new device id.
-     */
-    public function setMasterDeviceId ($_deviceId)
-    {
-        $this->_masterDeviceId = $_deviceId;
-        return $this;
     }
 
     /**
@@ -115,7 +63,7 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
     {
         if (! isset($this->_device))
         {
-            $this->_device = Quotegen_Model_Mapper_Device::getInstance()->find($this->getMasterDeviceId());
+            $this->_device = Quotegen_Model_Mapper_Device::getInstance()->find($this->masterDeviceId);
         }
         return $this->_device;
     }
@@ -141,7 +89,7 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
     {
         if (! isset($this->_quoteDevice))
         {
-            $this->_quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($this->getQuoteDeviceId());
+            $this->_quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($this->quoteDeviceId);
         }
         return $this->_quoteDevice;
     }

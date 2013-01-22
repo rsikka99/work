@@ -36,7 +36,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                     $userSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
                     $quoteSetting->applyOverride($userSetting);
 
-                    $newQuoteDeviceId = $this->cloneFavoriteDeviceToQuote($deviceConfigurationId, $quoteSetting->getDeviceMargin());
+                    $newQuoteDeviceId = $this->cloneFavoriteDeviceToQuote($deviceConfigurationId, $quoteSetting->deviceMargin);
                     if ($newQuoteDeviceId)
                     {
                         $this->_helper->redirector(null, null, null, array (
@@ -71,7 +71,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
 
                             // Setup some defaults that don't get synced
                             $quoteDevice->quoteId = $this->_quoteId;
-                            $quoteDevice->margin = $quoteSetting->getDeviceMargin();
+                            $quoteDevice->margin = $quoteSetting->deviceMargin;
                             $quoteDevice->packageCost = $quoteDevice->calculatePackageCost();
                             $quoteDevice->packageMarkup = 0;
                             $quoteDevice->residual = 0;
@@ -84,8 +84,8 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
 
                             // Create Link to Device
                             $quoteDeviceConfiguration = new Quotegen_Model_QuoteDeviceConfiguration();
-                            $quoteDeviceConfiguration->setMasterDeviceId($masterDeviceId);
-                            $quoteDeviceConfiguration->setQuoteDeviceId($quoteDeviceId);
+                            $quoteDeviceConfiguration->masterDeviceId = $masterDeviceId;
+                            $quoteDeviceConfiguration->quoteDeviceId = $quoteDeviceId;
                             Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->insert($quoteDeviceConfiguration);
 
                             // Update the quote
@@ -226,11 +226,11 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
 
                             /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
                             $quoteDeviceOption = $element->quoteDeviceOption;
-                            $optionId = $quoteDeviceOption->getId();
+                            $optionId = $quoteDeviceOption->id;
                             $quantity = (int)$formValues ["option{$optionId}quantity"];
-                            if ($quantity !== (int)$quoteDeviceOption->getQuantity())
+                            if ($quantity !== (int)$quoteDeviceOption->quantity)
                             {
-                                $quoteDeviceOption->setQuantity($quantity);
+                                $quoteDeviceOption->quantity = $quantity;
                                 $optionHasChanged = true;
                             }
 
@@ -320,7 +320,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             ));
         }
 
-        $availableOptions = Quotegen_Model_Mapper_Option::getInstance()->fetchAllAvailableOptionsForQuoteDevice($quoteDevice->id, $quoteDeviceConfiguration->getMasterDeviceId());
+        $availableOptions = Quotegen_Model_Mapper_Option::getInstance()->fetchAllAvailableOptionsForQuoteDevice($quoteDevice->id, $quoteDeviceConfiguration->masterDeviceId);
         if (count($availableOptions) < 1)
         {
             $this->_helper->flashMessenger(array (
@@ -352,15 +352,15 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                     {
                         // Create a blank quote device option
                         $quoteDeviceOption = new Quotegen_Model_QuoteDeviceOption();
-                        $quoteDeviceOption->setQuoteDeviceId($quoteDevice->id);
-                        $quoteDeviceOption->setQuantity(1);
-                        $quoteDeviceOption->setIncludedQuantity(0);
+                        $quoteDeviceOption->quoteDeviceId = $quoteDevice->id;
+                        $quoteDeviceOption->quantity = 1;
+                        $quoteDeviceOption->includedQuantity = 0;
 
                         // Create a ready to use link
                         $quoteDeviceConfigurationOption = new Quotegen_Model_QuoteDeviceConfigurationOption();
 
                         $masterDeviceId = $quoteDevice->getDevice()->masterDeviceId;
-                        $quoteDeviceConfigurationOption->setMasterDeviceId($masterDeviceId);
+                        $quoteDeviceConfigurationOption->masterDeviceId = $masterDeviceId;
 
                         $deviceOptionMapper = Quotegen_Model_Mapper_DeviceOption::getInstance();
                         $quoteDeviceOptionMapper = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance();
@@ -375,9 +375,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             )));
                             $quoteDeviceOptionId = $quoteDeviceOptionMapper->insert($quoteDeviceOption);
 
-                            $quoteDeviceConfigurationOption->setOptionId($optionId);
+                            $quoteDeviceConfigurationOption->optionId = $optionId;
 
-                            $quoteDeviceConfigurationOption->setQuoteDeviceOptionId($quoteDeviceOptionId);
+                            $quoteDeviceConfigurationOption->quoteDeviceOptionId = $quoteDeviceOptionId;
                             try
                             {
                                 $quoteDeviceConfigurationOptionMapper->insert($quoteDeviceConfigurationOption);

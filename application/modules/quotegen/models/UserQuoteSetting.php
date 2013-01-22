@@ -1,27 +1,15 @@
 <?php
-
-/**
- * Quotegen_Model_UserQuoteSetting
- *
- * @author Lee Robert
- *        
- */
 class Quotegen_Model_UserQuoteSetting extends My_Model_Abstract
 {
-    
     /**
-     * The user id
-     *
      * @var int
      */
-    protected $_userId = 0;
-    
+    public $userId = 0;
+
     /**
-     * The quote setting id
-     *
      * @var int
      */
-    protected $_quoteSettingId = 0;
+    public $quoteSettingId = 0;
     
     /**
      * Gets the related quoteSetting object
@@ -29,9 +17,9 @@ class Quotegen_Model_UserQuoteSetting extends My_Model_Abstract
      * @var Quotegen_Model_QuoteSetting
      */
     protected $_quoteSetting;
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::populate()
+
+    /**
+     * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
     {
@@ -39,65 +27,24 @@ class Quotegen_Model_UserQuoteSetting extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
+
         if (isset($params->userId) && ! is_null($params->userId))
-            $this->setUserId($params->userId);
-        
+            $this->userId = $params->userId;
+
         if (isset($params->quoteSettingId) && ! is_null($params->quoteSettingId))
-            $this->setQuoteSettingId($params->quoteSettingId);
+            $this->quoteSettingId = $params->quoteSettingId;
+
     }
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::toArray()
+
+    /**
+     * @return array
      */
     public function toArray ()
     {
         return array (
-                'userId' => $this->getUserId(), 
-                'quoteSettingId' => $this->getQuoteSettingId() 
+            "userId" => $this->userId,
+            "quoteSettingId" => $this->quoteSettingId,
         );
-    }
-
-    /**
-     * Gets the user id
-     *
-     * @return number The user id
-     */
-    public function getUserId ()
-    {
-        return $this->_userId;
-    }
-
-    /**
-     * Sets the user id of the object
-     *
-     * @param number $_userId
-     *            the new user id
-     */
-    public function setUserId ($_userId)
-    {
-        $this->_userId = $_userId;
-    }
-
-    /**
-     * Gets the quote setting id
-     *
-     * @return number The quote setting id
-     */
-    public function getQuoteSettingId ()
-    {
-        return $this->_quoteSettingId;
-    }
-
-    /**
-     * Sets the quote setting id
-     *
-     * @param number $_quoteSettingId
-     *            The new quote setting id
-     */
-    public function setQuoteSettingId ($_quoteSettingId)
-    {
-        $this->_quoteSettingId = $_quoteSettingId;
-        return $this;
     }
 
     /**
@@ -109,7 +56,7 @@ class Quotegen_Model_UserQuoteSetting extends My_Model_Abstract
     {
         if (! isset($this->_quoteSetting))
         {
-            $this->_quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->find($this->getQuoteSettingId());
+            $this->_quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->find($this->quoteSettingId);
         }
         return $this->_quoteSetting;
     }

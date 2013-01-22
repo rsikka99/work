@@ -1,33 +1,30 @@
 <?php
-
-/**
- * Quotegen_Model_QuoteDeviceGroupDevice
- *
- * @author Shawn Wilder
- *        
- */
 class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
 {
     /**
-     * Foreign key that is associated with `qgen_quote_devices`
-     *
      * @var int
      */
-    protected $_quoteDeviceId;
-    
+    public $quoteDeviceId;
+
     /**
-     * Foreign key that is associated with `qgen_quote_device_groups`
-     *
      * @var int
      */
-    protected $_quoteDeviceGroupId;
-    
+    public $quoteDeviceGroupId;
+
     /**
-     * Quantity of devices in group
-     *
      * @var int
      */
-    protected $_quantity;
+    public $quantity;
+
+    /**
+     * @var int
+     */
+    public $monochromePagesQuantity;
+
+    /**
+     * @var int
+     */
+    public $colorPagesQuantity;
     
     /**
      * The quote device
@@ -42,23 +39,10 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
      * @var Quotegen_Model_QuoteDeviceGroup
      */
     protected $_quoteDeviceGroup;
-    
+
+
     /**
-     * The quantity of monochrome pages assigned to the deviced
-     *
-     * @var int
-     */
-    protected $_monochromePagesQuantity;
-    
-    /**
-     * The quantity of color pages assigned to the deviced*
-     *
-     * @var int
-     */
-    protected $_colorPagesQuantity;
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::populate()
+     * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
     {
@@ -66,96 +50,36 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
+
         if (isset($params->quoteDeviceId) && ! is_null($params->quoteDeviceId))
-            $this->setQuoteDeviceId($params->quoteDeviceId);
+            $this->quoteDeviceId = $params->quoteDeviceId;
+
         if (isset($params->quoteDeviceGroupId) && ! is_null($params->quoteDeviceGroupId))
-            $this->setQuoteDeviceGroupId($params->quoteDeviceGroupId);
+            $this->quoteDeviceGroupId = $params->quoteDeviceGroupId;
+
         if (isset($params->quantity) && ! is_null($params->quantity))
-            $this->setQuantity($params->quantity);
+            $this->quantity = $params->quantity;
+
         if (isset($params->monochromePagesQuantity) && ! is_null($params->monochromePagesQuantity))
-            $this->setMonochromePagesQuantity($params->monochromePagesQuantity);
+            $this->monochromePagesQuantity = $params->monochromePagesQuantity;
+
         if (isset($params->colorPagesQuantity) && ! is_null($params->colorPagesQuantity))
-            $this->setColorPagesQuantity($params->colorPagesQuantity);
+            $this->colorPagesQuantity = $params->colorPagesQuantity;
+
     }
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::toArray()
+
+    /**
+     * @return array
      */
     public function toArray ()
     {
         return array (
-                'quoteDeviceId' => $this->getQuoteDeviceId(), 
-                'quoteDeviceGroupId' => $this->getQuoteDeviceGroupId(), 
-                'quantity' => $this->getQuantity(), 
-                'monochromePagesQuantity' => $this->getMonochromePagesQuantity(), 
-                'colorPagesQuantity' => $this->getColorPagesQuantity() 
+            "quoteDeviceId" => $this->quoteDeviceId,
+            "quoteDeviceGroupId" => $this->quoteDeviceGroupId,
+            "quantity" => $this->quantity,
+            "monochromePagesQuantity" => $this->monochromePagesQuantity,
+            "colorPagesQuantity" => $this->colorPagesQuantity,
         );
-    }
-
-    /**
-     * Gets the quoteDeviceId
-     *
-     * @return the quote device id of the objevt
-     */
-    public function getQuoteDeviceId ()
-    {
-        return $this->_quoteDeviceId;
-    }
-
-    /**
-     * Sets the quoteDevice idof the object
-     *
-     * @param number $_quoteDeviceId
-     *            the new quoteDeviceID
-     */
-    public function setQuoteDeviceId ($_quoteDeviceId)
-    {
-        $this->_quoteDeviceId = $_quoteDeviceId;
-        return $this;
-    }
-
-    /**
-     * Gets the quoteDeviceGroupId of the object
-     *
-     * @return the qouteDeviceGroupId of the object
-     */
-    public function getQuoteDeviceGroupId ()
-    {
-        return $this->_quoteDeviceGroupId;
-    }
-
-    /**
-     * Sets a new qouteDeviceGroupId for the object
-     *
-     * @param int $_quoteDeviceGroupId
-     *            the new quoteDeviceGroupId
-     */
-    public function setQuoteDeviceGroupId ($_quoteDeviceGroupId)
-    {
-        $this->_quoteDeviceGroupId = $_quoteDeviceGroupId;
-        return $this;
-    }
-
-    /**
-     * Gets the amount of devices attached to the group
-     *
-     * @return the $_quantity of the devices attached to the group
-     */
-    public function getQuantity ()
-    {
-        return $this->_quantity;
-    }
-
-    /**
-     * Sets a new quantity for the qouteDeviceGroupId and qouteDeviceId
-     *
-     * @param int $_quantity
-     *            the new quantity
-     */
-    public function setQuantity ($_quantity)
-    {
-        $this->_quantity = $_quantity;
-        return $this;
     }
 
     /**
@@ -167,7 +91,7 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
     {
         if (! isset($this->_quoteDevice))
         {
-            $this->_quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($this->getQuoteDeviceId());
+            $this->_quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($this->quoteDeviceId);
         }
         return $this->_quoteDevice;
     }
@@ -192,7 +116,7 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
     {
         if (! isset($this->_quoteDeviceGroup))
         {
-            $this->_quoteDeviceGroup = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->find($this->getQuoteDeviceGroupId());
+            $this->_quoteDeviceGroup = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->find($this->quoteDeviceGroupId);
         }
         return $this->_quoteDeviceGroup;
     }
@@ -209,54 +133,12 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
     }
 
     /**
-     * Gets the number of _monochrome pages for this device
-     *
-     * @return the $_monochromePagesQuantity
-     */
-    public function getMonochromePagesQuantity ()
-    {
-        return $this->_monochromePagesQuantity;
-    }
-
-    /**
-     * Sets the number of _monochrome pages for this device
-     *
-     * @param number $_monochromePagesQuantity            
-     */
-    public function setMonochromePagesQuantity ($_monochromePagesQuantity)
-    {
-        $this->_monochromePagesQuantity = $_monochromePagesQuantity;
-        return $this;
-    }
-
-    /**
-     * Gets the number of color pages for this device
-     *
-     * @return the $_colorPagesQuantity
-     */
-    public function getColorPagesQuantity ()
-    {
-        return $this->_colorPagesQuantity;
-    }
-
-    /**
-     * Gets the number of color pages for this device
-     *
-     * @param number $_colorPagesQuantity            
-     */
-    public function setColorPagesQuantity ($_colorPagesQuantity)
-    {
-        $this->_colorPagesQuantity = $_colorPagesQuantity;
-        return $this;
-    }
-
-    /**
      * Calculates the sub total for this device (quantity * package price)
      *
      * @return number
      */
     public function calculateSubtotal ()
     {
-        return $this->getQuantity() * $this->getQuoteDevice()->getPackagePrice();
+        return $this->quantity * $this->getQuoteDevice()->getPackagePrice();
     }
 }

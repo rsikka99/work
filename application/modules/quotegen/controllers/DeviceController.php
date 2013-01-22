@@ -238,7 +238,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
                             {
                                 $includeQuantity = 0;
                             }
-                            $object->deviceOption->setIncludedQuantity($includeQuantity);
+                            $object->deviceOption->includedQuantity = $includeQuantity;
                             $deviceOptionMapper->save($object->deviceOption);                            
                         }
 

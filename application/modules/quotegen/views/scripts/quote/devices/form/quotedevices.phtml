@@ -29,14 +29,14 @@ $addDeviceOptionsHtml = implode("\n", $addDeviceOptions);
         <tr class="header-row">
             <th colspan="4">
                 <div class="input-prepend">
-                <button type="submit" name="addConfiguration" value="<?php echo $quoteDeviceGroup->getId(); ?>" class="btn btn-success">Add</button><select name="deviceConfigurationId-<?php echo $quoteDeviceGroup->getId(); ?>">
+                <button type="submit" name="addConfiguration" value="<?php echo $quoteDeviceGroup->id; ?>" class="btn btn-success">Add</button><select name="deviceConfigurationId-<?php echo $quoteDeviceGroup->id; ?>">
                     <?php echo $addDeviceOptionsHtml; ?>
                 </select>
                 </div>
             </th>
             <th colspan="2" style="text-align: center;">Purchase</th>
             <th colspan="3" style="text-align: center">Lease</th>
-            <th style="width: 30px;"><button type="submit" name="deleteGroup" value="<?php echo $quoteDeviceGroup->getId(); ?>" title="Delete Group" class="btn btn-danger btn-mini"><i class="icon-trash icon-white"></i></button></th>
+            <th style="width: 30px;"><button type="submit" name="deleteGroup" value="<?php echo $quoteDeviceGroup->id; ?>" title="Delete Group" class="btn btn-danger btn-mini"><i class="icon-trash icon-white"></i></button></th>
         </tr>
         <tr class="header-row">
             <th>Item</th>
@@ -105,7 +105,7 @@ $addDeviceOptionsHtml = implode("\n", $addDeviceOptions);
         <?php if (count($quoteDevice->getQuoteDeviceOptions()) > 0) : ?>
             <?php foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
             <tr class="optionRow">
-                <td style="padding-left: 25px;"><?php echo $quoteDeviceOption->getName(); ?><i class="icon-info-sign pull-right" data-placement="right" data-title="<?php echo $quoteDeviceOption->getOemSku(); ?>" data-content="<?php echo $quoteDeviceOption->getDescription(); ?>"></i><br><h5><small><?php echo $quoteDeviceOption->getOemSku(); ?></small></h5></td>
+                <td style="padding-left: 25px;"><?php echo $quoteDeviceOption->name; ?><i class="icon-info-sign pull-right" data-placement="right" data-title="<?php echo $quoteDeviceOption->oemSku; ?>" data-content="<?php echo $quoteDeviceOption->description; ?>"></i><br><h5><small><?php echo $quoteDeviceOption->oemSku; ?></small></h5></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -130,7 +130,7 @@ $addDeviceOptionsHtml = implode("\n", $addDeviceOptions);
         <th></th>
         <th></th>
         <th></th>
-        <th><button type="submit" name="addPages" value="<?php echo $quoteDeviceGroup->getId(); ?>" class="btn btn-success btn-mini"><i class="icon-plus-sign icon-white"></i></button></th>
+        <th><button type="submit" name="addPages" value="<?php echo $quoteDeviceGroup->id; ?>" class="btn btn-success btn-mini"><i class="icon-plus-sign icon-white"></i></button></th>
     </tr>
     <?php if (count($group->quoteDeviceGroupPages) > 0) :?>
     <?php foreach ($group->quoteDeviceGroupPages as $set) : 

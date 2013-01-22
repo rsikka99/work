@@ -109,7 +109,7 @@ class Quotegen_QuotesettingController extends Zend_Controller_Action
                         }
                         // Update quoteSetting and message to comfirm
                         $quoteSetting->populate($values);
-                        $quoteSetting->setId($quoteSettingId);
+                        $quoteSetting->id = $quoteSettingId;
                         
                         $quoteSettingMapper->save($quoteSetting, $quoteSettingId);
                         $this->_helper->flashMessenger(array (

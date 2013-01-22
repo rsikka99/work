@@ -79,7 +79,7 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
         
         foreach ( $this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
-            $groupDropdown->addMultiOption("{$quoteDeviceGroup->getId()}", $quoteDeviceGroup->getName());
+            $groupDropdown->addMultiOption("{$quoteDeviceGroup->id}", $quoteDeviceGroup->name);
         }
         $addDeviceToGroupSubform->addElement($groupDropdown);
         
@@ -152,11 +152,11 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
         foreach ( $this->getQuote()->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
             
-            $validQuoteGroupIds [] = "{$quoteDeviceGroup->getId()}";
-            $this->addElement("text", "groupName_{$quoteDeviceGroup->getId()}",array(
+            $validQuoteGroupIds [] = "{$quoteDeviceGroup->id}";
+            $this->addElement("text", "groupName_{$quoteDeviceGroup->id}",array(
                     'required' => true,
                     'class' => 'span4',
-                    'value' => $quoteDeviceGroup->getName(), 
+                    'value' => $quoteDeviceGroup->name,
                     'filters' => array (
                             'StringTrim',
                             'StripTags'
@@ -175,11 +175,11 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
             /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
-                $deviceQuantitySubform->addElement('text', "quantity_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}_{$quoteDeviceGroupDevice->getQuoteDeviceId()}", array (
+                $deviceQuantitySubform->addElement('text', "quantity_{$quoteDeviceGroupDevice->quoteDeviceGroupId}_{$quoteDeviceGroupDevice->quoteDeviceId}", array (
                         'label' => 'Quantity', 
                         'required' => true, 
                         'class' => 'span1', 
-                        'value' => $quoteDeviceGroupDevice->getQuantity(), 
+                        'value' => $quoteDeviceGroupDevice->quantity,
                         'validators' => array (
                                 'Int', 
                                 array (
@@ -192,7 +192,7 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
                         ) 
                 ));
                 
-                $validQuoteGroupId_DeviceId_Combinations [] = "{$quoteDeviceGroupDevice->getQuoteDeviceId()}_{$quoteDeviceGroupDevice->getQuoteDeviceGroupId()}";
+                $validQuoteGroupId_DeviceId_Combinations [] = "{$quoteDeviceGroupDevice->quoteDeviceId}_{$quoteDeviceGroupDevice->quoteDeviceGroupId}";
             }
         }
         

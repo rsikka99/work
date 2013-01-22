@@ -13,21 +13,21 @@
                     <th style="width: 70px;">Subtotal</th>
                 </tr>
                 <?php foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice) : /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */ ?>
-                	<?php if($quoteDeviceGroupDevice->getQuantity() > 0) :?>
+                	<?php if($quoteDeviceGroupDevice->quantity > 0) :?>
 	                    <tr class="deviceRow">
 							<th><h5><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->name; ?></h5></th>
 	                    	<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->oemSku; ?></td>
 	                    	<td></td>           
 	                    	<td style="text-align: right;"><?php echo $this->currency($quoteDeviceGroupDevice->getQuoteDevice()->calculatePackagePrice()); ?></td>
-	                    	<td style="text-align: right;"><?php echo number_format($quoteDeviceGroupDevice->getQuantity()); ?></td>
+	                    	<td style="text-align: right;"><?php echo number_format($quoteDeviceGroupDevice->quantity); ?></td>
 	                    	<td style="text-align: right;"><?php echo $this->currency($quoteDeviceGroupDevice->getQuoteDevice()->calculateTotalPrice()); ?></td>
 	                    </tr>
 	                    <?php if (count($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() > 0)) : ?>
 	                        <?php foreach ($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
 	                            <tr class="optionRow">
-	                                <td><?php echo $quoteDeviceOption->getName(); ?></td>
-	                                <td><?php echo $quoteDeviceOption->getOemSku(); ?></td>
-	                                <td><?php echo $quoteDeviceOption->getDescription(); ?></td>
+	                                <td><?php echo $quoteDeviceOption->name; ?></td>
+	                                <td><?php echo $quoteDeviceOption->oemSku; ?></td>
+	                                <td><?php echo $quoteDeviceOption->description; ?></td>
 	                                <td></td>
 	                                <td></td>
 	                                <td></td>

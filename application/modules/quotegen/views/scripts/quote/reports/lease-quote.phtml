@@ -3,7 +3,7 @@
     <div class="span12">
         <?php foreach ($quote->getQuoteDeviceGroups() as $quoteDeviceGroup) : /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */ ?>
         <?php if($quoteDeviceGroup->calculateTotalQuantity() > 0 ) : ?>
-        	<h3><?php echo $this->escape($quoteDeviceGroup->getName()); ?></h3>
+        	<h3><?php echo $this->escape($quoteDeviceGroup->name); ?></h3>
             <table class="table table-condensed table-bordered table-striped quoteDeviceTable">
                 <tr class="header-row">
                     <th style="width: 220px;">Item</th>
@@ -14,21 +14,21 @@
                     <th style="width: 70px;">Subtotal</th>
                 </tr>
                 <?php foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice) : /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */ ?>
-                    <?php if($quoteDeviceGroupDevice->getQuantity() > 0) : ?>
+                    <?php if($quoteDeviceGroupDevice->quantity > 0) : ?>
                     	<tr class="deviceRow">
                 	        <th><h5><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->name; ?></h5></th>
             	        <td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->oemSku; ?></td>
         	            <td></td>           
     	                <td style="text-align: right;"></td>
-	                    <td style="text-align: right;"><?php echo number_format($quoteDeviceGroupDevice->getQuantity()); ?></td>
+	                    <td style="text-align: right;"><?php echo number_format($quoteDeviceGroupDevice->quantity); ?></td>
                 	    <td style="text-align: right;"></td>
             	        </tr>
         	            <?php if (count($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions()) > 0) : ?>
     	                    <?php foreach ($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
 	                            <tr class="optionRow">
-                        	        <td><?php echo $quoteDeviceOption->getName(); ?></td>
-                    	            <td><?php echo $quoteDeviceOption->getOemSku(); ?></td>
-                	                <td><?php echo $quoteDeviceOption->getDescription(); ?></td>
+                        	        <td><?php echo $quoteDeviceOption->name; ?></td>
+                    	            <td><?php echo $quoteDeviceOption->oemSku; ?></td>
+                	                <td><?php echo $quoteDeviceOption->description; ?></td>
             	                    <td></td>
         	                        <td></td>
     	                            <td></td>

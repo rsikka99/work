@@ -1,27 +1,15 @@
 <?php
-
-/**
- * Quotegen_Model_QuoteLeaseTerm
- *
- * @author Lee Robert
- *        
- */
 class Quotegen_Model_QuoteLeaseTerm extends My_Model_Abstract
 {
-    
     /**
-     * The quote id
-     *
      * @var int
      */
-    protected $_quoteId;
-    
+    public $quoteId;
+
     /**
-     * The lease term id
-     *
      * @var int
      */
-    protected $_leasingSchemaTermId;
+    public $leasingSchemaTermId;
     
     /**
      * The quote
@@ -36,9 +24,9 @@ class Quotegen_Model_QuoteLeaseTerm extends My_Model_Abstract
      * @var Quotegen_Model_LeasingSchemaTerm
      */
     protected $_leaseTerm;
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::populate()
+
+    /**
+     * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
     {
@@ -46,65 +34,24 @@ class Quotegen_Model_QuoteLeaseTerm extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
+
         if (isset($params->quoteId) && ! is_null($params->quoteId))
-            $this->setQuoteId($params->quoteId);
+            $this->quoteId = $params->quoteId;
+
         if (isset($params->leasingSchemaTermId) && ! is_null($params->leasingSchemaTermId))
-            $this->setLeasingSchemaTermId($params->leasingSchemaTermId);
+            $this->leasingSchemaTermId = $params->leasingSchemaTermId;
+
     }
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::toArray()
+
+    /**
+     * @return array
      */
     public function toArray ()
     {
         return array (
-                'quoteId' => $this->getQuoteId(), 
-                'leasingSchemaTermId' => $this->getLeasingSchemaTermId() 
+            "quoteId" => $this->quoteId,
+            "leasingSchemaTermId" => $this->leasingSchemaTermId,
         );
-    }
-
-    /**
-     * Gets the quote id
-     *
-     * @return number The quote id
-     */
-    public function getQuoteId ()
-    {
-        return $this->_quoteId;
-    }
-
-    /**
-     * Sets a new quote id
-     *
-     * @param number $_quoteId
-     *            The new id
-     */
-    public function setQuoteId ($_quoteId)
-    {
-        $this->_quoteId = $_quoteId;
-        return $this;
-    }
-
-    /**
-     * Gets the lease term id
-     *
-     * @return number The lease term id
-     */
-    public function getLeasingSchemaTermId ()
-    {
-        return $this->_leasingSchemaTermId;
-    }
-
-    /**
-     * Sets a lease term id
-     *
-     * @param number $_leasingSchemaTermId
-     *            The id
-     */
-    public function setLeasingSchemaTermId ($_leasingSchemaTermId)
-    {
-        $this->_leasingSchemaTermId = $_leasingSchemaTermId;
-        return $this;
     }
 
     /**
@@ -116,7 +63,7 @@ class Quotegen_Model_QuoteLeaseTerm extends My_Model_Abstract
     {
         if (! isset($this->_quote))
         {
-            $this->_quote = Quotegen_Model_Mapper_Quote::getInstance()->find($this->getQuoteId());
+            $this->_quote = Quotegen_Model_Mapper_Quote::getInstance()->find($this->quoteId);
         }
         return $this->_quote;
     }
@@ -141,7 +88,7 @@ class Quotegen_Model_QuoteLeaseTerm extends My_Model_Abstract
     {
         if (! isset($this->_quote))
         {
-            $this->_leaseTerm = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->find($this->getLeasingSchemaTermId());
+            $this->_leaseTerm = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->find($this->leasingSchemaTermId);
         }
         return $this->_leaseTerm;
     }

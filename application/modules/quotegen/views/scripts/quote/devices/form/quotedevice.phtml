@@ -16,7 +16,7 @@ $form = $this->element;
         <?php echo $element->quantity->renderLabel(); ?>
         <div class="controls">
         	<div class="input-prepend input-append">
-        		<span class="add-on">Qty:</span><?php echo trim($element->quantity->renderViewHelper()); ?><span class='add-on' style="width: 150px; text-align: left;">Cost Per Unit: <?php echo $this->currency((float)$element->quoteDeviceOption->getCost()); ?></span><a href="<?php echo $this->url(array('action' => 'delete-option-from-quote-device', 'quoteDeviceOptionId' => $element->quantity->getDescription()));?>" class="add-on btn btn-danger"><i class="icon-trash"></i></a>
+        		<span class="add-on">Qty:</span><?php echo trim($element->quantity->renderViewHelper()); ?><span class='add-on' style="width: 150px; text-align: left;">Cost Per Unit: <?php echo $this->currency((float)$element->quoteDeviceOption->cost); ?></span><a href="<?php echo $this->url(array('action' => 'delete-option-from-quote-device', 'quoteDeviceOptionId' => $element->quantity->getDescription()));?>" class="add-on btn btn-danger"><i class="icon-trash"></i></a>
         	</div>
         	<?php
         	    echo $element->quantity->renderErrors();

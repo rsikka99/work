@@ -704,12 +704,12 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
                 // Total weight
-                $monochromeTotal += $quoteDeviceGroupDevice->getMonochromePagesQuantity() * $quoteDeviceGroupDevice->getQuantity();
+                $monochromeTotal += $quoteDeviceGroupDevice->monochromePagesQuantity * $quoteDeviceGroupDevice->quantity;
 
                 // Total Cost for pages
-                if ($quoteDeviceGroupDevice->getMonochromePagesQuantity() > 0)
+                if ($quoteDeviceGroupDevice->monochromePagesQuantity > 0)
                 {
-                    $quoteDeviceGroupDeviceCost += $quoteDeviceGroupDevice->getMonochromePagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->calculateMonochromeCostPerPage() * $quoteDeviceGroupDevice->getQuantity();
+                    $quoteDeviceGroupDeviceCost += $quoteDeviceGroupDevice->monochromePagesQuantity * $quoteDeviceGroupDevice->getQuoteDevice()->calculateMonochromeCostPerPage() * $quoteDeviceGroupDevice->quantity;
 					$quoteHasPages = true;
                 }
                 $totalCpp = $quoteDeviceGroupDevice->getQuoteDevice()->calculateMonochromeCostPerPage();
@@ -747,12 +747,13 @@ class Quotegen_Model_Quote extends My_Model_Abstract
 
         foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
         {
+            /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
             {
-                $colorTotal += $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuantity();
-                if ($quoteDeviceGroupDevice->getColorPagesQuantity() > 0)
+                $colorTotal += $quoteDeviceGroupDevice->colorPagesQuantity * $quoteDeviceGroupDevice->quantity;
+                if ($quoteDeviceGroupDevice->colorPagesQuantity > 0)
                 {
-                    $colorPageCostTotal += $quoteDeviceGroupDevice->getColorPagesQuantity() * $quoteDeviceGroupDevice->getQuoteDevice()->calculateColorCostPerPage() * $quoteDeviceGroupDevice->getQuantity();
+                    $colorPageCostTotal += $quoteDeviceGroupDevice->colorPagesQuantity * $quoteDeviceGroupDevice->getQuoteDevice()->calculateColorCostPerPage() * $quoteDeviceGroupDevice->quantity;
                     $quoteHasPages = true;
                 }
                 $totalCpp = $quoteDeviceGroupDevice->getQuoteDevice()->calculateColorCostPerPage();

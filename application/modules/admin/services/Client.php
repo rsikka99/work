@@ -322,7 +322,7 @@ class Admin_Service_Client
         $region = Quotegen_Model_Mapper_Region::getInstance()->getByRegionNameAndCountryId($regionName, $countryId);
         if ($region)
         {
-            return $region->getId();
+            return $region->id;
         }
         
         return false;
@@ -338,7 +338,7 @@ class Admin_Service_Client
         $address = Quotegen_Model_Mapper_Address::getInstance()->getAddressByClientId($clientId);
         
         $address->region = Quotegen_Model_Mapper_Region::getInstance()->getById($address->region)
-            ->getRegion();
+            ->region;
         
         $contact = Quotegen_Model_Mapper_Contact::getInstance()->getContactByClientId($clientId);
         $combinedClientData = $client->toArray();

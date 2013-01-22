@@ -1,68 +1,47 @@
 <?php
-
-/**
- * Quotegen_Model_QuoteSetting
- *
- * @author John Sadler
- *        
- */
 class Quotegen_Model_QuoteSetting extends My_Model_Abstract
 {
     const SYSTEM_ROW_ID = 1;
-    
+
     /**
-     * The id assigned by the database
-     *
      * @var int
      */
-    protected $_id = 0;
+    public $id = 0;
+
     /**
-     * The default black & white page coverage value
-     *
      * @var double
      */
-    protected $_pageCoverageMonochrome;
+    public $pageCoverageMonochrome;
+
     /**
-     * The default color page coverage value
-     *
      * @var double
      */
-    protected $_pageCoverageColor;
-    
+    public $pageCoverageColor;
+
     /**
-     * The default device margin value
-     *
      * @var double
      */
-    protected $_deviceMargin;
-    
+    public $deviceMargin;
+
     /**
-     * The default page margin value
-     *
      * @var double
      */
-    protected $_pageMargin;
-    
+    public $pageMargin;
+
     /**
-     * The default pricing config preference
-     *
      * @var int
      */
-    protected $_pricingConfigId;
-    
+    public $pricingConfigId;
+
     /**
-     * Service cost per page
-     *
      * @var float
      */
-    protected $_serviceCostPerPage;
-    
+    public $serviceCostPerPage;
+
     /**
-     * Admin cost per page
-     *
      * @var float
      */
-    protected $_adminCostPerPage;
+    public $adminCostPerPage;
     
     /**
      * A pricing config object
@@ -70,8 +49,9 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
      * @var Proposalgen_Model_PricingConfig
      */
     protected $_pricingConfig;
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::populate()
+
+    /**
+     * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
     {
@@ -79,22 +59,31 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
+
         if (isset($params->id) && ! is_null($params->id))
-            $this->setId($params->id);
+            $this->id = $params->id;
+
         if (isset($params->pageCoverageMonochrome) && ! is_null($params->pageCoverageMonochrome))
-            $this->setPageCoverageMonochrome($params->pageCoverageMonochrome);
+            $this->pageCoverageMonochrome = $params->pageCoverageMonochrome;
+
         if (isset($params->pageCoverageColor) && ! is_null($params->pageCoverageColor))
-            $this->setPageCoverageColor($params->pageCoverageColor);
+            $this->pageCoverageColor = $params->pageCoverageColor;
+
         if (isset($params->deviceMargin) && ! is_null($params->deviceMargin))
-            $this->setDeviceMargin($params->deviceMargin);
+            $this->deviceMargin = $params->deviceMargin;
+
         if (isset($params->pageMargin) && ! is_null($params->pageMargin))
-            $this->setPageMargin($params->pageMargin);
+            $this->pageMargin = $params->pageMargin;
+
         if (isset($params->pricingConfigId) && ! is_null($params->pricingConfigId))
-            $this->setPricingConfigId($params->pricingConfigId);
-        if (isset($params->adminCostPerPage) && ! is_null($params->adminCostPerPage))
-            $this->setAdminCostPerPage($params->adminCostPerPage);
+            $this->pricingConfigId = $params->pricingConfigId;
+
         if (isset($params->serviceCostPerPage) && ! is_null($params->serviceCostPerPage))
-            $this->setServiceCostPerPage($params->serviceCostPerPage);
+            $this->serviceCostPerPage = $params->serviceCostPerPage;
+
+        if (isset($params->adminCostPerPage) && ! is_null($params->adminCostPerPage))
+            $this->adminCostPerPage = $params->adminCostPerPage;
+
     }
 
     /**
@@ -119,156 +108,42 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
         
         // Do the same logic as populate, except never set the id.
         if (isset($settings->pageCoverageMonochrome) && ! is_null($settings->pageCoverageMonochrome))
-            $this->setPageCoverageMonochrome($settings->pageCoverageMonochrome);
+            $this->pageCoverageMonochrome = $settings->pageCoverageMonochrome;
         if (isset($settings->pageCoverageColor) && ! is_null($settings->pageCoverageColor))
-            $this->setPageCoverageColor($settings->pageCoverageColor);
+            $this->pageCoverageColor = $settings->pageCoverageColor;
         if (isset($settings->deviceMargin) && ! is_null($settings->deviceMargin))
-            $this->setDeviceMargin($settings->deviceMargin);
+            $this->deviceMargin = $settings->deviceMargin;
         if (isset($settings->pageMargin) && ! is_null($settings->pageMargin))
-            $this->setPageMargin($settings->pageMargin);
+            $this->pageMargin = $settings->pageMargin;
         if (isset($settings->serviceCostPerPage) && ! is_null($settings->serviceCostPerPage))
-            $this->setServiceCostPerPage($settings->serviceCostPerPage);
+            $this->serviceCostPerPage = $settings->serviceCostPerPage;
         if (isset($settings->adminCostPerPage) && ! is_null($settings->adminCostPerPage))
-            $this->setAdminCostPerPage($settings->adminCostPerPage);
+            $this->adminCostPerPage = $settings->adminCostPerPage;
         
         if (isset($settings->pricingConfigId) && ! is_null($settings->pricingConfigId))
         {
             if ($settings->pricingConfigId !== Proposalgen_Model_PricingConfig::NONE)
             {
-                $this->setPricingConfigId($settings->pricingConfigId);
+                $this->pricingConfigId = $settings->pricingConfigId;
             }
         }
     }
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::toArray()
+
+    /**
+     * @return array
      */
     public function toArray ()
     {
         return array (
-                'id' => $this->getId(), 
-                'pageCoverageMonochrome' => $this->getPageCoverageMonochrome(), 
-                'pageCoverageColor' => $this->getPageCoverageColor(), 
-                'deviceMargin' => $this->getDeviceMargin(), 
-                'pageMargin' => $this->getPageMargin(), 
-                'pricingConfigId' => $this->getPricingConfigId(), 
-                'serviceCostPerPage' => $this->getServiceCostPerPage(), 
-                'adminCostPerPage' => $this->getAdminCostPerPage() 
+            "id" => $this->id,
+            "pageCoverageMonochrome" => $this->pageCoverageMonochrome,
+            "pageCoverageColor" => $this->pageCoverageColor,
+            "deviceMargin" => $this->deviceMargin,
+            "pageMargin" => $this->pageMargin,
+            "pricingConfigId" => $this->pricingConfigId,
+            "serviceCostPerPage" => $this->serviceCostPerPage,
+            "adminCostPerPage" => $this->adminCostPerPage,
         );
-    }
-
-    /**
-     *
-     * @return the $_id
-     */
-    public function getId ()
-    {
-        return $this->_id;
-    }
-
-    /**
-     *
-     * @param number $_id            
-     */
-    public function setId ($_id)
-    {
-        $this->_id = $_id;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $_pageCoverageMonochrome
-     */
-    public function getPageCoverageMonochrome ()
-    {
-        return $this->_pageCoverageMonochrome;
-    }
-
-    /**
-     *
-     * @param number $_pageCoverageMonochrome            
-     */
-    public function setPageCoverageMonochrome ($_pageCoverageMonochrome)
-    {
-        $this->_pageCoverageMonochrome = $_pageCoverageMonochrome;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $_pageCoverageColor
-     */
-    public function getPageCoverageColor ()
-    {
-        return $this->_pageCoverageColor;
-    }
-
-    /**
-     *
-     * @param number $_pageCoverageColor            
-     */
-    public function setPageCoverageColor ($_pageCoverageColor)
-    {
-        $this->_pageCoverageColor = $_pageCoverageColor;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $_deviceMargin
-     */
-    public function getDeviceMargin ()
-    {
-        return $this->_deviceMargin;
-    }
-
-    /**
-     *
-     * @param number $_deviceMargin            
-     */
-    public function setDeviceMargin ($_deviceMargin)
-    {
-        $this->_deviceMargin = $_deviceMargin;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $_pageMargin
-     */
-    public function getPageMargin ()
-    {
-        return $this->_pageMargin;
-    }
-
-    /**
-     *
-     * @param number $_pageMargin            
-     */
-    public function setPageMargin ($_pageMargin)
-    {
-        $this->_pageMargin = $_pageMargin;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $_pricingConfigId
-     */
-    public function getPricingConfigId ()
-    {
-        return $this->_pricingConfigId;
-    }
-
-    /**
-     *
-     * @param number $_pricingConfigId            
-     */
-    public function setPricingConfigId ($_pricingConfigId)
-    {
-        $this->_pricingConfigId = $_pricingConfigId;
-        return $this;
     }
 
     /**
@@ -280,7 +155,7 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
     {
         if (! isset($this->_pricingConfig))
         {
-            $this->_pricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->getPricingConfigId());
+            $this->_pricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->pricingConfigId);
         }
         return $this->_pricingConfig;
     }
@@ -294,48 +169,6 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
     public function setPricingConfig ($_pricingConfig)
     {
         $this->_pricingConfig = $_pricingConfig;
-        return $this;
-    }
-
-    /**
-     * Gets the service cost per page
-     *
-     * @return number
-     */
-    public function getServiceCostPerPage ()
-    {
-        return $this->_serviceCostPerPage;
-    }
-
-    /**
-     * Sets the service cost per page
-     *
-     * @param number $_serviceCostPerPage            
-     */
-    public function setServiceCostPerPage ($_serviceCostPerPage)
-    {
-        $this->_serviceCostPerPage = $_serviceCostPerPage;
-        return $this;
-    }
-
-    /**
-     * Gets the admin cost per page
-     *
-     * @return number
-     */
-    public function getAdminCostPerPage ()
-    {
-        return $this->_adminCostPerPage;
-    }
-
-    /**
-     * Sets the admin cost per page
-     *
-     * @param number $_adminCostPerPage            
-     */
-    public function setAdminCostPerPage ($_adminCostPerPage)
-    {
-        $this->_adminCostPerPage = $_adminCostPerPage;
         return $this;
     }
 }

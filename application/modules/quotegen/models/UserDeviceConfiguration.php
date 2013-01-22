@@ -1,31 +1,19 @@
 <?php
-
-/**
- * Quotegen_Model_UserDeviceConfiguration
- *
- * @author Shawn Wilder
- *        
- */
 class Quotegen_Model_UserDeviceConfiguration extends My_Model_Abstract
 {
     /**
-     * The device configuration id
-     *
      * @var int
      */
-    protected $_deviceConfigurationId;
-    
-    /**
-     * The user id
-     *
-     * @var int
-     */
-    protected $_userId;
-    
+    public $deviceConfigurationId;
 
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::populate()
+    /**
+     * @var int
+     */
+    public $userId;
+
+
+    /**
+     * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
     {
@@ -33,67 +21,23 @@ class Quotegen_Model_UserDeviceConfiguration extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
+
         if (isset($params->deviceConfigurationId) && ! is_null($params->deviceConfigurationId))
-            $this->setDeviceConfigurationId($params->deviceConfigurationId);
+            $this->deviceConfigurationId = $params->deviceConfigurationId;
+
         if (isset($params->userId) && ! is_null($params->userId))
-            $this->setUserId($params->userId);
+            $this->userId = $params->userId;
 
     }
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::toArray()
+
+    /**
+     * @return array
      */
     public function toArray ()
     {
         return array (
-                'id' => $this->getId(), 
-                'userId' => $this->getUserId(), 
+            "deviceConfigurationId" => $this->deviceConfigurationId,
+            "userId" => $this->userId,
         );
     }
-
-    /**
-     * Gets the device configuration id of the object
-     *
-     * @return the $_deviceConfigurationId
-     */
-    public function getDeviceConfigurationId ()
-    {
-        return $this->_deviceConfigurationId;
-    }
-
-    /**
-     * Sets a new device configuration id for the object
-     *
-     * @param number $_deviceConfigurationId
-     *            the new device configuration to be set
-     */
-    public function setDeviceConfigurationId ($_deviceConfigurationId)
-    {
-        $this->_deviceConfigurationId = $_deviceConfigurationId;
-        return $this;
-    }
-
-    /**
-     * Get the userId of the object
-     *
-     * @return the $_userId
-     */
-    public function getUserId ()
-    {
-        return $this->_userId;
-    }
-
-    /**
-     * Sets the new userId of the object
-     *
-     * @param number $_userId
-     *            The new objects userId
-     */
-    public function setUserId ($_userId)
-    {
-        $this->_userId = $_userId;
-        return $this;
-    }
-
-
 }

@@ -166,8 +166,8 @@ class Quotegen_Form_EditQuote extends EasyBib_Form
         $userSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
         $quoteSetting->applyOverride($userSetting);
         
-        $pageCoverageColor->setDescription($quoteSetting->getPageCoverageColor());
-        $pageCoverageMonochrome->setDescription($quoteSetting->getPageCoverageMonochrome());
+        $pageCoverageColor->setDescription($quoteSetting->pageCoverageColor);
+        $pageCoverageMonochrome->setDescription($quoteSetting->pageCoverageMonochrome);
         
         $pricingConfigDropdown = new Zend_Form_Element_Select('pricingConfigId', array (
                 'label' => 'Toner Preference:' 
@@ -176,11 +176,11 @@ class Quotegen_Form_EditQuote extends EasyBib_Form
         /* @var $pricingConfig Proposalgen_Model_PricingConfig */
         foreach ( Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll() as $pricingConfig )
         {
-            $pricingConfigDropdown->addMultiOption($pricingConfig->getPricingConfigId(), $pricingConfig->getConfigName());
+            $pricingConfigDropdown->addMultiOption($pricingConfig->pricingConfigId, $pricingConfig->configName);
         }
         $this->addElement($pricingConfigDropdown);
         
-        $pricingConfigDropdown->setDescription($quoteSetting->getPricingConfigId());
+        $pricingConfigDropdown->setDescription($quoteSetting->pricingConfigId);
         
         $this->addElement('text', 'quoteDate', array (
                 'label' => 'Quote Date:' 

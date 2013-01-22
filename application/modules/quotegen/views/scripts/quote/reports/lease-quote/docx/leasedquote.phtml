@@ -37,7 +37,7 @@ foreach ( $this->quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
         /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
         foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
         {
-            if ($quoteDeviceGroupDevice->getQuantity() > 0)
+            if ($quoteDeviceGroupDevice->quantity > 0)
             {
                 $device = $quoteDeviceGroupDevice->getQuoteDevice();
                 $table->addRow($tcStyle->device->rowheight);
@@ -48,7 +48,7 @@ foreach ( $this->quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
                 // Description and features
                 $table->addCell($tcStyle->col3Width, $tcStyle->device->cell3->cellStyle);
                 // Quantity
-                $table->addCell($tcStyle->col4Width, $tcStyle->device->cell4->cellStyle)->addText(number_format($quoteDeviceGroupDevice->getQuantity()), $tcStyle->device->cell4->fontStyle, $tcStyle->device->cell4->paragraphStyle);
+                $table->addCell($tcStyle->col4Width, $tcStyle->device->cell4->cellStyle)->addText(number_format($quoteDeviceGroupDevice->quantity), $tcStyle->device->cell4->fontStyle, $tcStyle->device->cell4->paragraphStyle);
                 
                 // Get quote device options
                 $quoteDeviceOptions = $quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions();
@@ -56,9 +56,9 @@ foreach ( $this->quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
                 foreach ( $quoteDeviceOptions as $quoteDeviceOption )
                 {
                     $table->addRow($tcStyle->option->rowheight);
-                    $table->addCell($tcStyle->col1Width, $tcStyle->option->cell1->cellStyle)->addText($quoteDeviceOption->getName() . ' (' . number_format($quoteDeviceOption->getQuantity()) . 'x)', $tcStyle->option->cell1->fontStyle, $tcStyle->option->cell1->paragraphStyle);
+                    $table->addCell($tcStyle->col1Width, $tcStyle->option->cell1->cellStyle)->addText($quoteDeviceOption->name . ' (' . number_format($quoteDeviceOption->quantity) . 'x)', $tcStyle->option->cell1->fontStyle, $tcStyle->option->cell1->paragraphStyle);
                     $table->addCell($tcStyle->col2Width, $tcStyle->option->cell2->cellStyle)->addText($quoteDeviceOption->getReportSku(), $tcStyle->option->cell2->fontStyle, $tcStyle->option->cell2->paragraphStyle);
-                    $table->addCell($tcStyle->col3Width, $tcStyle->option->cell3->cellStyle)->addText($quoteDeviceOption->getDescription(), $tcStyle->option->cell3->fontStyle, $tcStyle->option->cell3->paragraphStyle);
+                    $table->addCell($tcStyle->col3Width, $tcStyle->option->cell3->cellStyle)->addText($quoteDeviceOption->description, $tcStyle->option->cell3->fontStyle, $tcStyle->option->cell3->paragraphStyle);
                     $table->addCell($tcStyle->col4Width, $tcStyle->option->cell4->cellStyle)->addText();
                 }
             }
@@ -80,7 +80,7 @@ foreach ( $this->quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
         // Show subtotal line
         $table->addRow($tcStyle->subtotal->rowheight);
         $table->addCell($tcStyle->cell1Width, $tcStyle->subtotal->cell1->cellStyle)->addText();
-        $table->addCell($tcStyle->span23Width, $tcStyle->subtotal->cell2->cellStyle, 2)->addText($this->translate('Subtotal for group ' . $quoteDeviceGroup->getName()), $tcStyle->subtotal->cell2->fontStyle, $tcStyle->subtotal->cell2->paragraphStyle);
+        $table->addCell($tcStyle->span23Width, $tcStyle->subtotal->cell2->cellStyle, 2)->addText($this->translate('Subtotal for group ' . $quoteDeviceGroup->name), $tcStyle->subtotal->cell2->fontStyle, $tcStyle->subtotal->cell2->paragraphStyle);
         $table->addCell($tcStyle->cell4Width, $tcStyle->subtotal->cell3->cellStyle)->addText($this->currency($quoteDeviceGroup->calculateMonthlyLeasePrice()), $tcStyle->subtotal->cell3->fontStyle, $tcStyle->subtotal->cell3->paragraphStyle);
         
         $groupCount ++;

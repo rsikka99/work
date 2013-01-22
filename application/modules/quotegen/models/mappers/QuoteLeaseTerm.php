@@ -59,7 +59,7 @@ class Quotegen_Model_Mapper_QuoteLeaseTerm extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return array (
-                $object->getQuoteId() 
+                $object->quoteId
         );
     }
 
@@ -105,7 +105,7 @@ class Quotegen_Model_Mapper_QuoteLeaseTerm extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_QuoteLeaseTerm)
         {
             $whereClause = array (
-                    "{$this->col_quoteId} = ?" => $object->getQuoteId() 
+                    "{$this->col_quoteId} = ?" => $object->quoteId
             );
         }
         else
