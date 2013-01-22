@@ -41,3 +41,4 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 public/downloads/*.docx
 public/downloads/*.docx
+data/uploads/*
