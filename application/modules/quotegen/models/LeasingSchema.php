@@ -8,7 +8,7 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
     public $id = 0;
 
     /**
-     * @var int
+     * @var string
      */
     public $name;
 

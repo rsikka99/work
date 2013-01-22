@@ -4,10 +4,10 @@
 </div>
 <div class="well">
     <dl class="dl-horizontal">
-        <dt>Name</dt><dd><?php echo $option->getName(); ?></dd>
-        <dt>Description</dt><dd><?php echo $option->getDescription(); ?></dd>
-        <dt>Sku</dt><dd><?php echo $option->getOemSku() ?></dd>
-        <dt>Price</dt><dd><?php echo $option->getCost() ?></dd>
+        <dt>Name</dt><dd><?php echo $option->name; ?></dd>
+        <dt>Description</dt><dd><?php echo $option->description; ?></dd>
+        <dt>Sku</dt><dd><?php echo $option->oemSku ?></dd>
+        <dt>Price</dt><dd><?php echo $option->cost ?></dd>
         <dt>Options</dt>
         
         <?php /* @var $category Quotegen_Model_Category */ foreach ($option->getCategories() as $category) : ?>

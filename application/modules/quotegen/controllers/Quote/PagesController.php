@@ -62,13 +62,13 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                     }
                     
                     // Here we need to check to see if page coverage has changed.
-                    $quotePageCoverageMono = (float)$this->_quote->getPageCoverageMonochrome();
-                    $quotePageCoverageColor = (float)$this->_quote->getPageCoverageColor();
+                    $quotePageCoverageMono = (float)$this->_quote->pageCoverageMonochrome;
+                    $quotePageCoverageColor = (float)$this->_quote->pageCoverageColor;
                     
                     $this->_quote->populate($values);
                     
                     // If we have a difference in page coverage we need to recalculate cpp rates for devices
-                    if ($quotePageCoverageMono !== (float)$this->_quote->getPageCoverageMonochrome() || $quotePageCoverageColor !== (float)$this->_quote->getPageCoverageColor())
+                    if ($quotePageCoverageMono !== (float)$this->_quote->pageCoverageMonochrome || $quotePageCoverageColor !== (float)$this->_quote->pageCoverageColor)
                     {
                         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
                         foreach ( $this->_quote->getQuoteDevices() as $quoteDevice )

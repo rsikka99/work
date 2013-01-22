@@ -52,8 +52,8 @@
     	<?php $quoteDeviceGroupDevices = $deviceGroup->getQuoteDeviceGroupDevices();?>
     	<?php /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */ foreach ($quoteDeviceGroupDevices as $quoteDeviceGroupDevice) : ?>
     	<tr>
-    		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getName() ?></td>
-    		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->getOemSku() ?></td>
+    		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->name ?></td>
+    		<td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->oemSku ?></td>
     		<td>
     		<?php if (count($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions()) > 0) : ?>
 	    		<?php 

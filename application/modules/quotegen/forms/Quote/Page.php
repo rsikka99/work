@@ -89,7 +89,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
         // monochromePageMargin : Quotegen_Model_Quote->monochromePageMargin
         // monochromePageMargin is used to determine margin on pages for the entire quote
         $this->addElement('text', 'monochromePageMargin', array (
-                'value' => $this->_quote->getMonochromePageMargin(), 
+                'value' => $this->_quote->monochromePageMargin,
                 'required' => true, 
                 'decorators' => $inlineDecorators, 
                 'class' => 'input-mini', 
@@ -109,7 +109,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
         // colorPageMargin : Quotegen_Model_Quote->colorPageMargin
         // colorPageMargin is used to set a page margin for all of the color pages on the quote
         $this->addElement('text', 'colorPageMargin', array (
-                'value' => $this->_quote->getColorPageMargin(), 
+                'value' => $this->_quote->colorPageMargin,
                 'required' => true, 
                 'decorators' => $inlineDecorators, 
                 'class' => 'input-mini', 
@@ -129,7 +129,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
         // monochromeOverageMargin : Quotegen_Model_Quote->monochromeOverageMargin
         // monochromeOverageMargin is used for the calcuation of overage rate per page for pages.
         $this->addElement('text', 'monochromeOverageMargin', array (
-                'value' => $this->_quote->getMonochromeOverageMagrin(), 
+                'value' => $this->_quote->monochromeOverageMargin,
                 'required' => true, 
                 'class' => 'input-mini', 
                 'decorators' => $inlineDecorators, 
@@ -149,7 +149,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
         // colorOverageMargin : Quotegen_Model_Quote->colorOverageMargin
         // colorOverageMargin is used for the calcuation of overage rate per page for pages.
         $this->addElement('text', 'colorOverageMargin', array (
-                'value' => $this->_quote->getColorOverageMargin(), 
+                'value' => $this->_quote->colorOverageMargin,
                 'required' => true, 
                 'class' => 'input-mini', 
                 'decorators' => $inlineDecorators, 
@@ -172,7 +172,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
                 'label' => 'Page Coverage Color:', 
                 'class' => 'input-mini', 
                 'required' => true, 
-                'value' => $this->_quote->getPageCoverageColor(), 
+                'value' => $this->_quote->pageCoverageColor,
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -197,7 +197,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
                 'label' => 'Page Coverage Monochrome:', 
                 'class' => 'input-mini', 
                 'required' => true, 
-                'value' => $this->_quote->getPageCoverageMonochrome(), 
+                'value' => $this->_quote->pageCoverageMonochrome,
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -220,7 +220,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
         // adminCostPerPage is a flat CPP that is used to add an additional charge per page to recoop admin relate fees
         $adminCostPerPage = $this->createElement('text', 'adminCostPerPage', array (
                 'label' => 'Admin Cost Per Page:', 
-                'value' => $this->_quote->getAdminCostPerPage(), 
+                'value' => $this->_quote->adminCostPerPage,
                 'required' => true, 
                 'class' => 'input-mini', 
                 'filters' => array (
@@ -244,7 +244,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
         // serviceCostPerPage is a flat CPP that is used to add an additional charge per page to recoop service related fees
         $serviceCostPerPage = $this->createElement('text', 'serviceCostPerPage', array (
                 'label' => 'Service Cost Per Page:', 
-                'value' => $this->_quote->getServiceCostPerPage(), 
+                'value' => $this->_quote->serviceCostPerPage,
                 'required' => true, 
                 'class' => 'input-mini', 
                 'filters' => array (
@@ -268,7 +268,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
         // pricingConfigId is used to determine the users prefernce for toners when it comes to calculating a devices CPP
         $pricingConfigDropdown = $this->createElement('select', 'pricingConfigId', array (
                 'label' => 'Toner Preference:', 
-                'value' => $this->_quote->getPricingConfigId(), 
+                'value' => $this->_quote->pricingConfigId,
                 'required' => true 
         ));
         

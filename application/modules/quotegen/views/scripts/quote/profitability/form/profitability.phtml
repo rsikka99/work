@@ -56,13 +56,13 @@ $(function()
     <?php foreach ($quote->getQuoteDevices() as $quoteDevice) : /* @var $quoteDevice Quotegen_Model_QuoteDevice */ ?>
 		<?php if ($quoteDevice->calculateTotalQuantity() > 0) : ?>
 	    <tr>
-	        <td><h5><?php echo $quoteDevice->getName() ?><br/><small><?php echo $quoteDevice->getOemSku() ?></small></h5></td>
+	        <td><h5><?php echo $quoteDevice->name ?><br/><small><?php echo $quoteDevice->oemSku ?></small></h5></td>
 			<td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculatePackageCost()); ?></td>
-			<td style="text-align: right;"><?php echo $form->getElement("packageMarkup_{$quoteDevice->getId()}"); ?></td>
-			<td style="text-align: right;"><?php echo $form->getElement("margin_{$quoteDevice->getId()}"); ?></td>
+			<td style="text-align: right;"><?php echo $form->getElement("packageMarkup_{$quoteDevice->id}"); ?></td>
+			<td style="text-align: right;"><?php echo $form->getElement("margin_{$quoteDevice->id}"); ?></td>
 			<td style="text-align: right;"><?php echo $this->currency( (float) $quoteDevice->calculatePackagePrice() ); ?></td>
 			<?php if ($isLeased) : ?>
-			<td style="text-align: right;"><?php echo $form->getElement("residual_{$quoteDevice->getId()}"); ?></td>
+			<td style="text-align: right;"><?php echo $form->getElement("residual_{$quoteDevice->id}"); ?></td>
 			<?php endif; ?>
 			<td style="text-align: right;"><?php echo number_format($quoteDevice->calculateTotalQuantity()); ?></td>
 			<td style="text-align: right;"><?php echo $this->currency( (float) $quoteDevice->calculateTotalPrice() ); ?></td>

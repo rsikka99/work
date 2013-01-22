@@ -170,7 +170,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                         // Save Options
                         foreach ( $deviceOptions as $option )
                         {
-                            $optionId = $option->getOptionId();
+                            $optionId = $option->optionId;
                             $quantity = $values ["quantity{$optionId}"];
                         
                             $where = "deviceConfigurationId = {$deviceConfigurationId} AND optionId = {$optionId}";
@@ -378,7 +378,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
                         // Save Options
                         foreach ( $deviceOptions as $option )
                         {
-                            $optionId = $option->getOptionId();
+                            $optionId = $option->optionId;
                             $quantity = $values ["quantity{$optionId}"];
 
                             $where = "deviceConfigurationId = {$deviceConfigurationId} AND optionId = {$optionId}";
@@ -502,7 +502,7 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
         $selectedOptionsList = array ();
         foreach ( $selectedOptions as $option )
         {
-            $selectedOptionsList [] = $option->getOptionId();
+            $selectedOptionsList [] = $option->optionId;
         }
         $form->getElement("options")->setValue($selectedOptionsList);
         

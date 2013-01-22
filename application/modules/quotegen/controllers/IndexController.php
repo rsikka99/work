@@ -46,13 +46,13 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 // Update current quote object and save new quote items to database
                 $this->_quote->populate($quoteSetting->toArray());
                 $this->_quote->populate($formValues);
-                $this->_quote->setDateCreated(date('Y-m-d H:i:s'));
-                $this->_quote->setQuoteDate(date('Y-m-d H:i:s'));
-                $this->_quote->setUserId($this->_userId);
-                $this->_quote->setColorPageMargin($quoteSetting->getPageMargin());
-                $this->_quote->setMonochromePageMargin($quoteSetting->getPageMargin());
-                $this->_quote->setColorOverageMargin($quoteSetting->getPageMargin());
-                $this->_quote->setMonochromeOverageMagrin($quoteSetting->getPageMargin());
+                $this->_quote->dateCreated = date('Y-m-d H:i:s');
+                $this->_quote->quoteDate = date('Y-m-d H:i:s');
+                $this->_quote->userId = $this->_userId;
+                $this->_quote->colorPageMargin = $quoteSetting->getPageMargin();
+                $this->_quote->monochromePageMargin = $quoteSetting->getPageMargin();
+                $this->_quote->colorOverageMargin = $quoteSetting->getPageMargin();
+                $this->_quote->monochromeOverageMargin = $quoteSetting->getPageMargin();
                 $quoteId = $this->saveQuote();
                 
                 // Add a default group
@@ -72,8 +72,8 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                     {
                         
                         $quoteLeaseTerm = new Quotegen_Model_QuoteLeaseTerm();
-                        $quoteLeaseTerm->setQuoteId($this->_quote->getId());
-                        $quoteLeaseTerm->setLeasingSchemaTermId($leasingSchemaTerms [0]->getId());
+                        $quoteLeaseTerm->setQuoteId($this->_quote->id);
+                        $quoteLeaseTerm->setLeasingSchemaTermId($leasingSchemaTerms [0]->id);
                         Quotegen_Model_Mapper_QuoteLeaseTerm::getInstance()->insert($quoteLeaseTerm);
                     }
                 }
@@ -148,9 +148,9 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
             foreach ( $quotes as $quote )
             {
                 $quoteArray = array (
-                        'id' => $quote->getId(), 
+                        'id' => $quote->id,
                     'clientName' => $quote->getClient()->companyName,
-                        'quotedate' => $quote->getQuoteDate(), 
+                        'quotedate' => $quote->quoteDate,
                         'isLeased' => $quote->isLeased() 
                 );
                 $quoteList [] = $quoteArray;

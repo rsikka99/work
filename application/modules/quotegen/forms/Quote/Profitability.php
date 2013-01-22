@@ -89,11 +89,11 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
             if ($quoteDevice->calculateTotalQuantity() > 0)
             {
                 // Package Markup
-                $this->addElement('text', "packageMarkup_{$quoteDevice->getId()}", array (
+                $this->addElement('text', "packageMarkup_{$quoteDevice->id}", array (
                         'label' => 'Markup', 
                         'required' => true, 
                         'class' => 'input-mini rightAlign', 
-                        'value' => $quoteDevice->getPackageMarkup(), 
+                        'value' => $quoteDevice->packageMarkup,
                         'validators' => array (
                                 'Float', 
                                 array (
@@ -107,11 +107,11 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
                 ));
                 
                 // Margin
-                $this->addElement('text', "margin_{$quoteDevice->getId()}", array (
+                $this->addElement('text', "margin_{$quoteDevice->id}", array (
                         'label' => 'Margin', 
                         'required' => true, 
                         'class' => 'input-mini rightAlign', 
-                        'value' => $quoteDevice->getMargin(), 
+                        'value' => $quoteDevice->margin,
                         'validators' => array (
                                 'Float', 
                                 array (
@@ -128,11 +128,11 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
                 if ($this->_quote->isLeased())
                 {
                     // Residual
-                    $this->addElement('text', "residual_{$quoteDevice->getId()}", array (
+                    $this->addElement('text', "residual_{$quoteDevice->id}", array (
                             'label' => 'Residual', 
                             'required' => true, 
                             'class' => 'input-mini rightAlign', 
-                            'value' => $quoteDevice->getResidual(), 
+                            'value' => $quoteDevice->residual,
                             'validators' => array (
                                     'Float', 
                                     array (
