@@ -47,7 +47,7 @@ class Quotegen_OptionController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        $message = "Are you sure you want to delete {$option->getName()}?";
+        $message = "Are you sure you want to delete {$option->name}?";
         $form = new Application_Form_Delete($message);
         
         $request = $this->getRequest();
@@ -59,11 +59,11 @@ class Quotegen_OptionController extends Zend_Controller_Action
                 // delete quote from database
                 if ($form->isValid($values))
                 {
-                    Quotegen_Model_Mapper_OptionCategory::getInstance()->deleteByOptionId($option->getId());
+                    Quotegen_Model_Mapper_OptionCategory::getInstance()->deleteByOptionId($option->id);
                     $optionMapper->delete($option);
                     
                     $this->_helper->flashMessenger(array (
-                            'success' => "Option  {$this->view->escape ( $option->getName() )} was deleted successfully." 
+                            'success' => "Option  {$this->view->escape ( $option->name )} was deleted successfully."
                     ));
                     $this->_helper->redirector('index');
                 }
@@ -105,11 +105,11 @@ class Quotegen_OptionController extends Zend_Controller_Action
                         
                         // Create optionCategory with $optionId to save 
                         $optionCategory = new Quotegen_Model_OptionCategory();
-                        $optionCategory->setOptionId($optionId);
+                        $optionCategory->optionId = $optionId;
                         
                         foreach ( $values ['categories'] as $categoryId )
                         {
-                            $optionCategory->setCategoryId($categoryId);
+                            $optionCategory->categoryId = $categoryId;
                             Quotegen_Model_Mapper_OptionCategory::getInstance()->insert($optionCategory);
                         }
                         
@@ -182,7 +182,7 @@ class Quotegen_OptionController extends Zend_Controller_Action
         /* @var $category Quotegen_Model_Category */
         foreach ( $option->getCategories() as $category )
         {
-            $optionValues ['categories'] [] = $category->getId();
+            $optionValues ['categories'] [] = $category->id;
         }
         
         $form->populate($optionValues);
@@ -206,21 +206,21 @@ class Quotegen_OptionController extends Zend_Controller_Action
                         $optionCategoryMapper = Quotegen_Model_Mapper_OptionCategory::getInstance();
                         // Create a new category since we know the option id will stay the same at all times.
                         $optionCategory = new Quotegen_Model_OptionCategory();
-                        $optionCategory->setOptionId($option->getId());
+                        $optionCategory->optionId = $option->id;
                         
                         $categoryIds [] = array ();
                         /* @var $category Quotegen_Model_Category */
                         foreach ( $option->getCategories() as $category )
                         {
                             
-                            if (array_search((string)$category->getId(), $values ['categories']) === false)
+                            if (array_search((string)$category->id, $values ['categories']) === false)
                             {
-                                $optionCategory->setCategoryId($category->getId());
+                                $optionCategory->categoryId = $category->id;
                                 $optionCategoryMapper->delete($optionCategory);
                             }
                             else
                             {
-                                $categoryIds [] = $category->getId();
+                                $categoryIds [] = $category->id;
                             }
                         }
                         
@@ -228,7 +228,7 @@ class Quotegen_OptionController extends Zend_Controller_Action
                         {
                             if (array_search($categoryPostId, $categoryIds) === false)
                             {
-                                $optionCategory->setCategoryId($categoryPostId);
+                                $optionCategory->categoryId = $categoryPostId;
                                 $optionCategoryMapper->insert($optionCategory);
                             }
                         }

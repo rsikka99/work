@@ -69,7 +69,7 @@ class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        $message = "Are you sure you want to delete {$deviceConfiguration->getId()}?";
+        $message = "Are you sure you want to delete {$deviceConfiguration->id}?";
         $form = new Application_Form_Delete($message);
         
         $request = $this->getRequest();
@@ -83,7 +83,7 @@ class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
                 {
                     $mapper->delete($deviceConfiguration);
                     $this->_helper->flashMessenger(array (
-                            'success' => "Device configuration  {$deviceConfiguration->getId()} was deleted successfully." 
+                            'success' => "Device configuration  {$deviceConfiguration->id} was deleted successfully."
                     ));
                     $this->_helper->redirector('index');
                 }
@@ -125,7 +125,7 @@ class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
                             $deviceConfigurationId = $mapper->insert($deviceConfiguration);
                             
                             $this->_helper->flashMessenger(array (
-                                    'success' => "Device configuration {$deviceConfiguration->getId()} was added successfully." 
+                                    'success' => "Device configuration {$deviceConfiguration->id} was added successfully."
                             ));
                             
                             $this->_helper->redirector('edit', null, null, array (
@@ -211,7 +211,7 @@ class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
         $this->view->deviceConfiguration = $deviceConfiguration;
         
         // Create a new form with the mode and roles set
-        $form = new Quotegen_Form_DeviceConfiguration($deviceConfiguration->getId());
+        $form = new Quotegen_Form_DeviceConfiguration($deviceConfiguration->id);
         
         // Prepare the data for the form
         $request = $this->getRequest();
@@ -244,13 +244,13 @@ class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
 
                         // Save option quantities
                         $deviceConfigurationOption = new Quotegen_Model_DeviceConfigurationOption();
-                        $deviceConfigurationOption->setDeviceConfigurationId($deviceConfigurationId);
+                        $deviceConfigurationOption->deviceConfigurationId = $deviceConfigurationId;
                         
                         foreach ( $form->getOptionElements() as $element )
                         {
                             $optionId = (int)$element->getDescription();
-                            $deviceConfigurationOption->setOptionId($optionId);
-                            $deviceConfigurationOption->setQuantity($values ["option$optionId"]);
+                            $deviceConfigurationOption->optionId = $optionId;
+                            $deviceConfigurationOption->quantity = $values ["option$optionId"];
                             Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->save($deviceConfigurationOption);
                         }
                         
@@ -271,7 +271,7 @@ class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
                         else
                         {
                             $this->_helper->flashMessenger(array (
-                                    'success' => "Device configuration '{$deviceConfiguration->getId()}' was updated sucessfully." 
+                                    'success' => "Device configuration '{$deviceConfiguration->id}' was updated sucessfully."
                             ));
                             
                             // Send back to the main list
@@ -336,12 +336,12 @@ class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
                     {
                         $deviceConfigurationOptionMapper = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance();
                         $deviceConfigurationOption = new Quotegen_Model_DeviceConfigurationOption();
-                        $deviceConfigurationOption->setDeviceConfigurationId($deviceConfiguration->getId());
+                        $deviceConfigurationOption->deviceConfigurationId = $deviceConfiguration->id;
                         
                         $insertedOptions = 0;
                         foreach ( $values ['options'] as $optionId )
                         {
-                            $deviceConfigurationOption->setOptionId($optionId);
+                            $deviceConfigurationOption->optionId = $optionId;
                             try
                             {
                                 $deviceConfigurationOptionMapper->insert($deviceConfigurationOption);
@@ -395,8 +395,8 @@ class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
         try
         {
             $deviceConfigurationOption = new Quotegen_Model_DeviceConfigurationOption();
-            $deviceConfigurationOption->setDeviceConfigurationId($id);
-            $deviceConfigurationOption->setOptionId($optionId);
+            $deviceConfigurationOption->deviceConfigurationId = $id;
+            $deviceConfigurationOption->optionId = $optionId;
             Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->delete($deviceConfigurationOption);
             $this->_helper->flashMessenger(array (
                     'success' => "Configuration Option deleted successfully." 

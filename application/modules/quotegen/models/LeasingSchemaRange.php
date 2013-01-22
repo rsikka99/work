@@ -1,32 +1,21 @@
 <?php
-
-/**
- * Application_Model_LeasingSchemaRange is a model that represents a user row in the database.
- *
- * @author John Sadler
- *        
- */
 class Quotegen_Model_LeasingSchemaRange extends My_Model_Abstract
 {
-    
+
     /**
-     * The id assigned by the database
-     *
      * @var int
      */
-    protected $_id = 0;
+    public $id = 0;
+
     /**
-     * The related leasing schema id
-     *
      * @var int
      */
-    protected $_leasingSchemaId = 0;
+    public $leasingSchemaId = 0;
+
     /**
-     * The minimum value in the range
-     *
-     * @var double
+     * @var int
      */
-    protected $_startRange = 0;
+    public $startRange = 0;
     
     /**
      * Leasing Schema
@@ -34,9 +23,9 @@ class Quotegen_Model_LeasingSchemaRange extends My_Model_Abstract
      * @var Quotegen_Model_LeasingSchema
      */
     protected $_leasingSchema;
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::populate()
+
+    /**
+     * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
     {
@@ -44,81 +33,28 @@ class Quotegen_Model_LeasingSchemaRange extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
+
         if (isset($params->id) && ! is_null($params->id))
-            $this->setId($params->id);
+            $this->id = $params->id;
+
         if (isset($params->leasingSchemaId) && ! is_null($params->leasingSchemaId))
-            $this->setLeasingSchemaId($params->leasingSchemaId);
+            $this->leasingSchemaId = $params->leasingSchemaId;
+
         if (isset($params->startRange) && ! is_null($params->startRange))
-            $this->setStartRange($params->startRange);
+            $this->startRange = $params->startRange;
+
     }
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::toArray()
+
+    /**
+     * @return array
      */
     public function toArray ()
     {
         return array (
-                'id' => $this->getId(), 
-                'leasingSchemaId' => $this->getLeasingSchemaId(), 
-                'startRange' => $this->getStartRange() 
+            "id" => $this->id,
+            "leasingSchemaId" => $this->leasingSchemaId,
+            "startRange" => $this->startRange,
         );
-    }
-
-    /**
-     *
-     * @return the $_id
-     */
-    public function getId ()
-    {
-        return $this->_id;
-    }
-
-    /**
-     *
-     * @param number $_id            
-     */
-    public function setId ($_id)
-    {
-        $this->_id = $_id;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $_leasingSchemaId
-     */
-    public function getLeasingSchemaId ()
-    {
-        return $this->_leasingSchemaId;
-    }
-
-    /**
-     *
-     * @param number $_leasingSchemaId            
-     */
-    public function setLeasingSchemaId ($_leasingSchemaId)
-    {
-        $this->_leasingSchemaId = $_leasingSchemaId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $_startRange
-     */
-    public function getStartRange ()
-    {
-        return $this->_startRange;
-    }
-
-    /**
-     *
-     * @param number $_startRange            
-     */
-    public function setStartRange ($_startRange)
-    {
-        $this->_startRange = $_startRange;
-        return $this;
     }
 
     /**
@@ -130,7 +66,7 @@ class Quotegen_Model_LeasingSchemaRange extends My_Model_Abstract
     {
         if (! isset($this->_leasingSchema))
         {
-            $this->_leasingSchema = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($this->getLeasingSchemaId());
+            $this->_leasingSchema = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($this->leasingSchemaId);
         }
         return $this->_leasingSchema;
     }
@@ -138,7 +74,9 @@ class Quotegen_Model_LeasingSchemaRange extends My_Model_Abstract
     /**
      * Sets the leasing schema
      *
-     * @param Quotegen_Model_LeasingSchema $_leasingSchema            
+     * @param Quotegen_Model_LeasingSchema $_leasingSchema
+     *
+     * @return Quotegen_Model_LeasingSchemaRange
      */
     public function setLeasingSchema ($_leasingSchema)
     {

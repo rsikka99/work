@@ -127,7 +127,7 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
             foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDevice )
             {
                 
-                $quoteDeviceId = $quoteDevice->getId();
+                $quoteDeviceId = $quoteDevice->id;
                 $elementSet = new stdClass();
                 $elementSet->quoteDevice = $quoteDevice;
                 
@@ -152,7 +152,7 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
                 $elementSet->residual = $this->createElement('text', "residual-{$quoteDeviceId}", array (
                         'label' => 'Residual:', 
                         'class' => 'input-mini', 
-                        'value' => $quoteDevice->getResidual(), 
+                        'value' => $quoteDevice->residual,
                         'validators' => array (
                                 'Float', 
                                 array (
@@ -169,7 +169,7 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
                 $elementSet->margin = $this->createElement('text', "margin-{$quoteDeviceId}", array (
                         'label' => 'Margin:', 
                         'class' => 'input-mini', 
-                        'value' => $quoteDevice->getMargin(), 
+                        'value' => $quoteDevice->margin,
                         'validators' => array (
                                 'Float', 
                                 array (

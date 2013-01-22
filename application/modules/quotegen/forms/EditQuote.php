@@ -38,9 +38,9 @@ class Quotegen_Form_EditQuote extends EasyBib_Form
         {
             if (! $leasingSchemaId)
             {
-                $leasingSchemaId = $leasingSchema->getId();
+                $leasingSchemaId = $leasingSchema->id;
             }
-            $leasingSchemas [$leasingSchema->getId()] = $leasingSchema->getName();
+            $leasingSchemas [$leasingSchema->id] = $leasingSchema->name;
         }
         
         if ($this->_leasingSchemaId)
@@ -62,7 +62,7 @@ class Quotegen_Form_EditQuote extends EasyBib_Form
             /* @var $leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm */
             foreach ( $leasingSchema->getTerms() as $leasingSchemaTerm )
             {
-                $leasingSchemaTerms [$leasingSchemaTerm->getId()] = $leasingSchemaTerm->getMonths();
+                $leasingSchemaTerms [$leasingSchemaTerm->id] = $leasingSchemaTerm->months;
             }
         }
         
@@ -173,7 +173,7 @@ class Quotegen_Form_EditQuote extends EasyBib_Form
                 'label' => 'Toner Preference:' 
         ));
         
-        /* @var $princingConfig Proposalgen_Model_PricingConfig */
+        /* @var $pricingConfig Proposalgen_Model_PricingConfig */
         foreach ( Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll() as $pricingConfig )
         {
             $pricingConfigDropdown->addMultiOption($pricingConfig->getPricingConfigId(), $pricingConfig->getConfigName());

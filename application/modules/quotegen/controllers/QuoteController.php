@@ -34,7 +34,7 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
         $quoteMapper = new Quotegen_Model_Mapper_Quote();
         $quote = $quoteMapper->find($quoteId);
         
-        if (! $quote->getId())
+        if (! $quote->id)
         {
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error selecting the quote to delete.' 
@@ -42,8 +42,8 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
             $this->_helper->redirector('index');
         }
         
-        $client = Quotegen_Model_Mapper_Client::getInstance()->find($quote->getClientId());
-        $message = "Are you sure you want to delete the quote for {$client->getCompanyName()} ?";
+        $client = Quotegen_Model_Mapper_Client::getInstance()->find($quote->clientId);
+        $message = "Are you sure you want to delete the quote for {$client->companyName} ?";
         $form = new Application_Form_Delete($message);
         
         $request = $this->getRequest();

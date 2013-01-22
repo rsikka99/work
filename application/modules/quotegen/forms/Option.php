@@ -109,7 +109,7 @@ class Quotegen_Form_Option extends EasyBib_Form
         /* @var $category Quotegen_Model_Category */
         foreach ( $categories as $category )
         {
-            $optionCategoryCheckBox->addMultiOption($category->getId(), $category->getName());
+            $optionCategoryCheckBox->addMultiOption($category->id, $category->name);
         }
         
         if ($categories)

@@ -6,7 +6,7 @@ $addDeviceOptions[] = '<option value="-1">New Device</option>';
 /* @var $quoteDeviceConfiguration Quotegen_Model_DeviceConfiguration */
 foreach (Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAll() as $quoteDeviceConfiguration)
 {
-    $addDeviceOptions[] = "<option value='{$quoteDeviceConfiguration->getId()}'>{$quoteDeviceConfiguration->getName()}</option>";   
+    $addDeviceOptions[] = "<option value='{$quoteDeviceConfiguration->id}'>{$quoteDeviceConfiguration->name}</option>";
 }
 $addDeviceOptionsHtml = implode("\n", $addDeviceOptions);
 
@@ -56,7 +56,7 @@ $addDeviceOptionsHtml = implode("\n", $addDeviceOptions);
             $quoteDevice = $set->quoteDevice;
         ?>
         <tr class="deviceRow">
-            <th><h5><?php echo $quoteDevice->getName(); ?><br><small><?php echo $quoteDevice->getSku(); ?></small></h5></th>                
+            <th><h5><?php echo $quoteDevice->name; ?><br><small><?php echo $quoteDevice->getSku(); ?></small></h5></th>
             <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculatePackageCost()); ?></td>
             <td>
                 <div class="control-group <?php echo ($set->margin->hasErrors()) ? 'error' : ''; ?>">
@@ -94,10 +94,10 @@ $addDeviceOptionsHtml = implode("\n", $addDeviceOptions);
                     <a href="#" class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i></a>
                     <ul class="dropdown-menu pull-right">
                         <?php if ($quoteDevice->getDevice()) : ?>
-                        <li><a href="<?php echo $this->url(array('action' => 'sync-device-configuration', 'id' => $quoteDevice->getId())); ?>"><i class="icon-refresh"></i> Sync Device</a>
+                        <li><a href="<?php echo $this->url(array('action' => 'sync-device-configuration', 'id' => $quoteDevice->id)); ?>"><i class="icon-refresh"></i> Sync Device</a>
                         <?php endif; ?>
-                        <li><a href="<?php echo $this->url(array('action' => 'edit-quote-device', 'id' => $quoteDevice->getId())); ?>"><i class="icon-pencil"></i> Edit Device</a>
-                        <li><a href="<?php echo $this->url(array('action' => 'delete-quote-device', 'id' => $quoteDevice->getId())); ?>"><i class="icon-trash"></i> Delete Device</a>
+                        <li><a href="<?php echo $this->url(array('action' => 'edit-quote-device', 'id' => $quoteDevice->id)); ?>"><i class="icon-pencil"></i> Edit Device</a>
+                        <li><a href="<?php echo $this->url(array('action' => 'delete-quote-device', 'id' => $quoteDevice->id)); ?>"><i class="icon-trash"></i> Delete Device</a>
                     </ul>
                 </div>
             </td>

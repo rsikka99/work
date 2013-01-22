@@ -24,7 +24,7 @@ $leasingSchemaRanges = $this->leasingSchemaRanges;
 				<tr>
 					<th style="text-align: left;">Range</th>
 					<?php foreach ( $leasingSchemaRanges as $range ) { ?>
-					<th style="text-align: center;"><?php echo $this->currency($range->getStartRange()); ?>+</th>
+					<th style="text-align: center;"><?php echo $this->currency($range->startRange); ?>+</th>
 					<?php } ?>
 				</tr>
 			</thead>
@@ -33,10 +33,10 @@ $leasingSchemaRanges = $this->leasingSchemaRanges;
 					<th>Rate</th>
 					<?php foreach ( $leasingSchemaRanges as $range ) { ?>
 					<td style="text-align: center;">
-						<?php if ( $this->element->getElement("rate{$range->getId()}")->hasErrors() ) { 
-							$this->element->getElement("rate{$range->getId()}")->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+						<?php if ( $this->element->getElement("rate{$range->id}")->hasErrors() ) {
+							$this->element->getElement("rate{$range->id}")->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 						} ?> 
-						<?php echo $this->element->getElement("rate{$range->getId()}")->renderViewHelper(); ?>
+						<?php echo $this->element->getElement("rate{$range->id}")->renderViewHelper(); ?>
 					</td>
 					<?php } ?>
 				</tr>

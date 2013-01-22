@@ -19,16 +19,16 @@
     <tbody>
         <?php foreach ($this->paginator->getCurrentItems() as $option) : /* @var $option Quotegen_Model_Option */ ?>
         <tr>
-            <td><?php echo $option->getName(); ?></td>
-            <td><?php echo $option->getDescription(); ?></td>
-            <td style="text-align: right"><?php echo $this->currency($option->getCost());?></td>
-            <td><?php echo $option->getOemSku();?></td>
+            <td><?php echo $option->name; ?></td>
+            <td><?php echo $option->description; ?></td>
+            <td style="text-align: right"><?php echo $this->currency($option->cost);?></td>
+            <td><?php echo $option->oemSku;?></td>
             <?php if (count($option->getCategories()) > 0 ) :
 				$categoryNames = array();
             ?>
             <td>
             <?php foreach ($option->getCategories() as $category) : /* @var $category Quotegen_Model_Category */?>
-            	<?php $categoryNames [] = $category->getName(); ?>
+            	<?php $categoryNames [] = $category->name; ?>
             <?php endforeach; ?>
             <?php echo implode(', ', $categoryNames);?>
             </td>
@@ -37,8 +37,8 @@
             <?php endif; ?>
             <td>
                 <div class="btn-group">
-                    <a class="btn btn-mini btn-warning" title="Edit" href="<?php echo $this->url(array ( 'action' => 'edit', 'id' =>  $option->getId())); ?>"><i class="icon-pencil"></i></a>
-                    <a class="btn btn-mini btn-danger" title="Delete" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' =>  $option->getId())); ?>"><i class="icon-trash"></i></a>
+                    <a class="btn btn-mini btn-warning" title="Edit" href="<?php echo $this->url(array ( 'action' => 'edit', 'id' =>  $option->id)); ?>"><i class="icon-pencil"></i></a>
+                    <a class="btn btn-mini btn-danger" title="Delete" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' =>  $option->id)); ?>"><i class="icon-trash"></i></a>
                 </div>
             </td>
         </tr>

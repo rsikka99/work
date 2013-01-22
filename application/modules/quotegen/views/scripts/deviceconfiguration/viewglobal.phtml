@@ -19,9 +19,9 @@
             <td><?php echo $deviceConfiguration->getDevice()->getMasterDevice()->getFullDeviceName(); ?></td>
             <td>
                 <div class="btn-group">
-	                <a class="btn btn-info" title="View Device" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $deviceConfiguration->getId())); ?>"><i class="icon-eye-open"></i></a>
-                    <a class="btn btn-warning" title="Edit Device" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $deviceConfiguration->getId())); ?>"><i class="icon-pencil"></i></a>
-                    <a class="btn btn-danger" title="Delete Device" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $deviceConfiguration->getId())); ?>"><i class="icon-trash"></i></a>
+	                <a class="btn btn-info" title="View Device" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $deviceConfiguration->id)); ?>"><i class="icon-eye-open"></i></a>
+                    <a class="btn btn-warning" title="Edit Device" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $deviceConfiguration->id)); ?>"><i class="icon-pencil"></i></a>
+                    <a class="btn btn-danger" title="Delete Device" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $deviceConfiguration->id)); ?>"><i class="icon-trash"></i></a>
                 </div>
             </td>
         </tr>

@@ -10,7 +10,7 @@ $quote = $this->quote;
 
 $client = $quote->getClient();
 
-$quoteDate = date('F jS, Y', strtotime($quote->getQuoteDate()));
+$quoteDate = date('F jS, Y', strtotime($quote->quoteDate));
 
 /* @var $section PHPWord_Section */
 $section = $this->section;
@@ -25,10 +25,10 @@ $cell->addTextBreak(3);
 $cell->addImage(ASSETS_PATH . "/docx/quote/images/cell2.jpg");
 $cell->addTextBreak(5);
 
-$clientName = $quote->getClientDisplayName();
+$clientName = $quote->clientDisplayName;
 if (empty($clientName))
 {
-    $clientName = $client->getCompanyName();
+    $clientName = $client->companyName;
 }
 
 $cell->addText($this->translate('Prepared For:') . " " . $clientName, 'titlepageHeaderFont', 'titlepageHeaderParagraph');

@@ -40,9 +40,9 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
             {
                 if (! $leasingSchemaId)
                 {
-                    $leasingSchemaId = $leasingSchema->getId();
+                    $leasingSchemaId = $leasingSchema->id;
                 }
-                $leasingSchemas [$leasingSchema->getId()] = $leasingSchema->getName();
+                $leasingSchemas [$leasingSchema->id] = $leasingSchema->name;
             }
             
             if ($this->_leasingSchemaId)
@@ -65,7 +65,7 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
                 /* @var $leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm */
                 foreach ( $leasingSchema->getTerms() as $leasingSchemaTerm )
                 {
-                    $leasingSchemaTerms [$leasingSchemaTerm->getId()] = number_format($leasingSchemaTerm->getMonths()) . " months";
+                    $leasingSchemaTerms [$leasingSchemaTerm->id] = number_format($leasingSchemaTerm->months) . " months";
                 }
             }
             
@@ -76,7 +76,7 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
                     'required' => true, 
                     'value' => $this->getQuote()
                         ->getLeasingSchemaTerm()
-                        ->getId() 
+                        ->id
             ));
         }
         
@@ -89,11 +89,11 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
             if ($quoteDevice->calculateTotalQuantity() > 0)
             {
                 // Package Markup
-                $this->addElement('text', "packageMarkup_{$quoteDevice->getId()}", array (
+                $this->addElement('text', "packageMarkup_{$quoteDevice->id}", array (
                         'label' => 'Markup', 
                         'required' => true, 
                         'class' => 'input-mini rightAlign', 
-                        'value' => $quoteDevice->getPackageMarkup(), 
+                        'value' => $quoteDevice->packageMarkup,
                         'validators' => array (
                                 'Float', 
                                 array (
@@ -107,11 +107,11 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
                 ));
                 
                 // Margin
-                $this->addElement('text', "margin_{$quoteDevice->getId()}", array (
+                $this->addElement('text', "margin_{$quoteDevice->id}", array (
                         'label' => 'Margin', 
                         'required' => true, 
                         'class' => 'input-mini rightAlign', 
-                        'value' => $quoteDevice->getMargin(), 
+                        'value' => $quoteDevice->margin,
                         'validators' => array (
                                 'Float', 
                                 array (
@@ -128,11 +128,11 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
                 if ($this->_quote->isLeased())
                 {
                     // Residual
-                    $this->addElement('text', "residual_{$quoteDevice->getId()}", array (
+                    $this->addElement('text', "residual_{$quoteDevice->id}", array (
                             'label' => 'Residual', 
                             'required' => true, 
                             'class' => 'input-mini rightAlign', 
-                            'value' => $quoteDevice->getResidual(), 
+                            'value' => $quoteDevice->residual,
                             'validators' => array (
                                     'Float', 
                                     array (

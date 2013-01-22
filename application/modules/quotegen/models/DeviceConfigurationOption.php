@@ -1,43 +1,25 @@
 <?php
-
-/**
- * Quotegen_Model_DeviceConfigurationOption
- *
- * @author Lee Robert
- *        
- */
 class Quotegen_Model_DeviceConfigurationOption extends My_Model_Abstract
 {
-    
     /**
-     * The device configuration id
-     *
      * @var int
      */
-    protected $_deviceConfigurationId = 0;
-    
+    public $deviceConfigurationId = 0;
+
     /**
-     * The option id
-     *
      * @var int
      */
-    protected $_optionId = 0;
-    
+    public $optionId =0;
+
     /**
-     * The quantity in the configuration.
-     * Defaults to 0
-     *
      * @var int
      */
-    protected $_quantity = 0;
-    
+    public $quantity =0;
+
     /**
-     * The included quantity in the configuration.
-     * Defaults to 0
-     *
      * @var int
      */
-    protected $_includedQuantity = 0;
+    public $includedQuantity = 0;
 
     /**
      * The option associated with this configuration
@@ -45,9 +27,9 @@ class Quotegen_Model_DeviceConfigurationOption extends My_Model_Abstract
      * @var Quotegen_Model_Option
      */
     protected $_option;
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::populate()
+
+    /**
+     * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
     {
@@ -55,112 +37,28 @@ class Quotegen_Model_DeviceConfigurationOption extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
+
         if (isset($params->deviceConfigurationId) && ! is_null($params->deviceConfigurationId))
-            $this->setDeviceConfigurationId($params->deviceConfigurationId);
+            $this->deviceConfigurationId = $params->deviceConfigurationId;
+
         if (isset($params->optionId) && ! is_null($params->optionId))
-            $this->setOptionId($params->optionId);
+            $this->optionId = $params->optionId;
+
         if (isset($params->quantity) && ! is_null($params->quantity))
-            $this->setQuantity($params->quantity);
+            $this->quantity = $params->quantity;
+
     }
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::toArray()
+
+    /**
+     * @return array
      */
     public function toArray ()
     {
         return array (
-                'deviceConfigurationId' => $this->getDeviceConfigurationId(), 
-                'optionId' => $this->getOptionId(), 
-                'quantity' => $this->getQuantity()
+            "deviceConfigurationId" => $this->deviceConfigurationId,
+            "optionId" => $this->optionId,
+            "quantity" => $this->quantity
         );
-    }
-
-    /**
-     * Gets the device configuration id
-     *
-     * @return number The device configuration id
-     */
-    public function getDeviceConfigurationId ()
-    {
-        return $this->_deviceConfigurationId;
-    }
-
-    /**
-     * Sets a new device configuration id
-     *
-     * @param number $_deviceConfigurationId
-     *            The new id
-     */
-    public function setDeviceConfigurationId ($_deviceConfigurationId)
-    {
-        $this->_deviceConfigurationId = $_deviceConfigurationId;
-        return $this;
-    }
-
-    /**
-     * Gets the option id
-     *
-     * @return number The option id
-     */
-    public function getOptionId ()
-    {
-        return $this->_optionId;
-    }
-
-    /**
-     * Sets a new option id
-     *
-     * @param number $_optionId
-     *            The id
-     */
-    public function setOptionId ($_optionId)
-    {
-        $this->_optionId = $_optionId;
-        return $this;
-    }
-
-    /**
-     * Gets the quantity
-     *
-     * @return number The quantity
-     */
-    public function getQuantity ()
-    {
-        return $this->_quantity;
-    }
-
-    /**
-     * Sets a new quantity
-     *
-     * @param number $_quantity
-     *            The new quantity
-     */
-    public function setQuantity ($_quantity)
-    {
-        $this->_quantity = $_quantity;
-        return $this;
-    }
-
-    /**
-     * Gets the quantity of this item that is included in the price of the device/device configuration
-     * 
-     * @return number The quantity
-     */
-    public function getIncludedQuantity ()
-    {
-        return $this->_includedQuantity;
-    }
-
-    /**
-     * Sets the quantity of this item that is included in the price of the device/device configuration
-     * 
-     * @param number $_includedQuantity
-     *            The new quantity
-     */
-    public function setIncludedQuantity ($_includedQuantity)
-    {
-        $this->_includedQuantity = $_includedQuantity;
-        return $this;
     }
 
     /**
@@ -172,7 +70,7 @@ class Quotegen_Model_DeviceConfigurationOption extends My_Model_Abstract
     {
         if (! isset($this->_option))
         {
-        	$this->_option = Quotegen_Model_Mapper_Option::getInstance()->find($this->getOptionId());
+        	$this->_option = Quotegen_Model_Mapper_Option::getInstance()->find($this->optionId);
         }
         return $this->_option;
     }

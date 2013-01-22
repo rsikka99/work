@@ -1,15 +1,15 @@
 <?php if ($this->Quote()): $quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */ ?>
 <div class="page-header">
-    <h1>Quote - <small><?php echo $quote->getClient()->getCompanyName(); ?></small></h1>
+    <h1>Quote - <small><?php echo $quote->getClient()->companyName; ?></small></h1>
 </div>
 <?php echo $this->quoteMenu(); ?>
 <?php if (false) : /* Disabling this so it doesnt appear in code*/?>
 <div class="row">
     <div class="span4">
-        <h3><?php echo $quote->getClient()->getCompanyName(); ?></h3>
+        <h3><?php echo $quote->getClient()->companyName; ?></h3>
         <dl class="dl-horizontal">
-            <dt>Date Created:</dt><dd><?php echo date('m/d/Y H:i', strtotime($quote->getDateCreated())); ?></dd>
-            <dt>Last Modified:</dt><dd><?php echo date('m/d/Y H:i', strtotime($quote->getDateModified())); ?></dd>
+            <dt>Date Created:</dt><dd><?php echo date('m/d/Y H:i', strtotime($quote->dateCreated)); ?></dd>
+            <dt>Last Modified:</dt><dd><?php echo date('m/d/Y H:i', strtotime($quote->dateModified)); ?></dd>
         </dl>
     </div>
     <div class="span4">
@@ -24,8 +24,8 @@
         <h3>Lease Specific Details</h3>
         <dl class="dl-horizontal">
             <dt>Quote Value:</dt><dd><?php echo $this->currency($quote->calculateQuoteLeaseValue()); ?></dd>
-            <dt>Lease Term:</dt><dd><?php echo number_format($quote->getLeaseTerm()); ?> months</dd>
-            <dt>Lease Factor:</dt><dd><?php echo number_format($quote->getLeaseRate(), 4); ?></dd>
+            <dt>Lease Term:</dt><dd><?php echo number_format($quote->leaseTerm); ?> months</dd>
+            <dt>Lease Factor:</dt><dd><?php echo number_format($quote->leaseRate, 4); ?></dd>
             <dt>Total Residual:</dt><dd><?php echo $this->currency($quote->calculateTotalResidual()); ?></dd>
             <dt>Monthly Payment:</dt><dd><?php echo $this->currency($quote->calculateQuoteMonthlyLeaseSubtotal()); ?></dd>
         </dl>

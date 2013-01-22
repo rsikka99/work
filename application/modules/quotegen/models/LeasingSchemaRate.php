@@ -1,32 +1,22 @@
 <?php
-
-/**
- * Application_Model_LeasingSchemaRate is a model that represents a user row in the database.
- *
- * @author John Sadler
- *        
- */
 class Quotegen_Model_LeasingSchemaRate extends My_Model_Abstract
 {
-    
+
     /**
-     * The related leasing schema term
-     *
      * @var int
      */
-    protected $_leasingSchemaTermId = 0;
+    public $leasingSchemaTermId = 0;
+
     /**
-     * The related leasing schema range
-     *
      * @var int
      */
-    protected $_leasingSchemaRangeId = 0;
+    public $leasingSchemaRangeId = 0;
+
     /**
-     * The rate for the term and range
-     *
-     * @var double
+     * @var int
      */
-    protected $_rate = 0;
+    public $rate = 0;
+
     /**
      * The term for the leasing schema rate
      *
@@ -39,9 +29,9 @@ class Quotegen_Model_LeasingSchemaRate extends My_Model_Abstract
      * @var Quotegen_Model_LeasingSchemaRange
      */
     protected $_range;
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::populate()
+
+    /**
+     * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
     {
@@ -49,93 +39,40 @@ class Quotegen_Model_LeasingSchemaRate extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
+
         if (isset($params->leasingSchemaTermId) && ! is_null($params->leasingSchemaTermId))
-            $this->setLeasingSchemaTermId($params->leasingSchemaTermId);
+            $this->leasingSchemaTermId = $params->leasingSchemaTermId;
+
         if (isset($params->leasingSchemaRangeId) && ! is_null($params->leasingSchemaRangeId))
-            $this->setLeasingSchemaRangeId($params->leasingSchemaRangeId);
+            $this->leasingSchemaRangeId = $params->leasingSchemaRangeId;
+
         if (isset($params->rate) && ! is_null($params->rate))
-            $this->setRate($params->rate);
+            $this->rate = $params->rate;
+
     }
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::toArray()
+
+    /**
+     * @return array
      */
     public function toArray ()
     {
         return array (
-                'leasingSchemaTermId' => $this->getLeasingSchemaTermId(), 
-                'leasingSchemaRangeId' => $this->getLeasingSchemaRangeId(), 
-                'rate' => $this->getRate() 
+            "leasingSchemaTermId" => $this->leasingSchemaTermId,
+            "leasingSchemaRangeId" => $this->leasingSchemaRangeId,
+            "rate" => $this->rate,
         );
-    }
-
-    /**
-     *
-     * @return the $_leasingSchemaTermId
-     */
-    public function getLeasingSchemaTermId ()
-    {
-        return $this->_leasingSchemaTermId;
-    }
-
-    /**
-     *
-     * @param number $_leasingSchemaTermId            
-     */
-    public function setLeasingSchemaTermId ($_leasingSchemaTermId)
-    {
-        $this->_leasingSchemaTermId = $_leasingSchemaTermId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $_leasingSchemaRangeId
-     */
-    public function getLeasingSchemaRangeId ()
-    {
-        return $this->_leasingSchemaRangeId;
-    }
-
-    /**
-     *
-     * @param number $_leasingSchemaRangeId            
-     */
-    public function setLeasingSchemaRangeId ($_leasingSchemaRangeId)
-    {
-        $this->_leasingSchemaRangeId = $_leasingSchemaRangeId;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $_rate
-     */
-    public function getRate ()
-    {
-        return $this->_rate;
-    }
-
-    /**
-     *
-     * @param number $_rate            
-     */
-    public function setRate ($_rate)
-    {
-        $this->_rate = $_rate;
-        return $this;
     }
 
     /**
      * Gets the term for the leasing schema rate
      *
-     * @return the $_term
+     *
      */
     public function getTerm ()
     {
         if (! isset($this->_term))
         {
-            $this->_term = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->find($this->getLeasingSchemaTermId());
+            $this->_term = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->find($this->leasingSchemaTermId);
         }
         return $this->_term;
     }
@@ -160,7 +97,7 @@ class Quotegen_Model_LeasingSchemaRate extends My_Model_Abstract
     {
         if (! isset($this->_range))
         {
-            $this->_range = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance()->find($this->getLeasingSchemaRangeId());
+            $this->_range = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance()->find($this->leasingSchemaRangeId);
         }
         return $this->_range;
     }
@@ -168,7 +105,9 @@ class Quotegen_Model_LeasingSchemaRate extends My_Model_Abstract
     /**
      * Sets the range for the leasing schema rate
      *
-     * @param Quotegen_Model_LeasingSchemaRange $_range            
+     * @param Quotegen_Model_LeasingSchemaRange $_range
+     *
+     * @return \Quotegen_Model_LeasingSchemaRate
      */
     public function setRange ($_range)
     {

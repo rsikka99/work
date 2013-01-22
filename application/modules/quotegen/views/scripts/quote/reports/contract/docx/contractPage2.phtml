@@ -24,7 +24,7 @@ foreach ( $quote->getQuoteDevices() as $quoteDevice )
     for($i = 0; $i < $quoteDevice->calculateTotalQuantity(); $i ++)
     {
         $deviceTable->addRow(600);
-        $deviceTable->addCell($tableSpan ['span2'], $this->cellStyle->bottomLeftBorder, 4)->addText($quoteDevice->getName(), null, $this->paragraphStyle->noSpacing);
+        $deviceTable->addCell($tableSpan ['span2'], $this->cellStyle->bottomLeftBorder, 4)->addText($quoteDevice->name, null, $this->paragraphStyle->noSpacing);
         $deviceTable->addCell($tableSpan ['span1'], $this->cellStyle->bottomRightBorder, 2)->addText(' ', null, $this->paragraphStyle->noSpacing);
         $deviceTable->addCell($tableSpan ['span1'], $this->cellStyle->bottomRightBorder, 2)->addText(' ', null, $this->paragraphStyle->noSpacing);
     }

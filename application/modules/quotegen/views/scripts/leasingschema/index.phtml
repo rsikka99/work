@@ -27,10 +27,10 @@
     			<tr>
     				<th nowrap="nowrap" style="min-width: 80px; text-align: center;">Term (months) </th>
     				<?php foreach ($leasingSchema->getRanges() as $range ) : ?>
-    					<?php if ($range->getStartRange() == 0) : ?>
+    					<?php if ($range->startRange == 0) : ?>
     						<th style="min-width: 80px; text-align: center;">$0+ </th>
     					<?php else : ?>
-    						<th style="min-width: 80px; text-align: center;"><?php echo $this->currency($range->getStartRange()); ?>+ </th>
+    						<th style="min-width: 80px; text-align: center;"><?php echo $this->currency($range->startRange); ?>+ </th>
     					<?php endif; ?>
     				<?php endforeach; ?>
     				<th nowrap="nowrap" style="min-width: 80px; text-align: center;">Action</th>
@@ -44,19 +44,19 @@
             <?php foreach ( $leasingSchema->getTerms() as $term ) : /* @var $term Quotegen_Model_LeasingSchemaTerm */ ?>
                 <tr>
         	        <td style="text-align: center;">
-        	        	<?php echo $term->getMonths(); ?> months
+        	        	<?php echo $term->months; ?> months
         	        </td>
         	        
                 <?php foreach ( $leasingSchema->getRanges() as $range ) : /* @var $range Quotegen_Model_LeasingSchemaRange */ ?>
-                    <td style="text-align: center;"><?php echo number_format($rates[$term->getId()][$range->getId()]->getRate(), 4); ?></td>
+                    <td style="text-align: center;"><?php echo number_format($rates[$term->id][$range->id]->rate, 4); ?></td>
                 <?php endforeach; ?>
                 
                     <td style="text-align: center;">
-        		      	<a class="btn btn-warning btn-mini" title="Edit Term" href="<?php echo $this->url( array ( 'action' => 'editterm', 'id' => $term->getId()) ); ?>">
+        		      	<a class="btn btn-warning btn-mini" title="Edit Term" href="<?php echo $this->url( array ( 'action' => 'editterm', 'id' => $term->id) ); ?>">
         					<i class="icon-pencil icon-white"></i>
         				</a>
     				<?php if ( count ( $leasingSchema->getTerms() ) > 1 ) : ?>
-        		      	<a class="btn btn-danger btn-mini" title="Delete Term" href="<?php echo $this->url( array ( 'action' => 'deleteterm', 'id' => $term->getId()) ); ?>">
+        		      	<a class="btn btn-danger btn-mini" title="Delete Term" href="<?php echo $this->url( array ( 'action' => 'deleteterm', 'id' => $term->id) ); ?>">
         					<i class="icon-trash icon-white"></i>
         				</a>
     				<?php endif; ?>
@@ -67,11 +67,11 @@
     	      	    <td></td>
       	    <?php foreach ($leasingSchema->getRanges() as $range ) : /* @var $range Quotegen_Model_LeasingSchemaRange */ ?> 
                     <td style="text-align: center;">
-    		      	    <a class="btn btn-warning btn-mini" title="Edit Range" href="<?php echo $this->url( array ( 'action' => 'editrange', 'id' => $range->getId()) ); ?>">
+    		      	    <a class="btn btn-warning btn-mini" title="Edit Range" href="<?php echo $this->url( array ( 'action' => 'editrange', 'id' => $range->id) ); ?>">
     						<i class="icon-pencil icon-white"></i>
     					</a>
-				    <?php if ($range->getStartRange() != 0) : ?>
-    			      	<a class="btn btn-danger btn-mini" title="Delete Range" href="<?php echo $this->url( array ( 'action' => 'deleterange', 'id' => $range->getId()) ); ?>">
+				    <?php if ($range->startRange != 0) : ?>
+    			      	<a class="btn btn-danger btn-mini" title="Delete Range" href="<?php echo $this->url( array ( 'action' => 'deleterange', 'id' => $range->id) ); ?>">
     						<i class="icon-trash icon-white"></i>
     					</a>
 					<?php endif; ?>

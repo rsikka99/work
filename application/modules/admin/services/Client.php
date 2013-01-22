@@ -300,7 +300,7 @@ class Admin_Service_Client
         }
         
         $country = Quotegen_Model_Mapper_Country::getInstance()->find($countryId);
-        $postValidator = new Zend_Validate_PostCode($country->getLocale());
+        $postValidator = new Zend_Validate_PostCode($country->locale);
         if ($postValidator->isValid($postCode))
         {
             return $postCode;
@@ -337,8 +337,8 @@ class Admin_Service_Client
         $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
         $address = Quotegen_Model_Mapper_Address::getInstance()->getAddressByClientId($clientId);
         
-        $address->setRegion(Quotegen_Model_Mapper_Region::getInstance()->getById($address->getRegion())
-            ->getRegion());
+        $address->region = Quotegen_Model_Mapper_Region::getInstance()->getById($address->region)
+            ->getRegion();
         
         $contact = Quotegen_Model_Mapper_Contact::getInstance()->getContactByClientId($clientId);
         $combinedClientData = $client->toArray();

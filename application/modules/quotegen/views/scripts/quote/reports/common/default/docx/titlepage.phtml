@@ -11,15 +11,15 @@ $quote = $this->quote;
 $client = $quote->getClient();
 
 
-$quoteDate = date('F jS, Y', strtotime($quote->getQuoteDate()));
+$quoteDate = date('F jS, Y', strtotime($quote->quoteDate));
 
 /* @var $section PHPWord_Section */
 $section = $this->section;
 
-$clientName = $quote->getClientDisplayName();
+$clientName = $quote->clientDisplayName;
 if (empty($clientName))
 {
-    $clientName = $client->getCompanyName();
+    $clientName = $client->companyName;
 }
 
 $section->addText($this->translate('Prepared For:') . " " . $clientName, 'titlepageHeaderFont', 'titlepageHeaderParagraph');
@@ -28,12 +28,12 @@ $section->addText($quoteDate, 'titlepageHeaderFont', 'titlepageHeaderParagraph')
 $section->addTextBreak(4);
 
 //add the addresses
-$section->addText($client->getAddress()->getAddressLine1(), null, 'nospacing');
+$section->addText($client->getAddress()->addressLine1, null, 'nospacing');
 
-if (strlen($client->getAddress()->getAddressLine2()) > 0)
+if (strlen($client->getAddress()->addressLine2) > 0)
 {
-	$section->addText($client->getAddress()->getAddressLine2(), null, 'nospacing');
+	$section->addText($client->getAddress()->addressLine2, null, 'nospacing');
 }
 
-$section->addText("{$client->getAddress()->getCity()}, {$client->getAddress()->getRegionName()} {$client->getAddress()->getPostCode()}", null, 'nospacing');
+$section->addText("{$client->getAddress()->city}, {$client->getAddress()->getRegionName()} {$client->getAddress()->postCode}", null, 'nospacing');
 $section->addText($client->getAddress()->getCountry(), null, 'nospacing');

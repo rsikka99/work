@@ -46,32 +46,32 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                         {
                             $quoteDeviceHasChanges = false;
                             
-                            $packageMarkup = $form->getValue("packageMarkup_{$quoteDevice->getId()}");
-                            $margin = $form->getValue("margin_{$quoteDevice->getId()}");
+                            $packageMarkup = $form->getValue("packageMarkup_{$quoteDevice->id}");
+                            $margin = $form->getValue("margin_{$quoteDevice->id}");
                             
                             // Has the package markup changed?
-                            if ((float)$quoteDevice->getPackageMarkup() !== (float)$packageMarkup)
+                            if ((float)$quoteDevice->packageMarkup !== (float)$packageMarkup)
                             {
-                                $quoteDevice->setPackageMarkup($packageMarkup);
+                                $quoteDevice->packageMarkup = $packageMarkup;
                                 $quoteDeviceHasChanges = true;
                             }
                             
                             // Has the margin changed?
-                            if ((float)$quoteDevice->getMargin() !== (float)$margin)
+                            if ((float)$quoteDevice->margin !== (float)$margin)
                             {
-                                $quoteDevice->setMargin($margin);
+                                $quoteDevice->margin = $margin;
                                 $quoteDeviceHasChanges = true;
                             }
                             
                             // Leased quote only
                             if ($this->_quote->isLeased())
                             {
-                                $residual = $form->getValue("residual_{$quoteDevice->getId()}");
+                                $residual = $form->getValue("residual_{$quoteDevice->id}");
                                 
                                 // Has the residual changed?
-                                if ((float)$quoteDevice->getResidual() !== (float)$residual)
+                                if ((float)$quoteDevice->residual !== (float)$residual)
                                 {
-                                    $quoteDevice->setResidual($residual);
+                                    $quoteDevice->residual = $residual;
                                     $quoteDeviceHasChanges = true;
                                 }
                             }
@@ -91,10 +91,10 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                             $leasingSchemaTerm = $this->_quote->getLeasingSchemaTerm();
                             
                             // Save the leasing schema term
-                            if (! $leasingSchemaTerm || (int)$form->getValue('leasingSchemaTermId') != (int)$leasingSchemaTerm->getId())
+                            if (! $leasingSchemaTerm || (int)$form->getValue('leasingSchemaTermId') != (int)$leasingSchemaTerm->id)
                             {
                                 $quoteLeaseTerm = new Quotegen_Model_QuoteLeaseTerm();
-                                $quoteLeaseTerm->setQuoteId($this->_quote->getId());
+                                $quoteLeaseTerm->setQuoteId($this->_quote->id);
                                 
                                 $quoteLeaseTerm->setLeasingSchemaTermId($form->getValue('leasingSchemaTermId'));
                                 

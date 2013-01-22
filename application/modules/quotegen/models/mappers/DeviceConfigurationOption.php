@@ -69,8 +69,8 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
     public function getPrimaryKeyValueForObject ($object)
     {
         return array (
-                $object->getDeviceConfigurationId(), 
-                $object->getOptionId() 
+                $object->deviceConfigurationId,
+                $object->optionId
         );
     }
 
@@ -118,8 +118,8 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
         if ($object instanceof Quotegen_Model_DeviceConfigurationOption)
         {
             $whereClause = array (
-                    "{$this->col_deviceConfigurationId} = ?" => $object->getDeviceConfigurationId(), 
-                    "{$this->col_optionId} = ?" => $object->getOptionId() 
+                    "{$this->col_deviceConfigurationId} = ?" => $object->deviceConfigurationId,
+                    "{$this->col_optionId} = ?" => $object->optionId
             );
         }
         else
@@ -200,8 +200,8 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
         $object = new Quotegen_Model_DeviceConfigurationOption($row->toArray());
         
         // Save the object into the cache
-        $primaryKey [0] = $object->getDeviceConfigurationId();
-        $primaryKey [1] = $object->getOptionId();
+        $primaryKey [0] = $object->deviceConfigurationId;
+        $primaryKey [1] = $object->optionId;
         $this->saveItemToCache($object);
         
         return $object;
@@ -229,8 +229,8 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
             $object = new Quotegen_Model_DeviceConfigurationOption($row->toArray());
             
             // Save the object into the cache
-            $primaryKey [0] = $object->getDeviceConfigurationId();
-            $primaryKey [1] = $object->getOptionId();
+            $primaryKey [0] = $object->deviceConfigurationId;
+            $primaryKey [1] = $object->optionId;
             $this->saveItemToCache($object);
             
             $entries [] = $object;

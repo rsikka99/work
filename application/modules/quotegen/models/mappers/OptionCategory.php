@@ -92,8 +92,8 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_OptionCategory)
         {
             $whereClause = array (
-                    "{$this->col_categoryId} = ?" => $object->getCategoryId(), 
-                    "{$this->col_optionId} = ?" => $object->getOptionId() 
+                    "{$this->col_categoryId} = ?" => $object->categoryId,
+                    "{$this->col_optionId} = ?" => $object->optionId
             );
         }
         else
@@ -120,7 +120,7 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_Option)
         {
             $whereClause = array (
-                    "{$this->col_optionId} = ?" => $object->getId() 
+                    "{$this->col_optionId} = ?" => $object->id
             );
         }
         else
@@ -146,7 +146,7 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_Category)
         {
             $whereClause = array (
-                    "{$this->col_categoryId} = ?" => $object->getId() 
+                    "{$this->col_categoryId} = ?" => $object->id
             );
         }
         else
@@ -213,8 +213,8 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_OptionCategory($row->toArray());
         
         // Save the object into the cache
-        $primaryKey [0] = $object->getCategoryId();
-        $primaryKey [1] = $object->getOptionId();
+        $primaryKey [0] = $object->categoryId;
+        $primaryKey [1] = $object->optionId;
         $this->saveItemToCache($object);
         
         return $object;
@@ -242,8 +242,8 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
             $object = new Quotegen_Model_OptionCategory($row->toArray());
             
             // Save the object into the cache
-            $primaryKey [0] = $object->getCategoryId();
-            $primaryKey [1] = $object->getOptionId();
+            $primaryKey [0] = $object->categoryId;
+            $primaryKey [1] = $object->optionId;
             $this->saveItemToCache($object);
             
             $entries [] = $object;
@@ -285,7 +285,7 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
             
             foreach ( $optionCategories as $optionCategory )
             {
-                $categories [] = $categoryMapper->find($optionCategory->getCategoryId());
+                $categories [] = $categoryMapper->find($optionCategory->categoryId);
             }
         }
         catch ( Exception $e )
@@ -301,8 +301,8 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return array (
-                $object->getCategoryId(), 
-                $object->getOptionId() 
+                $object->categoryId,
+                $object->optionId
         );
     }
 }

@@ -54,11 +54,11 @@ class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
             /* @var $deviceConfigurationOption Quotegen_Model_DeviceConfigurationOption */
             foreach ( $device->getOptions() as $deviceConfigurationOption )
             {
-                $optionElement = $this->createElement('text', "option-{$deviceConfigurationOption->getOptionId()}", array (
+                $optionElement = $this->createElement('text', "option-{$deviceConfigurationOption->optionId}", array (
                         'label' => $deviceConfigurationOption->getOption()
-                            ->getName(), 
-                        'value' => $deviceConfigurationOption->getQuantity(), 
-                        'description' => $deviceConfigurationOption->getOptionId() 
+                            ->name,
+                        'value' => $deviceConfigurationOption->quantity,
+                        'description' => $deviceConfigurationOption->optionId
                 )
                 );
                 $optionElement->setAttrib('class', 'span1');
@@ -80,7 +80,7 @@ class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
             /* @var $device Quotegen_Model_Device */
             foreach ( Quotegen_Model_Mapper_Device::getInstance()->fetchAll() as $device )
             {
-                $quoteDeviceList [$device->getMasterDeviceId()] = $device->getMasterDevice()->getFullDeviceName();
+                $quoteDeviceList [$device->masterDeviceId] = $device->getMasterDevice()->getFullDeviceName();
             }
             $this->addElement('select', 'masterDeviceId', array (
                     'label' => 'Available Devices:', 

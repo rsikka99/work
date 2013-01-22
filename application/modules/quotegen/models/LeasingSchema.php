@@ -1,38 +1,31 @@
 <?php
-
-/**
- * Application_Model_LeasingSchema is a model that represents a user row in the database.
- *
- * @author John Sadler
- *        
- */
 class Quotegen_Model_LeasingSchema extends My_Model_Abstract
 {
-    
+
     /**
-     * The id assigned by the database
-     *
      * @var int
      */
-    protected $_id = 0;
+    public $id = 0;
+
     /**
-     * The name of the schema
-     *
      * @var string
      */
-    protected $_name;
+    public $name;
+
     /**
      * All terms
      *
      * @var array
      */
     protected $_terms;
+
     /**
      * All ranges
      *
      * @var array
      */
     protected $_ranges;
+
     /**
      * 2 dimensional array rates.
      * First key is term id.
@@ -41,9 +34,9 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
      * @var array
      */
     protected $_rates;
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::populate()
+
+    /**
+     * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
     {
@@ -51,20 +44,23 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
+
         if (isset($params->id) && ! is_null($params->id))
-            $this->setId($params->id);
+            $this->id = $params->id;
+
         if (isset($params->name) && ! is_null($params->name))
-            $this->setName($params->name);
+            $this->name = $params->name;
+
     }
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::toArray()
+
+    /**
+     * @return array
      */
     public function toArray ()
     {
         return array (
-                'id' => $this->getId(), 
-                'name' => $this->getName() 
+            "id" => $this->id,
+            "name" => $this->name,
         );
     }
 
@@ -76,44 +72,6 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
     }
 
     /**
-     *
-     * @return the $_id
-     */
-    public function getId ()
-    {
-        return $this->_id;
-    }
-
-    /**
-     *
-     * @param number $_id            
-     */
-    public function setId ($_id)
-    {
-        $this->_id = $_id;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $_name
-     */
-    public function getName ()
-    {
-        return $this->_name;
-    }
-
-    /**
-     *
-     * @param string $_name            
-     */
-    public function setName ($_name)
-    {
-        $this->_name = $_name;
-        return $this;
-    }
-
-    /**
      * Gets all terms for leasing schema
      *
      * @return the $_terms
@@ -122,7 +80,7 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
     {
         if (! isset($this->_terms))
         {
-            $this->_terms = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->fetchAllForLeasingSchema($this->getId());
+            $this->_terms = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->fetchAllForLeasingSchema($this->id);
         }
         return $this->_terms;
     }
@@ -147,7 +105,7 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
     {
         if (! isset($this->_ranges))
         {
-            $this->_ranges = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance()->fetchAllForLeasingSchema($this->getId());
+            $this->_ranges = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance()->fetchAllForLeasingSchema($this->id);
         }
         return $this->_ranges;
     }
@@ -155,7 +113,9 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
     /**
      * Sets all ranges for leasing schema
      *
-     * @param multitype: $_ranges            
+     * @param multitype: $_ranges
+     *
+     * @return Quotegen_Model_LeasingSchema
      */
     public function setRanges ($_ranges)
     {
@@ -166,16 +126,14 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
     /**
      * Gets all rates for leasing schema
      *
-     * @return the $_rates
-     *         2 dimensional array rates.
-     *         First key is term id.
-     *         Second key is range id.
+     * @return array|\multitype 2 dimensional array rates.
+     * @internal param $
      */
     public function getRates ()
     {
         if (! isset($this->_rates))
         {
-            $this->_rates = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance()->fetchAllForLeasingSchema($this->getId());
+            $this->_rates = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance()->fetchAllForLeasingSchema($this->id);
         }
         return $this->_rates;
     }
@@ -187,6 +145,8 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
      *            2 dimensional array rates.
      *            First key is term id.
      *            Second key is range id.
+     *
+     * @return Quotegen_Model_LeasingSchema
      */
     public function setRates ($_rates)
     {

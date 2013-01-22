@@ -35,6 +35,7 @@ class Proposalgen_Report_IndexController extends Proposalgen_Library_Controller_
     public function indexAction ()
     {
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FINISHED);
+        $this->initReportList();
 
         $this->view->headScript()->prependFile($this->view->baseUrl("/js/htmlReport.js"));
         $this->view->formTitle = "Report Summary";
