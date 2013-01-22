@@ -21,7 +21,7 @@ final class Twitter_Bootstrap_Form_Search extends Twitter_Bootstrap_Form_Inline
     public function __construct($options = null)
     {
         $this->_initializePrefixes();
-        
+
         $this->setDisposition(self::DISPOSITION_SEARCH);
 
         $renderButton = true;
@@ -40,8 +40,10 @@ final class Twitter_Bootstrap_Form_Search extends Twitter_Bootstrap_Form_Inline
 
         // Add the search input
         $inputName = isset($options['inputName']) ? $options['inputName'] : 'searchQuery';
+        $placeholder = isset($options['placeholder']) ? $options['placeholder'] : null;
         $this->addElement('text', $inputName, array(
-            'class' => 'search-query'
+            'class' => 'search-query',
+            'placeholder' => $placeholder
         ));
 
         if ($renderButton) {
@@ -51,7 +53,7 @@ final class Twitter_Bootstrap_Form_Search extends Twitter_Bootstrap_Form_Inline
                 'label' => $buttonLabel
             ));
         }
-        
+
         parent::__construct($options);
     }
 }

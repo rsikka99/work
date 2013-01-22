@@ -5,6 +5,8 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
      * Column Definitions
      */
     public $col_id = 'id';
+    public $col_reportId = 'reportId';
+    public $col_rmsUploadRowId = 'rmsUploadRowId';
 
     /**
      * The default db table class to use
@@ -274,5 +276,17 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
         }
 
         return $devices;
+    }
+
+
+    /**
+     * Counts how many device instance rows we have for the report
+     * @param $reportId
+     *
+     * @return int
+     */
+    public function countRowsForReport ($reportId)
+    {
+        return $this->count(array("{$this->col_reportId} = ?" => $reportId));
     }
 }

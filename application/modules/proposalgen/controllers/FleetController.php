@@ -9,6 +9,68 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     {
         // Mark the step we're on as active
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FLEETDATA_UPLOAD);
+
+        $report = $this->getReport();
+        $form   = new Proposalgen_Form_UploadFile(array('csv'), "1B", "8MB");
+
+        if ($this->getRequest()->isPost())
+        {
+            $values = $this->getRequest()->getPost();
+            if (isset($values ["goBack"]))
+            {
+                $this->gotoPreviousStep();
+            }
+            else if (isset($values ["performUpload"]))
+            {
+                /*
+                 * Handle Upload
+                 */
+                if ($form->isValid($values))
+                {
+                    $filename = $form->getUploadedFilename();
+                    if ($filename !== false)
+                    {
+
+                    }
+                    $formData = $form->getValues();
+
+                    echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
+                    var_dump($formData);
+                    die();
+                    $this->_helper->flashMessenger(array(
+                                                        'success' => "Your file was imported successfully."
+                                                   ));
+                }
+                else
+                {
+                    $this->_helper->flashMessenger(array(
+                                                        'danger' => "Upload Failed. Please check the errors below."
+                                                   ));
+                }
+            }
+            else if (isset($values ["saveAndContinue"]))
+            {
+                $count = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->countRowsForReport($report->id);
+                if ($count < 2)
+                {
+                    $this->_helper->flashMessenger(array(
+                                                        'danger' => "You must have at least 2 valid devices to continue."
+                                                   ));
+                }
+                else
+                {
+                    // Every time we save anything related to a report, we should save it (updates the modification date)
+                    $this->saveReport();
+
+                    // Call the base controller to send us to the next logical step in the proposal.
+                    $this->gotoNextStep();
+                }
+            }
+        }
+
+        $this->view->form = $form;
+
+
 //
 //        $report   = $this->getReport();
 //        $reportId = $report->id;
@@ -261,12 +323,12 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                      * Convert some fields that may have the text 'false' to a boolean value
                      * Convert some rows to null if they are 0 (empty)
                      */
-                    $deviceRow->id         = null;
-                    $deviceRow->report_id = $reportId;
-                    $deviceRow->is_color   = (strcasecmp($deviceRow->is_color, 'false') === 0) ? 0 : 1;
-                    $deviceRow->is_copier  = (strcasecmp($deviceRow->is_copier, 'false') === 0) ? 0 : 1;
-                    $deviceRow->is_scanner = (strcasecmp($deviceRow->is_scanner, 'false') === 0) ? 0 : 1;
-                    $deviceRow->is_fax     = (strcasecmp($deviceRow->is_fax, 'false') === 0) ? 0 : 1;
+                    $deviceRow->id                   = null;
+                    $deviceRow->report_id            = $reportId;
+                    $deviceRow->is_color             = (strcasecmp($deviceRow->is_color, 'false') === 0) ? 0 : 1;
+                    $deviceRow->is_copier            = (strcasecmp($deviceRow->is_copier, 'false') === 0) ? 0 : 1;
+                    $deviceRow->is_scanner           = (strcasecmp($deviceRow->is_scanner, 'false') === 0) ? 0 : 1;
+                    $deviceRow->is_fax               = (strcasecmp($deviceRow->is_fax, 'false') === 0) ? 0 : 1;
                     $deviceRow->duty_cycle           = (empty($deviceRow->duty_cycle)) ? null : $deviceRow->duty_cycle;
                     $deviceRow->ppm_black            = (empty($deviceRow->ppm_black)) ? null : $deviceRow->ppm_black;
                     $deviceRow->ppm_color            = (empty($deviceRow->ppm_color)) ? null : $deviceRow->ppm_color;
@@ -302,7 +364,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     $deviceRow->endmeterscan         = (empty($deviceRow->endmeterscan)) ? null : $deviceRow->endmeterscan;
                     $deviceRow->startmeterfax        = (empty($deviceRow->startmeterfax)) ? null : $deviceRow->startmeterfax;
                     $deviceRow->endmeterfax          = (empty($deviceRow->endmeterfax)) ? null : $deviceRow->endmeterfax;
-
 
 
                     $manufacturerName = strtolower(trim($deviceRow->manufacturer));
@@ -359,7 +420,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     $discoveryDate    = (empty($deviceRow->discoverydate)) ? null : new Zend_Date($deviceRow->discoverydate, $dateInputFormat);
 
                     $deviceRow->date_introduction = $introductionDate->toString($dateOutputFormat);
-                    $deviceRow->discovery_date = $discoveryDate->toString($dateOutputFormat);
+                    $deviceRow->discovery_date    = $discoveryDate->toString($dateOutputFormat);
 
                     $deviceRow->devices_pf_id = $pfDevice->devicesPfId;
 
@@ -367,8 +428,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     $uploadDataCollectorRow = @Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance()->mapRowToObject($deviceRow);
                     //$uploadDataCollectorRow = new Proposalgen_Model_UploadDataCollectorRow($deviceRow);
 
-                    $uploadDataCollectorRow->startDate   = $startDate->toString($dateOutputFormat);
-                    $uploadDataCollectorRow->endDate     = $endDate->toString($dateOutputFormat);
+                    $uploadDataCollectorRow->startDate = $startDate->toString($dateOutputFormat);
+                    $uploadDataCollectorRow->endDate   = $endDate->toString($dateOutputFormat);
 
                     // Validate the row
                     $deviceHasBadData                    = $uploadDataCollectorRow->IsValid();
@@ -777,6 +838,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
     /**
      * Handles mapping a device
+     *
      * @throws Exception
      */
     public function setmappedtoAction ()
@@ -817,7 +879,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 else
                 {
                     $pf_device_matchup_usersData ['pf_device_id'] = $devices_pf_id;
-                    $pf_device_matchup_usersData ['user_id']       = $this->_userId;
+                    $pf_device_matchup_usersData ['user_id']      = $this->_userId;
                     $pf_device_matchup_usersTable->insert($pf_device_matchup_usersData);
                 }
             }
@@ -2447,7 +2509,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     if ($master_device_id > 0)
                     {
                         // get jit support
-                        $is_color    = $result [$key] ['is_color'];
+                        $is_color = $result [$key] ['is_color'];
                         if ($is_color == 0)
                         {
                             $tonerLevels = array(
@@ -2508,8 +2570,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     ->joinLeft(array(
                                     'di' => 'pgen_device_instances'
                                ), 'di.upload_data_collector_row_id = udc.id', array(
-                                                         'di.id AS device_instance_id'
-                                                    ))
+                                                                                   'di.id AS device_instance_id'
+                                                                              ))
                     ->where('udc.report_id = ?', $report_id, 'INTEGER')
                     ->where('udc.invalid_data = 0')
                     ->where('di.id > 0');

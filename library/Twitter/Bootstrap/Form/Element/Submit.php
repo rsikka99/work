@@ -24,6 +24,17 @@ class Twitter_Bootstrap_Form_Element_Submit extends Zend_Form_Element_Submit
     const BUTTON_WARNING = 'warning';
     const BUTTON_DANGER = 'danger';
     const BUTTON_INVERSE = 'inverse';
+    const BUTTON_LINK = 'link';
+
+    protected $buttons = array(
+        self::BUTTON_DANGER,
+        self::BUTTON_INFO,
+        self::BUTTON_PRIMARY,
+        self::BUTTON_SUCCESS,
+        self::BUTTON_WARNING,
+        self::BUTTON_INVERSE,
+        self::BUTTON_LINK
+    );
 
     /**
      * Class constructor
@@ -33,24 +44,15 @@ class Twitter_Bootstrap_Form_Element_Submit extends Zend_Form_Element_Submit
      */
     public function __construct($spec, $options = null)
     {
-        if (!isset($options['class'])) $options['class'] = '';
-        $classes = explode(' ',$options['class']);
+
+        if (!isset($options['class'])) {
+            $options['class'] = '';
+        }
+
+        $classes = explode(' ', $options['class']);
         $classes[] = 'btn';
 
-        if (
-            isset($options['buttonType'])
-            && in_array(
-                $options['buttonType'],
-                array(
-                    self::BUTTON_DANGER,
-                    self::BUTTON_INFO,
-                    self::BUTTON_PRIMARY,
-                    self::BUTTON_SUCCESS,
-                    self::BUTTON_WARNING,
-                    self::BUTTON_INVERSE
-                )
-            )
-        ) {
+        if (isset($options['buttonType']) && in_array( $options['buttonType'], $this->buttons )) {
             $classes[] = 'btn-' . $options['buttonType'];
             unset($options['buttonType']);
         }
@@ -58,10 +60,10 @@ class Twitter_Bootstrap_Form_Element_Submit extends Zend_Form_Element_Submit
         if (isset($options['disabled'])) {
             $classes[] = 'disabled';
         }
-        
+
         $classes = array_unique($classes);
 
-        $options['class'] = implode(' ', $classes);
+        $options['class'] = trim( implode(' ', $classes) );
 
         parent::__construct($spec, $options);
     }
