@@ -10,8 +10,10 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         // Mark the step we're on as active
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FLEETDATA_UPLOAD);
 
-        $report = $this->getReport();
-        $form   = new Proposalgen_Form_ImportRmsCsv(array('csv'), "1B", "8MB");
+        $report               = $this->getReport();
+        $form                 = new Proposalgen_Form_ImportRmsCsv(array('csv'), "1B", "8MB");
+        $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
+        $rmsExcludedRowMapper = Proposalgen_Model_Mapper_Rms_Excluded_Row::getInstance();
 
         if ($this->getRequest()->isPost())
         {
@@ -66,11 +68,9 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             $db->beginTransaction();
                             try
                             {
-                                $deviceInstanceMapper      = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
                                 $rmsUploadRowMapper        = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance();
                                 $deviceInstanceMeterMapper = Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance();
-                                $rmsExcludedRowMapper      = Proposalgen_Model_Mapper_Rms_Excluded_Row::getInstance();
-                                $rmsDeviceMapper = Proposalgen_Model_Mapper_Rms_Device::getInstance();
+                                $rmsDeviceMapper           = Proposalgen_Model_Mapper_Rms_Device::getInstance();
 
                                 /*
                                  * Delete all previously uploaded lines
@@ -101,10 +101,10 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                         $rmsDevice = $rmsDeviceMapper->find(array($uploadProviderId, $line->rmsModelId));
                                         if (!$rmsDevice instanceof Proposalgen_Model_Rms_Device)
                                         {
-                                            $rmsDevice = new Proposalgen_Model_Rms_Device($lineArray);
+                                            $rmsDevice                = new Proposalgen_Model_Rms_Device($lineArray);
                                             $rmsDevice->rmsProviderId = $uploadProviderId;
-                                            $rmsDevice->dateCreated = new Zend_Db_Expr("NOW()");
-                                            $rmsDevice->userId = $this->_userId;
+                                            $rmsDevice->dateCreated   = new Zend_Db_Expr("NOW()");
+                                            $rmsDevice->userId        = $this->_userId;
                                             $rmsDeviceMapper->insert($rmsDevice);
                                         }
 
@@ -217,12 +217,12 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                      */
                                     foreach ($uploadCsvService->invalidCsvLines as $line)
                                     {
-                                        $rmsExcludedRow                = new Proposalgen_Model_Rms_Excluded_Row($line->toArray());
+                                        $rmsExcludedRow = new Proposalgen_Model_Rms_Excluded_Row($line->toArray());
 
                                         // Set values that have different names than in $line
                                         $rmsExcludedRow->manufacturerName = $line->manufacturer;
-                                        $rmsExcludedRow->reportId      = $report->id;
-                                        $rmsExcludedRow->reason        = $line->validationErrorMessage;
+                                        $rmsExcludedRow->reportId         = $report->id;
+                                        $rmsExcludedRow->reason           = $line->validationErrorMessage;
 
                                         // Set values that are none existent in $line
                                         $rmsExcludedRow->rmsProviderId = $uploadProviderId;
@@ -294,133 +294,10 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
         $this->view->form = $form;
 
+        $this->view->deviceInstanceCount = $deviceInstanceMapper->countRowsForReport($report->id);
+        $this->view->rmsExcludedRowCount = $rmsExcludedRowMapper->countRowsForReport($report->id);
+        $this->view->hasPreviousUpload = ($this->view->deviceInstanceCount > 0 || $this->view->rmsExcludedRowCount > 0);
 
-//
-//        $report   = $this->getReport();
-//        $reportId = $report->id;
-//
-//        $request = $this->getRequest();
-//
-//        if ($request->isPost())
-//        {
-//            $values = $request->getPost();
-//            if (isset($values ["goBack"]))
-//            {
-//                $this->gotoPreviousStep();
-//            }
-//            else if (isset($values ["uploadData"]))
-//            {
-//                // Validate and receive the file.
-//                $upload = new Zend_File_Transfer_Adapter_Http();
-//                $upload->setDestination($this->view->App()->uploadPath);
-//
-//                // Limit the extensions to csv files
-//                $upload->addValidator('Extension', false, array(
-//                                                               'csv'
-//                                                          ));
-//                $upload->getValidator('Extension')->setMessage('File must have the csv extension.');
-//                $upload->addValidator('Count', false, 1);
-//                $upload->getValidator('Count')->setMessage('You are only allowed to upload 1 file at a time.');
-//
-//                // Limit the size of all files to be uploaded to maximum 4MB and
-//                // minimum 50B
-//                $upload->addValidator('FilesSize', false, array(
-//                                                               'min' => '50B',
-//                                                               'max' => '4MB'
-//                                                          ));
-//                $upload->getValidator('FilesSize')->setMessage('File size must be between 500B and 4MB.');
-//
-//                // Try to get the file
-//
-//
-//                if ($upload->receive())
-//                {
-//                    $isValid = true;
-//
-//                    try
-//                    {
-//                        // Get the text from the file
-//                        $lines = file($upload->getFileName(), FILE_IGNORE_NEW_LINES);
-//
-//                        Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance()->deleteAllRowsForReport($reportId);
-//                        if ($this->parseCSVUpload($lines))
-//                        {
-//
-//                            // Reset the report stage here since we've cleared our mappings and such.
-//                            $report->reportStage = Proposalgen_Model_Report_Step::STEP_FLEETDATA_UPLOAD;
-//
-//                            $this->_helper->flashMessenger(array(
-//                                                                'success' => "Fleet Data Imported Successfully."
-//                                                           ));
-//                        }
-//                    }
-//                    catch (Exception $e)
-//                    {
-//                        throw new Exception("Error Uploading.", 0, $e);
-//                        $this->_helper->flashMessenger(array(
-//                                                            'danger' => "Your file was not saved. Please double check the file and try again. If you continue to experience problems saving, contact your administrator."
-//                                                       ));
-//                    }
-//
-//                    // Delete the file after we're done with it.
-//                    unlink($upload->getFileName());
-//                }
-//                else
-//                {
-//                    if ($upload->isUploaded())
-//                    {
-//                        $this->_helper->flashMessenger(array(
-//                                                            'danger' => implode("<br>", $upload->getMessages())
-//                                                       ));
-//                    }
-//                    else
-//                    {
-//                        $this->_helper->flashMessenger(array(
-//                                                            'warning' => 'You must first select a file to upload.'
-//                                                       ));
-//                    }
-//                }
-//
-//                // Everytime we save anything related to a report, we should save it (updates the modification date)
-//                $this->saveReport(false);
-//            }
-//            else if (isset($values ["saveAndContinue"]))
-//            {
-//                $count = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance()->countUploadDataCollectorRowsForReport($reportId);
-//                if ($count < 2)
-//                {
-//                    $this->_helper->flashMessenger(array(
-//                                                        'danger' => "You must have at least 2 valid devices to continue."
-//                                                   ));
-//                }
-//                else
-//                {
-//                    // Everytime we save anything related to a report, we should save it (updates the modification date)
-//                    $this->saveReport();
-//
-//                    // Call the base controller to send us to the next logical step in the proposal.
-//                    $this->gotoNextStep();
-//                }
-//            }
-//        }
-//
-//        /*
-//         * Prepare the page after we've handled posting. This is because if we're redirecting the user there is no point
-//         * in hitting the database again.
-//         */
-//
-//        // Check to see if we already have uploaded data
-//        $rmsUploadRowMapper = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance();
-//        $count                        = $rmsUploadRowMapper->find($reportId);
-//        $this->view->has_data         = ($count > 0);
-//
-//        // Check to see if we have bad data
-//        $this->view->bad_data = true;
-//        if ($this->view->has_data)
-//        {
-//            $count                = $rmsUploadRowMapper->countUploadDataCollectorRowsForReport($reportId, true);
-//            $this->view->bad_data = ($count > 0);
-//        }
     }
 
     /**

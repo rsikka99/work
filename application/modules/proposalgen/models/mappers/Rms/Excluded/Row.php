@@ -238,4 +238,16 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
     {
         return $this->getDbTable()->delete(array("{$this->col_reportId} = ?" => $reportId));
     }
+
+    /**
+     * Counts how many excluded rows we have for the report
+     *
+     * @param $reportId
+     *
+     * @return int
+     */
+    public function countRowsForReport ($reportId)
+    {
+        return $this->count(array("{$this->col_reportId} = ?" => $reportId));
+    }
 }

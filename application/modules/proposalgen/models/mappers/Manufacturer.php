@@ -234,4 +234,10 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
     {
         return $object->id;
     }
+
+
+    public function searchManufacturersByName($manufacturerName)
+    {
+        return $this->fetchAll(array(""));
+    }
 }
