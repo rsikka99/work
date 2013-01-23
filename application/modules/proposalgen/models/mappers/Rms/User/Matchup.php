@@ -106,8 +106,7 @@ class Proposalgen_Model_Mapper_Rms_User_Matchup extends My_Model_Mapper_Abstract
     /**
      * Finds a Rms_User_Matchup based on it's primaryKey
      *
-     * @param $id int
-     *            The id of the Rms_User_Matchup to find
+     * @param array $id The id of the Rms_User_Matchup to find
      *
      * @return Proposalgen_Model_Rms_User_Matchup
      */

@@ -5,7 +5,6 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
      * Column Definitions
      */
     public $col_id = 'id';
-    public $col_reportId = 'id';
 
     /**
      * The default db table class to use
@@ -227,6 +226,7 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
         return $object->id;
     }
 
+
     /**
      * Deletes all rows related to a report
      *
@@ -236,6 +236,17 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
      */
     public function deleteAllForReport ($reportId)
     {
-        return $this->getDbTable()->delete(array("{$this->col_reportId} = ?" => $reportId));
+        $deviceInstanceMapper    = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
+        $rmsUploadRowTableName   = $this->getTableName();
+        $deviceInstanceTableName = $deviceInstanceMapper->getTableName();
+
+        $sql   = "
+            DELETE {$rmsUploadRowTableName} FROM {$rmsUploadRowTableName}
+            INNER JOIN {$deviceInstanceTableName} ON {$deviceInstanceTableName}.{$deviceInstanceMapper->col_rmsUploadRowId} = {$rmsUploadRowTableName}.{$this->col_id}
+            WHERE {$deviceInstanceTableName}.{$deviceInstanceMapper->col_reportId} = ?;
+        ";
+        $query = $this->getDbTable()->getAdapter()->query($sql, $reportId);
+
+        return $query->execute();
     }
 }

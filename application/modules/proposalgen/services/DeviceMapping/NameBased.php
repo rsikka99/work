@@ -31,13 +31,13 @@ class Proposalgen_Service_DeviceMapping_NameBased extends Proposalgen_Service_De
 
         $manufacturers = $this->_manufacturerMapper->searchByName($deviceInstance->getRmsUploadRow()->manufacturer);
 
-        $manufacturer = null;
+        $manufacturerId = null;
         if (count($manufacturers) === 1)
         {
-            $manufacturer = $manufacturers[0];
+            $manufacturerId = $manufacturers[0]->id;
         }
 
-        $masterDevices = $this->_masterDeviceMapper->searchByModelName($deviceInstance->getRmsUploadRow()->modelName, $manufacturer);
+        $masterDevices = $this->_masterDeviceMapper->searchByModelName($deviceInstance->getRmsUploadRow()->modelName, $manufacturerId);
         if (count($masterDevices) === 1)
         {
             $masterDevice                                 = $masterDevices[0];

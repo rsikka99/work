@@ -21,16 +21,17 @@ class Proposalgen_Service_DeviceMapping_UserMatchup extends Proposalgen_Service_
      * matchup table it will return FALSE®
      *
      * @param Proposalgen_Model_DeviceInstance $deviceInstance
+     * @param int                              $userId
      *
      * @return bool
      */
-    public function mapIt (Proposalgen_Model_DeviceInstance $deviceInstance)
+    public function mapIt (Proposalgen_Model_DeviceInstance $deviceInstance, $userId)
     {
         $isMapped      = false;
         $rmsProviderId = $deviceInstance->getRmsUploadRow()->rmsProviderId;
         $rmsModelId    = $deviceInstance->getRmsUploadRow()->rmsModelId;
 
-        $rmsUserMatchup = $this->_rmsUserMatchupMapper->find(array($rmsProviderId, $rmsModelId));
+        $rmsUserMatchup = $this->_rmsUserMatchupMapper->find(array($rmsProviderId, $rmsModelId, $userId));
         if ($rmsUserMatchup)
         {
             $deviceInstanceMasterDevice                   = new Proposalgen_Model_Device_Instance_Master_Device();

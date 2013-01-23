@@ -303,11 +303,11 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
     public function searchByModelName ($modelName, $manufacturerId)
     {
         $whereClause = array(
-            "{$this->col_modelName} LIKE " => "%{$modelName}%"
+            "{$this->col_modelName} LIKE ?" => "%{$modelName}%"
         );
         if ($manufacturerId !== null)
         {
-            $whereClause["{$this->col_manufacturerId} = ?"] = $manufacturerId;
+            $whereClause["{$this->col_manufacturerId} = ?"] = "{$manufacturerId}";
         }
 
         return $this->fetchAll($whereClause);

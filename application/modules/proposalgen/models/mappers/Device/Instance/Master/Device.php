@@ -39,13 +39,8 @@ class Proposalgen_Model_Mapper_Device_Instance_Master_Device extends My_Model_Ma
         // Get an array of data to save
         $data = $this->unsetNullValues($object->toArray());
 
-        // Remove the id
-        unset($data ["{$this->col_deviceInstanceId}"]);
-
         // Insert the data
         $id = $this->getDbTable()->insert($data);
-
-        $object->id = $id;
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -224,6 +219,6 @@ class Proposalgen_Model_Mapper_Device_Instance_Master_Device extends My_Model_Ma
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return $object->id;
+        return $object->deviceInstanceId;
     }
 }

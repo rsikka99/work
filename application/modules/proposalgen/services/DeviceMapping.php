@@ -31,9 +31,10 @@ class Proposalgen_Service_DeviceMapping
      * Loops through the given Proposalgen_Model_DeviceInstance[] and attempts to MAP IT™ if the device is not already mapped.
      *
      * @param Proposalgen_Model_DeviceInstance[] $deviceInstances
+     * @param int                                $userId
      * @param bool                               $useNameBasedMapping
      */
-    public function mapDevices ($deviceInstances, $useNameBasedMapping = false)
+    public function mapDevices ($deviceInstances, $userId, $useNameBasedMapping = false)
     {
         foreach ($deviceInstances as $deviceInstance)
         {
@@ -44,7 +45,7 @@ class Proposalgen_Service_DeviceMapping
                     /*
                      * No Mapping, lets MAP IT™!
                      */
-                    $this->_mapIt($deviceInstance, $useNameBasedMapping);
+                    $this->_mapIt($deviceInstance, $userId, $useNameBasedMapping);
                 }
             }
         }
@@ -58,11 +59,12 @@ class Proposalgen_Service_DeviceMapping
      * single Proposalgen_Model_MasterDevice result when we look it up, otherwise it will be up to the user to MAP IT™ themselves.
      *
      * @param Proposalgen_Model_DeviceInstance $deviceInstance
+     * @param int                              $userId
      * @param bool                             $useNameBasedMapping
      *
      * @return bool Returns whether or not the device got mapped
      */
-    protected function _mapIt (Proposalgen_Model_DeviceInstance $deviceInstance, $useNameBasedMapping)
+    protected function _mapIt (Proposalgen_Model_DeviceInstance $deviceInstance, $userId, $useNameBasedMapping)
     {
         $isMapped = false;
         $deviceInstance->id;
@@ -73,7 +75,7 @@ class Proposalgen_Service_DeviceMapping
         if ($hasRmsModelId)
         {
             // User Based
-            $isMapped = $this->_userMatchupBasedMappingService->mapIt($deviceInstance);
+            $isMapped = $this->_userMatchupBasedMappingService->mapIt($deviceInstance, $userId);
 
 
             if (!$isMapped)

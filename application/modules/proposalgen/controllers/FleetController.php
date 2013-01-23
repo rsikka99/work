@@ -88,6 +88,10 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                     /**
                                      * Valid Lines
                                      */
+                                    /**
+                                     * @var Proposalgen_Model_DeviceInstance[]
+                                     */
+                                    $deviceInstances = array();
                                     foreach ($uploadCsvService->validCsvLines as $line)
                                     {
                                         /*
@@ -122,6 +126,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                         $deviceInstance->reportId       = $report->id;
                                         $deviceInstance->rmsUploadRowId = $rmsUploadRow->id;
                                         $deviceInstanceMapper->insert($deviceInstance);
+
+                                        $deviceInstances[] = $deviceInstance;
 
                                         /*
                                          * Save Meters
@@ -229,6 +235,16 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
                                         $rmsExcludedRowMapper->insert($rmsExcludedRow);
                                     }
+
+
+                                    /*
+                                     * Perform Mapping
+                                     */
+                                    $deviceMappingService = new Proposalgen_Service_DeviceMapping();
+
+                                    $deviceMappingService->mapDevices($deviceInstances, $this->_userId, true);
+
+
                                 }
                                 else
                                 {
