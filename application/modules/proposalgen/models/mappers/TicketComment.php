@@ -49,7 +49,7 @@ class Proposalgen_Model_Mapper_TicketComment extends Tangent_Model_Mapper_Abstra
     /**
      * Saved an Proposalgen_Model_ object to the database
      *
-     * @param \Proposalgen_Model_TicketComment $object
+     * @param Proposalgen_Model_TicketComment $object
      *
      * @throws Exception
      * @return string

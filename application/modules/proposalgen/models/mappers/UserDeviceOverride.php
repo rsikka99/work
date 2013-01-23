@@ -23,7 +23,7 @@ class Proposalgen_Model_Mapper_UserDeviceOverride extends Tangent_Model_Mapper_A
      *
      * @param Zend_Db_Table_Row $row
      *
-     * @return \Proposalgen_Model_UserDeviceOverride
+     * @return Proposalgen_Model_UserDeviceOverride
      * @throws Exception
      */
     public function mapRowToObject ($row)

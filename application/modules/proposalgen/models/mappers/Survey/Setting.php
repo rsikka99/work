@@ -26,7 +26,7 @@ class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
      * @param $survey_setting Proposalgen_Model_Survey_Setting
      *                        The object to insert
      *
-     * @return mixed The primary key of the new row
+     * @return int The primary key of the new row
      */
     public function insert (&$survey_setting)
     {
@@ -43,7 +43,7 @@ class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Proposalgen_Model_Survey_Setting to the database.
      *
-     * @param $object Proposalgen_Model_Survey_Setting
+     * @param $object         Proposalgen_Model_Survey_Setting
      *                        The survey_setting model to save to the database
      * @param $primaryKey     mixed
      *                        Optional: The original primary key, in case we're changing it
@@ -74,7 +74,7 @@ class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
      * @param $survey_setting mixed
      *                        This can either be an instance of Proposalgen_Model_Survey_Setting or the primary key to delete
      *
-     * @return mixed The primary key of the new row
+     * @return int The primary key of the new row
      */
     public function delete ($survey_setting)
     {
@@ -163,6 +163,11 @@ class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
         return $entries;
     }
 
+    /*
+     * @param $userId int
+     *                The id of the user to find
+     * @return Proposalgen_Model_User_Survey_Setting
+     */
     public function fetchUserSurveySetting ($userId)
     {
         $surveySetting     = false;
@@ -199,7 +204,7 @@ class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
     /**
      * @param Proposalgen_Model_Survey_Setting $object
      *
-     * @return mixed
+     * @return int
      */
     public function getPrimaryKeyValueForObject ($object)
     {

@@ -28,7 +28,7 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
      * @param $user_survey_setting Proposalgen_Model_User_Survey_Setting
      *                             The object to insert
      *
-     * @return mixed The primary key of the new row
+     * @return int The primary key of the new row
      */
     public function insert (&$user_survey_setting)
     {
@@ -50,7 +50,7 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
      */
     public function save ($object, $primaryKey = null)
     {
-        $data = $this->unsetNullValues($user_survey_setting->toArray());
+        $data = $this->unsetNullValues($object->toArray());
 
         if ($primaryKey === null)
         {
@@ -81,7 +81,7 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
      * @param $user_survey_setting mixed
      *                             This can either be an instance of Proposalgen_Model_User_Survey_Setting or the primary key to delete
      *
-     * @return mixed The primary key of the new row
+     * @return int The primary key of the new row
      */
     public function delete ($user_survey_setting)
     {

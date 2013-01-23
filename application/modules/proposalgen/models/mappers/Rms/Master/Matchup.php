@@ -33,7 +33,7 @@ class Proposalgen_Model_Mapper_Rms_Master_Matchup extends My_Model_Mapper_Abstra
      * @param $object Proposalgen_Model_Rms_Master_Matchup
      *                The object to insert
      *
-     * @return mixed The primary key of the new row
+     * @return int The primary key of the new row
      */
     public function insert (&$object)
     {
@@ -86,7 +86,7 @@ class Proposalgen_Model_Mapper_Rms_Master_Matchup extends My_Model_Mapper_Abstra
      *                This can either be an instance of Proposalgen_Model_Rms_Master_Matchup or the
      *                primary key to delete
      *
-     * @return mixed The number of rows deleted
+     * @return int The number of rows deleted
      */
     public function delete ($object)
     {
@@ -202,15 +202,15 @@ class Proposalgen_Model_Mapper_Rms_Master_Matchup extends My_Model_Mapper_Abstra
     public function getWhereId ($id)
     {
         return array(
-            "{$this->col_rmsProviderId} = ?"  => $id[0],
-            "{$this->col_rmsModelId} = ?"     => $id[1]
+            "{$this->col_rmsProviderId} = ?" => $id[0],
+            "{$this->col_rmsModelId} = ?"    => $id[1]
         );
     }
 
     /**
      * @param Proposalgen_Model_Rms_Master_Matchup $object
      *
-     * @return mixed
+     * @return array
      */
     public function getPrimaryKeyValueForObject ($object)
     {

@@ -24,7 +24,7 @@ class Proposalgen_Model_Mapper_QuestionSetQuestion extends Tangent_Model_Mapper_
      *
      * @param Zend_Db_Table_Row $row
      *
-     * @return \Proposalgen_Model_QuestionSetQuestion
+     * @return Proposalgen_Model_QuestionSetQuestion
      * @throws Exception
      */
     public function mapRowToObject ($row)
@@ -47,7 +47,7 @@ class Proposalgen_Model_Mapper_QuestionSetQuestion extends Tangent_Model_Mapper_
     /**
      * Saved an Proposalgen_Model_ object to the database
      *
-     * @param \Proposalgen_Model_QuestionSetQuestion $object
+     * @param Proposalgen_Model_QuestionSetQuestion $object
      *
      * @throws Exception
      * @return string

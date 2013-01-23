@@ -19,7 +19,7 @@ class Proposalgen_Model_Mapper_TicketPFRequest extends Tangent_Model_Mapper_Abst
     }
 
     /**
-     * @param mixed $primaryKey
+     * @param int $primaryKey
      *
      * @return Proposalgen_Model_TicketPFRequest
      */

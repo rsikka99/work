@@ -19,7 +19,7 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends Tangent_Model_Mapper_Ab
     }
 
     /**
-     * @param mixed $primaryKey
+     * @param int $primaryKey
      *
      * @return Proposalgen_Model_ReplacementDevice
      */
