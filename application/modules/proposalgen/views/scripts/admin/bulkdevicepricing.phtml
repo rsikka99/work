@@ -11,7 +11,7 @@
 
 <?php $this->headScript()->captureStart('append','text/javascript') ?>
 	var repop = '<?php echo isset($this->pricing_filter); ?>';
-	var refilter = '<?php echo isset($this->search_criteria); ?>';
+	var refilter = '<?php echo !empty($this->search_criteria); ?>';
 	var default_price = <?php echo $this->default_price; ?>;
 	var repop_array = '<?php echo $this->repop_array; ?>';
 	var repop_page = '<?php echo $this->repop_page; ?>';
@@ -20,7 +20,7 @@
 		//find center screen for modal popup
 		var sTop = ($(window).height()/2)-100;
 		var sLeft = ($(window).width()/2)-200;
-		
+
 		//*********************************************************************
 		//* DEVICES GRID
 		//*********************************************************************
@@ -29,9 +29,9 @@
 			datatype:'json',
 			colNames:['Manufacturer','Printer Model','Printer Price','New Price'],
 			colModel:[
-				{width: 150, name:'manufacturer_name', index:'manufacturer_name', editable:true, editoptions:{disabled:true}},
-				{width: 350, name:'printer_model', index:'printer_model', editable:true, editoptions:{disabled:true}},
-				{width: 100, name:'device_price', index:'device_price', id:'master_device_id', editable:true, editoptions:{disabled:true}, align: 'right'},
+				{width: 150, name:'manufacturer_name', index:'manufacturerId', editable:true, editoptions:{disabled:true}},
+				{width: 350, name:'printer_model', index:'modelName', editable:true, editoptions:{disabled:true}},
+				{width: 100, name:'device_price', index:'cost', id:'master_device_id', editable:true, editoptions:{disabled:true}, align: 'right', sorttype: 'int'},
 				{width: 100, name:'new_device_price', index:'new_device_price', align:'right'}
 			],
 			height:'auto',
@@ -91,8 +91,8 @@
 				{width:200, name:'manufacturer_name', index:'manufacturer_name', editable:true, editoptions:{size:20,maxlength:30}},
 				{width:50, name:'part_type_id', index:'part_type_id', editable:true, editoptions:{size:20,maxlength:30}},
 				{width:60, name:'toner_color_name', index:'toner_color_name', editable:true, editoptions:{size:12,maxlength:30}},
-				{width:50, name:'toner_yield', index:'toner_yield', editable:true, editoptions:{size:10,maxlength:4}, align:'right'},
-				{width:60, name:'toner_price', index:'toner_price', editable:true, editoptions:{size:10,maxlength:8}, formatter:'currency', align:'right', formatoptions:{prefix:"$", thousandsSeparator:","}},
+				{width:50, name:'toner_yield', index:'yield', editable:true, editoptions:{size:10,maxlength:4}, align:'right'},
+				{width:60, name:'toner_price', index:'toner_price', editable:true, editoptions:{size:10,maxlength:8}, formatter:'currency', align:'right', formatoptions:{prefix:"$", thousandsSeparator:","}, sorttype:'int'},
 				{width:100, name:'new_toner_price', index:'new_toner_price', align:'right'},
 				{width:50, name:'master_device_id', index:'master_device_id', hidden:true, editable:true, editoptions:{size:12}},
 				{width:50, name:'is_added', index:'is_added', hidden:true, editable:true, editoptions:{size:12}},
@@ -172,8 +172,8 @@
 				$("#criteria_filter").append($('<option></option>').val('toner_sku').html('SKU'));
 				$("#criteria_filter").append($('<option></option>').val('manufacturer_name').html('Manufacturer'));
 			} else {
-				$("#criteria_filter").append($('<option></option>').val('manufacturer_name').html('Manufacturer'));
-				$("#criteria_filter").append($('<option></option>').val('printer_model').html('Printer Model'));
+				$("#criteria_filter").append($('<option></option>').val('manufacturerId').html('Manufacturer'));
+				$("#criteria_filter").append($('<option></option>').val('modelName').html('Printer Model'));
 			}
 		});
 				
@@ -185,7 +185,7 @@
 			$("#cboCriteria").html('');
 			
 			switch (this.value) {
-				case "manufacturer_name":
+				case "manufacturerId":
 					url = '<?php echo $this->baseUrl("/proposalgen/admin/filterlistitems"); ?>?list=man';
 					break;
 				case "type_name":
@@ -249,7 +249,7 @@
 		//* Set Defaults
 		//*********************************************************************
 		$('#toners_table').hide();
-		
+
 		if(repop == 1) {
 			$('#devices_table').hide();
         	if(refilter == 1) {
@@ -285,7 +285,7 @@
 	function update_grid(action) {
 		$('#devices_table').hide();
 		$('#toners_table').hide();
-		
+
 		//update column headers
 		if($('#pricing_filter').val() == 'labor') {
 			default_price = <?php echo ($this->default_labor > 0 ? $this->default_labor : 0); ?>;
@@ -311,12 +311,13 @@
 		
 		var params = '?filter=&criteria=';
 		if(action == 'search') {
-			if ($("#cboCriteria").is(":visible")) {
-				criteria = $("#cboCriteria option:selected").text();
-			} else {
-				criteria = $("#txtCriteria").val();
-			}
-			params = '?filter='+$("#criteria_filter").val()+'&criteria='+criteria;
+            if ($("#cboCriteria").is(":visible")) {
+                criteria = $("#cboCriteria").val();
+            } else {
+                criteria = $("#txtCriteria").val();
+            }
+<!--            criteria = $("#cboCriteria").val();-->
+            params = '?filter='+$("#criteria_filter").val()+'&criteria='+criteria;
 		} else if(action == 'clear') {
 			$("#criteria_filter").attr('selectedIndex', 2);
         	$("#list_criteria").hide();
@@ -452,8 +453,8 @@
 		<div id="criteria_container">
 			<label for="criteria_filter" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">Filter:</label>
 			<select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
-				<option value="manufacturer_name" <?php if($this->search_filter == 'manufacturer_name') { echo "selected"; } ?>>Manufacturer</option>
-				<option value="printer_model" <?php if($this->search_filter == 'printer_model') { echo "selected"; } ?>>Printer Model</option>
+				<option value="manufacturerId" <?php if($this->search_filter == 'manufacturer_name') { echo "selected"; } ?>>Manufacturer</option>
+				<option value="modelName" <?php if($this->search_filter == 'printer_model') { echo "selected"; } ?>>Printer Model</option>
 			</select>
 			<label for="txtCriteria" class="details_label" style="display: inline; padding: 0px 10px 0px 10px;">for</label>
     				<span id="text_criteria"><input type="text" name="txtCriteria" style="width: 152px;" id="txtCriteria" <?php if($this->search_criteria != '') { echo 'value="' . $this->search_criteria . '"'; } ?> /></span>

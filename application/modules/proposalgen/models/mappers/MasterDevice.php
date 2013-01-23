@@ -5,6 +5,8 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
      * Column Definitions
      */
     public $col_id = 'id';
+    public $col_manufacturerId = 'manufacturerId';
+    public $col_modelName = 'modelName';
 
     /**
      * The default db table class to use
@@ -214,6 +216,36 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         return array(
             "{$this->col_id} = ?" => $id
         );
+    }
+
+    /**
+     * Get all the printer model with the wild cards %<modelName>%
+     *
+     * @param string  $criteria
+     * @param null    $order
+     * @param int     $count
+     * @param null    $offset
+     *
+     * @return Proposalgen_Model_MasterDevice[]
+     */
+    public function fetchAllLikePrinterModel ($criteria, $order = null, $count = 25, $offset = null)
+    {
+        return $this->fetchAll(array("{$this->col_modelName} LIKE ?" => "%{$criteria}%"), $order, $count, $offset);
+    }
+
+    /**
+     * Get all master devices that match the manufacturer id that has been passed.
+     *
+     * @param string      $criteria
+     * @param null        $order
+     * @param int         $count
+     * @param null        $offset
+     *
+     * @return Proposalgen_Model_MasterDevice[]
+     */
+    public function fetchAllByManufacturerId ($criteria, $order = null, $count = 25, $offset = null)
+    {
+        return $this->fetchAll(array("{$this->col_manufacturerId} = ?" => $criteria), $order, $count, $offset);
     }
 
     /**
