@@ -9,13 +9,6 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
     protected $_inputFilter;
 
     /**
-     * The format needed to change a Zend_Date object into a MySQL compatible time
-     *
-     * @var string
-     */
-    const ZEND_TO_MYSQL_DATEFORMAT = "yyyy-MM-dd HH:mm:ss";
-
-    /**
      * How to read the date coming in from the csv
      *
      * @var string
@@ -110,23 +103,23 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
     /**
      * Valid csv lines
      *
-     * @var array
+     * @var Proposalgen_Service_Rms_Upload_Line[]
      */
-    protected $_csvLines = array();
+    public $csvLines = array();
 
     /**
      * Valid csv lines
      *
-     * @var array
+     * @var Proposalgen_Service_Rms_Upload_Line[]
      */
-    protected $_validCsvLines = array();
+    public $validCsvLines = array();
 
     /**
      * Invalid csv lines
      *
-     * @var array
+     * @var Proposalgen_Service_Rms_Upload_Line[]
      */
-    protected $_invalidCsvLines = array();
+    public $invalidCsvLines = array();
 
     /**
      * Raw csv header
@@ -233,10 +226,10 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
         if (file_exists($filename))
         {
             // Reset arrays
-            $this->_csvLines        = array();
-            $this->_validCsvLines   = array();
-            $this->_invalidCsvLines = array();
-            $this->_csvHeaders      = array();
+            $this->csvLines        = array();
+            $this->validCsvLines   = array();
+            $this->invalidCsvLines = array();
+            $this->_csvHeaders     = array();
 
             $fileLines = file($filename, FILE_IGNORE_NEW_LINES);
             $lineCount = count($fileLines) - 1;
@@ -250,6 +243,7 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
             {
                 return "The uploaded file contains {$lineCount} printers. The maximum number of printers supported in a single report is {$maxLineCount}. Please modify your file and try again.";
             }
+
 
             /*
              * Pop off the first line since they are headers
@@ -289,6 +283,7 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
              */
             if ($this->validateHeaders($this->_fieldsPresent))
             {
+                $csvLineNumber = 2;
                 // Get normalized data
                 foreach ($fileLines as $line)
                 {
@@ -298,25 +293,28 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
                     // Only validate lines that were combined properly (meaning they weren't empty and had the same column count as the headers)
                     if ($csvLine !== false)
                     {
+                        $csvLine["csvLineNumber"] = $csvLineNumber;
+
                         /*
                          * Process our data and massage it into our upload line
                          */
                         $uploadLine = new Proposalgen_Service_Rms_Upload_Line($this->processData($csvLine));
 
-                        $validationMessage = $uploadLine->isValid();
+                        $validationMessage = $uploadLine->isValid($this->_incomingDateFormat);
 
                         if ($validationMessage === true)
                         {
-                            $this->_validCsvLines [] = $uploadLine;
-                            $this->_csvLines []      = $uploadLine;
+                            $this->validCsvLines [] = $uploadLine;
+                            $this->csvLines []      = $uploadLine;
                         }
                         else
                         {
                             $uploadLine->validationErrorMessage = $validationMessage;
-                            $this->_csvLines []                 = $uploadLine;
-                            $this->_invalidCsvLines []          = $uploadLine;
+                            $this->csvLines []                  = $uploadLine;
+                            $this->invalidCsvLines []           = $uploadLine;
                         }
                     }
+                    $csvLineNumber++;
                 }
             }
             else
@@ -350,204 +348,6 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
         return true;
     }
 
-    /**
-     * Validates a csv line
-     *
-     * @param array $csvLine
-     *
-     * @return boolean Returns true when line is valid, or returns an error message.
-     */
-    public function validateLine (&$csvLine)
-    {
-        // Settings
-        $requiredDaysOfInformation     = 4;
-        $maximumAgeInYears             = 5;
-        $minimumDeviceIntroductionDate = new Zend_Date(strtotime("-{$maximumAgeInYears} years"));
-
-        // Process our line of data
-        $csvLine = $this->processData($csvLine);
-
-        // Make sure required data is there
-
-        // Turn all the dates into Zend_Date objects
-        $monitorStartDate = (empty($csvLine ['monitorStartDate'])) ? null : new Zend_Date($csvLine ['monitorStartDate'], $this->_incomingDateFormat);
-        $monitorEndDate   = (empty($csvLine ['monitorEndDate'])) ? null : new Zend_Date($csvLine ['monitorEndDate'], $this->_incomingDateFormat);
-        $discoveryDate    = (empty($csvLine ['discoveryDate'])) ? null : new Zend_Date($csvLine ['discoveryDate'], $this->_incomingDateFormat);
-        $introductionDate = (empty($csvLine ['introductionDate'])) ? null : new Zend_Date($csvLine ['introductionDate'], $this->_incomingDateFormat);
-        $adoptionDate     = (empty($csvLine ['adoptionDate'])) ? null : new Zend_Date($csvLine ['adoptionDate'], $this->_incomingDateFormat);
-
-        $outputFormat = "yyyy-MM-dd HH:mm:ss";
-
-        // Convert all the dates back to mysql dates
-        $csvLine ['monitorStartDate'] = ($monitorStartDate === null) ? null : $monitorStartDate->toString($outputFormat);
-        $csvLine ['monitorEndDate']   = ($monitorEndDate === null) ? null : $monitorEndDate->toString($outputFormat);
-        $csvLine ['discoveryDate']    = ($discoveryDate === null) ? null : $discoveryDate->toString($outputFormat);
-        $csvLine ['introductionDate'] = ($introductionDate === null) ? null : $introductionDate->toString($outputFormat);
-        $csvLine ['adoptionDate']     = ($adoptionDate === null) ? null : $adoptionDate->toString($outputFormat);
-
-        // Validate that certain fields are present
-        if (empty($csvLine ['rmsModelId']))
-        {
-            return "Device does not have a model id";
-        }
-        if (empty($csvLine ['modelName']))
-        {
-            return "Device does not have a modelname";
-        }
-        if (empty($csvLine ['manufacturer']))
-        {
-            return "Device does not have a manufacturer";
-        }
-        if (empty($csvLine ['monitorStartDate']))
-        {
-            return "Device does not have a start date";
-        }
-        if (empty($csvLine ['monitorEndDate']))
-        {
-            return "Device does not have a end date";
-        }
-
-        /*
-         * Device name sanitization
-         */
-        $manufacturer = $csvLine ['manufacturer'];
-        $devicename   = $csvLine ['modelName'];
-
-        // Remove the manufacturer name from the model name
-        $devicename = str_ireplace($manufacturer . ' ', '', $devicename);
-
-        // If the manufacturer is Hewlet-packard we also need to strip away HP
-        if (strcasecmp($manufacturer, 'hewlett-packard') === 0)
-        {
-            $devicename = str_ireplace('hp ', '', $devicename);
-        }
-
-        // Correct the device name
-        $devicename = ucwords(trim($devicename));
-
-        // Convert hp into it's full name
-        if ($manufacturer == "hp")
-        {
-            $manufacturer = "hewlett-packard";
-        }
-
-        $csvLine ['modelName']    = $devicename;
-        $csvLine ['manufacturer'] = ucwords($manufacturer);
-
-        // Check the meter columns
-        $checkMetersValidation = $this->validateMetersForLine($csvLine);
-        if ($checkMetersValidation !== true)
-        {
-            return $checkMetersValidation;
-        }
-
-
-        // If the discovery date is after the start date, use the discovery date
-        if ($discoveryDate !== null && $discoveryDate->compare($monitorStartDate) === 1)
-        {
-            // Use Discovery Date
-            $dateMonitoringStarted = new DateTime("@" . $discoveryDate->toString(Zend_Date::TIMESTAMP));
-        }
-        else
-        {
-            // Use monitor start date
-            $dateMonitoringStarted = new DateTime("@" . $monitorStartDate->toString(Zend_Date::TIMESTAMP));
-        }
-        $dateMonitoringEnded = new DateTime("@" . $monitorEndDate->toString(Zend_Date::TIMESTAMP));
-
-        // Figure out how long we've been monitoring this device
-        $monitoringInterval = $dateMonitoringStarted->diff($dateMonitoringEnded);
-
-        // Monitoring should not be inverted (means start date occured after end date)
-        if ($monitoringInterval->invert || $monitoringInterval->days < $requiredDaysOfInformation)
-        {
-            return "Device was monitored for less than {$requiredDaysOfInformation} days.";
-        }
-
-        // Check to make sure our start date is not more than 5 years old
-        if ($minimumDeviceIntroductionDate->compare($monitorStartDate) == 1)
-        {
-            return "Start date is greater than {$maximumAgeInYears} years old.";
-        }
-
-        return true;
-    }
-
-    /**
-     * Validates the meters for a csv line
-     *
-     * @param array $csvLine
-     *
-     * @return boolean True if the meters are ok or returns an error message
-     */
-    public function validateMetersForLine ($csvLine)
-    {
-        /*
-         * The start meter of any meter should never be greater than the end meter.
-         */
-
-        // If we are missing a black meter and are missing a color/life meter then we cannot proceed
-        if (empty($csvLine ['startMeterBlack']) && (empty($csvLine ['startMeterLife']) || empty($csvLine ['startMeterColor'])))
-        {
-            return "Invalid black meter";
-        }
-
-        // Black meter
-        if (($csvLine ['startMeterBlack'] > $csvLine ['endMeterBlack']) || ($csvLine ['startMeterBlack'] < 0 || $csvLine ['endMeterBlack'] < 0))
-        {
-            return "Invalid black meter";
-        }
-
-        // Life meter
-        if (($csvLine ['startMeterLife'] > $csvLine ['endMeterLife']) || ($csvLine ['startMeterLife'] < 0 || $csvLine ['endMeterLife'] < 0))
-        {
-            return "Invalid life meter";
-        }
-
-        // Color meter
-        if (($csvLine ['startMeterColor'] > $csvLine ['endMeterColor']) || ($csvLine ['startMeterColor'] < 0 || $csvLine ['endMeterColor'] < 0))
-        {
-            return "Invalid color meter";
-        }
-
-        // Print Black meter
-        if (($csvLine ['startMeterPrintBlack'] > $csvLine ['endMeterPrintBlack']) || ($csvLine ['startMeterPrintBlack'] < 0 || $csvLine ['endMeterPrintBlack'] < 0))
-        {
-            return "Invalid print black meter";
-        }
-
-        // Print Color  meter
-        if (($csvLine ['startMeterPrintColor'] > $csvLine ['endMeterPrintColor']) || ($csvLine ['startMeterPrintColor'] < 0 || $csvLine ['endMeterPrintColor'] < 0))
-        {
-            return "Invalid print color meter";
-        }
-
-        // Copy Black meter
-        if (($csvLine ['startMeterCopyBlack'] > $csvLine ['endMeterCopyBlack']) || ($csvLine ['startMeterCopyBlack'] < 0 || $csvLine ['endMeterCopyBlack'] < 0))
-        {
-            return "Invalid copy black meter";
-        }
-
-        // Copy Color meter
-        if (($csvLine ['startMeterCopyColor'] > $csvLine ['endMeterCopyColor']) || ($csvLine ['startMeterCopyColor'] < 0 || $csvLine ['endMeterCopyColor'] < 0))
-        {
-            return "Invalid copy color meter";
-        }
-
-        // Scan meter
-        if (($csvLine ['startMeterScan'] > $csvLine ['endMeterScan']) || ($csvLine ['startMeterScan'] < 0 || $csvLine ['endMeterScan'] < 0))
-        {
-            return "Invalid scan meter";
-        }
-
-        // Fax meter
-        if (($csvLine ['startMeterFax'] > $csvLine ['endMeterFax']) || ($csvLine ['startMeterFax'] < 0 || $csvLine ['endMeterFax'] < 0))
-        {
-            return "Invalid fax meter";
-        }
-
-        return true;
-    }
 
     /**
      * Filters the data into desired formats
@@ -560,103 +360,12 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
     {
         $this->_inputFilter->setData($csvData);
 
-        foreach ($this->_fieldsPresent as $fieldname)
+        foreach ($this->_fieldsPresent as $fieldName)
         {
-            $value                = $this->_inputFilter->getEscaped($fieldname);
-            $csvData [$fieldname] = (strlen($value) < 1 || strcasecmp($value, 'null') === 0) ? null : $value;
+            $value                = $this->_inputFilter->getEscaped($fieldName);
+            $csvData [$fieldName] = (strlen($value) < 1 || strcasecmp($value, 'null') === 0) ? null : $value;
         }
 
         return $csvData;
-    }
-
-    /**
-     * Parses a date into MySQL date format
-     *
-     * @param string $dateString
-     *            The date to parse
-     *
-     * @return string The MySQL date
-     */
-    public function normalizeDate ($dateString)
-    {
-        $date       = new Zend_Date($dateString, $this->_incomingDateFormat);
-        $dateString = $date->toString(self::ZEND_TO_MYSQL_DATEFORMAT);
-
-        return $dateString;
-    }
-
-    /**
-     * Getter for $_validCsvLines
-     *
-     * @return array
-     */
-    public function getValidCsvLines ()
-    {
-        return $this->_validCsvLines;
-    }
-
-    /**
-     * Setter for $_validCsvLines
-     *
-     * @param array $_validCsvLines
-     *                 The new value
-     *
-     * @return \Proposalgen_Service_Rms_Upload_Abstract
-     */
-    public function setValidCsvLines ($_validCsvLines)
-    {
-        $this->_validCsvLines = $_validCsvLines;
-
-        return $this;
-    }
-
-    /**
-     * Getter for $_csvLines
-     *
-     * @return array
-     */
-    public function getCsvLines ()
-    {
-        return $this->_csvLines;
-    }
-
-    /**
-     * Setter for $_csvLines
-     *
-     * @param array $_csvLines
-     *                 The new value
-     *
-     * @return \Proposalgen_Service_Rms_Upload_Abstract
-     */
-    public function setCsvLines ($_csvLines)
-    {
-        $this->_csvLines = $_csvLines;
-
-        return $this;
-    }
-
-    /**
-     * Getter for $_invalidCsvLines
-     *
-     * @return array
-     */
-    public function getInvalidCsvLines ()
-    {
-        return $this->_invalidCsvLines;
-    }
-
-    /**
-     * Setter for $_invalidCsvLines
-     *
-     * @param array $_invalidCsvLines
-     *                 The new value
-     *
-     * @return \Proposalgen_Service_Rms_Upload_Abstract
-     */
-    public function setInvalidCsvLines ($_invalidCsvLines)
-    {
-        $this->_invalidCsvLines = $_invalidCsvLines;
-
-        return $this;
     }
 }

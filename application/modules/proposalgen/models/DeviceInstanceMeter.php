@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Model_DeviceInstanceMeter extends Tangent_Model_Abstract
+class Proposalgen_Model_DeviceInstanceMeter extends My_Model_Abstract
 {
     const METER_TYPE_LIFE        = 'LIFE';
     const METER_TYPE_COLOR       = 'COLOR';

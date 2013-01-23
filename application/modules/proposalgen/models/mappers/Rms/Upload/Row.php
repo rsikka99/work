@@ -226,4 +226,16 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
     {
         return $object->id;
     }
+
+    /**
+     * Deletes all rows related to a report
+     *
+     * @param int $reportId The report id
+     *
+     * @return int The number of rows  deleted
+     */
+    public function deleteAllForReport ($reportId)
+    {
+        return $this->getDbTable()->delete(array("{$this->col_reportId} = ?" => $reportId));
+    }
 }
