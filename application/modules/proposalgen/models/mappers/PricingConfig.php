@@ -24,7 +24,7 @@ class Proposalgen_Model_Mapper_PricingConfig extends Tangent_Model_Mapper_Abstra
      * @param Zend_Db_Table_Row $row
      *
      * @throws Exception
-     * @return \Proposalgen_Model_PricingConfig
+     * @return Proposalgen_Model_PricingConfig
      */
     public function mapRowToObject ($row)
     {
@@ -48,7 +48,7 @@ class Proposalgen_Model_Mapper_PricingConfig extends Tangent_Model_Mapper_Abstra
     /**
      * Saved an Proposalgen_Model_ object to the database
      *
-     * @param \Proposalgen_Model_PricingConfig $object
+     * @param Proposalgen_Model_PricingConfig $object
      *
      * @throws Exception
      * @return string

@@ -26,7 +26,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
      * @param $object Proposalgen_Model_Manufacturer
      *                The object to insert
      *
-     * @return mixed The primary key of the new row
+     * @return int The primary key of the new row
      */
     public function insert (&$object)
     {
@@ -55,7 +55,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
      *
-     * @return int The number of rows affected
+     * @return string The number of rows affected
      */
     public function save ($object, $primaryKey = null)
     {
@@ -84,7 +84,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
      *                This can either be an instance of Proposalgen_Model_Manufacturer or the
      *                primary key to delete
      *
-     * @return mixed The number of rows deleted
+     * @return int The number of rows deleted
      */
     public function delete ($object)
     {
@@ -233,5 +233,11 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->id;
+    }
+
+
+    public function searchManufacturersByName($manufacturerName)
+    {
+        return $this->fetchAll(array(""));
     }
 }

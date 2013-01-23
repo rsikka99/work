@@ -21,7 +21,7 @@ class Proposalgen_Model_Mapper_TonerConfig extends Tangent_Model_Mapper_Abstract
     static $_tonerConfigs = array();
 
     /**
-     * @param mixed $id
+     * @param int $id
      *
      * @return Proposalgen_Model_TonerConfig
      */

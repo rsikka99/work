@@ -256,7 +256,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         }
 
         // Display filterd list of toners
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Admin_Model_Mapper_Toner::getInstance(), $where));
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Proposalgen_Model_Mapper_Toner::getInstance(), $where));
 
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
@@ -603,7 +603,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         if ($tonerId && $masterDeviceId)
                         {
                             // Get toner
-                            $toner = Admin_Model_Mapper_Toner::getInstance()->find($tonerId);
+                            $toner = Proposalgen_Model_Mapper_Toner::getInstance()->find($tonerId);
 
                             $validToner = in_array($toner->getTonerColorId(), $requiredTonerColors);
 
@@ -655,7 +655,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             }
                         }
 
-                        $toner = Admin_Model_Mapper_Toner::getInstance()->find($tonerId);
+                        $toner = Proposalgen_Model_Mapper_Toner::getInstance()->find($tonerId);
 
                         // Make sure we're not dropping below one valid toner for the color
                         if ($tonerCounts [$toner->getTonerColorId()] < 2)
@@ -785,7 +785,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                 'toner_color_id IN ( ? )' => $validTonerColors
         ));
 
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Admin_Model_Mapper_Toner::getInstance(), $where));
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Proposalgen_Model_Mapper_Toner::getInstance(), $where));
 
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));

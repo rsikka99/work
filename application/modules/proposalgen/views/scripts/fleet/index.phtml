@@ -1,13 +1,28 @@
 <div class="page-header">
     <h1>Fleet<small> - Upload Data</small></h1>
 </div>
+<?php
+$disabled = "disabled='disabled'";
+    if ($this->hasPreviousUpload) :
+        $disabled = "";
+?>
+<div class="alert alert-info">This report already has a csv imported.</div>
+<?php endif; ?>
+
+<?php if ($this->deviceInstanceCount > 0) : ?>
+<div class="alert alert-info">This report has a total of <?php echo number_format($this->deviceInstanceCount); ?> valid devices that were imported from a csv.</div>
+<?php endif; ?>
+
+<?php if ($this->rmsExcludedRowCount > 0) : ?>
+<div class="alert alert-warning">This report has a total of <?php echo number_format($this->rmsExcludedRowCount); ?> bad devices that were imported from a csv.</div>
+<?php endif; ?>
 <div class="well">
     <?php echo $this->form; ?>
 </div>
 <div class="well">
     <form class="proposalForm form-horizontal" method="POST">
     	<div class="form-actions">
-            <input type="submit" name="saveAndContinue" id="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary">
+            <input type="submit" name="saveAndContinue" id="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary" <?php echo $disabled; ?>>
             <input type="submit" name="goBack" id="goBack" value="Go Back" class="btn">
         </div>
     </form>

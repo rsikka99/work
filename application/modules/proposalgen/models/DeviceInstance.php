@@ -95,6 +95,16 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     protected $_masterDevice;
 
+    /**
+     * @var Proposalgen_Model_Rms_Upload_Row
+     */
+    protected $_rmsUploadRow;
+
+    /**
+     * @var Proposalgen_Model_Device_Instance_Master_Device
+     */
+    protected $_deviceInstanceMasterDevice;
+
     /*
      * ********************************************************************************
      * Calculated fields
@@ -1103,8 +1113,16 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_masterDevice))
         {
-            $masterDeviceMapper  = Proposalgen_Model_Mapper_MasterDevice::getInstance();
-            $this->_masterDevice = $masterDeviceMapper->find($this->masterDeviceId);
+            if ($this->getIsMappedToMasterDevice())
+            {
+                $masterDeviceMapper         = Proposalgen_Model_Mapper_MasterDevice::getInstance();
+                $deviceInstanceMasterDevice = $this->getDeviceInstanceMasterDevice();
+                $this->_masterDevice        = $masterDeviceMapper->find($deviceInstanceMasterDevice->masterDeviceId);
+            }
+            else
+            {
+                // FIXME: Get master device from rms upload row
+            }
         }
 
         return $this->_masterDevice;
@@ -1122,11 +1140,62 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         return $this;
     }
 
+    /**
+     * Gets the rms upload row
+     *
+     * @return Proposalgen_Model_Rms_Upload_Row
+     */
+    public function getRmsUploadRow ()
+    {
+        if (!isset($this->_rmsUploadRow))
+        {
+            $this->_rmsUploadRow = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance()->find($this->rmsUploadRowId);
+        }
+
+        return $this->_rmsUploadRow;
+    }
+
+    /**
+     * Sets the rms upload row
+     *
+     * @param Proposalgen_Model_Rms_Upload_Row $rmsUploadRow
+     *
+     * @return Proposalgen_Model_DeviceInstance
+     */
+    public function setRmsUploadRow ($rmsUploadRow)
+    {
+        $this->_rmsUploadRow = $rmsUploadRow;
+
+        return $this;
+    }
+
+    /**
+     * Gets the device instance master device
+     *
+     * @return Proposalgen_Model_Device_Instance_Master_Device
+     */
     public function getDeviceInstanceMasterDevice ()
     {
-        $deviceInstanceMasterDevice = false;
+        if (!isset($this->_deviceInstanceMasterDevice))
+        {
+            $this->_deviceInstanceMasterDevice = Proposalgen_Model_Mapper_Device_Instance_Master_Device::getInstance()->find($this->id);
+        }
 
-        return $deviceInstanceMasterDevice;
+        return $this->_deviceInstanceMasterDevice;
+    }
+
+    /**
+     * Sets the device instance master device
+     *
+     * @param Proposalgen_Model_Device_Instance_Master_Device $deviceInstanceMasterDevice
+     *
+     * @return Proposalgen_Model_DeviceInstance
+     */
+    public function setDeviceInstanceMasterDevice ($deviceInstanceMasterDevice)
+    {
+        $this->_deviceInstanceMasterDevice = $deviceInstanceMasterDevice;
+
+        return $this;
     }
 
     /**

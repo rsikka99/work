@@ -23,7 +23,7 @@ class Proposalgen_Model_Mapper_TicketStatus extends Tangent_Model_Mapper_Abstrac
      *
      * @param Zend_Db_Table_Row $row
      *
-     * @return \Proposalgen_Model_TicketStatus
+     * @return Proposalgen_Model_TicketStatus
      * @throws Exception
      */
     public function mapRowToObject ($row)

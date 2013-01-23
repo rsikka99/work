@@ -32,7 +32,7 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
      * @param $object Proposalgen_Model_Rms_Excluded_Row
      *                The object to insert
      *
-     * @return mixed The primary key of the new row
+     * @return int The primary key of the new row
      */
     public function insert (&$object)
     {
@@ -220,7 +220,7 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
     /**
      * @param Proposalgen_Model_Rms_Excluded_Row $object
      *
-     * @return mixed
+     * @return int
      */
     public function getPrimaryKeyValueForObject ($object)
     {
@@ -237,5 +237,17 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
     public function deleteAllForReport ($reportId)
     {
         return $this->getDbTable()->delete(array("{$this->col_reportId} = ?" => $reportId));
+    }
+
+    /**
+     * Counts how many excluded rows we have for the report
+     *
+     * @param $reportId
+     *
+     * @return int
+     */
+    public function countRowsForReport ($reportId)
+    {
+        return $this->count(array("{$this->col_reportId} = ?" => $reportId));
     }
 }

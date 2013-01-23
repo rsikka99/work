@@ -24,7 +24,7 @@ class Proposalgen_Model_Mapper_Ticket extends Tangent_Model_Mapper_Abstract
      *
      * @param Zend_Db_Table_Row $row
      *
-     * @return \Proposalgen_Model_Ticket
+     * @return Proposalgen_Model_Ticket
      * @throws Exception
      */
     public function mapRowToObject ($row)

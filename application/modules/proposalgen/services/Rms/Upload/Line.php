@@ -1,6 +1,10 @@
 <?php
 class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
 {
+    const METER_IS_VALID       = 0;
+    const METER_IS_NOT_PRESENT = 1;
+    const METER_IS_INVALID     = 2;
+
     /**
      * The minimum number of days that we need to monitor a device before we can get a decent average page count
      *
@@ -889,67 +893,184 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         /*
          * The start meter of any meter should never be greater than the end meter.
          */
+        $blackMeterStatus      = $this->_validateMeter($this->startMeterBlack, $this->endMeterBlack);
+        $colorMeterStatus      = $this->_validateMeter($this->startMeterColor, $this->endMeterColor);
+        $lifeMeterStatus       = $this->_validateMeter($this->startMeterLife, $this->endMeterLife);
+        $printBlackMeterStatus = $this->_validateMeter($this->startMeterPrintBlack, $this->endMeterPrintBlack);
+        $printColorMeterStatus = $this->_validateMeter($this->startMeterPrintColor, $this->endMeterPrintColor);
+        $copyBlackMeterStatus  = $this->_validateMeter($this->startMeterCopyBlack, $this->endMeterCopyBlack);
+        $copyColorMeterStatus  = $this->_validateMeter($this->startMeterCopyColor, $this->endMeterCopyColor);
+        $scanMeterStatus       = $this->_validateMeter($this->startMeterScan, $this->endMeterScan);
+        $faxMeterStatus        = $this->_validateMeter($this->startMeterFax, $this->endMeterFax);
 
         // If we are missing a black meter and are missing a color/life meter then we cannot proceed
-        if (empty($this->startMeterBlack) && (empty($this->startMeterLife) || empty($this->startMeterColor)))
+        if ($blackMeterStatus !== self::METER_IS_VALID && ($colorMeterStatus !== self::METER_IS_VALID || $lifeMeterStatus !== self::METER_IS_VALID))
         {
             return "Invalid black meter";
         }
-
-        // Black meter
-        if (($this->startMeterBlack > $this->endMeterBlack) || ($this->startMeterBlack < 0 || $this->endMeterBlack < 0))
+        if ($blackMeterStatus === self::METER_IS_INVALID)
         {
-            return "Invalid black meter";
-        }
+            /*
+             * If we get here it means that we have an invalid black meter, but valid color and life meter. We can now calculate our black meter
+             */
+            $this->startMeterBlack = $this->startMeterLife - $this->startMeterColor;
+            $this->endMeterBlack   = $this->endMeterLife - $this->endMeterColor;
 
-        // Life meter
-        if (($this->startMeterLife > $this->endMeterLife) || ($this->startMeterLife < 0 || $this->endMeterLife < 0))
-        {
-            return "Invalid life meter";
         }
 
         // Color meter
-        if (($this->startMeterColor > $this->endMeterColor) || ($this->startMeterColor < 0 || $this->endMeterColor < 0))
+        if ($colorMeterStatus === self::METER_IS_INVALID)
         {
+            if ($lifeMeterStatus === self::METER_IS_VALID)
+            {
+                // Derive Color from Life - Black Meter only if it's > 0
+                if ($this->startMeterLife !== $this->startMeterBlack && $this->endMeterLife !== $this->endMeterBlack)
+                {
+                    $this->startMeterColor = $this->startMeterLife - $this->startMeterBlack;
+                    $this->endMeterColor   = $this->endMeterLife - $this->endMeterBlack;
+                }
+            }
+
             return "Invalid color meter";
         }
 
-        // Print Black meter
-        if (($this->startMeterPrintBlack > $this->endMeterPrintBlack) || ($this->startMeterPrintBlack < 0 || $this->endMeterPrintBlack < 0))
+        // Life meter
+        if ($lifeMeterStatus === self::METER_IS_INVALID)
         {
-            return "Invalid print black meter";
+            $this->startMeterLife = $this->startMeterBlack;
+            $this->endMeterLife   = $this->endMeterBlack;
+
+            // If we have a color meter, add that to our life count
+            if ($colorMeterStatus === self::METER_IS_VALID)
+            {
+                $this->startMeterLife = $this->startMeterLife + $this->startMeterColor;
+                $this->endMeterLife   = $this->endMeterLife + $this->endMeterColor;
+            }
+        }
+
+
+        // Print Black meter
+        if ($printBlackMeterStatus === self::METER_IS_INVALID)
+        {
+            /*
+             * Right now we don't really care about this meter. Lets set it to null when invalid
+             */
+            $this->startMeterPrintBlack = null;
+            $this->endMeterPrintBlack   = null;
+            // return "Invalid print black meter";
         }
 
         // Print Color  meter
-        if (($this->startMeterPrintColor > $this->endMeterPrintColor) || ($this->startMeterPrintColor < 0 || $this->endMeterPrintColor < 0))
+        if ($printColorMeterStatus === self::METER_IS_INVALID)
         {
-            return "Invalid print color meter";
+            /*
+             * Right now we don't really care about this meter. Lets set it to null when invalid
+             */
+            $this->startMeterPrintColor = null;
+            $this->endMeterPrintColor   = null;
+            // return "Invalid print color meter";
         }
 
         // Copy Black meter
-        if (($this->startMeterCopyBlack > $this->endMeterCopyBlack) || ($this->startMeterCopyBlack < 0 || $this->endMeterCopyBlack < 0))
+        if ($copyBlackMeterStatus === self::METER_IS_INVALID)
         {
-            return "Invalid copy black meter";
+            /*
+             * Right now we don't really care about this meter. Lets set it to null when invalid
+             */
+            $this->startMeterCopyBlack = null;
+            $this->endMeterCopyBlack   = null;
+            // return "Invalid copy black meter";
         }
 
         // Copy Color meter
-        if (($this->startMeterCopyColor > $this->endMeterCopyColor) || ($this->startMeterCopyColor < 0 || $this->endMeterCopyColor < 0))
+        if ($copyColorMeterStatus === self::METER_IS_INVALID)
         {
-            return "Invalid copy color meter";
+            /*
+             * Right now we don't really care about this meter. Lets set it to null when invalid
+             */
+            $this->startMeterCopyColor = null;
+            $this->endMeterCopyColor   = null;
+            // return "Invalid copy color meter";
         }
 
         // Scan meter
-        if (($this->startMeterScan > $this->endMeterScan) || ($this->startMeterScan < 0 || $this->endMeterScan < 0))
+        if ($scanMeterStatus === self::METER_IS_INVALID)
         {
-            return "Invalid scan meter";
+            /*
+             * Right now we don't really care about this meter. Lets set it to null when invalid
+             */
+            $this->startMeterScan = null;
+            $this->endMeterScan   = null;
+            // return "Invalid scan meter";
         }
 
         // Fax meter
-        if (($this->startMeterFax > $this->endMeterFax) || ($this->startMeterFax < 0 || $this->endMeterFax < 0))
+        if ($faxMeterStatus === self::METER_IS_INVALID)
         {
-            return "Invalid fax meter";
+            /*
+             * Right now we don't really care about this meter. Lets set it to null when invalid
+             */
+            $this->startMeterFax = null;
+            $this->endMeterFax   = null;
+            // return "Invalid fax meter";
         }
 
         return true;
+    }
+
+    /**
+     * Validates a single meter
+     *
+     * @param int $startMeter The start meter reading
+     * @param int $endMeter   The end meter reading
+     *
+     * @return int
+     */
+    protected function _validateMeter (&$startMeter, &$endMeter)
+    {
+        $returnCode = self::METER_IS_VALID;
+
+        // If we have an end meter we but our start is null, we might as well assume it was 0
+        if ($startMeter === null && $endMeter !== null)
+        {
+            $startMeter = 0;
+        }
+
+        /*
+         * Because of our previous logic setting the start meter 0 if end meter is present,
+         * we can assume that if either meter is set to null that the meter is not present
+         */
+        if ($startMeter === null || $endMeter === null)
+        {
+            $returnCode = self::METER_IS_NOT_PRESENT;
+        }
+        else
+        {
+            /**
+             * If either meter is less than 0 it's invalid
+             */
+            if ($startMeter < 0 || $endMeter < 0)
+            {
+                $returnCode = self::METER_IS_INVALID;
+            }
+            else if ($startMeter >= 0 || $endMeter >= 0)
+            {
+                /*
+                 * Meter Has Data -
+                 * Start Meter should never be higher than the end meter but it is allowed to be the same as the end meter
+                 */
+                if ($startMeter > $endMeter)
+                {
+                    $returnCode = self::METER_IS_INVALID;
+                }
+            }
+            else
+            {
+                $returnCode = self::METER_IS_NOT_PRESENT;
+            }
+        }
+
+
+        return $returnCode;
     }
 }

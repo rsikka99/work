@@ -62,7 +62,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
      *
-     * @return int The number of rows affected
+     * @return string The number of rows affected
      */
     public function save ($object, $primaryKey = null)
     {
@@ -221,7 +221,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
     /**
      * @param Proposalgen_Model_DeviceInstance $object
      *
-     * @return mixed
+     * @return int
      */
     public function getPrimaryKeyValueForObject ($object)
     {
@@ -281,6 +281,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
 
     /**
      * Counts how many device instance rows we have for the report
+     *
      * @param $reportId
      *
      * @return int
