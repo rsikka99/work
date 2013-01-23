@@ -23,7 +23,7 @@ class Proposalgen_Model_Mapper_NumericAnswer extends Tangent_Model_Mapper_Abstra
      *
      * @param Zend_Db_Table_Row $row
      *
-     * @return \Proposalgen_Model_NumericAnswer
+     * @return Proposalgen_Model_NumericAnswer
      * @throws Exception
      */
     public function mapRowToObject ($row)

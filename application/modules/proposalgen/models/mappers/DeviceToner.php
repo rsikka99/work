@@ -24,15 +24,15 @@ class Proposalgen_Model_Mapper_DeviceToner extends Tangent_Model_Mapper_Abstract
      * @param Zend_Db_Table_Row $row
      *
      * @throws Exception
-     * @return \Proposalgen_Model_DeviceToner
+     * @return Proposalgen_Model_DeviceToner
      */
     public function mapRowToObject ($row)
     {
         $object = null;
         try
         {
-            $object               = new Proposalgen_Model_DeviceToner();
-            $object->tonerId      = $row->toner_id;
+            $object                 = new Proposalgen_Model_DeviceToner();
+            $object->tonerId        = $row->toner_id;
             $object->masterDeviceId = $row->master_device_id;
         }
         catch (Exception $e)
@@ -44,7 +44,7 @@ class Proposalgen_Model_Mapper_DeviceToner extends Tangent_Model_Mapper_Abstract
     }
 
     /**
-     * @param \Proposalgen_Model_DeviceToner $object
+     * @param Proposalgen_Model_DeviceToner $object
      *
      * @return string
      * @throws Exception
@@ -70,7 +70,7 @@ class Proposalgen_Model_Mapper_DeviceToner extends Tangent_Model_Mapper_Abstract
      *
      * @param $masterDeviceId
      *
-     * @return Admin_Model_Toner[]
+     * @return Proposalgen_Model_Toner[]
      */
     public function getDeviceToners ($masterDeviceId)
     {
@@ -79,9 +79,9 @@ class Proposalgen_Model_Mapper_DeviceToner extends Tangent_Model_Mapper_Abstract
         foreach ($deviceToners as $deviceToner)
         {
             $tonerId = $deviceToner->TonerId;
-            $toner   = Admin_Model_Mapper_Toner::getInstance()->find($tonerId);
+            $toner   = Proposalgen_Model_Mapper_Toner::getInstance()->find($tonerId);
 
-            $object = new Admin_Model_Toner($toner->toArray());
+            $object = new Proposalgen_Model_Toner($toner->toArray());
 
             $entries [] = $object;
         }

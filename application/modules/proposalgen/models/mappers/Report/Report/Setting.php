@@ -34,7 +34,7 @@ class Proposalgen_Model_Mapper_Report_Report_Setting extends My_Model_Mapper_Abs
      * @param $object Proposalgen_Model_Report_Report_Setting
      *                The object to insert
      *
-     * @return mixed The primary key of the new row
+     * @return int The primary key of the new row
      */
     public function insert (&$object)
     {
@@ -87,7 +87,7 @@ class Proposalgen_Model_Mapper_Report_Report_Setting extends My_Model_Mapper_Abs
      *                This can either be an instance of Proposalgen_Model_Report_Report_Setting or the
      *                primary key to delete
      *
-     * @return mixed The number of rows deleted
+     * @return int The number of rows deleted
      */
     public function delete ($object)
     {
@@ -217,7 +217,7 @@ class Proposalgen_Model_Mapper_Report_Report_Setting extends My_Model_Mapper_Abs
     /**
      * @param Proposalgen_Model_Report_Report_Setting $object
      *
-     * @return mixed
+     * @return int
      */
     public function getPrimaryKeyValueForObject ($object)
     {

@@ -52,7 +52,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
             $object->isScanner                = $row->is_scanner;
             $object->wattsPowerNormal         = $row->jit_supplies_supported;
             $object->wattsPowerIdle           = $row->watts_power_normal;
-            $object->cost              = $row->watts_power_idle;
+            $object->cost                     = $row->watts_power_idle;
             $object->launchDate               = $row->cost;
             $object->dateCreated              = $row->launch_date;
             $object->blackTonerSku            = $row->date_created;
@@ -181,7 +181,7 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
 
                     $masterDevice                      = new Proposalgen_Model_MasterDevice();
                     $masterDevice->id                  = null;
-                    $masterDevice->modelName        = $row->printer_model;
+                    $masterDevice->modelName           = $row->printer_model;
                     $masterDevice->tonerConfigId       = $tonerConfig->tonerConfigId;
                     $masterDevice->isCopier            = $row->is_copier;
                     $masterDevice->isFax               = $row->is_fax;
@@ -222,17 +222,17 @@ class Proposalgen_Model_Mapper_UnknownDeviceInstance extends Tangent_Model_Mappe
                     }
 
 
-                    $device->id                    = null;
-                    $device->reportId              = $row->report_id;
-                    $device->rmsUploadRowId = $row->upload_data_collector_row_id;
-                    $device->serialNumber          = $row->printer_serial_number;
-                    $device->mpsMonitorStartDate   = $row->mps_monitor_startdate;
-                    $device->mpsMonitorEndDate     = $row->mps_monitor_enddate;
-                    $device->mpsDiscoveryDate      = $row->mps_discovery_date;
-                    $device->isExcluded            = $row->is_excluded;
-                    $device->isUnknown             = true;
+                    $device->id                  = null;
+                    $device->reportId            = $row->report_id;
+                    $device->rmsUploadRowId      = $row->upload_data_collector_row_id;
+                    $device->serialNumber        = $row->printer_serial_number;
+                    $device->mpsMonitorStartDate = $row->mps_monitor_startdate;
+                    $device->mpsMonitorEndDate   = $row->mps_monitor_enddate;
+                    $device->mpsDiscoveryDate    = $row->mps_discovery_date;
+                    $device->isExcluded          = $row->is_excluded;
+                    $device->isUnknown           = true;
                     $device->reportsTonerLevels  = $row->jit_supplies_supported;
-                    $device->ipAddress             = $row->ip_address;
+                    $device->ipAddress           = $row->ip_address;
 
                     $device->setMeters($meters);
                     $device->setMasterDevice($masterDevice);
