@@ -29,10 +29,28 @@ class Proposalgen_Service_DeviceMapping_NameBased extends Proposalgen_Service_De
     {
         $isMapped = false;
 
-        $manufacturer = $this->_manufacturerMapper->searchManufacturersByName();
+        $manufacturers = $this->_manufacturerMapper->searchByName($deviceInstance->getRmsUploadRow()->manufacturer);
 
-        // TODO: Implement named based mapping
+        $manufacturer = null;
+        if (count($manufacturers) === 1)
+        {
+            $manufacturer = $manufacturers[0];
+        }
 
+        $masterDevices = $this->_masterDeviceMapper->searchByModelName($deviceInstance->getRmsUploadRow()->modelName, $manufacturer);
+        if (count($masterDevices) === 1)
+        {
+            $masterDevice                                 = $masterDevices[0];
+            $deviceInstanceMasterDevice                   = new Proposalgen_Model_Device_Instance_Master_Device();
+            $deviceInstanceMasterDevice->deviceInstanceId = $deviceInstance->id;
+            $deviceInstanceMasterDevice->masterDeviceId   = $masterDevice->id;
+
+            $this->_deviceInstanceMasterDeviceMapper->insert($deviceInstanceMasterDevice);
+
+            // TODO: Create user matchup?
+
+            $isMapped = true;
+        }
 
         return $isMapped;
     }

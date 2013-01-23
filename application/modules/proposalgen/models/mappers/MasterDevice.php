@@ -290,4 +290,26 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
     {
         return $object->id;
     }
+
+    /**
+     * Searches the master devices by modelName (uses LIKE %NAME% in where clause)
+     * If a manufacturer id is supplied it is used to refine the search
+     *
+     * @param string $modelName
+     * @param int    $manufacturerId
+     *
+     * @return Proposalgen_Model_MasterDevice[]
+     */
+    public function searchByModelName ($modelName, $manufacturerId)
+    {
+        $whereClause = array(
+            "{$this->col_modelName} LIKE " => "%{$modelName}%"
+        );
+        if ($manufacturerId !== null)
+        {
+            $whereClause["{$this->col_manufacturerId} = ?"] = $manufacturerId;
+        }
+
+        return $this->fetchAll($whereClause);
+    }
 }

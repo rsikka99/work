@@ -1,6 +1,14 @@
 <?php
 class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
 {
+    /*
+     * Column Definitions
+     */
+    public $col_id = 'id';
+    public $col_displayName = 'displayname';
+    public $col_fullName = 'fullname';
+    public $col_isDeleted = 'isDeleted';
+
     /**
      * The default db table class to use
      *
@@ -34,7 +42,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
         $data = $object->toArray();
 
         // Remove the id
-        unset($data ['id']);
+        unset($data ["{$this->col_id}"]);
 
         // Insert the data
         $id = $this->getDbTable()->insert($data);
@@ -63,12 +71,12 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
 
         if ($primaryKey === null)
         {
-            $primaryKey = $data ['id'];
+            $primaryKey = $data ["{$this->col_id}"];
         }
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                'id = ?' => $primaryKey
+                                                                "{$this->col_id} = ?" => $primaryKey
                                                            ));
 
         // Save the object into the cache
@@ -91,7 +99,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
         if ($object instanceof Proposalgen_Model_Manufacturer)
         {
             $whereClause = array(
-                'id = ?' => $object->id
+                "{$this->col_id} = ?" => $object->id
             );
         }
         else
@@ -207,7 +215,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array(
-            'id = ?' => $id
+            "{$this->col_id} = ?" => $id
         );
     }
 
@@ -219,9 +227,9 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
     public function fetchAllAvailableManufacturers ()
     {
         return $this->fetchAll(array(
-                                    'isDeleted = 0'
+                                    "{$this->col_isDeleted} = 0"
                                ), array(
-                                       'fullname ASC'
+                                       "{$this->col_fullName} ASC"
                                   ));
     }
 
@@ -235,9 +243,15 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
         return $object->id;
     }
 
-
-    public function searchManufacturersByName($manufacturerName)
+    /**
+     * Searches the manufacturer by full name (uses LIKE %NAME% in where clause)
+     *
+     * @param string $manufacturerName
+     *
+     * @return Proposalgen_Model_Manufacturer[]
+     */
+    public function searchByName ($manufacturerName)
     {
-        return $this->fetchAll(array(""));
+        return $this->fetchAll(array("{$this->col_fullName} LIKE " => "%{$manufacturerName}%"));
     }
 }
