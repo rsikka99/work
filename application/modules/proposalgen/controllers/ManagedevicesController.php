@@ -119,18 +119,11 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
         {
             $repop_form = 0;
             $formData   = $this->_request->getPost();
-
-            // print_r($formData); die;
-
-
             // conditional requirements
             $form->set_validation($formData);
-
             // get form mode
             $form_mode = $formData ['form_mode'];
-
             $date = date('Y-m-d H:i:s');
-
             // validate fields
             if ($formData ["manufacturer_id"] == 0)
             {
@@ -166,7 +159,6 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
             {
                 if ($formData ['save_flag'] == "save")
                 {
-
                     // update the selected device
                     $db->beginTransaction();
                     try
@@ -174,6 +166,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                         $master_device_id = 0;
                         if ($form_mode == "edit")
                         {
+
                             $master_device_id = $formData ['printer_model'];
                         }
                         $master_deviceTable = new Proposalgen_Model_DbTable_MasterDevice();
@@ -193,12 +186,9 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                         foreach ($toner_array as $key)
                         {
                             $toner_id = str_replace("'", "", $key);
-
-
                             if ($toner_id > 0)
                             {
                                 // get color and type from $key
-                                $select   = new Zend_Db_Select($db);
                                 $select   = $db->select()
                                     ->from(array(
                                                 't' => 'pgen_toners'
@@ -689,6 +679,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                 if (isset($formData ['printer_model']))
                 {
                     $form->getElement('printer_model')->setValue($formData ['printer_model']);
+                    $this->view->printer_model =  $formData ['printer_model'];
                 }
                 $form->getElement('new_printer')->setValue($formData ['new_printer']);
                 $form->getElement('launch_date')->setValue($formData ['launch_date']);

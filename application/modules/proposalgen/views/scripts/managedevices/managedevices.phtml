@@ -400,6 +400,7 @@
 			$('#applied_toners_list').clearGridData();
 			
 		    var manufacturerid = $("#manufacturer_id").val();
+            var printer_model_id = $("#printer_model").val();
 		    var url = '<?php echo $this->baseUrl("/proposalgen/admin/printermodels"); ?>?manufacturerid='+manufacturerid;
 
 			$.ajax ({
@@ -413,7 +414,6 @@
 				    
 					var listItems = "";
 					var selected = '<?php echo $this->printer_model; ?>';
-					
 					listItems+="<option value=''></option>";
 					for (var i = 0; i < models.rows.length; i++){
 						selected_code = "";
@@ -462,23 +462,22 @@
 		        },
 		        url: '<?php echo $this->baseUrl("/proposalgen/admin/devicedetails"); ?>?deviceid='+master_device_id,
 		        success: function(data) {
-		            var obj = jQuery.parseJSON(data);
 		            if(form_mode != 'add' && repop != 1) {
-			            $("#launch_date").val(obj.launch_date);
-			            $("#device_price").val(obj.device_price);
-			            $("#toner_config_id").val(obj.toner_config_id);
-			            $("#is_copier").attr('checked', obj.is_copier);
-			            $("#is_scanner").attr('checked', obj.is_scanner);
-			            $("#is_fax").attr('checked', obj.is_fax);
-			            $("#is_duplex").attr('checked', obj.is_duplex);
-			            $("#watts_power_normal").val(obj.watts_power_normal);
-			            $("#watts_power_idle").val(obj.watts_power_idle);
-						$("#toner_array").val(obj.toner_array);
-			            $("#is_leased").attr('checked', obj.is_leased);
-			            $("#leased_toner_yield").val(obj.leased_toner_yield);
-                        $("#ppm_black").val(obj.ppm_black);
-                        $("#ppm_color").val(obj.ppm_color);
-                        $("#duty_cycle").val(obj.duty_cycle);
+			            $("#launch_date").val(data.launch_date);
+			            $("#device_price").val(data.device_price);
+			            $("#toner_config_id").val(data.toner_config_id);
+			            $("#is_copier").attr('checked', data.is_copier);
+			            $("#is_scanner").attr('checked', data.is_scanner);
+			            $("#is_fax").attr('checked', data.is_fax);
+			            $("#is_duplex").attr('checked', data.is_duplex);
+			            $("#watts_power_normal").val(data.watts_power_normal);
+			            $("#watts_power_idle").val(data.watts_power_idle);
+						$("#toner_array").val(data.toner_array);
+			            $("#is_leased").attr('checked', data.is_leased);
+			            $("#leased_toner_yield").val(data.leased_toner_yield);
+                        $("#ppm_black").val(data.ppm_black);
+                        $("#ppm_color").val(data.ppm_color);
+                        $("#duty_cycle").val(data.duty_cycle);
 					}
 		        },
 		        error: function() {
@@ -643,7 +642,7 @@
 			$("#new_printer-element").css('display','none');
 		} else {
 			if(repop != 1) {
-				disable_form();
+                disable_form();
 				$("#add_link").hide();
 			}
 		}
