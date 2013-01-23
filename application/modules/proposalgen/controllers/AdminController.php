@@ -450,7 +450,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $manufacturer_id     = $_GET ['manufacturerid'];
         $master_devicesTable = new Proposalgen_Model_DbTable_MasterDevice();
         $where               = $master_devicesTable->getAdapter()->quoteInto('manufacturerId = ?', $manufacturer_id, 'INTEGER');
-        $result              = $master_devicesTable->fetchAll($where, 'printerModel');
+        $result              = $master_devicesTable->fetchAll($where, 'modelName');
 
         $i        = 0;
         $response = null;
@@ -461,7 +461,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $response->rows [$i] ['id']   = $row ['id'];
                 $response->rows [$i] ['cell'] = array(
                     $row ['id'],
-                    ucwords(strtolower($row ['printerModel']))
+                    ucwords(strtolower($row ['modelName']))
                 );
                 $i++;
             }
@@ -485,9 +485,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
      */
     public function devicedetailsAction ()
     {
-        // disable the default layout
-        $this->_helper->layout->disableLayout();
-
         $db       = Zend_Db_Table::getDefaultAdapter();
         $deviceID = $this->_getParam('deviceid', false);
 
@@ -496,7 +493,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             if ($deviceID > 0)
             {
                 // get toners for device
-                $select = new Zend_Db_Select($db);
                 $select = $db->select()
                     ->from(array(
                                 't' => 'pgen_toners'
@@ -525,7 +521,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                            ))
                     ->joinLeft(array(
                                     'm' => 'manufacturers'
-                               ), 'm.id = md.manufacturer_id')
+                               ), 'm.id = md.manufacturerId')
                     ->joinLeft(array(
                                     'rd' => 'pgen_replacement_devices'
                                ), 'rd.master_device_id = md.id')
@@ -533,17 +529,16 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $stmt        = $db->query($select);
                 $row         = $stmt->fetchAll();
                 $launch_date = new Zend_Date($row [0] ['launch_date'], "yyyy/mm/dd HH:ii:ss");
-                $formdata    = array(
-
+                $formData    = array(
                     'launch_date'           => $launch_date->toString('mm/dd/yyyy'),
-                    'toner_config_id'       => $row [0] ['toner_config_id'],
-                    'is_copier'             => $row [0] ['is_copier'] ? true : false,
-                    'is_scanner'            => $row [0] ['is_scanner'] ? true : false,
-                    'is_fax'                => $row [0] ['is_fax'] ? true : false,
-                    'is_duplex'             => $row [0] ['is_duplex'] ? true : false,
-                    'is_replacement_device' => $row [0] ['is_replacement_device'],
-                    'watts_power_normal'    => $row [0] ['watts_power_normal'],
-                    'watts_power_idle'      => $row [0] ['watts_power_idle'],
+                    'toner_config_id'       => $row [0] ['tonerConfigId'],
+                    'is_copier'             => $row [0] ['isCopier'] ? true : false,
+                    'is_scanner'            => $row [0] ['isScanner'] ? true : false,
+                    'is_fax'                => $row [0] ['isFax'] ? true : false,
+                    'is_duplex'             => $row [0] ['isDuplex'] ? true : false,
+                    'is_replacement_device' => $row [0] ['isReplacementDevice'],
+                    'watts_power_normal'    => $row [0] ['wattsPowerNormal'],
+                    'watts_power_idle'      => $row [0] ['wattsPowerIdle'],
                     'device_price'          => ($row [0] ['cost'] > 0 ? (float)$row [0] ['cost'] : ""),
                     'is_deleted'            => $row [0] ['is_deleted'],
                     'toner_array'           => $toner_array,
@@ -555,17 +550,17 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     // 'cpp_above' => $row [0]
                     // ['CPP_above_ten_thousand_pages'],
                     'monthly_rate'          => $row [0] ['monthly_rate'],
-                    'is_leased'             => $row [0] ['is_leased'] ? true : false,
-                    'leased_toner_yield'    => $row [0] ['leased_toner_yield'],
-                    'ppm_black'             => $row [0] ['ppm_black'],
-                    'ppm_color'             => $row [0] ['ppm_color'],
-                    'duty_cycle'            => $row [0] ['duty_cycle'],
+                    'is_leased'             => $row [0] ['isLeased'] ? true : false,
+                    'leased_toner_yield'    => $row [0] ['leasedTonerYield'],
+                    'ppm_black'             => $row [0] ['ppmBlack'],
+                    'ppm_color'             => $row [0] ['ppmColor'],
+                    'duty_cycle'            => $row [0] ['dutyCycle'],
                 );
             }
             else
             {
                 // empty form values
-                $formdata = array();
+                $formData = array();
             }
         }
         catch (Exception $e)
@@ -574,10 +569,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             Throw new exception("Critical Error: Unable to find device.", 0, $e);
         } // end catch
 
-
-        // encode user data to return to the client:
-        $json             = Zend_Json::encode($formdata);
-        $this->view->data = $json;
+        $this->_helper->json($formData);
     }
 
     public function devicereportsAction ()
