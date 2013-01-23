@@ -685,7 +685,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     public function previewlistAction ()
     {
         // disable the default layout
-        $this->_helper->layout->disableLayout();
         $db           = Zend_Db_Table::getDefaultAdapter();
         $invalid_data = $this->_getParam('filter', 0);
 
@@ -823,8 +822,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             My_Log::logException($e);
         }
         // encode user data to return to the client:
-        $json             = Zend_Json::encode($formdata);
-        $this->view->data = $json;
+        $this->_helper->json($formdata);
     }
 
     /**
@@ -943,13 +941,11 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     public function devicemappinglistAction ()
     {
         // disable the default layout
-        $this->_helper->layout->disableLayout();
         $db = Zend_Db_Table::getDefaultAdapter();
 
         $this->_userId = Zend_Auth::getInstance()->getIdentity()->id;
         $report_id     = $this->getReport()->id;
 
-        $select = new Zend_Db_Select($db);
         $select = $db->select()
             ->from(array(
                         'udc' => 'pgen_upload_data_collector_rows'
@@ -1059,8 +1055,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         }
 
         // encode user data to return to the client:
-        $json             = Zend_Json::encode($formdata);
-        $this->view->data = $json;
+        $this->_helper->json($formdata);
     }
 
     /**
@@ -1163,7 +1158,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     public function mastermappinglistAction ()
     {
         // disable the default layout
-        $this->_helper->layout->disableLayout();
         $db = Zend_Db_Table::getDefaultAdapter();
 
         $this->_userId = Zend_Auth::getInstance()->getIdentity()->id;
@@ -1308,8 +1302,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         }
 
         // encode user data to return to the client:
-        $json             = Zend_Json::encode($formdata);
-        $this->view->data = $json;
+        $this->_helper->json($formdata);
     }
 
     /**
@@ -2589,11 +2582,12 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     public function removedeviceAction ()
     {
         // disable the default layout
-        $this->_helper->layout->disableLayout();
         $db = Zend_Db_Table::getDefaultAdapter();
 
         // get devices_pf_id
         $devices_pf_id = $this->_getParam('key', null);
+
+        $jsonResponse = array();
 
         $db->beginTransaction();
         try
@@ -2621,14 +2615,17 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 }
             }
             $db->commit();
+            $jsonResponse["success"] = "Device was removed successfully";
         }
         catch (Exception $e)
         {
             $db->rollback();
-            echo $e . "<br />";
-            $this->view->message = "Error removing device.";
-            throw new Exception("An error occurred saving mapping.", 0, $e);
+            My_Log::logException($e);
+            $uid                   = My_Log::getUniqueId();
+            $jsonResponse["error"] = "There was an error removing the device. Please try again. If this continues to happen please reference #{$uid} in your support request.";
         }
+
+        $this->_helper->json($jsonResponse);
     }
 
     public function savemappingAction ()
@@ -3232,7 +3229,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     public function deviceleasingexcludedlistAction ()
     {
         // disable the default layout
-        $this->_helper->layout->disableLayout();
         $db       = Zend_Db_Table::getDefaultAdapter();
         $formData = new stdClass();
         $page     = $_GET ['page'];
@@ -3356,8 +3352,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         }
 
         // encode user data to return to the client:
-        $json             = Zend_Json::encode($formData);
-        $this->view->data = $json;
+        $this->_helper->json($formData);
     }
 
     public function setleasedAction ()
@@ -3367,6 +3362,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $db            = Zend_Db_Table::getDefaultAdapter();
         $devices_pf_id = $this->_getParam('id', false);
         $value         = $this->_getParam('mode', 0);
+        $jsonResponse  = array();
 
         // get report id from session
         $report_id = $this->getReport()->id;
@@ -3418,22 +3414,26 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 }
             }
             $db->commit();
+            $jsonResponse["success"] = "The device is now marked as leased";
         }
         catch (Exception $e)
         {
             $db->rollBack();
+            My_Log::logException($e);
+            My_Log::getUniqueId();
+            $jsonResponse["error"] = "There was an error setting the device to leased.";
         }
+        $this->_helper->json($jsonResponse);
     }
 
     public function setexcludedAction ()
     {
         // disable the default layout
-        $this->_helper->layout->disableLayout();
         $db                       = Zend_Db_Table::getDefaultAdapter();
         $upload_data_collector_id = $this->_getParam('id', false);
         $value                    = $this->_getParam('mode', 0);
-
-        $updateData = array(
+        $jsonResponse             = array();
+        $updateData               = array(
             'is_excluded' => $value
         );
 
@@ -3469,11 +3469,17 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 }
             }
             $db->commit();
+            $jsonResponse["success"] = "The device is now excluded";
         }
         catch (Exception $e)
         {
             $db->rollBack();
+            My_Log::logException($e);
+            My_Log::getUniqueId();
+            $jsonResponse["error"] = "There was an error setting the device to excluded.";
         }
+
+        $this->_helper->json($jsonResponse);
     }
 
     /**
