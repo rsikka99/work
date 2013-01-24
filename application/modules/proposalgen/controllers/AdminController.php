@@ -1406,8 +1406,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 // ($with_id)
                 foreach ($total_devices as $key)
                 {
-                    $master_device_id = $key->getMasterDeviceId;
-
+                    $master_device_id = $key->masterDeviceId;
                     // UPDATE ALL DEVICES WITH THIS TONER (replace_id) TO
                     // REPLACEMENT TONER (with_id)
                     $device_tonerMapper     = Proposalgen_Model_Mapper_DeviceToner::getInstance();
@@ -1422,6 +1421,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 if ($with_id > 0)
                 {
+
                     // LOOP THROUGH ALL DEVICES AND UPDATE TO REPLACEMENT TONER
                     // ID ($with_id)
                     foreach ($total_devices as $key)
@@ -1430,11 +1430,12 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
                         if ($apply_all == 1)
                         {
+
                             // UPDATE ALL DEVICES WITH THIS TONER (replace_id)
                             // TO REPLACEMENT TONER (with_id)
                             $device_tonerMapper = Proposalgen_Model_Mapper_DeviceToner::getInstance();
                             $device_toner       = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchRow('toner_id = ' . $replace_id . ' AND master_device_id = ' . $master_device_id);
-                            $device_toner->setTonerId($with_id);
+                            $device_toner->tonerId = $with_id;
                             $device_tonerMapper->save($device_toner);
                             $toner_count += 1;
                         }
@@ -1459,7 +1460,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 // (with_id)
                                 $device_tonerMapper     = Proposalgen_Model_Mapper_DeviceToner::getInstance();
                                 $device_toner           = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchRow('toner_id = ' . $replace_id . ' AND master_device_id = ' . $master_device_id);
-                                $device_toner->toner_id = $with_id;
+                                $device_toner->tonerId = $with_id;
                                 $device_tonerMapper->save($device_toner);
                                 $toner_count += 1;
                             }
