@@ -852,32 +852,13 @@
 			$("#device_form").submit();
 			
 		} else if(inAction == 'delete') {
-			var alert_message = "Are you sure you want to delete this printer?";
-			var url = '<?php echo $this->baseUrl("/proposalgen/admin/devicereports"); ?>?id='+$("#printer_model").val();
-			var num_reports = 0;
-			
-			// get number of reports this printer belongs to
-		    $.ajax({
-		        url: url,
-		        success: function(data) {
-		            var obj = jQuery.parseJSON(data);
-		            num_reports = obj.report_count;
-        			if (num_reports > 0) {
-        				alert_message = "This printer is currently used in " + num_reports + " report(s), are you sure you want to delete it?";
-        			}
-		        },
-		        error: function() {
-		            $('#message_container').html("Error checking report count.");
-		        },
-		        complete: function() {
-        			if(confirm(alert_message)) {
+			var alert_message = "Deleting a printer can be very destructive. Are you sure you want to delete it?";
+            if(confirm(alert_message)) {
 						$('#toner_array').val('');
         				$("#save_flag").val('delete');
         				document.getElementById("device_form").submit();
-        			}
-		        }
-			});
-			
+        	}
+
 		} else if(inAction == 'done') {
 			document.location.href='../admin';
 			

@@ -111,7 +111,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_reports` (
   `userId` INT(11) NOT NULL ,
   `customerCompanyName` VARCHAR(255) NOT NULL ,
   `userPricingOverride` TINYINT(4) NULL DEFAULT '0' ,
-  `reportStage` ENUM('company','general','finance','purchasing','it','users','verify','upload','mapdevices','summary','reportsettings','finished') NULL DEFAULT NULL ,
+  `reportStage` ENUM('company','general','finance','purchasing','it','users','verify','upload','mapdevices','summary','reportsettings','optimization','finished') NULL ,
   `questionSetId` INT(11) NOT NULL ,
   `dateCreated` DATETIME NOT NULL ,
   `lastModified` DATETIME NOT NULL ,
@@ -815,7 +815,9 @@ CREATE  TABLE IF NOT EXISTS `pgen_user_device_overrides` (
   INDEX `master_device_id` (`master_device_id` ASC) ,
   CONSTRAINT `proposalgenerator_user_device_overrides_ibfk_1`
     FOREIGN KEY (`master_device_id` )
-    REFERENCES `pgen_master_devices` (`id` ),
+    REFERENCES `pgen_master_devices` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `proposalgenerator_user_device_overrides_ibfk_2`
     FOREIGN KEY (`user_id` )
     REFERENCES `users` (`id` )
@@ -865,10 +867,14 @@ CREATE  TABLE IF NOT EXISTS `pgen_user_report_settings` (
   INDEX `report_setting_id` (`reportSettingId` ASC) ,
   CONSTRAINT `proposalgenerator_user_report_settings_ibfk_1`
     FOREIGN KEY (`userId` )
-    REFERENCES `users` (`id` ),
+    REFERENCES `users` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `proposalgenerator_user_report_settings_ibfk_2`
     FOREIGN KEY (`reportSettingId` )
-    REFERENCES `pgen_report_settings` (`id` ))
+    REFERENCES `pgen_report_settings` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -883,10 +889,14 @@ CREATE  TABLE IF NOT EXISTS `pgen_user_survey_settings` (
   INDEX `survey_setting_id` (`surveySettingId` ASC) ,
   CONSTRAINT `proposalgenerator_user_survey_settings_ibfk_1`
     FOREIGN KEY (`userId` )
-    REFERENCES `users` (`id` ),
+    REFERENCES `users` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `proposalgenerator_user_survey_settings_ibfk_2`
     FOREIGN KEY (`surveySettingId` )
-    REFERENCES `pgen_survey_settings` (`id` ))
+    REFERENCES `pgen_survey_settings` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -903,7 +913,9 @@ CREATE  TABLE IF NOT EXISTS `pgen_user_toner_overrides` (
   INDEX `proposalgenerator_user_toner_overrides_ibfk_2_idx` (`user_id` ASC) ,
   CONSTRAINT `proposalgenerator_user_toner_overrides_ibfk_1`
     FOREIGN KEY (`toner_id` )
-    REFERENCES `pgen_toners` (`id` ),
+    REFERENCES `pgen_toners` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `proposalgenerator_user_toner_overrides_ibfk_2`
     FOREIGN KEY (`user_id` )
     REFERENCES `users` (`id` )
@@ -939,8 +951,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_devices` (
   CONSTRAINT `quotegen_devices_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
     REFERENCES `pgen_master_devices` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -1144,7 +1156,9 @@ CREATE  TABLE IF NOT EXISTS `qgen_option_categories` (
   INDEX `optionId` (`optionId` ASC) ,
   CONSTRAINT `quotegen_option_categories_ibfk_1`
     FOREIGN KEY (`categoryId` )
-    REFERENCES `qgen_categories` (`id` ),
+    REFERENCES `qgen_categories` (`id` )
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
   CONSTRAINT `quotegen_option_categories_ibfk_2`
     FOREIGN KEY (`optionId` )
     REFERENCES `qgen_options` (`id` )
@@ -1608,7 +1622,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Placeholder table for view `pgen_map_device_instances`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `pgen_map_device_instances` (`rmsProviderId` INT, `rmsModelId` INT, `manufacturer` INT, `modelName` INT, `useUserData` INT, `reportId` INT, `masterDeviceId` INT, `isMapped` INT, `deviceCount` INT, `deviceInstanceIds` INT);
+CREATE TABLE IF NOT EXISTS `pgen_map_device_instances` (`rmsProviderId` INT, `rmsModelId` INT, `manufacturer` INT, `modelName` INT, `useUserData` INT, `reportId` INT, `masterDeviceId` INT, `isMapped` INT, `mappedManufacturer` INT, `mappedModelName` INT, `deviceCount` INT, `deviceInstanceIds` INT);
 
 -- -----------------------------------------------------
 -- View `pgen_map_device_instances`
@@ -1624,12 +1638,16 @@ pgen_device_instances.useUserData,
 pgen_device_instances.reportId,
 pgen_device_instance_master_devices.masterDeviceId,
 pgen_device_instance_master_devices.masterDeviceId IS NOT NULL AS isMapped,
+manufacturers.displayname mappedManufacturer,
+pgen_master_devices.modelName AS mappedModelName,
 COUNT(*) as deviceCount,
 GROUP_CONCAT(pgen_device_instances.id) as deviceInstanceIds
 FROM pgen_device_instances
 
 JOIN pgen_rms_upload_rows ON pgen_device_instances.rmsUploadRowId = pgen_rms_upload_rows.id
 LEFT JOIN pgen_device_instance_master_devices ON pgen_device_instance_master_devices.deviceInstanceId = pgen_device_instances.id
+LEFT JOIN pgen_master_devices ON pgen_device_instance_master_devices.masterDeviceId = pgen_master_devices.id
+LEFT JOIN manufacturers ON pgen_master_devices.manufacturerId = manufacturers.id
 
 GROUP BY CONCAT(pgen_rms_upload_rows.manufacturer, " ", pgen_rms_upload_rows.modelName);
 
