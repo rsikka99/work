@@ -5707,8 +5707,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 $select->where("CONCAT(mdm.fullname,' ',md.modelName) LIKE '%" . $where_compatible . "%'");
             }
-            $select->group('t.id');
 
+            $select->group('t.id');
             $stmt   = $db->query($select);
             $result = $stmt->fetchAll();
             $count  = count($result);
@@ -5732,6 +5732,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
             $select->order($sortIndex . ' ' . $sortOrder);
             $select->limit($limit, $start);
+//            echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
+//            var_dump((string)$select);
+//            die();
             $stmt   = $db->query($select);
             $result = $stmt->fetchAll();
 
@@ -5851,7 +5854,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                            ), 'md.id = dt.master_device_id')
                 ->joinLeft(array(
                                 'mdm' => 'manufacturers'
-                           ), 'mdm.id = md.manufacturer_id', array(
+                           ), 'mdm.id = md.manufacturerId', array(
                                                                   'mdm.fullname'
                                                              ))
                 ->joinLeft(array(
@@ -5928,7 +5931,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                                              ))
                 ->joinLeft(array(
                                 'mdm' => 'manufacturers'
-                           ), 'mdm.id = md.manufacturer_id', array(
+                           ), 'mdm.id = md.manufacturerId', array(
                                                                   'mdm.fullname'
                                                              ))
                 ->joinLeft(array(
