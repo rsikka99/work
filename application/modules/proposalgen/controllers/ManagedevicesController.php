@@ -14,9 +14,9 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
         $this->view->title = 'Manage Printers and Toners';
         $this->config      = Zend_Registry::get('config');
         $this->initView();
-        $this->view->app            = $this->config->app;
-        $this->view->user           = Zend_Auth::getInstance()->getIdentity();
-        $this->view->user_id        = Zend_Auth::getInstance()->getIdentity()->id;
+        $this->view->app     = $this->config->app;
+        $this->view->user    = Zend_Auth::getInstance()->getIdentity();
+        $this->view->user_id = Zend_Auth::getInstance()->getIdentity()->id;
         //$this->view->privilege      = Zend_Auth::getInstance()->getIdentity()->privileges;
         $this->user_id = Zend_Auth::getInstance()->getIdentity()->id;
         //$this->privilege            = Zend_Auth::getInstance()->getIdentity()->privileges;
@@ -44,7 +44,9 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
         $form->removeElement('back_button');
 
         // fill manufacturer dropdown
-        $list                          = "";
+        $list = "";
+        // $isPrintModelSet is used to see if data has been saved successfully.
+        $isPrintModelSet               = false;
         $manufacturersTable            = new Proposalgen_Model_DbTable_Manufacturer();
         $manufacturers                 = $manufacturersTable->fetchAll('isDeleted = 0', 'fullName');
         $currElement                   = $form->getElement('manufacturer_id');
@@ -76,7 +78,6 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
 
         // return part_type list
         $list           = "";
-        $part_type      = "";
         $part_typeTable = new Proposalgen_Model_DbTable_PartType();
         $part_types     = $part_typeTable->fetchAll();
         foreach ($part_types as $row)
@@ -123,7 +124,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
             $form->set_validation($formData);
             // get form mode
             $form_mode = $formData ['form_mode'];
-            $date = date('Y-m-d H:i:s');
+            $date      = date('Y-m-d H:i:s');
             // validate fields
             if ($formData ["manufacturer_id"] == 0)
             {
@@ -166,7 +167,6 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                         $master_device_id = 0;
                         if ($form_mode == "edit")
                         {
-
                             $master_device_id = $formData ['printer_model'];
                         }
                         $master_deviceTable = new Proposalgen_Model_DbTable_MasterDevice();
@@ -196,13 +196,13 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                     ->join(array(
                                                 'tc' => 'pgen_toner_colors'
                                            ), 'tc.id = t.tonerColorId', array(
-                                                                               'name AS toner_color_name'
-                                                                          ))
+                                                                             'name AS toner_color_name'
+                                                                        ))
                                     ->join(array(
                                                 'pt' => 'pgen_part_types'
                                            ), 'pt.id = t.partTypeId', array(
-                                                                             'name AS type_name'
-                                                                        ))->where('t.id = ?', $toner_id);
+                                                                           'name AS type_name'
+                                                                      ))->where('t.id = ?', $toner_id);
                                 $stmt     = $db->query($select);
                                 $curToner = $stmt->fetchAll();
 
@@ -243,9 +243,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                         $toner_error_colors = "";
                         if ($has_toner)
                         {
-
-                            // Has toners, validate to make sure they match
-                            // the device
+                            // Has toners, validate to make sure they match the device
                             switch ($toner_config_id)
                             {
                                 case Proposalgen_Model_TonerConfig::BLACK_ONLY:
@@ -397,19 +395,19 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
 
                             // save master device
                             $master_deviceData = array(
-                                'launchDate'        => $launch_date->toString('yyyy-MM-dd HH:mm:ss'),
+                                'launchDate'       => $launch_date->toString('yyyy-MM-dd HH:mm:ss'),
                                 'tonerConfigId'    => $toner_config_id,
-                                'isCopier'          => $formData ["is_copier"],
-                                'isScanner'         => $formData ["is_scanner"],
-                                'isFax'             => $formData ["is_fax"],
-                                'isDuplex'          => $formData ["is_duplex"],
+                                'isCopier'         => $formData ["is_copier"],
+                                'isScanner'        => $formData ["is_scanner"],
+                                'isFax'            => $formData ["is_fax"],
+                                'isDuplex'         => $formData ["is_duplex"],
                                 'wattsPowerNormal' => $formData ["watts_power_normal"],
                                 'wattsPowerIdle'   => $formData ["watts_power_idle"],
-                                'cost'               => ($formData ["device_price"] == 0 ? null : $formData ["device_price"]),
-                                'ppmBlack'          => ($formData ["ppm_black"] > 0) ? $formData ["ppm_black"] : null,
-                                'ppmColor'          => ($formData ["ppm_color"] > 0) ? $formData ["ppm_color"] : null,
-                                'dutyCycle'         => ($formData ["duty_cycle"] > 0) ? $formData ["duty_cycle"] : null,
-                                'isLeased'          => $formData ["is_leased"],
+                                'cost'             => ($formData ["device_price"] == 0 ? null : $formData ["device_price"]),
+                                'ppmBlack'         => ($formData ["ppm_black"] > 0) ? $formData ["ppm_black"] : null,
+                                'ppmColor'         => ($formData ["ppm_color"] > 0) ? $formData ["ppm_color"] : null,
+                                'dutyCycle'        => ($formData ["duty_cycle"] > 0) ? $formData ["duty_cycle"] : null,
+                                'isLeased'         => $formData ["is_leased"],
                                 'leasedTonerYield' => ($formData ["is_leased"] ? $formData ["leased_toner_yield"] : null)
                             );
                             if ($master_device_id > 0)
@@ -449,43 +447,44 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                 $repop_form                = 1;
                                 $this->view->printer_model = $master_device_id;
                                 $this->view->message       = 'Device "' . $printer_model . '" has been updated.';
+                                $isPrintModelSet           = true;
 
                                 // set selected printer model to new printer model
                                 $this->view->printer_model = $master_device_id;
                             }
                             else
                             {
-                                // get printer_model
+                                // How does it get meters when it saves it get printer_model
                                 $manufacturer_id = $formData ['manufacturer_id'];
-
                                 if ($manufacturer_id > 0)
                                 {
-
-                                    // add creation_date to array
-                                    $master_deviceData ["manufacturer_id"] = $manufacturer_id;
-                                    $master_deviceData ["printer_model"]   = $formData ["new_printer"];
-                                    $master_deviceData ['date_created']    = $date;
-
-                                    // check for master device flagged as
-                                    // deleted
-                                    $where                 = $master_deviceTable->getAdapter()->quoteInto('manufacturer_id = ' . $manufacturer_id . ' AND printer_model = ?', $formData ["new_printer"]);
+                                    // Add creation_date to array.
+                                    $master_deviceData ["manufacturerId"] = $manufacturer_id;
+                                    $master_deviceData ["modelName"]      = $formData ["new_printer"];
+                                    $master_deviceData ["dateCreated"]    = $date;
+                                    // Check for master device flagged as deleted.
+                                    $where                 = $master_deviceTable->getAdapter()->quoteInto('manufacturerId = ' . $manufacturer_id . ' AND modelName = ?', $formData ["new_printer"]);
                                     $master_device_flagged = $master_deviceTable->fetchRow($where);
 
                                     if (count($master_device_flagged) > 0)
                                     {
-                                        $master_device_id    = $master_device_flagged ['master_device_id'];
-                                        $where               = $master_deviceTable->getAdapter()->quoteInto('master_device_id = ?' . $master_device_id, 'INTEGER');
+                                        $master_device_id = $master_device_flagged ['id'];
+//                                        $where               = $master_deviceTable->getAdapter()->quoteInto('master_device_id = ?' . $master_device_id, 'INTEGER');
                                         $this->view->message = "The printer you're trying to add already exists.";
 
                                     }
                                     else
                                     {
-                                        $master_device_id = $master_deviceTable->insert($master_deviceData);
-
-                                        $this->view->message = 'Printer "' . $formData ["new_printer"] . '" has been saved.';
-                                        // save toners
+                                        // Create a new master device, and populate and insert.
+                                        $masterDevice = new Proposalgen_Model_MasterDevice();
+                                        $masterDevice->populate($master_deviceData);
+                                        // Get the current date for the devices date created.
+                                        $masterDevice->dateCreated = $date;
+                                        $master_device_id          = Proposalgen_Model_Mapper_MasterDevice::getInstance()->insert($masterDevice);
+                                        $this->view->message       = 'Printer "' . $formData ["new_printer"] . '" has been saved.';
                                         if ($has_toner)
                                         {
+                                            // For each toner attempt to see if current configuration exists. If not, add an entry in the deviceToner table
                                             foreach ($toner_array as $key)
                                             {
                                                 $toner_id = str_replace("'", "", $key);
@@ -497,6 +496,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                                     );
                                                     $where            = $device_tonerTable->getAdapter()->quoteInto('toner_id = ' . $toner_id . ' AND master_device_id = ?', $master_device_id, 'INTEGER');
                                                     $device_toners    = $device_tonerTable->fetchRow($where);
+
                                                     if (count($device_toners) == 0)
                                                     {
                                                         $device_tonerTable->insert($device_tonerData);
@@ -504,7 +504,11 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                                 }
                                             }
                                         }
-                                        $form_mode = 'edit';
+                                        // Save the printer model to the view so it shows the recently
+                                        // saved printer on the page after reload.
+                                        $this->view->printer_model = $master_device_id;
+                                        $isPrintModelSet           = true;
+                                        $form_mode                 = 'edit';
                                     }
                                     $repop_form                = 1;
                                     $this->view->printer_model = $master_device_id;
@@ -529,6 +533,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                     {
                         $db->rollback();
                         $this->view->message = 'Database Error: "' . $formData ["new_printer"] . '" could not be saved. Make sure the printer does not already exist.<br />';
+                        Throw new exception("Critical Device Update Error.", 0, $e);
                     }
                     catch (Exception $e)
                     {
@@ -678,7 +683,12 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                 if (isset($formData ['printer_model']))
                 {
                     $form->getElement('printer_model')->setValue($formData ['printer_model']);
-                    $this->view->printer_model =  $formData ['printer_model'];
+                    // If we didn't successfully update the database, get the printer model from the form.
+                    // If we successfully update the database, this is already set.
+                    if (!$isPrintModelSet)
+                    {
+                        $this->view->printer_model = $formData ['printer_model'];
+                    }
                 }
                 $form->getElement('new_printer')->setValue($formData ['new_printer']);
                 $form->getElement('launch_date')->setValue($formData ['launch_date']);
@@ -893,7 +903,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                 }
                 catch (Exception $e)
                 {
-                   // echo $e; die();
+                    // echo $e; die();
                 }
                 // change done button to return to managetickets
 
@@ -970,21 +980,21 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                         ->join(array(
                                                     'tc' => 'pgen_toner_colors'
                                                ), 'tc.id = t.tonerColorId', array(
-                                                                                   'name AS toner_color_name'
-                                                                              ))
+                                                                                 'name AS toner_color_name'
+                                                                            ))
                                         ->join(array(
                                                     'pt' => 'pgen_part_types'
                                                ), 'pt.id = t.partTypeId', array(
-                                                                                 'name AS type_name'
-                                                                            ))->where('t.id = ?', $toner_id);
+                                                                               'name AS type_name'
+                                                                          ))->where('t.id = ?', $toner_id);
                                     $stmt     = $db->query($select);
                                     $curToner = $stmt->fetchAll();
                                     if (count($curToner) > 0)
                                     {
                                         $has_toner = true;
 
-                                        $curColor  = strtolower($curToner [0] ['toner_color_name']);
-                                        $curType   = strtolower($curToner [0] ['type_name']);
+                                        $curColor = strtolower($curToner [0] ['toner_color_name']);
+                                        $curType  = strtolower($curToner [0] ['type_name']);
                                         if ($curColor == "black")
                                         {
                                             $has_black = true;
@@ -1012,17 +1022,14 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                     }
                                 }
                             }
-
                             $toner_errors       = "";
                             $toner_error_colors = "";
                             if ($has_toner)
                             {
-                                // Has toners, validate to make sure they match
-                                // the device
+                                // Has toners, validate to make sure they match the device
                                 switch ($toner_config_id)
                                 {
-                                    case "1" :
-                                        // BLACK ONLY
+                                    case Proposalgen_Model_TonerConfig::BLACK_ONLY:
                                         if ($has_3color || $has_4color || $has_cyan || $has_magenta || $has_yellow)
                                         {
                                             $repop_form   = 1;
@@ -1039,8 +1046,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                             $toner_errors = "Error: Missing a Black Toner. Please add one and try again.";
                                         }
                                         break;
-                                    case "2" :
-                                        // 3 COLOR - SEPARATED
+                                    case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED:
                                         if ($has_3color || $has_4color)
                                         {
                                             $repop_form   = 1;
@@ -1095,8 +1101,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                             $toner_errors = "Error: Missing a " . $toner_error_colors . " Toner. Please add one and try again.";
                                         }
                                         break;
-                                    case "3" :
-                                        // 3 COLOR - COMBINED
+                                    case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED:
                                         if ($has_4color || $has_cyan || $has_magenta || $has_yellow)
                                         {
                                             $repop_form   = 1;
@@ -1129,8 +1134,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                             $toner_errors = "Error: Missing a " . $toner_error_colors . " Toner. Please add one and try again.";
                                         }
                                         break;
-                                    case "4" :
-                                        // 4 COLOR - COMBINED
+                                    case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED:
                                         if ($has_3color || $has_black || $has_cyan || $has_magenta || $has_yellow)
                                         {
                                             $repop_form   = 1;
@@ -1178,7 +1182,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                     'is_duplex'          => $formData ["is_duplex"],
                                     'watts_power_normal' => $formData ["watts_power_normal"],
                                     'watts_power_idle'   => $formData ["watts_power_idle"],
-                                    'cost'       => ($formData ["device_price"] == 0 ? null : $formData ["device_price"]),
+                                    'cost'               => ($formData ["device_price"] == 0 ? null : $formData ["device_price"]),
                                     'ppm_black'          => $formData ["ppm_black"],
                                     'ppm_color'          => $formData ["ppm_color"],
                                     'duty_cycle'         => $formData ["duty_cycle"],
@@ -1220,8 +1224,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                     $repop_form                = 1;
                                     $this->view->printer_model = $master_device_id;
                                     $this->view->message       = 'Device "' . $printer_model . '" has been updated.';
-
-                                    // set selected printer model to new printer model
+                                    // Set selected printer model to new printer model
                                     $this->view->printer_model = $master_device_id;
                                 }
                                 else
@@ -1234,8 +1237,8 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                     {
                                         // add creation_date to array
                                         $master_deviceData ["manufacturer_id"] = $manufacturer_id;
-                                        $master_deviceData ["printer_model"]           = $formData ["new_printer"];
-                                        $master_deviceData ['date_created']            = $date;
+                                        $master_deviceData ["printer_model"]   = $formData ["new_printer"];
+                                        $master_deviceData ['date_created']    = $date;
 
                                         // check for master device
                                         $where                 = $master_deviceTable->getAdapter()->quoteInto('manufacturer_id = ' . $manufacturer_id . ' AND printer_model = ?', $formData ["new_printer"]);
