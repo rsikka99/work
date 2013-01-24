@@ -528,7 +528,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     ->where('md.id = ?', $deviceID);
                 $stmt        = $db->query($select);
                 $row         = $stmt->fetchAll();
-                $launch_date = new Zend_Date($row [0] ['launch_date'], "yyyy/mm/dd HH:ii:ss");
+                $launch_date = new Zend_Date($row [0] ['launchDate'], "yyyy/mm/dd HH:ii:ss");
                 $formData    = array(
                     'launch_date'           => $launch_date->toString('mm/dd/yyyy'),
                     'toner_config_id'       => $row [0] ['tonerConfigId'],
