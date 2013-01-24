@@ -1622,7 +1622,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Placeholder table for view `pgen_map_device_instances`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `pgen_map_device_instances` (`rmsProviderId` INT, `rmsModelId` INT, `manufacturer` INT, `modelName` INT, `useUserData` INT, `reportId` INT, `masterDeviceId` INT, `isMapped` INT, `deviceCount` INT, `deviceInstanceIds` INT);
+CREATE TABLE IF NOT EXISTS `pgen_map_device_instances` (`rmsProviderId` INT, `rmsModelId` INT, `manufacturer` INT, `modelName` INT, `useUserData` INT, `reportId` INT, `masterDeviceId` INT, `isMapped` INT, `mappedManufacturer` INT, `mappedModelName` INT, `deviceCount` INT, `deviceInstanceIds` INT);
 
 -- -----------------------------------------------------
 -- View `pgen_map_device_instances`
@@ -1638,12 +1638,16 @@ pgen_device_instances.useUserData,
 pgen_device_instances.reportId,
 pgen_device_instance_master_devices.masterDeviceId,
 pgen_device_instance_master_devices.masterDeviceId IS NOT NULL AS isMapped,
+manufacturers.displayname mappedManufacturer,
+pgen_master_devices.modelName AS mappedModelName,
 COUNT(*) as deviceCount,
 GROUP_CONCAT(pgen_device_instances.id) as deviceInstanceIds
 FROM pgen_device_instances
 
 JOIN pgen_rms_upload_rows ON pgen_device_instances.rmsUploadRowId = pgen_rms_upload_rows.id
 LEFT JOIN pgen_device_instance_master_devices ON pgen_device_instance_master_devices.deviceInstanceId = pgen_device_instances.id
+LEFT JOIN pgen_master_devices ON pgen_device_instance_master_devices.masterDeviceId = pgen_master_devices.id
+LEFT JOIN manufacturers ON pgen_master_devices.manufacturerId = manufacturers.id
 
 GROUP BY CONCAT(pgen_rms_upload_rows.manufacturer, " ", pgen_rms_upload_rows.modelName);
 
