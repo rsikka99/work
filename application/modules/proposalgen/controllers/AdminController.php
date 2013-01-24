@@ -5607,6 +5607,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
         $where            = '';
         $where_compatible = '';
+
         // Check the filter type to build where clause
         if (!empty($filter) && !empty($criteria) && $filter != 'machine_compatibility')
         {
@@ -5618,13 +5619,17 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 $filter = "pt.name";
             }
-            else if ($filter == "toner_sku")
+            else if ($filter == "toner_SKU")
             {
                 $filter = "t.sku";
             }
             else if ($filter == "toner_color_name")
             {
                 $filter = "tc.name";
+            }
+            else if ($filter == "toner_yield")
+            {
+                $filter = "t.yield";
             }
             $where = ' AND ' . $filter . ' LIKE("%' . $criteria . '%")';
         }
