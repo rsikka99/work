@@ -7,8 +7,6 @@
  */
 ?>
 <?php $this->headScript()->captureStart('prepend','text/javascript') ?>
-var TMTW_BASEURL = '<?php echo $this->baseUrl('/'); ?>';
-
 <?php if (isset($this->pf_model_id)) : ?>
 var url_matchuplist = TMTW_BASEURL + 'proposalgen/admin/matchuplist/format/json?filter=model&criteria=<?php echo $this->pf_model_id; ?>' ;
 <?php else : ?>

@@ -290,4 +290,58 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
     {
         return $this->count(array("{$this->col_reportId} = ?" => $reportId));
     }
+
+    /**
+     * This function fetches match up devices
+     *
+     * @param int     $reportId
+     * @param string  $sortColumn
+     *            The column to sort by
+     * @param string  $sortDirection
+     *            The direction to sort
+     * @param number  $limit
+     *            The number of records to retrieve
+     * @param number  $offset
+     *            The record to start at
+     * @param boolean $justCount
+     *            If set to true this function will return an integer of the row count of all available rows
+     *
+     * @return number|Proposalgen_Model_DeviceInstance[] Returns an array, or if justCount is true then it will count how many rows are
+     *           available
+     */
+    public function fetchDevicesInstancesForMapping ($reportId, $sortColumn, $sortDirection, $limit = null, $offset = null, $justCount = false)
+    {
+        /*
+         * Setup our where clause
+         */
+        $whereClause = array(
+            "{$this->col_reportId} = ?" => $reportId
+        );
+
+
+        // If we're just counting we only need to return the count
+        if ($justCount)
+        {
+            return $this->count($whereClause);
+        }
+        else
+        {
+            /*
+             * Parse our order
+             */
+            $order = array(
+                "{$sortColumn} {$sortDirection}"
+            );
+
+            /*
+             * Parse our Limit
+             */
+            if ($limit > 0)
+            {
+                $offset = ($offset > 0) ? $offset : null;
+            }
+
+            return $this->fetchAll($whereClause, $order, $limit, $offset);
+        }
+    }
 }

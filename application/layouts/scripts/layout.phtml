@@ -96,7 +96,9 @@
                 echo $this->partial('phpErrorPartial.phtml', array('exceptions' => $this->exceptions, 'request' => $this->request));
             }
         ?>
-        
+        <script type="text/javascript">
+            var TMTW_BASEURL = '<?php echo $this->serverUrl(); ?>/'
+        </script>
         <!-- JavaScript at the bottom for fast page loading -->
         <?php echo $this->jQuery()->enable(); ?>
         <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
