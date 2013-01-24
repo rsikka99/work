@@ -312,410 +312,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
         $this->view->deviceInstanceCount = $deviceInstanceMapper->countRowsForReport($report->id);
         $this->view->rmsExcludedRowCount = $rmsExcludedRowMapper->countRowsForReport($report->id);
-        $this->view->hasPreviousUpload = ($this->view->deviceInstanceCount > 0 || $this->view->rmsExcludedRowCount > 0);
+        $this->view->hasPreviousUpload   = ($this->view->deviceInstanceCount > 0 || $this->view->rmsExcludedRowCount > 0);
 
-    }
-
-    /**
-     * Parses the uploaded csv data and saves it to the database if needed.
-     *
-     * @param array $lines
-     *            (All the lines from the file)
-     *
-     * @throws Exception
-     * @return bool
-     */
-    public function parseCSVUpload ($lines)
-    {
-        // Variables
-        $maxUploadLines         = 1000;
-        $currentDateTime        = date('Y-m-d H:i:s');
-        $userId                 = Zend_Auth::getInstance()->getIdentity()->id;
-        $dateInputFormat        = "mm/dd/yyyy HH:mm:ss";
-        $dateOutputFormat       = "yyyy/mm/dd HH:mm:ss";
-        $reportId               = $this->getReport()->id;
-        $minimumDeviceAgeInDays = 4;
-        $isValid                = true;
-
-        // Remove the headers from the start
-        $headers = str_getcsv(strtolower(array_shift($lines)));
-
-        // Count the number of valid rows in the file
-        $devices = array();
-        foreach ($lines as $value)
-        {
-            // Parse the line. If the first two values aren't empty then add it to the list
-            $line = str_getcsv($value);
-            if (strlen($line [0]) > 0 && strlen($line [1]) > 0)
-            {
-                $devices [] = new ArrayObject(array_combine($headers, $line), ArrayObject::ARRAY_AS_PROPS);
-            }
-        }
-
-        $validLineCount = count($devices);
-        if (count($devices) > $maxUploadLines)
-        {
-            $isValid = false;
-            $this->_helper->flashMessenger(array(
-                                                'danger' => "The uploaded file contains {$validLineCount} printers. The maximum number of printers supported in a single report is {$maxUploadLines}. Please modify your file and try again."
-                                           ));
-        }
-        else
-        {
-            // required fields list
-            $requiredHeaders = array(
-                'startdate',
-                'enddate',
-                'printermodelid',
-                'ipaddress',
-                'serialnumber',
-                'modelname',
-                'manufacturer',
-                'is_color',
-                'is_copier',
-                'is_scanner',
-                'is_fax',
-                'ppm_black',
-                'ppm_color',
-                'dateintroduction',
-                'dateadoption',
-                'discoverydate',
-                'black_prodcodeoem',
-                'black_yield',
-                'black_prodcostoem',
-                'cyan_prodcodeoem',
-                'cyan_yield',
-                'cyan_prodcostoem',
-                'magenta_prodcodeoem',
-                'magenta_yield',
-                'magenta_prodcostoem',
-                'yellow_prodcodeoem',
-                'yellow_yield',
-                'yellow_prodcostoem',
-                'duty_cycle',
-                'wattspowernormal',
-                'wattspoweridle',
-                'startmeterprintcolor',
-                'endmeterprintcolor',
-                'startmeterblack',
-                'endmeterblack',
-                'startmetercolor',
-                'endmetercolor',
-                'startmeterprintblack',
-                'endmeterprintblack',
-                'startmeterprintcolor',
-                'endmeterprintcolor',
-                'startmetercopyblack',
-                'endmetercopyblack',
-                'startmetercopycolor',
-                'endmetercopycolor',
-                'startmeterscan',
-                'endmeterscan',
-                'startmeterfax',
-                'endmeterfax',
-                'tonerlevel_black',
-                'tonerlevel_cyan',
-                'tonerlevel_magenta',
-                'tonerlevel_yellow'
-            );
-
-            // Make sure we have all our required headers
-            foreach ($requiredHeaders as $key => $value)
-            {
-                if (!in_array(strtolower($value), $headers))
-                {
-                    $isValid = false;
-                    $this->_helper->flashMessenger(array(
-                                                        'danger' => "This file is missing required column: {$value}"
-                                                   ));
-                }
-            }
-
-            // Finally if we're still valid, begin parsing.
-            if ($isValid)
-            {
-                $rowsToSave = array();
-
-                // Loop through all the lines.
-                foreach ($devices as $deviceRow)
-                {
-                    /*
-                     * Convert some fields that may have the text 'false' to a boolean value
-                     * Convert some rows to null if they are 0 (empty)
-                     */
-                    $deviceRow->id                   = null;
-                    $deviceRow->report_id            = $reportId;
-                    $deviceRow->is_color             = (strcasecmp($deviceRow->is_color, 'false') === 0) ? 0 : 1;
-                    $deviceRow->is_copier            = (strcasecmp($deviceRow->is_copier, 'false') === 0) ? 0 : 1;
-                    $deviceRow->is_scanner           = (strcasecmp($deviceRow->is_scanner, 'false') === 0) ? 0 : 1;
-                    $deviceRow->is_fax               = (strcasecmp($deviceRow->is_fax, 'false') === 0) ? 0 : 1;
-                    $deviceRow->duty_cycle           = (empty($deviceRow->duty_cycle)) ? null : $deviceRow->duty_cycle;
-                    $deviceRow->ppm_black            = (empty($deviceRow->ppm_black)) ? null : $deviceRow->ppm_black;
-                    $deviceRow->ppm_color            = (empty($deviceRow->ppm_color)) ? null : $deviceRow->ppm_color;
-                    $deviceRow->black_prodcodeoem    = (empty($deviceRow->black_prodcodeoem)) ? null : $deviceRow->black_prodcodeoem;
-                    $deviceRow->black_yield          = (empty($deviceRow->black_yield)) ? null : $deviceRow->black_yield;
-                    $deviceRow->black_prodcostoem    = (empty($deviceRow->black_prodcostoem)) ? null : $deviceRow->black_prodcostoem;
-                    $deviceRow->cyan_prodcodeoem     = (empty($deviceRow->cyan_prodcodeoem)) ? null : $deviceRow->cyan_prodcodeoem;
-                    $deviceRow->cyan_yield           = (empty($deviceRow->cyan_yield)) ? null : $deviceRow->cyan_yield;
-                    $deviceRow->cyan_prodcostoem     = (empty($deviceRow->cyan_prodcostoem)) ? null : $deviceRow->cyan_prodcostoem;
-                    $deviceRow->magenta_prodcodeoem  = (empty($deviceRow->magenta_prodcodeoem)) ? null : $deviceRow->magenta_prodcodeoem;
-                    $deviceRow->magenta_yield        = (empty($deviceRow->magenta_yield)) ? null : $deviceRow->magenta_yield;
-                    $deviceRow->magenta_prodcostoem  = (empty($deviceRow->magenta_prodcostoem)) ? null : $deviceRow->magenta_prodcostoem;
-                    $deviceRow->yellow_prodcodeoem   = (empty($deviceRow->yellow_prodcodeoem)) ? null : $deviceRow->yellow_prodcodeoem;
-                    $deviceRow->yellow_yield         = (empty($deviceRow->yellow_yield)) ? null : $deviceRow->yellow_yield;
-                    $deviceRow->yellow_prodcostoem   = (empty($deviceRow->yellow_prodcostoem)) ? null : $deviceRow->yellow_prodcostoem;
-                    $deviceRow->wattspowernormal     = (empty($deviceRow->wattspowernormal)) ? null : $deviceRow->wattspowernormal;
-                    $deviceRow->wattspoweridle       = (empty($deviceRow->wattspoweridle)) ? null : $deviceRow->wattspoweridle;
-                    $deviceRow->startmeterlife       = (empty($deviceRow->startmeterlife)) ? null : $deviceRow->startmeterlife;
-                    $deviceRow->endmeterlife         = (empty($deviceRow->endmeterlife)) ? null : $deviceRow->endmeterlife;
-                    $deviceRow->startmeterblack      = (empty($deviceRow->startmeterblack)) ? null : $deviceRow->startmeterblack;
-                    $deviceRow->endmeterblack        = (empty($deviceRow->endmeterblack)) ? null : $deviceRow->endmeterblack;
-                    $deviceRow->startmetercolor      = (empty($deviceRow->startmetercolor)) ? null : $deviceRow->startmetercolor;
-                    $deviceRow->endmetercolor        = (empty($deviceRow->endmetercolor)) ? null : $deviceRow->endmetercolor;
-                    $deviceRow->startmeterprintblack = (empty($deviceRow->startmeterprintblack)) ? null : $deviceRow->startmeterprintblack;
-                    $deviceRow->endmeterprintblack   = (empty($deviceRow->endmeterprintblack)) ? null : $deviceRow->endmeterprintblack;
-                    $deviceRow->startmeterprintcolor = (empty($deviceRow->startmeterprintcolor)) ? null : $deviceRow->startmeterprintcolor;
-                    $deviceRow->endmeterprintcolor   = (empty($deviceRow->endmeterprintcolor)) ? null : $deviceRow->endmeterprintcolor;
-                    $deviceRow->startmetercopyblack  = (empty($deviceRow->startmetercopyblack)) ? null : $deviceRow->startmetercopyblack;
-                    $deviceRow->endmetercopyblack    = (empty($deviceRow->endmetercopyblack)) ? null : $deviceRow->endmetercopyblack;
-                    $deviceRow->startmetercopycolor  = (empty($deviceRow->startmetercopycolor)) ? null : $deviceRow->startmetercopycolor;
-                    $deviceRow->endmetercopycolor    = (empty($deviceRow->endmetercopycolor)) ? null : $deviceRow->endmetercopycolor;
-                    $deviceRow->startmeterscan       = (empty($deviceRow->startmeterscan)) ? null : $deviceRow->startmeterscan;
-                    $deviceRow->endmeterscan         = (empty($deviceRow->endmeterscan)) ? null : $deviceRow->endmeterscan;
-                    $deviceRow->startmeterfax        = (empty($deviceRow->startmeterfax)) ? null : $deviceRow->startmeterfax;
-                    $deviceRow->endmeterfax          = (empty($deviceRow->endmeterfax)) ? null : $deviceRow->endmeterfax;
-
-
-                    $manufacturerName = strtolower(trim($deviceRow->manufacturer));
-
-                    // In case the manufacturer is HP instead of hewlett-packard, change it to hewlett packard
-                    if (strcmp('hp', $manufacturerName) === 0)
-                    {
-                        $manufacturerName = 'hewlett-packard';
-                    }
-
-                    // The model name coming in often has the manufacturer attached to it. Remove it.
-                    $deviceName = str_replace("{$manufacturerName} ", '', strtolower($deviceRow->modelname));
-
-                    // HotFix for HP Printers
-                    if (strcmp('hewlett-packard', $manufacturerName) === 0)
-                    {
-                        $deviceName = str_replace('hp ', '', $deviceName);
-                    }
-
-                    // Now we make the manufacturer name pretty
-                    $manufacturerName = ucwords($manufacturerName);
-
-                    // If we have an empty manufacturer or device name then we cannot have an entry in our table
-                    if (strlen($manufacturerName) === 0 || strlen($deviceName) === 0)
-                    {
-                        $printfleetDeviceId = 0;
-                    }
-                    else
-                    {
-                        // Check to see if one exists already
-                        $pfDevice = Proposalgen_Model_Mapper_DevicePf::getInstance()->fetchByDeviceNameOrModelId($deviceName, $deviceRow->printermodelid);
-
-                        // If it doesn't then we make one.
-                        if ($pfDevice === false)
-                        {
-                            $pfDevice                   = new Proposalgen_Model_DevicePf();
-                            $pfDevice->pfModelId        = $deviceRow->printermodelid;
-                            $pfDevice->pfDbDeviceName   = $deviceName;
-                            $pfDevice->pfDbManufacturer = $manufacturerName;
-                            $pfDevice->createdBy        = $userId;
-                            $pfDevice->dateCreated      = $currentDateTime;
-
-                            $insertId              = Proposalgen_Model_Mapper_DevicePf::getInstance()->save($pfDevice);
-                            $pfDevice->devicesPfId = $insertId;
-                        }
-                    }
-
-                    // Prepare the dates
-                    $startDate = (empty($deviceRow->startdate)) ? null : new Zend_Date($deviceRow->startdate, $dateInputFormat);
-                    $endDate   = (empty($deviceRow->enddate)) ? null : new Zend_Date($deviceRow->enddate, $dateInputFormat);
-
-                    $introductionDate = (empty($deviceRow->dateintroduction)) ? null : new Zend_Date($deviceRow->dateintroduction, $dateInputFormat);
-                    $adoptionDate     = (empty($deviceRow->dateadoption)) ? null : new Zend_Date($deviceRow->dateadoption, $dateInputFormat);
-                    $discoveryDate    = (empty($deviceRow->discoverydate)) ? null : new Zend_Date($deviceRow->discoverydate, $dateInputFormat);
-
-                    $deviceRow->date_introduction = $introductionDate->toString($dateOutputFormat);
-                    $deviceRow->discovery_date    = $discoveryDate->toString($dateOutputFormat);
-
-                    $deviceRow->devices_pf_id = $pfDevice->devicesPfId;
-
-                    // Prepare the upload data collector model
-                    $uploadDataCollectorRow = @Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance()->mapRowToObject($deviceRow);
-                    //$uploadDataCollectorRow = new Proposalgen_Model_UploadDataCollectorRow($deviceRow);
-
-                    $uploadDataCollectorRow->startDate = $startDate->toString($dateOutputFormat);
-                    $uploadDataCollectorRow->endDate   = $endDate->toString($dateOutputFormat);
-
-                    // Validate the row
-                    $deviceHasBadData                    = $uploadDataCollectorRow->IsValid();
-                    $uploadDataCollectorRow->invalidData = $deviceHasBadData;
-                    $this->view->has_bad_data            = $deviceHasBadData;
-
-                    $rowsToSave [] = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance()->mapObjectToRow($uploadDataCollectorRow);
-                }
-
-                // Save all our rows
-                $saveResult = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance()->saveRows($rowsToSave);
-
-                if (!$saveResult)
-                {
-                    throw new Exception("An error occured while saving the rows.");
-                }
-            }
-        }
-
-        return $isValid;
-    }
-
-    /**
-     * This gets the devices for the jqgrid on the index page
-     */
-    public function previewlistAction ()
-    {
-        // disable the default layout
-        $db           = Zend_Db_Table::getDefaultAdapter();
-        $invalid_data = $this->_getParam('filter', 0);
-
-        $page  = $_GET ['page'];
-        $limit = $_GET ['rows'];
-        $sidx  = $_GET ['sidx'];
-        $sord  = $_GET ['sord'];
-
-        if (!$sidx)
-        {
-            $sidx = 9;
-        }
-
-        // get report id from session
-        $report_id = $this->getReport()->id;
-
-        try
-        {
-            $select = new Zend_Db_Select($db);
-            $select = $db->select()
-                ->from(array(
-                            'udc' => 'pgen_upload_data_collector_rows'
-                       ))
-                ->where('invalid_data = ' . $invalid_data . ' AND report_id = ' . $report_id);
-            $stmt   = $db->query($select);
-            $result = $stmt->fetchAll();
-
-            $count = count($result);
-            if ($count > 0)
-            {
-                $total_pages = ceil($count / $limit);
-            }
-            else
-            {
-                $total_pages = 0;
-            }
-            if ($page > $total_pages)
-            {
-                $page = $total_pages;
-            }
-            $start = $limit * $page - $limit;
-            if ($start < 0)
-            {
-                $start = 0;
-            }
-
-            $select = new Zend_Db_Select($db);
-            $select = $db->select()
-                ->from(array(
-                            'udc' => 'pgen_upload_data_collector_rows'
-                       ))
-                ->where('invalid_data = ' . $invalid_data . ' AND report_id = ' . $report_id)
-                ->order($sidx . ' ' . $sord)
-                ->limit($limit, $start);
-            $stmt   = $db->query($select);
-            $result = $stmt->fetchAll();
-
-            if (count($result) > 0)
-            {
-                $i                 = 0;
-                $formdata          = new stdClass();
-                $formdata->page    = $page;
-                $formdata->total   = $total_pages;
-                $formdata->records = $count;
-                foreach ($result as $key => $value)
-                {
-                    $formdata->rows [$i] ['id']   = $result [$key] ['id'];
-                    $formdata->rows [$i] ['cell'] = array(
-                        $result [$key] ['id'],
-                        $result [$key] ['devices_pf_id'],
-                        $result [$key] ['printermodelid'],
-                        $result [$key] ['manufacturer'],
-                        $result [$key] ['modelname'],
-                        $result [$key] ['serialnumber'],
-                        $result [$key] ['ipaddress'],
-                        $result [$key] ['is_color'],
-                        $result [$key] ['is_copier'],
-                        $result [$key] ['is_scanner'],
-                        $result [$key] ['is_fax'],
-                        $result [$key] ['ppm_black'],
-                        $result [$key] ['ppm_color'],
-                        $result [$key] ['date_introduction'],
-                        $result [$key] ['date_adoption'],
-                        $result [$key] ['discovery_date'],
-                        $result [$key] ['black_prodcodeoem'],
-                        $result [$key] ['black_yield'],
-                        $result [$key] ['black_prodcostoem'],
-                        $result [$key] ['cyan_prodcodeoem'],
-                        $result [$key] ['cyan_yield'],
-                        $result [$key] ['cyan_prodcostoem'],
-                        $result [$key] ['magenta_prodcodeoem'],
-                        $result [$key] ['magenta_yield'],
-                        $result [$key] ['magenta_prodcostoem'],
-                        $result [$key] ['yellow_prodcodeoem'],
-                        $result [$key] ['yellow_yield'],
-                        $result [$key] ['yellow_prodcostoem'],
-                        $result [$key] ['duty_cycle'],
-                        $result [$key] ['wattspowernormal'],
-                        $result [$key] ['wattspoweridle'],
-                        $result [$key] ['startmeterlife'],
-                        $result [$key] ['endmeterlife'],
-                        $result [$key] ['startmeterblack'],
-                        $result [$key] ['endmeterblack'],
-                        $result [$key] ['startmetercolor'],
-                        $result [$key] ['endmetercolor'],
-                        $result [$key] ['startmeterprintblack'],
-                        $result [$key] ['endmeterprintblack'],
-                        $result [$key] ['startmeterprintcolor'],
-                        $result [$key] ['endmeterprintcolor'],
-                        $result [$key] ['startmetercopyblack'],
-                        $result [$key] ['endmetercopyblack'],
-                        $result [$key] ['startmetercopycolor'],
-                        $result [$key] ['endmetercopycolor'],
-                        $result [$key] ['startmeterscan'],
-                        $result [$key] ['endmeterscan'],
-                        $result [$key] ['startmeterfax'],
-                        $result [$key] ['endmeterfax'],
-                        $result [$key] ['tonerlevel_black'],
-                        $result [$key] ['tonerlevel_cyan'],
-                        $result [$key] ['tonerlevel_magenta'],
-                        $result [$key] ['tonerlevel_yellow'],
-                        $result [$key] ['startdate'],
-                        $result [$key] ['enddate']
-                    );
-                    $i++;
-                }
-            }
-            else
-            {
-                $formdata = array();
-            }
-        }
-        catch (Exception $e)
-        {
-            My_Log::logException($e);
-        }
-        // encode user data to return to the client:
-        $this->_helper->json($formdata);
     }
 
     /**
@@ -726,106 +324,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         // Mark the step we're on as active
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FLEETDATA_MAPDEVICES);
 
-        $this->_userId = Zend_Auth::getInstance()->getIdentity()->id;
 
-        Tangent_Timer::Milestone("Device Mapping Action Start");
-        $db               = Zend_Db_Table::getDefaultAdapter();
-        $this->view->grid = $this->_getParam('grid', 'none');
-
-        $report_id = $this->getReport()->id;
-
-        // Get devices that are not mapped.
-        $select                     = new Zend_Db_Select($db);
-        $select                     = $db->select()
-            ->from(array(
-                        'udc' => 'pgen_upload_data_collector_rows'
-                   ))
-            ->joinLeft(array(
-                            'mmpf' => 'pgen_master_pf_device_matchups'
-                       ), 'udc.devices_pf_id = mmpf.pf_device_id', array(
-                                                                        'mmpf.master_device_id'
-                                                                   ))
-            ->joinLeft(array(
-                            'pfdmu' => 'pgen_user_pf_device_matchups'
-                       ), 'udc.devices_pf_id = pfdmu.pf_device_id AND pfdmu.user_id = ' . $this->_userId, array(
-                                                                                                               'pfdmu.master_device_id'
-                                                                                                          ))
-            ->joinLeft(array(
-                            'md' => 'pgen_master_devices'
-                       ), 'md.id = pfdmu.master_device_id', array(
-                                                                 'printerModel'
-                                                            ))
-            ->joinLeft(array(
-                            'm' => 'manufacturers'
-                       ), 'm.id = md.manufacturerId', array(
-                                                           'fullname'
-                                                      ))
-            ->where('udc.report_id = ?', $report_id)
-            ->where('udc.invalid_data = 0')
-            ->where('mmpf.master_device_id IS NULL')
-            ->where('pfdmu.master_device_id > 0 || pfdmu.master_device_id IS NULL')
-            ->group('udc.devices_pf_id')
-            ->order('udc.modelname');
-        $stmt                       = $db->query($select);
-        $result                     = $stmt->fetchAll();
-        $this->view->unmapped_count = count($result);
-        if (count($result) > 0)
-        {
-            $this->view->message = "<p>We were unable to find a match for " . count($result) . " uploaded printer model(s).  You may search our master list for a match or add new models by clicking the corresponding \"Add\" button.<p>";
-        }
-        else
-        {
-            $this->view->message = "<p>All uploaded printers have been successfully mapped to an equivalent master printer. You may review mapped printers below or press &quot;Save and continue&quot;</p>";
-        }
-
-        // get mapped counts
-        $select                   = new Zend_Db_Select($db);
-        $select                   = $db->select()
-            ->from(array(
-                        'udc' => 'pgen_upload_data_collector_rows'
-                   ))
-            ->joinLeft(array(
-                            'pfdmu' => 'pgen_user_pf_device_matchups'
-                       ), 'udc.devices_pf_id = pfdmu.pf_device_id AND pfdmu.user_id = ' . $this->_userId, array(
-                                                                                                               'pfdmu.master_device_id'
-                                                                                                          ))
-            ->joinLeft(array(
-                            'mmpf' => 'pgen_master_pf_device_matchups'
-                       ), 'udc.devices_pf_id = mmpf.pf_device_id', array(
-                                                                        'mmpf.master_device_id'
-                                                                   ))
-            ->joinLeft(array(
-                            'md' => 'pgen_master_devices'
-                       ), 'md.id = mmpf.master_device_id', array(
-                                                                'printerModel'
-                                                           ))
-            ->joinLeft(array(
-                            'm' => 'manufacturers'
-                       ), 'm.id = md.manufacturerId', array(
-                                                           'fullname'
-                                                      ))
-            ->where('udc.report_id = ?', $report_id, 'INTEGER')
-            ->where('udc.invalid_data = 0')
-            ->where('pfdmu.master_device_id IS NULL')
-            ->where('mmpf.master_device_id > 0')
-            ->group('udc.devices_pf_id')
-            ->order('udc.modelname');
-        $stmt                     = $db->query($select);
-        $result                   = $stmt->fetchAll();
-        $this->view->mapped_count = count($result);
-
-        // check for previously uploaded data for report in device instance and
-        // unknown device instance tables
-        $notes  = '';
-        $select = $db->select()
-            ->from(array(
-                        'udc' => 'pgen_upload_data_collector_rows'
-                   ))
-            ->where('udc.report_id = ' . $report_id);
-        $stmt   = $db->query($select);
-        $result = $stmt->fetchAll();
-
-        Tangent_Timer::Milestone("Device Mapping Action End");
     }
 
     /**
@@ -833,122 +332,57 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
      */
     public function devicemappinglistAction ()
     {
-        // disable the default layout
-        $db = Zend_Db_Table::getDefaultAdapter();
+        $jqGrid               = new Tangent_Service_JQGrid();
+        $mapDeviceInstanceMapper = Proposalgen_Model_Mapper_Map_Device_Instance::getInstance();
 
-        $this->_userId = Zend_Auth::getInstance()->getIdentity()->id;
-        $report_id     = $this->getReport()->id;
+        /*
+         * Grab the incoming parameters
+         */
+        $jqGridParameters = array(
+            'sidx' => $this->_getParam('sidx', 'manufacturer'),
+            'sord' => $this->_getParam('sord', 'ASC'),
+            'page' => $this->_getParam('page', 1),
+            'rows' => $this->_getParam('rows', 10)
+        );
 
-        $select = $db->select()
-            ->from(array(
-                        'udc' => 'pgen_upload_data_collector_rows'
-                   ), array(
-                           'id',
-                           'report_id',
-                           'devices_pf_id',
-                           'printermodelid',
-                           'modelname',
-                           'manufacturer',
-                           '(SELECT COUNT(*) AS count FROM pgen_upload_data_collector_rows AS sudc WHERE sudc.report_id=udc.report_id AND sudc.devices_pf_id=udc.devices_pf_id AND sudc.invalid_data = 0) AS group_count'
-                      ))
-            ->joinLeft(array(
-                            'mmpf' => 'pgen_master_pf_device_matchups'
-                       ), 'udc.devices_pf_id = mmpf.pf_device_id', array(
-                                                                        'mmpf.master_device_id'
-                                                                   ))
-            ->joinLeft(array(
-                            'pfdmu' => 'pgen_user_pf_device_matchups'
-                       ), 'udc.devices_pf_id = pfdmu.pf_device_id AND pfdmu.user_id = ' . $this->_userId, array(
-                                                                                                               'pfdmu.master_device_id'
-                                                                                                          ))
-            ->joinLeft(array(
-                            'md' => 'pgen_master_devices'
-                       ), 'md.id = pfdmu.master_device_id', array(
-                                                                 'printerModel',
-                                                                 'isLeased'
-                                                            ))
-            ->joinLeft(array(
-                            'm' => 'manufacturers'
-                       ), 'm.id = md.manufacturerId', array(
-                                                           'fullname'
-                                                      ))
-            ->where('udc.report_id = ' . $report_id . ' AND udc.invalid_data = 0 AND mmpf.master_device_id IS NULL AND (pfdmu.master_device_id > 0 || pfdmu.master_device_id IS NULL)')
-            ->group('udc.devices_pf_id')
-            ->order('udc.modelname');
-        $stmt   = $db->query($select);
-        $result = $stmt->fetchAll();
+        // Set up validation arrays
+        $sortColumns = array(
+            'manufacturer',
+            'modelName'
+        );
 
-        $formdata = new stdClass();
-        try
+        $jqGrid->parseJQGridPagingRequest($jqGridParameters);
+        $jqGrid->setValidSortColumns($sortColumns);
+
+
+        if ($jqGrid->sortingIsValid())
         {
-            if (count($result) > 0)
+            $jqGrid->setRecordCount($mapDeviceInstanceMapper->fetchAllForReport($this->getReport()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), null, null, true));
+
+            // Validate current page number since we don't want to be out of bounds
+            if ($jqGrid->getCurrentPage() < 1)
             {
-
-                $i = 0;
-                foreach ($result as $key => $value)
-                {
-                    $is_added               = '';
-                    $mapped_to_id           = '';
-                    $mapped_to_modelname    = '';
-                    $mapped_to_manufacturer = '';
-
-                    $count = $result [$key] ['group_count'];
-
-                    // set up mapped to suggestions
-                    $is_leased                    = $result [$key] ['is_leased'];
-                    $devices_pf_id                = $result [$key] ['devices_pf_id'];
-                    $upload_data_collector_row_id = $result [$key] ['id'];
-
-                    $mapped_to_id           = $result [$key] ['master_device_id'];
-                    $mapped_to_modelname    = $result [$key] ['printer_model'];
-                    $mapped_to_manufacturer = $result [$key] ['fullname'];
-
-                    // check to see if device has been added
-                    $unknown_device_instanceTable = new Proposalgen_Model_DbTable_UnknownDeviceInstance();
-                    $where                        = $unknown_device_instanceTable->getAdapter()->quoteInto('report_id = ' . $report_id . ' AND upload_data_collector_row_id = ?', $upload_data_collector_row_id, 'INTEGER');
-                    $unknown_device_instance      = $unknown_device_instanceTable->fetchRow($where);
-
-                    if (count($unknown_device_instance) > 0)
-                    {
-                        $is_added = $key;
-                    }
-                    else
-                    {
-                        $device_instanceTable = new Proposalgen_Model_DbTable_DeviceInstance();
-                        $where                = $device_instanceTable->getAdapter()->quoteInto('report_id = ' . $report_id . ' AND upload_data_collector_row_id = ?', $upload_data_collector_row_id, 'INTEGER');
-                        $device_instance      = $device_instanceTable->fetchRow($where);
-
-                        if (count($device_instance) > 0)
-                        {
-                            $is_added = '';
-                        }
-                    }
-
-                    $formdata->rows [$i] ['id']   = $upload_data_collector_row_id;
-                    $formdata->rows [$i] ['cell'] = array(
-                        $upload_data_collector_row_id,
-                        $result [$key] ['devices_pf_id'],
-                        $count,
-                        ucwords(strtolower($result [$key] ['modelname'])),
-                        $mapped_to_id,
-                        $mapped_to_modelname,
-                        $mapped_to_manufacturer,
-                        null,
-                        $is_added,
-                        null
-                    );
-                    $i++;
-                }
+                $jqGrid->setCurrentPage(1);
             }
-        }
-        catch (Exception $e)
-        {
-            // critical exception
-            throw new Exception("Error Getting Data", 0, $e);
-        }
+            else if ($jqGrid->getCurrentPage() > $jqGrid->calculateTotalPages())
+            {
+                $jqGrid->setCurrentPage($jqGrid->calculateTotalPages());
+            }
 
-        // encode user data to return to the client:
-        $this->_helper->json($formdata);
+            // Return a small subset of the results based on the jqGrid parameters
+            $startRecord = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
+            $jqGrid->setRows($mapDeviceInstanceMapper->fetchAllForReport($this->getReport()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord));
+
+            // Send back jqGrid json data
+            $this->_helper->json($jqGrid->createPagerResponseArray());
+        }
+        else
+        {
+            $this->_response->setHttpResponseCode(500);
+            $this->_helper->json(array(
+                                      'error' => 'Sorting parameters are invalid'
+                                 ));
+        }
     }
 
     /**
