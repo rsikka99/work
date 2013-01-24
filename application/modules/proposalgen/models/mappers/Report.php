@@ -272,4 +272,28 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
     {
         return $object->id;
     }
+
+    /**
+     * This finds all reports that have a master device using the $masterDeviceId and
+     * sets the deviceModified field to 1
+     * @param int $masterDeviceId
+     *
+     * @return bool
+     */
+    public function setDevicesModifiedFlagOnReports ($masterDeviceId)
+    {
+        $sql    = "
+    UPDATE pgen_reports AS rp
+	SET rp.devicesModified=1
+	WHERE rp.id IN (
+		SELECT di.reportId FROM pgen_device_instances AS di
+        LEFT JOIN pgen_device_instance_master_devices AS dimd ON di.id = dimd.deviceInstanceId
+        WHERE dimd.masterDeviceId = ?
+		GROUP BY di.reportId
+	);";
+        $query  = $this->getDbTable()->getAdapter()->query($sql, $masterDeviceId);
+        $result = $query->execute();
+
+        return $result;
+    }
 }

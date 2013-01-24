@@ -559,8 +559,8 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
 
                         if (count($master_device) > 0)
                         {
-                            $printer_model = $master_device ['printer_model'];
 
+                            $printer_model = $master_device ['modelName'];
                             // NEED TO CHECK IF REPLACEMENT DEVICE
                             $replacement_devicesTable = new Proposalgen_Model_DbTable_ReplacementDevices();
                             $where                    = $replacement_devicesTable->getAdapter()->quoteInto('master_device_id = ?', $master_device_id, 'INTEGER');
@@ -574,74 +574,9 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                             }
                             else
                             {
-                                // UPDATE REPORTS AND DELETE DEVICE
-                                // INSTANCES
-                                $device_instanceTable = new Proposalgen_Model_DbTable_DeviceInstance();
-                                $where                = $device_instanceTable->getAdapter()->quoteInto('master_device_id = ?', $master_device_id, 'INTEGER');
-                                $result               = $device_instanceTable->fetchAll($where);
-
-                                foreach ($result as $row)
-                                {
-                                    $report_id                = $row ['report_id'];
-                                    $device_instance_id       = $row ['device_instance_id'];
-                                    $upload_data_collector_id = $row ['upload_data_collector_id'];
-
-                                    // FLAG REPORTS AS MODIFIED
-                                    $reportData  = array(
-                                        'devices_modified' => 1
-                                    );
-                                    $reportTable = new Proposalgen_Model_DbTable_Report();
-                                    $where       = $reportTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
-                                    $reportTable->update($reportData, $where);
-
-                                    // FLAG UPLOAD DATA COLLECTOR ROWS AS
-                                    // EXCLUDED
-                                    $udcData  = array(
-                                        'is_excluded' => 1
-                                    );
-                                    $udcTable = new Proposalgen_Model_DbTable_UploadDataCollectorRow();
-                                    $where    = $udcTable->getAdapter()->quoteInto('upload_data_collector_id = ?', $upload_data_collector_id, 'INTEGER');
-                                    $udcTable->update($udcData, $where);
-
-                                    // DELETE METERS
-                                    $metersTable = new Proposalgen_Model_DbTable_DeviceInstanceMeter();
-                                    $where       = $metersTable->getAdapter()->quoteInto('device_instance_id = ?', $device_instance_id, 'INTEGER');
-                                    $metersTable->delete($where);
-
-                                    // DELETE DEVICE INSTANCES
-                                    $where = $device_instanceTable->getAdapter()->quoteInto('device_instance_id = ?', $device_instance_id, 'INTEGER');
-                                    $device_instanceTable->delete($where);
-                                }
-
-                                // DELETE MASTER MAPPINGS
-                                $master_matchup_pfTable = new Proposalgen_Model_DbTable_PFMasterMatchup();
-                                $where                  = $master_matchup_pfTable->getAdapter()->quoteInto('master_device_id = ?', $master_device_id, 'INTEGER');
-                                $master_matchup_pfTable->delete($where);
-
-                                // DELETE USER MAPPINGS
-                                $pf_device_matchup_usersTable = new Proposalgen_Model_DbTable_PFMatchupUsers();
-                                $where                        = $pf_device_matchup_usersTable->getAdapter()->quoteInto('master_device_id = ?', $master_device_id, 'INTEGER');
-                                $pf_device_matchup_usersTable->delete($where);
-
-                                // DELETE DEVICE_TONER MAPPINGS
-                                $device_tonerTable = new Proposalgen_Model_DbTable_DeviceToner();
-                                $where             = $device_tonerTable->getAdapter()->quoteInto('master_device_id = ?', $master_device_id, 'INTEGER');
-                                $device_tonerTable->delete($where);
-
-                                // DELETE DEALER DEVICE OVERRIDE
-                                $dealer_device_overrideTable = new Proposalgen_Model_DbTable_PFMatchupUsers();
-                                $where                       = $dealer_device_overrideTable->getAdapter()->quoteInto('master_device_id = ?', $master_device_id, 'INTEGER');
-                                $dealer_device_overrideTable->delete($where);
-
-                                // DELETE USER DEVICE OVERRIDE
-                                $user_device_overrideTable = new Proposalgen_Model_DbTable_PFMatchupUsers();
-                                $where                     = $user_device_overrideTable->getAdapter()->quoteInto('master_device_id = ?', $master_device_id, 'INTEGER');
-                                $user_device_overrideTable->delete($where);
-
-                                // DELETE DEVICES
-                                $deviceTable = new Quotegen_Model_DbTable_Device();
-                                $where       = $deviceTable->getAdapter()->quoteInto('masterDeviceId = ?', $master_device_id, 'INTEGER');
-                                $deviceTable->delete($where);
+                                // Set reports modified flag
+                                $reportTableMapper = Proposalgen_Model_Mapper_Report::getInstance();
+                                $reportTableMapper->setDevicesModifiedFlagOnReports($master_device_id);
 
                                 // DELETE MASTER DEVICE
                                 $master_deviceTable = new Proposalgen_Model_DbTable_MasterDevice();

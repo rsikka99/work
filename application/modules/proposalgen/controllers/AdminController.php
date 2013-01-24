@@ -580,9 +580,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $db               = Zend_Db_Table::getDefaultAdapter();
         $master_device_id = $this->_getParam('id', 0);
 
-        $device_instanceTable = new Proposalgen_Model_DbTable_DeviceInstance();
-        $where                = $device_instanceTable->getAdapter()->quoteInto('master_device_id = ?', $master_device_id, 'INTEGER');
-        $device_instances     = $device_instanceTable->fetchAll($where);
+        $device_instance_master_devicesTable = new Proposalgen_Model_DbTable_Device_Instance_Master_Device();
+        $where = $device_instance_master_devicesTable->getAdapter()->quoteInto('masterDeviceId = ?', $master_device_id, 'INTEGER');
+        $device_instances = $device_instance_master_devicesTable->fetchAll($where);
 
         try
         {
