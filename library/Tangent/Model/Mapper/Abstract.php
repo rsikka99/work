@@ -54,7 +54,7 @@ abstract class Tangent_Model_Mapper_Abstract
      * @param mixed $primaryKey The values of the primary key(s)
      *
      * @throws Exception
-     * @return bool|null
+     * @return Proposalgen_Model_DeviceToner
      */
     public function find ($primaryKey)
     {
