@@ -209,9 +209,9 @@ class Proposalgen_Model_Mapper_Map_Device_Instance extends My_Model_Mapper_Abstr
             $order = array();
             if ($sortColumn != $this->col_modelName && $sortColumn != $this->col_manufacturer)
             {
+                $order[] = "{$sortColumn} {$sortDirection}";
                 $order[] = "{$this->col_manufacturer} ASC";
                 $order[] = "{$this->col_modelName} ASC";
-                $order[] = "{$sortColumn} {$sortDirection}";
             }
             else if ($sortColumn == $this->col_manufacturer)
             {
