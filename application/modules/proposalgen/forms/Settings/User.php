@@ -804,6 +804,12 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $elementCounter++;
         $formElements->addElement($target_color);
 
+        
+            ->setAttrib('class', 'span1')
+        $target_monochrome->setLabel('Target Monochrome')
+            ->setAttrib('class', 'span1')
+        $target_color->setLabel('Target Color')
+            ->setAttrib('class', 'span1')
         //save button
         $element = new Zend_Form_Element_Submit('save_settings', array(
                                                                       'disableLoadDefaultDecorators' => true
