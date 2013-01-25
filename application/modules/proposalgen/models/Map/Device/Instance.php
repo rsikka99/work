@@ -44,6 +44,16 @@ class Proposalgen_Model_Map_Device_Instance extends My_Model_Abstract
     /**
      * @var int
      */
+    public $mappedManufacturer;
+
+    /**
+     * @var int
+     */
+    public $mappedModelName;
+
+    /**
+     * @var int
+     */
     public $deviceCount;
 
     /**
@@ -102,6 +112,16 @@ class Proposalgen_Model_Map_Device_Instance extends My_Model_Abstract
             $this->isMapped = $params->isMapped;
         }
 
+        if (isset($params->mappedManufacturer) && !is_null($params->mappedManufacturer))
+        {
+            $this->mappedManufacturer = $params->mappedManufacturer;
+        }
+
+        if (isset($params->mappedModelName) && !is_null($params->mappedModelName))
+        {
+            $this->mappedModelName = $params->mappedModelName;
+        }
+
         if (isset($params->deviceCount) && !is_null($params->deviceCount))
         {
             $this->deviceCount = $params->deviceCount;
@@ -120,16 +140,18 @@ class Proposalgen_Model_Map_Device_Instance extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "rmsProviderId"     => $this->rmsProviderId,
-            "rmsModelId"        => $this->rmsModelId,
-            "manufacturer"      => $this->manufacturer,
-            "modelName"         => $this->modelName,
-            "useUserData"       => $this->useUserData,
-            "reportId"          => $this->reportId,
-            "masterDeviceId"    => $this->masterDeviceId,
-            "isMapped"          => $this->isMapped,
-            "deviceCount"       => $this->deviceCount,
-            "deviceInstanceIds" => $this->deviceInstanceIds,
+            "rmsProviderId"      => $this->rmsProviderId,
+            "rmsModelId"         => $this->rmsModelId,
+            "manufacturer"       => $this->manufacturer,
+            "modelName"          => $this->modelName,
+            "useUserData"        => $this->useUserData,
+            "reportId"           => $this->reportId,
+            "masterDeviceId"     => $this->masterDeviceId,
+            "isMapped"           => $this->isMapped,
+            "mappedManufacturer" => $this->mappedManufacturer,
+            "mappedModelName"    => $this->mappedModelName,
+            "deviceCount"        => $this->deviceCount,
+            "deviceInstanceIds"  => $this->deviceInstanceIds,
         );
     }
 }

@@ -346,10 +346,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         );
 
         // Set up validation arrays
-        $sortColumns = array(
-            'manufacturer',
-            'modelName'
-        );
+        $blankModel = new Proposalgen_Model_Map_Device_Instance();
+        $sortColumns = array_keys($blankModel->toArray());
 
         $jqGrid->parseJQGridPagingRequest($jqGridParameters);
         $jqGrid->setValidSortColumns($sortColumns);

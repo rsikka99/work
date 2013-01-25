@@ -24,6 +24,15 @@ $(function ()
                     sortable: false
                 },
                 {
+                    width   : 50,
+                    name    : 'isMapped',
+                    index   : 'isMapped',
+                    label   : 'Is Mapped',
+                    title   : false,
+                    sortable: false,
+                    align   : 'center'
+                },
+                {
                     width   : 10,
                     name    : 'rmsModelId',
                     index   : 'rmsModelId',
@@ -47,8 +56,9 @@ $(function ()
                     index   : 'deviceCount',
                     label   : 'Count',
                     title   : false,
-                    sortable: false,
-                    align   : 'center'
+                    sortable: true,
+                    align   : 'center',
+                    sorttype: 'int'
                 },
                 {
                     width   : 200,
@@ -56,7 +66,7 @@ $(function ()
                     index   : 'manufacturer',
                     label   : 'Device Manufacturer',
                     title   : false,
-                    sortable: false
+                    sortable: true
                 },
                 {
                     width   : 200,
@@ -64,30 +74,30 @@ $(function ()
                     index   : 'modleName',
                     label   : 'Device Name',
                     title   : false,
-                    sortable: false
+                    sortable: true
                 },
                 {
-                    width   : 10,
-                    name    : 'mapped_to_id',
-                    index   : 'mapped_to_id',
+                    width   : 50,
+                    name    : 'masterDeviceId',
+                    index   : 'masterDeviceId',
                     label   : 'Mapped To ID',
-                    hidden  : true,
+                    hidden  : false,
+                    sortable: true
+                },
+                {
+                    width   : 10,
+                    name    : 'mappedModelName',
+                    index   : 'mappedModelName',
+                    label   : 'Mapped Model Name',
+                    hidden  : false,
                     sortable: false
                 },
                 {
                     width   : 10,
-                    name    : 'mapped_to_modelname',
-                    index   : 'mapped_to_modelname',
-                    label   : 'Mapped To ModelName',
-                    hidden  : true,
-                    sortable: false
-                },
-                {
-                    width   : 10,
-                    name    : 'mapped_to_manufacturer',
-                    index   : 'mapped_to_manufacturer',
-                    label   : 'Mapped To Manufacturer',
-                    hidden  : true,
+                    name    : 'mappedManufacturer',
+                    index   : 'mappedManufacturer',
+                    label   : 'Mapped Manufacturer',
+                    hidden  : false,
                     sortable: false
                 },
                 {
