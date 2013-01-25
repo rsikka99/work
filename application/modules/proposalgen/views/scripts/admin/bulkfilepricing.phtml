@@ -98,7 +98,7 @@
 			       To update your pricing: <br><br>
 			       1) Download current pricing template by clicking the appropriate link below. <br>
 			       2) Modify the pricing columns in the template. You may edit <span style="color: red">pricing columns only.</span> <br>
-			       3) Import the modified pricing template bank into the system. 
+			       3) Import the modified pricing template back into the system.
 			    </p>
 			</div>
 			
@@ -137,44 +137,8 @@
                 <div>Choose a <span style="color: red">.CSV</span> file to upload: <input type="file" name="uploadedfile" id="uploadedfile" accept="application/csv, text/csv" size="60" class="upload_file" /></div>
                 <div><input type="button" name="btnUpload" id="btnUpload" value="Import Pricing" onclick="javascript: do_action('upload');" class="btn" /></div>
             </div>
-			
-		    <div class="results_container" class="top-margined clear" style="margin-top: 20px;">
-		    <?php if (isset($this->columnsArray) && isset($this->resultsArray)) { ?>
-				<h3>Results to be Imported:</h3>
-				<div id="confirm_container"></div>
-				<table id="results_list" class="top-margined">
-					<tr>
-					<?php foreach($this->columnsArray as $key => $value) { ?>
-						<th nowrap="nowrap">&nbsp;&nbsp;<?=$value?>&nbsp;&nbsp;</th>
-					<?php } ?>
-					</tr>
-					<?php
-					//loop through the array and build the preview
-					foreach ($this->resultsArray as $key => $value) { ?>
-						<tr>
-						<?php foreach ($value as $key2) { ?>
-							<td nowrap="nowrap"><?=$key2?></td>
-						<?php } ?>
-						</tr>
-					<?php } ?>
-				</table>
-				<br />
-	            <?php if(count($this->resultsArray) <= 1) { ?>
-				<div id="no_results_container">
-					<p>The file contains no valid data. Please correct your file and try again.</p>
-				</div>
-				<br />
-				<?php } ?>
-			<?php } ?>
-			
+
 			<div id="buttons_container" class="top-margined margined clear_center">
-				<?php if(count($this->resultsArray) > 0) { ?>
-               		<input type="button" name="btnNext" id="btnNext" value="Confirm Import" onclick="javascript: do_action('confirm');" class="btn btn-primary" />
-					<input type="button" name="btnCancel" id="btnCancel" value="Cancel" onclick="javascript: do_action('cancel');" class="btn" />
-               	<?php } else { ?>
-               		<input type="button" name="btnNext" id="btnNext" value="Confirm Import" class="btn btn-primary disabled" />
-					<input type="button" name="btnCancel" id="btnCancel" value="Cancel" class="btn disabled" />
-           		<?php } ?>
 				<input type="button" name="btnBack" id="btnBack" value="Done" onclick="javascript: do_action('back');" class="btn" />
 			</div>
 			
