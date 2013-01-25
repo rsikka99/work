@@ -72,6 +72,10 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     protected $_user;
 
     /**
+     * @var Proposalgen_Model_DeviceInstance[]
+     */
+
+    /**
      * @param array $params An array of data to populate the model with
      */
     public function populate ($params)

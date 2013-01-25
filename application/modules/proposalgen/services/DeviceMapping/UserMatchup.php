@@ -12,18 +12,16 @@ class Proposalgen_Service_DeviceMapping_UserMatchup extends Proposalgen_Service_
     public function __construct ()
     {
         $this->_rmsUserMatchupMapper = Proposalgen_Model_Mapper_Rms_User_Matchup::getInstance();
-
-        parent::__construct();
     }
 
     /**
-     * MAP IT™ attempts to map a device instance to a master device by using the user matchup table. If there is no entry in the
+     * MAP IT™ attempts to find a suitable master device by using the user matchup table. If there is no entry in the
      * matchup table it will return FALSE®
      *
      * @param Proposalgen_Model_DeviceInstance $deviceInstance
      * @param int                              $userId
      *
-     * @return bool
+     * @return bool|
      */
     public function mapIt (Proposalgen_Model_DeviceInstance $deviceInstance, $userId)
     {
@@ -34,13 +32,7 @@ class Proposalgen_Service_DeviceMapping_UserMatchup extends Proposalgen_Service_
         $rmsUserMatchup = $this->_rmsUserMatchupMapper->find(array($rmsProviderId, $rmsModelId, $userId));
         if ($rmsUserMatchup)
         {
-            $deviceInstanceMasterDevice                   = new Proposalgen_Model_Device_Instance_Master_Device();
-            $deviceInstanceMasterDevice->deviceInstanceId = $deviceInstance->id;
-            $deviceInstanceMasterDevice->masterDeviceId   = $rmsUserMatchup->masterDeviceId;
-
-            $this->_deviceInstanceMasterDeviceMapper->insert($deviceInstanceMasterDevice);
-
-            $isMapped = true;
+            $isMapped = $rmsUserMatchup->masterDeviceId;
         }
 
         return $isMapped;
