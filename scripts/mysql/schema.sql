@@ -1,6 +1,6 @@
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 
 -- -----------------------------------------------------
@@ -578,7 +578,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_report_settings` (
   `assessmentPricingConfigId` INT(11) NULL DEFAULT NULL ,
   `grossMarginPricingConfigId` INT(11) NULL DEFAULT NULL ,
   `reportDate` DATETIME NULL DEFAULT NULL ,
-  `targetMono` DOUBLE NULL DEFAULT NULL ,
+  `targetMonochrome` DOUBLE NULL DEFAULT NULL ,
   `targetColor` DOUBLE NULL DEFAULT NULL ,
   `costThreshold` DOUBLE NULL DEFAULT NULL ,
   PRIMARY KEY (`id`) ,
@@ -1629,22 +1629,21 @@ CREATE  TABLE IF NOT EXISTS `device_instance_replacement_master_devices` (
   `masterDeviceId` INT NOT NULL ,
   `deviceInstanceId` INT NOT NULL ,
   PRIMARY KEY (`masterDeviceId`) ,
-  INDEX `device_instance_replacement_master_devices_ibfk1` (`masterDeviceId` ASC, `deviceInstanceId` ASC) ,
-  INDEX `device_instance_replacement_master_devices_ibfk2` () ,
+  INDEX `device_instance_replacement_master_devices_ibfk1` (`masterDeviceId` ASC) ,
+  INDEX `device_instance_replacement_master_devices_ibfk2` (`deviceInstanceId` ASC) ,
   CONSTRAINT `device_instance_replacement_master_devices_ibfk1`
-    FOREIGN KEY (`masterDeviceId` , `deviceInstanceId` )
-    REFERENCES `pgen_master_devices` (`id` , `id` )
+    FOREIGN KEY (`masterDeviceId` )
+    REFERENCES `pgen_master_devices` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `device_instance_replacement_master_devices_ibfk2`
-    FOREIGN KEY ()
-    REFERENCES `pgen_device_instances` ()
+    FOREIGN KEY (`deviceInstanceId` )
+    REFERENCES `pgen_device_instances` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
 -- Placeholder table for view `pgen_map_device_instances`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pgen_map_device_instances` (`rmsProviderId` INT, `rmsModelId` INT, `manufacturer` INT, `modelName` INT, `useUserData` INT, `reportId` INT, `masterDeviceId` INT, `isMapped` INT, `mappedManufacturer` INT, `mappedModelName` INT, `deviceCount` INT, `deviceInstanceIds` INT);
