@@ -1368,4 +1368,8 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         $randomNumber =  rand(0,2);
         return $action[$randomNumber];
     }
+    public function getReplacementMasterDevice()
+    {
+        return Proposalgen_Model_Mapper_MasterDevice::getInstance()->find(2);
+    }
 }
