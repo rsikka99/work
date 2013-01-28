@@ -544,15 +544,17 @@ DEFAULT CHARACTER SET = utf8;
 -- Table `pgen_replacement_devices`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_replacement_devices` (
-  `master_device_id` INT(11) NOT NULL ,
-  `replacement_category` ENUM('BLACK & WHITE','BLACK & WHITE MFP','COLOR','COLOR MFP') NULL DEFAULT NULL ,
-  `print_speed` INT(11) NULL DEFAULT NULL ,
+  `masterDeviceId` INT(11) NOT NULL ,
+  `replacementCategory` ENUM('BLACK & WHITE','BLACK & WHITE MFP','COLOR','COLOR MFP') NULL DEFAULT NULL ,
+  `printSpeed` INT(11) NULL DEFAULT NULL ,
   `resolution` INT(11) NULL DEFAULT NULL ,
-  `monthly_rate` DOUBLE NULL DEFAULT NULL ,
-  PRIMARY KEY (`master_device_id`) ,
+  `monthlyRate` DOUBLE NULL DEFAULT NULL ,
+  PRIMARY KEY (`masterDeviceId`) ,
   CONSTRAINT `proposalgenerator_replacement_devices_ibfk_1`
-    FOREIGN KEY (`master_device_id` )
-    REFERENCES `pgen_master_devices` (`id` ))
+    FOREIGN KEY (`masterDeviceId` )
+    REFERENCES `pgen_master_devices` (`id` )
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
