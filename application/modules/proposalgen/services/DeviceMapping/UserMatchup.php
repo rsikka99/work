@@ -21,20 +21,20 @@ class Proposalgen_Service_DeviceMapping_UserMatchup extends Proposalgen_Service_
      * @param Proposalgen_Model_DeviceInstance $deviceInstance
      * @param int                              $userId
      *
-     * @return bool|
+     * @return bool|int The master device id, or false if it could not map
      */
     public function mapIt (Proposalgen_Model_DeviceInstance $deviceInstance, $userId)
     {
-        $isMapped      = false;
-        $rmsProviderId = $deviceInstance->getRmsUploadRow()->rmsProviderId;
-        $rmsModelId    = $deviceInstance->getRmsUploadRow()->rmsModelId;
+        $masterDeviceId = false;
+        $rmsProviderId  = $deviceInstance->getRmsUploadRow()->rmsProviderId;
+        $rmsModelId     = $deviceInstance->getRmsUploadRow()->rmsModelId;
 
         $rmsUserMatchup = $this->_rmsUserMatchupMapper->find(array($rmsProviderId, $rmsModelId, $userId));
         if ($rmsUserMatchup)
         {
-            $isMapped = $rmsUserMatchup->masterDeviceId;
+            $masterDeviceId = $rmsUserMatchup->masterDeviceId;
         }
 
-        return $isMapped;
+        return $masterDeviceId;
     }
 }

@@ -190,14 +190,14 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
             $hasError        = false;
             try
             {
-                $this->_proposal = new Proposalgen_Model_Proposal_OfficeDepot($this->_user, $this->_report);
+                $this->_proposal = new Proposalgen_Model_Proposal_OfficeDepot($this->_report);
 
                 if ($this->_report->devicesModified)
                 {
                     $this->_redirect('/data/modificationwarning');
                 }
 
-                if (count($this->_proposal->DeviceCount) < 1)
+                if (count($this->_proposal->getDeviceCount()) < 1)
                 {
                     $this->view->ErrorMessages [] = "All uploaded printers were excluded from your report. Reports can not be generated until at least 1 printer is added.";
                     $hasError                     = true;

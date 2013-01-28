@@ -13,8 +13,6 @@ class Proposalgen_Service_DeviceMapping_NameBased extends Proposalgen_Service_De
     {
         $this->_manufacturerMapper = Proposalgen_Model_Mapper_Manufacturer::getInstance();
         $this->_masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
-
-        parent::__construct();
     }
 
     /**

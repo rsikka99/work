@@ -63,6 +63,13 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
     protected $_costPerPage;
 
     /**
+     * Whether or not overrides have been processed
+     *
+     * @var bool
+     */
+    protected $_overridesProcessed;
+
+    /**
      * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
@@ -123,6 +130,37 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
             "manufacturerId" => $this->manufacturerId,
             "tonerColorId"   => $this->tonerColorId,
         );
+    }
+
+    /**
+     * Handles processing overrides for a toner
+     *
+     * @param Proposalgen_Model_Report $report
+     */
+    public function processOverrides ($report)
+    {
+        if (!$this->_overridesProcessed)
+        {
+            $userTonerOverrideMapper = Proposalgen_Model_Mapper_UserTonerOverride::getInstance();
+
+            $tonerOverride = null;
+            /*
+             * We can never have overrides on an unknown device
+             */
+            if ($this->id > 0)
+            {
+
+                $tonerOverride = $userTonerOverrideMapper->findOverrideForToner($report->userId, $this->id);
+
+            }
+            // If we found a toner override, apply it
+            if ($tonerOverride)
+            {
+                $this->cost = $tonerOverride->overrideTonerPrice;
+            }
+
+            $this->_overridesProcessed = true;
+        }
     }
 
 

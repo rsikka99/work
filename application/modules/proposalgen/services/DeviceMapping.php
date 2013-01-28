@@ -97,7 +97,7 @@ class Proposalgen_Service_DeviceMapping
             $mapDeviceToMasterDeviceId = $this->_nameBasedMappingService->mapIt($deviceInstance);
         }
 
-        if (!$mapDeviceToMasterDeviceId)
+        if ($mapDeviceToMasterDeviceId !== false && $mapDeviceToMasterDeviceId > 0)
         {
             $this->_mapDeviceToMasterDevice($deviceInstance, $mapDeviceToMasterDeviceId);
         }
@@ -117,7 +117,7 @@ class Proposalgen_Service_DeviceMapping
     {
         $deviceInstanceMasterDevice                   = new Proposalgen_Model_Device_Instance_Master_Device();
         $deviceInstanceMasterDevice->deviceInstanceId = $deviceInstance->id;
-        $deviceInstanceMasterDevice->masterDeviceId   = $masterDevice->id;
+        $deviceInstanceMasterDevice->masterDeviceId   = $masterDeviceId;
 
         $result = $this->_deviceInstanceMasterDeviceMapper->insert($deviceInstanceMasterDevice);
 

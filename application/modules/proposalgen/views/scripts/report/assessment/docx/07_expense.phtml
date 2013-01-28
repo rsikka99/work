@@ -53,7 +53,7 @@ $assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->co
 $assumedLeasedCostsTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $cell = $assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1Border);
 $cell->addText($this->translate('Estimated annual total lease payments'), null, 'nospacing');
-$cell->addText(sprintf($this->translate('Based on $%1$s per month per device'), $proposal->getReport()->getReportMonthlyLeasePayment()), 'small_italic_text', 'nospacing');
+$cell->addText(sprintf($this->translate('Based on $%1$s per month per device'), $proposal->report->getReportMonthlyLeasePayment()), 'small_italic_text', 'nospacing');
 
 
 $assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText('$' . number_format($this->proposal->CombinedAnnualLeasePayments), null, 'nospacing_rightalign');

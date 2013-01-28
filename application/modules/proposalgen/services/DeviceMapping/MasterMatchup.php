@@ -24,9 +24,9 @@ class Proposalgen_Service_DeviceMapping_MasterMatchup extends Proposalgen_Servic
      */
     public function mapIt (Proposalgen_Model_DeviceInstance $deviceInstance)
     {
-        $masterDeviceId      = false;
-        $rmsProviderId = $deviceInstance->getRmsUploadRow()->rmsProviderId;
-        $rmsModelId    = $deviceInstance->getRmsUploadRow()->rmsModelId;
+        $masterDeviceId = false;
+        $rmsProviderId  = $deviceInstance->getRmsUploadRow()->rmsProviderId;
+        $rmsModelId     = $deviceInstance->getRmsUploadRow()->rmsModelId;
 
         $rmsMasterMatchup = $this->_rmsMasterMatchupMapper->find(array($rmsProviderId, $rmsModelId));
         if ($rmsMasterMatchup)

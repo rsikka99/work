@@ -19,7 +19,7 @@ $cell = $table->addCell(5818);
 $cell->addTextBreak(3);
 $cell->addImage(PUBLIC_PATH . "/assets/images/docx/solution/cell2.jpg");
 $cell->addTextBreak(5);
-$cell->addText($this->translate('Prepared For:') . " " . $proposal->Report->_customerCompanyName, 'titlepageHeaderFont', 'titlepageHeaderParagraph');
+$cell->addText($this->translate('Prepared For:') . " " . $proposal->report->_customerCompanyName, 'titlepageHeaderFont', 'titlepageHeaderParagraph');
 $cell->addText($proposal->DateReportPrepared, 'titlepageHeaderFont', 'titlepageHeaderParagraph');
 $cell->addTextBreak(4);
 // Parse the address

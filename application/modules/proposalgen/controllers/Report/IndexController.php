@@ -51,6 +51,7 @@ class Proposalgen_Report_IndexController extends Proposalgen_Library_Controller_
     public function printingdevicelistAction ()
     {
         $this->initReportList();
+        $this->initHtmlReport();
 
         $this->view->availableReports->PrintingDeviceList->active = true;
         $this->view->reportTitle                                  = "Printing Device List";

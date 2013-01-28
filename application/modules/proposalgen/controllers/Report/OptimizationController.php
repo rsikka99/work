@@ -4,11 +4,12 @@ class Proposalgen_Report_OptimizationController extends Proposalgen_Library_Cont
     public function indexAction ()
     {
         $this->initReportList();
+        $this->initHtmlReport();
 
         $this->view->availableReports->Solution->active = true;
 
         $this->view->formats = array(
-            "/proposalgen/solution/generate/format/docx" => $this->wordFormat
+            "/proposalgen/solution/generate/format/docx" => $this->_wordFormat
         );
 
         try

@@ -105,6 +105,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     protected $_deviceInstanceMasterDevice;
 
+    /**
+     * @var Proposalgen_Model_MasterDevice
+     */
+    protected $_replacementMasterDevice;
+
     /*
      * ********************************************************************************
      * Calculated fields
@@ -292,91 +297,35 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     static $uniqueTonerArray = array();
 
+
     /**
-     * Applies overrides to device costs and toner costs.
-     * Also adds a margin on the costs that were not overridden
+     * Applies overrides to settings, device prices, toner prices
      *
-     * @param Proposalgen_Model_DeviceInstance $deviceInstance
-     * @param Proposalgen_Model_Report         $report
-     * @param float                            $reportMargin
-     * @param float                            $companyMargin
+     * @param Proposalgen_Model_Report $report
      */
-    static function processOverrides ($deviceInstance, $report, $reportMargin, $companyMargin)
+    public function processOverrides ($report)
     {
-        $userDeviceOverrideMapper = Proposalgen_Model_Mapper_UserDeviceOverride::getInstance();
-        $userTonerOverrideMapper  = Proposalgen_Model_Mapper_UserTonerOverride::getInstance();
-        $deviceOverride           = null;
-
-        // Known Device, override
-        if ($deviceInstance->getIsMappedToMasterDevice())
+        /**
+         * Process any overrides we have on a master device
+         */
+        $masterDevice = $this->getMasterDevice();
+        if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
         {
-            $deviceOverride = $userDeviceOverrideMapper->fetchRow(array(
-                                                                       "master_device_id = ?" => $deviceInstance->getMasterDevice()->id,
-                                                                       "user_id = ?"          => $report->userId
-                                                                  ));
-
+            $this->getMasterDevice()->processOverrides($report);
         }
 
-        // Apply Company Margin if no overrides
-        if ($deviceOverride)
+        /*
+         * Process any overrides on the replacement master device
+         */
+        if ($this->getIsMappedToMasterDevice() || $this->useUserData)
         {
-            // Cost
-            $deviceInstance->getMasterDevice()->cost = $deviceOverride->OverrideDevicePrice;
-        }
-        else // If we found a device override, apply it
-        {
-            $deviceInstance->getMasterDevice()->cost = $deviceInstance->getMasterDevice()->cost / $companyMargin;
-        }
-
-        // Apply Report Margin to the device price
-        $deviceInstance->getMasterDevice()->cost = $deviceInstance->getMasterDevice()->cost / $reportMargin;
-
-        // Toner Overrides + Margin
-        foreach ($deviceInstance->getMasterDevice()->getToners() as $tonersByPartType)
-        {
-            foreach ($tonersByPartType as $tonersByColor)
+            $replacementMasterDevice = $this->getReplacementMasterDevice();
+            if ($replacementMasterDevice instanceof Proposalgen_Model_MasterDevice)
             {
-                /* @var $toner Proposalgen_Model_Toner */
-                foreach ($tonersByColor as $toner)
-                {
-                    if (!in_array($toner->sku, self::$uniqueTonerArray))
-                    {
-                        self::$uniqueTonerArray [] = $toner->sku;
-                        $tonerOverride             = null;
-                        // Known Device, override
-                        if (!$deviceInstance->isUnknown)
-                        {
-                            /* @var $tonerOverride Proposalgen_Model_UserTonerOverride */
-                            $tonerOverride = $userTonerOverrideMapper->fetchRow(array(
-                                                                                     "toner_id = ?" => $toner->id,
-                                                                                     "user_id = ?"  => $report->userId
-                                                                                ));
-                        }
-
-                        // If we found a toner override, apply it
-                        if ($tonerOverride)
-                        {
-                            $toner->cost = $tonerOverride->overrideTonerPrice;
-                        }
-                        else // Apply Company Margin if no overrides
-                        {
-                            $toner->cost = $toner->cost / $companyMargin;
-                        }
-                    }
-                }
+                $replacementMasterDevice->processOverrides($report);
             }
         }
-
-        // Service Cost Per Page Cost
-        if ($deviceInstance->getMasterDevice()->serviceCostPerPage <= 0)
-        {
-            $deviceInstance->getMasterDevice()->serviceCostPerPage = $report->getReportSettings()->serviceCostPerPage;
-        }
-
-        // Admin Charge
-        $deviceInstance->getMasterDevice()->adminCostPerPage = $report->getReportSettings()->adminCostPerPage;
     }
-
 
     /**
      * @param array $params An array of data to populate the model with
@@ -688,8 +637,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_meters))
         {
-            $meterMapper = Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance();
-            $meters      = $meterMapper->fetchAllForDevice($this->id);
+            $meters = Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance()->fetchAllForDeviceInstance($this->id);
 
             // If we do not have a BLACK meter, then we should try and calculate
             // it
@@ -832,8 +780,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_usage))
         {
-            // Calculate device usage by dividing it's current monthly volume by
-            // its maximum
+            // Calculate device usage by dividing it's current monthly volume by its maximum
             $this->_usage = $this->getAverageMonthlyPageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume();
         }
 
@@ -1212,6 +1159,40 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function getIsMappedToMasterDevice ()
     {
-        return (!$this->useUserData && $this->getDeviceInstanceMasterDevice() instanceof Proposalgen_Model_MasterDevice);
+        return (!$this->useUserData && $this->getDeviceInstanceMasterDevice() instanceof Proposalgen_Model_Device_Instance_Master_Device);
+    }
+
+
+    /**
+     * Gets the replacement master device
+     *
+     * @return Proposalgen_Model_MasterDevice
+     */
+    public function getReplacementMasterDevice ()
+    {
+        if (!isset($this->_replacementMasterDevice))
+        {
+            $deviceInstanceReplacementMasterDevice = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance()->find($this->id);
+            if ($deviceInstanceReplacementMasterDevice)
+            {
+                $this->_replacementMasterDevice = $deviceInstanceReplacementMasterDevice->getMasterDevice();
+            }
+        }
+
+        return $this->_replacementMasterDevice;
+    }
+
+    /**
+     *Sets the replacement master device
+     *
+     * @param Proposalgen_Model_MasterDevice $replacementMasterDevice
+     *
+     * @return \Proposalgen_Model_DeviceInstance
+     */
+    public function setReplacementMasterDevice ($replacementMasterDevice)
+    {
+        $this->_replacementMasterDevice = $replacementMasterDevice;
+
+        return $this;
     }
 }

@@ -8,6 +8,7 @@ class Proposalgen_Report_GrossmarginController extends Proposalgen_Library_Contr
     public function indexAction ()
     {
         $this->initReportList();
+        $this->initHtmlReport();
 
         $this->view->availableReports->GrossMargin->active = true;
         $this->view->formats                               = array(
@@ -240,6 +241,6 @@ class Proposalgen_Report_GrossmarginController extends Proposalgen_Library_Contr
                                         "|",
                                         "~",
                                         "`"
-                                   ), "_", $proposal->Report->CustomerCompanyName);
+                                   ), "_", $proposal->report->CustomerCompanyName);
     }
 }
