@@ -1195,4 +1195,48 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 
         return $this;
     }
+
+    /**
+     * Calculates the cost per page for a master device.
+     *
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *            The settings to use when calculating cost per page
+     * @param Proposalgen_Model_MasterDevice $masterDevice
+     *            The master device to use
+     * @throws InvalidArgumentException
+     * @return Proposalgen_Model_CostPerPage
+     */
+    public function calculateCostPerPage(Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null)
+    {
+        // Make sure our array is initialized
+        if (!isset($this->_cachedCostPerPage)) {
+            $this->_cachedCostPerPage = array();
+        }
+
+        // If master device isn't passed, get the master device
+        if (!$masterDevice instanceof Proposalgen_Model_MasterDevice) {
+            $masterDevice = $this->getMasterDevice();
+        }
+
+        $cacheKey = $costPerPageSetting->createCacheKey() . "_" . (int)$masterDevice->id;
+
+        if (!array_key_exists($cacheKey, $this->_cachedCostPerPage)) {
+            $costPerPage = new Proposalgen_Model_CostPerPage();
+
+            // DO MATH
+            if ($masterDevice instanceof Proposalgen_Model_MasterDevice) {
+
+                $costPerPage->add($masterDevice->calculateCostPerPage($costPerPageSetting));
+
+                $costPerPage->monochromeCostPerPage = $costPerPage->monochromeCostPerPage + $masterDevice->serviceCostPerPage + $costPerPageSetting->adminCostPerPage;
+                if ($masterDevice->isColor()) {
+                    $costPerPage->colorCostPerPage = $costPerPage->monochromeCostPerPage + $costPerPage->colorCostPerPage;
+                }
+            }
+
+            $this->_cachedCostPerPage [$cacheKey] = $costPerPage;
+        }
+
+        return $this->_cachedCostPerPage [$cacheKey];
+    }
 }

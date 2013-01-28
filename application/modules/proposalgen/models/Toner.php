@@ -438,4 +438,63 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
     {
         Proposalgen_Model_Toner::$ESTIMATED_PAGE_COVERAGE_COLOR = $ESTIMATED_PAGE_COVERAGE_COLOR;
     }
+
+    /**
+     * Calculates the coverage adjusted cost per page
+     *
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *            The settings to use when calculating cost per page
+     *
+     * @return Proposalgen_Model_CostPerPage
+     */
+    public function calculateCostPerPage (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    {
+        // Make sure our array is initialized
+        if (!isset($this->_cachedCostPerPage))
+        {
+            $this->_cachedCostPerPage = array();
+        }
+
+        // Turn coverage into a decimal
+        $monochromeCoverage = $costPerPageSetting->pageCoverageMonochrome / 100;
+        $colorCoverage      = $costPerPageSetting->pageCoverageColor / 100;
+
+        $cacheKey = "{$monochromeCoverage}_{$colorCoverage}";
+        if (!array_key_exists($cacheKey, $this->_cachedCostPerPage))
+        {
+            $costPerPage = new Proposalgen_Model_CostPerPage();
+            /*
+             * Cost per page is calculated by dividing the price by the yield. When providing a new coverage we need to
+             * divide the manufacturers coverage by our coverage in order to arrive to the right number.
+             */
+            $monochromeCostPerPage = 0;
+            $colorCostPerPage      = 0;
+
+            switch ($this->getTonerColor()->tonerColorId)
+            {
+                case Proposalgen_Model_TonerColor::BLACK :
+                    $monochromeCostPerPage = $this->cost / ($this->yield * (self::MANUFACTURER_ASSUMED_COVERAGE / $monochromeCoverage));
+                    break;
+                case Proposalgen_Model_TonerColor::CYAN :
+                case Proposalgen_Model_TonerColor::MAGENTA :
+                case Proposalgen_Model_TonerColor::YELLOW :
+                    $colorCostPerPage = $this->cost / ($this->yield * (self::MANUFACTURER_ASSUMED_COVERAGE / ($colorCoverage / 4)));
+                    break;
+                case Proposalgen_Model_TonerColor::THREE_COLOR :
+                    $colorCostPerPage = $this->cost / ($this->yield * (self::MANUFACTURER_ASSUMED_COVERAGE / ($colorCoverage / 4 * 3)));
+                    break;
+                case Proposalgen_Model_TonerColor::FOUR_COLOR :
+                    $monochromeCostPerPage = $this->cost / ($this->yield * (self::MANUFACTURER_ASSUMED_COVERAGE / $monochromeCoverage));
+                    $colorCostPerPage      = $this->cost / ($this->yield * (self::MANUFACTURER_ASSUMED_COVERAGE / $colorCoverage));
+                    break;
+            }
+
+            $costPerPage->monochromeCostPerPage = $monochromeCostPerPage;
+            $costPerPage->colorCostPerPage = $colorCostPerPage;
+
+            $this->_cachedCostPerPage [$cacheKey] = $costPerPage;
+        }
+
+        return $this->_cachedCostPerPage [$cacheKey];
+    }
 }
