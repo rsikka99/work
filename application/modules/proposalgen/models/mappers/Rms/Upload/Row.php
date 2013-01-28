@@ -249,4 +249,68 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
 
         return $query->execute();
     }
+
+
+    /**
+     * Converts an upload row into a master device
+     * @param Proposalgen_Model_Rms_Upload_Row $rmsUploadRow
+     *
+     * @return bool|\Proposalgen_Model_MasterDevice Returns a master device, or false if the rms upload row does not have complete information
+     */
+    public function convertUploadRowToMasterDevice ($rmsUploadRow)
+    {
+        $masterDevice = false;
+        if ($rmsUploadRow->hasCompleteInformation)
+        {
+            $masterDevice = new Proposalgen_Model_MasterDevice();
+
+            $masterDevice->populate($rmsUploadRow->toArray());
+
+            $toners = array();
+            switch ($rmsUploadRow->tonerConfigId)
+            {
+                case Proposalgen_Model_TonerConfig::BLACK_ONLY:
+                    $toners[] = $this->createTonerFromRmsUploadRow($rmsUploadRow->blackTonerSku, $rmsUploadRow->blackTonerYield, $rmsUploadRow->blackTonerCost, Proposalgen_Model_TonerColor::BLACK);
+                    break;
+                case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED:
+                    $toners[] = $this->createTonerFromRmsUploadRow($rmsUploadRow->blackTonerSku, $rmsUploadRow->blackTonerYield, $rmsUploadRow->blackTonerCost, Proposalgen_Model_TonerColor::BLACK);
+                    $toners[] = $this->createTonerFromRmsUploadRow($rmsUploadRow->cyanTonerSku, $rmsUploadRow->cyanTonerYield, $rmsUploadRow->cyanTonerCost, Proposalgen_Model_TonerColor::CYAN);
+                    $toners[] = $this->createTonerFromRmsUploadRow($rmsUploadRow->magentaTonerSku, $rmsUploadRow->magentaTonerYield, $rmsUploadRow->magentaTonerCost, Proposalgen_Model_TonerColor::MAGENTA);
+                    $toners[] = $this->createTonerFromRmsUploadRow($rmsUploadRow->yellowTonerSku, $rmsUploadRow->yellowTonerYield, $rmsUploadRow->yellowTonerCost, Proposalgen_Model_TonerColor::YELLOW);
+                    break;
+                case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED:
+                    $toners[] = $this->createTonerFromRmsUploadRow($rmsUploadRow->threeColorTonerSku, $rmsUploadRow->threeColorTonerYield, $rmsUploadRow->threeColorTonerCost, Proposalgen_Model_TonerColor::THREE_COLOR);
+                    break;
+                case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED:
+                    $toners[] = $this->createTonerFromRmsUploadRow($rmsUploadRow->fourColorTonerSku, $rmsUploadRow->fourColorTonerYield, $rmsUploadRow->fourColorTonerCost, Proposalgen_Model_TonerColor::FOUR_COLOR);
+                    break;
+            }
+
+            $masterDevice->setToners(array(Proposalgen_Model_PartType::OEM => $toners));
+        }
+
+        return $masterDevice;
+    }
+
+    /**
+     * Creates a toner
+     *
+     * @param $tonerSku
+     * @param $tonerYield
+     * @param $tonerCost
+     * @param $tonerColor
+     *
+     * @return Proposalgen_Model_Toner
+     */
+    public function createTonerFromRmsUploadRow ($tonerSku, $tonerYield, $tonerCost, $tonerColor)
+    {
+        $toner               = new Proposalgen_Model_Toner();
+        $toner->sku          = $tonerSku;
+        $toner->yield        = $tonerYield;
+        $toner->cost         = $tonerCost;
+        $toner->tonerColorId = $tonerColor;
+        $toner->partTypeId   = Proposalgen_Model_PartType::OEM;
+
+        return $toner;
+    }
 }
