@@ -11,6 +11,7 @@ class Proposalgen_Report_AssessmentController extends Proposalgen_Library_Contro
     public function indexAction ()
     {
         $this->initReportList();
+        $this->initHtmlReport();
 
         $this->view->availableReports->Assessment->active = true;
 
@@ -41,6 +42,10 @@ class Proposalgen_Report_AssessmentController extends Proposalgen_Library_Contro
                         // Add HTML Logic here
                         break;
                 }
+            }
+            else
+            {
+                throw new Exception("Proposal is false");
             }
             $this->view->proposal = $proposal;
         }

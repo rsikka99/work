@@ -1,6 +1,7 @@
 <?php
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
+$graphs = $proposal->getGraphs();
 ?>
 <div class="h1">Analysis: Environmental Impact</div>
 <table cellspacing="0" class="gradesTable">
@@ -14,7 +15,7 @@ $proposal = $this->proposal;
 <br />
 <div class="pheader">Energy Consumption</div>
 <?php if ($proposal->getPercentageOfDevicesReportingPower() > $proposal->getDevicesReportingPowerThreshold()) {?>
-<p>You are currently using an estimated average of <strong><?php echo number_format($proposal->getAveragePowerUsagePerMonth()); ?> kWh</strong> per month to operate printing devices at an estimated monthly cost of <strong>$<?php echo number_format($proposal->getAveragePowerCostPerMonth()); ?></strong>, assuming a cost of $<?php echo number_format($proposal->getReport()->getReportSettings()->kilowattsPerHour, 2); ?> per kWh.</p>
+<p>You are currently using an estimated average of <strong><?php echo number_format($proposal->getAveragePowerUsagePerMonth()); ?> kWh</strong> per month to operate printing devices at an estimated monthly cost of <strong>$<?php echo number_format($proposal->getAveragePowerCostPerMonth()); ?></strong>, assuming a cost of $<?php echo number_format($proposal->report->getReportSettings()->kilowattsPerHour, 2); ?> per kWh.</p>
 <p>The following lists the devices with the highest average power consumption per month.</p>
 <table cellspacing="0" class="genericTable" style="font-size: 10pt;">
     <thead>
@@ -42,6 +43,6 @@ $proposal = $this->proposal;
 <div class="pheader">Green Features: Duplexing and Scanning</div>
 <p>If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption by using a scanner to e-mail documents instead of printing copies for distribution. The following charts show how many of your printing devices have duplexing and scanning capabilities:</p>
 <div class="center">
-    <img src="<?php echo $proposal->Graphs[13]; ?>" style="width: 270px; height: 175px;" />
-    <img src="<?php echo $proposal->Graphs[14]; ?>" style="width: 270px; height: 175px;" />
+    <img src="<?php echo $graphs[13]; ?>" style="width: 270px; height: 175px;" />
+    <img src="<?php echo $graphs[14]; ?>" style="width: 270px; height: 175px;" />
 </div>
