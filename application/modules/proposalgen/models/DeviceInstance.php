@@ -1361,4 +1361,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         $colorCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->colorCostPerPage;
         return $colorCostPerPage * $this->getAverageMonthlyColorPageCount();
     }
+
+    public function calculateDeviceAction()
+    {
+        $action = array(0 => "Keep", 1 => "Replace", 2 => "Retire");
+        $randomNumber =  rand(0,2);
+        return $action[$randomNumber];
+    }
 }
