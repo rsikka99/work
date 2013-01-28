@@ -581,8 +581,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $master_device_id = $this->_getParam('id', 0);
 
         $device_instance_master_devicesTable = new Proposalgen_Model_DbTable_Device_Instance_Master_Device();
-        $where = $device_instance_master_devicesTable->getAdapter()->quoteInto('masterDeviceId = ?', $master_device_id, 'INTEGER');
-        $device_instances = $device_instance_master_devicesTable->fetchAll($where);
+        $where                               = $device_instance_master_devicesTable->getAdapter()->quoteInto('masterDeviceId = ?', $master_device_id, 'INTEGER');
+        $device_instances                    = $device_instance_master_devicesTable->fetchAll($where);
 
         try
         {
@@ -1433,8 +1433,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
                             // UPDATE ALL DEVICES WITH THIS TONER (replace_id)
                             // TO REPLACEMENT TONER (with_id)
-                            $device_tonerMapper = Proposalgen_Model_Mapper_DeviceToner::getInstance();
-                            $device_toner       = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchRow('toner_id = ' . $replace_id . ' AND master_device_id = ' . $master_device_id);
+                            $device_tonerMapper    = Proposalgen_Model_Mapper_DeviceToner::getInstance();
+                            $device_toner          = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchRow('toner_id = ' . $replace_id . ' AND master_device_id = ' . $master_device_id);
                             $device_toner->tonerId = $with_id;
                             $device_tonerMapper->save($device_toner);
                             $toner_count += 1;
@@ -1458,8 +1458,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             {
                                 // UPDATE THIS DEVICE WITH REPLCEMENT TONER
                                 // (with_id)
-                                $device_tonerMapper     = Proposalgen_Model_Mapper_DeviceToner::getInstance();
-                                $device_toner           = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchRow('toner_id = ' . $replace_id . ' AND master_device_id = ' . $master_device_id);
+                                $device_tonerMapper    = Proposalgen_Model_Mapper_DeviceToner::getInstance();
+                                $device_toner          = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchRow('toner_id = ' . $replace_id . ' AND master_device_id = ' . $master_device_id);
                                 $device_toner->tonerId = $with_id;
                                 $device_tonerMapper->save($device_toner);
                                 $toner_count += 1;
@@ -4287,7 +4287,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
         if ($this->_request->isPost())
         {
-            $formData = $this->_request->getPost();
+            $formData                   = $this->_request->getPost();
             $company                    = 1;
             $this->view->company_filter = $company;
 
@@ -5099,9 +5099,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         ->joinLeft(array(
                                         'm' => 'manufacturers'
                                    ), 'm.id = md.manufacturerId', array(
-                                                                        'id',
-                                                                        'fullname'
-                                                                   ))
+                                                                       'id',
+                                                                       'fullname'
+                                                                  ))
                         ->order(array(
                                      'm.fullname',
                                      'md.modelName'
@@ -5125,9 +5125,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         ->joinLeft(array(
                                         'm' => 'manufacturers'
                                    ), 'm.id = md.manufacturerId', array(
-                                                                        'id AS manufacturer_id',
-                                                                        'fullname'
-                                                                   ))
+                                                                       'id AS manufacturer_id',
+                                                                       'fullname'
+                                                                  ))
                         ->joinLeft(array(
                                         'udo' => 'pgen_user_device_overrides'
                                    ), 'udo.master_device_id = md.id AND udo.user_id = ' . $this->user_id, array(
@@ -5558,7 +5558,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 $filter = "pt.name";
             }
-            else if ($filter == "toner_sku" || $filter =="toner_SKU")
+            else if ($filter == "toner_sku" || $filter == "toner_SKU")
             {
                 $filter = "t.sku";
             }
@@ -5794,8 +5794,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 ->joinLeft(array(
                                 'mdm' => 'manufacturers'
                            ), 'mdm.id = md.manufacturerId', array(
-                                                                  'mdm.fullname'
-                                                             ))
+                                                                 'mdm.fullname'
+                                                            ))
                 ->joinLeft(array(
                                 'tc' => 'pgen_toner_colors'
                            ), 'tc.id = t.tonerColorId')
@@ -5871,8 +5871,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 ->joinLeft(array(
                                 'mdm' => 'manufacturers'
                            ), 'mdm.id = md.manufacturerId', array(
-                                                                  'mdm.fullname'
-                                                             ))
+                                                                 'mdm.fullname'
+                                                            ))
                 ->joinLeft(array(
                                 'tc' => 'pgen_toner_colors'
                            ), 'tc.id = t.tonerColorId', array(
@@ -6963,5 +6963,29 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         // encode user data to return to the client:
         $json             = Zend_Json::encode($formdata);
         $this->view->data = $json;
+    }
+
+
+    /**
+     * This action is used for searching for master devices via ajax
+     */
+    public function searchForDeviceAction ()
+    {
+        $searchTerm     = "%" . implode('%', explode(' ', $this->_getParam('searchTerm', ''))) . "%";
+        $manufacturerId = $this->_getParam('manufacturerId', false);
+
+        $filterByManufacturer = null;
+        if ($manufacturerId !== false)
+        {
+            $manufacturer = Proposalgen_Model_Mapper_Manufacturer::getInstance()->find($manufacturerId);
+            if ($manufacturer instanceof Proposalgen_Model_Manufacturer)
+            {
+                $filterByManufacturer = $manufacturer;
+            }
+        }
+
+        $jsonResponse = Proposalgen_Model_Mapper_MasterDevice::getInstance()->searchByName($searchTerm, $filterByManufacturer);
+
+        $this->_helper->json($jsonResponse);
     }
 } //end class AdminController
