@@ -1,6 +1,7 @@
 <?php
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
+$graphs = $proposal->getGraphs();
 ?>
 <div class="h1">Analysis: Service and Supplies Logistics</div>
 <br />
@@ -21,8 +22,8 @@ $proposal = $this->proposal;
         <tbody>
             <tr>
                 <td width="70"></td>
-                <td><img src="<?php echo $proposal->Graphs[1]; ?>" /></td> <!-- Devices leased/Devices Purchased -->
-                <td><img src="<?php echo $proposal->Graphs[2]; ?>" /></td> <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
+                <td><img src="<?php echo $graphs[1]; ?>" /></td> <!-- Devices leased/Devices Purchased -->
+                <td><img src="<?php echo $graphs[2]; ?>" /></td> <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
                 <td width="70"></td>
             </tr>
         </tbody>
@@ -88,8 +89,8 @@ else if ($proposal->getPercentPrintingDoneOnInkjet() == 18)
 <p>Time spent dealing with multiple vendors could be better spent focusing on your core business tasks. Office Depot can bundle your supplies and service into a single invoice - and if you need new hardware, that can be included too.</p>
 <br />
 <div class="pheader">Number of Printing Device Models and Supply Types</div>
-<p>Out of your <strong><?php echo count($proposal->getDevices()); ?></strong> networked printing devices, you have of <strong><?php echo $proposal->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type. We estimate that <strong><?php echo count($proposal->getLeasedDevices()); ?></strong> of your printing devices are leased machines, for which supplies are included in your contract. The <strong><?php echo count($proposal->getPurchasedDevices()); ?></strong> remaining machines consist of <strong><?php echo $proposal->getNumberOfUniquePurchasedModels(); ?></strong> different models and use <strong><?php echo $proposal->getNumberOfUniquePurchasedToners(); ?></strong> different supply types. If you hold two of each supply in inventory, you have an estimated <strong>$<?php echo number_format($proposal->getCashHeldInInventory()); ?> in operating cash held in printer supplies inventory</strong> at any given time.</p>
+<p>Out of your <strong><?php echo $proposal->getDeviceCount(); ?></strong> networked printing devices, you have of <strong><?php echo $proposal->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type. We estimate that <strong><?php echo count($proposal->getLeasedDevices()); ?></strong> of your printing devices are leased machines, for which supplies are included in your contract. The <strong><?php echo count($proposal->getPurchasedDevices()); ?></strong> remaining machines consist of <strong><?php echo $proposal->getNumberOfUniquePurchasedModels(); ?></strong> different models and use <strong><?php echo $proposal->getNumberOfUniquePurchasedToners(); ?></strong> different supply types. If you hold two of each supply in inventory, you have an estimated <strong>$<?php echo number_format($proposal->getCashHeldInInventory()); ?> in operating cash held in printer supplies inventory</strong> at any given time.</p>
 <div class="center">
-    <img src="<?php echo $proposal->Graphs[3]; ?>" /> <!--  Giant pie chart -->
+    <img src="<?php echo $graphs[3]; ?>" /> <!--  Giant pie chart -->
 </div>
 <p>By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. Office Depot can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.</p>

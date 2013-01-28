@@ -5,6 +5,7 @@ class Proposalgen_Model_Mapper_DeviceInstanceMeter extends My_Model_Mapper_Abstr
      * Column Definitions
      */
     public $col_id = 'id';
+    public $col_deviceInstanceId = 'deviceInstanceId';
 
     /**
      * The default db table class to use
@@ -224,5 +225,27 @@ class Proposalgen_Model_Mapper_DeviceInstanceMeter extends My_Model_Mapper_Abstr
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->id;
+    }
+
+    /**
+     * Fetches all the meters for a given device instance
+     *
+     * @param $deviceInstanceId
+     *
+     * @return Proposalgen_Model_DeviceInstanceMeter[]
+     */
+    public function fetchAllForDeviceInstance ($deviceInstanceId)
+    {
+        $meterArray = array();
+        $meters     = $this->fetchAll(array(
+                                           "{$this->col_deviceInstanceId} = ?" => $deviceInstanceId
+                                      ));
+
+        foreach ($meters as $meter)
+        {
+            $meterArray[$meter->meterType] = $meter;
+        }
+
+        return $meterArray;
     }
 }

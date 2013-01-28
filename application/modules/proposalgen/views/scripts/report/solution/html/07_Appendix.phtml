@@ -24,7 +24,7 @@ $proposal = $this->proposal;
 			</tr>
 		</thead>
 		<tbody>
-		<?php foreach($proposal->getDevices() as $deviceInstance) : /* @var $deviceInstance Proposalgen_Model_DeviceInstance */ ?>
+		<?php foreach($proposal->getDevices()->allIncludedDeviceInstances as $deviceInstance) : /* @var $deviceInstance Proposalgen_Model_DeviceInstance */ ?>
 			<tr>
 				<td class="column1"><div><?php echo $deviceInstance->getMasterDevice()->getManufacturer()->displayname; ?></div></td>
 				<td class="column2"><div><?php echo $deviceInstance->getMasterDevice()->modelName; ?></div></td>

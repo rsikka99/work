@@ -42,6 +42,10 @@ class Proposalgen_Report_AssessmentController extends Proposalgen_Library_Contro
                         break;
                 }
             }
+            else
+            {
+                throw new Exception("Proposal is false");
+            }
             $this->view->proposal = $proposal;
         }
         catch (Exception $e)

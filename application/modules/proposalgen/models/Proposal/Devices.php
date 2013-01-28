@@ -6,6 +6,12 @@ class Proposalgen_Model_Proposal_Devices
      */
     public $allDeviceInstances = array();
 
+
+    /**
+     * @var Proposalgen_Model_DeviceInstance[]
+     */
+    public $allIncludedDeviceInstances = array();
+
     /**
      * @var Proposalgen_Model_DeviceInstance[]
      */
@@ -80,6 +86,7 @@ class Proposalgen_Model_Proposal_Devices
                     $masterDevice = $deviceInstance->getMasterDevice();
                     if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
                     {
+                        $this->allIncludedDeviceInstances[] = $deviceInstance;
                         /*
                          * Sort leased and purchased devices
                          */
@@ -108,6 +115,4 @@ class Proposalgen_Model_Proposal_Devices
 
         return $this->_devicesFetchedAndSorted;
     }
-
-
 }

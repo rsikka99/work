@@ -139,27 +139,20 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     protected $UniquePurchasedDeviceList;
 
     /**
-     * @param Application_Model_User   $user
      * @param Proposalgen_Model_Report $report
-     * @param array                    $options
      */
-    public function __construct (Application_Model_User $user, Proposalgen_Model_Report $report, array $options = null)
+    public function __construct (Proposalgen_Model_Report $report)
     {
-        parent::__construct($options);
-        $this->User          = $user;
+        parent::__construct($report);
         $this->DealerCompany = "Office Depot Inc.";
 
         if (isset(self::$Proposal))
         {
             self::$Proposal = $this;
         }
-        $this->setReport($report);
-        $this->setReportId($report->id);
-
-        // Initialize Settings
 
         // Get the report settings
-        $reportSettings = $report->getReportSettings();
+        $reportSettings = $this->report->getReportSettings();
 
         // Set Page Coverage
         Proposalgen_Model_Toner::setESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE($this->getPageCoverageBlackAndWhite() / 100);
@@ -321,79 +314,13 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
-     * @throws Exception
-     */
-    public function getDevices ()
-    {
-        if (!isset($this->Devices))
-        {
-            // Calculating margin:
-            $report       = $this->report;
-            $reportMargin = $this->getReportMargin();
-            // FIXME: Remove company margin from process overrides
-            $companyMargin = 1;
-            $deviceMapper  = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
-
-            // Known Devices
-            $knownDevices = $deviceMapper->fetchAll(array(
-                                                         "report_id = ?"   => $this->report->id,
-                                                         "is_excluded = ?" => 0
-                                                    ));
-
-            // Unknown Devices
-            $unknownDeviceMapper = Proposalgen_Model_Mapper_UnknownDeviceInstance::getInstance();
-            $unknownDevices      = $unknownDeviceMapper->fetchAllUnknownDevicesAsKnownDevices($this->report->id, array(
-                                                                                                                    "report_id = ?"   => $this->report->id,
-                                                                                                                    "is_excluded = ?" => 0
-                                                                                                               ));
-
-            // Merge the two
-            $this->Devices = array_merge($knownDevices, $unknownDevices);
-
-            if (count($this->Devices) <= 0)
-            {
-                throw new Exception("There were no devices associated with this report.");
-            }
-
-            // Get any overridden prices
-            foreach ($this->Devices as $device)
-            {
-                Proposalgen_Model_DeviceInstance::processOverrides($device, $report, $reportMargin, $companyMargin);
-            } // endforeach
-
-
-            /**
-             * * Calculate IT CPP **
-             */
-            if ($this->getPageCounts()->Purchased->Combined->Yearly > 0)
-            {
-                Proposalgen_Model_DeviceInstance::setITCostPerPage(($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getPageCounts()->Purchased->Combined->Yearly);
-            }
-        } // endif
-        return $this->Devices;
-    }
-
-    /**
      * @return Proposalgen_Model_Rms_Excluded_Row[]
      */
     public function getExcludedDevices ()
     {
         if (!isset($this->ExcludedDevices))
         {
-            $deviceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
-            $knownDevices = $deviceMapper->fetchAll(array(
-                                                         "report_id = ?"   => $this->ReportId,
-                                                         "is_excluded = ?" => 1
-                                                    ));
-
-            $unknownDeviceMapper = Proposalgen_Model_Mapper_UnknownDeviceInstance::getInstance();
-            $unknownDevices      = $unknownDeviceMapper->fetchAllUnknownDevicesAsKnownDevices($this->ReportId, array(
-                                                                                                                    "report_id = ?" => $this->ReportId,
-                                                                                                                    "is_excluded = 1"
-                                                                                                               ));
-
-            $uploadDevices         = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance()->getExcludedAsDeviceInstance($this->ReportId);
+            $this->ExcludedDevices = array_merge($this->getDevices()->unmappedDeviceInstances, $this->getDevices()->excludedDeviceInstances);
             $this->ExcludedDevices = array_merge($knownDevices, $unknownDevices, $uploadDevices);
         }
 
@@ -408,11 +335,11 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->LeasedDevices))
         {
             $this->LeasedDevices = array();
-            foreach ($this->getDevices() as $device)
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($device->getMasterDevice()->isLeased)
+                if ($deviceInstance->getMasterDevice()->isLeased)
                 {
-                    $this->LeasedDevices [] = $device;
+                    $this->LeasedDevices [] = $deviceInstance;
                 }
             }
         }
@@ -425,7 +352,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      */
     public function getDeviceCount ()
     {
-        return count($this->getDevices());
+        return count($this->getDevices()->allIncludedDeviceInstances);
     }
 
     /**
@@ -444,11 +371,11 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->PurchasedDevices))
         {
             $this->PurchasedDevices = array();
-            foreach ($this->getDevices() as $device)
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($device->getMasterDevice()->isLeased === 0)
+                if ($deviceInstance->getMasterDevice()->isLeased === 0)
                 {
-                    $this->PurchasedDevices [] = $device;
+                    $this->PurchasedDevices [] = $deviceInstance;
                 }
             }
         }
@@ -710,9 +637,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->NumberOfScanCapableDevices))
         {
             $numberOfDevices = 0;
-            foreach ($this->getDevices() as $device)
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($device->getMasterDevice()->IsScanner)
+                if ($deviceInstance->getMasterDevice()->IsScanner)
                 {
                     $numberOfDevices++;
                 }
@@ -731,7 +658,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->NumberOfDuplexCapableDevices))
         {
             $numberOfDevices = 0;
-            foreach ($this->getDevices() as $device)
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
             {
                 if ($device->getMasterDevice()->IsDuplex)
                 {
@@ -752,9 +679,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->NumberOfFaxCapableDevices))
         {
             $numberOfDevices = 0;
-            foreach ($this->getDevices() as $device)
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($device->getMasterDevice()->IsFax)
+                if ($deviceInstance->getMasterDevice()->IsFax)
                 {
                     $numberOfDevices++;
                 }
@@ -845,9 +772,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->MaximumMonthlyPrintVolume))
         {
             $maxVolume = 0;
-            foreach ($this->getDevices() as $device)
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                $maxVolume += $device->getMasterDevice()->getMaximumMonthlyPageVolume();
+                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume();
             }
             $this->MaximumMonthlyPrintVolume = $maxVolume;
         }
@@ -863,7 +790,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->NumberOfColorCapableDevices))
         {
             $numberOfDevices = 0;
-            foreach ($this->getDevices() as $device)
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
             {
                 if ($device->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY)
                 {
@@ -1006,14 +933,14 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->PercentDevicesUnderused))
         {
             $devicesUnderusedCount = 0;
-            foreach ($this->getDevices() as $device)
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($device->getAverageMonthlyPageCount() < ($device->getMasterDevice()->getMaximumMonthlyPageVolume() * 0.25))
+                if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume() * 0.25))
                 {
                     $devicesUnderusedCount++;
                 }
             }
-            $this->PercentDevicesUnderused = ($devicesUnderusedCount / count($this->getDevices())) * 100;
+            $this->PercentDevicesUnderused = ($devicesUnderusedCount / count($this->getDevices()->allIncludedDeviceInstances)) * 100;
         }
 
         return $this->PercentDevicesUnderused;
@@ -1027,14 +954,14 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->PercentDevicesOverused))
         {
             $devicesOverusedCount = 0;
-            foreach ($this->getDevices() as $device)
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($device->getAverageMonthlyPageCount() > $device->getMasterDevice()->getMaximumMonthlyPageVolume())
+                if ($deviceInstance->getAverageMonthlyPageCount() > $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume())
                 {
                     $devicesOverusedCount++;
                 }
             }
-            $this->PercentDevicesOverused = ($devicesOverusedCount / count($this->getDevices())) * 100;
+            $this->PercentDevicesOverused = ($devicesOverusedCount / count($this->getDevices()->allIncludedDeviceInstances)) * 100;
         }
 
         return $this->PercentDevicesOverused;
@@ -1047,7 +974,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->LeastUsedDevices))
         {
-            $deviceArray = $this->getDevices();
+            $deviceArray = $this->getDevices()->allIncludedDeviceInstances;
             usort($deviceArray, array(
                                      $this,
                                      "ascendingSortDevicesByUsage"
@@ -1107,7 +1034,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->MostUsedDevices))
         {
-            $deviceArray = $this->getDevices();
+            $deviceArray = $this->getDevices()->allIncludedDeviceInstances;
             usort($deviceArray, array(
                                      $this,
                                      "descendingSortDevicesByUsage"
@@ -1130,7 +1057,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->PercentColorDevices))
         {
-            $this->PercentColorDevices = $this->getNumberOfColorCapableDevices() / count($this->getDevices());
+            $this->PercentColorDevices = $this->getNumberOfColorCapableDevices() / count($this->getDevices()->allIncludedDeviceInstances);
         }
 
         return $this->PercentColorDevices;
@@ -1144,11 +1071,11 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->AverageAgeOfDevices))
         {
             $totalAge = 0;
-            foreach ($this->getDevices() as $device)
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                $totalAge += $device->getAge();
+                $totalAge += $deviceInstance->getAge();
             }
-            $this->AverageAgeOfDevices = $totalAge / count($this->getDevices());
+            $this->AverageAgeOfDevices = $totalAge / count($this->getDevices()->allIncludedDeviceInstances);
         }
 
         return $this->AverageAgeOfDevices;
@@ -1161,7 +1088,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->HighPowerConsumptionDevices))
         {
-            $deviceArray = $this->getDevices();
+            $deviceArray = $this->getDevices()->allIncludedDeviceInstances;
             usort($deviceArray, array(
                                      $this,
                                      "ascendingSortDevicesByPowerConsumption"
@@ -1252,11 +1179,11 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         {
             $totalPowerUsage       = 0;
             $devicesReportingPower = 0;
-            foreach ($this->getDevices() as $device)
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($device->getMasterDevice()->WattsPowerNormal > 0)
+                if ($deviceInstance->getMasterDevice()->WattsPowerNormal > 0)
                 {
-                    $totalPowerUsage += $device->getAverageMonthlyPowerConsumption();
+                    $totalPowerUsage += $deviceInstance->getAverageMonthlyPowerConsumption();
                     $devicesReportingPower++;
                 }
             }
@@ -1350,9 +1277,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         {
             $averageAge    = 0;
             $cumulativeAge = 0;
-            foreach ($this->getDevices() as $device)
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                $cumulativeAge += $device->getAge();
+                $cumulativeAge += $deviceInstance->getAge();
             }
             if ($cumulativeAge > 0)
             {
@@ -1572,9 +1499,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->HighRiskDevices))
         {
-            $deviceArraySortedByUsage       = $this->getDevices();
-            $deviceArraySortedByAge         = $this->getDevices();
-            $deviceArraySortedByRiskRanking = $this->getDevices();
+            $deviceArraySortedByUsage       = $this->getDevices()->allIncludedDeviceInstances;
+            $deviceArraySortedByAge         = $this->getDevices()->allIncludedDeviceInstances;
+            $deviceArraySortedByRiskRanking = $this->getDevices()->allIncludedDeviceInstances;
             usort($deviceArraySortedByUsage, array(
                                                   $this,
                                                   "sortDevicesByLifeUsage"
@@ -1585,23 +1512,23 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                                            ));
             // setting the age rank for each device
             $ctr = 1;
-            foreach ($deviceArraySortedByAge as $device)
+            foreach ($deviceArraySortedByAge as $deviceInstance)
             {
-                $device->setAgeRank($ctr);
+                $deviceInstance->setAgeRank($ctr);
                 $ctr++;
             }
 
             // setting the life usage rank for each device
             $ctr = 1;
-            foreach ($deviceArraySortedByAge as $device)
+            foreach ($deviceArraySortedByAge as $deviceInstance)
             {
-                $device->setLifeUsageRank($ctr);
+                $deviceInstance->setLifeUsageRank($ctr);
                 $ctr++;
             }
             // setting the risk ranking based on age and life usage rank
-            foreach ($this->getDevices() as $device)
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                $device->setRiskRank($device->getLifeUsageRank() + $device->getAgeRank());
+                $deviceInstance->setRiskRank($deviceInstance->getLifeUsageRank() + $deviceInstance->getAgeRank());
             }
 
             // sorting devices based on risk ranking
@@ -2485,9 +2412,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->AverageOperatingWatts))
         {
             $totalWatts = 0;
-            foreach ($this->getDevices() as $device)
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                $totalWatts += $device->getMasterDevice()->wattsPowerNormal;
+                $totalWatts += $deviceInstance->getMasterDevice()->wattsPowerNormal;
             }
             $this->AverageOperatingWatts = ($totalWatts > 0) ? $totalWatts / $this->getDeviceCount() : 0;
         }
@@ -3092,11 +3019,11 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->UniqueDeviceList))
         {
             $masterDevices = array();
-            foreach ($this->getDevices() as $device)
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if (!in_array($device->getMasterDevice(), $masterDevices))
+                if (!in_array($deviceInstance->getMasterDevice(), $masterDevices))
                 {
-                    $masterDevices [] = $device->getMasterDevice();
+                    $masterDevices [] = $deviceInstance->getMasterDevice();
                 }
             }
             $this->UniqueDeviceList = $masterDevices;

@@ -105,6 +105,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     protected $_deviceInstanceMasterDevice;
 
+    /**
+     * @var Proposalgen_Model_MasterDevice
+     */
+    protected $_replacementMasterDevice;
+
     /*
      * ********************************************************************************
      * Calculated fields
@@ -300,15 +305,25 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function processOverrides ($report)
     {
+        /**
+         * Process any overrides we have on a master device
+         */
         $masterDevice = $this->getMasterDevice();
         if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
         {
             $this->getMasterDevice()->processOverrides($report);
-//            $replacementMasterDevice = $this->getReplacementMasterDevice();
-//            if ($replacementMasterDevice instanceof Application_Model_MasterDevice)
-//            {
-//                $replacementMasterDevice->processOverrides($report);
-//            }
+        }
+
+        /*
+         * Process any overrides on the replacement master device
+         */
+        if ($this->getIsMappedToMasterDevice() || $this->useUserData)
+        {
+            $replacementMasterDevice = $this->getReplacementMasterDevice();
+            if ($replacementMasterDevice instanceof Proposalgen_Model_MasterDevice)
+            {
+                $replacementMasterDevice->processOverrides($report);
+            }
         }
     }
 
@@ -622,8 +637,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_meters))
         {
-            $meterMapper = Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance();
-            $meters      = $meterMapper->fetchAllForDevice($this->id);
+            $meters = Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance()->fetchAllForDeviceInstance($this->id);
 
             // If we do not have a BLACK meter, then we should try and calculate
             // it
@@ -766,8 +780,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_usage))
         {
-            // Calculate device usage by dividing it's current monthly volume by
-            // its maximum
+            // Calculate device usage by dividing it's current monthly volume by its maximum
             $this->_usage = $this->getAverageMonthlyPageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume();
         }
 
@@ -1146,6 +1159,40 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function getIsMappedToMasterDevice ()
     {
-        return (!$this->useUserData && $this->getDeviceInstanceMasterDevice() instanceof Proposalgen_Model_MasterDevice);
+        return (!$this->useUserData && $this->getDeviceInstanceMasterDevice() instanceof Proposalgen_Model_Device_Instance_Master_Device);
+    }
+
+
+    /**
+     * Gets the replacement master device
+     *
+     * @return Proposalgen_Model_MasterDevice
+     */
+    public function getReplacementMasterDevice ()
+    {
+        if (!isset($this->_replacementMasterDevice))
+        {
+            $deviceInstanceReplacementMasterDevice = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance()->find($this->id);
+            if ($deviceInstanceReplacementMasterDevice)
+            {
+                $this->_replacementMasterDevice = $deviceInstanceReplacementMasterDevice->getMasterDevice();
+            }
+        }
+
+        return $this->_replacementMasterDevice;
+    }
+
+    /**
+     *Sets the replacement master device
+     *
+     * @param Proposalgen_Model_MasterDevice $replacementMasterDevice
+     *
+     * @return \Proposalgen_Model_DeviceInstance
+     */
+    public function setReplacementMasterDevice ($replacementMasterDevice)
+    {
+        $this->_replacementMasterDevice = $replacementMasterDevice;
+
+        return $this;
     }
 }
