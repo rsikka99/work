@@ -1,1 +1,13 @@
 .clearfix{*zoom:1}.clearfix:before,.clearfix:after{display:table;content:"";line-height:0}.clearfix:after{clear:both}.hide-text{font:0/0 a;color:transparent;text-shadow:none;background-color:transparent;border:0}.input-block-level{display:block;width:100%;min-height:30px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}body{background:transparent}html{background-image:url('../img/bg_repeat.png');background-attachment:fixed}#headerLogo{background-image:url('../img/headerLogo.png')}div.wrapper{background-image:url('../img/background-repeat.png');background-repeat:repeat-x}.pageHeader div.headerSpace{height:175px}.pageHeader .breadcrumb{background:transparent;border:0;-webkit-box-shadow:0;-moz-box-shadow:0;box-shadow:0}.pageHeader .breadcrumb li a{color:#FFF;text-shadow:0}.pageHeader .breadcrumb .divider{color:#FFF;text-shadow:0}footer{background-repeat:repeat-x}footer{padding-top:20px;color:#AAA}#footerLinks{text-align:right}div.innerWrapper{width:1100px;min-height:943px;padding-top:5px;margin:auto;background-image:url('../img/body-repeat.png');background-repeat:repeat-y}header.pageHeader{background-image:url('../img/header.png');background-repeat:no-repeat;height:207px;width:1100px;margin:auto}#authContent{margin-top:81px}header.authHeader{background-repeat:no-repeat;background-color:#218abd;background-image:-moz-linear-gradient(top,#1796d3,#2f789c);background-image:-webkit-gradient(linear,0 0,0 100%,from(#1796d3),to(#2f789c));background-image:-webkit-linear-gradient(top,#1796d3,#2f789c);background-image:-o-linear-gradient(top,#1796d3,#2f789c);background-image:linear-gradient(to bottom,#1796d3,#2f789c);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff1796d3',endColorstr='#ff2f789c',GradientType=0);height:30px;-webkit-border-radius:5px 5px 0 0;-moz-border-radius:5px 5px 0 0;border-radius:5px 5px 0 0}#authContent .well{-webkit-border-radius:0 0 5px 5px;-moz-border-radius:0 0 5px 5px;border-radius:0 0 5px 5px}#authContent{width:600px}
+.summaryReport td {
+    padding: 3px;
+    border: #000000 solid 1px;
+}
+table.summaryReport {
+    border-collapse: collapse;
+    width: 100%;
+}
+.summaryReport th{
+    background-color: #ACC7D3;
+    border: #000000 solid 1px;
+}

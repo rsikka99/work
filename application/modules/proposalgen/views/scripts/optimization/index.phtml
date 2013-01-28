@@ -1,0 +1,52 @@
+<h1> <?php echo $this->title; ?> </h1>
+<em> Optimization page allows you to customize your hardware after your report has been generated.</em>
+<br/> <br/>
+<!-- Begin target cost per page table -->
+<h3>Target Cost Per Page: </h3>
+<table>
+    <tbody>
+        <tr>
+            <td><strong>Monochrome: </strong><?php echo $this->currency(0.0150, array('precision' => 4));?> </td>
+            <td><strong>Color: </strong><?php echo $this->currency(0.0800, array('precision' => 4));?> </td>
+            <td><strong>Total Revenue: </strong><?php echo  $this->currency(908.65);?> </td>
+        </tr>
+    </tbody>
+</table>
+<!-- End target cost per page table -->
+<br />
+<!-- Begin Optimization Summary table -->
+<table class='summaryReport'>
+    <thead>
+        <tr class='header'>
+            <th></th>
+            <th>Mono CPP</th>
+            <th>Color CPP</th>
+            <th>Total Cost</th>
+            <th>Margin $</th>
+            <th>Margin %</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td> Current </td>
+            <td><?php echo $this->currency(0.0136, array('precision' => 4));?></td>
+            <td><?php echo $this->currency(0.0855, array('precision' => 4));?></td>
+            <td><?php echo $this->currency(825.02);?></td>
+            <td><?php echo $this->currency(83.53);?></td>
+            <td><?php echo number_format(9.19);?>%</td>
+        </tr>
+        <tr>
+            <td> Optimized </td>
+            <td><?php echo $this->currency(0.0136, array('precision' => 4));?></td>
+            <td><?php echo $this->currency(0.0855, array('precision' => 4));?></td>
+            <td><?php echo $this->currency(825.02);?></td>
+            <td><?php echo $this->currency(83.53);?></td>
+            <td><?php echo number_format(9.19);?>%</td>
+        </tr>
+    </tbody>
+</table>
+<!-- End Optimization Summary table -->
+<em> * Note: Cost per page in the table above are the weighted average for the fleet. </em>
+<br/><br/>
+<h3> Proposal Device</h3>
+<em>The following x out x devices are eligible for potential optimization.</em>

@@ -6,6 +6,7 @@ class Proposalgen_Model_Report_Step extends My_Model_Abstract
     const STEP_FLEETDATA_MAPDEVICES = 'mapdevices';
     const STEP_FLEETDATA_SUMMARY    = 'summary';
     const STEP_REPORTSETTINGS       = 'reportsettings';
+    const STEP_OPTIMIZATION         = 'optimization';
     const STEP_FINISHED             = 'finished';
     const GROUP_SURVEY              = 'Survey';
     const GROUP_FLEETDATA           = 'Fleet Data';
