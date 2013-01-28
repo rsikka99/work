@@ -1121,7 +1121,14 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             }
             else
             {
-                // FIXME: Get master device from rms upload row
+                if ($this->useUserData && $this->getRmsUploadRow()->hasCompleteInformation)
+                {
+                    $this->_masterDevice = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance()->convertUploadRowToMasterDevice($this->getRmsUploadRow());
+                }
+                else
+                {
+                    $this->_masterDevice = false;
+                }
             }
         }
 

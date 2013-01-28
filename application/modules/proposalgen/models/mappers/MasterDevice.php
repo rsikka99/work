@@ -312,4 +312,32 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
 
         return $this->fetchAll($whereClause);
     }
+
+    /**
+     * Returns results from a custom query that combines manufacturer and master device tables.
+     * It returns a list of devices that match (like statement) the search terms that have been passed.
+     * You can search by manufacturer name (manufacturers table), model name (master_device table) an
+     * or both.
+     *
+     * @param $searchTerms
+     *
+     * @return array
+     */
+    public function searchByName ($searchTerms)
+    {
+        $returnLimit = 10;
+        $sortOrder   = 'device_name ASC';
+
+        $db     = Zend_Db_Table::getDefaultAdapter();
+        $select = $db->select();
+        $select->from(array("md" => "pgen_master_devices"), array('modelName', 'id'))
+            ->joinLeft(array("m" => "manufacturers"), 'm.id = md.manufacturerId', array("fullname", "device_name" => new Zend_Db_Expr("concat(fullname,' ', modelName)")))
+            ->where("concat(fullname,' ', modelName) LIKE ? AND m.isDeleted = 0")
+            ->limit($returnLimit)
+            ->order($sortOrder);
+        $stmt   = $db->query($select, $searchTerms);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
 }
