@@ -11,6 +11,7 @@ class Proposalgen_Report_AssessmentController extends Proposalgen_Library_Contro
     public function indexAction ()
     {
         $this->initReportList();
+        $this->initHtmlReport();
 
         $this->view->availableReports->Assessment->active = true;
 

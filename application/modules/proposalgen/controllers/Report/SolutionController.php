@@ -11,11 +11,12 @@ class Proposalgen_Report_SolutionController extends Proposalgen_Library_Controll
     public function indexAction ()
     {
         $this->initReportList();
+        $this->initHtmlReport();
 
         $this->view->availableReports->Solution->active = true;
 
         $this->view->formats = array(
-            "/proposalgen/solution/generate/format/docx" => $this->wordFormat
+            "/proposalgen/solution/generate/format/docx" => $this->_wordFormat
         );
 
         try
