@@ -39,7 +39,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     /**
      * The current proposal
      *
-     * @var Application_Model_Proposal_OfficeDepot
+     * @var Proposalgen_Model_Proposal_OfficeDepot
      */
     protected $_proposal;
     protected $_csvFormat;

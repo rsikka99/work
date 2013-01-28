@@ -128,33 +128,40 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
             // validate fields
             if ($formData ["manufacturer_id"] == 0)
             {
-                $repop_form          = 1;
-                $this->view->message = 'Error: You must select a manufacturer.';
+                $this->_helper->flashMessenger(array (
+                                                     'error' => 'You must select a manufacturer.'
+                                               ));
             }
             else if ($form_mode == "edit" && $formData ["printer_model"] == 0)
             {
-                $repop_form          = 1;
-                $this->view->message = 'Error: You must select a printer model.';
+                $this->_helper->flashMessenger(array (
+                                                     'error' => 'You must select a printer model.'
+                                               ));
             }
             else if ($form_mode == "add" && trim($formData ["new_printer"]) == "")
             {
-                $repop_form          = 1;
-                $this->view->message = 'Error: You must enter a printer model name.';
+                $this->_helper->flashMessenger(array (
+                                                     'error' => 'You must enter a printer model name.'
+                                               ));
             }
             else if ($formData ["toner_config_id"] == 0)
             {
-                $repop_form          = 1;
-                $this->view->message = 'Error: Toner Config not selected. Please try again.';
+                $this->_helper->flashMessenger(array (
+                                                     'error' => 'Toner Config not selected. Please try again.'
+                                               ));
             }
             else if ($formData ["watts_power_normal"] < 1)
             {
-                $repop_form          = 1;
-                $this->view->message = 'Error: Power Consumption Normal must be greater then zero.';
+                $this->_helper->flashMessenger(array (
+                                                     'error' => 'Power Consumption Normal must be greater then zero.'
+                                               ));
             }
             else if ($formData ["watts_power_idle"] < 1)
             {
-                $repop_form          = 1;
-                $this->view->message = 'Error: Power Consumption Idle must be greater then zero.';
+                $this->_helper->flashMessenger(array (
+                                                     'error' => 'Power Consumption Idle must be greater then zero.'
+                                               ));
+
             }
             else
             {
@@ -446,7 +453,9 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
 
                                 $repop_form                = 1;
                                 $this->view->printer_model = $master_device_id;
-                                $this->view->message       = 'Device "' . $printer_model . '" has been updated.';
+                                $this->_helper->flashMessenger(array (
+                                                                     'success' => 'Device "' . $printer_model . '" has been updated.'
+                                                               ));
                                 $isPrintModelSet           = true;
 
                                 // set selected printer model to new printer model
@@ -470,7 +479,9 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                     {
                                         $master_device_id = $master_device_flagged ['id'];
 //                                        $where               = $master_deviceTable->getAdapter()->quoteInto('master_device_id = ?' . $master_device_id, 'INTEGER');
-                                        $this->view->message = "The printer you're trying to add already exists.";
+                                        $this->_helper->flashMessenger(array (
+                                                                             'error' => "The printer you're trying to add already exists."
+                                                                       ));
 
                                     }
                                     else
@@ -481,7 +492,9 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                         // Get the current date for the devices date created.
                                         $masterDevice->dateCreated = $date;
                                         $master_device_id          = Proposalgen_Model_Mapper_MasterDevice::getInstance()->insert($masterDevice);
-                                        $this->view->message       = 'Printer "' . $formData ["new_printer"] . '" has been saved.';
+                                        $this->_helper->flashMessenger(array (
+                                                                             'success' => 'Printer "' . $formData ["new_printer"] . '" has been saved.'
+                                                                       ));
                                         if ($has_toner)
                                         {
                                             // For each toner attempt to see if current configuration exists. If not, add an entry in the deviceToner table
@@ -515,7 +528,9 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                 }
                                 else
                                 {
-                                    $this->view->message = 'Error: No manufacturer has been selected.';
+                                    $this->_helper->flashMessenger(array (
+                                                                         'error' => 'Error: No manufacturer has been selected.'
+                                                                   ));
                                 }
                             }
                             $db->commit();
@@ -526,13 +541,17 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                             $db->rollback();
                             $repop_form                = 1;
                             $this->view->printer_model = $formData ['printer_model'];
-                            $this->view->message       = $toner_errors;
+                            $this->_helper->flashMessenger(array (
+                                                                 'error' => $toner_errors
+                                                           ));
                         }
                     }
                     catch (Zend_Db_Exception $e)
                     {
                         $db->rollback();
-                        $this->view->message = 'Database Error: "' . $formData ["new_printer"] . '" could not be saved. Make sure the printer does not already exist.<br />';
+                        $this->_helper->flashMessenger(array (
+                                                             'error' => 'Database Error: "' . $formData ["new_printer"] . '" could not be saved. Make sure the printer does not already exist.'
+                                                       ));
                         Throw new exception("Critical Device Update Error.", 0, $e);
                     }
                     catch (Exception $e)
@@ -568,9 +587,10 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
 
                             if (count($replacement_devices) > 0)
                             {
-                                // RETURN WARNING
                                 $db->rollback();
-                                $this->view->message = "This printer is currently configured as a replacement printer. Please remove it as a replacement printer and try again.<br />";
+                                $this->_helper->flashMessenger(array (
+                                                                     'warning' => "This printer is currently configured as a replacement printer. Please remove it as a replacement printer and try again."
+                                                               ));
                             }
                             else
                             {
@@ -586,19 +606,25 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                 $db->commit();
                                 $form_mode                 = 'delete';
                                 $this->view->printer_model = 0;
-                                $this->view->message       = "Printer " . $printer_model . " has been deleted.";
+                                $this->_helper->flashMessenger(array (
+                                                                     'success' => "Printer " . $printer_model . " has been deleted."
+                                                               ));
                             }
                         }
                         else
                         {
                             $db->rollback();
-                            $this->view->message = "No printer was selected. Please select a printer and try again.<br />";
+                            $this->_helper->flashMessenger(array (
+                                                                 'error' => "No printer was selected. Please select a printer and try again."
+                                                           ));
                         }
                     }
                     catch (Exception $e)
                     {
                         $db->rollback();
-                        $this->view->message = "There was an error and the printer was not deleted.<br />"; // .
+                        $this->_helper->flashMessenger(array (
+                                                             'error' => "There was an error and the printer was not deleted."
+                                                       ));
                     }
                 }
             }
@@ -853,27 +879,37 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                 if ($formData ["manufacturer_id"] == 0)
                 {
                     $repop_form          = 1;
-                    $this->view->message = 'Error: You must select a manufacturer.';
+                    $this->_helper->flashMessenger(array (
+                                                         'error' => 'Error: You must select a manufacturer.'
+                                                   ));
                 }
                 else if (trim($formData ["new_printer"]) == "")
                 {
                     $repop_form          = 1;
-                    $this->view->message = 'Error: You must enter a printer model name.';
+                    $this->_helper->flashMessenger(array (
+                                                         'error' => 'Error: You must enter a printer model name.'
+                                                   ));
                 }
                 else if ($formData ["toner_config_id"] == 0)
                 {
                     $repop_form          = 1;
-                    $this->view->message = 'Error: Toner Config not selected. Please try again.';
+                    $this->_helper->flashMessenger(array (
+                                                         'error' => 'Error: Toner Config not selected. Please try again.'
+                                                   ));
                 }
                 else if ($formData ["watts_power_normal"] < 1)
                 {
                     $repop_form          = 1;
-                    $this->view->message = 'Error: Power Consumption Normal must be greater then zero.';
+                    $this->_helper->flashMessenger(array (
+                                                         'error' => 'Error: Power Consumption Normal must be greater then zero.'
+                                                   ));
                 }
                 else if ($formData ["watts_power_idle"] < 1)
                 {
                     $repop_form          = 1;
-                    $this->view->message = 'Error: Power Consumption Idle must be greater then zero.';
+                    $this->_helper->flashMessenger(array (
+                                                         'error' => 'Error: Power Consumption Idle must be greater then zero.'
+                                                   ));
                 }
                 else
                 {
@@ -1158,7 +1194,10 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                     }
                                     $repop_form                = 1;
                                     $this->view->printer_model = $master_device_id;
-                                    $this->view->message       = 'Device "' . $printer_model . '" has been updated.';
+                                    $this->_helper->flashMessenger(array (
+                                                                         'success' => 'Device "' . $printer_model . '" has been updated.'
+                                                                   ));
+
                                     // Set selected printer model to new printer model
                                     $this->view->printer_model = $master_device_id;
                                 }
@@ -1183,12 +1222,16 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                         {
                                             $master_device_id    = $master_device_flagged ['id'];
                                             $where               = $master_deviceTable->getAdapter()->quoteInto('id = ?' . $master_device_id, 'INTEGER');
-                                            $this->view->message = "The printer you're trying to add already exists.";
+                                            $this->_helper->flashMessenger(array (
+                                                                                 'error' => "The printer you're trying to add already exists."
+                                                                           ));
                                         }
                                         else
                                         {
                                             $master_device_id    = $master_deviceTable->insert($master_deviceData);
-                                            $this->view->message = 'Printer "' . $formData ["new_printer"] . '" has been saved.';
+                                            $this->_helper->flashMessenger(array (
+                                                                                 'success' => 'Printer "' . $formData ["new_printer"] . '" has been saved.'
+                                                                           ));
 
                                             // save toners
                                             if ($has_toner)
@@ -1237,7 +1280,9 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                     }
                                     else
                                     {
-                                        $this->view->message = 'Error: No manufacturer has been selected.';
+                                        $this->_helper->flashMessenger(array (
+                                                                             'error' => 'Error: No manufacturer has been selected.'
+                                                                       ));
                                     }
                                 }
                                 $db->commit();
@@ -1247,13 +1292,17 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                 // invalid toners - return message
                                 $db->rollback();
                                 $repop_form          = 1;
-                                $this->view->message = $toner_errors;
+                                $this->_helper->flashMessenger(array (
+                                                                     'error' => $toner_errors
+                                                               ));
                             }
                         }
                         catch (Zend_Db_Exception $e)
                         {
                             $db->rollback();
-                            $this->view->message = 'Database Error: "' . $formData ["new_printer"] . '" could not be saved. Make sure the printer does not already exist.<br />';
+                            $this->_helper->flashMessenger(array (
+                                                                 'error' => 'Database Error: "' . $formData ["new_printer"] . '" could not be saved. Make sure the printer does not already exist'
+                                                           ));
                             //echo $e; die;
                         }
                         catch (Exception $e)
@@ -1586,27 +1635,37 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                 if ($formData ["manufacturer_id"] == 0)
                 {
                     $repop_form          = 1;
-                    $this->view->message = 'Error: You must select a manufacturer.';
+                    $this->_helper->flashMessenger(array (
+                                                         'error' => 'Error: You must select a manufacturer.'
+                                                   ));
                 }
                 else if (trim($formData ["new_printer"]) == "")
                 {
                     $repop_form          = 1;
-                    $this->view->message = 'Error: You must enter a printer model name.';
+                    $this->_helper->flashMessenger(array (
+                                                         'error' => 'Error: You must enter a printer model name.'
+                                                   ));
                 }
                 else if ($formData ["toner_config_id"] == 0)
                 {
                     $repop_form          = 1;
-                    $this->view->message = 'Error: Toner Config not selected. Please try again.';
+                    $this->_helper->flashMessenger(array (
+                                                         'error' => 'Error: Toner Config not selected. Please try again.'
+                                                   ));
                 }
                 else if ($formData ["watts_power_normal"] < 1)
                 {
                     $repop_form          = 1;
-                    $this->view->message = 'Error: Power Consumption Normal must be greater then zero.';
+                    $this->_helper->flashMessenger(array (
+                                                         'error' => 'Error: Power Consumption Normal must be greater then zero.'
+                                                   ));
                 }
                 else if ($formData ["watts_power_idle"] < 1)
                 {
                     $repop_form          = 1;
-                    $this->view->message = 'Error: Power Consumption Idle must be greater then zero.';
+                    $this->_helper->flashMessenger(array (
+                                                         'error' => 'Error: Power Consumption Idle must be greater then zero.'
+                                                   ));
                 }
                 else
                 {
@@ -1900,7 +1959,9 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                     }
                                     $repop_form                = 1;
                                     $this->view->printer_model = $master_device_id;
-                                    $this->view->message       = 'Device "' . $printer_model . '" has been updated.';
+                                    $this->_helper->flashMessenger(array (
+                                                                         'error' => 'Device "' . $printer_model . '" has been updated.'
+                                                                   ));
 
                                     // set selected printer model to new printer
                                     // model
@@ -1926,12 +1987,16 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                         {
                                             $master_device_id    = $master_device_flagged ['master_device_id'];
                                             $where               = $master_deviceTable->getAdapter()->quoteInto('master_device_id = ?' . $master_device_id, 'INTEGER');
-                                            $this->view->message = "The printer you're trying to add already exists.";
+                                            $this->_helper->flashMessenger(array (
+                                                                                 'error' => "The printer you're trying to add already exists."
+                                                                           ));
                                         }
                                         else
                                         {
                                             $master_device_id    = $master_deviceTable->insert($master_deviceData);
-                                            $this->view->message = 'Printer "' . $formData ["new_printer"] . '" has been saved.';
+                                            $this->_helper->flashMessenger(array (
+                                                                                 'success' => 'Printer "' . $formData ["new_printer"] . '" has been saved.'
+                                                                           ));
 
                                             // save toners
                                             if ($has_toner)
@@ -2003,7 +2068,9 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                     }
                                     else
                                     {
-                                        $this->view->message = 'Error: No manufacturer has been selected.';
+                                        $this->_helper->flashMessenger(array (
+                                                                             'error' => 'No manufacturer has been selected.'
+                                                                       ));
                                     }
                                 }
                                 $db->commit();
@@ -2013,13 +2080,17 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                 // invalid toners - return message
                                 $db->rollback();
                                 $repop_form          = 1;
-                                $this->view->message = $toner_errors;
+                                $this->_helper->flashMessenger(array (
+                                                                     'error' => $toner_errors
+                                                               ));
                             }
                         }
                         catch (Zend_Db_Exception $e)
                         {
                             $db->rollback();
-                            $this->view->message = 'Database Error: "' . $formData ["new_printer"] . '" could not be saved. Make sure the printer does not already exist.<br />';
+                            $this->_helper->flashMessenger(array (
+                                                                 'error' => 'Database Error: "' . $formData ["new_printer"] . '" could not be saved. Make sure the printer does not already exist'
+                                                           ));
                             //echo $e; die;
                         }
                         catch (Exception $e)

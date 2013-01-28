@@ -114,6 +114,26 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
     public $grossMarginPricingConfigId;
 
     /**
+     * Cost delta is used withing optimization report for a minimum savings
+     *
+     * @var int
+     */
+    public $costThreshold;
+
+    /**
+     * Target Monochrome is the desired cost per page looking to obtain for the fleet
+     *
+     * @var int
+     */
+    public $targetMonochrome;
+
+    /**
+     *  Target Color is the desired cost per page looking to obtain for the fleet
+     *
+     * @var int
+     */
+    public $targetColor;
+    /**
      * The assessment pricing configuration
      *
      * @var Proposalgen_Model_PricingConfig
@@ -233,6 +253,20 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
             $this->grossMarginPricingConfigId = $params->grossMarginPricingConfigId;
         }
 
+        if (isset($params->costThreshold) && !is_null($params->costThreshold))
+        {
+            $this->costThreshold = $params->costThreshold;
+        }
+
+        if (isset($params->targetMonochrome) && !is_null($params->targetMonochrome))
+        {
+            $this->targetMonochrome = $params->targetMonochrome;
+        }
+
+        if (isset($params->targetColor) && !is_null($params->targetColor))
+        {
+            $this->targetColor = $params->targetColor;
+        }
     }
 
     /**
@@ -257,6 +291,9 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
             "kilowattsPerHour"           => $this->kilowattsPerHour,
             "assessmentPricingConfigId"  => $this->assessmentPricingConfigId,
             "grossMarginPricingConfigId" => $this->grossMarginPricingConfigId,
+            "costThreshold"              => $this->costThreshold,
+            "targetMonochrome"           => $this->targetMonochrome,
+            "targetColor"                => $this->targetColor,
         );
     }
 
@@ -265,7 +302,8 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      *
      * @return Proposalgen_Model_PricingConfig
      */
-    public function getAssessmentPricingConfig ()
+    public
+    function getAssessmentPricingConfig ()
     {
         if (!isset($this->_assessmentPricingConfig))
         {
@@ -283,7 +321,8 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      *
      * @return \Proposalgen_Model_Report_Setting
      */
-    public function setAssessmentPricingConfig ($AssessmentPricingConfig)
+    public
+    function setAssessmentPricingConfig ($AssessmentPricingConfig)
     {
         $this->_assessmentPricingConfig = $AssessmentPricingConfig;
 
@@ -295,7 +334,8 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      *
      * @return Proposalgen_Model_PricingConfig
      */
-    public function getGrossMarginPricingConfig ()
+    public
+    function getGrossMarginPricingConfig ()
     {
         if (!isset($this->_grossMarginPricingConfig))
         {
@@ -313,7 +353,8 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      *
      * @return \Proposalgen_Model_Report_Setting
      */
-    public function setGrossMarginPricingConfig ($GrossMarginPricingConfig)
+    public
+    function setGrossMarginPricingConfig ($GrossMarginPricingConfig)
     {
         $this->_grossMarginPricingConfig = $GrossMarginPricingConfig;
 

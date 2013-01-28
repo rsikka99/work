@@ -28,6 +28,7 @@ $(function ()
                     name    : 'isMapped',
                     index   : 'isMapped',
                     label   : 'Is Mapped',
+                    hidden : true,
                     title   : false,
                     sortable: false,
                     align   : 'center'
@@ -61,7 +62,7 @@ $(function ()
                     sorttype: 'int'
                 },
                 {
-                    width   : 200,
+                    width   : 150,
                     name    : 'manufacturer',
                     index   : 'manufacturer',
                     label   : 'Device Manufacturer',
@@ -69,7 +70,7 @@ $(function ()
                     sortable: true
                 },
                 {
-                    width   : 200,
+                    width   : 150,
                     name    : 'modelName',
                     index   : 'modleName',
                     label   : 'Device Name',
@@ -81,7 +82,7 @@ $(function ()
                     name    : 'masterDeviceId',
                     index   : 'masterDeviceId',
                     label   : 'Mapped To ID',
-                    hidden  : false,
+                    hidden  : true,
                     sortable: true
                 },
                 {
@@ -89,7 +90,7 @@ $(function ()
                     name    : 'mappedModelName',
                     index   : 'mappedModelName',
                     label   : 'Mapped Model Name',
-                    hidden  : false,
+                    hidden  : true,
                     sortable: false
                 },
                 {
@@ -97,31 +98,22 @@ $(function ()
                     name    : 'mappedManufacturer',
                     index   : 'mappedManufacturer',
                     label   : 'Mapped Manufacturer',
-                    hidden  : false,
+                    hidden  : true,
                     sortable: false
                 },
                 {
                     width   : 250,
-                    name    : 'master_device_id',
-                    index   : 'master_device_id',
+                    name    : 'mapToMasterDevice',
+                    index   : 'mapToMasterDevice',
                     label   : 'Master Printer Name',
                     sortable: false,
                     align   : 'center'
                 },
                 {
                     width   : 10,
-                    name    : 'is_added',
-                    index   : 'is_added',
-                    label   : 'Is Added',
-                    hidden  : true,
-                    title   : false,
-                    sortable: false
-                },
-                {
-                    width   : 10,
-                    name    : 'is_leased',
-                    index   : 'is_leased',
-                    label   : 'Is Leased',
+                    name    : 'useUserData',
+                    index   : 'useUserData',
+                    label   : 'Using User Data',
                     hidden  : true,
                     title   : false,
                     sortable: false
@@ -159,25 +151,24 @@ $(function ()
                     // This is what toggles the 'master printer
                     // name' field between the auto complete text
                     // box and the 'Click to Remove' text
-                    if (row.is_added == 'true')
+                    if (row.useUserData == 1)
                     {
                         // Display message instead of dropdown
-                        row.master_device_id = '&nbsp;New Printer Added (<a href="javascript: void(0);" onclick="javascript: remove_device(' + row.id + ');">Click to Remove</a>)';
-                        row.action = '<input style="width:35px;" title="Edit Printer"    type="button" onclick="javascript: add_device(' + row.id + ');" value="Edit" />';
+                        row.mapToMasterDevice = '&nbsp;New Printer Added (<a href="javascript: void(0);" onclick="javascript: remove_device(' + row.deviceInstanceIds + ');">Click to Remove</a>)';
+                        row.action = '<input style="width:35px;" title="Edit Printer"    type="button" onclick="javascript: add_device(' + row.deviceInstanceIds + ');" value="Edit" />';
 
                     }
                     else
                     {
-                        master_device_dropdown = '';
-                        master_device_dropdown += '<input type="hidden" name="hdnDevicesPfId' + row.id + '" id="hdnDevicesPfId' + row.id + '" class="devicesPfId" value="' + row.id + '" />';
-                        master_device_dropdown += '<input type="hidden" name="hdnMasterDevicesValue' + row.id + '" id="hdnMasterDevicesValue' + row.id + '" class="masterDeviceId" value="' + row.mapped_to_id + '" />';
-                        master_device_dropdown += '<input type="hidden" name="hdnMasterDevicesText' + row.id + '" id="hdnMasterDevicesText' + row.id + '" class="masterDeviceName" value="' + row.mapped_to_modelname + '" />';
-                        master_device_dropdown += '<input type="hidden" name="hdnMasterDevicesManufacturer' + row.id + '" id="hdnMasterDevicesManufacturer' + row.id + '" class="manufacturerName" value="' + row.mapped_to_manufacturer + '" />';
-                        master_device_dropdown += '<input type="text" name="txtMasterDevices' + row.id + '" id="txtMasterDevices' + row.id + '" size="50" class="autoCompleteDeviceName" value="' + row.mapped_to_manufacturer + ' '
-                            + row.mapped_to_modelname + '" />';
+                        var master_device_dropdown = '';
+                        master_device_dropdown += '<input type="hidden" name="deviceInstanceIds" id="deviceInstanceIds" value="' + row.deviceInstanceIds + '" />';
+                        master_device_dropdown += '<input type="hidden" name="" id="" value="' + row.masterDeviceId + '" />';
+                        master_device_dropdown += '<input type="hidden" name="" id="" value="' + row.mappedModelName + '" />';
+                        master_device_dropdown += '<input type="hidden" name="" id="" value="' + row.mappedManufacturer + '" />';
+                        master_device_dropdown += '<input type="text"   name="" id="" style="width: 97%" class="autoCompleteDeviceName" value="' + row.mappedManufacturer + ' ' + row.mappedModelName + '" />';
 
-                        row.master_device_id = master_device_dropdown;
-                        row.action = '<input style="width:35px;" title="Add New Printer" type="button" onclick="javascript: add_device(' + row.id + ');" value="Add" />';
+                        row.mapToMasterDevice = master_device_dropdown;
+                        row.action = '<input style="width:35px;" title="Add New Printer" type="button" onclick="javascript: add_device(' + row.deviceInstanceIds + ');" value="Add" />';
                     }
 
                     // Put our new data back into the grid
@@ -188,7 +179,7 @@ $(function ()
                         source   : function (request, response)
                         {
                             $.ajax({
-                                url     : TMTW_BASEURL + "data/getmodels",
+                                url     : TMTW_BASEURL + "proposalgen/fleet/getmodels",
                                 dataType: "json",
                                 data    : {
                                     searchText: request.term

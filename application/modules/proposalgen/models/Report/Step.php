@@ -12,6 +12,7 @@ class Proposalgen_Model_Report_Step extends My_Model_Abstract
     const STEP_FLEETDATA_MAPDEVICES = 'mapdevices';
     const STEP_FLEETDATA_SUMMARY    = 'summary';
     const STEP_REPORTSETTINGS       = 'reportsettings';
+    const STEP_OPTIMIZATION         = 'optimizaiton';
     const STEP_FINISHED             = 'finished';
     const GROUP_SURVEY              = 'Survey';
     const GROUP_FLEETDATA           = 'Fleet Data';
@@ -88,6 +89,12 @@ class Proposalgen_Model_Report_Step extends My_Model_Abstract
             'group'      => null,
             'controller' => 'fleet',
             'action'     => 'reportsettings'
+        ),
+        self::STEP_OPTIMIZATION       => array(
+            'name'       => 'Optimization',
+            'group'      => null,
+            'controller' => 'optimization',
+            'action'     => 'index'
         ),
         self::STEP_FINISHED             => array(
             'name'       => 'Reports',

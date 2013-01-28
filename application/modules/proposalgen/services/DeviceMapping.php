@@ -16,6 +16,11 @@ class Proposalgen_Service_DeviceMapping
      */
     protected $_nameBasedMappingService;
 
+    /**
+     * @var Proposalgen_Model_Mapper_Device_Instance_Master_Device
+     */
+    protected $_deviceInstanceMasterDeviceMapper;
+
 
     /**
      * The default constructor. Initializes the various mapping services
@@ -25,6 +30,7 @@ class Proposalgen_Service_DeviceMapping
         $this->_userMatchupBasedMappingService   = new Proposalgen_Service_DeviceMapping_UserMatchup();
         $this->_masterMatchupBasedMappingService = new Proposalgen_Service_DeviceMapping_MasterMatchup();
         $this->_nameBasedMappingService          = new Proposalgen_Service_DeviceMapping_NameBased();
+        $this->_deviceInstanceMasterDeviceMapper = Proposalgen_Model_Mapper_Device_Instance_Master_Device::getInstance();
     }
 
     /**
@@ -66,7 +72,7 @@ class Proposalgen_Service_DeviceMapping
      */
     protected function _mapIt (Proposalgen_Model_DeviceInstance $deviceInstance, $userId, $useNameBasedMapping)
     {
-        $isMapped = false;
+        $mapDeviceToMasterDeviceId = false;
         $deviceInstance->id;
         $rmsUploadRow = $deviceInstance->getRmsUploadRow();
 
@@ -75,22 +81,46 @@ class Proposalgen_Service_DeviceMapping
         if ($hasRmsModelId)
         {
             // User Based
-            $isMapped = $this->_userMatchupBasedMappingService->mapIt($deviceInstance, $userId);
+            $mapDeviceToMasterDeviceId = $this->_userMatchupBasedMappingService->mapIt($deviceInstance, $userId);
 
 
-            if (!$isMapped)
+            if (!$mapDeviceToMasterDeviceId)
             {
                 // Master Based
-                $isMapped = $this->_masterMatchupBasedMappingService->mapIt($deviceInstance);
+                $mapDeviceToMasterDeviceId = $this->_masterMatchupBasedMappingService->mapIt($deviceInstance);
             }
         }
 
-        if (!$isMapped && $useNameBasedMapping)
+        if (!$mapDeviceToMasterDeviceId && $useNameBasedMapping)
         {
             // Named based
-            $isMapped = $this->_nameBasedMappingService->mapIt($deviceInstance);
+            $mapDeviceToMasterDeviceId = $this->_nameBasedMappingService->mapIt($deviceInstance);
         }
 
-        return $isMapped;
+        if (!$mapDeviceToMasterDeviceId)
+        {
+            $this->_mapDeviceToMasterDevice($deviceInstance, $mapDeviceToMasterDeviceId);
+        }
+
+        return $mapDeviceToMasterDeviceId;
+    }
+
+    /**
+     * Maps a device instance to a master device
+     *
+     * @param Proposalgen_Model_DeviceInstance $deviceInstance The device instance
+     * @param int                              $masterDeviceId The id of the master device
+     *
+     * @return int
+     */
+    protected function _mapDeviceToMasterDevice ($deviceInstance, $masterDeviceId)
+    {
+        $deviceInstanceMasterDevice                   = new Proposalgen_Model_Device_Instance_Master_Device();
+        $deviceInstanceMasterDevice->deviceInstanceId = $deviceInstance->id;
+        $deviceInstanceMasterDevice->masterDeviceId   = $masterDevice->id;
+
+        $result = $this->_deviceInstanceMasterDeviceMapper->insert($deviceInstanceMasterDevice);
+
+        return $result;
     }
 }

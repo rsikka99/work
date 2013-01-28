@@ -4078,31 +4078,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
         $this->view->default_price   = 1000;
         $this->view->default_service = 0.0035;
-        // get master company default prices
-//        $dealer_companyTable = new Proposalgen_Model_DbTable_DealerCompany();
-//        $where               = $dealer_companyTable->getAdapter()->quoteInto('dealer_company_id = ?', 1, 'INTEGER');
-//        $dealer_company      = $dealer_companyTable->fetchRow($where);
-//        if (count($dealer_company) > 0)
-//        {
-//            $this->view->default_price   = money_format('%i', $dealer_company ['dc_default_printer_cost']);
-//            $this->view->default_service = money_format('%.4n', $dealer_company ['dc_service_cost_per_page']);
-//        }
-//
-//        // override master prices if dealers exist
-//        $dealer_companyTable = new Proposalgen_Model_DbTable_DealerCompany();
-//        $where               = $dealer_companyTable->getAdapter()->quoteInto('dealer_company_id = ?', $this->dealer_company_id, 'INTEGER');
-//        $dealer_company      = $dealer_companyTable->fetchRow($where);
-//        if (count($dealer_company) > 0)
-//        {
-//            if ($dealer_company ['dc_default_printer_cost'])
-//            {
-//                $this->view->default_price = money_format('%i', $dealer_company ['dc_default_printer_cost']);
-//            }
-//            if ($dealer_company ['dc_service_cost_per_page'])
-//            {
-//                $this->view->default_parts = money_format('%.4n', $dealer_company ['dc_service_cost_per_page']);
-//            }
-//        }
 
         if ($this->_request->isPost())
         {
@@ -4307,42 +4282,16 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         Zend_Session::start();
         $this->view->title = "Import & Export Pricing";
         $db                = Zend_Db_Table::getDefaultAdapter();
-        $columns_session   = new Zend_Session_Namespace('import_headers_array');
-        $results_session   = new Zend_Session_Namespace('import_results_array');
-        $headers           = $columns_session;
-        $results           = $results_session;
-        // fill companies
-        //$dealer_companyTable = new Proposalgen_Model_DbTable_DealerCompany();
-        //$dealer_companies = $dealer_companyTable->fetchAll('is_deleted = false', 'company_name');
-        //$this->view->company_list = $dealer_companies;
-
-        // find company name
-//        $this->view->company_filter = $this->dealer_company_id;
-//        $where = $dealer_companyTable->getAdapter()->quoteInto('dealer_company_id = ?', $this->dealer_company_id, 'INTEGER');
-//        $dealer_company = $dealer_companyTable->fetchRow($where);
-//        if (count($dealer_company) > 0)
-//        {
-//            $this->view->company_name = $dealer_company ['company_name'];
-//        }
+        $headers           = array();
+        $results           = array();
 
         if ($this->_request->isPost())
         {
             $formData = $this->_request->getPost();
-
-            // get company
-            //if (isset($formData ['company_filter']))
-            //{
-            //    $company = $formData ['company_filter'];
-            //}
-//            else
-//            {
-//                $company = $this->dealer_company_id;
-//            }
-            // for OD default to always master
             $company                    = 1;
             $this->view->company_filter = $company;
 
-            // hdnRole is used when logged in as a dealer to differentiate
+            // hdnRole is used when logged in as a dealer to differentiatek
             // between if the dealer is on "update company pricing" or "update
             // my pricing"
             $hdnRole = $formData ['hdnRole'];
@@ -4353,378 +4302,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 // * Initial Page Load
                 // ************************************************************/
             }
-            else if ($formData ['hdnAction'] == "import")
-            {
-                // ************************************************************/
-                // * Save Imported File To Database
-                // ************************************************************/
-
-
-                $db->beginTransaction();
-                try
-                {
-                    // detect file type (printers or toners)
-                    $import_type = "printer";
-                    foreach ($headers->array as $value)
-                    {
-                        if (strtolower($value) == "toner id")
-                        {
-                            $import_type = "toner";
-                            break;
-                        }
-                    }
-                    // loop through file and save
-                    foreach ($results->array as $key => $value)
-                    {
-                        $exists = false;
-                        $insert = false;
-                        $update = false;
-                        $delete = false;
-
-                        // update records
-                        if ($import_type == 'printer')
-                        {
-                            // 0=master_device_id; 1=manufacturer_name;
-                            // 2=printer_model; 3=device_price;
-                            // 4=parts_cost_per_page; 5=labor_cost_per_page
-                            if (in_array("System Admin", $this->privilege) && $company == 1)
-                            {
-                                $master_device_id  = $results->array [$key] ['Master Printer ID'];
-                                $manufacturer_name = $results->array [$key] ['Manufacturer'];
-                                $printer_model     = $results->array [$key] ['Printer Model'];
-                                $device_price      = $results->array [$key] ['New Price'];
-
-                                $table = new Proposalgen_Model_DbTable_MasterDevice();
-                                $data  = array(
-                                    'cost' => $device_price
-                                );
-                                $where = $table->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
-
-                                // check to see if it exists - no inserts in the
-                                // Master Tables
-                                $toner = $table->fetchRow($where);
-                                if (count($toner) > 0)
-                                {
-                                    $exists = true;
-
-                                    // don't allow price of 0
-                                    if ($device_price == 0)
-                                    {
-                                        $device_price = null;
-                                    }
-
-                                    // don't update if values match
-                                    if ($toner ['cost'] != $device_price)
-                                    {
-                                        $update = true;
-                                    }
-                                }
-                            }
-                            else if ($hdnRole != "user" && (!in_array("Standard User", $this->privilege) && $company > 1))
-                            {
-                                $master_device_id  = $results->array [$key] ['Master Printer Id'];
-                                $manufacturer_name = $results->array [$key] ['Manufacturer'];
-                                $printer_model     = $results->array [$key] ['Printer Model'];
-                                $device_price      = $results->array [$key] ['New Override Price'];
-
-                                $table = new Proposalgen_Model_DbTable_DealerDeviceOverride();
-                                $data  = array(
-                                    'override_device_price' => $device_price
-                                );
-                                $where = $table->getAdapter()->quoteInto('dealer_company_id = ' . $company . ' AND master_device_id = ?', $master_device_id, 'INTEGER');
-
-                                // check to see if it exists
-                                $select = new Zend_Db_Select($db);
-                                $select = $db->select()
-                                    ->from(array(
-                                                'md' => 'master_device'
-                                           ), array(
-                                                   'device_price'
-                                              ))
-                                    ->joinLeft(array(
-                                                    'ddo' => 'dealer_device_override'
-                                               ), 'ddo.master_device_id = md.master_device_id AND ddo.dealer_company_id = ' . $company, array(
-                                                                                                                                             'override_device_price'
-                                                                                                                                        ))
-                                    ->where('md.master_device_id = ' . $master_device_id);
-                                $stmt   = $db->query($select);
-                                $toner  = $stmt->fetchAll();
-
-                                if (count($toner) > 0)
-                                {
-                                    if ($toner [0] ['override_device_price'] > 0)
-                                    {
-                                        $exists = true;
-
-                                        // don't update if values match
-                                        if ($device_price == 0 || empty($device_price))
-                                        {
-                                            $delete = true;
-                                        }
-                                        else if ($toner [0] ['device_price'] != $device_price)
-                                        {
-                                            $update = true;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        $exists = false;
-                                        if ($device_price > 0 && $toner [0] ['device_price'] != $device_price)
-                                        {
-                                            $insert = true;
-
-                                            $data ['dealer_company_id'] = $company;
-                                            $data ['master_device_id']  = $master_device_id;
-                                        }
-                                    }
-                                }
-                            }
-                            else if (in_array("Standard User", $this->privilege) || $hdnRole == "user")
-                            {
-
-                                $master_device_id  = $results->array [$key] ['Master Printer Id'];
-                                $manufacturer_name = $results->array [$key] ['Manufacturer'];
-                                $printer_model     = $results->array [$key] ['Printer Model'];
-                                $device_price      = $results->array [$key] ['New Override Price'];
-
-                                $table = new Proposalgen_Model_DbTable_UserDeviceOverride();
-                                $data  = array(
-                                    'override_device_price' => $device_price
-                                );
-                                $where = $table->getAdapter()->quoteInto('user_id = ' . $this->user_id . ' AND master_device_id = ?', $master_device_id, 'INTEGER');
-
-                                // check to see if it exists
-                                $select = new Zend_Db_Select($db);
-                                $select = $db->select()
-                                    ->from(array(
-                                                'md' => 'master_device'
-                                           ), array(
-                                                   'device_price'
-                                              ))
-                                    ->joinLeft(array(
-                                                    'udo' => 'user_device_override'
-                                               ), 'udo.master_device_id = md.master_device_id AND udo.user_id = ' . $this->user_id, array(
-                                                                                                                                         'override_device_price'
-                                                                                                                                    ))
-                                    ->where('md.master_device_id = ' . $master_device_id);
-                                $stmt   = $db->query($select);
-                                $toner  = $stmt->fetchAll();
-
-                                if (count($toner) > 0)
-                                {
-                                    if ($toner [0] ['override_device_price'] > 0)
-                                    {
-                                        $exists = true;
-
-                                        // don't update if values match
-                                        if ($device_price == 0 || empty($device_price))
-                                        {
-                                            $delete = true;
-                                        }
-                                        else if ($toner [0] ['device_price'] != $device_price)
-                                        {
-                                            $update = true;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        $exists = false;
-                                        if ($device_price > 0 && $toner [0] ['device_price'] != $device_price)
-                                        {
-                                            $insert = true;
-
-                                            $data ['user_id']          = $this->user_id;
-                                            $data ['master_device_id'] = $master_device_id;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // 0=toner_id; 1=manufacturer_name; 2=toner_SKU;
-                            // 3=toner_price
-                            if (in_array("System Admin", $this->privilege) && $company == 1)
-                            {
-                                $toner_id          = $results->array [$key] ['Toner ID'];
-                                $manufacturer_name = $results->array [$key] ['Manufacturer'];
-                                $toner_sku         = $results->array [$key] ['SKU'];
-                                $toner_price       = $results->array [$key] ['New Price'];
-
-                                $table = new Proposalgen_Model_DbTable_Toner();
-                                $data  = array(
-                                    'cost' => $toner_price
-                                );
-                                $where = $table->getAdapter()->quoteInto('id = ?', $toner_id, 'INTEGER');
-
-                                // check to see if it exists - no inserts in the
-                                // Master Tables
-                                $toner = $table->fetchRow($where);
-                                if (count($toner) > 0)
-                                {
-                                    $exists = true;
-
-                                    // don't update if values match
-                                    if (($toner ['cost'] != $toner_price) && $toner_price > 0)
-                                    {
-                                        $update = true;
-                                    }
-                                }
-                            }
-                            else if ($hdnRole != "user" && (!in_array("Standard User", $this->privilege) && $company > 1))
-                            {
-                                $toner_id          = $results->array [$key] ['Toner ID'];
-                                $manufacturer_name = $results->array [$key] ['Manufacturer'];
-                                $toner_sku         = $results->array [$key] ['SKU'];
-                                $toner_price       = $results->array [$key] ['New Override Price'];
-
-                                $table = new Proposalgen_Model_DbTable_DealerTonerOverride();
-                                $data  = array(
-                                    'override_toner_price' => $toner_price
-                                );
-                                $where = $table->getAdapter()->quoteInto('dealer_company_id = ' . $company . ' AND toner_id = ?', $toner_id, 'INTEGER');
-
-                                // check to see if it exists
-                                $select = new Zend_Db_Select($db);
-                                $select = $db->select()
-                                    ->from(array(
-                                                't' => 'toner'
-                                           ), array(
-                                                   'toner_price'
-                                              ))
-                                    ->joinLeft(array(
-                                                    'dto' => 'dealer_toner_override'
-                                               ), 'dto.toner_id = t.toner_id AND dto.dealer_company_id = ' . $company, array(
-                                                                                                                            'override_toner_price'
-                                                                                                                       ))
-                                    ->where('t.toner_id = ?', $toner_id);
-                                $stmt   = $db->query($select);
-                                $toner  = $stmt->fetchAll();
-
-                                if (count($toner) > 0)
-                                {
-                                    if ($toner [0] ['override_toner_price'] > 0)
-                                    {
-                                        $exists = true;
-
-                                        // don't update if values match
-                                        if ($toner_price == 0 || empty($toner_price))
-                                        {
-                                            $delete = true;
-                                        }
-                                        else if ($toner [0] ['toner_price'] != $toner_price)
-                                        {
-                                            $update = true;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        $exists = false;
-                                        if ($toner_price > 0 && $toner [0] ['toner_price'] != $toner_price)
-                                        {
-                                            $insert = true;
-
-                                            $data ['dealer_company_id'] = $company;
-                                            $data ['toner_id']          = $toner_id;
-                                        }
-                                    }
-                                }
-                            }
-                            else if (in_array("Standard User", $this->privilege) || $hdnRole == "user")
-                            {
-
-                                $toner_id          = $results->array [$key] ['Toner ID'];
-                                $manufacturer_name = $results->array [$key] ['Manufacturer'];
-                                $toner_sku         = $results->array [$key] ['SKU'];
-                                $toner_price       = $results->array [$key] ['New Override Price'];
-
-                                $table = new Proposalgen_Model_DbTable_UserTonerOverride();
-                                $data  = array(
-                                    'override_toner_price' => $toner_price
-                                );
-                                $where = $table->getAdapter()->quoteInto('user_id = ' . $this->user_id . ' AND toner_id = ?', $toner_id, 'INTEGER');
-
-                                // check to see if it exists
-                                $select = new Zend_Db_Select($db);
-                                $select = $db->select()
-                                    ->from(array(
-                                                't' => 'toner'
-                                           ), array(
-                                                   'toner_price'
-                                              ))
-                                    ->joinLeft(array(
-                                                    'uto' => 'user_toner_override'
-                                               ), 'uto.toner_id = t.toner_id AND uto.user_id = ' . $this->user_id, array(
-                                                                                                                        'override_toner_price'
-                                                                                                                   ))
-                                    ->where('t.toner_id = ?', $toner_id);
-                                $stmt   = $db->query($select);
-                                $toner  = $stmt->fetchAll();
-
-                                if (count($toner) > 0)
-                                {
-                                    if ($toner [0] ['override_toner_price'] > 0)
-                                    {
-                                        $exists = true;
-
-                                        // don't update if values match
-                                        if ($toner_price == 0 || empty($toner_price))
-                                        {
-                                            $delete = true;
-                                        }
-                                        else if ($toner [0] ['toner_price'] != $toner_price)
-                                        {
-                                            $update = true;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        $exists = false;
-                                        if ($toner_price > 0 && $toner [0] ['toner_price'] != $toner_price)
-                                        {
-                                            $insert = true;
-
-                                            $data ['user_id']  = $this->user_id;
-                                            $data ['toner_id'] = $toner_id;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        // update database
-                        if ($exists == true)
-                        {
-                            if ($delete == true)
-                            {
-                                $table->delete($where);
-                            }
-                            else if ($update == true)
-                            {
-                                $table->update($data, $where);
-                            }
-                        }
-                        else if ($insert == true)
-                        {
-                            $table->insert($data);
-                        }
-                    }
-                    $this->view->message = "Your pricing updates have been applied successfully.";
-                    $db->commit();
-                }
-                catch (Exception $e)
-                {
-
-                    $db->rollback();
-                    $this->view->message = "<span class=\"warning\">*</span> An error has occurred during the update and your changes were not applied. Please review your file and try again.";
-                }
-
-            }
             else
             {
 
                 // ************************************************************/
-                // * Upload File and Build Preview
+                // * Upload File
                 // ************************************************************/
                 $upload = new Zend_File_Transfer_Adapter_Http();
                 $upload->setDestination($this->config->app->uploadPath);
@@ -4738,7 +4320,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $upload->getValidator('Count')->setMessage('<span class="warning">*</span> You are only allowed to upload 1 file at a time.');
 
                 // Limit the size of all files to be uploaded to maximum 4MB and
-                // mimimum 500B
+                // mimimum 100B
                 $upload->addValidator('FilesSize', false, array(
                                                                'min' => '100B',
                                                                'max' => '4MB'
@@ -4821,10 +4403,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
                         if ($is_valid)
                         {
-                            // create an associative array of the csv infomation
+                            // create an associative array of the csv information
                             foreach ($lines as $key => $value)
                             {
-
                                 if ($key > 0)
                                 {
                                     $devices [$key] = str_getcsv($value);
@@ -4838,7 +4419,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         $current_labor_cpp    = 0;
 
                                         $master_device_id = $devices [$key] [0];
-                                        if (in_array("System Admin", $this->privilege) && $company == 1)
+                                        if (in_array("System Admin", $this->privilege))
                                         {
 
                                             $columns [0] = "Master Printer ID";
@@ -4864,7 +4445,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                                 $final_devices [4] = $devices [$key] [$key_new_price];
                                             }
                                         }
-                                        else if ($this->view->hdnRole != "user" && (!in_array("Standard User", $this->privilege) && $company > 1))
+                                        else if ($this->view->hdnRole != "user" && (!in_array("Standard User", $this->privilege)))
                                         {
                                             $columns [0] = "Master Printer ID";
                                             $columns [1] = "Manufacturer";
@@ -4944,7 +4525,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         $current_toner_price = 0;
 
                                         $toner_id = $devices [$key] [0];
-                                        if (in_array("System Admin", $this->privilege) && $company == 1)
+                                        if (in_array("System Admin", $this->privilege))
                                         {
 
                                             $columns [0] = "Toner ID";
@@ -4976,7 +4557,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                                 $final_devices [7] = $devices [$key] [$key_new_price];
                                             }
                                         }
-                                        else if ($this->view->hdnRole != "user" && (!in_array("Standard User", $this->privilege) && $company > 1))
+                                        else if ($this->view->hdnRole != "user" && (!in_array("Standard User", $this->privilege)))
                                         {
 
                                             $columns [0] = "Toner ID";
@@ -5075,16 +4656,373 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                     }
                                 }
                             }
-                            $this->view->columnsArray = $columns;
-                            $this->view->headerArray  = $headers;
-                            $this->view->resultsArray = $finalDevices;
+                            $columns = $columns;
+                            $results = $finalDevices;
+                            $db->beginTransaction();
+                            try
+                            {
+                                // detect file type (printers or toners)
+                                $import_type = "printer";
 
-                            // store array in session to be used by
-                            // confirmationAction to save the values to the
-                            // database
-                            $columns_session->array = $columns;
-                            $results_session->array = $finalDevices;
-                            $db->commit();
+                                foreach ($columns as $value)
+                                {
+                                    if (strtolower($value) == "toner id")
+                                    {
+                                        $import_type = "toner";
+                                        break;
+                                    }
+                                }
+                                // loop through file and save
+                                foreach ($results as $key => $value)
+                                {
+                                    $exists = false;
+                                    $insert = false;
+                                    $update = false;
+                                    $delete = false;
+
+                                    // update records
+                                    if ($import_type == 'printer')
+                                    {
+
+                                        // 0=master_device_id; 1=manufacturer_name;
+                                        // 2=printer_model; 3=device_price;
+                                        // 4=parts_cost_per_page; 5=labor_cost_per_page
+                                        if (in_array("System Admin", $this->privilege))
+                                        {
+                                            $master_device_id  = $results[$key] ['Master Printer ID'];
+                                            $manufacturer_name = $results[$key] ['Manufacturer'];
+                                            $printer_model     = $results[$key] ['Printer Model'];
+                                            $device_price      = $results[$key] ['New Price'];
+
+                                            $table = new Proposalgen_Model_DbTable_MasterDevice();
+                                            $data  = array(
+                                                'cost' => $device_price
+                                            );
+                                            $where = $table->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
+
+                                            // check to see if it exists - no inserts in the
+                                            // Master Tables
+                                            $toner = $table->fetchRow($where);
+                                            if (count($toner) > 0)
+                                            {
+                                                $exists = true;
+
+                                                // don't allow price of 0
+                                                if ($device_price == 0)
+                                                {
+                                                    $device_price = null;
+                                                }
+
+                                                // don't update if values match
+                                                if ($toner ['cost'] != $device_price)
+                                                {
+                                                    $update = true;
+                                                }
+                                            }
+                                        }
+                                        else if ($hdnRole != "user" && (!in_array("Standard User", $this->privilege)))
+                                        {
+                                            $master_device_id  = $results->array [$key] ['Master Printer Id'];
+                                            $manufacturer_name = $results->array [$key] ['Manufacturer'];
+                                            $printer_model     = $results->array [$key] ['Printer Model'];
+                                            $device_price      = $results->array [$key] ['New Override Price'];
+
+                                            $table = new Proposalgen_Model_DbTable_DealerDeviceOverride();
+                                            $data  = array(
+                                                'override_device_price' => $device_price
+                                            );
+                                            $where = $table->getAdapter()->quoteInto('dealer_company_id = ' . $company . ' AND master_device_id = ?', $master_device_id, 'INTEGER');
+
+                                            // check to see if it exists
+                                            $select = new Zend_Db_Select($db);
+                                            $select = $db->select()
+                                                ->from(array(
+                                                            'md' => 'master_device'
+                                                       ), array(
+                                                               'device_price'
+                                                          ))
+                                                ->joinLeft(array(
+                                                                'ddo' => 'dealer_device_override'
+                                                           ), 'ddo.master_device_id = md.master_device_id AND ddo.dealer_company_id = ' . $company, array(
+                                                                                                                                                         'override_device_price'
+                                                                                                                                                    ))
+                                                ->where('md.master_device_id = ' . $master_device_id);
+                                            $stmt   = $db->query($select);
+                                            $toner  = $stmt->fetchAll();
+
+                                            if (count($toner) > 0)
+                                            {
+                                                if ($toner [0] ['override_device_price'] > 0)
+                                                {
+                                                    $exists = true;
+
+                                                    // don't update if values match
+                                                    if ($device_price == 0 || empty($device_price))
+                                                    {
+                                                        $delete = true;
+                                                    }
+                                                    else if ($toner [0] ['device_price'] != $device_price)
+                                                    {
+                                                        $update = true;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    $exists = false;
+                                                    if ($device_price > 0 && $toner [0] ['device_price'] != $device_price)
+                                                    {
+                                                        $insert = true;
+
+                                                        $data ['dealer_company_id'] = $company;
+                                                        $data ['master_device_id']  = $master_device_id;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (in_array("Standard User", $this->privilege) || $hdnRole == "user")
+                                        {
+
+                                            $master_device_id  = $results->array [$key] ['Master Printer Id'];
+                                            $manufacturer_name = $results->array [$key] ['Manufacturer'];
+                                            $printer_model     = $results->array [$key] ['Printer Model'];
+                                            $device_price      = $results->array [$key] ['New Override Price'];
+
+                                            $table = new Proposalgen_Model_DbTable_UserDeviceOverride();
+                                            $data  = array(
+                                                'override_device_price' => $device_price
+                                            );
+                                            $where = $table->getAdapter()->quoteInto('user_id = ' . $this->user_id . ' AND master_device_id = ?', $master_device_id, 'INTEGER');
+
+                                            // check to see if it exists
+                                            $select = new Zend_Db_Select($db);
+                                            $select = $db->select()
+                                                ->from(array(
+                                                            'md' => 'master_device'
+                                                       ), array(
+                                                               'device_price'
+                                                          ))
+                                                ->joinLeft(array(
+                                                                'udo' => 'user_device_override'
+                                                           ), 'udo.master_device_id = md.master_device_id AND udo.user_id = ' . $this->user_id, array(
+                                                                                                                                                     'override_device_price'
+                                                                                                                                                ))
+                                                ->where('md.master_device_id = ' . $master_device_id);
+                                            $stmt   = $db->query($select);
+                                            $toner  = $stmt->fetchAll();
+
+                                            if (count($toner) > 0)
+                                            {
+                                                if ($toner [0] ['override_device_price'] > 0)
+                                                {
+                                                    $exists = true;
+
+                                                    // don't update if values match
+                                                    if ($device_price == 0 || empty($device_price))
+                                                    {
+                                                        $delete = true;
+                                                    }
+                                                    else if ($toner [0] ['device_price'] != $device_price)
+                                                    {
+                                                        $update = true;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    $exists = false;
+                                                    if ($device_price > 0 && $toner [0] ['device_price'] != $device_price)
+                                                    {
+                                                        $insert = true;
+
+                                                        $data ['user_id']          = $this->user_id;
+                                                        $data ['master_device_id'] = $master_device_id;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // 0=toner_id; 1=manufacturer_name; 2=toner_SKU;
+                                        // 3=toner_price
+                                        if (in_array("System Admin", $this->privilege) && $company == 1)
+                                        {
+                                            $toner_id          = $results[$key] ['Toner ID'];
+                                            $manufacturer_name = $results[$key] ['Manufacturer'];
+                                            $toner_sku         = $results[$key] ['SKU'];
+                                            $toner_price       = $results[$key] ['New Price'];
+
+                                            $table = new Proposalgen_Model_DbTable_Toner();
+                                            $data  = array(
+                                                'cost' => $toner_price
+                                            );
+                                            $where = $table->getAdapter()->quoteInto('id = ?', $toner_id, 'INTEGER');
+
+                                            // check to see if it exists - no inserts in the
+                                            // Master Tables
+                                            $toner = $table->fetchRow($where);
+                                            if (count($toner) > 0)
+                                            {
+                                                $exists = true;
+
+                                                // don't update if values match
+                                                if (($toner ['cost'] != $toner_price) && $toner_price > 0)
+                                                {
+                                                    $update = true;
+                                                }
+                                            }
+                                        }
+                                        else if ($hdnRole != "user" && (!in_array("Standard User", $this->privilege) && $company > 1))
+                                        {
+                                            $toner_id          = $results[$key] ['Toner ID'];
+                                            $manufacturer_name = $results[$key] ['Manufacturer'];
+                                            $toner_sku         = $results[$key] ['SKU'];
+                                            $toner_price       = $results[$key] ['New Override Price'];
+
+                                            $table = new Proposalgen_Model_DbTable_DealerTonerOverride();
+                                            $data  = array(
+                                                'override_toner_price' => $toner_price
+                                            );
+                                            $where = $table->getAdapter()->quoteInto('dealer_company_id = ' . $company . ' AND toner_id = ?', $toner_id, 'INTEGER');
+
+                                            // check to see if it exists
+                                            $select = new Zend_Db_Select($db);
+                                            $select = $db->select()
+                                                ->from(array(
+                                                            't' => 'toner'
+                                                       ), array(
+                                                               'toner_price'
+                                                          ))
+                                                ->joinLeft(array(
+                                                                'dto' => 'dealer_toner_override'
+                                                           ), 'dto.toner_id = t.toner_id AND dto.dealer_company_id = ' . $company, array(
+                                                                                                                                        'override_toner_price'
+                                                                                                                                   ))
+                                                ->where('t.toner_id = ?', $toner_id);
+                                            $stmt   = $db->query($select);
+                                            $toner  = $stmt->fetchAll();
+
+                                            if (count($toner) > 0)
+                                            {
+                                                if ($toner [0] ['override_toner_price'] > 0)
+                                                {
+                                                    $exists = true;
+
+                                                    // don't update if values match
+                                                    if ($toner_price == 0 || empty($toner_price))
+                                                    {
+                                                        $delete = true;
+                                                    }
+                                                    else if ($toner [0] ['toner_price'] != $toner_price)
+                                                    {
+                                                        $update = true;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    $exists = false;
+                                                    if ($toner_price > 0 && $toner [0] ['toner_price'] != $toner_price)
+                                                    {
+                                                        $insert = true;
+
+                                                        $data ['dealer_company_id'] = $company;
+                                                        $data ['toner_id']          = $toner_id;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (in_array("Standard User", $this->privilege) || $hdnRole == "user")
+                                        {
+
+                                            $toner_id          = $results[$key] ['Toner ID'];
+                                            $manufacturer_name = $results[$key] ['Manufacturer'];
+                                            $toner_sku         = $results[$key] ['SKU'];
+                                            $toner_price       = $results[$key] ['New Override Price'];
+
+                                            $table = new Proposalgen_Model_DbTable_UserTonerOverride();
+                                            $data  = array(
+                                                'override_toner_price' => $toner_price
+                                            );
+                                            $where = $table->getAdapter()->quoteInto('user_id = ' . $this->user_id . ' AND toner_id = ?', $toner_id, 'INTEGER');
+
+                                            // check to see if it exists
+                                            $select = new Zend_Db_Select($db);
+                                            $select = $db->select()
+                                                ->from(array(
+                                                            't' => 'toner'
+                                                       ), array(
+                                                               'toner_price'
+                                                          ))
+                                                ->joinLeft(array(
+                                                                'uto' => 'user_toner_override'
+                                                           ), 'uto.toner_id = t.toner_id AND uto.user_id = ' . $this->user_id, array(
+                                                                                                                                    'override_toner_price'
+                                                                                                                               ))
+                                                ->where('t.toner_id = ?', $toner_id);
+                                            $stmt   = $db->query($select);
+                                            $toner  = $stmt->fetchAll();
+
+                                            if (count($toner) > 0)
+                                            {
+                                                if ($toner [0] ['override_toner_price'] > 0)
+                                                {
+                                                    $exists = true;
+
+                                                    // don't update if values match
+                                                    if ($toner_price == 0 || empty($toner_price))
+                                                    {
+                                                        $delete = true;
+                                                    }
+                                                    else if ($toner [0] ['toner_price'] != $toner_price)
+                                                    {
+                                                        $update = true;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    $exists = false;
+                                                    if ($toner_price > 0 && $toner [0] ['toner_price'] != $toner_price)
+                                                    {
+                                                        $insert = true;
+
+                                                        $data ['user_id']  = $this->user_id;
+                                                        $data ['toner_id'] = $toner_id;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    // update database
+                                    if ($exists == true)
+                                    {
+                                        if ($delete == true)
+                                        {
+                                            $table->delete($where);
+                                        }
+                                        else if ($update == true)
+                                        {
+                                            $table->update($data, $where);
+                                        }
+                                    }
+                                    else if ($insert == true)
+                                    {
+                                        $table->insert($data);
+                                    }
+                                }
+                                $this->view->message = "Your pricing updates have been applied successfully.";
+                                $db->commit();
+                            }
+                            catch (Exception $e)
+                            {
+
+                                $db->rollback();
+                                $this->view->message = "<span class=\"warning\">*</span> An error has occurred during the update and your changes were not applied. Please review your file and try again.";
+                            }
+
+                            //////////////////////////////////////////
+                            //////////////////////////////////////////
+                            ////End Saving
+                            //////////////////////////////////////////
                         }
                     }
                     catch (Exception $e)
@@ -5154,19 +5092,19 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                     'md' => 'pgen_master_devices'
                                ), array(
                                        'id AS master_id',
-                                       'manufacturer_id',
-                                       'printer_model',
+                                       'manufacturerId',
+                                       'modelName',
                                        'cost'
                                   ))
                         ->joinLeft(array(
                                         'm' => 'manufacturers'
-                                   ), 'm.id = md.manufacturer_id', array(
+                                   ), 'm.id = md.manufacturerId', array(
                                                                         'id',
                                                                         'fullname'
                                                                    ))
                         ->order(array(
                                      'm.fullname',
-                                     'md.printer_model'
+                                     'md.modelName'
                                 ));
                     $stmt   = $db->query($select);
                     $result = $stmt->fetchAll();
@@ -5186,7 +5124,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                   ))
                         ->joinLeft(array(
                                         'm' => 'manufacturers'
-                                   ), 'm.id = md.manufacturer_id', array(
+                                   ), 'm.id = md.manufacturerId', array(
                                                                         'id AS manufacturer_id',
                                                                         'fullname'
                                                                    ))
@@ -5219,10 +5157,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $fieldList [] = array(
                         $value ['master_id'],
                         $value ['fullname'],
-                        $value ['printer_model'],
+                        $value ['modelName'],
                         $price
                     );
                 }
+
             }
             else
             {
@@ -5315,7 +5254,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $price = 0;
 
                     // prep pricing
-                    if (in_array("System Admin", $this->privilege) && $company == 1)
+                    if (in_array("System Admin", $this->privilege))
                     {
                         $price = $value ['cost'];
                     }
@@ -5619,7 +5558,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 $filter = "pt.name";
             }
-            else if ($filter == "toner_SKU")
+            else if ($filter == "toner_sku" || $filter =="toner_SKU")
             {
                 $filter = "t.sku";
             }
