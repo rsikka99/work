@@ -471,23 +471,19 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         {
             $searchTerm .= "$term%";
         }
+
         // Fetch Devices like term
-        $db = Zend_Db_Table::getDefaultAdapter();
+        $results = Proposalgen_Model_Mapper_MasterDevice::getInstance()->searchByName($searchTerm);
 
-        $sql = "SELECT concat(fullname, ' ', printer_model) as device_name, pgen_master_devices.id as master_device_id, fullname, printer_model FROM manufacturers
-        JOIN pgen_master_devices on pgen_master_devices.manufacturer_id = manufacturers.id
-        WHERE concat(fullname, ' ', printer_model) LIKE '%$searchTerm%' AND manufacturers.isDeleted = 0 ORDER BY device_name ASC LIMIT 10;";
-
-        $results = $db->fetchAll($sql);
         // $results is an array of device names
         $devices = array();
         foreach ($results as $row)
         {
-            $deviceName = $row ["fullname"] . " " . $row ["printer_model"];
+            $deviceName = $row ["fullname"] . " " . $row ["modelName"];
             $deviceName = ucwords(strtolower($deviceName));
             $devices [] = array(
                 "label"        => $deviceName,
-                "value"        => $row ["master_device_id"],
+                "value"        => $row ["id"],
                 "manufacturer" => ucwords(strtolower($row ["fullname"]))
             );
         }
