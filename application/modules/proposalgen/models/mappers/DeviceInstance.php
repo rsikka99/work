@@ -292,6 +292,18 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
     }
 
     /**
+     * Fetches all rows for a report
+     *
+     * @param $reportId
+     *
+     * @return Proposalgen_Model_DeviceInstance[]
+     */
+    public function fetchAllForReport ($reportId)
+    {
+        return $this->fetchAll(array("{$this->col_reportId} = ?" => $reportId));
+    }
+
+    /**
      * This function fetches match up devices
      *
      * @param int     $reportId

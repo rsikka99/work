@@ -1,6 +1,18 @@
 <?php
 class Proposalgen_Model_Report_Setting extends My_Model_Abstract
 {
+    const SERVICE_BILLING_PREFERENCE_NOT_SET  = null;
+    const SERVICE_BILLING_PREFERENCE_PER_PAGE = 1;
+    const SERVICE_BILLING_PREFERENCE_MONTHLY  = 2;
+    const MIN_VALID_SERVICE_BILLING_VALUE     = 1;
+    const MAX_VALID_SERVICE_BILLING_VALUE     = 2;
+
+    static $ServiceBillingPreferenceOptions = array(
+        self::SERVICE_BILLING_PREFERENCE_NOT_SET  => "",
+        self::SERVICE_BILLING_PREFERENCE_PER_PAGE => "Per Page",
+        self::SERVICE_BILLING_PREFERENCE_MONTHLY  => "Monthly"
+    );
+
     /**
      * The database id
      *

@@ -240,6 +240,6 @@ class Proposalgen_Report_GrossmarginController extends Proposalgen_Library_Contr
                                         "|",
                                         "~",
                                         "`"
-                                   ), "_", $proposal->Report->CustomerCompanyName);
+                                   ), "_", $proposal->report->CustomerCompanyName);
     }
 }

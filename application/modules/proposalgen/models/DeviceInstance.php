@@ -292,91 +292,25 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     static $uniqueTonerArray = array();
 
+
     /**
-     * Applies overrides to device costs and toner costs.
-     * Also adds a margin on the costs that were not overridden
+     * Applies overrides to settings, device prices, toner prices
      *
-     * @param Proposalgen_Model_DeviceInstance $deviceInstance
-     * @param Proposalgen_Model_Report         $report
-     * @param float                            $reportMargin
-     * @param float                            $companyMargin
+     * @param Proposalgen_Model_Report $report
      */
-    static function processOverrides ($deviceInstance, $report, $reportMargin, $companyMargin)
+    public function processOverrides ($report)
     {
-        $userDeviceOverrideMapper = Proposalgen_Model_Mapper_UserDeviceOverride::getInstance();
-        $userTonerOverrideMapper  = Proposalgen_Model_Mapper_UserTonerOverride::getInstance();
-        $deviceOverride           = null;
-
-        // Known Device, override
-        if ($deviceInstance->getIsMappedToMasterDevice())
+        $masterDevice = $this->getMasterDevice();
+        if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
         {
-            $deviceOverride = $userDeviceOverrideMapper->fetchRow(array(
-                                                                       "master_device_id = ?" => $deviceInstance->getMasterDevice()->id,
-                                                                       "user_id = ?"          => $report->userId
-                                                                  ));
-
+            $this->getMasterDevice()->processOverrides($report);
+//            $replacementMasterDevice = $this->getReplacementMasterDevice();
+//            if ($replacementMasterDevice instanceof Application_Model_MasterDevice)
+//            {
+//                $replacementMasterDevice->processOverrides($report);
+//            }
         }
-
-        // Apply Company Margin if no overrides
-        if ($deviceOverride)
-        {
-            // Cost
-            $deviceInstance->getMasterDevice()->cost = $deviceOverride->OverrideDevicePrice;
-        }
-        else // If we found a device override, apply it
-        {
-            $deviceInstance->getMasterDevice()->cost = $deviceInstance->getMasterDevice()->cost / $companyMargin;
-        }
-
-        // Apply Report Margin to the device price
-        $deviceInstance->getMasterDevice()->cost = $deviceInstance->getMasterDevice()->cost / $reportMargin;
-
-        // Toner Overrides + Margin
-        foreach ($deviceInstance->getMasterDevice()->getToners() as $tonersByPartType)
-        {
-            foreach ($tonersByPartType as $tonersByColor)
-            {
-                /* @var $toner Proposalgen_Model_Toner */
-                foreach ($tonersByColor as $toner)
-                {
-                    if (!in_array($toner->sku, self::$uniqueTonerArray))
-                    {
-                        self::$uniqueTonerArray [] = $toner->sku;
-                        $tonerOverride             = null;
-                        // Known Device, override
-                        if (!$deviceInstance->isUnknown)
-                        {
-                            /* @var $tonerOverride Proposalgen_Model_UserTonerOverride */
-                            $tonerOverride = $userTonerOverrideMapper->fetchRow(array(
-                                                                                     "toner_id = ?" => $toner->id,
-                                                                                     "user_id = ?"  => $report->userId
-                                                                                ));
-                        }
-
-                        // If we found a toner override, apply it
-                        if ($tonerOverride)
-                        {
-                            $toner->cost = $tonerOverride->overrideTonerPrice;
-                        }
-                        else // Apply Company Margin if no overrides
-                        {
-                            $toner->cost = $toner->cost / $companyMargin;
-                        }
-                    }
-                }
-            }
-        }
-
-        // Service Cost Per Page Cost
-        if ($deviceInstance->getMasterDevice()->serviceCostPerPage <= 0)
-        {
-            $deviceInstance->getMasterDevice()->serviceCostPerPage = $report->getReportSettings()->serviceCostPerPage;
-        }
-
-        // Admin Charge
-        $deviceInstance->getMasterDevice()->adminCostPerPage = $report->getReportSettings()->adminCostPerPage;
     }
-
 
     /**
      * @param array $params An array of data to populate the model with

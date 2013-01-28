@@ -68,4 +68,20 @@ class Proposalgen_Model_Mapper_UserDeviceOverride extends Tangent_Model_Mapper_A
 
         return $primaryKey;
     }
+
+    /**
+     * Finds a user override for a master device cost
+     *
+     * @param $userId
+     * @param $masterDeviceId
+     *
+     * @return Proposalgen_Model_UserDeviceOverride
+     */
+    public function findOverrideForMasterDevice ($userId, $masterDeviceId)
+    {
+        return $this->fetchRow(array(
+                                    "master_device_id = ?" => $masterDeviceId,
+                                    "user_id = ?"          => $userId
+                               ));
+    }
 }

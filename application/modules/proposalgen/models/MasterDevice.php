@@ -130,6 +130,69 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     protected $_tonersForGrossMargin;
     protected $_requiredTonerColors;
 
+
+    /**
+     * Whether or not overrides have been processed
+     *
+     * @var boolean
+     */
+    protected $_overridesProcessed;
+
+    /**
+     * @param Proposalgen_Model_Report $report
+     */
+    public function processOverrides ($report)
+    {
+        if (!$this->_overridesProcessed)
+        {
+            /*
+             * Only apply overrides if we have a master device id. If this is an unknown device it won't have one.
+             */
+            if ($this->id > 0)
+            {
+                $userDeviceOverrideMapper = Proposalgen_Model_Mapper_UserDeviceOverride::getInstance();
+                /*
+                 * Check for a user override
+                 */
+                $deviceOverride = $userDeviceOverrideMapper->findOverrideForMasterDevice($report->userId, $this->id);
+
+                /*
+                 * Check to see if we found an override.
+                 */
+                if ($deviceOverride)
+                {
+                    $this->cost = $deviceOverride->overrideDevicePrice;
+                }
+            }
+
+            // Apply Report Margin to the device price
+            $this->cost = $this->cost / $report->getReportSettings()->assessmentReportMargin;
+
+            // Handle Toners
+            // Toner Overrides + Margin
+            foreach ($this->getToners() as $tonersByPartType)
+            {
+                foreach ($tonersByPartType as $tonersByColor)
+                {
+                    /* @var $toner Proposalgen_Model_Toner */
+                    foreach ($tonersByColor as $toner)
+                    {
+                        if (!in_array($toner->sku, Proposalgen_Model_DeviceInstance::$uniqueTonerArray))
+                        {
+                            Proposalgen_Model_DeviceInstance::$uniqueTonerArray [] = $toner->sku;
+                        }
+
+                        // Process the overrides
+                        $toner->processOverrides($report);
+                    }
+                }
+            } // End of toners loop
+
+
+            $this->_overridesProcessed = true;
+        }
+    }
+
     /**
      * The maximum monthly page volume is calculated using the smallest toner yield
      * given the current pricing configuration

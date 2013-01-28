@@ -1,11 +1,10 @@
 <?php
-class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
+class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_Abstract
 {
     public static $Proposal;
 
     // New Separated Proposal
     protected $Ranking;
-    protected $Report;
     protected $ReportId;
     protected $ReportQuestions;
     protected $DefaultToners;
@@ -308,59 +307,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_Report
-     * @throws Exception
-     */
-    public function getReport ()
-    {
-        if (!isset($this->Report))
-        {
-            throw new Exception("No Report Provided!");
-        }
-
-        return $this->Report;
-    }
-
-    /**
-     * @param Proposalgen_Model_Report $Report
-     *
-     * @return Proposalgen_Model_Proposal_OfficeDepot
-     */
-    public function setReport ($Report)
-    {
-        $this->Report = $Report;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     * @throws Exception
-     */
-    public function getReportId ()
-    {
-        if (!isset($this->ReportId))
-        {
-            // Report Id MUST be set before anything tries to use it.
-            throw new Exception("ReportId not set in Abstract");
-        }
-
-        return $this->ReportId;
-    }
-
-    /**
-     * @param int $ReportId
-     *
-     * @return Proposalgen_Model_Proposal_OfficeDepot
-     */
-    public function setReportId ($ReportId)
-    {
-        $this->ReportId = $ReportId;
-
-        return $this;
-    }
-
-    /**
      * @return Proposalgen_Model_Question[]
      */
     public function getReportQuestions ()
@@ -368,7 +314,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         if (!isset($this->ReportQuestions))
         {
             $questionSetMapper     = Proposalgen_Model_Mapper_QuestionSet::getInstance();
-            $this->ReportQuestions = $questionSetMapper->getQuestionSetQuestions($this->getReport()->questionSetId, $this->getReport()->id);
+            $this->ReportQuestions = $questionSetMapper->getQuestionSetQuestions($this->report->questionSetId, $this->report->id);
         }
 
         return $this->ReportQuestions;
@@ -383,7 +329,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
         if (!isset($this->Devices))
         {
             // Calculating margin:
-            $report       = $this->getReport();
+            $report       = $this->report;
             $reportMargin = $this->getReportMargin();
             // FIXME: Remove company margin from process overrides
             $companyMargin = 1;
@@ -391,14 +337,14 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
 
             // Known Devices
             $knownDevices = $deviceMapper->fetchAll(array(
-                                                         "report_id = ?"   => $this->ReportId,
+                                                         "report_id = ?"   => $this->report->id,
                                                          "is_excluded = ?" => 0
                                                     ));
 
             // Unknown Devices
             $unknownDeviceMapper = Proposalgen_Model_Mapper_UnknownDeviceInstance::getInstance();
-            $unknownDevices      = $unknownDeviceMapper->fetchAllUnknownDevicesAsKnownDevices($this->ReportId, array(
-                                                                                                                    "report_id = ?"   => $this->ReportId,
+            $unknownDevices      = $unknownDeviceMapper->fetchAllUnknownDevicesAsKnownDevices($this->report->id, array(
+                                                                                                                    "report_id = ?"   => $this->report->id,
                                                                                                                     "is_excluded = ?" => 0
                                                                                                                ));
 
@@ -429,13 +375,12 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return Proposalgen_Model_Rms_Excluded_Row[]
      */
     public function getExcludedDevices ()
     {
         if (!isset($this->ExcludedDevices))
         {
-            // Calculating margin:
             $deviceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
             $knownDevices = $deviceMapper->fetchAll(array(
                                                          "report_id = ?"   => $this->ReportId,
@@ -580,7 +525,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     {
         if (!isset($this->CombinedAnnualLeasePayments))
         {
-            $this->CombinedAnnualLeasePayments = $this->getReport()->getReportSettings()->monthlyLeasePayment * $this->getLeasedDeviceCount() * 12;
+            $this->CombinedAnnualLeasePayments = $this->report->getReportSettings()->monthlyLeasePayment * $this->getLeasedDeviceCount() * 12;
         }
 
         return $this->CombinedAnnualLeasePayments;
@@ -651,7 +596,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     {
         if (!isset($this->ReportMargin))
         {
-            $this->ReportMargin = 1 - ((((int)$this->getReport()->getReportSettings()->assessmentReportMargin)) / 100);
+            $this->ReportMargin = 1 - ((((int)$this->report->getReportSettings()->assessmentReportMargin)) / 100);
         }
 
         return $this->ReportMargin;
@@ -664,7 +609,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     {
         if (!isset($this->LeasedBlackAndWhiteCharge))
         {
-            $this->LeasedBlackAndWhiteCharge = $this->getReport()->ReportLeasedBWPerPage;
+            $this->LeasedBlackAndWhiteCharge = $this->report->ReportLeasedBWPerPage;
         }
 
         return $this->LeasedBlackAndWhiteCharge;
@@ -677,7 +622,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     {
         if (!isset($this->LeasedColorCharge))
         {
-            $this->LeasedColorCharge = $this->getReport()->ReportLeasedColorPerPage;
+            $this->LeasedColorCharge = $this->report->ReportLeasedColorPerPage;
         }
 
         return $this->LeasedColorCharge;
@@ -713,7 +658,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             if ($this->getPurchasedDeviceCount())
             {
                 $averageAge                          = $totalAge / $this->getPurchasedDeviceCount();
-                $this->AnnualCostOfHardwarePurchases = ($this->getDeviceCount() / $averageAge) * $this->getReport()->ReportAverageNonLeasePrinterCost;
+                $this->AnnualCostOfHardwarePurchases = ($this->getDeviceCount() / $averageAge) * $this->report->ReportAverageNonLeasePrinterCost;
             }
             else
             {
@@ -1047,7 +992,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     {
         if (!isset($this->AverageCostOfDevices))
         {
-            $this->AverageCostOfDevices = $this->getReport()->getReportSettings()->defaultPrinterCost;
+            $this->AverageCostOfDevices = $this->report->getReportSettings()->defaultPrinterCost;
         }
 
         return $this->AverageCostOfDevices;
@@ -1291,7 +1236,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     {
         if (!isset($this->DateReportPrepared))
         {
-            $report_date              = new DateTime($this->getReport()->reportDate);
+            $report_date              = new DateTime($this->report->reportDate);
             $this->DateReportPrepared = date_format($report_date, 'F jS, Y');
         }
 
@@ -1802,7 +1747,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
             // Other variables used in several places
             $pageCounts      = $this->getPageCounts();
             $reportQuestions = $this->getReportQuestions();
-            $companyName     = $this->getReport()->customerCompanyName;
+            $companyName     = $this->report->customerCompanyName;
             $employeeCount   = $reportQuestions [5]->numericAnswer;
 
             // Formatting variables
@@ -2431,7 +2376,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     {
         if (!isset($this->MPSBlackAndWhiteCPP))
         {
-            $this->MPSBlackAndWhiteCPP = $this->getReport()->getReportSettings()->mpsBwCostPerPage;
+            $this->MPSBlackAndWhiteCPP = $this->report->getReportSettings()->mpsBwCostPerPage;
         }
 
         return $this->MPSBlackAndWhiteCPP;
@@ -2444,7 +2389,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Tangent_Model_Abstract
     {
         if (!isset($this->MPSColorCPP))
         {
-            $this->MPSColorCPP = $this->getReport()->getReportSettings()->mpsColorCostPerPage;
+            $this->MPSColorCPP = $this->report->getReportSettings()->mpsColorCostPerPage;
         }
 
         return $this->MPSColorCPP;

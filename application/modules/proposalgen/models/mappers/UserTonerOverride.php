@@ -66,4 +66,20 @@ class Proposalgen_Model_Mapper_UserTonerOverride extends Tangent_Model_Mapper_Ab
 
         return $primaryKey;
     }
+
+    /**
+     * Finds a user override for a toner cost
+     *
+     * @param $userId
+     * @param $tonerId
+     *
+     * @return Proposalgen_Model_UserTonerOverride
+     */
+    public function findOverrideForToner ($userId, $tonerId)
+    {
+        return $this->fetchRow(array(
+                                    "id = ?" => $tonerId,
+                                    "user_id = ?"  => $userId
+                               ));
+    }
 }
