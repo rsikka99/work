@@ -9,26 +9,11 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
     public $adminCostPerPage = 0;
 
     /**
-     * The service billing preference
-     *
-     * @var int
-     */
-    public $billingPreference = Proposalgen_Model_Report_Setting::SERVICE_BILLING_PREFERENCE_PER_PAGE;
-
-    /**
-     * The default labor cost
+     * The default service cost per page
      *
      * @var float
      */
-    public $defaultLaborCost = 0;
-
-    /**
-     * The default parts cost
-     *
-     * @var float
-     */
-    public $defaultPartsCost = 0;
-
+    public $serviceCostPerPage = 0;
     /**
      * The monochrome page coverage
      *
@@ -49,6 +34,7 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
      * @var Proposalgen_Model_PricingConfig
      */
     public $pricingConfiguration;
+
 
     /**
      * @param null|array $options
@@ -118,9 +104,7 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
     {
         return array(
             "adminCostPerPage"       => $this->adminCostPerPage,
-            "billingPreference"      => $this->billingPreference,
-            "defaultLaborCost"       => $this->defaultLaborCost,
-            "defaultPartsCost"       => $this->defaultPartsCost,
+            "serviceCostPerPage"     => $this->serviceCostPerPage,
             "pageCoverageMonochrome" => $this->pageCoverageMonochrome,
             "pageCoverageColor"      => $this->pageCoverageColor,
             "pricingConfiguration"   => $this->pricingConfiguration,
@@ -134,6 +118,6 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
      */
     public function createCacheKey ()
     {
-        return "{$this->adminCostPerPage}_{$this->billingPreference}_{$this->defaultLaborCost}_{$this->defaultPartsCost}_{$this->pageCoverageMonochrome}_{$this->pageCoverageColor}_{$this->pricingConfiguration}";
+        return "{$this->adminCostPerPage}_{$this->serviceCostPerPage}_{$this->pageCoverageMonochrome}_{$this->pageCoverageColor}_{$this->pricingConfiguration->pricingConfigId}";
     }
 }

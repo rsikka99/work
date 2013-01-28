@@ -11,6 +11,22 @@ class Proposalgen_Model_Proposal_Abstract
      */
     public $report;
 
+    /**
+     * The cost page setting when displaying numbers to a customer
+     *
+     * @var Proposalgen_Model_CostPerPageSetting
+     */
+    protected $_costPerPageSettingForCustomer;
+    /**
+     * The cost page setting when displaying numbers to a dealer
+     *
+     * @var Proposalgen_Model_CostPerPageSetting
+     */
+    protected $_costPerPageSettingForDealer;
+    protected $PageCoverageBlackAndWhite;
+    protected $PageCoverageColor;
+    protected $ReportQuestions;
+
 
     /**
      * Constructor
@@ -42,5 +58,88 @@ class Proposalgen_Model_Proposal_Abstract
         }
 
         return $this->_devices;
+    }
+
+    /**
+     * Gets the cost per page settings for the customers point of view
+     *
+     * @return Proposalgen_Model_CostPerPageSetting
+     */
+    public function getCostPerPageSettingForCustomer ()
+    {
+        if (!isset($this->_costPerPageSettingForCustomer))
+        {
+            $this->_costPerPageSettingForCustomer                         = new Proposalgen_Model_CostPerPageSetting();
+            $reportSettings                                               = $this->report->getReportSettings();
+            $this->_costPerPageSettingForCustomer->adminCostPerPage       = $reportSettings->adminCostPerPage;
+            $this->_costPerPageSettingForCustomer->pageCoverageColor      = $this->getPageCoverageColor();
+            $this->_costPerPageSettingForCustomer->pageCoverageMonochrome = $this->getPageCoverageBlackAndWhite();
+            $this->_costPerPageSettingForCustomer->pricingConfiguration   = $reportSettings->getAssessmentPricingConfig();
+        }
+
+        return $this->_costPerPageSettingForCustomer;
+    }
+
+    /**
+     * Gets the cost per page settings for the dealers point of view
+     *
+     * @return Proposalgen_Model_CostPerPageSetting
+     */
+    public function getCostPerPageSettingForDealer ()
+    {
+        if (!isset($this->_costPerPageSettingForDealer))
+        {
+            $this->_costPerPageSettingForDealer = new Proposalgen_Model_CostPerPageSetting();
+
+            $reportSettings                                             = $this->report->getReportSettings();
+            $this->_costPerPageSettingForDealer->adminCostPerPage       = $reportSettings->adminCostPerPage;
+            $this->_costPerPageSettingForDealer->pageCoverageColor      = $reportSettings->actualPageCoverageColor;
+            $this->_costPerPageSettingForDealer->pageCoverageMonochrome = $reportSettings->actualPageCoverageMono;
+            $this->_costPerPageSettingForDealer->pricingConfiguration   = $reportSettings->getGrossMarginPricingConfig();
+        }
+
+        return $this->_costPerPageSettingForDealer;
+    }
+
+    /**
+     * @return Proposalgen_Model_Question[]
+     */
+    public function getReportQuestions ()
+    {
+        if (!isset($this->ReportQuestions))
+        {
+            $questionSetMapper     = Proposalgen_Model_Mapper_QuestionSet::getInstance();
+            $this->ReportQuestions = $questionSetMapper->getQuestionSetQuestions($this->report->questionSetId, $this->report->id);
+        }
+
+        return $this->ReportQuestions;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPageCoverageBlackAndWhite ()
+    {
+        if (!isset($this->PageCoverageBlackAndWhite))
+        {
+            $questions                       = $this->getReportQuestions();
+            $this->PageCoverageBlackAndWhite = $questions [21]->numericAnswer;
+        }
+
+        return $this->PageCoverageBlackAndWhite;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPageCoverageColor ()
+    {
+        if (!isset($this->PageCoverageColor))
+        {
+            $questions               = $this->getReportQuestions();
+            $this->PageCoverageColor = $questions [22]->numericAnswer;
+        }
+
+        return $this->PageCoverageColor;
     }
 }
