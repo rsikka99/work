@@ -65,21 +65,6 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
             $this->adminCostPerPage = $params->adminCostPerPage;
         }
 
-        if (isset($params->billingPreference) && !is_null($params->billingPreference))
-        {
-            $this->billingPreference = $params->billingPreference;
-        }
-
-        if (isset($params->defaultLaborCost) && !is_null($params->defaultLaborCost))
-        {
-            $this->defaultLaborCost = $params->defaultLaborCost;
-        }
-
-        if (isset($params->defaultPartsCost) && !is_null($params->defaultPartsCost))
-        {
-            $this->defaultPartsCost = $params->defaultPartsCost;
-        }
-
         if (isset($params->pageCoverageMonochrome) && !is_null($params->pageCoverageMonochrome))
         {
             $this->pageCoverageMonochrome = $params->pageCoverageMonochrome;
