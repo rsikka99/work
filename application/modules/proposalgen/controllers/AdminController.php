@@ -1684,11 +1684,13 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
                 $form->removeElement('select_manufacturer');
                 $form->removeElement('manufacturer_name');
+                $form->removeElement('manufacturer_displayname');
                 $form->removeElement('save_manufacturer');
                 $form->removeElement('delete_manufacturer');
                 $form->removeElement('back_button');
 
                 $this->view->message = "<h3 style='margin: 20px 0px 0px 0px; border-bottom: 0px;'>Adding Manufacturer... please wait.</h3>";
+
 
                 $db->beginTransaction();
                 try
@@ -1696,8 +1698,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     if ($formData ['options'] == "new")
                     {
                         $manufacturer_name = ucwords(strtolower($formData ["manufacturer_name"]));
+                        $manufacturer_displayname = ucwords(strtolower($formData ["manufacturer_displayname"]));
                         $manufacturerData  = array(
                             'fullname'  => $manufacturer_name,
+                            'displayname' => $manufacturer_displayname,
                             'isDeleted' => 0
                         );
                         $where             = $manufacturersTable->getAdapter()->quoteInto('fullName = ?', $manufacturer_name);
@@ -1720,7 +1724,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $manufacturersTable = new Proposalgen_Model_DbTable_Manufacturer();
                 $manufacturer_id    = $formData ['select_manufacturer'];
                 $manufacturer_name  = strtoupper($formData ['manufacturer_name']);
-
+                $manufacturer_displayname  = strtoupper($formData ['manufacturer_displayname']);
                 $db->beginTransaction();
                 try
                 {
@@ -1729,44 +1733,62 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     {
 
                         $manufacturerData = array(
-                            'displayName' => $manufacturer_name,
-                            'fullName'    => $manufacturer_name
+
+                            'fullName'    => $manufacturer_name,
+                            'displayName' => $manufacturer_displayname,
                         );
 
+                        //Check if fullName is already used
+                        $where        = $manufacturersTable->getAdapter()->quoteInto('id <> ' . $manufacturer_id . ' AND fullName = ?',$manufacturer_name);
+                        $manufacturer = $manufacturersTable->fetchRow($where);
                         if ($manufacturer_id > 0)
                         {
+                            if (count($manufacturer) > 0)
+                            {
+                                $this->_helper->flashMessenger(array(
+                                                                    "error" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" already exists.'
+                                                               ));
+                            }
+                            else
+                            {
 
-                            $where = $manufacturersTable->getAdapter()->quoteInto('id = ?', $manufacturer_id, 'INTEGER');
-                            $manufacturersTable->update($manufacturerData, $where);
 
-                            $this->view->message = 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Updated';
+                                $where = $manufacturersTable->getAdapter()->quoteInto('id = ?', $manufacturer_id, 'INTEGER');
+                                $manufacturersTable->update($manufacturerData, $where);
+                                $this->_helper->flashMessenger(array(
+                                                                    "success" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Updated'
+                                                               ));
+                            }
                         }
                         else
                         {
-
-                            $where        = $manufacturersTable->getAdapter()->quoteInto('fullName = ?', $manufacturer_name);
-                            $manufacturer = $manufacturersTable->fetchRow($where);
-
                             if (count($manufacturer) > 0)
                             {
                                 if ($manufacturer ['isDeleted'] == 1)
                                 {
                                     $manufacturerData = array(
-                                        'isDeleted' => 0
+                                        'displayName' => $manufacturer_displayname,
+                                        'isDeleted'   => 0
                                     );
                                     $where            = $manufacturersTable->getAdapter()->quoteInto('id = ?', $manufacturer ['id'], 'INTEGER');
                                     $manufacturersTable->update($manufacturerData, $where);
-                                    $this->view->message = 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Added.';
+                                    $this->_helper->flashMessenger(array(
+                                                                        "success" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Added.'
+                                                                   ));
                                 }
                                 else
                                 {
-                                    $this->view->message = 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" already exists.';
+                                    $this->_helper->flashMessenger(array(
+                                                                        "error" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" already exists.'
+                                                                   ));
                                 }
                             }
                             else
                             {
                                 $manufacturersTable->insert($manufacturerData);
-                                $this->view->message = 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Added.';
+                                $this->_helper->flashMessenger(array(
+                                                                    "success" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Added.'
+                                                               ));
                             }
                         }
                     }
@@ -1779,7 +1801,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             // check to see if any devices are using the
                             // manufacturer
                             $master_deviceTable = new Proposalgen_Model_DbTable_MasterDevice();
-                            $where              = $master_deviceTable->getAdapter()->quoteInto('manufacturer_id = ?', $manufacturer_id, 'INTEGER');
+                            $where              = $master_deviceTable->getAdapter()->quoteInto('manufacturerId = ?', $manufacturer_id, 'INTEGER');
                             $master_device      = $master_deviceTable->fetchAll($where);
 
                             if (count($master_device) == 0)
@@ -1831,6 +1853,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     // reset form
                     $currElement->setValue('');
                     $form->getElement('manufacturer_name')->setValue('');
+                    $form->getElement('manufacturer_displayname')->setValue('');
                 }
                 catch (Exception $e)
                 {
@@ -1866,6 +1889,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 $formdata = array(
                     'manufacturer_name' => Trim(ucwords(strtolower($manufacturer ['fullname']))),
+                    'manufacturer_displayname' => Trim(ucwords(strtolower($manufacturer ['displayname']))),
                     'is_deleted'        => ($manufacturer ['isDeleted'] == 1 ? true : false)
                 );
             }
@@ -1874,7 +1898,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 // empty form values
                 $formdata = array(
                     'manufacturer_name' => '',
-                    'is_deleted'        => false
+                    'manufacturer_displayname' => '',
+                    'is_deleted' => false
                 );
             }
         }
