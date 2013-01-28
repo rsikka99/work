@@ -33,10 +33,11 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                 {
                     if (!$step->canAccess)
                     {
-                        $lastStep = $step->previousStep;
                         break;
                     }
+                    $lastStep = $step;
                 }
+
                 if ($lastStep !== null)
                 {
                     // Send to latest page
