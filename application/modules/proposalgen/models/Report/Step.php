@@ -47,6 +47,12 @@ class Proposalgen_Model_Report_Step extends My_Model_Abstract
             'controller' => 'fleet',
             'action'     => 'reportsettings'
         ),
+        self::STEP_OPTIMIZATION       => array(
+            'name'       => 'Optimization',
+            'group'      => null,
+            'controller' => 'optimization',
+            'action'     => 'index'
+        ),
         self::STEP_FINISHED             => array(
             'name'       => 'Reports',
             'group'      => null,
