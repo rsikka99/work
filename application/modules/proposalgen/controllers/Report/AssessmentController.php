@@ -16,7 +16,7 @@ class Proposalgen_Report_AssessmentController extends Proposalgen_Library_Contro
         $this->view->availableReports->Assessment->active = true;
 
         $this->view->formats = array(
-            "/proposalgen/assessment/generate/format/docx" => $this->_wordFormat
+            "/proposalgen/report_assessment/generate/format/docx" => $this->_wordFormat
         );
 
         $this->view->reportTitle = "Assessment";
@@ -26,13 +26,14 @@ class Proposalgen_Report_AssessmentController extends Proposalgen_Library_Contro
         {
             // Clear the cache for the report before proceeding
             $this->clearCacheForReport();
-
             if (false !== ($proposal = $this->getProposal()))
             {
                 switch ($format)
                 {
                     case "docx" :
                         // Add DOCX Logic here
+
+                        $this->view->phpword = new PHPWord();
                         break;
                     case "pdf" :
                         // Add PDF Logic here
@@ -70,7 +71,8 @@ class Proposalgen_Report_AssessmentController extends Proposalgen_Library_Contro
                 throw new Exception("CSV Format not available through this page yet!");
                 break;
             case "docx" :
-                $this->initDocx();
+                require_once ('PHPWord.php');
+                $this->view->phpword = new PHPWord();
                 $proposal = $this->getProposal();
                 $graphs   = $this->cachePNGImages($proposal->getGraphs(), true);
                 $proposal->setGraphs($graphs);

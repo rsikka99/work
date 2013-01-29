@@ -198,7 +198,7 @@ echo $this->pageStart;
 						<td class="red">$<?php echo number_format($proposal->getCurrentCostOfReplacedBlackAndWhitePrinters() - $proposal->getProposedCostOfReplacedBlackAndWhitePrinters()); ?></td>
 					</tr>
 					<?php endif; ?>
-					<?php if (count($proposal->DevicesToBeReplaced->BlackAndWhiteMFP) > 0) : ?>
+					<?php if (count($proposal->getDevicesToBeReplaced()->BlackAndWhiteMFP) > 0) : ?>
 					<tr>
 						<td class="left">PrintIQ&reg; Plus&reg; - Monochrome MFP Devices </td>
 						<td>$<?php echo number_format($proposal->getCurrentCostOfReplacedBlackAndWhiteMFPPrinters()); ?></td>

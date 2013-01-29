@@ -59,8 +59,23 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     public function init ()
     {
         $this->_reportSession    = new Zend_Session_Namespace('proposalgenerator_report');
+        $this->_reportId         = $this->_reportSession->reportId;
         $this->view->reportSteps = $this->getReportSteps();
         $this->_userId           = Zend_Auth::getInstance()->getIdentity()->id;
+
+        $this->_reportAbsoluteCachePath = PUBLIC_PATH . "/cache/reports/" . $this->_reportId;
+        $this->_reportCachePath         = "/cache/reports/" . $this->_reportId;
+        // Make the directory if it doesn't exist
+        if (!is_dir($this->_reportAbsoluteCachePath))
+        {
+            if (!mkdir($this->_reportAbsoluteCachePath, 0777, true))
+            {
+                throw new Exception("Could not open cache folder! PATH:" . $this->_reportAbsoluteCachePath, 0);
+            }
+        }
+
+        $this->view->ReportAbsoluteCachePath = $this->_reportAbsoluteCachePath;
+        $this->view->ReportCachePath         = $this->_reportCachePath;
     }
 
     public function initReportList ()
@@ -97,22 +112,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
      */
     public function initHtmlReport ()
     {
-        $session = new Zend_Session_Namespace('proposalgenerator_report');
 
-        $this->_reportId                = $session->reportId;
-        $this->_reportAbsoluteCachePath = PUBLIC_PATH . "/cache/reports/" . $this->_reportId;
-        $this->_reportCachePath         = "/cache/reports/" . $this->_reportId;
-        // Make the directory if it doesn't exist
-        if (!is_dir($this->_reportAbsoluteCachePath))
-        {
-            if (!mkdir($this->_reportAbsoluteCachePath, 0777, true))
-            {
-                throw new Exception("Could not open cache folder! PATH:" . $this->_reportAbsoluteCachePath, 0);
-            }
-        }
-
-        $this->view->ReportAbsoluteCachePath = $this->_reportAbsoluteCachePath;
-        $this->view->ReportCachePath         = $this->_reportCachePath;
 
         $this->_user = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
 
