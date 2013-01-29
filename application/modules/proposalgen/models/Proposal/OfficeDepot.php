@@ -6,7 +6,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     // New Separated Proposal
     protected $Ranking;
     protected $ReportId;
-    protected $ReportQuestions;
     protected $DefaultToners;
     protected $Devices;
     protected $ExcludedDevices;
@@ -16,8 +15,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     protected $DealerCompany;
     protected $CompanyMargin;
     protected $ReportMargin;
-    protected $PageCoverageBlackAndWhite;
-    protected $PageCoverageColor;
     protected $MaximumMonthlyPrintVolume;
     protected $PageCounts;
     protected $Percentages;
@@ -299,19 +296,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         return $reportQuestions [30]->textualAnswer;
     }
 
-    /**
-     * @return Proposalgen_Model_Question[]
-     */
-    public function getReportQuestions ()
-    {
-        if (!isset($this->ReportQuestions))
-        {
-            $questionSetMapper     = Proposalgen_Model_Mapper_QuestionSet::getInstance();
-            $this->ReportQuestions = $questionSetMapper->getQuestionSetQuestions($this->report->questionSetId, $this->report->id);
-        }
 
-        return $this->ReportQuestions;
-    }
 
     /**
      * @return Proposalgen_Model_Rms_Excluded_Row[]
@@ -736,33 +721,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         return $this->CashHeldInInventory;
     }
 
-    /**
-     * @return float
-     */
-    public function getPageCoverageBlackAndWhite ()
-    {
-        if (!isset($this->PageCoverageBlackAndWhite))
-        {
-            $questions                       = $this->getReportQuestions();
-            $this->PageCoverageBlackAndWhite = $questions [21]->numericAnswer;
-        }
 
-        return $this->PageCoverageBlackAndWhite;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPageCoverageColor ()
-    {
-        if (!isset($this->PageCoverageColor))
-        {
-            $questions               = $this->getReportQuestions();
-            $this->PageCoverageColor = $questions [22]->numericAnswer;
-        }
-
-        return $this->PageCoverageColor;
-    }
 
     /**
      * @return int

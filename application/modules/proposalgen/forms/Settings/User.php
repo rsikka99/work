@@ -802,7 +802,8 @@ class Proposalgen_Form_Settings_User extends Zend_Form
                             ));
         array_push($elements, $target_color);
         $elementCounter++;
-        $formElements->addElement($target_color) ->setAttrib('class', 'span1');
+        $formElements->addElement($target_color)
+            ->setAttrib('class', 'span1');
         $target_monochrome->setLabel('Target Monochrome')
             ->setAttrib('class', 'span1');
         $target_color->setLabel('Target Color')

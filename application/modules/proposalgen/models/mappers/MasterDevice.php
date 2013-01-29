@@ -319,23 +319,36 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
      * You can search by manufacturer name (manufacturers table), model name (master_device table) an
      * or both.
      *
-     * @param $searchTerms
+     * @param string   $searchTerm
+     *
+     * @param null|int $manufacturerId
      *
      * @return array
      */
-    public function searchByName ($searchTerms)
+    public function searchByName ($searchTerm, $manufacturerId = null)
     {
+        $manufacturerMapper = Proposalgen_Model_Mapper_Manufacturer::getInstance();
+
         $returnLimit = 10;
         $sortOrder   = 'device_name ASC';
 
         $db     = Zend_Db_Table::getDefaultAdapter();
         $select = $db->select();
-        $select->from(array("md" => "pgen_master_devices"), array('modelName', 'id'))
-            ->joinLeft(array("m" => "manufacturers"), 'm.id = md.manufacturerId', array("fullname", "device_name" => new Zend_Db_Expr("concat(fullname,' ', modelName)")))
-            ->where("concat(fullname,' ', modelName) LIKE ? AND m.isDeleted = 0")
+        $select->from(array("md" => $this->getTableName()), array('modelName', 'id'))
+            ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "m.{$manufacturerMapper->col_id} = md.{$this->col_manufacturerId}", array($manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$this->col_modelName})")))
+            ->where("concat({$manufacturerMapper->col_fullName},' ', {$this->col_modelName}) LIKE ? AND m.isDeleted = 0")
             ->limit($returnLimit)
             ->order($sortOrder);
-        $stmt   = $db->query($select, $searchTerms);
+
+        /*
+         * Filter by manufacturer id if provided
+         */
+        if ($manufacturerId)
+        {
+            $select->where("{$manufacturerMapper->col_fullName} = ?", $manufacturerId);
+        }
+
+        $stmt   = $db->query($select, $searchTerm);
         $result = $stmt->fetchAll();
 
         return $result;

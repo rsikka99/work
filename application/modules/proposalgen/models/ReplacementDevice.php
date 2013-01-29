@@ -1,10 +1,10 @@
 <?php
 class Proposalgen_Model_ReplacementDevice extends My_Model_Abstract
 {
-    const REPLACMENT_BW       = 1;
-    const REPLACMENT_BWMFP    = 2;
-    const REPLACMENT_COLOR    = 3;
-    const REPLACMENT_COLORMFP = 4;
+    const REPLACEMENT_BW       = 1;
+    const REPLACEMENT_BWMFP    = 2;
+    const REPLACEMENT_COLOR    = 3;
+    const REPLACEMENT_COLORMFP = 4;
 
     /**
      * An array of replacement type names with the id as the array key
@@ -12,10 +12,10 @@ class Proposalgen_Model_ReplacementDevice extends My_Model_Abstract
      * @var string[]
      */
     public static $replacementTypes = array(
-        self::REPLACMENT_BW       => 'BLACK & WHITE',
-        self::REPLACMENT_BWMFP    => 'BLACK & WHITE MFP',
-        self::REPLACMENT_COLOR    => 'COLOR',
-        self::REPLACMENT_COLORMFP => 'COLOR MFP'
+        self::REPLACEMENT_BW       => 'BLACK & WHITE',
+        self::REPLACEMENT_BWMFP    => 'BLACK & WHITE MFP',
+        self::REPLACEMENT_COLOR    => 'COLOR',
+        self::REPLACEMENT_COLORMFP => 'COLOR MFP'
     );
 
     /**

@@ -9,6 +9,13 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
     protected $_inputFilter;
 
     /**
+     * The number of lines to trim off the top of the csv
+     *
+     * @var int
+     */
+    protected $_linesToTrim = 4;
+
+    /**
      * How to read the date coming in from the csv
      *
      * @var string
@@ -232,7 +239,7 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
             $this->_csvHeaders     = array();
 
             $fileLines = file($filename, FILE_IGNORE_NEW_LINES);
-            $lineCount = count($fileLines) - 1;
+            $lineCount = count($fileLines) - 1 - $this->_linesToTrim;
 
             if ($lineCount < 1)
             {
@@ -244,6 +251,13 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
                 return "The uploaded file contains {$lineCount} printers. The maximum number of printers supported in a single report is {$maxLineCount}. Please modify your file and try again.";
             }
 
+            /*
+             * Trim the top of the file
+             */
+            if ($this->_linesToTrim > 0)
+            {
+                $fileLines = array_splice($fileLines, $this->_linesToTrim);
+            }
 
             /*
              * Pop off the first line since they are headers
@@ -283,7 +297,7 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
              */
             if ($this->validateHeaders($this->_fieldsPresent))
             {
-                $csvLineNumber = 2;
+                $csvLineNumber = $this->_linesToTrim + 2;
                 // Get normalized data
                 foreach ($fileLines as $line)
                 {

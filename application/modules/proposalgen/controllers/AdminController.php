@@ -6976,7 +6976,31 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $this->view->data = $json;
     }
 
+
     /**
+     * This action is used for searching for master devices via ajax
+     */
+    public function searchForDeviceAction ()
+    {
+        $searchTerm     = "%" . implode('%', explode(' ', $this->_getParam('searchTerm', ''))) . "%";
+        $manufacturerId = $this->_getParam('manufacturerId', false);
+
+        $filterByManufacturer = null;
+        if ($manufacturerId !== false)
+        {
+            $manufacturer = Proposalgen_Model_Mapper_Manufacturer::getInstance()->find($manufacturerId);
+            if ($manufacturer instanceof Proposalgen_Model_Manufacturer)
+            {
+                $filterByManufacturer = $manufacturer;
+            }
+        }
+
+        $jsonResponse = Proposalgen_Model_Mapper_MasterDevice::getInstance()->searchByName($searchTerm, $filterByManufacturer);
+
+        $this->_helper->json($jsonResponse);
+
+        }
+          /**
      * Checks to see if the currently logged in user has access to the resource.
      *
      * @param $resource
@@ -6998,6 +7022,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         {
             return true;
         }
+
 
         return false;
     }

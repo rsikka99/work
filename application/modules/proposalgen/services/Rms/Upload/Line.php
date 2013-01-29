@@ -779,10 +779,6 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         $minimumDeviceIntroductionDate = new Zend_Date(strtotime("-" . self::MAXIMUM_DEVICE_AGE_YEARS . " years"));
 
         // Validate that certain fields are present
-        if (empty($this->rmsModelId))
-        {
-            return "Device does not have a model id";
-        }
         if (empty($this->modelName))
         {
             return "Device does not have a model name";
@@ -904,18 +900,32 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         $faxMeterStatus        = $this->_validateMeter($this->startMeterFax, $this->endMeterFax);
 
         // If we are missing a black meter and are missing a color/life meter then we cannot proceed
-        if ($blackMeterStatus !== self::METER_IS_VALID && ($colorMeterStatus !== self::METER_IS_VALID || $lifeMeterStatus !== self::METER_IS_VALID))
+        if ($blackMeterStatus !== self::METER_IS_VALID && $lifeMeterStatus !== self::METER_IS_VALID)
         {
+            if ($this->endMeterLife !== null)
+            {
+            echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
+            var_dump($lifeMeterStatus);
+            die();
+            }
             return "Invalid black meter";
         }
-        if ($blackMeterStatus === self::METER_IS_INVALID)
+
+        if ($blackMeterStatus !== self::METER_IS_VALID)
         {
             /*
              * If we get here it means that we have an invalid black meter, but valid color and life meter. We can now calculate our black meter
              */
-            $this->startMeterBlack = $this->startMeterLife - $this->startMeterColor;
-            $this->endMeterBlack   = $this->endMeterLife - $this->endMeterColor;
-
+            if ($colorMeterStatus === self::METER_IS_VALID)
+            {
+                $this->startMeterBlack = $this->startMeterLife - $this->startMeterColor;
+                $this->endMeterBlack   = $this->endMeterLife - $this->endMeterColor;
+            }
+            else
+            {
+                $this->startMeterBlack = $this->startMeterLife;
+                $this->endMeterBlack   = $this->endMeterLife;
+            }
         }
 
         // Color meter
@@ -1051,7 +1061,13 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
              */
             if ($startMeter < 0 || $endMeter < 0)
             {
+                // Set our meters to null so they don't get saved
+                $startMeter = null;
+                $endMeter = null;
+
+
                 $returnCode = self::METER_IS_INVALID;
+
             }
             else if ($startMeter >= 0 || $endMeter >= 0)
             {
@@ -1061,6 +1077,10 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
                  */
                 if ($startMeter > $endMeter)
                 {
+                    // Set our meters to null so they don't get saved
+                    $startMeter = null;
+                    $endMeter = null;
+
                     $returnCode = self::METER_IS_INVALID;
                 }
             }

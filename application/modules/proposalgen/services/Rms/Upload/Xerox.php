@@ -6,7 +6,13 @@ class Proposalgen_Service_Rms_Upload_Xerox extends Proposalgen_Service_Rms_Uploa
      *
      * @var string
      */
-    protected $_incomingDateFormat = "MM/dd/yyyy HH:ii:ss";
+    protected $_incomingDateFormat = "MMMM d YYYY";
+
+    /**
+     * The number of lines to trim off the top of the csv
+     * @var int
+     */
+    protected $_linesToTrim = 4;
 
     /**
      * Column mapping for CSV -> Upload Row.
@@ -16,17 +22,17 @@ class Proposalgen_Service_Rms_Upload_Xerox extends Proposalgen_Service_Rms_Uploa
      */
     protected $_columnMapping = array(
         'tag'           => 'assetId',
-        'meter date 1'  => 'monitorStartDate',
-        'meter date 2'  => 'monitorEndDate',
+        'meter date 2'  => 'monitorStartDate',
+        'meter date 1'  => 'monitorEndDate',
         'ip address'    => 'ipAddress',
         'make'          => 'manufacturer',
         'model'         => 'modelName',
         'serial number' => 'serialNumber',
-        'bw meter 1'    => 'startMeterBlack',
-        'bw meter 2'    => 'endMeterBlack',
-        'color meter 1' => 'startMeterColor',
-        'color meter 2' => 'endMeterColor',
-        'total meter 1' => 'startMeterLife',
-        'total meter 2' => 'endMeterLife'
+        'bw meter 2'    => 'startMeterBlack',
+        'bw meter 1'    => 'endMeterBlack',
+        'color meter 2' => 'startMeterColor',
+        'color meter 1' => 'endMeterColor',
+        'total meter 2' => 'startMeterLife',
+        'total meter 1' => 'endMeterLife'
     );
 }

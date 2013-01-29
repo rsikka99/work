@@ -102,14 +102,17 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                         /*
                                          * Check and insert rms device
                                          */
-                                        $rmsDevice = $rmsDeviceMapper->find(array($uploadProviderId, $line->rmsModelId));
-                                        if (!$rmsDevice instanceof Proposalgen_Model_Rms_Device)
+                                        if ($line->rmsModelId > 0)
                                         {
-                                            $rmsDevice                = new Proposalgen_Model_Rms_Device($lineArray);
-                                            $rmsDevice->rmsProviderId = $uploadProviderId;
-                                            $rmsDevice->dateCreated   = new Zend_Db_Expr("NOW()");
-                                            $rmsDevice->userId        = $this->_userId;
-                                            $rmsDeviceMapper->insert($rmsDevice);
+                                            $rmsDevice = $rmsDeviceMapper->find(array($uploadProviderId, $line->rmsModelId));
+                                            if (!$rmsDevice instanceof Proposalgen_Model_Rms_Device)
+                                            {
+                                                $rmsDevice                = new Proposalgen_Model_Rms_Device($lineArray);
+                                                $rmsDevice->rmsProviderId = $uploadProviderId;
+                                                $rmsDevice->dateCreated   = new Zend_Db_Expr("NOW()");
+                                                $rmsDevice->userId        = $this->_userId;
+                                                $rmsDeviceMapper->insert($rmsDevice);
+                                            }
                                         }
 
                                         /*
@@ -406,57 +409,81 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
      *
      * @throws Exception
      */
-    public function setmappedtoAction ()
+    public function setMappedToAction ()
     {
-        // disable the default layout
-        $this->_helper->layout->disableLayout();
-        $db = Zend_Db_Table::getDefaultAdapter();
+        $db                               = Zend_Db_Table_Abstract::getDefaultAdapter();
+        $deviceInstanceIds                = $this->_getParam('deviceInstanceIds', false);
+        $masterDeviceId                   = $this->_getParam('masterDeviceId', false);
+        $errorMessage                     = null;
+        $deviceInstanceMasterDeviceMapper = Proposalgen_Model_Mapper_Device_Instance_Master_Device::getInstance();
+        $successMessage                   = "Device mapped successfully";
 
-        // get params
-        $devices_pf_id    = $this->_getParam('devices_pf_id', 0);
-        $master_device_id = $this->_getParam('master_device_id', 0);
-
-        $db->beginTransaction();
-        try
+        if ($deviceInstanceIds !== false && $masterDeviceId !== false)
         {
-            // add pf_device_matchup_users record
-            $pf_device_matchup_usersTable = new Proposalgen_Model_DbTable_PFMatchupUsers();
-            if ($devices_pf_id > 0)
+            $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
+            if ($masterDevice instanceof Proposalgen_Model_MasterDevice || $masterDeviceId == 0)
             {
-                $where  = $pf_device_matchup_usersTable->getAdapter()->quoteInto('pf_device_id = ' . $devices_pf_id . ' AND user_id = ' . $this->_userId, null);
-                $result = $pf_device_matchup_usersTable->fetchRow($where);
+                $deviceInstanceIds = explode(',', $deviceInstanceIds);
 
-                $pf_device_matchup_usersData = array(
-                    'master_device_id' => $master_device_id
-                );
-
-                if ($result && count($result->toArray()) > 0)
+                $db->beginTransaction();
+                try
                 {
-                    if ($master_device_id > 0)
+                    if ($masterDeviceId == 0)
                     {
-                        $pf_device_matchup_usersTable->update($pf_device_matchup_usersData, $where);
+                        $successMessage = "Device unmapped successfully";
+                        // Delete mapping
+                        foreach ($deviceInstanceIds as $deviceInstanceId)
+                        {
+                            $deviceInstanceMasterDeviceMapper->delete($deviceInstanceId);
+                        }
                     }
                     else
                     {
-                        $pf_device_matchup_usersTable->delete($where);
+                        foreach ($deviceInstanceIds as $deviceInstanceId)
+                        {
+                            $deviceInstanceMasterDevice = $deviceInstanceMasterDeviceMapper->find($deviceInstanceId);
+                            if ($deviceInstanceMasterDevice instanceof Proposalgen_Model_Device_Instance_Master_Device)
+                            {
+                                $deviceInstanceMasterDevice->masterDeviceId = $masterDeviceId;
+                                $deviceInstanceMasterDeviceMapper->save($deviceInstanceMasterDevice);
+                            }
+                            else
+                            {
+                                $deviceInstanceMasterDevice                   = new Proposalgen_Model_Device_Instance_Master_Device();
+                                $deviceInstanceMasterDevice->deviceInstanceId = $deviceInstanceId;
+                                $deviceInstanceMasterDevice->masterDeviceId   = $masterDeviceId;
+                                $deviceInstanceMasterDeviceMapper->insert($deviceInstanceMasterDevice);
+
+                            }
+                        }
                     }
+
+                    $db->commit();
                 }
-                else
+                catch (Exception $e)
                 {
-                    $pf_device_matchup_usersData ['pf_device_id'] = $devices_pf_id;
-                    $pf_device_matchup_usersData ['user_id']      = $this->_userId;
-                    $pf_device_matchup_usersTable->insert($pf_device_matchup_usersData);
+                    $db->rollBack();
+                    My_Log::logException($e);
+                    $errorMessage = "An error occurred while mapping";
                 }
             }
-            $db->commit();
+            else
+            {
+                // Invalid Master Device
+                $errorMessage = "Invalid master device selected";
+            }
+
         }
-        catch (Exception $e)
+
+        if ($errorMessage !== null)
         {
-            My_Log::logException($e);
-            $db->rollback();
-            $this->_helper->json(array("success" => false, "message" => "Error mapping device"));
+            $this->getResponse()->setHttpResponseCode(500);
+            $this->_helper->json(array("error" => true, "message" => $errorMessage));
         }
-        $this->_helper->json(array("success" => true, "message" => "Device mapped successfully"));
+        else
+        {
+            $this->_helper->json(array("success" => true, "message" => $successMessage));
+        }
     }
 
     /**

@@ -986,4 +986,70 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     {
         return ((int)$this->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY);
     }
+
+    /**
+     * Calculates the cost per page for a master device.
+     *
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *            The settings to use when calculating cost per page
+     * @return Proposalgen_Model_CostPerPage
+     */
+    public function calculateCostPerPage (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    {
+        // Make sure our array is initialized
+        if (! isset($this->_cachedCostPerPage))
+        {
+            $this->_cachedCostPerPage = array ();
+        }
+
+        $cacheKey = $costPerPageSetting->createCacheKey();
+        if (! array_key_exists($cacheKey, $this->_cachedCostPerPage))
+        {
+            // Initialize the cpp object
+            $costPerPage = new Proposalgen_Model_CostPerPage();
+            $costPerPage->monochromeCostPerPage = 0;
+            $costPerPage->colorCostPerPage = 0;
+
+            /* @var $toner Proposalgen_Model_Toner */
+            foreach ( $this->getCheapestTonerSet($costPerPageSetting->pricingConfiguration) as $toner )
+            {
+                $tonerCostPerPage = $toner->calculateCostPerPage($costPerPageSetting);
+
+                $costPerPage->add($tonerCostPerPage);
+            }
+
+            $this->_cachedCostPerPage [$cacheKey] = $costPerPage;
+        }
+        return $this->_cachedCostPerPage [$cacheKey];
+    }
+
+    /**
+     * Gets the cheapest tonerset for a pricing configuration
+     *
+     * @param Proposalgen_Model_PricingConfig $pricingConfiguration
+     *            The pricing configuration to use
+     * @return Proposalgen_Model_Toner[]
+     */
+    public function getCheapestTonerSet (Proposalgen_Model_PricingConfig $pricingConfiguration)
+    {
+        // Make sure our array is initialized
+        if (! isset($this->_cachedCheapestTonerSets))
+        {
+            $this->_cachedCheapestTonerSets = array ();
+        }
+
+        $cacheKey = "pricingConfiguration_{$pricingConfiguration->pricingConfigId}";
+        if (! array_key_exists($cacheKey, $this->_cachedCostPerPage))
+        {
+            $tonerColors = $this->getRequiredTonerColors();
+            $toners = array ();
+            foreach ( $tonerColors as $tonerColor )
+            {
+                $toners [] = $this->getCheapestToner($tonerColor, $pricingConfiguration);
+            }
+            $this->_cachedCheapestTonerSets [$cacheKey] = $toners;
+        }
+
+        return $this->_cachedCheapestTonerSets [$cacheKey];
+    }
 }
