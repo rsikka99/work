@@ -4,22 +4,22 @@ $proposal = $this->proposal;
 /**
 	REPLACEMENT DEVICE VARIABLES
  */
-$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACMENT_BW] = 'MONOCHROME';
-$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACMENT_BWMFP] = 'MONOCHROME MFP';
-$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACMENT_COLOR] = 'COLOR';
-$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACMENT_COLORMFP] = 'COLOR MFP';
+$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW] = 'MONOCHROME';
+$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP] = 'MONOCHROME MFP';
+$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR] = 'COLOR';
+$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP] = 'COLOR MFP';
 
-$printerTypes[Proposalgen_Model_ReplacementDevice::REPLACMENT_BW] = 'Monochrome printer(s)';
-$printerTypes[Proposalgen_Model_ReplacementDevice::REPLACMENT_BWMFP] = 'Monochrome MFP(s)';
-$printerTypes[Proposalgen_Model_ReplacementDevice::REPLACMENT_COLOR] = 'Color printer(s)';
-$printerTypes[Proposalgen_Model_ReplacementDevice::REPLACMENT_COLORMFP] = 'Color MFP(s)';
+$printerTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW] = 'Monochrome printer(s)';
+$printerTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP] = 'Monochrome MFP(s)';
+$printerTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR] = 'Color printer(s)';
+$printerTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP] = 'Color MFP(s)';
 
 $replacementDevices = $proposal->getReplacementDevices();
 
-$devicesToBeReplaced[Proposalgen_Model_ReplacementDevice::REPLACMENT_BW] = $proposal->getDevicesToBeReplaced()->BlackAndWhite;
-$devicesToBeReplaced[Proposalgen_Model_ReplacementDevice::REPLACMENT_BWMFP] = $proposal->getDevicesToBeReplaced()->BlackAndWhiteMFP;
-$devicesToBeReplaced[Proposalgen_Model_ReplacementDevice::REPLACMENT_COLOR] = $proposal->getDevicesToBeReplaced()->Color;
-$devicesToBeReplaced[Proposalgen_Model_ReplacementDevice::REPLACMENT_COLORMFP] = $proposal->getDevicesToBeReplaced()->ColorMFP;
+$devicesToBeReplaced[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW] = $proposal->getDevicesToBeReplaced()->BlackAndWhite;
+$devicesToBeReplaced[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP] = $proposal->getDevicesToBeReplaced()->BlackAndWhiteMFP;
+$devicesToBeReplaced[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR] = $proposal->getDevicesToBeReplaced()->Color;
+$devicesToBeReplaced[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP] = $proposal->getDevicesToBeReplaced()->ColorMFP;
 
 $reportHasDevicesToReplace = false;
 foreach ($devicesToBeReplaced as $deviceList)
@@ -316,8 +316,6 @@ echo $this->pageStart;
     		</table>
     		<em>* Monthly cost includes both toner and non-toner expenses such as service, hardware and administration.</em>
 		
-	<?php endif; ?>
-	<?php echo $this->noBreakEnd; ?>
-<?php
-    echo $this->pageEnd;
- ?>
+<?php endif;
+    echo $this->noBreakEnd;
+    echo $this->pageEnd; ?>
