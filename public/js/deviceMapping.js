@@ -105,7 +105,7 @@ $(function ()
                     width   : 250,
                     name    : 'mapToMasterDevice',
                     index   : 'mapToMasterDevice',
-                    label   : 'Master Printer Name',
+                    label   : 'Select Master Device',
                     sortable: false,
                     align   : 'center'
                 },
@@ -119,7 +119,7 @@ $(function ()
                     sortable: false
                 },
                 {
-                    width   : 50,
+                    width   : 80,
                     name    : 'action',
                     index   : 'action',
                     label   : 'Action',
@@ -168,7 +168,14 @@ $(function ()
                         master_device_dropdown += '<input type="text"   name="masterDeviceName" style="width: 97%" class="autoCompleteDeviceName" value="' + row.mappedManufacturer + ' ' + row.mappedModelName + '" />';
 
                         row.mapToMasterDevice = master_device_dropdown;
-                        row.action = '<input style="width:35px;" title="Add New Printer" type="button" onclick="javascript: add_device(' + row.deviceInstanceIds + ');" value="Add" />';
+                        if (row.isMapped == 1)
+                        {
+                            row.action = 'Mapped';
+                        }
+                        else
+                        {
+                            row.action = '<input title="Add New Printer" type="button" onclick="javascript: add_device(' + row.deviceInstanceIds + ');" value="Create New" />';
+                        }
                     }
 
                     // Put our new data back into the grid
