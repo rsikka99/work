@@ -13,7 +13,7 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
      *
      * @var int
      */
-    protected $_linesToTrim = 4;
+    protected $_linesToTrim = 0;
 
     /**
      * How to read the date coming in from the csv
