@@ -28,7 +28,7 @@ $(function ()
                     name    : 'isMapped',
                     index   : 'isMapped',
                     label   : 'Is Mapped',
-                    hidden : true,
+                    hidden  : true,
                     title   : false,
                     sortable: false,
                     align   : 'center'
@@ -161,11 +161,11 @@ $(function ()
                     else
                     {
                         var master_device_dropdown = '';
-                        master_device_dropdown += '<input type="hidden" name="deviceInstanceIds" id="deviceInstanceIds" value="' + row.deviceInstanceIds + '" />';
-                        master_device_dropdown += '<input type="hidden" name="" id="" value="' + row.masterDeviceId + '" />';
-                        master_device_dropdown += '<input type="hidden" name="" id="" value="' + row.mappedModelName + '" />';
-                        master_device_dropdown += '<input type="hidden" name="" id="" value="' + row.mappedManufacturer + '" />';
-                        master_device_dropdown += '<input type="text"   name="" id="" style="width: 97%" class="autoCompleteDeviceName" value="' + row.mappedManufacturer + ' ' + row.mappedModelName + '" />';
+                        master_device_dropdown += '<input type="hidden" name="deviceInstanceIds" class="deviceInstanceIds" value="' + row.deviceInstanceIds + '" />';
+                        master_device_dropdown += '<input type="hidden" name="masterDeviceId" class="masterDeviceId" value="' + row.masterDeviceId + '" />';
+                        master_device_dropdown += '<input type="hidden" name="modelName" class="masterDeviceName" value="' + row.mappedModelName + '" />';
+                        master_device_dropdown += '<input type="hidden" name="manufacturer" class="manufacturerName" value="' + row.mappedManufacturer + '" />';
+                        master_device_dropdown += '<input type="text"   name="masterDeviceName" style="width: 97%" class="autoCompleteDeviceName" value="' + row.mappedManufacturer + ' ' + row.mappedModelName + '" />';
 
                         row.mapToMasterDevice = master_device_dropdown;
                         row.action = '<input style="width:35px;" title="Add New Printer" type="button" onclick="javascript: add_device(' + row.deviceInstanceIds + ');" value="Add" />';
@@ -179,20 +179,20 @@ $(function ()
                         source   : function (request, response)
                         {
                             $.ajax({
-                                url     : TMTW_BASEURL + "proposalgen/fleet/getmodels",
+                                url     : TMTW_BASEURL + "proposalgen/admin/search-for-device",
                                 dataType: "json",
                                 data    : {
-                                    searchText: request.term
+                                    searchTerm: request.term
                                 },
                                 success : function (data)
                                 {
                                     response($.map(data, function (item)
                                     {
                                         return {
-                                            value       : item.label,
-                                            id          : item.value,
-                                            label       : item.label,
-                                            manufacturer: item.manufacturer
+                                            value       : item.device_name,
+                                            id          : item.id,
+                                            label       : item.device_name,
+                                            manufacturer: item.fullName
                                         };
                                     }));
                                 }
@@ -226,6 +226,7 @@ $(function ()
                             var rmsUploadRowId = this.id.replace("txtMasterDevices", "");
                             var masterDeviceId = $.trim(parent.find("input.masterDeviceId")[0].value);
                             var deviceName = $.trim(parent.find("input.masterDeviceName")[0].value);
+                            var deviceInstanceIds = $(this).parent().find("input.deviceInstanceIds")[0].value;
 
                             /*
                              * Populate the text field if the user was auto completing, or clear it out if they were deleting the text
@@ -245,7 +246,7 @@ $(function ()
 
                                 }
                                 this.value = textValue;
-                                set_mapped(rmsUploadRowId, masterDeviceId);
+                                set_mapped(deviceInstanceIds, masterDeviceId);
                             }
                             else
                             {
@@ -253,7 +254,7 @@ $(function ()
                                 parent.find("input.masterDeviceName")[0].value = "";
                                 parent.find("input.manufacturerName")[0].value = "";
                                 this.value = textValue;
-                                set_mapped(rmsUploadRowId, 0);
+                                set_mapped(deviceInstanceIds, 0);
                             }
 
                         }
@@ -271,3 +272,39 @@ $(function ()
         search : false
     }, {}, {}, {}, {}, {});
 });
+
+
+function set_mapped(deviceInstanceIds, masterDeviceId)
+{
+    $.ajax({
+        url     : TMTW_BASEURL + '/proposalgen/fleet/set-mapped-to',
+        dataType: 'json',
+        data    : {
+            'deviceInstanceIds': deviceInstanceIds,
+            'masterDeviceId'   : masterDeviceId
+        },
+        complete: function (data)
+        {
+            console.log("Ajax set mapped to complete.");
+            console.log(data);
+        }
+    });
+}
+
+
+/**
+ * TODO: Write function description
+ *
+ * @param deviceInstanceIds
+ */
+function add_device(deviceInstanceIds) {
+    document.getElementById("hdnID").value = deviceInstanceIds;
+    document.getElementById("hdnGrid").value = document.getElementById("mapped_list_container").style.display;
+    document.getElementById("mapping").action = TMTW_BASEURL + "data/adddevice";
+    document.getElementById("mapping").submit();
+}
+
+function remove_device(deviceInstanceIds)
+{
+
+}

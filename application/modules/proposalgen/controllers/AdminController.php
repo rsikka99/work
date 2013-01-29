@@ -108,7 +108,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             // update company
                             $where = $dealer_companyTable->getAdapter()->quoteInto('dealer_company_id = ?', $dealer_company_id, 'INTEGER');
                             $dealer_companyTable->update($companyData, $where);
-                            $this->view->message = 'Company "' . $dealer_company_name . '" has been updated';
+                            $this->_helper->flashMessenger(array(
+                                                                "success" => 'Company "' . $dealer_company_name . '" has been updated'
+                                                           ));
                         }
                         else
                         {
@@ -117,12 +119,16 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
                             if (count($dealer_company) > 0)
                             {
-                                $this->view->message = 'Company "' . $dealer_company_name . '" already exists.';
+                                $this->_helper->flashMessenger(array(
+                                                                    "error" => 'company "' . $dealer_company_name . '" already exists.'
+                                                               ));
                             }
                             else
                             {
                                 $dealer_companyTable->insert($companyData);
-                                $this->view->message = 'Company "' . $dealer_company_name . '" Added.';
+                                $this->_helper->flashMessenger(array(
+                                                                    "success" => 'Company "' . $dealer_company_name . '" Added.'
+                                                               ));
                             }
                         }
                     }
@@ -144,7 +150,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
                                 if (!$status)
                                 {
-                                    $this->view->message = "An error has occurred while deleting the companies users and the company was not deleted. Please try again. If the problem persists, please contact your administrator.";
+                                    $this->_helper->flashMessenger(array(
+                                                                        "error" => "An error has occurred while deleting the companies users and the company was not deleted. Please try again. If the problem persists, please contact your administrator."
+                                                                   ));
                                     exit();
                                 }
                             }
@@ -167,8 +175,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 // delete dealer companay
                                 $where = $dealer_companyTable->getAdapter()->quoteInto($criteria, null);
                                 $dealer_companyTable->delete($where);
-
-                                $this->view->message = "\"" . $dealer_company_name . "\" was successfully deleted.";
+                                $this->_helper->flashMessenger(array(
+                                                                    "success" => "\"" . $dealer_company_name . "\" was successfully deleted."
+                                                               ));
                             }
                         }
                     }
@@ -191,7 +200,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 catch (Zend_Db_Exception $e)
                 {
                     $db->rollback();
-                    $this->view->message = 'Database Error: Company "' . $formData ["company_name"] . '" could not be saved.';
+                    $this->_helper->flashMessenger(array(
+                                                        "error" => 'Database Error: Company "' . $formData ["company_name"] . '" could not be saved.'
+                                                   ));
                 }
                 catch (Exception $e)
                 {
@@ -202,8 +213,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             }
             else
             {
-                $this->view->repop   = true;
-                $this->view->message = 'Error: Invalid data. Please review your entries and try again.';
+                $this->view->repop = true;
+                $this->_helper->flashMessenger(array(
+                                                    "error" => 'Error: Invalid data. Please review your entries and try again.'
+                                               ));
             }
         }
 
@@ -1684,24 +1697,28 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
                 $form->removeElement('select_manufacturer');
                 $form->removeElement('manufacturer_name');
+                $form->removeElement('manufacturer_displayname');
                 $form->removeElement('save_manufacturer');
                 $form->removeElement('delete_manufacturer');
                 $form->removeElement('back_button');
 
                 $this->view->message = "<h3 style='margin: 20px 0px 0px 0px; border-bottom: 0px;'>Adding Manufacturer... please wait.</h3>";
 
+
                 $db->beginTransaction();
                 try
                 {
                     if ($formData ['options'] == "new")
                     {
-                        $manufacturer_name = ucwords(strtolower($formData ["manufacturer_name"]));
-                        $manufacturerData  = array(
-                            'fullname'  => $manufacturer_name,
-                            'isDeleted' => 0
+                        $manufacturer_name        = ucwords(strtolower($formData ["manufacturer_name"]));
+                        $manufacturer_displayname = ucwords(strtolower($formData ["manufacturer_displayname"]));
+                        $manufacturerData         = array(
+                            'fullname'    => $manufacturer_name,
+                            'displayname' => $manufacturer_displayname,
+                            'isDeleted'   => 0
                         );
-                        $where             = $manufacturersTable->getAdapter()->quoteInto('fullName = ?', $manufacturer_name);
-                        $manufacturer      = $manufacturersTable->fetchAll($where);
+                        $where                    = $manufacturersTable->getAdapter()->quoteInto('fullName = ?', $manufacturer_name);
+                        $manufacturer             = $manufacturersTable->fetchAll($where);
 
                         if (count($manufacturer) == 0)
                         {
@@ -1717,10 +1734,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             }
             else if (isset($formData ['manufacturer_name']) && $form->isValid($formData))
             {
-                $manufacturersTable = new Proposalgen_Model_DbTable_Manufacturer();
-                $manufacturer_id    = $formData ['select_manufacturer'];
-                $manufacturer_name  = strtoupper($formData ['manufacturer_name']);
-
+                $manufacturersTable       = new Proposalgen_Model_DbTable_Manufacturer();
+                $manufacturer_id          = $formData ['select_manufacturer'];
+                $manufacturer_name        = strtoupper($formData ['manufacturer_name']);
+                $manufacturer_displayname = strtoupper($formData ['manufacturer_displayname']);
                 $db->beginTransaction();
                 try
                 {
@@ -1729,44 +1746,60 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     {
 
                         $manufacturerData = array(
-                            'displayName' => $manufacturer_name,
-                            'fullName'    => $manufacturer_name
+
+                            'fullName'    => $manufacturer_name,
+                            'displayName' => $manufacturer_displayname,
                         );
 
+                        //Check if fullName is already used
+                        $where        = $manufacturersTable->getAdapter()->quoteInto('id <> ' . $manufacturer_id . ' AND fullName = ?', $manufacturer_name);
+                        $manufacturer = $manufacturersTable->fetchRow($where);
                         if ($manufacturer_id > 0)
                         {
-
-                            $where = $manufacturersTable->getAdapter()->quoteInto('id = ?', $manufacturer_id, 'INTEGER');
-                            $manufacturersTable->update($manufacturerData, $where);
-
-                            $this->view->message = 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Updated';
+                            if (count($manufacturer) > 0)
+                            {
+                                $this->_helper->flashMessenger(array(
+                                                                    "error" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" already exists.'
+                                                               ));
+                            }
+                            else
+                            {
+                                $where = $manufacturersTable->getAdapter()->quoteInto('id = ?', $manufacturer_id, 'INTEGER');
+                                $manufacturersTable->update($manufacturerData, $where);
+                                $this->_helper->flashMessenger(array(
+                                                                    "success" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Updated'
+                                                               ));
+                            }
                         }
                         else
                         {
-
-                            $where        = $manufacturersTable->getAdapter()->quoteInto('fullName = ?', $manufacturer_name);
-                            $manufacturer = $manufacturersTable->fetchRow($where);
-
                             if (count($manufacturer) > 0)
                             {
                                 if ($manufacturer ['isDeleted'] == 1)
                                 {
                                     $manufacturerData = array(
-                                        'isDeleted' => 0
+                                        'displayName' => $manufacturer_displayname,
+                                        'isDeleted'   => 0
                                     );
                                     $where            = $manufacturersTable->getAdapter()->quoteInto('id = ?', $manufacturer ['id'], 'INTEGER');
                                     $manufacturersTable->update($manufacturerData, $where);
-                                    $this->view->message = 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Added.';
+                                    $this->_helper->flashMessenger(array(
+                                                                        "success" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Added.'
+                                                                   ));
                                 }
                                 else
                                 {
-                                    $this->view->message = 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" already exists.';
+                                    $this->_helper->flashMessenger(array(
+                                                                        "error" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" already exists.'
+                                                                   ));
                                 }
                             }
                             else
                             {
                                 $manufacturersTable->insert($manufacturerData);
-                                $this->view->message = 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Added.';
+                                $this->_helper->flashMessenger(array(
+                                                                    "success" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Added.'
+                                                               ));
                             }
                         }
                     }
@@ -1779,7 +1812,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             // check to see if any devices are using the
                             // manufacturer
                             $master_deviceTable = new Proposalgen_Model_DbTable_MasterDevice();
-                            $where              = $master_deviceTable->getAdapter()->quoteInto('manufacturer_id = ?', $manufacturer_id, 'INTEGER');
+                            $where              = $master_deviceTable->getAdapter()->quoteInto('manufacturerId = ?', $manufacturer_id, 'INTEGER');
                             $master_device      = $master_deviceTable->fetchAll($where);
 
                             if (count($master_device) == 0)
@@ -1805,11 +1838,15 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 );
                                 $manufacturersTable->update($manufacturerData, $where);
                             }
-                            $this->view->message = 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Deleted.';
+                            $this->_helper->flashMessenger(array(
+                                                                "success" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Deleted.'
+                                                           ));
                         }
                         else
                         {
-                            $this->view->message = "No manufacturer was selected to be deleted.";
+                            $this->_helper->flashMessenger(array(
+                                                                "error" => "No manufacturer was selected to be deleted."
+                                                           ));
                         }
                     }
                     $db->commit();
@@ -1831,6 +1868,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     // reset form
                     $currElement->setValue('');
                     $form->getElement('manufacturer_name')->setValue('');
+                    $form->getElement('manufacturer_displayname')->setValue('');
                 }
                 catch (Exception $e)
                 {
@@ -1865,16 +1903,18 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             if (count($manufacturer) > 0)
             {
                 $formdata = array(
-                    'manufacturer_name' => Trim(ucwords(strtolower($manufacturer ['fullname']))),
-                    'is_deleted'        => ($manufacturer ['isDeleted'] == 1 ? true : false)
+                    'manufacturer_name'        => Trim(ucwords(strtolower($manufacturer ['fullname']))),
+                    'manufacturer_displayname' => Trim(ucwords(strtolower($manufacturer ['displayname']))),
+                    'is_deleted'               => ($manufacturer ['isDeleted'] == 1 ? true : false)
                 );
             }
             else
             {
                 // empty form values
                 $formdata = array(
-                    'manufacturer_name' => '',
-                    'is_deleted'        => false
+                    'manufacturer_name'        => '',
+                    'manufacturer_displayname' => '',
+                    'is_deleted'               => false
                 );
             }
         }
@@ -6575,8 +6615,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $offset            = null;
         $id_list           = null;
 
-        $User = Proposalgen_Model_Mapper_User::getInstance();
-
+        //$User = Proposalgen_Model_Mapper_User::getInstance();
+        $isSystemAdmin = $this->isAllowed('',Application_Model_Acl::PRIVILEGE_ADMIN);
         //*************************************************
         // postback
         //*************************************************
@@ -6584,7 +6624,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
         if ($this->_request->isPost())
         {
-            $reportTable = new Proposalgen_Model_DbTable_Reports();
+            $reportTable = new Proposalgen_Model_DbTable_Report();
             $formData    = $this->_request->getPost();
             // print_r($formData); die;
 
@@ -6609,13 +6649,13 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $report->userId = $new_user_id;
                     $reportMapper->save($report);
 
-                    // update unknown_device_instance records
-                    $udiTable         = new Proposalgen_Model_DbTable_UnknownDeviceInstance();
-                    $data ['user_id'] = $new_user_id;
-                    $where            = $udiTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
+//                    // update unknown_device_instance records
+//                    $udiTable         = new Proposalgen_Model_DbTable_UnknownDeviceInstance();
+//                    $data ['user_id'] = $new_user_id;
+//                    $where            = $udiTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
 
                     // Perform the update.
-                    $udiTable->update($data, $where);
+                    //$udiTable->update($data, $where);
 
                     $this->_helper->flashMessenger(array(
                                                         "success" => "Report Transfer Complete."
@@ -6647,32 +6687,29 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
         // if system admin (all users) else if dealer admin or standard user (company users only)
         $where = null;
-        if (in_array("Standard User", $this->privilege))
+        if ($isSystemAdmin)
+        {
+
+        }
+        else
         {
             $where = 'u.user_id = ' . $this->user_id;
         }
-        else if (in_array("Dealer Admin", $this->privilege))
-        {
-            $where = 'dealer_company_id = ' . $this->dealer_company_id;
-        }
-        else if (in_array("System Admin", $this->privilege))
-        {
-            // nothing else
-        }
 
-        $select = new Zend_Db_Select($db);
         $select = $db->select()
-            ->from(array(
-                        'u' => 'users'
-                   ))
-            ->joinLeft(array(
-                            'up' => 'user_privileges'
-                       ), 'u.user_id = up.user_id');
+        ->from(array(
+                    'u' => 'users'
+               ))
+        ->joinLeft(array(
+                        'up' => 'user_roles'
+                   ), 'u.id = up.userId'
+        );
         if ($where)
         {
             $select->where($where);
         }
         $select->order('username ASC');
+        $select->group('u.id');
         $stmt                   = $db->query($select);
         $users                  = $stmt->fetchAll();
         $this->view->users_list = $users;
@@ -6683,45 +6720,19 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
 
         // if system admin (all users) else if dealer admin or standard user (company users only)
-        $where = null;
-        if (!in_array("System Admin", $this->privilege))
-        {
-            $where = 'dealer_company_id=' . $this->dealer_company_id;
-        }
-
-        $select = new Zend_Db_Select($db);
         $select = $db->select()
             ->from(array(
                         'u' => 'users'
                    ))
             ->joinLeft(array(
-                            'up' => 'user_privileges'
-                       ), 'u.user_id = up.user_id');
-        if ($where)
-        {
-            $select->where($where);
-        }
+                            'up' => 'user_roles'
+                       ), 'u.id = up.userId');
         $select->order('username ASC');
+        $select->group('u.id');
         $stmt                      = $db->query($select);
         $users                     = $stmt->fetchAll();
         $this->view->to_users_list = $users;
 
-        //*************************************************
-        // get companies
-        //*************************************************
-
-
-        // if system admin (show all reports) else if dealer admin (above users reports only) else if standard user (show only users reports)
-        $where = 'dealer_company_id > 1 ';
-        if (!in_array("System Admin", $this->privilege))
-        {
-            $where .= 'AND dealer_company_id = ' . $this->dealer_company_id;
-        }
-        $order = 'company_name ASC';
-
-        $companiesTable           = new Proposalgen_Model_DbTable_DealerCompany();
-        $companies                = $companiesTable->fetchAll($where, $order, $count, $offset);
-        $this->view->company_list = $companies;
 
         //*************************************************
         // get reports
@@ -6730,27 +6741,28 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
         // if system admin (show all reports) else if dealer admin (above users reports only) else if standard user (show only users reports)
         $where = null;
-        if (!in_array("Standard User", $this->privilege))
+        if ($isSystemAdmin)
         {
             //build id string
             foreach ($this->view->users_list as $key)
             {
-                if ($id_list)
-                {
-                    $id_list .= ',';
+                if($key['userId'] != null){
+                    if ($id_list)
+                    {
+                        $id_list .= ',';
+                    }
+                    $id_list .= $key ['userId'];
                 }
-                $id_list .= $key ['user_id'];
             }
-            $where = 'user_id IN (' . $id_list . ')';
+            $where = 'userId IN (' . $id_list . ')';
         }
         else
         {
-            $where = 'user_id=' . $this->user_id;
+            $where = 'userId=' . $this->user_id;
         }
-        $order = 'date_created DESC';
-
-        $reportsTable             = new Proposalgen_Model_DbTable_Reports();
-        $reports                  = $reportsTable->fetchAll($where, $order, $count, $offset);
+        $order = 'dateCreated DESC';
+        $reportTable             = new Proposalgen_Model_DbTable_Report();
+        $reports                  = $reportTable->fetchAll($where, $order, $count, $offset);
         $this->view->reports_list = $reports;
     }
 
@@ -6770,31 +6782,42 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $where = null;
             if ($filterfield == 'date_created' && $startdate && $enddate)
             {
-                $where = 'r.date_created BETWEEN "' . date("Y-m-d", strtotime($startdate)) . '" AND "' . date("Y-m-d", strtotime($enddate)) . '"';
+                $where = 'r.dateCreated BETWEEN "' . date("Y-m-d", strtotime($startdate)) . '" AND "' . date("Y-m-d", strtotime($enddate)) . '"';
             }
             else if ($filterfield && $filtervalue)
             {
+                if($filtervalue != 'all'){
                 if ($filterfield == 'user_id')
                 {
-                    $filterfield = 'r.user_id';
+
+                    $filterfield = 'r.userId';
                 }
                 $where = $filterfield . ' = ' . $filtervalue;
+                }
             }
 
-            if (in_array("Standard User", $this->privilege))
+            if ($this->isAllowed('',Application_Model_Acl::PRIVILEGE_ADMIN))
             {
-                $where = 'r.user_id = ' . $this->user_id;
+
+            }
+            else
+            {
+                $where = 'r.userId = ' . $this->user_id;
             }
 
             // select reports
             $select = new Zend_Db_Select($db);
             $select = $db->select()
                 ->from(array(
-                            'r' => 'reports'
-                       ))
+                            'r' => 'pgen_reports'
+                       ),array (
+                               'id AS report_id',
+                               'customerCompanyName',
+                               'dateCreated'
+                         ))
                 ->joinLeft(array(
                                 'u' => 'users'
-                           ), 'u.user_id = r.user_id', array(
+                           ), 'u.id = r.userId', array(
                                                             'username'
                                                        ));
             if ($where)
@@ -6802,8 +6825,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $select->where($where);
             }
             $select->order(array(
-                                'date_created DESC',
-                                'customer_company_name ASC'
+                                'dateCreated DESC',
+                                'customerCompanyName ASC'
                            ));
             //echo $select; die;
             $stmt   = $db->query($select);
@@ -6817,7 +6840,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $formdata->rows [$i] ['id']   = $row ['report_id'];
                     $formdata->rows [$i] ['cell'] = array(
                         $row ['report_id'],
-                        $row ['customer_company_name'] . ' (' . $row ['username'] . ' on ' . date("m-d-Y", strtotime($row ['date_created'])) . ')'
+                        $row ['customerCompanyName'] . ' (' . $row ['username'] . ' on ' . date("m-d-Y", strtotime($row ['dateccreated'])) . ')'
                     );
                     $i++;
                 }
@@ -6849,33 +6872,21 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         try
         {
             $where = null;
-            if (strtolower($filter) == 'my')
-            {
-                $where = 'u.dealer_company_id = ' . $this->dealer_company_id;
-            }
-            elseif (strtolower($filter) == 'all')
-            {
-                //nothing to add
-            }
-            else
-            {
-                $where = 'dealer_company_id = ' . $filter;
-            }
 
             // select users
-            $select = new Zend_Db_Select($db);
             $select = $db->select()
                 ->from(array(
                             'u' => 'users'
                        ))
                 ->joinLeft(array(
-                                'up' => 'user_privileges'
+                                'up' => 'user_roles'
                            ), 'u.user_id = up.user_id');
             if ($where)
             {
                 $select->where($where);
             }
             $select->order('username ASC');
+            $select->group('u.id');
             $stmt   = $db->query($select);
             $result = $stmt->fetchAll();
 
@@ -6987,5 +6998,32 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $jsonResponse = Proposalgen_Model_Mapper_MasterDevice::getInstance()->searchByName($searchTerm, $filterByManufacturer);
 
         $this->_helper->json($jsonResponse);
+
+        }
+          /**
+     * Checks to see if the currently logged in user has access to the resource.
+     *
+     * @param $resource
+     * @param $privilege
+     *
+     * @return bool
+     */
+    public function isAllowed ($resource, $privilege = null)
+    {
+        $userId = null;
+        if (Zend_Auth::getInstance()->hasIdentity())
+        {
+            $userId = Zend_Auth::getInstance()->getIdentity()->id;
+        }
+
+        $acl = Application_Model_Acl::getInstance();
+
+        if ($acl->isAllowed($userId, $resource, $privilege))
+        {
+            return true;
+        }
+
+
+        return false;
     }
 } //end class AdminController

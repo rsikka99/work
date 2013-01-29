@@ -120,7 +120,7 @@ class Proposalgen_Form_Manufacturers extends Zend_Form
         
         //manufacturers name
         $manufacturerName = new Zend_Form_Element_Text('manufacturer_name');
-        $manufacturerName->setLabel('* Manufacturer Name:')
+        $manufacturerName->setLabel('* Full Name:')
             ->setRequired(true)
             ->setAttrib('size', 50)
             ->setAttrib('maxlength', 50)
@@ -152,6 +152,42 @@ class Proposalgen_Form_Manufacturers extends Zend_Form
                 ) 
         ));
         array_push($elements, $manufacturerName);
+        $elementCounter ++;
+
+        //manufacturers Full Name
+        $manufacturerDisplayName = new Zend_Form_Element_Text('manufacturer_displayname');
+        $manufacturerDisplayName->setLabel('* Display Name:')
+            ->setRequired(true)
+            ->setAttrib('size', 50)
+            ->setAttrib('maxlength', 50)
+            ->setOrder($elementCounter)
+            ->setAttrib('id', 'manufacturer_displayname')
+            ->setDecorators(array (
+                                  'ViewHelper',
+                                  array (
+                                      'Description',
+                                      array (
+                                          'escape' => false,
+                                          'tag' => false
+                                      )
+                                  ),
+                                  'Errors',
+                                  array (
+                                      'HtmlTag',
+                                      array (
+                                          'tag' => 'dd',
+                                          'id' => 'manufacturer_displayname-element'
+                                      )
+                                  ),
+                                  array (
+                                      'Label',
+                                      array (
+                                          'tag' => 'dt',
+                                          'class' => 'forms_label'
+                                      )
+                                  )
+                            ));
+        array_push($elements, $manufacturerDisplayName);
         $elementCounter ++;
         
         //save button
@@ -209,6 +245,8 @@ class Proposalgen_Form_Manufacturers extends Zend_Form
         ));
         array_push($elements, $element);
         $elementCounter ++;
+
+
         
         //back button
         $back = new Zend_Form_Element_Button('back_button');
