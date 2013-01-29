@@ -83,10 +83,10 @@
     function update_filtervalue_list( type ) {
         var url = '';
         if ( type == 'user_id' ) {
-		    url = '<?php echo $this->baseUrl(); ?>/admin/filteruserslist';
+		    url = '<?php echo $this->baseUrl('/proposalgen/admin/filteruserslist'); ?>';
 		    default_option_text = "Users";
 		} else {
-		    url = '<?php echo $this->baseUrl(); ?>/admin/filtercompanieslist';
+		    url = '<?php echo $this->baseUrl('/proposalgen/admin/filtercompanieslist'); ?>';
 		    default_option_text = "Companies";
 		}
 		
@@ -125,7 +125,7 @@
 		var startdate = $("#start_date").val();
 		var enddate = $("#end_date").val();
 		
-		var url = '<?php echo $this->baseUrl(); ?>/admin/filterreportslist?filterfield='+filterfield+'&filtervalue='+filtervalue+'&startdate='+startdate+'&enddate='+enddate;
+		var url = '<?php echo $this->baseUrl('/proposalgen/admin/filterreportslist'); ?>?filterfield='+filterfield+'&filtervalue='+filtervalue+'&startdate='+startdate+'&enddate='+enddate;
 		//alert(url);
 		
 		$.ajax ({
@@ -382,7 +382,7 @@
 	            <option value="all">All Users</option>
 				<?php
 				foreach($this->users_list as $key) {
-					echo "<option value='" . $key['user_id'] ."'>" . (strtolower($key['username'])) . "</option>";
+					echo "<option value='" . $key['userId'] ."'>" . (strtolower($key['username'])) . "</option>";
 				}
 				?>
 	        </select>
@@ -399,7 +399,7 @@
     	        <option value=""> -- Select A Report -- </option>
 				<?php
 				foreach($this->reports_list as $key) {
-					echo "<option value='" . $key['report_id'] ."'>" . ($key['customer_company_name']) . ' (' . Proposalgen_Model_Mapper_User::getInstance()->find( $key['user_id'] )->getUsername() . ' on ' . date("m-d-Y", strtotime($key['date_created'])) . ')' . "</option>";
+					echo "<option value='" . $key['id'] ."'>" . ($key['customerCompanyName']) . ' (' . Application_Model_Mapper_User::getInstance()->find( $key['userId'] )->username . ' on ' . date("m-d-Y", strtotime($key['dateCreated'])) . ')' . "</option>";
 				}
 				?>
     	    </select>
@@ -419,7 +419,7 @@
     	        <option value=""> -- Select A User -- </option>
 				<?php
 				foreach($this->to_users_list as $key) {
-					echo "<option value='" . $key['user_id'] ."'>" . (strtolower($key['username'])) . "</option>";
+					echo "<option value='" . $key['userId'] ."'>" . (strtolower($key['username'])) . "</option>";
 				}
 				?>
     	    </select>
@@ -431,7 +431,7 @@
             	    <select name="userlist" id="userlist" class="multibox" multiple="multiple" ondblclick="javascript: transfer_user('add');">
     				<?php
     				foreach($this->to_users_list as $key) {
-    					echo "<option value='" . $key['user_id'] ."'>" . (strtolower($key['username'])) . "</option>";
+    					echo "<option value='" . $key['userId'] ."'>" . (strtolower($key['username'])) . "</option>";
     				}
     				?>
             	    </select>
@@ -452,6 +452,6 @@
 	
 	<div class="submitBar" id="submitBtns">	 
 		<input type="button" name="btnTransfer" id="btnTransfer" value="Complete Transfer" onclick="javascript: confirm_transfer();" class="btn btn-primary" />
-		<input type="button" name="btnDone" id="btnDone" value="Done" onclick="javascript: document.location.href='<?php echo $this->baseUrl()."/admin/managemyreports"?>';" class="btn" />
+		<input type="button" name="btnDone" id="btnDone" value="Done" onclick="javascript: document.location.href='<?php echo $this->baseUrl("/proposalgen/admin/managemyreports")?>';" class="btn" />
 	</div>		
 </form>
