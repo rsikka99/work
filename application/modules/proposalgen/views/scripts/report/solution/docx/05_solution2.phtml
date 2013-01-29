@@ -15,22 +15,22 @@ $listParagraphStyle = array (
         'spaceAfter' => 80 
 );
 
-$replacementTypes [Proposalgen_Model_ReplacementDevice::REPLACMENT_BW] = 'MONOCHROME';
-$replacementTypes [Proposalgen_Model_ReplacementDevice::REPLACMENT_BWMFP] = 'MONOCHROME MFP';
-$replacementTypes [Proposalgen_Model_ReplacementDevice::REPLACMENT_COLOR] = 'COLOR';
-$replacementTypes [Proposalgen_Model_ReplacementDevice::REPLACMENT_COLORMFP] = 'COLOR MFP';
+$replacementTypes [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW] = 'MONOCHROME';
+$replacementTypes [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP] = 'MONOCHROME MFP';
+$replacementTypes [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR] = 'COLOR';
+$replacementTypes [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP] = 'COLOR MFP';
 
-$printerTypes [Proposalgen_Model_ReplacementDevice::REPLACMENT_BW] = 'Monochrome printer(s)';
-$printerTypes [Proposalgen_Model_ReplacementDevice::REPLACMENT_BWMFP] = 'Monochrome MFP(s)';
-$printerTypes [Proposalgen_Model_ReplacementDevice::REPLACMENT_COLOR] = 'Color printer(s)';
-$printerTypes [Proposalgen_Model_ReplacementDevice::REPLACMENT_COLORMFP] = 'Color MFP(s)';
+$printerTypes [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW] = 'Monochrome printer(s)';
+$printerTypes [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP] = 'Monochrome MFP(s)';
+$printerTypes [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR] = 'Color printer(s)';
+$printerTypes [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP] = 'Color MFP(s)';
 
 $replacementDevices = $proposal->getReplacementDevices();
 
-$devicesToBeReplaced [Proposalgen_Model_ReplacementDevice::REPLACMENT_BW] = $proposal->getDevicesToBeReplaced()->BlackAndWhite;
-$devicesToBeReplaced [Proposalgen_Model_ReplacementDevice::REPLACMENT_BWMFP] = $proposal->getDevicesToBeReplaced()->BlackAndWhiteMFP;
-$devicesToBeReplaced [Proposalgen_Model_ReplacementDevice::REPLACMENT_COLOR] = $proposal->getDevicesToBeReplaced()->Color;
-$devicesToBeReplaced [Proposalgen_Model_ReplacementDevice::REPLACMENT_COLORMFP] = $proposal->getDevicesToBeReplaced()->ColorMFP;
+$devicesToBeReplaced [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW] = $proposal->getDevicesToBeReplaced()->BlackAndWhite;
+$devicesToBeReplaced [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP] = $proposal->getDevicesToBeReplaced()->BlackAndWhiteMFP;
+$devicesToBeReplaced [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR] = $proposal->getDevicesToBeReplaced()->Color;
+$devicesToBeReplaced [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP] = $proposal->getDevicesToBeReplaced()->ColorMFP;
 
 $reportHasDevicesToReplace = false;
 foreach ( $devicesToBeReplaced as $deviceList )
@@ -160,15 +160,15 @@ if ($reportHasDevicesToReplace)
     
     $table->addRow($tc->row->rowheight);
     $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText($this->translate('Estimated cost of monochrome pages'), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
-    $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($proposal->LeftOverBlackAndWhitePageCount * $proposal->MPSBlackAndWhiteCPP), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($proposal->getLeftOverBlackAndWhitePageCount() * $proposal->getMPSBlackAndWhiteCPP()), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
     
     $table->addRow($tc->row->rowheight);
     $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText($this->translate('Estimated cost of color pages'), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
-    $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($proposal->LeftOverColorPageCount * $proposal->MPSColorCPP), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($proposal->getLeftOverColorPageCount() * $proposal->getMPSColorCPP()), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
     
     $table->addRow($tc->row->rowheight);
-    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText(sprintf($this->translate('Processing 1 invoice/month @ $%1$s'), number_format($proposal->CostOfExecutingSuppliesOrder)), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
-    $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($proposal->InternalAdminCost), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText(sprintf($this->translate('Processing 1 invoice/month @ $%1$s'), number_format($proposal->getCostOfExecutingSuppliesOrder())), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($proposal->getInternalAdminCost()), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
     
     $table->addRow($tc->row->rowheight);
     $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText($this->translate('External service'), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
@@ -176,7 +176,7 @@ if ($reportHasDevicesToReplace)
     
     $table->addRow($tc->row->rowheight);
     $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText($this->translate('Internal IT support for printers'), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
-    $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($proposal->AnnualITCost * 0.5), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($proposal->getAnnualITCost() * 0.5), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
     
     $table->addRow($tc->row->rowheight);
     $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText($this->translate('Additional hardware purchases'), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
@@ -188,15 +188,15 @@ if ($reportHasDevicesToReplace)
     
     $table->addRow($tc->boldRow->rowheight);
     $table->addCell($tc->col1Width, $tc->boldRow->cell1->cellStyle)->addText($this->translate('Total annual cost under PrintIQ�'), $tc->boldRow->cell1->fontStyle, $tc->boldRow->cell1->paragraphStyle);
-    $table->addCell($tc->col1Width, $tc->boldRow->cell2->cellStyle)->addText('$' . number_format($proposal->LeftOverPrintIQCost), $tc->boldRow->cell2->fontStyle, $tc->boldRow->cell2->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->boldRow->cell2->cellStyle)->addText('$' . number_format($proposal->getLeftOverPrintIQCost()), $tc->boldRow->cell2->fontStyle, $tc->boldRow->cell2->paragraphStyle);
     
     $table->addRow($tc->boldRow->rowheight);
     $table->addCell($tc->col1Width, $tc->boldRow->cell1->cellStyle)->addText($this->translate('Current annual cost of these devices'), $tc->boldRow->cell1->fontStyle, $tc->boldRow->cell1->paragraphStyle);
-    $table->addCell($tc->col1Width, $tc->boldRow->cell2->cellStyle)->addText('$' . number_format($proposal->CostOfRemainingDevices), $tc->boldRow->cell2->fontStyle, $tc->boldRow->cell2->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->boldRow->cell2->cellStyle)->addText('$' . number_format($proposal->getCostOfRemainingDevices()), $tc->boldRow->cell2->fontStyle, $tc->boldRow->cell2->paragraphStyle);
     
     $table->addRow($tc->footer->rowheight);
     $table->addCell($tc->col1Width, $tc->footer->cell1->cellStyle)->addText($this->translate('Total annual savings for PrintIQ�'), $tc->footer->cell1->fontStyle, $tc->footer->cell1->paragraphStyle);
-    $table->addCell($tc->col1Width, $tc->footer->cell2->cellStyle)->addText('$' . number_format($proposal->CostOfRemainingDevices - $proposal->LeftOverPrintIQCost), $tc->footer->cell2->fontStyle, $tc->footer->cell2->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->footer->cell2->cellStyle)->addText('$' . number_format($proposal->getCostOfRemainingDevices() - $proposal->getLeftOverPrintIQCost()), $tc->footer->cell2->fontStyle, $tc->footer->cell2->paragraphStyle);
     
     $section->addTextBreak();
     $tc = $this->styles->tables->printiqplussummary;
@@ -208,53 +208,53 @@ if ($reportHasDevicesToReplace)
     $table->addCell($tc->col3Width, $tc->header->cell3->cellStyle)->addText($this->translate('Proposed Annual Cost'), $tc->header->cell3->fontStyle, $tc->header->cell3->paragraphStyle);
     $table->addCell($tc->col4Width, $tc->header->cell4->cellStyle)->addText($this->translate('Estimated Annual Savings'), $tc->header->cell4->fontStyle, $tc->header->cell4->paragraphStyle);
     
-    if (count($this->proposal->DevicesToBeReplaced->BlackAndWhite) > 0)
+    if (count($proposal->getDevicesToBeReplaced()->BlackAndWhite) > 0)
     {
         $table->addRow($tc->body->rowheight);
         $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText($this->translate('PrintIQ� Plus�- Monochrome Devices'), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
-        $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($proposal->CurrentCostOfReplacedBlackAndWhitePrinters), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
-        $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('$' . number_format($proposal->ProposedCostOfReplacedBlackAndWhitePrinters), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
-        $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($proposal->CurrentCostOfReplacedBlackAndWhitePrinters - $proposal->ProposedCostOfReplacedBlackAndWhitePrinters), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
+        $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($proposal->getCurrentCostOfReplacedBlackAndWhitePrinters()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
+        $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('$' . number_format($proposal->getProposedCostOfReplacedBlackAndWhitePrinters()), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
+        $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($proposal->getCurrentCostOfReplacedBlackAndWhitePrinters() - $proposal->getProposedCostOfReplacedBlackAndWhitePrinters()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
     }
-    if (count($this->proposal->DevicesToBeReplaced->BlackAndWhiteMFP) > 0)
+    if (count($proposal->getDevicesToBeReplaced()->BlackAndWhiteMFP) > 0)
     {
         $table->addRow($tc->body->rowheight);
         $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText($this->translate('PrintIQ� Plus� - Monochrome MFP Devices'), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
-        $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($proposal->CurrentCostOfReplacedBlackAndWhiteMFPPrinters), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
-        $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('$' . number_format($proposal->ProposedCostOfReplacedBlackAndWhiteMFPPrinters), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
-        $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($proposal->CurrentCostOfReplacedBlackAndWhiteMFPPrinters - $proposal->ProposedCostOfReplacedBlackAndWhiteMFPPrinters), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
+        $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($proposal->getCurrentCostOfReplacedBlackAndWhiteMFPPrinters()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
+        $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('$' . number_format($proposal->getProposedCostOfReplacedBlackAndWhiteMFPPrinters()), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
+        $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($proposal->getCurrentCostOfReplacedBlackAndWhiteMFPPrinters() - $proposal->getProposedCostOfReplacedBlackAndWhiteMFPPrinters()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
     }
-    if (count($this->proposal->DevicesToBeReplaced->Color) > 0)
+    if (count($proposal->getDevicesToBeReplaced()->Color) > 0)
     {
         $table->addRow($tc->body->rowheight);
         $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText($this->translate('PrintIQ� Plus� - Color Devices'), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
-        $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($proposal->CurrentCostOfReplacedColorPrinters), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
-        $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('$' . number_format($proposal->ProposedCostOfReplacedColorPrinters), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
-        $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($proposal->CurrentCostOfReplacedColorPrinters - $proposal->ProposedCostOfReplacedColorPrinters), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
+        $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($proposal->getCurrentCostOfReplacedColorPrinters()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
+        $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('$' . number_format($proposal->getProposedCostOfReplacedColorPrinters()), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
+        $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($proposal->getCurrentCostOfReplacedColorPrinters() - $proposal->getProposedCostOfReplacedColorPrinters()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
     
     }
-    if (count($this->proposal->DevicesToBeReplaced->ColorMFP) > 0)
+    if (count($proposal->getDevicesToBeReplaced()->ColorMFP) > 0)
     {
         $table->addRow($tc->body->rowheight);
         $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText($this->translate('PrintIQ� - Color MFP Devices'), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
-        $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($proposal->CurrentCostOfReplacedColorMFPPrinters), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
-        $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('$' . number_format($proposal->ProposedCostOfReplacedColorMFPPrinters), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
-        $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($proposal->CurrentCostOfReplacedColorMFPPrinters - $proposal->ProposedCostOfReplacedColorMFPPrinters), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
+        $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($proposal->getCurrentCostOfReplacedColorMFPPrinters()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
+        $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('$' . number_format($proposal->getProposedCostOfReplacedColorMFPPrinters()), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
+        $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($proposal->getCurrentCostOfReplacedColorMFPPrinters() - $proposal->getProposedCostOfReplacedColorMFPPrinters()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
     }
-    if (count($this->proposal->DevicesToBeReplaced->LeftOver) > 0)
+    if (count($proposal->getDevicesToBeReplaced()->LeftOver) > 0)
     {
         $table->addRow($tc->body->rowheight);
         $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText($this->translate('PrintIQ� Plus� - Remaining print devices'), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
-        $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($proposal->CostOfRemainingDevices), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
-        $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('$' . number_format($proposal->LeftOverPrintIQCost), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
-        $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($proposal->CostOfRemainingDevices - $proposal->LeftOverPrintIQCost), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
+        $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($proposal->getCostOfRemainingDevices()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
+        $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('$' . number_format($proposal->getLeftOverPrintIQCost()), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
+        $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($proposal->getCostOfRemainingDevices() - $proposal->getLeftOverPrintIQCost()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
     }
     
     $table->addRow($tc->footer->rowheight);
     $table->addCell($tc->col1Width, $tc->footer->cell1->cellStyle)->addText($this->translate('TOTAL'), $tc->footer->cell1->fontStyle, $tc->footer->cell1->paragraphStyle);
-    $table->addCell($tc->col2Width, $tc->footer->cell2->cellStyle)->addText('$' . number_format($proposal->TotalPurchasedAnnualCost), $tc->footer->cell2->fontStyle, $tc->footer->cell2->paragraphStyle);
-    $table->addCell($tc->col3Width, $tc->footer->cell3->cellStyle)->addText('$' . number_format($proposal->TotalProposedAnnualCost), $tc->footer->cell3->fontStyle, $tc->footer->cell3->paragraphStyle);
-    $table->addCell($tc->col4Width, $tc->footer->cell4->cellStyle)->addText('$' . number_format($proposal->TotalAnnualSavings), $tc->footer->cell4->fontStyle, $tc->footer->cell4->paragraphStyle);
+    $table->addCell($tc->col2Width, $tc->footer->cell2->cellStyle)->addText('$' . number_format($proposal->getTotalPurchasedAnnualCost()), $tc->footer->cell2->fontStyle, $tc->footer->cell2->paragraphStyle);
+    $table->addCell($tc->col3Width, $tc->footer->cell3->cellStyle)->addText('$' . number_format($proposal->getTotalProposedAnnualCost()), $tc->footer->cell3->fontStyle, $tc->footer->cell3->paragraphStyle);
+    $table->addCell($tc->col4Width, $tc->footer->cell4->cellStyle)->addText('$' . number_format($proposal->getTotalAnnualSavings()), $tc->footer->cell4->fontStyle, $tc->footer->cell4->paragraphStyle);
     
     $section->addTextBreak();
     
@@ -263,7 +263,7 @@ if ($reportHasDevicesToReplace)
     
     $table->addRow($tc->body->rowheight);
     $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText($this->translate('Total annual savings with PrintIQ�'), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
-    $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($proposal->TotalAnnualSavings), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
+    $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($proposal->getTotalAnnualSavings()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
 }
 
 // Disclaimer is added at the end
