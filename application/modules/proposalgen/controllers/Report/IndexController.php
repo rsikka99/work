@@ -47,33 +47,6 @@ class Proposalgen_Report_IndexController extends Proposalgen_Library_Controller_
         $this->view->reportName  = $report->customerCompanyName;
     }
 
-    public function printingdevicelistAction ()
-    {
-        $this->initReportList();
-        $this->initHtmlReport();
-
-        $this->view->availableReports->PrintingDeviceList->active = true;
-        $this->view->reportTitle                                  = "Printing Device List";
-        $this->view->formats                                      = array(
-            "/proposalgen/report_printingdevicelist/generate/format/csv"  => $this->_csvFormat,
-            "/proposalgen/report_printingdevicelist/generate/format/docx" => $this->_wordFormat
-        );
-
-        try
-        {
-            // Clear the cache for the report before proceeding
-            $this->clearCacheForReport();
-            $proposal             = $this->getProposal();
-            $this->view->proposal = $proposal;
-        }
-        catch (Exception $e)
-        {
-            throw new Exception("Could not generate printing device list report.");
-        }
-
-        $this->_helper->layout->setLayout('htmlreport');
-    }
-
     /**
      * Shows specific details of a device or unknown device
      */
