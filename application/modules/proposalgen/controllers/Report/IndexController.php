@@ -16,8 +16,7 @@ class Proposalgen_Report_IndexController extends Proposalgen_Library_Controller_
     function postDispatch ()
     {
         parent::postDispatch();
-//        $this->verifyReplacementDevices();
-
+        // $this->verifyReplacementDevices();
         // If we have error messages, send them to the error page
         if (count($this->view->ErrorMessages) > 0)
         {
@@ -41,8 +40,8 @@ class Proposalgen_Report_IndexController extends Proposalgen_Library_Controller_
         $this->view->formTitle = "Report Summary";
 
         // proposal
-//        $proposal                = $this->getProposal();
-//        $this->view->proposal    = $proposal;
+        // $proposal                = $this->getProposal();
+        // $this->view->proposal    = $proposal;
         $report                  = $this->getReport();
         $this->view->companyName = $report->customerCompanyName; // Set company
         $this->view->reportName  = $report->customerCompanyName;
@@ -56,15 +55,14 @@ class Proposalgen_Report_IndexController extends Proposalgen_Library_Controller_
         $this->view->availableReports->PrintingDeviceList->active = true;
         $this->view->reportTitle                                  = "Printing Device List";
         $this->view->formats                                      = array(
-            "/proposalgen/printingdevicelist/generate/format/csv"  => $this->_csvFormat,
-            "/proposalgen/printingdevicelist/generate/format/docx" => $this->_wordFormat
+            "/proposalgen/report_printingdevicelist/generate/format/csv"  => $this->_csvFormat,
+            "/proposalgen/report_printingdevicelist/generate/format/docx" => $this->_wordFormat
         );
 
         try
         {
             // Clear the cache for the report before proceeding
             $this->clearCacheForReport();
-
             $proposal             = $this->getProposal();
             $this->view->proposal = $proposal;
         }

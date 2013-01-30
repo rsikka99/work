@@ -20,7 +20,6 @@ class Proposalgen_Report_GrossmarginController extends Proposalgen_Library_Contr
         {
             // Clear the cache for the report before proceeding
             $this->clearCacheForReport();
-
             $proposal             = $this->getProposal();
             $this->view->proposal = $proposal;
         }
@@ -46,7 +45,11 @@ class Proposalgen_Report_GrossmarginController extends Proposalgen_Library_Contr
                 $this->initCSVGrossMargin();
                 break;
             case "docx" :
-                $this->initDocx();
+                require_once ('PHPWord.php');
+                $this->view->phpword = new PHPWord();
+                $proposal            = $this->getProposal();
+                $graphs              = $this->cachePNGImages($proposal->getGraphs(), true);
+                $proposal->setGraphs($graphs);
                 $this->_helper->layout->disableLayout();
                 break;
             case "pdf" :

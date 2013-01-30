@@ -7,7 +7,7 @@
 /* @var $section PHPWord_Section */
 $section = $this->section;
 
-/* @var $proposal Proposalgen_Model_Proposal_Abstract */
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
 
 /**
@@ -49,7 +49,7 @@ $table->addCell($tcStyle->col10Width, $tcStyle->header->cell)->addText($this->tr
 $table->addCell($tcStyle->col11Width, $tcStyle->header->cell)->addText($this->translate('Total Printing Cost'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
 
 
-foreach ($proposal->PurchasedDevices as $deviceInstance) /* @var $deviceInstance Proposalgen_Model_DeviceInstance */{
+foreach ($proposal->getPurchasedDevices() as $deviceInstance) /* @var $deviceInstance Proposalgen_Model_DeviceInstance */{
     // This is only here for zend content assist
     //$device = new Proposalgen_Model_DeviceInstance();
     $tonerConfig = $deviceInstance->getMasterDevice()->tonerConfigId;
@@ -123,14 +123,13 @@ foreach ($proposal->PurchasedDevices as $deviceInstance) /* @var $deviceInstance
 // Table footer (totals row)
 $table->addRow($tcStyle->footer->rowheight);
 $table->addCell($tcStyle->col1Width, $tcStyle->footer->cell)->addText($this->translate('Totals for ' . $proposal->PurchasedDeviceCount. ' devices:'), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
-$table->addCell($tcStyle->col2Width, $tcStyle->footer->cell)->addText(number_format($this->proposal->PageCounts->Purchased->BlackAndWhite->Monthly), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
+$table->addCell($tcStyle->col2Width, $tcStyle->footer->cell)->addText(number_format($proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col3Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col4Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col5Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
-$table->addCell($tcStyle->col6Width, $tcStyle->footer->cell)->addText('$' . number_format($this->proposal->GrossMarginTotalMonthlyCost->BlackAndWhite, 2), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
-$table->addCell($tcStyle->col7Width, $tcStyle->footer->cell)->addText(number_format($this->proposal->PageCounts->Purchased->Color->Monthly), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
+$table->addCell($tcStyle->col6Width, $tcStyle->footer->cell)->addText('$' . number_format($proposal->getGrossMarginTotalMonthlyCost()->BlackAndWhite, 2), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
+$table->addCell($tcStyle->col7Width, $tcStyle->footer->cell)->addText(number_format($proposal->getPageCounts()->Purchased->Color->Monthly), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col8Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col9Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col10Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
-$table->addCell($tcStyle->col11Width, $tcStyle->footer->cell)->addText('$' . number_format($this->proposal->GrossMarginTotalMonthlyCost->Color, 2), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
-
+$table->addCell($tcStyle->col11Width, $tcStyle->footer->cell)->addText('$' . number_format($proposal->getGrossMarginTotalMonthlyCost()->Color, 2), $tcStyle->footer->fontStyle, $tcStyle->rightalign);

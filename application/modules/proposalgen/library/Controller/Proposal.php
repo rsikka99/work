@@ -100,7 +100,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
             "PrintingDeviceList" => (object)array(
                 "pagetitle" => "Printing Device List",
                 "active"    => false,
-                "url"       => $this->view->baseUrl('/proposalgen/report_index/printingdevicelist')
+                "url"       => $this->view->baseUrl('/proposalgen/report_printingdevicelist/index')
             )
         );
     }

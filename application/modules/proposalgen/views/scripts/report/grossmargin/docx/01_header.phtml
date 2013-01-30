@@ -8,7 +8,7 @@
 /* @var $section PHPWord_Section */
 $section = $this->section;
 
-/* @var $proposal Proposalgen_Model_Proposal_Abstract */
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
 
 /**
@@ -31,33 +31,33 @@ $table = $section->addTable($tcStyle->tablestyle);
 
 $table->addRow($tcStyle->row->rowheight);
 $table->addCell($tcStyle->col1Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('PrintIQ Black And White CPP:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
-$table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($this->proposal->MPSBlackAndWhiteCPP, 4), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle );
+$table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($proposal->getMPSBlackAndWhiteCPP(), 4), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle );
 $table->addCell($tcStyle->col3Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Total Cost:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($this->proposal->GrossMarginTotalMonthlyCost->Combined, 2), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($proposal->getGrossMarginTotalMonthlyCost()->Combined, 2), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
 
 $table->addRow($tcStyle->row->rowheight);
 $table->addCell($tcStyle->col1Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('PrintIQ Color CPP:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
-$table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($this->proposal->MPSColorCPP, 4), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($proposal->getMPSColorCPP(), 4), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Total Revenue:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($this->proposal->GrossMarginTotalMonthlyRevenue->Combined, 2), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($proposal->getGrossMarginTotalMonthlyRevenue()->Combined, 2), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
 
 $table->addRow($tcStyle->row->rowheight);
 $table->addCell($tcStyle->col1Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Weighted Black And White CPP:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
-$table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($this->proposal->GrossMarginWeightedCPP->BlackAndWhite, 4), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($proposal->getGrossMarginWeightedCPP()->BlackAndWhite, 4), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Monthly Profit:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($this->proposal->GrossMarginMonthlyProfit, 2), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($proposal->getGrossMarginMonthlyProfit(), 2), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
 
 $table->addRow($tcStyle->row->rowheight);
 $table->addCell($tcStyle->col1Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Weighted Color CPP:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
-$table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($this->proposal->GrossMarginWeightedCPP->Color, 4), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($proposal->getGrossMarginWeightedCPP()->Color, 4), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Overall Margin:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText(number_format($this->proposal->GrossMarginOverallMargin) . '%', $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText(number_format($proposal->getGrossMarginOverallMargin()) . '%', $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
 
 $table->addRow($tcStyle->row->rowheight);
 $table->addCell($tcStyle->col1Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Black And White Margin:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
-$table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addText(number_format($this->proposal->GrossMarginBlackAndWhiteMargin) . '%', $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addText(number_format($proposal->getGrossMarginBlackAndWhiteMargin()) . '%', $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Color Margin:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText(number_format($this->proposal->GrossMarginColorMargin) . '%', $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText(number_format($proposal->getGrossMarginColorMargin()) . '%', $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
 
 $textRun = $section->createTextRun();
 $textRun = $section->createTextRun();
