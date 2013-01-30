@@ -163,6 +163,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         Proposalgen_Model_MasterDevice::setPricingConfig($reportSettings->getAssessmentPricingConfig());
         Proposalgen_Model_MasterDevice::setGrossMarginPricingConfig($reportSettings->getGrossMarginPricingConfig());
         Proposalgen_Model_MasterDevice::setReportMargin(1 - ((((int)$reportSettings->assessmentReportMargin)) / 100));
+
+        Proposalgen_Model_DeviceInstance::$ITCostPerPage = (($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getPageCounts()->Purchased->Combined->Yearly);
     }
 
     /**
@@ -2474,10 +2476,10 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                 else
                 {
                     // If we are here the device is with in the page count and supports JIT?
-                    switch ($device->getMasterDevice()->TonerConfigId)
+                    switch ($device->getMasterDevice()->tonerConfigId)
                     {
                         case Proposalgen_Model_TonerConfig::BLACK_ONLY :
-                            if ($device->getMasterDevice()->IsFax || $device->getMasterDevice()->IsScanner || $device->getMasterDevice()->IsCopier)
+                            if ($device->getMasterDevice()->isFax || $device->getMasterDevice()->isScanner || $device->getMasterDevice()->isCopier)
                             {
                                 $savings = $device->getMonthlyRate() - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP]->monthlyRate;
                                 // MFP
@@ -2500,7 +2502,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                         case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED :
                         case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED :
                         case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED :
-                            if ($device->getMasterDevice()->IsFax || $device->getMasterDevice()->IsScanner || $device->getMasterDevice()->IsCopier)
+                            if ($device->getMasterDevice()->isFax || $device->getMasterDevice()->isScanner || $device->getMasterDevice()->isCopier)
                             {
                                 // MFP
                                 $savings = $device->getMonthlyRate() - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP]->monthlyRate;
@@ -2512,6 +2514,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                             }
                             else
                             {
+
                                 $savings = $device->getMonthlyRate() - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR]->monthlyRate;
                                 if ($savings >= $minimumSavings)
                                 {
@@ -2818,7 +2821,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->CostOfExecutingSuppliesOrder))
         {
             $reportQuestions                    = $this->getReportQuestions();
-            $this->CostOfExecutingSuppliesOrder = $reportQuestions [14]->NumericAnswer;
+            $this->CostOfExecutingSuppliesOrder = $reportQuestions [14]->NumericAnswer * $this->getNumberOfAnnualInkTonerOrders();
         }
 
         return $this->CostOfExecutingSuppliesOrder;

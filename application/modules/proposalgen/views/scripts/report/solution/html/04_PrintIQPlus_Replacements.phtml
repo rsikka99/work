@@ -21,6 +21,7 @@ $devicesToBeReplaced[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP] = $
 $devicesToBeReplaced[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR] = $proposal->getDevicesToBeReplaced()->Color;
 $devicesToBeReplaced[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP] = $proposal->getDevicesToBeReplaced()->ColorMFP;
 
+
 $reportHasDevicesToReplace = false;
 foreach ($devicesToBeReplaced as $deviceList)
 {
@@ -31,11 +32,7 @@ foreach ($devicesToBeReplaced as $deviceList)
     }
 }
 if ($reportHasDevicesToReplace) : // See "endif; // $reportHasDevicesToReplace"  for the end
-
-echo $this->pageEnd;
-echo $this->pageStart;
 ?>
-	<?php echo $this->noBreakStart; ?>
 		<div class="h1">Solution 2: Hybrid Program of PrintIQ&reg; and PrintIQ Plus&reg;</div>
 		<p style="margin-bottom: 10pt;">There is no need to invest in expensive printing hardware. Our PrintIQ Plus program provides you with an economical flat-rate
 		option to replace your old, expensive hardware with equipment that has the features and functionality you need. Remaining devices can be managed under our PrintIQ program.</p>
@@ -53,7 +50,6 @@ echo $this->pageStart;
 		you the most on a monthly basis. The following recommendations maintain your current levels of copy,
 		scan and fax functionality, but you may choose to upgrade your hardware to add more of these
 		productivity-enhancing features.</p>
-	<?php echo $this->noBreakEnd; ?>
 
 <?php foreach ($replacementDevices as $ctr => $replacementDevice) :
 	$printIQCost = 0; $replacementSavings = 0; $currentCost = 0;?>
@@ -69,8 +65,6 @@ echo $this->pageStart;
     			<?php endif; ?>
     			<li>ENERGY STAR qualified</li>
     		</ul>
-        <?php echo $this->noBreakEnd; ?>
-        <?php echo $this->noBreakStart; ?>
     		<table class="genericTable">
     			<thead>
     				<tr class="center">
@@ -252,13 +246,8 @@ echo $this->pageStart;
 		</div>
 		<br />
 		
-		<?php else : echo $this->noBreakStart; ?>
 		<?php endif; // end if($reportHasDevicesToReplace) ?>
 		<p>This quote is valid for 7 days from the date on the cover of this document. Depending on your requirements, you may be subject to additional charges for installation, insurance, and documentation fees. Please review the contract for details.</p>
-	<?php echo $this->noBreakEnd; ?>
-	
-	<?php echo $this->noBreakStart; ?>
-	
 	<?php if (count($proposal->getDevicesToBeReplaced()->OverMaxLeasedCapacity) > 0) : ?>
 	<br/><br/>
 	<div class="pheader">Additional Replacement Suggestions</div>
@@ -274,7 +263,7 @@ echo $this->pageStart;
     			</thead>
     			<tbody>
     				<?php foreach ($proposal->getDevicesToBeReplaced()->OverMaxLeasedCapacity as $deviceInstance) :?>
-    				<?php $SerialNo = ($deviceInstance->SerialNumber=="") ? 'Unknown' : $deviceInstance->SerialNumber; ?>
+    				<?php $SerialNo = ($deviceInstance->serialNumber === "") ? 'Unknown' : $deviceInstance->serialNumber; ?>
     				<?php $modelName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getUploadDataCollectorRow()->modelName) ?>
     				<tr class="center">
     					<td class="left"><?php echo $modelName ?></td>
