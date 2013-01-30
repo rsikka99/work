@@ -461,7 +461,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $powerUsage   = 0;
             $runningHours = 0;
 
-
             foreach (self::$RUNNING_HOUR_ARRAY as $pages => $runningHours)
             {
                 if ($this->getAverageDailyPageCount() >= $pages)
@@ -471,8 +470,8 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             }
 
             $idleHours = 24 - $runningHours;
-            $powerUsage += $idleHours * $this->getMasterDevice()->WattsPowerIdle;
-            $powerUsage += $runningHours * $this->getMasterDevice()->WattsPowerNormal;
+            $powerUsage += $idleHours * $this->getMasterDevice()->wattsPowerIdle;
+            $powerUsage += $runningHours * $this->getMasterDevice()->wattsPowerNormal;
             $powerUsage                          = $powerUsage / 1000;
             $this->_averageDailyPowerConsumption = $powerUsage;
         }

@@ -1,6 +1,7 @@
 <?php
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
+$graphs = $proposal->getGraphs();
 ?>
 <div class="h1">Your PrintIQ&reg; Smart Assessment</div>
 <p>It can be a challenge to understand your printing needs, and there are many factors to consider: hardware functionality, supplies delivery, service, parts, maintenance kits,
@@ -49,7 +50,7 @@ can help you get your office print under control with our smart and flexible man
 </table>
 <br />
 <div class="center">
-    <img src="<?php echo $proposal->graphs[0]; ?>" /> <!-- Annual printing costs for purchased hardware -->
+    <img src="<?php echo $graphs[0]; ?>" /> <!-- Annual printing costs for purchased hardware -->
 </div>
 <br /> <br />
 <div class="annualSavings">Our PrintIQ&reg; program could provide you with annual savings of up to <strong>&#36;<?php echo number_format($proposal->getPrintIQSavings(), 0); ?></strong>.</div>
