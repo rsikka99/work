@@ -12,15 +12,14 @@ class Proposalgen_Report_GrossmarginController extends Proposalgen_Library_Contr
 
         $this->view->availableReports->GrossMargin->active = true;
         $this->view->formats                               = array(
-            "/proposalgen/grossmargin/generate/format/csv"  => $this->_csvFormat,
-            "/proposalgen/grossmargin/generate/format/docx" => $this->_wordFormat
+            "/proposalgen/report_grossmargin/generate/format/csv"  => $this->_csvFormat,
+            "/proposalgen/report_grossmargin/generate/format/docx" => $this->_wordFormat
         );
 
         try
         {
             // Clear the cache for the report before proceeding
             $this->clearCacheForReport();
-
             $proposal             = $this->getProposal();
             $this->view->proposal = $proposal;
         }
@@ -46,7 +45,11 @@ class Proposalgen_Report_GrossmarginController extends Proposalgen_Library_Contr
                 $this->initCSVGrossMargin();
                 break;
             case "docx" :
-                $this->initDocx();
+                require_once ('PHPWord.php');
+                $this->view->phpword = new PHPWord();
+                $proposal            = $this->getProposal();
+                $graphs              = $this->cachePNGImages($proposal->getGraphs(), true);
+                $proposal->setGraphs($graphs);
                 $this->_helper->layout->disableLayout();
                 break;
             case "pdf" :
@@ -83,17 +86,17 @@ class Proposalgen_Report_GrossmarginController extends Proposalgen_Library_Contr
         {
             $proposal = $this->getProposal();
 
-            $this->view->PrintIQ_Black_And_White_CPP  = number_format($proposal->MPSBlackAndWhiteCPP, 4, '.', '');
-            $this->view->PrintIQ_Color_CPP            = number_format($proposal->MPSColorCPP, 4, '.', '');
-            $this->view->Weighted_Black_And_White_CPP = number_format($proposal->GrossMarginWeightedCPP->BlackAndWhite, 4, '.', '');
-            $this->view->Weighted_Color_CPP           = number_format($proposal->GrossMarginWeightedCPP->Color, 4, '.', '');
-            $this->view->Black_And_White_Margin       = number_format($proposal->GrossMarginBlackAndWhiteMargin, 0, '.', '');
+            $this->view->PrintIQ_Black_And_White_CPP  = number_format($proposal->getMPSBlackAndWhiteCPP(), 4, '.', '');
+            $this->view->PrintIQ_Color_CPP            = number_format($proposal->getMPSColorCPP(), 4, '.', '');
+            $this->view->Weighted_Black_And_White_CPP = number_format($proposal->getGrossMarginWeightedCPP()->BlackAndWhite, 4, '.', '');
+            $this->view->Weighted_Color_CPP           = number_format($proposal->getGrossMarginWeightedCPP()->Color, 4, '.', '');
+            $this->view->Black_And_White_Margin       = number_format($proposal->getGrossMarginBlackAndWhiteMargin(), 0, '.', '');
 
-            $this->view->Total_Cost     = number_format($proposal->GrossMarginTotalMonthlyCost->Combined, 2, '.', '');
-            $this->view->Total_Revenue  = number_format($proposal->GrossMarginTotalMonthlyRevenue->Combined, 2, '.', '');
-            $this->view->Monthly_Profit = number_format($proposal->GrossMarginMonthlyProfit, 2, '.', '');
-            $this->view->Overall_Margin = number_format($proposal->GrossMarginOverallMargin, 0, '.', '');
-            $this->view->Color_Margin   = number_format($proposal->GrossMarginColorMargin, 0, '.', '');
+            $this->view->Total_Cost     = number_format($proposal->getGrossMarginTotalMonthlyCost()->Combined, 2, '.', '');
+            $this->view->Total_Revenue  = number_format($proposal->getGrossMarginTotalMonthlyRevenue()->Combined, 2, '.', '');
+            $this->view->Monthly_Profit = number_format($proposal->getGrossMarginMonthlyProfit(), 2, '.', '');
+            $this->view->Overall_Margin = number_format($proposal->getGrossMarginOverallMargin(), 0, '.', '');
+            $this->view->Color_Margin   = number_format($proposal->getGrossMarginColorMargin(), 0, '.', '');
         }
         catch (Exception $e)
         {
@@ -133,7 +136,7 @@ class Proposalgen_Report_GrossmarginController extends Proposalgen_Library_Contr
         {
             $fieldList_Values = "";
             /* @var $device Proposalgen_Model_DeviceInstance() */
-            foreach ($proposal->PurchasedDevices as $device)
+            foreach ($proposal->getPurchasedDevices() as $device)
             {
                 $tonerConfig              = $device->getMasterDevice()->TonerConfigId;
                 $grossMarginPricingConfig = Proposalgen_Model_MasterDevice::getGrossMarginPricingConfig();

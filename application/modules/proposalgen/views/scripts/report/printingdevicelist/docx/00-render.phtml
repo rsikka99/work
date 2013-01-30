@@ -249,9 +249,9 @@ $data = array (
 /**
  * Render each of the view scripts for different parts of the document
  */
-$this->partial("printingdevicelist/docx/01_header.phtml", $data);
-$this->partial("printingdevicelist/docx/02_included.phtml", $data);
-$this->partial("printingdevicelist/docx/03_excluded.phtml", $data);
+$this->partial("/report/printingdevicelist/docx/01_header.phtml", $data);
+$this->partial("/report/printingdevicelist/docx/02_included.phtml", $data);
+$this->partial("/report/printingdevicelist/docx/03_excluded.phtml", $data);
 
 $objWriter = PHPWord_IOFactory::createWriter($this->phpword, 'Word2007');
 $objWriter->save($this->savePath);

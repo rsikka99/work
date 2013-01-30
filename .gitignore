@@ -42,3 +42,4 @@ _ReSharper*/
 public/downloads/*.docx
 public/downloads/*.docx
 data/uploads/*
+public/cache/*

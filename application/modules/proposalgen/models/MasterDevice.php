@@ -188,6 +188,14 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
                 }
             } // End of toners loop
 
+            // Service Cost Per Page Cost
+            if ($this->serviceCostPerPage <= 0)
+            {
+                $this->serviceCostPerPage = $report->getReportSettings()->serviceCostPerPage;
+            }
+
+            // Admin Charge
+            $this->adminCostPerPage = $report->getReportSettings()->adminCostPerPage;
 
             $this->_overridesProcessed = true;
         }
@@ -514,7 +522,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     {
         if (!isset($this->_costPerPage))
         {
-
             $costPerPage = new stdClass();
 
             $ReportMargin = self::getReportMargin();

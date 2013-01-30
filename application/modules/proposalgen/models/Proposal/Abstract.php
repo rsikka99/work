@@ -123,7 +123,7 @@ class Proposalgen_Model_Proposal_Abstract
         if (!isset($this->PageCoverageBlackAndWhite))
         {
             $questions                       = $this->getReportQuestions();
-            $this->PageCoverageBlackAndWhite = $questions [21]->numericAnswer;
+            $this->PageCoverageBlackAndWhite = $questions [21]->NumericAnswer;
         }
 
         return $this->PageCoverageBlackAndWhite;
@@ -137,7 +137,7 @@ class Proposalgen_Model_Proposal_Abstract
         if (!isset($this->PageCoverageColor))
         {
             $questions               = $this->getReportQuestions();
-            $this->PageCoverageColor = $questions [22]->numericAnswer;
+            $this->PageCoverageColor = $questions [22]->NumericAnswer;
         }
 
         return $this->PageCoverageColor;

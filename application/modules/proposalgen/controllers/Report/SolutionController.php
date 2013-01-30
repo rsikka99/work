@@ -16,7 +16,7 @@ class Proposalgen_Report_SolutionController extends Proposalgen_Library_Controll
         $this->view->availableReports->Solution->active = true;
 
         $this->view->formats = array(
-            "/proposalgen/solution/generate/format/docx" => $this->_wordFormat
+            "/proposalgen/report_solution/generate/format/docx" => $this->_wordFormat
         );
 
         try
@@ -48,7 +48,11 @@ class Proposalgen_Report_SolutionController extends Proposalgen_Library_Controll
                 throw new Exception("CSV Format not available through this page yet!");
                 break;
             case "docx" :
-                $this->initDocx();
+                require_once ('PHPWord.php');
+                $this->view->phpword = new PHPWord();
+                $proposal = $this->getProposal();
+                $graphs   = $this->cachePNGImages($proposal->getGraphs(), true);
+                $proposal->setGraphs($graphs);
                 $this->_helper->layout->disableLayout();
                 break;
             case "pdf" :

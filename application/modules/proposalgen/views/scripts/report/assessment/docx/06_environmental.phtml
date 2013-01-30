@@ -3,8 +3,8 @@
  * Assessment - Analysis: Environmental Impact
  */
 
-/* @var $phpword PHPWord */
-$phpword = $this->phpword;
+/* @var $phpWord PHPWord */
+$phpWord = $this->phpword;
 
 /* @var $section PHPWord_Section */
 $section = $this->section;
@@ -12,17 +12,18 @@ $section->addPageBreak();
 
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
+$graphs = $proposal->getGraphs();
 
 $section->addTitle($this->translate("Analysis: Environmental Impact"), 1);
 $gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
 $gradeTable->addRow();
-$gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($proposal->Ranking->EnvironmentalFriendliness->RankingText);
-$gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number_format($proposal->Ranking->EnvironmentalFriendliness->Rank, 1), "gradeFont", "gradeParagraph");
+$gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($proposal->getRanking()->EnvironmentalFriendliness->RankingText);
+$gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number_format($proposal->getRanking()->EnvironmentalFriendliness->Rank, 1), "gradeFont", "gradeParagraph");
 
 $section->addTextBreak();
 
 $section->addTitle($this->translate('Energy Consumption'), 2);
-$section->addText(sprintf($this->translate('You are currently using an estimated average of %1$s kWh per month to operate printing devices at an estimated monthly cost of $%2$s, assuming a cost of $%3$s per kWh.'), number_format($this->proposal->getAveragePowerUsagePerMonth()), number_format($this->proposal->getAveragePowerCostPerMonth()), number_format($this->proposal->Report->ReportKilowattsPerHour, 2)));
+$section->addText(sprintf($this->translate('You are currently using an estimated average of %1$s kWh per month to operate printing devices at an estimated monthly cost of $%2$s, assuming a cost of $%3$s per kWh.'), number_format($proposal->getAveragePowerUsagePerMonth()), number_format($proposal->getAveragePowerCostPerMonth()), number_format($proposal->Report->ReportKilowattsPerHour, 2)));
 $section->addText($this->translate('The following lists the devices with the highest average power consumption per month.'));
 
 $cellWidths = array (
@@ -40,13 +41,13 @@ $highEnergyTable->addCell($cellWidths [2], $this->styles->tables->highriskdevice
 $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText($this->translate('Avg. Power Cost per Month'), 'bold_text', 'nospacing_centeralign');
 /* @var $device Proposalgen_Model_DeviceInstance */
 $rowCount = 0;
-foreach ( $this->proposal->HighPowerConsumptionDevices as $device )
+foreach ( $proposal->getHighPowerConsumptionDevices() as $device )
 {
     $highEnergyTable->addRow();
     $highEnergyTable->addCell($cellWidths [0], $this->styles->tables->highriskdevices->cell1)->addText($device->getDeviceName(), null, 'nospacing');
     $highEnergyTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText(($device->serialNumber) ?  : "Unknown", null, 'nospacing_centeralign');
-    $highEnergyTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText(number_format($device->_averageMonthlyPowerConsumption) . ' kWh', null, 'nospacing_centeralign');
-    $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText('$' . number_format($device->_averageMonthlyPowerCost), null, 'nospacing_centeralign');
+    $highEnergyTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText(number_format($device->getAverageMonthlyPowerConsumption()) . ' kWh', null, 'nospacing_centeralign');
+    $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText('$' . number_format($device->getAverageMonthlyPowerCost()), null, 'nospacing_centeralign');
     $rowCount ++;
     if ($rowCount >= 3)
         break;
@@ -60,5 +61,5 @@ $section->addText($this->translate('If you printed every document on both sides 
 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($proposal->Graphs [13]);
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($proposal->Graphs [14]);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs [13]);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs [14]);

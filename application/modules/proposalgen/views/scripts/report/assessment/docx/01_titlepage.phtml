@@ -20,7 +20,7 @@ $cell->addTextBreak(3);
 $cell->addImage(PUBLIC_PATH . "/assets/images/docx/assessment/cell2.jpg");
 $cell->addTextBreak(5);
 $cell->addText($this->translate('Prepared For:') . " " . $proposal->report->_customerCompanyName, 'titlepageHeaderFont', 'titlepageHeaderParagraph');
-$cell->addText($proposal->DateReportPrepared, 'titlepageHeaderFont', 'titlepageHeaderParagraph');
+$cell->addText($proposal->getDateReportPrepared(), 'titlepageHeaderFont', 'titlepageHeaderParagraph');
 $cell->addTextBreak(4);
 // Parse the address
 $addressLines = explode("\n", $proposal->CustomerAddress);
