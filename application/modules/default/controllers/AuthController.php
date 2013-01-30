@@ -76,20 +76,20 @@ class Default_AuthController extends Zend_Controller_Action
                     $authStorage = $auth->getStorage();
                     $authStorage->write($userInfo);
 
-                    $session = new Zend_Session_Namespace("authRedirect");
-                    if (isset($session->module))
-                    {
-                        $module     = $session->module;
-                        $controller = $session->controller;
-                        $action     = $session->action;
-                        $params     = $session->params;
-                        $session->unsetAll();
-                        $this->_helper->redirector($action, $controller, $module, $params);
-                    }
-                    else
-                    {
-                        $this->_redirect('/');
-                    }
+//                    $session = new Zend_Session_Namespace("authRedirect");
+//                    if (isset($session->module))
+//                    {
+//                        $module     = $session->module;
+//                        $controller = $session->controller;
+//                        $action     = $session->action;
+//                        $params     = $session->params;
+//                        $session->unsetAll();
+//                        $this->_helper->redirector($action, $controller, $module, $params);
+//                    }
+//                    else
+//                    {
+//                    }
+                    $this->_helper->redirector('index', 'index', 'index');
                 }
                 else
                 {
