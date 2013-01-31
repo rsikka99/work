@@ -522,7 +522,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                             $this->saveNumericQuestionAnswer(18, $form->getValue('itHours'));
                         }
 
-                        // Quesiton 20 (Monthly Breakdowns)
+                        // Question 20 (Monthly Breakdowns)
                         $this->saveTextualQuestionAnswer(20, $form->getValue('monthlyBreakdownRadio'));
                         if ($form->getValue('monthlyBreakdown'))
                         {
@@ -532,7 +532,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         // Question 19 (IP Based Location Tracking)
                         $this->saveTextualQuestionAnswer(19, $form->getValue('location_tracking'));
 
-                        // Everytime we save anything related to a report, we should save it (updates the modification date)
+                        // Every time we save anything related to a report, we should save it (updates the modification date)
                         $this->saveReport();
 
                         if (isset($values ["saveAndContinue"]))
@@ -543,7 +543,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         else
                         {
                             $this->_helper->flashMessenger(array(
-                                                                'success' => "Your changes were saved sucessfully."
+                                                                'success' => "Your changes were saved successfully."
                                                            ));
                         }
                     }

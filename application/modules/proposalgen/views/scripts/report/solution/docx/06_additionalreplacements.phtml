@@ -33,7 +33,7 @@ if (count($proposal->getDevicesToBeReplaced()->OverMaxLeasedCapacity) > 0 || cou
         {
             $table->addRow($tc->body->rowheight);
             $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText($device->getMasterDevice()->getFullDeviceName(), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
-            $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText(($device->SerialNumber) ?  : "Unknown", $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
+            $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText(($device->serialNumber === "") ? "Unknown" : $device->serialNumber, $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
             $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText(number_format($device->getAverageMonthlyPageCount()), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
             $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($device->getMonthlyRate() * 12), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
         }
@@ -57,7 +57,7 @@ if (count($proposal->getDevicesToBeReplaced()->OverMaxLeasedCapacity) > 0 || cou
         {
             $table->addRow($tc->body->rowheight);
             $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText($device->getMasterDevice()->getFullDeviceName(), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
-            $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText(($device->SerialNumber) ?  : "Unknown", $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
+            $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText(($device->serialNumber === "") ? "Unknown" : $device->serialNumber, $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
             $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText(number_format($device->getAverageMonthlyPageCount()), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
             $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($device->getMonthlyRate() * 12), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
         }

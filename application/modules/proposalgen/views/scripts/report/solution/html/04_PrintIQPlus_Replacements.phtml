@@ -79,7 +79,7 @@ if ($reportHasDevicesToReplace) : // See "endif; // $reportHasDevicesToReplace" 
     			<tbody>
     
     				<?php foreach ($devicesToBeReplaced[$ctr] as $deviceInstance) : /* @var $deviceInstance Proposalgen_Model_DeviceInstance */ ?>
-    				<?php $SerialNo = ($deviceInstance->SerialNumber=="") ? 'Unknown' : $deviceInstance->SerialNumber; ?>
+    				<?php $SerialNo = ($deviceInstance->serialNumber === "") ? 'Unknown' : $deviceInstance->serialNumber; ?>
     				<?php $modelName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getUploadDataCollectorRow()->modelName) ?>
     				<tr class="center">
     					<td class="left"><?php echo $modelName ?></td>
@@ -264,7 +264,7 @@ if ($reportHasDevicesToReplace) : // See "endif; // $reportHasDevicesToReplace" 
     			<tbody>
     				<?php foreach ($proposal->getDevicesToBeReplaced()->OverMaxLeasedCapacity as $deviceInstance) :?>
     				<?php $SerialNo = ($deviceInstance->serialNumber === "") ? 'Unknown' : $deviceInstance->serialNumber; ?>
-    				<?php $modelName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getUploadDataCollectorRow()->modelName) ?>
+    				<?php $modelName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getMasterDevice()->getFullDeviceName()) ?>
     				<tr class="center">
     					<td class="left"><?php echo $modelName ?></td>
     					<td><?php echo $SerialNo ?></td>
@@ -291,9 +291,9 @@ if ($reportHasDevicesToReplace) : // See "endif; // $reportHasDevicesToReplace" 
     				</tr>
     			</thead>
     			<tbody>
-    				<?php foreach ($proposal->getDevicesToBeReplaced()->NoTonerLevels as $deviceInstance) :?>
-    				<?php $SerialNo = ($deviceInstance->SerialNumber=="") ? 'Unknown' : $deviceInstance->SerialNumber; ?>
-    				<?php $modelName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getUploadDataCollectorRow()->modelName) ?>
+                <?php foreach ($proposal->getDevicesToBeReplaced()->NoTonerLevels as $deviceInstance) :?>
+                <?php $SerialNo = ($deviceInstance->serialNumber =="") ? 'Unknown' : $deviceInstance->serialNumber; ?>
+   				<?php $modelName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getMasterDevice()->getFullDeviceName()); ?>
     				<tr class="center">
     					<td class="left"><?php echo $modelName ?></td>
     					<td><?php echo $SerialNo ?></td>

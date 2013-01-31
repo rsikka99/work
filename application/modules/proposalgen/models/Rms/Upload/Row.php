@@ -311,6 +311,11 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
      */
     public $tonerLevelYellow;
 
+    /**
+     * @var Proposalgen_Model_Manufacturer
+     */
+    protected $_manufacturer;
+
 
     /**
      * @param array $params An array of data to populate the model with
@@ -703,5 +708,35 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             "tonerLevelMagenta"        => $this->tonerLevelMagenta,
             "tonerLevelYellow"         => $this->tonerLevelYellow,
         );
+    }
+
+
+    /**
+     * Getter for manufacturer
+     *
+     * @return Proposalgen_Model_Manufacturer
+     */
+    public function getManufacturer ()
+    {
+        if (!isset($this->_manufacturer) && $this->manufacturerId > 0)
+        {
+            $this->_manufacturer = Proposalgen_Model_Mapper_Manufacturer::getInstance()->find($this->manufacturerId);
+        }
+
+        return $this->_manufacturer;
+    }
+
+    /**
+     * Setter for manufacturer
+     *
+     * @param Proposalgen_Model_Manufacturer $manufacturer
+     *
+     * @return Proposalgen_Model_Rms_Upload_Row
+     */
+    public function setManufacturer ($manufacturer)
+    {
+        $this->_manufacturer = $manufacturer;
+
+        return $this;
     }
 }
