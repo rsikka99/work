@@ -1,0 +1,17 @@
+<?php $this->headScript()->appendFile($this->baseUrl('js/userAddDevice.js')); ?>
+<div class="page-header">
+    <h1>Fleet<small> - Add unknown device</small></h1>
+</div>
+<div class="well">
+    <p>Temporary Information</p>
+    <p>Affected Device Instance Ids: <?php echo implode(",", $this->deviceInstanceIds); ?></p>
+    <?php if (isset($this->rmsUploadRow)) :
+    /* @var $rmsUploadRow Proposalgen_Model_Rms_Upload_Row */
+    $rmsUploadRow = $this->rmsUploadRow;
+    ?>
+    <p>Device Name: <?php echo $rmsUploadRow->manufacturer . " " . $rmsUploadRow->modelName; ?> </p>
+    <?php endif; ?>
+    <hr>
+    <p>Add Device Form</p>
+    <?php echo $this->form; ?>
+</div>

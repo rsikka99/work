@@ -24,7 +24,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     protected $_reportSteps;
 
     /**
-     * @var Application_Model_User
+     * @var int
      */
     protected $_userId;
 

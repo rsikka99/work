@@ -27,15 +27,12 @@ class Proposalgen_Service_DeviceMapping_NameBased extends Proposalgen_Service_De
     {
         $masterDeviceId = false;
 
-        $manufacturers = $this->_manufacturerMapper->searchByName($deviceInstance->getRmsUploadRow()->manufacturer);
+        /*
+         * If we have a manufacturer we can refine our search
+         */
+        $manufacturerId = ($deviceInstance->getRmsUploadRow()->manufacturerId > 0) ? $deviceInstance->getRmsUploadRow()->manufacturerId : null;
 
-        $manufacturerId = null;
-        if (count($manufacturers) === 1)
-        {
-            $manufacturerId = $manufacturers[0]->id;
-        }
-
-        $masterDevices = $this->_masterDeviceMapper->searchByModelName($deviceInstance->getRmsUploadRow()->modelName, $manufacturerId);
+        $masterDevices = $this->_masterDeviceMapper->searchByModelName($deviceInstance->getRmsUploadRow()->modelName, $manufacturerId, false);
         if (count($masterDevices) === 1)
         {
             $masterDeviceId = $masterDevices[0]->id;

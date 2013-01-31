@@ -298,13 +298,21 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
      * @param string $modelName
      * @param int    $manufacturerId
      *
+     * @param bool   $useWildCards Defaults to true. Will wrap the modelName in wildcards
+     *
      * @return Proposalgen_Model_MasterDevice[]
      */
-    public function searchByModelName ($modelName, $manufacturerId)
+    public function searchByModelName ($modelName, $manufacturerId, $useWildCards = true)
     {
+        if ($useWildCards)
+        {
+            $modelName = "%{$modelName}%";
+        }
+
         $whereClause = array(
-            "{$this->col_modelName} LIKE ?" => "%{$modelName}%"
+            "{$this->col_modelName} LIKE ?" => $modelName
         );
+
         if ($manufacturerId !== null)
         {
             $whereClause["{$this->col_manufacturerId} = ?"] = "{$manufacturerId}";
