@@ -1,6 +1,6 @@
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 
 -- -----------------------------------------------------
@@ -214,6 +214,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_upload_rows` (
   `hasCompleteInformation` TINYINT(4) NOT NULL DEFAULT 0 ,
   `modelName` VARCHAR(255) NOT NULL DEFAULT '' ,
   `manufacturer` VARCHAR(255) NOT NULL DEFAULT '' ,
+  `manufacturerId` INT(11) NULL ,
   `cost` DOUBLE NULL ,
   `dutyCycle` INT(11) NULL ,
   `isColor` TINYINT(4) NOT NULL DEFAULT 0 ,
@@ -229,24 +230,42 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_upload_rows` (
   `tonerConfigId` INT(11) NOT NULL DEFAULT 1 ,
   `wattsPowerNormal` DOUBLE NULL ,
   `wattsPowerIdle` DOUBLE NULL ,
-  `blackTonerSku` VARCHAR(255) NULL ,
-  `blackTonerYield` INT(11) NULL ,
-  `blackTonerCost` DOUBLE NULL ,
-  `cyanTonerSku` VARCHAR(255) NULL ,
-  `cyanTonerYield` INT(11) NULL ,
-  `cyanTonerCost` DOUBLE NULL ,
-  `magentaTonerSku` VARCHAR(255) NULL ,
-  `magentaTonerYield` INT(11) NULL ,
-  `magentaTonerCost` DOUBLE NULL ,
-  `yellowTonerSku` VARCHAR(255) NULL ,
-  `yellowTonerYield` INT(11) NULL ,
-  `yellowTonerCost` DOUBLE NULL ,
-  `threeColorSku` VARCHAR(255) NULL ,
-  `threeColorYield` INT(11) NULL ,
-  `threeColorCost` DOUBLE NULL ,
-  `fourColorSku` VARCHAR(255) NULL ,
-  `fourColorYield` INT(11) NULL ,
-  `fourColorCost` DOUBLE NULL ,
+  `oemBlackTonerSku` VARCHAR(255) NULL ,
+  `oemBlackTonerYield` INT(11) NULL ,
+  `oemBlackTonerCost` DOUBLE NULL ,
+  `oemCyanTonerSku` VARCHAR(255) NULL ,
+  `oemCyanTonerYield` INT(11) NULL ,
+  `oemCyanTonerCost` DOUBLE NULL ,
+  `oemMagentaTonerSku` VARCHAR(255) NULL ,
+  `oemMagentaTonerYield` INT(11) NULL ,
+  `oemMagentaTonerCost` DOUBLE NULL ,
+  `oemYellowTonerSku` VARCHAR(255) NULL ,
+  `oemYellowTonerYield` INT(11) NULL ,
+  `oemYellowTonerCost` DOUBLE NULL ,
+  `oemThreeColorTonerSku` VARCHAR(255) NULL ,
+  `oemThreeColorTonerYield` INT(11) NULL ,
+  `oemThreeColorTonerCost` DOUBLE NULL ,
+  `oemFourColorTonerSku` VARCHAR(255) NULL ,
+  `oemFourColorTonerYield` INT(11) NULL ,
+  `oemFourColorTonerCost` DOUBLE NULL ,
+  `compBlackTonerSku` VARCHAR(255) NULL ,
+  `compBlackTonerYield` INT(11) NULL ,
+  `compBlackTonerCost` DOUBLE NULL ,
+  `compCyanTonerSku` VARCHAR(255) NULL ,
+  `compCyanTonerYield` INT(11) NULL ,
+  `compCyanTonerCost` DOUBLE NULL ,
+  `compMagentaTonerSku` VARCHAR(255) NULL ,
+  `compMagentaTonerYield` INT(11) NULL ,
+  `compMagentaTonerCost` DOUBLE NULL ,
+  `compYellowTonerSku` VARCHAR(255) NULL ,
+  `compYellowTonerYield` INT(11) NULL ,
+  `compYellowTonerCost` DOUBLE NULL ,
+  `compThreeColorTonerSku` VARCHAR(255) NULL ,
+  `compThreeColorTonerYield` INT(11) NULL ,
+  `compThreeColorTonerCost` DOUBLE NULL ,
+  `compFourColorTonerSku` VARCHAR(255) NULL ,
+  `compFourColorTonerYield` INT(11) NULL ,
+  `compFourColorTonerCost` DOUBLE NULL ,
   `tonerLevelBlack` VARCHAR(255) NULL ,
   `tonerLevelCyan` VARCHAR(255) NULL ,
   `tonerLevelMagenta` VARCHAR(255) NULL ,
@@ -254,6 +273,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_upload_rows` (
   PRIMARY KEY (`id`) ,
   INDEX `pgen_rms_upload_rows_ibfk_1_idx` (`rmsProviderId` ASC) ,
   INDEX `pgen_rms_upload_rows_ibfk_2_idx` (`rmsProviderId` ASC, `rmsModelId` ASC) ,
+  INDEX `pgen_rms_upload_rows_ibfk_3_idx` (`manufacturerId` ASC) ,
   CONSTRAINT `pgen_rms_upload_rows_ibfk_1`
     FOREIGN KEY (`rmsProviderId` )
     REFERENCES `pgen_rms_providers` (`id` )
@@ -263,7 +283,12 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_upload_rows` (
     FOREIGN KEY (`rmsProviderId` , `rmsModelId` )
     REFERENCES `pgen_rms_devices` (`rmsProviderId` , `rmsModelId` )
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE NO ACTION,
+  CONSTRAINT `pgen_rms_upload_rows_ibfk_3`
+    FOREIGN KEY (`manufacturerId` )
+    REFERENCES `manufacturers` (`id` )
+    ON DELETE SET NULL
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 477
 DEFAULT CHARACTER SET = utf8;
@@ -1630,8 +1655,8 @@ ENGINE = InnoDB;
 CREATE  TABLE IF NOT EXISTS `device_instance_replacement_master_devices` (
   `masterDeviceId` INT NOT NULL ,
   `deviceInstanceId` INT NOT NULL ,
-  INDEX `device_instance_replacement_master_devices_ibfk1` (`masterDeviceId` ASC) ,
-  INDEX `device_instance_replacement_master_devices_ibfk2` (`deviceInstanceId` ASC) ,
+  INDEX `device_instance_replacement_master_devices_ibfk1_idx` (`masterDeviceId` ASC) ,
+  INDEX `device_instance_replacement_master_devices_ibfk2_idx` (`deviceInstanceId` ASC) ,
   PRIMARY KEY (`deviceInstanceId`) ,
   CONSTRAINT `device_instance_replacement_master_devices_ibfk1`
     FOREIGN KEY (`masterDeviceId` )

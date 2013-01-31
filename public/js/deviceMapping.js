@@ -105,7 +105,7 @@ $(function ()
                     width   : 250,
                     name    : 'mapToMasterDevice',
                     index   : 'mapToMasterDevice',
-                    label   : 'Master Printer Name',
+                    label   : 'Select Master Device',
                     sortable: false,
                     align   : 'center'
                 },
@@ -119,7 +119,7 @@ $(function ()
                     sortable: false
                 },
                 {
-                    width   : 50,
+                    width   : 80,
                     name    : 'action',
                     index   : 'action',
                     label   : 'Action',
@@ -154,8 +154,8 @@ $(function ()
                     if (row.useUserData == 1)
                     {
                         // Display message instead of dropdown
-                        row.mapToMasterDevice = '&nbsp;New Printer Added (<a href="javascript: void(0);" onclick="javascript: remove_device(' + row.deviceInstanceIds + ');">Click to Remove</a>)';
-                        row.action = '<input style="width:35px;" title="Edit Printer"    type="button" onclick="javascript: add_device(' + row.deviceInstanceIds + ');" value="Edit" />';
+                        row.mapToMasterDevice = '&nbsp;New Printer Added (<a href="javascript: void(0);" class="removeUnknownDeviceButton" data-device-instance-ids="' + row.deviceInstanceIds + '">Click to Remove</a>)';
+                        row.action = '<input style="width:35px;" title="Edit Printer" class="addEditUnknownDeviceButton" type="button" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit" />';
 
                     }
                     else
@@ -168,7 +168,14 @@ $(function ()
                         master_device_dropdown += '<input type="text"   name="masterDeviceName" style="width: 97%" class="autoCompleteDeviceName" value="' + row.mappedManufacturer + ' ' + row.mappedModelName + '" />';
 
                         row.mapToMasterDevice = master_device_dropdown;
-                        row.action = '<input style="width:35px;" title="Add New Printer" type="button" onclick="javascript: add_device(' + row.deviceInstanceIds + ');" value="Add" />';
+                        if (row.isMapped == 1)
+                        {
+                            row.action = 'Mapped';
+                        }
+                        else
+                        {
+                            row.action = '<input title="Create New Device" type="button" class="addEditUnknownDeviceButton" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create New" />';
+                        }
                     }
 
                     // Put our new data back into the grid
@@ -271,6 +278,37 @@ $(function ()
         refresh: false,
         search : false
     }, {}, {}, {}, {}, {});
+
+
+    /**
+     * Adding/Editing of the unknown device
+     */
+    $(document).on("click", ".addEditUnknownDeviceButton", function() {
+        $("#unknownDeviceDeviceInstanceIds").val($(this).data("device-instance-ids"));
+        $("#addUnknownDeviceForm").submit();
+    });
+
+    /**
+     * Removal of the unknown device
+     */
+    $(document).on("click", ".removeUnknownDeviceButton", function() {
+        var deviceInstanceIds = $(this).data("device-instance-ids");
+        $.ajax({
+            url     : TMTW_BASEURL + "/proposalgen/fleet/remove-unknown-device",
+            dataType: 'json',
+            data    : {'deviceInstanceIds': deviceInstanceIds},
+            success : function (data)
+            {
+                jQuery("#mappingGrid").trigger("reloadGrid");
+            },
+            error   : function (data)
+            {
+                alert("There was an error removing the device.");
+            }
+
+        });
+    });
+
 });
 
 
@@ -289,22 +327,4 @@ function set_mapped(deviceInstanceIds, masterDeviceId)
             console.log(data);
         }
     });
-}
-
-
-/**
- * TODO: Write function description
- *
- * @param deviceInstanceIds
- */
-function add_device(deviceInstanceIds) {
-    document.getElementById("hdnID").value = deviceInstanceIds;
-    document.getElementById("hdnGrid").value = document.getElementById("mapped_list_container").style.display;
-    document.getElementById("mapping").action = TMTW_BASEURL + "data/adddevice";
-    document.getElementById("mapping").submit();
-}
-
-function remove_device(deviceInstanceIds)
-{
-
 }
