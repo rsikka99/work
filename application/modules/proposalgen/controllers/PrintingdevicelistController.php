@@ -57,8 +57,8 @@ class Proposalgen_PrintingdevicelistController extends My_Controller_Report
     {
         try
         {
+            /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
             $proposal = $this->getProposal();
-            
             $url = $this->view->serverUrl();
             $this->view->url = $url;
         }
@@ -77,7 +77,7 @@ class Proposalgen_PrintingdevicelistController extends My_Controller_Report
         try
         {
             /* @var $device Proposalgen_Model_DeviceInstance */
-            foreach ( $proposal->getDevices() as $device )
+            foreach ($proposal->getDevices()->purchasedDeviceInstances as $device )
             {
                 $row = array ();
                 $row [] = $device->getMasterDevice()

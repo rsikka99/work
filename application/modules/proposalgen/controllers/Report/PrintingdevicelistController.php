@@ -63,7 +63,7 @@ class Proposalgen_Report_PrintingdevicelistController extends Proposalgen_Librar
                 break;
         }
 
-        $filename = "solution.$format";
+        $filename = "printingdevicelist.$format";
 
         $this->initReportVariables($filename);
 
