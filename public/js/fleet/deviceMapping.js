@@ -11,7 +11,7 @@ $(function ()
      **********************************************************************************************************************************************************/
     jQuery("#mappingGrid").jqGrid(
         {
-            url         : TMTW_BASEURL + 'proposalgen/fleet/devicemappinglist',
+            url         : TMTW_BASEURL + 'proposalgen/fleet/device-mapping-list',
             datatype    : 'json',
             colModel    : [
                 {
@@ -270,15 +270,6 @@ $(function ()
             }
         }
     );
-
-    jQuery("#grid_list").jqGrid('navGrid', '#mappingGridPager', {
-        add    : false,
-        del    : false,
-        edit   : false,
-        refresh: false,
-        search : false
-    }, {}, {}, {}, {}, {});
-
 
     /**
      * Adding/Editing of the unknown device

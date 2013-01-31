@@ -7,6 +7,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
     public $col_id = 'id';
     public $col_reportId = 'reportId';
     public $col_rmsUploadRowId = 'rmsUploadRowId';
+    public $col_useUserData = 'useUserData';
 
     /**
      * The default db table class to use
@@ -354,6 +355,77 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
             }
 
             return $this->fetchAll($whereClause, $order, $limit, $offset);
+        }
+    }
+
+    /**
+     * @param      $reportId
+     * @param      $sortColumn
+     * @param      $sortDirection
+     * @param null $limit
+     * @param null $offset
+     * @param bool $justCount
+     *
+     * @return Proposalgen_Model_DeviceInstance[]|int
+     */
+    public function getMappedDeviceInstances ($reportId, $sortColumn, $sortDirection, $limit = null, $offset = null, $justCount = false)
+    {
+        $dbTable                          = $this->getDbTable();
+        $deviceInstanceTableName          = $this->getTableName();
+        $deviceInstanceMasterDeviceMapper = Proposalgen_Model_Mapper_Device_Instance_Master_Device::getInstance();
+
+        $columns = null;
+        if ($justCount)
+        {
+            $columns = array("count" => "COUNT(*)");
+        }
+
+        $select = $dbTable->select()->from(array("di" => $deviceInstanceTableName), $columns)
+            ->distinct(true)
+            ->joinLeft(array("di_md" => $deviceInstanceMasterDeviceMapper->getTableName()), "di_md.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$this->col_id}", array())
+            ->where("di.{$this->col_reportId} = ?", $reportId)
+            ->where("di_md.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId} IS NOT NULL OR di.{$this->col_useUserData} = 1");
+
+        // If we're just counting we only need to return the count
+        if ($justCount)
+        {
+            $query = $dbTable->getAdapter()->query($select);
+
+            return (int)$query->fetchColumn();
+        }
+        else
+        {
+            /*
+             * Parse our order
+             */
+            $select->order("di.{$sortColumn} {$sortDirection}");
+
+
+            /*
+             * Parse our Limit
+             */
+            if ($limit > 0)
+            {
+                $offset = ($offset > 0) ? $offset : null;
+                $select->limit($limit, $offset);
+            }
+
+            $query = $dbTable->getAdapter()->query($select);
+
+            $results = $query->fetchAll();
+
+            $deviceInstances = array();
+            foreach ($results as $result)
+            {
+                $object = new Proposalgen_Model_DeviceInstance($result);
+
+                // Save the object into the cache
+                $this->saveItemToCache($object);
+
+                $deviceInstances [] = $object;
+            }
+
+            return $deviceInstances;
         }
     }
 }

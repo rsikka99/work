@@ -329,7 +329,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     /**
      * This handles the mapping of devices to our master devices
      */
-    public function devicemappingAction ()
+    public function mappingAction ()
     {
         // Mark the step we're on as active
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FLEETDATA_MAPDEVICES);
@@ -358,7 +358,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     /**
      * Generates a list of devices that were not mapped automatically
      */
-    public function devicemappinglistAction ()
+    public function deviceMappingListAction ()
     {
         $jqGrid                  = new Tangent_Service_JQGrid();
         $mapDeviceInstanceMapper = Proposalgen_Model_Mapper_Map_Device_Instance::getInstance();
@@ -493,7 +493,10 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         }
     }
 
-    public function deviceleasingAction ()
+    /**
+     * This is the device summary page
+     */
+    public function summaryAction ()
     {
         // Mark the step we're on as active
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FLEETDATA_SUMMARY);
@@ -517,24 +520,87 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         }
     }
 
-    public function deviceleasinglistAction ()
+    /**
+     * The list of devices that are mapped in the report. It's used on the summary page
+     */
+    public function deviceSummaryListAction ()
     {
-        // TODO: Code the device leasing list action
-    }
+        $jqGrid               = new Tangent_Service_JQGrid();
+        $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
 
-    public function deviceleasingexcludedlistAction ()
-    {
-        // TODO: Code the get leasing excluded list?
-    }
+        /*
+         * Grab the incoming parameters
+         */
+        $jqGridParameters = array(
+            'sidx' => $this->_getParam('sidx', 'id'),
+            'sord' => $this->_getParam('sord', 'ASC'),
+            'page' => $this->_getParam('page', 1),
+            'rows' => $this->_getParam('rows', 10)
+        );
 
-    public function setleasedAction ()
-    {
-        // TODO: Code the set leased action
-    }
+        // Set up validation arrays
+        $validSortColumns = array('id');
+        $sortColumns      = array_keys($validSortColumns);
 
-    public function setexcludedAction ()
-    {
-        // TODO: Code the set excluded action
+        $jqGrid->parseJQGridPagingRequest($jqGridParameters);
+        $jqGrid->setValidSortColumns($sortColumns);
+
+
+        if ($jqGrid->sortingIsValid())
+        {
+            $jqGrid->setRecordCount($deviceInstanceMapper->getMappedDeviceInstances($this->getReport()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), null, null, true));
+
+            // Validate current page number since we don't want to be out of bounds
+            if ($jqGrid->getCurrentPage() < 1)
+            {
+                $jqGrid->setCurrentPage(1);
+            }
+            else if ($jqGrid->getCurrentPage() > $jqGrid->calculateTotalPages())
+            {
+                $jqGrid->setCurrentPage($jqGrid->calculateTotalPages());
+            }
+
+            // Return a small subset of the results based on the jqGrid parameters
+            $startRecord     = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
+            $deviceInstances = $deviceInstanceMapper->getMappedDeviceInstances($this->getReport()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord);
+
+            $rows = array();
+            foreach ($deviceInstances as $deviceInstance)
+            {
+
+                $row = array(
+                    "id"         => $deviceInstance->id,
+                    "reportId"   => $deviceInstance->reportId,
+                    "isExcluded" => $deviceInstance->isExcluded
+                );
+
+                if ($deviceInstance->getMasterDevice() instanceof Proposalgen_Model_MasterDevice)
+                {
+                    $row["manufacturer"] = $deviceInstance->getMasterDevice()->getManufacturer()->displayname;
+                    $row["modelName"]    = $deviceInstance->getMasterDevice()->modelName;
+                }
+                else
+                {
+                    $row["manufacturer"] = $deviceInstance->getRmsUploadRow()->getManufacturer()->displayname;
+                    $row["modelName"]    = $deviceInstance->getRmsUploadRow()->modelName;
+                }
+
+                $rows[] = $row;
+
+            }
+
+            $jqGrid->setRows($rows);
+
+            // Send back jqGrid json data
+            $this->_helper->json($jqGrid->createPagerResponseArray());
+        }
+        else
+        {
+            $this->_response->setHttpResponseCode(500);
+            $this->_helper->json(array(
+                                      'error' => 'Sorting parameters are invalid'
+                                 ));
+        }
     }
 
     /**
@@ -584,7 +650,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     public function editUnknownDeviceAction ()
     {
         $db                        = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $deviceInstanceIdsAsString = $this->getParam("deviceInstanceIds", false);
+        $deviceInstanceIdsAsString = $this->_getParam("deviceInstanceIds", false);
 
         if ($deviceInstanceIdsAsString !== false)
         {
@@ -658,7 +724,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             $db->commit();
 
                             $this->_helper->flashMessenger(array("success" => "Device successfully mapped!"));
-                            $this->_helper->redirector("devicemapping");
+                            $this->_helper->redirector("mapping");
                         }
                         catch (Exception $e)
                         {
@@ -684,7 +750,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         else
         {
             $this->_helper->flashMessenger(array("warning" => "Invalid Device Specified."));
-            $this->_helper->redirector("devicemapping");
+            $this->_helper->redirector("mapping");
         }
 
     }
@@ -731,5 +797,70 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         }
 
         $this->_helper->json($jsonResponse);
+    }
+
+    /**
+     * Handles excluding/including devices
+     */
+    public function toggleExcludedFlagAction ()
+    {
+        $deviceInstanceId = $this->_getParam("deviceInstanceId", false);
+        $isExcluded       = $this->getParam("isExcluded", false);
+        $booleanFilter    = new Zend_Filter_Boolean();
+        $isExcluded       = $booleanFilter->filter($isExcluded);
+        $errorMessage     = false;
+
+        if ($deviceInstanceId !== false)
+        {
+            $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
+            $deviceInstance       = $deviceInstanceMapper->find($deviceInstanceId);
+            if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance)
+            {
+                if ($deviceInstance->reportId == $this->getReport()->id)
+                {
+                    $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+                    $db->beginTransaction();
+                    try
+                    {
+                        $deviceInstance->isExcluded = $isExcluded;
+                        $deviceInstanceMapper->save($deviceInstance);
+                        $db->commit();
+                    }
+                    catch (Exception $e)
+                    {
+                        $db->rollBack();
+                        My_Log::logException($e);
+                        $errorMessage = "The system encountered an error while trying to exclude the device. Reference #" . My_Log::getUniqueId();
+                    }
+                }
+                else
+                {
+                    $errorMessage = "You can only exclude device instances that belong to the same assessment." . $deviceInstance->reportId . " - " . $this->getReport()->id;
+                }
+            }
+            else
+            {
+                $errorMessage = "Invalid device instance.";
+            }
+        }
+        else
+        {
+            $errorMessage = "Invalid device instance id.";
+        }
+
+        if ($errorMessage !== false)
+        {
+            $this->_helper->json(array("error" => true, "message" => $errorMessage));
+        }
+
+        if ($isExcluded)
+        {
+            $this->_helper->json(array("success" => true, "message" => "Device is now excluded."));
+        }
+        else
+        {
+            $this->_helper->json(array("success" => true, "message" => "Device is now included. "));
+        }
+
     }
 }

@@ -75,13 +75,13 @@ class Proposalgen_Model_Report_Step extends My_Model_Abstract
             'name'       => 'Map Devices',
             'group'      => self::GROUP_FLEETDATA,
             'controller' => 'fleet',
-            'action'     => 'devicemapping'
+            'action'     => 'mapping'
         ),
         self::STEP_FLEETDATA_SUMMARY    => array(
             'name'       => 'Summary',
             'group'      => self::GROUP_FLEETDATA,
             'controller' => 'fleet',
-            'action'     => 'deviceleasing'
+            'action'     => 'summary'
         ),
         self::STEP_REPORTSETTINGS       => array(
             'name'       => 'Report Settings',
