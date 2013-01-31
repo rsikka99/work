@@ -63,14 +63,13 @@ INSERT INTO `log_types` (`id`, `name`) VALUES
 
 INSERT INTO `manufacturers` (`id`, `fullname`, `displayname`, `isDeleted`) VALUES
 (1, 'Brother','Brother', 0),
-(2, 'BROTHER INTL CORP','BROTHER INTL CORP', 0),
-(3, 'CLOVER TECHNOLOGIES GROUP','CLOVER TECHNOLOGIES GROUP', 0),
+(3, 'Clover Technologies Group','Clover', 0),
 (4, 'Dell','Dell', 0),
-(5, 'Hewlett-Packard','Hewlett-Packard', 0),
-(6, 'IMAGE PROJECTIONS WEST INC','IMAGE PROJECTIONS WEST INC', 0),
+(5, 'Hewlett-Packard','HP', 0),
+(6, 'Image Projections West Inc','Image Projections West Inc', 0),
 (7, 'Lexmark','Lexmark', 0),
-(8, 'HORIZON USA','HORIZON USA', 0),
-(9, 'TECH OPTICS INC','TECH OPTICS INC', 0),
+(8, 'Horizon USA','Horizon USA', 0),
+(9, 'Tech Optics Inc','Tech Optics Inc', 0),
 (10, 'Xerox','Xerox', 0),
 (11, 'Canon','Canon', 0),
 (12, 'Imagistics','Imagistics', 0),
@@ -78,19 +77,19 @@ INSERT INTO `manufacturers` (`id`, `fullname`, `displayname`, `isDeleted`) VALUE
 (14, 'Oce Imagistics','Oce Imagistics', 0),
 (15, 'Ricoh','Ricoh', 0),
 (16, 'Savin','Savin', 0),
-(17, 'Konica Minolta','Konica Minolta', 0),
-(18, 'Kyocera Mita','Kyocera Mita', 0),
+(17, 'Konica Minolta','Konica', 0),
+(18, 'Kyocera Mita','Kyocera', 0),
 (19, 'Minolta','Minolta', 0),
 (20, 'Fuji Xerox','Fuji Xerox', 0),
 (21, 'Oki','Oki', 0),
 (22, 'Samsung','Samsung', 0),
 (23, 'Toshiba','Toshiba', 0),
 (24, 'Sharp','Sharp', 0),
-(25, 'Ibm','Ibm', 0),
+(25, 'IBM','IBM', 0),
 (26, 'Panasonic','Panasonic', 0),
 (27, 'Copystar','Copystar', 0),
 (28, 'Lanier','Lanier', 0),
-(29, 'MEDIA SCIENCE','MEDIA SCIENCE', 0);
+(29, 'Media Science','Media Science', 0);
 
 INSERT INTO `countries` (`id`, `name`,`locale`) VALUES
 (1, 'Canada','en_CA'),
