@@ -3406,7 +3406,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
     public function deleteReport ($reportId)
     {
         $db = Zend_Db_Table::getDefaultAdapter();
-
+		$rmsUploadRowMapper = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance();
         $reportMapper        = Proposalgen_Model_Mapper_Report::getInstance();
         $reportSettingMapper = Proposalgen_Model_Mapper_Report_Setting::getInstance();
         $report              = $reportMapper->find($reportId);
@@ -3421,6 +3421,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                  * Report Report Settings
                  * Report Settings
                  */
+                $rmsUploadRowMapper->deleteAllForReport($reportId);
                 $reportSettingMapper->delete($report->getReportSettings());
                 $reportMapper->delete($report);
                 $db->commit();
@@ -6685,6 +6686,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(array(
                                                     "error" => "There was an error while trying to transfer the report. Please contact your administrator."
                                                ));
+                
             }
         }
 
