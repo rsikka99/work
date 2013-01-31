@@ -87,8 +87,8 @@ CREATE  TABLE IF NOT EXISTS `users` (
   UNIQUE INDEX `username` (`username` ASC) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 13
-DEFAULT CHARACTER SET = latin1
-COMMENT = 'The users table stores basic information on a user';
+DEFAULT CHARACTER SET = latin1, 
+COMMENT = 'The users table stores basic information on a user' ;
 
 
 -- -----------------------------------------------------
@@ -214,6 +214,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_upload_rows` (
   `hasCompleteInformation` TINYINT(4) NOT NULL DEFAULT 0 ,
   `modelName` VARCHAR(255) NOT NULL DEFAULT '' ,
   `manufacturer` VARCHAR(255) NOT NULL DEFAULT '' ,
+  `manufacturerId` INT(11) NULL ,
   `cost` DOUBLE NULL ,
   `dutyCycle` INT(11) NULL ,
   `isColor` TINYINT(4) NOT NULL DEFAULT 0 ,
@@ -229,24 +230,42 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_upload_rows` (
   `tonerConfigId` INT(11) NOT NULL DEFAULT 1 ,
   `wattsPowerNormal` DOUBLE NULL ,
   `wattsPowerIdle` DOUBLE NULL ,
-  `blackTonerSku` VARCHAR(255) NULL ,
-  `blackTonerYield` INT(11) NULL ,
-  `blackTonerCost` DOUBLE NULL ,
-  `cyanTonerSku` VARCHAR(255) NULL ,
-  `cyanTonerYield` INT(11) NULL ,
-  `cyanTonerCost` DOUBLE NULL ,
-  `magentaTonerSku` VARCHAR(255) NULL ,
-  `magentaTonerYield` INT(11) NULL ,
-  `magentaTonerCost` DOUBLE NULL ,
-  `yellowTonerSku` VARCHAR(255) NULL ,
-  `yellowTonerYield` INT(11) NULL ,
-  `yellowTonerCost` DOUBLE NULL ,
-  `threeColorSku` VARCHAR(255) NULL ,
-  `threeColorYield` INT(11) NULL ,
-  `threeColorCost` DOUBLE NULL ,
-  `fourColorSku` VARCHAR(255) NULL ,
-  `fourColorYield` INT(11) NULL ,
-  `fourColorCost` DOUBLE NULL ,
+  `oemBlackTonerSku` VARCHAR(255) NULL ,
+  `oemBlackTonerYield` INT(11) NULL ,
+  `oemBlackTonerCost` DOUBLE NULL ,
+  `oemCyanTonerSku` VARCHAR(255) NULL ,
+  `oemCyanTonerYield` INT(11) NULL ,
+  `oemCyanTonerCost` DOUBLE NULL ,
+  `oemMagentaTonerSku` VARCHAR(255) NULL ,
+  `oemMagentaTonerYield` INT(11) NULL ,
+  `oemMagentaTonerCost` DOUBLE NULL ,
+  `oemYellowTonerSku` VARCHAR(255) NULL ,
+  `oemYellowTonerYield` INT(11) NULL ,
+  `oemYellowTonerCost` DOUBLE NULL ,
+  `oemThreeColorTonerSku` VARCHAR(255) NULL ,
+  `oemThreeColorTonerYield` INT(11) NULL ,
+  `oemThreeColorTonerCost` DOUBLE NULL ,
+  `oemFourColorTonerSku` VARCHAR(255) NULL ,
+  `oemFourColorTonerYield` INT(11) NULL ,
+  `oemFourColorTonerCost` DOUBLE NULL ,
+  `compBlackTonerSku` VARCHAR(255) NULL ,
+  `compBlackTonerYield` INT(11) NULL ,
+  `compBlackTonerCost` DOUBLE NULL ,
+  `compCyanTonerSku` VARCHAR(255) NULL ,
+  `compCyanTonerYield` INT(11) NULL ,
+  `compCyanTonerCost` DOUBLE NULL ,
+  `compMagentaTonerSku` VARCHAR(255) NULL ,
+  `compMagentaTonerYield` INT(11) NULL ,
+  `compMagentaTonerCost` DOUBLE NULL ,
+  `compYellowTonerSku` VARCHAR(255) NULL ,
+  `compYellowTonerYield` INT(11) NULL ,
+  `compYellowTonerCost` DOUBLE NULL ,
+  `compThreeColorTonerSku` VARCHAR(255) NULL ,
+  `compThreeColorTonerYield` INT(11) NULL ,
+  `compThreeColorTonerCost` DOUBLE NULL ,
+  `compFourColorTonerSku` VARCHAR(255) NULL ,
+  `compFourColorTonerYield` INT(11) NULL ,
+  `compFourColorTonerCost` DOUBLE NULL ,
   `tonerLevelBlack` VARCHAR(255) NULL ,
   `tonerLevelCyan` VARCHAR(255) NULL ,
   `tonerLevelMagenta` VARCHAR(255) NULL ,
@@ -254,6 +273,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_upload_rows` (
   PRIMARY KEY (`id`) ,
   INDEX `pgen_rms_upload_rows_ibfk_1_idx` (`rmsProviderId` ASC) ,
   INDEX `pgen_rms_upload_rows_ibfk_2_idx` (`rmsProviderId` ASC, `rmsModelId` ASC) ,
+  INDEX `pgen_rms_upload_rows_ibfk_3_idx` (`manufacturerId` ASC) ,
   CONSTRAINT `pgen_rms_upload_rows_ibfk_1`
     FOREIGN KEY (`rmsProviderId` )
     REFERENCES `pgen_rms_providers` (`id` )
@@ -263,7 +283,12 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_upload_rows` (
     FOREIGN KEY (`rmsProviderId` , `rmsModelId` )
     REFERENCES `pgen_rms_devices` (`rmsProviderId` , `rmsModelId` )
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE NO ACTION,
+  CONSTRAINT `pgen_rms_upload_rows_ibfk_3`
+    FOREIGN KEY (`manufacturerId` )
+    REFERENCES `manufacturers` (`id` )
+    ON DELETE SET NULL
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 477
 DEFAULT CHARACTER SET = utf8;
@@ -1065,8 +1090,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schemas` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'Stores information on different leasing schemas';
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'Stores information on different leasing schemas' ;
 
 
 -- -----------------------------------------------------
@@ -1083,7 +1108,7 @@ CREATE  TABLE IF NOT EXISTS `qgen_global_leasing_schemas` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
-COMMENT = 'This table marks leasing schemas as global';
+COMMENT = 'This table marks leasing schemas as global' ;
 
 
 -- -----------------------------------------------------
@@ -1102,8 +1127,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_ranges` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 5
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'Stores the available value ranges (start range) for a leasin';
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'Stores the available value ranges (start range) for a leasin' ;
 
 
 -- -----------------------------------------------------
@@ -1122,8 +1147,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_terms` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 10
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'Holds the terms available for a leasing schema';
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'Holds the terms available for a leasing schema' ;
 
 
 -- -----------------------------------------------------
@@ -1147,8 +1172,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_rates` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'Stores the rates that coincide with the terms and ranges for';
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'Stores the rates that coincide with the terms and ranges for' ;
 
 
 -- -----------------------------------------------------
@@ -1217,8 +1242,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_quotes` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'Primary table for a quote. Stores basic information';
+DEFAULT CHARACTER SET = utf8, 
+COMMENT = 'Primary table for a quote. Stores basic information' ;
 
 
 -- -----------------------------------------------------
@@ -1630,8 +1655,8 @@ ENGINE = InnoDB;
 CREATE  TABLE IF NOT EXISTS `device_instance_replacement_master_devices` (
   `masterDeviceId` INT NOT NULL ,
   `deviceInstanceId` INT NOT NULL ,
-  INDEX `device_instance_replacement_master_devices_ibfk1` (`masterDeviceId` ASC) ,
-  INDEX `device_instance_replacement_master_devices_ibfk2` (`deviceInstanceId` ASC) ,
+  INDEX `device_instance_replacement_master_devices_ibfk1_idx` (`masterDeviceId` ASC) ,
+  INDEX `device_instance_replacement_master_devices_ibfk2_idx` (`deviceInstanceId` ASC) ,
   PRIMARY KEY (`deviceInstanceId`) ,
   CONSTRAINT `device_instance_replacement_master_devices_ibfk1`
     FOREIGN KEY (`masterDeviceId` )
@@ -1650,6 +1675,373 @@ ENGINE = InnoDB;
 -- Placeholder table for view `pgen_map_device_instances`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pgen_map_device_instances` (`rmsProviderId` INT, `rmsModelId` INT, `manufacturer` INT, `modelName` INT, `useUserData` INT, `reportId` INT, `masterDeviceId` INT, `isMapped` INT, `mappedManufacturer` INT, `mappedModelName` INT, `deviceCount` INT, `deviceInstanceIds` INT);
+
+-- -----------------------------------------------------
+-- procedure clone_report
+-- -----------------------------------------------------
+DELIMITER $$
+CREATE PROCEDURE `clone_report`(IN reportToBeCloned INT(11), IN userToBeClonedTo INT(11))
+BEGIN
+	declare newdiid integer(11);
+	declare rmsid integer(11);
+	declare finished boolean default false;
+	
+	-- Cursor
+	declare uploadcursor cursor for
+		SELECT `rmsUploadRowId` FROM pgen_device_instances WHERE `reportId` = reportToBeCloned;
+	declare continue handler for not found set finished = true;
+	SET @reportIdToClone = reportToBeCloned;
+	SET @userIdToCloneTo = userToBeClonedTo;
+	
+	-- Clone report
+	INSERT INTO pgen_reports (
+		`userId`, 
+		`customerCompanyName`,
+		`userPricingOverride`,
+		`reportStage`,
+		`questionSetId`,
+		`dateCreated`,
+		`lastModified`,
+		`reportDate`,
+		`devicesModified`
+	) 
+	SELECT 
+		@userIdToCloneTo, 
+		`customerCompanyName`,
+		`userPricingOverride`,
+		`reportStage`,
+		`questionSetId`,
+		`dateCreated`,
+		`lastModified`,
+		`reportDate`,
+		`devicesModified`
+	FROM `pgen_reports`
+	WHERE `id` = @reportIdToClone;
+	
+	SET @newReportId = last_insert_id();
+	
+	-- Clones rms excluded rows WHERE `reportId` = reportid
+	INSERT INTO pgen_rms_excluded_rows (
+		`reportId`, 
+		`rmsProviderId`,
+		`rmsModelId`,
+		`serialNumber`,
+		`ipAddress`,
+		`modelName`,
+		`manufacturerName`,
+		`reason`,
+		`csvLineNumber`
+	)
+	SELECT
+		@newReportId,
+		`rmsProviderId`,
+		`rmsModelId`,
+		`serialNumber`,
+		`ipAddress`,
+		`modelName`,
+		`manufacturerName`,
+		`reason`,
+		`csvLineNumber`
+	FROM `pgen_rms_excluded_rows`
+	WHERE `reportId` = @reportIdToClone;
+	
+	-- Start the loop up
+	open uploadcursor;
+	curloop: loop
+		fetch uploadcursor into rmsid;
+		if finished then
+			close uploadcursor;
+			set finished = false;
+			leave curloop;
+		end if;
+		-- Clone upload rows WHERE `id` = the fetched id from the cursor(deviceinstanceid)
+		INSERT INTO pgen_rms_upload_rows (
+			`id`,
+			`rmsProviderId`,
+			`rmsModelId`,
+			`hasCompleteInformation`,
+			`modelName`,
+			`manufacturer`,
+			`cost`,
+			`dutyCycle`,
+			`isColor`,
+			`isCopier`,
+			`isFax`,
+			`isLeased`,
+			`isScanner`,
+			`launchDate`,
+			`leasedTonerYield`,
+			`ppmBlack`,
+			`ppmColor`,
+			`serviceCostPerPage`,
+			`tonerConfigId`,
+			`wattsPowerNormal`,
+			`wattsPowerIdle`,
+			`blackTonerSku`,
+			`blackTonerYield`,
+			`blackTonerCost`,
+			`cyanTonerSku`,
+			`cyanTonerYield`,
+			`cyanTonerCost`,
+			`magentaTonerSku`,
+			`magentaTonerYield`,
+			`magentaTonerCost`,
+			`yellowTonerSku`,
+			`yellowTonerYield`,
+			`yellowTonerCost`,
+			`threeColorSku`,
+			`threeColorYield`,
+			`threeColorCost`,
+			`fourColorSku`,
+			`fourColorYield`,
+			`fourColorCost`,
+			`tonerLevelCyan`,
+			`tonerLevelMagenta`,
+			`tonerLevelYellow`
+		)
+		SELECT 
+			0,
+			`rmsProviderId`,
+			`rmsModelId`,
+			`hasCompleteInformation`,
+			`modelName`,
+			`manufacturer`,
+			`cost`,
+			`dutyCycle`,
+			`isColor`,
+			`isCopier`,
+			`isFax`,
+			`isLeased`,
+			`isScanner`,
+			`launchDate`,
+			`leasedTonerYield`,
+			`ppmBlack`,
+			`ppmColor`,
+			`serviceCostPerPage`,
+			`tonerConfigId`,
+			`wattsPowerNormal`,
+			`wattsPowerIdle`,
+			`blackTonerSku`,
+			`blackTonerYield`,
+			`blackTonerCost`,
+			`cyanTonerSku`,
+			`cyanTonerYield`,
+			`cyanTonerCost`,
+			`magentaTonerSku`,
+			`magentaTonerYield`,
+			`magentaTonerCost`,
+			`yellowTonerSku`,
+			`yellowTonerYield`,
+			`yellowTonerCost`,
+			`threeColorSku`,
+			`threeColorYield`,
+			`threeColorCost`,
+			`fourColorSku`,
+			`fourColorYield`,
+			`fourColorCost`,
+			`tonerLevelCyan`,
+			`tonerLevelMagenta`,
+			`tonerLevelYellow`
+		FROM pgen_rms_upload_rows
+		WHERE `id` = rmsid;
+		-- Gets the new upload row id(rmsUploadRows)
+		SET @newrmsid = last_insert_id();
+			
+		-- Clone device instances, uses new reportid and new rmsid
+		INSERT INTO pgen_device_instances (
+			`reportId`,
+			`rmsUploadRowId`,
+			`ipAddress`,
+			`isExcluded`,
+			`mpsDiscoveryDate`,
+			`reportsTonerLevels`,
+			`serialNumber`,
+			`useUserData`
+		) SELECT 
+			@newReportId,
+			@newrmsid,
+			`ipAddress`,
+			`isExcluded`,
+			`mpsDiscoveryDate`,
+			`reportsTonerLevels`,
+			`serialNumber`,
+			`useUserData`
+		FROM pgen_device_instances
+		WHERE `reportId` = @reportIdToClone AND rmsUploadRowId = rmsid;
+			
+		-- The new Device Instance Id
+		SET newdiid = last_insert_id();
+		-- Get the current Device Instance id we are looping through
+		SET @diid = (SELECT id from `pgen_device_instances` WHERE `reportId` = @reportIdToClone and `rmsUploadRowId` = rmsid);
+			
+		-- Clone Device Instance Meters
+		INSERT INTO `pgen_device_instance_meters` (
+			`deviceInstanceId`,
+			`meterType`,
+			`startMeter`,
+			`endMeter`,
+			`monitorStartDate`,
+			`monitorEndDate`
+		) 
+		SELECT
+			newdiid,
+			`meterType`,
+			`startMeter`,
+			`endMeter`,
+			`monitorStartDate`,
+			`monitorEndDate`
+		FROM `pgen_device_instance_meters`
+		WHERE `deviceInstanceId` = @diid;
+			
+			-- Clone Device Instance Master Devices
+		INSERT INTO `pgen_device_instance_master_devices` (
+			`deviceInstanceId`,
+			`masterDeviceId`
+		)
+		SELECT
+			newdiid,
+			`masterDeviceId`
+		FROM `pgen_device_instance_master_devices`
+		WHERE `deviceInstanceId` = @diid;
+			
+		-- Clone Device Instance Replacement Master Devices
+		INSERT INTO device_instance_replacement_master_devices (
+			`deviceInstanceId`,
+			`masterDeviceId`
+		)
+		SELECT
+			newdiid,
+			`masterDeviceId`
+		FROM `device_instance_replacement_master_devices`
+		WHERE `deviceInstanceId` = @diid;
+		
+	end loop curloop;
+
+	-- Clone Textual Answers
+	INSERT INTO `pgen_textual_answers` (
+		`question_id`,
+		`report_id`,
+		`textual_answer`
+	)
+	SELECT
+		`question_id`,
+		@newReportId,
+		`textual_answer`
+	FROM pgen_textual_answers
+	WHERE `report_id` = @reportIdToClone;
+
+	-- Clone Date Answers
+	INSERT INTO pgen_date_answers (
+		`question_id`,
+		`report_id`,
+		`date_answer`
+	)
+	SELECT
+		`question_id`,
+		@newReportId,
+		`date_answer`
+	FROM `pgen_date_answers`
+	WHERE `report_id` = @reportIdToClone;
+
+	-- Numeric Date Answers
+	INSERT INTO pgen_numeric_answers (
+		`question_id`,
+		`report_id`,
+		`numeric_answer`
+	)
+	SELECT
+		`question_id`,
+		@newReportId,
+		`numeric_answer`
+	FROM `pgen_numeric_answers`
+	WHERE `report_id` = @reportIdToClone;
+
+	SET @reportSettingIdToClone = (Select `reportSettingId` FROM `pgen_report_report_settings` WHERE `reportId` = @reportIdToClone);
+	
+	INSERT INTO pgen_report_settings (
+		`actualPageCoverageMono`,
+		`actualPageCoverageColor`,
+		`serviceCostPerPage`,
+		`adminCostPerPage`,
+		`assessmentReportMargin`,
+		`grossMarginReportMargin`,
+		`monthlyLeasePayment`,
+		`defaultPrinterCost`,
+		`leasedBwCostPerPage`,
+		`leasedColorCostPerPage`,
+		`mpsBwCostPerPage`,
+		`mpsColorCostPerPage`,
+		`kilowattsPerHour`,
+		`assessmentPricingConfigId`,
+		`grossMarginPricingConfigId`,
+		`reportDate`,
+		`targetMonochrome`,
+		`targetColor`,
+		`costThreshold`
+	)
+	SELECT 
+		`actualPageCoverageMono`,
+		`actualPageCoverageColor`,
+		`serviceCostPerPage`,
+		`adminCostPerPage`,
+		`assessmentReportMargin`,
+		`grossMarginReportMargin`,
+		`monthlyLeasePayment`,
+		`defaultPrinterCost`,
+		`leasedBwCostPerPage`,
+		`leasedColorCostPerPage`,
+		`mpsBwCostPerPage`,
+		`mpsColorCostPerPage`,
+		`kilowattsPerHour`,
+		`assessmentPricingConfigId`,
+		`grossMarginPricingConfigId`,
+		`reportDate`,
+		`targetMonochrome`,
+		`targetColor`,
+		`costThreshold`
+	FROM `pgen_report_settings`
+	WHERE `id` = @reportSettingIdToClone;
+
+	SET @newreportsettingid = last_insert_id();
+	
+	INSERT INTO `pgen_report_report_settings` (
+		`reportId`,
+		`reportSettingId`
+	)
+	SELECT 
+		@newReportId,
+		@newreportsettingid
+	FROM `pgen_report_report_settings`
+	WHERE `reportId` = @reportIdToClone;
+	
+	SET @surveySettingIdToClone = (Select `surveySettingId` FROM `pgen_report_survey_settings` WHERE `reportId` = @reportIdToClone);
+	INSERT INTO pgen_survey_settings (
+		`pageCoverageMono`,
+		`pageCoverageColor`
+		)
+	SELECT
+		`pageCoverageMono`,
+		`pageCoverageColor`
+	FROM `pgen_survey_settings`
+	WHERE `id` = @surveySettingIdToClone;
+	
+	SET @newsurveysettingid = last_insert_id();
+	INSERT INTO `pgen_report_survey_settings` (
+		`reportId`,
+		`surveySettingId`
+	)
+	SELECT 
+		@newReportId,
+		@newsurveysettingid
+	FROM `pgen_report_survey_settings`
+	WHERE `reportId` = @reportIdToClone;
+			
+END
+$$
+
+$$
+DELIMITER ;
+
 
 -- -----------------------------------------------------
 -- View `pgen_map_device_instances`

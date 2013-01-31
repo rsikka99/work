@@ -5,6 +5,12 @@ function runSQLFile ($filename, mysqli $dbConnection)
     $NL = PHP_EOL;
     $statementNumber = 0;
     $sql = file_get_contents($filename);
+    
+    $sql = str_replace("DELIMITER $$", "", $sql);
+    $sql = str_replace("DELIMITER ;", "", $sql);
+    $sql = str_replace("$$" . PHP_EOL . PHP_EOL . "$$", ";", $sql);
+    
+    
     if ($dbConnection->multi_query($sql))
     {
         
