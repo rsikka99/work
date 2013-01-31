@@ -1,11 +1,11 @@
 $(document).ready(function ()
 {
-    var blackTonerFieldset = $("#fieldset-blackTonerFieldset");
-    var cyanTonerFieldset = $("#fieldset-cyanTonerFieldset");
-    var magentaTonerFieldset = $("#fieldset-magentaTonerFieldset");
-    var yellowTonerFieldset = $("#fieldset-yellowTonerFieldset");
-    var threeColorTonerFieldset = $("#fieldset-threeColorTonerFieldset");
-    var fourColorTonerFieldset = $("#fieldset-fourColorTonerFieldset");
+    var blackTonerFieldset = $(".BlackTonerSet");
+    var cyanTonerFieldset = $(".CyanTonerSet");
+    var magentaTonerFieldset = $(".MagentaTonerSet");
+    var yellowTonerFieldset = $(".YellowTonerSet");
+    var threeColorTonerFieldset = $(".ThreeColorTonerSet");
+    var fourColorTonerFieldset = $(".FourColorTonerSet");
 
 
     var isLeasedCheckbox = $("#is_leased");
@@ -63,5 +63,10 @@ $(document).ready(function ()
     isLeasedCheckbox.change(function ()
     {
         $("#tonerConfigId").change();
+    });
+
+    $(".tmtwDatePicker").datetimepicker({
+        timeFormat: "hh:mm:ss",
+        dateFormat: "yy-mm-dd"
     });
 });

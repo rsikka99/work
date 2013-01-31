@@ -69,23 +69,23 @@ class Proposalgen_Model_TonerConfig extends My_Model_Abstract
         {
 
             case self::BLACK_ONLY :
-                $tonerColors ["black"] = Proposalgen_Model_TonerColor::BLACK;
+                $tonerColors ["Black"] = Proposalgen_Model_TonerColor::BLACK;
                 break;
             case self::THREE_COLOR_SEPARATED :
-                $tonerColors ["black"]   = Proposalgen_Model_TonerColor::BLACK;
-                $tonerColors ["cyan"]    = Proposalgen_Model_TonerColor::CYAN;
-                $tonerColors ["magenta"] = Proposalgen_Model_TonerColor::MAGENTA;
-                $tonerColors ["yellow"]  = Proposalgen_Model_TonerColor::YELLOW;
+                $tonerColors ["Black"]   = Proposalgen_Model_TonerColor::BLACK;
+                $tonerColors ["Cyan"]    = Proposalgen_Model_TonerColor::CYAN;
+                $tonerColors ["Magenta"] = Proposalgen_Model_TonerColor::MAGENTA;
+                $tonerColors ["Yellow"]  = Proposalgen_Model_TonerColor::YELLOW;
                 break;
             case self::THREE_COLOR_COMBINED :
-                $tonerColors ["black"]   = Proposalgen_Model_TonerColor::BLACK;
-                $tonerColors ["3 color"] = Proposalgen_Model_TonerColor::THREE_COLOR;
+                $tonerColors ["Black"]   = Proposalgen_Model_TonerColor::BLACK;
+                $tonerColors ["ThreeColor"] = Proposalgen_Model_TonerColor::THREE_COLOR;
                 break;
             case self::FOUR_COLOR_COMBINED :
-                $tonerColors ["4 color"] = Proposalgen_Model_TonerColor::FOUR_COLOR;
+                $tonerColors ["FourColor"] = Proposalgen_Model_TonerColor::FOUR_COLOR;
                 break;
             default :
-                $tonerColors ["black"] = Proposalgen_Model_TonerColor::BLACK;
+                $tonerColors ["Black"] = Proposalgen_Model_TonerColor::BLACK;
                 break;
         }
 

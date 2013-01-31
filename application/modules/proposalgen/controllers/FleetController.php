@@ -1,7 +1,6 @@
 <?php
 class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposal
 {
-
     /**
      * Users can upload/see uploaded data on this step
      */
@@ -120,6 +119,14 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                          */
                                         $rmsUploadRow                = new Proposalgen_Model_Rms_Upload_Row($lineArray);
                                         $rmsUploadRow->rmsProviderId = $uploadProviderId;
+
+                                        // Lets make an attempt at finding the manufacturer
+                                        $manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->searchByName($rmsUploadRow->manufacturer);
+                                        if ($manufacturers && count($manufacturers) > 0)
+                                        {
+                                            $rmsUploadRow->manufacturerId = $manufacturers[0]->id;
+                                        }
+
                                         $rmsUploadRowMapper->insert($rmsUploadRow);
 
                                         /*
@@ -247,7 +254,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
                                     $deviceMappingService->mapDevices($deviceInstances, $this->_userId, true);
 
-
+                                    $db->commit();
+                                    $importSuccessful = true;
                                 }
                                 else
                                 {
@@ -255,8 +263,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                                                         'error' => "There was an error importing your file. $processCsvMessage"
                                                                    ));
                                 }
-                                $db->commit();
-                                $importSuccessful = true;
+
                             }
                             catch (Exception $e)
                             {
@@ -486,11 +493,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         }
     }
 
-    public function removedeviceAction ()
-    {
-        // TODO Code remove device action
-    }
-
     public function deviceleasingAction ()
     {
         // Mark the step we're on as active
@@ -579,13 +581,155 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     /**
      * This is where a user can modify the properties of an rms upload row in a way that will make it valid
      */
-    public function adddeviceAction()
+    public function editUnknownDeviceAction ()
     {
-        $form = new Proposalgen_Form_Fleet_AddDevice();
+        $db                        = Zend_Db_Table_Abstract::getDefaultAdapter();
+        $deviceInstanceIdsAsString = $this->getParam("deviceInstanceIds", false);
 
-        // TODO: Code add device
+        if ($deviceInstanceIdsAsString !== false)
+        {
+            $deviceInstanceIds             = explode(",", $deviceInstanceIdsAsString);
+            $this->view->deviceInstanceIds = $deviceInstanceIds;
+
+            $form = new Proposalgen_Form_Fleet_AddDevice();
+            $form->deviceInstanceIds->setValue($deviceInstanceIdsAsString);
+
+            $rmsUploadRowMapper   = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance();
+            $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
+            $deviceInstance       = $deviceInstanceMapper->find($deviceInstanceIds[0]);
+            if ($deviceInstance)
+            {
+                $rmsUploadRow             = $deviceInstance->getRmsUploadRow();
+                $this->view->rmsUploadRow = $rmsUploadRow;
+                $form->populate($rmsUploadRow->toArray());
+            }
 
 
-        $this->view->form = $form;
+            /*
+             * Received a POST
+             */
+            if ($this->getRequest()->isPost())
+            {
+                $postData = $this->getRequest()->getPost();
+                if (isset($postData['submit']))
+                {
+                    /*
+                     * POST was a submit from our form
+                     */
+                    $form->setValidationOnToners($postData['tonerConfigId']);
+                    if ($form->isValid($postData))
+                    {
+                        /*
+                         * Form is VALID
+                         */
+                        $formValues = $form->getValues();
+                        $db->beginTransaction();
+                        try
+                        {
+                            /**
+                             * Here we need to set any blank fields to NULL
+                             */
+                            foreach ($formValues as &$formValue)
+                            {
+                                if (is_string($formValue) && strlen($formValue) < 1)
+                                {
+                                    $formValue = new Zend_Db_Expr("NULL");
+                                }
+                            }
+
+                            /**
+                             * Save each of our devices
+                             */
+                            foreach ($deviceInstanceIds as $deviceInstanceId)
+                            {
+                                $deviceInstance = $deviceInstanceMapper->find($deviceInstanceId);
+
+                                // Update the rms upload row
+                                $rmsUploadRow = $deviceInstance->getRmsUploadRow();
+                                $rmsUploadRow->populate($formValues);
+                                $rmsUploadRow->hasCompleteInformation = true;
+
+
+                                $rmsUploadRowMapper->save($rmsUploadRow);
+
+                                $deviceInstance->useUserData = true;
+                                $deviceInstanceMapper->save($deviceInstance);
+                            }
+                            $db->commit();
+
+                            $this->_helper->flashMessenger(array("success" => "Device successfully mapped!"));
+                            $this->_helper->redirector("devicemapping");
+                        }
+                        catch (Exception $e)
+                        {
+                            /**
+                             * Error Saving
+                             */
+                            $db->rollBack();
+                            My_Log::logException($e);
+                            $this->_helper->flashMessenger(array("danger" => "There was a system error while saving your device. Please try again. Reference #" . My_Log::getUniqueId()));
+                        }
+                    }
+                    else
+                    {
+                        /**
+                         * Form is INVALID
+                         */
+                        $this->_helper->flashMessenger(array("danger" => "Please check the errors below and resubmit your request."));
+                    }
+                }
+            }
+            $this->view->form = $form;
+        }
+        else
+        {
+            $this->_helper->flashMessenger(array("warning" => "Invalid Device Specified."));
+            $this->_helper->redirector("devicemapping");
+        }
+
+    }
+
+    /*
+     * Handles removing an unknown device.
+     * This is a JSON function
+     */
+    public function removeUnknownDeviceAction ()
+    {
+        $db                        = Zend_Db_Table_Abstract::getDefaultAdapter();
+        $deviceInstanceIdsAsString = $this->getParam("deviceInstanceIds", false);
+
+        $deviceInstanceIds    = explode(",", $deviceInstanceIdsAsString);
+        $reportId             = $this->getReport()->id;
+        $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
+
+        $jsonResponse = array("success" => true, "message" => "Unknown Device successfully removed.");
+
+        $db->beginTransaction();
+        try
+        {
+            /*
+             * Loop through all the device instance ids and set the useUserDate to false
+             */
+            foreach ($deviceInstanceIds as $deviceInstanceId)
+            {
+                $deviceInstance = $deviceInstanceMapper->find($deviceInstanceId);
+                if ($deviceInstance && $deviceInstance->reportId == $reportId)
+                {
+                    $deviceInstance->useUserData = false;
+                    $deviceInstanceMapper->save($deviceInstance);
+                }
+
+            }
+            $db->commit();
+        }
+        catch (Exception $e)
+        {
+            $db->rollBack();
+            My_Log::logException($e);
+            $this->getResponse()->setHttpResponseCode(500);
+            $jsonResponse = array("error" => true, "message" => "There was an error removing the unknown device. Reference #" . My_Log::getUniqueId());
+        }
+
+        $this->_helper->json($jsonResponse);
     }
 }
