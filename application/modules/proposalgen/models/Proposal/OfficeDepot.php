@@ -1353,9 +1353,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->NumberOfRepairs))
         {
             $reportQuestions = $this->getReportQuestions();
-            if (strcasecmp($reportQuestions [24]->textualAnswer, "I know the exact amount") === 0)
+            if (strcasecmp($reportQuestions [20]->TextualAnswer, "I know the exact amount") === 0)
             {
-                $this->NumberOfRepairs = $reportQuestions [24]->NumericAnswer;
+                $this->NumberOfRepairs = $reportQuestions [20]->NumericAnswer;
             }
             else
             {
@@ -1377,7 +1377,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->AverageTimeBetweenBreakdownAndFix))
         {
             $reportQuestions                         = $this->getReportQuestions();
-            $this->AverageTimeBetweenBreakdownAndFix = $reportQuestions [20]->NumericAnswer;
+            $this->AverageTimeBetweenBreakdownAndFix = $reportQuestions [24]->NumericAnswer;
         }
 
         return $this->AverageTimeBetweenBreakdownAndFix;
@@ -2320,7 +2320,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         {
             $this->PrintIQTotalCost = $this->getInternalAdminCost() + ($this->getAnnualITCost() * 0.5) + ($this->getPageCounts()->Purchased->Color->Yearly * $this->getMPSColorCPP()) + ($this->getPageCounts()->Purchased->BlackAndWhite->Yearly * $this->getMPSBlackAndWhiteCPP()) + $this->getAnnualCostOfHardwarePurchases();
         }
-
         return $this->PrintIQTotalCost;
     }
 
