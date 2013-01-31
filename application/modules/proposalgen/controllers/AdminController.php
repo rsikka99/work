@@ -537,7 +537,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                ), 'm.id = md.manufacturerId')
                     ->joinLeft(array(
                                     'rd' => 'pgen_replacement_devices'
-                               ), 'rd.master_device_id = md.id')
+                               ), 'rd.masterDeviceId = md.id')
                     ->where('md.id = ?', $deviceID);
                 $stmt        = $db->query($select);
                 $row         = $stmt->fetchAll();
@@ -3406,7 +3406,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
     public function deleteReport ($reportId)
     {
         $db = Zend_Db_Table::getDefaultAdapter();
-
+		$rmsUploadRowMapper = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance();
         $reportMapper        = Proposalgen_Model_Mapper_Report::getInstance();
         $reportSettingMapper = Proposalgen_Model_Mapper_Report_Setting::getInstance();
         $report              = $reportMapper->find($reportId);
@@ -3421,6 +3421,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                  * Report Report Settings
                  * Report Settings
                  */
+                $rmsUploadRowMapper->deleteAllForReport($reportId);
                 $reportSettingMapper->delete($report->getReportSettings());
                 $reportMapper->delete($report);
                 $db->commit();
@@ -6663,8 +6664,16 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 }
                 else if ($formData ['transfertype'] == 'clone')
                 {
-                    $reportMapper->cloneReport($report_id, $formData ['hdntransferlist']);
-
+                    $array = explode(",",$formData['hdntransferlist']);
+                    foreach($array as $value){
+                        if(is_numeric($value))
+                        {
+                            $stmt = $db->query("CALL clone_report({$report_id}, {$value})");
+                        }
+                    }
+                    
+                    
+                    
                     $this->_helper->flashMessenger(array(
                                                         "success" => "Report Cloning Complete."
                                                    ));
@@ -6677,6 +6686,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(array(
                                                     "error" => "There was an error while trying to transfer the report. Please contact your administrator."
                                                ));
+                
             }
         }
 
@@ -6693,7 +6703,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         }
         else
         {
-            $where = 'u.user_id = ' . $this->user_id;
+            $where = 'u.id = ' . $this->user_id;
         }
 
         $select = $db->select()
@@ -6723,10 +6733,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $select = $db->select()
             ->from(array(
                         'u' => 'users'
-                   ))
-            ->joinLeft(array(
-                            'up' => 'user_roles'
-                       ), 'u.id = up.userId');
+                   ));
+
         $select->order('username ASC');
         $select->group('u.id');
         $stmt                      = $db->query($select);
@@ -6877,10 +6885,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $select = $db->select()
                 ->from(array(
                             'u' => 'users'
-                       ))
-                ->joinLeft(array(
-                                'up' => 'user_roles'
-                           ), 'u.user_id = up.user_id');
+                       ));
             if ($where)
             {
                 $select->where($where);
@@ -6895,9 +6900,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $i = 0;
                 foreach ($result as $row)
                 {
-                    $formdata->rows [$i] ['id']   = $row ['user_id'];
+                    $formdata->rows [$i] ['id']   = $row ['idid'];
                     $formdata->rows [$i] ['cell'] = array(
-                        $row ['user_id'],
+                        $row ['id'],
                         strtolower($row ['username'])
                     );
                     $i++;

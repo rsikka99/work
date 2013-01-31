@@ -43,13 +43,15 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
 
         // Create a new form with the mode and roles set
         $form = new Quotegen_Form_DeviceSetup();
-
+		
         // Make sure we are posting data
         $request = $this->getRequest();
         if ($request->isPost())
         {
             // Get the post data
             $values = $request->getPost();
+            $values['tonerConfigId'] = $values['toner_config_id'];
+            $values['manufacturerId'] = $values['manufacturer_id'];
             $assignedToners = $values ['hdnToners'];
 
             // If we cancelled we don't need to validate anything
@@ -78,7 +80,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         else
                         {
                             $where = array_merge((array)$where, array (
-                                    'manufacturer_id = ?' => $cboCriteria
+                                    'manufacturerid = ?' => $cboCriteria
                             ));
                         }
 
@@ -165,7 +167,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             $masterDevice = new Proposalgen_Model_MasterDevice();
                             $masterDevice->dateCreated = date('Y-m-d H:i:s');
 
-                            foreach ( $values as &$value )
+                            foreach ( $values as $value )
                             {
                                 if (strlen($value) < 1)
                                     $value = null;
@@ -174,7 +176,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             $masterDevice->populate($values);
 
                             // Make sure device doesn't exist
-                            $checkwhere = "manufacturer_id = {$values ['manufacturer_id']} AND printer_model LIKE '%{$values['printer_model']}%'";
+                            $checkwhere = "manufacturerId = {$values ['manufacturer_id']} AND modelName LIKE '%{$values['modelName']}%'";
                             $exists = $masterDeviceMapper->fetch($checkwhere);
 
                             if ($exists)
@@ -305,7 +307,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $mapper = new Proposalgen_Model_Mapper_MasterDevice();
         $masterDevice = $mapper->find($masterDeviceId);
         $this->view->devicename = $masterDevice->getFullDeviceName();
-
+		
         // If the masterDevice doesn't exist, send them back t the view all masterDevices page
         if (! $masterDevice)
         {
@@ -413,7 +415,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         $masterDeviceId = $mapper->save($masterDevice, $masterDeviceId);
 
                         $this->_helper->flashMessenger(array (
-                                'success' => "The {$masterDevice->getFullDeviceName()} device has been updated sucessfully."
+                                'success' => "The device has been updated sucessfully."
                         ));
                     }
 
@@ -493,7 +495,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                     $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchAll("master_device_id = {$deviceId}");
                     foreach ( $deviceToners as $toner )
                     {
-                        $tonerId = $toner->getTonerId();
+                        $tonerId = $toner->tonerId;
                         Proposalgen_Model_Mapper_DeviceToner::getInstance()->delete("toner_id = {$tonerId}");
                     }
 
@@ -551,7 +553,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             ));
             $this->_helper->redirector('index');
         }
-        $tonerConfig = $masterDevice->getTonerConfig()->getTonerConfigName();
+        $tonerConfig = $masterDevice->getTonerConfig()->tonerConfigName;
 
         // Get the toner colors that we require
         $requiredTonerColors = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($masterDevice->tonerConfigId);
@@ -605,7 +607,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             // Get toner
                             $toner = Proposalgen_Model_Mapper_Toner::getInstance()->find($tonerId);
 
-                            $validToner = in_array($toner->getTonerColorId(), $requiredTonerColors);
+                            $validToner = in_array($toner->tonerColorId, $requiredTonerColors);
 
                             if ($validToner)
                             {
@@ -658,7 +660,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         $toner = Proposalgen_Model_Mapper_Toner::getInstance()->find($tonerId);
 
                         // Make sure we're not dropping below one valid toner for the color
-                        if ($tonerCounts [$toner->getTonerColorId()] < 2)
+                        if ($tonerCounts [$toner->tonerColorId] < 2)
                         {
                             $safeToDelete = false;
                         }
@@ -694,7 +696,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         );
                         foreach ( $deviceToners as $toner )
                         {
-                            $assignedToners [] = $toner->getId();
+                            $assignedToners [] = $toner->id;
                         }
 
                         if ($view == "assigned")
@@ -719,7 +721,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                         else
                         {
                             $where = array_merge((array)$where, array (
-                                    'manufacturer_id = ?' => $cboCriteria
+                                    'manufacturerId = ?' => $cboCriteria
                             ));
                         }
                     }
@@ -748,7 +750,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         $assignedToners = array ();
         foreach ( $deviceToners as $toner )
         {
-            $assignedToners [] = $toner->getId();
+            $assignedToners [] = $toner->id;
         }
         $this->view->assignedToners = $assignedToners;
 
@@ -782,7 +784,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         }
 
         $where = array_merge((array)$where, array (
-                'toner_color_id IN ( ? )' => $validTonerColors
+                'tonerColorId IN ( ? )' => $validTonerColors
         ));
 
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Proposalgen_Model_Mapper_Toner::getInstance(), $where));
