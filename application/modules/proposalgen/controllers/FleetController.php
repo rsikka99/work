@@ -570,21 +570,21 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
                 $row = array(
                     "id"         => $deviceInstance->id,
-                    "reportId"   => $deviceInstance->reportId,
-                    "isExcluded" => $deviceInstance->isExcluded
+                    "isExcluded" => $deviceInstance->isExcluded,
+                    "ampv"       => number_format($deviceInstance->getAverageMonthlyPageCount()),
+                    "isLeased"   => ($deviceInstance->getIsLeased()) ? "Leased" : "Purchased"
                 );
+
+                $row["deviceName"] = $deviceInstance->getRmsUploadRow()->getManufacturer()->fullname . " " . $deviceInstance->getRmsUploadRow()->modelName . "<br>" . $deviceInstance->ipAddress;
 
                 if ($deviceInstance->getMasterDevice() instanceof Proposalgen_Model_MasterDevice)
                 {
-                    $row["manufacturer"] = $deviceInstance->getMasterDevice()->getManufacturer()->displayname;
-                    $row["modelName"]    = $deviceInstance->getMasterDevice()->modelName;
+                    $row["mappedToDeviceName"] = $deviceInstance->getMasterDevice()->getManufacturer()->fullname . " " . $deviceInstance->getMasterDevice()->modelName;
                 }
                 else
                 {
-                    $row["manufacturer"] = $deviceInstance->getRmsUploadRow()->getManufacturer()->displayname;
-                    $row["modelName"]    = $deviceInstance->getRmsUploadRow()->modelName;
+                    $row["mappedToDeviceName"] = $deviceInstance->getRmsUploadRow()->getManufacturer()->fullname . " " . $deviceInstance->getRmsUploadRow()->modelName;
                 }
-
                 $rows[] = $row;
 
             }

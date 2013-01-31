@@ -373,6 +373,8 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
         $dbTable                          = $this->getDbTable();
         $deviceInstanceTableName          = $this->getTableName();
         $deviceInstanceMasterDeviceMapper = Proposalgen_Model_Mapper_Device_Instance_Master_Device::getInstance();
+        $masterDeviceMapper               = Proposalgen_Model_Mapper_MasterDevice::getInstance();
+        $manufacturerMapper               = Proposalgen_Model_Mapper_Manufacturer::getInstance();
 
         $columns = null;
         if ($justCount)
@@ -383,6 +385,8 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
         $select = $dbTable->select()->from(array("di" => $deviceInstanceTableName), $columns)
             ->distinct(true)
             ->joinLeft(array("di_md" => $deviceInstanceMasterDeviceMapper->getTableName()), "di_md.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$this->col_id}", array())
+            ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "md.{$masterDeviceMapper->col_id} = di_md.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}", array())
+            ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array())
             ->where("di.{$this->col_reportId} = ?", $reportId)
             ->where("di_md.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId} IS NOT NULL OR di.{$this->col_useUserData} = 1");
 
@@ -398,8 +402,8 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
             /*
              * Parse our order
              */
-            $select->order("di.{$sortColumn} {$sortDirection}");
 
+            $select->order("di.{$sortColumn} {$sortDirection}");
 
             /*
              * Parse our Limit

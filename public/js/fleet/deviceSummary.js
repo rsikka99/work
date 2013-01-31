@@ -14,30 +14,38 @@ $(function ()
             datatype    : 'json',
             colModel    : [
                 {
+                    hidden  : true,
                     name    : 'id', index: 'id', label: 'Id',
                     sortable: false,
                     width   : 10
                 },
                 {
-                    name    : 'reportId', index: 'reportId', label: 'reportId',
-                    sortable: false,
-                    width   : 10
-                },
-                {
-                    name    : 'manufacturer', index: 'manufacturer', label: 'Device Manufacturer',
+                    name    : 'deviceName', index: 'deviceName', label: 'Device Name',
                     sortable: false,
                     width   : 150
                 },
                 {
-                    name    : 'modelName', index: 'modelName', label: 'Device Name',
+                    name    : 'mappedToDeviceName', index: 'mappedToDeviceName', label: 'Mapped To Device Name',
                     sortable: false,
                     width   : 150
+                },
+                {
+                    align   : 'right',
+                    name    : 'ampv', index: 'ampv', label: 'AMPV',
+                    sortable: false,
+                    width   : 40
+                },
+                {
+                    align   : 'center',
+                    name    : 'isLeased', index: 'isLeased', label: 'Ownership',
+                    sortable: false,
+                    width   : 40
                 },
                 {
                     align   : 'center',
                     name    : 'isExcluded', index: 'isExcluded', label: 'Excluded',
                     sortable: false,
-                    width   : 25
+                    width   : 35
                 }
             ],
             jsonReader  : {
