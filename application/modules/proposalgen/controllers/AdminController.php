@@ -537,7 +537,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                ), 'm.id = md.manufacturerId')
                     ->joinLeft(array(
                                     'rd' => 'pgen_replacement_devices'
-                               ), 'rd.master_device_id = md.id')
+                               ), 'rd.masterDeviceId = md.id')
                     ->where('md.id = ?', $deviceID);
                 $stmt        = $db->query($select);
                 $row         = $stmt->fetchAll();
@@ -6703,7 +6703,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         }
         else
         {
-            $where = 'u.user_id = ' . $this->user_id;
+            $where = 'u.id = ' . $this->user_id;
         }
 
         $select = $db->select()

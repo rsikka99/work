@@ -41,7 +41,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         /*
          * Printer Model Name
          */
-        $this->addElement('text', 'printer_model', array (
+        $this->addElement('text', 'modelName', array (
                 'label' => 'Model Name:', 
                 'class' => 'span3', 
                 'required' => true, 
@@ -160,7 +160,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         /*
          * Is copier
          */
-        $this->addElement('checkbox', 'is_copier', array (
+        $this->addElement('checkbox', 'isCopier', array (
                 'label' => 'Is Copier:', 
                 'filters' => array (
                         'Boolean' 
@@ -170,7 +170,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         /*
          * Is fax
          */
-        $this->addElement('checkbox', 'is_fax', array (
+        $this->addElement('checkbox', 'isFax', array (
                 'label' => 'Is Fax:', 
                 'filters' => array (
                         'Boolean' 
@@ -180,7 +180,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         /*
          * Is scanner
          */
-        $this->addElement('checkbox', 'is_scanner', array (
+        $this->addElement('checkbox', 'isScanner', array (
                 'label' => 'Is Scanner:', 
                 'filters' => array (
                         'Boolean' 
@@ -190,7 +190,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         /*
          * Is duplex
          */
-        $this->addElement('checkbox', 'is_duplex', array (
+        $this->addElement('checkbox', 'isDuplex', array (
                 'label' => 'Is Duplex:', 
                 'filters' => array (
                         'Boolean' 
@@ -200,7 +200,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         /*
          * Printer Wattage (Running)
          */
-        $this->addElement('text', 'watts_power_normal', array (
+        $this->addElement('text', 'wattsPowerNormal', array (
                 'label' => 'Watts Power Normal:', 
                 'class' => 'span1', 
                 'maxlength' => 4, 
@@ -223,7 +223,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         /*
          * Printer Wattage (Idle)
          */
-        $this->addElement('text', 'watts_power_idle', array (
+        $this->addElement('text', 'wattsPowerIdle', array (
                 'label' => 'Watts Power Idle:', 
                 'class' => 'span1', 
                 'maxlength' => 4, 
@@ -275,7 +275,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         /*
          * Service Cost Per Page
          */
-        $this->addElement('text', 'service_cost_per_page', array (
+        $this->addElement('text', 'serviceCostPerPage', array (
                 'label' => 'Service Cost Per Page:', 
                 'class' => 'span1', 
                 'maxlength' => 8, 
@@ -300,7 +300,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          */
         $minYear = 1950;
         $maxYear = date('Y') + 2;
-        $launchDate = new ZendX_JQuery_Form_Element_DatePicker('launch_date');
+        $launchDate = new ZendX_JQuery_Form_Element_DatePicker('launchDate');
         $launchDate->setLabel('Launch Date:')
             ->setAttrib('class', 'span2')
             ->setJQueryParam('dateFormat', 'yy-mm-dd')
@@ -320,7 +320,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         /*
          * / /* Duty Cycle
          */
-        $this->addElement('text', 'duty_cycle', array (
+        $this->addElement('text', 'dutyCycle', array (
                 'label' => 'Duty Cycle:', 
                 'class' => 'span1', 
                 'maxlength' => 6, 
@@ -343,7 +343,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         /*
          * Print Speed (Monochrome)
          */
-        $this->addElement('text', 'ppm_black', array (
+        $this->addElement('text', 'ppmBlack', array (
                 'label' => 'Print Speed (Mono):', 
                 'class' => 'span1', 
                 'maxlength' => 4, 
@@ -366,7 +366,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         /*
          * Print Speed (Color)
          */
-        $this->addElement('text', 'ppm_color', array (
+        $this->addElement('text', 'ppmColor', array (
                 'label' => 'Print Speed (Color):', 
                 'class' => 'span1', 
                 'maxlength' => 4, 
@@ -389,7 +389,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         /*
          * Is leased
          */
-        $this->addElement('checkbox', 'is_leased', array (
+        $this->addElement('checkbox', 'isLeased', array (
                 'label' => 'Is Leased:', 
                 'description' => 'Note: Leased Toner Yield is required when checked.', 
                 'filters' => array (
@@ -400,7 +400,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         /*
          * Leased Toner Yield
          */
-        $this->addElement('text', 'leased_toner_yield', array (
+        $this->addElement('text', 'leasedTonerYield', array (
                 'label' => 'Leased Toner Yield:', 
                 'class' => 'span1', 
                 'maxlength' => 6, 
@@ -410,7 +410,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                 ), 
                 'allowEmpty' => false, 
                 'validators' => array (
-                        new Custom_Validate_FieldDependsOnValue('is_leased', '1', array (
+                        new Custom_Validate_FieldDependsOnValue('isLeased', '1', array (
                                 new Zend_Validate_NotEmpty(), 
                                 new Zend_Validate_Int(), 
                                 new Zend_Validate_Between(array (
