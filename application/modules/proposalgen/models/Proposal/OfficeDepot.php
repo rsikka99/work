@@ -163,6 +163,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         Proposalgen_Model_MasterDevice::setPricingConfig($reportSettings->getAssessmentPricingConfig());
         Proposalgen_Model_MasterDevice::setGrossMarginPricingConfig($reportSettings->getGrossMarginPricingConfig());
         Proposalgen_Model_MasterDevice::setReportMargin(1 - ((((int)$reportSettings->assessmentReportMargin)) / 100));
+
+        Proposalgen_Model_DeviceInstance::$ITCostPerPage = (($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getPageCounts()->Purchased->Combined->Yearly);
     }
 
     /**
@@ -437,6 +439,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->CombinedAnnualLeasePayments))
         {
+
             $this->CombinedAnnualLeasePayments = $this->report->getReportSettings()->monthlyLeasePayment * $this->getLeasedDeviceCount() * 12;
         }
 
@@ -521,7 +524,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->LeasedBlackAndWhiteCharge))
         {
-            $this->LeasedBlackAndWhiteCharge = $this->report->ReportLeasedBWPerPage;
+            $this->LeasedBlackAndWhiteCharge = $this->report->getReportSettings()->leasedBwCostPerPage;
         }
 
         return $this->LeasedBlackAndWhiteCharge;
@@ -534,7 +537,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->LeasedColorCharge))
         {
-            $this->LeasedColorCharge = $this->report->ReportLeasedColorPerPage;
+            $this->LeasedColorCharge = $this->report->getReportSettings()->leasedColorCostPerPage;
         }
 
         return $this->LeasedColorCharge;
@@ -624,7 +627,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             $numberOfDevices = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($deviceInstance->getMasterDevice()->IsScanner)
+                if ($deviceInstance->getMasterDevice()->isScanner)
                 {
                     $numberOfDevices++;
                 }
@@ -645,7 +648,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             $numberOfDevices = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
             {
-                if ($device->getMasterDevice()->IsDuplex)
+                if ($device->getMasterDevice()->isDuplex)
                 {
                     $numberOfDevices++;
                 }
@@ -666,7 +669,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             $numberOfDevices = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($deviceInstance->getMasterDevice()->IsFax)
+                if ($deviceInstance->getMasterDevice()->isFax)
                 {
                     $numberOfDevices++;
                 }
@@ -1140,7 +1143,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             $devicesReportingPower = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($deviceInstance->getMasterDevice()->WattsPowerNormal > 0)
+                if ($deviceInstance->getMasterDevice()->wattsPowerNormal > 0)
                 {
                     $totalPowerUsage += $deviceInstance->getAverageMonthlyPowerConsumption();
                     $devicesReportingPower++;
@@ -1673,7 +1676,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             $barGraph->setProperty('chxs', '0N*sz0*');
             $barGraph->addValueMarkers($PrintIQSavingsBarGraph_currencyValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($PrintIQSavingsBarGraph_currencyValueMarker, "000000", "1", "-1", "11");
-
+            // Graphs[0]
             $this->Graphs [] = $barGraph->getUrl();
 
             /**
@@ -1706,7 +1709,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                                  ));
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
-
+            // Graphs[1]
             $this->Graphs [] = $barGraph->getUrl();
 
             /**
@@ -1742,6 +1745,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             $barGraph->setProperty('chxs', '0N*sz0*');
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
+            // Graphs[2]
             $this->Graphs [] = $barGraph->getUrl();
 
             /**
@@ -1750,15 +1754,15 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             $uniqueModelArray = array();
             foreach ($this->getPurchasedDevices() as $device)
             {
-                if (array_key_exists($device->getMasterDevice()->PrinterModel, $uniqueModelArray))
+                if (array_key_exists($device->getMasterDevice()->modelName, $uniqueModelArray))
                 {
-                    $uniqueModelArray [$device->getMasterDevice()->PrinterModel] += 1;
+                    $uniqueModelArray [$device->getMasterDevice()->modelName] += 1;
                 }
                 else
                 {
                     // $legendItems[] =
                     // $device->getMasterDevice()->PrinterModel;
-                    $uniqueModelArray [$device->getMasterDevice()->PrinterModel] = 1;
+                    $uniqueModelArray [$device->getMasterDevice()->modelName] = 1;
                 }
             }
             $uniqueDevicesGraph = new gchart\gPie3DChart(350, 270);
@@ -1780,6 +1784,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                                                 "000000"
                                            ));
             // $uniqueDevicesGraph->setLegend($legendItems);
+            // Graphs[3]
             $this->Graphs [] = $uniqueDevicesGraph->getUrl();
 
             /**
@@ -1816,6 +1821,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             $barGraph->setProperty('chxs', '0N*sz0*');
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
+            // Graphs[4]
             $this->Graphs [] = $barGraph->getUrl();
 
             /**
@@ -1851,6 +1857,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             $barGraph->setProperty('chxs', '0N*sz0*');
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
+            // Graphs[5]
             $this->Graphs [] = $barGraph->getUrl();
 
             /**
@@ -1885,6 +1892,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                                  ));
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
+            // Graphs[6]
             $this->Graphs [] = $barGraph->getUrl();
 
             /**
@@ -1915,6 +1923,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                                                "0194D2"
                                           ));
             $colorCapableGraph->setLegendPosition("bv");
+            // Graphs[7]
             $this->Graphs [] = $colorCapableGraph->getUrl();
 
             /**
@@ -1946,6 +1955,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                                                  "0194D2"
                                             ));
             $colorVSBWPagesGraph->setLegendPosition("bv");
+            // Graphs[8]
             $this->Graphs [] = $colorVSBWPagesGraph->getUrl();
 
             /**
@@ -2001,6 +2011,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                                             "adba1d"
                                        ));
             $deviceAgeGraph->setLegendPosition("bv");
+            // Graphs[9]
             $this->Graphs [] = $deviceAgeGraph->getUrl();
 
             /**
@@ -2033,6 +2044,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                                               "0194D2"
                                          ));
             $scanCapableGraph->setLegendPosition("bv");
+            // Graphs[10]
             $this->Graphs [] = $scanCapableGraph->getUrl();
 
             /**
@@ -2063,12 +2075,14 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                                         "0194D2"
                                    ));
             $faxCapable->setLegendPosition("bv");
+            // Graphs[11]
             $this->Graphs [] = $faxCapable->getUrl();
 
             /**
              * -- SmallColorCapableDevicesGraph
              */
             $colorCapableGraph->setDimensions(200, 160);
+            // Graphs[12]
             $this->Graphs [] = $colorCapableGraph->getUrl();
 
             /**
@@ -2099,12 +2113,14 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                                                 "0194D2"
                                            ));
             $duplexCapableGraph->setLegendPosition("bv");
+            // Graphs[13]
             $this->Graphs [] = $duplexCapableGraph->getUrl();
 
             /**
              * -- BigScanCapableDevicesGraph
              */
             $scanCapableGraph->setDimensions(305, 210);
+            // Graphs[14]
             $this->Graphs [] = $scanCapableGraph->getUrl();
         }
 
@@ -2460,10 +2476,10 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                 else
                 {
                     // If we are here the device is with in the page count and supports JIT?
-                    switch ($device->getMasterDevice()->TonerConfigId)
+                    switch ($device->getMasterDevice()->tonerConfigId)
                     {
                         case Proposalgen_Model_TonerConfig::BLACK_ONLY :
-                            if ($device->getMasterDevice()->IsFax || $device->getMasterDevice()->IsScanner || $device->getMasterDevice()->IsCopier)
+                            if ($device->getMasterDevice()->isFax || $device->getMasterDevice()->isScanner || $device->getMasterDevice()->isCopier)
                             {
                                 $savings = $device->getMonthlyRate() - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP]->monthlyRate;
                                 // MFP
@@ -2486,7 +2502,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                         case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED :
                         case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED :
                         case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED :
-                            if ($device->getMasterDevice()->IsFax || $device->getMasterDevice()->IsScanner || $device->getMasterDevice()->IsCopier)
+                            if ($device->getMasterDevice()->isFax || $device->getMasterDevice()->isScanner || $device->getMasterDevice()->isCopier)
                             {
                                 // MFP
                                 $savings = $device->getMonthlyRate() - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP]->monthlyRate;
@@ -2498,6 +2514,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                             }
                             else
                             {
+
                                 $savings = $device->getMonthlyRate() - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR]->monthlyRate;
                                 if ($savings >= $minimumSavings)
                                 {
@@ -2804,7 +2821,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->CostOfExecutingSuppliesOrder))
         {
             $reportQuestions                    = $this->getReportQuestions();
-            $this->CostOfExecutingSuppliesOrder = $reportQuestions [14]->NumericAnswer;
+            $this->CostOfExecutingSuppliesOrder = $reportQuestions [14]->NumericAnswer * $this->getNumberOfAnnualInkTonerOrders();
         }
 
         return $this->CostOfExecutingSuppliesOrder;
