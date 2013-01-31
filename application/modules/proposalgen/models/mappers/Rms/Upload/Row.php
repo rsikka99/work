@@ -267,6 +267,9 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
 
             $masterDevice->populate($rmsUploadRow->toArray());
 
+            // Unset the id for the master device to ensure that this device is a 'user mapped' master device
+            $masterDevice->id = null;
+
             $toners = array();
 
             $requiredTonerColorList = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($rmsUploadRow->tonerConfigId);
