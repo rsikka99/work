@@ -752,7 +752,14 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             $this->_helper->flashMessenger(array("warning" => "Invalid Device Specified."));
             $this->_helper->redirector("mapping");
         }
+    }
 
+    /**
+     * Function to edit master devices for a system admin during the mapping stage.
+     */
+    public function editMasterDeviceAction()
+    {
+        $this->_redirect('proposalgen/managedevices/managemappingdevices');
     }
 
     /*
@@ -805,7 +812,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     public function toggleExcludedFlagAction ()
     {
         $deviceInstanceId = $this->_getParam("deviceInstanceId", false);
-        $isExcluded       = $this->getParam("isExcluded", false);
+        $isExcluded       = $this->_getParam("isExcluded", false);
         $booleanFilter    = new Zend_Filter_Boolean();
         $isExcluded       = $booleanFilter->filter($isExcluded);
         $errorMessage     = false;
