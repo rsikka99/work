@@ -47,8 +47,7 @@ class Admin_TonerController extends Zend_Controller_Action
         }
 
         $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchDeviceTonersByTonerId($tonerId);
-
-        if ($deviceToners && count($deviceToners) < 1)
+        if (count($deviceToners) < 1)
         {
             $message = "Are you sure you want to delete toner SKU {$toner->sku} ({$toner->getManufacturer()->displayname} {$toner->getPartType()->typeName} {$toner->getTonerColor()->tonerColorName} {$toner->yield})?";
             $form    = new Application_Form_Delete($message);
@@ -176,7 +175,7 @@ class Admin_TonerController extends Zend_Controller_Action
                         $mapper = new Proposalgen_Model_Mapper_Toner;
                         $toner  = new Proposalgen_Model_Toner();
                         $toner->populate($values);
-                        $toner->setId($tonerId);
+                        $toner->id = $tonerId;
 
                         $mapper->save($toner, $tonerId);
                         $this->_helper->flashMessenger(array(

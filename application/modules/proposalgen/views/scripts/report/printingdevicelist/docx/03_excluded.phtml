@@ -7,7 +7,7 @@
 /* @var $section PHPWord_Section */
 $section = $this->section;
 
-/* @var $proposal Proposalgen_Model_Proposal_Abstract */
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
 
 /**
@@ -37,14 +37,23 @@ $table->addCell($tcStyle->col2Width, $tcStyle->header->cell)->addText($this->tra
 $table->addCell($tcStyle->col3Width, $tcStyle->header->cell)->addText($this->translate('IP Address'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
 $table->addCell($tcStyle->col4Width, $tcStyle->header->cell)->addText($this->translate('Exclusion Reason'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
 
+/* @var $device Proposalgen_Model_DeviceInstance */
 foreach($proposal->getExcludedDevices() as $device) {
-    $SerialNumber = (strlen($device->SerialNumber) == 0) ? 'Unknown Serial' : $device->SerialNumber;
+    $SerialNumber = (strlen($device->serialNumber) == 0) ? 'Unknown Serial' : $device->serialNumber;
     
     $table->addRow($tcStyle->cell->rowheight);
-    $table->addCell($tcStyle->col1Width, $tcStyle->row->cell)->addText($this->translate($device->getMasterDevice()->getManufacturer()->getManufacturerName()), $tcStyle->row->fontStyle, $tcStyle->leftalign);
-    $table->addCell($tcStyle->col1Width, $tcStyle->row->cell)->addText($this->translate($device->getMasterDevice()->getPrinterModel()), $tcStyle->row->fontStyle, $tcStyle->leftalign);
+    if($device->getIsMappedToMasterDevice())
+    {
+        $table->addCell($tcStyle->col1Width, $tcStyle->row->cell)->addText($this->translate($device->getMasterDevice()->getManufacturer()->fullname), $tcStyle->row->fontStyle, $tcStyle->leftalign);
+        $table->addCell($tcStyle->col1Width, $tcStyle->row->cell)->addText($this->translate($device->getMasterDevice()->modelName), $tcStyle->row->fontStyle, $tcStyle->leftalign);
+    }
+    else
+    {
+        $table->addCell($tcStyle->col1Width, $tcStyle->row->cell)->addText($this->translate($device->getRmsUploadRow()->manufacturer), $tcStyle->row->fontStyle, $tcStyle->leftalign);
+        $table->addCell($tcStyle->col1Width, $tcStyle->row->cell)->addText($this->translate($device->getRmsUploadRow()->modelName), $tcStyle->row->fontStyle, $tcStyle->leftalign);
+    }
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText($this->translate($SerialNumber), $tcStyle->row->fontStyle, $tcStyle->centeralign);
     $table->addCell($tcStyle->col3Width, $tcStyle->row->cell)->addText($this->translate(($device->IpAddress) ? $device->IpAddress : 'Unknown IP'), $tcStyle->row->fontStyle, $tcStyle->centeralign);
-    $table->addCell($tcStyle->col4Width, $tcStyle->row->cell)->addText($this->translate($device->ExclusionReason), $tcStyle->row->fontStyle);
+    $table->addCell($tcStyle->col4Width, $tcStyle->row->cell)->addText($this->translate($device->isExcluded) ? 'Manually excluded.' : 'Not Mapped.', $tcStyle->row->fontStyle);
 }
 

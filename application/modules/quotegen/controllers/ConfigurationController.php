@@ -155,8 +155,8 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
 	        }
 	        */
         }
-       
-        $deviceOptions = null;
+        $where = "masterDeviceId = {$masterDeviceId}";
+        $deviceOptions = Quotegen_Model_Mapper_DeviceOption::getInstance()->fetchAll($where);
         // Get device options
         $request = $this->getRequest();
         if ($request->isPost())
@@ -165,9 +165,6 @@ class Quotegen_ConfigurationController extends Zend_Controller_Action
             $values = $request->getPost();
             if (! isset($values ['cancel']))
             {
-                    $where = "masterDeviceId = {$masterDeviceId}";
-                    $deviceOptions = Quotegen_Model_Mapper_DeviceOption::getInstance()->fetchAll($where);
-
                 try
                 {
                     if ($form->isValid($values))

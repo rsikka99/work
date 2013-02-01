@@ -47,7 +47,7 @@ class Proposalgen_ManufacturerController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         }
         
-        $message = "Are you sure you want to delete {$manufacturer->getFullname()}? This is VERY DESTRUCTIVE! Please edit the manufacturer and mark it as deleted if you want to preserve anything that relies on the manufacturer instead.";
+        $message = "Are you sure you want to delete {$manufacturer->fullname}? This is VERY DESTRUCTIVE! Please edit the manufacturer and mark it as deleted if you want to preserve anything that relies on the manufacturer instead.";
         $form = new Application_Form_Delete($message);
         
         $request = $this->getRequest();
@@ -61,7 +61,7 @@ class Proposalgen_ManufacturerController extends Zend_Controller_Action
                 {
                     $mapper->delete($manufacturer);
                     $this->_helper->flashMessenger(array (
-                            'success' => "Manufacturer  {$this->view->escape ($manufacturer->getFullname() )} was deleted successfully." 
+                            'success' => "Manufacturer  {$this->view->escape ($manufacturer->fullname )} was deleted successfully." 
                     ));
                     $this->_helper->redirector('index');
                 }

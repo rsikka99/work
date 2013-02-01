@@ -168,14 +168,22 @@ $(function ()
                         master_device_dropdown += '<input type="text"   name="masterDeviceName" style="width: 97%" class="autoCompleteDeviceName" value="' + row.mappedManufacturer + ' ' + row.mappedModelName + '" />';
 
                         row.mapToMasterDevice = master_device_dropdown;
-                        if (row.isMapped == 1)
+                        if(row.isMapped == 1)
                         {
-                            row.action = 'Mapped';
+                            row.action = '<input title="Edit Device" type="button" class="addEditMasterDevice" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit"/>';
                         }
                         else
                         {
-                            row.action = '<input title="Create New Device" type="button" class="addEditUnknownDeviceButton" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create New" />';
+                            row.action = '<input title="Create New Device" type="button" class="addEditMasterDevice" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create New" />';
                         }
+//                        if (row.isMapped == 1)
+//                        {
+//                            row.action = 'Mapped';
+//                        }
+//                        else
+//                        {
+//                            row.action = '<input title="Create New Device" type="button" class="addEditUnknownDeviceButton" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create New" />';
+//                        }
                     }
 
                     // Put our new data back into the grid
@@ -277,6 +285,14 @@ $(function ()
     $(document).on("click", ".addEditUnknownDeviceButton", function() {
         $("#unknownDeviceDeviceInstanceIds").val($(this).data("device-instance-ids"));
         $("#addUnknownDeviceForm").submit();
+    });
+
+    /**
+     * System admin actions
+     */
+    $(document).on("click", ".addEditMasterDevice", function(){
+        $("#masterDeviceDeviceInstanceIds").val($(this).data("device-instance-ids"));
+        $("#addMasterDeviceForm").submit();
     });
 
     /**
