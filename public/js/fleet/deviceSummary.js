@@ -14,30 +14,38 @@ $(function ()
             datatype    : 'json',
             colModel    : [
                 {
+                    hidden  : true,
                     name    : 'id', index: 'id', label: 'Id',
                     sortable: false,
                     width   : 10
                 },
                 {
-                    name    : 'reportId', index: 'reportId', label: 'reportId',
-                    sortable: false,
-                    width   : 10
-                },
-                {
-                    name    : 'manufacturer', index: 'manufacturer', label: 'Device Manufacturer',
+                    name    : 'deviceName', index: 'deviceName', label: 'Device Name',
                     sortable: false,
                     width   : 150
                 },
                 {
-                    name    : 'modelName', index: 'modelName', label: 'Device Name',
+                    name    : 'mappedToDeviceName', index: 'mappedToDeviceName', label: 'Mapped To Device Name',
                     sortable: false,
                     width   : 150
+                },
+                {
+                    align   : 'right',
+                    name    : 'ampv', index: 'ampv', label: 'AMPV',
+                    sortable: false,
+                    width   : 40
+                },
+                {
+                    align   : 'center',
+                    name    : 'isLeased', index: 'isLeased', label: 'Ownership',
+                    sortable: false,
+                    width   : 40
                 },
                 {
                     align   : 'center',
                     name    : 'isExcluded', index: 'isExcluded', label: 'Excluded',
                     sortable: false,
-                    width   : 25
+                    width   : 35
                 }
             ],
             jsonReader  : {
@@ -58,6 +66,8 @@ $(function ()
                     // Get the data so we can use and manipualte it.
                     var row = summaryGrid.getRowData(ids[i]);
 
+                    row.mappedToDeviceName = "<a style='text-decoration: underline;' href='javascript:void(0);' class='viewDeviceDetails' data-device-instance-id='" + row.id + "'>" + row.mappedToDeviceName + "</a>";
+
                     var checked = "";
                     if (row.isExcluded == 1)
                     {
@@ -71,6 +81,26 @@ $(function ()
             }
         }
     );
+
+    $(document).on("click", ".viewDeviceDetails", function ()
+    {
+        $.ajax({
+            url     : '/proposalgen/fleet/device-instance-details',
+            dataType: 'json',
+            data    : {
+                deviceInstanceId: $(this).data("device-instance-id")
+            },
+            success : function ()
+            {
+                alert('Ajax for device details was successful.');
+            },
+            error   : function ()
+            {
+                alert('Ajax for did not complete successfully.');
+            }
+        });
+
+    });
 
     /**
      * Toggles whether or not a device is excluded
@@ -102,4 +132,5 @@ $(function ()
         }
     });
 
-});
+})
+;

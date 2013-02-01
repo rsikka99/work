@@ -1,0 +1,37 @@
+{
+    "hash": "9b9cc0104bf941eaf5e581a0d3cb8c72",
+    "packages": [
+        {
+            "package": "gChartPhp/gChartPhp",
+            "version": "dev-master",
+            "source-reference": "0.6.7",
+            "commit-date": "1334945119"
+        },
+        {
+            "package": "phpexcel/phpexcel",
+            "version": "dev-master",
+            "source-reference": "v1.7.7",
+            "commit-date": "1346783377"
+        },
+        {
+            "package": "phpword/phpword",
+            "version": "dev-master",
+            "source-reference": "4ba9cb7f65618ec6990ecefa5edc6a992db04429",
+            "commit-date": "1356472512"
+        },
+        {
+            "package": "zendframework/zendframework1",
+            "version": "1.12.1"
+        }
+    ],
+    "packages-dev": null,
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "phpword/phpword": 20,
+        "phpexcel/phpexcel": 20,
+        "gchartphp/gchartphp": 20
+    }
+}
