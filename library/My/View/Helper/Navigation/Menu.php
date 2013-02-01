@@ -44,7 +44,7 @@ class My_View_Helper_Navigation_Menu extends Zend_View_Helper_Navigation_Menu
             return $html;
         }
         $domDoc = new DOMDocument('1.0', 'utf-8');
-        $domDoc->loadXML('<?xml version="1.0" encoding="utf-8"?>' . $html);
+        $domDoc->loadHTML($html);
         
         $xpath = new DOMXPath($domDoc);
         /* @var $item DOMNode */
@@ -78,7 +78,7 @@ class My_View_Helper_Navigation_Menu extends Zend_View_Helper_Navigation_Menu
                     $subResult = $xpath->query('ul', $item);
                     if ($result->length === 1)
                     {
-                        $caret = $domDoc->createElement('b', '');
+                        $caret = $domDoc->createElement('b', ' ');
                         $caret->setAttribute('class', 'right-caret pull-right');
                         $item->insertBefore($caret, $item->childNodes->item(0));
                     }
@@ -96,7 +96,7 @@ class My_View_Helper_Navigation_Menu extends Zend_View_Helper_Navigation_Menu
             }
         }
         
-        return $domDoc->saveXML($xpath->query('/ul')
+        return $domDoc->saveHTML($xpath->query('/ul')
             ->item(0));
     }
 }
