@@ -206,6 +206,14 @@
                                             <resource>quotegen__category__edit</resource>
                                             <visible>0</visible>
                                         </edit>
+                                        <delete>
+                                            <label>Delete</label>
+                                            <module>quotegen</module>
+                                            <controller>category</controller>
+                                            <action>delete</action>
+                                            <resource>quotegen__category__delete</resource>
+                                            <visible>0</visible>
+                                        </delete>
                                     </pages>
                                 </categories>
                                 <view>
@@ -224,6 +232,14 @@
                                     <resource>quotegen__option__edit</resource>
                                     <visible>0</visible>
                                 </edit>
+                                                                <delete>
+                                    <label>Delete</label>
+                                    <module>quotegen</module>
+                                    <controller>option</controller>
+                                    <action>delete</action>
+                                    <resource>quotegen__option__delete</resource>
+                                    <visible>0</visible>
+                                </delete>
                             </pages>
                         </optionmanagement>
                         <tonermanagement>
@@ -232,6 +248,40 @@
                             <controller>toner</controller>
                             <action>index</action>
                             <resource>admin__toner__index</resource>
+                            <pages>
+                            	<create>
+	                            	<label>Create New</label>
+	                            	<module>admin</module>
+	                            	<controller>toner</controller>
+	                            	<action>create</action>
+	                            	<resource>admin__toner__create</resource>
+	                            	<visible>0</visible>
+                            	</create>
+                            	<view>
+	                            	<label>View</label>
+	                            	<module>admin</module>
+	                            	<controller>toner</controller>
+	                            	<action>view</action>
+	                            	<resource>admin__toner__view</resource>
+	                            	<visible>0</visible>
+                            	</view>
+                            	<edit>
+	                            	<label>Edit</label>
+	                            	<module>admin</module>
+	                            	<controller>toner</controller>
+	                            	<action>edit</action>
+	                            	<resource>admin__toner__edit</resource>
+	                            	<visible>0</visible>
+                            	</edit>
+                            	<delete>
+	                            	<label>Delete</label>
+	                            	<module>admin</module>
+	                            	<controller>toner</controller>
+	                            	<action>delete</action>
+	                            	<resource>admin__toner__delete</resource>
+	                            	<visible>0</visible>
+                            	</delete>
+                            </pages>
                         </tonermanagement>
                         <viewall>
                             <label>View All Devices</label>

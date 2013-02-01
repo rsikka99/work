@@ -44,7 +44,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $session              = new Zend_Session_Namespace('proposalgenerator_report');
         $config               = Zend_Registry::get('config');
         $this->MPSProgramName = $config->app->MPSProgramName;
-
     } // end indexAction
 
 
@@ -6875,11 +6874,18 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $db       = Zend_Db_Table::getDefaultAdapter();
         $filter   = $this->_getParam('filter', 'all');
         $formdata = new stdClass();
-
+        $isSystemAdmin = $this->isAllowed('',Application_Model_Acl::PRIVILEGE_ADMIN);
         try
         {
             $where = null;
-
+            if ($isSystemAdmin)
+            {
+            
+            }
+            else
+            {
+                $where = 'u.id = ' . $this->user_id;
+            }
             // select users
             $select = $db->select()
                 ->from(array(
