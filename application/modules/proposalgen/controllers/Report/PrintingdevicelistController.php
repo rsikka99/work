@@ -136,13 +136,19 @@ class Proposalgen_Report_PrintingdevicelistController extends Proposalgen_Librar
             foreach ( $proposal->getExcludedDevices() as $device )
             {
                 $row = array ();
-                $row [] = $device->getMasterDevice()
-                    ->getManufacturer()
-                    ->fullname;
-                $row [] = $device->getMasterDevice()->modelName;
+                if($device->getIsMappedToMasterDevice())
+                {
+                    $row [] = $device->getMasterDevice()->getFullDeviceName();
+                    $row [] = $device->getMasterDevice()->modelName;
+                }
+                else
+                {
+                    $row [] = $device->getRmsUploadRow()->manufacturer;
+                    $row [] = $device->getRmsUploadRow()->modelName;
+                }
                 $row [] = (strlen($device->serialNumber) > 0) ? $device->serialNumber : "Unknown";
                 $row [] = ($device->IpAddress) ? $device->IpAddress : "Unknown IP";
-                $row [] = $device->ExclusionReason;
+                $row [] = ($device->isExcluded) ? 'Manually excluded' : 'Device not mapped.';
                 $excluded_values .= implode(",", $row) . "\n";
             } // end Purchased Devices foreach
         }

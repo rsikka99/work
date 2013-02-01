@@ -527,7 +527,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $toner_array .= "'" . $key ['toner_id'] . "'";
                 }
 
-                $select      = new Zend_Db_Select($db);
                 $select      = $db->select()
                     ->from(array(
                                 'md' => 'pgen_master_devices'

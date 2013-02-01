@@ -308,7 +308,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->ExcludedDevices))
         {
             $this->ExcludedDevices = array_merge($this->getDevices()->unmappedDeviceInstances, $this->getDevices()->excludedDeviceInstances);
-            $this->ExcludedDevices = array_merge($knownDevices, $unknownDevices, $uploadDevices);
         }
 
         return $this->ExcludedDevices;

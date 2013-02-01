@@ -13,6 +13,7 @@
 <?php $this->headScript()->captureStart('append','text/javascript') ?>
 	var colorList = "<?php echo $this->tonerColorList; ?>";
 	var repop = '<?php echo $this->repop; ?>';
+    var callOnChangePrinterModel = '<?php echo $this->changePrinterModel ?>';
 	var form_mode = '<?php echo $this->form_mode; ?>';
 	if(form_mode == '') {form_mode = 'edit';}
 	
@@ -123,7 +124,7 @@
 		//find center screen for modal popup
 		var master_device_id = $("#printer_model").val();
 		var lastsel;
-		
+
 		jQuery("#applied_toners_list").jqGrid({
 			url:'<?php echo $this->baseUrl("/proposalgen/admin/devicetoners"); ?>?deviceid='+master_device_id,
 			datatype:'json',
@@ -451,6 +452,7 @@
 			$('#applied_toners_list').clearGridData();
 			
 		    var master_device_id = $("#printer_model").val();
+            console.log(master_device_id);
 		    if(form_mode == "add") {
 		    	master_device_id = 0;
 		    }
