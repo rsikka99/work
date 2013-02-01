@@ -390,6 +390,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
             ->where("di.{$this->col_reportId} = ?", $reportId)
             ->where("di_md.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId} IS NOT NULL OR di.{$this->col_useUserData} = 1");
 
+
         // If we're just counting we only need to return the count
         if ($justCount)
         {
@@ -413,6 +414,10 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
                 $offset = ($offset > 0) ? $offset : null;
                 $select->limit($limit, $offset);
             }
+
+            echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
+            var_dump((string)$select);
+            die();
 
             $query = $dbTable->getAdapter()->query($select);
 

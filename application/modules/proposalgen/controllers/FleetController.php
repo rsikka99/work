@@ -863,4 +863,61 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         }
 
     }
+
+    /**
+     * Gets all the details for a device instance
+     */
+    public function deviceInstanceDetailsAction ()
+    {
+        $jsonResponse = array();
+        $errorMessage = false;
+
+        // FIXME: Hard coded default of 24. Should be FALSE
+        $deviceInstanceId = $this->_getParam("deviceInstanceId", 28);
+
+        /*
+         * We must get a deviceInstanceId
+         */
+        if ($deviceInstanceId !== false)
+        {
+            /*
+             * Devices must exist
+             */
+            $deviceInstance = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($deviceInstanceId);
+            if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance)
+            {
+                /*
+                 * Devices must be part of our report
+                 */
+                if ($deviceInstance->reportId == $this->getReport()->id)
+                {
+                    /*
+                     * Once we get here we can start populating our response
+                     */
+                    $jsonResponse = $deviceInstance->toArray();
+//                    $jsonResponse["masterDevice"] = $deviceInstance->getMasterDevice()->toArray();
+                }
+                else
+                {
+                    $errorMessage = "Device does not belong to your report.";
+                }
+            }
+            else
+            {
+                $errorMessage = "Invalid device specified.";
+            }
+        }
+        else
+        {
+            $errorMessage = "Missing/Invalid Parameter 'deviceInstanceId'.";
+        }
+
+        if ($errorMessage !== false)
+        {
+            $jsonResponse = array("error" => true, "message" => $errorMessage);
+            $this->getResponse()->setHttpResponseCode(500);
+        }
+
+        $this->_helper->json($jsonResponse);
+    }
 }
