@@ -1,41 +1,5 @@
-<?php
-/**
- * Default view: index.phtml
- *  
- */
-?>
-<?php Zend_Session::namespaceUnset('request');?>
-<h2><?php echo $this->title;?></h2><br/>
-
-<div id="master-admin-console" class="margined">
-	<?php if(in_array("System Admin", $this->privilege)) { ?>
-	    <h3>System Administration</h3>
-	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/manageusers")?>">Manage Users</a><br/>
-	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/manufacturers")?>">Manage Manufacturers</a><br />
-	   	<a href="<?php echo $this->baseUrl("/proposalgen/managedevices/managedevices")?>">Manage Master Printer and Toner Properties</a><br />
-	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/bulkdevicepricing")?>">Update Pricing</a><br />
-	    <a href="<?php echo $this->baseUrl("/proposalgen/ticket/managetickets")?>">Support Tickets</a><br />
-	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/managereplacements")?>">Manage Replacement Printers</a><br />
-	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/managematchups")?>">Manage Printer Matchups</a><br />
-	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/managesettings")?>">Default Report Settings</a><br />
-	    <br />
-	    <h3>My Administration</h3>
-	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/managemysettings")?>">My Report Settings</a><br />
-	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/managemyreports")?>">Manage My Reports</a><br />
-	<?php } else { ?>
-	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/bulkuserpricing")?>">Update My Pricing</a><br />
-   		<a href="<?php echo $this->baseUrl("/proposalgen/ticket/managemytickets")?>">Support Tickets</a><br />
-	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/managemysettings")?>">My Report Settings</a><br />
-	    <a href="<?php echo $this->baseUrl("/proposalgen/admin/managemyreports")?>">Manage My Reports</a><br />
-	<?php } ?>
-	<a href="<?php echo $this->baseUrl("/auth/changepassword")?>">Change Password</a><br/>
+<div class="page-header">
+    <h1>System Administration<small> - Menu</small></h1>
 </div>
-
-<?php
-if($this->message) {
-	echo '<div class="display-error" style="width: 500px;">';
-	echo $this->escape($this->message);
-	echo '</div>';
- }
- //echo $this->form;
-?>
+<?php $page = $this->navigation()->findOneBy('label','System Administration'); ?>
+<?php echo $this->navigation()->menu()->setUlClass('nav nav-list')->renderMenu($page); ?>
