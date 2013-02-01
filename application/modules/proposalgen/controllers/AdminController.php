@@ -527,7 +527,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $toner_array .= "'" . $key ['toner_id'] . "'";
                 }
 
-                $select      = new Zend_Db_Select($db);
                 $select      = $db->select()
                     ->from(array(
                                 'md' => 'pgen_master_devices'
@@ -537,7 +536,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                ), 'm.id = md.manufacturerId')
                     ->joinLeft(array(
                                     'rd' => 'pgen_replacement_devices'
-                               ), 'rd.master_device_id = md.id')
+                               ), 'rd.masterDeviceId = md.id')
                     ->where('md.id = ?', $deviceID);
                 $stmt        = $db->query($select);
                 $row         = $stmt->fetchAll();

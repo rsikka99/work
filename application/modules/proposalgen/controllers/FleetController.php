@@ -754,14 +754,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         }
     }
 
-    /**
-     * Function to edit master devices for a system admin during the mapping stage.
-     */
-    public function editMasterDeviceAction()
-    {
-        $this->_redirect('proposalgen/managedevices/managemappingdevices');
-    }
-
     /*
      * Handles removing an unknown device.
      * This is a JSON function

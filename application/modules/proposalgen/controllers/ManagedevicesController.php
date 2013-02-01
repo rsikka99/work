@@ -34,6 +34,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
     {
         $this->view->headScript()->appendFile($this->view->baseUrl('/js/libs/jqgrid/plugins/grid.celledit.js'), 'text/javascript');
         $db = Zend_Db_Table::getDefaultAdapter();
+        $deviceInstanceIds = $this->_getParam('deviceInstanceIds', false);
 
         // add device form
         $form = new Proposalgen_Form_Device(null, "edit");
@@ -47,6 +48,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
         $list = "";
         // $isPrintModelSet is used to see if data has been saved successfully.
         $isPrintModelSet               = false;
+
         $manufacturersTable            = new Proposalgen_Model_DbTable_Manufacturer();
         $manufacturers                 = $manufacturersTable->fetchAll('isDeleted = 0', 'fullName');
         $currElement                   = $form->getElement('manufacturer_id');
@@ -116,7 +118,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
         $this->view->fourColorList     = "6:4 Color";
 
         // check if this page has been posted to
-        if ($this->_request->isPost())
+        if ($this->_request->isPost() && !$deviceInstanceIds)
         {
             $repop_form = 0;
             $formData   = $this->_request->getPost();
@@ -627,6 +629,20 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                                        ));
                     }
                 }
+            }
+
+            // If the device instance is set, we want to polulate the form
+            if($deviceInstanceIds)
+            {
+                $this->view->repop = true;
+                $form_mode = 'edit';
+                $deviceInstanceIdsSplit = explode(',',$deviceInstanceIds);
+                // Get the master device for on of the devices
+                $deviceInstanceMasterDevice = Proposalgen_Model_Mapper_Device_Instance_Master_Device::getInstance()->find($deviceInstanceIdsSplit[0]);
+                /* @var $masterDevice Proposalgen_Model_MasterDevice */
+                $masterDevice = $deviceInstanceMasterDevice->getMasterDevice();
+                $form->getElement('printer_model')->setValue($masterDevice->modelName);
+                $form->getElement('manufacturer_id')->setValue($masterDevice->getManufacturer()->id);
             }
 
             // add failed, repop form with entered values
@@ -1394,12 +1410,12 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
         $currElement->addMultiOption('0', 'Select Manufacturer');
         foreach ($manufacturers as $row)
         {
-            $currElement->addMultiOption($row ['manufacturer_id'], ucwords(strtolower($row ['manufacturer_name'])));
+            $currElement->addMultiOption($row ['manufacturerId'], ucwords(strtolower($row ['manufacturerName'])));
             if (empty($list) == false)
             {
                 $list .= ";";
             }
-            $list .= $row ['manufacturer_id'] . ":" . ucwords(strtolower($row ['manufacturer_name']));
+            $list .= $row ['manufacturerId'] . ":" . ucwords(strtolower($row ['manufacturerName']));
         }
         $this->view->manufacturers = $list;
 
