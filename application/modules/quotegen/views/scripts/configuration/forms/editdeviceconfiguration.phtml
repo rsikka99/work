@@ -78,8 +78,9 @@ $deviceOptions = $this->deviceOptions;
 							<td style="text-align: center;"><input type="text" class="span1" name="quantity<?php echo $option->optionId; ?>"
 							 id="quantity<?php echo $option->optionId; ?>" 
 							 value="<?php 
-							  echo $option->getDeviceConfigurationOption($deviceConfigurationId)->quantity;
-							   ?>" maxlength="3" /></td>
+							 if($option->getDeviceConfigurationOption($deviceConfigurationId)){
+							 	echo $option->getDeviceConfigurationOption($deviceConfigurationId)->quantity;
+							 }?>" maxlength="3" /></td>
 						</tr>
 						<?php } ?>
 					</tbody>
