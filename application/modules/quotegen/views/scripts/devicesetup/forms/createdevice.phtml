@@ -98,7 +98,7 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<?php $element = $this->element->getElement("printer_model"); ?>
+	<?php $element = $this->element->getElement("modelName"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
@@ -165,7 +165,7 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<?php $element = $this->element->getElement("is_copier"); ?>
+	<?php $element = $this->element->getElement("isCopier"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
@@ -176,7 +176,7 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<?php $element = $this->element->getElement("is_scanner"); ?>
+	<?php $element = $this->element->getElement("isScanner"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
@@ -187,7 +187,7 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<?php $element = $this->element->getElement("is_fax"); ?>
+	<?php $element = $this->element->getElement("isFax"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
@@ -198,7 +198,7 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<?php $element = $this->element->getElement("is_duplex"); ?>
+	<?php $element = $this->element->getElement("isDuplex"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
@@ -209,7 +209,7 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<?php $element = $this->element->getElement("watts_power_normal"); ?>
+	<?php $element = $this->element->getElement("wattsPowerNormal"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
@@ -220,7 +220,7 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<?php $element = $this->element->getElement("watts_power_idle"); ?>
+	<?php $element = $this->element->getElement("wattsPowerIdle"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
@@ -242,7 +242,7 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<?php $element = $this->element->getElement("service_cost_per_page"); ?>
+	<?php $element = $this->element->getElement("serviceCostPerPage"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
@@ -253,7 +253,7 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<?php $element = $this->element->getElement("launch_date"); ?>
+	<?php $element = $this->element->getElement("launchDate"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
@@ -262,7 +262,7 @@ $form = $this->form;
 			<?php echo trim($element->renderDescription()); ?>
 		</div>
 	</div>
-	<?php $element = $this->element->getElement("duty_cycle"); ?>
+	<?php $element = $this->element->getElement("dutyCycle"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
@@ -273,7 +273,7 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<?php $element = $this->element->getElement("ppm_black"); ?>
+	<?php $element = $this->element->getElement("ppmBlack"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
@@ -284,7 +284,7 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<?php $element = $this->element->getElement("ppm_color"); ?>
+	<?php $element = $this->element->getElement("ppmColor"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
@@ -295,7 +295,7 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<?php $element = $this->element->getElement("is_leased"); ?>
+	<?php $element = $this->element->getElement("isLeased"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
@@ -307,7 +307,7 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<?php $element = $this->element->getElement("leased_toner_yield"); ?>
+	<?php $element = $this->element->getElement("leasedTonerYield"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
@@ -360,17 +360,17 @@ $form = $this->form;
 			<tbody>
 			    <?php foreach ($this->paginator->getCurrentItems() as $toner) : /* @var $toner Admin_Model_Toner */ ?>
 			    <tr>
-					<td><?php echo $toner->getSku(); ?></td>
-					<td><?php echo $toner->getManufacturer()->getDisplayname(); ?></td>
-					<td><?php echo $toner->getPartType()->getTypeName(); ?></td>
-					<td style="text-transform: capitalize;"><?php echo strToLower($toner->getTonerColor()->getTonerColorName()); ?></td>
-					<td style="text-align: right;"><?php echo number_format($toner->getYield(), 0, '', ','); ?></td>
-					<td style="text-align: right;"><?php echo "$" . number_format($toner->getCost(), 2, '.', ','); ?></td>
+					<td><?php echo $toner->sku ?></td>
+					<td><?php echo $toner->getManufacturer()->displayname; ?></td>
+					<td><?php echo $toner->getPartType()->typeName ?></td>
+					<td style="text-transform: capitalize;"><?php echo strToLower($toner->getTonerColor()->tonerColorName); ?></td>
+					<td style="text-align: right;"><?php echo number_format($toner->yield, 0, '', ','); ?></td>
+					<td style="text-align: right;"><?php echo "$" . number_format($toner->cost, 2, '.', ','); ?></td>
 					<td style="text-align: center;">
-					<?php if ( in_array($toner->getId(), explode(",", $this->assignedToners) ) ) { ?>
-						<button type="button" name="btnAssign<?php echo $toner->getId(); ?>" id="btnAssign<?php echo $toner->getId(); ?>" class="btn btn-danger btn-mini" onclick="javascript: update_toner(<?php echo $toner->getId(); ?>);"><i class="icon-minus-sign icon-white"></i> Unassign</button>
+					<?php if ( in_array($toner->id, explode(",", $this->assignedToners) ) ) { ?>
+						<button type="button" name="btnAssign<?php echo $toner->id; ?>" id="btnAssign<?php echo $toner->id; ?>" class="btn btn-danger btn-mini" onclick="javascript: update_toner(<?php echo $toner->id; ?>);"><i class="icon-minus-sign icon-white"></i> Unassign</button>
 					<?php } else { ?>
-						<button type="button" name="btnAssign<?php echo $toner->getId(); ?>" id="btnAssign<?php echo $toner->getId(); ?>" class="btn btn-success btn-mini" onclick="javascript: update_toner(<?php echo $toner->getId(); ?>);"><i class="icon-plus-sign icon-white"></i> Assign</button>
+						<button type="button" name="btnAssign<?php echo $toner->id; ?>" id="btnAssign<?php echo $toner->id; ?>" class="btn btn-success btn-mini" onclick="javascript: update_toner(<?php echo $toner->id; ?>);"><i class="icon-plus-sign icon-white"></i> Assign</button>
 					<?php } ?>
 					</td>
 				</tr>

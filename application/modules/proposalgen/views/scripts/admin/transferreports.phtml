@@ -358,7 +358,6 @@
 	    <p>
     	    <label for="filterfield" class="form_label">Filter Reports:</label>
 	        <span id="filterlabel0" style="display: inline-block; width: 36px;">Where</span>
-	        
 	        <?php if (! in_array("Standard User", $this->privilege) ) { ?>
 	        <select name="filterfield" id="filterfield" style="display: inline-block;">
 	            <option value="user_id">User</option>
@@ -419,7 +418,7 @@
     	        <option value=""> -- Select A User -- </option>
 				<?php
 				foreach($this->to_users_list as $key) {
-					echo "<option value='" . $key['userId'] ."'>" . (strtolower($key['username'])) . "</option>";
+					echo "<option value='" . $key['id'] ."'>" . (strtolower($key['username'])) . "</option>";
 				}
 				?>
     	    </select>
@@ -431,7 +430,7 @@
             	    <select name="userlist" id="userlist" class="multibox" multiple="multiple" ondblclick="javascript: transfer_user('add');">
     				<?php
     				foreach($this->to_users_list as $key) {
-    					echo "<option value='" . $key['userId'] ."'>" . (strtolower($key['username'])) . "</option>";
+    					echo "<option value='" . $key['id'] ."'>" . (strtolower($key['username'])) . "</option>";
     				}
     				?>
             	    </select>

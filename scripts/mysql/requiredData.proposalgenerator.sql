@@ -28,16 +28,6 @@ INSERT INTO `pgen_toner_colors` (`id`, `name`) VALUES
 (5,'3 COLOR'),
 (6,'4 COLOR');
 
-INSERT INTO `pgen_ticket_statuses` (`id`, `name`) VALUES 
-(1, 'New'      ),
-(2, 'Open'     ),
-(3, 'Closed'   ),
-(4, 'Rejected' );
-
-INSERT INTO `pgen_ticket_categories` (`id`, `name`) VALUES 
-(1, 'Printfleet'   ),
-(2, 'FM Audit'     );
-
 /* Default System Report Settings */
 INSERT INTO `pgen_report_settings` (`id`,`actualPageCoverageMono`,`actualPageCoverageColor`,`serviceCostPerPage`,`adminCostPerPage`,`assessmentReportMargin`,`grossMarginReportMargin`,`monthlyLeasePayment`,`defaultPrinterCost`,`leasedBwCostPerPage`,`leasedColorCostPerPage`,`mpsBwCostPerPage`,`mpsColorCostPerPage`,`kilowattsPerHour`,`assessmentPricingConfigId`,`grossMarginPricingConfigId`,`costThreshold`, `targetMonochrome`,`targetColor`) VALUES
 (1,6,24,0.0035,0.0006,20,20,250,1000,0.015,0.08,0.02,0.09,0.1,2,3,10,0.018,0.02);

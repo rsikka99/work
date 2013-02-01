@@ -78,7 +78,7 @@ class Proposalgen_Model_Mapper_DeviceToner extends Tangent_Model_Mapper_Abstract
         $entries      = array();
         foreach ($deviceToners as $deviceToner)
         {
-            $tonerId = $deviceToner->TonerId;
+            $tonerId = $deviceToner->tonerId;
             $toner   = Proposalgen_Model_Mapper_Toner::getInstance()->find($tonerId);
 
             $object = new Proposalgen_Model_Toner($toner->toArray());

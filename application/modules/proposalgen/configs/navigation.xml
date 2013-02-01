@@ -185,13 +185,6 @@
                             <action>bulkdevicepricing</action>
                             <resource>proposalgen__admin__bulkdevicepricing</resource>
                         </updatepricing>
-                        <supporttickets>
-                            <label>Support Tickets</label>
-                            <module>proposalgen</module>
-                            <controller>ticket</controller>
-                            <action>managetickets</action>
-                            <resourece>proposalgen_ticket_managetickets</resourece>
-                        </supporttickets>
                         <managereplacements>
                             <label>Manage Replacement Printers</label>
                             <module>proposalgen</module>

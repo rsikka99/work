@@ -81,7 +81,7 @@ $manufacturers = $this->manufacturers;
 					<span id="list_criteria" style="display: none;">
 						<select name="cboCriteria" id="cboCriteria" style="width: 160px; margin: 0px 10px 0px 0px;">
 						<?php foreach ( $manufacturers as $manufacturer ) {  /* @var $manufacturer Proposalgen_Model_Manufacturer */ ?>
-							<option value="<?php echo $manufacturer->id; ?>"><?php echo $manufacturer->displayname(); ?></option>
+							<option value="<?php echo $manufacturer->id; ?>"><?php echo $manufacturer->displayname; ?></option>
 						<?php } ?>
 						</select>
 					</span>
@@ -107,18 +107,18 @@ $manufacturers = $this->manufacturers;
 					<tbody>
 					    <?php foreach ($this->paginator->getCurrentItems() as $toner) : /* @var $toner Admin_Model_Toner */ ?>
 					    <tr>
-							<td><?php echo $toner->getSku(); ?></td>
-							<td><?php echo $toner->getManufacturer()->getDisplayname(); ?></td>
-							<td><?php echo $toner->getPartType()->getTypeName(); ?></td>
-							<td style="text-transform: capitalize;"><?php echo strToLower($toner->getTonerColor()->getTonerColorName()); ?></td>
-							<td style="text-align: right;"><?php echo number_format($toner->getYield(), 0, '', ','); ?></td>
-							<td style="text-align: right;"><?php echo "$" . number_format($toner->getCost(), 2, '.', ','); ?></td>
+							<td><?php echo $toner->sku; ?></td>
+							<td><?php echo $toner->getManufacturer()->displayname; ?></td>
+							<td><?php echo $toner->getPartType()->typeName ?></td>
+							<td style="text-transform: capitalize;"><?php echo strToLower($toner->getTonerColor()->tonerColorName); ?></td>
+							<td style="text-align: right;"><?php echo number_format($toner->yield, 0, '', ','); ?></td>
+							<td style="text-align: right;"><?php echo "$" . number_format($toner->cost, 2, '.', ','); ?></td>
 							<td>
 								<div class="" style="text-align: center;">
-									<?php if ( in_array($toner->getId(), $this->assignedToners ) ) { ?>
-										<button type="submit" name="btnUnassign" id="btnUnassign" class="btn btn-danger btn-mini" onclick="javascript: $('#tonerid').val(<?php echo $toner->getId(); ?>);"><i class="icon-minus-sign icon-white"></i> Unassign</button>
+									<?php if ( in_array($toner->id, $this->assignedToners ) ) { ?>
+										<button type="submit" name="btnUnassign" id="btnUnassign" class="btn btn-danger btn-mini" onclick="javascript: $('#tonerid').val(<?php echo $toner->id; ?>);"><i class="icon-minus-sign icon-white"></i> Unassign</button>
 									<?php } else { ?>
-										<button type="submit" name="btnAssign" id="btnAssign" class="btn btn-success btn-mini" onclick="javascript: $('#tonerid').val(<?php echo $toner->getId(); ?>);"><i class="icon-plus-sign icon-white"></i> Assign</button>
+										<button type="submit" name="btnAssign" id="btnAssign" class="btn btn-success btn-mini" onclick="javascript: $('#tonerid').val(<?php echo $toner->id; ?>);"><i class="icon-plus-sign icon-white"></i> Assign</button>
 									<?php } ?>
 								</div>
 							</td>
