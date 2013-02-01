@@ -29,16 +29,17 @@ if ($zendFrameworkPath)
     }
     else
     {
-        include $zendFrameworkPath . '/Zend/Loader/AutoloaderFactory.php';
-        Zend\Loader\AutoloaderFactory::factory(array(
-                                                    'Zend\Loader\StandardAutoloader' => array(
-                                                        'autoregister_zf' => true
-                                                    )
-                                               ));
+        include $zendFrameworkPath . '/Zend/Loader/Autoloader.php';
+        $autoloader = Zend_Loader_Autoloader::getInstance();
     }
 }
-
-if (!class_exists('Zend_Loader_AutoloaderFactory'))
+else
 {
-    throw new RuntimeException('Unable to load Zend Framework. Run `php composer.phar install` or define a ZF_PATH environment variable.');
+    include ('Zend/Loader/Autoloader.php');
+    $autoloader = Zend_Loader_Autoloader::getInstance();
+}
+
+if (!class_exists('Zend_Application'))
+{
+//    throw new RuntimeException('Unable to load Zend Framework. Run `php composer.phar install` or define a ZF_PATH environment variable.');
 }
