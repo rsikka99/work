@@ -397,7 +397,6 @@ class Application_Model_Acl extends Zend_Acl
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN_FILTERREPORTSLIST, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN_FILTERUSERSLIST, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN, self::PRIVILEGE_VIEW);
 
         //Survey
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_SURVEY_WILDCARD, self::PRIVILEGE_VIEW);
