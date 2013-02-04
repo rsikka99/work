@@ -45,7 +45,7 @@ class Admin_Model_Mapper_UserRole extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Admin_Model_UserRole to the database.
      *
-     * @param $object     Admin_Model_UserRole
+     * @param Admin_Model_UserRole $object
      *                    The userRole model to save to the database
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
