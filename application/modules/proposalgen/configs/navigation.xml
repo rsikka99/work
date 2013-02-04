@@ -14,9 +14,9 @@
 					<label>Proposal</label>
 					<class>dropdown</class>
 					<module>proposalgen</module>
-					<controller>index</controller>
+					<controller>survey</controller>
 					<action>index</action>
-					<resource>propsalgen__index__index</resource>
+					<resource>propsalgen__survey__index</resource>
 					<visible>0</visible>
 					<pages>
 						<survey>
@@ -238,8 +238,8 @@
 					<label>My Admin</label>
 					<module>proposalgen</module>
 					<controller>admin</controller>
-					<action>index</action>
-					<resource>proposalgen__admin__index</resource>
+					<action>managemysettings</action>
+					<resource>proposalgen__admin__managemysettings</resource>
 					<class>dropdown></class>
 					<pages>
 						<myreportsettings>

@@ -553,7 +553,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     'device_price'          => ($row [0] ['cost'] > 0 ? (float)$row [0] ['cost'] : ""),
                     'is_deleted'            => $row [0] ['is_deleted'],
                     'toner_array'           => $toner_array,
-                    'replacement_category'  => $row [0] ['replacement_category'],
+                    'replacement_category'  => $row [0] ['replacementCategory'],
                     // 'is_letter_legal' => $row [0] ['is_letter_legal'],
                     'print_speed'           => $row [0] ['print_speed'],
                     'resolution'            => $row [0] ['resolution'],
@@ -3403,8 +3403,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
      */
     public function deleteReport ($reportId)
     {
-        $db = Zend_Db_Table::getDefaultAdapter();
-		$rmsUploadRowMapper = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance();
+        $db                  = Zend_Db_Table::getDefaultAdapter();
+        $rmsUploadRowMapper  = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance();
         $reportMapper        = Proposalgen_Model_Mapper_Report::getInstance();
         $reportSettingMapper = Proposalgen_Model_Mapper_Report_Setting::getInstance();
         $report              = $reportMapper->find($reportId);
@@ -5458,8 +5458,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             'md' => 'pgen_master_devices'
                        ), array(
                                'id',
-                               'manufacturer_id',
-                               'printer_model',
+                               'manufacturerId',
+                               'modelName',
                                'cost'
                           ))
                 ->joinLeft(array(
@@ -5509,15 +5509,15 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             'md' => 'pgen_master_devices'
                        ), array(
                                'id AS master_id',
-                               'manufacturer_id',
-                               'printer_model',
+                               'manufacturerId',
+                               'modelName',
                                'cost'
                           ))
                 ->joinLeft(array(
                                 'm' => 'manufacturers'
-                           ), 'm.id = md.manufacturer_id', array(
-                                                                'fullname'
-                                                           ))
+                           ), 'm.id = md.manufacturerId', array(
+                                                               'fullname'
+                                                          ))
                 ->joinLeft(array(
                                 'udo' => 'pgen_user_device_overrides'
                            ), 'udo.master_device_id = md.id AND udo.user_id = ' . $user_id, array(
@@ -5550,7 +5550,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $formdata->rows [$i] ['id']   = $row ['master_id'];
                     $formdata->rows [$i] ['cell'] = array(
                         ucwords(strtolower($row ['fullname'])),
-                        ucwords(strtolower($row ['printer_model'])),
+                        ucwords(strtolower($row ['modelName'])),
                         $price,
                         ($row ['override_cost'] > 0 ? (float)$row ['override_cost'] : null)
                     );
@@ -6326,7 +6326,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         {
             try
             {
-                $replacementTable = new Proposalgen_Model_DbTable_ReplacementDevices();
+                $replacementTable = new Proposalgen_Model_DbTable_ReplacementDevice();
                 $formData         = $this->_request->getPost();
                 $form_mode        = $formData ['form_mode'];
                 $hdnIds           = $formData ['hdnIds'];
@@ -6340,12 +6340,12 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         if (isset($formData ['jqg_grid_list_' . $key]) && $formData ['jqg_grid_list_' . $key] == "on")
                         {
                             $replacement_category = $formData ['replacement_category_' . $key];
-                            $where                = $replacementTable->getAdapter()->quoteInto('replacement_category = ?', $replacement_category);
+                            $where                = $replacementTable->getAdapter()->quoteInto('replacementCategory = ?', $replacement_category);
                             $replacement          = $replacementTable->fetchAll($where);
 
                             if (count($replacement) > 1)
                             {
-                                $where = $replacementTable->getAdapter()->quoteInto('master_device_id = ?', $key, 'INTEGER');
+                                $where = $replacementTable->getAdapter()->quoteInto('masterDeviceId = ?', $key, 'INTEGER');
                                 $replacementTable->delete($where);
                                 $this->view->message = "<p>The selected printer(s) are no longer marked as replacement printers.</p>";
                             }
@@ -6394,7 +6394,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $monthly_rate         = $formData ['monthly_rate'];
         $form_mode            = $formData ['form_mode'];
 
-
         // validation
         $validation = '';
         if ($manufacturer_id == "")
@@ -6429,22 +6428,23 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $db->beginTransaction();
             try
             {
-                $replacementTable         = new Proposalgen_Model_DbTable_ReplacementDevices();
-                $replacement_devicesTable = new Proposalgen_Model_DbTable_ReplacementDevices();
+                $replacementTable         = new Proposalgen_Model_DbTable_ReplacementDevice();
+                $replacement_devicesTable = new Proposalgen_Model_DbTable_ReplacementDevice();
                 $replacementTableMapper   = Proposalgen_Model_Mapper_ReplacementDevice::getInstance();
 
                 $replacement_devicesData = array(
-                    'replacement_category' => strtoupper($replacement_category),
-                    'print_speed'          => $print_speed,
+                    'replacementCategory' => strtoupper($replacement_category),
+                    'printSpeed'          => $print_speed,
                     'resolution'           => $resolution,
-                    'monthly_rate'         => $monthly_rate
+                    'monthlyRate'         => $monthly_rate
                 );
 
                 if ($form_mode == "add")
                 {
                     // check to see if replacement device exists
-                    $where               = $replacement_devicesTable->getAdapter()->quoteInto('master_device_id = ?', $printer_model, 'INTEGER');
-                    $replacement_devices = $replacementTableMapper->fetchRow($where);
+
+                    $where               = $replacement_devicesTable->getAdapter()->quoteInto('masterDeviceId = ?', $printer_model, 'INTEGER');
+                    $replacement_devices = $replacementTableMapper->fetchAll($where,null,1);
                     if (count($replacement_devices) > 0)
                     {
                         $replacement_devicesTable->update($replacement_devicesData, $where);
@@ -6452,8 +6452,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     }
                     else
                     {
-                        $replacement_devicesData ['master_device_id'] = $printer_model;
+
+                        $replacement_devicesData ['masterDeviceId'] = $printer_model;
                         $replacement_devicesTable->insert($replacement_devicesData);
+
                         $this->view->message = "<p>The replacement printer has been added.</p>";
                     }
                 }
@@ -6462,7 +6464,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $is_valid = true;
                     if (strtoupper($hdnOriginalCategory) !== strtoupper($replacement_category))
                     {
-                        $where       = $replacementTable->getAdapter()->quoteInto('replacement_category = ?', $hdnOriginalCategory);
+
+                        $where       = $replacementTable->getAdapter()->quoteInto('replacementCategory = ?', $hdnOriginalCategory);
                         $replacement = $replacementTableMapper->fetchAll($where);
                         if (count($replacement) > 1)
                         {
@@ -6477,7 +6480,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
                     if ($is_valid === true)
                     {
-                        $where = $replacement_devicesTable->getAdapter()->quoteInto('master_device_id = ?', $printer_model, 'INTEGER');
+                        $where = $replacement_devicesTable->getAdapter()->quoteInto('masterDeviceId = ?', $printer_model, 'INTEGER');
                         $replacement_devicesTable->update($replacement_devicesData, $where);
                         $this->view->message = "<p>The replacement printer has been updated.</p>";
                     }
@@ -6563,15 +6566,15 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     ->from(array(
                                 'rd' => 'pgen_replacement_devices'
                            ))
-                    ->where('master_device_id = ?', $device_id, 'INTEGER');
+                    ->where('masterDeviceId = ?', $device_id, 'INTEGER');
                 $stmt   = $db->query($select);
                 $row    = $stmt->fetchAll();
 
                 $formdata = array(
-                    'replacement_category' => $row [0] ['replacement_category'],
-                    'print_speed'          => $row [0] ['print_speed'],
+                    'replacement_category' => $row [0] ['replacementCategory'],
+                    'print_speed'          => $row [0] ['printSpeed'],
                     'resolution'           => $row [0] ['resolution'],
-                    'monthly_rate'         => $row [0] ['monthly_rate']
+                    'monthly_rate'         => $row [0] ['monthlyRate']
                 );
             }
             else
@@ -6615,7 +6618,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $id_list           = null;
 
         //$User = Proposalgen_Model_Mapper_User::getInstance();
-        $isSystemAdmin = $this->isAllowed('',Application_Model_Acl::PRIVILEGE_ADMIN);
+        $isSystemAdmin = $this->isAllowed('', Application_Model_Acl::PRIVILEGE_ADMIN);
         //*************************************************
         // postback
         //*************************************************
@@ -6662,16 +6665,16 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 }
                 else if ($formData ['transfertype'] == 'clone')
                 {
-                    $array = explode(",",$formData['hdntransferlist']);
-                    foreach($array as $value){
-                        if(is_numeric($value))
+                    $array = explode(",", $formData['hdntransferlist']);
+                    foreach ($array as $value)
+                    {
+                        if (is_numeric($value))
                         {
                             $stmt = $db->query("CALL clone_report({$report_id}, {$value})");
                         }
                     }
-                    
-                    
-                    
+
+
                     $this->_helper->flashMessenger(array(
                                                         "success" => "Report Cloning Complete."
                                                    ));
@@ -6684,7 +6687,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(array(
                                                     "error" => "There was an error while trying to transfer the report. Please contact your administrator."
                                                ));
-                
+
             }
         }
 
@@ -6705,12 +6708,12 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         }
 
         $select = $db->select()
-        ->from(array(
-                    'u' => 'users'
-               ))
-        ->joinLeft(array(
-                        'up' => 'user_roles'
-                   ), 'u.id = up.userId'
+            ->from(array(
+                        'u' => 'users'
+                   ))
+            ->joinLeft(array(
+                            'up' => 'user_roles'
+                       ), 'u.id = up.userId'
         );
         if ($where)
         {
@@ -6752,7 +6755,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             //build id string
             foreach ($this->view->users_list as $key)
             {
-                if($key['userId'] != null){
+                if ($key['userId'] != null)
+                {
                     if ($id_list)
                     {
                         $id_list .= ',';
@@ -6766,8 +6770,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         {
             $where = 'userId=' . $this->user_id;
         }
-        $order = 'dateCreated DESC';
-        $reportTable             = new Proposalgen_Model_DbTable_Report();
+        $order                    = 'dateCreated DESC';
+        $reportTable              = new Proposalgen_Model_DbTable_Report();
         $reports                  = $reportTable->fetchAll($where, $order, $count, $offset);
         $this->view->reports_list = $reports;
     }
@@ -6792,17 +6796,18 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             }
             else if ($filterfield && $filtervalue)
             {
-                if($filtervalue != 'all'){
-                if ($filterfield == 'user_id')
+                if ($filtervalue != 'all')
                 {
+                    if ($filterfield == 'user_id')
+                    {
 
-                    $filterfield = 'r.userId';
-                }
-                $where = $filterfield . ' = ' . $filtervalue;
+                        $filterfield = 'r.userId';
+                    }
+                    $where = $filterfield . ' = ' . $filtervalue;
                 }
             }
 
-            if ($this->isAllowed('',Application_Model_Acl::PRIVILEGE_ADMIN))
+            if ($this->isAllowed('', Application_Model_Acl::PRIVILEGE_ADMIN))
             {
 
             }
@@ -6816,16 +6821,16 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $select = $db->select()
                 ->from(array(
                             'r' => 'pgen_reports'
-                       ),array (
+                       ), array(
                                'id AS report_id',
                                'customerCompanyName',
                                'dateCreated'
-                         ))
+                          ))
                 ->joinLeft(array(
                                 'u' => 'users'
                            ), 'u.id = r.userId', array(
-                                                            'username'
-                                                       ));
+                                                      'username'
+                                                 ));
             if ($where)
             {
                 $select->where($where);
@@ -6871,16 +6876,16 @@ class Proposalgen_AdminController extends Zend_Controller_Action
     {
         // disable the default layout
         $this->_helper->layout->disableLayout();
-        $db       = Zend_Db_Table::getDefaultAdapter();
-        $filter   = $this->_getParam('filter', 'all');
-        $formdata = new stdClass();
-        $isSystemAdmin = $this->isAllowed('',Application_Model_Acl::PRIVILEGE_ADMIN);
+        $db            = Zend_Db_Table::getDefaultAdapter();
+        $filter        = $this->_getParam('filter', 'all');
+        $formdata      = new stdClass();
+        $isSystemAdmin = $this->isAllowed('', Application_Model_Acl::PRIVILEGE_ADMIN);
         try
         {
             $where = null;
             if ($isSystemAdmin)
             {
-            
+
             }
             else
             {
@@ -7009,8 +7014,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
         $this->_helper->json($jsonResponse);
 
-        }
-          /**
+    }
+
+    /**
      * Checks to see if the currently logged in user has access to the resource.
      *
      * @param $resource

@@ -1,6 +1,8 @@
-<?php
-    $this->headScript()->appendFile($this->baseUrl('js/fleet/deviceMapping.js'));
-?>
+<?php $this->headScript()->captureStart('append','text/javascript'); ?>
+    var canEditMasterDevices = <?php echo ($this->IsAllowed('proposalgen__managedevices__managemappingdevices')) ? true : false; ?>;
+<?php $this->headScript()->captureEnd(); ?>
+
+<?php $this->headScript()->appendFile($this->baseUrl('js/proposalgen/fleet/deviceMapping.js')); ?>
 <div class="page-header">
     <h1>Fleet<small> - Map Devices</small></h1>
 </div>
