@@ -168,22 +168,31 @@ $(function ()
                         master_device_dropdown += '<input type="text"   name="masterDeviceName" style="width: 97%" class="autoCompleteDeviceName" value="' + row.mappedManufacturer + ' ' + row.mappedModelName + '" />';
 
                         row.mapToMasterDevice = master_device_dropdown;
-                        if (row.isMapped == 1)
+
+                        if (canEditMasterDevices)
                         {
-                            row.action = '<input title="Edit Device" type="button" id="deviceAction" class="addEditMasterDevice" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit"/>';
+                            if (row.isMapped == 1)
+                            {
+                                row.action = '<input title="Edit Device" type="button" id="deviceAction" class="addEditMasterDevice" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit"/>';
+                            }
+                            else
+                            {
+                                row.action = '<input title="Create New Device" type="button" id="deviceAction" class="addEditMasterDevice" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create New" />';
+                            }
                         }
                         else
                         {
-                            row.action = '<input title="Create New Device" type="button" id="deviceAction" class="addEditMasterDevice" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create New" />';
+                            if (row.isMapped == 1)
+                            {
+                                row.action = 'Mapped';
+                            }
+                            else
+                            {
+                                row.action = '<input title="Create New Device" type="button" class="addEditUnknownDeviceButton" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create New" />';
+                            }
                         }
-                        if (row.isMapped == 1)
-                        {
-                            row.action = 'Mapped';
-                        }
-                        else
-                        {
-                            row.action = '<input title="Create New Device" type="button" class="addEditUnknownDeviceButton" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create New" />';
-                        }
+
+
                     }
 
                     // Put our new data back into the grid
