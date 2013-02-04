@@ -790,7 +790,8 @@ class Proposalgen_Form_Device extends Zend_Form
         $element->getValidator('GreaterThan')->setMessage('Must be greater than 0.');
         array_push($elements, $element);
         $elementCounter++;
-
+        $hiddenElement = new Zend_Form_Element_Hidden('deviceInstanceId');
+        array_push($elements, $hiddenElement);
         /**
          * ********************************************************************
          * //FOR REPLACEMENT DEVICES BELOW

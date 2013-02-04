@@ -54,6 +54,11 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
     /**
      * @var bool
      */
+    public $isDuplex;
+
+    /**
+     * @var bool
+     */
     public $isCopier;
 
     /**
@@ -387,6 +392,12 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             $this->isFax = $params->isFax;
         }
 
+        if (isset($params->isDuplex) && !is_null($params->isDuplex))
+        {
+            $this->isDuplex = $params->isDuplex;
+        }
+
+
         if (isset($params->isLeased) && !is_null($params->isLeased))
         {
             $this->isLeased = $params->isLeased;
@@ -658,6 +669,7 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             "isCopier"                 => $this->isCopier,
             "isFax"                    => $this->isFax,
             "isLeased"                 => $this->isLeased,
+            "isDuplex"                 => $this->isDuplex,
             "isScanner"                => $this->isScanner,
             "launchDate"               => $this->launchDate,
             "leasedTonerYield"         => $this->leasedTonerYield,

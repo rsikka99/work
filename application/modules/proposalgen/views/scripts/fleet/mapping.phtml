@@ -9,7 +9,7 @@
     <form id="addUnknownDeviceForm" action="<?php echo $this->url(array("action" => "edit-unknown-device")); ?>" method="POST">
         <input type="hidden" name="deviceInstanceIds" id="unknownDeviceDeviceInstanceIds" />
     </form>
-    <form id="addMasterDeviceForm" action="<?php echo $this->url(array("controller" => "managedevices", "action" => "managedevices")); ?>" method="POST">
+    <form id="addMasterDeviceForm" action="<?php echo $this->url(array("controller" => "managedevices", "action" => "managemappingdevices")); ?>" method="POST">
         <input type="hidden" name="deviceInstanceIds" id="masterDeviceDeviceInstanceIds" />
     </form>
     <table id="mappingGrid"></table>
