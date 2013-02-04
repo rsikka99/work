@@ -16,4 +16,76 @@ $this->headScript()->appendFile($this->baseUrl('js/fleet/deviceSummary.js'));
         </div>
     </form>
 </div>
-<div class="lightbox-panel" id="deviceDetailsContainer"></div>
+<div class="lightbox-panel" id="deviceDetailsContainer" style="display: none;">
+    <h4>Device Details</h4>
+    <table class="table table-bordered table-striped table-condensed">
+        <tr>
+            <td style="width: 180px;">Launch Date:</td>
+            <td id="deviceDetails_launchDate">Launch Date</td>
+        </tr>
+        <tr>
+            <td>Copier:</td>
+            <td id="deviceDetails_isCopier">YES</td>
+        </tr>
+        <tr>
+            <td>Duplex:</td>
+            <td id="deviceDetails_isDuplex">NO</td>
+        </tr>
+        <tr>
+            <td>Fax:</td>
+            <td id="deviceDetails_isFax">YESYES</td>
+        </tr>
+        <tr>
+            <td>Scanner:</td>
+            <td id="deviceDetails_isScanner">YES</td>
+        </tr>
+        <tr>
+            <td>PPM Black:</td>
+            <td id="deviceDetails_ppmBlack"></td>
+        </tr>
+        <tr>
+            <td>PPM Color:</td>
+            <td id="deviceDetails_ppmColor"></td>
+        </tr>
+        <tr>
+            <td>Duty Cycle:</td>
+            <td id="deviceDetails_dutyCycle"></td>
+        </tr>
+        <tr>
+            <td>Watts Power Normal:</td>
+            <td id="deviceDetails_wattsPowerNormal"></td>
+        </tr>
+        <tr>
+            <td>Watts Power Idle:</td>
+            <td id="deviceDetails_wattsPowerIdle"></td>
+        </tr>
+        <tr>
+            <td>Device Cost:</td>
+            <td id="deviceDetails_cost"></td>
+        </tr>
+        <tr>
+            <td>Toner Configuration:</td>
+            <td id="deviceDetails_tonerConfigName"></td>
+        </tr>
+        <tr>
+            <td>Is Leased:</td>
+            <td id="deviceDetails_isLeased">YESNO</td>
+        </tr>
+    </table>
+    <h4>Toners</h4>
+    <table class="table table-bordered table-striped table-condensed">
+        <thead>
+        <tr>
+            <th>SKU</th>
+            <th>Manufacturer</th>
+            <th>Type</th>
+            <th>Color</th>
+            <th>Yield</th>
+            <th>Cost</th>
+        </tr>
+        </thead>
+        <tbody id="deviceDetails_toners">
+
+        </tbody>
+    </table>
+</div>

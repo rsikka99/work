@@ -90,13 +90,73 @@ $(function ()
             data    : {
                 deviceInstanceId: $(this).data("device-instance-id")
             },
-            success : function ()
+            success : function (data)
             {
-                alert('Ajax for device details was successful.');
+                /**
+                 * Populate the dialog
+                 */
+                var deviceDetailsContainer = $('#deviceDetailsContainer');
+
+                $('#deviceDetails_launchDate').empty().html(data.masterDevice.launchDate);
+                $('#deviceDetails_isCopier').empty().html((data.masterDevice.isCopier) ? 'YES' : 'NO');
+                $('#deviceDetails_isDuplex').empty().html((data.masterDevice.isDuplex) ? 'YES' : 'NO');
+                $('#deviceDetails_isFax').empty().html((data.masterDevice.isFax) ? 'YES' : 'NO');
+                $('#deviceDetails_isScan').empty().html((data.masterDevice.isScan) ? 'YES' : 'NO');
+
+                $('#deviceDetails_ppmBlack').empty().html(data.masterDevice.ppmBlack);
+                $('#deviceDetails_ppmColor').empty().html(data.masterDevice.ppmColor);
+                $('#deviceDetails_dutyCycle').empty().html(data.masterDevice.dutyCycle);
+
+                $('#deviceDetails_wattsPowerNormal').empty().html(data.masterDevice.wattsPowerNormal);
+                $('#deviceDetails_wattsPowerIdle').empty().html(data.masterDevice.wattsPowerIdle);
+                $('#deviceDetails_cost').empty().html(data.masterDevice.cost);
+                $('#deviceDetails_tonerConfigName').empty().html(data.masterDevice.tonerConfigName);
+                $('#deviceDetails_isLeased').empty().html((data.masterDevice.isLeased) ? 'YES' : 'NO');
+
+                var tonerTBody = $('#deviceDetails_toners');
+                tonerTBody.empty();
+
+                $.each(data.masterDevice.toners, function (key, toner)
+                {
+                    var tr = $('<tr></tr>');
+                    tr.append($('<td></td>').html(toner.sku));
+                    tr.append($('<td></td>').html(toner.manufacturer.fullname));
+                    tr.append($('<td></td>').html(toner.partTypeName));
+                    tr.append($('<td></td>').html(toner.tonerColorName));
+                    tr.append($('<td></td>').html(toner.yield));
+                    tr.append($('<td></td>').html(toner.cost));
+                    tonerTBody.append(tr);
+                });
+
+
+                /**
+                 * Show the dialog
+                 */
+                deviceDetailsContainer.dialog({
+                    modal  : true,
+                    title  : data.masterDevice.manufacturer.fullname + " " + data.masterDevice.modelName,
+                    width  : 700,
+                    buttons: {
+                        Ok: function ()
+                        {
+                            $(this).dialog("close");
+                        }
+                    },
+                    open   : function ()
+                    {
+                        $('.ui-widget-overlay').bind('click', function ()
+                        {
+                            deviceDetailsContainer.dialog('close');
+                        })
+                    }
+                });
+                /**
+                 * End of the dialog
+                 */
             },
             error   : function ()
             {
-                alert('Ajax for did not complete successfully.');
+                alert("There was an error retrieving device information.");
             }
         });
 
@@ -132,5 +192,4 @@ $(function ()
         }
     });
 
-})
-;
+});

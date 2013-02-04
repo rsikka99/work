@@ -381,6 +381,10 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
         {
             $columns = array("count" => "COUNT(*)");
         }
+        else
+        {
+            $columns = array("di.*");
+        }
 
         $select = $dbTable->select()->from(array("di" => $deviceInstanceTableName), $columns)
             ->distinct(true)
@@ -414,10 +418,6 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
                 $offset = ($offset > 0) ? $offset : null;
                 $select->limit($limit, $offset);
             }
-
-            echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
-            var_dump((string)$select);
-            die();
 
             $query = $dbTable->getAdapter()->query($select);
 
