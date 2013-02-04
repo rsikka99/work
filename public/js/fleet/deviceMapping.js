@@ -168,22 +168,22 @@ $(function ()
                         master_device_dropdown += '<input type="text"   name="masterDeviceName" style="width: 97%" class="autoCompleteDeviceName" value="' + row.mappedManufacturer + ' ' + row.mappedModelName + '" />';
 
                         row.mapToMasterDevice = master_device_dropdown;
-                        if(row.isMapped == 1)
+                        if (row.isMapped == 1)
                         {
-                            row.action = '<input title="Edit Device" type="button" class="addEditMasterDevice" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit"/>';
+                            row.action = '<input title="Edit Device" type="button" id="deviceAction" class="addEditMasterDevice" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit"/>';
                         }
                         else
                         {
-                            row.action = '<input title="Create New Device" type="button" class="addEditMasterDevice" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create New" />';
+                            row.action = '<input title="Create New Device" type="button" id="deviceAction" class="addEditMasterDevice" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create New" />';
                         }
-//                        if (row.isMapped == 1)
-//                        {
-//                            row.action = 'Mapped';
-//                        }
-//                        else
-//                        {
-//                            row.action = '<input title="Create New Device" type="button" class="addEditUnknownDeviceButton" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create New" />';
-//                        }
+                        if (row.isMapped == 1)
+                        {
+                            row.action = 'Mapped';
+                        }
+                        else
+                        {
+                            row.action = '<input title="Create New Device" type="button" class="addEditUnknownDeviceButton" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create New" />';
+                        }
                     }
 
                     // Put our new data back into the grid
@@ -282,7 +282,8 @@ $(function ()
     /**
      * Adding/Editing of the unknown device
      */
-    $(document).on("click", ".addEditUnknownDeviceButton", function() {
+    $(document).on("click", ".addEditUnknownDeviceButton", function ()
+    {
         $("#unknownDeviceDeviceInstanceIds").val($(this).data("device-instance-ids"));
         $("#addUnknownDeviceForm").submit();
     });
@@ -290,7 +291,8 @@ $(function ()
     /**
      * System admin actions
      */
-    $(document).on("click", ".addEditMasterDevice", function(){
+    $(document).on("click", ".addEditMasterDevice", function ()
+    {
         $("#masterDeviceDeviceInstanceIds").val($(this).data("device-instance-ids"));
         $("#addMasterDeviceForm").submit();
     });
@@ -298,7 +300,8 @@ $(function ()
     /**
      * Removal of the unknown device
      */
-    $(document).on("click", ".removeUnknownDeviceButton", function() {
+    $(document).on("click", ".removeUnknownDeviceButton", function ()
+    {
         var deviceInstanceIds = $(this).data("device-instance-ids");
         $.ajax({
             url     : TMTW_BASEURL + "/proposalgen/fleet/remove-unknown-device",
