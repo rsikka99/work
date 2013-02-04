@@ -5458,8 +5458,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             'md' => 'pgen_master_devices'
                        ), array(
                                'id',
-                               'manufacturer_id',
-                               'printer_model',
+                               'manufacturerId',
+                               'modelName',
                                'cost'
                           ))
                 ->joinLeft(array(
@@ -5509,13 +5509,13 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             'md' => 'pgen_master_devices'
                        ), array(
                                'id AS master_id',
-                               'manufacturer_id',
-                               'printer_model',
+                               'manufacturerId',
+                               'modelName',
                                'cost'
                           ))
                 ->joinLeft(array(
                                 'm' => 'manufacturers'
-                           ), 'm.id = md.manufacturer_id', array(
+                           ), 'm.id = md.manufacturerId', array(
                                                                 'fullname'
                                                            ))
                 ->joinLeft(array(
@@ -5550,7 +5550,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $formdata->rows [$i] ['id']   = $row ['master_id'];
                     $formdata->rows [$i] ['cell'] = array(
                         ucwords(strtolower($row ['fullname'])),
-                        ucwords(strtolower($row ['printer_model'])),
+                        ucwords(strtolower($row ['modelName'])),
                         $price,
                         ($row ['override_cost'] > 0 ? (float)$row ['override_cost'] : null)
                     );
