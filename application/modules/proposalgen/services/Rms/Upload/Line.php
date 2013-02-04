@@ -353,9 +353,14 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
     public $hasCompleteInformation;
 
     /**
-     * @var number
+     * @var int
      */
     public $csvLineNumber;
+
+    /**
+     * @var int
+     */
+    public $tonerConfigId;
 
     /**
      * @param array $params An array of data to populate the model with
@@ -696,6 +701,11 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         {
             $this->csvLineNumber = $params->csvLineNumber;
         }
+
+        if (isset($params->tonerConfigId) && !is_null($params->tonerConfigId))
+        {
+            $this->tonerConfigId = $params->tonerConfigId;
+        }
     }
 
     /**
@@ -770,6 +780,7 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             "validationErrorMessage" => $this->validationErrorMessage,
             "hasCompleteInformation" => $this->hasCompleteInformation,
             "csvLineNumber"          => $this->csvLineNumber,
+            "tonerConfigId"          => $this->tonerConfigId,
         );
     }
 
@@ -899,15 +910,37 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         $scanMeterStatus       = $this->_validateMeter($this->startMeterScan, $this->endMeterScan);
         $faxMeterStatus        = $this->_validateMeter($this->startMeterFax, $this->endMeterFax);
 
+        /**
+         * While we're here, lets do some toner configuration guessing
+         */
+        if ($colorMeterStatus === self::METER_IS_VALID)
+        {
+            // What type of color are we?
+            if ($this->fourColorTonerCost !== null || $this->fourColorTonerSku !== null || $this->fourColorTonerSku !== null)
+            {
+                $this->tonerConfigId = Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED;
+            }
+            else if ($this->threeColorTonerCost !== null || $this->threeColorTonerSku !== null || $this->threeColorTonerSku !== null)
+            {
+                $this->tonerConfigId = Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED;
+            }
+            else
+            {
+                $this->tonerConfigId = Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED;
+            }
+        }
+        else
+        {
+            // Set configuration to black only
+            $this->tonerConfigId = Proposalgen_Model_TonerConfig::BLACK_ONLY;
+        }
+
+        /**
+         * Process && Normalize meters
+         */
         // If we are missing a black meter and are missing a color/life meter then we cannot proceed
         if ($blackMeterStatus !== self::METER_IS_VALID && $lifeMeterStatus !== self::METER_IS_VALID)
         {
-            if ($this->endMeterLife !== null)
-            {
-            echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
-            var_dump($lifeMeterStatus);
-            die();
-            }
             return "Invalid black meter";
         }
 
@@ -1040,12 +1073,6 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
     {
         $returnCode = self::METER_IS_VALID;
 
-        // If we have an end meter we but our start is null, we might as well assume it was 0
-        if ($startMeter === null && $endMeter !== null)
-        {
-            $startMeter = 0;
-        }
-
         /*
          * Because of our previous logic setting the start meter 0 if end meter is present,
          * we can assume that if either meter is set to null that the meter is not present
@@ -1061,11 +1088,6 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
              */
             if ($startMeter < 0 || $endMeter < 0)
             {
-                // Set our meters to null so they don't get saved
-                $startMeter = null;
-                $endMeter = null;
-
-
                 $returnCode = self::METER_IS_INVALID;
 
             }
@@ -1077,10 +1099,6 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
                  */
                 if ($startMeter > $endMeter)
                 {
-                    // Set our meters to null so they don't get saved
-                    $startMeter = null;
-                    $endMeter = null;
-
                     $returnCode = self::METER_IS_INVALID;
                 }
             }
@@ -1088,6 +1106,15 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             {
                 $returnCode = self::METER_IS_NOT_PRESENT;
             }
+        }
+
+        /**
+         * Null out our values if we don't have a valid meter. We don't want invalid data to be saved.
+         */
+        if ($returnCode !== self::METER_IS_VALID)
+        {
+            $startMeter = null;
+            $endMeter   = null;
         }
 
 

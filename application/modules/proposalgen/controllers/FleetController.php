@@ -893,8 +893,37 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     /*
                      * Once we get here we can start populating our response
                      */
-                    $jsonResponse = $deviceInstance->toArray();
-//                    $jsonResponse["masterDevice"] = $deviceInstance->getMasterDevice()->toArray();
+                    $jsonResponse                                     = $deviceInstance->toArray();
+                    $jsonResponse['masterDevice']                     = $deviceInstance->getMasterDevice()->toArray();
+                    $launchDate                                       = new Zend_Date($jsonResponse['masterDevice']['launchDate']);
+                    $jsonResponse['masterDevice']['launchDate']       = $launchDate->toString(Zend_Date::DATE_MEDIUM);
+                    $jsonResponse['masterDevice']['cost']             = ($jsonResponse['cost'] > 0) ? $this->view->currency((float)$jsonResponse['cost']) : '';
+                    $jsonResponse['masterDevice']['ppmBlack']         = ($jsonResponse['masterDevice']['ppmBlack'] > 0) ? number_format($jsonResponse['masterDevice']['ppmBlack']) : '';
+                    $jsonResponse['masterDevice']['ppmColor']         = ($jsonResponse['masterDevice']['ppmColor'] > 0) ? number_format($jsonResponse['masterDevice']['ppmColor']) : '';
+                    $jsonResponse['masterDevice']['wattsPowerNormal'] = number_format($jsonResponse['masterDevice']['wattsPowerNormal']);
+                    $jsonResponse['masterDevice']['wattsPowerIdle']   = number_format($jsonResponse['masterDevice']['wattsPowerIdle']);
+                    $jsonResponse['masterDevice']['dutyCycle']        = number_format($jsonResponse['masterDevice']['dutyCycle']);
+                    $jsonResponse["masterDevice"]["manufacturer"]     = $deviceInstance->getMasterDevice()->getManufacturer()->toArray();
+                    $jsonResponse["masterDevice"]["tonerConfigName"]  = $deviceInstance->getMasterDevice()->getTonerConfig()->tonerConfigName;
+
+                    foreach ($deviceInstance->getMasterDevice()->getToners() as $tonersByPartType)
+                    {
+                        foreach ($tonersByPartType as $tonersByColor)
+                        {
+                            /* @var $toner Proposalgen_Model_Toner */
+                            foreach ($tonersByColor as $toner)
+                            {
+                                $tonerArray                               = $toner->toArray();
+                                $tonerArray['cost']                       = $this->view->currency((float)$tonerArray['cost']);
+                                $tonerArray['yield']                      = number_format($tonerArray['yield']);
+                                $tonerArray['manufacturer']               = $toner->getManufacturer()->toArray();
+                                $tonerArray['partTypeName']               = Proposalgen_Model_PartType::$PartTypeNames[$toner->partTypeId];
+                                $tonerArray['tonerColorName']             = Proposalgen_Model_TonerColor::$ColorNames[$toner->tonerColorId];
+                                $jsonResponse["masterDevice"]["toners"][] = $tonerArray;
+
+                            }
+                        }
+                    }
                 }
                 else
                 {
