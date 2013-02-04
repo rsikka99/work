@@ -28,6 +28,7 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_DEFAULT_WILDCARD     = "default__%__%";
     const RESOURCE_PROPOSALGEN_WILDCARD = "proposalgen__%__%";
     const RESOURCE_PROPOSALGEN_SURVEY_WILDCARD    = "proposalgen__survey__%";
+    const RESOURCE_PROPOSALGEN_REPORT_WILDCARD = "proposalgen__report_assessment__%";
     const RESOURCE_QUOTEGEN_WILDCARD    = "quotegen__%__%";
     const RESOURCE_QUOTEGEN_CLIENT_WILDCARD = "quotegen__client__%";
     const RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD = "quotegen__configuration__%";
@@ -48,6 +49,7 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_PROPOSALGEN_ADMIN_MYREPORTSLIST = "proposalgen__admin__myreportslist";
     const RESOURCE_PROPOSALGEN_ADMIN_FILTERREPORTSLIST = "proposalgen__admin__filterreportslist";
     const RESOURCE_PROPOSALGEN_ADMIN_FILTERUSERSLIST = "proposalgen__admin__filteruserslist";
+
     const RESOURCE_PROPOSALGEN_FLEET = "proposalgen__fleet__index";
     const RESOURCE_PROPOSALGEN_FLEET_MAPPING = "proposalgen__fleet__mapping";
     const RESOURCE_PROPOSALGEN_FLEET_SUMMARY = "proposalgen__fleet__summary";
@@ -56,12 +58,12 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_PROPOSALGEN_FLEET_EDITUNKNOWNDEVICES = "proposalgen__fleet__edit-unknown-devices";
     const RESOURCE_PROPOSALGEN_FLEET_DEVICEMAPPINGLIST = "proposalgen__fleet__device-mapping-list";
     const RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS = "proposalgen__fleet__device-instance-details";
+    const RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG = "proposalgen__fleet__toggle-excluded-flag";
     const RESOURCE_PROPOSALGEN_REPORT_INDEX = "proposalgen__report_index__index";
-    const RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT = "proposalgen__report_assessment__index";
-    const RESOURCE_PROPOSALGEN_REPORT_SOLUTION = "proposalgen__report_solution__index";
-    const RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN = "proposalgen__report_grossmargin__index";
-    const RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST = "proposalgen__report_printingdevicelist__index";
-    const RESOURCE_PROPOSALGEN_REPORT_PIQESSENTIALS = "proposalgen__report_piqessentials__index";
+    const RESOURCE_PROPOSALGEN_REPORT_SOLUTION = "proposalgen__report_solution__%";
+    const RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN = "proposalgen__report_grossmargin__%";
+    const RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST = "proposalgen__report_printingdevicelist__%";
+    const RESOURCE_PROPOSALGEN_REPORT_PIQESSENTIALS = "proposalgen__report_piqessentials__%";
     const RESOURCE_ADMIN_USER_PROFILE = "admin__user__profile";
 
     const RESOURCE_QUOTEGEN = "quotegen__index__index";
@@ -312,9 +314,10 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_PROPOSALGEN_FLEET_EDITUNKNOWNDEVICES);
         $this->addResource(self::RESOURCE_PROPOSALGEN_FLEET_DEVICEMAPPINGLIST);
         $this->addResource(self::RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS);
+        $this->addResource(self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG);
 
         $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_INDEX);
-        $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT);
+        $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_WILDCARD);
         $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_SOLUTION);
         $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN);
         $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST);
@@ -411,8 +414,9 @@ class Application_Model_Acl extends Zend_Acl
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_EDITUNKNOWNDEVICES, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_DEVICEMAPPINGLIST, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_INDEX, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_SOLUTION, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST, self::PRIVILEGE_VIEW);
