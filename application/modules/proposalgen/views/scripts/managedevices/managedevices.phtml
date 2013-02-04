@@ -1,15 +1,3 @@
-<?php
-/**
- * managedevices.phtml
- * admin only
- * allows admin to add/edit/delete toners and devices
- * 
- * @author: John Sadler
- * @version: v1.0
- * 
- */
-?>
-
 <?php $this->headScript()->captureStart('append','text/javascript') ?>
 	var colorList = "<?php echo $this->tonerColorList; ?>";
 	var repop = '<?php echo $this->repop; ?>';
@@ -1001,8 +989,9 @@
 	
 <?php $this->headScript()->captureEnd() ?>
 
-<h2><?php echo $this->title;?></h2>
-
+<div class="page-header">
+    <h1>Manage Printer and Toners</h1>
+</div>
 <div id="form_container">
 	
 		<div id="lightbox-panel" class="new_manufacturer_container">
