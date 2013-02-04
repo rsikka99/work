@@ -63,13 +63,12 @@
                     <label>Hardware Library</label>
                     <class>dropdown</class>
                     <module>quotegen</module>
-                    <controller>devicesetup</controller>
+                    <controller>configuration</controller>
                     <action>index</action>
-                    <resource>quotegen__devicesetup__index</resource>
+                    <resource>quotegen__configuration__index</resource>
                     <pages>
                         <viewalldevices>
                             <label>All Devices</label>
-                            <class>dropdown</class>
                             <module>quotegen</module>
                             <controller>devicesetup</controller>
                             <action>index</action>
