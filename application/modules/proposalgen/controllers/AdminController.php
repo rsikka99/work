@@ -6429,8 +6429,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $db->beginTransaction();
             try
             {
-                $replacementTable         = new Proposalgen_Model_DbTable_ReplacementDevices();
-                $replacement_devicesTable = new Proposalgen_Model_DbTable_ReplacementDevices();
+                $replacementTable         = new Proposalgen_Model_DbTable_ReplacementDevice();
+                $replacement_devicesTable = new Proposalgen_Model_DbTable_ReplacementDevice();
                 $replacementTableMapper   = Proposalgen_Model_Mapper_ReplacementDevice::getInstance();
 
                 $replacement_devicesData = array(
@@ -6443,7 +6443,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 if ($form_mode == "add")
                 {
                     // check to see if replacement device exists
-                    $where               = $replacement_devicesTable->getAdapter()->quoteInto('master_device_id = ?', $printer_model, 'INTEGER');
+                    $where               = $replacement_devicesTable->getAdapter()->quoteInto('masterDeviceId = ?', $printer_model, 'INTEGER');
                     $replacement_devices = $replacementTableMapper->fetchRow($where);
                     if (count($replacement_devices) > 0)
                     {
@@ -6452,7 +6452,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     }
                     else
                     {
-                        $replacement_devicesData ['master_device_id'] = $printer_model;
+                        $replacement_devicesData ['masterDeviceId'] = $printer_model;
                         $replacement_devicesTable->insert($replacement_devicesData);
                         $this->view->message = "<p>The replacement printer has been added.</p>";
                     }
@@ -6462,7 +6462,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $is_valid = true;
                     if (strtoupper($hdnOriginalCategory) !== strtoupper($replacement_category))
                     {
-                        $where       = $replacementTable->getAdapter()->quoteInto('replacement_category = ?', $hdnOriginalCategory);
+                        $where       = $replacementTable->getAdapter()->quoteInto('replacementCategory = ?', $hdnOriginalCategory);
                         $replacement = $replacementTableMapper->fetchAll($where);
                         if (count($replacement) > 1)
                         {
@@ -6477,7 +6477,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
                     if ($is_valid === true)
                     {
-                        $where = $replacement_devicesTable->getAdapter()->quoteInto('master_device_id = ?', $printer_model, 'INTEGER');
+                        $where = $replacement_devicesTable->getAdapter()->quoteInto('masterDeviceId = ?', $printer_model, 'INTEGER');
                         $replacement_devicesTable->update($replacement_devicesData, $where);
                         $this->view->message = "<p>The replacement printer has been updated.</p>";
                     }
@@ -6563,7 +6563,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     ->from(array(
                                 'rd' => 'pgen_replacement_devices'
                            ))
-                    ->where('master_device_id = ?', $device_id, 'INTEGER');
+                    ->where('masterDeviceId = ?', $device_id, 'INTEGER');
                 $stmt   = $db->query($select);
                 $row    = $stmt->fetchAll();
 
