@@ -6618,7 +6618,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $id_list           = null;
 
         //$User = Proposalgen_Model_Mapper_User::getInstance();
-        $isSystemAdmin = $this->isAllowed('', Application_Model_Acl::PRIVILEGE_ADMIN);
+        $isSystemAdmin = $this->isAllowed(Application_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_TRANSFERREPORTS, Application_Model_Acl::PRIVILEGE_ADMIN);
         //*************************************************
         // postback
         //*************************************************
@@ -6807,7 +6807,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 }
             }
 
-            if ($this->isAllowed('', Application_Model_Acl::PRIVILEGE_ADMIN))
+            if ($this->isAllowed(Application_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_FILTERREPORTSLIST, Application_Model_Acl::PRIVILEGE_ADMIN))
             {
 
             }

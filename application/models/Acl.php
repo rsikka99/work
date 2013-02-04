@@ -62,6 +62,7 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN = "proposalgen__report_grossmargin__index";
     const RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST = "proposalgen__report_printingdevicelist__index";
     const RESOURCE_PROPOSALGEN_REPORT_PIQESSENTIALS = "proposalgen__report_piqessentials__index";
+    const RESOURCE_ADMIN_USER_PROFILE = "admin__user__profile";
 
     const RESOURCE_QUOTEGEN = "quotegen__index__index";
 
@@ -334,6 +335,8 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_QUOTEGEN_QUOTESETTING_EDIT);
         $this->addResource(self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD);
 
+        $this->addResource(self::RESOURCE_ADMIN_USER_PROFILE);
+
         $this->addResource(self::RESOURCE_ADMIN);
     }
 
@@ -414,6 +417,8 @@ class Application_Model_Acl extends Zend_Acl
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_PIQESSENTIALS, self::PRIVILEGE_VIEW);
+
+        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_ADMIN_USER_PROFILE, self::PRIVILEGE_VIEW);
     }
 
     /**
@@ -455,6 +460,8 @@ class Application_Model_Acl extends Zend_Acl
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTESETTING_EDIT, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_CLIENT_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD, self::PRIVILEGE_VIEW);
+
+        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_ADMIN_USER_PROFILE, self::PRIVILEGE_VIEW);
 
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_ADMIN, self::PRIVILEGE_VIEW);
     }

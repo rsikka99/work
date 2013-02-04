@@ -189,11 +189,11 @@ class Default_AuthController extends Zend_Controller_Action
                     $password = crypt($form->getValue("current_password"), $user->password);
 
                     // Check that the user has entered in the correct password
-                    if (strcmp($password, $user->getPassword()) === 0)
+                    if (strcmp($password, $user->password) === 0)
                     {
 
                         // Process password change and remove change flag
-                        $user->setPassword(crypt($form->getValue("password"), $user->getPassword()));
+                        $user->password = (crypt($form->getValue("password"), $user->password));
                         $user->resetPasswordOnNextLogin = 0;
                         $userMapper->save($user);
 
