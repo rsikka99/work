@@ -55,7 +55,7 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_PROPOSALGEN_FLEET_SUMMARY = "proposalgen__fleet__summary";
     const RESOURCE_PROPOSALGEN_FLEET_DEVICESUMMARYLIST = "proposalgen__fleet__device-summary-list";
     const RESOURCE_PROPOSALGEN_FLEET_REPORTSETTINGS = "proposalgen__fleet__reportsettings";
-    const RESOURCE_PROPOSALGEN_FLEET_EDITUNKNOWNDEVICES = "proposalgen__fleet__edit-unknown-devices";
+    const RESOURCE_PROPOSALGEN_FLEET_EDITUNKNOWNDEVICES = "proposalgen__fleet__edit-unknown-device";
     const RESOURCE_PROPOSALGEN_FLEET_DEVICEMAPPINGLIST = "proposalgen__fleet__device-mapping-list";
     const RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS = "proposalgen__fleet__device-instance-details";
     const RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG = "proposalgen__fleet__toggle-excluded-flag";
