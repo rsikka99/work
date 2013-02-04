@@ -827,7 +827,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $element->setLabel('Done')
             ->setOrder($elementCounter)
             ->setAttrib('class', 'btn')
-            ->setAttrib('onClick', 'javascript: document.location.href="../admin";')
+            ->setAttrib('onClick', 'javascript: document.location.href="/proposalgen";')
             ->setDecorators(array(
                                  'ViewHelper',
                                  'Errors'

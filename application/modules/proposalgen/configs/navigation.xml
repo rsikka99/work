@@ -238,8 +238,8 @@
 					<label>My Admin</label>
 					<module>proposalgen</module>
 					<controller>admin</controller>
-					<action>index</action>
-					<resource>proposalgen__admin__index</resource>
+					<action>managemysettings</action>
+					<resource>proposalgen__admin__managemysettings</resource>
 					<class>dropdown></class>
 					<pages>
 						<myreportsettings>
