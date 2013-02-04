@@ -221,6 +221,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_upload_rows` (
   `isCopier` TINYINT(4) NOT NULL DEFAULT 0 ,
   `isFax` TINYINT(4) NOT NULL DEFAULT 0 ,
   `isLeased` TINYINT(4) NOT NULL DEFAULT 0 ,
+  `isDuplex` TINYINT(4) NULL ,
   `isScanner` TINYINT(4) NOT NULL DEFAULT 0 ,
   `launchDate` DATETIME NULL ,
   `leasedTonerYield` INT(11) NULL ,
