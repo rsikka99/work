@@ -3403,8 +3403,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
      */
     public function deleteReport ($reportId)
     {
-        $db = Zend_Db_Table::getDefaultAdapter();
-		$rmsUploadRowMapper = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance();
+        $db                  = Zend_Db_Table::getDefaultAdapter();
+        $rmsUploadRowMapper  = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance();
         $reportMapper        = Proposalgen_Model_Mapper_Report::getInstance();
         $reportSettingMapper = Proposalgen_Model_Mapper_Report_Setting::getInstance();
         $report              = $reportMapper->find($reportId);
@@ -5516,8 +5516,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 ->joinLeft(array(
                                 'm' => 'manufacturers'
                            ), 'm.id = md.manufacturerId', array(
-                                                                'fullname'
-                                                           ))
+                                                               'fullname'
+                                                          ))
                 ->joinLeft(array(
                                 'udo' => 'pgen_user_device_overrides'
                            ), 'udo.master_device_id = md.id AND udo.user_id = ' . $user_id, array(
@@ -6615,7 +6615,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $id_list           = null;
 
         //$User = Proposalgen_Model_Mapper_User::getInstance();
-        $isSystemAdmin = $this->isAllowed('',Application_Model_Acl::PRIVILEGE_ADMIN);
+        $isSystemAdmin = $this->isAllowed('', Application_Model_Acl::PRIVILEGE_ADMIN);
         //*************************************************
         // postback
         //*************************************************
@@ -6662,16 +6662,16 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 }
                 else if ($formData ['transfertype'] == 'clone')
                 {
-                    $array = explode(",",$formData['hdntransferlist']);
-                    foreach($array as $value){
-                        if(is_numeric($value))
+                    $array = explode(",", $formData['hdntransferlist']);
+                    foreach ($array as $value)
+                    {
+                        if (is_numeric($value))
                         {
                             $stmt = $db->query("CALL clone_report({$report_id}, {$value})");
                         }
                     }
-                    
-                    
-                    
+
+
                     $this->_helper->flashMessenger(array(
                                                         "success" => "Report Cloning Complete."
                                                    ));
@@ -6684,7 +6684,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(array(
                                                     "error" => "There was an error while trying to transfer the report. Please contact your administrator."
                                                ));
-                
+
             }
         }
 
@@ -6705,12 +6705,12 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         }
 
         $select = $db->select()
-        ->from(array(
-                    'u' => 'users'
-               ))
-        ->joinLeft(array(
-                        'up' => 'user_roles'
-                   ), 'u.id = up.userId'
+            ->from(array(
+                        'u' => 'users'
+                   ))
+            ->joinLeft(array(
+                            'up' => 'user_roles'
+                       ), 'u.id = up.userId'
         );
         if ($where)
         {
@@ -6752,7 +6752,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             //build id string
             foreach ($this->view->users_list as $key)
             {
-                if($key['userId'] != null){
+                if ($key['userId'] != null)
+                {
                     if ($id_list)
                     {
                         $id_list .= ',';
@@ -6766,8 +6767,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         {
             $where = 'userId=' . $this->user_id;
         }
-        $order = 'dateCreated DESC';
-        $reportTable             = new Proposalgen_Model_DbTable_Report();
+        $order                    = 'dateCreated DESC';
+        $reportTable              = new Proposalgen_Model_DbTable_Report();
         $reports                  = $reportTable->fetchAll($where, $order, $count, $offset);
         $this->view->reports_list = $reports;
     }
@@ -6792,17 +6793,18 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             }
             else if ($filterfield && $filtervalue)
             {
-                if($filtervalue != 'all'){
-                if ($filterfield == 'user_id')
+                if ($filtervalue != 'all')
                 {
+                    if ($filterfield == 'user_id')
+                    {
 
-                    $filterfield = 'r.userId';
-                }
-                $where = $filterfield . ' = ' . $filtervalue;
+                        $filterfield = 'r.userId';
+                    }
+                    $where = $filterfield . ' = ' . $filtervalue;
                 }
             }
 
-            if ($this->isAllowed('',Application_Model_Acl::PRIVILEGE_ADMIN))
+            if ($this->isAllowed('', Application_Model_Acl::PRIVILEGE_ADMIN))
             {
 
             }
@@ -6816,16 +6818,16 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $select = $db->select()
                 ->from(array(
                             'r' => 'pgen_reports'
-                       ),array (
+                       ), array(
                                'id AS report_id',
                                'customerCompanyName',
                                'dateCreated'
-                         ))
+                          ))
                 ->joinLeft(array(
                                 'u' => 'users'
                            ), 'u.id = r.userId', array(
-                                                            'username'
-                                                       ));
+                                                      'username'
+                                                 ));
             if ($where)
             {
                 $select->where($where);
@@ -6871,16 +6873,16 @@ class Proposalgen_AdminController extends Zend_Controller_Action
     {
         // disable the default layout
         $this->_helper->layout->disableLayout();
-        $db       = Zend_Db_Table::getDefaultAdapter();
-        $filter   = $this->_getParam('filter', 'all');
-        $formdata = new stdClass();
-        $isSystemAdmin = $this->isAllowed('',Application_Model_Acl::PRIVILEGE_ADMIN);
+        $db            = Zend_Db_Table::getDefaultAdapter();
+        $filter        = $this->_getParam('filter', 'all');
+        $formdata      = new stdClass();
+        $isSystemAdmin = $this->isAllowed('', Application_Model_Acl::PRIVILEGE_ADMIN);
         try
         {
             $where = null;
             if ($isSystemAdmin)
             {
-            
+
             }
             else
             {
@@ -7009,8 +7011,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
         $this->_helper->json($jsonResponse);
 
-        }
-          /**
+    }
+
+    /**
      * Checks to see if the currently logged in user has access to the resource.
      *
      * @param $resource
