@@ -553,7 +553,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     'device_price'          => ($row [0] ['cost'] > 0 ? (float)$row [0] ['cost'] : ""),
                     'is_deleted'            => $row [0] ['is_deleted'],
                     'toner_array'           => $toner_array,
-                    'replacement_category'  => $row [0] ['replacement_category'],
+                    'replacement_category'  => $row [0] ['replacementCategory'],
                     // 'is_letter_legal' => $row [0] ['is_letter_legal'],
                     'print_speed'           => $row [0] ['print_speed'],
                     'resolution'            => $row [0] ['resolution'],
@@ -6326,7 +6326,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         {
             try
             {
-                $replacementTable = new Proposalgen_Model_DbTable_ReplacementDevices();
+                $replacementTable = new Proposalgen_Model_DbTable_ReplacementDevice();
                 $formData         = $this->_request->getPost();
                 $form_mode        = $formData ['form_mode'];
                 $hdnIds           = $formData ['hdnIds'];
@@ -6340,12 +6340,12 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         if (isset($formData ['jqg_grid_list_' . $key]) && $formData ['jqg_grid_list_' . $key] == "on")
                         {
                             $replacement_category = $formData ['replacement_category_' . $key];
-                            $where                = $replacementTable->getAdapter()->quoteInto('replacement_category = ?', $replacement_category);
+                            $where                = $replacementTable->getAdapter()->quoteInto('replacementCategory = ?', $replacement_category);
                             $replacement          = $replacementTable->fetchAll($where);
 
                             if (count($replacement) > 1)
                             {
-                                $where = $replacementTable->getAdapter()->quoteInto('master_device_id = ?', $key, 'INTEGER');
+                                $where = $replacementTable->getAdapter()->quoteInto('masterDeviceId = ?', $key, 'INTEGER');
                                 $replacementTable->delete($where);
                                 $this->view->message = "<p>The selected printer(s) are no longer marked as replacement printers.</p>";
                             }
@@ -6394,7 +6394,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $monthly_rate         = $formData ['monthly_rate'];
         $form_mode            = $formData ['form_mode'];
 
-
         // validation
         $validation = '';
         if ($manufacturer_id == "")
@@ -6434,17 +6433,18 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $replacementTableMapper   = Proposalgen_Model_Mapper_ReplacementDevice::getInstance();
 
                 $replacement_devicesData = array(
-                    'replacement_category' => strtoupper($replacement_category),
-                    'print_speed'          => $print_speed,
+                    'replacementCategory' => strtoupper($replacement_category),
+                    'printSpeed'          => $print_speed,
                     'resolution'           => $resolution,
-                    'monthly_rate'         => $monthly_rate
+                    'monthlyRate'         => $monthly_rate
                 );
 
                 if ($form_mode == "add")
                 {
                     // check to see if replacement device exists
+
                     $where               = $replacement_devicesTable->getAdapter()->quoteInto('masterDeviceId = ?', $printer_model, 'INTEGER');
-                    $replacement_devices = $replacementTableMapper->fetchRow($where);
+                    $replacement_devices = $replacementTableMapper->fetchAll($where,null,1);
                     if (count($replacement_devices) > 0)
                     {
                         $replacement_devicesTable->update($replacement_devicesData, $where);
@@ -6452,8 +6452,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     }
                     else
                     {
+
                         $replacement_devicesData ['masterDeviceId'] = $printer_model;
                         $replacement_devicesTable->insert($replacement_devicesData);
+
                         $this->view->message = "<p>The replacement printer has been added.</p>";
                     }
                 }
@@ -6462,6 +6464,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $is_valid = true;
                     if (strtoupper($hdnOriginalCategory) !== strtoupper($replacement_category))
                     {
+
                         $where       = $replacementTable->getAdapter()->quoteInto('replacementCategory = ?', $hdnOriginalCategory);
                         $replacement = $replacementTableMapper->fetchAll($where);
                         if (count($replacement) > 1)
@@ -6568,10 +6571,10 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $row    = $stmt->fetchAll();
 
                 $formdata = array(
-                    'replacement_category' => $row [0] ['replacement_category'],
-                    'print_speed'          => $row [0] ['print_speed'],
+                    'replacement_category' => $row [0] ['replacementCategory'],
+                    'print_speed'          => $row [0] ['printSpeed'],
                     'resolution'           => $row [0] ['resolution'],
-                    'monthly_rate'         => $row [0] ['monthly_rate']
+                    'monthly_rate'         => $row [0] ['monthlyRate']
                 );
             }
             else

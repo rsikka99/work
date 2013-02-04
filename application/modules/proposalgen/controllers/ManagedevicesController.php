@@ -580,8 +580,8 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
 
                             $printer_model = $master_device ['modelName'];
                             // NEED TO CHECK IF REPLACEMENT DEVICE
-                            $replacement_devicesTable = new Proposalgen_Model_DbTable_ReplacementDevices();
-                            $where                    = $replacement_devicesTable->getAdapter()->quoteInto('master_device_id = ?', $master_device_id, 'INTEGER');
+                            $replacement_devicesTable = new Proposalgen_Model_DbTable_ReplacementDevice();
+                            $where                    = $replacement_devicesTable->getAdapter()->quoteInto('masterDeviceId = ?', $master_device_id, 'INTEGER');
                             $replacement_devices      = $replacement_devicesTable->fetchAll($where);
 
                             if (count($replacement_devices) > 0)
