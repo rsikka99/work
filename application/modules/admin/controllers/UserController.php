@@ -327,12 +327,12 @@ class Admin_UserController extends Zend_Controller_Action
                                 }
                             }
 
+
                             // Loop through our old roles to see which were removed
                             /* @var $userRole Admin_Model_UserRole */
                             foreach ($userRoles as $userRole)
                             {
                                 $hasRole = false;
-
                                 foreach ($values ["userRoles"] as $roleId)
                                 {
                                     if ($userRole->roleId == $roleId)
