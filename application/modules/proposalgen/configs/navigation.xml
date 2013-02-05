@@ -16,7 +16,7 @@
 					<module>proposalgen</module>
 					<controller>survey</controller>
 					<action>index</action>
-					<resource>propsalgen__survey__index</resource>
+					<resource>proposalgen__survey__index</resource>
 					<visible>0</visible>
 					<pages>
 						<survey>
