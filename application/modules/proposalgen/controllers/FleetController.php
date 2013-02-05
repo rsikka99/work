@@ -367,8 +367,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
          * Grab the incoming parameters
          */
         $jqGridParameters = array(
-            'sidx' => $this->_getParam('sidx', 'manufacturer'),
-            'sord' => $this->_getParam('sord', 'ASC'),
+            'sidx' => $this->_getParam('sidx', 'deviceCount'),
+            'sord' => $this->_getParam('sord', 'desc'),
             'page' => $this->_getParam('page', 1),
             'rows' => $this->_getParam('rows', 10)
         );

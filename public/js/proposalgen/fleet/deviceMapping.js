@@ -9,11 +9,11 @@ $(function ()
     /***********************************************************************************************************************************************************
      * UNMAPPED GRID
      **********************************************************************************************************************************************************/
-    jQuery("#mappingGrid").jqGrid(
+    $("#mappingGrid").jqGrid(
         {
-            url         : TMTW_BASEURL + 'proposalgen/fleet/device-mapping-list',
-            datatype    : 'json',
-            colModel    : [
+            url       : TMTW_BASEURL + 'proposalgen/fleet/device-mapping-list',
+            datatype  : 'json',
+            colModel  : [
                 {
                     width   : 10,
                     name    : 'deviceInstanceIds',
@@ -52,30 +52,31 @@ $(function ()
                     sortable: false
                 },
                 {
-                    width   : 40,
-                    name    : 'deviceCount',
-                    index   : 'deviceCount',
-                    label   : 'Count',
-                    title   : false,
-                    sortable: true,
-                    align   : 'center',
-                    sorttype: 'int'
+                    width         : 80,
+                    name          : 'deviceCount',
+                    index         : 'deviceCount',
+                    label         : 'Count',
+                    title         : false,
+                    sortable      : true,
+                    align         : 'center',
+                    sorttype      : 'int',
+                    firstsortorder: 'asc'
                 },
                 {
                     width   : 150,
                     name    : 'manufacturer',
                     index   : 'manufacturer',
-                    label   : 'Device Manufacturer',
+                    label   : 'Device Manu.',
                     title   : false,
                     sortable: true
                 },
                 {
-                    width   : 150,
+                    width   : 200,
                     name    : 'modelName',
                     index   : 'modleName',
                     label   : 'Device Name',
                     title   : false,
-                    sortable: true
+                    sortable: false
                 },
                 {
                     width   : 50,
@@ -102,7 +103,7 @@ $(function ()
                     sortable: false
                 },
                 {
-                    width   : 250,
+                    width   : 350,
                     name    : 'mapToMasterDevice',
                     index   : 'mapToMasterDevice',
                     label   : 'Select Master Device',
@@ -119,7 +120,7 @@ $(function ()
                     sortable: false
                 },
                 {
-                    width   : 80,
+                    width   : 65,
                     name    : 'action',
                     index   : 'action',
                     label   : 'Action',
@@ -128,10 +129,12 @@ $(function ()
                     align   : 'center'
                 }
             ],
-            jsonReader  : {
+            jsonReader: {
                 repeatitems: false
             },
-            width       : 900,
+            sortorder : 'desc',
+            sortname  : 'deviceCount',
+
             height      : 'auto',
             rowNum      : 15,
             rowList     : [ 15, 30, 50, 100 ],
@@ -160,12 +163,17 @@ $(function ()
                     }
                     else
                     {
+                        var deviceName = '';
+                        if (row.mappedManufacturer.length > 0 && row.mappedModelName.length > 0)
+                        {
+                            deviceName = row.mappedManufacturer + ' ' + row.mappedModelName;
+                        }
                         var master_device_dropdown = '';
                         master_device_dropdown += '<input type="hidden" name="deviceInstanceIds" class="deviceInstanceIds" value="' + row.deviceInstanceIds + '" />';
                         master_device_dropdown += '<input type="hidden" name="masterDeviceId" class="masterDeviceId" value="' + row.masterDeviceId + '" />';
                         master_device_dropdown += '<input type="hidden" name="modelName" class="masterDeviceName" value="' + row.mappedModelName + '" />';
                         master_device_dropdown += '<input type="hidden" name="manufacturer" class="manufacturerName" value="' + row.mappedManufacturer + '" />';
-                        master_device_dropdown += '<input type="text"   name="masterDeviceName" style="width: 97%" class="autoCompleteDeviceName" value="' + row.mappedManufacturer + ' ' + row.mappedModelName + '" />';
+                        master_device_dropdown += '<input type="text"   placeholder="Not Mapped. Type to search..." name="masterDeviceName" style="width: 97%" class="autoCompleteDeviceName" value="' + deviceName + '" />';
 
                         row.mapToMasterDevice = master_device_dropdown;
 
@@ -173,11 +181,11 @@ $(function ()
                         {
                             if (row.isMapped == 1)
                             {
-                                row.action = '<input title="Edit Device" type="button" id="deviceAction" class="addEditMasterDevice" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit"/>';
+                                row.action = '<input title="Edit Device" type="button" id="deviceAction" class="addEditMasterDevice btn btn-small btn-warning" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit"/>';
                             }
                             else
                             {
-                                row.action = '<input title="Create New Device" type="button" id="deviceAction" class="addEditMasterDevice" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create New" />';
+                                row.action = '<input title="Create New Device" type="button" id="deviceAction" class="addEditMasterDevice btn btn-small btn-success" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create" />';
                             }
                         }
                         else
@@ -188,7 +196,7 @@ $(function ()
                             }
                             else
                             {
-                                row.action = '<input title="Create New Device" type="button" class="addEditUnknownDeviceButton" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create New" />';
+                                row.action = '<input title="Create New Device" type="button" class="addEditUnknownDeviceButton" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create" />';
                             }
                         }
 
@@ -210,6 +218,7 @@ $(function ()
                                 },
                                 success : function (data)
                                 {
+                                    data.unshift({device_name: "Remove mapping", fullname:"Remove mapping", id: 0, modelName: "Remove Mapping"});
                                     response($.map(data, function (item)
                                     {
                                         return {
@@ -228,6 +237,7 @@ $(function ()
                             $(this).parent().find("input.masterDeviceId")[0].value = ui.item.id;
                             $(this).parent().find("input.masterDeviceName")[0].value = ui.item.label;
                             $(this).parent().find("input.manufacturerName")[0].value = ui.item.manufacturer;
+                            $(this).autocomplete('option', 'change').call(this);
                         },
                         open     : function (event, ui)
                         {
@@ -236,11 +246,18 @@ $(function ()
                             autocompleteData.menu.element.find('a').each(function ()
                             {
                                 var label = $(this);
-                                var regex = new RegExp(autocompleteData.term, "gi");
-                                label.html(label.text().replace(regex, function (matched)
+                                if (label.text() == "Remove mapping")
                                 {
-                                    return termTemplate.replace('%s', matched);
-                                }));
+                                    label.html("<strong>Remove Mapping</strong>");
+                                }
+                                else
+                                {
+                                    var regex = new RegExp(autocompleteData.term, "gi");
+                                    label.html(label.text().replace(regex, function (matched)
+                                    {
+                                        return termTemplate.replace('%s', matched);
+                                    }));
+                                }
                             });
                         },
                         change   : function (event, ui)
@@ -255,7 +272,7 @@ $(function ()
                             /*
                              * Populate the text field if the user was auto completing, or clear it out if they were deleting the text
                              */
-                            if (textValue)
+                            if (textValue && masterDeviceId > 0)
                             {
                                 // If the device id is not set, then we reset to blank
                                 if (!masterDeviceId)
@@ -318,7 +335,7 @@ $(function ()
             data    : {'deviceInstanceIds': deviceInstanceIds},
             success : function (data)
             {
-                jQuery("#mappingGrid").trigger("reloadGrid");
+                $("#mappingGrid").trigger("reloadGrid");
             },
             error   : function (data)
             {
@@ -342,8 +359,7 @@ function set_mapped(deviceInstanceIds, masterDeviceId)
         },
         complete: function (data)
         {
-            console.log("Ajax set mapped to complete.");
-            console.log(data);
+            $("#mappingGrid").trigger("reloadGrid");
         }
     });
 }

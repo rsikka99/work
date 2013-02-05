@@ -315,6 +315,12 @@ tr.ui-search-toolbar select {
 .proposalForm.form-horizontal .controls {
   padding-left: 0;
 }
+btn.addEditMasterDevice,
+input.addEditMasterDevice,
+btn.addEditUnknownDevice,
+input.addEditUnknownDevice {
+  width: 100%;
+}
 #lightbox {
   display: none;
   background: #000000;
