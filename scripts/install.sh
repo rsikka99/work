@@ -24,8 +24,8 @@ chmod 777 "$DIR/data/uploads"
 
 
 # Our public folder needs its cache folder set to be writable
+if [ ! -d "$DIR/public/cache" ]; then
+    mkdir "$DIR/public/cache"
+fi
+
 chmod 777 "$DIR/public/cache"
-
-
-
-git clone https://github.com/tangentmtw/PrintIQMPS.git /home/bitnami/apps/dev.mpstoolbox.com
