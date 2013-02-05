@@ -112,7 +112,9 @@ class Quotegen_OptionController extends Zend_Controller_Action
                             $optionCategory->categoryId = $categoryId;
                             Quotegen_Model_Mapper_OptionCategory::getInstance()->insert($optionCategory);
                         }
-                        
+                        $this->_helper->flashMessenger(array (
+                                                             'success' => "Option {$values['name']} Created"
+                                                       ));
                         if ($page == "options")
                         {
                             // User has cancelled. Go back to the edit page
