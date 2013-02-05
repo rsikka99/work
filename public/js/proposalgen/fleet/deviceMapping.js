@@ -160,6 +160,11 @@ $(function ()
                 {
                     // Get the data so we can use and manipualte it.
                     var row = grid.getRowData(ids[i]);
+                    if(row.mappedManufacturer != undefined);
+                    {
+                        row.mappedManufacturer = row.mappedManufacturer.replace('"', '&quot;');
+                    }
+                    row.manufacturer = row.manufacturer.replace('"', '&quot;');
 
                     row.deviceName = row.manufacturer + ' ' + row.modelName;
 
