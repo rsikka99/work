@@ -12,20 +12,26 @@
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )
 
-echo $DIR;
-
 # Folders under the data folder need to be writable by the web user
-chmod 777 "$DIR/data/cache"
-chmod 777 "$DIR/data/indexes"
-chmod 777 "$DIR/data/logs"
-chmod 777 "$DIR/data/sessions"
-chmod 777 "$DIR/data/temp"
-chmod 777 "$DIR/data/uploads"
+chmod 777 "${DIR}/data/cache"
+chmod 777 "${DIR}/data/indexes"
+chmod 777 "${DIR}/data/logs"
+chmod 777 "${DIR}/data/sessions"
+chmod 777 "${DIR}/data/temp"
+chmod 777 "${DIR}/data/uploads"
 
 
 # Our public folder needs its cache folder set to be writable
-if [ ! -d "$DIR/public/cache" ]; then
-    mkdir "$DIR/public/cache"
+if [ ! -d "${DIR}/public/cache" ]; then
+    mkdir "${DIR}/public/cache"
 fi
 
-chmod 777 "$DIR/public/cache"
+chmod 777 "${DIR}/public/cache"
+
+cd "${DIR}"
+GIT_HASH=$(git rev-list --max-count=1 HEAD)
+CURRENT_DATE=date
+
+echo "[production]\n" > "${DIR}/application/configs/buildinfo.ini"
+echo "build.githash = \"${GIT_HASH}\"\n" >> "${DIR}/application/configs/buildinfo.ini"
+echo "build.date = \"${CURRENT_DATE}\"" >> "${DIR}/application/configs/buildinfo.ini"
