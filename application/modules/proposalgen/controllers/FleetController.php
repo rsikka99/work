@@ -903,6 +903,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     $jsonResponse['masterDevice']['wattsPowerNormal'] = number_format($jsonResponse['masterDevice']['wattsPowerNormal']);
                     $jsonResponse['masterDevice']['wattsPowerIdle']   = number_format($jsonResponse['masterDevice']['wattsPowerIdle']);
                     $jsonResponse['masterDevice']['dutyCycle']        = number_format($jsonResponse['masterDevice']['dutyCycle']);
+                    $jsonResponse['masterDevice']['leasedTonerYield'] = number_format($jsonResponse['masterDevice']['leasedTonerYield']);
                     $jsonResponse["masterDevice"]["manufacturer"]     = $deviceInstance->getMasterDevice()->getManufacturer()->toArray();
                     $jsonResponse["masterDevice"]["tonerConfigName"]  = $deviceInstance->getMasterDevice()->getTonerConfig()->tonerConfigName;
 
