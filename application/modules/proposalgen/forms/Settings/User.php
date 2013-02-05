@@ -50,7 +50,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
             ->addValidator('greaterThan', true, array(
                                                      'min' => 0
                                                 ))
-            ->setAttrib('class', 'span1')
+            ->setAttrib('class', 'input-mini')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setOrder($elementCounter)
@@ -94,7 +94,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
             ->addValidator('greaterThan', true, array(
                                                      'min' => 0
                                                 ))
-            ->setAttrib('class', 'span1')
+            ->setAttrib('class', 'input-mini')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setOrder($elementCounter)
@@ -140,7 +140,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
             ->addValidator('greaterThan', true, array(
                                                      'min' => 0
                                                 ))
-            ->setAttrib('class', 'span1')
+            ->setAttrib('class', 'input-mini')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setOrder($elementCounter)
@@ -184,7 +184,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
             ->addValidator('greaterThan', true, array(
                                                      'min' => 0
                                                 ))
-            ->setAttrib('class', 'span1')
+            ->setAttrib('class', 'input-mini')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setOrder($elementCounter)
@@ -228,7 +228,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
                                                           'min' => 0,
                                                           'max' => 99
                                                      )))
-            ->setAttrib('class', 'span1')
+            ->setAttrib('class', 'input-mini')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setOrder($elementCounter)
@@ -270,7 +270,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $service_cost = new Zend_Form_Element_Text('serviceCostPerPage');
         $service_cost->setLabel('Service Cost:')
             ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span2')
+            ->setAttrib('class', 'input-mini')
             ->setAttrib('service', 'service')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
@@ -315,7 +315,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $admin_charge = new Zend_Form_Element_Text('adminCostPerPage');
         $admin_charge->setLabel('Admin Charge:')
             ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span2')
+            ->setAttrib('class', 'input-mini')
             ->setAttrib('page', 'page')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
@@ -360,7 +360,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $element = new Zend_Form_Element_Text('monthlyLeasePayment');
         $element->setLabel('Average Monthly Lease Payment:')
             ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span2')
+            ->setAttrib('class', 'input-mini')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setOrder($elementCounter)
@@ -405,7 +405,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $element->setLabel('Default Printer Cost:');
 
         $element->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span2')
+            ->setAttrib('class', 'input-mini')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setOrder($elementCounter)
@@ -449,7 +449,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $element = new Zend_Form_Element_Text('leasedBwCostPerPage');
         $element->setLabel('Leased Monochrome Cost:')
             ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span2')
+            ->setAttrib('class', 'input-mini')
             ->setAttrib('maxlength', 10)
             ->setAttrib('page', 'page')
             ->setAttrib('style', 'text-align: right')
@@ -494,7 +494,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $element = new Zend_Form_Element_Text('leasedColorCostPerPage');
         $element->setLabel('Leased Color Cost:')
             ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span2')
+            ->setAttrib('class', 'input-mini')
             ->setAttrib('maxlength', 10)
             ->setAttrib('page', 'page')
             ->setAttrib('style', 'text-align: right')
@@ -539,7 +539,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $element = new Zend_Form_Element_Text('kilowattsPerHour');
         $element->setLabel('Energy Cost:')
             ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span2')
+            ->setAttrib('class', 'input-mini')
             ->setAttrib('KW', 'KW')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
@@ -584,7 +584,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $element = new Zend_Form_Element_Text('mpsBwCostPerPage');
         $element->setLabel($MPSProgramName . ' Monochrome Cost:')
             ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span2')
+            ->setAttrib('class', 'input-mini')
             ->setAttrib('page', 'page')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
@@ -629,7 +629,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $element = new Zend_Form_Element_Text('mpsColorCostPerPage');
         $element->setLabel($MPSProgramName . ' Color Cost:')
             ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span2')
+            ->setAttrib('class', 'input-mini')
             ->setAttrib('page', 'page')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
@@ -803,11 +803,11 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         array_push($elements, $target_color);
         $elementCounter++;
         $formElements->addElement($target_color)
-            ->setAttrib('class', 'span1');
+            ->setAttrib('class', 'input-mini');
         $target_monochrome->setLabel('Target Monochrome')
-            ->setAttrib('class', 'span1');
+            ->setAttrib('class', 'input-mini');
         $target_color->setLabel('Target Color')
-            ->setAttrib('class', 'span1');
+            ->setAttrib('class', 'input-mini');
         //save button
         $element = new Zend_Form_Element_Submit('save_settings', array(
                                                                       'disableLoadDefaultDecorators' => true

@@ -75,10 +75,8 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
 		</tr>
 	</thead>
 	<tbody>
-		<?php foreach ($proposal->getPurchasedDevices() as $deviceInstance) : ?>
+		<?php foreach ($proposal->getDevices()->purchasedDeviceInstances as $deviceInstance) : ?>
 		<?php
-            // This is only here for zend content assist
-		    //$device = new Proposalgen_Model_DeviceInstance();
 		    $tonerConfig = $deviceInstance->getMasterDevice()->tonerConfigId;
 		    $grossMarginPricingConfig = Proposalgen_Model_MasterDevice::getGrossMarginPricingConfig();
 		    $completeMonoToners = $deviceInstance->getMasterDevice()->getHasValidMonoGrossMarginToners();
@@ -99,11 +97,12 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
 	                $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::FOUR_COLOR, $grossMarginPricingConfig);
 	                $colorToner = $blackToner;
 		            break;
-	            default:
+	            case Proposalgen_Model_TonerConfig::BLACK_ONLY:
 	                $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
-	                break;
+                    break;
+                default:
+                    break;
 		    }
-		    
 		    // Black Toner
 		    $blackCost = "$" . number_format($blackToner->cost, 2);
 		    $blackYield = number_format($blackToner->yield);
