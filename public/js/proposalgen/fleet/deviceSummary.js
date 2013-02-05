@@ -116,17 +116,31 @@ $(function ()
                 var tonerTBody = $('#deviceDetails_toners');
                 tonerTBody.empty();
 
-                $.each(data.masterDevice.toners, function (key, toner)
+                if (data.masterDevice.isLeased)
                 {
                     var tr = $('<tr></tr>');
-                    tr.append($('<td></td>').html(toner.sku));
-                    tr.append($('<td></td>').html(toner.manufacturer.fullname));
-                    tr.append($('<td></td>').html(toner.partTypeName));
-                    tr.append($('<td></td>').html(toner.tonerColorName));
-                    tr.append($('<td></td>').html(toner.yield));
-                    tr.append($('<td></td>').html(toner.cost));
+                    tr.append($('<td></td>').html('N/A'));
+                    tr.append($('<td></td>').html('N/A'));
+                    tr.append($('<td></td>').html('N/A'));
+                    tr.append($('<td></td>').html('N/A'));
+                    tr.append($('<td></td>').html(data.masterDevice.leasedTonerYield));
+                    tr.append($('<td></td>').html('N/A'));
                     tonerTBody.append(tr);
-                });
+                }
+                else
+                {
+                    $.each(data.masterDevice.toners, function (key, toner)
+                    {
+                        var tr = $('<tr></tr>');
+                        tr.append($('<td></td>').html(toner.sku));
+                        tr.append($('<td></td>').html(toner.manufacturer.fullname));
+                        tr.append($('<td></td>').html(toner.partTypeName));
+                        tr.append($('<td></td>').html(toner.tonerColorName));
+                        tr.append($('<td></td>').html(toner.yield));
+                        tr.append($('<td></td>').html(toner.cost));
+                        tonerTBody.append(tr);
+                    });
+                }
 
 
                 /**
