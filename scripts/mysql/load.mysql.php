@@ -8,8 +8,8 @@ include ('includes/functions.php');
 defined('APPLICATION_PATH') || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../../application'));
 
 set_include_path(implode(PATH_SEPARATOR, array (
-        APPLICATION_PATH . '/../../library', 
-        get_include_path() 
+        APPLICATION_PATH . '/../../library',
+        get_include_path()
 )));
 
 require_once 'Zend/Loader/Autoloader.php';
@@ -17,9 +17,9 @@ Zend_Loader_Autoloader::getInstance();
 
 // Define some CLI options
 $getopt = new Zend_Console_Getopt(array (
-        'withdata|w' => 'Load database with sample data', 
-        'env|e-s' => 'Application environment for which to create database (defaults to development)', 
-        'help|h' => 'Help -- usage message' 
+        'withdata|w' => 'Load database with sample data',
+        'env|e-s' => 'Application environment for which to create database (defaults to development)',
+        'help|h' => 'Help -- usage message'
 ));
 try
 {
@@ -45,7 +45,11 @@ $env = $getopt->getOption('e');
 defined('APPLICATION_ENV') || define('APPLICATION_ENV', (null === $env) ? 'development' : $env);
 
 // Initialize Zend_Application
-$application = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
+$application = new Zend_Application(APPLICATION_ENV, array(
+                                                          'config' => array(
+                                                              APPLICATION_PATH . '/configs/global.ini',
+                                                              APPLICATION_PATH . '/configs/application.ini',
+                                                          )));
 
 // Initialize and retrieve DB resource
 $bootstrap = $application->getBootstrap();
@@ -89,24 +93,24 @@ try
         $conn->query('DROP DATABASE IF EXISTS `' . $options ['db'] ['params'] ['dbname'] . '`;');
         $conn->query('CREATE DATABASE `' . $options ['db'] ['params'] ['dbname'] . '`;');
         $conn->select_db($options ['db'] ['params'] ['dbname']);
-        
+
         echo "Loading Schema...";
         runSQLFile(dirname(__FILE__) . '/schema.sql', $conn);
         runSQLFile(dirname(__FILE__) . '/requiredData.base.sql', $conn);
         runSQLFile(dirname(__FILE__) . '/requiredData.proposalgenerator.sql', $conn);
         runSQLFile(dirname(__FILE__) . '/requiredData.quotegenerator.sql', $conn);
-        
+
         if ('testing' != APPLICATION_ENV)
         {
             echo 'DONE!' . PHP_EOL;
         }
-        
+
         if ($withData)
         {
             echo "Loading Data...";
             runSQLFile(dirname(__FILE__) . '/data.proposalgenerator.sql', $conn);
             runSQLFile(dirname(__FILE__) . '/data.quotegen.sql', $conn);
-            
+
             if ('testing' != APPLICATION_ENV)
             {
                 echo 'DONE!';
