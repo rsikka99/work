@@ -49,6 +49,7 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_PROPOSALGEN_ADMIN_MYREPORTSLIST = "proposalgen__admin__myreportslist";
     const RESOURCE_PROPOSALGEN_ADMIN_FILTERREPORTSLIST = "proposalgen__admin__filterreportslist";
     const RESOURCE_PROPOSALGEN_ADMIN_FILTERUSERSLIST = "proposalgen__admin__filteruserslist";
+    const RESOURCE_PROPOSALGEN_ADMIN_SEARCHFORDEVICE = "proposalgen__admin__search-for-device";
 
     const RESOURCE_PROPOSALGEN_FLEET = "proposalgen__fleet__index";
     const RESOURCE_PROPOSALGEN_FLEET_MAPPING = "proposalgen__fleet__mapping";
@@ -292,6 +293,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_DEFAULT_AUTH_LOGIN);
 
         //Assessment User
+        $this->addResource(self::RESOURCE_PROPOSALGEN);
         $this->addResource(self::RESOURCE_PROPOSALGEN_ADMIN);
         $this->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_BULKUSERPRICING);
         $this->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_USERDEVICES);
@@ -302,10 +304,10 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_MANAGEMYREPORTS);
         $this->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_MYREPORTSLIST);
         $this->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_FILTERREPORTSLIST);
-
         $this->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_TRANSFERREPORTS);
         $this->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_FILTERUSERSLIST);
-        $this->addResource(self::RESOURCE_PROPOSALGEN);
+        $this->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_SEARCHFORDEVICE);
+
 
         $this->addResource(self::RESOURCE_PROPOSALGEN_FLEET);
         $this->addResource(self::RESOURCE_PROPOSALGEN_FLEET_MAPPING);
@@ -368,6 +370,8 @@ class Application_Model_Acl extends Zend_Acl
 
         // Add our privileges
         $this->allow(self::ROLE_AUTHENTICATED_USER, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_ADMIN_SEARCHFORDEVICE, self::PRIVILEGE_VIEW);
+
     }
 
     /**
