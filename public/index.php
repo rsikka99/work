@@ -24,5 +24,9 @@ require 'init_autoloader.php';
 defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'development'));
 
 // Create application, bootstrap, and run
-$application = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
+$application = new Zend_Application(APPLICATION_ENV, array(
+                                                          'config' => array(
+                                                              APPLICATION_PATH . '/configs/global.ini',
+                                                              APPLICATION_PATH . '/configs/application.ini',
+                                                          )));
 $application->bootstrap()->run();
