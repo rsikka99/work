@@ -225,8 +225,8 @@ label.label-phone-number-country {
   border-top: 4px solid transparent;
   border-bottom: 4px solid transparent;
   border-left: 4px solid #000000;
-  opacity: 0.3;
-  filter: alpha(opacity=30);
+  opacity: 0.003;
+  filter: alpha(opacity=0.3);
   content: ">";
 }
 .right-caret.pull-right {
