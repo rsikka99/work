@@ -279,17 +279,15 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
                 $toner = $this->createTonerFromRmsUploadRow($rmsUploadRow->{"oem{$tonerColorName}TonerSku"}, $rmsUploadRow->{"oem{$tonerColorName}TonerYield"}, $rmsUploadRow->{"oem{$tonerColorName}TonerCost"}, $tonerColorId);
                 if ($toner !== false)
                 {
-                    $toners[Proposalgen_Model_PartType::OEM] = $toner;
+                    $toners[Proposalgen_Model_PartType::OEM][$tonerColorId][] = $toner;
                 }
 
                 $toner = $this->createTonerFromRmsUploadRow($rmsUploadRow->{"comp{$tonerColorName}TonerSku"}, $rmsUploadRow->{"comp{$tonerColorName}TonerYield"}, $rmsUploadRow->{"comp{$tonerColorName}TonerCost"}, $tonerColorId);
                 if ($toner !== false)
                 {
-                    $toners[Proposalgen_Model_PartType::COMP] = $toner;
+                    $toners[Proposalgen_Model_PartType::COMP][$tonerColorId][] = $toner;
                 }
             }
-
-
             $masterDevice->setToners($toners);
         }
 

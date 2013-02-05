@@ -102,15 +102,15 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
         //*****************************************************************
         // PROPOSAL SETTING FIELDS
         //*****************************************************************
-        
+
 
         // Page Pricing Margin
         $pricing_margin = new Zend_Form_Element_Text('assessmentReportMargin');
         $pricing_margin->setLabel('Pricing Margin')
             ->addValidator(new Zend_Validate_Float())
             ->addValidator(new Zend_Validate_Between(array (
-                'min' => 0, 
-                'max' => 99 
+                'min' => 0,
+                'max' => 99
         )))
             ->setAttrib('class', 'span1')
             ->setAttrib('maxlength', 10)
@@ -121,10 +121,10 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
             ->setAttrib('inputappend', '%');
         $pricing_margin->getValidator('Float')->setMessage('Please enter a number.');
         $pricing_margin->getValidator('Between')->setMessage('Must be greater than 0 and less than 100.');
-        
+
         $this->addElement($pricing_margin);
         $proposalGroup->elements [] = $pricing_margin;
-        
+
         // Average Monthly Lease Payment
         $element = new Zend_Form_Element_Text('monthlyLeasePayment');
         $element->setLabel('Average Monthly Lease Payment')
@@ -274,28 +274,6 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
         //*****************************************************************
         // GROSS MARGIN SETTING FIELDS
         //*****************************************************************
-        
-
-        // Page Pricing Margin
-        $gross_margin_pricing_margin = new Zend_Form_Element_Text('grossMarginPricingMargin');
-        $gross_margin_pricing_margin->setLabel('Pricing Margin')
-            ->addValidator(new Zend_Validate_Float())
-            ->addValidator(new Zend_Validate_Between(array (
-                'min' => 0, 
-                'max' => 99 
-        )))
-            ->setAttrib('class', 'span1')
-            ->setAttrib('maxlength', 10)
-            ->setAttrib('style', 'text-align: right')
-            ->setDescription('%')
-            ->setValue('20')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->grossMarginReportMargin, 2))
-            ->setAttrib('inputappend', '%');
-        $gross_margin_pricing_margin->getValidator('Float')->setMessage('Please enter a number.');
-        $gross_margin_pricing_margin->getValidator('Between')->setMessage('Must be greater than 0 and less than 100.');
-        
-        $this->addElement($pricing_margin);
-        $grossMarginGroup->elements [] = $pricing_margin;
         
         // Actual Page Coverage (Monochrome)
         $actual_page_coverage = new Zend_Form_Element_Text('actualPageCoverageMono');
