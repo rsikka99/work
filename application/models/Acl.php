@@ -61,6 +61,7 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS = "proposalgen__fleet__device-instance-details";
     const RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG = "proposalgen__fleet__toggle-excluded-flag";
     const RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE = "proposalgen__fleet__remove-unknown-device";
+    const RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO = "proposalgen__fleet__set-mapped-to";
     const RESOURCE_PROPOSALGEN_REPORT_INDEX = "proposalgen__report_index__index";
     const RESOURCE_PROPOSALGEN_REPORT_SOLUTION = "proposalgen__report_solution__%";
     const RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN = "proposalgen__report_grossmargin__%";
@@ -319,6 +320,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS);
         $this->addResource(self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG);
         $this->addResource(self::RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE);
+        $this->addResource(self::RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO);
 
         $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_INDEX);
         $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_WILDCARD);
@@ -423,6 +425,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_INDEX, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_SOLUTION, self::PRIVILEGE_VIEW);
