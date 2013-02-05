@@ -32,6 +32,6 @@ cd "${DIR}"
 GIT_HASH=$(git rev-list --max-count=1 HEAD)
 CURRENT_DATE=$(date)
 
-echo "[production]\n" > "${DIR}/application/configs/buildinfo.ini"
-echo "build.githash = \"${GIT_HASH}\"\n" >> "${DIR}/application/configs/buildinfo.ini"
+echo "[production]" > "${DIR}/application/configs/buildinfo.ini"
+echo "build.githash = \"${GIT_HASH}\"" >> "${DIR}/application/configs/buildinfo.ini"
 echo "build.date = \"${CURRENT_DATE}\"" >> "${DIR}/application/configs/buildinfo.ini"
