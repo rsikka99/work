@@ -301,7 +301,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
      */
     public function fetchAllForReport ($reportId)
     {
-        return $this->fetchAll(array("{$this->col_reportId} = ?" => $reportId));
+        return $this->fetchAll(array("{$this->col_reportId} = ?" => $reportId), null, 1000);
     }
 
     /**
