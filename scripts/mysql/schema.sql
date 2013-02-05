@@ -393,12 +393,14 @@ CREATE  TABLE IF NOT EXISTS `pgen_toners` (
     REFERENCES `pgen_part_types` (`id` ),
   CONSTRAINT `proposalgenerator_toners_ibfk_3`
     FOREIGN KEY (`tonerColorId` )
-    REFERENCES `pgen_toner_colors` (`id` ),
+    REFERENCES `pgen_toner_colors` (`id` )
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
   CONSTRAINT `proposalgenerator_toners_ibfk_2`
     FOREIGN KEY (`manufacturerId` )
     REFERENCES `manufacturers` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 15
 DEFAULT CHARACTER SET = utf8;
@@ -446,12 +448,14 @@ CREATE  TABLE IF NOT EXISTS `pgen_master_devices` (
   INDEX `proposalgenerator_master_devices_ibfk_1_idx` (`manufacturerId` ASC) ,
   CONSTRAINT `proposalgenerator_master_devices_ibfk_2`
     FOREIGN KEY (`tonerConfigId` )
-    REFERENCES `pgen_toner_configs` (`id` ),
+    REFERENCES `pgen_toner_configs` (`id` )
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
   CONSTRAINT `proposalgenerator_master_devices_ibfk_1`
     FOREIGN KEY (`manufacturerId` )
     REFERENCES `manufacturers` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8;
@@ -468,8 +472,8 @@ CREATE  TABLE IF NOT EXISTS `pgen_device_toners` (
   CONSTRAINT `proposalgenerator_device_toners_ibfk_1`
     FOREIGN KEY (`toner_id` )
     REFERENCES `pgen_toners` (`id` )
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `proposalgenerator_device_toners_ibfk_2`
     FOREIGN KEY (`master_device_id` )
     REFERENCES `pgen_master_devices` (`id` )

@@ -6139,9 +6139,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 throw new Exception("Passing Exception Up The Chain", null, $e);
                 $db->rollback();
-                $this->view->message = "Error";
                 $this->_helper->flashMessenger(array(
-                                                    "error" => "An error has occurred."
+                                                    "error" => "Error."
                                                ));
             }
         }
@@ -6397,8 +6396,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 else
                 {
                     $db->rollback();
-
-                    $this->view->message = $message;
                 }
             }
             catch (Exception $e)
