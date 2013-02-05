@@ -12,7 +12,8 @@ class Proposalgen_View_Helper_ProposalMenu extends Zend_View_Helper_Abstract
         $html = array();
         if ($reportSteps !== null)
         {
-            $html [] = '<ul class="nav nav-pills">';
+            $html [] = '<ul class="nav nav-pills assessmentMenu">';
+
             foreach ($reportSteps as $step)
             {
                 if ($step->active)
