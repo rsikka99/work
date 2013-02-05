@@ -398,13 +398,24 @@ $(document).ready(function ()
             if (num_devices == 0 && total_devices == 0)
             {
                 //should never hit this as it's handled by the confirm box instead
-                $('#replacement_toners_container').hide();
-                $('#replace_all_container').hide();
-                $('#replacement_filter_container').hide();
-                $('#replace_mode').val('no_replace');
-                $('#replacement_title').html('Confirm Toner Deletion');
-                $('#replacement_toners_statement').html('Are you sure you want to delete this toner?');
-
+//                $('#replacement_toners_container').hide();
+//                $('#replace_all_container').hide();
+//                $('#replacement_filter_container').hide();
+//                $('#replace_mode').val('no_replace');
+//                $('#replacement_title').html('Confirm Toner Deletion');
+//                $('#replacement_toners_statement').html('Are you sure you want to delete this toner?');
+//                $('#replacement_toners_container').show();
+//                $('#replace_all_container').hide();
+//                $('#replacement_filter_container').show();
+//                $('#replace_mode').val('optional_replace');
+//                $('#replacement_title').html('Confirm Toner Deletion');
+//                $('#replacement_toners_statement').html('This toner is being used by ' + total_devices + ' device(s). If you wish to assign a replacement toner to apply to all ' + total_devices + ' device(s), please select it from the list below.');
+                $('#replacement_toners_container').show();
+                $('#replace_all_container').show();
+                $('#replacement_filter_container').show();
+                $('#replace_mode').val('require_replace');
+                $('#replacement_title').html('Select Replacement Toner');
+                $('#replacement_toners_statement').html(num_devices + ' of the ' + total_devices + ' device(s) using this toner require a replacement toner to be assigned. Please select a replacement toner from the list below.');
 
             }
             else if (num_devices == 0)

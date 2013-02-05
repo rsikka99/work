@@ -42,7 +42,11 @@ INSERT INTO `user_roles` (`userId`, `roleId`) VALUES
     (6,5),
 
     -- standarduser
-    (8,5);
+    (8,5),
+
+    -- triehl
+    (9,3),
+    (9,5);
     
 /* Add privileges to the roles */
 -- INSERT INTO `privileges` (`roleId`, `module`, `controller`, `action`) VALUES

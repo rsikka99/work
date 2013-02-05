@@ -86,12 +86,6 @@ class Admin_UserController extends Zend_Controller_Action
                             // Reset the form after everything is saved successfully
                             $form->reset();
                         }
-                        else
-                        {
-                            $this->_helper->flashMessenger(array(
-                                                                'error' => "You must assign user roles."
-                                                           ));
-                        }
 
 
                     }

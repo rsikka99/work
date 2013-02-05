@@ -1427,6 +1427,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $toner_count += 1;
                 }
                 $message = "The toner has been replaced and deleted successfully.";
+
             }
             else if ($replace_mode == 'require_replace')
             {
@@ -1477,7 +1478,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             }
                         }
                     }
-                    $message = "The toner has been replaced and deleted successfully.";
+                    $this->_helper->flashMessenger(array(
+                                                        "success" => "The toner has been replaced and deleted successfully."
+                                                   ));
                 }
                 else
                 {
@@ -2318,7 +2321,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         $systemReportSettings->populate($formData);
                         Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($systemReportSettings, $systemReportSettings->id);
 
-                        $this->_helper->flashMessenger(array("success" => "Your settings have been updated."));
+                        $this->_helper->flashMessenger(array(
+                                                            "success" => "Your settings have been updated."
+                                                       ));
                         $db->commit();
                     }
                     catch (Zend_Db_Exception $e)
@@ -3301,14 +3306,18 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             $response  = $this->deleteReport($report_id);
                             if ($response == 0)
                             {
-                                $this->view->message = "There was an error while trying to delete the report " . $report_id . ". Please contact your administrator.";
+                                $this->_helper->flashMessenger(array(
+                                                                    "error" => "There was an error while trying to delete the report " . $report_id . ". Please contact your administrator."
+                                                               ));
                                 exit();
                             }
                         }
                     }
                     if ($response == 1)
                     {
-                        $this->view->message = "The report(s) were successfully deleted.";
+                        $this->_helper->flashMessenger(array(
+                                                            "success" => "The report(s) were successfully deleted."
+                                                       ));
                     }
                 }
                 $db->commit();
@@ -3316,7 +3325,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             catch (Exception $e)
             {
                 $db->rollback();
-                $this->view->message = "There was an error while trying to delete the reports. Please contact your administrator.";
+                $this->_helper->flashMessenger(array(
+                                                    "error" => "There was an error while trying to delete the reports. Please contact your administrator."
+                                               ));
             }
         }
     }
@@ -3505,13 +3516,17 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 if ($price == "0")
                                 {
                                     $passvalid           = 1;
-                                    $this->view->message = "All values must be greater than 0. Please correct it and try again.";
+                                    $this->_helper->flashMessenger(array(
+                                                                        "error" => "All values must be greater than 0. Please correct it and try again."
+                                                                   ));
                                     break;
                                 }
                                 else if ($price != '' && !is_numeric($price))
                                 {
                                     $passvalid           = 1;
-                                    $this->view->message = "All values must be numeric. Please correct it and try again.";
+                                    $this->_helper->flashMessenger(array(
+                                                                        "error" => "All values must be numeric. Please correct it and try again."
+                                                                   ));
                                     break;
                                 }
                                 else if ($price != '')
@@ -3530,8 +3545,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
                         if ($passvalid == 0)
                         {
-
-                            $this->view->message = "<p>The toner pricing updates have been applied successfully.</p>";
+                            $this->_helper->flashMessenger(array(
+                                                                "success" => "The toner pricing updates have been applied successfully."
+                                                           ));
                         }
                         else
                         {
@@ -3570,7 +3586,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 if ($price != '' && !is_numeric($price))
                                 {
                                     $passvalid           = 1;
-                                    $this->view->message = "All values must be numeric. Please correct it and try again.";
+                                    $this->_helper->flashMessenger(array(
+                                                                        "error" => "All values must be numeric. Please correct it and try again."
+                                                                   ));
                                     break;
                                 }
                                 else if ($price != '')
@@ -3610,11 +3628,15 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         {
                             if (!empty($summary))
                             {
-                                $this->view->message = "<p>The device pricing updates have been applied successfully.</p>";
+                                $this->_helper->flashMessenger(array(
+                                                                    "success" => "The device pricing updates have been applied successfully."
+                                                               ));
                             }
                             else
                             {
-                                $this->view->message = "<p>You have not updated any pricing. Please enter a new price and try again.</p>";
+                                $this->_helper->flashMessenger(array(
+                                                                    "error" => "You have not updated any pricing. Please enter a new price and try again."
+                                                               ));
                             }
                         }
                         else
@@ -3647,7 +3669,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             catch (Exception $e)
             {
                 $db->rollback();
-                $this->view->message = "Error: The updates were not saved.";
+                $this->_helper->flashMessenger(array(
+                                                    "error" => "Error: The updates were not saved."
+                                               ));
             }
         }
     }
@@ -5048,14 +5072,18 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                         $table->insert($data);
                                     }
                                 }
-                                $this->view->message = "Your pricing updates have been applied successfully.";
+                                $this->_helper->flashMessenger(array(
+                                                                    "success" => "Your pricing updates have been applied successfully."
+                                                               ));
                                 $db->commit();
                             }
                             catch (Exception $e)
                             {
 
                                 $db->rollback();
-                                $this->view->message = "<span class=\"warning\">*</span> An error has occurred during the update and your changes were not applied. Please review your file and try again.";
+                                $this->_helper->flashMessenger(array(
+                                                                    "error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."
+                                                               ));
                             }
 
                             //////////////////////////////////////////
@@ -5067,7 +5095,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     catch (Exception $e)
                     {
                         $db->rollback();
-                        $this->view->message = "<span class=\"warning\">*</span> An error has occurred during the update and your changes were not applied. Please review your file and try again.";
+                        $this->_helper->flashMessenger(array(
+                                                            "error" => " An error has occurred during the update and your changes were not applied. Please review your file and try again."
+                                                       ));
                     }
 
                     // delete the file we just uploaded
@@ -5710,9 +5740,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
             $select->order($sortIndex . ' ' . $sortOrder);
             $select->limit($limit, $start);
-//            echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
-//            var_dump((string)$select);
-//            die();
             $stmt   = $db->query($select);
             $result = $stmt->fetchAll();
 
@@ -6092,7 +6119,9 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         unset($master_matchup_pfData);
                     }
                     $db->commit();
-                    $this->view->message = "<p>The matchups have been saved.</p>";
+                    $this->_helper->flashMessenger(array(
+                                                        "success" => "The matchups have been saved."
+                                                   ));
                 }
                 else
                 {
@@ -6347,11 +6376,15 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                             {
                                 $where = $replacementTable->getAdapter()->quoteInto('masterDeviceId = ?', $key, 'INTEGER');
                                 $replacementTable->delete($where);
-                                $this->view->message = "<p>The selected printer(s) are no longer marked as replacement printers.</p>";
+                                $this->_helper->flashMessenger(array(
+                                                                    "success" => "The selected printer(s) are no longer marked as replacement printers."
+                                                               ));
                             }
                             else
                             {
-                                $message = "<p>Could not delete all replacement printers as one or more was the last printer for it's replacement category.</p>";
+                                $this->_helper->flashMessenger(array(
+                                                                    "error" => "Could not delete all replacement printers as one or more was the last printer for it's replacement category."
+                                                               ));
                             }
                         }
                     }
@@ -6879,7 +6912,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $db            = Zend_Db_Table::getDefaultAdapter();
         $filter        = $this->_getParam('filter', 'all');
         $formdata      = new stdClass();
-        $isSystemAdmin = $this->isAllowed('', Application_Model_Acl::PRIVILEGE_ADMIN);
+        $isSystemAdmin = $this->isAllowed(Application_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_FILTERUSERSLIST, Application_Model_Acl::PRIVILEGE_ADMIN);
         try
         {
             $where = null;
