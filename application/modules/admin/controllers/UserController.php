@@ -26,7 +26,9 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function createAction ()
     {
-        $form = new Admin_Form_User();
+        $roleMapper = new Admin_Model_Mapper_Role();
+        $roles      = $roleMapper->fetchAll();
+        $form = new Admin_Form_User(Admin_Form_User::MODE_CREATE,$roles);
 
         $request = $this->getRequest();
 
@@ -47,13 +49,51 @@ class Admin_UserController extends Zend_Controller_Action
                         $user->populate($values);
                         $user->password = $this->cryptPassword($user->password);
                         $userId         = $mapper->insert($user);
+                        // Save changes to the user roles
+                        if (isset($values ["userRoles"]))
+                        {
+                            $userRole         = new Admin_Model_UserRole();
+                            $userRole->userId = $userId;
+                            $userRoleMapper = new Admin_Model_Mapper_UserRole();
+                            $userRoles      = $userRoleMapper->fetchAll(array(
+                                                                             'userId = ?' => $userId
+                                                                        ));
+                            // Loop through our new roles
+                            foreach ($values ["userRoles"] as $roleId)
+                            {
+                                $hasRole = false;
 
-                        $this->_helper->flashMessenger(array(
-                                                            'success' => "User '" . $this->view->escape($values ["username"]) . "' saved sucessfully."
-                                                       ));
+                                foreach ($userRoles as $existingUserRole)
+                                {
+                                    if ($existingUserRole->roleId == $roleId)
+                                    {
+                                        $hasRole = true;
+                                        break;
+                                    }
+                                }
 
-                        // Reset the form after everything is saved successfully
-                        $form->reset();
+                                // If the role is new
+                                if (!$hasRole)
+                                {
+                                    $userRole->roleId = $roleId;
+                                    $userRoleMapper->insert($userRole);
+                                }
+                            }
+                            $this->_helper->flashMessenger(array(
+                                                                'success' => "User '" . $this->view->escape($values ["username"]) . "' saved sucessfully."
+                                                           ));
+
+                            // Reset the form after everything is saved successfully
+                            $form->reset();
+                        }
+                        else
+                        {
+                            $this->_helper->flashMessenger(array(
+                                                                'error' => "You must assign user roles."
+                                                           ));
+                        }
+
+
                     }
                     catch (Zend_Db_Statement_Mysqli_Exception $e)
                     {
@@ -355,11 +395,6 @@ class Admin_UserController extends Zend_Controller_Action
                         }
                         else
                         {
-                            // If the user deselected all the boxes, delete all the roles
-                            if (count($userRoles) > 0)
-                            {
-                                $userRoleMapper->deleteAllRolesForUser($userId);
-                            }
                         }
 
                         $this->_helper->flashMessenger(array(
