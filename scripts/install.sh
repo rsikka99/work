@@ -30,7 +30,7 @@ chmod 777 "${DIR}/public/cache"
 
 cd "${DIR}"
 GIT_HASH=$(git rev-list --max-count=1 HEAD)
-CURRENT_DATE=date
+CURRENT_DATE=$(date)
 
 echo "[production]\n" > "${DIR}/application/configs/buildinfo.ini"
 echo "build.githash = \"${GIT_HASH}\"\n" >> "${DIR}/application/configs/buildinfo.ini"
