@@ -60,7 +60,7 @@ $(function ()
                     sortable      : true,
                     align         : 'center',
                     sorttype      : 'int',
-                    firstsortorder: 'asc'
+                    firstsortorder: 'desc'
                 },
                 {
                     width   : 150,
@@ -68,15 +68,25 @@ $(function ()
                     index   : 'manufacturer',
                     label   : 'Device Manu.',
                     title   : false,
-                    sortable: true
+                    sortable: false,
+                    hidden: true
                 },
                 {
                     width   : 200,
                     name    : 'modelName',
                     index   : 'modleName',
+                    label   : 'Model Name',
+                    title   : false,
+                    sortable: false,
+                    hidden: true
+                },
+                {
+                    width   : 350,
+                    name    : 'deviceName',
+                    index   : 'manufacturer',
                     label   : 'Device Name',
                     title   : false,
-                    sortable: false
+                    sortable: true
                 },
                 {
                     width   : 50,
@@ -151,29 +161,31 @@ $(function ()
                     // Get the data so we can use and manipualte it.
                     var row = grid.getRowData(ids[i]);
 
+                    row.deviceName = row.manufacturer + ' ' + row.modelName;
+
                     // This is what toggles the 'master printer
                     // name' field between the auto complete text
                     // box and the 'Click to Remove' text
                     if (row.useUserData == 1)
                     {
-                        // Display message instead of dropdown
+                        // Display message instead of drop down
                         row.mapToMasterDevice = '&nbsp;New Printer Added (<a href="javascript: void(0);" class="removeUnknownDeviceButton" data-device-instance-ids="' + row.deviceInstanceIds + '">Click to Remove</a>)';
                         row.action = '<input style="width:35px;" title="Edit Printer" class="addEditUnknownDeviceButton" type="button" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit" />';
 
                     }
                     else
                     {
-                        var deviceName = '';
+                        var mappedToDeviceName = '';
                         if (row.mappedManufacturer.length > 0 && row.mappedModelName.length > 0)
                         {
-                            deviceName = row.mappedManufacturer + ' ' + row.mappedModelName;
+                            mappedToDeviceName = row.mappedManufacturer + ' ' + row.mappedModelName;
                         }
                         var master_device_dropdown = '';
                         master_device_dropdown += '<input type="hidden" name="deviceInstanceIds" class="deviceInstanceIds" value="' + row.deviceInstanceIds + '" />';
                         master_device_dropdown += '<input type="hidden" name="masterDeviceId" class="masterDeviceId" value="' + row.masterDeviceId + '" />';
                         master_device_dropdown += '<input type="hidden" name="modelName" class="masterDeviceName" value="' + row.mappedModelName + '" />';
                         master_device_dropdown += '<input type="hidden" name="manufacturer" class="manufacturerName" value="' + row.mappedManufacturer + '" />';
-                        master_device_dropdown += '<input type="text"   placeholder="Not Mapped. Type to search..." name="masterDeviceName" style="width: 97%" class="autoCompleteDeviceName" value="' + deviceName + '" />';
+                        master_device_dropdown += '<input type="text"   placeholder="Not Mapped. Type to search..." name="masterDeviceName" style="width: 97%" class="autoCompleteDeviceName" value="' + mappedToDeviceName + '" />';
 
                         row.mapToMasterDevice = master_device_dropdown;
 

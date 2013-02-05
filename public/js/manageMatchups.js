@@ -4,20 +4,60 @@ $(document).ready(function ()
     var sTop = ($(window).height() / 2) - 100;
     var sLeft = ($(window).width() / 2) - 200;
 
-    jQuery("#grid_list").jqGrid({
+    $("#grid_list").jqGrid({
         url         : url_matchuplist,
         datatype    : 'json',
         colModel    : [
-            { label: 'Provider Id', width: 35, name: 'rmsProviderId', index: 'rmsProviderId', hidden: true },
-            { label: 'Provider', width: 50, name: 'rmsProviderName', index: 'rmsProviderName' },
-            { label: 'Model Id', width: 50, name: 'rmsModelId', index: 'rmsModelId', align: 'center' },
-            { label: 'Provider Device Name', width: 250, name: 'rmsProviderDeviceName', index: 'rmsProviderDeviceName' },
-            { label: 'Master Device', width: 250, name: 'masterDevice', index: 'masterDevice' },
-            { label: 'masterDeviceId', width: 35, name: 'masterDeviceId', index: 'masterDeviceId', hidden: true },
-            { label: 'modelName', width: 35, name: 'modelName', index: 'modelName', hidden: true },
-            { label: 'displayname', width: 35, name: 'displayname', index: 'displayname', hidden: true }
+            {
+                label : 'Provider Id',
+                width : 10,
+                name  : 'rmsProviderId',
+                index : 'rmsProviderId',
+                hidden: true
+            },
+            { label  : 'Provider',
+                width: 90,
+                name : 'rmsProviderName',
+                index: 'rmsProviderName'
+            },
+            {
+                label: 'Model Id',
+                width: 90,
+                name : 'rmsModelId',
+                index: 'rmsModelId',
+                align: 'center'
+            },
+            {
+                label: 'Provider Device Name',
+                width: 300,
+                name : 'rmsProviderDeviceName',
+                index: 'rmsProviderDeviceName'
+            },
+            {
+                label: 'Master Device',
+                width: 350, name: 'masterDevice',
+                index: 'masterDevice'
+            },
+            {
+                label : 'masterDeviceId',
+                width : 35, name: 'masterDeviceId',
+                index : 'masterDeviceId',
+                hidden: true
+            },
+            {
+                label : 'modelName',
+                width : 35, name: 'modelName',
+                index : 'modelName',
+                hidden: true
+            },
+            {
+                label : 'displayname',
+                width : 35,
+                name  : 'displayname',
+                index : 'displayname',
+                hidden: true
+            }
         ],
-        width       : 765,
         height      : 'auto',
         jsonReader  : {
             repeatitems: false
@@ -27,7 +67,7 @@ $(document).ready(function ()
         pager       : '#grid_pager',
         gridComplete: function ()
         {
-            var grid = jQuery("#grid_list").jqGrid();
+            var grid = $("#grid_list").jqGrid();
             var ids = grid.getDataIDs();
 
             // Loop through the rows
@@ -53,7 +93,7 @@ $(document).ready(function ()
                 rowData.masterDevice += '<input type="hidden" class="masterDeviceId" value="' + mapped_to_id + '" />';
                 rowData.masterDevice += '<input type="hidden" class="masterDeviceName" value="' + mapped_to_deviceName + '" />';
                 rowData.masterDevice += '<input type="hidden" class="manufacturerName" value="' + mapped_to_manufacturer + '" />';
-                rowData.masterDevice += '<input type="text" name="txtMasterDevices' + rmsKey + '" id="txtMasterDevices' + rmsKey + '" size="55" class="autoCompleteDeviceName" value="' + mapped_to_deviceName + '" />';
+                rowData.masterDevice += '<input style="width: 96%" type="text" name="txtMasterDevices' + rmsKey + '" id="txtMasterDevices' + rmsKey + '" size="55" class="autoCompleteDeviceName" value="' + mapped_to_deviceName + '" />';
 
                 var result = grid.setRowData(ids[i], rowData);
             }
@@ -69,6 +109,7 @@ $(document).ready(function ()
                         },
                         success : function (data)
                         {
+                            data.unshift({label: "Remove mapping", manufacturer: "Remove mapping", value: 0});
                             response($.map(data, function (item)
                             {
                                 return {
@@ -84,33 +125,40 @@ $(document).ready(function ()
                 minLength: 0,
                 select   : function (event, ui)
                 {
-                    // TODO: Perform Mapping
-                    // doMapping(rmsProviderId, rmsModelId, masterDeviceId);
                     $(this).parent().find("input.masterDeviceId")[0].value = ui.item.id;
                     $(this).parent().find("input.masterDeviceName")[0].value = ui.item.label;
                     $(this).parent().find("input.manufacturerName")[0].value = ui.item.manufacturer;
+                    $(this).autocomplete('option', 'change').call(this);
 
                 },
                 open     : function (event, ui)
                 {
-                    // Perform autocomplete, and bold the match critera to help the end user see what was matched.
+                    // Perform auto complete, and bold the match criteria to help the end user see what was matched.
                     var termTemplate = '<strong>%s</strong>';
                     var autocompleteData = $(this).data('autocomplete');
                     autocompleteData.menu.element.find('a').each(function ()
                     {
                         var label = $(this);
-                        var regex = new RegExp(autocompleteData.term, "gi");
-                        label.html(label.text().replace(regex, function (matched)
+                        if (label.text() == "Remove mapping")
                         {
-                            return termTemplate.replace('%s', matched);
-                        }));
+                            label.html("<strong>Remove Mapping</strong>");
+                        }
+                        else
+                        {
+                            var regex = new RegExp(autocompleteData.term, "gi");
+                            label.html(label.text().replace(regex, function (matched)
+                            {
+                                return termTemplate.replace('%s', matched);
+                            }));
+                        }
                     });
                 },
                 change   : function (event, ui)
                 {
                     var parent = $(this).parent();
                     var textValue = $.trim(this.value);
-                    // We stored our ids in our textbox name as txtMasterDevices{ProviderId}_{ModelId}
+
+                    // We stored our ids in our text box name as txtMasterDevices{ProviderId}_{ModelId}
                     var rmsUploadRowId = this.id.replace("txtMasterDevices", "");
                     var identifiers = rmsUploadRowId.split('_');
                     var rmsProviderId = identifiers[0];
@@ -121,7 +169,7 @@ $(document).ready(function ()
                     /*
                      * Populate the text field if the user was auto completing, or clear it out if they were deleting the text
                      */
-                    if (textValue)
+                    if (textValue && masterDeviceId > 0)
                     {
                         // If the device id is not set, then we reset to blank
                         if (!masterDeviceId)
@@ -155,28 +203,6 @@ $(document).ready(function ()
         editurl     : 'dummy.php'
     });
 
-    jQuery("#grid_list").jqGrid('navGrid', '#grid_pager', {
-        add    : false,
-        del    : false,
-        edit   : false,
-        refresh: false,
-        search : false
-    }, {
-        closeAfterEdit: true,
-        recreateForm  : true,
-        closeOnEscape : true,
-        width         : 400,
-        top           : sTop,
-        left          : sLeft
-    }, {
-        closeAfterAdd: true,
-        recreateForm : true,
-        closeOnEscape: true,
-        width        : 400,
-        top          : sTop,
-        left         : sLeft
-    }, {}, {}, {});
-
 });
 
 /**
@@ -197,6 +223,10 @@ function set_mapped(rmsProviderId, rmsModelId, masterDeviceId)
             "rmsProviderId" : rmsProviderId,
             "rmsModelId"    : rmsModelId,
             "masterDeviceId": masterDeviceId
+        },
+        complete   : function ()
+        {
+            $('#grid_list').trigger("reloadGrid");
         },
         error      : function ()
         {
