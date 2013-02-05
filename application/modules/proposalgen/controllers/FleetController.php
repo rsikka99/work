@@ -761,7 +761,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     public function removeUnknownDeviceAction ()
     {
         $db                        = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $deviceInstanceIdsAsString = $this->getParam("deviceInstanceIds", false);
+        $deviceInstanceIdsAsString = $this->_getParam("deviceInstanceIds", false);
 
         $deviceInstanceIds    = explode(",", $deviceInstanceIdsAsString);
         $reportId             = $this->getReport()->id;
