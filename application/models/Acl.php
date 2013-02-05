@@ -371,6 +371,7 @@ class Application_Model_Acl extends Zend_Acl
         // Add our privileges
         $this->allow(self::ROLE_AUTHENTICATED_USER, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_ADMIN_SEARCHFORDEVICE, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_AUTHENTICATED_USER, self::RESOURCE_ADMIN_USER_PROFILE, self::PRIVILEGE_VIEW);
 
     }
 
@@ -429,7 +430,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_PIQESSENTIALS, self::PRIVILEGE_VIEW);
 
-        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_ADMIN_USER_PROFILE, self::PRIVILEGE_VIEW);
+
     }
 
     /**
@@ -471,8 +472,6 @@ class Application_Model_Acl extends Zend_Acl
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTESETTING_EDIT, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_CLIENT_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD, self::PRIVILEGE_VIEW);
-
-        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_ADMIN_USER_PROFILE, self::PRIVILEGE_VIEW);
 
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_ADMIN, self::PRIVILEGE_VIEW);
     }

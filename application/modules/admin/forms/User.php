@@ -139,11 +139,12 @@ class Admin_Form_User extends EasyBib_Form
                         'EmailAddress' => 'Invalid Email Address' 
                 ) 
         ));
-        
+
         if ($this->roles)
         {
             $userRoles = new Zend_Form_Element_MultiCheckbox('userRoles');
             $userRoles->setLabel("User Roles:");
+            $userRoles->setRequired(true);
             /* @var $role Admin_Model_Role */
             foreach ( $this->roles as $role )
             {
