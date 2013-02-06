@@ -1214,9 +1214,6 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                                     }
                                 }
                                 $db->commit();
-                                $this->_helper->flashMessenger(array(
-                                                                    'success' => 'Printer "' . $formData ["new_printer"] . '" has been saved.'
-                                                               ));
                                 $this->_helper->_redirector('mapping', 'fleet');
                             }
                             else
