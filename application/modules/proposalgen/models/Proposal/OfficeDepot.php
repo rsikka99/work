@@ -2432,7 +2432,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         $monthlyRate       = 0;
         foreach ($this->getReplacementDevices() as $device)
         {
-            if ($device->ReplacementCategory == $type && ($device->monthlyRate < $monthlyRate || $monthlyRate == 0))
+            if ($device->replacementCategory == $type && ($device->monthlyRate < $monthlyRate || $monthlyRate == 0))
             {
                 $replacementDevice = $device;
                 $monthlyRate       = $device->monthlyRate;
@@ -2749,6 +2749,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             {
                 $cost += $deviceInstance->getMonthlyRate();
             }
+
             $this->CurrentCostOfReplacedBlackAndWhitePrinters = $cost * 12;
         }
 

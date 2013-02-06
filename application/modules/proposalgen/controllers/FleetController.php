@@ -575,7 +575,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     "isLeased"   => ($deviceInstance->getIsLeased()) ? "Leased" : "Purchased"
                 );
 
-                $row["deviceName"] = $deviceInstance->getRmsUploadRow()->getManufacturer()->fullname . " " . $deviceInstance->getRmsUploadRow()->modelName . "<br>" . $deviceInstance->ipAddress;
+                $row["deviceName"] = $deviceInstance->getRmsUploadRow()->manufacturer . " " . $deviceInstance->getRmsUploadRow()->modelName . "<br>" . $deviceInstance->ipAddress;
 
                 if ($deviceInstance->getMasterDevice() instanceof Proposalgen_Model_MasterDevice)
                 {
