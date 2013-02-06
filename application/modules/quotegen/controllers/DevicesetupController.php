@@ -50,8 +50,6 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
         {
             // Get the post data
             $values = $request->getPost();
-            $values['tonerConfigId'] = $values['toner_config_id'];
-            $values['manufacturerId'] = $values['manufacturerId'];
             $assignedToners = $values ['hdnToners'];
 
             // If we cancelled we don't need to validate anything
@@ -96,7 +94,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
 
                     else if ($form->isValid($values))
                     {
-                        $toner_config_id = $values ['toner_config_id'];
+                        $toner_config_id = $values ['tonerConfigId'];
                         $toners = explode(',', $values ['hdnToners']);
 
                         // An array of required toners
@@ -339,13 +337,6 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             $form->getElement('description')->setValue($description);
         }
 
-        // Update hidden toner config to current toner config value so it gets submitted with the form
-        // Disable and set Toner Config to not be required
-        $form->getElement('hidden_toner_config_id')->setValue($form->getElement('toner_config_id')
-            ->getValue());
-        $form->getElement('toner_config_id')->setAttrib('disabled', 'disabled');
-        $form->getElement('toner_config_id')->setRequired(false);
-
         // Make sure we are posting data
         $request = $this->getRequest();
         if ($request->isPost())
@@ -365,8 +356,6 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                          * In order to use populate, we need to make sure the toner_config_id value is set Since it's
                          * disabled in edit mode, we need to assign it the value from the hidden field
                          */
-                        $values ['toner_config_id'] = $formValues ['hidden_toner_config_id'];
-
                         // If checkbox for can sell is checked, if not delete.
                         if ($formValues ['can_sell'])
                         {
