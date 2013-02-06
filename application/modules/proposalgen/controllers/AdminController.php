@@ -6816,7 +6816,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         $startdate   = $this->_getParam('startdate', null);
         $enddate     = $this->_getParam('enddate', null);
         $formdata    = new stdClass();
-
         try
         {
             $where = null;
@@ -6843,7 +6842,13 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             }
             else
             {
-                $where = 'r.userId = ' . $this->user_id;
+                if($where != null){
+                    $where .= ' AND r.userId = ' . $this->user_id;
+                }else
+                {
+                    $where = 'r.userId = ' . $this->user_id;
+                }
+
             }
 
             // select reports
@@ -6881,7 +6886,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     $formdata->rows [$i] ['id']   = $row ['report_id'];
                     $formdata->rows [$i] ['cell'] = array(
                         $row ['report_id'],
-                        $row ['customerCompanyName'] . ' (' . $row ['username'] . ' on ' . date("m-d-Y", strtotime($row ['dateccreated'])) . ')'
+                        $row ['customerCompanyName'] . ' (' . $row ['username'] . ' on ' . date("m-d-Y", strtotime($row ['dateCreated'])) . ')'
                     );
                     $i++;
                 }
