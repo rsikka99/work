@@ -28,6 +28,13 @@ fi
 
 chmod 777 "${DIR}/public/cache"
 
+# Our public folder needs its cache folder set to be writable
+if [ ! -d "${DIR}/public/downloads" ]; then
+    mkdir "${DIR}/public/downloads"
+fi
+
+chmod 777 "${DIR}/public/downloads"
+
 cd "${DIR}"
 GIT_HASH=$(git rev-list --max-count=1 HEAD)
 CURRENT_DATE=$(date)

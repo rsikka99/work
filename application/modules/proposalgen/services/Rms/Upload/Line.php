@@ -887,6 +887,29 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         $this->launchDate       = ($introductionDate === null) ? null : $introductionDate->toString(self::ZEND_TO_MYSQL_DATE_FORMAT);
         $this->adoptionDate     = ($adoptionDate === null) ? null : $adoptionDate->toString(self::ZEND_TO_MYSQL_DATE_FORMAT);
 
+
+        /*
+         * Figure out if the device reports toner levels
+         */
+        $this->reportsTonerLevels = false;
+
+        if (strpos($this->tonerLevelBlack, '%') || strpos($this->tonerLevelCyan, '%') || strpos($this->tonerLevelMagenta, '%') || strpos($this->tonerLevelYellow, '%'))
+        {
+            if ($this->tonerLevelBlack == 'LOW' || $this->tonerLevelBlack == 'OK' || strpos($this->tonerLevelBlack, '%'))
+            {
+                if ($this->tonerLevelCyan == 'LOW' || $this->tonerLevelCyan == 'OK' || strpos($this->tonerLevelCyan, '%'))
+                {
+                    if ($this->tonerLevelMagenta == 'LOW' || $this->tonerLevelMagenta == 'OK' || strpos($this->tonerLevelMagenta, '%'))
+                    {
+                        if ($this->tonerLevelYellow == 'LOW' || $this->tonerLevelYellow == 'OK' || strpos($this->tonerLevelYellow, '%'))
+                        {
+                            $this->reportsTonerLevels = true;
+                        }
+                    }
+                }
+            }
+        }
+
         return true;
     }
 
