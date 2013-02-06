@@ -1,5 +1,5 @@
 {
-    "hash": "9b9cc0104bf941eaf5e581a0d3cb8c72",
+    "hash": "66196b2f9e90f834e3c62d401e3637be",
     "packages": [
         {
             "name": "gChartPhp/gChartPhp",
@@ -39,6 +39,17 @@
             ]
         },
         {
+            "name": "lrobert/phpword",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:lrobert/PHPWord.git",
+                "reference": "master"
+            },
+            "type": "library",
+            "time": "2012-08-08 14:48:20"
+        },
+        {
             "name": "phpexcel/phpexcel",
             "version": "dev-master",
             "source": {
@@ -48,7 +59,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/ddeboer/phpexcel/archive/v1.7.7.zip",
+                "url": "https://api.github.com/repos/ddeboer/phpexcel/zipball/v1.7.7",
                 "reference": "v1.7.7",
                 "shasum": ""
             },
@@ -72,87 +83,6 @@
                 "excel",
                 "xls"
             ]
-        },
-        {
-            "name": "phpword/phpword",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://bitbucket.org/kkula/phpword.git",
-                "reference": "4ba9cb7f65618ec6990ecefa5edc6a992db04429"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://bitbucket.org/kkula/phpword/get/4ba9cb7f65618ec6990ecefa5edc6a992db04429.zip",
-                "reference": "4ba9cb7f65618ec6990ecefa5edc6a992db04429",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">5.2.0"
-            },
-            "time": "2012-12-25 21:55:12",
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "PHPWord": "Library"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GNU"
-            ],
-            "description": "PHPWord is a library written in PHP that create word documents.",
-            "homepage": "http://phpword.codeplex.com",
-            "keywords": [
-                "word",
-                "doc",
-                "docx"
-            ]
-        },
-        {
-            "name": "zendframework/zendframework1",
-            "version": "1.12.1",
-            "source": {
-                "type": "svn",
-                "url": "http://framework.zend.com/svn/framework/standard",
-                "reference": "/tags/release-1.12.1/@25165"
-            },
-            "require": {
-                "php": ">=5.2.11"
-            },
-            "time": "2012-12-18 17:24:42",
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-trunk": "1.12.x-dev",
-                    "dev-release-1.0": "1.0.x-dev",
-                    "dev-release-1.5": "1.5.x-dev",
-                    "dev-release-1.6": "1.6.x-dev",
-                    "dev-release-1.7": "1.7.x-dev",
-                    "dev-release-1.8": "1.8.x-dev",
-                    "dev-release-1.9": "1.9.x-dev",
-                    "dev-release-1.10": "1.10.x-dev",
-                    "dev-release-1.11": "1.11.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Zend": "library/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "include-path": [
-                "library/"
-            ],
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Zend Framework 1",
-            "homepage": "http://framework.zend.com/",
-            "keywords": [
-                "framework",
-                "ZF1"
-            ]
         }
     ],
     "packages-dev": null,
@@ -161,7 +91,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "phpword/phpword": 20,
+        "lrobert/phpword": 20,
         "phpexcel/phpexcel": 20,
         "gchartphp/gchartphp": 20
     }

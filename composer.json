@@ -1,14 +1,28 @@
 {
-    "name"   : "tangentmtw/printiqmps",
-    "authors": [
+    "name"        : "tangentmtw/printiqmps",
+    "authors"     : [
         {
             "name" : "Lee Robert",
             "email": "lrobert@tangentmtw.com"
         }
     ],
-    "require": {
+    "repositories": [
+        {
+            "type"   : "package",
+            "package": {
+                "name"   : "lrobert/phpword",
+                "version": "dev-master",
+                "source" : {
+                    "url"      : "git@github.com:lrobert/PHPWord.git",
+                    "type"     : "git",
+                    "reference": "master"
+                }
+            }
+        }
+    ],
+    "require"     : {
         "zendframework/zendframework1": "1.12.*",
-        "phpword/phpword"             : "dev-master",
+        "lrobert/phpword"             : "dev-master",
         "phpexcel/phpexcel"           : "dev-master",
         "gChartPhp/gChartPhp"         : "dev-master"
     }
