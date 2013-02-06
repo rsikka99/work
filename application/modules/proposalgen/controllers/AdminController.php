@@ -5624,6 +5624,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 $filter = "tm.fullname";
             }
+
             else if ($filter == "type_name")
             {
                 $filter = "pt.name";
@@ -5640,7 +5641,14 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             {
                 $filter = "t.yield";
             }
-            $where = ' AND ' . $filter . ' LIKE("%' . $criteria . '%")';
+            if ($filter == "manufacturerId")
+            {
+                $filter = "tm.id";
+                $where = ' AND ' . $filter . ' = ' . $criteria;
+            }else
+            {
+                $where = ' AND ' . $filter . ' LIKE("%' . $criteria . '%")';
+            }
         }
         else if (!empty($filter) && $filter == 'machine_compatibility')
         {

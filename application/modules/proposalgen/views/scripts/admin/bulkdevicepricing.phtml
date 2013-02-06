@@ -88,7 +88,7 @@
 			colModel:[
         		{width:60, name:'toner_id', index:'toner_id', sorttype:'int', hidden:true, editable:true, editoptions:{readonly:true, size:12}},
 				{width:80, name:'toner_SKU', index:'toner_SKU', editable:true, editoptions:{size:12,maxlength:30}},
-				{width:200, name:'manufacturer_name', index:'manufacturer_name', editable:true, editoptions:{size:20,maxlength:30}},
+				{width:200, name:'manufacturer_name', index:'manufacturerId', editable:true, editoptions:{size:20,maxlength:30}},
 				{width:50, name:'part_type_id', index:'part_type_id', editable:true, editoptions:{size:20,maxlength:30}},
 				{width:60, name:'toner_color_name', index:'toner_color_name', editable:true, editoptions:{size:12,maxlength:30}},
 				{width:50, name:'toner_yield', index:'yield', editable:true, editoptions:{size:10,maxlength:4}, align:'right'},
@@ -162,18 +162,21 @@
 			//reset page to 1
 			repop_page = 1;
 			$("#hdnPage").val(1);
-			
 			//remove all options
 			$("#criteria_filter >option").remove();
-			
+
 			//add new options depending on selection
 			if($('#pricing_filter').val() == 'toner') {
 				$("#criteria_filter").append($('<option></option>').val('machine_compatibility').html('Machine Compatibility'));
 				$("#criteria_filter").append($('<option></option>').val('toner_sku').html('SKU'));
-				$("#criteria_filter").append($('<option></option>').val('manufacturer_name').html('Manufacturer'));
+				$("#criteria_filter").append($('<option></option>').val('manufacturerId').html('Manufacturer'));
+                $("#text_criteria").show();
+                $("#list_criteria").hide();
 			} else {
 				$("#criteria_filter").append($('<option></option>').val('manufacturerId').html('Manufacturer'));
 				$("#criteria_filter").append($('<option></option>').val('modelName').html('Printer Model'));
+                setupManufacturerList('<?php echo $this->baseUrl("/proposalgen/admin/filterlistitems"); ?>?list=man');
+
 			}
 		});
 				
@@ -199,28 +202,7 @@
 			}
 			
 			if (url != '') {
-    		    $.ajax({
-    		    	type: "POST",
-    		        url: url,
-    		        contentType: "application/json; charset=utf-8",
-    		        dataType: "json",
-    		        success: function(data) {
-    		            var obj = jQuery.parseJSON(data);
-    		            var options = '';
-    		            for (var i = 0; i < data.rows.length; i++) {
-    		            	list = (data.rows[i].cell);
-        					options += '<option value="' + list[0] + '">' + list[1] + '</option>';
-      					}
-      					$("#cboCriteria").html(options);
-    		        },
-    		        error: function() {
-    		            $('#details_error').html("Error returning criteria list.");
-    		        },
-    		        complete: function() {
-    		        	$("#text_criteria").hide();
-    		        	$("#list_criteria").show();
-    		        }
-    			});
+                setupManufacturerList(url)
     			
     		} else {
 	        	$("#list_criteria").hide();
@@ -268,7 +250,30 @@
 		$('#criteria_filter').change();
 		
     });
-	
+    function setupManufacturerList(url) {
+        $.ajax({
+        type: "POST",
+        url: url,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(data) {
+        var obj = jQuery.parseJSON(data);
+        var options = '';
+        for (var i = 0; i < data.rows.length; i++) {
+            list = (data.rows[i].cell);
+            options += '<option value="' + list[0] + '">' + list[1] + '</option>';
+        }
+        $("#cboCriteria").html(options);
+        },
+        error: function() {
+            $('#details_error').html("Error returning criteria list.");
+        },
+        complete: function() {
+            $("#text_criteria").hide();
+            $("#list_criteria").show();
+        }
+    });
+    }
 	function repop_form(grid) {
 		repop_items = repop_array.split(',');
 		for(i=0; i < repop_items.length; i++) {
@@ -453,7 +458,7 @@
 		<div id="criteria_container">
 			<label for="criteria_filter" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">Filter:</label>
 			<select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
-				<option value="manufacturerId" <?php if($this->search_filter == 'manufacturer_name') { echo "selected"; } ?>>Manufacturer</option>
+				<option value="manufacturerId" <?php if($this->search_filter == 'manufacturerId') { echo "selected"; } ?>>Manufacturer</option>
 				<option value="modelName" <?php if($this->search_filter == 'printer_model') { echo "selected"; } ?>>Printer Model</option>
 			</select>
 			<label for="txtCriteria" class="details_label" style="display: inline; padding: 0px 10px 0px 10px;">for</label>
