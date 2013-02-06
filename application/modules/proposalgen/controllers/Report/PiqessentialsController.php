@@ -156,11 +156,11 @@ class Proposalgen_Report_PiqessentialsController extends Proposalgen_Library_Con
                 foreach ($proposal->getExcludedDevices() as $device)
                 {
                     $row = array();
-                    $row [] = $device->DeviceName;
-                    $row [] = ($device->IpAddress) ? $device->IpAddress : "Unknown IP";
+                    $row [] = $device->getDeviceName();
+                    $row [] = ($device->ipAddress) ? $device->ipAddress : "Unknown IP";
                     $row [] = (strlen($device->serialNumber) > 0) ? $device->serialNumber : "Unknown";
 
-                    $row [] = $device->ExclusionReason;
+                    $row [] = $device->_exclusionReason;
                     $excluded_values .= implode(",", $row) . "\n";
                 } // end Purchased Devices foreach
             }

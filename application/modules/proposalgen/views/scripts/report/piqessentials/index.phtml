@@ -1,3 +1,6 @@
 <?php
 $this->placeholder('extraNavbar')->set($this->render('_partials/reportMenu.phtml'));
 echo $this->render('report/piqessentials/' . $this->App()->theme . '/html/00_Render.phtml');
+    		<?php foreach($proposal->getDevices()->excludedDeviceInstances as $device):
+    					<td><div class=" left"><?php echo ($device->getMasterDevice() != null) ? $device->getMasterDevice()->getFullDeviceName() : 'N/A'; ?></div></td>
+    					<td><div class=" left"><?php echo ($device->isExcluded) ? 'Manually Excluded' : 'Not Mapped'; ?></div></td>
