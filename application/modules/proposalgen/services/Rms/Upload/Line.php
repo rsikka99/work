@@ -893,17 +893,33 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
          */
         $this->reportsTonerLevels = false;
 
-        if (strpos($this->tonerLevelBlack, '%') || strpos($this->tonerLevelCyan, '%') || strpos($this->tonerLevelMagenta, '%') || strpos($this->tonerLevelYellow, '%'))
+        if ($this->tonerConfigId === Proposalgen_Model_TonerConfig::BLACK_ONLY)
         {
-            if ($this->tonerLevelBlack == 'LOW' || $this->tonerLevelBlack == 'OK' || strpos($this->tonerLevelBlack, '%'))
+            /*
+             * Monochrome device JIT
+             */
+            if (strpos($this->tonerLevelBlack, '%'))
             {
-                if ($this->tonerLevelCyan == 'LOW' || $this->tonerLevelCyan == 'OK' || strpos($this->tonerLevelCyan, '%'))
+                $this->reportsTonerLevels = true;
+            }
+        }
+        else
+        {
+            /*
+             * Color Device JIT
+             */
+            if (strpos($this->tonerLevelBlack, '%') || strpos($this->tonerLevelCyan, '%') || strpos($this->tonerLevelMagenta, '%') || strpos($this->tonerLevelYellow, '%'))
+            {
+                if ($this->tonerLevelBlack == 'LOW' || $this->tonerLevelBlack == 'OK' || strpos($this->tonerLevelBlack, '%'))
                 {
-                    if ($this->tonerLevelMagenta == 'LOW' || $this->tonerLevelMagenta == 'OK' || strpos($this->tonerLevelMagenta, '%'))
+                    if ($this->tonerLevelCyan == 'LOW' || $this->tonerLevelCyan == 'OK' || strpos($this->tonerLevelCyan, '%'))
                     {
-                        if ($this->tonerLevelYellow == 'LOW' || $this->tonerLevelYellow == 'OK' || strpos($this->tonerLevelYellow, '%'))
+                        if ($this->tonerLevelMagenta == 'LOW' || $this->tonerLevelMagenta == 'OK' || strpos($this->tonerLevelMagenta, '%'))
                         {
-                            $this->reportsTonerLevels = true;
+                            if ($this->tonerLevelYellow == 'LOW' || $this->tonerLevelYellow == 'OK' || strpos($this->tonerLevelYellow, '%'))
+                            {
+                                $this->reportsTonerLevels = true;
+                            }
                         }
                     }
                 }
