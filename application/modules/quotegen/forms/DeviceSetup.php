@@ -32,7 +32,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
             $manufacturers [$manufacturer->id] = $manufacturer->fullname;
         }
         
-        $this->addElement('select', 'manufacturerId', array (
+        $this->addElement('select', 'manufacturer_id', array (
                 'label' => 'Manufacturer:', 
                 'class' => 'span3', 
                 'multiOptions' => $manufacturers 
