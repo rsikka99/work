@@ -18,7 +18,7 @@ class Proposalgen_Form_Device extends Zend_Form
      *                 can be set to 'edit', or null. Differnt form elements are added for editing an instructor and adding a
      *                 new instructor.
      *
-     * @return HTML markup for the from is automatically returned by zend_form
+     * @return \Proposalgen_Form_Device markup for the from is automatically returned by zend_form
      */
     public function __construct ($options = null, $type = null)
     {
@@ -438,6 +438,37 @@ class Proposalgen_Form_Device extends Zend_Form
                                  )
                             ));
         array_push($elements, $is_scanner);
+        $elementCounter++;
+
+        $reportsTonerLevels = new Zend_Form_Element_Checkbox('reportsTonerLevels');
+        $reportsTonerLevels->setLabel('Reports toner levels:')
+            ->setOrder($elementCounter)
+            ->setDecorators(array(
+                                 array(
+                                     'Description',
+                                     array(
+                                         'escape' => false,
+                                         'tag'    => false
+                                     )
+                                 ),
+                                 'ViewHelper',
+                                 'Errors',
+                                 array(
+                                     'HtmlTag',
+                                     array(
+                                         'tag' => 'dd',
+                                         'id'  => 'is_scanner-element'
+                                     )
+                                 ),
+                                 array(
+                                     'Label',
+                                     array(
+                                         'tag'   => 'dt',
+                                         'class' => 'forms_label'
+                                     )
+                                 )
+                            ));
+        array_push($elements, $reportsTonerLevels);
         $elementCounter++;
 
         //fax

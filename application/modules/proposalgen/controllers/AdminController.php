@@ -547,6 +547,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     'is_scanner'            => $row [0] ['isScanner'] ? true : false,
                     'is_fax'                => $row [0] ['isFax'] ? true : false,
                     'is_duplex'             => $row [0] ['isDuplex'] ? true : false,
+                    'reportsTonerLevels'    => $row [0] ['reportsTonerLevels'] ? true : false,
                     'is_replacement_device' => $row [0] ['isReplacementDevice'],
                     'watts_power_normal'    => $row [0] ['wattsPowerNormal'],
                     'watts_power_idle'      => $row [0] ['wattsPowerIdle'],
@@ -3515,7 +3516,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 // check if new price is populated.
                                 if ($price == "0")
                                 {
-                                    $passvalid           = 1;
+                                    $passvalid = 1;
                                     $this->_helper->flashMessenger(array(
                                                                         "error" => "All values must be greater than 0. Please correct it and try again."
                                                                    ));
@@ -3523,7 +3524,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 }
                                 else if ($price != '' && !is_numeric($price))
                                 {
-                                    $passvalid           = 1;
+                                    $passvalid = 1;
                                     $this->_helper->flashMessenger(array(
                                                                         "error" => "All values must be numeric. Please correct it and try again."
                                                                    ));
@@ -3585,7 +3586,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                 // check if new price is populated.
                                 if ($price != '' && !is_numeric($price))
                                 {
-                                    $passvalid           = 1;
+                                    $passvalid = 1;
                                     $this->_helper->flashMessenger(array(
                                                                         "error" => "All values must be numeric. Please correct it and try again."
                                                                    ));
@@ -6465,7 +6466,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $replacement_devicesData = array(
                     'replacementCategory' => strtoupper($replacement_category),
                     'printSpeed'          => $print_speed,
-                    'resolution'           => $resolution,
+                    'resolution'          => $resolution,
                     'monthlyRate'         => $monthly_rate
                 );
 
@@ -6474,7 +6475,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                     // check to see if replacement device exists
 
                     $where               = $replacement_devicesTable->getAdapter()->quoteInto('masterDeviceId = ?', $printer_model, 'INTEGER');
-                    $replacement_devices = $replacementTableMapper->fetchAll($where,null,1);
+                    $replacement_devices = $replacementTableMapper->fetchAll($where, null, 1);
                     if (count($replacement_devices) > 0)
                     {
                         $replacement_devicesTable->update($replacement_devicesData, $where);
@@ -6842,9 +6843,11 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             }
             else
             {
-                if($where != null){
+                if ($where != null)
+                {
                     $where .= ' AND r.userId = ' . $this->user_id;
-                }else
+                }
+                else
                 {
                     $where = 'r.userId = ' . $this->user_id;
                 }

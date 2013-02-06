@@ -898,7 +898,7 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             /*
              * Monochrome device JIT
              */
-            if (strpos($this->tonerLevelBlack, '%'))
+            if ($this->validateTonerLevel($this->tonerLevelBlack))
             {
                 $this->reportsTonerLevels = true;
             }
@@ -908,25 +908,55 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             /*
              * Color Device JIT
              */
-            if (strpos($this->tonerLevelBlack, '%') || strpos($this->tonerLevelCyan, '%') || strpos($this->tonerLevelMagenta, '%') || strpos($this->tonerLevelYellow, '%'))
+            // At least one level must return a percentage or number
+            if ($this->validateTonerLevel($this->tonerLevelBlack) || $this->validateTonerLevel($this->tonerLevelCyan) || $this->validateTonerLevel($this->tonerLevelMagenta) || $this->validateTonerLevel($this->tonerLevelYellow))
             {
-                if ($this->tonerLevelBlack == 'LOW' || $this->tonerLevelBlack == 'OK' || strpos($this->tonerLevelBlack, '%'))
+                // All toner levels must have a percentage/number/low/ok
+                if ($this->validateTonerLevel($this->tonerLevelBlack, true) && $this->validateTonerLevel($this->tonerLevelCyan, true) & $this->validateTonerLevel($this->tonerLevelMagenta, true) && $this->validateTonerLevel($this->tonerLevelYellow, true))
                 {
-                    if ($this->tonerLevelCyan == 'LOW' || $this->tonerLevelCyan == 'OK' || strpos($this->tonerLevelCyan, '%'))
-                    {
-                        if ($this->tonerLevelMagenta == 'LOW' || $this->tonerLevelMagenta == 'OK' || strpos($this->tonerLevelMagenta, '%'))
-                        {
-                            if ($this->tonerLevelYellow == 'LOW' || $this->tonerLevelYellow == 'OK' || strpos($this->tonerLevelYellow, '%'))
-                            {
-                                $this->reportsTonerLevels = true;
-                            }
-                        }
-                    }
+                    $this->reportsTonerLevels = true;
                 }
             }
         }
 
         return true;
+    }
+
+    /**
+     * Validates a toner level.
+     *
+     * @param      $tonerLevel
+     * @param bool $acceptLowAndOk
+     *
+     * @return bool
+     */
+    public function validateTonerLevel ($tonerLevel, $acceptLowAndOk = false)
+    {
+        // It's a percentage, this is valid
+        if (strpos($tonerLevel, '%'))
+        {
+            return true;
+        }
+
+        // If it's a number and between 0 and 100 inclusively we can consider it valid
+        $intValidator = new Zend_Validate_Int();
+        if ($intValidator->isValid($tonerLevel) && $tonerLevel >= 0 && $tonerLevel <= 100)
+        {
+            return true;
+        }
+
+        /*
+         * This is only good when we have a percentage/number somewhere else
+         */
+        if ($acceptLowAndOk)
+        {
+            if ($tonerLevel == 'LOW' || $tonerLevel == 'OK')
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

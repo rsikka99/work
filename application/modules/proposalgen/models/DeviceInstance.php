@@ -1263,4 +1263,24 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 
         return $isLeased;
     }
+
+
+    /**
+     * Figures out if the device can report toner levels
+     *
+     * @return bool|int
+     */
+    public function isCapableOfReportingTonerLevels ()
+    {
+        // Use the device instance's value at all times. We assume it to be the most accurate when its set to true.
+        $reportsTonerLevels = $this->reportsTonerLevels;
+
+        // In the case that our device instance says it cannot report toner levels we will go with whatever the master device says it can do.
+        if (!$reportsTonerLevels && $this->getMasterDevice() instanceof Proposalgen_Model_MasterDevice)
+        {
+            $reportsTonerLevels = $this->getMasterDevice()->reportsTonerLevels;
+        }
+
+        return $reportsTonerLevels;
+    }
 }

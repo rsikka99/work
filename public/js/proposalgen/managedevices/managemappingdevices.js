@@ -504,7 +504,6 @@ $(document).ready(function ()
         $('#applied_toners_list').clearGridData();
 
         var master_device_id = $("#printer_model").val();
-        console.log(master_device_id);
         if (form_mode == "add")
         {
             master_device_id = 0;
@@ -526,6 +525,7 @@ $(document).ready(function ()
                     $("#toner_config_id").val(data.toner_config_id);
                     $("#is_copier").attr('checked', data.is_copier);
                     $("#is_scanner").attr('checked', data.is_scanner);
+                    $("#reportsTonerLevels").attr('checked', data.reportsTonerLevels);
                     $("#is_fax").attr('checked', data.is_fax);
                     $("#is_duplex").attr('checked', data.is_duplex);
                     $("#watts_power_normal").val(data.watts_power_normal);
@@ -837,6 +837,7 @@ function empty_form()
     $("#toner_config_id").val('');
     $("#is_copier").removeAttr('checked');
     $("#is_scanner").removeAttr('checked');
+    $("#reportsTonerLevels").removeAttr('checked');
     $("#is_fax").removeAttr('checked');
     $("#is_duplex").removeAttr('checked');
     $("#ppm_black").val('');
@@ -878,6 +879,7 @@ function disable_form()
     $("#toner_config_id").attr('disabled', 'disabled');
     $("#is_copier").attr('disabled', 'disabled');
     $("#is_scanner").attr('disabled', 'disabled');
+    $("#reportsTonerLevels").attr('disabled', 'disabled');
     $("#is_fax").attr('disabled', 'disabled');
     $("#is_duplex").attr('disabled', 'disabled');
     $("#ppm_black").attr('disabled', 'disabled');
@@ -916,6 +918,7 @@ function enable_form()
     $("#toner_config_id").removeAttr('disabled');
     $("#is_copier").removeAttr('disabled');
     $("#is_scanner").removeAttr('disabled');
+    $("#reportsTonerLevels").removeAttr('disabled');
     $("#is_fax").removeAttr('disabled');
     $("#is_duplex").removeAttr('disabled');
     $("#ppm_black").removeAttr('disabled');

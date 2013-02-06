@@ -443,6 +443,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_master_devices` (
   `tonerConfigId` INT(11) NOT NULL ,
   `wattsPowerNormal` DOUBLE NULL ,
   `wattsPowerIdle` DOUBLE NULL ,
+  `reportsTonerLevels` TINYINT NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`id`) ,
   INDEX `toner_config_id` (`tonerConfigId` ASC) ,
   INDEX `proposalgenerator_master_devices_ibfk_1_idx` (`manufacturerId` ASC) ,

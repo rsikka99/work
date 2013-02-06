@@ -43,6 +43,6 @@ foreach($proposal->getDevices()->allIncludedDeviceInstances as $deviceInstance) 
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(($deviceInstance->serialNumber) ? $deviceInstance->serialNumber : "Unknown", $tcStyle->row->fontStyle, $tcStyle->centeralign);
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(($deviceInstance->MasterDevice->IsLeased) ? "Leased" : "Purchased", $tcStyle->row->fontStyle, $tcStyle->centeralign);
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(number_format($deviceInstance->AverageMonthlyPageCount), $tcStyle->row->fontStyle, $tcStyle->rightalign);
-    $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(($deviceInstance->reportsTonerLevels) ? "Yes" : "No", $tcStyle->row->fontStyle, $tcStyle->centeralign);
+    $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(($deviceInstance->isCapableOfReportingTonerLevels()) ? "Yes" : "No", $tcStyle->row->fontStyle, $tcStyle->centeralign);
 }
 

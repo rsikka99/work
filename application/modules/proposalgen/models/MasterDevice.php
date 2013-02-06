@@ -109,6 +109,11 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public $leasedTonerYield;
 
+    /**
+     * @var bool
+     */
+    public $reportsTonerLevels;
+
     /*
      * Related Objects
      */
@@ -344,6 +349,10 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         {
             $this->leasedTonerYield = $params->leasedTonerYield;
         }
+        if (isset($params->reportsTonerLevels) && !is_null($params->reportsTonerLevels))
+        {
+            $this->reportsTonerLevels = $params->reportsTonerLevels;
+        }
 
     }
 
@@ -373,6 +382,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             "ppmColor"            => $this->ppmColor,
             "isLeased"            => $this->isLeased,
             "leasedTonerYield"    => $this->leasedTonerYield,
+            "reportsTonerLevels"  => $this->reportsTonerLevels,
         );
     }
 
@@ -999,26 +1009,27 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      *
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *            The settings to use when calculating cost per page
+     *
      * @return Proposalgen_Model_CostPerPage
      */
     public function calculateCostPerPage (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
     {
         // Make sure our array is initialized
-        if (! isset($this->_cachedCostPerPage))
+        if (!isset($this->_cachedCostPerPage))
         {
-            $this->_cachedCostPerPage = array ();
+            $this->_cachedCostPerPage = array();
         }
 
         $cacheKey = $costPerPageSetting->createCacheKey();
-        if (! array_key_exists($cacheKey, $this->_cachedCostPerPage))
+        if (!array_key_exists($cacheKey, $this->_cachedCostPerPage))
         {
             // Initialize the cpp object
-            $costPerPage = new Proposalgen_Model_CostPerPage();
+            $costPerPage                        = new Proposalgen_Model_CostPerPage();
             $costPerPage->monochromeCostPerPage = 0;
-            $costPerPage->colorCostPerPage = 0;
+            $costPerPage->colorCostPerPage      = 0;
 
             /* @var $toner Proposalgen_Model_Toner */
-            foreach ( $this->getCheapestTonerSet($costPerPageSetting->pricingConfiguration) as $toner )
+            foreach ($this->getCheapestTonerSet($costPerPageSetting->pricingConfiguration) as $toner)
             {
                 $tonerCostPerPage = $toner->calculateCostPerPage($costPerPageSetting);
 
@@ -1027,6 +1038,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
 
             $this->_cachedCostPerPage [$cacheKey] = $costPerPage;
         }
+
         return $this->_cachedCostPerPage [$cacheKey];
     }
 
@@ -1035,22 +1047,23 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      *
      * @param Proposalgen_Model_PricingConfig $pricingConfiguration
      *            The pricing configuration to use
+     *
      * @return Proposalgen_Model_Toner[]
      */
     public function getCheapestTonerSet (Proposalgen_Model_PricingConfig $pricingConfiguration)
     {
         // Make sure our array is initialized
-        if (! isset($this->_cachedCheapestTonerSets))
+        if (!isset($this->_cachedCheapestTonerSets))
         {
-            $this->_cachedCheapestTonerSets = array ();
+            $this->_cachedCheapestTonerSets = array();
         }
 
         $cacheKey = "pricingConfiguration_{$pricingConfiguration->pricingConfigId}";
-        if (! array_key_exists($cacheKey, $this->_cachedCostPerPage))
+        if (!array_key_exists($cacheKey, $this->_cachedCostPerPage))
         {
             $tonerColors = $this->getRequiredTonerColors();
-            $toners = array ();
-            foreach ( $tonerColors as $tonerColor )
+            $toners      = array();
+            foreach ($tonerColors as $tonerColor)
             {
                 $toners [] = $this->getCheapestToner($tonerColor, $pricingConfiguration);
             }

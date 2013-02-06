@@ -401,20 +401,21 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
 
                             // save master device
                             $master_deviceData = array(
-                                'launchDate'       => $launch_date->toString('yyyy-MM-dd HH:mm:ss'),
-                                'tonerConfigId'    => $toner_config_id,
-                                'isCopier'         => $formData ["is_copier"],
-                                'isScanner'        => $formData ["is_scanner"],
-                                'isFax'            => $formData ["is_fax"],
-                                'isDuplex'         => $formData ["is_duplex"],
-                                'wattsPowerNormal' => $formData ["watts_power_normal"],
-                                'wattsPowerIdle'   => $formData ["watts_power_idle"],
-                                'cost'             => ($formData ["device_price"] == 0 ? null : $formData ["device_price"]),
-                                'ppmBlack'         => ($formData ["ppm_black"] > 0) ? $formData ["ppm_black"] : null,
-                                'ppmColor'         => ($formData ["ppm_color"] > 0) ? $formData ["ppm_color"] : null,
-                                'dutyCycle'        => ($formData ["duty_cycle"] > 0) ? $formData ["duty_cycle"] : null,
-                                'isLeased'         => $formData ["is_leased"],
-                                'leasedTonerYield' => ($formData ["is_leased"] ? $formData ["leased_toner_yield"] : null)
+                                'launchDate'         => $launch_date->toString('yyyy-MM-dd HH:mm:ss'),
+                                'tonerConfigId'      => $toner_config_id,
+                                'isCopier'           => $formData ["is_copier"],
+                                'isScanner'          => $formData ["is_scanner"],
+                                'reportsTonerLevels' => $formData ["reportsTonerLevels"],
+                                'isFax'              => $formData ["is_fax"],
+                                'isDuplex'           => $formData ["is_duplex"],
+                                'wattsPowerNormal'   => $formData ["watts_power_normal"],
+                                'wattsPowerIdle'     => $formData ["watts_power_idle"],
+                                'cost'               => ($formData ["device_price"] == 0 ? null : $formData ["device_price"]),
+                                'ppmBlack'           => ($formData ["ppm_black"] > 0) ? $formData ["ppm_black"] : null,
+                                'ppmColor'           => ($formData ["ppm_color"] > 0) ? $formData ["ppm_color"] : null,
+                                'dutyCycle'          => ($formData ["duty_cycle"] > 0) ? $formData ["duty_cycle"] : null,
+                                'isLeased'           => $formData ["is_leased"],
+                                'leasedTonerYield'   => ($formData ["is_leased"] ? $formData ["leased_toner_yield"] : null)
                             );
                             if ($master_device_id > 0)
                             {
@@ -657,6 +658,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                 $form->getElement('toner_config_id')->setValue($formData ['toner_config_id']);
                 $form->getElement('is_copier')->setAttrib('checked', $formData ['is_copier']);
                 $form->getElement('is_scanner')->setAttrib('checked', $formData ['is_scanner']);
+                $form->getElement('reportsTonerLevels')->setAttrib('checked', $formData ['reportsTonerLevels']);
                 $form->getElement('is_fax')->setAttrib('checked', $formData ['is_fax']);
                 $form->getElement('is_duplex')->setAttrib('checked', $formData ['is_duplex']);
                 $form->getElement('watts_power_normal')->setValue($formData ['watts_power_normal']);
@@ -1061,20 +1063,21 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
 
                                 // save master device
                                 $master_deviceData = array(
-                                    'launchDate'       => $launch_date->toString('yyyy-MM-dd HH:mm:ss'),
-                                    'tonerConfigId'    => $toner_config_id,
-                                    'isCopier'         => $formData ["is_copier"],
-                                    'isScanner'        => $formData ["is_scanner"],
-                                    'isFax'            => $formData ["is_fax"],
-                                    'isDuplex'         => $formData ["is_duplex"],
-                                    'wattsPowerNormal' => $formData ["watts_power_normal"],
-                                    'wattsPowerIdle'   => $formData ["watts_power_idle"],
-                                    'cost'             => ($formData ["device_price"] == 0 ? null : $formData ["device_price"]),
-                                    'ppmBlack'         => ($formData ["ppm_black"] > 0) ? $formData ["ppm_black"] : null,
-                                    'ppmColor'         => ($formData ["ppm_color"] > 0) ? $formData ["ppm_color"] : null,
-                                    'dutyCycle'        => ($formData ["duty_cycle"] > 0) ? $formData ["duty_cycle"] : null,
-                                    'isLeased'         => $formData ["is_leased"],
-                                    'leasedTonerYield' => ($formData ["is_leased"] ? $formData ["leased_toner_yield"] : null)
+                                    'launchDate'         => $launch_date->toString('yyyy-MM-dd HH:mm:ss'),
+                                    'tonerConfigId'      => $toner_config_id,
+                                    'isCopier'           => $formData ["is_copier"],
+                                    'isScanner'          => $formData ["is_scanner"],
+                                    'reportsTonerLevels' => $formData ["reportsTonerLevels"],
+                                    'isFax'              => $formData ["is_fax"],
+                                    'isDuplex'           => $formData ["is_duplex"],
+                                    'wattsPowerNormal'   => $formData ["watts_power_normal"],
+                                    'wattsPowerIdle'     => $formData ["watts_power_idle"],
+                                    'cost'               => ($formData ["device_price"] == 0 ? null : $formData ["device_price"]),
+                                    'ppmBlack'           => ($formData ["ppm_black"] > 0) ? $formData ["ppm_black"] : null,
+                                    'ppmColor'           => ($formData ["ppm_color"] > 0) ? $formData ["ppm_color"] : null,
+                                    'dutyCycle'          => ($formData ["duty_cycle"] > 0) ? $formData ["duty_cycle"] : null,
+                                    'isLeased'           => $formData ["is_leased"],
+                                    'leasedTonerYield'   => ($formData ["is_leased"] ? $formData ["leased_toner_yield"] : null)
                                 );
                                 if ($master_device_id > 0)
                                 {
@@ -1276,6 +1279,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                         $deviceData ['device_price']       = $masterDevice->cost;
                         $deviceData ['is_copier']          = $masterDevice->isCopier;
                         $deviceData ['is_scanner']         = $masterDevice->isScanner;
+                        $deviceData ['reportsTonerLevels'] = $masterDevice->reportsTonerLevels;
                         $deviceData ['is_fax']             = $masterDevice->isFax;
                         $deviceData ['is_duplex']          = $masterDevice->isDuplex;
                         $deviceData ['watts_power_normal'] = $masterDevice->wattsPowerNormal;
@@ -1301,6 +1305,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                         $deviceData ['device_price']       = $rmsRow->cost;
                         $deviceData ['is_copier']          = $rmsRow->isCopier;
                         $deviceData ['is_scanner']         = $rmsRow->isScanner;
+                        $deviceData ['reportsTonerLevels'] = $deviceInstance->reportsTonerLevels;
                         $deviceData ['is_fax']             = $rmsRow->isFax;
                         $deviceData ['is_duplex']          = $rmsRow->isDuplex;
                         $deviceData ['watts_power_normal'] = $rmsRow->wattsPowerNormal;
@@ -1322,6 +1327,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                     $form->getElement('toner_config_id')->setValue($deviceData ['toner_config_id']);
                     $form->getElement('is_copier')->setAttrib('checked', $deviceData ['is_copier']);
                     $form->getElement('is_scanner')->setAttrib('checked', $deviceData ['is_scanner']);
+                    $form->getElement('reportsTonerLevels')->setAttrib('checked', $deviceData ['reportsTonerLevels']);
                     $form->getElement('is_fax')->setAttrib('checked', $deviceData ['is_fax']);
                     $form->getElement('is_duplex')->setAttrib('checked', $deviceData ['is_duplex']);
                     $form->getElement('watts_power_normal')->setValue($deviceData ['watts_power_normal']);
@@ -1365,6 +1371,7 @@ class Proposalgen_ManagedevicesController extends Zend_Controller_Action
                     $form->getElement('toner_config_id')->setValue($formData ['toner_config_id']);
                     $form->getElement('is_copier')->setAttrib('checked', $formData ['is_copier']);
                     $form->getElement('is_scanner')->setAttrib('checked', $formData ['is_scanner']);
+                    $form->getElement('reportsTonerLevels')->setAttrib('checked', $formData ['reportsTonerLevels']);
                     $form->getElement('is_fax')->setAttrib('checked', $formData ['is_fax']);
                     $form->getElement('is_duplex')->setAttrib('checked', $formData ['is_duplex']);
                     $form->getElement('watts_power_normal')->setValue($formData ['watts_power_normal']);
