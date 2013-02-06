@@ -51,7 +51,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
             // Get the post data
             $values = $request->getPost();
             $values['tonerConfigId'] = $values['toner_config_id'];
-            $values['manufacturerId'] = $values['manufacturer_id'];
+            $values['manufacturerId'] = $values['manufacturerId'];
             $assignedToners = $values ['hdnToners'];
 
             // If we cancelled we don't need to validate anything
@@ -176,7 +176,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
                             $masterDevice->populate($values);
 
                             // Make sure device doesn't exist
-                            $checkwhere = "manufacturerId = {$values ['manufacturer_id']} AND modelName LIKE '%{$values['modelName']}%'";
+                            $checkwhere = "manufacturerId = {$values ['manufacturerId']} AND modelName LIKE '%{$values['modelName']}%'";
                             $exists = $masterDeviceMapper->fetch($checkwhere);
 
                             if ($exists)

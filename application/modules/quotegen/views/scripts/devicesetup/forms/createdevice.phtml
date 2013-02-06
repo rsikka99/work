@@ -87,7 +87,7 @@ $form = $this->form;
 
 <form name="createdevice" id="createdevice" class="form-horizontal" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>">
 <div class="well">
-	<?php $element = $this->element->getElement("manufacturer_id"); ?>
+	<?php $element = $this->element->getElement("manufacturerId"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
