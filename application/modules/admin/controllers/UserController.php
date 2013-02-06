@@ -26,9 +26,10 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function createAction ()
     {
+        $db         = Zend_Db_Table_Abstract::getDefaultAdapter();
         $roleMapper = new Admin_Model_Mapper_Role();
         $roles      = $roleMapper->fetchAll();
-        $form = new Admin_Form_User(Admin_Form_User::MODE_CREATE,$roles);
+        $form       = new Admin_Form_User(Admin_Form_User::MODE_CREATE, $roles);
 
         $request = $this->getRequest();
 
@@ -44,6 +45,9 @@ class Admin_UserController extends Zend_Controller_Action
                     // Save to the database
                     try
                     {
+                        $db->beginTransaction();
+
+
                         $mapper = new Application_Model_Mapper_User();
                         $user   = new Application_Model_User();
                         $user->populate($values);
@@ -54,10 +58,10 @@ class Admin_UserController extends Zend_Controller_Action
                         {
                             $userRole         = new Admin_Model_UserRole();
                             $userRole->userId = $userId;
-                            $userRoleMapper = new Admin_Model_Mapper_UserRole();
-                            $userRoles      = $userRoleMapper->fetchAll(array(
-                                                                             'userId = ?' => $userId
-                                                                        ));
+                            $userRoleMapper   = new Admin_Model_Mapper_UserRole();
+                            $userRoles        = $userRoleMapper->fetchAll(array(
+                                                                               'userId = ?' => $userId
+                                                                          ));
                             // Loop through our new roles
                             foreach ($values ["userRoles"] as $roleId)
                             {
@@ -87,10 +91,17 @@ class Admin_UserController extends Zend_Controller_Action
                             $form->reset();
                         }
 
+                        $db->commit();
+
+                        /*
+                         * Send Email
+                         */
+
 
                     }
                     catch (Zend_Db_Statement_Mysqli_Exception $e)
                     {
+                        $db->rollBack();
                         // Check to see what error code was thrown
                         switch ($e->getCode())
                         {
@@ -111,6 +122,8 @@ class Admin_UserController extends Zend_Controller_Action
                     }
                     catch (Exception $e)
                     {
+                        $db->rollBack();
+                        My_Log::logException($e);
                         $this->_helper->flashMessenger(array(
                                                             'danger' => 'There was an error processing this request.  Please try again.'
                                                        ));

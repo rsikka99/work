@@ -11,13 +11,6 @@
             <action>index</action>
             <resource>admin__index__index</resource>
             <pages>
-                <logs>
-                    <label>View Logs</label>
-                    <module>admin</module>
-                    <controller>logs</controller>
-                    <action>index</action>
-                    <resource>admin__logs__index</resource>
-                </logs>
                 <clients>
                     <label>Clients</label>
                     <module>quotegen</module>

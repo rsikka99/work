@@ -3,10 +3,27 @@ Changelog for MPS Tools
 This file contains information on what has changed in each version of the 
 software. The information may not be entirely complete or accurate and is 
 just used as a way to help describe the changes as we progress versions.
- 
- 
- Version 0.1.0
- -------------
- - First glance at the quote generator
- - Very minimal support for proposal generator features
- - New kind of permission system to allow finer grain permissions
+
+
+Version 1.3.0
+-------------
+- Xerox File Import Support
+- Proposal generator 'ticketing' system removed
+
+Version 1.0.0
+-------------
+- Proposal generator fully supported.
+- Permissions refined to allow role management
+- Improvements to the proposal generator workflow
+
+
+Version 0.5.0
+-------------
+- Quote generator functional
+
+
+Version 0.1.0
+-------------
+- First glance at the quote generator
+- Very minimal support for proposal generator features
+- New kind of permission system to allow finer grain permissions
