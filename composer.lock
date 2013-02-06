@@ -1,5 +1,5 @@
 {
-    "hash": "66196b2f9e90f834e3c62d401e3637be",
+    "hash": "38ba0f431b796f3f1f2c1383d62c5cb6",
     "packages": [
         {
             "name": "gChartPhp/gChartPhp",
@@ -82,6 +82,51 @@
             "keywords": [
                 "excel",
                 "xls"
+            ]
+        },
+        {
+            "name": "zendframework/zendframework1",
+            "version": "1.12.1",
+            "source": {
+                "type": "svn",
+                "url": "http://framework.zend.com/svn/framework/standard",
+                "reference": "/tags/release-1.12.1/@25165"
+            },
+            "require": {
+                "php": ">=5.2.11"
+            },
+            "time": "2012-12-18 17:24:42",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-trunk": "1.12.x-dev",
+                    "dev-release-1.0": "1.0.x-dev",
+                    "dev-release-1.5": "1.5.x-dev",
+                    "dev-release-1.6": "1.6.x-dev",
+                    "dev-release-1.7": "1.7.x-dev",
+                    "dev-release-1.8": "1.8.x-dev",
+                    "dev-release-1.9": "1.9.x-dev",
+                    "dev-release-1.10": "1.10.x-dev",
+                    "dev-release-1.11": "1.11.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Zend": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "include-path": [
+                "library/"
+            ],
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Zend Framework 1",
+            "homepage": "http://framework.zend.com/",
+            "keywords": [
+                "framework",
+                "ZF1"
             ]
         }
     ],
