@@ -25,7 +25,6 @@ class Application_Model_Acl extends Zend_Acl
      * These are module controller action combinations
      */
     const RESOURCE_ADMIN_WILDCARD             = "admin__%__%";
-    const RESOURCE_ADMIN_DEVICESETUP_WILDCARD = "admin__devicesetup__%";
     const RESOURCE_ADMIN_TONER_WILDCARD       = "admin__toner__%";
 
 
@@ -303,7 +302,6 @@ class Application_Model_Acl extends Zend_Acl
     protected function _setupResources ()
     {
         $this->addResource(self::RESOURCE_ADMIN_WILDCARD);
-        $this->addResource(self::RESOURCE_ADMIN_DEVICESETUP_WILDCARD);
         $this->addResource(self::RESOURCE_ADMIN_TONER_WILDCARD);
         $this->addResource(self::RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD);
 
@@ -408,7 +406,7 @@ class Application_Model_Acl extends Zend_Acl
 
         // Add our privileges
 
-        $this->allow(self::ROLE_PROPOSAL_ADMIN, self::RESOURCE_PROPOSALGEN_WILDCARD, self::PRIVILEGE_ADMIN);
+        $this->allow(self::ROLE_PROPOSAL_ADMIN, self::RESOURCE_PROPOSALGEN_WILDCARD, self::PRIVILEGE_VIEW);
     }
 
     /**
@@ -467,10 +465,9 @@ class Application_Model_Acl extends Zend_Acl
 
         // Add our privileges
         $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_WILDCARD, self::PRIVILEGE_ADMIN);
-        $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_ADMIN_DEVICESETUP_WILDCARD, self::PRIVILEGE_ADMIN);
-        $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_ADMIN_TONER_WILDCARD, self::PRIVILEGE_ADMIN);
-        $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD, self::PRIVILEGE_ADMIN);
+        $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_WILDCARD, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_ADMIN_TONER_WILDCARD, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_ADMIN_INDEX_INDEX, self::PRIVILEGE_VIEW);
     }
 
