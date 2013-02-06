@@ -139,7 +139,7 @@ class Proposalgen_Report_GrossmarginController extends Proposalgen_Library_Contr
             /* @var $device Proposalgen_Model_DeviceInstance() */
             foreach ($proposal->getPurchasedDevices() as $device)
             {
-                $tonerConfig              = $device->getMasterDevice()->TonerConfigId;
+                $tonerConfig              = $device->getMasterDevice()->tonerConfigId;
                 $grossMarginPricingConfig = Proposalgen_Model_MasterDevice::getGrossMarginPricingConfig();
                 $completeMonoToners       = $device->getMasterDevice()->HasValidMonoGrossMarginToners;
                 $completeColorToners      = $device->getMasterDevice()->HasValidColorGrossMarginToners;
@@ -166,8 +166,8 @@ class Proposalgen_Report_GrossmarginController extends Proposalgen_Library_Contr
                 }
 
                 // Black Toner
-                $blackCost  = "$" . number_format($blackToner->TonerPrice, 2, '.', '');
-                $blackYield = number_format($blackToner->TonerYield, 0, '.', '');
+                $blackCost  = "$" . number_format($blackToner->cost, 2, '.', '');
+                $blackYield = number_format($blackToner->yield, 0, '.', '');
 
                 // Color Toner
                 $colorCost  = "-";
@@ -175,8 +175,8 @@ class Proposalgen_Report_GrossmarginController extends Proposalgen_Library_Contr
                 $isColor    = false;
                 if ($colorToner)
                 {
-                    $colorCost  = "$" . number_format($colorToner->TonerPrice, 2, '.', '');
-                    $colorYield = number_format($colorToner->TonerYield, 0, '.', '');
+                    $colorCost  = "$" . number_format($colorToner->cost, 2, '.', '');
+                    $colorYield = number_format($colorToner->yield, 0, '.', '');
                     $isColor    = true;
                 }
 
@@ -186,12 +186,12 @@ class Proposalgen_Report_GrossmarginController extends Proposalgen_Library_Contr
                 $fieldList [] = number_format($device->getAverageMonthlyBlackAndWhitePageCount(), 0, '.', '');
                 $fieldList [] = $blackCost;
                 $fieldList [] = $blackYield;
-                $fieldList [] = number_format($device->getMasterDevice()->CostPerPage->Actual->BasePlusService->BlackAndWhite, 4, '.', '');
+                $fieldList [] = number_format($device->getMasterDevice()->getCostPerPage()->Actual->BasePlusService->BlackAndWhite, 4, '.', '');
                 $fieldList [] = "$" . number_format($device->getGrossMarginMonthlyBlackAndWhiteCost(), 2, '.', '');
                 $fieldList [] = $isColor ? number_format($device->getAverageMonthlyColorPageCount(), 0, '.', '') : "-";
                 $fieldList [] = $colorCost;
                 $fieldList [] = $colorYield;
-                $fieldList [] = $isColor ? "$" . number_format($device->getMasterDevice()->CostPerPage->Actual->BasePlusService->Color, 4, '.', '') : "-";
+                $fieldList [] = $isColor ? "$" . number_format($device->getMasterDevice()->getCostPerPage()->Actual->BasePlusService->Color, 4, '.', '') : "-";
                 $fieldList [] = $isColor ? "$" . number_format($device->getGrossMarginMonthlyColorCost(), 2, '.', '') : "-";
                 $fieldList_Values .= implode(",", $fieldList) . "\n";
             }

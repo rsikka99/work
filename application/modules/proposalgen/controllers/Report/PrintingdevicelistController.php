@@ -115,8 +115,8 @@ class Proposalgen_Report_PrintingdevicelistController extends Proposalgen_Librar
                 $row [] = $device->getMasterDevice()->modelName;
                 $row [] = ($device->ipAddress) ? $device->ipAddress : "Unknown";
                 $row [] = ($device->serialNumber) ? $device->serialNumber : "Unknown";
-                $row [] = ($device->MasterDevice->IsLeased) ? "Leased" : "Purchased";
-                $row [] = $device->AverageMonthlyPageCount;
+                $row [] = ($device->getMasterDevice()->isLeased) ? "Leased" : "Purchased";
+                $row [] = $device->getAverageMonthlyPageCount();
                 $row [] = ($device->reportsTonerLevels) ? "Yes" : "No";
                 $appendix_values .= implode(",", $row) . "\n";
             } // end Purchased Devices foreach
@@ -148,7 +148,7 @@ class Proposalgen_Report_PrintingdevicelistController extends Proposalgen_Librar
                     $row [] = $device->getRmsUploadRow()->modelName;
                 }
                 $row [] = (strlen($device->serialNumber) > 0) ? $device->serialNumber : "Unknown";
-                $row [] = ($device->IpAddress) ? $device->IpAddress : "Unknown IP";
+                $row [] = ($device->ipAddress) ? $device->ipAddress : "Unknown IP";
                 $row [] = ($device->isExcluded) ? 'Manually excluded' : 'Device not mapped.';
                 $excluded_values .= implode(",", $row) . "\n";
             } // end Purchased Devices foreach

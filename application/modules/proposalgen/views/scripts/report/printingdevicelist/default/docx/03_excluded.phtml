@@ -53,7 +53,7 @@ foreach($proposal->getExcludedDevices() as $device) {
         $table->addCell($tcStyle->col1Width, $tcStyle->row->cell)->addText($this->translate($device->getRmsUploadRow()->modelName), $tcStyle->row->fontStyle, $tcStyle->leftalign);
     }
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText($this->translate($SerialNumber), $tcStyle->row->fontStyle, $tcStyle->centeralign);
-    $table->addCell($tcStyle->col3Width, $tcStyle->row->cell)->addText($this->translate(($device->IpAddress) ? $device->IpAddress : 'Unknown IP'), $tcStyle->row->fontStyle, $tcStyle->centeralign);
+    $table->addCell($tcStyle->col3Width, $tcStyle->row->cell)->addText($this->translate(($device->ipAddress) ? $device->ipAddress : 'Unknown IP'), $tcStyle->row->fontStyle, $tcStyle->centeralign);
     $table->addCell($tcStyle->col4Width, $tcStyle->row->cell)->addText($this->translate($device->isExcluded) ? 'Manually excluded.' : 'Not Mapped.', $tcStyle->row->fontStyle);
 }
 
