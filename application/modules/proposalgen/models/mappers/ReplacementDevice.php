@@ -243,26 +243,26 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
     public function fetchCheapestForEachCategory ()
     {
         $replacementDevices                                                             = array();
-        $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW]       = $this->fetchAll(array(
+        $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW]       = $this->fetch(array(
                                                                                                                "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW
                                                                                                           ), array(
                                                                                                                   "{$this->col_monthlyRate} ASC"
-                                                                                                             ),1);
-        $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP]    = $this->fetchAll(array(
+                                                                                                             ));
+        $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP]    = $this->fetch(array(
                                                                                                                "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP
                                                                                                           ), array(
                                                                                                                   "{$this->col_monthlyRate} ASC"
-                                                                                                             ),1);
-        $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR]    = $this->fetchAll(array(
+                                                                                                             ));
+        $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR]    = $this->fetch(array(
                                                                                                                "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR
                                                                                                           ), array(
                                                                                                                   "{$this->col_monthlyRate} ASC"
-                                                                                                             ),1);
-        $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP] = $this->fetchAll(array(
+                                                                                                             ));
+        $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP] = $this->fetch(array(
                                                                                                                "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP
                                                                                                           ), array(
                                                                                                                   "{$this->col_monthlyRate} ASC"
-                                                                                                             ),1);
+                                                                                                             ));
 
         return $replacementDevices;
     }

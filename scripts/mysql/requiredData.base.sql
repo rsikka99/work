@@ -34,7 +34,9 @@ INSERT INTO `user_roles` (`userId`, `roleId`) VALUES
     (4,5),
 
     -- jlarochelle
+    (5,2),
     (5,3),
+    (5,4),
     (5,5),
 
     -- nmcconkey
