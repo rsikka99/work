@@ -1706,6 +1706,15 @@ INSERT INTO `pgen_master_devices` (`id`, `manufacturerId`, `modelName`, `tonerCo
 (476, 10, 'Phaser 1235DT', 2, 0, 0, 0, 0, 0, 1000, 300, NULL, NULL, '2000-10-30 00:00:00', '2012-12-05 14:07:02', 60000, 20, 12, 0, NULL),
 (477, 4, 'Dell 1135n Laser MFP', 1, 1, 1, 1, 0, 0, 420, 45, NULL, NULL, '2009-12-01 00:00:00', '2013-01-02 15:08:10', 12000, 23, 0, 0, NULL);
 
+-- This insert has a different column order
+INSERT INTO `pgen_master_devices` (`id`, `cost`, `dateCreated`, `dutyCycle`, `isCopier`, `isDuplex`, `isFax`, `isLeased`, `isReplacementDevice`, `isScanner`, `launchDate`, `manufacturerId`, `modelName`, `leasedTonerYield`, `ppmBlack`, `ppmColor`, `serviceCostPerPage`, `tonerConfigId`, `wattsPowerNormal`, `wattsPowerIdle`) VALUES
+(478, 1299.99, '2013-02-06 12:53:46', 0, 0, 1, 0, 0, 0, 0, '2012-04-19 00:00:00', 5, 'LaserJet Enterprise 600 M602DN', 0, 0, 0, 0, 1, 0, 10),
+(479, 4699.99, '2013-02-06 12:55:38', 0, 1, 1, 1, 0, 0, 1, '2011-04-30 00:00:00', 5, 'LaserJet Enterprise M4555fskm MFP', 0, 0, 0, 0, 1, 0, 10),
+(480, 2595, '2013-02-06 12:57:46', 0, 1, 1, 1, 0, 0, 1, '2011-08-18 00:00:00', 18, 'FS-C2626MFP', 0, 0, 28, 0, 2, 0, 10),
+(481, 1569, '2013-02-06 13:03:11', 0, 0, 1, 0, 0, 0, 0, '2011-01-01 00:00:00', 18, 'ECOSYS FS-4300DN', 0, 62, 0, 0, 1, 0, 10),
+(482, 4941, '2013-02-06 13:21:28', 0, 1, 1, 0, 0, 0, 1, '2011-01-01 00:00:00', 18, 'TASKalfa 5500i', 0, 55, 0, 0, 1, 0, 10),
+(483, 14500, '2013-02-06 13:31:48', 0, 1, 1, 0, 0, 0, 1, '2011-01-01 00:00:00', 18, 'TASKalfa 6550ci', 0, 65, 65, 0, 2, 0, 10);
+
 
 
 INSERT INTO `pgen_device_toners` (`toner_id`, `master_device_id`) VALUES
