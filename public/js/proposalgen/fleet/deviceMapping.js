@@ -174,7 +174,7 @@ $(function ()
                     if (row.useUserData == 1)
                     {
                         // Display message instead of drop down
-                        row.mapToMasterDevice = '&nbsp;New Printer Added (<a href="javascript: void(0);" class="removeUnknownDeviceButton" data-device-instance-ids="' + row.deviceInstanceIds + '">Click to Remove</a>)';
+                        row.mapToMasterDevice = 'New Printer Added (<a href="javascript: void(0);" class="removeUnknownDeviceButton" data-device-instance-ids="' + row.deviceInstanceIds + '">Click to Remove</a>)';
                         row.action = '<input style="width:35px;" title="Edit Printer" class="addEditUnknownDeviceButton" type="button" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit" />';
 
                     }
