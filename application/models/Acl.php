@@ -304,6 +304,7 @@ class Application_Model_Acl extends Zend_Acl
     {
         $this->addResource(self::RESOURCE_ADMIN_WILDCARD);
         $this->addResource(self::RESOURCE_ADMIN_DEVICESETUP_WILDCARD);
+        $this->addResource(self::RESOURCE_ADMIN_TONER_WILDCARD);
         $this->addResource(self::RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD);
 
         $this->addResource(self::RESOURCE_DEFAULT_WILDCARD);
