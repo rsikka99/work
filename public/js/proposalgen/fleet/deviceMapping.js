@@ -175,7 +175,7 @@ $(function ()
                     {
                         // Display message instead of drop down
                         row.mapToMasterDevice = 'New Printer Added (<a href="javascript: void(0);" class="removeUnknownDeviceButton" data-device-instance-ids="' + row.deviceInstanceIds + '">Click to Remove</a>)';
-                        row.action = '<input style="width:35px;" title="Edit Printer" class="addEditUnknownDeviceButton" type="button" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit" />';
+                        row.action = '<input style="width:75px;" title="Edit Printer" class="addEditUnknownDeviceButton btn btn-small btn-warning" type="button" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit" />';
 
                     }
                     else
@@ -213,7 +213,7 @@ $(function ()
                             }
                             else
                             {
-                                row.action = '<input title="Create New Device" type="button" class="addEditUnknownDeviceButton" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create" />';
+                                row.action = '<input title="Create New Device" type="button" class="addEditUnknownDeviceButton btn btn-small btn-success" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create" />';
                             }
                         }
 

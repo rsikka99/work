@@ -102,7 +102,7 @@ $(function ()
                 $('#deviceDetails_isDuplex').empty().html((data.masterDevice.isDuplex) ? 'YES' : 'NO');
                 $('#deviceDetails_isFax').empty().html((data.masterDevice.isFax) ? 'YES' : 'NO');
                 $('#deviceDetails_isScan').empty().html((data.masterDevice.isScan) ? 'YES' : 'NO');
-
+                $('#deviceDetails_reportsToners').empty().html((data.masterDevice.reportsTonerLevels == 1) ? 'YES' : 'NO');
                 $('#deviceDetails_ppmBlack').empty().html(data.masterDevice.ppmBlack);
                 $('#deviceDetails_ppmColor').empty().html(data.masterDevice.ppmColor);
                 $('#deviceDetails_dutyCycle').empty().html(data.masterDevice.dutyCycle);

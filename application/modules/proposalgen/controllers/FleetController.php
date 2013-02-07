@@ -667,7 +667,9 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             {
                 $rmsUploadRow             = $deviceInstance->getRmsUploadRow();
                 $this->view->rmsUploadRow = $rmsUploadRow;
+                $form->populate(array('reportsTonerLevels' => $deviceInstance->isCapableOfReportingTonerLevels()));
                 $form->populate($rmsUploadRow->toArray());
+
             }
 
 
@@ -685,11 +687,13 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     $form->setValidationOnToners($postData['tonerConfigId']);
                     if ($form->isValid($postData))
                     {
+
                         /*
                          * Form is VALID
                          */
                         $formValues = $form->getValues();
                         $db->beginTransaction();
+
                         try
                         {
                             /**
@@ -719,6 +723,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 $rmsUploadRowMapper->save($rmsUploadRow);
 
                                 $deviceInstance->useUserData = true;
+                                $deviceInstance->reportsTonerLevels = $formValues['reportsTonerLevels'];
+                                //$deviceInstance->reportsTonerLevels = $formValues["reportsTonerLevels"];
                                 $deviceInstanceMapper->save($deviceInstance);
                             }
                             $db->commit();
@@ -905,6 +911,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     $jsonResponse['masterDevice']['dutyCycle']        = number_format($jsonResponse['masterDevice']['dutyCycle']);
                     $jsonResponse['masterDevice']['leasedTonerYield'] = number_format($jsonResponse['masterDevice']['leasedTonerYield']);
                     $jsonResponse["masterDevice"]["manufacturer"]     = $deviceInstance->getMasterDevice()->getManufacturer()->toArray();
+                    $jsonResponse["masterDevice"]["reportsTonerLevels"]     = $deviceInstance->isCapableOfReportingTonerLevels();
                     $jsonResponse["masterDevice"]["tonerConfigName"]  = $deviceInstance->getMasterDevice()->getTonerConfig()->tonerConfigName;
 
                     foreach ($deviceInstance->getMasterDevice()->getToners() as $tonersByPartType)

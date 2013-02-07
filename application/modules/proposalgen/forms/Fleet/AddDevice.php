@@ -127,9 +127,16 @@ class Proposalgen_Form_Fleet_AddDevice extends Twitter_Bootstrap_Form_Horizontal
                                                         'Boolean'
                                                     ),
                                                ));
-        $deviceDetailElements[] = 'isScan';
-        $this->addElement('checkbox', 'isScan', array(
+        $deviceDetailElements[] = 'isScanner';
+        $this->addElement('checkbox', 'isScanner', array(
                                                      'label'    => 'Scan',
+                                                     'filters'  => array(
+                                                         'Boolean'
+                                                     ),
+                                                ));
+        $deviceDetailElements[] = 'reportsTonerLevels';
+        $this->addElement('checkbox', 'reportsTonerLevels', array(
+                                                     'label'    => 'reportsTonerLevels',
                                                      'filters'  => array(
                                                          'Boolean'
                                                      ),
