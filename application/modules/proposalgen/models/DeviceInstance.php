@@ -1,6 +1,21 @@
 <?php
 class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 {
+
+    /*
+     *
+        */
+    const ACTION_KEEP = 'Keep';
+    const ACTION_REPLACE = 'Replace';
+    const ACTION_RETIRE = 'Retire';
+
+    /*
+     *
+     */
+    const RETIREMENT_AGE = 10;
+    const RETIREMENT_MAXPAGECOUNT = 500;
+    const REPLACEMENT_AGE = 10;
+    const REPLACEMENT_MINPAGECOUNT = 500;
     /**
      * An array used to determine how many hours a device is running based on its average volume per day
      *
@@ -77,7 +92,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public $useUserData;
 
-
     /*
      * ********************************************************************************
      * Related Objects
@@ -89,6 +103,13 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * @var Proposalgen_Model_DeviceInstanceMeter[]
      */
     protected $_meters;
+
+    /**
+     * Used in determining actions for replacement devices.
+     *
+     * @var String
+     */
+    protected $_deviceAction;
 
     /**
      * @var Proposalgen_Model_MasterDevice
@@ -1362,14 +1383,86 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         return $colorCostPerPage * $this->getAverageMonthlyColorPageCount();
     }
 
-    public function calculateDeviceAction()
+    /**
+     * The action of the device
+     *
+     * @return String $Action
+     */
+    public function getAction()
     {
-        $action = array(0 => "Keep", 1 => "Replace", 2 => "Retire");
-        $randomNumber =  rand(0,2);
-        return $action[$randomNumber];
+        if (!isset($this->Action)) {
+            if ($this->getMasterDevice()->getAge() > self::RETIREMENT_AGE && $this->getAverageMonthlyPageCount() < self::RETIREMENT_MAXPAGECOUNT) {
+                $this->Action = Proposalgen_Model_DeviceInstance::ACTION_RETIRE;
+            } else if (($this->getMasterDevice()->getAge() > self::REPLACEMENT_AGE || $this->_lifeUsage > 1) && $this->getAverageMonthlyPageCount() > self::REPLACEMENT_MINPAGECOUNT) {
+                $this->Action = Proposalgen_Model_DeviceInstance::ACTION_REPLACE;
+            } else {
+                $this->Action = Proposalgen_Model_DeviceInstance::ACTION_KEEP;
+            }
+        }
+        return $this->Action;
     }
-    public function getReplacementMasterDevice()
+
+    /**
+     * Calculates the monthly cost for this instance
+     *
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *            The settings to use when calculating cost per page
+     * @param Proposalgen_Model_MasterDevice       $masterDevice
+     *            The master device to use
+     *
+     * @return number
+     */
+    public function calculateMonthlyCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null)
     {
-        return Proposalgen_Model_Mapper_MasterDevice::getInstance()->find(2);
+        return $this->calculateMonthlyMonoCost($costPerPageSetting, $masterDevice) + $this->calculateMonthlyColorCost($costPerPageSetting, $masterDevice);
     }
+
+    /**
+     * Calculates the monthly cost for monochrome printing
+     *
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *            The setting used to calculate cost per page
+     * @param Proposalgen_Model_MasterDevice       $masterDevice
+     *            the master device to us
+     *
+     * @return number
+     */
+    public function calculateMonthlyMonoCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null)
+    {
+        $monoCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->monochromeCostPerPage;
+
+        return $monoCostPerPage * $this->getAverageMonthlyBlackAndWhitePageCount();
+    }
+
+    /**
+     * Calculates the monthly cost for color printing
+     *
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *            the setting used to calculate cost per page
+     * @param Proposalgen_Model_MasterDevice       $masterDevice
+     *            the master device to use, or null for current instance of device
+     *
+     * @return number
+     */
+    public function calculateMonthlyColorCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null)
+    {
+        $colorCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->colorCostPerPage;
+
+        return $colorCostPerPage * $this->getAverageMonthlyColorPageCount();
+    }
+
+    /**
+     * Calculates a cost per page for a replacement device
+     *
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *            The settings to use when calculating cost per page
+     *
+     * @return Proposalgen_Model_CostPerPage
+     */
+    public function calculateCostPerPageWithReplacement (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    {
+        return $this->calculateCostPerPage($costPerPageSetting, $this->getReplacementMasterDevice());
+    }
+
+
 }
