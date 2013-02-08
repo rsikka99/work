@@ -1,6 +1,14 @@
 <?php
 class Proposalgen_Model_MasterDevice extends My_Model_Abstract
 {
+    /*
+     * The different device types
+     */
+    const DEVICETYPE_MONO = 0;
+    const DEVICETYPE_MONO_MFP = 1;
+    const DEVICETYPE_COLOR = 2;
+    const DEVICETYPE_COLOR_MFP = 3;
+
     private static $ReportMargin;
     private static $PricingConfig;
     private static $GrossMarginPricingConfig;
@@ -1073,5 +1081,66 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         }
 
         return $this->_cachedCheapestTonerSets [$cacheKey];
+    }
+
+    /**
+     * Gets the device type
+     *
+     * @return number @see Application_Model_MasterDevice for constants
+     */
+    public function getDeviceType ()
+    {
+        if (! isset($this->_deviceType))
+        {
+            if ($this->tonerConfigId === Proposalgen_Model_TonerConfig::BLACK_ONLY)
+            {
+                if ($this->isCopier)
+                {
+                    $this->_deviceType = self::DEVICETYPE_MONO_MFP;
+                }
+                else
+                {
+
+                    $this->_deviceType = self::DEVICETYPE_MONO;
+                }
+            }
+            else
+            {
+                if ($this->isCopier)
+                {
+                    $this->_deviceType = self::DEVICETYPE_COLOR_MFP;
+                }
+                else
+                {
+                    $this->_deviceType = self::DEVICETYPE_COLOR;
+                }
+            }
+        }
+        return $this->_deviceType;
+    }
+
+    /**
+     * The age is the difference between the launch date and today in years.
+     * The only special thing here is that the launch date is changed -1 year if
+     * it
+     * is at least 1 year old. This is to compensate for the fact that most
+     * printers
+     * aren't deployed in a fleet as soon as they were launched by their
+     * manufacturers
+     *
+     * @return int Calculated device age in years
+     */
+    public function getAge ()
+    {
+        if (! isset($this->Age))
+        {
+            // Get the time difference in seconds
+            $launchDate = time() - strtotime($this->launchDate);
+            $correctedLaunchDate = ($launchDate > 31556926) ? ($launchDate - 31556926) : $launchDate;
+            $this->Age = floor($correctedLaunchDate / 31556926);
+            if ($this->Age == 0)
+                $this->Age = 1;
+        }
+        return $this->Age;
     }
 }
