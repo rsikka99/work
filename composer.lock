@@ -1,5 +1,5 @@
 {
-    "hash": "38ba0f431b796f3f1f2c1383d62c5cb6",
+    "hash": "aaebeece347467cc5ff088e6172c0bed",
     "packages": [
         {
             "name": "gChartPhp/gChartPhp",
@@ -47,7 +47,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2012-08-08 14:48:20"
+            "time": "2013-02-06 15:48:47"
         },
         {
             "name": "phpexcel/phpexcel",
@@ -85,49 +85,15 @@
             ]
         },
         {
-            "name": "zendframework/zendframework1",
-            "version": "1.12.1",
+            "name": "tangentmtw/ZF1",
+            "version": "dev-master",
             "source": {
-                "type": "svn",
-                "url": "http://framework.zend.com/svn/framework/standard",
-                "reference": "/tags/release-1.12.1/@25165"
+                "type": "git",
+                "url": "git@github.com:breerly/zf1.git",
+                "reference": "master"
             },
-            "require": {
-                "php": ">=5.2.11"
-            },
-            "time": "2012-12-18 17:24:42",
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-trunk": "1.12.x-dev",
-                    "dev-release-1.0": "1.0.x-dev",
-                    "dev-release-1.5": "1.5.x-dev",
-                    "dev-release-1.6": "1.6.x-dev",
-                    "dev-release-1.7": "1.7.x-dev",
-                    "dev-release-1.8": "1.8.x-dev",
-                    "dev-release-1.9": "1.9.x-dev",
-                    "dev-release-1.10": "1.10.x-dev",
-                    "dev-release-1.11": "1.11.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Zend": "library/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "include-path": [
-                "library/"
-            ],
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Zend Framework 1",
-            "homepage": "http://framework.zend.com/",
-            "keywords": [
-                "framework",
-                "ZF1"
-            ]
+            "time": "2012-06-25 01:15:47"
         }
     ],
     "packages-dev": null,
@@ -136,6 +102,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
+        "tangentmtw/zf1": 20,
         "lrobert/phpword": 20,
         "phpexcel/phpexcel": 20,
         "gchartphp/gchartphp": 20

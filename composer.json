@@ -18,12 +18,24 @@
                     "reference": "master"
                 }
             }
+        },
+        {
+            "type"   : "package",
+            "package": {
+                "name"   : "tangentmtw/ZF1",
+                "version": "dev-master",
+                "source" : {
+                    "url"      : "git@github.com:breerly/zf1.git",
+                    "type"     : "git",
+                    "reference": "master"
+                }
+            }
         }
     ],
     "require"     : {
-        "zendframework/zendframework1": "1.12.*",
-        "lrobert/phpword"             : "dev-master",
-        "phpexcel/phpexcel"           : "dev-master",
-        "gChartPhp/gChartPhp"         : "dev-master"
+        "tangentmtw/ZF1"     : "dev-master",
+        "lrobert/phpword"    : "dev-master",
+        "phpexcel/phpexcel"  : "dev-master",
+        "gChartPhp/gChartPhp": "dev-master"
     }
 }
