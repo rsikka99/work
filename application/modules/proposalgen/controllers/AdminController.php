@@ -2380,6 +2380,30 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $form->getElement('assessmentPricingConfigId')->addMultiOption($pricingConfig->pricingConfigId, ($pricingConfig->pricingConfigId !== 1) ? $pricingConfig->configName : "");
         }
 
+
+        // Populate the values in the form.
+        $form->populate($surveySettings->toArray());
+        $form->populate($reportSettings->toArray());
+
+        // Get the system defaults and unset the id's.  Merge the two system settings and set the dropdowns.
+        $systemReportSettings      = Proposalgen_Model_Mapper_Report_Setting::getInstance()->find(1);
+        $systemSurveySetting       = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->find(1);
+        $systemReportSettingsArray = $systemReportSettings->toArray();
+        $systemSurveySettingArray  = $systemSurveySetting->toArray();
+        unset($systemReportSettingsArray ['id']);
+        unset($systemSurveySettingArray ['id']);
+        $defaultSettings = array_merge($systemReportSettingsArray, $systemSurveySettingArray);
+
+        if ($defaultSettings ["assessmentPricingConfigId"] !== Proposalgen_Model_PricingConfig::NONE)
+        {
+            $defaultSettings ["assessmentPricingConfigId"] = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($defaultSettings ["assessmentPricingConfigId"])->configName;
+        }
+        else
+        {
+            $defaultSettings ["assessmentPricingConfigId"] = "";
+        }
+
+
         if ($this->_request->isPost())
         {
             // get form values
@@ -2397,7 +2421,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         {
                             if (strlen($value) === 0)
                             {
-                                $value = null;
+                                $value = new Zend_Db_Expr("NULL");
                             }
                         }
 
@@ -2430,27 +2454,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 $form->populate($formData);
             }
         }
-        // Populate the values in the form.
-        $form->populate($surveySettings->toArray());
-        $form->populate($reportSettings->toArray());
 
-        // Get the system defaults and unset the id's.  Merge the two system settings and set the dropdowns.
-        $systemReportSettings      = Proposalgen_Model_Mapper_Report_Setting::getInstance()->find(1);
-        $systemSurveySetting       = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->find(1);
-        $systemReportSettingsArray = $systemReportSettings->toArray();
-        $systemSurveySettingArray  = $systemSurveySetting->toArray();
-        unset($systemReportSettingsArray ['id']);
-        unset($systemSurveySettingArray ['id']);
-        $defaultSettings = array_merge($systemReportSettingsArray, $systemSurveySettingArray);
-
-        if ($defaultSettings ["assessmentPricingConfigId"] !== Proposalgen_Model_PricingConfig::NONE)
-        {
-            $defaultSettings ["assessmentPricingConfigId"] = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($defaultSettings ["assessmentPricingConfigId"])->configName;
-        }
-        else
-        {
-            $defaultSettings ["assessmentPricingConfigId"] = "";
-        }
 
         // add form to page
         $form->setDecorators(array(

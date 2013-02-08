@@ -457,7 +457,7 @@ class Proposalgen_Form_Device extends Zend_Form
                                      'HtmlTag',
                                      array(
                                          'tag' => 'dd',
-                                         'id'  => 'is_scanner-element'
+                                         'id'  => 'reportsTonerLevels-element'
                                      )
                                  ),
                                  array(

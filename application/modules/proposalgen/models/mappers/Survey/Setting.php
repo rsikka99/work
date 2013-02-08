@@ -202,6 +202,15 @@ class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
     }
 
     /**
+     * Fetches system default report survey_setting
+     * @return Proposalgen_Model_Survey_Setting
+     */
+    public function fetchSystemDefaultSurveySettings ()
+    {
+        return $this->find(1);
+    }
+
+    /**
      * @param Proposalgen_Model_Survey_Setting $object
      *
      * @return int

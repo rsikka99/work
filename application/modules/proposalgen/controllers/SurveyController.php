@@ -571,17 +571,19 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $request = $this->getRequest();
         $form    = new Proposalgen_Form_Survey_Users();
 
+
+
         // Get the user survey settings for overrides
-        $userSurveySetting = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchUserSurveySetting(Zend_Auth::getInstance()->getIdentity()->id);
+        $surveySetting = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchSystemDefaultSurveySettings();
+        $surveySetting->populate(Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchUserSurveySetting($this->_userId)->toArray());
 
         // Override with user settings
         $pageCoverageBW    = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(21, $this->getReport()->id);
         $pageCoverageColor = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(22, $this->getReport()->id);
 
         // Override the settings with user settings
-        $pageCoverageBW    = (!$pageCoverageBW) ? $userSurveySetting->pageCoverageMono : $pageCoverageBW;
-        $pageCoverageColor = (!$pageCoverageColor) ? $userSurveySetting->pageCoverageColor : $pageCoverageColor;
-
+        $pageCoverageBW    = (!$pageCoverageBW) ? $surveySetting->pageCoverageMono : $pageCoverageBW;
+        $pageCoverageColor = (!$pageCoverageColor) ? $surveySetting->pageCoverageColor : $pageCoverageColor;
 
         $formDataFromAnswers = array(
             "pageCoverage_BW"    => $pageCoverageBW,
