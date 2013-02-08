@@ -129,10 +129,12 @@ class Proposalgen_Model_Mapper_Map_Device_Instance extends My_Model_Mapper_Abstr
      * @param $offset int
      *                OPTIONAL An SQL LIMIT offset.
      *
+     * @throws BadMethodCallException
      * @return Proposalgen_Model_Map_Device_Instance[]
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
+        throw new BadMethodCallException("This method is not available for this mapper.");
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
         $entries   = array();
         foreach ($resultSet as $row)
@@ -188,17 +190,41 @@ class Proposalgen_Model_Mapper_Map_Device_Instance extends My_Model_Mapper_Abstr
      */
     public function fetchAllForReport ($reportId, $sortColumn, $sortDirection, $limit = null, $offset = null, $justCount = false)
     {
-        /*
-         *Setup our where clause
-         */
-        $whereClause = array(
-            "{$this->col_reportId} = ?" => $reportId
-        );
+
+        $db = $this->getDbTable()->getAdapter();
 
         // If we're just counting we only need to return the count
         if ($justCount)
         {
-            return $this->count($whereClause);
+            $justCountSql   = "
+SELECT COUNT(*) FROM (
+SELECT
+    pgen_rms_upload_rows.rmsProviderId,
+    pgen_rms_upload_rows.rmsModelId,
+    pgen_rms_upload_rows.manufacturer,
+    pgen_rms_upload_rows.modelName,
+    pgen_device_instances.useUserData,
+    pgen_device_instances.reportId,
+    pgen_device_instance_master_devices.masterDeviceId,
+    pgen_device_instance_master_devices.masterDeviceId IS NOT NULL AS isMapped,
+    manufacturers.displayname mappedManufacturer,
+    pgen_master_devices.modelName AS mappedModelName,
+    COUNT(*) as deviceCount,
+    GROUP_CONCAT(pgen_device_instances.id) as deviceInstanceIds
+FROM pgen_device_instances
+JOIN pgen_rms_upload_rows ON pgen_device_instances.rmsUploadRowId = pgen_rms_upload_rows.id
+LEFT JOIN pgen_device_instance_master_devices ON pgen_device_instance_master_devices.deviceInstanceId = pgen_device_instances.id
+LEFT JOIN pgen_master_devices ON pgen_device_instance_master_devices.masterDeviceId = pgen_master_devices.id
+LEFT JOIN manufacturers ON pgen_master_devices.manufacturerId = manufacturers.id
+WHERE pgen_device_instances.reportId = 2
+GROUP BY pgen_device_instances.reportId, CONCAT(pgen_rms_upload_rows.manufacturer, ' ', pgen_rms_upload_rows.modelName)
+ORDER BY deviceCount DESC
+) AS countTable";
+            $justCountQuery = $db->query($justCountSql, $reportId);
+
+            $count = $justCountQuery->fetchColumn();
+
+            return $count;
         }
         else
         {
@@ -224,15 +250,59 @@ class Proposalgen_Model_Mapper_Map_Device_Instance extends My_Model_Mapper_Abstr
                 $order[] = "{$this->col_modelName} {$sortDirection}";
             }
 
+            $orderBy = implode(', ', $order);
+
+
             /*
              * Parse our Limit
              */
+
             if ($limit > 0)
             {
-                $offset = ($offset > 0) ? $offset : null;
+                $offset         = ($offset > 0) ? $offset : 0;
+                $limitStatement = "LIMIT $limit OFFSET $offset";
+            }
+            else
+            {
+                $limitStatement = "LIMIT 25";
             }
 
-            return $this->fetchAll($whereClause, $order, $limit, $offset);
+            $sql   = "
+SELECT
+    pgen_rms_upload_rows.rmsProviderId,
+    pgen_rms_upload_rows.rmsModelId,
+    pgen_rms_upload_rows.manufacturer,
+    pgen_rms_upload_rows.modelName,
+    pgen_device_instances.useUserData,
+    pgen_device_instances.reportId,
+    pgen_device_instance_master_devices.masterDeviceId,
+    pgen_device_instance_master_devices.masterDeviceId IS NOT NULL AS isMapped,
+    manufacturers.displayname mappedManufacturer,
+    pgen_master_devices.modelName AS mappedModelName,
+    COUNT(*) as deviceCount,
+    GROUP_CONCAT(pgen_device_instances.id) as deviceInstanceIds
+FROM pgen_device_instances
+JOIN pgen_rms_upload_rows ON pgen_device_instances.rmsUploadRowId = pgen_rms_upload_rows.id
+LEFT JOIN pgen_device_instance_master_devices ON pgen_device_instance_master_devices.deviceInstanceId = pgen_device_instances.id
+LEFT JOIN pgen_master_devices ON pgen_device_instance_master_devices.masterDeviceId = pgen_master_devices.id
+LEFT JOIN manufacturers ON pgen_master_devices.manufacturerId = manufacturers.id
+WHERE pgen_device_instances.reportId = 2
+GROUP BY CONCAT(pgen_rms_upload_rows.manufacturer, ' ', pgen_rms_upload_rows.modelName)
+ORDER BY $orderBy
+$limitStatement
+";
+            $query = $db->query($sql, $reportId);
+
+
+            $mapDeviceInstances = array();
+
+            foreach ($query->fetchAll() as $row)
+            {
+                $mapDeviceInstances[] = new Proposalgen_Model_Map_Device_Instance($row);
+            }
+
+
+            return $mapDeviceInstances;
         }
     }
 }
