@@ -203,6 +203,21 @@ class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends
         return $entries;
     }
 
+    public function deleteAllDeviceInstancesForReport ($reportId)
+    {
+        $db    = $this->getDbTable()->getDefaultAdapter();
+        $query = $db->query("
+	        DELETE FROM `device_instance_replacement_master_devices`
+    	    WHERE `deviceInstanceId` IN (
+        	SELECT `id` AS `deviceInstanceId` FROM `pgen_device_instances`
+        	WHERE `reportId` = ?
+        	);", $reportId);
+
+        $rowsAffected = $query->execute();
+
+        return $rowsAffected;
+    }
+
     /**
      * Gets a where clause for filtering by id
      *
@@ -226,4 +241,5 @@ class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends
     {
         return $object->deviceInstanceId;
     }
+
 }

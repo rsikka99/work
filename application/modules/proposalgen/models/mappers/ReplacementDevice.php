@@ -244,26 +244,123 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
     {
         $replacementDevices                                                             = array();
         $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW]       = $this->fetch(array(
-                                                                                                               "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW
-                                                                                                          ), array(
-                                                                                                                  "{$this->col_monthlyRate} ASC"
-                                                                                                             ));
+                                                                                                            "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW
+                                                                                                       ), array(
+                                                                                                               "{$this->col_monthlyRate} ASC"
+                                                                                                          ));
         $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP]    = $this->fetch(array(
-                                                                                                               "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP
-                                                                                                          ), array(
-                                                                                                                  "{$this->col_monthlyRate} ASC"
-                                                                                                             ));
+                                                                                                            "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP
+                                                                                                       ), array(
+                                                                                                               "{$this->col_monthlyRate} ASC"
+                                                                                                          ));
         $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR]    = $this->fetch(array(
-                                                                                                               "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR
-                                                                                                          ), array(
-                                                                                                                  "{$this->col_monthlyRate} ASC"
-                                                                                                             ));
+                                                                                                            "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR
+                                                                                                       ), array(
+                                                                                                               "{$this->col_monthlyRate} ASC"
+                                                                                                          ));
         $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP] = $this->fetch(array(
-                                                                                                               "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP
-                                                                                                          ), array(
-                                                                                                                  "{$this->col_monthlyRate} ASC"
-                                                                                                             ));
+                                                                                                            "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP
+                                                                                                       ), array(
+                                                                                                               "{$this->col_monthlyRate} ASC"
+                                                                                                          ));
 
         return $replacementDevices;
+    }
+
+    /**
+     * Gets the replacement devices that are eligible for replacing Black Devices
+     *
+     * @param bool $allowUpgrades
+     *
+     * @return Proposalgen_Model_MasterDevice []
+     */
+    public function getBlackReplacementDevices ($allowUpgrades = true)
+    {
+        $deviceArray        = array();
+        $replacementDevices = $this->fetchAll();
+        foreach ($replacementDevices as $replacementDevice)
+        {
+            if ($replacementDevice->replacementCategory === Proposalgen_Model_ReplacementDevice::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW])
+            {
+                $deviceArray [] = $replacementDevice->getMasterDevice();
+            }
+            else if ($allowUpgrades)
+            {
+                $deviceArray [] = $replacementDevice->getMasterDevice();
+            }
+        }
+
+        return $deviceArray;
+    }
+
+    /**
+     * Gets the replacement devices that are eligible for replacing Black MFP Devices
+     *
+     * @param bool $allowUpgrades
+     *
+     * @return Proposalgen_Model_MasterDevice []
+     */
+    public function getBlackMfpReplacementDevices ($allowUpgrades = true)
+    {
+        $deviceArray        = array();
+        $replacementDevices = $this->fetchAll();
+        foreach ($replacementDevices as $replacementDevice)
+        {
+            if ($replacementDevice->replacementCategory === Proposalgen_Model_ReplacementDevice::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP])
+            {
+                $deviceArray [] = $replacementDevice->getMasterDevice();
+            }
+            else if ($allowUpgrades && $replacementDevice->replacementCategory === Proposalgen_Model_ReplacementDevice::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP])
+            {
+                $deviceArray [] = $replacementDevice->getMasterDevice();
+            }
+        }
+
+        return $deviceArray;
+    }
+
+    /**
+     * Gets the replacement devices that are eligible for replacing Color Devices
+     *
+     * @param bool $allowUpgrades
+     *
+     * @return Proposalgen_Model_MasterDevice []
+     */
+    public function getColorReplacementDevices ($allowUpgrades = true)
+    {
+        $deviceArray        = array();
+        $replacementDevices = $this->fetchAll();
+        foreach ($replacementDevices as $replacementDevice)
+        {
+            if ($replacementDevice->replacementCategory === Proposalgen_Model_ReplacementDevice::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR])
+            {
+                $deviceArray [] = $replacementDevice->getMasterDevice();
+            }
+            else if ($allowUpgrades && $replacementDevice->replacementCategory === Proposalgen_Model_ReplacementDevice::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP])
+            {
+                $deviceArray [] = $replacementDevice->getMasterDevice();
+            }
+        }
+
+        return $deviceArray;
+    }
+
+    /**
+     * Gets the replacement devices that are eligible for replacing Color MFP Devices
+     *
+     * @return Proposalgen_Model_MasterDevice []
+     */
+    public function getColorMfpReplacementDevices ()
+    {
+        $deviceArray        = array();
+        $replacementDevices = $this->fetchAll();
+        foreach ($replacementDevices as $replacementDevice)
+        {
+            if ($replacementDevice->replacementCategory === Proposalgen_Model_ReplacementDevice::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP]);
+            {
+                $deviceArray [] = $replacementDevice->getMasterDevice();
+            }
+        }
+        return $deviceArray;
     }
 }
