@@ -6,11 +6,16 @@
  */
 class Proposalgen_Form_DeviceSwapChoice extends Zend_Form
 {
+    const DEVICETYPE_MONO = 0;
+    const DEVICETYPE_MONO_MFP = 1;
+    const DEVICETYPE_COLOR = 2;
+    const DEVICETYPE_COLOR_MFP = 3;
+
     /**
      *
-     * @var Proposalgen_Model_Report
+     * @var Proposalgen_Model_Proposal_OfficeDepot
      */
-    protected $report;
+    protected $proposal;
     /**
      *
      * @var Proposalgen_Model_DeviceInstance[]
@@ -32,97 +37,92 @@ class Proposalgen_Form_DeviceSwapChoice extends Zend_Form
      */
     protected $colorMfpReplacementDevicecs;
 
-    public function __construct($report, $options = NULL)
+    public function __construct ($proposal, $options = null)
     {
-        $this->report = $report;
+        $this->proposal = $proposal;
         parent::__construct($options);
     }
 
-    public function init()
+    public function init ()
     {
         $this->setMethod('post');
 
         // Add button(s) to form
-        $submitButton = $this->createElement('submit', 'Submit', array(
-            'label' => "Re-calculate",
-            'ignore' => false,
-            'title' => 'Calculates and saves new totals based on current devices in Action column.'
-        ));
-        $cancelButton = $this->createElement('submit', 'Cancel', array(
-            'label' => "Save And Continue",
-            'ignore' => false,
-            "title" => "Calculates and saves new totals based on current device in Action column. Proceeds to next step."
-        ));
-        $analyzeButton = $this->createElement('submit', 'Analyze', array(
-            'label' => "Auto Analyze",
-            'ignore' => false,
-            'title' => "Removes any replacement devices previously saved. Then determines the optimal devices based on target monochrome/color CPP and cost delta thershold settings."
-        ));
+        $submitButton            = $this->createElement('submit', 'Submit', array(
+                                                                                 'label'  => "Re-calculate",
+                                                                                 'ignore' => false,
+                                                                                 'title'  => 'Calculates and saves new totals based on current devices in Action column.'
+                                                                            ));
+        $cancelButton            = $this->createElement('submit', 'Cancel', array(
+                                                                                 'label'  => "Save And Continue",
+                                                                                 'ignore' => false,
+                                                                                 "title"  => "Calculates and saves new totals based on current device in Action column. Proceeds to next step."
+                                                                            ));
+        $analyzeButton           = $this->createElement('submit', 'Analyze', array(
+                                                                                  'label'  => "Auto Analyze",
+                                                                                  'ignore' => false,
+                                                                                  'title'  => "Removes any replacement devices previously saved. Then determines the optimal devices based on target monochrome/color CPP and cost delta thershold settings."
+                                                                             ));
         $resetReplacementsButton = $this->createElement('submit', 'ResetReplacements', array(
-            'label' => "Reset",
-            'ignore' => false,
-            'title' => "Sets all the replacement devices back to there default action.",
-        ));
+                                                                                            'label'  => "Reset",
+                                                                                            'ignore' => false,
+                                                                                            'title'  => "Sets all the replacement devices back to there default action.",
+                                                                                       ));
 
         $this->addElements(array(
-            $submitButton,
-            $cancelButton,
-            $analyzeButton,
-            $resetReplacementsButton
-        ));
-
-        /**
-         * Data for select boxes
-         */
-        $mappedDevices = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->getDevicesForReport($this->report->id);
-
-        echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
-        var_dump($mappedDevices);
-        die();
-
-        // Get all proposal devices
-        // $proposalDevices = $this->proposal->getDevices()->getPurchased();
+                                $submitButton,
+                                $cancelButton,
+                                $analyzeButton,
+                                $resetReplacementsButton
+                           ));
 
         /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
-        foreach ($mappedDevices as $deviceInstance) {
+        foreach ($this->proposal->getPurchasedDevices() as $deviceInstance)
+        {
             // Get replacement devices for each type of device
-            if ($deviceInstance->getAction() !== Application_Model_DeviceInstance::ACTION_RETIRE) {
-                if ($deviceInstance->getMasterDevice()->getTonerConfigId() === Application_Model_TonerConfig::BLACK_ONLY) {
-                    if ($deviceInstance->getMasterDevice()->getIsCopier()) {
+            if ($deviceInstance->getAction() !== 'Retire')
+            {
+                if ($deviceInstance->getMasterDevice()->tonerConfigId === Proposalgen_Model_TonerConfig::BLACK_ONLY)
+                {
+                    if ($deviceInstance->getMasterDevice()->isCopier)
+                    {
                         $replacementDevices = $this->getBlackMfpReplacementDevices();
-                    } else {
+                    }
+                    else
+                    {
                         $replacementDevices = $this->getBlackReplacementDevices();
                     }
-                } else {
-                    if ($deviceInstance->getMasterDevice()->getIsCopier()) {
-                        $replacementDevices = $this->getColorMfpReplacementDevicecs();
-                    } else {
+                }
+                else
+                {
+                    if ($deviceInstance->getMasterDevice()->isCopier)
+                    {
+                        $replacementDevices = $this->getColorMfpReplacementDevices();
+                    }
+                    else
+                    {
                         $replacementDevices = $this->getColorReplacementDevices();
                     }
                 }
-
-                if ($deviceInstance instanceof Application_Model_UnknownDeviceInstance) {
-                    $deviceType = 'unknownDeviceInstance_';
-                } else if ($deviceInstance instanceof Application_Model_DeviceInstance) {
-                    $deviceType = 'deviceInstance_';
-                }
-
                 $deviceInstanceReplacementMasterDevice = $deviceInstance->getReplacementMasterDevice();
-            } else {
-                $replacementDevices = array();
+            }
+            else
+            {
+                $replacementDevices                    = array();
+                $deviceInstanceReplacementMasterDevice = null;
             }
 
-            $replacementDevices[0] = $deviceInstance->getAction();
+            $deviceType = 'deviceInstance_';
 
-            // Create an element for each device
-            // Device list per manufacturer
-            $deviceElement = $this->createElement('select', $deviceType . $deviceInstance->getDeviceInstanceId(), array(
-                'label' => 'Device: ',
-                'attribs' => array(
-                    'style' => 'width: 100%'
-                ),
-                'value' => ($deviceInstanceReplacementMasterDevice) ? $deviceInstanceReplacementMasterDevice->getMasterDeviceId() : 0
-            ));
+            $replacementDevices[0] = $deviceInstance->getAction();
+            // Create an element for each device Device list per manufacturer
+            $deviceElement = $this->createElement('select', $deviceType . $deviceInstance->id, array(
+                                                                                                    'label'   => 'Device: ',
+                                                                                                    'attribs' => array(
+                                                                                                        'style' => 'width: 100%'
+                                                                                                    ),
+                                                                                                    'value'   => ($deviceInstanceReplacementMasterDevice) ? $deviceInstanceReplacementMasterDevice->id : 0
+                                                                                               ));
 
             $this->addElement($deviceElement);
 
@@ -130,10 +130,10 @@ class Proposalgen_Form_DeviceSwapChoice extends Zend_Form
              * If the master device device does not exist in our array we need to add it as it is replaced anyways....
              * o.O
              */
-            if ($deviceInstanceReplacementMasterDevice && !array_key_exists($deviceInstanceReplacementMasterDevice->getMasterDeviceId(), $replacementDevices)) {
-                $replacementDevices [$deviceInstanceReplacementMasterDevice->getMasterDeviceId()] = $deviceInstanceReplacementMasterDevice->getManufacturer()->getManufacturerName() . " " . $deviceInstanceReplacementMasterDevice->getPrinterModel();
+            if ($deviceInstanceReplacementMasterDevice && !array_key_exists($deviceInstanceReplacementMasterDevice->id, $replacementDevices))
+            {
+                $replacementDevices [$deviceInstanceReplacementMasterDevice->id] = $deviceInstanceReplacementMasterDevice->getManufacturer()->fullname . " " . $deviceInstanceReplacementMasterDevice->modelName;
             }
-
             $deviceElement->setMultiOptions($replacementDevices);
         }
 
@@ -141,106 +141,108 @@ class Proposalgen_Form_DeviceSwapChoice extends Zend_Form
          * Form element decorators
          */
         $submitButton->setDecorators(array(
-            'ViewHelper',
-            array(
-                'HtmlTag',
-                array(
-                    'tag' => 'div',
-                    'class' => 'form-actions',
-                    'openOnly' => true,
-                    'placement' => Zend_Form_Decorator_Abstract::PREPEND
-                )
-            )
-        ));
+                                          'ViewHelper',
+                                          array(
+                                              'HtmlTag',
+                                              array(
+                                                  'tag'       => 'div',
+                                                  'class'     => 'form-actions',
+                                                  'openOnly'  => true,
+                                                  'placement' => Zend_Form_Decorator_Abstract::PREPEND
+                                              )
+                                          )
+                                     ));
         $cancelButton->setDecorators(array(
-            'ViewHelper',
-            array(
-                'HtmlTag',
-                array(
-                    'tag' => 'div',
-                    'closeOnly' => true,
-                    'placement' => Zend_Form_Decorator_Abstract::APPEND
-                )
-            )
-        ));
+                                          'ViewHelper',
+                                          array(
+                                              'HtmlTag',
+                                              array(
+                                                  'tag'       => 'div',
+                                                  'closeOnly' => true,
+                                                  'placement' => Zend_Form_Decorator_Abstract::APPEND
+                                              )
+                                          )
+                                     ));
     }
 
     /**
      * Getter for $proposal
      *
-     * @return Application_Model_Proposal_Abstract
+     * @return Proposalgen_Model_Proposal_OfficeDepot
      */
-    public function getReport()
+    public function getProposal ()
     {
-        return $this->report;
+        return $this->proposal;
     }
 
     /**
      * Getter for $blackReplacementDevices
      *
-     * @return field_type
+     * @return Proposalgen_Model_DeviceInstance []
      */
-    public function getBlackReplacementDevices()
+    public function getBlackReplacementDevices ()
     {
-        if (!isset($this->blackReplacementDevices)) {
-            $deviceArray = array();
+        if (!isset($this->blackReplacementDevices))
+        {
+            $deviceArray     = array();
             $deviceArray [0] = 'Keep';
-            /* @var $replacementDevices Default_Model_Replacement_Device */
-            $replacementDevices = Default_Model_Mapper_Replacement_Device::getInstance()->getBlackReplacementDevices();
-            foreach ($replacementDevices as $replacementDevice) {
-                /* @var $masterDevice Application_Model_MasterDevice */
-                $masterDevice = Application_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->getMasterDeviceId());
-                $deviceArray [$replacementDevice->getMasterDeviceId()] = $masterDevice->getManufacturer()->getManufacturerName() . ' ' . $masterDevice->getPrinterModel();
+            $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackReplacementDevices();
+            foreach ($replacementDevices as $replacementDevice)
+            {
+                $masterDevice                                          = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->id);
+                $deviceArray [$replacementDevice->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
             }
 
             $this->blackReplacementDevices = $deviceArray;
         }
+
         return $this->blackReplacementDevices;
     }
 
     /**
      * Getter for $blackMfpReplacementDevices
      *
-     * @return field_type
+     * @return Proposalgen_Model_DeviceInstance []
      */
-    public function getBlackMfpReplacementDevices()
+    public function getBlackMfpReplacementDevices ()
     {
-        if (!isset($this->blackMfpReplacementDevices)) {
-            $deviceArray = array();
+        if (!isset($this->blackMfpReplacementDevices))
+        {
+            $deviceArray     = array();
             $deviceArray [0] = 'Keep';
-            /* @var $replacementDevices Default_Model_Replacement_Device */
-            $replacementDevices = Default_Model_Mapper_Replacement_Device::getInstance()->getBlackMfpReplacementDevices();
-            foreach ($replacementDevices as $replacementDevice) {
-                /* @var $masterDevice Application_Model_MasterDevice */
-                $masterDevice = Application_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->getMasterDeviceId());
-                $deviceArray [$replacementDevice->getMasterDeviceId()] = $masterDevice->getManufacturer()->getManufacturerName() . ' ' . $masterDevice->getPrinterModel();
+            $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackMfpReplacementDevices();
+            foreach ($replacementDevices as $replacementDevice)
+            {
+                $masterDevice                                          = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->id);
+                $deviceArray [$replacementDevice->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
             }
 
             $this->blackMfpReplacementDevices = $deviceArray;
         }
+
         return $this->blackMfpReplacementDevices;
     }
 
     /**
      * Getter for $colorReplacementDevices
      *
-     * @return field_type
+     * @return Proposalgen_Model_DeviceInstance []
      */
-    public function getColorReplacementDevices()
+    public function getColorReplacementDevices ()
     {
-        if (!isset($this->colorReplacementDevices)) {
-            $deviceArray = array();
+        if (!isset($this->colorReplacementDevices))
+        {
+            $deviceArray     = array();
             $deviceArray [0] = 'Keep';
-            /* @var $replacementDevices Default_Model_Replacement_Device */
-            $replacementDevices = Default_Model_Mapper_Replacement_Device::getInstance()->getColorReplacementDevices();
-            foreach ($replacementDevices as $replacementDevice) {
-                /* @var $masterDevice Application_Model_MasterDevice */
-                $masterDevice = Application_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->getMasterDeviceId());
-                if ($masterDevice->getTonerConfigId() !== Application_Model_TonerConfig::BLACK_ONLY) {
-                    $deviceArray [$replacementDevice->getMasterDeviceId()] = $masterDevice->getManufacturer()->getManufacturerName() . ' ' . $masterDevice->getPrinterModel();
+            $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorReplacementDevices();
+            foreach ($replacementDevices as $replacementDevice)
+            {
+                $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->id);
+                if ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY)
+                {
+                    $deviceArray [$replacementDevice->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
                 }
             }
-
             $this->colorReplacementDevices = $deviceArray;
         }
         return $this->colorReplacementDevices;
@@ -249,25 +251,27 @@ class Proposalgen_Form_DeviceSwapChoice extends Zend_Form
     /**
      * Getter for $colorMfpReplacementDevicecs
      *
-     * @return field_type
+     * @return Proposalgen_Model_DeviceInstance []
      */
-    public function getColorMfpReplacementDevicecs()
+    public function getColorMfpReplacementDevices ()
     {
-        if (!isset($this->colorMfpReplacementDevicecs)) {
-            $deviceArray = array();
+        if (!isset($this->colorMfpReplacementDevicecs))
+        {
+            $deviceArray     = array();
             $deviceArray [0] = 'Keep';
-            /* @var $replacementDevices Default_Model_Replacement_Device */
-            $replacementDevices = Default_Model_Mapper_Replacement_Device::getInstance()->getColorMfpReplacementDevices();
-            foreach ($replacementDevices as $replacementDevice) {
-                /* @var $masterDevice Application_Model_MasterDevice */
-                $masterDevice = Application_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->getMasterDeviceId());
-                if ($masterDevice->getTonerConfigId() !== Application_Model_TonerConfig::BLACK_ONLY && $masterDevice->getIsCopier()) {
-                    $deviceArray [$replacementDevice->getMasterDeviceId()] = $masterDevice->getManufacturer()->getManufacturerName() . ' ' . $masterDevice->getPrinterModel();
+            $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorMfpReplacementDevices();
+            foreach ($replacementDevices as $replacementDevice)
+            {
+                $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->id);
+                if ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY && $masterDevice->isCopier)
+                {
+                    $deviceArray [$replacementDevice->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
                 }
             }
 
             $this->colorMfpReplacementDevicecs = $deviceArray;
         }
+
         return $this->colorMfpReplacementDevicecs;
     }
 }

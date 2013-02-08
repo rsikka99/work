@@ -70,6 +70,11 @@ class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
         $grossMarginGroup->title = "Gross Margin";
         $grossMarginGroup->elements = array ();
         $this->_formElementGroups [] = $grossMarginGroup;
+
+        $optimization = new stdClass();
+        $optimization->title = "Optimization";
+        $optimization->elements = array ();
+        $this->_formElementGroups [] = $optimization;
         
         //*****************************************************************
         // GENERAL SETTING FIELDS
@@ -350,7 +355,7 @@ class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
         $this->addElement($service_cost);
         $grossMarginGroup->elements [] = $service_cost;
         
-        // Toner preference for the gross margin
+        // Toner preference for the gross marginm
         $gross_margin_pricing_config = new Zend_Form_Element_Select('grossMarginPricingConfigId');
         $gross_margin_pricing_config->setLabel('Toner Preference')
             ->setAttrib('class', 'span2')
@@ -360,6 +365,44 @@ class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
         
         $this->addElement($gross_margin_pricing_config);
         $grossMarginGroup->elements [] = $gross_margin_pricing_config;
+
+        $cost_threshold = new Zend_Form_Element_Text('costThreshold');
+        $cost_threshold->setLabel('Cost Threshold')
+            ->addValidator(new Zend_Validate_Float())
+            ->setAttrib('class', 'input-mini')
+            ->setDescription('$')
+            ->setAttrib('inputprepend', '$')
+            ->setAttrib('inputappend', ' / month')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->costThreshold));
+        $this->addElement($cost_threshold);
+        $optimization->elements [] = $cost_threshold;
+
+        $target_monochrome = new Zend_Form_Element_Text('targetMonochromeCostPerPage');
+        $target_monochrome->setLabel('Target Monochrome Cost Per Page')
+            ->addValidator(new Zend_Validate_Float())
+            ->setAttrib('class', 'input-mini')
+            ->setDescription('$')
+            ->setAttrib('inputprepend', '$')
+            ->setAttrib('inputappend', ' / page')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->targetMonochromeCostPerPage, 4));
+        $this->addElement($target_monochrome);
+        $optimization->elements [] = $target_monochrome;
+
+        $target_color = new Zend_Form_Element_Text('targetColorCostPerPage');
+        $target_color->setLabel('Target Color Cost Per Page')
+            ->addValidator(new Zend_Validate_Float())
+            ->setAttrib('class', 'input-mini')
+            ->setAttrib('inputprepend', '$')
+            ->setAttrib('inputappend', ' / page')
+            ->setDescription('$')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->targetColorCostPerPage, 4));
+        $this->addElement($target_color);
+        $optimization->elements [] = $target_color;
+
+        $target_monochrome->setLabel('Target Monochrome')
+            ->setAttrib('class', 'input-mini');
+        $target_color->setLabel('Target Color')
+            ->setAttrib('class', 'input-mini');
         
         //*****************************************************************
         // BUTTONS

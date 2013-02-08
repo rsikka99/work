@@ -758,7 +758,7 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
         $elementCounter++;
         $formElements->addElement($cost_threshold);
 
-        $target_monochrome = new Zend_Form_Element_Text('targetMonochrome');
+        $target_monochrome = new Zend_Form_Element_Text('targetMonochromeCostPerPage');
         $target_monochrome->setLabel('Target Monochrome')
             ->addValidator(new Zend_Validate_Float())
             ->setAttrib('class', 'span1')
@@ -791,7 +791,7 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
         $elementCounter++;
         $formElements->addElement($target_monochrome);
 
-        $target_color = new Zend_Form_Element_Text('targetColor');
+        $target_color = new Zend_Form_Element_Text('targetColorCostPerPage');
         $target_color->setLabel('Target Color')
             ->addValidator(new Zend_Validate_Float())
             ->setAttrib('class', 'span1')

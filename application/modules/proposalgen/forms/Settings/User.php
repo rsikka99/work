@@ -741,7 +741,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $elementCounter++;
         $formElements->addElement($cost_threshold);
 
-        $target_monochrome = new Zend_Form_Element_Text('targetMonochrome');
+        $target_monochrome = new Zend_Form_Element_Text('targetMonochromeCostPerPage');
         $target_monochrome->setLabel('Cost Threshold')
             ->addValidator(new Zend_Validate_Float())
             ->setDecorators(array(
@@ -773,7 +773,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $elementCounter++;
         $formElements->addElement($target_monochrome);
 
-        $target_color = new Zend_Form_Element_Text('targetColor');
+        $target_color = new Zend_Form_Element_Text('targetColorCostPerPage');
         $target_color->setLabel('Cost Threshold')
             ->addValidator(new Zend_Validate_Float())
             ->setDecorators(array(
