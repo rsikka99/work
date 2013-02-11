@@ -1,6 +1,69 @@
-<div class="hero-unit">
-	<h1>MPS Tools</h1>
-	<p>This is just a simple landing page that is shown to a user when they first log into the system.</p>
-	<p>You may select a module from the top menu to get started.</p>
+<div class="page-header">
+    <h1>Catchy Title For Landing Page</h1>
 </div>
-<hr>
+<?php
+$client = Quotegen_Model_Mapper_Client::getInstance()->find($this->selectedClientId);
+?>
+<div class="row">
+    <div class="span3">
+        <div class="well well-small">
+            <strong>Client Information</strong>
+
+            <form method="POST">
+                <p>ID: <?php echo $client->id; ?></p>
+
+                <p><?php echo $client->companyName; ?></p>
+
+                <p><?php echo nl2br($client->getAddress()); ?></p>
+
+                <p class="clearfix">
+                    <button class="btn btn-primary btn-mini pull-right" name="changeClient">Change Client</button>
+                </p>
+            </form>
+        </div>
+        <div class="well well-small">
+            <strong>Fleet Information</strong>
+            <select name="mySelect" style="width: 100%">
+                <option>January 15th, 2013 to March 15th 2013 (MySampleImport.csv)</option>
+                <option>January 3rd, 2013 to January 26th 2013 (MyFirstImport.csv)</option>
+            </select>
+
+            <p><strong>30</strong> Mapped Devices</p>
+
+            <p><strong>4</strong> Unmapped Devices</p>
+
+            <p><strong>9</strong> Invalid Devices</p>
+
+            <p><strong>500,000</strong> Mono Pages/Month</p>
+
+            <p><strong>500,000</strong> Color Pages/Month</p>
+
+            <p><strong>$500,000</strong> Per Month</p>
+            <button type="button" class="btn">Upload Fleet CSV</button>
+        </div>
+    </div>
+    <div class="span9">
+        <div class="hero-unit">
+            <h1>Coming Soon...</h1>
+
+            <p>This page will eventually house information about a client and it will be your main entry point to the software.</p>
+        </div>
+        <div class="well">
+            <p><strong>1.</strong> Assess
+                <button type="button" class="btn">Create Assessment</button>
+            </p>
+            <p><strong>2.</strong> Solve
+                <button type="button" class="btn">Create Solution</button>
+            </p>
+            <p><strong>3.</strong> Health Check
+                <button type="button" class="btn">Perform Health Check</button>
+            </p>
+            <p><strong>4.</strong> Optimize
+                <button type="button" class="btn">Optimize the fleet</button>
+            </p>
+            <p><strong>5.</strong> Quote
+                <button type="button" class="btn">Create a quote</button>
+            </p>
+        </div>
+    </div>
+</div>
