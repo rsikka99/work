@@ -24,8 +24,8 @@ class Application_Model_Acl extends Zend_Acl
      * Resources
      * These are module controller action combinations
      */
-    const RESOURCE_ADMIN_WILDCARD             = "admin__%__%";
-    const RESOURCE_ADMIN_TONER_WILDCARD       = "admin__toner__%";
+    const RESOURCE_ADMIN_WILDCARD       = "admin__%__%";
+    const RESOURCE_ADMIN_TONER_WILDCARD = "admin__toner__%";
 
 
     const RESOURCE_DEFAULT_WILDCARD                = "default__%__%";
@@ -44,11 +44,14 @@ class Application_Model_Acl extends Zend_Acl
      */
     const RESOURCE_ADMIN_INDEX_INDEX  = "admin__index__index";
     const RESOURCE_ADMIN_USER_PROFILE = "admin__user__profile";
+    const RESOURCE_ADMIN_USER_WILDCARD = "admin__user__%";
 
     /**
      * Default constants
      */
-    const RESOURCE_DEFAULT_AUTH_LOGIN = "default__auth__login";
+    const RESOURCE_DEFAULT_AUTH_LOGIN          = "default__auth__login";
+    const RESOURCE_DEFAULT_AUTH_LOGOUT         = "default__auth__logout";
+    const RESOURCE_DEFAULT_AUTH_FORGOTPASSWORD = "default__auth__forgotpassword";
 
     /**
      * Proposalgen Constants
@@ -310,7 +313,10 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_PROPOSALGEN_SURVEY_WILDCARD);
         $this->addResource(self::RESOURCE_QUOTEGEN_WILDCARD);
         $this->addResource(self::RESOURCE_QUOTEGEN_CLIENT_WILDCARD);
+
         $this->addResource(self::RESOURCE_DEFAULT_AUTH_LOGIN);
+        $this->addResource(self::RESOURCE_DEFAULT_AUTH_LOGOUT);
+        $this->addResource(self::RESOURCE_DEFAULT_AUTH_FORGOTPASSWORD);
 
         //Assessment User
         $this->addResource(self::RESOURCE_PROPOSALGEN_INDEX_INDEX);
@@ -364,6 +370,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD);
 
         $this->addResource(self::RESOURCE_ADMIN_USER_PROFILE);
+        $this->addResource(self::RESOURCE_ADMIN_USER_WILDCARD);
 
         $this->addResource(self::RESOURCE_ADMIN_INDEX_INDEX);
     }
@@ -379,6 +386,7 @@ class Application_Model_Acl extends Zend_Acl
         // Add our privileges
         //$this->allow(self::ROLE_GUEST, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_GUEST, self::RESOURCE_DEFAULT_AUTH_LOGIN, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_GUEST, self::RESOURCE_DEFAULT_AUTH_FORGOTPASSWORD, self::PRIVILEGE_VIEW);
     }
 
     /**
@@ -513,6 +521,7 @@ class Application_Model_Acl extends Zend_Acl
 
         // Add our privileges
         $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_USER_WILDCARD, self::PRIVILEGE_VIEW);
     }
 
 

@@ -2,10 +2,16 @@
 
 class Admin_UserController extends Zend_Controller_Action
 {
+    /**
+     * Whether or not the current user has root access
+     *
+     * @var bool
+     */
+    protected $_currentUserIsRoot;
 
     public function init ()
     {
-        /* Initialize action controller here */
+        $this->_currentUserIsRoot = (Zend_Auth::getInstance()->getIdentity()->id == 1);
     }
 
     /**
@@ -14,8 +20,8 @@ class Admin_UserController extends Zend_Controller_Action
     public function indexAction ()
     {
         // Fetch all the users
-        $mapper = new Application_Model_Mapper_User();
-        $users  = $mapper->fetchAll();
+        $userMapper = new Application_Model_Mapper_User();
+        $users      = $userMapper->fetchUserList($this->_currentUserIsRoot);
 
         // Display all of the users
         $this->view->users = $users;
@@ -156,14 +162,15 @@ class Admin_UserController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'warning' => 'Please select a user to delete first.'
                                            ));
-            $this->_redirect('/admin/user');
+            $this->_helper->redirector('index');
         }
+
         if ($userId === '1')
         {
             $this->_helper->flashMessenger(array(
-                                                'danger' => 'Insufficient Privilege: cannot delete root user.'
+                                                'danger' => 'Insufficient Privilege: You cannot delete the root user.'
                                            ));
-            $this->_redirect('/admin/user');
+            $this->_helper->redirector('index');
         }
 
         $mapper = new Application_Model_Mapper_User();
@@ -175,7 +182,7 @@ class Admin_UserController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'danger' => 'There was an error selecting the user to delete.'
                                            ));
-            $this->_redirect('/admin/user');
+            $this->_helper->redirector('index');
         }
 
         $form = new Application_Form_Delete("Are you sure you want to delete {$user->username} ({$user->firstname} {$user->lastname})?");
@@ -197,20 +204,20 @@ class Admin_UserController extends Zend_Controller_Action
                                                         'success' => "User deleted."
                                                    ));
 
-                    $this->_redirect('/admin/user');
+                    $this->_helper->redirector('index');
                 }
                 else
                 {
                     $this->_helper->flashMessenger(array(
                                                         'danger' => 'There was an error while deleting the user'
                                                    ));
-                    $this->_redirect('/admin/user');
+                    $this->_helper->redirector('index');
                 }
             }
             else
             {
                 // User has cancelled.
-                $this->_redirect('/admin/user');
+                $this->_helper->redirector('index');
             }
         }
 
@@ -230,7 +237,15 @@ class Admin_UserController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'warning' => 'Please select a user to delete first.'
                                            ));
-            $this->_redirect('/admin/user');
+            $this->_helper->redirector('index');
+        }
+
+        if ($userId == '1' && !$this->_currentUserIsRoot)
+        {
+            $this->_helper->flashMessenger(array(
+                                                'danger' => 'Insufficient Privilege: You cannot edit the root user.'
+                                           ));
+            $this->_helper->redirector('index');
         }
 
         // Get the user
@@ -259,7 +274,7 @@ class Admin_UserController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'danger' => 'There was an error selecting the user to delete.'
                                            ));
-            $this->_redirect('/admin/user');
+            $this->_helper->redirector('index');
         }
 
         // Create a new form with the mode and roles set
@@ -468,14 +483,14 @@ class Admin_UserController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'warning' => 'Please select a user to delete first.'
                                            ));
-            $this->_redirect('/admin/user');
+            $this->_helper->redirector('index');
         }
 
         // Get the user
         $userMapper = new Application_Model_Mapper_User();
         $user       = $userMapper->find($userId);
 
-        $form = new Admin_Form_User(2);
+        $form = new Admin_Form_User(Admin_Form_User::MODE_USER_EDIT);
         $form->populate($user->toArray());
 
         $request = $this->getRequest();
@@ -498,11 +513,10 @@ class Admin_UserController extends Zend_Controller_Action
                         $userMapper->save($user, $userId);
 
                         // Update storage
-                        $storage              = Zend_Auth::getInstance()->getStorage();
-                        $indentity            = Zend_Auth::getInstance()->getIdentity();
-                        $indentity->firstname = $values ['firstname'];
-                        $indentity->lastname  = $values ['lastname'];
-                        $indentity->email     = $values ['email'];
+                        $identity            = Zend_Auth::getInstance()->getIdentity();
+                        $identity->firstname = $values ['firstname'];
+                        $identity->lastname  = $values ['lastname'];
+                        $identity->email     = $values ['email'];
 
                         $this->_helper->flashMessenger(array(
                                                             'success' => "User {$user->username} has been updated successfully."

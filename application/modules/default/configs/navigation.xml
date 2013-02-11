@@ -33,7 +33,7 @@
                             <resource>default__auth__changepassword</resource>
                         </changepassword>
                         <logout>
-                            <label>Logout</label>
+                            <label>Sign Out</label>
                             <module>default</module>
                             <controller>auth</controller>
                             <action>logout</action>

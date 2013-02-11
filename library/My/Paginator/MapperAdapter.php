@@ -12,7 +12,7 @@ class My_Paginator_MapperAdapter implements Zend_Paginator_Adapter_Interface
     /**
      * The where array to use with the count and fetchall functions
      * 
-     * @var unknown_type
+     * @var array
      */
     protected $_where;
     

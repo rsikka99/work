@@ -177,13 +177,13 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
      * @param $order  string|array
      *                OPTIONAL An SQL ORDER clause.
      * @param $count  int
-     *                OPTIONAL An SQL LIMIT count. (Defaults to 25)
+     *                OPTIONAL An SQL LIMIT count. (Defaults to 150)
      * @param $offset int
      *                OPTIONAL An SQL LIMIT offset.
      *
      * @return Application_Model_User[]
      */
-    public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
+    public function fetchAll ($where = null, $order = null, $count = 150, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
         $entries   = array();
@@ -227,6 +227,27 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->id;
+    }
+
+    /**
+     * Fetches a list of users in the system
+     * @param bool $includeRootUser
+     *
+     * @return Application_Model_User[]
+     */
+    public function fetchUserList ($includeRootUser = false)
+    {
+        $users = array();
+        if ($includeRootUser)
+        {
+            $users = $this->fetchAll();
+        }
+        else
+        {
+            $users = $this->fetchAll(array("{$this->col_id} != ?" => 1));
+        }
+
+        return $users;
     }
 }
 
