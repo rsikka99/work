@@ -1,9 +1,37 @@
 <?php
 
 // TODO: Remove hardcoded values
-$filename = 'purchase-quote.docx';
-$savePath = PUBLIC_PATH . '/downloads/' . $filename;
-$linkToFile = $this->baseUrl('/downloads/' . $filename);
+$filename =  "purchase-quote.docx";
+$savePath = PUBLIC_PATH . "/downloads/client/{$this->clientId}/quote/{$this->quoteId}/";
+
+if (!is_dir($savePath))
+{
+    if (!mkdir($savePath, 0777, true))
+    {
+        throw new Exception("Could not open cache folder! PATH:" . $savePath, 0);
+    }
+}
+$savePath = $savePath . $filename;
+
+$linkToFile = $this->baseUrl("/downloads/client/{$this->clientId}/quote/{$this->quoteId}/{$filename}");
+
+$testArray =  array();
+
+$stdClass = new stdClass();
+$stdClass->termId = "53";
+$stdClass->name = 'cat';
+$stdClass->slug = '33';
+$stdClass->term_group = '33';
+$stdClass->term_taxonomy_id = '33';
+$testArray [53] = $stdClass;
+$newArray = $testArray;
+echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
+var_dump(array_shift($newArray)->name);
+var_dump($testArray);
+die();
+//{ [53]=> object(stdClass)#448 (10) { ["term_id"]=> string(2) "53" ["name"]=> string(22) "Trade Show & Kiosk" ["slug"]=> string(20) "trade-show-and-kiosk" ["term_group"]=> string(1) "0" ["term_taxonomy_id"]=> string(2) "53" ["taxonomy"]=> string(18) "portfolio-category" ["description"]=> string(0) "" ["parent"]=> string(1) "0" ["count"]=> string(1) "5" ["object_id"]=> string(3) "934" } }
+
+
 
 // This may not need to be removed from here
 // Base path to the files used to render the document

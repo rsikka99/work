@@ -21,7 +21,7 @@ class Proposalgen_Report_PiqessentialsController extends Proposalgen_Library_Con
         $this->view->availableReports->PIQEssentials->active = true;
 
         $this->view->formats = array(
-            "/proposalgen/report_piqessentials/generate/format/csv"  => $this->_csvFormat,
+            "/proposalgen/report_piqessentials/generate/format/csv" => $this->_csvFormat,
         );
 
         try
@@ -90,32 +90,32 @@ class Proposalgen_Report_PiqessentialsController extends Proposalgen_Library_Con
             /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
             $proposal = $this->getProposal();
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
             throw new Exception("Could not generate essentials csv report.");
         }
 
         // Define our field titles
-        $fieldTitlesLvl1 = array ('','','','OEM','','','','','','','','','','','','COMPATIBLE',
-                                  '','','','','','','','','','','','','');
+        $fieldTitlesLvl1 = array('', '', '', 'OEM', '', '', '', '', '', '', '', '', '', '', '', 'COMPATIBLE',
+                                 '', '', '', '', '', '', '', '', '', '', '', '', '');
 
-        $fieldTitlesLvl2 = array ('Device Name','IP Address','Serial Number','Black SKU','Black Cost','Cyan SKU',
-                                  'Cyan Cost','Magenta SKU','Magenta Cost','Yellow SKU','Yellow Cost','3Color SKU',
-                                  '3Color Cost','4Color SKU','4Color Cost','Black SKU','Black Cost','Cyan SKU',
-                                  'Cyan Cost','Magenta SKU','Magenta Cost','Yellow SKU','Yellow Cost','3Color SKU',
-                                  '3Color Cost','4Color SKU','4Color Cost');
+        $fieldTitlesLvl2 = array('Device Name', 'IP Address', 'Serial Number', 'Black SKU', 'Black Cost', 'Cyan SKU',
+                                 'Cyan Cost', 'Magenta SKU', 'Magenta Cost', 'Yellow SKU', 'Yellow Cost', '3Color SKU',
+                                 '3Color Cost', '4Color SKU', '4Color Cost', 'Black SKU', 'Black Cost', 'Cyan SKU',
+                                 'Cyan Cost', 'Magenta SKU', 'Magenta Cost', 'Yellow SKU', 'Yellow Cost', '3Color SKU',
+                                 '3Color Cost', '4Color SKU', '4Color Cost');
 
         try
         {
             $fieldList_Values = "";
             /* @var $device Proposalgen_Model_DeviceInstance() */
-            foreach ( $proposal->getDevices()->purchasedDeviceInstances as $device )
+            foreach ($proposal->getPurchasedDevices() as $device)
             {
-                $toners = $device->getMasterDevice()->getToners();
+                $toners    = $device->getMasterDevice()->getToners();
                 $oemToners = $toners[Proposalgen_Model_PartType::OEM];
 
                 // Create an array of purchased devices (this will be the dynamic CSV body)
-                $fieldList = array ();
+                $fieldList    = array();
                 $fieldList [] = $device->getDeviceName();
                 $fieldList [] = $device->ipAddress;
                 $fieldList [] = $device->serialNumber;
@@ -147,14 +147,14 @@ class Proposalgen_Report_PiqessentialsController extends Proposalgen_Library_Con
             }
 
             // Define our field titles for the excluded devices section
-            $excluded_titles = array ("Device Name,IP Address,Serial,Exclusion Reason");
+            $excluded_titles = array("Device Name,IP Address,Serial,Exclusion Reason");
 
             $excluded_values = "";
             try
             {
-                foreach ( $proposal->getExcludedDevices() as $device )
+                foreach ($proposal->getExcludedDevices() as $device)
                 {
-                    $row = array ();
+                    $row = array();
                     $row [] = $device->DeviceName;
                     $row [] = ($device->IpAddress) ? $device->IpAddress : "Unknown IP";
                     $row [] = (strlen($device->serialNumber) > 0) ? $device->serialNumber : "Unknown";
@@ -163,50 +163,50 @@ class Proposalgen_Report_PiqessentialsController extends Proposalgen_Library_Con
                     $excluded_values .= implode(",", $row) . "\n";
                 } // end Purchased Devices foreach
             }
-            catch ( Exception $e )
+            catch (Exception $e)
             {
                 throw new Exception("Error while generating CSV Report.", 0, $e);
             }
 
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
             throw new Exception("CSV File could not be opened/written for export.", 0, $e);
         }
 
-        $this->view->fieldTitlesLvl1 = implode(",", $fieldTitlesLvl1) . "\n";
-        $this->view->fieldTitlesLvl2 = implode(",", $fieldTitlesLvl2) . "\n";
-        $this->view->fieldList = $fieldList_Values;
+        $this->view->fieldTitlesLvl1    = implode(",", $fieldTitlesLvl1) . "\n";
+        $this->view->fieldTitlesLvl2    = implode(",", $fieldTitlesLvl2) . "\n";
+        $this->view->fieldList          = $fieldList_Values;
         $this->view->excludedTableTitle = "Excluded Devices";
-        $this->view->excludedTitles = implode(",", $excluded_titles) . "\n";
-        $this->view->excludedValues = $excluded_values;
+        $this->view->excludedTitles     = implode(",", $excluded_titles) . "\n";
+        $this->view->excludedValues     = $excluded_values;
 
         // Removes spaces from company name, otherwise CSV filename contains + symbol
-        $companyName = str_replace(array (
-                                         " ",
-                                         "/",
-                                         "\\",
-                                         ";",
-                                         "?",
-                                         "\"",
-                                         "'",
-                                         ",",
-                                         "%",
-                                         "&",
-                                         "#",
-                                         "@",
-                                         "!",
-                                         ">",
-                                         "<",
-                                         "+",
-                                         "=",
-                                         "{",
-                                         "}",
-                                         "[",
-                                         "]",
-                                         "|",
-                                         "~",
-                                         "`"
+        $companyName = str_replace(array(
+                                        " ",
+                                        "/",
+                                        "\\",
+                                        ";",
+                                        "?",
+                                        "\"",
+                                        "'",
+                                        ",",
+                                        "%",
+                                        "&",
+                                        "#",
+                                        "@",
+                                        "!",
+                                        ">",
+                                        "<",
+                                        "+",
+                                        "=",
+                                        "{",
+                                        "}",
+                                        "[",
+                                        "]",
+                                        "|",
+                                        "~",
+                                        "`"
                                    ), "_", $proposal->Report->CustomerCompanyName);
     }
 }

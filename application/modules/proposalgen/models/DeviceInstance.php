@@ -754,7 +754,15 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_deviceName))
         {
-            $this->_deviceName = $this->getMasterDevice()->getManufacturer()->fullname . " " . $this->getMasterDevice()->modelName;
+            if ($this->getIsMappedToMasterDevice())
+            {
+                $this->_deviceName = $this->getMasterDevice()->getManufacturer()->fullname . " " . $this->getMasterDevice()->modelName;
+            }
+            else
+            {
+                $this->_deviceName = $this->getRmsUploadRow()->manufacturer . ' ' . $this->getRmsUploadRow()->modelName;
+            }
+
         }
 
         return $this->_deviceName;

@@ -115,7 +115,7 @@ $proposal = $this->proposal;
                 /* @var $device Proposalgen_Model_DeviceInstance */ ?>
                 <?php $SerialNumber = (strlen($device->serialNumber) === "") ? 'Unknown Serial' : $device->serialNumber; ?>
             <tr>
-    					<td><div class=" left"><?php echo $device->getDeviceName(); ?></div></td>
+    					<td><div class=" left"><?php echo $device->getDeviceName();?>
     					<td><div class=" left"><?php if ($device->ipAddress) echo $device->ipAddress; else echo 'Unknown IP';?></div></td>
     					<td><div class=" center"><?php echo $SerialNumber; ?></div></td>    					
     					<td><div class=" left"><?php echo $device->_exclusionReason; ?></div></td>

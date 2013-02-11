@@ -1,9 +1,19 @@
 <?php
 
 // TODO: Remove hardcoded values
-$filename = 'lease-quote.docx';
-$savePath = PUBLIC_PATH . '/downloads/' . $filename;
-$linkToFile = $this->baseUrl('/downloads/' . $filename);
+$filename = 'order-list.xlsx';
+$savePath = PUBLIC_PATH . "/downloads/client/{$this->clientId}/quote/{$this->quoteId}/";
+
+if (!is_dir($savePath))
+{
+    if (!mkdir($savePath, 0777, true))
+    {
+        throw new Exception("Could not open cache folder! PATH:" . $savePath, 0);
+    }
+}
+$savePath = $savePath . $filename;
+
+$linkToFile = $this->baseUrl("/downloads/client/{$this->clientId}/quote/{$this->quoteId}/{$filename}");
 
 // This may not need to be removed from here
 // Base path to the files used to render the document

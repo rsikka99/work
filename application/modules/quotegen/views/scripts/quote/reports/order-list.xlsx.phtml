@@ -2,8 +2,19 @@
 
 // TODO: Remove hardcoded values
 $filename = 'order-list.xlsx';
-$savePath = PUBLIC_PATH . '/downloads/' . $filename;
-$linkToFile = $this->baseUrl('/downloads/' . $filename);
+$savePath = PUBLIC_PATH . "/downloads/client/{$this->clientId}/orderlist/{$this->quoteId}/";
+
+if (!is_dir($savePath))
+{
+    if (!mkdir($savePath, 0777, true))
+    {
+        throw new Exception("Could not open cache folder! PATH:" . $savePath, 0);
+    }
+}
+$savePath = $savePath . $filename;
+
+$linkToFile = $this->baseUrl("/downloads/client/{$this->clientId}/quote/{$this->quoteId}/{$filename}");
+
 
 $quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
 $totalQuantity = 1;

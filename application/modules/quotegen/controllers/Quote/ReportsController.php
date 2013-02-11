@@ -3,7 +3,7 @@
 class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
 {
     public $contexts = array (
-            'purchase-quote' => array (
+            "purchase-quote" => array (
                     'docx' 
             ), 
             'lease-quote' => array (
@@ -73,6 +73,8 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
      */
     public function purchaseQuoteAction ()
     {
+        $this->view->clientId = $this->_quote->clientId;
+        $this->view->quoteId = $this->_quote->id;
     }
 
     /**
@@ -80,6 +82,8 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
      */
     public function leaseQuoteAction ()
     {
+        $this->view->clientId = $this->_quote->clientId;
+        $this->view->quoteId = $this->_quote->id;
     }
 
     /**
@@ -87,6 +91,8 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
      */
     public function orderListAction ()
     {
+        $this->view->clientId = $this->_quote->clientId;
+        $this->view->quoteId = $this->_quote->id;
     }
 
     /**
@@ -94,6 +100,8 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
      */
     public function contractAction ()
     {
+        $this->view->clientId = $this->_quote->clientId;
+        $this->view->quoteId = $this->_quote->id;
     }
 }
 
