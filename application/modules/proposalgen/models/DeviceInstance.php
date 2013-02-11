@@ -1258,6 +1258,82 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
+     * Gets whether or not the device is leased
+     *
+     * @return bool
+     */
+    public function getIsLeased ()
+    {
+        if ($this->getIsMappedToMasterDevice())
+        {
+            $isLeased = $this->getMasterDevice()->isLeased;
+        }
+        else
+        {
+            $isLeased = $this->getRmsUploadRow()->isLeased;
+        }
+
+        return $isLeased;
+    }
+
+    /**
+     * The action of the device
+     *
+     * @return String $Action
+     */
+    public function getAction ()
+    {
+        if (!isset($this->Action))
+        {
+            if ($this->getMasterDevice()->getAge() > self::RETIREMENT_AGE && $this->getAverageMonthlyPageCount() < self::RETIREMENT_MAXPAGECOUNT)
+            {
+                $this->Action = Proposalgen_Model_DeviceInstance::ACTION_RETIRE;
+            }
+            else if (($this->getMasterDevice()->getAge() > self::REPLACEMENT_AGE || $this->_lifeUsage > 1) && $this->getAverageMonthlyPageCount() > self::REPLACEMENT_MINPAGECOUNT)
+            {
+                $this->Action = Proposalgen_Model_DeviceInstance::ACTION_REPLACE;
+            }
+            else
+            {
+                $this->Action = Proposalgen_Model_DeviceInstance::ACTION_KEEP;
+            }
+        }
+
+        return $this->Action;
+    }
+
+    /**
+     * Getter for $_reason
+     *
+     * @return string
+     */
+    public function getReason ()
+    {
+        if (!isset($this->_reason))
+        {
+            $this->_reason = "Okay. ";
+
+            if ($this->getReplacementMasterDevice())
+            {
+                $this->_reason = "Current CPP greater than target CPP.";
+            }
+            if ($this->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
+            {
+                $this->_reason = "Device not consistent with MPS program.  AMPV is significant.";
+            }
+            if ($this->getAction() === Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
+            {
+                $this->_reason = "Device no longer reliable, AMPV not significant.";
+            }
+        }
+
+        return $this->_reason;
+    }
+
+    /*****************************************************
+     ***************Device Calculations*******************
+     *****************************************************/
+    /**
      * Calculates the cost per page for a master device.
      *
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
@@ -1308,24 +1384,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
-     * Gets whether or not the device is leased
-     *
-     * @return bool
-     */
-    public function getIsLeased ()
-    {
-        if ($this->getIsMappedToMasterDevice())
-        {
-            $isLeased = $this->getMasterDevice()->isLeased;
-        }
-        else
-        {
-            $isLeased = $this->getRmsUploadRow()->isLeased;
-        }
-
-        return $isLeased;
-    }
-
 
     /**
      * Figures out if the device can report toner levels
