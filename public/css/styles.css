@@ -363,9 +363,6 @@ html {
   margin: auto;
   width: 100px;
 }
-body {
-  min-width: 1280px;
-}
 form.form-center-actions .form-actions {
   padding: 0;
   display: block;
