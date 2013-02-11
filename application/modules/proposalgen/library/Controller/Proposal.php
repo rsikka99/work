@@ -102,30 +102,40 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_index/index')
             ),
-            "Assessment"         => (object)array(
+            "Assessment"                   => (object)array(
                 "pagetitle" => "Assessment",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_assessment/index')
             ),
-            "Solution"           => (object)array(
+            "Solution"                     => (object)array(
                 "pagetitle" => "Solution",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_solution/index')
             ),
-            "GrossMargin"        => (object)array(
+            "GrossMargin"                  => (object)array(
                 "pagetitle" => "Gross Margin",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_grossmargin/index')
             ),
-            "PrintingDeviceList" => (object)array(
+            "PrintingDeviceList"           => (object)array(
                 "pagetitle" => "Printing Device List",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_printingdevicelist/index')
             ),
-            "PIQEssentials"      => (object)array(
+            "PIQEssentials" => (object)array(
                 "pagetitle" => "Print IQ Essentials",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_piqessentials/index')
+            ),
+            "DealerHardwareOptimization"   => (object)array(
+                "pagetitle" => "Dealer Hardware Optimization",
+                "active"    => false,
+                "url"       => $this->view->baseUrl('/proposalgen/report_optimization_dealer/index')
+            ),
+            "CustomerHardwareOptimization" => (object)array(
+                "pagetitle" => "Customer Hardware Optimization",
+                "active"    => false,
+                "url"       => $this->view->baseUrl('/proposalgen/report_optimization_customer/index')
             ),
             "HealthCheck"      => (object)array(
                 "pagetitle" => "Health Check",

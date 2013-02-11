@@ -1,15 +1,12 @@
 <?php
-class Proposalgen_Report_OptimizationController extends Proposalgen_Library_Controller_Proposal
+class Proposalgen_Report_Optimization_CustomerController  extends Proposalgen_Library_Controller_Proposal
 {
     public function indexAction ()
     {
-        // Mark the step we're on as active
-        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FINISHED);
-
         $this->initReportList();
         $this->initHtmlReport();
 
-        $this->view->availableReports->Solution->active = true;
+        $this->view->availableReports->CustomerHardwareOptimization->active = true;
 
         $this->view->formats = array(
             "/proposalgen/solution/generate/format/docx" => $this->_wordFormat

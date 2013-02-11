@@ -39,7 +39,7 @@ $(function ()
             { label: 'More Details', name: 'info', index: 'info', align: 'center', width: 50, sortable: false },
             { label: 'ID', name: 'deviceInstanceId', index: 'deviceInstanceId', align: 'left', width: 25, hidden: true},
             { label: 'Is Color', name: 'isColor', index: 'isColor', align: 'left', width: 25, hidden: true },
-            { label: 'Reason', name: 'reason', index: 'reason', align: 'left', width: 350 },
+            { label: 'Reason', name: 'reason', index: 'reason', align: 'left', width: 350 }
         ],
         height      : 900,
         width       : 940,

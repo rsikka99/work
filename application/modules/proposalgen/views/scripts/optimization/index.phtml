@@ -69,10 +69,8 @@
 <em> * Note: Cost per page in the table above are the weighted average for the fleet. </em>
 <br/>
 
-<h3> Proposal Device</h3>
-<em>The following x out x devices are eligible for potential optimization.</em>
+<h3>Proposal Device</h3>
 <br />
-
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
     <div class='replacementDevices'>
 
@@ -112,7 +110,7 @@
                 'action' => $replacementDeviceElement->renderViewHelper(),
                 'costDelta' => $this->currency($costDelta, array('precision' => 2)),
                 'rawCostDelta' => $costDelta,
-                'reason' => 'Preset answer: Fix Reason',
+                'reason' => $device->getReason(),
             );
             $jsonRows[] = $rowJson;
             ?>

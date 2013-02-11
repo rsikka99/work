@@ -1441,24 +1441,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         return $colorCostPerPage * $this->getAverageMonthlyColorPageCount();
     }
 
-    /**
-     * The action of the device
-     *
-     * @return String $Action
-     */
-    public function getAction()
-    {
-        if (!isset($this->Action)) {
-            if ($this->getMasterDevice()->getAge() > self::RETIREMENT_AGE && $this->getAverageMonthlyPageCount() < self::RETIREMENT_MAXPAGECOUNT) {
-                $this->Action = Proposalgen_Model_DeviceInstance::ACTION_RETIRE;
-            } else if (($this->getMasterDevice()->getAge() > self::REPLACEMENT_AGE || $this->_lifeUsage > 1) && $this->getAverageMonthlyPageCount() > self::REPLACEMENT_MINPAGECOUNT) {
-                $this->Action = Proposalgen_Model_DeviceInstance::ACTION_REPLACE;
-            } else {
-                $this->Action = Proposalgen_Model_DeviceInstance::ACTION_KEEP;
-            }
-        }
-        return $this->Action;
-    }
 
     /**
      * Calculates the monthly cost for this instance
