@@ -1,7 +1,9 @@
 <?php
-//$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
-//$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
-//$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/essentials/essentials_html.css"));
-///* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-//$proposal = $this->proposal;
-//?>
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
+$customerOptimization = new Proposalgen_Model_Optimization_Customer($proposal);
+$graphs = $customerOptimization->getGraphs();
+?>
+
+<img src="<?php echo $graphs[0]; ?>" />
+<img src="<?php echo $graphs[1]; ?>" />
