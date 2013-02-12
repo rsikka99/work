@@ -1,4 +1,4 @@
-<div class="page-header">
+<div class="page-header" xmlns="http://www.w3.org/1999/html">
     <h1>Catchy Title For Landing Page</h1>
 </div>
 <?php
@@ -43,27 +43,70 @@ $client = Quotegen_Model_Mapper_Client::getInstance()->find($this->selectedClien
         </div>
     </div>
     <div class="span9">
-        <div class="hero-unit">
-            <h1>Coming Soon...</h1>
 
-            <p>This page will eventually house information about a client and it will be your main entry point to the software.</p>
-        </div>
-        <div class="well">
-            <p><strong>1.</strong> Assess
-                <button type="button" class="btn">Create Assessment</button>
-            </p>
-            <p><strong>2.</strong> Solve
-                <button type="button" class="btn">Create Solution</button>
-            </p>
-            <p><strong>3.</strong> Health Check
-                <button type="button" class="btn">Perform Health Check</button>
-            </p>
-            <p><strong>4.</strong> Optimize
-                <button type="button" class="btn">Optimize the fleet</button>
-            </p>
-            <p><strong>5.</strong> Quote
-                <button type="button" class="btn">Create a quote</button>
-            </p>
+        <div class="tabs-top">
+            <ul class="nav nav-tabs" id="myTab">
+                <li><a href="#survey" data-toggle="tab">Survey</a></li>
+                <li class="active"><a href="#assessment" data-toggle="tab">Assessment</a></li>
+                <li><a href="#quotes" data-toggle="tab">Quotes</a></li>
+                <li><a href="#healthCheck" data-toggle="tab">Health Check</a></li>
+                <li><a href="#optimization" data-toggle="tab">Optimization</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane" id="survey">
+                    <div class="well">
+                        <button class="btn btn-success" type="button">Edit Survey</button>
+                    </div>
+                </div>
+                <div class="tab-pane active" id="assessment">
+                    <div class="well">
+                        <p>
+
+                        <form method="POST">
+                            <button class="btn btn-success" name="startNewAssessment">Start New Assessment</button>
+                        </form>
+                        <select>
+                            <option>View Assessment</option>
+                            <option>View Solution</option>
+                            <option>Optimize</option>
+                            <option>Health Check</option>
+                        </select>
+                        <button class="btn btn-success" type="button">Go</button>
+                        </p>
+                    </div>
+                </div>
+                <div class="tab-pane" id="quotes">
+                    <div class="well">
+                        <button class="btn btn-success" type="button">Create New Quote</button>
+                        <p>Quote 1</p>
+
+                        <p>Quote 2</p>
+
+                        <p>Quote 3</p>
+
+                        <p>Quote 4</p>
+                    </div>
+                </div>
+                <div class="tab-pane" id="healthCheck">
+                    <div class="hero-unit">
+                        <h1>Coming Soon...</h1>
+
+                        <p>Health Check Health Check Health Check Health Check Health Check Health Check Health Check Health Check Health Check Health Check
+                            Health
+                            Check Health Check Health Check Health Check</p>
+                    </div>
+                </div>
+                <div class="tab-pane" id="optimization">
+                    <div class="hero-unit">
+                        <h1>Optimization Coming Soon...</h1>
+
+                        <p>Health Check Health Check Health Check Health Check Health Check Health Check Health Check Health Check Health Check Health Check
+                            Health
+                            Check Health Check Health Check Health Check</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

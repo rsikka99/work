@@ -46,6 +46,10 @@ class Default_IndexController extends Zend_Controller_Action
                 unset($this->_mpsSession->selectedClientId);
                 $this->_helper->redirector('select-client');
             }
+            else if (isset($postData['startNewAssessment']))
+            {
+                $this->_helper->redirector('index', 'survey', 'proposalgen');
+            }
         }
 
     }
