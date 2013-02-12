@@ -12,6 +12,11 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     public $userId;
 
     /**
+     * @var int
+     */
+    public $clientId;
+
+    /**
      * @var string
      */
     public $customerCompanyName;
@@ -72,8 +77,9 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     protected $_user;
 
     /**
-     * @var Proposalgen_Model_DeviceInstance[]
+     * @var Quotegen_Model_Client
      */
+    protected $_client;
 
     /**
      * @param array $params An array of data to populate the model with
@@ -93,6 +99,11 @@ class Proposalgen_Model_Report extends My_Model_Abstract
         if (isset($params->userId) && !is_null($params->userId))
         {
             $this->userId = $params->userId;
+        }
+
+        if (isset($params->clientId) && !is_null($params->clientId))
+        {
+            $this->clientId = $params->clientId;
         }
 
         if (isset($params->customerCompanyName) && !is_null($params->customerCompanyName))
@@ -145,6 +156,7 @@ class Proposalgen_Model_Report extends My_Model_Abstract
         return array(
             "id"                  => $this->id,
             "userId"              => $this->userId,
+            "clientId"            => $this->clientId,
             "customerCompanyName" => $this->customerCompanyName,
             "userPricingOverride" => $this->userPricingOverride,
             "reportStage"         => $this->reportStage,
@@ -240,5 +252,34 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     public function setUser ($user)
     {
         $this->_user = $user;
+    }
+
+    /**
+     * Gets the client
+     *
+     * @return Quotegen_Model_Client
+     */
+    public function getClient ()
+    {
+        if (!isset($this->_client))
+        {
+            $this->_client = Quotegen_Model_Mapper_Client::getInstance()->find($this->clientId);
+        }
+
+        return $this->_client;
+    }
+
+    /**
+     * Sets the client
+     *
+     * @param Quotegen_Model_Client $client
+     *
+     * @return Proposalgen_Model_Report
+     */
+    public function setClient ($client)
+    {
+        $this->_client = $client;
+
+        return $this;
     }
 }

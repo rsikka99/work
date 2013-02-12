@@ -11,6 +11,7 @@ CREATE  TABLE IF NOT EXISTS `clients` (
   `accountNumber` VARCHAR(255) NOT NULL ,
   `companyName` VARCHAR(255) NOT NULL ,
   `legalName` VARCHAR(255) NULL ,
+  `employeeCount` INT NOT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 5
@@ -109,6 +110,7 @@ DEFAULT CHARACTER SET = utf8;
 CREATE  TABLE IF NOT EXISTS `pgen_reports` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
   `userId` INT(11) NOT NULL ,
+  `clientId` INT NOT NULL ,
   `customerCompanyName` VARCHAR(255) NOT NULL ,
   `userPricingOverride` TINYINT(4) NULL DEFAULT '0' ,
   `reportStage` ENUM('company','general','finance','purchasing','it','users','verify','upload','mapdevices','summary','reportsettings','optimization','finished') NULL ,
@@ -120,12 +122,20 @@ CREATE  TABLE IF NOT EXISTS `pgen_reports` (
   PRIMARY KEY (`id`) ,
   INDEX `user_id` (`userId` ASC) ,
   INDEX `questionset_id` (`questionSetId` ASC) ,
+  INDEX `proposalgenerator_reports_ibfk_3_idx` (`clientId` ASC) ,
   CONSTRAINT `proposalgenerator_reports_ibfk_1`
     FOREIGN KEY (`userId` )
-    REFERENCES `users` (`id` ),
+    REFERENCES `users` (`id` )
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
   CONSTRAINT `proposalgenerator_reports_ibfk_2`
     FOREIGN KEY (`questionSetId` )
-    REFERENCES `pgen_question_sets` (`id` ))
+    REFERENCES `pgen_question_sets` (`id` ),
+  CONSTRAINT `proposalgenerator_reports_ibfk_3`
+    FOREIGN KEY (`clientId` )
+    REFERENCES `clients` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = utf8;

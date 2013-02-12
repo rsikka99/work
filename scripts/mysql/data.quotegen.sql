@@ -1,8 +1,8 @@
-INSERT INTO `clients` (`id`, `accountNumber`, `companyName`,`legalName`) VALUES
-(1, '0000001', 'Tangent MTW', 'Tangent MTW Incorporated'),
-(2, '0000002', 'Starbucks', 'Starbucks'),
-(3, '0000003', 'Novellis', 'Novellis co-operatives'),
-(4, '0000004', 'Samsung', 'Samsung Incorporated');
+INSERT INTO `clients` (`id`, `accountNumber`, `companyName`,`legalName`,`employeeCount`) VALUES
+(1, '0000001', 'Tangent MTW', 'Tangent MTW Incorporated', 12),
+(2, '0000002', 'Starbucks', 'Starbucks', 12000),
+(3, '0000003', 'Novellis', 'Novellis co-operatives', 1200),
+(4, '0000004', 'Samsung', 'Samsung Incorporated', 9800);
 
 INSERT INTO `contacts` (`id`,`clientId`, `firstName`, `lastName`,`countryCode`,`areaCode`,`exchangeCode`,`number`,`extension`) VALUES
 (1,1, 'Norm', 'McConkey', 1,613,507,5151,null),
