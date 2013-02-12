@@ -44,7 +44,7 @@ class Proposalgen_Form_SelectReport extends EasyBib_Form
         foreach ( $this->_reports as $report )
         {
             
-            $reportName = $report->customerCompanyName;
+            $reportName = $report->getClient()->companyName;
             if ($report->dateCreated !== null)
             {
                 $date = strftime('%x', strtotime($report->dateCreated));

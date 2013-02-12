@@ -1635,7 +1635,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             // Other variables used in several places
             $pageCounts      = $this->getPageCounts();
             $reportQuestions = $this->getReportQuestions();
-            $companyName     = $this->report->customerCompanyName;
+            $companyName     = $this->report->getClient()->companyName;
             $employeeCount   = $reportQuestions [5]->NumericAnswer;
 
             // Formatting variables

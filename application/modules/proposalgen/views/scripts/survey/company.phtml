@@ -1,6 +1,13 @@
+<?php
+/* @var $report Proposalgen_Model_Report */
+$report = $this->report;
+?>
 <div class="page-header">
-    <h1>Survey <small>- Company</small></h1>
+    <h1>Survey <small>- General</small></h1>
 </div>
 <div class="well">
-	<?php echo $this->form ?>
+    <p>Company Name: <?php echo $report->getClient()->companyName; ?> </p>
+    <p>Address: <?php echo $report->getClient()->getAddress(); ?> </p>
+    <p>Employee Count: <?php echo number_format($report->getClient()->employeeCount); ?> </p>
+    <?php echo $this->form ?>
 </div>

@@ -3385,7 +3385,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                         'cell' => array(
                             $report->id,
                             $report->getUser()->username,
-                            $report->customerCompanyName,
+                            $report->getClient()->companyName,
                             $this->convertDate($report->dateCreated),
                             $this->convertDate($report->lastModified),
                             $finishedString,

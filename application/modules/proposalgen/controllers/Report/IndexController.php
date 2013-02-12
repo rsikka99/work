@@ -43,8 +43,8 @@ class Proposalgen_Report_IndexController extends Proposalgen_Library_Controller_
         // $proposal                = $this->getProposal();
         // $this->view->proposal    = $proposal;
         $report                  = $this->getReport();
-        $this->view->companyName = $report->customerCompanyName; // Set company
-        $this->view->reportName  = $report->customerCompanyName;
+        $this->view->companyName = $report->getClient()->companyName; // Set company
+        $this->view->reportName  = $report->getClient()->companyName;
     }
 
     /**

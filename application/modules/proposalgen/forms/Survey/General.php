@@ -22,22 +22,6 @@ class Proposalgen_Form_Survey_General extends Proposalgen_Form_Survey_BaseSurvey
          */
         $this->setAttrib('class', 'proposalForm form-vertical');
         
-        $numb_employees = new Zend_Form_Element_Text('numb_employees');
-        $numb_employees->setAttrib('maxlength', 4)
-            ->setAttrib('class', 'span1')
-            ->setRequired(true)
-            ->addValidator('digits', true)
-            ->setAutoInsertNotEmptyValidator(true)
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ));
-        
-        $numb_employees->getValidator('digits')->setMessage('Please enter a number. (With no decimal places)');
-        $numb_employees->getValidator('greaterThan')->setMessage('%value% must be greater than 0.');
-        $emplQst = "How many office employees do you have at the site(s) to be covered by managed print services?";
-        $numb_employees->setLabel($emplQst);
-        $this->addElement($numb_employees);
-        
         /*
          * Please note that this validator will not display errors in the correct location. This is just a failsafe
          * against anyone who may want to try to hack a different value in. The average user will never trigger this

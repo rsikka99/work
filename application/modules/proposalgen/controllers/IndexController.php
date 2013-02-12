@@ -29,7 +29,7 @@ class Proposalgen_IndexController extends Zend_Controller_Action
      */
     public function startProposal ($session, $reportId = null)
     {
-        $session->$reportId = null;
+        $session->reportId = null;
         
         // Redirect to the survey controller of our current module
         $this->_helper->redirector('index', 'survey');
@@ -80,7 +80,7 @@ class Proposalgen_IndexController extends Zend_Controller_Action
             // Tack on a proposal that handles creating a new one
             $newReport = new Proposalgen_Model_Report();
             $newReport->id = 0;
-            $newReport->customerCompanyName = "Start New Proposal";
+            $newReport->getClient()->companyName = "Start New Proposal";
             array_unshift($reports, $newReport);
         }
         else

@@ -1,8 +1,6 @@
 <?php
 class Proposalgen_Model_Report_Step extends My_Model_Abstract
 {
-    const STEP_SURVEY_COMPANY       = 'company';
-    const STEP_SURVEY_GENERAL       = 'general';
     const STEP_SURVEY_FINANCE       = 'finance';
     const STEP_SURVEY_PURCHASING    = 'purchasing';
     const STEP_SURVEY_IT            = 'it';
@@ -22,19 +20,6 @@ class Proposalgen_Model_Report_Step extends My_Model_Abstract
      * @var array
      */
     private static $stepNames = array(
-        self::STEP_SURVEY_COMPANY       => array(
-            'name'       => 'Company',
-            'group'      => self::GROUP_SURVEY,
-            'controller' => 'survey',
-            'action'     => 'company',
-            'canAccess'  => true
-        ),
-        self::STEP_SURVEY_GENERAL       => array(
-            'name'       => 'General',
-            'group'      => self::GROUP_SURVEY,
-            'controller' => 'survey',
-            'action'     => 'general'
-        ),
         self::STEP_SURVEY_FINANCE       => array(
             'name'       => 'Finance',
             'group'      => self::GROUP_SURVEY,

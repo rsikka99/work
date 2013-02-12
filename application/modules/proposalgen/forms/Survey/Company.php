@@ -22,26 +22,7 @@ class Proposalgen_Form_Survey_Company extends Proposalgen_Form_Survey_BaseSurvey
          */
         $this->setAttrib('class', 'proposalForm form-horizontal');
         
-        $company_name = new Zend_Form_Element_Text('company_name');
-        $company_name->setAttrib('maxlength', 40)
-            ->setRequired(true)
-            ->setAutoInsertNotEmptyValidator(true);
-        $companyQst = "Company name:";
-        $company_name->setLabel($companyQst);
-        $this->addElement($company_name);
-        
-        $company_address = new Zend_Form_Element_Textarea('company_address');
-        $company_address->setAttrib('maxlength', 200)
-            ->setRequired(true)
-            ->setAutoInsertNotEmptyValidator(true)
-            ->setAttrib('tmtw', 'text')
-            ->setAttrib('id', '30')
-            ->setAttrib('cols', '40')
-            ->setAttrib('rows', '5')
-            ->setAttrib('style', 'resize: none;');
-        $companyAddressQst = "Address:";
-        $company_address->setLabel($companyAddressQst);
-        $this->addElement($company_address);
+
         
         parent::init();
     }

@@ -1,13 +1,4 @@
 <?php
-
-/**
- * Description of SurveyController:
- * This controller handles the survey/questionnaire.
- * User should be guided through a series of forms where they are asked to answer
- * questions about their existing fleet of printers.
- *
- * @author Lee robert
- */
 class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Proposal
 {
 
@@ -22,7 +13,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         {
             if ($this->_reportSession->reportId === 0)
             {
-                $this->_helper->redirector('company');
+                $this->_helper->redirector('finance');
             }
             else
             {
@@ -45,7 +36,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                 }
                 else
                 {
-                    $this->_helper->redirector('company');
+                    $this->_helper->redirector('finance');
                 }
             }
         }
@@ -55,174 +46,6 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         }
     }
 
-    /**
-     * This is one of the pages in the survey
-     */
-    public function companyAction ()
-    {
-        // Mark the step we're on as active
-        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_COMPANY);
-
-        $request = $this->getRequest();
-        $form    = new Proposalgen_Form_Survey_Company();
-
-        // Get any saved answers
-        $formDataFromAnswers = array(
-            "company_name" => $this->getReport()->customerCompanyName
-        );
-
-        $formDataFromAnswers ["company_address"] = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(30, $this->getReport()
-            ->id)) ? : "";
-
-        $form->populate($formDataFromAnswers);
-
-        if ($request->isPost())
-        {
-            $values = $request->getPost();
-            if (isset($values ["goBack"]))
-            {
-                $this->gotoPreviousStep();
-            }
-            else
-            {
-                try
-                {
-                    if ($form->isValid($values))
-                    {
-                        $this->getReport()->customerCompanyName = $form->getValue('company_name');
-
-                        // Everytime we save anything related to a report, we should save it (updates the modification date)
-                        $this->saveReport();
-
-                        $this->saveTextualQuestionAnswer(4, $form->getValue('company_name'));
-                        $this->saveTextualQuestionAnswer(30, $form->getValue('company_address'));
-
-                        if (isset($values ["saveAndContinue"]))
-                        {
-                            // Call the base controller to send us to the next logical step in the proposal.
-                            $this->gotoNextStep();
-                        }
-                        else
-                        {
-                            $this->_helper->flashMessenger(array(
-                                                                'success' => "Your changes were saved sucessfully."
-                                                           ));
-                        }
-                    }
-                    else
-                    {
-                        throw new Zend_Validate_Exception("Form Validation Failed");
-                    }
-                }
-                catch (Zend_Validate_Exception $e)
-                {
-                    $form->buildBootstrapErrorDecorators();
-                }
-            }
-        }
-
-        $this->view->form = $form;
-    }
-
-    /**
-     * This is one of the pages in the survey
-     */
-    public function generalAction ()
-    {
-        // Mark the step we're on as active
-        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_GENERAL);
-
-        $request = $this->getRequest();
-        $form    = new Proposalgen_Form_Survey_General();
-
-        $mpsGoalRankings [1] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(6, $this->getReport()->id)) ? : false;
-        $mpsGoalRankings [2] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(7, $this->getReport()->id)) ? : false;
-        $mpsGoalRankings [3] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(8, $this->getReport()->id)) ? : false;
-        $mpsGoalRankings [4] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(9, $this->getReport()->id)) ? : false;
-        $mpsGoalRankings [5] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(10, $this->getReport()->id)) ? : false;
-
-        /*
-         * Get saved answers.
-         */
-        $formDataFromAnswers = array(
-            "numb_employees" => (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(5, $this->getReport()->id)) ? : ""
-        );
-
-        /*
-         * Note we use rank$rankNumber because the answer is the rank number. The questions 6-10 are translated to
-         * values of 1-5. We must only set values for radio boxes that are set. $questionNumber is the way we map the
-         * question to the values of each rank.
-         */
-        foreach ($mpsGoalRankings as $questionNumber => $rankNumber)
-        {
-            // Only set it if it's a real number.
-            if ($rankNumber !== false)
-            {
-                $formDataFromAnswers ["rank{$rankNumber}"] = $questionNumber;
-            }
-        }
-
-        $form->populate($formDataFromAnswers);
-
-        if ($request->isPost())
-        {
-            $values = $request->getPost();
-            if (isset($values ["goBack"]))
-            {
-                $this->gotoPreviousStep();
-            }
-            else
-            {
-                try
-                {
-
-                    if ($form->isValid($values))
-                    {
-                        $this->saveNumericQuestionAnswer(5, $form->getValue('numb_employees'));
-
-                        // Map the rank numbers to the question numbers.
-                        $rank [1] = $form->getValue('rank1');
-                        $rank [2] = $form->getValue('rank2');
-                        $rank [3] = $form->getValue('rank3');
-                        $rank [4] = $form->getValue('rank4');
-                        $rank [5] = $form->getValue('rank5');
-
-                        foreach ($rank as $rankNumber => $questionNumber)
-                        {
-                            // Right now it happens that the real question numbers are 5 above the 1-5.
-                            $realQuestionNumber = $questionNumber + 5;
-                            $this->saveNumericQuestionAnswer($realQuestionNumber, $rankNumber);
-                        }
-
-                        // Everytime we save anything related to a report, we should save it (updates the modification date)
-                        $this->saveReport();
-
-                        if (isset($values ["saveAndContinue"]))
-                        {
-                            // Call the base controller to send us to the next logical step in the proposal.
-                            $this->gotoNextStep();
-                        }
-                        else
-                        {
-                            $this->_helper->flashMessenger(array(
-                                                                'success' => "Your changes were saved sucessfully."
-                                                           ));
-                        }
-                    }
-                    else
-                    {
-                        throw new Zend_Validate_Exception("Form Validation Failed");
-                    }
-                }
-                catch (Zend_Validate_Exception $e)
-                {
-                    $form->buildBootstrapErrorDecorators();
-                }
-            }
-        }
-
-        $this->view->form = $form;
-    }
 
     /**
      * This is one of the pages in the survey
@@ -296,6 +119,8 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                 {
                     if ($form->isValid($values))
                     {
+                        $this->saveReport();
+
                         // Question 11 (Ink and Toner costs
                         $this->saveTextualQuestionAnswer(11, $form->getValue('toner_cost_radio'));
                         if ($form->getValue('toner_cost'))
@@ -572,7 +397,6 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $form    = new Proposalgen_Form_Survey_Users();
 
 
-
         // Get the user survey settings for overrides
         $surveySetting = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchSystemDefaultSurveySettings();
         $surveySetting->populate(Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchUserSurveySetting($this->_userId)->toArray());
@@ -683,37 +507,11 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $currency = new Zend_Currency();
 
         // COMPANY
-        $this->view->companyName    = $this->getReport()->customerCompanyName;
-        $this->view->companyAddress = Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(30, $reportId);
+        $this->view->companyName = $this->getReport()->getClient()->companyName;
+        $this->view->companyAddress = $this->getReport()->getClient()->getAddress();
 
         // GENERAL
-        $this->view->numberOfEmployees = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(5, $reportId) . ' employees';
-
-        $goalArray = array(
-            1 => 'Ensure hardware matches print volume needs',
-            2 => 'Increasing uptime and productivity',
-            3 => 'Streamline logistics for supplies, service and hardware acquisition',
-            4 => 'Reduce environmental impact',
-            5 => 'Reduce costs'
-        );
-
-        $mpsGoalRankings [1] = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(6, $reportId);
-        $mpsGoalRankings [2] = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(7, $reportId);
-        $mpsGoalRankings [3] = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(8, $reportId);
-        $mpsGoalRankings [4] = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(9, $reportId);
-        $mpsGoalRankings [5] = Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(10, $reportId);
-
-        // Sort the goal rankings
-        asort($mpsGoalRankings);
-
-        $mpsGoalPriority = array();
-        for ($i = 1; $i <= 5; $i++)
-        {
-
-            $mpsGoalPriority [] = "{$i}. " . $goalArray [$mpsGoalRankings [$i]];
-        }
-
-        $this->view->mpsGoalPriority = implode("\n", $mpsGoalPriority);
+        $this->view->numberOfEmployees = number_format($this->getReport()->getClient()->employeeCount) . ' employees';
 
         // FINANCE
         $tonerCostsRadio = Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(11, $reportId);

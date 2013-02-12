@@ -6,12 +6,12 @@ $proposal = $this->proposal;
     <div class="header">
         <h3>Prepared for:
             <?php
-            if (strlen($proposal->report->customerCompanyName) > 26)
+            if (strlen($proposal->report->getClient()->companyName) > 26)
             {
                 echo "<br/>";
             }
 
-            echo $proposal->report->customerCompanyName;
+            echo $proposal->report->getClient()->companyName;
             ?>
         </h3>
         <h3><?php echo $proposal->getDateReportPrepared() ; ?></h3>

@@ -13,10 +13,21 @@ class Default_IndexController extends Zend_Controller_Action
      */
     protected $_mpsSession;
 
+    /**
+     * The namespace for our proposal generator
+     *
+     * @deprecated This will eventually be migrated to be in mps-tools session namespace
+     * @var Zend_Session_Namespace
+     */
+    protected $_proposalSession;
+
     public function init ()
     {
         /* Initialize action controller here */
-        $this->_mpsSession = new Zend_Session_Namespace('mps-tools');
+        $this->_mpsSession      = new Zend_Session_Namespace('mps-tools');
+        $this->_proposalSession = new Zend_Session_Namespace('proposalgenerator_report');
+
+
         if (isset($this->_mpsSession->selectedClientId))
         {
             $this->_selectedClientId      = $this->_mpsSession->selectedClientId;
@@ -48,6 +59,7 @@ class Default_IndexController extends Zend_Controller_Action
             }
             else if (isset($postData['startNewAssessment']))
             {
+                $this->_proposalSession->reportId = 0;
                 $this->_helper->redirector('index', 'survey', 'proposalgen');
             }
         }

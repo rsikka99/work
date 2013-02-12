@@ -19,6 +19,11 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     protected $_reportSession;
 
     /**
+     * @var Zend_Session_Namespace
+     */
+    protected $_mpsSession;
+
+    /**
      * @var Proposalgen_Model_Report_Step
      */
     protected $_reportSteps;
@@ -27,6 +32,11 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
      * @var int
      */
     protected $_userId;
+
+    /**
+     * @var int
+     */
+    protected $_clientId;
 
     /**
      * The current step that the user is viewing.
@@ -58,10 +68,15 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
      */
     public function init ()
     {
+        $this->_mpsSession = new Zend_Session_Namespace('mps-tools');
+        $this->_clientId   = (int)$this->_mpsSession->selectedClientId;
+
+
         $this->_reportSession    = new Zend_Session_Namespace('proposalgenerator_report');
-        $this->_reportId         = $this->_reportSession->reportId;
+        $this->_reportId         = (int)$this->_reportSession->reportId;
         $this->view->reportSteps = $this->getReportSteps();
         $this->_userId           = Zend_Auth::getInstance()->getIdentity()->id;
+
 
         $this->_reportAbsoluteCachePath = PUBLIC_PATH . "/cache/reports/" . $this->_reportId;
         $this->_reportCachePath         = "/cache/reports/" . $this->_reportId;
@@ -102,7 +117,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_printingdevicelist/index')
             ),
-            "PIQEssentials" => (object)array(
+            "PIQEssentials"      => (object)array(
                 "pagetitle" => "Print IQ Essentials",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_piqessentials/index')
@@ -427,7 +442,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     public function postDispatch ()
     {
         // Render our survey menu
-        $stage = ($this->getReport()->reportStage) ? : Proposalgen_Model_Report_Step::STEP_SURVEY_COMPANY;
+        $stage = ($this->getReport()->reportStage) ? : Proposalgen_Model_Report_Step::STEP_SURVEY_FINANCE;
         Proposalgen_Model_Report_Step::updateAccessibleSteps($this->getReportSteps(), $stage);
 
         $this->view->placeholder('ProgressionNav')->set($this->view->ProposalMenu($this->getReportSteps()));
@@ -457,8 +472,9 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
                 $identity                     = Zend_Auth::getInstance()->getIdentity();
                 $this->_report                = new Proposalgen_Model_Report();
                 $this->_report->userId        = $identity->id;
+                $this->_report->clientId      = $this->_clientId;
                 $this->_report->questionSetId = self::QUESTION_SET_ID;
-                $this->_report->reportStage   = Proposalgen_Model_Report_Step::STEP_SURVEY_COMPANY;
+                $this->_report->reportStage   = Proposalgen_Model_Report_Step::STEP_SURVEY_FINANCE;
                 $this->_report->dateCreated   = date('Y-m-d H:i:s');
                 $this->_report->reportDate    = date('Y-m-d H:i:s');
             }

@@ -17,11 +17,6 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     public $clientId;
 
     /**
-     * @var string
-     */
-    public $customerCompanyName;
-
-    /**
      * @var int
      */
     public $userPricingOverride;
@@ -106,11 +101,6 @@ class Proposalgen_Model_Report extends My_Model_Abstract
             $this->clientId = $params->clientId;
         }
 
-        if (isset($params->customerCompanyName) && !is_null($params->customerCompanyName))
-        {
-            $this->customerCompanyName = $params->customerCompanyName;
-        }
-
         if (isset($params->userPricingOverride) && !is_null($params->userPricingOverride))
         {
             $this->userPricingOverride = $params->userPricingOverride;
@@ -157,7 +147,6 @@ class Proposalgen_Model_Report extends My_Model_Abstract
             "id"                  => $this->id,
             "userId"              => $this->userId,
             "clientId"            => $this->clientId,
-            "customerCompanyName" => $this->customerCompanyName,
             "userPricingOverride" => $this->userPricingOverride,
             "reportStage"         => $this->reportStage,
             "questionSetId"       => $this->questionSetId,
@@ -206,7 +195,7 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     {
         if (!isset($this->_reportSteps))
         {
-            $stage = ($this->reportStage) ? : Proposalgen_Model_Report_Step::STEP_SURVEY_COMPANY;
+            $stage = ($this->reportStage) ? : Proposalgen_Model_Report_Step::STEP_SURVEY_FINANCE;
 
             $this->_reportSteps = Proposalgen_Model_Report_Step::getSteps();
             Proposalgen_Model_Report_Step::updateAccessibleSteps($this->_reportSteps, $stage);
