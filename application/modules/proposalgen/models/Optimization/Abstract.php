@@ -69,8 +69,23 @@ abstract class Proposalgen_Model_Optimization_Abstract
      */
     public $actionRetireCount;
 
+    /**
+     * Gets the amount of purchased devices that are JIT Compatible
+     *
+     * @var int
+     */
+    public $jitCompatibleCount;
+
+    /**
+     * Stores the proposal object for future use
+     *
+     * @var Proposalgen_Model_Proposal_OfficeDepot
+     */
+    public $proposal;
+
     public function __construct (Proposalgen_Model_Proposal_OfficeDepot $proposal)
     {
+        $this->proposal = $proposal;
         // Set up the arrays of devices to be produced
         $retiredDevices      = array();
         $replacedDevices     = array();
@@ -80,12 +95,18 @@ abstract class Proposalgen_Model_Optimization_Abstract
         $actionKeep          = 0;
         $actionReplace       = 0;
         $actionRetire        = 0;
-        $deviceInstanceCount = 0;
+        $this->jitCompatibleCount = 0;
 
         // Go through each purchase devices that rank it's classifictions
         /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
         foreach ($proposal->getPurchasedDevices() as $deviceInstance)
         {
+
+            // Checks to see if the device is JIT Compatible
+            if($deviceInstance->getMasterDevice()->reportsTonerLevels)
+            {
+                $this->jitCompatibleCount++;
+            }
             // Check the action status first, then check the replacement status
             if ($deviceInstance->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
             {
@@ -125,16 +146,16 @@ abstract class Proposalgen_Model_Optimization_Abstract
         $leasedDevices   = $proposal->getLeasedDevices();
         $excludedDevices = $proposal->getExcludedDevices();
 
-        $this->actionKeepCount = $actionKeep;
+        $this->actionKeepCount    = $actionKeep;
         $this->actionReplaceCount = $actionReplace;
-        $this->actionRetireCount = $actionRetire;
-        $this->excess = $excessDevices;
-        $this->flagged = $flaggedDevices;
-        $this->excluded = $excludedDevices ;
-        $this->kept = $keepDevices;
-        $this->leased = $leasedDevices;
-        $this->replaced = $replacedDevices;
-        $this->retired = $retiredDevices;
+        $this->actionRetireCount  = $actionRetire;
+        $this->excess             = $excessDevices;
+        $this->flagged            = $flaggedDevices;
+        $this->excluded           = $excludedDevices;
+        $this->kept               = $keepDevices;
+        $this->leased             = $leasedDevices;
+        $this->replaced           = $replacedDevices;
+        $this->retired            = $retiredDevices;
     }
 
 }
