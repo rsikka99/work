@@ -1,30 +1,111 @@
 <?php
+    $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
+    $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
+    $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/optimization/optimization_html.css"));
+?>
+
+<?php
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
 $customerOptimization = new Proposalgen_Model_Optimization_Customer($proposal);
 $graphs = $customerOptimization->getGraphs();
 ?>
 
-<img src="<?php echo $graphs[0]; ?>" />
-<img src="<?php echo $graphs[1]; ?>" />
-<br/><br/>
-<img src="<?php echo $graphs[2]; ?>" />
-<img src="<?php echo $graphs[3]; ?>" />
-<br/><br/>
-<img src="<?php echo $graphs[4]; ?>" />
-<br/><br/>
-<img src="<?php echo $graphs[5]; ?>" />
-<img src="<?php echo $graphs[6]; ?>" />
-<br/><br/>
-<img src="<?php echo $graphs[7]; ?>" />
-<img src="<?php echo $graphs[8]; ?>" />
-<br/><br/>
-<img src="<?php echo $graphs[9]; ?>" />
-<img src="<?php echo $graphs[10]; ?>" />
-<br/><br/>
-<h3>Placeholder </h3>
+<div class="h1">
+    Your Hardware Optimization
+</div>
+
+<div class="pheader">
+    Optimization Summary
+</div>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut semper rutrum nunc sed condimentum. Praesent id justo a enim sagittis sodales vitae in mauris. Nunc id eros vel urna laoreet feugiat. Quisque vitae lorem ligula, et porta felis. Suspendisse potenti. Maecenas viverra, arcu vel tempor accumsan, neque tellus facilisis ligula, sed posuere ipsum odio eget est. Duis venenatis sodales nisi ut congue.</p>
 <br/>
-<img src="<?php echo $graphs[11]; ?>" />
+<table class='center'>
+    <tr>
+        <td><img src="<?php echo $graphs[0]; ?>" /></td>
+        <td><img src="<?php echo $graphs[1]; ?>" /></td>
+    </tr>
+</table>
+
+<div class="h1">
+    Analysis: Service and Supplies Logistics
+</div>
+
+<div class="pheader">
+Printing Device Management Breakdown
+</div>
+<p>Different types of printing devices are managed in different ways-newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.</p>
+<table class='center'>
+    <tr>
+        <td><img src="<?php echo $graphs[2]; ?>" /></td>
+        <td><img src="<?php echo $graphs[3]; ?>" /></td>
+    </tr>
+</table>
+
+<div class="pheader">
+Number of Printing Device Models and Supply Types
+</div>
+<p>Out of your 229 networked printing devices, you have of 61 different models. Each section of the chart below represents a single model type. We estimate that 77 of your printing devices are leased machines, for which supplies are included in your contract. The 152 remaining machines consist of 1 different models and use 65 different supply types. If you hold two of each supply in inventory, you have an estimated $16,276 in operating cash held in printer supplies inventory at any given time.</p>
+<table class='center'>
+    <tr>
+        <td><img src="<?php echo $graphs[4]; ?>" /></td>
+    </tr>
+</table>
+<p>By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. Office Depot can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.</p>
+
+<div class="h1">
+    Analysis: Printing Hardware Usage
+</div>
+
+<div class="pheader">
+    Print Volume and Number of Printing Devices
+</div>
+<p>You currently have 229 networked printing devices that print an average of 3,302pages each per month, for an average total monthly print volume of 756,157 pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity. </p>
+<table class='center'>
+    <tr>
+        <td><img src="<?php echo $graphs[5]; ?>" /></td>
+        <td><img src="<?php echo $graphs[6]; ?>" /></td>
+    </tr>
+    <tr>
+        <td><img src="<?php echo $graphs[7]; ?>" /></td>
+        <td><img src="<?php echo $graphs[8]; ?>" /></td>
+    </tr>
+</table>
 <br/>
-<br/>
-<img src="<?php echo $graphs[12]; ?>" />
+
+<div class="h1">
+    Analysis: Technology Reliability and User Productivity
+</div>
+
+<div class="pheader">
+    Color Usage
+</div>
+<p>You currently have 89 color printing devices that print a monthly average of 108,381 color pages per month, which is 14.33% of your total monthly print volume.</p>
+<table class='center'>
+    <tr>
+        <td><img src="<?php echo $graphs[9]; ?>" /></td>
+        <td><img src="<?php echo $graphs[10]; ?>" /></td>
+    </tr>
+</table>
+<p>Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your company's professional image, improve comprehension and increase readership.
+Office Depot can help you track your color printing and provide low-cost color hardware options.</p>
+
+<div class="pheader">
+    Age Of Printing Devices
+</div>
+<p>The breakdown of the age of your printing devices is shown below: </p>
+<table class='center'>
+    <tr>
+        <td><img src="<?php echo $graphs[11]; ?>" /></td>
+    </tr>
+</table>
+
+<div class="pheader">
+    Technology Features and Functionality
+</div>
+<p>If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption by using a scanner to e-mail documents instead of printing copies for distribution. The following charts show how many of your printing devices have duplexing and scanning capabilities:</p>
+<table class='center'>
+    <tr>
+        <td><img src="<?php echo $graphs[12]; ?>" /></td>
+    </tr>
+</table>

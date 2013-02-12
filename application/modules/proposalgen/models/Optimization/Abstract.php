@@ -88,6 +88,13 @@ abstract class Proposalgen_Model_Optimization_Abstract
      */
     public $deviceCategories = array();
 
+    public static $ageRanks = array(
+        8 => "8+ Years",
+        4 => "4-8 Years",
+        2 => "2-4 Years",
+        0 => "0-2 Years",
+    );
+
     public function __construct (Proposalgen_Model_Proposal_OfficeDepot $proposal)
     {
         $this->proposal = $proposal;
@@ -102,27 +109,26 @@ abstract class Proposalgen_Model_Optimization_Abstract
         $actionRetire             = 0;
         $this->jitCompatibleCount = 0;
 
-        // Set up the age ranks to get devices that are greater than the values in the array
-        $ageRanks = array("8", "4", "2", "0");
+
         // Initialize the values for each age rank
-        foreach ($ageRanks as $ageRank)
+        foreach (self::$ageRanks as $ageRank => $ageRankName)
         {
             $this->deviceAges[$ageRank] = 0;
         }
 
         // Initialize the categories variables count to 0
-        $this->deviceCategories["copier"] = 0;
+        $this->deviceCategories["copier"]  = 0;
         $this->deviceCategories["scanner"] = 0;
-        $this->deviceCategories["duplex"] = 0;
+        $this->deviceCategories["duplex"]  = 0;
 
         // Go through each purchase devices that rank it's classifications
         /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
         foreach ($proposal->getPurchasedDevices() as $deviceInstance)
         {
             // For each age rank, check if device is greater than range.
-            foreach ($ageRanks as $ageRank)
+            foreach (self::$ageRanks as $ageRank => $ageRankName)
             {
-                if ($deviceInstance->getMasterDevice()->getAge() > $ageRank)
+                if ($deviceInstance->getMasterDevice()->getAge() >= $ageRank)
                 {
                     $this->deviceAges[$ageRank]++;
                     break;
