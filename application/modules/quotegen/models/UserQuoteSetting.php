@@ -10,7 +10,7 @@ class Quotegen_Model_UserQuoteSetting extends My_Model_Abstract
      * @var int
      */
     public $quoteSettingId = 0;
-    
+
     /**
      * Gets the related quoteSetting object
      *
@@ -28,11 +28,15 @@ class Quotegen_Model_UserQuoteSetting extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->userId) && ! is_null($params->userId))
+        if (isset($params->userId) && !is_null($params->userId))
+        {
             $this->userId = $params->userId;
+        }
 
-        if (isset($params->quoteSettingId) && ! is_null($params->quoteSettingId))
+        if (isset($params->quoteSettingId) && !is_null($params->quoteSettingId))
+        {
             $this->quoteSettingId = $params->quoteSettingId;
+        }
 
     }
 
@@ -41,8 +45,8 @@ class Quotegen_Model_UserQuoteSetting extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array (
-            "userId" => $this->userId,
+        return array(
+            "userId"         => $this->userId,
             "quoteSettingId" => $this->quoteSettingId,
         );
     }
@@ -54,10 +58,11 @@ class Quotegen_Model_UserQuoteSetting extends My_Model_Abstract
      */
     public function getQuoteSetting ()
     {
-        if (! isset($this->_quoteSetting))
+        if (!isset($this->_quoteSetting))
         {
             $this->_quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->find($this->quoteSettingId);
         }
+
         return $this->_quoteSetting;
     }
 
@@ -70,6 +75,7 @@ class Quotegen_Model_UserQuoteSetting extends My_Model_Abstract
     public function setQuoteSetting ($_quoteSetting)
     {
         $this->_quoteSetting = $_quoteSetting;
+
         return $this;
     }
 }

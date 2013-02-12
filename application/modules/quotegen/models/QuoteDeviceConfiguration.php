@@ -10,14 +10,14 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
      * @var int
      */
     public $masterDeviceId;
-    
+
     /**
      * The device
      *
      * @var Quotegen_Model_Device
      */
     protected $_device;
-    
+
     /**
      * The quote device
      *
@@ -35,11 +35,15 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->quoteDeviceId) && ! is_null($params->quoteDeviceId))
+        if (isset($params->quoteDeviceId) && !is_null($params->quoteDeviceId))
+        {
             $this->quoteDeviceId = $params->quoteDeviceId;
+        }
 
-        if (isset($params->masterDeviceId) && ! is_null($params->masterDeviceId))
+        if (isset($params->masterDeviceId) && !is_null($params->masterDeviceId))
+        {
             $this->masterDeviceId = $params->masterDeviceId;
+        }
 
     }
 
@@ -48,8 +52,8 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array (
-            "quoteDeviceId" => $this->quoteDeviceId,
+        return array(
+            "quoteDeviceId"  => $this->quoteDeviceId,
             "masterDeviceId" => $this->masterDeviceId,
         );
     }
@@ -61,10 +65,11 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
      */
     public function getDevice ()
     {
-        if (! isset($this->_device))
+        if (!isset($this->_device))
         {
             $this->_device = Quotegen_Model_Mapper_Device::getInstance()->find($this->masterDeviceId);
         }
+
         return $this->_device;
     }
 
@@ -77,6 +82,7 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
     public function setDevice ($_device)
     {
         $this->_device = $_device;
+
         return $this;
     }
 
@@ -87,10 +93,11 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
      */
     public function getQuoteDevice ()
     {
-        if (! isset($this->_quoteDevice))
+        if (!isset($this->_quoteDevice))
         {
             $this->_quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($this->quoteDeviceId);
         }
+
         return $this->_quoteDevice;
     }
 
@@ -103,6 +110,7 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
     public function setQuoteDevice ($_quoteDevice)
     {
         $this->_quoteDevice = $_quoteDevice;
+
         return $this;
     }
 }

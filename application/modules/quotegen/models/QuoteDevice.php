@@ -76,28 +76,28 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      * @var int
      */
     public $tonerConfigId;
-    
+
     /**
      * The device configuration that this quote is attached to
      *
      * @var Quotegen_Model_QuoteDeviceConfiguration
      */
     protected $_device;
-    
+
     /**
      * The quote device options that are stored separately from device configuration options
      *
      * @var Quotegen_Model_QuoteDeviceOption
      */
     protected $_quoteDeviceOptions;
-    
+
     /**
      * The quote that this device is for
      *
      * @var Quotegen_Model_Quote
      */
     protected $_quote;
-    
+
     /**
      * The devices attached to a group
      *
@@ -115,50 +115,80 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->id) && ! is_null($params->id))
+        if (isset($params->id) && !is_null($params->id))
+        {
             $this->id = $params->id;
+        }
 
-        if (isset($params->quoteId) && ! is_null($params->quoteId))
+        if (isset($params->quoteId) && !is_null($params->quoteId))
+        {
             $this->quoteId = $params->quoteId;
+        }
 
-        if (isset($params->margin) && ! is_null($params->margin))
+        if (isset($params->margin) && !is_null($params->margin))
+        {
             $this->margin = $params->margin;
+        }
 
-        if (isset($params->name) && ! is_null($params->name))
+        if (isset($params->name) && !is_null($params->name))
+        {
             $this->name = $params->name;
+        }
 
-        if (isset($params->oemSku) && ! is_null($params->oemSku))
+        if (isset($params->oemSku) && !is_null($params->oemSku))
+        {
             $this->oemSku = $params->oemSku;
+        }
 
-        if (isset($params->dealerSku) && ! is_null($params->dealerSku))
+        if (isset($params->dealerSku) && !is_null($params->dealerSku))
+        {
             $this->dealerSku = $params->dealerSku;
+        }
 
-        if (isset($params->oemCostPerPageMonochrome) && ! is_null($params->oemCostPerPageMonochrome))
+        if (isset($params->oemCostPerPageMonochrome) && !is_null($params->oemCostPerPageMonochrome))
+        {
             $this->oemCostPerPageMonochrome = $params->oemCostPerPageMonochrome;
+        }
 
-        if (isset($params->oemCostPerPageColor) && ! is_null($params->oemCostPerPageColor))
+        if (isset($params->oemCostPerPageColor) && !is_null($params->oemCostPerPageColor))
+        {
             $this->oemCostPerPageColor = $params->oemCostPerPageColor;
+        }
 
-        if (isset($params->compCostPerPageMonochrome) && ! is_null($params->compCostPerPageMonochrome))
+        if (isset($params->compCostPerPageMonochrome) && !is_null($params->compCostPerPageMonochrome))
+        {
             $this->compCostPerPageMonochrome = $params->compCostPerPageMonochrome;
+        }
 
-        if (isset($params->compCostPerPageColor) && ! is_null($params->compCostPerPageColor))
+        if (isset($params->compCostPerPageColor) && !is_null($params->compCostPerPageColor))
+        {
             $this->compCostPerPageColor = $params->compCostPerPageColor;
+        }
 
-        if (isset($params->cost) && ! is_null($params->cost))
+        if (isset($params->cost) && !is_null($params->cost))
+        {
             $this->cost = $params->cost;
+        }
 
-        if (isset($params->residual) && ! is_null($params->residual))
+        if (isset($params->residual) && !is_null($params->residual))
+        {
             $this->residual = $params->residual;
+        }
 
-        if (isset($params->packageCost) && ! is_null($params->packageCost))
+        if (isset($params->packageCost) && !is_null($params->packageCost))
+        {
             $this->packageCost = $params->packageCost;
+        }
 
-        if (isset($params->packageMarkup) && ! is_null($params->packageMarkup))
+        if (isset($params->packageMarkup) && !is_null($params->packageMarkup))
+        {
             $this->packageMarkup = $params->packageMarkup;
+        }
 
-        if (isset($params->tonerConfigId) && ! is_null($params->tonerConfigId))
+        if (isset($params->tonerConfigId) && !is_null($params->tonerConfigId))
+        {
             $this->tonerConfigId = $params->tonerConfigId;
+        }
 
     }
 
@@ -167,22 +197,22 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array (
-            "id" => $this->id,
-            "quoteId" => $this->quoteId,
-            "margin" => $this->margin,
-            "name" => $this->name,
-            "oemSku" => $this->oemSku,
-            "dealerSku" => $this->dealerSku,
-            "oemCostPerPageMonochrome" => $this->oemCostPerPageMonochrome,
-            "oemCostPerPageColor" => $this->oemCostPerPageColor,
+        return array(
+            "id"                        => $this->id,
+            "quoteId"                   => $this->quoteId,
+            "margin"                    => $this->margin,
+            "name"                      => $this->name,
+            "oemSku"                    => $this->oemSku,
+            "dealerSku"                 => $this->dealerSku,
+            "oemCostPerPageMonochrome"  => $this->oemCostPerPageMonochrome,
+            "oemCostPerPageColor"       => $this->oemCostPerPageColor,
             "compCostPerPageMonochrome" => $this->compCostPerPageMonochrome,
-            "compCostPerPageColor" => $this->compCostPerPageColor,
-            "cost" => $this->cost,
-            "residual" => $this->residual,
-            "packageCost" => $this->packageCost,
-            "packageMarkup" => $this->packageMarkup,
-            "tonerConfigId" => $this->tonerConfigId,
+            "compCostPerPageColor"      => $this->compCostPerPageColor,
+            "cost"                      => $this->cost,
+            "residual"                  => $this->residual,
+            "packageCost"               => $this->packageCost,
+            "packageMarkup"             => $this->packageMarkup,
+            "tonerConfigId"             => $this->tonerConfigId,
         );
     }
 
@@ -193,15 +223,16 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function getDevice ()
     {
-        if (! isset($this->_device))
+        if (!isset($this->_device))
         {
-            $this->_device = false;
+            $this->_device            = false;
             $quoteDeviceConfiguration = Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->findByQuoteDeviceId($this->id);
             if ($quoteDeviceConfiguration)
             {
                 $this->_device = Quotegen_Model_Mapper_Device::getInstance()->find($quoteDeviceConfiguration->masterDeviceId);
             }
         }
+
         return $this->_device;
     }
 
@@ -214,6 +245,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     public function setDevice ($_device)
     {
         $this->_device = $_device;
+
         return $this;
     }
 
@@ -224,10 +256,11 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function getQuoteDeviceOptions ()
     {
-        if (! isset($this->_quoteDeviceOptions))
+        if (!isset($this->_quoteDeviceOptions))
         {
             $this->_quoteDeviceOptions = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->fetchAllOptionsForQuoteDevice($this->id);
         }
+
         return $this->_quoteDeviceOptions;
     }
 
@@ -240,6 +273,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     public function setQuoteDeviceOptions ($_quoteDeviceOptions)
     {
         $this->_quoteDeviceOptions = $_quoteDeviceOptions;
+
         return $this;
     }
 
@@ -250,10 +284,11 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function getQuote ()
     {
-        if (! isset($this->_quote))
+        if (!isset($this->_quote))
         {
             $this->_quote = Quotegen_Model_Mapper_Quote::getInstance()->find($this->quoteId);
         }
+
         return $this->_quote;
     }
 
@@ -266,6 +301,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     public function setQuote ($_quote)
     {
         $this->_quote = $_quote;
+
         return $this;
     }
 
@@ -276,10 +312,11 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function getQuoteDeviceGroupDevices ()
     {
-        if (! isset($this->_quoteDeviceGroupDevices))
+        if (!isset($this->_quoteDeviceGroupDevices))
         {
             $this->_quoteDeviceGroupDevices = Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->fetchDevicesForQuoteDevice($this->id);
         }
+
         return $this->_quoteDeviceGroupDevices;
     }
 
@@ -288,11 +325,13 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @param array $_quoteDeviceGroupDevices
      *            An array of qutoe device group devices
+     *
      * @return Quotegen_Model_QuoteDevice
      */
     public function setQuoteDeviceGroupDevices ($_quoteDeviceGroupDevices)
     {
         $this->_quoteDeviceGroupDevices = $_quoteDeviceGroupDevices;
+
         return this;
     }
 
@@ -327,7 +366,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      * DEVICE CALCULATIONS
      * ****************************************************************************************************************************************
      */
-    
+
     /**
      * Calculates the cost of options for this configuration
      *
@@ -336,10 +375,11 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     public function calculateOptionCost ()
     {
         $cost = 0;
-        foreach ( $this->getQuoteDeviceOptions() as $quoteDeviceOption )
+        foreach ($this->getQuoteDeviceOptions() as $quoteDeviceOption)
         {
             $cost += $quoteDeviceOption->getTotalCost();
         }
+
         return $cost;
     }
 
@@ -359,8 +399,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     public function calculatePackagePrice ()
     {
         $marginPercent = (float)$this->margin;
-        $cost = (float)$this->calculateFinalPackageCost();
-        
+        $cost          = (float)$this->calculateFinalPackageCost();
+
         return Tangent_Accounting::applyMargin($cost, $marginPercent);
     }
 
@@ -383,9 +423,9 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateMargin ()
     {
-        $cost = (float)$this->calculateFinalPackageCost();
+        $cost  = (float)$this->calculateFinalPackageCost();
         $price = (float)$this->calculatePackagePrice();
-        
+
         return Tangent_Accounting::reverseEngineerMargin($cost, $price);
     }
 
@@ -398,10 +438,11 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     {
         $quantity = 0;
         /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
-        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+        foreach ($this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
         {
             $quantity += $quoteDeviceGroupDevice->quantity;
         }
+
         return $quantity;
     }
 
@@ -435,8 +476,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     public function calculateMonthlyLeasePrice ()
     {
         $packagePrice = $this->calculatePackagePrice() + $this->residual;
-        $leaseFactor = $this->getQuote()->leaseRate;
-        
+        $leaseFactor  = $this->getQuote()->leaseRate;
+
         return $packagePrice * $leaseFactor;
     }
 
@@ -467,10 +508,10 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateLeaseValue ()
     {
-        $value = $this->calculatePackagePrice();
-        $residual = $this->residual;
+        $value      = $this->calculatePackagePrice();
+        $residual   = $this->residual;
         $leaseValue = 0;
-        
+
         /*
          * We need to be at or over 0 in all cases, otherwise we might as well return 0 since negative numbers make no
          * sense for this.
@@ -479,7 +520,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         {
             $leaseValue = $value + $residual;
         }
-        
+
         return $leaseValue;
     }
 
@@ -506,8 +547,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     public function calculateColorCostPerPage ()
     {
         $getCompCostPerPage = false;
-        $costPerPageColor = 0;
-        
+        $costPerPageColor   = 0;
+
         // Get the pricing config
         switch ($this->getQuote()->pricingConfigId)
         {
@@ -516,24 +557,24 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
                 $getCompCostPerPage = true;
                 break;
         }
-        
+
         // If we want to get comp prices then get them
         if ($getCompCostPerPage)
         {
             $costPerPageColor = $this->compCostPerPageColor;
         }
-        
+
         // If not they are set to oem
         if ($costPerPageColor <= 0.0)
         {
             $costPerPageColor = $this->oemCostPerPageColor;
         }
-        
+
         /*
          * Adjust for coverage (Disabled since it's not working)
          */
         //$costPerPageColor = Tangent_PrinterMath::adjustDeviceCostPerPage($costPerPageColor, $this->getQuote()->getPageCoverageColor(), $this->getTonerConfigId());
-        
+
 
         /*
          * Only add service and admin if we have a cpp > 0. This way if cpp is 0 for some reason the end user will see
@@ -543,6 +584,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         {
             $costPerPageColor += $this->getQuote()->adminCostPerPage + $this->getQuote()->serviceCostPerPage;
         }
+
         return (float)$costPerPageColor;
     }
 
@@ -553,9 +595,9 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateMonochromeCostPerPage ()
     {
-        $getCompCostPerPage = false;
+        $getCompCostPerPage    = false;
         $costPerPageMonochrome = 0;
-        
+
         // Figure out which pricing configuration the quote is set for
         switch ($this->getQuote()->pricingConfigId)
         {
@@ -564,24 +606,24 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
                 $getCompCostPerPage = true;
                 break;
         }
-        
+
         // If we want to get comp prices then get them
         if ($getCompCostPerPage)
         {
             $costPerPageMonochrome = $this->compCostPerPageMonochrome;
         }
-        
+
         // If not they are set to oem
         if ($costPerPageMonochrome <= 0.0)
         {
             $costPerPageMonochrome = $this->oemCostPerPageMonochrome;
         }
-        
+
         /*
          * Adjust for coverage (Disabled since it's not working)
          */
         //$costPerPageMonochrome = Tangent_PrinterMath::adjustDeviceCostPerPage($costPerPageMonochrome, $this->getQuote()->getPageCoverageMonochrome(), $this->getTonerConfigId());
-        
+
 
         /*
          * Only add service and admin if we have a cpp > 0. This way if cpp is 0 for some reason the end user will see
@@ -591,7 +633,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         {
             $costPerPageMonochrome += $this->getQuote()->adminCostPerPage + $this->getQuote()->serviceCostPerPage;
         }
-        
+
         return $costPerPageMonochrome;
     }
 }

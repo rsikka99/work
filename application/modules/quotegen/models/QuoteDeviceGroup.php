@@ -21,21 +21,21 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
      * @var int
      */
     public $isDefault;
-    
+
     /**
      * Are the pages going to be grouped
      *
      * @var int
      */
     protected $_groupPages;
-    
+
     /**
      * The quote
      *
      * @var Quotegen_Model_Quote
      */
     protected $_quote;
-    
+
     /**
      * The quote device group devices
      *
@@ -53,17 +53,25 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->id) && ! is_null($params->id))
+        if (isset($params->id) && !is_null($params->id))
+        {
             $this->id = $params->id;
+        }
 
-        if (isset($params->quoteId) && ! is_null($params->quoteId))
+        if (isset($params->quoteId) && !is_null($params->quoteId))
+        {
             $this->quoteId = $params->quoteId;
+        }
 
-        if (isset($params->name) && ! is_null($params->name))
+        if (isset($params->name) && !is_null($params->name))
+        {
             $this->name = $params->name;
+        }
 
-        if (isset($params->isDefault) && ! is_null($params->isDefault))
+        if (isset($params->isDefault) && !is_null($params->isDefault))
+        {
             $this->isDefault = $params->isDefault;
+        }
 
     }
 
@@ -72,10 +80,10 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array (
-            "id" => $this->id,
-            "quoteId" => $this->quoteId,
-            "name" => $this->name,
+        return array(
+            "id"        => $this->id,
+            "quoteId"   => $this->quoteId,
+            "name"      => $this->name,
             "isDefault" => $this->isDefault,
         );
     }
@@ -93,11 +101,12 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     /**
      * Sets the group pages flag
      *
-     * @param number $_groupPages            
+     * @param number $_groupPages
      */
     public function setGroupPages ($_groupPages)
     {
         $this->_groupPages = $_groupPages;
+
         return $this;
     }
 
@@ -113,21 +122,23 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
      */
     public function getQuote ()
     {
-        if (! isset($this->_quote))
+        if (!isset($this->_quote))
         {
             $this->_quote = Quotegen_Model_Mapper_Quote::getInstance()->find($this->quoteId);
         }
+
         return $this->_quote;
     }
 
     /**
      * Sets the quote
      *
-     * @param $_quote Quotegen_Model_Quote            
+     * @param $_quote Quotegen_Model_Quote
      */
     public function setQuote ($_quote)
     {
         $this->_quote = $_quote;
+
         return $this;
     }
 
@@ -139,10 +150,11 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
      */
     public function getQuoteDeviceGroupDevices ()
     {
-        if (! isset($this->_quoteDeviceGroupDevices))
+        if (!isset($this->_quoteDeviceGroupDevices))
         {
             $this->_quoteDeviceGroupDevices = Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->fetchDevicesForQuoteDeviceGroup($this->id);
         }
+
         return $this->_quoteDeviceGroupDevices;
     }
 
@@ -150,11 +162,12 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
      * Sets the quote devices
      *
      * @param $_quoteDeviceGroupDevices multitype:Quotegen_Model_QuoteDeviceGroupDevice
-     *            The quote devices
+     *                                  The quote devices
      */
     public function setQuoteDeviceGroupDevices ($_quoteDeviceGroupDevices)
     {
         $this->_quoteDeviceGroupDevices = $_quoteDeviceGroupDevices;
+
         return $this;
     }
 
@@ -163,21 +176,21 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
      * HARDWARE CALCULATIONS
      * ****************************************************************************************************************************************
      */
-    
+
     /**
      * Calculates the total quantity of printers for this group
-     * 
+     *
      * @return number The number of devices to this group.F`
      */
     public function calculateTotalQuantity ()
     {
         $quantity = 0;
-        
-        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+
+        foreach ($this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
         {
             $quantity += $quoteDeviceGroupDevice->quantity;
         }
-       
+
         return $quantity;
     }
 
@@ -190,9 +203,9 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     public function calculateGroupSubtotal ()
     {
         $subtotal = 0;
-        
+
         /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
-        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+        foreach ($this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
         {
             $quantity = $quoteDeviceGroupDevice->quantity;
             if ($quantity > 0)
@@ -200,6 +213,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
                 $subtotal += $quoteDeviceGroupDevice->getQuoteDevice()->calculatePackagePrice() * $quantity;
             }
         }
+
         return $subtotal;
     }
 
@@ -211,9 +225,9 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     public function calculateMonthlyLeasePrice ()
     {
         $subtotal = 0;
-        
+
         /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
-        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+        foreach ($this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
         {
             $quantity = $quoteDeviceGroupDevice->quantity;
             if ($quantity > 0)
@@ -221,10 +235,10 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
                 $subtotal += $quoteDeviceGroupDevice->getQuoteDevice()->calculateMonthlyLeasePrice() * $quantity;
             }
         }
-        
+
         // Add Pages
         $subtotal += $this->calculateTotalPageRevenue();
-        
+
         return $subtotal;
     }
 
@@ -236,12 +250,13 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     public function calculateHardwareLeaseValue ()
     {
         $subtotal = 0;
-        
+
         /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
-        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+        foreach ($this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
         {
             $subtotal += $quoteDeviceGroupDevice->getQuoteDevice()->calculateLeaseValue() * $quoteDeviceGroupDevice->quantity;
         }
+
         return $subtotal;
     }
 
@@ -253,12 +268,12 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     public function calculateLeaseValue ()
     {
         $subtotal = 0;
-        
+
         $subtotal += $this->calculateHardwareLeaseValue();
-        
+
         // Add Pages
         $subtotal += $this->calculateTotalPageRevenue() * $this->getQuote()->leaseTerm;
-        
+
         return $subtotal;
     }
 
@@ -270,12 +285,13 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     public function calculateTotalResidual ()
     {
         $totalResidual = 0;
-        
+
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDevice )
+        foreach ($this->getQuoteDeviceGroupDevices() as $quoteDevice)
         {
             $totalResidual += $quoteDevice->residual();
         }
+
         return $totalResidual;
     }
 
@@ -287,15 +303,16 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     public function calculateTotalCost ()
     {
         $totalCost = 0;
-        
+
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDevice )
+        foreach ($this->getQuoteDeviceGroupDevices() as $quoteDevice)
         {
             if ($quoteDevice->getQuantity() > 0)
             {
                 $totalCost += $quoteDevice->calculatePackageCost() * $quoteDevice->getQuantity();
             }
         }
+
         return $totalCost;
     }
 
@@ -306,17 +323,17 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
      */
     public function calculatePurchaseSubtotal ()
     {
-        $subTotal = 0;
+        $subTotal     = 0;
         $packagePrice = (float)$this->getPackagePrice();
-        
+
         $quantity = $this->quantity;
-        
+
         // Make sure both the price and quantity are greater than 0
         if ($packagePrice > 0 && $quantity > 0)
         {
             $subTotal = $packagePrice * $quantity;
         }
-        
+
         return $subTotal;
     }
 
@@ -333,13 +350,13 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     public function calculateTotalMonochromePages ()
     {
         $pagesMonochrome = 0;
-        
+
         /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
-        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+        foreach ($this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
         {
             $pagesMonochrome += $quoteDeviceGroupDevice->monochromePagesQuantity * $quoteDeviceGroupDevice->quantity;
         }
-        
+
         return $pagesMonochrome;
     }
 
@@ -351,11 +368,11 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     public function calculateMonochromePageCost ()
     {
         $cost = 0;
-        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+        foreach ($this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
         {
             $cost += $quoteDeviceGroupDevice->monochromePagesQuantity * $quoteDeviceGroupDevice->getQuoteDevice()->calculateMonochromeCostPerPage() * $quoteDeviceGroupDevice->quantity;
         }
-        
+
         return $cost;
     }
 
@@ -387,13 +404,13 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     public function calculateTotalColorPages ()
     {
         $pagesColor = 0;
-        
+
         /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
-        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+        foreach ($this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
         {
             $pagesColor += $quoteDeviceGroupDevice->colorPagesQuantity * $quoteDeviceGroupDevice->quantity;
         }
-        
+
         return $pagesColor;
     }
 
@@ -406,11 +423,11 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     {
         $cost = 0;
         /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
-        foreach ( $this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+        foreach ($this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
         {
             $cost += $quoteDeviceGroupDevice->colorPagesQuantity * $quoteDeviceGroupDevice->getQuoteDevice()->calculateColorCostPerPage() * $quoteDeviceGroupDevice->quantity;
         }
-        
+
         return $cost;
     }
 

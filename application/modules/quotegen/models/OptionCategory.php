@@ -23,11 +23,15 @@ class Quotegen_Model_OptionCategory extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->categoryId) && ! is_null($params->categoryId))
+        if (isset($params->categoryId) && !is_null($params->categoryId))
+        {
             $this->categoryId = $params->categoryId;
+        }
 
-        if (isset($params->optionId) && ! is_null($params->optionId))
+        if (isset($params->optionId) && !is_null($params->optionId))
+        {
             $this->optionId = $params->optionId;
+        }
 
     }
 
@@ -36,9 +40,9 @@ class Quotegen_Model_OptionCategory extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array (
+        return array(
             "categoryId" => $this->categoryId,
-            "optionId" => $this->optionId,
+            "optionId"   => $this->optionId,
         );
     }
 }

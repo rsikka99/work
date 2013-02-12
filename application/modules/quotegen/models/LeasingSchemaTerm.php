@@ -16,7 +16,7 @@ class Quotegen_Model_LeasingSchemaTerm extends My_Model_Abstract
      * @var int
      */
     public $months = 0;
-    
+
     /**
      * Leasing Schema
      *
@@ -34,14 +34,20 @@ class Quotegen_Model_LeasingSchemaTerm extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->id) && ! is_null($params->id))
+        if (isset($params->id) && !is_null($params->id))
+        {
             $this->id = $params->id;
+        }
 
-        if (isset($params->leasingSchemaId) && ! is_null($params->leasingSchemaId))
+        if (isset($params->leasingSchemaId) && !is_null($params->leasingSchemaId))
+        {
             $this->leasingSchemaId = $params->leasingSchemaId;
+        }
 
-        if (isset($params->months) && ! is_null($params->months))
+        if (isset($params->months) && !is_null($params->months))
+        {
             $this->months = $params->months;
+        }
 
     }
 
@@ -50,30 +56,31 @@ class Quotegen_Model_LeasingSchemaTerm extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array (
-            "id" => $this->id,
+        return array(
+            "id"              => $this->id,
             "leasingSchemaId" => $this->leasingSchemaId,
-            "months" => $this->months,
+            "months"          => $this->months,
         );
     }
 
     /**
      * Gets the leasing schema
-     * 
+     *
      * @return Quotegen_Model_LeasingSchema
      */
     public function getLeasingSchema ()
     {
-        if (! isset($this->_leasingSchema))
+        if (!isset($this->_leasingSchema))
         {
             $this->_leasingSchema = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($this->leasingSchemaId);
         }
+
         return $this->_leasingSchema;
     }
 
     /**
      * Sets the leasing schema
-     * 
+     *
      * @param Quotegen_Model_LeasingSchema $_leasingSchema
      *
      * @return \Quotegen_Model_LeasingSchemaTerm
@@ -81,6 +88,7 @@ class Quotegen_Model_LeasingSchemaTerm extends My_Model_Abstract
     public function setLeasingSchema ($_leasingSchema)
     {
         $this->_leasingSchema = $_leasingSchema;
+
         return $this;
     }
 }

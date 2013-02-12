@@ -27,14 +27,20 @@ class Quotegen_Model_Category extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->id) && ! is_null($params->id))
+        if (isset($params->id) && !is_null($params->id))
+        {
             $this->id = $params->id;
+        }
 
-        if (isset($params->name) && ! is_null($params->name))
+        if (isset($params->name) && !is_null($params->name))
+        {
             $this->name = $params->name;
+        }
 
-        if (isset($params->description) && ! is_null($params->description))
+        if (isset($params->description) && !is_null($params->description))
+        {
             $this->description = $params->description;
+        }
 
     }
 
@@ -43,9 +49,9 @@ class Quotegen_Model_Category extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array (
-            "id" => $this->id,
-            "name" => $this->name,
+        return array(
+            "id"          => $this->id,
+            "name"        => $this->name,
             "description" => $this->description,
         );
     }

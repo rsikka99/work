@@ -26,14 +26,20 @@ class Quotegen_Model_Region extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->id) && ! is_null($params->id))
+        if (isset($params->id) && !is_null($params->id))
+        {
             $this->id = $params->id;
+        }
 
-        if (isset($params->countryId) && ! is_null($params->countryId))
+        if (isset($params->countryId) && !is_null($params->countryId))
+        {
             $this->countryId = $params->countryId;
+        }
 
-        if (isset($params->region) && ! is_null($params->region))
+        if (isset($params->region) && !is_null($params->region))
+        {
             $this->region = $params->region;
+        }
 
     }
 
@@ -42,10 +48,10 @@ class Quotegen_Model_Region extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array (
-            "id" => $this->id,
+        return array(
+            "id"        => $this->id,
             "countryId" => $this->countryId,
-            "region" => $this->region,
+            "region"    => $this->region,
         );
     }
 }

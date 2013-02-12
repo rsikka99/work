@@ -1,7 +1,7 @@
 <?php
 class Quotegen_Model_Country extends My_Model_Abstract
 {
-    const COUNTRY_CANADA = 1;
+    const COUNTRY_CANADA        = 1;
     const COUNTRY_UNITED_STATES = 2;
     /**
      * @var int
@@ -29,14 +29,20 @@ class Quotegen_Model_Country extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->id) && ! is_null($params->id))
+        if (isset($params->id) && !is_null($params->id))
+        {
             $this->id = $params->id;
+        }
 
-        if (isset($params->name) && ! is_null($params->name))
+        if (isset($params->name) && !is_null($params->name))
+        {
             $this->name = $params->name;
+        }
 
-        if (isset($params->locale) && ! is_null($params->locale))
+        if (isset($params->locale) && !is_null($params->locale))
+        {
             $this->locale = $params->locale;
+        }
 
     }
 
@@ -45,9 +51,9 @@ class Quotegen_Model_Country extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array (
-            "id" => $this->id,
-            "name" => $this->name,
+        return array(
+            "id"     => $this->id,
+            "name"   => $this->name,
             "locale" => $this->locale,
         );
     }

@@ -3,21 +3,22 @@
 class Quotegen_Model_DbTable_Device extends Zend_Db_Table_Abstract
 {
     protected $_name = 'qgen_devices';
-    protected $_primary = array (
-            'masterDeviceId' 
+    protected $_primary = array(
+        'masterDeviceId'
     );
 
     /**
      * This function allows for searching by a device name, manufacturer, or sku
      *
-     * @param unknown_type $searchString            
+     * @param unknown_type $searchString
+     *
      * @return Ambigous <Zend_Db_Statement_Interface, Zend_Db_Statement, PDOStatement>
      */
     public function searchByNameOrSku ($searchString)
     {
-        $db = $this->getAdapter();
+        $db           = $this->getAdapter();
         $searchString = $db->quoteInto("LIKE ?", "%$searchString%");
-        $sql = "
+        $sql          = "
                 SELECT  
                     `qgen_devices`.`masterDeviceId`,
                     `printer_model`, 
@@ -34,13 +35,13 @@ class Quotegen_Model_DbTable_Device extends Zend_Db_Table_Abstract
                 OR `printer_model` {$searchString}
                 OR `sku` {$searchString}
                 ";
-        $result = $db->query($sql);
-        
+        $result       = $db->query($sql);
+
         if ($result)
         {
             $result = $result->fetchAll();
         }
-        
+
         return $result;
     }
 }

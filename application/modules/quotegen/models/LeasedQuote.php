@@ -27,14 +27,20 @@ class Quotegen_Model_LeasedQuote extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->quoteId) && ! is_null($params->quoteId))
+        if (isset($params->quoteId) && !is_null($params->quoteId))
+        {
             $this->quoteId = $params->quoteId;
+        }
 
-        if (isset($params->rate) && ! is_null($params->rate))
+        if (isset($params->rate) && !is_null($params->rate))
+        {
             $this->rate = $params->rate;
+        }
 
-        if (isset($params->term) && ! is_null($params->term))
+        if (isset($params->term) && !is_null($params->term))
+        {
             $this->term = $params->term;
+        }
 
     }
 
@@ -43,10 +49,10 @@ class Quotegen_Model_LeasedQuote extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array (
+        return array(
             "quoteId" => $this->quoteId,
-            "rate" => $this->rate,
-            "term" => $this->term,
+            "rate"    => $this->rate,
+            "term"    => $this->term,
         );
     }
 }

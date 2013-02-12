@@ -42,17 +42,25 @@ class Quotegen_Model_Device extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->masterDeviceId) && ! is_null($params->masterDeviceId))
+        if (isset($params->masterDeviceId) && !is_null($params->masterDeviceId))
+        {
             $this->masterDeviceId = $params->masterDeviceId;
+        }
 
-        if (isset($params->oemSku) && ! is_null($params->oemSku))
+        if (isset($params->oemSku) && !is_null($params->oemSku))
+        {
             $this->oemSku = $params->oemSku;
+        }
 
-        if (isset($params->dealerSku) && ! is_null($params->dealerSku))
+        if (isset($params->dealerSku) && !is_null($params->dealerSku))
+        {
             $this->dealerSku = $params->dealerSku;
+        }
 
-        if (isset($params->description) && ! is_null($params->description))
+        if (isset($params->description) && !is_null($params->description))
+        {
             $this->description = $params->description;
+        }
     }
 
     /**
@@ -60,11 +68,11 @@ class Quotegen_Model_Device extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array (
+        return array(
             "masterDeviceId" => $this->masterDeviceId,
-            "oemSku" => $this->oemSku,
-            "dealerSku" => $this->dealerSku,
-            "description" => $this->description
+            "oemSku"         => $this->oemSku,
+            "dealerSku"      => $this->dealerSku,
+            "description"    => $this->description
         );
     }
 
@@ -75,12 +83,14 @@ class Quotegen_Model_Device extends My_Model_Abstract
      */
     public function getMasterDevice ()
     {
-        if (! isset($this->_masterDevice))
+        if (!isset($this->_masterDevice))
         {
             $this->_masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($this->masterDeviceId);
         }
+
         return $this->_masterDevice;
     }
+
     /**
      * Sets a new master device id for the object
      *
@@ -90,8 +100,10 @@ class Quotegen_Model_Device extends My_Model_Abstract
     public function setMasterDeviceId ($_masterDeviceId)
     {
         $this->_masterDeviceId = $_masterDeviceId;
+
         return $this;
     }
+
     /**
      * Get the array of options for the device
      *
@@ -99,10 +111,11 @@ class Quotegen_Model_Device extends My_Model_Abstract
      */
     public function getDeviceOptions ()
     {
-        if (! isset($this->_options))
+        if (!isset($this->_options))
         {
             $this->_options = Quotegen_Model_Mapper_Option::getInstance()->fetchAllDeviceOptionsForDevice($this->masterDeviceId);
         }
+
         return $this->_options;
     }
 
@@ -114,6 +127,7 @@ class Quotegen_Model_Device extends My_Model_Abstract
     public function setOptions ($_options)
     {
         $this->_options = $_options;
+
         return $this;
     }
 }

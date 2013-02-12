@@ -12,7 +12,7 @@
 
 class Quotegen_Model_Quote extends My_Model_Abstract
 {
-    const QUOTE_TYPE_LEASED = 'leased';
+    const QUOTE_TYPE_LEASED    = 'leased';
     const QUOTE_TYPE_PURCHASED = 'purchased';
 
     /**
@@ -156,62 +156,100 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->id) && ! is_null($params->id))
+        if (isset($params->id) && !is_null($params->id))
+        {
             $this->id = $params->id;
+        }
 
-        if (isset($params->clientId) && ! is_null($params->clientId))
+        if (isset($params->clientId) && !is_null($params->clientId))
+        {
             $this->clientId = $params->clientId;
+        }
 
-        if (isset($params->dateCreated) && ! is_null($params->dateCreated))
+        if (isset($params->dateCreated) && !is_null($params->dateCreated))
+        {
             $this->dateCreated = $params->dateCreated;
+        }
 
-        if (isset($params->dateModified) && ! is_null($params->dateModified))
+        if (isset($params->dateModified) && !is_null($params->dateModified))
+        {
             $this->dateModified = $params->dateModified;
+        }
 
-        if (isset($params->quoteDate) && ! is_null($params->quoteDate))
+        if (isset($params->quoteDate) && !is_null($params->quoteDate))
+        {
             $this->quoteDate = $params->quoteDate;
+        }
 
-        if (isset($params->userId) && ! is_null($params->userId))
+        if (isset($params->userId) && !is_null($params->userId))
+        {
             $this->userId = $params->userId;
+        }
 
-        if (isset($params->clientDisplayName) && ! is_null($params->clientDisplayName))
+        if (isset($params->clientDisplayName) && !is_null($params->clientDisplayName))
+        {
             $this->clientDisplayName = $params->clientDisplayName;
+        }
 
-        if (isset($params->leaseTerm) && ! is_null($params->leaseTerm))
+        if (isset($params->leaseTerm) && !is_null($params->leaseTerm))
+        {
             $this->leaseTerm = $params->leaseTerm;
+        }
 
-        if (isset($params->leaseRate) && ! is_null($params->leaseRate))
+        if (isset($params->leaseRate) && !is_null($params->leaseRate))
+        {
             $this->leaseRate = $params->leaseRate;
+        }
 
-        if (isset($params->pageCoverageMonochrome) && ! is_null($params->pageCoverageMonochrome))
+        if (isset($params->pageCoverageMonochrome) && !is_null($params->pageCoverageMonochrome))
+        {
             $this->pageCoverageMonochrome = $params->pageCoverageMonochrome;
+        }
 
-        if (isset($params->pageCoverageColor) && ! is_null($params->pageCoverageColor))
+        if (isset($params->pageCoverageColor) && !is_null($params->pageCoverageColor))
+        {
             $this->pageCoverageColor = $params->pageCoverageColor;
+        }
 
-        if (isset($params->monochromePageMargin) && ! is_null($params->monochromePageMargin))
+        if (isset($params->monochromePageMargin) && !is_null($params->monochromePageMargin))
+        {
             $this->monochromePageMargin = $params->monochromePageMargin;
+        }
 
-        if (isset($params->colorPageMargin) && ! is_null($params->colorPageMargin))
+        if (isset($params->colorPageMargin) && !is_null($params->colorPageMargin))
+        {
             $this->colorPageMargin = $params->colorPageMargin;
+        }
 
-        if (isset($params->monochromeOverageMargin) && ! is_null($params->monochromeOverageMargin))
+        if (isset($params->monochromeOverageMargin) && !is_null($params->monochromeOverageMargin))
+        {
             $this->monochromeOverageMargin = $params->monochromeOverageMargin;
+        }
 
-        if (isset($params->colorOverageMargin) && ! is_null($params->colorOverageMargin))
+        if (isset($params->colorOverageMargin) && !is_null($params->colorOverageMargin))
+        {
             $this->colorOverageMargin = $params->colorOverageMargin;
+        }
 
-        if (isset($params->adminCostPerPage) && ! is_null($params->adminCostPerPage))
+        if (isset($params->adminCostPerPage) && !is_null($params->adminCostPerPage))
+        {
             $this->adminCostPerPage = $params->adminCostPerPage;
+        }
 
-        if (isset($params->serviceCostPerPage) && ! is_null($params->serviceCostPerPage))
+        if (isset($params->serviceCostPerPage) && !is_null($params->serviceCostPerPage))
+        {
             $this->serviceCostPerPage = $params->serviceCostPerPage;
+        }
 
-        if (isset($params->pricingConfigId) && ! is_null($params->pricingConfigId))
+        if (isset($params->pricingConfigId) && !is_null($params->pricingConfigId))
+        {
             $this->pricingConfigId = $params->pricingConfigId;
+        }
 
-        if (isset($params->quoteType) && ! is_null($params->quoteType))
+        if (isset($params->quoteType) && !is_null($params->quoteType))
+        {
             $this->quoteType = $params->quoteType;
+        }
 
     }
 
@@ -220,26 +258,26 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array (
-            "id" => $this->id,
-            "clientId" => $this->clientId,
-            "dateCreated" => $this->dateCreated,
-            "dateModified" => $this->dateModified,
-            "quoteDate" => $this->quoteDate,
-            "userId" => $this->userId,
-            "clientDisplayName" => $this->clientDisplayName,
-            "leaseTerm" => $this->leaseTerm,
-            "leaseRate" => $this->leaseRate,
-            "pageCoverageMonochrome" => $this->pageCoverageMonochrome,
-            "pageCoverageColor" => $this->pageCoverageColor,
-            "monochromePageMargin" => $this->monochromePageMargin,
-            "colorPageMargin" => $this->colorPageMargin,
+        return array(
+            "id"                      => $this->id,
+            "clientId"                => $this->clientId,
+            "dateCreated"             => $this->dateCreated,
+            "dateModified"            => $this->dateModified,
+            "quoteDate"               => $this->quoteDate,
+            "userId"                  => $this->userId,
+            "clientDisplayName"       => $this->clientDisplayName,
+            "leaseTerm"               => $this->leaseTerm,
+            "leaseRate"               => $this->leaseRate,
+            "pageCoverageMonochrome"  => $this->pageCoverageMonochrome,
+            "pageCoverageColor"       => $this->pageCoverageColor,
+            "monochromePageMargin"    => $this->monochromePageMargin,
+            "colorPageMargin"         => $this->colorPageMargin,
             "monochromeOverageMargin" => $this->monochromeOverageMargin,
-            "colorOverageMargin" => $this->colorOverageMargin,
-            "adminCostPerPage" => $this->adminCostPerPage,
-            "serviceCostPerPage" => $this->serviceCostPerPage,
-            "pricingConfigId" => $this->pricingConfigId,
-            "quoteType" => $this->quoteType,
+            "colorOverageMargin"      => $this->colorOverageMargin,
+            "adminCostPerPage"        => $this->adminCostPerPage,
+            "serviceCostPerPage"      => $this->serviceCostPerPage,
+            "pricingConfigId"         => $this->pricingConfigId,
+            "quoteType"               => $this->quoteType,
         );
     }
 
@@ -250,10 +288,11 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     public function getClient ()
     {
-        if (! isset($this->_client) && isset($this->clientId))
+        if (!isset($this->_client) && isset($this->clientId))
         {
             $this->_client = Quotegen_Model_Mapper_Client::getInstance()->find($this->clientId);
         }
+
         return $this->_client;
     }
 
@@ -261,7 +300,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      * Sets the client for the report (Also sets the client id of the report if the client has one.
      *
      * @param $_client Quotegen_Model_Client
-     *            The new client
+     *                 The new client
      *
      * @return \Quotegen_Model_Quote
      */
@@ -272,6 +311,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         {
             $this->clientId = $_client->id;
         }
+
         return $this;
     }
 
@@ -283,10 +323,11 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     public function getQuoteDeviceGroups ()
     {
-        if (! isset($this->_quoteDeviceGroups))
+        if (!isset($this->_quoteDeviceGroups))
         {
             $this->_quoteDeviceGroups = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->fetchDeviceGroupsForQuote($this->id);
         }
+
         return $this->_quoteDeviceGroups;
     }
 
@@ -294,13 +335,14 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      * Sets the quote devices for the quote
      *
      * @param $_quoteDeviceGroups multitype:Quotegen_Model_QuoteDeviceGroup
-     *            The quote devices.
+     *                            The quote devices.
      *
      * @return \Quotegen_Model_Quote
      */
     public function setQuoteDeviceGroups ($_quoteDeviceGroups)
     {
         $this->_quoteDeviceGroups = $_quoteDeviceGroups;
+
         return $this;
     }
 
@@ -311,10 +353,11 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     public function getPricingConfig ()
     {
-        if (! isset($this->_pricingConfig))
+        if (!isset($this->_pricingConfig))
         {
             $this->_pricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->pricingConfigId);
         }
+
         return $this->_pricingConfig;
     }
 
@@ -322,11 +365,12 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      * Sets the pricing config object
      *
      * @param $_pricingConfig Proposalgen_Model_PricingConfig
-     *            The new princing config.
+     *                        The new princing config.
      */
     public function setPricingConfig ($_pricingConfig)
     {
         $this->_pricingConfig = $_pricingConfig;
+
         return $this;
     }
 
@@ -337,7 +381,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     public function getLeasingSchemaTerm ()
     {
-        if (! isset($this->_leasingSchemaTerm))
+        if (!isset($this->_leasingSchemaTerm))
         {
             $quoteLeaseTerm = Quotegen_Model_Mapper_QuoteLeaseTerm::getInstance()->find($this->id);
             if ($quoteLeaseTerm)
@@ -345,6 +389,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                 $this->_leasingSchemaTerm = $quoteLeaseTerm->getLeaseTerm();
             }
         }
+
         return $this->_leasingSchemaTerm;
     }
 
@@ -356,6 +401,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function setLeasingSchemaTerm ($_leasingSchemaTerm)
     {
         $this->_leasingSchemaTerm = $_leasingSchemaTerm;
+
         return $this;
     }
 
@@ -366,10 +412,11 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     public function getQuoteDevices ()
     {
-        if (! isset($this->_quoteDevices))
+        if (!isset($this->_quoteDevices))
         {
             $this->_quoteDevices = Quotegen_Model_Mapper_QuoteDevice::getInstance()->fetchDevicesForQuote($this->id);
         }
+
         return $this->_quoteDevices;
     }
 
@@ -381,6 +428,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function setQuoteDevices ($_quoteDevices)
     {
         $this->_quoteDevices = $_quoteDevices;
+
         return $this;
     }
 
@@ -409,7 +457,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $leaseValue = 0;
 
-        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        foreach ($this->getQuoteDeviceGroups() as $quoteDeviceGroup)
         {
             $leaseValue += $quoteDeviceGroup->calculateLeaseValue();
         }
@@ -426,7 +474,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $leaseValue = 0;
 
-        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        foreach ($this->getQuoteDeviceGroups() as $quoteDeviceGroup)
         {
             $leaseValue += $quoteDeviceGroup->calculateHardwareLeaseValue();
         }
@@ -447,10 +495,10 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     public function calculateAverageDeviceMargin ()
     {
-        $margin = 0;
+        $margin      = 0;
         $deviceCount = count($this->getQuoteDevices);
 
-        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        foreach ($this->getQuoteDevices() as $quoteDevice)
         {
             $margin += $quoteDevice->margin;
         }
@@ -470,11 +518,11 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     public function calculateTotalMonthlyLeasePrice ()
     {
-        $leaseValue = $this->calculateTotalHardwareLeaseValue();
+        $leaseValue     = $this->calculateTotalHardwareLeaseValue();
         $monthlyPayment = 0;
-        $leaseFactor = $this->leaseRate;
+        $leaseFactor    = $this->leaseRate;
 
-        if (! empty($leaseFactor) && ! empty($leaseValue))
+        if (!empty($leaseFactor) && !empty($leaseValue))
         {
             $monthlyPayment = $leaseFactor * $leaseValue;
         }
@@ -491,10 +539,11 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $totalCost = 0;
 
-        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        foreach ($this->getQuoteDevices() as $quoteDevice)
         {
             $totalCost += $quoteDevice->calculateTotalCost();
         }
+
         return $totalCost;
     }
 
@@ -507,10 +556,11 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $totalPrice = 0;
 
-        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        foreach ($this->getQuoteDevices() as $quoteDevice)
         {
             $totalPrice += $quoteDevice->calculateTotalPrice();
         }
+
         return $totalPrice;
     }
 
@@ -523,7 +573,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $deviceCount = 0;
 
-        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        foreach ($this->getQuoteDevices() as $quoteDevice)
         {
             $deviceCount += $quoteDevice->calculateTotalQuantity();
         }
@@ -540,10 +590,11 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $totalResidual = 0;
 
-        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        foreach ($this->getQuoteDevices() as $quoteDevice)
         {
             $totalResidual += $quoteDevice->calculateTotalResidual();
         }
+
         return $totalResidual;
     }
 
@@ -557,10 +608,11 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $subtotal = 0;
 
-        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        foreach ($this->getQuoteDeviceGroups() as $quoteDeviceGroup)
         {
             $subtotal += $quoteDeviceGroup->calculateGroupSubtotal();
         }
+
         return $subtotal;
     }
 
@@ -573,10 +625,11 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $subtotal = 0;
 
-        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        foreach ($this->getQuoteDeviceGroups() as $quoteDeviceGroup)
         {
             $subtotal += $quoteDeviceGroup->calculateMonthlyLeasePrice();
         }
+
         return $subtotal;
     }
 
@@ -589,10 +642,11 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $subtotal = 0;
 
-        foreach ( $this->getQuoteDevices() as $quoteDevice )
+        foreach ($this->getQuoteDevices() as $quoteDevice)
         {
             $subtotal += $quoteDevice->calculateTotalLeaseValue();
         }
+
         return $subtotal;
     }
 
@@ -605,10 +659,11 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $count = 0;
 
-        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        foreach ($this->getQuoteDeviceGroups() as $quoteDeviceGroup)
         {
             $count += count($quoteDeviceGroup->getQuoteDeviceGroupDevices());
         }
+
         return $count;
     }
 
@@ -619,8 +674,8 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     public function calculateTotalMargin ()
     {
-        $cost = $this->calculateTotalCost();
-        $price = $this->calculateQuoteSubtotal();
+        $cost   = $this->calculateTotalCost();
+        $price  = $this->calculateQuoteSubtotal();
         $margin = 0;
 
         if ($price > $cost)
@@ -654,7 +709,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $quantity = 0;
 
-        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        foreach ($this->getQuoteDeviceGroups() as $quoteDeviceGroup)
         {
             $quantity += $quoteDeviceGroup->calculateTotalMonochromePages();
         }
@@ -671,7 +726,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $quantity = 0;
 
-        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        foreach ($this->getQuoteDeviceGroups() as $quoteDeviceGroup)
         {
             $quantity += $quoteDeviceGroup->calculateTotalColorPages();
         }
@@ -688,7 +743,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         // Represents quote total page weight
         $monochromeCostPerPage = 0;
-        $monochromeTotal = 0;
+        $monochromeTotal       = 0;
         // The total cpp for all quote devices, used for calcualtion with no pages
         $totalCpp = 0;
         // Total device count, used for calculation with no pages in quote
@@ -699,9 +754,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         // Represents quote total costs for pages
         $quoteDeviceGroupDeviceCost = 0;
 
-        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        foreach ($this->getQuoteDeviceGroups() as $quoteDeviceGroup)
         {
-            foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+            foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
             {
                 // Total weight
                 $monochromeTotal += $quoteDeviceGroupDevice->monochromePagesQuantity * $quoteDeviceGroupDevice->quantity;
@@ -710,7 +765,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                 if ($quoteDeviceGroupDevice->monochromePagesQuantity > 0)
                 {
                     $quoteDeviceGroupDeviceCost += $quoteDeviceGroupDevice->monochromePagesQuantity * $quoteDeviceGroupDevice->getQuoteDevice()->calculateMonochromeCostPerPage() * $quoteDeviceGroupDevice->quantity;
-					$quoteHasPages = true;
+                    $quoteHasPages = true;
                 }
                 $totalCpp = $quoteDeviceGroupDevice->getQuoteDevice()->calculateMonochromeCostPerPage();
                 $totalDevices++;
@@ -718,9 +773,13 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         }
 
         if ($quoteHasPages)
+        {
             $monochromeCostPerPage = $quoteDeviceGroupDeviceCost / $monochromeTotal;
+        }
         else
+        {
             $monochromeCostPerPage = $totalCpp / $totalDevices;
+        }
 
         return $monochromeCostPerPage;
     }
@@ -745,10 +804,10 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         // Flag to see if pages exist
         $quoteHasPages = false;
 
-        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        foreach ($this->getQuoteDeviceGroups() as $quoteDeviceGroup)
         {
             /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
-            foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+            foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
             {
                 $colorTotal += $quoteDeviceGroupDevice->colorPagesQuantity * $quoteDeviceGroupDevice->quantity;
                 if ($quoteDeviceGroupDevice->colorPagesQuantity > 0)
@@ -757,7 +816,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                     $quoteHasPages = true;
                 }
                 $totalCpp = $quoteDeviceGroupDevice->getQuoteDevice()->calculateColorCostPerPage();
-                $totalDevices ++;
+                $totalDevices++;
             }
         }
 
@@ -782,7 +841,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         $totalMonochromePageCost = 0;
 
-        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        foreach ($this->getQuoteDeviceGroups() as $quoteDeviceGroup)
         {
             $totalMonochromePageCost += $quoteDeviceGroup->calculateMonochromePageCost();
         }
@@ -798,10 +857,11 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function calculateColorPageCost ()
     {
         $totalColorPageCost = 0;
-        foreach ( $this->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        foreach ($this->getQuoteDeviceGroups() as $quoteDeviceGroup)
         {
             $totalColorPageCost += $quoteDeviceGroup->calculateColorPageCost();
         }
+
         return $totalColorPageCost;
     }
 

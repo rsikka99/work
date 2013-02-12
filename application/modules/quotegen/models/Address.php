@@ -43,7 +43,6 @@ class Quotegen_Model_Address extends My_Model_Abstract
     public $countryId;
 
 
-
     /**
      * @param array $params An array of data to populate the model with
      */
@@ -54,29 +53,45 @@ class Quotegen_Model_Address extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->id) && ! is_null($params->id))
+        if (isset($params->id) && !is_null($params->id))
+        {
             $this->id = $params->id;
+        }
 
-        if (isset($params->clientId) && ! is_null($params->clientId))
+        if (isset($params->clientId) && !is_null($params->clientId))
+        {
             $this->clientId = $params->clientId;
+        }
 
-        if (isset($params->addressLine1) && ! is_null($params->addressLine1))
+        if (isset($params->addressLine1) && !is_null($params->addressLine1))
+        {
             $this->addressLine1 = $params->addressLine1;
+        }
 
-        if (isset($params->addressLine2) && ! is_null($params->addressLine2))
+        if (isset($params->addressLine2) && !is_null($params->addressLine2))
+        {
             $this->addressLine2 = $params->addressLine2;
+        }
 
-        if (isset($params->city) && ! is_null($params->city))
+        if (isset($params->city) && !is_null($params->city))
+        {
             $this->city = $params->city;
+        }
 
-        if (isset($params->region) && ! is_null($params->region))
+        if (isset($params->region) && !is_null($params->region))
+        {
             $this->region = $params->region;
+        }
 
-        if (isset($params->postCode) && ! is_null($params->postCode))
+        if (isset($params->postCode) && !is_null($params->postCode))
+        {
             $this->postCode = $params->postCode;
+        }
 
-        if (isset($params->countryId) && ! is_null($params->countryId))
+        if (isset($params->countryId) && !is_null($params->countryId))
+        {
             $this->countryId = $params->countryId;
+        }
 
     }
 
@@ -85,15 +100,15 @@ class Quotegen_Model_Address extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array (
-            "id" => $this->id,
-            "clientId" => $this->clientId,
+        return array(
+            "id"           => $this->id,
+            "clientId"     => $this->clientId,
             "addressLine1" => $this->addressLine1,
             "addressLine2" => $this->addressLine2,
-            "city" => $this->city,
-            "region" => $this->region,
-            "postCode" => $this->postCode,
-            "countryId" => $this->countryId,
+            "city"         => $this->city,
+            "region"       => $this->region,
+            "postCode"     => $this->postCode,
+            "countryId"    => $this->countryId,
         );
     }
 
@@ -111,7 +126,8 @@ class Quotegen_Model_Address extends My_Model_Abstract
      *
      * @return string
      */
-    public function getRegionName(){
+    public function getRegionName ()
+    {
         return Quotegen_Model_Mapper_Region::getInstance()->getById($this->region)->region;
     }
 
@@ -123,7 +139,7 @@ class Quotegen_Model_Address extends My_Model_Abstract
     public function getFullAddressOneLine ()
     {
         $address = "{$this->addressLine1}";
-        if (strlen($this->addressLine2)>0)
+        if (strlen($this->addressLine2) > 0)
         {
             $address .= " {$this->addressLine2}, ";
         }
@@ -131,8 +147,9 @@ class Quotegen_Model_Address extends My_Model_Abstract
         {
             $address .= ", ";
         }
-        
+
         $address .= "{$this->city}, {$this->getRegionName()} {$this->postCode}";
+
         return $address;
     }
 
@@ -143,7 +160,7 @@ class Quotegen_Model_Address extends My_Model_Abstract
      */
     public function getFullAddressMultipleLines ()
     {
-                $address = "{$this->addressLine1}";
+        $address = "{$this->addressLine1}";
         if ($this->addressLine2)
         {
             $address .= "\n{$this->addressLine2}\n";
@@ -152,12 +169,13 @@ class Quotegen_Model_Address extends My_Model_Abstract
         {
             $address .= "\n";
         }
-        
+
         $address .= "{$this->city}, {$this->getRegionName()}\n {$this->postCode}";
+
         return $address;
     }
 
-    public function __toString()
+    public function __toString ()
     {
         return $this->getFullAddressMultipleLines();
     }

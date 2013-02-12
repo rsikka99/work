@@ -17,8 +17,10 @@ class Quotegen_Model_GlobalDeviceConfiguration extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->deviceConfigurationId) && ! is_null($params->deviceConfigurationId))
+        if (isset($params->deviceConfigurationId) && !is_null($params->deviceConfigurationId))
+        {
             $this->deviceConfigurationId = $params->deviceConfigurationId;
+        }
 
     }
 
@@ -27,7 +29,7 @@ class Quotegen_Model_GlobalDeviceConfiguration extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array (
+        return array(
             "deviceConfigurationId" => $this->deviceConfigurationId,
         );
     }

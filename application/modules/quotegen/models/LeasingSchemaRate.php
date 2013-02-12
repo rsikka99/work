@@ -40,14 +40,20 @@ class Quotegen_Model_LeasingSchemaRate extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->leasingSchemaTermId) && ! is_null($params->leasingSchemaTermId))
+        if (isset($params->leasingSchemaTermId) && !is_null($params->leasingSchemaTermId))
+        {
             $this->leasingSchemaTermId = $params->leasingSchemaTermId;
+        }
 
-        if (isset($params->leasingSchemaRangeId) && ! is_null($params->leasingSchemaRangeId))
+        if (isset($params->leasingSchemaRangeId) && !is_null($params->leasingSchemaRangeId))
+        {
             $this->leasingSchemaRangeId = $params->leasingSchemaRangeId;
+        }
 
-        if (isset($params->rate) && ! is_null($params->rate))
+        if (isset($params->rate) && !is_null($params->rate))
+        {
             $this->rate = $params->rate;
+        }
 
     }
 
@@ -56,10 +62,10 @@ class Quotegen_Model_LeasingSchemaRate extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array (
-            "leasingSchemaTermId" => $this->leasingSchemaTermId,
+        return array(
+            "leasingSchemaTermId"  => $this->leasingSchemaTermId,
             "leasingSchemaRangeId" => $this->leasingSchemaRangeId,
-            "rate" => $this->rate,
+            "rate"                 => $this->rate,
         );
     }
 
@@ -70,21 +76,23 @@ class Quotegen_Model_LeasingSchemaRate extends My_Model_Abstract
      */
     public function getTerm ()
     {
-        if (! isset($this->_term))
+        if (!isset($this->_term))
         {
             $this->_term = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->find($this->leasingSchemaTermId);
         }
+
         return $this->_term;
     }
 
     /**
      * Sets the term for the leasing schema rate
      *
-     * @param Quotegen_Model_LeasingSchemaTerm $_term            
+     * @param Quotegen_Model_LeasingSchemaTerm $_term
      */
     public function setTerm ($_term)
     {
         $this->_term = $_term;
+
         return $this;
     }
 
@@ -95,10 +103,11 @@ class Quotegen_Model_LeasingSchemaRate extends My_Model_Abstract
      */
     public function getRange ()
     {
-        if (! isset($this->_range))
+        if (!isset($this->_range))
         {
             $this->_range = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance()->find($this->leasingSchemaRangeId);
         }
+
         return $this->_range;
     }
 
@@ -112,6 +121,7 @@ class Quotegen_Model_LeasingSchemaRate extends My_Model_Abstract
     public function setRange ($_range)
     {
         $this->_range = $_range;
+
         return $this;
     }
 }

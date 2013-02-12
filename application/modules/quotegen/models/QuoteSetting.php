@@ -42,7 +42,7 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
      * @var float
      */
     public $adminCostPerPage;
-    
+
     /**
      * A pricing config object
      *
@@ -60,29 +60,45 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->id) && ! is_null($params->id))
+        if (isset($params->id) && !is_null($params->id))
+        {
             $this->id = $params->id;
+        }
 
-        if (isset($params->pageCoverageMonochrome) && ! is_null($params->pageCoverageMonochrome))
+        if (isset($params->pageCoverageMonochrome) && !is_null($params->pageCoverageMonochrome))
+        {
             $this->pageCoverageMonochrome = $params->pageCoverageMonochrome;
+        }
 
-        if (isset($params->pageCoverageColor) && ! is_null($params->pageCoverageColor))
+        if (isset($params->pageCoverageColor) && !is_null($params->pageCoverageColor))
+        {
             $this->pageCoverageColor = $params->pageCoverageColor;
+        }
 
-        if (isset($params->deviceMargin) && ! is_null($params->deviceMargin))
+        if (isset($params->deviceMargin) && !is_null($params->deviceMargin))
+        {
             $this->deviceMargin = $params->deviceMargin;
+        }
 
-        if (isset($params->pageMargin) && ! is_null($params->pageMargin))
+        if (isset($params->pageMargin) && !is_null($params->pageMargin))
+        {
             $this->pageMargin = $params->pageMargin;
+        }
 
-        if (isset($params->pricingConfigId) && ! is_null($params->pricingConfigId))
+        if (isset($params->pricingConfigId) && !is_null($params->pricingConfigId))
+        {
             $this->pricingConfigId = $params->pricingConfigId;
+        }
 
-        if (isset($params->serviceCostPerPage) && ! is_null($params->serviceCostPerPage))
+        if (isset($params->serviceCostPerPage) && !is_null($params->serviceCostPerPage))
+        {
             $this->serviceCostPerPage = $params->serviceCostPerPage;
+        }
 
-        if (isset($params->adminCostPerPage) && ! is_null($params->adminCostPerPage))
+        if (isset($params->adminCostPerPage) && !is_null($params->adminCostPerPage))
+        {
             $this->adminCostPerPage = $params->adminCostPerPage;
+        }
 
     }
 
@@ -99,28 +115,40 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
         {
             $settings = $settings->toArray();
         }
-        
+
         // Turn an array into an ArrayObject
         if (is_array($settings))
         {
             $settings = new ArrayObject($settings, ArrayObject::ARRAY_AS_PROPS);
         }
-        
+
         // Do the same logic as populate, except never set the id.
-        if (isset($settings->pageCoverageMonochrome) && ! is_null($settings->pageCoverageMonochrome))
+        if (isset($settings->pageCoverageMonochrome) && !is_null($settings->pageCoverageMonochrome))
+        {
             $this->pageCoverageMonochrome = $settings->pageCoverageMonochrome;
-        if (isset($settings->pageCoverageColor) && ! is_null($settings->pageCoverageColor))
+        }
+        if (isset($settings->pageCoverageColor) && !is_null($settings->pageCoverageColor))
+        {
             $this->pageCoverageColor = $settings->pageCoverageColor;
-        if (isset($settings->deviceMargin) && ! is_null($settings->deviceMargin))
+        }
+        if (isset($settings->deviceMargin) && !is_null($settings->deviceMargin))
+        {
             $this->deviceMargin = $settings->deviceMargin;
-        if (isset($settings->pageMargin) && ! is_null($settings->pageMargin))
+        }
+        if (isset($settings->pageMargin) && !is_null($settings->pageMargin))
+        {
             $this->pageMargin = $settings->pageMargin;
-        if (isset($settings->serviceCostPerPage) && ! is_null($settings->serviceCostPerPage))
+        }
+        if (isset($settings->serviceCostPerPage) && !is_null($settings->serviceCostPerPage))
+        {
             $this->serviceCostPerPage = $settings->serviceCostPerPage;
-        if (isset($settings->adminCostPerPage) && ! is_null($settings->adminCostPerPage))
+        }
+        if (isset($settings->adminCostPerPage) && !is_null($settings->adminCostPerPage))
+        {
             $this->adminCostPerPage = $settings->adminCostPerPage;
-        
-        if (isset($settings->pricingConfigId) && ! is_null($settings->pricingConfigId))
+        }
+
+        if (isset($settings->pricingConfigId) && !is_null($settings->pricingConfigId))
         {
             if ($settings->pricingConfigId !== Proposalgen_Model_PricingConfig::NONE)
             {
@@ -134,15 +162,15 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array (
-            "id" => $this->id,
+        return array(
+            "id"                     => $this->id,
             "pageCoverageMonochrome" => $this->pageCoverageMonochrome,
-            "pageCoverageColor" => $this->pageCoverageColor,
-            "deviceMargin" => $this->deviceMargin,
-            "pageMargin" => $this->pageMargin,
-            "pricingConfigId" => $this->pricingConfigId,
-            "serviceCostPerPage" => $this->serviceCostPerPage,
-            "adminCostPerPage" => $this->adminCostPerPage,
+            "pageCoverageColor"      => $this->pageCoverageColor,
+            "deviceMargin"           => $this->deviceMargin,
+            "pageMargin"             => $this->pageMargin,
+            "pricingConfigId"        => $this->pricingConfigId,
+            "serviceCostPerPage"     => $this->serviceCostPerPage,
+            "adminCostPerPage"       => $this->adminCostPerPage,
         );
     }
 
@@ -153,10 +181,11 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
      */
     public function getPricingConfig ()
     {
-        if (! isset($this->_pricingConfig))
+        if (!isset($this->_pricingConfig))
         {
             $this->_pricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->pricingConfigId);
         }
+
         return $this->_pricingConfig;
     }
 
@@ -169,6 +198,7 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
     public function setPricingConfig ($_pricingConfig)
     {
         $this->_pricingConfig = $_pricingConfig;
+
         return $this;
     }
 }

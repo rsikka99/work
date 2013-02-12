@@ -1,23 +1,13 @@
 <?php
-
-/**
- * Quotegen_Model_Template
- *
- * @author Lee Robert
- *        
- */
 class Quotegen_Model_Template extends My_Model_Abstract
 {
-    
     /**
-     * The id assigned by the database
-     *
      * @var int
      */
-    protected $_id = 0;
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::populate()
+    public $id;
+
+    /**
+     * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
     {
@@ -25,38 +15,23 @@ class Quotegen_Model_Template extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        if (isset($params->id) && ! is_null($params->id))
-            $this->setId($params->id);
+
+        if (isset($params->id) && !is_null($params->id))
+        {
+            $this->id = $params->id;
+        }
+
+
     }
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::toArray()
+
+    /**
+     * @return array
      */
     public function toArray ()
     {
-        return array (
-                'id' => $this->getId() 
+        return array(
+            "id" => $this->id,
+
         );
-    }
-
-    /**
-     * Gets the id of the object
-     *
-     * @return number The id of the object
-     */
-    public function getId ()
-    {
-        return $this->_id;
-    }
-
-    /**
-     * Sets the id of the object
-     *
-     * @param number $_id
-     *            the new id
-     */
-    public function setId ($_id)
-    {
-        $this->_id = $_id;
     }
 }

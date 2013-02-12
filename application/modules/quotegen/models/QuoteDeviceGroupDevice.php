@@ -25,14 +25,14 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
      * @var int
      */
     public $colorPagesQuantity;
-    
+
     /**
      * The quote device
      *
      * @var Quotegen_Model_QuoteDevice
      */
     protected $_quoteDevice;
-    
+
     /**
      * The quote device group
      *
@@ -51,20 +51,30 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->quoteDeviceId) && ! is_null($params->quoteDeviceId))
+        if (isset($params->quoteDeviceId) && !is_null($params->quoteDeviceId))
+        {
             $this->quoteDeviceId = $params->quoteDeviceId;
+        }
 
-        if (isset($params->quoteDeviceGroupId) && ! is_null($params->quoteDeviceGroupId))
+        if (isset($params->quoteDeviceGroupId) && !is_null($params->quoteDeviceGroupId))
+        {
             $this->quoteDeviceGroupId = $params->quoteDeviceGroupId;
+        }
 
-        if (isset($params->quantity) && ! is_null($params->quantity))
+        if (isset($params->quantity) && !is_null($params->quantity))
+        {
             $this->quantity = $params->quantity;
+        }
 
-        if (isset($params->monochromePagesQuantity) && ! is_null($params->monochromePagesQuantity))
+        if (isset($params->monochromePagesQuantity) && !is_null($params->monochromePagesQuantity))
+        {
             $this->monochromePagesQuantity = $params->monochromePagesQuantity;
+        }
 
-        if (isset($params->colorPagesQuantity) && ! is_null($params->colorPagesQuantity))
+        if (isset($params->colorPagesQuantity) && !is_null($params->colorPagesQuantity))
+        {
             $this->colorPagesQuantity = $params->colorPagesQuantity;
+        }
 
     }
 
@@ -73,12 +83,12 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array (
-            "quoteDeviceId" => $this->quoteDeviceId,
-            "quoteDeviceGroupId" => $this->quoteDeviceGroupId,
-            "quantity" => $this->quantity,
+        return array(
+            "quoteDeviceId"           => $this->quoteDeviceId,
+            "quoteDeviceGroupId"      => $this->quoteDeviceGroupId,
+            "quantity"                => $this->quantity,
             "monochromePagesQuantity" => $this->monochromePagesQuantity,
-            "colorPagesQuantity" => $this->colorPagesQuantity,
+            "colorPagesQuantity"      => $this->colorPagesQuantity,
         );
     }
 
@@ -89,21 +99,23 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
      */
     public function getQuoteDevice ()
     {
-        if (! isset($this->_quoteDevice))
+        if (!isset($this->_quoteDevice))
         {
             $this->_quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($this->quoteDeviceId);
         }
+
         return $this->_quoteDevice;
     }
 
     /**
      * Sets the quote device
      *
-     * @param Quotegen_Model_QuoteDevice $_quoteDevice            
+     * @param Quotegen_Model_QuoteDevice $_quoteDevice
      */
     public function setQuoteDevice ($_quoteDevice)
     {
         $this->_quoteDevice = $_quoteDevice;
+
         return $this;
     }
 
@@ -114,21 +126,23 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
      */
     public function getQuoteDeviceGroup ()
     {
-        if (! isset($this->_quoteDeviceGroup))
+        if (!isset($this->_quoteDeviceGroup))
         {
             $this->_quoteDeviceGroup = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->find($this->quoteDeviceGroupId);
         }
+
         return $this->_quoteDeviceGroup;
     }
 
     /**
      * Sets the quote device group
      *
-     * @param Quotegen_Model_QuoteDeviceGroup $_quoteDeviceGroup            
+     * @param Quotegen_Model_QuoteDeviceGroup $_quoteDeviceGroup
      */
     public function setQuoteDeviceGroup ($_quoteDeviceGroup)
     {
         $this->_quoteDeviceGroup = $_quoteDeviceGroup;
+
         return $this;
     }
 
