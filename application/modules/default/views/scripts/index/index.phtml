@@ -1,112 +1,169 @@
 <div class="page-header" xmlns="http://www.w3.org/1999/html">
     <h1>Catchy Title For Landing Page</h1>
 </div>
-<?php
-$client = Quotegen_Model_Mapper_Client::getInstance()->find($this->selectedClientId);
-?>
+
 <div class="row">
     <div class="span3">
         <div class="well well-small">
-            <strong>Client Information</strong>
-
+            <?php if ($this->selectedClientId > 0) :
+            $selectedClient = Quotegen_Model_Mapper_Client::getInstance()->find($this->selectedClientId);
+            ?>
             <form method="POST">
-                <p>ID: <?php echo $client->id; ?></p>
-
-                <p><?php echo $client->companyName; ?></p>
-
-                <p><?php echo nl2br($client->getAddress()); ?></p>
-
-                <p class="clearfix">
-                    <button class="btn btn-primary btn-mini pull-right" name="changeClient">Change Client</button>
+                <button class="btn btn-primary btn-mini pull-right" name="editClient">Edit</button>
+                <p>
+                    <strong><?php echo (strlen($selectedClient->companyName) > 20) ? substr($selectedClient->companyName, 0, 20) . "..." : $selectedClient->companyName; ?></strong>
                 </p>
+
+                <p><strong>Address:</strong><br>
+                    <?php
+                    $truncatedAddressLines = array();
+                    foreach (explode("\n", $selectedClient->getAddress()->getFullAddressMultipleLines()) as $addressLine) : ?>
+                        <?php $truncatedAddressLines[] = (strlen($addressLine) > 26) ? substr($addressLine, 0, 26) . "..." : $addressLine; ?>
+                        <?php
+                    endforeach;
+
+                    echo implode("<br>", $truncatedAddressLines);
+                    ?>
+                </p>
+
+                <p><strong>Organization Size:</strong><br><strong><?php echo number_format($selectedClient->employeeCount); ?></strong> employees</p>
             </form>
-        </div>
-        <div class="well well-small">
-            <strong>Fleet Information</strong>
-            <select name="mySelect" style="width: 100%">
-                <option>January 15th, 2013 to March 15th 2013 (MySampleImport.csv)</option>
-                <option>January 3rd, 2013 to January 26th 2013 (MyFirstImport.csv)</option>
-            </select>
+            <?php endif; ?>
+            <hr>
+            <strong>Recent Clients</strong>
+            <form method="POST">
+                <table class="table">
+                    <?php foreach (Quotegen_Model_Mapper_Client::getInstance()->fetchAll() as $client) : ?>
+                    <?php if ($selectedClient && $client->id != $selectedClient->id) : ?>
+                        <tr>
+                            <td><?php echo (strlen($client->companyName) > 20) ? substr($client->companyName, 0, 20) . "..." : $client->companyName; ?></td>
+                            <td>
+                                <button class="btn btn-primary btn-mini" name="selectClient" value="<?php echo $client->id; ?>">Select</button>
+                            </td>
+                        </tr>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </table>
+            </form>
+            <hr>
+            <form method="POST">
+                <button class="btn btn-success btn-small " name="createClient">Create New Client</button>
+            </form>
+            <hr>
+            <strong>Search By Name</strong>
+            <form class="form-inline">
+                <input type="text" placeholder="Enter name to search..." class="input-block-level">
+            </form>
 
-            <p><strong>30</strong> Mapped Devices</p>
-
-            <p><strong>4</strong> Unmapped Devices</p>
-
-            <p><strong>9</strong> Invalid Devices</p>
-
-            <p><strong>500,000</strong> Mono Pages/Month</p>
-
-            <p><strong>500,000</strong> Color Pages/Month</p>
-
-            <p><strong>$500,000</strong> Per Month</p>
-            <button type="button" class="btn">Upload Fleet CSV</button>
         </div>
     </div>
     <div class="span9">
 
-        <div class="tabs-top">
-            <ul class="nav nav-tabs" id="myTab">
-                <li><a href="#survey" data-toggle="tab">Survey</a></li>
-                <li class="active"><a href="#assessment" data-toggle="tab">Assessment</a></li>
-                <li><a href="#quotes" data-toggle="tab">Quotes</a></li>
-                <li><a href="#healthCheck" data-toggle="tab">Health Check</a></li>
-                <li><a href="#optimization" data-toggle="tab">Optimization</a></li>
+        <?php if ($this->selectedClientId > 0) : ?>
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#assessmentTabPane" data-toggle="tab">Assessment</a></li>
+                <li><a href="#quoteTabPane" data-toggle="tab">Quote</a></li>
+                <li><a href="#healthCheckTabPane" data-toggle="tab">Health Check</a></li>
+                <li><a href="#hardwareOptimizationTabPane" data-toggle="tab">Hardware Optimize</a></li>
             </ul>
 
             <div class="tab-content">
-                <div class="tab-pane" id="survey">
-                    <div class="well">
-                        <button class="btn btn-success" type="button">Edit Survey</button>
-                    </div>
-                </div>
-                <div class="tab-pane active" id="assessment">
-                    <div class="well">
-                        <p>
-
+                <div class="tab-pane active" id="assessmentTabPane">
+                    <div class="well well-small">
                         <form method="POST">
-                            <button class="btn btn-success" name="startNewAssessment">Start New Assessment</button>
+                            <table class="table table-striped table-condensed table-bordered">
+                                <tr>
+                                    <th>Date Created</th>
+                                    <th>Last Modified</th>
+                                    <th>Finished</th>
+                                    <th style="width: 100px;">Action</th>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <button name="selectAssessment" value="0" class="btn btn-success btn-mini">Start New</button>
+                                    </td>
+                                </tr>
+                                <?php foreach ($this->availableAssessments as $report) : /* @var $report Proposalgen_Model_Report */ ?>
+                                <tr>
+                                    <td><?php echo strftime("%B %d, %Y", strtotime($report->dateCreated)); ?></td>
+                                    <td><?php echo strftime("%B %d, %Y", strtotime($report->lastModified)); ?></td>
+
+                                    <?php if ($report->reportStage == Proposalgen_Model_Report_Step::STEP_FINISHED) : ?>
+                                    <td>Finished</td>
+
+                                    <?php else : ?>
+                                    <td>In Progress</td>
+                                    <?php endif; ?>
+                                    <td>
+                                        <button name="selectAssessment" value="<?php echo $report->id; ?>" class="btn btn-primary btn-mini">Select</button>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </table>
                         </form>
-                        <select>
-                            <option>View Assessment</option>
-                            <option>View Solution</option>
-                            <option>Optimize</option>
-                            <option>Health Check</option>
-                        </select>
-                        <button class="btn btn-success" type="button">Go</button>
-                        </p>
+                    </div>
+
+                </div>
+                <div class="tab-pane" id="quoteTabPane">
+
+                    <div class="well well-small">
+                        <form method="POST">
+                            <p>
+                            <button name="createLeasedQuote" value="0" class="btn btn-primary btn-mini">Create New Leased Quote</button>
+                            <button name="createPurchasedQuote" value="0" class="btn btn-success btn-mini">Create New Purchased Quote</button>
+                            </p>
+                            <table class="table table-striped table-condensed table-bordered">
+                                <tr>
+                                    <th>Date Created</th>
+                                    <th>Last Modified</th>
+                                    <th>Type</th>
+                                    <th style="width: 100px;">Action</th>
+                                </tr>
+
+                                <?php foreach ($this->availableQuotes as $quote) : /* @var $quote Quotegen_Model_Quote */ ?>
+                                <tr>
+                                    <td><?php echo strftime("%B %d, %Y", strtotime($quote->dateCreated)); ?></td>
+                                    <td><?php echo strftime("%B %d, %Y", strtotime($quote->dateModified)); ?></td>
+
+                                    <?php if ($quote->quoteType == Quotegen_Model_Quote::QUOTE_TYPE_LEASED) : ?>
+                                    <td>Leased</td>
+                                    <?php else : ?>
+                                    <td>Purchased</td>
+                                    <?php endif; ?>
+                                    <td>
+                                        <button name="selectQuote" value="<?php echo $quote->id; ?>" class="btn btn-primary btn-mini">Select</button>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </table>
+                        </form>
                     </div>
                 </div>
-                <div class="tab-pane" id="quotes">
-                    <div class="well">
-                        <button class="btn btn-success" type="button">Create New Quote</button>
-                        <p>Quote 1</p>
-
-                        <p>Quote 2</p>
-
-                        <p>Quote 3</p>
-
-                        <p>Quote 4</p>
-                    </div>
-                </div>
-                <div class="tab-pane" id="healthCheck">
+                <div class="tab-pane" id="healthCheckTabPane">
                     <div class="hero-unit">
                         <h1>Coming Soon...</h1>
 
-                        <p>Health Check Health Check Health Check Health Check Health Check Health Check Health Check Health Check Health Check Health Check
-                            Health
-                            Check Health Check Health Check Health Check</p>
+                        <p>Gain the ability to perform quarterly reviews of your clients fleet.</p>
                     </div>
                 </div>
-                <div class="tab-pane" id="optimization">
+                <div class="tab-pane" id="hardwareOptimizationTabPane">
                     <div class="hero-unit">
-                        <h1>Optimization Coming Soon...</h1>
+                        <h1>Coming Soon...</h1>
 
-                        <p>Health Check Health Check Health Check Health Check Health Check Health Check Health Check Health Check Health Check Health Check
-                            Health
-                            Check Health Check Health Check Health Check</p>
+                        <p>Find out how profitable your clients really are. Once you review a fleet you can likely change a few key devices for a huge boost in
+                            profit!</p>
                     </div>
                 </div>
             </div>
         </div>
+        <?php else : ?>
+        <div class="well">
+            <p>Please select a client from the left menu.</p>
+        </div>
+        <?php endif; ?>
     </div>
 </div>

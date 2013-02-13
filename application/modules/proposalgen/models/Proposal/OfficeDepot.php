@@ -1636,7 +1636,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             $pageCounts      = $this->getPageCounts();
             $reportQuestions = $this->getReportQuestions();
             $companyName     = $this->report->getClient()->companyName;
-            $employeeCount   = $reportQuestions [5]->NumericAnswer;
+            $employeeCount   = $this->report->getClient()->employeeCount;
 
             // Formatting variables
             $numberValueMarker                          = "N *sz0";
@@ -2370,8 +2370,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->EmployeeCount))
         {
-            $questions           = $this->getReportQuestions();
-            $this->EmployeeCount = $questions [5]->NumericAnswer;
+            $this->EmployeeCount = $this->report->getClient()->employeeCount;
         }
 
         return $this->EmployeeCount;

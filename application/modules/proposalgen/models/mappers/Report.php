@@ -6,6 +6,8 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
      */
     public $col_id = 'id';
     public $col_userId = 'userId';
+    public $col_clientId = 'clientId';
+    public $col_dateCreated = 'dateCreated';
     public $col_reportStage = 'reportStage';
 
     /*
@@ -251,6 +253,49 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
                                ));
     }
 
+
+    /**
+     * Fetches all unfinished reports for a given client
+     *
+     * @param int $clientId
+     *
+     * @return Proposalgen_Model_Report[]
+     */
+    public function fetchAllUnfinishedReportsForClient ($clientId)
+    {
+        return $this->fetchAll(array(
+                                    "{$this->col_userId} = ?"       => $clientId,
+                                    "{$this->col_reportStage} <> ?" => Proposalgen_Model_Report_Step::STEP_FINISHED
+                               ));
+    }
+
+    /**
+     * Fetches all reports for a given client
+     *
+     * @param int $clientId
+     *
+     * @return Proposalgen_Model_Report[]
+     */
+    public function fetchAllFinishedReportsForClient ($clientId)
+    {
+        return $this->fetchAll(array(
+                                    "{$this->col_userId} = ?"      => $clientId,
+                                    "{$this->col_reportStage} = ?" => Proposalgen_Model_Report_Step::STEP_FINISHED
+                               ));
+    }
+
+    /**
+     * Fetches all reports for a given client
+     *
+     * @param int $clientId
+     *
+     * @return Proposalgen_Model_Report[]
+     */
+    public function fetchAllReportsForClient ($clientId)
+    {
+        return $this->fetchAll(array("{$this->col_userId} = ?" => $clientId), "{$this->col_dateCreated} DESC", 100);
+    }
+
     /**
      * Gets a where clause for filtering by id
      *
@@ -276,6 +321,7 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
     /**
      * This finds all reports that have a master device using the $masterDeviceId and
      * sets the deviceModified field to 1
+     *
      * @param int $masterDeviceId
      *
      * @return bool

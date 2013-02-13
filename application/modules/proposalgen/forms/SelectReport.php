@@ -38,16 +38,15 @@ class Proposalgen_Form_SelectReport extends EasyBib_Form
         //$this->setAttrib('class', 'form-horizontal');
         
 
-        $select = new Zend_Form_Element_Select('select_proposal');
+        $select = new Zend_Form_Element_Select('reportId');
         //$select->setLabel("Please select a report:");
         /* @var $report Proposalgen_Model_Report */
         foreach ( $this->_reports as $report )
         {
-            
-            $reportName = $report->getClient()->companyName;
+            $reportName = $report-> getClient()->companyName;
             if ($report->dateCreated !== null)
             {
-                $date = strftime('%x', strtotime($report->dateCreated));
+                $date = strftime("%B %d, %Y", strtotime($report->dateCreated));
                 $reportName .= ' (' . $date . ')';
             }
             $select->addMultiOption($report->id, $reportName);
@@ -58,10 +57,10 @@ class Proposalgen_Form_SelectReport extends EasyBib_Form
         // Add the submit button
         
 
-        $this->addElement('submit', 'start_survey', array (
+        $this->addElement('submit', 'selectAssessment', array (
                 'ignore' => true, 
                 'label' => 'Next' 
         ));
-        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'start_survey', 'cancel');
+        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'selectAssessment', 'cancel');
     }
 }
