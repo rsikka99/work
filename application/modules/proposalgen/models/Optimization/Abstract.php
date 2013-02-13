@@ -88,6 +88,11 @@ abstract class Proposalgen_Model_Optimization_Abstract
      */
     public $deviceCategories = array();
 
+    /**
+     * The ages that are shown inside the age graph inside the customer facing report.
+     *
+     * @var array
+     */
     public static $ageRanks = array(
         8 => "8+ Years",
         4 => "4-8 Years",
@@ -95,9 +100,17 @@ abstract class Proposalgen_Model_Optimization_Abstract
         0 => "0-2 Years",
     );
 
+    /**
+     * Array of purchased devices as device instances
+     *
+     * @var Proposalgen_Model_DeviceInstance []
+     */
+    protected $_purchasedDevices;
+
     public function __construct (Proposalgen_Model_Proposal_OfficeDepot $proposal)
     {
         $this->proposal = $proposal;
+
         // Set up the arrays of devices to be produced
         $retiredDevices           = array();
         $replacedDevices          = array();
@@ -123,7 +136,7 @@ abstract class Proposalgen_Model_Optimization_Abstract
 
         // Go through each purchase devices that rank it's classifications
         /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
-        foreach ($proposal->getPurchasedDevices() as $deviceInstance)
+        foreach ($this->getPurchasedDevices() as $deviceInstance)
         {
             // For each age rank, check if device is greater than range.
             foreach (self::$ageRanks as $ageRank => $ageRankName)
@@ -204,4 +217,18 @@ abstract class Proposalgen_Model_Optimization_Abstract
         $this->retired            = $retiredDevices;
     }
 
+    /**
+     * Gets all purchased devices and caches them for use in getting device statistics
+     *
+     * @return array Proposalgen_Model_DeviceInstance []
+     */
+    protected function getPurchasedDevices ()
+    {
+        if (!isset($this->_purchasedDevices))
+        {
+            $this->_purchasedDevices = $this->proposal->getPurchasedDevices();
+        }
+
+        return $this->_purchasedDevices;
+    }
 }

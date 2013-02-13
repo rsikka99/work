@@ -27,12 +27,15 @@ $graphs = $customerOptimization->getGraphs();
     </tr>
 </table>
 
+<!--
+    Service and supplies logistics section
+-->
 <div class="h1">
     Analysis: Service and Supplies Logistics
 </div>
 
 <div class="pheader">
-Printing Device Management Breakdown
+    Printing Device Management Breakdown
 </div>
 <p>Different types of printing devices are managed in different ways-newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.</p>
 <table class='center'>
@@ -43,9 +46,9 @@ Printing Device Management Breakdown
 </table>
 
 <div class="pheader">
-Number of Printing Device Models and Supply Types
+    Number of Printing Device Models and Supply Types
 </div>
-<p>Out of your 229 networked printing devices, you have of 61 different models. Each section of the chart below represents a single model type. We estimate that 77 of your printing devices are leased machines, for which supplies are included in your contract. The 152 remaining machines consist of 1 different models and use 65 different supply types. If you hold two of each supply in inventory, you have an estimated $16,276 in operating cash held in printer supplies inventory at any given time.</p>
+<p>Out of your <strong><?php echo $proposal->getDeviceCount(); ?></strong> networked printing devices, you have of <strong><?php echo $proposal->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type. We estimate that <strong><?php echo count($proposal->getLeasedDevices()); ?></strong> of your printing devices are leased machines, for which supplies are included in your contract. The <strong><?php echo count($proposal->getPurchasedDevices()); ?></strong> remaining machines consist of <strong><?php echo $proposal->getNumberOfUniquePurchasedModels(); ?></strong> different models and use <strong><?php echo $proposal->getNumberOfUniquePurchasedToners(); ?></strong> different supply types. If you hold two of each supply in inventory, you have an estimated <strong>$<?php echo number_format($proposal->getCashHeldInInventory()); ?> in operating cash held in printer supplies inventory</strong> at any given time.</p>
 <table class='center'>
     <tr>
         <td><img src="<?php echo $graphs[4]; ?>" /></td>
@@ -53,6 +56,9 @@ Number of Printing Device Models and Supply Types
 </table>
 <p>By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. Office Depot can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.</p>
 
+<!--
+    Printing hardware usage section
+-->
 <div class="h1">
     Analysis: Printing Hardware Usage
 </div>
@@ -60,7 +66,9 @@ Number of Printing Device Models and Supply Types
 <div class="pheader">
     Print Volume and Number of Printing Devices
 </div>
-<p>You currently have 229 networked printing devices that print an average of 3,302pages each per month, for an average total monthly print volume of 756,157 pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity. </p>
+<p>You currently have <strong><?php echo $proposal->getDeviceCount(); ?></strong> networked printing devices that print an average of <strong><?php echo number_format(($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->getDeviceCount())); ?>
+</strong> pages each per month, for an average total monthly print volume of <strong><?php echo number_format($proposal->getPageCounts()->Total->Combined->Monthly); ?></strong> pages.
+Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.</p>
 <table class='center'>
     <tr>
         <td><img src="<?php echo $graphs[5]; ?>" /></td>
@@ -73,6 +81,9 @@ Number of Printing Device Models and Supply Types
 </table>
 <br/>
 
+<!--
+    Technology reliability and user productivity section
+-->
 <div class="h1">
     Analysis: Technology Reliability and User Productivity
 </div>
@@ -80,7 +91,7 @@ Number of Printing Device Models and Supply Types
 <div class="pheader">
     Color Usage
 </div>
-<p>You currently have 89 color printing devices that print a monthly average of 108,381 color pages per month, which is 14.33% of your total monthly print volume.</p>
+<p>You currently have <strong><?php echo $proposal->getNumberOfColorCapableDevices(); ?></strong> color printing devices that print a monthly average of <strong><?php echo number_format($proposal->getPageCounts()->Total->Color->Monthly); ?></strong> color pages per month, which is <strong><?php echo number_format(($proposal->getPercentages()->TotalColorPercentage * 100),2); ?>%</strong> of your total monthly print volume.</p>
 <table class='center'>
     <tr>
         <td><img src="<?php echo $graphs[9]; ?>" /></td>
@@ -89,6 +100,7 @@ Number of Printing Device Models and Supply Types
 </table>
 <p>Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your company's professional image, improve comprehension and increase readership.
 Office Depot can help you track your color printing and provide low-cost color hardware options.</p>
+<br/>
 
 <div class="pheader">
     Age Of Printing Devices
@@ -99,6 +111,7 @@ Office Depot can help you track your color printing and provide low-cost color h
         <td><img src="<?php echo $graphs[11]; ?>" /></td>
     </tr>
 </table>
+<br/>
 
 <div class="pheader">
     Technology Features and Functionality
