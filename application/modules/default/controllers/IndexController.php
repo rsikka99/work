@@ -46,11 +46,14 @@ class Default_IndexController extends Zend_Controller_Action
      */
     public function indexAction ()
     {
-        $availableReports                 = Proposalgen_Model_Mapper_Report::getInstance()->fetchAllReportsForClient($this->_selectedClientId);
-        $this->view->availableAssessments = $availableReports;
+        if ($this->_selectedClientId > 0)
+        {
+            $availableReports                 = Proposalgen_Model_Mapper_Report::getInstance()->fetchAllReportsForClient($this->_selectedClientId);
+            $this->view->availableAssessments = $availableReports;
 
-        $availableQuotes             = Quotegen_Model_Mapper_Quote::getInstance()->fetchAllForClient($this->_selectedClientId);
-        $this->view->availableQuotes = $availableQuotes;
+            $availableQuotes             = Quotegen_Model_Mapper_Quote::getInstance()->fetchAllForClient($this->_selectedClientId);
+            $this->view->availableQuotes = $availableQuotes;
+        }
 
 
         if ($this->getRequest()->isPost())
