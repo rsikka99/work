@@ -9,7 +9,7 @@ class Proposalgen_Report_Optimization_CustomerController  extends Proposalgen_Li
         $this->view->availableReports->CustomerHardwareOptimization->active = true;
 
         $this->view->formats = array(
-            "/proposalgen/solution/generate/format/docx" => $this->_wordFormat
+            "/proposalgen/report_optimization_customer/generate/format/docx" => $this->_wordFormat
         );
 
         try
@@ -26,5 +26,47 @@ class Proposalgen_Report_Optimization_CustomerController  extends Proposalgen_Li
         }
 
         $this->_helper->layout->setLayout('htmlreport');
+    }
+
+    /**
+     * The Index action of the solution.
+     */
+    public function generateAction ()
+    {
+        $format = $this->_getParam("format", "docx");
+
+        switch ($format)
+        {
+            case "csv" :
+                throw new Exception("CSV Format not available through this page yet!");
+                break;
+            case "docx" :
+                require_once ('PHPWord.php');
+                $this->view->phpword = new PHPWord();
+                $proposal = $this->getProposal();
+                $graphs   = $this->cachePNGImages($proposal->getGraphs(), true);
+                $proposal->setGraphs($graphs);
+                $this->_helper->layout->disableLayout();
+                break;
+            case "pdf" :
+                throw new Exception("PDF Format not available through this page yet!");
+                break;
+            default :
+                throw new Exception("Invalid Format Requested!");
+                break;
+        }
+
+        $filename = "customerHardwareOptimization.$format";
+
+        $this->initReportVariables($filename);
+        // Render early
+        try
+        {
+            $this->render($format . "/00_render");
+        }
+        catch (Exception $e)
+        {
+            throw new Exception("Controller caught the exception!", 0, $e);
+        }
     }
 }
