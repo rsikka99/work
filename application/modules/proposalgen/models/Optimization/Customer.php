@@ -197,4 +197,14 @@ class Proposalgen_Model_Optimization_Customer extends
         }
         return $this->_graphs;
     }
+
+    /**
+     * Allows the user to set the graphs object for caching purposes
+     *
+     * @param $graphs array
+     */
+    public function setGraphs($graphs)
+    {
+
+    }
 }

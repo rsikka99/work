@@ -44,8 +44,10 @@ class Proposalgen_Report_Optimization_CustomerController  extends Proposalgen_Li
                 require_once ('PHPWord.php');
                 $this->view->phpword = new PHPWord();
                 $proposal = $this->getProposal();
-                $graphs   = $this->cachePNGImages($proposal->getGraphs(), true);
-                $proposal->setGraphs($graphs);
+                $customerProfitability = new Proposalgen_Model_Optimization_Customer($proposal);
+                $graphs   = $this->cachePNGImages($customerProfitability->getGraphs(), true);
+                $customerProfitability->setGraphs($graphs);
+                $this->view->graphs = $graphs;
                 $this->_helper->layout->disableLayout();
                 break;
             case "pdf" :

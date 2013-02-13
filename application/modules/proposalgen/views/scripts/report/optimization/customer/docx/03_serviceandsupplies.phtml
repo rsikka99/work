@@ -1,7 +1,7 @@
 <?php
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
-$graphs = $proposal->getGraphs();
+
 /* @var $section PHPWord_Section */
 $section = $this->section;
 $section->addPageBreak();
@@ -11,11 +11,18 @@ $section->addTitle($this->translate('Printing Device Management Breakdown'), 2);
 $section->addText("Different types of printing devices are managed in different ways-newer networked printers can be managed with remote monitoring software; leased multifunction devices are
 typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them
  with software. ");
-// Insert Graph
+$section->addTextBreak();
+$imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
+$imageTable->addRow();
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($this->graphs [2]);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($this->graphs [3]);
+$section->addTextBreak();
+
+
 
 $section->addTitle($this->translate('Number of Printing Device Models and Supply Types'), 2);
 $section->addText(sprintf($this->translate('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type. We estimate that %3$s of your printing devices are leased machines, for which supplies are included in your contract. The %4$s remaining machines consist of %5$s different models and use %6$s different supply types. If you hold two of each supply in inventory, you have an estimated $%7$s in operating cash held in printer supplies inventory at any given time.'), number_format($proposal->getPurchasedDeviceCount()), number_format($proposal->getNumberOfUniqueModels()), number_format(count($proposal->getLeasedDevices())), number_format(count($proposal->getPurchasedDevices())), number_format($proposal->getNumberOfUniquePurchasedModels()), number_format($proposal->getNumberOfUniquePurchasedToners()), number_format($proposal->getCashHeldInInventory())));
-// Insert Graph
+$section->addImage($this->graphs[4],$this->styles->images->center);
 $section->addText("By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required.
 Office Depot can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.");
 
