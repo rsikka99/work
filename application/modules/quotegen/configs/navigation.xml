@@ -9,6 +9,7 @@
             <action>index</action>
             <resource>quotegen__index__index</resource>
             <order>100</order>
+            <visible>0</visible>
             <pages>
                 <quotes>
                     <label>Quotes</label>

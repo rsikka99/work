@@ -37,19 +37,39 @@
     width : auto;
 }
 
+
+
+
+#navbar-container {
+    width : 960px;
+}
+
+.navbar {
+    margin : 0;
+}
+
+.navbar-inner {
+    padding-left: 0px;
+    padding-right: 10px;
+}
+
+.navbar .brand {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-left: -21px;
+}
+
 .navbar .navbar-inner {
     .gradientBar(#666, #222);
     .border-radius(0 0 0);
 }
 
-.navbar .brand {
-    color : #FFFFFF;
+
+.navbar .nav > li > a {
+    color: #fff;
+    text-shadow: none;
 }
 
-.navbar .container {
-    width : 940px;
-}
-
-.navbar {
-    margin : 0;
+.navbar .nav > li > a:focus, .navbar .nav > li > a:hover {
+    color: #fff;
 }

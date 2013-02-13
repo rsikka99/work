@@ -6,106 +6,103 @@
 <!-- Consider adding a manifest.appcache: h5bp.com/d/Offline -->
 <!--[if gt IE 8]><!-->
 <html class="no-js" lang="en">
-    <!--<![endif]-->
-    <head>
-        <meta charset="utf-8" />
-        <?php echo $this->headTitle($this->App()->title); ?>
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    <?php echo $this->headTitle($this->App()->title); ?>
 
-        <!-- Use the .htaccess and remove these lines to avoid edge case issues. More info: h5bp.com/i/378 -->
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- Use the .htaccess and remove these lines to avoid edge case issues. More info: h5bp.com/i/378 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-        <!-- Mobile viewport optimized: h5bp.com/viewport -->
-        <meta name="viewport" content="width=device-width">
-        <meta name="author" content="Tangent MTW">
+    <!-- Mobile viewport optimized: h5bp.com/viewport -->
+    <meta name="viewport" content="width=device-width">
+    <meta name="author" content="Tangent MTW">
 
-        <?php echo $this->headLink(); ?>
-        <!-- All JavaScript at the bottom, except this Modernizr build.
-        Modernizr enables HTML5 elements & feature detects for optimal performance.
-        Create your own custom Modernizr build: www.modernizr.com/download/ -->
-        <script src="<?php echo $this->baseUrl("/js/libs/modernizr-2.5.3.min.js"); ?>"></script>
-    </head>
-    <body>
-        <!-- Prompt to upgrade browsers/install chrome frame if IE 6 -->
-        <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
-        <!-- Start of Navbar -->
-        <div class="navbar navbar-inverse">
-            <div class="navbar-inner">
-                <div class="container">
-                    <div class="sidebar pull-right">
-                        <div class="pull-right">
-                            <?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
-                            <div class="btn-group pull-right">
-                                <a class="btn btn-small btn-primary" href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'user', 'action' => 'profile'))?>"><i class="icon-user icon-white"></i> <?php echo $this->Username(); ?></a>
-                                <a class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><b class="caret"></b></a>
-                                <?php echo $this->Usermenu(); ?>
-                            </div>
-                            <?php else : ?>
-                                <a class="btn btn-danger" href="<?php echo $this->url(array('module' => 'default', 'controller' => 'auth', 'action' => 'login'));?>"><i class="icon-user icon-white"></i> Login</a>
-                            <?php endif; ?>
-                        </div>
+    <?php echo $this->headLink(); ?>
+    <!-- All JavaScript at the bottom, except this Modernizr build.
+    Modernizr enables HTML5 elements & feature detects for optimal performance.
+    Create your own custom Modernizr build: www.modernizr.com/download/ -->
+    <script src="<?php echo $this->baseUrl("/js/libs/modernizr-2.5.3.min.js"); ?>"></script>
+</head>
+<body>
+<!-- Prompt to upgrade browsers/install chrome frame if IE 6 -->
+<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or
+    <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+<!-- Start of Navbar -->
+<div class="container" id="navbar-container">
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="sidebar pull-right">
+                <div class="pull-right">
+                    <?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
+                    <div class="btn-group pull-right">
+                        <a class="btn btn-small btn-primary" href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'user', 'action' => 'profile'))?>"><i class="icon-user icon-white"></i> <?php echo $this->Username(); ?>
+                        </a>
+                        <a class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><b class="caret"></b></a>
+                        <?php echo $this->Usermenu(); ?>
                     </div>
-                    <?php echo $this->navigation()->menu()->setUlClass('nav nav-pills')->setMinDepth(0)->setMaxDepth(0)->render(); ?>
+                    <?php else : ?>
+                    <a class="btn btn-danger" href="<?php echo $this->url(array('module' => 'default', 'controller' => 'auth', 'action' => 'login'));?>"><i class="icon-user icon-white"></i>
+                        Login</a>
+                    <?php endif; ?>
                 </div>
             </div>
+            <?php echo $this->navigation()->menu()->setUlClass('nav')->setMinDepth(0)->setMaxDepth(0)->render(); ?>
         </div>
-        <!-- End of Navbar -->
-        <div class="subnav">
-            <div class="container">
-                <?php echo $this->Subnav(); ?>
+    </div>
+</div>
+
+<!-- End of Navbar -->
+
+<!-- Start of main container -->
+<div class="container" id="meat">
+    <img src="//placehold.it/960x80" />
+    <?php $subNav = $this->Subnav(); ?>
+    <?php if ($subNav) : ?>
+    <div class="subnav">
+        <?php echo $subNav; ?>
+    </div>
+    <?php endif; ?>
+
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <?php echo $this->placeholder('ProgressionNav'); ?>
+                <?php echo $this->flashMessenger("info", '<div class="alert alert-%s">%s</div>'); ?>
+                <?php echo $this->layout()->content; ?>
             </div>
+            <!--/span-->
         </div>
-        <div class="wrapper" id="eminem">
-            <header class="pageHeader">
-                <div class="headerSpace"></div>
-                <div class="container">
-                <!-- Start of Breadcrumbs -->
-                    <?php echo $this->navigation()->breadcrumbs()->setMinDepth(0)->setRenderInvisible(true)->setLinkLast(true)->setSeparator('/')->setPartial(array('menus/breadcrumbs.phtml', 'default'))->render(); ?>
-                <!-- End of Breadcrumbs -->
-                </div>
-            </header>
-            <div class="innerWrapper">
-                <!-- Start of main container -->
-                <div class="container">
-                    <div class="row">
-                        <div class="span12">
-                            <?php echo $this->placeholder('ProgressionNav'); ?>
-                            <?php echo $this->flashMessenger("info", '<div class="alert alert-%s">%s</div>'); ?>
-                            <?php echo $this->layout()->content; ?>
-                        </div>
-                        <!--/span-->
-                    </div>
-                    <hr>
-                </div>
-                <!-- End of main container -->
-            </div>
-        </div>
+        <hr>
         <footer>
-            <div class="container">
-                <div class="row">
-                    <div class="span6">Copyright Tangent MTW &copy; <?php echo date("Y"); ?>. All Rights Reserved.</div>
-                    <div class="span6" id="footerLinks">
-                        <?php echo $this->Footermenu(); ?>
-                    </div>
+            <div class="row">
+                <div class="span6">Copyright Tangent MTW &copy; <?php echo date("Y"); ?>. All Rights Reserved.</div>
+                <div class="span6" id="footerLinks">
+                    <?php echo $this->Footermenu(); ?>
                 </div>
             </div>
         </footer>
+    </div>
+</div>
+<!-- End of main container -->
 
-        <?php 
-            if (APPLICATION_ENV != 'production')
-            {
-                echo $this->partial('phpErrorPartial.phtml', array('exceptions' => $this->exceptions, 'request' => $this->request));
-            }
-        ?>
-        <script type="text/javascript">
-            var TMTW_BASEURL = '<?php echo $this->serverUrl(); ?>/'
-        </script>
-        <!-- JavaScript at the bottom for fast page loading -->
-        <?php echo $this->jQuery()->enable(); ?>
-        <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
-        <!--  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script> -->
-        <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\/script>');</script>
-        <!-- Scripts concatenated and minified via build script -->
-        <?php echo $this->headScript(); ?>
-        <!-- end scripts -->
-    </body>
+
+<?php
+if (APPLICATION_ENV != 'production')
+{
+    echo $this->partial('phpErrorPartial.phtml', array('exceptions' => $this->exceptions, 'request' => $this->request));
+}
+?>
+<script type="text/javascript">
+    var TMTW_BASEURL = '<?php echo $this->serverUrl(); ?>/'
+</script>
+<!-- JavaScript at the bottom for fast page loading -->
+<?php echo $this->jQuery()->enable(); ?>
+<!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+<!--  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script> -->
+<script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\/script>');</script>
+<!-- Scripts concatenated and minified via build script -->
+<?php echo $this->headScript(); ?>
+<!-- end scripts -->
+</body>
 </html>

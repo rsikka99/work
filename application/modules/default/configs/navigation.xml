@@ -2,6 +2,7 @@
 <config>
     <nav>
         <menu>
+            <id>homemenu</id>
             <label>Home</label>
             <class>dropdown</class>
             <module>default</module>
@@ -45,7 +46,7 @@
                     <id>footermenu</id>
                     <label>Information</label>
                     <uri>#</uri>
-                    <visible>1</visible>
+                    <visible>0</visible>
                     <class>dropdown</class>
                     <pages>
                         <about>

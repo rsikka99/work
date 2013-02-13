@@ -9,6 +9,7 @@
 			<action>index</action>
 			<resource>proposalgen__index__index</resource>
 			<order>200</order>
+            <visible>0</visible>
 			<pages>
 				<proposal>
 					<label>Proposal</label>

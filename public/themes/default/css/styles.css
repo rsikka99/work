@@ -53,9 +53,8 @@ div.wrapper {
   text-shadow: 0 0 0;
 }
 footer {
-  background-image: url('../img/footer-repeat.png');
   background-repeat: repeat-x;
-  height: 60px;
+  height: 40px;
 }
 footer .container {
   padding-top: 20px;

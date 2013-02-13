@@ -32,16 +32,14 @@
             <hr>
             <strong>All Clients</strong>
             <form method="POST">
-                <table class="table">
+                <table class="table table-condensed">
                     <?php foreach (Quotegen_Model_Mapper_Client::getInstance()->fetchAll() as $client) : ?>
-                    <?php if (!isset($this->selectedClientId) || $client->id != $selectedClient->id) : ?>
-                        <tr>
+                        <tr class="<?php echo (isset($this->selectedClientId) && $client->id == $this->selectedClientId) ? "info" : ""; ?>">
                             <td><?php echo (strlen($client->companyName) > 20) ? substr($client->companyName, 0, 20) . "..." : $client->companyName; ?></td>
-                            <td>
+                            <td style="width: 50px;">
                                 <button class="btn btn-primary btn-mini" name="selectClient" value="<?php echo $client->id; ?>">Select</button>
                             </td>
                         </tr>
-                        <?php endif; ?>
                     <?php endforeach; ?>
                 </table>
             </form>
@@ -77,18 +75,18 @@
                                     <th>Date Created</th>
                                     <th>Last Modified</th>
                                     <th>Finished</th>
-                                    <th style="width: 100px;">Action</th>
+                                    <th style="width: 70px;">Action</th>
                                 </tr>
-                                <tr>
+                                <tr class="info">
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td>
+                                    <td style="text-align: center;">
                                         <button name="selectAssessment" value="0" class="btn btn-success btn-mini">Start New</button>
                                     </td>
                                 </tr>
                                 <?php foreach ($this->availableAssessments as $report) : /* @var $report Proposalgen_Model_Report */ ?>
-                                <tr>
+                                <tr class="<?php echo ($report->reportStage == Proposalgen_Model_Report_Step::STEP_FINISHED) ? "success" : "warning"; ?>">
                                     <td><?php echo strftime("%B %d, %Y", strtotime($report->dateCreated)); ?></td>
                                     <td><?php echo strftime("%B %d, %Y", strtotime($report->lastModified)); ?></td>
 
@@ -98,7 +96,7 @@
                                     <?php else : ?>
                                     <td>In Progress</td>
                                     <?php endif; ?>
-                                    <td>
+                                    <td style="text-align: center;">
                                         <button name="selectAssessment" value="<?php echo $report->id; ?>" class="btn btn-primary btn-mini">Select</button>
                                     </td>
                                 </tr>
