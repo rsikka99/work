@@ -54,11 +54,10 @@ div.wrapper {
 }
 footer {
   background-repeat: repeat-x;
-  height: 40px;
 }
-footer .container {
+footer {
   padding-top: 20px;
-  color: #CCC;
+  color: #AAA;
 }
 #footerLinks {
   text-align: right;
