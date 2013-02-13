@@ -54,9 +54,7 @@ div.wrapper {
   text-shadow: 0 0 0;
 }
 footer {
-  background-image: url('../img/footer-repeat.png');
   background-repeat: repeat-x;
-  height: 60px;
 }
 footer .container {
   padding-top: 20px;
@@ -64,10 +62,6 @@ footer .container {
 }
 #footerLinks {
   text-align: right;
-}
-#footerLinks ul.footer-nav > li a {
-  border-left: 1px solid #EB0E0E;
-  border-right: 1px solid #BD2424;
 }
 div.innerWrapper {
   width: 1100px;
