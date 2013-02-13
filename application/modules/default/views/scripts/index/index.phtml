@@ -5,7 +5,7 @@
 <div class="row">
     <div class="span3">
         <div class="well well-small">
-            <?php if ($this->selectedClientId > 0) :
+            <?php if (isset($this->selectedClientId)) :
             $selectedClient = Quotegen_Model_Mapper_Client::getInstance()->find($this->selectedClientId);
             ?>
             <form method="POST">
@@ -30,11 +30,11 @@
             </form>
             <?php endif; ?>
             <hr>
-            <strong>Recent Clients</strong>
+            <strong>All Clients</strong>
             <form method="POST">
                 <table class="table">
                     <?php foreach (Quotegen_Model_Mapper_Client::getInstance()->fetchAll() as $client) : ?>
-                    <?php if ($selectedClient && $client->id != $selectedClient->id) : ?>
+                    <?php if (!isset($this->selectedClientId) || $client->id != $selectedClient->id) : ?>
                         <tr>
                             <td><?php echo (strlen($client->companyName) > 20) ? substr($client->companyName, 0, 20) . "..." : $client->companyName; ?></td>
                             <td>
@@ -59,7 +59,7 @@
     </div>
     <div class="span9">
 
-        <?php if ($this->selectedClientId > 0) : ?>
+        <?php if (isset($this->selectedClientId)) : ?>
         <div class="tabbable">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#assessmentTabPane" data-toggle="tab">Assessment</a></li>
@@ -162,7 +162,7 @@
         </div>
         <?php else : ?>
         <div class="well">
-            <p>Please select a client from the left menu.</p>
+            <div class="alert alert-info"><strong>Important:</strong> Please select a client from the left menu to proceed.</div>
         </div>
         <?php endif; ?>
     </div>
