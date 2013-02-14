@@ -1134,7 +1134,7 @@ function update_available(action)
     }
     else if (action == 'clear')
     {
-        $("#criteria_filter").attr('selectedIndex', 0);
+        $("#criteria_filter").val("toner_SKU");
         $("#list_criteria").hide();
         $("#text_criteria").show();
         $("#cboCriteria").html('');
