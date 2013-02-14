@@ -26,17 +26,22 @@ class Proposalgen_Model_Optimization_Customer extends
             $graph = new gchart\gBarChart(280, 350, "g", "h");
             $graph->setVisibleAxes(array('x'));
             // Amount of keep devices
+
             $graph->addDataSet(array($this->actionKeepCount / $purchaseDeviceCount));
             $graph->addColors(array("0CC2D2"));
+            $percentValueMarker1 = "N  *p0* ({$this->actionKeepCount})";
             // Amount of replace devices
             $graph->addDataSet(array($this->actionReplaceCount / $purchaseDeviceCount));
             $graph->addColors(array("4f81bd"));
+            $percentValueMarker2 = "N  *p0* ({$this->actionReplaceCount})";
             // Amount of retire devices
             $graph->addDataSet(array($this->actionRetireCount / $purchaseDeviceCount));
             $graph->addColors(array("c0504d"));
+            $percentValueMarker3 = "N  *p0* ({$this->actionRetireCount})";
             // Set the replaced amount to 0
             $graph->addDataSet(array(0));
             $graph->addColors(array("9bbb59"));
+            $percentValueMarker4 = "N  *p0* (0)";
             $graph->setDataRange(0, 1);
             $graph->setBarScale(50, 10);
             $graph->setLegendPosition("b");
@@ -47,10 +52,10 @@ class Proposalgen_Model_Optimization_Customer extends
                                    "Replace",
                               ));
             $graph->setTitle("Current Fleet Summary");
-            $graph->addValueMarkers($percentValueMarker, "000000", "0", "-1", "11");
-            $graph->addValueMarkers($percentValueMarker, "000000", "1", "-1", "11");
-            $graph->addValueMarkers($percentValueMarker, "000000", "2", "-1", "11");
-            $graph->addValueMarkers($percentValueMarker, "000000", "3", "-1", "11");
+            $graph->addValueMarkers($percentValueMarker1, "000000", "0", "-1", "11");
+            $graph->addValueMarkers($percentValueMarker2, "000000", "1", "-1", "11");
+            $graph->addValueMarkers($percentValueMarker3, "000000", "2", "-1", "11");
+            $graph->addValueMarkers($percentValueMarker4, "000000", "3", "-1", "11");
             $this->_graphs [] = $graph->getUrl();
 
 
@@ -59,14 +64,27 @@ class Proposalgen_Model_Optimization_Customer extends
              */
             $graph   = new gchart\gBarChart(280, 350, "g", "h");
             $graph->setVisibleAxes(array('x'));
-            $graph->addDataSet(array((count($this->kept) / $purchaseDeviceCount)));
+
+            $count = count($this->kept);
+            $graph->addDataSet(array(($count / $purchaseDeviceCount)));
+            $percentValueMarker1 = "N  *p0* ({$count})";
             $graph->addColors(array("0CC2D2"));
+
+            $count = count($this->flagged);
             $graph->addDataSet(array(count($this->flagged) / $purchaseDeviceCount));
+            $percentValueMarker2 = "N  *p0* ({$count})";
             $graph->addColors(array("4f81bd"));
-            $graph->addDataSet(array(count($this->retired) / $purchaseDeviceCount));
+
+            $count = count($this->retired);
+            $graph->addDataSet(array($count / $purchaseDeviceCount));
+            $percentValueMarker3 = "N  *p0* ({$count})";
             $graph->addColors(array("c0504d"));
-            $graph->addDataSet(array(count($this->replaced) / $purchaseDeviceCount));
+
+            $count = count($this->replaced);
+            $graph->addDataSet(array($count / $purchaseDeviceCount));
+            $percentValueMarker4 = "N  *p0* ({$count})";
             $graph->addColors(array("9bbb59"));
+
             $graph->setDataRange(0, 1);
             $graph->setBarScale(50, 10);
             $graph->setLegendPosition("b");
@@ -77,10 +95,10 @@ class Proposalgen_Model_Optimization_Customer extends
                                    "Replace",
                               ));
             $graph->setTitle("Optimized Fleet Summary");
-            $graph->addValueMarkers($percentValueMarker, "000000", "0", "-1", "11");
-            $graph->addValueMarkers($percentValueMarker, "000000", "1", "-1", "11");
-            $graph->addValueMarkers($percentValueMarker, "000000", "2", "-1", "11");
-            $graph->addValueMarkers($percentValueMarker, "000000", "3", "-1", "11");
+            $graph->addValueMarkers($percentValueMarker1, "000000", "0", "-1", "11");
+            $graph->addValueMarkers($percentValueMarker2, "000000", "1", "-1", "11");
+            $graph->addValueMarkers($percentValueMarker3, "000000", "2", "-1", "11");
+            $graph->addValueMarkers($percentValueMarker4, "000000", "3", "-1", "11");
             $this->_graphs [] = $graph->getUrl();
 
             $this->_graphs [] = $proposalGraphs[1];

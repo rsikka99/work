@@ -26,6 +26,52 @@ $graphs = $customerOptimization->getGraphs();
         <td><img src="<?php echo $graphs[1]; ?>" /></td>
     </tr>
 </table>
+<br/><br/>
+
+<div class="pheader">
+    Suggested Replacement Devices <em><?php echo '(' . count($customerOptimization->replaced) . ' of ' . count($proposal->getPurchasedDevices()) .')' ?></em>
+</div>
+<p>The following devices have been targeted for replacements.</p>
+<!-- Only display table if there are replacement devices assigned -->
+<?php if($customerOptimization->replaced) : ?>
+<table class="rDevices">
+		<thead>
+		    <tr class='header'>
+		        <th colspan='2'>Current</th>
+		        <th colspan='1'>Replacement</th>
+		        <th colspan='2'>Statistics</th>
+		    </tr>
+		    <tr class='subHeader'>
+		    	<th style='width:150px;'>Device Name<br/>Serial / IP Address</th>
+		    	<th style='width:150px;'>Device Name</th>
+		    	<th>Reason </th>
+		    	<th>Mono AMPV </th>
+		    	<th>Color AMPV </th>
+			</tr>
+	    </thead>
+    <?php foreach ($customerOptimization->replaced as $deviceInstance) : ?>
+    <?php $masterDevice = $deviceInstance->getMasterDevice(); ?>
+    <?php
+    $replacementDevice = $deviceInstance->getReplacementMasterDevice();
+    $isColor = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+    ?>
+
+    <tr>
+	        <td class='deviceName'><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/>'
+                                            . $deviceInstance->serialNumber . "<br/>" . $deviceInstance->ipAddress;?></td>
+	        <!-- Replacement Devices -->
+    		<td class='deviceName'><?php echo '<em>' . $replacementDevice->getManufacturer()->fullname . '</em><br/><strong>' . $replacementDevice->modelName;?></td>
+		    <td><?php echo $deviceInstance->getReason();?>
+                <!-- Monthly Statistics -->
+			<td><?php echo number_format($deviceInstance->getAverageMonthlyBlackAndWhitePageCount()); ?></td>
+			<td><?php echo ($isColor) ? number_format($deviceInstance->getAverageMonthlyColorPageCount()) : 'N/A'; ?></td>
+	    </tr>
+    <?php endforeach ?>
+	</table>
+<?php else: ?>
+<em>This assessment has no replacement devices assigned. </em>
+<?php endif; ?>
+<br/>
 
 <!--
     Service and supplies logistics section

@@ -8,7 +8,7 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
         // Get all devices
 
         // Every time we save anything related to a report, we should save it (updates the modification date)
-        $this->saveReport();
+
         $form = new Proposalgen_Form_DeviceSwapChoice($this->getProposal());
 
         // Get all devices
@@ -258,10 +258,12 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
         /* @var $replacementDevice Proposalgen_Model_MasterDevice */
         foreach ($replacementDevices as $masterDevice)
         {
-            $costDelta = ($deviceInstanceMonthlyCost - $deviceInstance->calculateMonthlyCost($costPerPageSetting, $masterDevice));
+            $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($costPerPageSetting, $masterDevice);
+            $costDelta = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
             if ($costDelta > $costSavingsThreshold && $costDelta > $greatestSavings)
             {
                 $suggestedDevice = $masterDevice;
+                $greatestSavings = $costDelta;
             }
         }
 
@@ -293,6 +295,11 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
             $blackMfpReplacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackMfpReplacementDevices(false);
             $colorReplacementDevices    = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorReplacementDevices(false);
             $colorMfpReplacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorMfpReplacementDevices(false);
+
+            foreach (array_merge($blackReplacementDevices, $blackMfpReplacementDevices, $colorReplacementDevices, $colorMfpReplacementDevices) as $replacementMasterDevice)
+            {
+                $replacementMasterDevice->processOverrides($proposal->report);
+            }
 
             $costPerPageSetting = $proposal->getCostPerPageSettingForDealer();
 

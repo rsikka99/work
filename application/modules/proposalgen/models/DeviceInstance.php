@@ -1231,6 +1231,10 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function getReplacementMasterDevice ()
     {
+        if($this->id == 183)
+        {
+            $blah = 33;
+        }
         if (!isset($this->_replacementMasterDevice))
         {
             $deviceInstanceReplacementMasterDevice = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance()->find($this->id);

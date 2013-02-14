@@ -4,9 +4,9 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     /*
      * The different device types
      */
-    const DEVICETYPE_MONO = 0;
-    const DEVICETYPE_MONO_MFP = 1;
-    const DEVICETYPE_COLOR = 2;
+    const DEVICETYPE_MONO      = 0;
+    const DEVICETYPE_MONO_MFP  = 1;
+    const DEVICETYPE_COLOR     = 2;
     const DEVICETYPE_COLOR_MFP = 3;
 
     private static $ReportMargin;
@@ -1090,7 +1090,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getDeviceType ()
     {
-        if (! isset($this->_deviceType))
+        if (!isset($this->_deviceType))
         {
             if ($this->tonerConfigId === Proposalgen_Model_TonerConfig::BLACK_ONLY)
             {
@@ -1116,6 +1116,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
                 }
             }
         }
+
         return $this->_deviceType;
     }
 
@@ -1132,15 +1133,18 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getAge ()
     {
-        if (! isset($this->Age))
+        if (!isset($this->Age))
         {
             // Get the time difference in seconds
-            $launchDate = time() - strtotime($this->launchDate);
+            $launchDate          = time() - strtotime($this->launchDate);
             $correctedLaunchDate = ($launchDate > 31556926) ? ($launchDate - 31556926) : $launchDate;
-            $this->Age = floor($correctedLaunchDate / 31556926);
+            $this->Age           = floor($correctedLaunchDate / 31556926);
             if ($this->Age == 0)
+            {
                 $this->Age = 1;
+            }
         }
+
         return $this->Age;
     }
 }

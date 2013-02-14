@@ -26,7 +26,7 @@ class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends
     /**
      * Gets an instance of the mapper
      *
-     * @return Proposalgen_Model_Mapper_Device_Instance_Master_Device
+     * @return Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device
      */
     public static function getInstance ()
     {
@@ -96,8 +96,9 @@ class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends
     {
         if ($object instanceof Proposalgen_Model_Device_Instance_Replacement_Master_Device)
         {
+
             $whereClause = array(
-                "{$this->col_deviceInstanceId} = ?" => $object->id
+                "{$this->col_deviceInstanceId} = ?" => $object->deviceInstanceId
             );
         }
         else
