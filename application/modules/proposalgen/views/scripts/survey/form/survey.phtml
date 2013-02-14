@@ -1,121 +1,35 @@
 <?php
 /* @var $form Proposalgen_Form_Survey */
-$form = $this->element;
-
-$tonerCostRadio = $form->getElement('toner_cost_radio');
-$tonerCost      = $form->getElement('toner_cost');
-
-$laborCostRadio = $form->getElement('labor_cost_radio');
-$laborCost      = $form->getElement('labor_cost');
-
-$averagePurchase = $form->getElement('avg_purchase');
-$itHourlyRate    = $form->getElement('it_hourlyRate');
-
+$form                       = $this->element;
+$tonerCostRadio             = $form->getElement('toner_cost_radio');
+$tonerCost                  = $form->getElement('toner_cost');
+$laborCostRadio             = $form->getElement('labor_cost_radio');
+$laborCost                  = $form->getElement('labor_cost');
+$averagePurchase            = $form->getElement('avg_purchase');
+$itHourlyRate               = $form->getElement('it_hourlyRate');
 $numberOfMonthlyOrdersRadio = $form->getElement('inkTonerOrderRadio');
 $numberOfMonthlyOrders      = $form->getElement('numb_monthlyOrders');
 $numberOfVendors            = $form->getElement('numb_vendors');
+$itHoursRadio               = $form->getElement('itHoursRadio');
+$ithours                    = $form->getElement('itHours');
+$monthlyBreakdownRadio      = $form->getElement('monthlyBreakdownRadio');
+$monthlyBreakdown           = $form->getElement('monthlyBreakdown');
+$pageCoverageQuestion       = $form->getElement('pageCoverageQuestion');
+$pageCoverageMonochrome     = $form->getElement('pageCoverage_BW');
+$pageCoverageColor          = $form->getElement('pageCoverage_Color');
+$printVolume                = $form->getElement('printVolume');
+$repairTime                 = $form->getElement('repairTime');
 
-$itHoursRadio = $form->getElement('itHoursRadio');
-$ithours      = $form->getElement('itHours');
+$this->headScript()->appendFile($this->baseUrl('/js/proposalgen/survey/survey/surveyForm.js'));
 
-$monthlyBreakdownRadio = $form->getElement('monthlyBreakdownRadio');
-$monthlyBreakdown      = $form->getElement('monthlyBreakdown');
+?>
 
-$pageCoverageQuestion   = $form->getElement('pageCoverageQuestion');
-$pageCoverageMonochrome = $form->getElement('pageCoverage_BW');
-$pageCoverageColor      = $form->getElement('pageCoverage_Color');
-$printVolume            = $form->getElement('printVolume');
-$repairTime             = $form->getElement('repairTime');
-
-
-$this->headScript()->captureStart('append', 'text/javascript') ?>
-
-$(document).ready(function() {
-
-//set default
-if($("#toner_cost_radio-guess").is(':checked')) {
-$("#toner_cost").attr('disabled','disabled');
-$("#toner_cost").val('');
-}
-
-$("#toner_cost_radio-guess").click(function() {
-$("#toner_cost").attr('disabled','disabled');
-$("#toner_cost").val('');
-});
-
-$("#toner_cost_radio-Iknowtheexactamount").click(function() {
-$("#toner_cost").removeAttr('disabled');
-});
-
-//set default
-if($("#labor_cost_radio-guess").is(':checked')) {
-$("#labor_cost").attr('disabled','disabled');
-$("#labor_cost").val('');
-}
-
-$("#labor_cost_radio-guess").click(function() {
-$("#labor_cost").attr('disabled','disabled');
-$("#labor_cost").val('');
-});
-
-$("#labor_cost_radio-Iknowtheexactamount").click(function() {
-$("#labor_cost").removeAttr('disabled');
-});
-
-
-//set default
-if(!$("#inkTonerOrderRadio-Timespermonth").is(':checked')) {
-$("#numb_monthlyOrders").val('');
-$("#numb_monthlyOrders").attr('disabled','disabled');
-}
-
-//add option click events
-$("#inkTonerOrderRadio-Daily").click(function() {
-$("#numb_monthlyOrders").val('');
-$("#numb_monthlyOrders").attr('disabled','disabled');
-});
-$("#inkTonerOrderRadio-Weekly").click(function() {
-$("#numb_monthlyOrders").val('');
-$("#numb_monthlyOrders").attr('disabled','disabled');
-});
-$("#inkTonerOrderRadio-Timespermonth").click(function() {
-$("#numb_monthlyOrders").removeAttr('disabled');
-});
-
-//set default
-if($("#itHoursRadio-guess").is(':checked')) {
-$("#itHours").attr('disabled','disabled');
-$("#itHours").val('');
-}
-
-$("#itHoursRadio-guess").click(function() {
-$("#itHours").attr('disabled','disabled');
-$("#itHours").val('');
-});
-
-$("#itHoursRadio-Iknowtheexactamount").click(function() {
-$("#itHours").removeAttr('disabled');
-});
-
-//set default
-if($("#monthlyBreakdownRadio-guess").is(':checked')) {
-$("#monthlyBreakdown").attr('disabled','disabled');
-$("#monthlyBreakdown").val('');
-}
-
-$("#monthlyBreakdownRadio-guess").click(function() {
-$("#monthlyBreakdown").attr('disabled','disabled');
-$("#monthlyBreakdown").val('');
-});
-
-$("#monthlyBreakdownRadio-Iknowtheexactamount").click(function() {
-$("#monthlyBreakdown").removeAttr('disabled');
-});
-
-});
-
-<?php $this->headScript()->captureEnd() ?>
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+
+    <!--    FINANCE SECTION   -->
+    <h2 id="surveyFinanceSection">Finance</h2>
+
+    <!-- Cost of ink and toner -->
     <div class="control-group <?php echo ($tonerCostRadio->hasErrors() || $tonerCost->hasErrors()) ? 'error' : '' ?>">
         <?php echo $tonerCost->renderLabel(); ?>
         <div class="controls">
@@ -129,6 +43,8 @@ $("#monthlyBreakdown").removeAttr('disabled');
         </div>
     </div>
     <hr>
+
+    <!-- Amount spent on outside service (labor cost) -->
     <div class="control-group <?php echo ($laborCostRadio->hasErrors() || $laborCost->hasErrors()) ? 'error' : '' ?>">
         <?php echo $laborCost->renderLabel(); ?>
         <div class="controls">
@@ -143,6 +59,7 @@ $("#monthlyBreakdown").removeAttr('disabled');
     </div>
     <hr>
 
+    <!-- Average Cost To Execute Supplies Order -->
     <div class="control-group <?php echo ($averagePurchase->hasErrors()) ? 'error' : '' ?>">
         <?php echo $averagePurchase->renderLabel(); ?>
         <div class="controls">
@@ -154,6 +71,7 @@ $("#monthlyBreakdown").removeAttr('disabled');
     </div>
     <hr>
 
+    <!-- IT Hourly Rate -->
     <div class="control-group <?php echo ($itHourlyRate->hasErrors()) ? 'error' : '' ?>">
         <?php echo $itHourlyRate->renderLabel(); ?>
         <div class="controls">
@@ -164,8 +82,14 @@ $("#monthlyBreakdown").removeAttr('disabled');
     </div>
     <hr>
 
+    <!--    PURCHASING SECTION   -->
+    <h2 id="surveyPurchasingSection">Purchasing</h2>
+
+    <!-- Number of supply vendors-->
     <?php echo $numberOfVendors; ?>
     <hr>
+
+    <!-- Number of monthly orders -->
     <div class="control-group <?php echo ($numberOfMonthlyOrdersRadio->hasErrors() || $numberOfMonthlyOrders->hasErrors()) ? 'error' : '' ?>">
         <?php echo $numberOfMonthlyOrdersRadio->renderLabel(); ?>
         <div class="controls">
@@ -180,6 +104,11 @@ $("#monthlyBreakdown").removeAttr('disabled');
         </div>
     </div>
     <hr>
+
+    <!--    IT SECTION   -->
+    <h2 id="surveyItSection">IT</h2>
+
+    <!-- IT Hours -->
     <div class="control-group <?php echo ($itHoursRadio->hasErrors() || $ithours->hasErrors()) ? 'error' : '' ?>">
         <?php echo $ithours->renderLabel(); ?>
         <div class="controls">
@@ -194,6 +123,8 @@ $("#monthlyBreakdown").removeAttr('disabled');
         </div>
     </div>
     <hr>
+
+    <!-- Monthly Breakdowns-->
     <div class="control-group <?php echo ($monthlyBreakdownRadio->hasErrors() || $monthlyBreakdown->hasErrors()) ? 'error' : '' ?>">
         <?php echo $monthlyBreakdown->renderLabel(); ?>
         <div class="controls">
@@ -210,9 +141,12 @@ $("#monthlyBreakdown").removeAttr('disabled');
     </div>
     <hr>
 
+    <!--    USERS SECTION   -->
+    <h2 id="surveyUsersSection">Users</h2>
 
     <p>Page coverages range from 5% to 10% for monochrome and 15% to 25% for color. Estimate your own average page coverages.</p>
 
+    <!-- Page Coverage Question -->
     <div class="control-group <?php echo ($pageCoverageMonochrome->hasErrors()) ? 'error' : '' ?>">
         <?php echo $pageCoverageMonochrome->renderLabel(); ?>
         <div class="controls">
@@ -234,14 +168,13 @@ $("#monthlyBreakdown").removeAttr('disabled');
         </div>
     </div>
     <hr>
+
+    <!-- Inkjet print volume -->
     <?php echo $printVolume; ?>
+    <hr>
+
+    <!-- Repair Time Question -->
     <?php echo $repairTime; ?>
-
-
-
-
-
-
 
     <?php echo $this->partial('survey/form/form-actions.phtml', array('canGoBack' => true)); ?>
 </form>

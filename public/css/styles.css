@@ -473,3 +473,13 @@ table.quoteDeviceTable tr.optionRow td {
 .form-horizontal td .controls {
   margin: 0;
 }
+#surveyNavbar {
+  width: 140px;
+}
+#surveyNavbar.affix {
+  top: 40px;
+}
+body {
+  height: 100%;
+  overflow: auto;
+}
