@@ -163,6 +163,7 @@ $(document).ready(function ()
                     toner_array = toner_array + ",";
                 }
                 toner_array = toner_array + "'" + cur_row + "'";
+
             }
             $("#toner_array").val(toner_array);
         }
@@ -202,7 +203,7 @@ $(document).ready(function ()
     jQuery("#available_toners_list").jqGrid({
         url         : TMTW_BASEURL + '/proposalgen/admin/tonerslist?deviceid=' + master_device_id,
         datatype    : 'json',
-        colNames    : ['Toner ID', 'SKU', 'Manufacturer', 'Type', 'Color', 'Yield', 'Price', 'MasterID', 'Added', 'Action', 'Apply To Printer', 'Machine Compabibility'],
+        colNames    : ['Toner ID', 'SKU', 'Manufacturer', 'Type', 'Color', 'Yield', 'Price', 'MasterID', 'Added','Machine Compatibility', 'Action', 'Apply To Printer', 'Machine Compabibility'],
         colModel    : [
             {tag: 0, width: 30, name: 'toner_id', index: 'toner_id', sorttype: 'int', hidden: true, editable: true, editoptions: {readonly: true, size: 12}},
             {tag: 1, width: 60, name: 'toner_sku', index: 'toner_sku', editable: true, editoptions: {size: 12, maxlength: 30}},
@@ -213,9 +214,13 @@ $(document).ready(function ()
             {tag: 6, width: 80, name: 'toner_price', index: 'toner_price', editable: true, editoptions: {size: 10, maxlength: 8}, align: 'right', formatter: 'currency', formatoptions: {prefix: "$", thousandsSeparator: ","}, sorttype: 'int'},
             {tag: 7, width: 50, name: 'master_device_id', index: 'master_device_id', hidden: true, editable: true, editoptions: {size: 12}},
             {tag: 8, width: 50, name: 'is_added', index: 'is_added', editable: true, hidden: true, editoptions: {size: 12}},
-            {tag: 9, width: 60, name: 'action', index: 'action', editable: false, align: 'center'},
-            {tag: 10, width: 50, name: 'machine_compatibility', index: 'machine_compatibility', hidden: true},
-            {tag: 11, width: 60, name: 'apply', index: 'apply', hidden: true, edittype: 'checkbox', editable: true, align: 'center'}
+            {tag: 9, width:225, name:'device_list', index:'device_list'},
+
+            {tag: 10, width: 60, name: 'action', index: 'action', editable: false, align: 'center'},
+            {tag: 11, width: 50, name: 'machine_compatibility', index: 'machine_compatibility', hidden: true},
+
+            {tag: 12, width: 60, name: 'apply', index: 'apply', hidden: true, edittype: 'checkbox', editable: true, align: 'center'}
+
         ],
         width       : 940,
         height      : 150,
@@ -230,7 +235,7 @@ $(document).ready(function ()
             for (var i = 0; i < ids.length; i++)
             {
                 var cur_row = ids[i];
-                var is_added = document.getElementById("available_toners_list").rows[i + 1].cells[8].innerHTML;
+                var is_added = document.getElementById("available_toners_list").rows[i+1].cells[9].innerHTML;
 
                 add_button = '<input type="button" name="btnAdd' + cur_row + '" id="btnAdd' + cur_row + '" tag="Add" value="Assign" class="btn" onclick="javascript: do_add(' + cur_row + ');" />';
                 disabled_button = '<input type="button" name="btnAdd' + cur_row + '" id="btnAdd' + cur_row + '" tag="Add" value="Assign" class="btn" onclick="javascript: do_add(' + cur_row + ');" disabled="disabled" />';
@@ -243,7 +248,27 @@ $(document).ready(function ()
                 {
                     jQuery("#available_toners_list").jqGrid('setRowData', ids[i], {action: add_button});
                 }
+                var min = 4;
+                var max = 1;
+                var output = '';
+                device_list = document.getElementById("available_toners_list").rows[i+1].cells[9].innerHTML;
+                var pieces = device_list.split("; ");
+                output += '<div id="outer_'+ids[i]+'" style="text-align: left; width: 200px;">';
+                for(var j=0; j < pieces.length; j++) {
+                    device = pieces[j];
+                    if(j == max) {
+                        output += '<div id="inner_'+ids[i]+'" style="display: none;">';
+                    }
+                    output += device + '<br />';
+                    if(j > max && j == pieces.length - 1) {
+                        output += '</div>';
+                        output += '<a id="view_link_'+ids[i]+'" href="javascript: void(0);" class="blue_link" onclick="javascript: view_device_list(\'\','+ids[i]+');">View All...</a>';
+                    }
+                }
+
+                jQuery("#available_toners_list").jqGrid('setRowData',ids[i],{device_list:output});
             }
+
         },
         editurl     : TMTW_BASEURL + '/proposalgen/admin/edittoner?deviceid=' + master_device_id
     });
@@ -798,7 +823,15 @@ function update_label()
         $("#devicename").html('Toner Assignment:');
     }
 }
-
+function view_device_list(type,id) {
+    if(document.getElementById(type+'inner_'+id).style.display == 'none') {
+        document.getElementById(type+'inner_'+id).style.display = 'block';
+        document.getElementById(type+'view_link_'+id).innerHTML = 'Collapse...';
+    } else {
+        document.getElementById(type+'inner_'+id).style.display = 'none';
+        document.getElementById(type+'view_link_'+id).innerHTML = 'View All...';
+    }
+}
 function add_printer(mode)
 {
     if (repop != 1 && $("#manufacturer_id").val() > 0)
