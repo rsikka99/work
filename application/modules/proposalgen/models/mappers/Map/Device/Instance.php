@@ -192,6 +192,7 @@ class Proposalgen_Model_Mapper_Map_Device_Instance extends My_Model_Mapper_Abstr
     {
 
         $db = $this->getDbTable()->getAdapter();
+        $reportId = $db->quote($reportId, 'INTEGER');
 
         // If we're just counting we only need to return the count
         if ($justCount)
@@ -216,11 +217,11 @@ JOIN pgen_rms_upload_rows ON pgen_device_instances.rmsUploadRowId = pgen_rms_upl
 LEFT JOIN pgen_device_instance_master_devices ON pgen_device_instance_master_devices.deviceInstanceId = pgen_device_instances.id
 LEFT JOIN pgen_master_devices ON pgen_device_instance_master_devices.masterDeviceId = pgen_master_devices.id
 LEFT JOIN manufacturers ON pgen_master_devices.manufacturerId = manufacturers.id
-WHERE pgen_device_instances.reportId = 2
+WHERE pgen_device_instances.reportId = {$reportId}
 GROUP BY pgen_device_instances.reportId, CONCAT(pgen_rms_upload_rows.manufacturer, ' ', pgen_rms_upload_rows.modelName)
 ORDER BY deviceCount DESC
 ) AS countTable";
-            $justCountQuery = $db->query($justCountSql, $reportId);
+            $justCountQuery = $db->query($justCountSql);
 
             $count = $justCountQuery->fetchColumn();
 
@@ -286,13 +287,13 @@ JOIN pgen_rms_upload_rows ON pgen_device_instances.rmsUploadRowId = pgen_rms_upl
 LEFT JOIN pgen_device_instance_master_devices ON pgen_device_instance_master_devices.deviceInstanceId = pgen_device_instances.id
 LEFT JOIN pgen_master_devices ON pgen_device_instance_master_devices.masterDeviceId = pgen_master_devices.id
 LEFT JOIN manufacturers ON pgen_master_devices.manufacturerId = manufacturers.id
-WHERE pgen_device_instances.reportId = 2
+WHERE pgen_device_instances.reportId = {$reportId}
 GROUP BY CONCAT(pgen_rms_upload_rows.manufacturer, ' ', pgen_rms_upload_rows.modelName)
 ORDER BY $orderBy
 $limitStatement
 ";
-            $query = $db->query($sql, $reportId);
 
+            $query = $db->query($sql);
 
             $mapDeviceInstances = array();
 
