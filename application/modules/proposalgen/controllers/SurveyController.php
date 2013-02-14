@@ -46,19 +46,18 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         }
     }
 
-
     /**
-     * This is one of the pages in the survey
+     * This is our survey page. Everything we need to fill out is here.
      */
-    public function financeAction ()
+    public function surveyAction ()
     {
-        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_FINANCE);
+        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY);
 
-        $request = $this->getRequest();
-        $form    = new Proposalgen_Form_Survey_Finance();
+        $form = new Proposalgen_Form_Survey();
 
-        // Populate the form with saved answers if we have them.
-
+        /**
+         * Get data to populate
+         */
 
         $formDataFromAnswers = array();
 
@@ -104,91 +103,12 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
             $formDataFromAnswers ["it_hourlyRate"] = $itHourlyRate;
         }
 
-        $form->populate($formDataFromAnswers);
-
-        if ($request->isPost())
-        {
-            $values = $request->getPost();
-            if (isset($values ["goBack"]))
-            {
-                $this->gotoPreviousStep();
-            }
-            else
-            {
-                try
-                {
-                    if ($form->isValid($values))
-                    {
-                        $this->saveReport();
-
-                        // Question 11 (Ink and Toner costs
-                        $this->saveTextualQuestionAnswer(11, $form->getValue('toner_cost_radio'));
-                        if ($form->getValue('toner_cost'))
-                        {
-                            $this->saveNumericQuestionAnswer(11, $form->getValue('toner_cost'));
-                        }
-
-                        // Quesiton 12 (Service costs)
-                        $this->saveTextualQuestionAnswer(12, $form->getValue('labor_cost_radio'));
-                        if ($form->getValue('labor_cost'))
-                        {
-                            $this->saveNumericQuestionAnswer(12, $form->getValue('labor_cost'));
-                        }
-
-                        // Question 14
-                        $this->saveNumericQuestionAnswer(14, $form->getValue('avg_purchase'));
-
-                        // Question 15
-                        $this->saveNumericQuestionAnswer(15, $form->getValue('it_hourlyRate'));
-
-                        // Everytime we save anything related to a report, we should save it (updates the modification date)
-                        $this->saveReport();
-
-                        if (isset($values ["saveAndContinue"]))
-                        {
-                            // Call the base controller to send us to the next logical step in the proposal.
-                            $this->gotoNextStep();
-                        }
-                        else
-                        {
-                            $this->_helper->flashMessenger(array(
-                                                                'success' => "Your changes were saved sucessfully."
-                                                           ));
-                        }
-                    }
-                    else
-                    {
-                        throw new Zend_Validate_Exception("Form Validation Failed");
-                    }
-                }
-                catch (Zend_Validate_Exception $e)
-                {
-                    $form->buildBootstrapErrorDecorators();
-                }
-            }
-        }
-
-        $this->view->form = $form;
-    }
-
-    /**
-     * This is one of the pages in the survey
-     */
-    public function purchasingAction ()
-    {
-        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_PURCHASING);
-
-        $request = $this->getRequest();
-        $form    = new Proposalgen_Form_Survey_Purchasing();
-
         // Defaults
         $dailyValue  = 22;
         $weeklyValue = 4;
 
         // Get any saved answers
-        $formDataFromAnswers = array(
-            "numb_vendors" => (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(16, $this->getReport()->id)) ? : ""
-        );
+        $formDataFromAnswers ["numb_vendors"] = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(16, $this->getReport()->id)) ? : "";
 
         $numberOfMonthlyOrders = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(17, $this->getReport()->id)) ? : false;
         if ($numberOfMonthlyOrders !== false)
@@ -207,88 +127,6 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                     break;
             }
         }
-
-        $form->populate($formDataFromAnswers);
-
-        if ($request->isPost())
-        {
-            $values = $request->getPost();
-            if (isset($values ["goBack"]))
-            {
-                $this->gotoPreviousStep();
-            }
-            else
-            {
-                try
-                {
-
-                    if ($form->isValid($values))
-                    {
-                        // Question 16
-                        $this->saveNumericQuestionAnswer(16, $form->getValue('numb_vendors'));
-
-                        $numberOfOrdersRadio = $form->getValue('inkTonerOrderRadio');
-
-                        switch ($numberOfOrdersRadio)
-                        {
-                            case "Daily" :
-                                $ordersPerMonth = $dailyValue;
-                                break;
-                            case "Weekly" :
-                                $ordersPerMonth = $weeklyValue;
-                                break;
-                            default :
-                                $ordersPerMonth = $form->getValue('numb_monthlyOrders');
-                                break;
-                        }
-
-                        // Question 16
-                        $this->saveNumericQuestionAnswer(17, $ordersPerMonth);
-
-                        // Everytime we save anything related to a report, we should save it (updates the modification date)
-                        $this->saveReport();
-
-                        if (isset($values ["saveAndContinue"]))
-                        {
-                            // Call the base controller to send us to the next logical step in the proposal.
-                            $this->gotoNextStep();
-                        }
-                        else
-                        {
-                            $this->_helper->flashMessenger(array(
-                                                                'success' => "Your changes were saved sucessfully."
-                                                           ));
-                        }
-                    }
-                    else
-                    {
-                        throw new Zend_Validate_Exception("Form Validation Failed");
-                    }
-                }
-                catch (Zend_Validate_Exception $e)
-                {
-                    $form->buildBootstrapErrorDecorators();
-                }
-            }
-        }
-
-        $this->view->form = $form;
-    }
-
-    /**
-     * This is one of the pages in the survey
-     */
-    public function itAction ()
-    {
-        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_IT);
-
-        $request = $this->getRequest();
-        $form    = new Proposalgen_Form_Survey_It();
-
-        // Populate the form with saved answers if we have them.
-
-
-        $formDataFromAnswers = array();
 
         $itHoursRadio = (Proposalgen_Model_Mapper_TextualAnswer::getInstance()->getQuestionAnswer(18, $this->getReport()->id)) ? : false;
 
@@ -325,78 +163,6 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
             $formDataFromAnswers ["location_tracking"] = $locationTracking;
         }
 
-        $form->populate($formDataFromAnswers);
-
-        if ($request->isPost())
-        {
-            $values = $request->getPost();
-            if (isset($values ["goBack"]))
-            {
-                $this->gotoPreviousStep();
-            }
-            else
-            {
-                try
-                {
-                    if ($form->isValid($values))
-                    {
-                        // Question 18 (It Hours per month)
-                        $this->saveTextualQuestionAnswer(18, $form->getValue('itHoursRadio'));
-                        if ($form->getValue('itHours'))
-                        {
-                            $this->saveNumericQuestionAnswer(18, $form->getValue('itHours'));
-                        }
-
-                        // Question 20 (Monthly Breakdowns)
-                        $this->saveTextualQuestionAnswer(20, $form->getValue('monthlyBreakdownRadio'));
-                        if ($form->getValue('monthlyBreakdown'))
-                        {
-                            $this->saveNumericQuestionAnswer(20, $form->getValue('monthlyBreakdown'));
-                        }
-
-                        // Question 19 (IP Based Location Tracking)
-                        $this->saveTextualQuestionAnswer(19, $form->getValue('location_tracking'));
-
-                        // Every time we save anything related to a report, we should save it (updates the modification date)
-                        $this->saveReport();
-
-                        if (isset($values ["saveAndContinue"]))
-                        {
-                            // Call the base controller to send us to the next logical step in the proposal.
-                            $this->gotoNextStep();
-                        }
-                        else
-                        {
-                            $this->_helper->flashMessenger(array(
-                                                                'success' => "Your changes were saved successfully."
-                                                           ));
-                        }
-                    }
-                    else
-                    {
-                        throw new Zend_Validate_Exception("Form Validation Failed");
-                    }
-                }
-                catch (Zend_Validate_Exception $e)
-                {
-                    $form->buildBootstrapErrorDecorators();
-                }
-            }
-        }
-
-        $this->view->form = $form;
-    }
-
-    /**
-     * This is one of the pages in the survey
-     */
-    public function usersAction ()
-    {
-        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY_USERS);
-        $request = $this->getRequest();
-        $form    = new Proposalgen_Form_Survey_Users();
-
-
         // Get the user survey settings for overrides
         $surveySetting = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchSystemDefaultSurveySettings();
         $surveySetting->populate(Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchUserSurveySetting($this->_userId)->toArray());
@@ -409,10 +175,8 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $pageCoverageBW    = (!$pageCoverageBW) ? $surveySetting->pageCoverageMono : $pageCoverageBW;
         $pageCoverageColor = (!$pageCoverageColor) ? $surveySetting->pageCoverageColor : $pageCoverageColor;
 
-        $formDataFromAnswers = array(
-            "pageCoverage_BW"    => $pageCoverageBW,
-            "pageCoverage_Color" => $pageCoverageColor,
-        );
+        $formDataFromAnswers["pageCoverage_BW"]    = $pageCoverageBW;
+        $formDataFromAnswers["pageCoverage_Color"] = $pageCoverageColor;
 
         $percentPrintVolume = (Proposalgen_Model_Mapper_NumericAnswer::getInstance()->getQuestionAnswer(23, $this->getReport()->id)) ? : false;
         if ($percentPrintVolume !== false)
@@ -428,10 +192,14 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
 
         $form->populate($formDataFromAnswers);
 
-        if ($request->isPost())
+
+        /**
+         * Handle our post
+         */
+        if ($this->getRequest()->isPost())
         {
-            $values = $request->getPost();
-            if (isset($values ["goBack"]))
+            $postData = $this->getRequest()->getPost();
+            if (isset($postData ["goBack"]))
             {
                 $this->gotoPreviousStep();
             }
@@ -439,8 +207,65 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
             {
                 try
                 {
-                    if ($form->isValid($values))
+                    if ($form->isValid($postData))
                     {
+                        $this->saveReport(false);
+
+                        // Question 11 (Ink and Toner costs
+                        $this->saveTextualQuestionAnswer(11, $form->getValue('toner_cost_radio'));
+                        if ($form->getValue('toner_cost'))
+                        {
+                            $this->saveNumericQuestionAnswer(11, $form->getValue('toner_cost'));
+                        }
+
+                        // Question 12 (Service costs)
+                        $this->saveTextualQuestionAnswer(12, $form->getValue('labor_cost_radio'));
+                        if ($form->getValue('labor_cost'))
+                        {
+                            $this->saveNumericQuestionAnswer(12, $form->getValue('labor_cost'));
+                        }
+
+                        // Question 14
+                        $this->saveNumericQuestionAnswer(14, $form->getValue('avg_purchase'));
+
+                        // Question 15
+                        $this->saveNumericQuestionAnswer(15, $form->getValue('it_hourlyRate'));
+
+                        // Question 16
+                        $this->saveNumericQuestionAnswer(16, $form->getValue('numb_vendors'));
+
+                        $numberOfOrdersRadio = $form->getValue('inkTonerOrderRadio');
+
+                        switch ($numberOfOrdersRadio)
+                        {
+                            case "Daily" :
+                                $ordersPerMonth = $dailyValue;
+                                break;
+                            case "Weekly" :
+                                $ordersPerMonth = $weeklyValue;
+                                break;
+                            default :
+                                $ordersPerMonth = $form->getValue('numb_monthlyOrders');
+                                break;
+                        }
+
+                        // Question 16
+                        $this->saveNumericQuestionAnswer(17, $ordersPerMonth);
+
+                        // Question 18 (It Hours per month)
+                        $this->saveTextualQuestionAnswer(18, $form->getValue('itHoursRadio'));
+                        if ($form->getValue('itHours'))
+                        {
+                            $this->saveNumericQuestionAnswer(18, $form->getValue('itHours'));
+                        }
+
+                        // Question 20 (Monthly Breakdowns)
+                        $this->saveTextualQuestionAnswer(20, $form->getValue('monthlyBreakdownRadio'));
+                        if ($form->getValue('monthlyBreakdown'))
+                        {
+                            $this->saveNumericQuestionAnswer(20, $form->getValue('monthlyBreakdown'));
+                        }
+
                         // Question 21 (Page Coverage BW)
                         $this->saveNumericQuestionAnswer(21, $form->getValue('pageCoverage_BW'));
                         // Question 22 (Page Coverage Color)
@@ -453,7 +278,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                         // Every time we save anything related to a report, we should save it (updates the modification date)
                         $this->saveReport();
 
-                        if (isset($values ["saveAndContinue"]))
+                        if (isset($postData ["saveAndContinue"]))
                         {
                             // Call the base controller to send us to the next logical step in the proposal.
                             $this->gotoNextStep();
@@ -477,8 +302,10 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
             }
         }
 
+
         $this->view->form = $form;
     }
+
 
     /**
      * This is one of the pages in the survey
@@ -507,7 +334,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $currency = new Zend_Currency();
 
         // COMPANY
-        $this->view->companyName = $this->getReport()->getClient()->companyName;
+        $this->view->companyName    = $this->getReport()->getClient()->companyName;
         $this->view->companyAddress = $this->getReport()->getClient()->getAddress();
 
         // GENERAL

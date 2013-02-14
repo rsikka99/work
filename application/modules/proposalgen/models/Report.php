@@ -195,7 +195,7 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     {
         if (!isset($this->_reportSteps))
         {
-            $stage = ($this->reportStage) ? : Proposalgen_Model_Report_Step::STEP_SURVEY_FINANCE;
+            $stage = ($this->reportStage) ? : Proposalgen_Model_Report_Step::STEP_SURVEY;
 
             $this->_reportSteps = Proposalgen_Model_Report_Step::getSteps();
             Proposalgen_Model_Report_Step::updateAccessibleSteps($this->_reportSteps, $stage);

@@ -1,11 +1,7 @@
 <?php
 class Proposalgen_Model_Report_Step extends My_Model_Abstract
 {
-    const STEP_SURVEY_FINANCE       = 'finance';
-    const STEP_SURVEY_PURCHASING    = 'purchasing';
-    const STEP_SURVEY_IT            = 'it';
-    const STEP_SURVEY_USERS         = 'users';
-    const STEP_SURVEY_VERIFY        = 'verify';
+    const STEP_SURVEY               = 'survey';
     const STEP_FLEETDATA_UPLOAD     = 'upload';
     const STEP_FLEETDATA_MAPDEVICES = 'mapdevices';
     const STEP_FLEETDATA_SUMMARY    = 'summary';
@@ -20,35 +16,11 @@ class Proposalgen_Model_Report_Step extends My_Model_Abstract
      * @var array
      */
     private static $stepNames = array(
-        self::STEP_SURVEY_FINANCE       => array(
-            'name'       => 'Finance',
+        self::STEP_SURVEY               => array(
+            'name'       => 'Survey',
             'group'      => self::GROUP_SURVEY,
             'controller' => 'survey',
-            'action'     => 'finance'
-        ),
-        self::STEP_SURVEY_PURCHASING    => array(
-            'name'       => 'Purchasing',
-            'group'      => self::GROUP_SURVEY,
-            'controller' => 'survey',
-            'action'     => 'purchasing'
-        ),
-        self::STEP_SURVEY_IT            => array(
-            'name'       => 'IT',
-            'group'      => self::GROUP_SURVEY,
-            'controller' => 'survey',
-            'action'     => 'it'
-        ),
-        self::STEP_SURVEY_USERS         => array(
-            'name'       => 'Users',
-            'group'      => self::GROUP_SURVEY,
-            'controller' => 'survey',
-            'action'     => 'users'
-        ),
-        self::STEP_SURVEY_VERIFY        => array(
-            'name'       => 'Verify',
-            'group'      => self::GROUP_SURVEY,
-            'controller' => 'survey',
-            'action'     => 'verify'
+            'action'     => 'survey'
         ),
         self::STEP_FLEETDATA_UPLOAD     => array(
             'name'       => 'Upload',

@@ -112,7 +112,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_reports` (
   `userId` INT(11) NOT NULL ,
   `clientId` INT NOT NULL ,
   `userPricingOverride` TINYINT(4) NULL DEFAULT '0' ,
-  `reportStage` ENUM('company','general','finance','purchasing','it','users','verify','upload','mapdevices','summary','reportsettings','optimization','finished') NULL ,
+  `reportStage` VARCHAR(255) NULL ,
   `questionSetId` INT(11) NOT NULL ,
   `dateCreated` DATETIME NOT NULL ,
   `lastModified` DATETIME NOT NULL ,

@@ -442,7 +442,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     public function postDispatch ()
     {
         // Render our survey menu
-        $stage = ($this->getReport()->reportStage) ? : Proposalgen_Model_Report_Step::STEP_SURVEY_FINANCE;
+        $stage = ($this->getReport()->reportStage) ? : Proposalgen_Model_Report_Step::STEP_SURVEY;
         Proposalgen_Model_Report_Step::updateAccessibleSteps($this->getReportSteps(), $stage);
 
         $this->view->placeholder('ProgressionNav')->set($this->view->ProposalMenu($this->getReportSteps()));
@@ -458,7 +458,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     {
         if (!isset($this->_report))
         {
-            // Fetch the existing report, or create a new one if the session id isnt set
+            // Fetch the existing report, or create a new one if the session id isn't set
             if (isset($this->_reportSession->reportId) && $this->_reportSession->reportId > 0)
             {
                 $this->_report = Proposalgen_Model_Mapper_Report::getInstance()->find((int)$this->_reportSession->reportId);
@@ -474,7 +474,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
                 $this->_report->userId        = $identity->id;
                 $this->_report->clientId      = $this->_clientId;
                 $this->_report->questionSetId = self::QUESTION_SET_ID;
-                $this->_report->reportStage   = Proposalgen_Model_Report_Step::STEP_SURVEY_FINANCE;
+                $this->_report->reportStage   = Proposalgen_Model_Report_Step::STEP_SURVEY;
                 $this->_report->dateCreated   = date('Y-m-d H:i:s');
                 $this->_report->reportDate    = date('Y-m-d H:i:s');
             }
@@ -546,7 +546,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
      *
      * @return Proposalgen_Model_Report_Step Step Name. Returns FALSE if the step is not new.
      */
-    protected function checkIfNextStepIsNew (Proposalgen_Model_Report_Step $step)
+    protected function checkIfNextStepIsNew ($step)
     {
         if ($step !== null)
         {
