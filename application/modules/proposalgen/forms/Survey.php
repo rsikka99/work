@@ -1,7 +1,10 @@
 <?php
 
-class Proposalgen_Form_Survey extends Proposalgen_Form_Survey_BaseSurveyForm
+class Proposalgen_Form_Survey extends EasyBib_Form
 {
+
+    protected $currency;
+    protected $currencyRegex;
 
     public static $repairTimeOptions = array(
         '0.5' => 'Less than a day',
@@ -17,8 +20,20 @@ class Proposalgen_Form_Survey extends Proposalgen_Form_Survey_BaseSurveyForm
         '75' => 'More than 50%'
     );
 
+    public function __construct ($options = null)
+    {
+        $this->currency = new Zend_Currency();
+        $this->currencyRegex = '/^\d+(?:\.\d{0,2})?$/';
+
+        // This runs, among other things, the init functions. Therefore it must come before anything that affects the form.
+        parent::__construct($options);
+
+        $this->addPrefixPath('Tangent_Form_Element', 'Tangent/Form/Element/', 'element');
+    }
+
     public function init ()
     {
+
         // Set the method for the display form to POST
         $this->setMethod('POST');
         /**
@@ -259,7 +274,7 @@ class Proposalgen_Form_Survey extends Proposalgen_Form_Survey_BaseSurveyForm
                                              ));
         $this->addElement($repairTimeRadio);
 
-        parent::init();
+        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP);
     }
 
     public function loadDefaultDecorators ()
