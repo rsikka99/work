@@ -1,7 +1,7 @@
 <div class="form-actions">
-    <input type="submit" name="saveAndContinue" id="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary">
+    <button name="saveAndContinue" id="saveAndContinue" class="btn btn-primary pull-right">Save &amp; Continue <i class="icon-arrow-right icon-white"></i></button>
     <input type="submit" name="save" id="save" value="Save" class="btn">
     <?php if (isset($this->canGoBack) && $this->canGoBack) : ?>
-        <input type="submit" name="goBack" id="cancel" value="Go Back" class="btn">
+    <button name="goBack" id="goBack" class="btn btn-primary pull-left"><i class="icon-arrow-left icon-white"></i> Go Back</button>
     <?php endif; ?>
 </div>

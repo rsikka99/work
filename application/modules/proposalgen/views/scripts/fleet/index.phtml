@@ -16,23 +16,13 @@
     <div id="collapseOne" class="collapse">
         <div class="accordion-inner"><?php echo $this->form; ?></div>
     </div>
-    <form class="proposalForm form-horizontal" method="POST">
-        <div class="form-actions">
-            <input type="submit" name="saveAndContinue" id="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary">
-            <input type="submit" name="goBack" id="goBack" value="Go Back" class="btn">
-        </div>
-    </form>
+    <?php echo $this->navigationForm; ?>
 </div>
 
 <?php else : ?>
 <div class="well">
     <?php echo $this->form; ?>
-    <form class="proposalForm form-horizontal" method="POST">
-        <div class="form-actions">
-            <input type="submit" name="saveAndContinue" id="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary" title="You must upload a file before continuing" disabled="disabled">
-            <input type="submit" name="goBack" id="goBack" value="Go Back" class="btn">
-        </div>
-    </form>
+    <?php echo $this->navigationForm; ?>
 </div>
 <?php endif; ?>
 

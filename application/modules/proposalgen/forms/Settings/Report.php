@@ -5,7 +5,7 @@
  *
  * @version v1.0
  */
-class Proposalgen_Form_Settings_Report extends EasyBib_Form
+class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
 {
     /**
      * The default settings
@@ -381,18 +381,19 @@ class Proposalgen_Form_Settings_Report extends EasyBib_Form
         $this->addElement($element);
         
         // Add the submit button
-        $this->addElement('submit', 'submit', array (
-                'ignore' => true,
-                'label' => 'Save & Continue' 
-        ));
+//        $this->addElement('submit', 'submit', array (
+//                'ignore' => true,
+//                'label' => 'Save & Continue'
+//        ));
+//
+//        // Add the cancel button
+//        $this->addElement('submit', 'cancel', array (
+//                'ignore' => true,
+//                'label' => 'Back'
+//        ));
         
-        // Add the cancel button
-        $this->addElement('submit', 'cancel', array (
-                'ignore' => true,
-                'label' => 'Back' 
-        ));
-        
-        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
+        //EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
+        Proposalgen_Form_Assessment_Navigation::addFormActionsToForm(Proposalgen_Form_Assessment_Navigation::BUTTONS_ALL, $this);
     }
 
     /**

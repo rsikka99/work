@@ -53,7 +53,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
     {
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY);
 
-        $form = new Proposalgen_Form_Survey();
+        $form = new Proposalgen_Form_Assessment_Survey();
 
         /**
          * Get data to populate

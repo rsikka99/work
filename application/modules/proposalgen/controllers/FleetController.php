@@ -324,6 +324,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $this->view->rmsExcludedRowCount = $rmsExcludedRowMapper->countRowsForReport($report->id);
         $this->view->hasPreviousUpload   = ($this->view->deviceInstanceCount > 0 || $this->view->rmsExcludedRowCount > 0);
 
+        $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation(Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT);
+
     }
 
     /**
@@ -352,7 +354,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             }
         }
 
-
+        $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation(Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT);
     }
 
     /**
@@ -518,6 +520,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 $this->gotoPreviousStep();
             }
         }
+
+        $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation(Proposalgen_Form_Assessment_Navigation::BUTTONS_ALL);
     }
 
     /**
@@ -625,12 +629,16 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             {
                 if ($reportSettingsService->update($values))
                 {
+                    $this->saveReport();
                     $this->_helper->flashMessenger(array(
                                                         'success' => 'Settings saved.'
                                                    ));
 
-                    $this->saveReport();
-                    $this->gotoNextStep();
+
+                    if (isset($values ['saveAndContinue']))
+                    {
+                        $this->gotoNextStep();
+                    }
                 }
                 else
                 {
@@ -722,7 +730,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
                                 $rmsUploadRowMapper->save($rmsUploadRow);
 
-                                $deviceInstance->useUserData = true;
+                                $deviceInstance->useUserData        = true;
                                 $deviceInstance->reportsTonerLevels = $formValues['reportsTonerLevels'];
                                 //$deviceInstance->reportsTonerLevels = $formValues["reportsTonerLevels"];
                                 $deviceInstanceMapper->save($deviceInstance);
@@ -899,20 +907,20 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     /*
                      * Once we get here we can start populating our response
                      */
-                    $jsonResponse                                     = $deviceInstance->toArray();
-                    $jsonResponse['masterDevice']                     = $deviceInstance->getMasterDevice()->toArray();
-                    $launchDate                                       = new Zend_Date($jsonResponse['masterDevice']['launchDate']);
-                    $jsonResponse['masterDevice']['launchDate']       = $launchDate->toString(Zend_Date::DATE_MEDIUM);
-                    $jsonResponse['masterDevice']['cost']             = ($jsonResponse['cost'] > 0) ? $this->view->currency((float)$jsonResponse['cost']) : '';
-                    $jsonResponse['masterDevice']['ppmBlack']         = ($jsonResponse['masterDevice']['ppmBlack'] > 0) ? number_format($jsonResponse['masterDevice']['ppmBlack']) : '';
-                    $jsonResponse['masterDevice']['ppmColor']         = ($jsonResponse['masterDevice']['ppmColor'] > 0) ? number_format($jsonResponse['masterDevice']['ppmColor']) : '';
-                    $jsonResponse['masterDevice']['wattsPowerNormal'] = number_format($jsonResponse['masterDevice']['wattsPowerNormal']);
-                    $jsonResponse['masterDevice']['wattsPowerIdle']   = number_format($jsonResponse['masterDevice']['wattsPowerIdle']);
-                    $jsonResponse['masterDevice']['dutyCycle']        = number_format($jsonResponse['masterDevice']['dutyCycle']);
-                    $jsonResponse['masterDevice']['leasedTonerYield'] = number_format($jsonResponse['masterDevice']['leasedTonerYield']);
-                    $jsonResponse["masterDevice"]["manufacturer"]     = $deviceInstance->getMasterDevice()->getManufacturer()->toArray();
-                    $jsonResponse["masterDevice"]["reportsTonerLevels"]     = $deviceInstance->isCapableOfReportingTonerLevels();
-                    $jsonResponse["masterDevice"]["tonerConfigName"]  = $deviceInstance->getMasterDevice()->getTonerConfig()->tonerConfigName;
+                    $jsonResponse                                       = $deviceInstance->toArray();
+                    $jsonResponse['masterDevice']                       = $deviceInstance->getMasterDevice()->toArray();
+                    $launchDate                                         = new Zend_Date($jsonResponse['masterDevice']['launchDate']);
+                    $jsonResponse['masterDevice']['launchDate']         = $launchDate->toString(Zend_Date::DATE_MEDIUM);
+                    $jsonResponse['masterDevice']['cost']               = ($jsonResponse['cost'] > 0) ? $this->view->currency((float)$jsonResponse['cost']) : '';
+                    $jsonResponse['masterDevice']['ppmBlack']           = ($jsonResponse['masterDevice']['ppmBlack'] > 0) ? number_format($jsonResponse['masterDevice']['ppmBlack']) : '';
+                    $jsonResponse['masterDevice']['ppmColor']           = ($jsonResponse['masterDevice']['ppmColor'] > 0) ? number_format($jsonResponse['masterDevice']['ppmColor']) : '';
+                    $jsonResponse['masterDevice']['wattsPowerNormal']   = number_format($jsonResponse['masterDevice']['wattsPowerNormal']);
+                    $jsonResponse['masterDevice']['wattsPowerIdle']     = number_format($jsonResponse['masterDevice']['wattsPowerIdle']);
+                    $jsonResponse['masterDevice']['dutyCycle']          = number_format($jsonResponse['masterDevice']['dutyCycle']);
+                    $jsonResponse['masterDevice']['leasedTonerYield']   = number_format($jsonResponse['masterDevice']['leasedTonerYield']);
+                    $jsonResponse["masterDevice"]["manufacturer"]       = $deviceInstance->getMasterDevice()->getManufacturer()->toArray();
+                    $jsonResponse["masterDevice"]["reportsTonerLevels"] = $deviceInstance->isCapableOfReportingTonerLevels();
+                    $jsonResponse["masterDevice"]["tonerConfigName"]    = $deviceInstance->getMasterDevice()->getTonerConfig()->tonerConfigName;
 
                     foreach ($deviceInstance->getMasterDevice()->getToners() as $tonersByPartType)
                     {

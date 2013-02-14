@@ -1,6 +1,6 @@
 <?php
 
-class Proposalgen_Form_Survey extends EasyBib_Form
+class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Vertical
 {
 
     protected $currency;
@@ -22,7 +22,7 @@ class Proposalgen_Form_Survey extends EasyBib_Form
 
     public function __construct ($options = null)
     {
-        $this->currency = new Zend_Currency();
+        $this->currency      = new Zend_Currency();
         $this->currencyRegex = '/^\d+(?:\.\d{0,2})?$/';
 
         // This runs, among other things, the init functions. Therefore it must come before anything that affects the form.
@@ -33,6 +33,7 @@ class Proposalgen_Form_Survey extends EasyBib_Form
 
     public function init ()
     {
+        $this->_addClassNames("surveyForm form-center-actions");
 
         // Set the method for the display form to POST
         $this->setMethod('POST');
@@ -49,7 +50,7 @@ class Proposalgen_Form_Survey extends EasyBib_Form
          *
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
-        $this->setAttrib('class', 'proposalForm form-vertical');
+
 
         $multiOptions = array(
             'guess'                   => 'I don\'t know',
@@ -59,12 +60,12 @@ class Proposalgen_Form_Survey extends EasyBib_Form
         /*
          * Ink And Toner cost
          */
-        $inkAndTonerCostRadio = new Zend_Form_Element_Radio('toner_cost_radio');
-        $inkAndTonerCostRadio->addMultiOptions($multiOptions);
-        $inkAndTonerCostRadio->setValue('I know the exact amount');
+        $inkAndTonerCostRadio = $this->createElement('radio', 'toner_cost_radio');
+        $inkAndTonerCostRadio->setMultiOptions($multiOptions)
+            ->setValue('I know the exact amount');
         $this->addElement($inkAndTonerCostRadio);
 
-        $toner_cost = new Zend_Form_Element_Text('toner_cost');
+        $toner_cost = $this->createElement('text', 'toner_cost');
         $toner_cost->setAttrib('maxlength', 7)
             ->setAttrib('class', 'span2')
             ->setAttrib('placeholder', 'Enter Amount...')
@@ -82,12 +83,12 @@ class Proposalgen_Form_Survey extends EasyBib_Form
         /*
          * Service/Labor Cost
          */
-        $laborCostRadio = new Zend_Form_Element_Radio('labor_cost_radio');
-        $laborCostRadio->addMultiOptions($multiOptions);
+        $laborCostRadio = $this->createElement('radio', 'labor_cost_radio');
+        $laborCostRadio->setMultiOptions($multiOptions);
         $laborCostRadio->setValue('I know the exact amount');
         $this->addElement($laborCostRadio);
 
-        $labor_cost = new Zend_Form_Element_Text('labor_cost');
+        $labor_cost = $this->createElement('text', 'labor_cost');
         $labor_cost->setAttrib('maxlength', 7)
             ->setAttrib('class', 'span2')
             ->setAttrib('placeholder', 'Enter Amount...')
@@ -104,7 +105,7 @@ class Proposalgen_Form_Survey extends EasyBib_Form
         /*
          * Average Purchase
          */
-        $avg_purchase = new Zend_Form_Element_Text('avg_purchase');
+        $avg_purchase = $this->createElement('text', 'avg_purchase');
         $avg_purchase->setRequired(true)
             ->setAttrib('class', 'span2')
             ->setAttrib('placeholder', 'Enter Amount...')
@@ -127,7 +128,7 @@ class Proposalgen_Form_Survey extends EasyBib_Form
         /*
          * Hourly Rate
          */
-        $it_hourlyRate = new Zend_Form_Element_Text('it_hourlyRate');
+        $it_hourlyRate = $this->createElement('text', 'it_hourlyRate');
         $it_hourlyRate->setRequired(true)
             ->setAttrib('class', 'span2')
             ->setAttrib('placeholder', 'Enter Amount...')
@@ -147,30 +148,33 @@ class Proposalgen_Form_Survey extends EasyBib_Form
         $it_hourlyRate->setLabel($itQst);
         $this->addElement($it_hourlyRate);
 
-        $numb_vendors = new Zend_Form_Element_Text('numb_vendors');
+        /**
+         * Number of supply vendors
+         */
+        $numb_vendors = $this->createElement('text', 'numb_vendors');
         $numb_vendors->setRequired(true)
             ->setAttrib('maxlength', 3)
             ->setAttrib('class', 'span1')
             ->setAutoInsertNotEmptyValidator(false)
             ->addValidator('greaterThan', true, array(
                                                      'min' => 0
-                                                ));
-        $vendorsQst = "How many vendors do you currently deal with for printer supplies, service and hardware?";
-        $numb_vendors->setLabel($vendorsQst);
-        $numb_vendors->getValidator('greaterThan')->setMessage('Must be greater than zero');
+                                                ))
+            ->setLabel("How many vendors do you currently deal with for printer supplies, service and hardware?")
+            ->getValidator('greaterThan')->setMessage('Must be greater than zero');
         $this->addElement($numb_vendors);
 
-        // **********************************
-        $inkTonerOrderRadio = new Zend_Form_Element_Radio('inkTonerOrderRadio');
+        /**
+         * Ink and toner
+         */
+        $inkTonerOrderRadio = $this->createElement('radio', 'inkTonerOrderRadio');
         $inkTonerOrderRadio->addMultiOption('Daily', 'Daily')
             ->addMultiOption('Weekly', 'Weekly')
-            ->addMultiOption('Times per month', 'Custom');
-        $inkTonerOrderRadioQst = "How many times per month does your organization order printer supplies?";
-        $inkTonerOrderRadio->setLabel($inkTonerOrderRadioQst);
+            ->addMultiOption('Times per month', 'Custom')
+            ->setLabel("How many times per month does your organization order printer supplies?");
 
         $this->addElement($inkTonerOrderRadio);
 
-        $ink_toner_order = new Zend_Form_Element_Text('numb_monthlyOrders');
+        $ink_toner_order = $this->createElement('text', 'numb_monthlyOrders');
         $ink_toner_order->setAttrib('maxlength', 3)
             ->setAttrib('class', 'span1')
             ->setAllowEmpty(false)
@@ -182,19 +186,22 @@ class Proposalgen_Form_Survey extends EasyBib_Form
 
         $this->addElement($ink_toner_order);
 
-
-        $multiOptions = array(
-            'guess'                   => 'I don\'t know',
-            'I know the exact amount' => 'I know the exact amount'
-        );
-
-        $itHoursRadio = new Zend_Form_Element_Radio('itHoursRadio');
-        $itHoursRadio->addMultiOptions($multiOptions);
+        /**
+         * IT Hours Radio
+         */
+        $itHoursRadio = $this->createElement('radio', 'itHoursRadio');
+        $itHoursRadio->addMultiOptions(array(
+                                            'guess'                   => 'I don\'t know',
+                                            'I know the exact amount' => 'I know the exact amount'
+                                       ))
+            ->setValue('I know the exact amount');
 
         $this->addElement($itHoursRadio);
-        $this->getElement('itHoursRadio')->setValue('I know the exact amount');
 
-        $itHours = new Zend_Form_Element_Text('itHours');
+        /**
+         * IT hours Text
+         */
+        $itHours = $this->createElement('text', 'itHours');
         $itHours->setAttrib('maxlength', 3)
             ->setAttrib('class', 'span1')
             ->setDescription('hours')
@@ -202,12 +209,14 @@ class Proposalgen_Form_Survey extends EasyBib_Form
             ->addValidator(new Custom_Validate_FieldDependsOnValue('itHoursRadio', 'I know the exact amount', array(
                                                                                                                    new Zend_Validate_NotEmpty(),
                                                                                                                    new Zend_Validate_Float()
-                                                                                                              )), true);
-        $itHoursQst = "How many hours per week do IT personnel spend servicing and supporting printers? If you select \"I don't know\", an average of 15 minutes per week per printer will be used.";
-        $itHours->setLabel($itHoursQst);
+                                                                                                              )), true)
+            ->setLabel("How many hours per week do IT personnel spend servicing and supporting printers? If you select \"I don't know\", an average of 15 minutes per week per printer will be used.");
         $this->addElement($itHours);
 
-        $monthlyBreakdown = new Zend_Form_Element_Text('monthlyBreakdown');
+        /**
+         * Monthly Breakdowns Text
+         */
+        $monthlyBreakdown = $this->createElement('text', 'monthlyBreakdown');
         $monthlyBreakdown->setAttrib('maxlength', 3)
             ->setAttrib('class', 'span1')
             ->setDescription('breakdowns per month')
@@ -215,19 +224,24 @@ class Proposalgen_Form_Survey extends EasyBib_Form
             ->addValidator(new Custom_Validate_FieldDependsOnValue('monthlyBreakdownRadio', 'I know the exact amount', array(
                                                                                                                             new Zend_Validate_NotEmpty(),
                                                                                                                             new Zend_Validate_Float()
-                                                                                                                       )), true);
-        $monthlyBreakdownQst = "How many times per month, on average, does your internal IT staff or an external service company need to be called to repair a broken printer in your fleet? If you select \"I don't know\", an average of 1 repair per month for every 20 printers will be used.";
-        $monthlyBreakdown->setLabel($monthlyBreakdownQst);
+                                                                                                                       )), true)
+            ->setLabel("How many times per month, on average, does your internal IT staff or an external service company need to be called to repair a broken printer in your fleet? If you select \"I don't know\", an average of 1 repair per month for every 20 printers will be used.");
         $this->addElement($monthlyBreakdown);
 
-        $monthlyBreakdownRadio = new Zend_Form_Element_Radio('monthlyBreakdownRadio');
-        $monthlyBreakdownRadio->addMultiOptions($multiOptions);
-        $monthlyBreakdownRadio->setLabel($monthlyBreakdownQst);
+        /**
+         * Monthly Breakdowns Radio
+         */
+        $monthlyBreakdownRadio = $this->createElement('radio', 'monthlyBreakdownRadio');
+        $monthlyBreakdownRadio->addMultiOptions($multiOptions)
+            ->setLabel("")
+            ->setValue('I know the exact amount');
 
         $this->addElement($monthlyBreakdownRadio);
-        $this->getElement('monthlyBreakdownRadio')->setValue('I know the exact amount');
 
-        $pageCoverage_BW = new Zend_Form_Element_Text('pageCoverage_BW');
+        /**
+         * Page Coverage Mono
+         */
+        $pageCoverage_BW = $this->createElement('text', 'pageCoverage_BW');
         $pageCoverage_BW->setRequired(true)
             ->setLabel('Monochrome Coverage:')
             ->setAttrib('maxlength', 5)
@@ -239,7 +253,10 @@ class Proposalgen_Form_Survey extends EasyBib_Form
         $pageCoverage_BW->getValidator('Between')->setMessage('Must be between 1 and 100');
         $this->addElement($pageCoverage_BW);
 
-        $pageCoverage_Colour = new Zend_Form_Element_Text('pageCoverage_Color');
+        /**
+         * Page Coverage Color
+         */
+        $pageCoverage_Colour = $this->createElement('text', 'pageCoverage_Color');
         $pageCoverage_Colour->setRequired(true)
             ->setLabel('Color Coverage:')
             ->setAttrib('maxlength', 5)
@@ -250,10 +267,12 @@ class Proposalgen_Form_Survey extends EasyBib_Form
         $pageCoverage_Colour->getValidator('Between')->setMessage('Must be between 1 and 100');
         $this->addElement($pageCoverage_Colour);
 
-        $volumeQuestion = "What percent of your print volume is done on inkjet and other desktop printers?";
-
-        $printVolumeRadio = new Zend_Form_Element_Radio('printVolume');
-        $printVolumeRadio->setLabel($volumeQuestion)
+        /**
+         * Print Volume Question
+         */
+        $printVolumeRadio = $this->createElement('radio', 'printVolume');
+        $printVolumeRadio->setLabel("What percent of your print volume is done on inkjet and other desktop printers
+        ? ")
             ->setMultiOptions(self::$volumeOptions)
             ->setRequired(true)
             ->addFilter('StringTrim')
@@ -262,10 +281,14 @@ class Proposalgen_Form_Survey extends EasyBib_Form
                                              ));
         $this->addElement($printVolumeRadio);
 
-        $repairTimeQuestion = "How long does it take, on average, for a printer to be fixed after it has broken down?";
-
-        $repairTimeRadio = new Zend_Form_Element_Radio('repairTime');
-        $repairTimeRadio->setLabel($repairTimeQuestion)
+        /**
+         * Repair Time Question
+         */
+        $repairTimeRadio = $this->createElement('radio', 'repairTime');
+        $repairTimeRadio->setLabel("How long does it take, on average, for a printer to
+    {be
+} fixed after it has broken down
+        ?")
             ->setMultiOptions(self::$repairTimeOptions)
             ->setRequired(true)
             ->addFilter('StringTrim')
@@ -274,7 +297,11 @@ class Proposalgen_Form_Survey extends EasyBib_Form
                                              ));
         $this->addElement($repairTimeRadio);
 
-        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP);
+        /**
+         * Add our form actions
+         */
+
+        Proposalgen_Form_Assessment_Navigation::addFormActionsToForm(Proposalgen_Form_Assessment_Navigation::BUTTONS_NEXT, $this);
     }
 
     public function loadDefaultDecorators ()

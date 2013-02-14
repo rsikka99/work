@@ -7,12 +7,7 @@
 <div class="well">
     <table id="summaryGrid"></table>
     <div id="summaryGridPager"></div>
-    <form class="proposalForm form-horizontal" method="POST">
-        <div class="form-actions">
-            <input type="submit" name="saveAndContinue" id="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary">
-            <input type="submit" name="goBack" id="goBack" value="Go Back" class="btn">
-        </div>
-    </form>
+    <?php echo $this->navigationForm; ?>
 </div>
 <div class="lightbox-panel" id="deviceDetailsContainer" style="display: none;">
     <h4>Device Details</h4>

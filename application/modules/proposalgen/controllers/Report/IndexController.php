@@ -34,6 +34,15 @@ class Proposalgen_Report_IndexController extends Proposalgen_Library_Controller_
     public function indexAction ()
     {
         $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FINISHED);
+
+        if ($this->getRequest()->isPost())
+        {
+            $postData = $this->getRequest()->getPost();
+            if (isset($postData['goBack']))
+            {
+                $this->gotoPreviousStep();
+            }
+        }
         $this->initReportList();
 
         $this->view->headScript()->prependFile($this->view->baseUrl("/js/htmlReport.js"));
@@ -45,6 +54,8 @@ class Proposalgen_Report_IndexController extends Proposalgen_Library_Controller_
         $report                  = $this->getReport();
         $this->view->companyName = $report->getClient()->companyName; // Set company
         $this->view->reportName  = $report->getClient()->companyName;
+
+        $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation(Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK);
     }
 
     /**

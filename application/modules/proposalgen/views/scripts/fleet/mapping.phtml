@@ -1,13 +1,18 @@
-<?php $this->headScript()->captureStart('append','text/javascript'); ?>
-    var canEditMasterDevices = <?php echo ($this->IsAllowed('proposalgen__managedevices__managemappingdevices')) ? 'true' : 'false'; ?>;
+<?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
+var canEditMasterDevices = <?php echo ($this->IsAllowed('proposalgen__managedevices__managemappingdevices')) ? 'true' : 'false'; ?>;
 <?php $this->headScript()->captureEnd(); ?>
 
 <?php $this->headScript()->appendFile($this->baseUrl('js/proposalgen/fleet/deviceMapping.js')); ?>
 <div class="page-header">
-    <h1>Fleet<small> - Map Devices</small></h1>
+    <h1>Fleet
+        <small> - Map Devices</small>
+    </h1>
 </div>
 <div class="well">
-    <p>You can map and remap devices by typing into the "Select Master Device" field. The "Select Master Device" text box acts as a search. Once you select an item it will perform the mapping for you. In the case that the device does not exist you may add it using the action menu. If the device is mapped incorrectly you will need to remove the mapping by clearing the text in the "Select Master Device" box.</p>
+    <p>You can map and remap devices by typing into the "Select Master Device" field. The "Select Master Device" text box acts as a search. Once you select an
+        item it will perform the mapping for you. In the case that the device does not exist you may add it using the action menu. If the device is mapped
+        incorrectly you will need to remove the mapping by clearing the text in the "Select Master Device" box.</p>
+
     <form id="addUnknownDeviceForm" action="<?php echo $this->url(array("action" => "edit-unknown-device")); ?>" method="POST">
         <input type="hidden" name="deviceInstanceIds" id="unknownDeviceDeviceInstanceIds" />
     </form>
@@ -17,10 +22,5 @@
     <table id="mappingGrid"></table>
     <div id="mappingGridPager"></div>
 
-    <form class="proposalForm form-horizontal" method="POST">
-    	<div class="form-actions">
-            <input type="submit" name="saveAndContinue" id="saveAndContinue" value="Save &amp; Continue" class="btn btn-primary">
-            <input type="submit" name="goBack" id="goBack" value="Go Back" class="btn">
-        </div>
-    </form>
+    <?php echo $this->navigationForm; ?>
 </div>

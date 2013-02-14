@@ -1,5 +1,5 @@
 <?php
-/* @var $form Proposalgen_Form_Survey */
+/* @var $form Proposalgen_Form_Assessment_Survey */
 $form                       = $this->element;
 $tonerCostRadio             = $form->getElement('toner_cost_radio');
 $tonerCost                  = $form->getElement('toner_cost');
@@ -176,5 +176,6 @@ $this->headScript()->appendFile($this->baseUrl('/js/proposalgen/survey/survey/su
     <!-- Repair Time Question -->
     <?php echo $repairTime; ?>
 
-    <?php echo $this->partial('survey/form/form-actions.phtml', array('canGoBack' => true)); ?>
+    <?php echo $form->getDisplayGroup('actions')->render(); ?>
+
 </form>
