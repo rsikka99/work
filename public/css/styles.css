@@ -350,7 +350,11 @@ input.addEditUnknownDevice {
 }
 #meat {
   width: 960px;
-  background-color: #ffffff;
+  background-color: #fff;
+}
+#headerLogo {
+  height: 80px;
+  background-image: url('//placehold.it/960x80');
 }
 #lightbox {
   display: none;
