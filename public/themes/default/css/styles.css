@@ -33,7 +33,6 @@ html {
   background-attachment: fixed;
 }
 #headerLogo {
-  height: 100px;
   background-image: url('../img/headerLogo.png');
 }
 div.wrapper {
