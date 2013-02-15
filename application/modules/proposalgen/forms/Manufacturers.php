@@ -253,7 +253,7 @@ class Proposalgen_Form_Manufacturers extends Zend_Form
         $back->setLabel('Done')
             ->setOrder($elementCounter)
             ->setAttrib('class', 'btn')
-            ->setAttrib('onClick', 'javascript: document.location.href="../admin";')
+            ->setAttrib('onClick', 'javascript: document.location.href="/admin";')
             ->setDecorators(array (
                 'ViewHelper', 
                 'Errors', 

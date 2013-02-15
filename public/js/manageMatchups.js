@@ -279,7 +279,7 @@ function do_action(inAction)
         }
         else
         {
-            document.location.href = TMTW_BASEURL + 'proposalgen/admin';
+            document.location.href = TMTW_BASEURL + '/admin';
         }
     }
 }

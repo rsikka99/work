@@ -1014,7 +1014,7 @@ function do_action(inAction)
     }
     else if (inAction == 'done')
     {
-        document.location.href = '../admin';
+        document.location.href = '/admin';
 
     }
     else if (inAction == 'manufacturer')

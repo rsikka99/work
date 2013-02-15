@@ -14,8 +14,10 @@ var url_matchuplist = TMTW_BASEURL + 'proposalgen/admin/matchuplist/format/json'
 <?php endif; ?>
 <?php $this->headScript()->captureEnd(); ?>
 <?php $this->headScript()->appendFile($this->baseUrl('/js/manageMatchups.js')); ?>
-
-<form name="matchups" id="matchups" action="" method="post">
+<div class="page-header">
+    <h1>Manage Printer Matchups</h1>
+</div>
+<form class="form-inline"name="matchups" id="matchups" action="" method="post">
 <input type="hidden" name="ticket_id" id="ticket_id" value="<?php echo $this->ticket_id; ?>" />
 <input type="hidden" name="devices_pf_id" id="devices_pf_id" value="<?php echo $this->devices_pf_id; ?>" />
 <input type="hidden" name="rmsProviderId" id="rmsProviderId" value="<?php echo $this->rmsProviderId; ?>" />
@@ -30,13 +32,13 @@ var url_matchuplist = TMTW_BASEURL + 'proposalgen/admin/matchuplist/format/json'
 			</div>
 			<div id="filter_container">
 				<div id="criteria_container" style="display: inline; padding: 0px 0px 0px 0px;">
-					<label for="criteria_filter" class="label">Filter:</label>
+					<label for="criteria_filter" >Filter:</label>
 					<select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 200px; margin: 0px 0px 0px 26px;">
 						<option value="model">Model Id</option>
 						<option value="printer">Provider Device Name</option>
 						<option value="onlyUnmapped">Show Only Unmapped</option>
 					</select>
-					<label for="txtCriteria" class="label" style="padding: 0px 0px 0px 10px;">for</label>
+					<label for="txtCriteria" style="padding: 0px 0px 0px 10px;">for</label>
 					<input type="text" name="txtCriteria" style="width: 200px;" id="txtCriteria" value="<?php echo $this->pf_model_id; ?>" />
 					<input type="button" name="btnSearch" id="btnSearch" value="Search" onclick="javascript: update_grid('search');" />
 					<input type="button" name="btnClearSearch" id="btnClearSearch" value="Clear" onclick="javascript: update_grid('clear');" />

@@ -457,7 +457,102 @@
                         </view>
                     </pages>
                 </UserManagement>
+                <systemadmin>
+					<label>System Administration</label>
+					<class>dropdown</class>
+					<module>proposalgen</module>
+					<controller>admin</controller>
+					<action>index</action>
+					<resource>proposalgen__admin__index</resource>
+					<pages>
+						<managemanufacturers>
+							<label>Manage Manufacturers</label>
+							<module>proposalgen</module>
+							<controller>admin</controller>
+							<action>manufacturers</action>
+							<resource>proposalgen__admin__manufacturers</resource>
+						</managemanufacturers>
+						<manageprinterandtoner>
+							<label>Manage Master Printer And Toner Properties</label>
+							<module>proposalgen</module>
+							<controller>managedevices</controller>
+							<action>managedevices</action>
+							<resource>proposalgen__managedevices__managedevices</resource>
+						</manageprinterandtoner>
+						<updatepricing>
+							<label>Update Pricing</label>
+							<module>proposalgen</module>
+							<controller>admin</controller>
+							<action>bulkdevicepricing</action>
+							<resource>proposalgen__admin__bulkdevicepricing</resource>
+							<pages>
+								<bulkfilepricing>
+									<label>Import and Export Pricing</label>
+									<module>proposalgen</module>
+									<controller>admin</controller>
+									<action>bulkfilepricing</action>
+									<resource>proposalgen__admin__bulkfilepricing</resource>
+									<visible>0</visible>
+								</bulkfilepricing>
+							</pages>
+						</updatepricing>
+						<managereplacements>
+							<label>Manage Replacement Printers</label>
+							<module>proposalgen</module>
+							<controller>admin</controller>
+							<action>managereplacements</action>
+							<resource>proposalgen__admin__managereplacements</resource>
+						</managereplacements>
+						<managematchups>
+							<label>Manage Printer Matchups</label>
+							<module>proposalgen</module>
+							<controller>admin</controller>
+							<action>managematchups</action>
+							<resource>proposalgen__admin__managematchups</resource>
+						</managematchups>
+					</pages>
+				</systemadmin>
             </pages>
         </sysadmin>
+        <preferences>
+            <order>100000</order>
+            <label>Preferences</label>
+            <module>proposalgen</module>
+            <controller>admin</controller>
+            <action>managemysettings</action>
+            <resource>proposalgen__admin__managemysettings</resource>
+            <class>dropdown></class>
+            <pages>
+                <defaultreportsettings>
+                    <label>System Report Settings</label>
+                    <module>proposalgen</module>
+                    <controller>admin</controller>
+                    <action>managesettings</action>
+                    <resource>proposalgen__admin__managesettings</resource>
+                </defaultreportsettings>
+                <configuration>
+                    <label>System Quote Settings</label>
+                    <module>quotegen</module>
+                    <controller>quotesetting</controller>
+                    <action>editdefault</action>
+                    <resource>quotegen__quotesetting__editdefault</resource>
+                </configuration>
+                <myreportsettings>
+                    <label>My Report Settings</label>
+                    <module>proposalgen</module>
+                    <controller>admin</controller>
+                    <action>managemysettings</action>
+                    <resource>proposalgen__admin__managemysettings</resource>
+                </myreportsettings>
+                <mypreferences>
+                    <label>My Quote Settings</label>
+                    <class></class>
+                    <module>quotegen</module>
+                    <controller>quotesetting</controller>
+                    <action>edit</action>
+                    <resource>quotegen__quotesetting__edit</resource>
+                </mypreferences>
+            </pages>
+        </preferences>
     </nav>
 </config>

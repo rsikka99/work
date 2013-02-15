@@ -422,7 +422,9 @@
 
 <?php $this->headScript()->captureEnd() ?>
 
-<h2><?php echo $this->title;?></h2>
+<div class="page-header">
+    <h1>Update Pricing</h1>
+</div>
 
 <form name="bulk" id="bulk" action="" method="post">
 	<input type="hidden" name="hdnPage" id="hdnPage" />
@@ -508,7 +510,7 @@
 			
 			<div class="submitBar">	
 				<input type="button" name="btnUpdate" id="btnUpdate" value="Update" onclick="javascript: do_update();" class="btn btn-primary" />
-				<input type="button" name="btnDone" id="btnDone" value="Done" onClick="javascript:  document.location.href='<?php echo $this->baseUrl("/proposalgen/admin")?>';" class="btn" />
+				<input type="button" name="btnDone" id="btnDone" value="Done" onClick="javascript:  document.location.href='<?php echo $this->baseUrl("/admin")?>';" class="btn" />
 			</div>
 		</div>
 	</div>

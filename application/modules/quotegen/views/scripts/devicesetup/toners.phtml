@@ -45,7 +45,9 @@ $manufacturers = $this->manufacturers;
 <?php $this->headScript()->captureEnd() ?>
     
 <div class="clearfix">
-	<h1><?php echo $this->devicename; ?></h1>
+	<div class="page-header">
+        <h1>Hardware Library - <small><?php echo $this->devicename; ?></small></h1>
+    </div>
 </div>
 
 <div class="tabbable"> <!-- Only required for left/right tabs -->

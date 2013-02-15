@@ -424,13 +424,15 @@
 			});
 			
 		} else if(inAction == 'done') {
-			document.location.href = '<?php echo $this->baseUrl("/proposalgen/admin")?>';
+			document.location.href = '<?php echo $this->baseUrl("/admin")?>';
 		}
 	}
 	
 <?php $this->headScript()->captureEnd() ?>
 
-<h2><?php echo $this->title;?></h2>
+<div class="page-header">
+    <h1>Manage Replacement Printers</h1>
+</div>
 	
 <form name="replacements" id="replacements" action="" method="post">
 	<input type="hidden" name="hdnIds" id="hdnIds" />
