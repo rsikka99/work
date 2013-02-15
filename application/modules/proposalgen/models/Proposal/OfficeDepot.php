@@ -1250,10 +1250,10 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             $uniqueModelArray = array();
             foreach ($this->getPurchasedDevices() as $device)
             {
-                if (!in_array($device->getMasterDevice()->PrinterModel, $uniqueModelArray))
+                if (!in_array($device->getMasterDevice()->modelName, $uniqueModelArray))
                 {
                     $numberOfModels++;
-                    $uniqueModelArray [] = $device->getMasterDevice()->PrinterModel;
+                    $uniqueModelArray [] = $device->getMasterDevice()->modelName;
                 }
             }
             $this->NumberOfUniquePurchasedModels = $numberOfModels;
@@ -1731,7 +1731,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                 else
                 {
                     // $legendItems[] =
-                    // $device->getMasterDevice()->PrinterModel;
                     $uniqueModelArray [$device->getMasterDevice()->modelName] = 1;
                 }
             }
