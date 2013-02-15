@@ -199,11 +199,6 @@ label.label-phone-number-country {
   padding-left: 0px;
   padding-right: 10px;
 }
-.navbar .brand {
-  padding-top: 0px;
-  padding-bottom: 0px;
-  margin-left: -21px;
-}
 .navbar .navbar-inner {
   background-color: #4b4b4b;
   background-image: -moz-linear-gradient(top, #666666, #222222);
