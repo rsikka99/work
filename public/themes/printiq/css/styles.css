@@ -26,9 +26,12 @@
   -ms-box-sizing: border-box;
   box-sizing: border-box;
 }
-html,
 body {
-  background-color: #b9bab9;
+  background: transparent;
+}
+html {
+  background-image: url('../img/bg_repeat.png');
+  background-attachment: fixed;
 }
 div.wrapper {
   background-image: url('../img/background-repeat.png');

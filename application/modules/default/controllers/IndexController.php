@@ -64,6 +64,10 @@ class Default_IndexController extends Zend_Controller_Action
             {
                 $this->_helper->redirector('create-client');
             }
+            else if (isset($postData['editClient']))
+            {
+                $this->_helper->redirector('edit-client');
+            }
             else if (isset($postData['selectClient']))
             {
                 $newClientId = $postData['selectClient'];
@@ -223,6 +227,64 @@ class Default_IndexController extends Zend_Controller_Action
             }
         }
 
+        $this->view->form = $clientService->getForm();
+    }
+
+    /**
+     * Action to handle editing a client
+     */
+    public function editClientAction ()
+    {
+        // Get the passed client id
+        $clientId = $this->_selectedClientId;
+        // Get the client object from the database
+        $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
+
+        if (!$client)
+        {
+            $this->_helper->flashMessenger(array('warning' => 'Please select a client first.'));
+            $this->_helper->redirector('index');
+        }
+
+        // Start the client service
+        $clientService = new Admin_Service_Client();
+
+        $clientService->populateForm($clientId);
+        if ($this->getRequest()->isPost())
+        {
+            $values = $this->getRequest()->getPost();
+            if (isset($values ['Cancel']))
+            {
+                $this->_helper->redirector('index');
+            }
+
+            try
+            {
+                // Update Client
+                $clientId = $clientService->update($values, $clientId);
+            }
+            catch (Exception $e)
+            {
+                $clientId = false;
+            }
+
+            if ($clientId)
+            {
+                $this->_helper->flashMessenger(array(
+                                                    'success' => "Client {$client->companyName} successfully updated."
+                                               ));
+                // Redirect with client id so that the client is preselected
+                $this->_helper->redirector('index', null, null, array(
+                                                                     'clientId' => $clientId
+                                                                ));
+            }
+            else
+            {
+                $this->_helper->flashMessenger(array(
+                                                    'danger' => "Please correct the errors below."
+                                               ));
+            }
+        }
         $this->view->form = $clientService->getForm();
     }
 }

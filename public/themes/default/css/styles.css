@@ -26,9 +26,16 @@
   -ms-box-sizing: border-box;
   box-sizing: border-box;
 }
-html,
 body {
-  background-color: #D5D5D5;
+  background: transparent;
+}
+html {
+  background-image: url('../img/bg_repeat.png');
+  background-attachment: fixed;
+}
+#headerLogo {
+  height: 100px;
+  background-image: url('../img/headerLogo.png');
 }
 div.wrapper {
   background-image: url('../img/background-repeat.png');
