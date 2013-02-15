@@ -1,30 +1,23 @@
-/* 
-    Styles specific to the print IQ Essentials report 
-    Last revised: July 10, 2012
-*/
-
 body {
-	width: 940px;
-	margin: auto;
-	font-size: 9.5pt;
-	font-family: arial, verdana, arial, tahoma, verdana;
-	margin-bottom: 500px;
+    overflow    : visible;
+    font-size   : 9.5pt;
+    font-family : arial, verdana, arial, tahoma, verdana, sans-serif;
 }
 
 .right {
-	text-align: right;
+    text-align : right;
 }
 
 .center {
-	text-align: center;
+    text-align : center;
 }
 
-h2.reportTitle {
-	color: red;
-    margin-bottom: 0;
-	letter-spacing: 2px;
-	font-style: italic;
-    text-decoration: underline;
+.reportTitle {
+    color           : red;
+    margin-bottom   : 0;
+    letter-spacing  : 2px;
+    font-style      : italic;
+    text-decoration : underline;
 }
 
 /*
@@ -32,31 +25,19 @@ h2.reportTitle {
 */
 
 .essentialsTable th {
-	padding: 2px;
-	background-color: #f2f2f2;
+    padding          : 2px;
+    background-color : #f2f2f2;
 }
 
-.essentialsTable th, .essentialsTable td{
-	border: 1px solid #ccc;
+.essentialsTable th, .essentialsTable td {
+    border : 1px solid #ccc;
 }
 
 .essentialsTable .topleftcell {
-	border: 0;
-	background-color: transparent;
+    border           : 0;
+    background-color : transparent;
 }
 
 .essentialsTable td {
-	padding: 0px 3px;
-}
-
-
-/*
-    Add horizontal scroll bar so that all table columns fit within 940px width
-    NOTE: This is not a good way of acheiving the desired result.  Look for a way
-    to have the table adjust to the full viewing width with the browser providing
-    horizonal scroll bars.
-*/
-.table_horizontal_scroll {
-overflow: auto; overflow-y: hidden; -ms-overflow-y: hidden;
-
+    padding : 0 3px;
 }

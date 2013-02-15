@@ -77,6 +77,11 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     protected $_client;
 
     /**
+     * @var Proposalgen_Model_Assessment_Survey
+     */
+    protected $_survey;
+
+    /**
      * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
@@ -268,6 +273,35 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     public function setClient ($client)
     {
         $this->_client = $client;
+
+        return $this;
+    }
+
+    /**
+     * Gets the survey
+     *
+     * @return Proposalgen_Model_Assessment_Survey
+     */
+    public function getSurvey ()
+    {
+        if (!isset($this->_survey))
+        {
+            $this->_survey = Proposalgen_Model_Mapper_Assessment_Survey::getInstance()->find($this->id);
+        }
+
+        return $this->_survey;
+    }
+
+    /**
+     * Sets the survey
+     *
+     * @param Proposalgen_Model_Assessment_Survey $survey
+     *
+     * @return Proposalgen_Model_Report
+     */
+    public function setSurvey ($survey)
+    {
+        $this->_survey = $survey;
 
         return $this;
     }

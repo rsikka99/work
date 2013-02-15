@@ -1553,6 +1553,32 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `assessment_surveys`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `assessment_surveys` (
+  `reportId` INT NOT NULL ,
+  `costOfInkAndToner` DOUBLE NULL ,
+  `costOfLabor` DOUBLE NULL ,
+  `costToExecuteSuppliesOrder` DOUBLE NOT NULL DEFAULT 50.00 ,
+  `averageItHourlyRate` DOUBLE NOT NULL DEFAULT 40.00 ,
+  `numberOfSuppliesVendors` INT NOT NULL ,
+  `numberOfSupplyOrdersPerMonth` DOUBLE NOT NULL ,
+  `hoursSpentOnIt` INT NULL ,
+  `averageMonthlyBreakdowns` DOUBLE NULL ,
+  `pageCoverageMonochrome` DOUBLE NOT NULL ,
+  `pageCoverageColor` DOUBLE NOT NULL ,
+  `percentageOfInkjetPrintVolume` DOUBLE NOT NULL ,
+  `averageRepairTime` DOUBLE NOT NULL ,
+  PRIMARY KEY (`reportId`) ,
+  CONSTRAINT `assessment_surveys_ibfk_1`
+    FOREIGN KEY (`reportId` )
+    REFERENCES `pgen_reports` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Placeholder table for view `pgen_map_device_instances`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pgen_map_device_instances` (`rmsProviderId` INT, `rmsModelId` INT, `manufacturer` INT, `modelName` INT, `useUserData` INT, `reportId` INT, `masterDeviceId` INT, `isMapped` INT, `mappedManufacturer` INT, `mappedModelName` INT, `deviceCount` INT, `deviceInstanceIds` INT);

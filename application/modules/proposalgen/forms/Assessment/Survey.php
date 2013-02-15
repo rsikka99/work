@@ -54,7 +54,7 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Vertical
 
         $multiOptions = array(
             'guess'                   => 'I don\'t know',
-            'I know the exact amount' => 'I know the exact amount'
+            'exact' => 'I know the exact amount'
         );
 
         /*

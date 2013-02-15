@@ -30,6 +30,10 @@ $data = array(
     "noBreakEnd"     => $this->noBreakEnd,
     "orientation"    => $this->orientation
 );
+
+?>
+<div class="container" id="htmlReportContainer">
+<?php
 echo $this->partial('report/solution/html/01_Title.phtml', $data);
 echo $this->partial('report/solution/html/02_Description.phtml', $data);
 echo $this->partial('report/solution/html/03_PrintIQ.phtml', $data);
@@ -39,3 +43,5 @@ echo $this->partial('report/solution/html/04_PrintIQPlus_Replacements.phtml', $d
 	echo $this->partial('report/solution/05_PrintIQPlus_Summary.phtml', $data);
 */
 echo $this->partial('report/solution/html/06_Summary.phtml', $data);
+?>
+</div>
