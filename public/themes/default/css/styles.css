@@ -91,7 +91,16 @@ header.pageHeader {
 header.authHeader {
   background-image: url('../img/header.png');
   background-repeat: no-repeat;
-  height: 100px;
+  background-color: #218abd;
+  background-image: -moz-linear-gradient(top, #1796d3, #2f789c);
+  background-image: -ms-linear-gradient(top, #1796d3, #2f789c);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#1796d3), to(#2f789c));
+  background-image: -webkit-linear-gradient(top, #1796d3, #2f789c);
+  background-image: -o-linear-gradient(top, #1796d3, #2f789c);
+  background-image: linear-gradient(top, #1796d3, #2f789c);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1796d3', endColorstr='#2f789c', GradientType=0);
+  height: 30px;
   -webkit-border-radius: 5px 5px 0 0;
   -moz-border-radius: 5px 5px 0 0;
   border-radius: 5px 5px 0 0;
