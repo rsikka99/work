@@ -141,41 +141,6 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `pgen_questions`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_questions` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `description` TEXT NULL DEFAULT NULL ,
-  PRIMARY KEY (`id`) )
-ENGINE = InnoDB
-AUTO_INCREMENT = 31
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `pgen_date_answers`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_date_answers` (
-  `question_id` INT(11) NOT NULL ,
-  `report_id` INT(11) NOT NULL ,
-  `date_answer` DATETIME NOT NULL ,
-  PRIMARY KEY (`question_id`, `report_id`) ,
-  INDEX `report_id` (`report_id` ASC) ,
-  CONSTRAINT `proposalgenerator_date_answers_ibfk_1`
-    FOREIGN KEY (`report_id` )
-    REFERENCES `pgen_reports` (`id` )
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `proposalgenerator_date_answers_ibfk_2`
-    FOREIGN KEY (`question_id` )
-    REFERENCES `pgen_questions` (`id` )
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
 -- Table `pgen_rms_providers`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_rms_providers` (
@@ -512,6 +477,18 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_master_matchups` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `pgen_questions`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `pgen_questions` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `description` TEXT NULL DEFAULT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB
+AUTO_INCREMENT = 31
 DEFAULT CHARACTER SET = utf8;
 
 
