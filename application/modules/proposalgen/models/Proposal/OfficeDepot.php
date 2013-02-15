@@ -289,18 +289,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     }
 
     /**
-     * @return string
-     */
-    public function getCustomerAddress ()
-    {
-        $reportQuestions = $this->getReportQuestions();
-
-        return $reportQuestions [30]->textualAnswer;
-    }
-
-
-
-    /**
      * @return Proposalgen_Model_Rms_Excluded_Row[]
      */
     public function getExcludedDevices ()
@@ -722,7 +710,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
 
         return $this->CashHeldInInventory;
     }
-
 
 
     /**
@@ -1351,16 +1338,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->NumberOfRepairs))
         {
-            $reportQuestions = $this->getReportQuestions();
-            if (strcasecmp($reportQuestions [20]->TextualAnswer, "I know the exact amount") === 0)
+            $this->NumberOfRepairs = $this->report->getSurvey()->averageMonthlyBreakdowns;
+            if (!$this->NumberOfRepairs)
             {
-                $this->NumberOfRepairs = $reportQuestions [20]->NumericAnswer;
-            }
-            else
-            {
-                /*
-                 * The calculation is # of devices / 20. We do *.05 to avoid issues with division
-                 */
                 $this->NumberOfRepairs = $this->getDeviceCount() * 0.05;
             }
         }
@@ -1375,8 +1355,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->AverageTimeBetweenBreakdownAndFix))
         {
-            $reportQuestions                         = $this->getReportQuestions();
-            $this->AverageTimeBetweenBreakdownAndFix = $reportQuestions [24]->NumericAnswer;
+            $this->AverageTimeBetweenBreakdownAndFix = $this->report->getSurvey()->averageRepairTime;
         }
 
         return $this->AverageTimeBetweenBreakdownAndFix;
@@ -1405,8 +1384,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->NumberOfVendors))
         {
-            $reportQuestions       = $this->getReportQuestions();
-            $this->NumberOfVendors = $reportQuestions [16]->NumericAnswer;
+            $this->NumberOfVendors = $this->report->getSurvey()->numberOfSuppliesVendors;
         }
 
         return $this->NumberOfVendors;
@@ -1446,8 +1424,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->PercentPrintingDoneOnInkjet))
         {
-            $reportQuestions                   = $this->getReportQuestions();
-            $this->PercentPrintingDoneOnInkjet = $reportQuestions [23]->NumericAnswer;
+            $this->PercentPrintingDoneOnInkjet = $this->report->getSurvey()->percentageOfInkjetPrintVolume;
         }
 
         return $this->PercentPrintingDoneOnInkjet;
@@ -1566,12 +1543,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->WeeklyITHours))
         {
-            $reportQuestions = $this->getReportQuestions();
-            if (strcasecmp($reportQuestions [18]->textualAnswer, "I know the exact amount") === 0)
-            {
-                $this->WeeklyITHours = $reportQuestions [18]->NumericAnswer;
-            }
-            else
+            $this->WeeklyITHours = $this->report->getSurvey()->hoursSpentOnIt;
+            if (!$this->WeeklyITHours)
             {
                 $this->WeeklyITHours = $this->getDeviceCount() * 0.25;
             }
@@ -1600,8 +1573,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->AverageITRate))
         {
-            $reportQuestions     = $this->getReportQuestions();
-            $this->AverageITRate = $reportQuestions [15]->NumericAnswer;
+            $this->AverageITRate = $this->report->getSurvey()->averageItHourlyRate;
         }
 
         return $this->AverageITRate;
@@ -1633,10 +1605,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             $OD_AverageEmployeesPerDevice      = 4.4;
 
             // Other variables used in several places
-            $pageCounts      = $this->getPageCounts();
-            $reportQuestions = $this->getReportQuestions();
-            $companyName     = $this->report->getClient()->companyName;
-            $employeeCount   = $this->report->getClient()->employeeCount;
+            $pageCounts    = $this->getPageCounts();
+            $companyName   = $this->report->getClient()->companyName;
+            $employeeCount = $this->report->getClient()->employeeCount;
 
             // Formatting variables
             $numberValueMarker                          = "N *sz0";
@@ -2145,8 +2116,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->CostOfExecutingSuppliesOrders))
         {
-            $reportQuestions                     = $this->getReportQuestions();
-            $this->CostOfExecutingSuppliesOrders = $reportQuestions [14]->NumericAnswer * $this->getNumberOfAnnualInkTonerOrders();
+            $this->CostOfExecutingSuppliesOrders = $this->report->getSurvey()->costToExecuteSuppliesOrder * $this->report->getSurvey()->numberOfSupplyOrdersPerMonth;
         }
 
         return $this->CostOfExecutingSuppliesOrders;
@@ -2172,12 +2142,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->AnnualCostOfOutSourcing))
         {
-            $reportQuestions = $this->getReportQuestions();
-            if (strcasecmp($reportQuestions [12]->textualAnswer, "I know the exact amount") === 0)
-            {
-                $this->AnnualCostOfOutSourcing = $reportQuestions [12]->NumericAnswer;
-            }
-            else
+            $this->AnnualCostOfOutSourcing = $this->report->getSurvey()->costOfLabor;
+            if (!$this->AnnualCostOfOutSourcing)
             {
                 $this->AnnualCostOfOutSourcing = $this->getPurchasedDeviceCount() * 200;
             }
@@ -2303,8 +2269,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->InternalAdminCost))
         {
-            $reportQuestions         = $this->getReportQuestions();
-            $this->InternalAdminCost = $reportQuestions [14]->NumericAnswer * 12;
+            $this->InternalAdminCost = $this->report->getSurvey()->costToExecuteSuppliesOrder * 12;
         }
 
         return $this->InternalAdminCost;
@@ -2319,6 +2284,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         {
             $this->PrintIQTotalCost = $this->getInternalAdminCost() + ($this->getAnnualITCost() * 0.5) + ($this->getPageCounts()->Purchased->Color->Yearly * $this->getMPSColorCPP()) + ($this->getPageCounts()->Purchased->BlackAndWhite->Yearly * $this->getMPSBlackAndWhiteCPP()) + $this->getAnnualCostOfHardwarePurchases();
         }
+
         return $this->PrintIQTotalCost;
     }
 
@@ -2342,8 +2308,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->UniqueVendorCount))
         {
-            $questions               = $this->getReportQuestions();
-            $this->UniqueVendorCount = $questions [16]->NumericAnswer;
+            $this->UniqueVendorCount = $this->report->getSurvey()->numberOfSuppliesVendors;
         }
 
         return $this->UniqueVendorCount;
@@ -2356,8 +2321,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->NumberOfOrdersPerMonth))
         {
-            $reportQuestions              = $this->getReportQuestions();
-            $this->NumberOfOrdersPerMonth = $reportQuestions [17]->NumericAnswer;
+            $this->NumberOfOrdersPerMonth = $this->report->getSurvey()->numberOfSupplyOrdersPerMonth;
         }
 
         return $this->NumberOfOrdersPerMonth;
@@ -2818,8 +2782,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->CostOfExecutingSuppliesOrder))
         {
-            $reportQuestions                    = $this->getReportQuestions();
-            $this->CostOfExecutingSuppliesOrder = $reportQuestions [14]->NumericAnswer * $this->getNumberOfAnnualInkTonerOrders();
+            $this->CostOfExecutingSuppliesOrder = $this->report->getSurvey()->costToExecuteSuppliesOrder * $this->getNumberOfAnnualInkTonerOrders();
         }
 
         return $this->CostOfExecutingSuppliesOrder;

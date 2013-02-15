@@ -101,19 +101,6 @@ class Proposalgen_Model_Proposal_Abstract
         return $this->_costPerPageSettingForDealer;
     }
 
-    /**
-     * @return Proposalgen_Model_Question[]
-     */
-    public function getReportQuestions ()
-    {
-        if (!isset($this->ReportQuestions))
-        {
-            $questionSetMapper     = Proposalgen_Model_Mapper_QuestionSet::getInstance();
-            $this->ReportQuestions = $questionSetMapper->getQuestionSetQuestions($this->report->questionSetId, $this->report->id);
-        }
-
-        return $this->ReportQuestions;
-    }
 
     /**
      * @return float
@@ -122,8 +109,7 @@ class Proposalgen_Model_Proposal_Abstract
     {
         if (!isset($this->PageCoverageBlackAndWhite))
         {
-            $questions                       = $this->getReportQuestions();
-            $this->PageCoverageBlackAndWhite = $questions [21]->NumericAnswer;
+            $this->PageCoverageBlackAndWhite = $this->report->getSurvey()->pageCoverageMonochrome;
         }
 
         return $this->PageCoverageBlackAndWhite;
@@ -136,8 +122,7 @@ class Proposalgen_Model_Proposal_Abstract
     {
         if (!isset($this->PageCoverageColor))
         {
-            $questions               = $this->getReportQuestions();
-            $this->PageCoverageColor = $questions [22]->NumericAnswer;
+            $this->PageCoverageColor = $this->report->getSurvey()->pageCoverageColor;
         }
 
         return $this->PageCoverageColor;
