@@ -1,4 +1,3 @@
-/* Nav Tabs */
 .clearfix {
   *zoom: 1;
 }
@@ -34,7 +33,6 @@
   background-color: #eeeeee;
   /* Old browsers */
 
-  background-repeat: repeat-x;
   /* Repeat the gradient */
 
   background-color: #f2f2f2;
@@ -435,9 +433,6 @@ legend {
 }
 tr.lowProfitDevice td {
   font-weight: bold;
-}
-.assessmentMenu {
-  font-size: 13px;
 }
 /*
  * Quote Flow
