@@ -132,7 +132,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
      */
     public function initHtmlReport ()
     {
-
+        $this->view->headScript()->appendFile($this->view->baseUrl('/js/htmlReport.js'));
 
         $this->_user = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
 

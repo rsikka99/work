@@ -1,10 +1,11 @@
-<?php
+<?php $this->placeholder('extraNavbar')->set($this->render('_partials/reportMenu.phtml'));
+
 $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
 $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
 $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/assessment/assessment_html.css"));
 // Title page image
 echo '<style type="text/css">
-        div.titlepage {
+        #htmlReportContainer div.titlepage {
             height: 500px;
             padding-left: 300px;
             padding-top: 350px;

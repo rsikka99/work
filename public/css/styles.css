@@ -107,6 +107,10 @@
 #subnavbar-container {
   width: 960px;
 }
+.subnav .btn,
+.subnav .btn-group {
+  margin-top: 2px;
+}
 .form-inline {
   margin: 0;
 }
@@ -189,7 +193,7 @@ label.label-phone-number-country {
 .navbar .sidebar {
   width: auto;
 }
-#navbar-container {
+.navbar .navbar-container {
   width: 960px;
 }
 .navbar {
@@ -200,17 +204,6 @@ label.label-phone-number-country {
   min-width: 960px;
 }
 .navbar .navbar-inner {
-  background-color: #4b4b4b;
-  background-image: -moz-linear-gradient(top, #666666, #222222);
-  background-image: -ms-linear-gradient(top, #666666, #222222);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#666666), to(#222222));
-  background-image: -webkit-linear-gradient(top, #666666, #222222);
-  background-image: -o-linear-gradient(top, #666666, #222222);
-  background-image: linear-gradient(top, #666666, #222222);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#666666', endColorstr='#222222', GradientType=0);
-  border-color: #222222 #222222 #000000;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   -webkit-border-radius: 0 0 0;
   -moz-border-radius: 0 0 0;
   border-radius: 0 0 0;
@@ -370,7 +363,7 @@ input.addEditUnknownDevice {
   padding-top: 13px;
 }
 #header-background {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(122, 122, 122, 0.14);
 }
 #lightbox {
   display: none;

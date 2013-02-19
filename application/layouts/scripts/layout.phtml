@@ -31,7 +31,7 @@
 <!-- Start of Navbar -->
 <div class="navbar navbar-inverse">
     <div class="navbar-inner">
-        <div class="container" id="navbar-container">
+        <div class="container navbar-container">
             <div class="sidebar pull-right">
                 <div class="pull-right">
                     <?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
@@ -65,11 +65,12 @@
         <?php echo $subNav; ?>
     </div>
     <?php endif; ?>
-
+    <?php echo $this->placeholder('extraNavbar'); ?>
     <div class="container">
         <div class="row">
             <div class="span12">
                 <?php echo $this->placeholder('ProgressionNav'); ?>
+
                 <?php echo $this->flashMessenger("info", '<div class="alert alert-%s">%s</div>'); ?>
                 <?php echo $this->layout()->content; ?>
             </div>

@@ -1,11 +1,3 @@
-/* 
-    Styles specific to the gross margin report 
-    Last revised: January 18, 2013
-*/
-html, body {
-    background-color : #FFF;
-}
-
 #htmlReportContainer {
     width : 842px;
 }

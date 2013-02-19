@@ -32,7 +32,6 @@ class Proposalgen_Report_SolutionController extends Proposalgen_Library_Controll
             throw new Exception("Could not generate solution report.");
         }
 
-        $this->_helper->layout->setLayout('htmlreport');
     }
 
     /**

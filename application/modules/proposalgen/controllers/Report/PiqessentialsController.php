@@ -35,8 +35,6 @@ class Proposalgen_Report_PiqessentialsController extends Proposalgen_Library_Con
         {
             throw new Exception("Could not generate solution report.");
         }
-
-        $this->_helper->layout->setLayout('htmlreport');
     }
 
     /**

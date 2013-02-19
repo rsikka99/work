@@ -55,12 +55,12 @@ if ($reportHasDevicesToReplace) : // See "endif; // $reportHasDevicesToReplace" 
 	$printIQCost = 0; $replacementSavings = 0; $currentCost = 0;?>
 	<?php if (count($devicesToBeReplaced[$ctr]) > 0) :?>
         <?php echo $this->noBreakStart; ?>
-			<p style="margin-bottom: 10pt;">We recommend replacing the following <strong><?php echo count($devicesToBeReplaced[$ctr]); ?></strong> <?php echo $printerTypes[$ctr]?> listed below with the <strong><?php echo $replacementDevice->MasterDevice->Manufacturer->ManufacturerName; ?> <?php echo $replacementDevice->MasterDevice->PrinterModel; ?></strong>,which offers the following benefits:</p>
+			<p style="margin-bottom: 10pt;">We recommend replacing the following <strong><?php echo count($devicesToBeReplaced[$ctr]); ?></strong> <?php echo $printerTypes[$ctr]?> listed below with the <strong><?php echo $replacementDevice->getMasterDevice()->getFullDeviceName(); ?></strong>,which offers the following benefits:</p>
     		<ul>
-    			<li><strong>Flat monthly rate of $<?php echo number_format($replacementDevice->MonthlyRate)?> for up to 10,000 pages</strong></li>
-    			<li>Prints up to <?php echo $replacementDevice->PrintSpeed; ?> pages per minute in monochrome</li>
-    			<li>Up to <?php echo $replacementDevice->Resolution; ?> resolution</li>
-    			<?php if($replacementDevice->MasterDevice->IsDuplex) :?>
+    			<li><strong>Flat monthly rate of $<?php echo number_format($replacementDevice->monthlyRate)?> for up to 10,000 pages</strong></li>
+    			<li>Prints up to <?php echo $replacementDevice->printSpeed; ?> pages per minute in monochrome</li>
+    			<li>Up to <?php echo $replacementDevice->resolution; ?> resolution</li>
+    			<?php if($replacementDevice->getMasterDevice()->isDuplex) :?>
     					<li>Standard duplexing</li>
     			<?php endif; ?>
     			<li>ENERGY STAR qualified</li>
@@ -139,7 +139,7 @@ if ($reportHasDevicesToReplace) : // See "endif; // $reportHasDevicesToReplace" 
 						<td class="right">$<?php echo number_format(($proposal->getLeftOverColorPageCount() * $proposal->getMPSColorCPP()),0)?></td>
 					</tr>
 					<tr>
-						<td>Processing 1 invoice/month @ $<?php echo $proposal->getCostOfExecutingSuppliesOrder ?></td>
+						<td>Processing 1 invoice/month @ $<?php echo $proposal->getCostOfExecutingSuppliesOrder() ?></td>
 						<td class="right">$<?php echo number_format($proposal->getInternalAdminCost()); ?></td>
 					</tr>
 					<tr>

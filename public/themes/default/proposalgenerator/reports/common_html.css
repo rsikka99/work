@@ -1,44 +1,44 @@
 /* Styles specific to the assessment report */
-html, body {
-    background-color : #FFF;
+
+#htmlReportContainer {
+    width  : 595px;
+    border : 1px solid #CCC;
 }
 
 #htmlReportContainer {
-    width: 595px;
-}
-
-body {
     font-family    : Arial, sans-serif;
     padding-bottom : 150px;
 }
 
-p, span, li {
+#htmlReportContainer p,
+#htmlReportContainer span,
+#htmlReportContainer li {
     font-size : 12px;
 }
 
 /* GRADE TABLE */
-table.gradesTable {
+#htmlReportContainer table.gradesTable {
     background-color : #F0F0F0;
     border-left      : 1px solid #000000;
     border-top       : 1px solid #000000;
 }
 
-table.gradesTable td {
+#htmlReportContainer table.gradesTable td {
     border-bottom : 1px solid #000000;
     border-right  : 1px solid #000000;
 }
 
-table.gradesTable td.gradeDescription {
+#htmlReportContainer table.gradesTable td.gradeDescription {
     width        : 570px;
     padding-left : 10px;
 }
 
-table.gradesTable td.gradeDescription h4 {
+#htmlReportContainer table.gradesTable td.gradeDescription h4 {
     margin  : 0px;
     padding : 0px;
 }
 
-table.gradesTable td.gradeNumber {
+#htmlReportContainer table.gradesTable td.gradeNumber {
     padding     : 0px;
     font-size   : 20pt;
     font-weight : bold;
@@ -47,22 +47,22 @@ table.gradesTable td.gradeNumber {
 }
 
 /* Overrides */
-div.h1 {
+#htmlReportContainer div.h1 {
     margin-top : 100px;
 }
 
-div.annualSavings {
+#htmlReportContainer div.annualSavings {
     font-size : 15px;
 }
 
 /* References the 3 graphs */
-.graphs {
+#htmlReportContainer .graphs {
     margin-left : -30px;
     text-align  : center;
     width       : 100%;
 }
 
 /* IT Time Spent Supporting Printing Devices */
-.fontChange {
+#htmlReportContainer .fontChange {
     font-size : 13px;
 }
