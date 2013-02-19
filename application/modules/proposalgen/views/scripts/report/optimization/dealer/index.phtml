@@ -1,4 +1,5 @@
 <?php
+    $this->placeholder('extraNavbar')->set($this->render('_partials/reportMenu.phtml'));
     $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
     $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
     $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/optimization/optimization_html.css"));
@@ -13,296 +14,267 @@
                     count($profitabilityDevices->retired) +
                     count($profitabilityDevices->flagged);
 ?>
+<div class="container" id="htmlReportContainer">
+    <div class="pageTitle">MPS Dealer Optimization Report For <?php echo $proposal->report->getClient()->companyName;?> - Not For Customer Distribution </div>
+    <h3>Fleet</h3>
+    <table class="rDevices">
+        <tr>
+            <td><strong>Target Monochrome CPP:</strong></td>
+            <td><?php echo $this->currency($proposal->report->getReportSettings()->targetMonochromeCostPerPage, array('precision' => 4));?></td>
+            <td><strong>Target Color CPP:</strong></td>
+            <td><?php echo $this->currency($proposal->report->getReportSettings()->targetColorCostPerPage, array('precision' => 4));?></td>
+        </tr>
+        <tr>
+            <td><strong>Monthly Monochrome Page Count:</strong></td>
+            <td><?php echo number_format($proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly);?></td>
+            <td><strong>Monthly Color Page Count:</strong></td>
+            <td><?php echo number_format($proposal->getPageCounts()->Purchased->Color->Monthly);?></td>
+        </tr>
+    </table>
+    <br/>
 
-<div class="pageTitle">MPS Dealer Optimization Report For <?php echo $proposal->report->customerCompanyName;?> - Not For Customer Distribution </div>
-<h3>Fleet</h3>
-<table class="rDevices">
-	<tr>
-		<td><strong>Target Monochrome CPP:</strong></td>
-        <td><?php echo $this->currency($proposal->report->getReportSettings()->targetMonochromeCostPerPage, array('precision' => 4));?></td>
-		<td><strong>Target Color CPP:</strong></td>
-        <td><?php echo $this->currency($proposal->report->getReportSettings()->targetColorCostPerPage, array('precision' => 4));?></td>
-	</tr>
-	<tr>
-		<td><strong>Monthly Monochrome Page Count:</strong></td>
-        <td><?php echo number_format($proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly);?></td>
-		<td><strong>Monthly Color Page Count:</strong></td>
-        <td><?php echo number_format($proposal->getPageCounts()->Purchased->Color->Monthly);?></td>
-	</tr>
-</table>
-<br/>
+    <h3>Cost Analysis Summary</h3>
+    <table class="rDevices">
+        <tr class='header'>
+            <th colspan='2'>Current Fleet</th>
+            <th colspan='2'>Optimized Fleet</th>
+        </tr>
+        <tr>
+            <td style='width:150px;'><strong>Monochrome CPP:</strong></td>
+           <td><?php echo $this->currency((float)$proposal->calculateDealerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage, array('precision' => 4))?></td>
+           <td style='width:150px;'><strong>Monochrome CPP:</strong></td>
+           <td style='width:250px;'><?php echo $this->currency((float)$proposal->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage, array('precision' => 4))?></td>
+       </tr>
+       <tr>
+           <td style='width:150px;'><strong>Color CPP:</strong></td>
+           <td><?php echo $this->currency((float)$proposal->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array('precision' => 4))?></td>
+           <td style='width:150px;'><strong>Color CPP:</strong></td>
+           <td style='width:250px;'><?php echo $this->currency((float)$proposal->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array('precision' => 4))?></td>
+       </tr>
+       <tr>
+           <td style='width:150px;'><strong>Total Cost:</strong></td>
+           <td><?php echo $this->currency((float)$proposal->calculateDealerMonthlyCost(), array('precision' => 2))?></td>
+           <td style='width:150px;'><strong>Total Cost:</strong></td>
+           <td style='width:250px;'><?php echo $this->currency((float)$proposal->calculateDealerMonthlyCostWithReplacements(), array('precision' => 2))?></td>
+       </tr>
+       <tr>
+           <td style='width:150px;'><strong>Margin ($):</strong></td>
+           <td><?php echo $this->currency((float)$proposal->calculateDealerMonthlyProfitUsingTargetCostPerPage(), array('precision' => 2))?></td>
+           <td style='width:150px;'><strong>Margin ($):</strong></td>
+           <td style='width:250px;'><?php echo $this->currency((float)$proposal->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements(), array('precision' => 2))?></td>
+       </tr>
+       <tr>
+           <td style='width:150px;'><strong>Margin (%):</strong></td>
+           <td><?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$proposal->calculateDealerMonthlyCost(), (float)$proposal->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2)?>
+               %</td>
+           <td style='width:150px;'><strong>Margin (%):</strong></td>
+           <td style='width:250px;'><?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$proposal->calculateDealerMonthlyCostWithReplacements(), (float)$proposal->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2)?>
+               %</td>
+       </tr>
+    </table>
+    <br/>
 
-<h3>Cost Analysis Summary</h3>
-<table class="rDevices">
-	<tr class='header'>
-	    <th colspan='2'>Current Fleet</th>
-        <th colspan='2'>Optimized Fleet</th>
-	</tr>
-	<tr>
-		<td style='width:150px;'><strong>Monochrome CPP:</strong></td>
-       <td><?php echo $this->currency((float)$proposal->calculateDealerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage, array('precision' => 4))?></td>
-       <td style='width:150px;'><strong>Monochrome CPP:</strong></td>
-       <td style='width:250px;'><?php echo $this->currency((float)$proposal->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage, array('precision' => 4))?></td>
-   </tr>
-   <tr>
-       <td style='width:150px;'><strong>Color CPP:</strong></td>
-       <td><?php echo $this->currency((float)$proposal->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array('precision' => 4))?></td>
-       <td style='width:150px;'><strong>Color CPP:</strong></td>
-       <td style='width:250px;'><?php echo $this->currency((float)$proposal->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array('precision' => 4))?></td>
-   </tr>
-   <tr>
-       <td style='width:150px;'><strong>Total Cost:</strong></td>
-       <td><?php echo $this->currency((float)$proposal->calculateDealerMonthlyCost(), array('precision' => 2))?></td>
-       <td style='width:150px;'><strong>Total Cost:</strong></td>
-       <td style='width:250px;'><?php echo $this->currency((float)$proposal->calculateDealerMonthlyCostWithReplacements(), array('precision' => 2))?></td>
-   </tr>
-   <tr>
-       <td style='width:150px;'><strong>Margin ($):</strong></td>
-       <td><?php echo $this->currency((float)$proposal->calculateDealerMonthlyProfitUsingTargetCostPerPage(), array('precision' => 2))?></td>
-       <td style='width:150px;'><strong>Margin ($):</strong></td>
-       <td style='width:250px;'><?php echo $this->currency((float)$proposal->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements(), array('precision' => 2))?></td>
-   </tr>
-   <tr>
-       <td style='width:150px;'><strong>Margin (%):</strong></td>
-       <td><?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$proposal->calculateDealerMonthlyCost(), (float)$proposal->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2)?>
-           %</td>
-       <td style='width:150px;'><strong>Margin (%):</strong></td>
-       <td style='width:250px;'><?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$proposal->calculateDealerMonthlyCostWithReplacements(), (float)$proposal->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2)?>
-           %</td>
-   </tr>
-</table>
-<br/>
+    <h3>Device Summary</h3>
+    <table class="rDevices deviceSummary">
+        <tr class='header'>
+            <th colspan="4">Devices Analyzed For Report</th>
+        </tr>
+       <tr class='subHeader'>
+           <th colspan='2'>Current Fleet</th>
+           <th colspan='2'>Optimized Fleet</th>
+       </tr>
+       <tr>
+           <td><strong>Total Devices :</strong></td>
+           <td><?php echo number_format($totalDevices);?></td>
+           <td><strong>Total Devices :</strong></td>
+           <td><?php echo number_format($totalDevices);?></td>
+       </tr>
+       <tr>
+           <td><strong>Keep Devices:</strong></td>
+           <td><?php echo number_format($profitabilityDevices->actionKeepCount)?></td>
+           <td><strong>Keep Devices:</strong></td>
+           <td><?php echo number_format(count($profitabilityDevices->kept));?></td>
+       </tr>
+       <tr>
+           <td><strong>Flagged Devices:</strong></td>
+           <td><?php echo number_format($profitabilityDevices->actionReplaceCount)?></td>
+           <td><strong>Flagged Devices:</strong></td>
+           <td><?php echo number_format(count($profitabilityDevices->flagged));?></td>
+       </tr>
+       <tr>
+           <td><strong>Retired Devices:</strong></td>
+           <td><?php echo number_format($profitabilityDevices->actionRetireCount);?></td>
+           <td><strong>Retired Devices:</strong></td>
+           <td><?php echo number_format(count($profitabilityDevices->retired));?></td>
+        </tr>
+       <tr>
+           <td><strong>Replace Devices:</strong></td>;
+           <td>0</td>
+           <td><strong>Replace Devices:</strong></td>
+           <td><?php echo number_format(count($profitabilityDevices->replaced));?></td>
+       </tr>
+       <tr class='header'>
+            <th colspan="4">Other Devices</th>
+        </tr>
+       <tr class='subHeader'>s
+           <th colspan='2'>Current Fleet</th>
+           <th colspan='2'>Optimized Fleet</th>
+       </tr>
+       <tr>
+           <td><strong>Excess Devices:</strong></td>
+           <td>0</td>
+           <td><strong>Excess Devices:</strong></td>
+           <td><?php echo number_format(count($profitabilityDevices->excess));?></td>
+       </tr>
+       <tr>
+           <td><strong>Leased Devices:</strong></td>
+           <td><?php echo number_format(count($profitabilityDevices->leased));?></td>
+           <td><strong>Leased Devices:</strong></td>
+           <td><?php echo number_format(count($profitabilityDevices->leased));?></td>
+       </tr>
+       <tr>
+           <td><strong>Excluded Devices:</strong></td>
+           <td><?php echo number_format(count($profitabilityDevices->excluded));?></td>
+           <td><strong>Excluded Devices:</strong></td>
+           <td><?php echo number_format(count($profitabilityDevices->excluded));?></td>
+       </tr>
+    </table>
+    <br/>
 
-<h3>Device Summary</h3>
-<table class="rDevices deviceSummary">
-    <tr class='header'>
-		<th colspan="4">Devices Analyzed For Report</th>
-	</tr>
-   <tr class='subHeader'>
-       <th colspan='2'>Current Fleet</th>
-       <th colspan='2'>Optimized Fleet</th>
-   </tr>
-   <tr>
-       <td><strong>Total Devices :</strong></td>
-       <td><?php echo number_format($totalDevices);?></td>
-       <td><strong>Total Devices :</strong></td>
-       <td><?php echo number_format($totalDevices);?></td>
-   </tr>
-   <tr>
-       <td><strong>Keep Devices:</strong></td>
-       <td><?php echo number_format($profitabilityDevices->actionKeepCount)?></td>
-       <td><strong>Keep Devices:</strong></td>
-       <td><?php echo number_format(count($profitabilityDevices->kept));?></td>
-   </tr>
-   <tr>
-       <td><strong>Flagged Devices:</strong></td>
-       <td><?php echo number_format($profitabilityDevices->actionReplaceCount)?></td>
-       <td><strong>Flagged Devices:</strong></td>
-       <td><?php echo number_format(count($profitabilityDevices->flagged));?></td>
-   </tr>
-   <tr>
-       <td><strong>Retired Devices:</strong></td>
-       <td><?php echo number_format($profitabilityDevices->actionRetireCount);?></td>
-       <td><strong>Retired Devices:</strong></td>
-       <td><?php echo number_format(count($profitabilityDevices->retired));?></td>
-	</tr>
-   <tr>
-       <td><strong>Replace Devices:</strong></td>;
-       <td>0</td>
-       <td><strong>Replace Devices:</strong></td>
-       <td><?php echo number_format(count($profitabilityDevices->replaced));?></td>
-   </tr>
-   <tr class='header'>
-		<th colspan="4">Other Devices</th>
-	</tr>
-   <tr class='subHeader'>s
-       <th colspan='2'>Current Fleet</th>
-       <th colspan='2'>Optimized Fleet</th>
-   </tr>
-   <tr>
-       <td><strong>Excess Devices:</strong></td>
-       <td>0</td>
-       <td><strong>Excess Devices:</strong></td>
-       <td><?php echo number_format(count($profitabilityDevices->excess));?></td>
-   </tr>
-   <tr>
-       <td><strong>Leased Devices:</strong></td>
-       <td><?php echo number_format(count($profitabilityDevices->leased));?></td>
-       <td><strong>Leased Devices:</strong></td>
-       <td><?php echo number_format(count($profitabilityDevices->leased));?></td>
-   </tr>
-   <tr>
-       <td><strong>Excluded Devices:</strong></td>
-       <td><?php echo number_format(count($profitabilityDevices->excluded));?></td>
-       <td><strong>Excluded Devices:</strong></td>
-       <td><?php echo number_format(count($profitabilityDevices->excluded));?></td>
-   </tr>
-</table>
-<br/>
+    <h3>Suggested Replacement Devices<em><?php echo '(' . count($profitabilityDevices->replaced) . ' of ' . $totalDevices . ')'?></em></h3>
+    <em>The following devices have been targeted for replacement, either for a monthly cost savings greater than $10.00 or manual replacement.</em>
+    <!-- Only display table if there are replacement devices assigned -->
+    <?php if ($profitabilityDevices->replaced) : ?>
+    <table class="rDevices">
+        <tr class='header'>
+           <th colspan='5' class='header'>Current</th>
+           <th colspan='4' class='header'>Replacement</th>
+           <th colspan='3' class='header'>Statistics</th>
+       </tr>
+       <tr class='subHeader'>
+            <th style='width:175px;'>Device Name</th>
+            <th>Serial<br />IP Address</th>
+            <th>Mono CPP</th>
+            <th>Color CPP</th>
+            <th>Monthly Cost</th>
+            <th style='width:175px;'>Device Name</th>
+            <th>Mono CPP</th>
+            <th>Color CPP</th>
+            <th>Monthly Cost</th>
+            <th>Mono AMPV</th>
+            <th>Color AMPV</th>
+            <th>Cost Delta</th>
+       </tr>
+        <?php foreach ($profitabilityDevices->replaced as $device) :
+            $masterDevice      = $device->getMasterDevice();
+            $replacementDevice = $device->getReplacementMasterDevice();
+            $isColor           = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+        ?>
+        <tr class='<?php echo $this->cycle(array("rowOne", "rowTwo"))->next();?>'>
+           <td class='deviceName'><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>';?></td>
+           <td class='deviceName'><?php echo $device->serialNumber . '<br/>' . $device->ipAddress . '</em>';?></td>
+           <td><?php echo $this->currency($device->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array('precision' => 4));?></td>
+           <td><?php echo ($isColor) ? $this->currency($device->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->colorCostPerPage, array('precision' => 4)) : 'N/A';?></td>
+           <td class='borderRight'><?php echo $this->currency($device->calculateMonthlyCost($costPerPageSetting));?></td>
+           <!-- Replacement Devices -->
+            <td class='deviceName'><?php echo '<em>' . $replacementDevice->getManufacturer()->fullname . '</em><br/><strong>' . $replacementDevice->modelName . '</strong>';?></td>
+           <td><?php echo $this->currency($replacementDevice->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->monochromeCostPerPage, array('precision' => 4))?></td>
+           <td><?php echo ($isColor) ? $this->currency($replacementDevice->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->colorCostPerPage, array('precision' => 4)) : 'N/A';?></td>
+           <td class='borderRight'><?php echo $this->currency($device->calculateMonthlyCost($costPerPageSetting, $replacementDevice));?></td>
+           <!-- Monthly Statistics -->
+            <td><?php echo number_format($device->getAverageMonthlyBlackAndWhitePageCount());?></td>
+            <td><?php echo ($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A';?></td>
+            <td><?php echo $this->currency($device->calculateMonthlyCost($costPerPageSetting) - $device->calculateMonthlyCost($costPerPageSetting, $device->getReplacementMasterDevice()));?></td>
+       </tr>
+        <?php endforeach?>
+    </table>
+    <?php else: ?>
+    <em>This assessment has no replacement devices assigned.</em>
+    <?php endif; ?>
+    <br />
 
-<h3>Suggested Replacement Devices<em><?php echo '(' . count($profitabilityDevices->replaced) . ' of ' . $totalDevices . ')'?></em></h3>
-<em>The following devices have been targeted for replacement, either for a monthly cost savings greater than $10.00 or manual replacement.</em>
-<!-- Only display table if there are replacement devices assigned -->
-<?php if ($profitabilityDevices->replaced) : ?>
-<table class="rDevices">
-	<tr class='header'>
-       <th colspan='5' class='header'>Current</th>
-       <th colspan='4' class='header'>Replacement</th>
-       <th colspan='3' class='header'>Statistics</th>
-   </tr>
-   <tr class='subHeader'>
-    	<th style='width:175px;'>Device Name</th>
-    	<th>Serial<br />IP Address</th>
-    	<th>Mono CPP</th>
-    	<th>Color CPP</th>
-    	<th>Monthly Cost</th>
-    	<th style='width:175px;'>Device Name</th>
-    	<th>Mono CPP</th>
-    	<th>Color CPP</th>
-    	<th>Monthly Cost</th>
-    	<th>Mono AMPV</th>
-    	<th>Color AMPV</th>
-    	<th>Cost Delta</th>
-   </tr>
-    <?php foreach ($profitabilityDevices->replaced as $device) :
-        $masterDevice      = $device->getMasterDevice();
-        $replacementDevice = $device->getReplacementMasterDevice();
-        $isColor           = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
-    ?>
-    <tr class='<?php echo $this->cycle(array("rowOne", "rowTwo"))->next();?>'>
-       <td class='deviceName'><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>';?></td>
-       <td class='deviceName'><?php echo $device->serialNumber . '<br/>' . $device->ipAddress . '</em>';?></td>
-       <td><?php echo $this->currency($device->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array('precision' => 4));?></td>
-       <td><?php echo ($isColor) ? $this->currency($device->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->colorCostPerPage, array('precision' => 4)) : 'N/A';?></td>
-       <td class='borderRight'><?php echo $this->currency($device->calculateMonthlyCost($costPerPageSetting));?></td>
-       <!-- Replacement Devices -->
-    	<td class='deviceName'><?php echo '<em>' . $replacementDevice->getManufacturer()->fullname . '</em><br/><strong>' . $replacementDevice->modelName . '</strong>';?></td>
-       <td><?php echo $this->currency($replacementDevice->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->monochromeCostPerPage, array('precision' => 4))?></td>
-       <td><?php echo ($isColor) ? $this->currency($replacementDevice->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->colorCostPerPage, array('precision' => 4)) : 'N/A';?></td>
-       <td class='borderRight'><?php echo $this->currency($device->calculateMonthlyCost($costPerPageSetting, $replacementDevice));?></td>
-	   <!-- Monthly Statistics -->
-		<td><?php echo number_format($device->getAverageMonthlyBlackAndWhitePageCount());?></td>
-		<td><?php echo ($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A';?></td>
-		<td><?php echo $this->currency($device->calculateMonthlyCost($costPerPageSetting) - $device->calculateMonthlyCost($costPerPageSetting, $device->getReplacementMasterDevice()));?></td>
-   </tr>
-    <?php endforeach?>
-</table>
-<?php else: ?>
-<em>This assessment has no replacement devices assigned.</em>
-<?php endif; ?>
-<br />
+    <h3>Acceptable Devices<em><?php echo '(' . count($profitabilityDevices->kept) . ' of ' . $totalDevices . ')'?></em></h3>
+    <em>The following devices have been deemed productive and fall within the target costs per pages.</em>
+    <table class="rDevices">
+        <tr class='header'>
+            <th style='width:175px;'>Device Name</th>
+            <th>Serial<br />IP Address</th>
+            <th>Mono AMPV</th>
+            <th>Color AMPV</th>
+            <th>Mono CPP</th>
+            <th>Color CPP</th>
+            <th>Monthly Cost</th>
+        </tr>
+        <?php foreach ($profitabilityDevices->kept as $device) :
+        $masterDevice = $device->getMasterDevice();
+        $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+        ?>
+        <tr class='<?php echo $this->cycle(array("rowOne", "rowTwo"))->next();?>'>
+           <td class='deviceName'><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>';?></td>
+           <td class='deviceName'><?php echo $device->serialNumber . '<br/>' . $device->ipAddress . '</em>';?></td>
+            <td><?php echo number_format($device->getAverageMonthlyBlackAndWhitePageCount());?></td>
+            <td><?php echo ($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A';?></td>
+            <td><?php echo $this->currency($device->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array('precision' => 4));?></td>
+            <td><?php echo ($isColor) ? $this->currency($device->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, array('precision' => 4)) : 'N/A';?></td>
+            <td><?php echo $this->currency($device->calculateMonthlyCost($costPerPageSetting));?></td>
+        </tr>
+        <?php endforeach;?>
+    </table>
+    <br />
 
-<h3>Acceptable Devices<em><?php echo '(' . count($profitabilityDevices->kept) . ' of ' . $totalDevices . ')'?></em></h3>
-<em>The following devices have been deemed productive and fall within the target costs per pages.</em>
-<table class="rDevices">
-	<tr class='header'>
-		<th style='width:175px;'>Device Name</th>
-    	<th>Serial<br />IP Address</th>
-		<th>Mono AMPV</th>
-		<th>Color AMPV</th>
-		<th>Mono CPP</th>
-		<th>Color CPP</th>
-		<th>Monthly Cost</th>
-	</tr>
-    <?php foreach ($profitabilityDevices->kept as $device) :
-    $masterDevice = $device->getMasterDevice();
-    $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
-    ?>
-    <tr class='<?php echo $this->cycle(array("rowOne", "rowTwo"))->next();?>'>
-       <td class='deviceName'><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>';?></td>
-       <td class='deviceName'><?php echo $device->serialNumber . '<br/>' . $device->ipAddress . '</em>';?></td>
-		<td><?php echo number_format($device->getAverageMonthlyBlackAndWhitePageCount());?></td>
-		<td><?php echo ($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A';?></td>
-		<td><?php echo $this->currency($device->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array('precision' => 4));?></td>
-		<td><?php echo ($isColor) ? $this->currency($device->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, array('precision' => 4)) : 'N/A';?></td>
-		<td><?php echo $this->currency($device->calculateMonthlyCost($costPerPageSetting));?></td>
-	</tr>
-    <?php endforeach;?>
-</table>
-<br />
+    <h3>Excess Inventory<em><?php echo '(' . count($profitabilityDevices->excess) . ')'?></em></h3>
+    <em>The following devices are excess devices that can still be used inside your fleet.</em>
+    <table class="rDevices">
+        <tr class='header'>
+            <th style='width:175px;'>Device Name</th>
+            <th>Serial / IP Address</th>
+            <th>Life Page Count</th>
+            <th>JIT Compatible</th>
+            <th>Mono CPP</th>
+            <th>Color CPP</th>
+        </tr>
+        <?php foreach ($profitabilityDevices->excess as $device) :
+        $masterDevice = $device->getMasterDevice();
+        $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+        ?>
+        <tr>
+           <td class='deviceName'><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>';?></td>
+           <td class='deviceName'><?php echo $device->serialNumber . '<br/>' . $device->ipAddress . '</em>';?></td>
+           <td><?php echo number_format($device->getLifePageCount());?></td>
+            <td><?php echo ($device->reportsTonerLevels) ? 'Yes' : 'No';?></td>
+            <td><?php echo $this->currency($device->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array('precision' => 4));?></td>
+            <td><?php echo ($isColor) ? $this->currency($device->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, array('precision' => 4)) : 'N/A';?></td>
+        </tr>
+        <?php endforeach?>
+    </table>
+    <br />
 
-<h3>Excess Inventory<em><?php echo '(' . count($profitabilityDevices->excess) . ')'?></em></h3>
-<em>The following devices are excess devices that can still be used inside your fleet.</em>
-<table class="rDevices">
-	<tr class='header'>
-		<th style='width:175px;'>Device Name</th>
-        <th>Serial / IP Address</th>
-        <th>Life Page Count</th>
-		<th>JIT Compatible</th>
-		<th>Mono CPP</th>
-		<th>Color CPP</th>
-	</tr>
-    <?php foreach ($profitabilityDevices->excess as $device) :
-    $masterDevice = $device->getMasterDevice();
-    $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
-    ?>
-    <tr>
-       <td class='deviceName'><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>';?></td>
-       <td class='deviceName'><?php echo $device->serialNumber . '<br/>' . $device->ipAddress . '</em>';?></td>
-       <td><?php echo number_format($device->getLifePageCount());?></td>
-		<td><?php echo ($device->reportsTonerLevels) ? 'Yes' : 'No';?></td>
-		<td><?php echo $this->currency($device->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array('precision' => 4));?></td>
-		<td><?php echo ($isColor) ? $this->currency($device->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, array('precision' => 4)) : 'N/A';?></td>
-	</tr>
-    <?php endforeach?>
-</table>
-<br />
+    <h3>Retired <em><?php echo '(' . count($profitabilityDevices->retired) . ' of ' . $totalDevices . ')'?></em></h3>
+    <em>Devices with both low volume and age of over 8 years have been targeted for retirement. We suggest migrating the page volume to another device in your fleet. </em>
+    <table class="rDevices">
+        <tr class='header'>
+            <th style='width:175px;'>Device Name</th>
+            <th>Serial<br />IP Address</th>
+            <th>Life Page Count</th>
+            <th>Age (years)</th>
+            <th>JIT Compatible</th>
+            <th>Mono AMPV</th>
+            <th>Color AMPV</th>
+            <th>Mono CPP</th>
+            <th>Color CPP</th>
+            <th>Monthly Cost</th>
 
-<h3>Retired <em><?php echo '(' . count($profitabilityDevices->retired) . ' of ' . $totalDevices . ')'?></em></h3>
-<em>Devices with both low volume and age of over 8 years have been targeted for retirement. We suggest migrating the page volume to another device in your fleet. </em>
-<table class="rDevices">
-	<tr class='header'>
-		<th style='width:175px;'>Device Name</th>
-    	<th>Serial<br />IP Address</th>
-		<th>Life Page Count</th>
-		<th>Age (years)</th>
-		<th>JIT Compatible</th>
-		<th>Mono AMPV</th>
-		<th>Color AMPV</th>
-		<th>Mono CPP</th>
-		<th>Color CPP</th>
-		<th>Monthly Cost</th>
-
-	</tr>
-    <?php foreach ($profitabilityDevices->retired as $device) :
-    $masterDevice = $device->getMasterDevice();
-    $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
-    ?>
-	<tr>
-       	<td class='deviceName'><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>' . $device->serialNumber . '</em>';?></td>
-    <td class='deviceName'><?php echo $device->serialNumber . '<br/>' . $device->ipAddress . '</em>';?></td>
-    <td><?php echo number_format($device->getLifePageCount())?></td>
-    <td><?php echo number_format($device->getMasterDevice()->getAge());?></td>
-    <td><?php echo ($device->reportsTonerLevels) ? 'Yes' : 'No';?>
-    <td><?php echo number_format($device->getAverageMonthlyBlackAndWhitePageCount());?></td>
-    <td><?php echo ($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A';?></td>
-    <td><?php echo $this->currency($device->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array('precision' => 4));?></td>
-    <td><?php echo ($isColor) ? $this->currency($device->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, array('precision' => 4)) : 'N/A';?></td>
-    <td><?php echo $this->currency($device->calculateMonthlyCost($costPerPageSetting));?></td>
-    <?php endforeach?>
-</tr>
-</table>
-<br />
-
-<h3>Flagged Devices<em><?php echo '(' . count($profitabilityDevices->flagged) . ' of ' . $totalDevices . ')'?></em></h3>
-<em>These devices have been flagged for replacement based on operation reliabilty and not financial consideration.</em>
-<table class="rDevices">
-	<tr class='header'>
-		<th style='width:175px;'>Device Name</th>
-    	<th>Serial<br />IP Address</th>
-		<th>Mono AMPV</th>
-		<th>Color AMPV</th>
-		<th>Mono CPP</th>
-		<th>Color CPP</th>
-		<th>Monthly Cost</th>
-	</tr>
-    <?php foreach ($profitabilityDevices->flagged as $device) :
-    $masterDevice = $device->getMasterDevice();
-    $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
-    ?>
-    <tr>
-        <td class='deviceName'><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>' . $device->serialNumber . '</em>';?></td>
+        </tr>
+        <?php foreach ($profitabilityDevices->retired as $device) :
+        $masterDevice = $device->getMasterDevice();
+        $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+        ?>
+        <tr>
+            <td class='deviceName'><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>' . $device->serialNumber . '</em>';?></td>
         <td class='deviceName'><?php echo $device->serialNumber . '<br/>' . $device->ipAddress . '</em>';?></td>
+        <td><?php echo number_format($device->getLifePageCount())?></td>
+        <td><?php echo number_format($device->getMasterDevice()->getAge());?></td>
+        <td><?php echo ($device->reportsTonerLevels) ? 'Yes' : 'No';?>
         <td><?php echo number_format($device->getAverageMonthlyBlackAndWhitePageCount());?></td>
         <td><?php echo ($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A';?></td>
         <td><?php echo $this->currency($device->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array('precision' => 4));?></td>
@@ -310,46 +282,76 @@
         <td><?php echo $this->currency($device->calculateMonthlyCost($costPerPageSetting));?></td>
         <?php endforeach?>
     </tr>
-</table>
-<!---->
-<!--<br />-->
-<!--<h3>Leased Devices<em>--><?php //echo '(' . count($profitabilityDevices->leased) . ')'?><!--</em></h3>-->
-<!--<em>The following devices were flagged as leased within the ownership section.</em>-->
-<!--<table class="rDevices">-->
-<!--		<th style='width:175px;'>Device Name</th>-->
-<!--		<th>Mono AMPV</th>-->
-<!--		<th>Color AMPV</th>-->
-<!--		<th>Mono CPP</th>-->
-<!--		<th>Color CPP</th>-->
-<!--		<th>Monthly Cost</th>-->
-<!--	</tr>-->
-<!--    --><?php //foreach ($profitabilityDevices->leased as $device) :
-//        $masterDevice = $device->getMasterDevice();
-//        $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
-//    ?>
-<!--	<tr>-->
-<!--        <td class='deviceName'>--><?php //echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>' . $device->serialNumber . '</em>';?><!--</td>-->
-<!--        <td>--><?php //echo number_format($device->getAverageMonthlyBlackAndWhitePageCount());?><!--</td>-->
-<!--        <td>--><?php //echo ($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A';?><!--</td>-->
-<!--        <td>--><?php //echo $this->currency($device->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array('precision' => 4));?><!--</td>-->
-<!--        <td>--><?php //echo ($isColor) ? $this->currency($device->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, array('precision' => 4)) : 'N/A';?><!--</td>-->
-<!--        <td>--><?php //echo $this->currency($device->calculateMonthlyCost($costPerPageSetting));?><!--</td>-->
-<!--        --><?php //endforeach?>
-<!--    </tr>-->
-<!--</table>-->
-<br />
-<h3>Excluded<em><?php echo '(' . count($profitabilityDevices->excluded) . ')'?></em></h3>
-<table class="rDevices">
-	<tr class='header'>
-		<th style='width:175px;'>Device Name</th>
-		<th>IP Address</th>
-		<th>Serial Number</th>
-	</tr>
-    <?php foreach ($profitabilityDevices->excluded as $device) : ?>
-    <tr>
-		<td class='deviceName'><?php echo $device->getDeviceName();?></td>
-		<td><?php echo $device->ipAddress;?></td>
-		<td><?php echo $device->serialNumber;?></td>
-	</tr>
-    <?php endforeach;?>
-</table>
+    </table>
+    <br />
+
+    <h3>Flagged Devices<em><?php echo '(' . count($profitabilityDevices->flagged) . ' of ' . $totalDevices . ')'?></em></h3>
+    <em>These devices have been flagged for replacement based on operation reliabilty and not financial consideration.</em>
+    <table class="rDevices">
+        <tr class='header'>
+            <th style='width:175px;'>Device Name</th>
+            <th>Serial<br />IP Address</th>
+            <th>Mono AMPV</th>
+            <th>Color AMPV</th>
+            <th>Mono CPP</th>
+            <th>Color CPP</th>
+            <th>Monthly Cost</th>
+        </tr>
+        <?php foreach ($profitabilityDevices->flagged as $device) :
+        $masterDevice = $device->getMasterDevice();
+        $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+        ?>
+        <tr>
+            <td class='deviceName'><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>' . $device->serialNumber . '</em>';?></td>
+            <td class='deviceName'><?php echo $device->serialNumber . '<br/>' . $device->ipAddress . '</em>';?></td>
+            <td><?php echo number_format($device->getAverageMonthlyBlackAndWhitePageCount());?></td>
+            <td><?php echo ($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A';?></td>
+            <td><?php echo $this->currency($device->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array('precision' => 4));?></td>
+            <td><?php echo ($isColor) ? $this->currency($device->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, array('precision' => 4)) : 'N/A';?></td>
+            <td><?php echo $this->currency($device->calculateMonthlyCost($costPerPageSetting));?></td>
+            <?php endforeach?>
+        </tr>
+    </table>
+    <!---->
+    <!--<br />-->
+    <!--<h3>Leased Devices<em>--><?php //echo '(' . count($profitabilityDevices->leased) . ')'?><!--</em></h3>-->
+    <!--<em>The following devices were flagged as leased within the ownership section.</em>-->
+    <!--<table class="rDevices">-->
+    <!--		<th style='width:175px;'>Device Name</th>-->
+    <!--		<th>Mono AMPV</th>-->
+    <!--		<th>Color AMPV</th>-->
+    <!--		<th>Mono CPP</th>-->
+    <!--		<th>Color CPP</th>-->
+    <!--		<th>Monthly Cost</th>-->
+    <!--	</tr>-->
+    <!--    --><?php //foreach ($profitabilityDevices->leased as $device) :
+    //        $masterDevice = $device->getMasterDevice();
+    //        $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+    //    ?>
+    <!--	<tr>-->
+    <!--        <td class='deviceName'>--><?php //echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>' . $device->serialNumber . '</em>';?><!--</td>-->
+    <!--        <td>--><?php //echo number_format($device->getAverageMonthlyBlackAndWhitePageCount());?><!--</td>-->
+    <!--        <td>--><?php //echo ($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A';?><!--</td>-->
+    <!--        <td>--><?php //echo $this->currency($device->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array('precision' => 4));?><!--</td>-->
+    <!--        <td>--><?php //echo ($isColor) ? $this->currency($device->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, array('precision' => 4)) : 'N/A';?><!--</td>-->
+    <!--        <td>--><?php //echo $this->currency($device->calculateMonthlyCost($costPerPageSetting));?><!--</td>-->
+    <!--        --><?php //endforeach?>
+    <!--    </tr>-->
+    <!--</table>-->
+    <br />
+    <h3>Excluded<em><?php echo '(' . count($profitabilityDevices->excluded) . ')'?></em></h3>
+    <table class="rDevices">
+        <tr class='header'>
+            <th style='width:175px;'>Device Name</th>
+            <th>IP Address</th>
+            <th>Serial Number</th>
+        </tr>
+        <?php foreach ($profitabilityDevices->excluded as $device) : ?>
+        <tr>
+            <td class='deviceName'><?php echo $device->getDeviceName();?></td>
+            <td><?php echo $device->ipAddress;?></td>
+            <td><?php echo $device->serialNumber;?></td>
+        </tr>
+        <?php endforeach;?>
+    </table>
+</div>

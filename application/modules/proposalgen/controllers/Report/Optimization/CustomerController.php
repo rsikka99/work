@@ -24,8 +24,6 @@ class Proposalgen_Report_Optimization_CustomerController  extends Proposalgen_Li
         {
             throw new Exception("Could not generate solution report.");
         }
-
-        $this->_helper->layout->setLayout('htmlreport');
     }
 
     /**

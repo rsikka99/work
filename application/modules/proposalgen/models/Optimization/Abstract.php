@@ -130,8 +130,8 @@ abstract class Proposalgen_Model_Optimization_Abstract
         }
 
         // Initialize the categories variables count to 0
-        $this->deviceCategories["copier"]  = 0;
-        $this->deviceCategories["scanner"] = 0;
+        $this->deviceCategories["copy"]  = 0;
+        $this->deviceCategories["scan"] = 0;
         $this->deviceCategories["duplex"]  = 0;
 
         // Go through each purchase devices that rank it's classifications

@@ -11,24 +11,23 @@ class Proposalgen_Report_Optimization_DealerController extends Proposalgen_Libra
 
         $this->view->availableReports->DealerHardwareOptimization->active = true;
 
+
         $this->view->formats = array(
             "/proposalgen/report_optimization_dealer/generate/format/docx" => $this->_wordFormat
         );
+
 
         try
         {
             // Clear the cache for the report before proceeding
             $this->clearCacheForReport();
+            $this->view->proposal = $this->getProposal();
 
-            $proposal             = $this->getProposal();
-            $this->view->proposal = $proposal;
         }
         catch (Exception $e)
         {
             throw new Exception("Could not generate solution report.");
         }
-
-        $this->_helper->layout->setLayout('htmlreport');
     }
 
     /**

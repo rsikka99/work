@@ -69,6 +69,13 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
                                                        ));
                     }
                 }
+                else if ($form->getValues('Cancel'))
+                {
+                    // Every time we save anything related to a report, we should save it (updates the modification date)
+                    $this->saveReport();
+                    // Call the base controller to send us to the next logical step in the proposal.
+                    $this->gotoNextStep();
+                }
             }
         }
 
@@ -76,10 +83,7 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
         $this->view->devices  = $devices;
         $this->view->proposal = $this->getProposal();
 
-        // Every time we save anything related to a report, we should save it (updates the modification date)
-//        $this->saveReport();
-        // Call the base controller to send us to the next logical step in the proposal.
-//        $this->gotoNextStep();
+
 
         $this->view->title = 'Hardware Optimization';
     }

@@ -1,4 +1,5 @@
 <?php
+    $this->placeholder('extraNavbar')->set($this->render('_partials/reportMenu.phtml'));
     $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
     $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
     $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/optimization/optimization_html.css"));
@@ -11,230 +12,231 @@ $customerOptimization = new Proposalgen_Model_Optimization_Customer($proposal);
 $graphs = $customerOptimization->getGraphs();
 $totalPurchasedDevices = count($proposal->getPurchasedDevices());
 ?>
+<div class="container" id="htmlReportContainer">
+    <div class="h1">
+        Your Hardware Optimization
+    </div>
 
-<div class="h1">
-    Your Hardware Optimization
-</div>
+    <div class="pheader">
+        Optimization Summary
+    </div>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut semper rutrum nunc sed condimentum. Praesent id justo a enim sagittis sodales vitae in mauris. Nunc id eros vel urna laoreet feugiat. Quisque vitae lorem ligula, et porta felis. Suspendisse potenti. Maecenas viverra, arcu vel tempor accumsan, neque tellus facilisis ligula, sed posuere ipsum odio eget est. Duis venenatis sodales nisi ut congue.</p>
+    <br/>
+    <table class='center'>
+        <tr>
+            <td><img src="<?php echo $graphs[0]; ?>" /></td>
+            <td><img src="<?php echo $graphs[1]; ?>" /></td>
+        </tr>
+    </table>
+    <br/><br/>
 
-<div class="pheader">
-    Optimization Summary
-</div>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut semper rutrum nunc sed condimentum. Praesent id justo a enim sagittis sodales vitae in mauris. Nunc id eros vel urna laoreet feugiat. Quisque vitae lorem ligula, et porta felis. Suspendisse potenti. Maecenas viverra, arcu vel tempor accumsan, neque tellus facilisis ligula, sed posuere ipsum odio eget est. Duis venenatis sodales nisi ut congue.</p>
-<br/>
-<table class='center'>
-    <tr>
-        <td><img src="<?php echo $graphs[0]; ?>" /></td>
-        <td><img src="<?php echo $graphs[1]; ?>" /></td>
-    </tr>
-</table>
-<br/><br/>
-
-<div class="pheader">
-    Suggested Replacement Devices <em><?php echo '(' . count($customerOptimization->replaced) . ' of ' . $totalPurchasedDevices .')' ?></em>
-</div>
-<p>The following devices have been targeted for replacements.</p>
-<!-- Only display table if there are replacement devices assigned -->
-<?php if($customerOptimization->replaced) : ?>
-<table class="rDevices">
-		<thead>
-            <tr class='header'>
-		    	<th style='width:150px;'>Current Device</th>
-		    	<th style='width:150px;'>Replacement Device</th>
-                <th>Serial / IP Address </th>
-		    	<th>Reason </th>
-		    	<th>Mono AMPV </th>
-		    	<th>Color AMPV </th>
-			</tr>
-	    </thead>
-    <?php foreach ($customerOptimization->replaced as $deviceInstance) : ?>
-    <?php $masterDevice = $deviceInstance->getMasterDevice(); ?>
-    <?php
-    $replacementDevice = $deviceInstance->getReplacementMasterDevice();
-    $isColor = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
-    ?>
-
-    <tr>
-	        <td class='deviceName'><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/>';?></td>
-	        <!-- Replacement Devices -->
-    		<td class='deviceName'><?php echo '<em>' . $replacementDevice->getManufacturer()->fullname . '</em><br/><strong>' . $replacementDevice->modelName;?></td>
-            <td><?php echo $deviceInstance->serialNumber . "<br/>" . $deviceInstance->ipAddress; ?> </td>
-		    <td><?php echo $deviceInstance->getReason();?>
-            <!-- Monthly Statistics -->
-			<td><?php echo number_format($deviceInstance->getAverageMonthlyBlackAndWhitePageCount()); ?></td>
-			<td><?php echo ($isColor) ? number_format($deviceInstance->getAverageMonthlyColorPageCount()) : 'N/A'; ?></td>
-	    </tr>
-    <?php endforeach ?>
-	</table>
-<?php else: ?>
-<em>This assessment has no replacement devices assigned. </em>
-<?php endif; ?>
-<br/>
-
-<!--
-    Service and supplies logistics section
--->
-<div class="h1">
-    Analysis: Service and Supplies Logistics
-</div>
-
-<div class="pheader">
-    Printing Device Management Breakdown
-</div>
-<p>Different types of printing devices are managed in different ways-newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.</p>
-<table class='center'>
-    <tr>
-        <td><img src="<?php echo $graphs[2]; ?>" /></td>
-        <td><img src="<?php echo $graphs[3]; ?>" /></td>
-    </tr>
-</table>
-
-<div class="pheader">
-    Number of Printing Device Models and Supply Types
-</div>
-<p>Out of your <strong><?php echo $proposal->getDeviceCount(); ?></strong> networked printing devices, you have of <strong><?php echo $proposal->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type. We estimate that <strong><?php echo count($proposal->getLeasedDevices()); ?></strong> of your printing devices are leased machines, for which supplies are included in your contract. The <strong><?php echo $totalPurchasedDevices; ?></strong> remaining machines consist of <strong><?php echo $proposal->getNumberOfUniquePurchasedModels(); ?></strong> different models and use <strong><?php echo $proposal->getNumberOfUniquePurchasedToners(); ?></strong> different supply types. If you hold two of each supply in inventory, you have an estimated <strong>$<?php echo number_format($proposal->getCashHeldInInventory()); ?> in operating cash held in printer supplies inventory</strong> at any given time.</p>
-<table class='center'>
-    <tr>
-        <td><img src="<?php echo $graphs[4]; ?>" /></td>
-    </tr>
-</table>
-<p>By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. Office Depot can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.</p>
-
-<!--
-    Printing hardware usage section
--->
-<div class="h1">
-    Analysis: Printing Hardware Usage
-</div>
-
-<div class="pheader">
-    Print Volume and Number of Printing Devices
-</div>
-<p>You currently have <strong><?php echo $proposal->getDeviceCount(); ?></strong> networked printing devices that print an average of <strong><?php echo number_format(($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->getDeviceCount())); ?>
-</strong> pages each per month, for an average total monthly print volume of <strong><?php echo number_format($proposal->getPageCounts()->Total->Combined->Monthly); ?></strong> pages.
-Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.</p>
-<table class='center'>
-    <tr>
-        <td><img src="<?php echo $graphs[5]; ?>" /></td>
-        <td><img src="<?php echo $graphs[6]; ?>" /></td>
-    </tr>
-    <tr>
-        <td><img src="<?php echo $graphs[7]; ?>" /></td>
-        <td><img src="<?php echo $graphs[8]; ?>" /></td>
-    </tr>
-</table>
-<br/>
-
-<!--
-    Technology reliability and user productivity section
--->
-<div class="h1">
-    Analysis: Technology Reliability and User Productivity
-</div>
-
-<div class="pheader">
-    Color Usage
-</div>
-<p>You currently have <strong><?php echo $proposal->getNumberOfColorCapableDevices(); ?></strong> color printing devices that print a monthly average of <strong><?php echo number_format($proposal->getPageCounts()->Total->Color->Monthly); ?></strong> color pages per month, which is <strong><?php echo number_format(($proposal->getPercentages()->TotalColorPercentage * 100),2); ?>%</strong> of your total monthly print volume.</p>
-<table class='center'>
-    <tr>
-        <td><img src="<?php echo $graphs[9]; ?>" /></td>
-        <td><img src="<?php echo $graphs[10]; ?>" /></td>
-    </tr>
-</table>
-<p>Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your company's professional image, improve comprehension and increase readership.
-Office Depot can help you track your color printing and provide low-cost color hardware options.</p>
-<br/>
-
-
-
-<div class="pheader">
-    Technology Features and Functionality
-</div>
-<p>If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption by using a scanner to e-mail documents instead of printing copies for distribution. The following charts show how many of your printing devices have duplexing and scanning capabilities:</p>
-<table class='center'>
-    <tr>
-        <td><img src="<?php echo $graphs[12]; ?>" /></td>
-    </tr>
-</table>
-
-<div class="pheader">
-    Retire <em><?php echo '(' . count($customerOptimization->retired) . ' of ' . $totalPurchasedDevices .')' ?></em>
-</div>
-<em>Devices with both low volume and age of over 8 years have been target for retirement. We suggest migrating the page volume into another device.</em>
-<!-- Only display table if there are replacement devices assigned -->
-<?php if($customerOptimization->retired) : ?>
-<table class="rDevices">
-	<thead>
-		<tr class='header'>
-			<th style='width:175px;'>Device Name</th>
-			<th>Serial<br/>IP Address</th>
-			<th>Life Page Count</th>
-			<th>Age (Years)</th>
-			<th>JIT Compatible</th>
-		</tr>
-		</thead>
-
-    <?php foreach ($customerOptimization->retired as $device) :
-    $masterDevice = $device->getMasterDevice();
-    ?>
-    <tr>
-	        <td class='deviceName'><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/>';?></td>
-	        <td class='deviceName'><?php echo $device->serialNumber . "<br/>" . $device->ipAddress;?></td>
-	    	<td><?php echo number_format($device->getLifePageCount()); ?></td>
-			<td><?php echo $masterDevice->getAge();?></td>
-			<td><?php echo ($device->reportsTonerLevels ? 'Yes' : 'No'); ?></td>
-	    </tr>
-    <?php endforeach; ?>
-</table>
-<?php else: ?>
-<em>This assessment has no retired devices.</em>
-<?php endif; ?>
-
-<br/>
-<div class="pheader">
-    Age Of Printing Devices
-</div>
-<p>The breakdown of the age of your printing devices is shown below: </p>
-<table class='center'>
-    <tr>
-        <td><img src="<?php echo $graphs[11]; ?>" /></td>
-    </tr>
-</table>
-<br/>
-
-
-<div class="pheader">
-    Acceptable Devices <em><?php echo '(' . count($customerOptimization->kept) . ' of ' . $totalPurchasedDevices .')' ?></em>
-</div>
-<em>The following devices have been deemed productive and we suggest keeping these devices.</em>
-<!-- Only display table if there are replacement devices assigned -->
-<?php if($customerOptimization->kept) : ?>
-<table class="rDevices">
-	<thead>
-		<tr class='header'>
-			<th style='width:175px;'>Device Name</th>
-			<th>Serial<br/>IP Address</th>
-			<th>Mono AMPV </th>
-		    <th>Color AMPV </th>
-		</tr>
-		</thead>
-    <?php foreach ($customerOptimization->kept as $device) :
-        $masterDevice = $device->getMasterDevice();
+    <div class="pheader">
+        Suggested Replacement Devices <em><?php echo '(' . count($customerOptimization->replaced) . ' of ' . $totalPurchasedDevices .')' ?></em>
+    </div>
+    <p>The following devices have been targeted for replacements.</p>
+    <!-- Only display table if there are replacement devices assigned -->
+    <?php if($customerOptimization->replaced) : ?>
+    <table class="rDevices">
+            <thead>
+                <tr class='header'>
+                    <th style='width:150px;'>Current Device</th>
+                    <th style='width:150px;'>Replacement Device</th>
+                    <th>Serial / IP Address </th>
+                    <th>Reason </th>
+                    <th>Mono AMPV </th>
+                    <th>Color AMPV </th>
+                </tr>
+            </thead>
+        <?php foreach ($customerOptimization->replaced as $deviceInstance) : ?>
+        <?php $masterDevice = $deviceInstance->getMasterDevice(); ?>
+        <?php
+        $replacementDevice = $deviceInstance->getReplacementMasterDevice();
         $isColor = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
-    ?>
-    <tr>
-	        <td class='deviceName'><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/>';?></td>
-	        <td class='deviceName'><?php echo $device->serialNumber . "<br/>" . $device->ipAddress;?></td>
-		    <!-- Monthly Statistics -->
-			<td><?php echo number_format($device->getAverageMonthlyBlackAndWhitePageCount()); ?></td>
-			<td><?php echo ($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A'; ?></td>
-	    </tr>
-    <?php endforeach; ?>
-</table>
-<?php else: ?>
-<em>This assessment has acceptable devices. </em>
-<?php endif; ?>
-<br/>
+        ?>
+
+        <tr>
+                <td class='deviceName'><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/>';?></td>
+                <!-- Replacement Devices -->
+                <td class='deviceName'><?php echo '<em>' . $replacementDevice->getManufacturer()->fullname . '</em><br/><strong>' . $replacementDevice->modelName;?></td>
+                <td><?php echo $deviceInstance->serialNumber . "<br/>" . $deviceInstance->ipAddress; ?> </td>
+                <td><?php echo $deviceInstance->getReason();?>
+                <!-- Monthly Statistics -->
+                <td><?php echo number_format($deviceInstance->getAverageMonthlyBlackAndWhitePageCount()); ?></td>
+                <td><?php echo ($isColor) ? number_format($deviceInstance->getAverageMonthlyColorPageCount()) : 'N/A'; ?></td>
+            </tr>
+        <?php endforeach ?>
+        </table>
+    <?php else: ?>
+    <em>This assessment has no replacement devices assigned. </em>
+    <?php endif; ?>
+    <br/>
+
+    <!--
+        Service and supplies logistics section
+    -->
+    <div class="h1">
+        Analysis: Service and Supplies Logistics
+    </div>
+
+    <div class="pheader">
+        Printing Device Management Breakdown
+    </div>
+    <p>Different types of printing devices are managed in different ways-newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.</p>
+    <table class='center'>
+        <tr>
+            <td><img src="<?php echo $graphs[2]; ?>" /></td>
+            <td><img src="<?php echo $graphs[3]; ?>" /></td>
+        </tr>
+    </table>
+
+    <div class="pheader">
+        Number of Printing Device Models and Supply Types
+    </div>
+    <p>Out of your <strong><?php echo $proposal->getDeviceCount(); ?></strong> networked printing devices, you have of <strong><?php echo $proposal->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type. We estimate that <strong><?php echo count($proposal->getLeasedDevices()); ?></strong> of your printing devices are leased machines, for which supplies are included in your contract. The <strong><?php echo $totalPurchasedDevices; ?></strong> remaining machines consist of <strong><?php echo $proposal->getNumberOfUniquePurchasedModels(); ?></strong> different models and use <strong><?php echo $proposal->getNumberOfUniquePurchasedToners(); ?></strong> different supply types. If you hold two of each supply in inventory, you have an estimated <strong>$<?php echo number_format($proposal->getCashHeldInInventory()); ?> in operating cash held in printer supplies inventory</strong> at any given time.</p>
+    <table class='center'>
+        <tr>
+            <td><img src="<?php echo $graphs[4]; ?>" /></td>
+        </tr>
+    </table>
+    <p>By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. Office Depot can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.</p>
+
+    <!--
+        Printing hardware usage section
+    -->
+    <div class="h1">
+        Analysis: Printing Hardware Usage
+    </div>
+
+    <div class="pheader">
+        Print Volume and Number of Printing Devices
+    </div>
+    <p>You currently have <strong><?php echo $proposal->getDeviceCount(); ?></strong> networked printing devices that print an average of <strong><?php echo number_format(($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->getDeviceCount())); ?>
+    </strong> pages each per month, for an average total monthly print volume of <strong><?php echo number_format($proposal->getPageCounts()->Total->Combined->Monthly); ?></strong> pages.
+    Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.</p>
+    <table class='center'>
+        <tr>
+            <td><img src="<?php echo $graphs[5]; ?>" /></td>
+            <td><img src="<?php echo $graphs[6]; ?>" /></td>
+        </tr>
+        <tr>
+            <td><img src="<?php echo $graphs[7]; ?>" /></td>
+            <td><img src="<?php echo $graphs[8]; ?>" /></td>
+        </tr>
+    </table>
+    <br/>
+
+    <!--
+        Technology reliability and user productivity section
+    -->
+    <div class="h1">
+        Analysis: Technology Reliability and User Productivity
+    </div>
+
+    <div class="pheader">
+        Color Usage
+    </div>
+    <p>You currently have <strong><?php echo $proposal->getNumberOfColorCapableDevices(); ?></strong> color printing devices that print a monthly average of <strong><?php echo number_format($proposal->getPageCounts()->Total->Color->Monthly); ?></strong> color pages per month, which is <strong><?php echo number_format(($proposal->getPercentages()->TotalColorPercentage * 100),2); ?>%</strong> of your total monthly print volume.</p>
+    <table class='center'>
+        <tr>
+            <td><img src="<?php echo $graphs[9]; ?>" /></td>
+            <td><img src="<?php echo $graphs[10]; ?>" /></td>
+        </tr>
+    </table>
+    <p>Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your company's professional image, improve comprehension and increase readership.
+    Office Depot can help you track your color printing and provide low-cost color hardware options.</p>
+    <br/>
+
+
+
+    <div class="pheader">
+        Technology Features and Functionality
+    </div>
+    <p>If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption by using a scanner to e-mail documents instead of printing copies for distribution. The following charts show how many of your printing devices have duplexing and scanning capabilities:</p>
+    <table class='center'>
+        <tr>
+            <td><img src="<?php echo $graphs[12]; ?>" /></td>
+        </tr>
+    </table>
+
+    <div class="pheader">
+        Retire <em><?php echo '(' . count($customerOptimization->retired) . ' of ' . $totalPurchasedDevices .')' ?></em>
+    </div>
+    <em>Devices with both low volume and age of over 8 years have been target for retirement. We suggest migrating the page volume into another device.</em>
+    <!-- Only display table if there are replacement devices assigned -->
+    <?php if($customerOptimization->retired) : ?>
+    <table class="rDevices">
+        <thead>
+            <tr class='header'>
+                <th style='width:175px;'>Device Name</th>
+                <th>Serial<br/>IP Address</th>
+                <th>Life Page Count</th>
+                <th>Age (Years)</th>
+                <th>JIT Compatible</th>
+            </tr>
+            </thead>
+
+        <?php foreach ($customerOptimization->retired as $device) :
+        $masterDevice = $device->getMasterDevice();
+        ?>
+        <tr>
+                <td class='deviceName'><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/>';?></td>
+                <td class='deviceName'><?php echo $device->serialNumber . "<br/>" . $device->ipAddress;?></td>
+                <td><?php echo number_format($device->getLifePageCount()); ?></td>
+                <td><?php echo $masterDevice->getAge();?></td>
+                <td><?php echo ($device->reportsTonerLevels ? 'Yes' : 'No'); ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+    <?php else: ?>
+    <em>This assessment has no retired devices.</em>
+    <?php endif; ?>
+
+    <br/>
+    <div class="pheader">
+        Age Of Printing Devices
+    </div>
+    <p>The breakdown of the age of your printing devices is shown below: </p>
+    <table class='center'>
+        <tr>
+            <td><img src="<?php echo $graphs[11]; ?>" /></td>
+        </tr>
+    </table>
+    <br/>
+
+
+    <div class="pheader">
+        Acceptable Devices <em><?php echo '(' . count($customerOptimization->kept) . ' of ' . $totalPurchasedDevices .')' ?></em>
+    </div>
+    <em>The following devices have been deemed productive and we suggest keeping these devices.</em>
+    <!-- Only display table if there are replacement devices assigned -->
+    <?php if($customerOptimization->kept) : ?>
+    <table class="rDevices">
+        <thead>
+            <tr class='header'>
+                <th style='width:175px;'>Device Name</th>
+                <th>Serial<br/>IP Address</th>
+                <th>Mono AMPV </th>
+                <th>Color AMPV </th>
+            </tr>
+            </thead>
+        <?php foreach ($customerOptimization->kept as $device) :
+            $masterDevice = $device->getMasterDevice();
+            $isColor = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+        ?>
+        <tr>
+                <td class='deviceName'><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/>';?></td>
+                <td class='deviceName'><?php echo $device->serialNumber . "<br/>" . $device->ipAddress;?></td>
+                <!-- Monthly Statistics -->
+                <td><?php echo number_format($device->getAverageMonthlyBlackAndWhitePageCount()); ?></td>
+                <td><?php echo ($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A'; ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+    <?php else: ?>
+    <em>This assessment has acceptable devices. </em>
+    <?php endif; ?>
+    <br/>
+</div>
 
 
 
