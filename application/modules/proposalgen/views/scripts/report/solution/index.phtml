@@ -1,4 +1,6 @@
 <?php
+$this->placeholder('extraNavbar')->set($this->render('_partials/reportMenu.phtml'));
+
 $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
 $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
 $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/solution/solution_html.css"));
@@ -30,6 +32,10 @@ $data = array(
     "noBreakEnd"     => $this->noBreakEnd,
     "orientation"    => $this->orientation
 );
+
+?>
+<div class="container" id="htmlReportContainer">
+<?php
 echo $this->partial('report/solution/html/01_Title.phtml', $data);
 echo $this->partial('report/solution/html/02_Description.phtml', $data);
 echo $this->partial('report/solution/html/03_PrintIQ.phtml', $data);
@@ -39,3 +45,5 @@ echo $this->partial('report/solution/html/04_PrintIQPlus_Replacements.phtml', $d
 	echo $this->partial('report/solution/05_PrintIQPlus_Summary.phtml', $data);
 */
 echo $this->partial('report/solution/html/06_Summary.phtml', $data);
+?>
+</div>

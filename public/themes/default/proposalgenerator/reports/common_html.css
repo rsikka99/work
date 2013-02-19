@@ -1,62 +1,68 @@
 /* Styles specific to the assessment report */
-html, body {
-    background-color: #FFF;
+
+#htmlReportContainer {
+    width  : 595px;
+    border : 1px solid #CCC;
 }
 
-body {
-	width: 595px;
-    min-width: 595px;
-	font-family: Arial;
-	padding-bottom: 150px;
+#htmlReportContainer {
+    font-family    : Arial, sans-serif;
+    padding-bottom : 150px;
 }
 
-p, span, li {
-	font-size: 12px;
+#htmlReportContainer p,
+#htmlReportContainer span,
+#htmlReportContainer li {
+    font-size : 12px;
 }
 
 /* GRADE TABLE */
-table.gradesTable {
-    background-color: #F0F0F0;
-    border-left: 1px solid #000000;
-    border-top: 1px solid #000000;
+#htmlReportContainer table.gradesTable {
+    background-color : #F0F0F0;
+    border-left      : 1px solid #000000;
+    border-top       : 1px solid #000000;
 }
-table.gradesTable td {
-    border-bottom: 1px solid #000000;
-    border-right: 1px solid #000000;
+
+#htmlReportContainer table.gradesTable td {
+    border-bottom : 1px solid #000000;
+    border-right  : 1px solid #000000;
 }
-table.gradesTable td.gradeDescription {
-    width: 570px;
-    padding-left: 10px;
+
+#htmlReportContainer table.gradesTable td.gradeDescription {
+    width        : 570px;
+    padding-left : 10px;
 }
-table.gradesTable td.gradeDescription h4{
-    margin: 0px;
-    padding: 0px;
+
+#htmlReportContainer table.gradesTable td.gradeDescription h4 {
+    margin  : 0px;
+    padding : 0px;
 }
-table.gradesTable td.gradeNumber {
-    padding: 0px;
-    font-size: 20pt;
-    font-weight: bold;
-    text-align: center;
-    width: 75px;
+
+#htmlReportContainer table.gradesTable td.gradeNumber {
+    padding     : 0px;
+    font-size   : 20pt;
+    font-weight : bold;
+    text-align  : center;
+    width       : 75px;
 }
 
 /* Overrides */
-div.h1 {
-	margin-top: 100px;
+#htmlReportContainer div.h1 {
+    margin-top : 100px;
 }
 
-div.annualSavings {
-	font-size: 15px;
+#htmlReportContainer div.annualSavings {
+    font-size : 15px;
 }
 
 /* References the 3 graphs */
-.graphs {
-	margin-left: -30px;
-	text-align: center;
-	width: 100%;
+#htmlReportContainer .graphs {
+    margin-left : -30px;
+    text-align  : center;
+    width       : 100%;
 }
 
 /* IT Time Spent Supporting Printing Devices */
-.fontChange {
-	font-size: 13px;
+#htmlReportContainer .fontChange {
+    font-size : 13px;
 }

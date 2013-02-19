@@ -27,8 +27,6 @@ class Proposalgen_Report_GrossmarginController extends Proposalgen_Library_Contr
         {
             throw new Exception("Could not generate gross margin report.");
         }
-
-        $this->_helper->layout->setLayout('htmlreport');
     }
 
     /**

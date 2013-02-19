@@ -869,7 +869,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             {
                 $toner = $this->getCheapestToner($tonerColor, self::getGrossMarginPricingConfig());
 
-                if ($tonerColor == Proposalgen_Model_TonerColor::BLACK && $toner->partTypeId != self::getGrossMarginPricingConfig()->MonoTonerPartTypeId)
+                if ($tonerColor == Proposalgen_Model_TonerColor::BLACK && $toner->partTypeId != self::getGrossMarginPricingConfig()->monoTonerPartTypeId)
                 {
                     //$usesAllValidToners = false;
                     //break;

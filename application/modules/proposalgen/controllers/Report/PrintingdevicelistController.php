@@ -30,8 +30,6 @@ class Proposalgen_Report_PrintingdevicelistController extends Proposalgen_Librar
         {
             throw new Exception("Could not generate solution report.");
         }
-
-        $this->_helper->layout->setLayout('htmlreport');
     }
 
     /**

@@ -2,13 +2,6 @@
 class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
 {
     /**
-     * The question set id to use.
-     *
-     * @var number
-     */
-    const QUESTION_SET_ID = 1;
-
-    /**
      * @var Proposalgen_Model_Report
      */
     protected $_report;
@@ -137,7 +130,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
      */
     public function initHtmlReport ()
     {
-
+        $this->view->headScript()->appendFile($this->view->baseUrl('/js/htmlReport.js'));
 
         $this->_user = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
 
@@ -474,14 +467,13 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
             }
             else
             {
-                $identity                     = Zend_Auth::getInstance()->getIdentity();
-                $this->_report                = new Proposalgen_Model_Report();
-                $this->_report->userId        = $identity->id;
-                $this->_report->clientId      = $this->_clientId;
-                $this->_report->questionSetId = self::QUESTION_SET_ID;
-                $this->_report->reportStage   = Proposalgen_Model_Report_Step::STEP_SURVEY;
-                $this->_report->dateCreated   = date('Y-m-d H:i:s');
-                $this->_report->reportDate    = date('Y-m-d H:i:s');
+                $identity                   = Zend_Auth::getInstance()->getIdentity();
+                $this->_report              = new Proposalgen_Model_Report();
+                $this->_report->userId      = $identity->id;
+                $this->_report->clientId    = $this->_clientId;
+                $this->_report->reportStage = Proposalgen_Model_Report_Step::STEP_SURVEY;
+                $this->_report->dateCreated = date('Y-m-d H:i:s');
+                $this->_report->reportDate  = date('Y-m-d H:i:s');
             }
         }
 

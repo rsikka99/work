@@ -1,6 +1,6 @@
 <?php
 
-class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Vertical
+class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizontal
 {
 
     protected $currency;
@@ -33,6 +33,7 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Vertical
 
     public function init ()
     {
+        $this->setAttrib('class', 'form-vertical');
         $this->_addClassNames("surveyForm form-center-actions");
 
         // Set the method for the display form to POST
@@ -53,8 +54,8 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Vertical
 
 
         $multiOptions = array(
-            'guess'                   => 'I don\'t know',
-            'I know the exact amount' => 'I know the exact amount'
+            'guess' => 'I don\'t know',
+            'exact' => 'I know the exact amount'
         );
 
         /*
@@ -71,7 +72,7 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Vertical
             ->setAttrib('placeholder', 'Enter Amount...')
             ->setDescription($this->currency->getSymbol())
             ->setAllowEmpty(false)
-            ->addValidator(new Custom_Validate_FieldDependsOnValue('toner_cost_radio', 'I know the exact amount', array(
+            ->addValidator(new Custom_Validate_FieldDependsOnValue('toner_cost_radio', 'exact', array(
                                                                                                                        new Zend_Validate_NotEmpty(),
                                                                                                                        new Zend_Validate_Float()
                                                                                                                   )), true);
@@ -94,7 +95,7 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Vertical
             ->setAttrib('placeholder', 'Enter Amount...')
             ->setDescription($this->currency->getSymbol())
             ->setAllowEmpty(false)
-            ->addValidator(new Custom_Validate_FieldDependsOnValue('labor_cost_radio', 'I know the exact amount', array(
+            ->addValidator(new Custom_Validate_FieldDependsOnValue('labor_cost_radio', 'exact', array(
                                                                                                                        new Zend_Validate_NotEmpty(),
                                                                                                                        new Zend_Validate_Float()
                                                                                                                   )), true);
@@ -221,7 +222,7 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Vertical
             ->setAttrib('class', 'span1')
             ->setDescription('breakdowns per month')
             ->setAllowEmpty(false)
-            ->addValidator(new Custom_Validate_FieldDependsOnValue('monthlyBreakdownRadio', 'I know the exact amount', array(
+            ->addValidator(new Custom_Validate_FieldDependsOnValue('monthlyBreakdownRadio', 'exact', array(
                                                                                                                             new Zend_Validate_NotEmpty(),
                                                                                                                             new Zend_Validate_Float()
                                                                                                                        )), true)
@@ -270,16 +271,13 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Vertical
         /**
          * Print Volume Question
          */
-        $printVolumeRadio = $this->createElement('radio', 'printVolume');
-        $printVolumeRadio->setLabel("What percent of your print volume is done on inkjet and other desktop printers
-        ? ")
-            ->setMultiOptions(self::$volumeOptions)
-            ->setRequired(true)
-            ->addFilter('StringTrim')
-            ->addValidator('InArray', false, array(
-                                                  array_keys(self::$volumeOptions)
-                                             ));
-        $this->addElement($printVolumeRadio);
+        $this->addElement('radio', 'printVolume', array(
+                                                       'label'        => "What percent of your print volume is done on inkjet and other desktop printers ?",
+                                                       'multiOptions' => self::$volumeOptions,
+                                                       'required'     => true,
+                                                       'filters'      => array('StringTrim')
+                                                  ));
+
 
         /**
          * Repair Time Question

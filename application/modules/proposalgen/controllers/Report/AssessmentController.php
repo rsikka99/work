@@ -55,7 +55,7 @@ class Proposalgen_Report_AssessmentController extends Proposalgen_Library_Contro
             throw new Exception("Assessment could not be generated.", 0, $e);
         }
 
-        $this->_helper->layout->setLayout('htmlreport');
+//        $this->_helper->layout->setLayout('htmlreport');
     }
 
     /**

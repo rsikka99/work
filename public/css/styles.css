@@ -1,4 +1,3 @@
-/* Nav Tabs */
 .clearfix {
   *zoom: 1;
 }
@@ -34,7 +33,6 @@
   background-color: #eeeeee;
   /* Old browsers */
 
-  background-repeat: repeat-x;
   /* Repeat the gradient */
 
   background-color: #f2f2f2;
@@ -108,6 +106,10 @@
 }
 #subnavbar-container {
   width: 960px;
+}
+.subnav .btn,
+.subnav .btn-group {
+  margin-top: 2px;
 }
 .form-inline {
   margin: 0;
@@ -191,33 +193,17 @@ label.label-phone-number-country {
 .navbar .sidebar {
   width: auto;
 }
-#navbar-container {
+.navbar .navbar-container {
   width: 960px;
 }
 .navbar {
   margin: 0;
 }
 .navbar-inner {
-  padding-left: 0px;
-  padding-right: 10px;
-}
-.navbar .brand {
-  padding-top: 0px;
-  padding-bottom: 0px;
-  margin-left: -21px;
+  padding: 0;
+  min-width: 960px;
 }
 .navbar .navbar-inner {
-  background-color: #4b4b4b;
-  background-image: -moz-linear-gradient(top, #666666, #222222);
-  background-image: -ms-linear-gradient(top, #666666, #222222);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#666666), to(#222222));
-  background-image: -webkit-linear-gradient(top, #666666, #222222);
-  background-image: -o-linear-gradient(top, #666666, #222222);
-  background-image: linear-gradient(top, #666666, #222222);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#666666', endColorstr='#222222', GradientType=0);
-  border-color: #222222 #222222 #000000;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   -webkit-border-radius: 0 0 0;
   -moz-border-radius: 0 0 0;
   border-radius: 0 0 0;
@@ -229,6 +215,19 @@ label.label-phone-number-country {
 .navbar .nav > li > a:focus,
 .navbar .nav > li > a:hover {
   color: #fff;
+}
+.navbar-inverse .brand {
+  color: #FFF;
+}
+.navbar-inverse .nav > .active > a,
+.navbar .nav > .active > a:hover,
+.navbar .nav > .active > a:focus {
+  color: #555;
+  text-decoration: none;
+  background-color: #e5e5e5;
+  -webkit-box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
+  -moz-box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
+  box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
 }
 .right-caret {
   display: inline-block;
@@ -348,13 +347,23 @@ btn.addEditUnknownDevice,
 input.addEditUnknownDevice {
   width: 100%;
 }
-#meat {
+.body-container {
   width: 960px;
-  background-color: #fff;
+}
+#meat {
+  background-color: #ffffff;
 }
 #headerLogo {
   height: 80px;
-  background-image: url('//placehold.it/960x80');
+  margin: auto;
+  width: 960px;
+}
+#headerLogo h1 {
+  margin: 0;
+  padding-top: 13px;
+}
+#header-background {
+  background-color: rgba(122, 122, 122, 0.14);
 }
 #lightbox {
   display: none;
@@ -435,9 +444,6 @@ legend {
 }
 tr.lowProfitDevice td {
   font-weight: bold;
-}
-.assessmentMenu {
-  font-size: 13px;
 }
 /*
  * Quote Flow

@@ -1,0 +1,23 @@
+<div class="subnav">
+    <div class="container navbar-container">
+        <div class="navbar-form pull-left">
+            <select id="reportNavigator" style='margin-top: 5px;'>
+                <?php foreach ($this->availableReports as $report) : ?>
+                <option value='<?php echo $report->url; ?>' <?php echo ($report->active) ? "selected='selected'" : "";?>><?php echo $report->pagetitle; ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <?php if (count($this->formats) > 0) : ?>
+        <div class="navbar-form pull-right">
+            <div class="btn-group">
+                <span class="btn">Download As:</span>
+                <?php foreach ($this->formats as $url => $format) : ?>
+                <a class="btn btn-<?php echo $format->btnstyle; ?> downloadButton" href="<?php echo $this->baseUrl($url); ?>" data-ext="<?php echo $format->extension; ?>" data-loadingmessage="<?php echo $format->loadingmessage; ?>"><?php echo $format->name; ?>
+                    <i class="icon-download icon-white"></i></a>
+                <?php endforeach; ?>
+            </div>
+
+        </div>
+        <?php endif;?>
+    </div>
+</div>

@@ -27,11 +27,6 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     public $reportStage;
 
     /**
-     * @var int
-     */
-    public $questionSetId;
-
-    /**
      * @var string
      */
     public $dateCreated;
@@ -77,6 +72,11 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     protected $_client;
 
     /**
+     * @var Proposalgen_Model_Assessment_Survey
+     */
+    protected $_survey;
+
+    /**
      * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
@@ -109,11 +109,6 @@ class Proposalgen_Model_Report extends My_Model_Abstract
         if (isset($params->reportStage) && !is_null($params->reportStage))
         {
             $this->reportStage = $params->reportStage;
-        }
-
-        if (isset($params->questionSetId) && !is_null($params->questionSetId))
-        {
-            $this->questionSetId = $params->questionSetId;
         }
 
         if (isset($params->dateCreated) && !is_null($params->dateCreated))
@@ -149,7 +144,6 @@ class Proposalgen_Model_Report extends My_Model_Abstract
             "clientId"            => $this->clientId,
             "userPricingOverride" => $this->userPricingOverride,
             "reportStage"         => $this->reportStage,
-            "questionSetId"       => $this->questionSetId,
             "dateCreated"         => $this->dateCreated,
             "lastModified"        => $this->lastModified,
             "reportDate"          => $this->reportDate,
@@ -268,6 +262,35 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     public function setClient ($client)
     {
         $this->_client = $client;
+
+        return $this;
+    }
+
+    /**
+     * Gets the survey
+     *
+     * @return Proposalgen_Model_Assessment_Survey
+     */
+    public function getSurvey ()
+    {
+        if (!isset($this->_survey))
+        {
+            $this->_survey = Proposalgen_Model_Mapper_Assessment_Survey::getInstance()->find($this->id);
+        }
+
+        return $this->_survey;
+    }
+
+    /**
+     * Sets the survey
+     *
+     * @param Proposalgen_Model_Assessment_Survey $survey
+     *
+     * @return Proposalgen_Model_Report
+     */
+    public function setSurvey ($survey)
+    {
+        $this->_survey = $survey;
 
         return $this;
     }

@@ -21,7 +21,7 @@ $(document).ready(function ()
         $("#toner_cost").val('');
     });
 
-    $("#toner_cost_radio-Iknowtheexactamount").click(function ()
+    $("#toner_cost_radio-exact").click(function ()
     {
         $("#toner_cost").removeAttr('disabled');
     });
@@ -39,7 +39,7 @@ $(document).ready(function ()
         $("#labor_cost").val('');
     });
 
-    $("#labor_cost_radio-Iknowtheexactamount").click(function ()
+    $("#labor_cost_radio-exact").click(function ()
     {
         $("#labor_cost").removeAttr('disabled');
     });
@@ -99,7 +99,7 @@ $(document).ready(function ()
         $("#monthlyBreakdown").val('');
     });
 
-    $("#monthlyBreakdownRadio-Iknowtheexactamount").click(function ()
+    $("#monthlyBreakdownRadio-exact").click(function ()
     {
         $("#monthlyBreakdown").removeAttr('disabled');
     });

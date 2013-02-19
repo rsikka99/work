@@ -1,4 +1,5 @@
 <?php
+$this->placeholder('extraNavbar')->set($this->render('_partials/reportMenu.phtml'));
 
 $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
 $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
@@ -30,7 +31,10 @@ $data = array (
     "noBreakEnd" => $this->noBreakEnd,
     "orientation" => $this->orientation
 );
-
+?>
+<div class="container" id="htmlReportContainer">
+<?php
 echo $this->partial('report/solution/html/07_Appendix.phtml', $data);
 echo $this->partial('report/solution/html/08_ExcludedDevices.phtml', $data);
 ?>
+</div>

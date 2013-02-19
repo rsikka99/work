@@ -16,7 +16,7 @@ $proposal = $this->proposal;
             	<h3><?php echo $proposal->getDateReportPrepared(); ?></h3>
             </div> <!-- End div header -->
             <div class="customerdetails">
-                <p><?php echo nl2br($proposal->getCustomerAddress()); ?></p>
+                <p><?php echo nl2br($proposal->report->getClient()->getAddress()); ?></p>
             </div>
         </div> <!-- End div titlepage -->
     <?php echo $this->noBreakEnd; ?>

@@ -1,145 +1,165 @@
 /* These are common style attributes to both proposal/assessment reports */
 
 /* Borders */
-.noborder {border: 0px;}
-.topborder {border-top: 1px solid black;}
-.bottomborder {border-bottom: 1px solid black;}
+#htmlReportContainer .noborder {
+    border : 0px;
+}
 
+#htmlReportContainer .topborder {
+    border-top : 1px solid black;
+}
+
+#htmlReportContainer .bottomborder {
+    border-bottom : 1px solid black;
+}
 
 /* Positioning */
-.left {text-align: left;}
-.right {text-align: right;}
-.center {text-align: center;}
+#htmlReportContainer .left {
+    text-align : left;
+}
 
+#htmlReportContainer .right {
+    text-align : right;
+}
+
+#htmlReportContainer .center {
+    text-align : center;
+}
 
 /* Element overrides */
-em {
-	font-size: 9pt;
-	line-height: 8pt;
+#htmlReportContainer em {
+    font-size   : 9pt;
+    line-height : 8pt;
 }
 
-th {
-	vertical-align: top;
+#htmlReportContainer th {
+    vertical-align : top;
 }
 
-img {
-	margin: 0px;
+#htmlReportContainer img {
+    margin : 0px;
 }
 
-td {
-    padding: 5px;
+#htmlReportContainer td {
+    padding : 5px;
 }
 
-h3 {
-    font-size: 14pt;
+#htmlReportContainer h3 {
+    font-size : 14pt;
 }
 
-p,li {
-	font-size: 10pt;
+#htmlReportContainer p,
+#htmlReportContainer li {
+    font-size : 10pt;
 }
 
-p {
-	padding: 0;
-	margin: 5px; 
-	line-height: 12pt;
+#htmlReportContainer p {
+    padding     : 0;
+    margin      : 5px;
+    line-height : 12pt;
 }
 
-li {
-	padding-left: 8px;
-	padding-bottom: 8px;
+#htmlReportContainer li {
+    padding-left   : 8px;
+    padding-bottom : 8px;
 }
-
 
 /* Misc */
-div.center {
-    padding: 5px;
+#htmlReportContainer div.center {
+    padding : 5px;
 }
 
-.nopadding {
-    padding-top: 0px;
-    padding-bottom: 0px;
+#htmlReportContainer  .nopadding {
+    padding-top    : 0px;
+    padding-bottom : 0px;
 }
 
-.red {color: red;}
-.bold {font-weight: bold;}
+#htmlReportContainer  .red {
+    color : red;
+}
 
+#htmlReportContainer  .bold {
+    font-weight : bold;
+}
 
 /* TITLE PAGE */
-div.titlepage {
-    padding-left: 250px;
-    padding-top: 390px;
+#htmlReportContainer  div.titlepage {
+    padding-left : 250px;
+    padding-top  : 390px;
 }
 
-div.titlepage div.customerdetails {
-    padding-top: 150px;
+#htmlReportContainer  div.titlepage div.customerdetails {
+    padding-top : 150px;
 }
 
 /* PAGE FOOTER */
-table.footertable td {
-    width: 240px;
+#htmlReportContainer  table.footertable td {
+    width : 240px;
 }
-table.footertable td.col2 {
-    vertical-align: middle;
-    text-align: center;
+
+#htmlReportContainer  table.footertable td.col2 {
+    vertical-align : middle;
+    text-align     : center;
 }
 
 /* GENERAL PAGE ITEM DEFINITIONS */
-div.h1 {
-    border-bottom: 1px solid #000000;
-    color: #F0003C;
-    font-size: 14.5pt;
-    font-weight: bold;
-    margin-bottom: 15px;
+#htmlReportContainer  div.h1 {
+    border-bottom : 1px solid #000000;
+    color         : #F0003C;
+    font-size     : 14.5pt;
+    font-weight   : bold;
+    margin-bottom : 15px;
 }
 
 /* Paragraph header */
-div.pheader {
-    background-color: #F0003C;
-    padding: 2px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    color: #FFFFFF;
-    font-size: 12.5pt;
-    font-style: italic;
-    font-weight: bold;
+#htmlReportContainer  div.pheader {
+    background-color : #F0003C;
+    padding          : 2px;
+    margin-top       : 5px;
+    margin-bottom    : 5px;
+    color            : #FFFFFF;
+    font-size        : 12.5pt;
+    font-style       : italic;
+    font-weight      : bold;
 }
-
 
 /* GENERIC TABLE */
-table.genericTable {
-	font-size: 9pt;
-	line-height: 12pt;
-	border-collapse: collapse;
-	width: 100%;
-}
-table.genericTable td, th {
-	border: 1px solid #000;
-    padding: 5px;
-	font-size: 9pt;
+#htmlReportContainer  table.genericTable {
+    font-size       : 9pt;
+    line-height     : 12pt;
+    border-collapse : collapse;
+    width           : 100%;
 }
 
-table.genericTable th {
-    font-weight: bold;
+#htmlReportContainer  table.genericTable td,
+#htmlReportContainer th {
+    border    : 1px solid #000;
+    padding   : 5px;
+    font-size : 9pt;
 }
 
+#htmlReportContainer table.genericTable th {
+    font-weight : bold;
+}
 
 /* Annual savings */
-div.annualSavings strong {
-    color: #F0003C;
+#htmlReportContainer div.annualSavings strong {
+    color : #F0003C;
 }
-div.annualSavings {
-    background-color: #F0F0F0;
-    border: 1pt solid #999;
-    height: 40px;
-    font-weight: bold;
-    font-size: 13pt;
-    text-align: center;
-    vertical-align: middle;
+
+#htmlReportContainer div.annualSavings {
+    background-color : #F0F0F0;
+    border           : 1pt solid #999;
+    height           : 40px;
+    font-weight      : bold;
+    font-size        : 13pt;
+    text-align       : center;
+    vertical-align   : middle;
 }
 
 /* COPYRIGHT */
-p#copyright {
-	color: #666;
-    font-size: 8pt;
-    font-style: italic;
+#copyright {
+    color      : #666;
+    font-size  : 8pt;
+    font-style : italic;
 }

@@ -1,15 +1,28 @@
 // Make the scroll bar always show
 
 // The meat of the document
+.body-container {
+    width : 960px;
+}
+
 #meat {
-    width: 960px;
-    background-color: #fff;
-    //.box-shadow(1px 1px #000);
+    background-color : rgba(255, 255, 255, 1);
 }
 
 #headerLogo {
-    height: 80px;
-    background-image: url('//placehold.it/960x80');
+    height  : 80px;
+    margin  : auto;
+    width   : 960px;
+
+}
+
+#headerLogo h1 {
+    margin: 0;
+    padding-top: 13px;
+}
+
+#header-background {
+    background-color : rgba(122, 122, 122, 0.14);
 }
 
 #lightbox {
@@ -109,9 +122,4 @@ legend {
 // Devices Page
 tr.lowProfitDevice td {
     font-weight : bold;
-}
-
-
-.assessmentMenu {
-    font-size: 13px;
 }

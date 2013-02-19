@@ -29,9 +29,9 @@
 <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or
     <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
 <!-- Start of Navbar -->
-<div class="container" id="navbar-container">
-    <div class="navbar">
-        <div class="navbar-inner">
+<div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+        <div class="container navbar-container">
             <div class="sidebar pull-right">
                 <div class="pull-right">
                     <?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
@@ -55,19 +55,22 @@
 <!-- End of Navbar -->
 
 <!-- Start of main container -->
-<div class="container" id="meat">
-    <div id="headerLogo"></div>
+<div id="header-background">
+    <header id="headerLogo"></header>
+</div>
+<div class="container body-container" id="meat">
     <?php $subNav = $this->Subnav(); ?>
     <?php if ($subNav) : ?>
     <div class="subnav">
         <?php echo $subNav; ?>
     </div>
     <?php endif; ?>
-
+    <?php echo $this->placeholder('extraNavbar'); ?>
     <div class="container">
         <div class="row">
             <div class="span12">
                 <?php echo $this->placeholder('ProgressionNav'); ?>
+
                 <?php echo $this->flashMessenger("info", '<div class="alert alert-%s">%s</div>'); ?>
                 <?php echo $this->layout()->content; ?>
             </div>
