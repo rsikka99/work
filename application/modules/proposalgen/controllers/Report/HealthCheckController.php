@@ -55,7 +55,6 @@ class Proposalgen_Report_HealthCheckController extends Proposalgen_Library_Contr
             throw new Exception("Health Check could not be generated.", 0, $e);
         }
 
-        $this->_helper->layout->setLayout('htmlreport');
     }
 
     /**

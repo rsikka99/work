@@ -38,7 +38,7 @@ $graphs = $proposal->getGraphs();
 
 <div class="pheader">Number of Printing Devices Compatible with Office Depot™ ATR</div>
 <p>Out of your <?php echo $proposal->getDeviceCount(); ?> networked printing devices, you have <strong><?php echo $proposal->getNumberOfATRCompatibleDevices(); ?></strong> that are compatible with Office Depot™ Auto Toner Replenishment (ATR). A complete list of all devices and their ATR compatibility can be found in the Appendix.</p>
-<p><?php echo $proposal->getRanking()->getCompatibleATRRankingText(5,"test")->RankingText; ?></p>
+<p><?php echo $proposal->getRanking()->getCompatibleATRRankingText(5,"test"); ?></p>
 <br />
 <div class="center">
     <table>

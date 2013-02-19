@@ -2129,8 +2129,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
              * -- PagesPrinterATRPieGraph
              */
             $deviceAges = array(
-                "Pages Printed" => 0,
-                "5-6 years old"         => 0
+                "Pages Printed on ATR devices" => 0,
+                "Pages Printed on non-ATR devices"         => 0
             );
             foreach ($this->getPurchasedDevices() as $device)
             {
@@ -2196,7 +2196,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             $barGraph->addAxisRange(0, 0, $highest * 1.3);
             $barGraph->setDataRange(0, $highest * 1.3);
             $barGraph->setBarScale(40, 10);
-            $barGraph->setLegendPosition("bv");
+            $barGraph->setLegendPosition("b");
             $barGraph->addColors(array(
                                       "0194D2"
                                  ));

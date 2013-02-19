@@ -1,10 +1,11 @@
-<?php
+<?php $this->placeholder('extraNavbar')->set($this->render('_partials/reportMenu.phtml'));
+
 $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
 $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
 $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/healthcheck/healthcheck_html.css"));
 // Title page image
 echo '<style type="text/css">
-        div.titlepage {
+        #htmlReportContainer div.titlepage {
             height: 500px;
             padding-left: 300px;
             padding-top: 350px;
@@ -12,8 +13,9 @@ echo '<style type="text/css">
             background-repeat: no-repeat;
         }
      </style>';
-
-
+?>
+<div class="container" id="htmlReportContainer">
+<?php
 echo $this->render('report/healthcheck/html/01_Title.phtml');
 echo $this->render('report/healthcheck/html/02_Scorecard.phtml');
 echo $this->render('report/healthcheck/html/03_ServiceAndSuppliesLogistics.phtml');
@@ -22,3 +24,5 @@ echo $this->render('report/healthcheck/html/05_TechnologyReliabilityAndUserProdu
 echo $this->render('report/healthcheck/html/06_EnvironmentalImpact.phtml');
 echo $this->render('report/healthcheck/html/07_Expense.phtml');
 echo $this->render('report/healthcheck/html/08_Summary.phtml');
+    ?>
+</div>
