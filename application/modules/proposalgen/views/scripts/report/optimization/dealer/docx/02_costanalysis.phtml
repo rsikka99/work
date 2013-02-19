@@ -1,0 +1,55 @@
+<?php
+/**
+ * Cost Analysis - Header information
+ *
+ * This script contains everything that comes before the big table of
+ * information in the cost analysis.
+ */
+
+/* @var $section PHPWord_Section */
+$section = $this->section;
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
+
+$section->addTextBreak();
+$section->addText('Cost Analyst Summary', array('bold' => true, 'size' => 12));
+
+// Table with values
+$tcStyle = $this->styles->tables->compare;
+$table = $section->addTable($tcStyle->tablestyle);
+
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->span2Width, $tcStyle->header->header->cellStyle, 2)->addText($this->translate('Current Fleet'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->span2Width, $tcStyle->header->header->cellStyle, 2)->addText($this->translate('Optimized'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText('Monochrome CPP:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText('$0.0015', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->even)->addText('Monochrome CPP:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText('$0.0011', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText('Color CPP:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText('$0.02', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->odd)->addText('Color CPP:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText('$0.018', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText('Total Cost:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText('$2549.39', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->even)->addText('Total Cost:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText('$1293.33', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText('Margin ($):', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText('$3200.00', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->odd)->addText('Margin ($):', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText('$4200.00', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText('Margin (%):', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText('-12.00%', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->even)->addText('Margin (%):', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText('2.00%', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+
+?>
