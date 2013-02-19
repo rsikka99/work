@@ -14,6 +14,8 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
      * Define the primary key of the model association
      */
     public $col_id = 'id';
+    public $col_companyName = 'companyName';
+    public $col_legalName = 'legalName';
 
     /**
      * Gets an instance of the mapper
@@ -225,5 +227,21 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->id;
+    }
+
+    /**
+     * Searches for a client by the company name field.
+     *
+     * @param string $searchTerm
+     *
+     * @return Quotegen_Model_Client[]
+     */
+    public function searchForClientByCompanyName ($searchTerm)
+    {
+        $searchTerm = trim($searchTerm, "%");
+
+        return $this->fetchAll(array(
+                                    "{$this->col_companyName} LIKE ?" => "%{$searchTerm}%"
+                               ));
     }
 }

@@ -287,4 +287,27 @@ class Default_IndexController extends Zend_Controller_Action
         }
         $this->view->form = $clientService->getForm();
     }
+
+
+    /**
+     * JSON ACTION: Handles searching for a client by name.
+     */
+    public function searchForClientAction ()
+    {
+        $searchTerm = $this->getParam('name', false);
+        $results    = array();
+        if ($searchTerm !== false)
+        {
+            $clients = Quotegen_Model_Mapper_Client::getInstance()->searchForClientByCompanyName($searchTerm);
+            foreach ($clients as $client)
+            {
+                $results[] = array(
+                    "id"          => $client->id,
+                    "companyName" => $client->companyName
+                );
+            }
+        }
+
+        $this->_helper->json($results);
+    }
 }
