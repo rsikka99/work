@@ -234,7 +234,28 @@ $excessTable = (object)array(
         'cellMarginRight' => 50,
         'cellMarginBottom' => 50,
         'cellMarginLeft' => 50
-    )
+    ),
+    "col1Width" => $widthTwips * 0.20,
+    "col2Width" => $widthTwips * 0.20,
+    "col3Width" => $widthTwips * 0.15,
+    "col4Width" => $widthTwips * 0.15,
+    "col5Width" => $widthTwips * 0.10,
+    "col6Width" => $widthTwips * 0.10,
+    "body" => (object)array(
+        "rowheight" => null,
+        "cell1" => $standard_cell,
+        "cell2" => $standard_cell,
+        "cell3" => $standard_cell,
+        "cell4" => $standard_cell,
+        "cell5" => $standard_cell,
+        "cell6" => $standard_cell,
+        "cell7" => $standard_cell_no_right_border,
+    ),
+    "header" => (object)array(
+        'header' => $standard_header,
+        'sub_header' => $standard_sub_header,
+    ),
+
 );
 $retireTable = (object)array(
     "tablestyle" => array(
@@ -306,6 +327,7 @@ $this->partial("report/optimization/dealer/docx/02_costanalysis.phtml", $data);
 $this->partial("report/optimization/dealer/docx/03_devicesummary.phtml", $data);
 $this->partial("report/optimization/dealer/docx/04_replacements.phtml", $data);
 $this->partial("report/optimization/dealer/docx/05_acceptable.phtml", $data);
+$this->partial("report/optimization/dealer/docx/06_excess.phtml", $data);
 
 $objWriter = PHPWord_IOFactory::createWriter($this->phpword, 'Word2007');
 $objWriter->save($this->savePath);

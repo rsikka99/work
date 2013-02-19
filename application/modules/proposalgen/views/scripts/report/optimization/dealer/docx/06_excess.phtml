@@ -1,0 +1,37 @@
+<?php
+/**
+ * Cost Analysis - Header information
+ *
+ * This script contains everything that comes before the big table of
+ * information in the cost analysis.
+ */
+
+/* @var $section PHPWord_Section */
+$section = $this->section;
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
+$section->addTextBreak();
+$section->addText('Acceptable Devices', array('bold' => true, 'size' => 12));
+
+// Table with values
+$tcStyle = $this->styles->tables->acceptable;
+$table = $section->addTable($tcStyle->tablestyle);
+// Table header
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial / Ip Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Life Page Count', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText('Color AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('Mono CPP', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText('Color CPP', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addText('Monthly Cost', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+
+// Begin with data rows
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->body->cell1->odd)->addText('Xerox WorkCentre 5645', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->body->cell2->odd)->addText('WTD081861E 10.100.1.68', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->body->cell3->odd)->addText('29,882', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->body->cell4->odd)->addText('N/A', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->col5Width, $tcStyle->body->cell5->odd)->addText('$0.0070', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->col6Width, $tcStyle->body->cell6->odd)->addText('N/A', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->col7Width, $tcStyle->body->cell7->odd)->addText('$209.15', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
