@@ -93,18 +93,6 @@ COMMENT = 'The users table stores basic information on a user';
 
 
 -- -----------------------------------------------------
--- Table `pgen_question_sets`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_question_sets` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `name` VARCHAR(255) NULL DEFAULT NULL ,
-  PRIMARY KEY (`id`) )
-ENGINE = InnoDB
-AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
 -- Table `pgen_reports`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_reports` (
@@ -113,23 +101,18 @@ CREATE  TABLE IF NOT EXISTS `pgen_reports` (
   `clientId` INT NOT NULL ,
   `userPricingOverride` TINYINT(4) NULL DEFAULT '0' ,
   `reportStage` VARCHAR(255) NULL ,
-  `questionSetId` INT(11) NOT NULL ,
   `dateCreated` DATETIME NOT NULL ,
   `lastModified` DATETIME NOT NULL ,
   `reportDate` DATETIME NULL DEFAULT NULL ,
   `devicesModified` TINYINT(4) NULL DEFAULT '0' ,
   PRIMARY KEY (`id`) ,
   INDEX `user_id` (`userId` ASC) ,
-  INDEX `questionset_id` (`questionSetId` ASC) ,
   INDEX `proposalgenerator_reports_ibfk_3_idx` (`clientId` ASC) ,
   CONSTRAINT `proposalgenerator_reports_ibfk_1`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
     ON DELETE RESTRICT
     ON UPDATE RESTRICT,
-  CONSTRAINT `proposalgenerator_reports_ibfk_2`
-    FOREIGN KEY (`questionSetId` )
-    REFERENCES `pgen_question_sets` (`id` ),
   CONSTRAINT `proposalgenerator_reports_ibfk_3`
     FOREIGN KEY (`clientId` )
     REFERENCES `clients` (`id` )
@@ -481,41 +464,6 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `pgen_questions`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_questions` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `description` TEXT NULL DEFAULT NULL ,
-  PRIMARY KEY (`id`) )
-ENGINE = InnoDB
-AUTO_INCREMENT = 31
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `pgen_numeric_answers`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_numeric_answers` (
-  `question_id` INT(11) NOT NULL ,
-  `report_id` INT(11) NOT NULL ,
-  `numeric_answer` DOUBLE NOT NULL ,
-  PRIMARY KEY (`question_id`, `report_id`) ,
-  INDEX `report_id` (`report_id` ASC) ,
-  CONSTRAINT `proposalgenerator_numeric_answers_ibfk_1`
-    FOREIGN KEY (`report_id` )
-    REFERENCES `pgen_reports` (`id` )
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `proposalgenerator_numeric_answers_ibfk_2`
-    FOREIGN KEY (`question_id` )
-    REFERENCES `pgen_questions` (`id` )
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
 -- Table `pgen_pricing_configs`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_pricing_configs` (
@@ -535,25 +483,6 @@ CREATE  TABLE IF NOT EXISTS `pgen_pricing_configs` (
     REFERENCES `pgen_part_types` (`id` ))
 ENGINE = InnoDB
 AUTO_INCREMENT = 6
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `pgen_questionset_questions`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_questionset_questions` (
-  `question_id` INT(11) NOT NULL ,
-  `questionset_id` INT(11) NOT NULL ,
-  PRIMARY KEY (`question_id`, `questionset_id`) ,
-  INDEX `questionset_id` (`questionset_id` ASC) ,
-  CONSTRAINT `proposalgenerator_questionset_questions_ibfk_1`
-    FOREIGN KEY (`questionset_id` )
-    REFERENCES `pgen_question_sets` (`id` ),
-  CONSTRAINT `proposalgenerator_questionset_questions_ibfk_2`
-    FOREIGN KEY (`question_id` )
-    REFERENCES `pgen_questions` (`id` )
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -663,29 +592,6 @@ CREATE  TABLE IF NOT EXISTS `pgen_report_survey_settings` (
   CONSTRAINT `proposalgenerator_report_survey_settings_ibfk_2`
     FOREIGN KEY (`surveySettingId` )
     REFERENCES `pgen_survey_settings` (`id` ))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `pgen_textual_answers`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_textual_answers` (
-  `question_id` INT(11) NOT NULL ,
-  `report_id` INT(11) NOT NULL ,
-  `textual_answer` TEXT NOT NULL ,
-  PRIMARY KEY (`question_id`, `report_id`) ,
-  INDEX `report_id` (`report_id` ASC) ,
-  CONSTRAINT `proposalgenerator_textual_answers_ibfk_1`
-    FOREIGN KEY (`report_id` )
-    REFERENCES `pgen_reports` (`id` )
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `proposalgenerator_textual_answers_ibfk_2`
-    FOREIGN KEY (`question_id` )
-    REFERENCES `pgen_questions` (`id` )
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -1584,7 +1490,6 @@ BEGIN
 		`customerCompanyName`,
 		`userPricingOverride`,
 		`reportStage`,
-		`questionSetId`,
 		`dateCreated`,
 		`lastModified`,
 		`reportDate`,
@@ -1595,7 +1500,6 @@ BEGIN
 		`customerCompanyName`,
 		`userPricingOverride`,
 		`reportStage`,
-		`questionSetId`,
 		`dateCreated`,
 		`lastModified`,
 		`reportDate`,
@@ -1842,45 +1746,6 @@ BEGIN
 		
 	end loop curloop;
 
-	-- Clone Textual Answers
-	INSERT INTO `pgen_textual_answers` (
-		`question_id`,
-		`report_id`,
-		`textual_answer`
-	)
-	SELECT
-		`question_id`,
-		@newReportId,
-		`textual_answer`
-	FROM pgen_textual_answers
-	WHERE `report_id` = @reportIdToClone;
-
-	-- Clone Date Answers
-	INSERT INTO pgen_date_answers (
-		`question_id`,
-		`report_id`,
-		`date_answer`
-	)
-	SELECT
-		`question_id`,
-		@newReportId,
-		`date_answer`
-	FROM `pgen_date_answers`
-	WHERE `report_id` = @reportIdToClone;
-
-	-- Numeric Date Answers
-	INSERT INTO pgen_numeric_answers (
-		`question_id`,
-		`report_id`,
-		`numeric_answer`
-	)
-	SELECT
-		`question_id`,
-		@newReportId,
-		`numeric_answer`
-	FROM `pgen_numeric_answers`
-	WHERE `report_id` = @reportIdToClone;
-
 	SET @reportSettingIdToClone = (Select `reportSettingId` FROM `pgen_report_report_settings` WHERE `reportId` = @reportIdToClone);
 	
 	INSERT INTO pgen_report_settings (
@@ -1961,9 +1826,7 @@ BEGIN
 	FROM `pgen_report_survey_settings`
 	WHERE `reportId` = @reportIdToClone;
 			
-END
-
-$$
+END$$
 
 -- -----------------------------------------------------
 -- View `pgen_map_device_instances`

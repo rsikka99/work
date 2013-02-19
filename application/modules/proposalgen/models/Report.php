@@ -27,11 +27,6 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     public $reportStage;
 
     /**
-     * @var int
-     */
-    public $questionSetId;
-
-    /**
      * @var string
      */
     public $dateCreated;
@@ -116,11 +111,6 @@ class Proposalgen_Model_Report extends My_Model_Abstract
             $this->reportStage = $params->reportStage;
         }
 
-        if (isset($params->questionSetId) && !is_null($params->questionSetId))
-        {
-            $this->questionSetId = $params->questionSetId;
-        }
-
         if (isset($params->dateCreated) && !is_null($params->dateCreated))
         {
             $this->dateCreated = $params->dateCreated;
@@ -154,7 +144,6 @@ class Proposalgen_Model_Report extends My_Model_Abstract
             "clientId"            => $this->clientId,
             "userPricingOverride" => $this->userPricingOverride,
             "reportStage"         => $this->reportStage,
-            "questionSetId"       => $this->questionSetId,
             "dateCreated"         => $this->dateCreated,
             "lastModified"        => $this->lastModified,
             "reportDate"          => $this->reportDate,
