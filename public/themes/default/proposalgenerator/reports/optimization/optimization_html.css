@@ -11,7 +11,7 @@ table.center td{
 
 /* Le Styles for dealer / customer facing optmization reports */
 
-.rDevices table { width: 100%; }
+table.rDevices { width: 100%; }
 .rDevices th { vertical-align: middle; }
 .rDevices td {
     border-right-style: solid;

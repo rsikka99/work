@@ -30,26 +30,29 @@ class Proposalgen_Model_Optimization_Customer extends
             $graph->addDataSet(array($this->actionKeepCount / $purchaseDeviceCount));
             $graph->addColors(array("0CC2D2"));
             $percentValueMarker1 = "N  *p0* ({$this->actionKeepCount})";
-            // Amount of replace devices
-            $graph->addDataSet(array($this->actionReplaceCount / $purchaseDeviceCount));
-            $graph->addColors(array("4f81bd"));
-            $percentValueMarker2 = "N  *p0* ({$this->actionReplaceCount})";
-            // Amount of retire devices
-            $graph->addDataSet(array($this->actionRetireCount / $purchaseDeviceCount));
-            $graph->addColors(array("c0504d"));
-            $percentValueMarker3 = "N  *p0* ({$this->actionRetireCount})";
             // Set the replaced amount to 0
             $graph->addDataSet(array(0));
             $graph->addColors(array("9bbb59"));
-            $percentValueMarker4 = "N  *p0* (0)";
+            $percentValueMarker2 = "N  *p0* (0)";
+
+            // Amount of replace devices
+            $graph->addDataSet(array($this->actionReplaceCount / $purchaseDeviceCount));
+            $graph->addColors(array("4f81bd"));
+            $percentValueMarker3 = "N  *p0* ({$this->actionReplaceCount})";
+            // Amount of retire devices
+            $graph->addDataSet(array($this->actionRetireCount / $purchaseDeviceCount));
+            $graph->addColors(array("c0504d"));
+            $percentValueMarker4 = "N  *p0* ({$this->actionRetireCount})";
+
+
             $graph->setDataRange(0, 1);
             $graph->setBarScale(50, 10);
             $graph->setLegendPosition("b");
             $graph->setLegend(array(
                                    "Keep",
+                                   "Replace",
                                    "Flagged",
                                    "Retire",
-                                   "Replace",
                               ));
             $graph->setTitle("Current Fleet Summary");
             $graph->addValueMarkers($percentValueMarker1, "000000", "0", "-1", "11");
@@ -70,29 +73,29 @@ class Proposalgen_Model_Optimization_Customer extends
             $percentValueMarker1 = "N  *p0* ({$count})";
             $graph->addColors(array("0CC2D2"));
 
+            $count = count($this->replaced);
+            $graph->addDataSet(array($count / $purchaseDeviceCount));
+            $percentValueMarker2 = "N  *p0* ({$count})";
+            $graph->addColors(array("9bbb59"));
+
             $count = count($this->flagged);
             $graph->addDataSet(array(count($this->flagged) / $purchaseDeviceCount));
-            $percentValueMarker2 = "N  *p0* ({$count})";
+            $percentValueMarker3 = "N  *p0* ({$count})";
             $graph->addColors(array("4f81bd"));
 
             $count = count($this->retired);
             $graph->addDataSet(array($count / $purchaseDeviceCount));
-            $percentValueMarker3 = "N  *p0* ({$count})";
-            $graph->addColors(array("c0504d"));
-
-            $count = count($this->replaced);
-            $graph->addDataSet(array($count / $purchaseDeviceCount));
             $percentValueMarker4 = "N  *p0* ({$count})";
-            $graph->addColors(array("9bbb59"));
+            $graph->addColors(array("c0504d"));
 
             $graph->setDataRange(0, 1);
             $graph->setBarScale(50, 10);
             $graph->setLegendPosition("b");
             $graph->setLegend(array(
                                    "Keep",
+                                   "Replace",
                                    "Flagged",
                                    "Retire",
-                                   "Replace",
                               ));
             $graph->setTitle("Optimized Fleet Summary");
             $graph->addValueMarkers($percentValueMarker1, "000000", "0", "-1", "11");
