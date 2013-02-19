@@ -6,6 +6,7 @@
             "email": "lrobert@tangentmtw.com"
         }
     ],
+    "description" : "MPS Tools",
     "repositories": [
         {
             "type"   : "package",

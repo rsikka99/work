@@ -9,6 +9,14 @@ $(document).ready(function ()
     });
 
     /**
+     * Handles the view report button
+     */
+    $("#viewReportButton").click(function (e)
+    {
+        window.open($("#availableReports")[0].value);
+    });
+
+    /**
      * Handles when a download button is clicked
      */
     $(".downloadButton").click(function (e)

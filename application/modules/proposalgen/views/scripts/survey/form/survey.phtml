@@ -38,8 +38,9 @@ $this->headScript()->appendFile($this->baseUrl('/js/proposalgen/survey/survey/su
         </div>
         <div class="controls">
             <div class="input-prepend">
-                <span class="add-on"><?php echo $tonerCost->getDescription(); ?></span><?php echo str_replace(PHP_EOL, '', $tonerCost->renderViewHelper()); ?><?php echo $tonerCost->renderErrors(); ?>
+                <span class="add-on"><?php echo $tonerCost->getDescription(); ?></span><?php echo str_replace(PHP_EOL, '', $tonerCost->renderViewHelper()); ?>
             </div>
+            <?php echo $tonerCost->renderErrors(); ?>
         </div>
     </div>
     <hr>
@@ -53,8 +54,9 @@ $this->headScript()->appendFile($this->baseUrl('/js/proposalgen/survey/survey/su
         </div>
         <div class="controls">
             <div class="input-prepend">
-                <span class="add-on"><?php echo $laborCost->getDescription(); ?></span><?php echo str_replace(PHP_EOL, '', $laborCost->renderViewHelper()); ?><?php echo $laborCost->renderErrors(); ?>
+                <span class="add-on"><?php echo $laborCost->getDescription(); ?></span><?php echo str_replace(PHP_EOL, '', $laborCost->renderViewHelper()); ?>
             </div>
+            <?php echo $laborCost->renderErrors(); ?>
         </div>
     </div>
     <hr>
@@ -65,8 +67,9 @@ $this->headScript()->appendFile($this->baseUrl('/js/proposalgen/survey/survey/su
         <div class="controls">
 
             <div class="input-prepend">
-                <span class="add-on"><?php echo $averagePurchase->getDescription(); ?></span><?php echo str_replace(PHP_EOL, '', $averagePurchase->renderViewHelper()); ?><?php echo $averagePurchase->renderErrors(); ?>
+                <span class="add-on"><?php echo $averagePurchase->getDescription(); ?></span><?php echo str_replace(PHP_EOL, '', $averagePurchase->renderViewHelper()); ?>
             </div>
+            <?php echo $averagePurchase->renderErrors(); ?>
         </div>
     </div>
     <hr>
@@ -76,8 +79,9 @@ $this->headScript()->appendFile($this->baseUrl('/js/proposalgen/survey/survey/su
         <?php echo $itHourlyRate->renderLabel(); ?>
         <div class="controls">
             <div class="input-prepend">
-                <span class="add-on"><?php echo $itHourlyRate->getDescription(); ?></span><?php echo str_replace(PHP_EOL, '', $itHourlyRate->renderViewHelper()); ?><?php echo $itHourlyRate->renderErrors(); ?>
+                <span class="add-on"><?php echo $itHourlyRate->getDescription(); ?></span><?php echo str_replace(PHP_EOL, '', $itHourlyRate->renderViewHelper()); ?>
             </div>
+            <?php echo $itHourlyRate->renderErrors(); ?>
         </div>
     </div>
     <hr>
@@ -99,8 +103,9 @@ $this->headScript()->appendFile($this->baseUrl('/js/proposalgen/survey/survey/su
         <div class="controls">
             <div class="input-append">
                 <?php echo str_replace(PHP_EOL, '', $numberOfMonthlyOrders->renderViewHelper()); ?>
-                <span class="add-on"><?php echo $numberOfMonthlyOrders->getDescription(); ?></span><?php echo $numberOfMonthlyOrders->renderErrors(); ?>
+                <span class="add-on"><?php echo $numberOfMonthlyOrders->getDescription(); ?></span>
             </div>
+            <?php echo $numberOfMonthlyOrders->renderErrors(); ?>
         </div>
     </div>
     <hr>
