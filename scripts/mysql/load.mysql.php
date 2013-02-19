@@ -12,6 +12,39 @@ set_include_path(implode(PATH_SEPARATOR, array (
         get_include_path()
 )));
 
+defined('APPLICATION_BASE_PATH') || define('APPLICATION_BASE_PATH', realpath(dirname(__FILE__) . '/../..'));
+
+// Define the paths
+defined('APPLICATION_PATH') || define('APPLICATION_PATH', APPLICATION_BASE_PATH . '/application');
+defined('DATA_PATH') || define('DATA_PATH', APPLICATION_BASE_PATH . '/data');
+defined('PUBLIC_PATH') || define('PUBLIC_PATH', APPLICATION_BASE_PATH . '/public');
+defined('ASSETS_PATH') || define('ASSETS_PATH', APPLICATION_BASE_PATH . '/assets');
+defined('MYSQL_FILES_PATH') || define('MYSQL_FILES_PATH', APPLICATION_BASE_PATH . '/scripts/mysql');
+
+/**
+ * This makes our life easier when dealing with paths. Everything is relative
+ * to the application root now.
+ */
+chdir(APPLICATION_BASE_PATH);
+
+// Setup autoloading
+require 'init_autoloader.php';
+
+//
+//ini_set("display_errors", 1);
+//error_reporting(E_ALL);
+
+// Define application environment.
+defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'development'));
+
+// Create application, bootstrap, and run
+$application = new Zend_Application(APPLICATION_ENV, array(
+                                                          'config' => array(
+                                                              APPLICATION_PATH . '/configs/global.ini',
+                                                              APPLICATION_PATH . '/configs/application.ini',
+                                                          )));
+
+
 require_once 'Zend/Loader/Autoloader.php';
 Zend_Loader_Autoloader::getInstance();
 
@@ -69,17 +102,6 @@ if ($withData)
 }
 echo '.' . PHP_EOL;
 
-// if ('testing' != APPLICATION_ENV)
-// {
-//     echo 'Writing Database in (control-c to cancel): ' . PHP_EOL;
-//     for($x = 5; $x > 0; $x --)
-//     {
-//         echo $x . "\r";
-//         sleep(1);
-//     }
-// }
-
-
 // Check to see if we have a database file already
 $options = $bootstrap->getOption('resources');
 
@@ -95,10 +117,10 @@ try
         $conn->select_db($options ['db'] ['params'] ['dbname']);
 
         echo "Loading Schema...";
-        runSQLFile(dirname(__FILE__) . '/schema.sql', $conn);
-        runSQLFile(dirname(__FILE__) . '/requiredData.base.sql', $conn);
-        runSQLFile(dirname(__FILE__) . '/requiredData.proposalgenerator.sql', $conn);
-        runSQLFile(dirname(__FILE__) . '/requiredData.quotegenerator.sql', $conn);
+        runSQLFile(MYSQL_FILES_PATH . '/schema.sql', $conn);
+        runSQLFile(MYSQL_FILES_PATH . '/requiredData.base.sql', $conn);
+        runSQLFile(MYSQL_FILES_PATH . '/requiredData.proposalgenerator.sql', $conn);
+        runSQLFile(MYSQL_FILES_PATH . '/requiredData.quotegenerator.sql', $conn);
 
         if ('testing' != APPLICATION_ENV)
         {
@@ -108,8 +130,8 @@ try
         if ($withData)
         {
             echo "Loading Data...";
-            runSQLFile(dirname(__FILE__) . '/data.proposalgenerator.sql', $conn);
-            runSQLFile(dirname(__FILE__) . '/data.quotegen.sql', $conn);
+            runSQLFile(MYSQL_FILES_PATH . '/data.proposalgenerator.sql', $conn);
+            runSQLFile(MYSQL_FILES_PATH . '/data.quotegen.sql', $conn);
 
             if ('testing' != APPLICATION_ENV)
             {
