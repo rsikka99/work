@@ -1,12 +1,12 @@
 {
-    "hash": "aaebeece347467cc5ff088e6172c0bed",
+    "hash": "b1faab05880dc45a1bb8c651ccad528e",
     "packages": [
         {
             "name": "gChartPhp/gChartPhp",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/aimfeld/gChartPhp",
+                "url": "https://github.com/aimfeld/gChartPhp.git",
                 "reference": "0.6.7"
             },
             "dist": {
@@ -54,7 +54,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/ddeboer/phpexcel",
+                "url": "https://github.com/ddeboer/phpexcel.git",
                 "reference": "v1.7.7"
             },
             "dist": {
