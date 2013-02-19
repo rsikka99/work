@@ -122,6 +122,11 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_piqessentials/index')
             ),
+            "HealthCheck"      => (object)array(
+                "pagetitle" => "Health Check",
+                "active"    => false,
+                "url"       => $this->view->baseUrl('/proposalgen/report_healthcheck/index')
+            ),
         );
     }
 

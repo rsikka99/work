@@ -1,0 +1,22 @@
+<?php
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
+?>
+<div class="titlepage">
+    <div class="header">
+        <h3>Prepared for:
+            <?php
+            if (strlen($proposal->report->getClient()->companyName) > 26)
+            {
+                echo "<br/>";
+            }
+
+            echo $proposal->report->getClient()->companyName;
+            ?>
+        </h3>
+        <h3><?php echo $proposal->getDateReportPrepared() ; ?></h3>
+    </div>
+    <div class="customerdetails">
+        <p><?php echo nl2br($proposal->getCustomerAddress()); ?></p>
+    </div>
+</div>
