@@ -59,6 +59,23 @@ $standard_cell                 = (object)array(
         'align'      => 'right'
     )
 );
+$standard_cell_left            = (object)array(
+    "even"           => array(
+        "bgColor"          => $even_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20
+    ),
+    "odd"            => array(
+        "bgColor"          => $odd_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20
+    ),
+    "fontStyle"      => null,
+    "paragraphStyle" => array(
+        'spaceAfter' => 0,
+        'align'      => 'left'
+    )
+);
 $standard_cell_no_right_border = (object)array(
     "even"           => array(
         "bgColor" => $even_color,
@@ -148,8 +165,8 @@ $replacementTable = (object)array(
     "col12Width" => $replacementSpan3Width / 3,
     "body"       => (object)array(
         "rowheight" => null,
-        "cell1"     => $standard_cell,
-        "cell2"     => $standard_cell,
+        "cell1"     => $standard_cell_left,
+        "cell2"     => $standard_cell_left,
         "cell3"     => $standard_cell,
         "cell4"     => $standard_cell,
         "cell5"     => (object)array(
@@ -215,8 +232,8 @@ $acceptableTable = (object)array(
     "col7Width"  => $widthTwips * 0.120,
     "body"       => (object)array(
         "rowheight" => null,
-        "cell1"     => $standard_cell,
-        "cell2"     => $standard_cell,
+        "cell1"     => $standard_cell_left,
+        "cell2"     => $standard_cell_left,
         "cell3"     => $standard_cell,
         "cell4"     => $standard_cell,
         "cell5"     => $standard_cell,
@@ -243,8 +260,8 @@ $excessTable     = (object)array(
     "col6Width"  => $widthTwips * 0.125,
     "body"       => (object)array(
         "rowheight" => null,
-        "cell1"     => $standard_cell,
-        "cell2"     => $standard_cell,
+        "cell1"     => $standard_cell_left,
+        "cell2"     => $standard_cell_left,
         "cell3"     => $standard_cell,
         "cell4"     => $standard_cell,
         "cell5"     => $standard_cell,
@@ -275,8 +292,8 @@ $retireTable     = (object)array(
     "col10Width" => $widthTwips * 0.075,
     "body"       => (object)array(
         "rowheight" => null,
-        "cell1"     => $standard_cell,
-        "cell2"     => $standard_cell,
+        "cell1"     => $standard_cell_left,
+        "cell2"     => $standard_cell_left,
         "cell3"     => $standard_cell,
         "cell4"     => $standard_cell,
         "cell5"     => $standard_cell,
@@ -307,8 +324,8 @@ $flaggedTable    = (object)array(
     "col7Width"  => $widthTwips * 0.120,
     "body"       => (object)array(
         "rowheight" => null,
-        "cell1"     => $standard_cell,
-        "cell2"     => $standard_cell,
+        "cell1"     => $standard_cell_left,
+        "cell2"     => $standard_cell_left,
         "cell3"     => $standard_cell,
         "cell4"     => $standard_cell,
         "cell5"     => $standard_cell,
@@ -340,8 +357,8 @@ $excludedTable   = (object)array(
     "col3Width"  => $widthTwips * 0.35,
     "body"       => (object)array(
         "rowheight" => null,
-        "cell1"     => $standard_cell,
-        "cell2"     => $standard_cell,
+        "cell1"     => $standard_cell_left,
+        "cell2"     => $standard_cell_left,
         "cell3"     => $standard_cell_no_right_border,
     ),
     "header"     => (object)array(
@@ -354,7 +371,7 @@ $excludedTable   = (object)array(
  * Here we put all our table styles into an object that gets passed to each of
  * the view scripts
  */
-$styles = (object)array(
+$styles               = (object)array(
     "tables" => (object)array(
         "compare"     => $compareTable,
 //                 "fleetAnalysist" => $fleetAnalysistTable, 
@@ -367,15 +384,16 @@ $styles = (object)array(
         "excluded"    => $excludedTable
     )
 );
-
+$profitabilityDevices = new Proposalgen_Model_Optimization_Dealer($this->proposal);
 /**
  * An array of view variables to pass to the partial scripts
  */
 $data = array(
-    "phpword"  => $this->phpword,
-    "proposal" => $this->proposal,
-    "section"  => $mainSection,
-    "styles"   => $styles
+    "phpword"              => $this->phpword,
+    "proposal"             => $this->proposal,
+    "section"              => $mainSection,
+    "profitabilityDevices" => $profitabilityDevices,
+    "styles"               => $styles
 );
 
 /**

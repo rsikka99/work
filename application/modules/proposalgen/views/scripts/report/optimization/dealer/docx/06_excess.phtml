@@ -10,12 +10,15 @@
 $section = $this->section;
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
+/* @var $profitabiltyDevices Proposalgen_Model_Optimization_Dealer */
+$profitabiltyDevices = $this->profitabilityDevices;
+
 $section->addTextBreak();
 $section->addText('Excess Devices', array('bold' => true, 'size' => 12));
 
 // Table with values
 $tcStyle = $this->styles->tables->excess;
-$table = $section->addTable($tcStyle->tablestyle);
+$table   = $section->addTable($tcStyle->tablestyle);
 // Table header
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
@@ -26,10 +29,19 @@ $table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addTe
 $table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText('Color CPP', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 
 // Begin with data rows
-$table->addRow($tcStyle->body->rowheight);
-$table->addCell($tcStyle->col1Width, $tcStyle->body->cell1->odd)->addText('Xerox WorkCentre 5645', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->col2Width, $tcStyle->body->cell2->odd)->addText('WTD081861E 10.100.1.68', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
-$table->addCell($tcStyle->col3Width, $tcStyle->body->cell3->odd)->addText('29,882', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->body->cell4->odd)->addText('Yes', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-$table->addCell($tcStyle->col5Width, $tcStyle->body->cell5->odd)->addText('$0.0070', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-$table->addCell($tcStyle->col6Width, $tcStyle->body->cell6->odd)->addText('N/A', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+foreach ($profitabiltyDevices->excess as $device)
+{
+    $masterDevice = $device->getMasterDevice();
+    $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+
+    $table->addRow($tcStyle->body->rowheight);
+    $style = ($this->cycle(array($tcStyle->body->cell1->even, $tcStyle->body->cell1->odd))->next()->current());
+
+    $table->addRow($tcStyle->body->rowheight);
+    $table->addCell($tcStyle->col1Width, $style)->addText($device->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+    $table->addCell($tcStyle->col2Width, $style)->addText($device->serialNumber . ' ' . $device->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+    $table->addCell($tcStyle->col3Width, $style)->addText(number_format($device->getLifePageCount()), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+    $table->addCell($tcStyle->col4Width, $style)->addText(($device->reportsTonerLevels) ? 'Yes' : 'No', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+    $table->addCell($tcStyle->col5Width, $style)->addText($this->currency($device->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->monochromeCostPerPage,array('precision' => 4)), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
+    $table->addCell($tcStyle->col6Width, $style)->addText(($isColor) ? $this->currency($device->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->colorCostPerPage,array('precision' => 4)) : 'N/A', $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
+}

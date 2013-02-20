@@ -10,12 +10,16 @@
 $section = $this->section;
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
+/* @var $profitabiltyDevices Proposalgen_Model_Optimization_Dealer */
+$profitabiltyDevices = $this->profitabilityDevices;
+$costPerPageSetting   = $proposal->getCostPerPageSettingForDealer();
+
 $section->addTextBreak();
 $section->addText('Suggested Replacement Devices', array('bold' => true, 'size' => 12));
 
 // Table with values
 $tcStyle = $this->styles->tables->replacement;
-$table = $section->addTable($tcStyle->tablestyle);
+$table   = $section->addTable($tcStyle->tablestyle);
 // Table header
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->span5Width, $tcStyle->header->header->cellStyle, 5)->addText('Current', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
@@ -37,17 +41,26 @@ $table->addCell($tcStyle->col11Width, $tcStyle->header->sub_header->cellStyle)->
 $table->addCell($tcStyle->col12Width, $tcStyle->header->sub_header->cellStyle)->addText('Cost Delta', $tcStyle->header->sub_header->fontStyle, $tcStyle->header->sub_header->paragraphStyle);
 
 // Begin with data rows
-$table->addRow($tcStyle->body->rowheight);
-$table->addCell($tcStyle->collWidth, $tcStyle->body->cell1->odd)->addText('Hewlett-Packard Color LaserJet CM3530 MFP', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->col2Width, $tcStyle->body->cell2->odd)->addText('CNJLB01441 10.12.0.232', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
-$table->addCell($tcStyle->col3Width, $tcStyle->body->cell3->odd)->addText('$0.0273', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->body->cell4->odd)->addText('$0.1027', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-$table->addCell($tcStyle->col5Width, $tcStyle->body->cell5->odd)->addText('$873.51', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-$table->addCell($tcStyle->col6Width, $tcStyle->body->cell6->odd)->addText('Hewlett-Packard Color LaserJet 4730mfp', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-$table->addCell($tcStyle->col7Width, $tcStyle->body->cell7->odd)->addText('$0.0732', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-$table->addCell($tcStyle->col8Width, $tcStyle->body->cell8->odd)->addText('$0.0732', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-$table->addCell($tcStyle->col9Width, $tcStyle->body->cell9->odd)->addText('$818.33', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-$table->addCell($tcStyle->col10Width, $tcStyle->body->cell10->odd)->addText('4,625', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-$table->addCell($tcStyle->col11Width, $tcStyle->body->cell11->odd)->addText('7,274', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-$table->addCell($tcStyle->col12Width, $tcStyle->body->cell12->odd)->addText('$55.17', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+foreach ($profitabiltyDevices->replaced as $device)
+{
+    $masterDevice      = $device->getMasterDevice();
+    $replacementDevice = $device->getReplacementMasterDevice();
+    $isColor           = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+    $style = ($this->cycle(array($tcStyle->body->cell1->even, $tcStyle->body->cell1->odd))->next()->current());
+
+
+    $table->addRow($tcStyle->body->rowheight);
+    $table->addCell($tcStyle->collWidth, $style)->addText($device->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+    $table->addCell($tcStyle->col2Width, $style)->addText($device->serialNumber . ' ' . $device->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+    $table->addCell($tcStyle->col3Width, $style)->addText($this->currency($device->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array('precision' => 4)), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+    $table->addCell($tcStyle->col4Width, $style)->addText(($isColor) ? $this->currency($device->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, array('precision' => 4)) : 'N/A', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+    $table->addCell($tcStyle->col5Width, $style)->addText($this->currency($device->calculateMonthlyCost($costPerPageSetting)), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
+    $table->addCell($tcStyle->col6Width, $style)->addText($replacementDevice->getManufacturer()->fullname . ' ' . $replacementDevice->modelName, $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
+    $table->addCell($tcStyle->col7Width, $style)->addText($this->currency($replacementDevice->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->monochromeCostPerPage, array('precision' => 4)), $tcStyle->body->cell7->fontStyle, $tcStyle->body->cell7->paragraphStyle);
+    $table->addCell($tcStyle->col8Width, $style)->addText(($isColor) ? $this->currency($replacementDevice->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->colorCostPerPage, array('precision' => 4)) : 'N/A', $tcStyle->body->cell8->fontStyle, $tcStyle->body->cell8->paragraphStyle);
+    $table->addCell($tcStyle->col9Width, $style)->addText($this->currency($device->calculateMonthlyCost($costPerPageSetting, $replacementDevice)), $tcStyle->body->cell9->fontStyle, $tcStyle->body->cell9->paragraphStyle);
+    $table->addCell($tcStyle->col10Width, $style)->addText(number_format($device->getAverageMonthlyBlackAndWhitePageCount()), $tcStyle->body->cell10->fontStyle, $tcStyle->body->cell10->paragraphStyle);
+    $table->addCell($tcStyle->col11Width, $style)->addText(($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A', $tcStyle->body->cell11->fontStyle, $tcStyle->body->cell11->paragraphStyle);
+    $table->addCell($tcStyle->col12Width, $style)->addText($this->currency($device->calculateMonthlyCost($costPerPageSetting) - $device->calculateMonthlyCost($costPerPageSetting, $device->getReplacementMasterDevice())), $tcStyle->body->cell12->fontStyle, $tcStyle->body->cell12->paragraphStyle);
+}
 ?>
