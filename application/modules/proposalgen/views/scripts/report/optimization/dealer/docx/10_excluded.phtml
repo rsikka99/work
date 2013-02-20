@@ -1,0 +1,29 @@
+<?php
+/**
+ * Cost Analysis - Header information
+ *
+ * This script contains everything that comes before the big table of
+ * information in the cost analysis.
+ */
+
+/* @var $section PHPWord_Section */
+$section = $this->section;
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
+$section->addTextBreak();
+$section->addText('Flagged Devices', array('bold' => true, 'size' => 12));
+
+// Table with values
+$tcStyle = $this->styles->tables->excluded;
+$table = $section->addTable($tcStyle->tablestyle);
+// Table header
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Ip Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Serial Number', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+
+// Begin with data rows
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->body->cell1->odd)->addText('Xerox WorkCentre 5645', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->body->cell2->odd)->addText('10.100.1.68', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->body->cell3->odd)->addText('WTD081861E', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);

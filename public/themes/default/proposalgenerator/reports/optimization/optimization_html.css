@@ -44,14 +44,13 @@ table.rDevices {
 
 .rDevices tr.header th {
     padding            : 5px;
-    background-color   : #F0003C;
-    color              : white;
+    background-color   : #B8CCE3;
     border-right-color : #DDDDDD;
 }
 
 .rDevices tr.subHeader th {
     padding          : 5px;
-    background-color : #FCCCD8;
+    background-color : #EAF0F7;
     border-color     : #DDDDDD;
 }
 

@@ -23,99 +23,99 @@ $properties->setKeywords('demo, assessment, report');
 
 // This section is landscape with 0.5" margins insead of 1"
 $mainSection = $phpWord->createSection(array(
-    'orientation' => 'landscape',
-    'marginLeft' => 720,
-    'marginRight' => 720,
-    'marginTop' => 720,
-    'marginBottom' => 720
-));
+                                            'orientation'  => 'landscape',
+                                            'marginLeft'   => 720,
+                                            'marginRight'  => 720,
+                                            'marginTop'    => 720,
+                                            'marginBottom' => 720
+                                       ));
 
 /**
  * Define Table Styles here
  */
-$widthTwips = 15297;
-$header_color = "B8CCE3";
+$widthTwips       = 15297;
+$header_color     = "B8CCE3";
 $sub_header_color = "EAF0F7";
-$even_color = "EFEFEF";
-$odd_color = "FCFCFC";
-$footer_color = "b8cce3";
-$highlight_color = "ebc7a4";
+$even_color       = "EFEFEF";
+$odd_color        = "FCFCFC";
+$footer_color     = "b8cce3";
+$highlight_color  = "ebc7a4";
 
 // Classes that describe standard cells
-$standard_cell = (object)array(
-    "even" => array(
-        "bgColor" => $even_color,
+$standard_cell                 = (object)array(
+    "even"           => array(
+        "bgColor"          => $even_color,
         "borderRightColor" => 'FFFFFF',
-        "borderRightSize" => 20
+        "borderRightSize"  => 20
     ),
-    "odd" => array(
-        "bgColor" => $odd_color,
+    "odd"            => array(
+        "bgColor"          => $odd_color,
         "borderRightColor" => 'FFFFFF',
-        "borderRightSize" => 20
+        "borderRightSize"  => 20
     ),
-    "fontStyle" => null,
+    "fontStyle"      => null,
     "paragraphStyle" => array(
         'spaceAfter' => 0,
-        'align' => 'right'
+        'align'      => 'right'
     )
 );
 $standard_cell_no_right_border = (object)array(
-    "even" => array(
+    "even"           => array(
         "bgColor" => $even_color,
     ),
-    "odd" => array(
+    "odd"            => array(
         "bgColor" => $odd_color,
     ),
-    "fontStyle" => null,
+    "fontStyle"      => null,
     "paragraphStyle" => array(
         'spaceAfter' => 0,
-        'align' => 'right'
+        'align'      => 'right'
     )
 );
-$standard_header = (object)array(
-    "cellStyle" => array(
+$standard_header               = (object)array(
+    "cellStyle"      => array(
         'bgColor' => $header_color
     ),
-    "fontStyle" => array(
+    "fontStyle"      => array(
         'bold' => true
     ),
     "paragraphStyle" => array(
         'spaceAfter' => 0,
-        'align' => 'center'
+        'align'      => 'center'
     )
 );
-$standard_sub_header = (object)array(
-    "cellStyle" => array(
+$standard_sub_header           = (object)array(
+    "cellStyle"      => array(
         'bgColor' => $sub_header_color
     ),
-    "fontStyle" => array(
+    "fontStyle"      => array(
         'bold' => true
     ),
     "paragraphStyle" => array(
         'spaceAfter' => 0,
-        'align' => 'center'
+        'align'      => 'center'
     )
 );
 
 $compareTable = (object)array(
     "tablestyle" => array(
-        'cellMarginTop' => 50,
-        'cellMarginRight' => 50,
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
         'cellMarginBottom' => 50,
-        'cellMarginLeft' => 50
+        'cellMarginLeft'   => 50
     ),
-    "colWidth" => $widthTwips * 0.25,
+    "colWidth"   => $widthTwips * 0.25,
     "span2Width" => $widthTwips / 2,
-    "spanAll" => $widthTwips,
-    "body" => (object)array(
+    "spanAll"    => $widthTwips,
+    "body"       => (object)array(
         "rowheight" => null,
-        "cell1" => $standard_cell,
-        "cell2" => $standard_cell,
-        "cell3" => $standard_cell,
-        "cell4" => $standard_cell_no_right_border,
+        "cell1"     => $standard_cell,
+        "cell2"     => $standard_cell,
+        "cell3"     => $standard_cell,
+        "cell4"     => $standard_cell_no_right_border,
     ),
-    "header" => (object)array(
-        'header' => $standard_header,
+    "header"     => (object)array(
+        'header'     => $standard_header,
         'sub_header' => $standard_sub_header,
     )
 );
@@ -126,168 +126,228 @@ $replacementSpan3Width = $widthTwips * 0.2;
 
 $replacementTable = (object)array(
     "tablestyle" => array(
-        'cellMarginTop' => 50,
-        'cellMarginRight' => 50,
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
         'cellMarginBottom' => 50,
-        'cellMarginLeft' => 50
+        'cellMarginLeft'   => 50
     ),
     "span5Width" => $replacementSpan5Width,
     "span4Width" => $replacementSpan4Width,
     "span3Width" => $replacementSpan3Width,
-    "col1Width" => $replacementSpan5Width * 0.32,
-    "col2Width" => $replacementSpan5Width * 0.2,
-    "col3Width" => $replacementSpan5Width * 0.16,
-    "col4Width" => $replacementSpan5Width * 0.16,
-    "col5Width" => $replacementSpan5Width * 0.16,
-    "col6Width" => $replacementSpan4Width * 0.4,
-    "col7Width" => $replacementSpan4Width * 0.2,
-    "col8Width" => $replacementSpan4Width * 0.2,
-    "col9Width" => $replacementSpan4Width * 0.2,
+    "col1Width"  => $replacementSpan5Width * 0.32,
+    "col2Width"  => $replacementSpan5Width * 0.2,
+    "col3Width"  => $replacementSpan5Width * 0.16,
+    "col4Width"  => $replacementSpan5Width * 0.16,
+    "col5Width"  => $replacementSpan5Width * 0.16,
+    "col6Width"  => $replacementSpan4Width * 0.4,
+    "col7Width"  => $replacementSpan4Width * 0.2,
+    "col8Width"  => $replacementSpan4Width * 0.2,
+    "col9Width"  => $replacementSpan4Width * 0.2,
     "col10Width" => $replacementSpan3Width / 3,
     "col11Width" => $replacementSpan3Width / 3,
     "col12Width" => $replacementSpan3Width / 3,
-    "body" => (object)array(
+    "body"       => (object)array(
         "rowheight" => null,
-        "cell1" => $standard_cell,
-        "cell2" => $standard_cell,
-        "cell3" => $standard_cell,
-        "cell4" => $standard_cell,
-        "cell5" => (object)array(
-            "even" => array(
-                "bgColor" => $even_color,
+        "cell1"     => $standard_cell,
+        "cell2"     => $standard_cell,
+        "cell3"     => $standard_cell,
+        "cell4"     => $standard_cell,
+        "cell5"     => (object)array(
+            "even"           => array(
+                "bgColor"          => $even_color,
                 "borderRightColor" => 'DDDDDD',
-                "borderRightSize" => 20
+                "borderRightSize"  => 20
             ),
-            "odd" => array(
-                "bgColor" => $odd_color,
+            "odd"            => array(
+                "bgColor"          => $odd_color,
                 "borderRightColor" => 'DDDDDD',
-                "borderRightSize" => 20
+                "borderRightSize"  => 20
             ),
-            "fontStyle" => null,
+            "fontStyle"      => null,
             "paragraphStyle" => array(
                 'spaceAfter' => 0,
-                'align' => 'right'
+                'align'      => 'right'
             )
         ),
-        "cell6" => $standard_cell,
-        "cell7" => $standard_cell,
-        "cell8" => $standard_cell,
-        "cell9" => (object)array(
-            "even" => array(
-                "bgColor" => $even_color,
+        "cell6"     => $standard_cell,
+        "cell7"     => $standard_cell,
+        "cell8"     => $standard_cell,
+        "cell9"     => (object)array(
+            "even"           => array(
+                "bgColor"          => $even_color,
                 "borderRightColor" => 'DDDDDD',
-                "borderRightSize" => 20
+                "borderRightSize"  => 20
             ),
-            "odd" => array(
-                "bgColor" => $odd_color,
+            "odd"            => array(
+                "bgColor"          => $odd_color,
                 "borderRightColor" => 'DDDDDD',
-                "borderRightSize" => 20
+                "borderRightSize"  => 20
             ),
-            "fontStyle" => null,
+            "fontStyle"      => null,
             "paragraphStyle" => array(
                 'spaceAfter' => 0,
-                'align' => 'right'
+                'align'      => 'right'
             )
         ),
-        "cell10" => $standard_cell,
-        "cell11" => $standard_cell,
-        "cell12" => $standard_cell_no_right_border,
+        "cell10"    => $standard_cell,
+        "cell11"    => $standard_cell,
+        "cell12"    => $standard_cell_no_right_border,
     ),
-    "header" => (object)array(
-        'header' => $standard_header,
+    "header"     => (object)array(
+        'header'     => $standard_header,
         'sub_header' => $standard_sub_header,
     ),
 );
 
 $acceptableTable = (object)array(
     "tablestyle" => array(
-        'cellMarginTop' => 50,
-        'cellMarginRight' => 50,
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
         'cellMarginBottom' => 50,
-        'cellMarginLeft' => 50
+        'cellMarginLeft'   => 50
     ),
-    "col1Width" => $widthTwips * 0.225,
-    "col2Width" => $widthTwips * 0.15,
-    "col3Width" => $widthTwips * 0.125,
-    "col4Width" => $widthTwips * 0.125,
-    "col5Width" => $widthTwips * 0.125,
-    "col6Width" => $widthTwips * 0.125,
-    "col7Width" => $widthTwips * 0.125,
-    "body" => (object)array(
+    "col1Width"  => $widthTwips * 0.25,
+    "col2Width"  => $widthTwips * 0.15,
+    "col3Width"  => $widthTwips * 0.120,
+    "col4Width"  => $widthTwips * 0.120,
+    "col5Width"  => $widthTwips * 0.120,
+    "col6Width"  => $widthTwips * 0.120,
+    "col7Width"  => $widthTwips * 0.120,
+    "body"       => (object)array(
         "rowheight" => null,
-        "cell1" => $standard_cell,
-        "cell2" => $standard_cell,
-        "cell3" => $standard_cell,
-        "cell4" => $standard_cell,
-        "cell5" => $standard_cell,
-        "cell6" => $standard_cell,
-        "cell7" => $standard_cell_no_right_border,
+        "cell1"     => $standard_cell,
+        "cell2"     => $standard_cell,
+        "cell3"     => $standard_cell,
+        "cell4"     => $standard_cell,
+        "cell5"     => $standard_cell,
+        "cell6"     => $standard_cell,
+        "cell7"     => $standard_cell_no_right_border,
     ),
-    "header" => (object)array(
-        'header' => $standard_header,
+    "header"     => (object)array(
+        'header'     => $standard_header,
         'sub_header' => $standard_sub_header,
     ),
 );
-$excessTable = (object)array(
+$excessTable     = (object)array(
     "tablestyle" => array(
-        'cellMarginTop' => 50,
-        'cellMarginRight' => 50,
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
         'cellMarginBottom' => 50,
-        'cellMarginLeft' => 50
+        'cellMarginLeft'   => 50
     ),
-    "col1Width" => $widthTwips * 0.20,
-    "col2Width" => $widthTwips * 0.20,
-    "col3Width" => $widthTwips * 0.15,
-    "col4Width" => $widthTwips * 0.15,
-    "col5Width" => $widthTwips * 0.10,
-    "col6Width" => $widthTwips * 0.10,
-    "body" => (object)array(
+    "col1Width"  => $widthTwips * 0.25,
+    "col2Width"  => $widthTwips * 0.15,
+    "col3Width"  => $widthTwips * 0.175,
+    "col4Width"  => $widthTwips * 0.175,
+    "col5Width"  => $widthTwips * 0.125,
+    "col6Width"  => $widthTwips * 0.125,
+    "body"       => (object)array(
         "rowheight" => null,
-        "cell1" => $standard_cell,
-        "cell2" => $standard_cell,
-        "cell3" => $standard_cell,
-        "cell4" => $standard_cell,
-        "cell5" => $standard_cell,
-        "cell6" => $standard_cell,
-        "cell7" => $standard_cell_no_right_border,
+        "cell1"     => $standard_cell,
+        "cell2"     => $standard_cell,
+        "cell3"     => $standard_cell,
+        "cell4"     => $standard_cell,
+        "cell5"     => $standard_cell,
+        "cell6"     => $standard_cell_no_right_border,
     ),
-    "header" => (object)array(
-        'header' => $standard_header,
+    "header"     => (object)array(
+        'header'     => $standard_header,
         'sub_header' => $standard_sub_header,
     ),
 
 );
-$retireTable = (object)array(
+$retireTable     = (object)array(
     "tablestyle" => array(
-        'cellMarginTop' => 50,
-        'cellMarginRight' => 50,
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
         'cellMarginBottom' => 50,
-        'cellMarginLeft' => 50
+        'cellMarginLeft'   => 50
+    ),
+    "col1Width"  => $widthTwips * 0.25,
+    "col2Width"  => $widthTwips * 0.15,
+    "col3Width"  => $widthTwips * 0.075,
+    "col4Width"  => $widthTwips * 0.075,
+    "col5Width"  => $widthTwips * 0.075,
+    "col6Width"  => $widthTwips * 0.075,
+    "col7Width"  => $widthTwips * 0.075,
+    "col8Width"  => $widthTwips * 0.075,
+    "col9Width"  => $widthTwips * 0.075,
+    "col10Width" => $widthTwips * 0.075,
+    "body"       => (object)array(
+        "rowheight" => null,
+        "cell1"     => $standard_cell,
+        "cell2"     => $standard_cell,
+        "cell3"     => $standard_cell,
+        "cell4"     => $standard_cell,
+        "cell5"     => $standard_cell,
+        "cell6"     => $standard_cell,
+        "cell7"     => $standard_cell,
+        "cell8"     => $standard_cell,
+        "cell9"     => $standard_cell,
+        "cell10"    => $standard_cell_no_right_border,
+    ),
+    "header"     => (object)array(
+        'header'     => $standard_header,
+        'sub_header' => $standard_sub_header,
+    ),
+);
+$flaggedTable    = (object)array(
+    "tablestyle" => array(
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
+        'cellMarginBottom' => 50,
+        'cellMarginLeft'   => 50
+    ),
+    "col1Width"  => $widthTwips * 0.25,
+    "col2Width"  => $widthTwips * 0.15,
+    "col3Width"  => $widthTwips * 0.120,
+    "col4Width"  => $widthTwips * 0.120,
+    "col5Width"  => $widthTwips * 0.120,
+    "col6Width"  => $widthTwips * 0.120,
+    "col7Width"  => $widthTwips * 0.120,
+    "body"       => (object)array(
+        "rowheight" => null,
+        "cell1"     => $standard_cell,
+        "cell2"     => $standard_cell,
+        "cell3"     => $standard_cell,
+        "cell4"     => $standard_cell,
+        "cell5"     => $standard_cell,
+        "cell6"     => $standard_cell,
+        "cell7"     => $standard_cell_no_right_border,
+    ),
+    "header"     => (object)array(
+        'header'     => $standard_header,
+        'sub_header' => $standard_sub_header,
+    ),
+);
+$leasedTable     = (object)array(
+    "tablestyle" => array(
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
+        'cellMarginBottom' => 50,
+        'cellMarginLeft'   => 50
     )
 );
-$flaggedTable = (object)array(
+$excludedTable   = (object)array(
     "tablestyle" => array(
-        'cellMarginTop' => 50,
-        'cellMarginRight' => 50,
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
         'cellMarginBottom' => 50,
-        'cellMarginLeft' => 50
-    )
-);
-$leasedTable = (object)array(
-    "tablestyle" => array(
-        'cellMarginTop' => 50,
-        'cellMarginRight' => 50,
-        'cellMarginBottom' => 50,
-        'cellMarginLeft' => 50
-    )
-);
-$excludedTable = (object)array(
-    "tablestyle" => array(
-        'cellMarginTop' => 50,
-        'cellMarginRight' => 50,
-        'cellMarginBottom' => 50,
-        'cellMarginLeft' => 50
-    )
+        'cellMarginLeft'   => 50
+    ),
+    "col1Width"  => $widthTwips * 0.35,
+    "col2Width"  => $widthTwips * 0.30,
+    "col3Width"  => $widthTwips * 0.35,
+    "body"       => (object)array(
+        "rowheight" => null,
+        "cell1"     => $standard_cell,
+        "cell2"     => $standard_cell,
+        "cell3"     => $standard_cell_no_right_border,
+    ),
+    "header"     => (object)array(
+        'header'     => $standard_header,
+        'sub_header' => $standard_sub_header,
+    ),
 );
 
 /**
@@ -296,15 +356,15 @@ $excludedTable = (object)array(
  */
 $styles = (object)array(
     "tables" => (object)array(
-        "compare" => $compareTable,
+        "compare"     => $compareTable,
 //                 "fleetAnalysist" => $fleetAnalysistTable, 
         "replacement" => $replacementTable,
-        "acceptable" => $acceptableTable,
-        "excess" => $excessTable,
-        "retire" => $retireTable,
-        "flagged" => $flaggedTable,
-        "leased" => $leasedTable,
-        "excluded" => $excludedTable
+        "acceptable"  => $acceptableTable,
+        "excess"      => $excessTable,
+        "retire"      => $retireTable,
+        "flagged"     => $flaggedTable,
+        "leased"      => $leasedTable,
+        "excluded"    => $excludedTable
     )
 );
 
@@ -312,10 +372,10 @@ $styles = (object)array(
  * An array of view variables to pass to the partial scripts
  */
 $data = array(
-    "phpword" => $this->phpword,
+    "phpword"  => $this->phpword,
     "proposal" => $this->proposal,
-    "section" => $mainSection,
-    "styles" => $styles
+    "section"  => $mainSection,
+    "styles"   => $styles
 );
 
 /**
@@ -328,6 +388,10 @@ $this->partial("report/optimization/dealer/docx/03_devicesummary.phtml", $data);
 $this->partial("report/optimization/dealer/docx/04_replacements.phtml", $data);
 $this->partial("report/optimization/dealer/docx/05_acceptable.phtml", $data);
 $this->partial("report/optimization/dealer/docx/06_excess.phtml", $data);
+$this->partial("report/optimization/dealer/docx/07_retired.phtml", $data);
+$this->partial("report/optimization/dealer/docx/08_flagged.phtml", $data);
+//$this->partial("report/optimization/dealer/docx/09_leased.phtml", $data);
+$this->partial("report/optimization/dealer/docx/10_excluded.phtml", $data);
 
 $objWriter = PHPWord_IOFactory::createWriter($this->phpword, 'Word2007');
 $objWriter->save($this->savePath);
