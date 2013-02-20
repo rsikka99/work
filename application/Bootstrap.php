@@ -96,7 +96,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view->headLink()->prependStylesheet($view->baseUrl("/css/styles.css"));
         $view->headLink()->prependStylesheet($view->theme("/jquery/ui/grid/ui.jqgrid.css"));
         $view->headLink()->prependStylesheet($view->theme("/jquery/ui/jquery-ui-1.8.20.custom.css"));
-        $view->headLink()->prependStylesheet($view->baseUrl("/css/bootstrap.min.css"));
+        $view->headLink()->prependStylesheet($view->baseUrl("/css/bootstrap.css"));
         
         // Add default scripts
         $view->headScript()->prependFile($view->baseUrl("/js/script.js"));

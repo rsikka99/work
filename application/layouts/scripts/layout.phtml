@@ -97,7 +97,7 @@ if (APPLICATION_ENV != 'production')
 }
 ?>
 <script type="text/javascript">
-    var TMTW_BASEURL = '<?php echo $this->serverUrl(); ?>/'
+    var TMTW_BASEURL = '<?php echo $this->serverUrl('/'); ?>'
 </script>
 <!-- JavaScript at the bottom for fast page loading -->
 <?php echo $this->jQuery()->enable(); ?>

@@ -1,0 +1,29 @@
+// Makes the tabs fit in more
+.tabbable .nav-tabs {
+    margin-bottom : 0;
+}
+
+.tabbable .nav-tabs > li > a {
+    border              : 1px solid;
+    border-color        : #eee #eee #ddd;
+    border-bottom-color : transparent;
+    .border-radius(0);
+}
+
+.tabbable .nav-tabs > li > a:hover {
+    border : 1px solid #ddd;
+}
+
+.tabbable .nav-tabs > li.active > a {
+    color        : #000;
+    border-color : #ddd;
+}
+
+.tabbable .tab-content {
+    background-color: #f7f7f7;
+    min-height: 150px;
+    padding: 9px;
+    border: 1px solid #ddd;
+    border-top: 0;
+    .box-shadow(inset 0 1px 1px rgba(0,0,0,0.10));
+}

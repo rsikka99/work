@@ -138,7 +138,7 @@ class Default_IndexController extends Zend_Controller_Action
             }
         }
 
-
+        $this->view->headScript()->appendFile($this->view->baseUrl('/js/default/clientSearch.js'));
     }
 
     /**
@@ -294,7 +294,7 @@ class Default_IndexController extends Zend_Controller_Action
      */
     public function searchForClientAction ()
     {
-        $searchTerm = $this->getParam('name', false);
+        $searchTerm = $this->getParam('query', false);
         $results    = array();
         if ($searchTerm !== false)
         {
