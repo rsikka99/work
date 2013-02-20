@@ -22,26 +22,6 @@ $graphs = $proposal->getGraphs();
 <br />
 <?php echo $this->noBreakEnd; ?>
 <?php echo $this->noBreakStart; ?>
-<div class="pheader">IT Time Spent Supporting Printing Devices</div>
-<p>Based on your questionnaire responses, your internal IT personnel spend an average of <strong><?php echo number_format($proposal->getWeeklyITHours());?></strong> hours per week supporting printing devices. This results in the following:</p>
-<br />
-<table cellspacing="0" class="bold fontChange">
-    <tr>
-        <td style="width: 470px;">Annual internal IT hours spent servicing and supporting printers</td>
-        <td style="width: 175px;" class="right"><?php echo $proposal->getAnnualITHours(); ?></td>
-    </tr>
-    <tr>
-        <td>Average hourly IT rate</td>
-        <td class="right">$<?php echo $proposal->getAverageITRate(); ?></td>
-    </tr>
-    <tr>
-        <td>Annual cost for internal IT staff to service and support printers</td>
-        <td class="right">$<?php echo number_format($proposal->getAnnualITCost()); ?></td>
-    </tr>
-</table>
-<br />
-<p>The Gartner Group stated that 30% to 40% of all IT and help desk calls are related to issues with printing and copying. The time that your IT personnel spend managing printers reduces the resources available for your core technology projects. Office Depot can help you manage your printers efficiently and free up the time of your IT staff.</p>
-<br />
 <div class="pheader">Technology Features and Functionality</div>
 <p>The ability to scan and fax documents from convenient locations helps to improve document workflow and productivity, and scanning can also help reduce the amount of pages printed. Color printing capabilities are important if you are generating client-facing or other important documents in-house.</p>
 <p>The charts below show the percent of your printing devices that are capable of scanning, faxing, and color printing.</p>

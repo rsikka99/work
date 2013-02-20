@@ -1,0 +1,149 @@
+<?php
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
+?>
+<div class="h1">Fleet Attributes</div>
+    <p>The following provides a summary of your existing printing devices.</p>
+<div class="pheader">Optimized Devices - No Changes Necessary</div>
+<table cellspacing="0" class="genericTable" style="font-size: 10pt;">
+    <thead>
+        <tr>
+            <th style="width: 160px;">Device Name</th>
+            <th style="width: 100px;" class="center">Device Age (Years)</th>
+            <th style="width: 170px;" class="center">Monthly Page Volume</th>
+            <th style="width: 145px;" class="center">Percent of Total Page Volume</th>
+            <th style="width: 145px;" class="center">Percent of Monthly Cost</th>
+            <th style="width: 145px;" class="center">Office Depot™ ATR Compatible</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php /** FIXME  Optimized Devices - No Changes Necessary*/
+        $ctr = 0; foreach ($proposal->getHighPowerConsumptionDevices() as $deviceInstance): ?>
+            <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
+        <tr>
+            <td><div style="width: 160px; padding: 0;"><?php echo $deviceName; ?></div></td>
+            <td class="center"></td>
+            <td class="center"></td>
+            <td class="center"></td>
+            <td></td>
+            <td></td>
+        </tr>
+            <?php $ctr++; if ($ctr > 2) break; endforeach; ?>
+    </tbody>
+</table>
+<div class="pheader">Underutilized Devices</div>
+<table cellspacing="0" class="genericTable" style="font-size: 10pt;">
+    <thead>
+        <tr>
+            <th style="width: 160px;">Device Name</th>
+            <th style="width: 100px;" class="center">Device Age (Years)</th>
+            <th style="width: 170px;" class="center">Monthly Page Volume</th>
+            <th style="width: 145px;" class="center">Percent of Total Page Volume</th>
+            <th style="width: 145px;" class="center">Percent of Monthly Cost</th>
+            <th style="width: 145px;" class="center">Office Depot™ ATR Compatible</th>
+            <th style="width: 145px;" class="center">Suggested Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php /** FIXME  Underutilized Devices*/
+        $ctr = 0; foreach ($proposal->getHighPowerConsumptionDevices() as $deviceInstance): ?>
+            <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
+        <tr>
+            <td><div style="width: 160px; padding: 0;"><?php echo $deviceName; ?></div></td>
+            <td class="center"></td>
+            <td class="center"></td>
+            <td class="center"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+            <?php $ctr++; if ($ctr > 2) break; endforeach; ?>
+    </tbody>
+</table>
+<div class="pheader">Overutilized Devices</div>
+<table cellspacing="0" class="genericTable" style="font-size: 10pt;">
+    <thead>
+        <tr>
+            <th style="width: 160px;">Device Name</th>
+            <th style="width: 100px;" class="center">Device Age (Years)</th>
+            <th style="width: 170px;" class="center">Monthly Page Volume</th>
+            <th style="width: 145px;" class="center">Percent of Total Page Volume</th>
+            <th style="width: 145px;" class="center">Percent of Monthly Cost</th>
+            <th style="width: 145px;" class="center">Office Depot™ ATR Compatible</th>
+            <th style="width: 145px;" class="center">Suggested Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php /** FIXME  Overutilized Devices*/
+        $ctr = 0; foreach ($proposal->getHighPowerConsumptionDevices() as $deviceInstance): ?>
+            <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
+        <tr>
+            <td><div style="width: 160px; padding: 0;"><?php echo $deviceName; ?></div></td>
+            <td class="center"></td>
+            <td class="center"></td>
+            <td class="center"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+            <?php $ctr++; if ($ctr > 2) break; endforeach; ?>
+    </tbody>
+</table>
+<div class="pheader">Old Devices</div>
+<table cellspacing="0" class="genericTable" style="font-size: 10pt;">
+    <thead>
+        <tr>
+            <th style="width: 160px;">Device Name</th>
+            <th style="width: 100px;" class="center">Device Age (Years)</th>
+            <th style="width: 170px;" class="center">Monthly Page Volume</th>
+            <th style="width: 145px;" class="center">Percent of Total Page Volume</th>
+            <th style="width: 145px;" class="center">Percent of Monthly Cost</th>
+            <th style="width: 145px;" class="center">Office Depot™ ATR Compatible</th>
+            <th style="width: 145px;" class="center">Suggested Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php /** FIXME  Underutilized Devices*/
+        $ctr = 0; foreach ($proposal->getHighPowerConsumptionDevices() as $deviceInstance): ?>
+            <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
+        <tr>
+            <td><div style="width: 160px; padding: 0;"><?php echo $deviceName; ?></div></td>
+            <td class="center"></td>
+            <td class="center"></td>
+            <td class="center"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+            <?php $ctr++; if ($ctr > 2) break; endforeach; ?>
+    </tbody>
+</table>
+<div class="pheader">Devices Not Reporting Pages and/or Toner Levels</div>
+<table cellspacing="0" class="genericTable" style="font-size: 10pt;">
+    <thead>
+        <tr>
+            <th style="width: 160px;">Device Name</th>
+            <th style="width: 100px;" class="center">Device Age (Years)</th>
+            <th style="width: 170px;" class="center">Monthly Page Volume</th>
+            <th style="width: 145px;" class="center">Percent of Total Page Volume</th>
+            <th style="width: 145px;" class="center">Percent of Monthly Cost</th>
+            <th style="width: 145px;" class="center">Office Depot™ ATR Compatible</th>
+            <th style="width: 145px;" class="center">Suggested Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php /** FIXME  Devices Not Reporting Pages and/or Toner Levels*/
+        $ctr = 0; foreach ($proposal->getHighPowerConsumptionDevices() as $deviceInstance): ?>
+            <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
+        <tr>
+            <td><div style="width: 160px; padding: 0;"><?php echo $deviceName; ?></div></td>
+            <td class="center"></td>
+            <td class="center"></td>
+            <td class="center"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+            <?php $ctr++; if ($ctr > 2) break; endforeach; ?>
+    </tbody>
+</table>
