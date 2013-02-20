@@ -16,9 +16,9 @@ elseif (get_cfg_var('zf_path'))
     // Support for zf2_path directive value
     $zendFrameworkPath = get_cfg_var('zf_path');
 }
-elseif (is_dir('vendor/zendframework/zendframework1/library'))
+elseif (is_dir(APPLICATION_BASE_PATH . '/vendor/webino/zf1/library'))
 {
-    $zendFrameworkPath = 'vendor/zendframework/zendframework1/library';
+    $zendFrameworkPath = APPLICATION_BASE_PATH . '/vendor/webino/zf1/library';
 }
 
 if ($zendFrameworkPath)
@@ -29,14 +29,14 @@ if ($zendFrameworkPath)
     }
     else
     {
-        include $zendFrameworkPath . '/Zend/Loader/Autoloader.php';
-        $autoloader = Zend_Loader_Autoloader::getInstance();
+        include ($zendFrameworkPath . '/Zend/Loader/Autoloader.php');
+        $autoLoader = Zend_Loader_Autoloader::getInstance();
     }
 }
 else
 {
     include ('Zend/Loader/Autoloader.php');
-    $autoloader = Zend_Loader_Autoloader::getInstance();
+    $autoLoader = Zend_Loader_Autoloader::getInstance();
 }
 
 if (!class_exists('Zend_Application'))

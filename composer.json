@@ -23,10 +23,10 @@
         {
             "type"   : "package",
             "package": {
-                "name"   : "tangentmtw/ZF1",
+                "name"   : "lrobert/zf1",
                 "version": "dev-master",
                 "source" : {
-                    "url"      : "git@github.com:breerly/zf1.git",
+                    "url"      : "git@github.com:lrobert/zf1.git",
                     "type"     : "git",
                     "reference": "master"
                 }
@@ -34,7 +34,7 @@
         }
     ],
     "require"     : {
-        "tangentmtw/ZF1"     : "dev-master",
+        "webino/zf1": "dev-master",
         "lrobert/phpword"    : "dev-master",
         "phpexcel/phpexcel"  : "dev-master",
         "gChartPhp/gChartPhp": "dev-master"

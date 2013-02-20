@@ -1,12 +1,12 @@
 {
-    "hash": "aaebeece347467cc5ff088e6172c0bed",
+    "hash": "ced0d7f0eecbe56b9eb10fb31042e337",
     "packages": [
         {
             "name": "gChartPhp/gChartPhp",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/aimfeld/gChartPhp",
+                "url": "https://github.com/aimfeld/gChartPhp.git",
                 "reference": "0.6.7"
             },
             "dist": {
@@ -32,10 +32,10 @@
             "description": "PHP Object wrapper for the Google Chart API.",
             "homepage": "https://github.com/pacbard/gChartPhp",
             "keywords": [
-                "php",
-                "wrapper",
                 "Google Charts",
-                "charts"
+                "charts",
+                "php",
+                "wrapper"
             ]
         },
         {
@@ -54,7 +54,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/ddeboer/phpexcel",
+                "url": "https://github.com/ddeboer/phpexcel.git",
                 "reference": "v1.7.7"
             },
             "dist": {
@@ -85,15 +85,42 @@
             ]
         },
         {
-            "name": "tangentmtw/ZF1",
+            "name": "webino/zf1",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:breerly/zf1.git",
-                "reference": "master"
+                "url": "https://github.com/webino/ZF1.git",
+                "reference": "1.0.0"
             },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webino/ZF1/zipball/1.0.0",
+                "reference": "1.0.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "time": "2012-12-30 20:08:22",
             "type": "library",
-            "time": "2012-06-25 01:15:47"
+            "autoload": {
+                "psr-0": {
+                    "Zend": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "include-path": [
+                "src/"
+            ],
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Zend Framework 1.12.1 - lightweight & de-included",
+            "homepage": "http://framework.zend.com/",
+            "keywords": [
+                "ZF1",
+                "framework"
+            ]
         }
     ],
     "packages-dev": null,
@@ -102,7 +129,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "tangentmtw/zf1": 20,
+        "webino/zf1": 20,
         "lrobert/phpword": 20,
         "phpexcel/phpexcel": 20,
         "gchartphp/gchartphp": 20
