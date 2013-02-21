@@ -4,7 +4,7 @@ class Proposalgen_Report_HealthCheckController extends Proposalgen_Library_Contr
 {
 
     /**
-     * The healthcheckAction displays the OD healthcheck report.
+     * The healthcheckAction displays the healthcheck report.
      * Data is retrieved
      * from the database and displayed using HTML, CSS, and javascript.
      */
@@ -25,6 +25,7 @@ class Proposalgen_Report_HealthCheckController extends Proposalgen_Library_Contr
         try
         {
             // Clear the cache for the report before proceeding
+            $healthCheck = new Proposalgen_Model_HealthCheck_HealthCheck($this->getProposal());
             $this->clearCacheForReport();
             if (false !== ($proposal = $this->getProposal()))
             {
@@ -48,7 +49,7 @@ class Proposalgen_Report_HealthCheckController extends Proposalgen_Library_Contr
             {
                 throw new Exception("Proposal is false");
             }
-            $this->view->proposal = $proposal;
+            $this->view->healthcheck = $healthCheck;
         }
         catch (Exception $e)
         {

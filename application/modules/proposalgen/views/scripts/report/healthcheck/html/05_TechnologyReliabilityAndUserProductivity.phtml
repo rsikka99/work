@@ -1,7 +1,7 @@
 <?php
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-$proposal = $this->proposal;
-$graphs = $proposal->getGraphs();
+$proposal = $this->healthcheck->proposal;
+$graphs = $this->healthcheck->getGraphs();
 ?>
 <div class="h1">Analysis: Technology Reliability and User Productivity</div>
 <table cellspacing="0" class="gradesTable">
@@ -16,7 +16,7 @@ $graphs = $proposal->getGraphs();
 <div class="pheader">Age of Printing Devices</div>
     <p>The breakdown of the age of your printing devices is shown below:</p>
 <div class="center">
-    <img src="<?php echo $graphs[23]; ?>" />
+    <img src="<?php echo $graphs['healthCheck']['AgeBarGraph']; ?>" />
 </div>
 <br />
 <br />

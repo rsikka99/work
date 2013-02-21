@@ -1,7 +1,7 @@
 <?php
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-$proposal = $this->proposal;
-$graphs = $proposal->getGraphs();
+$proposal = $this->healthcheck->proposal;
+$graphs = $this->healthcheck->getGraphs();
 ?>
 <div class="h1">Analysis: Service and Supplies Logistics</div>
 <br />
@@ -21,10 +21,8 @@ $graphs = $proposal->getGraphs();
     <table>
         <tbody>
             <tr>
-                <td width="70"></td>
                 <td><img src="<?php echo $graphs[1]; ?>" /></td> <!-- Devices leased/Devices Purchased -->
                 <td><img src="<?php echo $graphs[2]; ?>" /></td> <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
-                <td width="70"></td>
             </tr>
         </tbody>
     </table>
@@ -44,10 +42,8 @@ $graphs = $proposal->getGraphs();
     <table>
         <tbody>
             <tr>
-                <td width="70"></td>
-                <td><img src="<?php echo $graphs[15]; ?>" /></td> <!-- Devices leased/Devices Purchased -->
-                <td><img src="<?php echo $graphs[16]; ?>" /></td> <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
-                <td width="70"></td>
+                <td><img src="<?php echo $graphs['healthCheck']['CompatibleATRBarGraph']; ?>" /></td> <!-- Devices leased/Devices Purchased -->
+                <td><img src="<?php echo $graphs['healthCheck']['PagesPrinterATRPieGraph']; ?>" /></td> <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
             </tr>
         </tbody>
     </table>
@@ -100,10 +96,11 @@ $graphs = $proposal->getGraphs();
         </tr>
     </tbody>
 </table>
+    <?php //FIXME ADD TONER NUMBERS ?>
 <div class="pheader">DIFFERENCE<span style="text-align:right;float:right">$5,168.40</span></div>
     <p>
         Where compatible substitutes are available, we estimate that by switching even 50% of your OEM toner, you can save approximately <strong>$2,584 per year</strong> in toner costs.
     </p>
 <div class="center">
-<img src="<?php echo $graphs[21]; ?>" />
+<img src="<?php echo $graphs['healthCheck']['DifferenceBarGraph']; ?>" />
 </div>

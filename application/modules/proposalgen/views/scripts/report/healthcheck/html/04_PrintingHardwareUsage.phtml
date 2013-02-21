@@ -1,7 +1,7 @@
 <?php
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-$proposal = $this->proposal;
-$graphs = $proposal->getGraphs();
+$proposal = $this->healthcheck->proposal;
+$graphs = $this->healthcheck->getGraphs();
 ?>
 <div class="h1">Analysis: Printing Hardware Usage</div>
 <table cellspacing="0" class="gradesTable">
@@ -18,7 +18,7 @@ $graphs = $proposal->getGraphs();
 </strong>pages each per month, for an average total monthly print volume of <strong><?php echo number_format($proposal->getPageCounts()->Total->Combined->Monthly); ?></strong> pages.
 Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.</p>
 <br /> <br />
-<div class="center graphs">
+<div class="center">
     <img src="<?php echo $graphs[4]; ?>" style="width: 30%; height: 30%;" /> <!-- Average monthly pages per networked printer -->
     <img src="<?php echo $graphs[5]; ?>" style="width: 30%; height: 30%;" /> <!-- Average monthly pages per employee -->
     <img src="<?php echo $graphs[6]; ?>" style="width: 30%; height: 30%;" /> <!-- Employees per printing device -->
@@ -45,8 +45,8 @@ Ideally, you should have the minimum amount of printing hardware required to mee
 <p>A good measure of the recommended maximum monthly page volume for a printing device is the manufacturer's stated yield of a single print cartridge. In essence, you should not have to change the same toner cartridge more than once per month.</p>
 <p>Using this definition of maximum monthly page volume, the total capacity of your printing fleet is the sum of the maximum page volumes for all of your printing devices.  As a guide we suggest that company printing should range between 35 and 50% of maximum  fleet capacity. The closer you are to printing at maximum capacity, the more return you are getting on your printing assets. Most find that they have more printing hardware than they need. The following chart displays your estimated monthly page volume compared to your maximum monthly page capacity.</p>
 <div class="center">
-<img src="<?php echo $graphs[17]; ?>"  /> <!-- Monthly Usage compared to maximum fleet capacity -->
-<img src="<?php echo $graphs[22]; ?>"  /> <!-- Monthly Usage compared to optimal fleet capacity -->
+<img src="<?php echo $graphs['healthCheck']['HardwareUtilizationCapacityBar']; ?>"  /> <!-- Monthly Usage compared to maximum fleet capacity -->
+<img src="<?php echo $graphs['healthCheck']['HardwareUtilizationCapacityPercent']; ?>"  /> <!-- Monthly Usage compared to optimal fleet capacity -->
 </div>
 <div class="pheader">Underused and Overused Printing Devices</div>
 <p>Currently, <strong><?php echo number_format($proposal->getPercentDevicesUnderused()); ?>%</strong> of your printing devices are printing less than one quarter of our recommended monthly print volume, and <strong><?php echo number_format($proposal->getPercentDevicesOverused());?>%</strong> are printing above our recommended monthly print volume. Our recommended monthly print volumes are equal to the manufacturer's stated yield for a single print cartridge (for monochrome devices, the black cartridge, and for color devices, a single color cartridge unless the device is not being used for color).</p>
@@ -110,10 +110,8 @@ Ideally, you should have the minimum amount of printing hardware required to mee
     <table>
         <tbody>
             <tr>
-                <td width="70"></td>
-                <td><img src="<?php echo $graphs[18]; ?>" /></td> <!-- Devices leased/Devices Purchased -->
-                <td><img src="<?php echo $graphs[19]; ?>" /></td> <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
-                <td width="70"></td>
+                <td><img src="<?php echo $graphs['healthCheck']['ColorCapablePrintingDevices']; ?>" /></td> <!-- Devices leased/Devices Purchased -->
+                <td><img src="<?php echo $graphs['healthCheck']['ColorVSBWPagesGraph']; ?>" /></td> <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
             </tr>
         </tbody>
     </table>
@@ -137,15 +135,15 @@ Ideally, you should have the minimum amount of printing hardware required to mee
     <tbody>
         <?php
         $ctr = 0;
-        foreach ($proposal->getHighPowerConsumptionDevices() as $deviceInstance): ?>
-            <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
+        foreach ($proposal->getMonthlyHighCostColorDevices($proposal->getCostPerPageSettingForDealer()) as $deviceInstance): ?>
+            <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName());?>
         <tr>
             <td><div style="width: 160px; padding: 0;"><?php echo $deviceName; ?></div></td>
             <td class="center"><?php if($deviceInstance->serialNumber) echo $deviceInstance->serialNumber; else echo 'Unknown';?></td>
-            <td class="center"><?php echo number_format($deviceInstance->getAverageMonthlyPowerConsumption()); ?> kWh</td>
-            <td class="center">$<?php echo number_format($deviceInstance->getAverageMonthlyPowerCost(), 2); ?></td>
-            <td></td>
-            <td></td>
+            <td class="center"> <?php echo number_format((($deviceInstance->getAverageMonthlyColorPageCount() * $deviceInstance->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->colorCostPerPage) / $proposal->getGrossMarginTotalMonthlyCost()->Combined) * 100,2) ?>%</td>
+            <td class="center"><?php echo number_format($deviceInstance->getAverageMonthlyColorPageCount()); ?></td>
+            <td><?php echo $this->currency($deviceInstance->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->colorCostPerPage,array('precision' => 4)); ?></td>
+            <td><?php echo $this->currency($deviceInstance->getAverageMonthlyColorPageCount() * $deviceInstance->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->colorCostPerPage,array('precision' => 2)) ?></td>
         </tr>
             <?php $ctr++; if ($ctr > 2) break; endforeach; ?>
     </tbody>
