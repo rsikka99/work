@@ -24,32 +24,32 @@ $table->addCell($tcStyle->span2Width, $tcStyle->header->header->cellStyle, 2)->a
 
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText('Monochrome CPP:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText('$0.0015', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText($this->currency((float)$proposal->calculateDealerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage, array('precision' => 4)), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->even)->addText('Monochrome CPP:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText('$0.0011', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText($this->currency((float)$proposal->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage, array('precision' => 4)), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText('Color CPP:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText('$0.02', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText($this->currency((float)$proposal->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array('precision' => 4)), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->odd)->addText('Color CPP:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText('$0.018', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText($this->currency((float)$proposal->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array('precision' => 4)), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText('Total Cost:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText('$2549.39', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText($this->currency((float)$proposal->calculateDealerMonthlyCost(), array('precision' => 2)), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->even)->addText('Total Cost:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText('$1293.33', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText($this->currency((float)$proposal->calculateDealerMonthlyCostWithReplacements(), array('precision' => 2)), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText('Margin ($):', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText('$3200.00', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText($this->currency((float)$proposal->calculateDealerMonthlyProfitUsingTargetCostPerPage()), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->odd)->addText('Margin ($):', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText('$4200.00', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText($this->currency((float)$proposal->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements()), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText('Margin (%):', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText('-12.00%', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText(number_format(Tangent_Accounting::reverseEngineerMargin((float)$proposal->calculateDealerMonthlyCost(), (float)$proposal->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2) . '%', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->even)->addText('Margin (%):', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText('2.00%', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText(number_format(Tangent_Accounting::reverseEngineerMargin((float)$proposal->calculateDealerMonthlyCostWithReplacements(), (float)$proposal->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2) . '%', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 
 ?>

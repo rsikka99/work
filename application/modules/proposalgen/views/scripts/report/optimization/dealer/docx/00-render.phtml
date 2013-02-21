@@ -6,11 +6,11 @@ $proposal = $this->proposal;
 
 // Initialize some properties
 $properties = $phpWord->getProperties();
-$properties->setCreator('Demo Report');
+$properties->setCreator('MPS Toolbox');
 $properties->setCompany('Demo Report');
-$properties->setTitle('Demo Report');
-$properties->setDescription('Demo Report');
-$properties->setCategory('Demo Report');
+$properties->setTitle('Hardware Optimization');
+$properties->setDescription('Hardware Optimization Report');
+$properties->setCategory('Report');
 $properties->setLastModifiedBy('Demo Report');
 $properties->setCreated();
 $properties->setModified();
@@ -40,6 +40,10 @@ $even_color       = "EFEFEF";
 $odd_color        = "FCFCFC";
 $footer_color     = "b8cce3";
 $highlight_color  = "ebc7a4";
+$phpWord->addFontStyle('titlepageHeaderFont', array (
+                                                    'bold' => true,
+                                                    'size' => 16
+                                              ));
 
 // Classes that describe standard cells
 $standard_cell                 = (object)array(
@@ -374,7 +378,6 @@ $excludedTable   = (object)array(
 $styles               = (object)array(
     "tables" => (object)array(
         "compare"     => $compareTable,
-//                 "fleetAnalysist" => $fleetAnalysistTable, 
         "replacement" => $replacementTable,
         "acceptable"  => $acceptableTable,
         "excess"      => $excessTable,

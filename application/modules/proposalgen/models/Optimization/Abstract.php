@@ -136,7 +136,7 @@ abstract class Proposalgen_Model_Optimization_Abstract
 
         // Go through each purchase devices that rank it's classifications
         /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
-        foreach ($this->getPurchasedDevices() as $deviceInstance)
+        foreach ($proposal->getPurchasedDevices() as $deviceInstance)
         {
             // For each age rank, check if device is greater than range.
             foreach (self::$ageRanks as $ageRank => $ageRankName)
@@ -215,20 +215,5 @@ abstract class Proposalgen_Model_Optimization_Abstract
         $this->leased             = $leasedDevices;
         $this->replaced           = $replacedDevices;
         $this->retired            = $retiredDevices;
-    }
-
-    /**
-     * Gets all purchased devices and caches them for use in getting device statistics
-     *
-     * @return array Proposalgen_Model_DeviceInstance []
-     */
-    protected function getPurchasedDevices ()
-    {
-        if (!isset($this->_purchasedDevices))
-        {
-            $this->_purchasedDevices = $this->proposal->getPurchasedDevices();
-        }
-
-        return $this->_purchasedDevices;
     }
 }

@@ -5,11 +5,13 @@
  * This script contains everything that comes before the big table of
  * information in the cost analysis.
  */
-
 /* @var $section PHPWord_Section */
 $section = $this->section;
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
+/* @var $profitabiltyDevices Proposalgen_Model_Optimization_Dealer */
+$profitabiltyDevices = $this->profitabilityDevices;
+
 $section->addTextBreak();
 $section->addText('Device Summary', array('bold' => true, 'size' => 12));
 
@@ -26,29 +28,29 @@ $table->addCell($tcStyle->span2Width, $tcStyle->header->sub_header->cellStyle, 2
 // Begin with data rows
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText('Total Devices:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText('58', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText(count($proposal->getPurchasedDevices()), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->odd)->addText('Total Devices:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText('54', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText(count($proposal->getPurchasedDevices()), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText('Keep Devices:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText('52', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText($profitabiltyDevices->actionKeepCount, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->even)->addText('Keep Devices:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText('37', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText(count($profitabiltyDevices->kept), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText('Flagged Devices:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText('1', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText($profitabiltyDevices->actionReplaceCount, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->odd)->addText('Flagged Devices:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText('2', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText(count($profitabiltyDevices->flagged), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText('Retired Devices:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText('4', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText($profitabiltyDevices->actionRetireCount, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->even)->addText('Retired Devices:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText('4', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText(count($profitabiltyDevices->retired), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText('Replaced Devices', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText('0', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText(0, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->odd)->addText('Replaced Devices', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText('15', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText(count($profitabiltyDevices->replaced), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 
 // Main Header
 $table->addRow($tcStyle->body->rowheight);
@@ -60,17 +62,17 @@ $table->addCell($tcStyle->span2Width, $tcStyle->header->sub_header->cellStyle, 2
 // Begin with data rows
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText('Excess Devices:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText('0', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText(0, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->odd)->addText('Excess Devices:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText('15', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText(count($profitabiltyDevices->excess), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText('Leased Devices:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText('9', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText(count($profitabiltyDevices->leased), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->even)->addText('Leased Devices:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText('9', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText(count($profitabiltyDevices->leased), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText('Exclude Devices', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText('62', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText(count($profitabiltyDevices->excess), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->odd)->addText('Exclude Devices', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText('62', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText(count($profitabiltyDevices->excess), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 ?>
