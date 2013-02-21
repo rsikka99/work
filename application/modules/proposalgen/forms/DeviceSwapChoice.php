@@ -4,11 +4,11 @@
  * @author swilder
  *
  */
-class Proposalgen_Form_DeviceSwapChoice extends Zend_Form
+class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
 {
-    const DEVICETYPE_MONO = 0;
-    const DEVICETYPE_MONO_MFP = 1;
-    const DEVICETYPE_COLOR = 2;
+    const DEVICETYPE_MONO      = 0;
+    const DEVICETYPE_MONO_MFP  = 1;
+    const DEVICETYPE_COLOR     = 2;
     const DEVICETYPE_COLOR_MFP = 3;
 
     /**
@@ -48,32 +48,44 @@ class Proposalgen_Form_DeviceSwapChoice extends Zend_Form
         $this->setMethod('post');
 
         // Add button(s) to form
-        $submitButton            = $this->createElement('submit', 'Submit', array(
-                                                                                 'label'  => "Re-calculate",
-                                                                                 'ignore' => false,
-                                                                                 'title'  => 'Calculates and saves new totals based on current devices in Action column.'
-                                                                            ));
-        $cancelButton            = $this->createElement('submit', 'Cancel', array(
-                                                                                 'label'  => "Save And Continue",
-                                                                                 'ignore' => false,
-                                                                                 "title"  => "Calculates and saves new totals based on current device in Action column. Proceeds to next step."
-                                                                            ));
-        $analyzeButton           = $this->createElement('submit', 'Analyze', array(
-                                                                                  'label'  => "Auto Analyze",
-                                                                                  'ignore' => false,
-                                                                                  'title'  => "Removes any replacement devices previously saved. Then determines the optimal devices based on target monochrome/color CPP and cost delta thershold settings."
+        $submitButton = $this->createElement('button', 'Submit', array(
+                                                                      'buttonType'   => Twitter_Bootstrap_Form_Element_Submit::BUTTON_SUCCESS,
+                                                                      'label'        => 'Re-calculate',
+                                                                      'type'         => 'submit',
+                                                                      'class'        => 'pull-right',
+                                                                      'icon'         => 'arrow-right',
+                                                                      'whiteIcon'    => true,
+                                                                      'ignore'       => false,
+                                                                      'title'        => 'Calculates and saves new totals based on current devices in Action column.',
+                                                                 ));
+
+        $analyzeButton           = $this->createElement('button', 'Analyze', array(
+                                                                                  'buttonType'   => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY,
+                                                                                  'label'        => 'Auto Analyze',
+                                                                                  'type'         => 'submit',
+                                                                                  'class'        => 'pull-right',
+                                                                                  'icon'         => 'refresh',
+                                                                                  'whiteIcon'    => true,
+                                                                                  'ignore'       => false,
+                                                                                  'title'        => "Removes any replacement devices previously saved. Then determines the optimal devices based on target monochrome/color CPP and cost delta thershold settings.",
                                                                              ));
-        $resetReplacementsButton = $this->createElement('submit', 'ResetReplacements', array(
-                                                                                            'label'  => "Reset",
-                                                                                            'ignore' => false,
-                                                                                            'title'  => "Sets all the replacement devices back to there default action.",
+        $resetReplacementsButton = $this->createElement('button', 'ResetReplacements', array(
+                                                                                            'buttonType'   => Twitter_Bootstrap_Form_Element_Submit::BUTTON_WARNING,
+                                                                                            'label'        => 'Reset',
+                                                                                            'type'         => 'submit',
+                                                                                            'class'        => 'pull-right',
+                                                                                            'icon'         => 'exclamation-sign',
+                                                                                            'whiteIcon'    => true,
+                                                                                            'ignore'       => false,
+                                                                                            'title'        => "Sets all the replacement devices back to there default action.",
+
                                                                                        ));
 
+
         $this->addElements(array(
-                                $submitButton,
-                                $cancelButton,
+                                $resetReplacementsButton,
                                 $analyzeButton,
-                                $resetReplacementsButton
+                                $submitButton,
                            ));
 
         /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
@@ -137,32 +149,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Zend_Form
             $deviceElement->setMultiOptions($replacementDevices);
         }
 
-        /**
-         * Form element decorators
-         */
-        $submitButton->setDecorators(array(
-                                          'ViewHelper',
-                                          array(
-                                              'HtmlTag',
-                                              array(
-                                                  'tag'       => 'div',
-                                                  'class'     => 'form-actions',
-                                                  'openOnly'  => true,
-                                                  'placement' => Zend_Form_Decorator_Abstract::PREPEND
-                                              )
-                                          )
-                                     ));
-        $cancelButton->setDecorators(array(
-                                          'ViewHelper',
-                                          array(
-                                              'HtmlTag',
-                                              array(
-                                                  'tag'       => 'div',
-                                                  'closeOnly' => true,
-                                                  'placement' => Zend_Form_Decorator_Abstract::APPEND
-                                              )
-                                          )
-                                     ));
+
     }
 
     /**
@@ -184,12 +171,12 @@ class Proposalgen_Form_DeviceSwapChoice extends Zend_Form
     {
         if (!isset($this->blackReplacementDevices))
         {
-            $deviceArray     = array();
-            $deviceArray [0] = 'Keep';
+            $deviceArray        = array();
+            $deviceArray [0]    = 'Keep';
             $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackReplacementDevices();
             foreach ($replacementDevices as $replacementDevice)
             {
-                $masterDevice                                          = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->id);
+                $masterDevice                         = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->id);
                 $deviceArray [$replacementDevice->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
             }
 
@@ -208,12 +195,12 @@ class Proposalgen_Form_DeviceSwapChoice extends Zend_Form
     {
         if (!isset($this->blackMfpReplacementDevices))
         {
-            $deviceArray     = array();
-            $deviceArray [0] = 'Keep';
+            $deviceArray        = array();
+            $deviceArray [0]    = 'Keep';
             $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackMfpReplacementDevices();
             foreach ($replacementDevices as $replacementDevice)
             {
-                $masterDevice                                          = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->id);
+                $masterDevice                         = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->id);
                 $deviceArray [$replacementDevice->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
             }
 
@@ -232,8 +219,8 @@ class Proposalgen_Form_DeviceSwapChoice extends Zend_Form
     {
         if (!isset($this->colorReplacementDevices))
         {
-            $deviceArray     = array();
-            $deviceArray [0] = 'Keep';
+            $deviceArray        = array();
+            $deviceArray [0]    = 'Keep';
             $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorReplacementDevices();
             foreach ($replacementDevices as $replacementDevice)
             {
@@ -245,6 +232,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Zend_Form
             }
             $this->colorReplacementDevices = $deviceArray;
         }
+
         return $this->colorReplacementDevices;
     }
 
@@ -257,8 +245,8 @@ class Proposalgen_Form_DeviceSwapChoice extends Zend_Form
     {
         if (!isset($this->colorMfpReplacementDevicecs))
         {
-            $deviceArray     = array();
-            $deviceArray [0] = 'Keep';
+            $deviceArray        = array();
+            $deviceArray [0]    = 'Keep';
             $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorMfpReplacementDevices();
             foreach ($replacementDevices as $replacementDevice)
             {

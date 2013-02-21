@@ -82,9 +82,7 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
         $this->view->form     = $form;
         $this->view->devices  = $devices;
         $this->view->proposal = $this->getProposal();
-
-
-
+        $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation(Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT);
         $this->view->title = 'Hardware Optimization';
     }
 

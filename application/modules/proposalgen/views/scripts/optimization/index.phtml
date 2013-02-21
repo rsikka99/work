@@ -10,17 +10,10 @@
     $targetColorCPP = (float)$proposal->report->getReportSettings()->targetColorCostPerPage;
     $thresholdColorCpp = $targetColorCPP * (1 - ($thresholdPercent / 100));
 
-    $formActions [] = $form->getElement('Analyze');
-    $formActions [] = $form->getElement('Submit');
     $formActions [] = $form->getElement('ResetReplacements');
-    $formActions [] = $form->getElement('Cancel');
+    $formActions [] = $form->getElement('Submit');
+    $formActions [] = $form->getElement('Analyze');
 ?>
-
-
-<h1> <?php echo $this->title; ?> </h1>
-<em> Optimization page allows you to customize your hardware after your report has been generated.</em>
-<br/><br/>
-
 <!-- Begin target cost per page table -->
 <h3>Target Cost Per Page: </h3>
 <table style="width: 65%">
@@ -67,17 +60,11 @@
 </table>
 <!-- End Optimization Summary table -->
 <em> * Note: Cost per page in the table above are the weighted average for the fleet. </em>
-<br/>
-
-<h3>Proposal Device</h3>
-<br />
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
     <div class='replacementDevices'>
-
-<?php
+        <?php
         $costPerPageSetting = $proposal->getCostPerPageSettingForDealer();
         $jsonRows = array();
-
         $deviceCount = 0;
         /* @var $device Proposalgen_Model_DeviceInstance */
         foreach ( $proposal->getPurchasedDevices() as $device ) :
@@ -97,36 +84,39 @@
             $costDelta = $device->calculateMonthlyCost($costPerPageSetting) - $device->calculateMonthlyCost($costPerPageSetting, $device->getReplacementMasterDevice());
 
             $rowJson = array(
-                'deviceInstanceId' => $device->id,
-                'isColor' => (int)$isDeviceColor,
-                'device' => "{$manufacturerName}<br/>{$masterDevice->modelName}",
-                'monoAmpv' => number_format($device->getAverageMonthlyBlackAndWhitePageCount()),
-                'colorAmpv' => $monthlyColorVolume,
-                'monoCpp' => $this->currency((float)$deviceCostPerPage->monochromeCostPerPage, array('precision' => 4)),
-                'rawMonoCpp' => $deviceCostPerPage->monochromeCostPerPage,
-                'colorCpp' => ($isDeviceColor) ? $this->currency($deviceCostPerPage->colorCostPerPage, array('precision' => 4)) : 'N/A',
-                'rawColorCpp' => ($isDeviceColor) ? $deviceCostPerPage->colorCostPerPage : 0,
-                'monthlyCost' => $this->currency($device->calculateMonthlyCost($costPerPageSetting), array('precision' => 2)),
-                'action' => $replacementDeviceElement->renderViewHelper(),
-                'costDelta' => $this->currency($costDelta, array('precision' => 2)),
-                'rawCostDelta' => $costDelta,
-                'reason' => $device->getReason(),
+                           'deviceInstanceId' => $device->id,
+                           'isColor' => (int)$isDeviceColor,
+                           'device' => "{$manufacturerName}<br/>{$masterDevice->modelName}",
+                           'monoAmpv' => number_format($device->getAverageMonthlyBlackAndWhitePageCount()),
+                           'colorAmpv' => $monthlyColorVolume,
+                           'monoCpp' => $this->currency((float)$deviceCostPerPage->monochromeCostPerPage, array('precision' => 4)),
+                           'rawMonoCpp' => $deviceCostPerPage->monochromeCostPerPage,
+                           'colorCpp' => ($isDeviceColor) ? $this->currency($deviceCostPerPage->colorCostPerPage, array('precision' => 4)) : 'N/A',
+                           'rawColorCpp' => ($isDeviceColor) ? $deviceCostPerPage->colorCostPerPage : 0,
+                           'monthlyCost' => $this->currency($device->calculateMonthlyCost($costPerPageSetting), array('precision' => 2)),
+                           'action' => $replacementDeviceElement->renderViewHelper(),
+                           'costDelta' => $this->currency($costDelta, array('precision' => 2)),
+                           'rawCostDelta' => $costDelta,
+                           'reason' => $device->getReason(),
             );
             $jsonRows[] = $rowJson;
             ?>
             <?php endforeach; ?>
-        <p>The following <?php echo $deviceCount; ?> out of <?php echo count($proposal->getDevices()->allIncludedDeviceInstances);?> devices are eligible for potential optimization.</p>
+    <em>The following <?php echo $deviceCount; ?> out of <?php echo count($proposal->getDevices()->allIncludedDeviceInstances);?> devices are eligible for potential optimization.</em>
+    <!-- Form Actions -->
+    <div class="clearfix">
+    <?php foreach($formActions as $element) :?>
+        <?php echo $element->renderViewHelper(); ?>
+        <?php endforeach; ?>
+    </div>
+    <br/>
+    <!-- End Form Actions -->
 	<table id='replacementDeviceTable' style="width: 100%" class="scroll">
 	    <tr>
 	        <td></td>
         </tr>
     </table>
     </div>
-    <!-- Form Actions -->
-    <?php foreach($formActions as $element) :?>
-        <?php echo $element->renderViewHelper(); ?>
-    <?php endforeach; ?>
-    <!-- End Form Actions -->
 </form>
 
 
@@ -146,3 +136,5 @@
     </table>
     <p id="replacementReason"></p>
 </div>
+<?php echo $this->navigationForm; ?>
+

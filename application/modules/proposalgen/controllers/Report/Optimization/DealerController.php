@@ -8,7 +8,7 @@ class Proposalgen_Report_Optimization_DealerController extends Proposalgen_Libra
 
         $this->initReportList();
         $this->initHtmlReport();
-
+        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FINISHED);
         $this->view->availableReports->DealerHardwareOptimization->active = true;
 
 
