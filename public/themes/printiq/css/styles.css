@@ -5,6 +5,7 @@
 .clearfix:after {
   display: table;
   content: "";
+  line-height: 0;
 }
 .clearfix:after {
   clear: both;
@@ -19,10 +20,9 @@
 .input-block-level {
   display: block;
   width: 100%;
-  min-height: 28px;
+  min-height: 30px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
   box-sizing: border-box;
 }
 body {
@@ -85,13 +85,12 @@ header.authHeader {
   background-repeat: no-repeat;
   background-color: #b21818;
   background-image: -moz-linear-gradient(top, #cc0000, #8a3b3b);
-  background-image: -ms-linear-gradient(top, #cc0000, #8a3b3b);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#cc0000), to(#8a3b3b));
   background-image: -webkit-linear-gradient(top, #cc0000, #8a3b3b);
   background-image: -o-linear-gradient(top, #cc0000, #8a3b3b);
-  background-image: linear-gradient(top, #cc0000, #8a3b3b);
+  background-image: linear-gradient(to bottom, #cc0000, #8a3b3b);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#cc0000', endColorstr='#8a3b3b', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffcc0000', endColorstr='#ff8a3b3b', GradientType=0);
   height: 30px;
   -webkit-border-radius: 5px 5px 0 0;
   -moz-border-radius: 5px 5px 0 0;

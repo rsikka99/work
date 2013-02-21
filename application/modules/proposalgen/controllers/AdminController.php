@@ -6298,9 +6298,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                                                           'onlyUnmapped'
                                                                       )
                                                                  ));
-
             // If search criteria or value is null then we don't need either one of them. Same goes if our criteria is invalid.
-            if ($searchCriteria === null || $searchValue === null || !$filterCriteriaValidator->isValid($searchCriteria))
+            if ($searchCriteria != 'onlyUnmapped' &&( $searchCriteria === '' || $searchValue === '' || !$filterCriteriaValidator->isValid($searchCriteria)))
             {
                 $searchCriteria = null;
                 $searchValue    = null;
@@ -7092,4 +7091,5 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
         return false;
     }
+
 } //end class AdminController

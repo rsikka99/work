@@ -1,4 +1,4 @@
-body {
+#htmlReportContainer {
 
     font-size   : 9.5pt;
     font-family : arial, verdana, arial, tahoma, verdana, sans-serif;
@@ -10,15 +10,15 @@ body {
     height: 300px;
 }
 
-.right {
+#htmlReportContainer .right {
     text-align : right;
 }
 
-.center {
+#htmlReportContainer .center {
     text-align : center;
 }
 
-.reportTitle {
+#htmlReportContainer .reportTitle {
     color           : red;
     margin-bottom   : 0;
     letter-spacing  : 2px;

@@ -282,6 +282,122 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
     }
 
     /**
+     * This function fetches match up devices
+     *
+     * @param string  $sortColumn
+     *            The column to sort by
+     * @param string  $sortDirection
+     *            The direction to sort
+     * @param string  $filterByColumn
+     *            The column to filter by
+     * @param string  $filterValue
+     *            The value to filter with
+     * @param number  $limit
+     *            The number of records to retrieve
+     * @param number  $offset
+     *            The record to start at
+     * @param boolean $canSell
+     *              If the we are searching for sellable devices
+     * @param boolean $justCount
+     *            If set to true this function will return an integer of the row count of all available rows
+     *
+     * @return number|array Returns an array, or if justCount is true then it will count how many rows are
+     *         available
+     */
+    public function getCanSellMasterDevices ($sortColumn, $sortDirection, $filterByColumn = null, $filterValue = null, $limit = null, $offset = null,$canSell = false, $justCount = false)
+    {
+        $db                         = Zend_Db_Table::getDefaultAdapter();
+        $masterDevicesTableName     = Proposalgen_Model_Mapper_MasterDevice::getInstance()->getTableName();
+        $manufacturerTableName      = Proposalgen_Model_Mapper_Manufacturer::getInstance()->getTableName();
+        $deviceTableName     = Quotegen_Model_Mapper_Device::getInstance()->getTableName();
+
+        $whereClause = '';//["{$deviceTableName}.masterDeviceId = ?"] = new Zend_Db_Expr('NULL');
+        if (strcasecmp($filterByColumn, 'deviceName') === 0 && $filterValue !=='')
+        {
+            $whereClause ["CONCAT({$manufacturerTableName}.displayname, \" \", {$masterDevicesTableName}.modelName) LIKE ?"] = "%{$filterValue}%";
+        }
+        elseif (strcasecmp($filterByColumn, 'oemSku') === 0 && $filterValue !=='')
+        {
+            $whereClause ["oemSku LIKE ?"] = "%{$filterValue}%";
+        }
+        else if (strcasecmp($filterByColumn, 'dealerSku') === 0 && $filterValue !== '')
+        {
+            $whereClause ["dealerSku LIKE ?"] = "%{$filterValue}%";
+        }
+        if ($justCount)
+        {
+
+            // Make sure we don't select any other columns
+            if($canSell){
+                $deviceColumns     = array('count' => 'COUNT(*)');
+                $masterDeviceColumns = null;
+            }
+            else
+            {
+                $masterDeviceColumns     = array('count' => 'COUNT(*)');
+                $deviceColumns = null;
+            }
+
+        }
+        else
+        {
+            $masterDeviceColumns     = array(
+                'id',
+                'modelName'
+            );
+            $deviceColumns     = array(
+                'oemSku',
+                'dealerSku'
+            );
+            $manufacturerColumns     = array(
+                'displayname'
+            );
+        }
+
+        /*
+         * Here we create our select statement
+         */
+        if($canSell){
+            $zendDbSelect = $db->select()->from($masterDevicesTableName, $masterDeviceColumns)
+                ->join($manufacturerTableName, "{$manufacturerTableName}.`id` = {$masterDevicesTableName}.`manufacturerId`",$manufacturerColumns)
+                ->joinRight($deviceTableName, "{$masterDevicesTableName}.`id` = {$deviceTableName}.`masterDeviceId`", $deviceColumns);
+        }
+        else{
+            $zendDbSelect = $db->select()->from($masterDevicesTableName, $masterDeviceColumns)
+                ->join($manufacturerTableName, "{$manufacturerTableName}.`id` = {$masterDevicesTableName}.`manufacturerId`",$manufacturerColumns)
+                ->joinLeft($deviceTableName, "{$masterDevicesTableName}.`id` = {$deviceTableName}.`masterDeviceId`", $deviceColumns);
+        }
+        // Apply our where clause
+        foreach ($whereClause as $cond => $value)
+        {
+            $zendDbSelect->where($cond, $value);
+        }
+
+        if ($limit > 0)
+        {
+            $offset = ($offset > 0) ? $offset : null;
+            $zendDbSelect->limit($limit, $offset);
+        }
+        // TODO: Process a where clause here
+
+
+        // If we're just counting we only need to return the count
+        if ($justCount)
+        {
+            $zendDbStatement = $db->query($zendDbSelect);
+
+            return $zendDbStatement->fetchColumn();
+        }
+        else
+        {
+            $zendDbSelect->order("{$sortColumn} {$sortDirection}");
+            $zendDbStatement = $db->query($zendDbSelect);
+
+            return $zendDbStatement->fetchAll();
+        }
+    }
+
+    /**
      * @param Proposalgen_Model_MasterDevice $object
      *
      * @return int

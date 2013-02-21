@@ -1,9 +1,4 @@
-<div class="page-header">
-    <h1>Fleet
-        <small> - Report Settings</small>
-    </h1>
-    <p class="pull-right" style="text-align: right;"><strong>Prepared For:</strong> <?php echo $this->companyName; ?></p>
-</div>
+<?php $this->placeholder('extraNavbar')->set($this->render('_partials/reportMenu.phtml')); ?>
 <div class="well">
     <div class="row-fluid">
         <div class="span6">
@@ -12,14 +7,5 @@
                     format from top right corner of each report. </em>
             </p>
         </div>
-        <div class="span6 form-horizontal">
-            <select id="availableReports">
-                <?php foreach ($this->availableReports as $report) : ?>
-                <option value='<?php echo $report->url; ?>' <?php echo ($report->active) ? "selected='selected'" : "";?>><?php echo $report->pagetitle; ?></option>
-                <?php endforeach; ?>
-            </select>
-            <button class="btn btn-primary" id='viewReportButton'>View Report</button>
-        </div>
     </div>
-    <?php echo $this->navigationForm; ?>
 </div>

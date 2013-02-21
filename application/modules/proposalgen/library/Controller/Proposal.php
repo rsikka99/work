@@ -90,6 +90,11 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     {
         // This is a list of reports that we can view.
         $this->view->availableReports = (object)array(
+            "Reports"         => (object)array(
+                "pagetitle" => "Select a report...",
+                "active"    => false,
+                "url"       => $this->view->baseUrl('/proposalgen/report_index/index')
+            ),
             "Assessment"         => (object)array(
                 "pagetitle" => "Assessment",
                 "active"    => false,
