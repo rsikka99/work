@@ -7,6 +7,9 @@ class Proposalgen_Report_GrossmarginController extends Proposalgen_Library_Contr
      */
     public function indexAction ()
     {
+        // Mark the step we're on as active
+        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FINISHED);
+
         $this->initReportList();
         $this->initHtmlReport();
 

@@ -2,21 +2,21 @@
     width : 842px;
 }
 
-body {
+#htmlReportContainer {
     font-size   : 9.5pt;
     font-family : arial, verdana, arial, tahoma, verdana, serif;
     margin      : auto auto 500px auto;
 }
 
-.right {
+#htmlReportContainer .right {
     text-align : right;
 }
 
-.center {
+#htmlReportContainer .center {
     text-align : center;
 }
 
-h2.reportTitle {
+#htmlReportContainer h2.reportTitle {
     color           : red;
     margin-bottom   : 0;
     letter-spacing  : 2px;

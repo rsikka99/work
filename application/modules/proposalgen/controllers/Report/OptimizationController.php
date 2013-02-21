@@ -3,6 +3,9 @@ class Proposalgen_Report_OptimizationController extends Proposalgen_Library_Cont
 {
     public function indexAction ()
     {
+        // Mark the step we're on as active
+        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FINISHED);
+
         $this->initReportList();
         $this->initHtmlReport();
 

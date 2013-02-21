@@ -419,9 +419,11 @@ table.quoteDeviceTable tr.optionRow td {
 #surveyNavbar.affix {
   top: 40px;
 }
-body {
-  height: 100%;
-  overflow: auto;
+#assessmentMenu {
+  margin-bottom: 0;
+}
+#selectReportMenu {
+  margin-bottom: 15px;
 }
 .body-container {
   width: 960px;

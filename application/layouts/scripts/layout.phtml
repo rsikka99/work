@@ -63,9 +63,13 @@
     <?php endif; ?>
     <!-- /Sub Navbar -->
 
+
     <!-- Step by step navigation -->
     <?php echo $this->placeholder('ProgressionNav'); ?>
     <!-- /Step by step navigation -->
+    <!-- Report List Navigation -->
+    <?php echo $this->placeholder('extraNavbar'); ?>
+    <!-- /Report List Navigation -->
 
     <div class="container">
         <div class="row">
@@ -74,11 +78,6 @@
                 <?php echo $this->flashMessenger("info", '<div class="alert alert-%s">%s</div>'); ?>
                 <!-- End Of flash messages -->
 
-
-
-                <!-- Report List Navigation -->
-                <?php echo $this->placeholder('extraNavbar'); ?>
-                <!-- /Report List Navigation -->
 
                 <!-- Main content -->
                 <?php echo $this->layout()->content; ?>

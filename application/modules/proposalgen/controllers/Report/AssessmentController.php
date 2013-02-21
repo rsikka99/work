@@ -10,6 +10,9 @@ class Proposalgen_Report_AssessmentController extends Proposalgen_Library_Contro
      */
     public function indexAction ()
     {
+        // Mark the step we're on as active
+        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FINISHED);
+
         $this->initReportList();
         $this->initHtmlReport();
 

@@ -264,31 +264,38 @@
                                 <assessment>
                                     <label>Assessment</label>
                                     <module>proposalgen</module>
-                                    <controller>report</controller>
-                                    <action>assessment</action>
-                                    <resource>proposalgen__report__assesment</resource>
+                                    <controller>report_assessment</controller>
+                                    <action>index</action>
+                                    <resource>proposalgen__report_assessment__index</resource>
                                 </assessment>
                                 <grossmargin>
                                     <label>Gross Margin</label>
                                     <module>proposalgen</module>
-                                    <controller>report</controller>
-                                    <action>grossmargin</action>
-                                    <resource>proposalgen__report__grossmargin</resource>
+                                    <controller>report_grossmargin</controller>
+                                    <action>index</action>
+                                    <resource>proposalgen__report_grossmargin__index</resource>
                                 </grossmargin>
                                 <solution>
                                     <label>Solution</label>
                                     <module>proposalgen</module>
-                                    <controller>report</controller>
-                                    <action>solution</action>
-                                    <resource>proposalgen__repot__solution</resource>
+                                    <controller>report_solution</controller>
+                                    <action>index</action>
+                                    <resource>proposalgen__report_solution__index</resource>
                                 </solution>
                                 <printingdevicelist>
                                     <label>Printing Device List</label>
                                     <module>proposalgen</module>
-                                    <controller>report</controller>
-                                    <action>printingdevicelist</action>
-                                    <resource>proposalgen__report__printingdevicelist</resource>
+                                    <controller>report_printingdevicelist</controller>
+                                    <action>index</action>
+                                    <resource>proposalgen__report_printingdevicelist__index</resource>
                                 </printingdevicelist>
+                                <piqessentials>
+                                    <label>Essentials</label>
+                                    <module>proposalgen</module>
+                                    <controller>report_piqessentials</controller>
+                                    <action>index</action>
+                                    <resource>proposalgen__report_piqessentials__index</resource>
+                                </piqessentials>
                             </pages>
                         </reports>
                     </pages>
