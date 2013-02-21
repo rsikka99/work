@@ -770,6 +770,23 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         return $this->MaximumMonthlyPrintVolume;
     }
 
+    public function calculateMaximumMonthlyPrintVolumeWithReplacements()
+    {
+        $maxVolume = 0;
+        foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+        {
+            if($deviceInstance->getReplacementMasterDevice())
+            {
+                $maxVolume += $deviceInstance->getReplacementMasterDevice()->getMaximumMonthlyPageVolume();
+            }
+            else
+            {
+                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume();
+            }
+        }
+        return $maxVolume;
+    }
+
     /**
      * @return int
      */

@@ -215,6 +215,122 @@ class Proposalgen_Model_Optimization_Customer extends
             $barGraph->addValueMarkers($percentValueMarker, "000000", "1", "-1", "11");
             $barGraph->addValueMarkers($percentValueMarker, "000000", "2", "-1", "11");
             $this->_graphs [] = $barGraph->getUrl();
+
+            /**
+             * -- Hardware Utilization and Capacity Percent version
+            */
+            $percentage = ($this->proposal->getPageCounts()->Total->Combined->Monthly / $this->proposal->getMaximumMonthlyPrintVolume());
+
+            $highest  = 100;
+            $barGraph = new gchart\gStackedBarChart(600, 160);
+            $barGraph->setHorizontal(true);
+            $barGraph->setVisibleAxes(array(
+                                           'x'
+                                      ));
+            $barGraph->addDataSet(array(
+                                       0
+                                  ));
+            $barGraph->addColors(array(
+                                      "E21736"
+                                 ));
+            $barGraph->addDataSet(array(
+                                       0
+                                  ));
+            $barGraph->addColors(array(
+                                      "0194D2"
+                                 ));
+            $barGraph->addDataSet(array(
+                                       30
+                                  ));
+            $barGraph->addColors(array(
+                                      "FFFFFF"
+                                 ));
+            $barGraph->addDataSet(array(
+                                       0
+                                  ));
+
+            $barGraph->addDataSet(array(
+                                       20
+                                  ));
+            $barGraph->addColors(array(
+                                      "FFFFFF"
+                                 ));
+            $barGraph->setLegend(array(
+                                      "Your Estimated Monthly Usage (% of Capacity)",
+                                      "Optimal Monthly Fleet Usage Range"
+                                 ));
+            $barGraph->addAxisRange(0, 0, $highest);
+            $barGraph->setDataRange(0, $highest);
+            $barGraph->setBarScale(40, 10);
+            $barGraph->setLegendPosition("bv");
+            $dotProperties = '@o,E21736,0,.5:' . number_format($percentage,2) . ',23|';
+//            $barGraph->setProperty('chm',$dotProperties);
+            $dotProperties .= '@t' . number_format($percentage * 100,2) . '%,000000,0,-2.5:' . number_format($percentage - .03,2)  . ',10';
+            $barGraph->setProperty('chm',$dotProperties);
+//            $dotProperties = '000000,FF0000|00FF00|0000FF';
+//            $barGraph->setProperty('chco',$dotProperties);
+            $barGraph->addColors(array(
+                                      "0194D2"
+                                 ));
+            $barGraph->setProperty('chxs', '0N*sz0*');
+//            $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
+            $this->_graphs [] = $barGraph->getUrl();
+
+            $percentage = ($this->proposal->getPageCounts()->Total->Combined->Monthly / $this->proposal->calculateMaximumMonthlyPrintVolumeWithReplacements());
+            $highest  = 100;
+            $barGraph = new gchart\gStackedBarChart(600, 160);
+            $barGraph->setHorizontal(true);
+            $barGraph->setVisibleAxes(array(
+                                           'x','y'
+                                      ));
+            $barGraph->addDataSet(array(
+                                       0
+                                  ));
+            $barGraph->addColors(array(
+                                      "E21736"
+                                 ));
+            $barGraph->addDataSet(array(
+                                       0
+                                  ));
+            $barGraph->addColors(array(
+                                      "0194D2"
+                                 ));
+            $barGraph->addDataSet(array(
+                                       30
+                                  ));
+            $barGraph->addColors(array(
+                                      "FFFFFF"
+                                 ));
+            $barGraph->addDataSet(array(
+                                       0
+                                  ));
+
+            $barGraph->addDataSet(array(
+                                       20
+                                  ));
+            $barGraph->addColors(array(
+                                      "FFFFFF"
+                                 ));
+            $barGraph->setLegend(array(
+                                      "Your Estimated Monthly Usage (% of Capacity)",
+                                      "Optimal Monthly Fleet Usage Range"
+                                 ));
+            $barGraph->addAxisRange(0, 0, $highest);
+            $barGraph->setDataRange(0, $highest);
+            $barGraph->setBarScale(40, 10);
+            $barGraph->setLegendPosition("bv");
+            $dotProperties = '@o,E21736,0,.5:' . number_format($percentage,2) . ',23|';
+//            $barGraph->setProperty('chm',$dotProperties);
+            $dotProperties .= '@t' . number_format($percentage * 100,2) . '%,000000,0,-4.5:' . number_format($percentage - .03,2)  . ',10,,:0:110';
+            $barGraph->setProperty('chm',$dotProperties);
+//            $dotProperties = '000000,FF0000|00FF00|0000FF';
+//            $barGraph->setProperty('chco',$dotProperties);
+            $barGraph->addColors(array(
+                                      "0194D2"
+                                 ));
+            $barGraph->setProperty('chxs', '0N*sz0*');
+//            $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
+            $this->_graphs [] = $barGraph->getUrl();
         }
         return $this->_graphs;
     }

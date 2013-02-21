@@ -22,7 +22,7 @@ $cell->addText($this->translate('Prepared For:') . " " . $proposal->report->_cus
 $cell->addText($proposal->getDateReportPrepared(), 'titlepageHeaderFont', 'titlepageHeaderParagraph');
 $cell->addTextBreak(4);
 // Parse the address
-$addressLines = explode("\n", $proposal->getCustomerAddress());
+$addressLines = explode("\n", $proposal->report->getClient()->getAddress());
 foreach ( $addressLines as $line )
 {
     $cell->addText($line, null, 'nospacing');

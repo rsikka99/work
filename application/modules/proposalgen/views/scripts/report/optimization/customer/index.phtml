@@ -71,41 +71,17 @@ $totalPurchasedDevices = count($proposal->getPurchasedDevices());
     <?php endif; ?>
     <br/>
 
-    <!--
-        Service and supplies logistics section
-    -->
-    <div class="h1">
-        Analysis: Service and Supplies Logistics
-    </div>
-
     <div class="pheader">
-        Printing Device Management Breakdown
+        Hardware Utilization and Capacity
     </div>
-    <p>Different types of printing devices are managed in different ways-newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.</p>
-    <table class='center'>
+        <table class='center'>
         <tr>
-            <td><img src="<?php echo $graphs[2]; ?>" /></td>
-            <td><img src="<?php echo $graphs[3]; ?>" /></td>
+            <td><img src="<?php echo $graphs[13]; ?>" /></td>
+        </tr>
+        <tr>
+            <td><img src="<?php echo $graphs[14]; ?>" /></td>
         </tr>
     </table>
-
-    <div class="pheader">
-        Number of Printing Device Models and Supply Types
-    </div>
-    <p>Out of your <strong><?php echo $proposal->getDeviceCount(); ?></strong> networked printing devices, you have of <strong><?php echo $proposal->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type. We estimate that <strong><?php echo count($proposal->getLeasedDevices()); ?></strong> of your printing devices are leased machines, for which supplies are included in your contract. The <strong><?php echo $totalPurchasedDevices; ?></strong> remaining machines consist of <strong><?php echo $proposal->getNumberOfUniquePurchasedModels(); ?></strong> different models and use <strong><?php echo $proposal->getNumberOfUniquePurchasedToners(); ?></strong> different supply types. If you hold two of each supply in inventory, you have an estimated <strong>$<?php echo number_format($proposal->getCashHeldInInventory()); ?> in operating cash held in printer supplies inventory</strong> at any given time.</p>
-    <table class='center'>
-        <tr>
-            <td><img src="<?php echo $graphs[4]; ?>" /></td>
-        </tr>
-    </table>
-    <p>By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. Office Depot can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.</p>
-
-    <!--
-        Printing hardware usage section
-    -->
-    <div class="h1">
-        Analysis: Printing Hardware Usage
-    </div>
 
     <div class="pheader">
         Print Volume and Number of Printing Devices
@@ -125,28 +101,35 @@ $totalPurchasedDevices = count($proposal->getPurchasedDevices());
     </table>
     <br/>
 
-    <!--
-        Technology reliability and user productivity section
-    -->
-    <div class="h1">
-        Analysis: Technology Reliability and User Productivity
-    </div>
-
     <div class="pheader">
-        Color Usage
+        Flagged Devices<em><?php echo '(' . count($customerOptimization->flagged) . ' of ' . $totalPurchasedDevices . ')'?></em>
     </div>
-    <p>You currently have <strong><?php echo $proposal->getNumberOfColorCapableDevices(); ?></strong> color printing devices that print a monthly average of <strong><?php echo number_format($proposal->getPageCounts()->Total->Color->Monthly); ?></strong> color pages per month, which is <strong><?php echo number_format(($proposal->getPercentages()->TotalColorPercentage * 100),2); ?>%</strong> of your total monthly print volume.</p>
-    <table class='center'>
-        <tr>
-            <td><img src="<?php echo $graphs[9]; ?>" /></td>
-            <td><img src="<?php echo $graphs[10]; ?>" /></td>
+    <em>These devices have been flagged for replacement based on operation reliability and not financial consideration.</em>
+    <table class="rDevices">
+        <tr class='header'>
+            <th style='width:175px;'>Device Name</th>
+            <th>Serial<br />IP Address</th>
+            <th>Mono AMPV</th>
+            <th>Color AMPV</th>
+            <th>Mono CPP</th>
+            <th>Color CPP</th>
+            <th>Monthly Cost</th>
         </tr>
+        <?php foreach ($customerOptimization->flagged as $device) :
+        $masterDevice = $device->getMasterDevice();
+        $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+        ?>
+        <tr>
+            <td class='deviceName'><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>' . $device->serialNumber . '</em>';?></td>
+        <td class='deviceName'><?php echo $device->serialNumber . '<br/>' . $device->ipAddress . '</em>';?></td>
+        <td><?php echo number_format($device->getAverageMonthlyBlackAndWhitePageCount());?></td>
+        <td><?php echo ($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A';?></td>
+        <td><?php echo $this->currency($device->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->monochromeCostPerPage, array('precision' => 4));?></td>
+        <td><?php echo ($isColor) ? $this->currency($device->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->colorCostPerPage, array('precision' => 4)) : 'N/A';?></td>
+        <td><?php echo $this->currency($device->calculateMonthlyCost($proposal->getCostPerPageSettingForDealer()));?></td>
+        <?php endforeach?>
+    </tr>
     </table>
-    <p>Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your company's professional image, improve comprehension and increase readership.
-    Office Depot can help you track your color printing and provide low-cost color hardware options.</p>
-    <br/>
-
-
 
     <div class="pheader">
         Technology Features and Functionality
@@ -203,7 +186,6 @@ $totalPurchasedDevices = count($proposal->getPurchasedDevices());
     </table>
     <br/>
 
-
     <div class="pheader">
         Acceptable Devices <em><?php echo '(' . count($customerOptimization->kept) . ' of ' . $totalPurchasedDevices .')' ?></em>
     </div>
@@ -236,8 +218,46 @@ $totalPurchasedDevices = count($proposal->getPurchasedDevices());
     <em>This assessment has acceptable devices. </em>
     <?php endif; ?>
     <br/>
+    <div class="pheader">
+        Number of Printing Device Models and Supply Types
+    </div>
+    <p>Out of your <strong><?php echo $proposal->getDeviceCount(); ?></strong> networked printing devices, you have of <strong><?php echo $proposal->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type. We estimate that <strong><?php echo count($proposal->getLeasedDevices()); ?></strong> of your printing devices are leased machines, for which supplies are included in your contract. The <strong><?php echo $totalPurchasedDevices; ?></strong> remaining machines consist of <strong><?php echo $proposal->getNumberOfUniquePurchasedModels(); ?></strong> different models and use <strong><?php echo $proposal->getNumberOfUniquePurchasedToners(); ?></strong> different supply types. If you hold two of each supply in inventory, you have an estimated <strong>$<?php echo number_format($proposal->getCashHeldInInventory()); ?> in operating cash held in printer supplies inventory</strong> at any given time.</p>
+    <table class='center'>
+        <tr>
+            <td><img src="<?php echo $graphs[4]; ?>" /></td>
+        </tr>
+    </table>
+    <p>By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. Office Depot can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.</p>
+    <div class="pheader">
+        Printing Device Management Breakdown
+    </div>
+    <p>Different types of printing devices are managed in different ways-newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.</p>
+    <table class='center'>
+        <tr>
+            <td><img src="<?php echo $graphs[2]; ?>" /></td>
+            <td><img src="<?php echo $graphs[3]; ?>" /></td>
+        </tr>
+    </table>    <div class="pheader">
+        Printing Device Management Breakdown
+    </div>
+    <p>Different types of printing devices are managed in different ways-newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.</p>
+    <table class='center'>
+        <tr>
+            <td><img src="<?php echo $graphs[2]; ?>" /></td>
+            <td><img src="<?php echo $graphs[3]; ?>" /></td>
+        </tr>
+    </table>
+    <div class="pheader">
+        Color Usage
+    </div>
+    <p>You currently have <strong><?php echo $proposal->getNumberOfColorCapableDevices(); ?></strong> color printing devices that print a monthly average of <strong><?php echo number_format($proposal->getPageCounts()->Total->Color->Monthly); ?></strong> color pages per month, which is <strong><?php echo number_format(($proposal->getPercentages()->TotalColorPercentage * 100),2); ?>%</strong> of your total monthly print volume.</p>
+    <table class='center'>
+        <tr>
+            <td><img src="<?php echo $graphs[9]; ?>" /></td>
+            <td><img src="<?php echo $graphs[10]; ?>" /></td>
+        </tr>
+    </table>
+    <p>Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your company's professional image, improve comprehension and increase readership.
+    Office Depot can help you track your color printing and provide low-cost color hardware options.</p>
+    <br/>
 </div>
-
-
-
-
