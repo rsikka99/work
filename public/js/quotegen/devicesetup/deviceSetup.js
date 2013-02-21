@@ -2,7 +2,7 @@ $(function ()
 {
     $("#devicesGrid").jqGrid(
         {
-            url       : TMTW_BASEURL + 'proposalgen/admin/sellablemasterdevices',
+            url       : TMTW_BASEURL + 'quotegen/devicesetup/all-devices-list',
             datatype  : 'json',
             colModel  : [
                 {
