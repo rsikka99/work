@@ -62,6 +62,15 @@ table.rDevices {
     background-color : #EFEFEF;
 }
 
+.rDevices th {
+    border: 0px;
+    vertical-align: middle;
+}
+
+.rDevices td:last-child {
+    border: 0px;
+}
+
 .deviceSummary td {
     width : 150px;
 }

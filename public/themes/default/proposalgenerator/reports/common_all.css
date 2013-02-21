@@ -160,8 +160,8 @@
 }
 
 #htmlReportContainer  table.genericTable td,
-#htmlReportContainer th {
-    border    : 1px solid #000;
+#htmlReportContainer  th {
+    /*border    : 1px solid #000;*/
     padding   : 5px;
     font-size : 9pt;
 }

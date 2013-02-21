@@ -1,0 +1,75 @@
+#htmlReportContainer {
+    width : 842px;
+}
+
+table.center {
+    margin : auto;
+}
+
+table.center td {
+    padding-top   : 20px;
+    padding-left  : 20px;
+    padding-right : 20px;
+}
+
+/* Le Styles for dealer / customer facing optmization reports */
+
+table.rDevices {
+    width : 100%;
+}
+
+.rDevices th {
+    vertical-align : middle;
+}
+
+.rDevices td {
+    border-right-style : solid;
+    border-right-color : #FFFFFF;
+    border-right-width : 3px;
+}
+
+.rDevices td.deviceName {
+    padding-left : 10px;
+    text-align   : left;
+}
+
+.rDevices td.borderRight, .rDevices th.borderRight {
+    border-color : #DDDDDD;
+}
+
+.rDevices td {
+    font-size  : 9pt;
+    text-align : right;
+}
+
+.rDevices tr.header th {
+    padding            : 5px;
+    background-color   : #B8CCE3;
+    border-right-color : #DDDDDD;
+}
+
+.rDevices tr.subHeader th {
+    padding          : 5px;
+    background-color : #EAF0F7;
+    border-color     : #DDDDDD;
+}
+
+.rDevices tr:nth-child(odd) {
+    background-color : #FCFCFC;
+}
+
+.rDevices tr:nth-child(even) {
+    background-color : #EFEFEF;
+}
+
+.rDevices th {
+    border: 0px;
+}
+
+.rDevices td:last-child {
+    border: 0px;
+}
+
+.deviceSummary td {
+    width : 150px;
+}
