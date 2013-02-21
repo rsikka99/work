@@ -1,9 +1,9 @@
 <?php 
 $quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
 $devices = $this->devices;
-$this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.phtml'));
 $this->headScript()->appendScript("$('i').popover();");
 ?>
+<?php echo $this->render('_partials/quoteHeading.phtml'); ?>
 
 <div class="well">
 <div class='pull-right' style='padding: 7px;'>

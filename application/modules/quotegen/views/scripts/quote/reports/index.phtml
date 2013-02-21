@@ -8,7 +8,7 @@ $(function () {
     $(".downloadButton").click(function(e)
 	{
 	    e.preventDefault();
-	    
+
     	var extension = "." + $(this).data('ext');
     	var loadingMessage = $(this).data('loadingmessage');
     	if (loadingMessage == null || loadingMessage.length < 1)
@@ -17,8 +17,8 @@ $(function () {
     	}
     	var cancelled = false;
     	var xhr;
-    	
-        
+
+
         $("<div id='loading' style='text-align: center'></div>").append("<p>" + loadingMessage + "</p>").append("<div class='AjaxLoadingIcon'></div>").dialog({
             height: 200,
             width: 400,
@@ -41,7 +41,7 @@ $(function () {
             success: function(data) {
             	if (data.indexOf(extension) < 0 || data.length > 100)
             	{
-            		// Debug Info for extension: 
+            		// Debug Info for extension:
             		//.append("<p>IndexOf Returned: " + data.indexOf(extension) + " for the extension " + extension +"</p>")
             		$("<div id='errorMessage'></div>").append(data).dialog({
             			height: 300,
@@ -72,7 +72,7 @@ $(function () {
 		    			draggable: true,
 		    			resizeable: true,
 		    			title: "Error"
-		    			
+
 		    		});
         		}
             },

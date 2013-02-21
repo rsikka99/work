@@ -47,15 +47,16 @@ class Quotegen_View_Helper_Quotemenu extends Zend_View_Helper_Abstract
                 $wasInvisible = true;
                 $container->setVisible(true);
             }
-            
+
             // Render the menu
             $html = $this->view->navigation()
                 ->menu()
                 ->renderMenu($container, array (
                     'minDepth' => 0, 
-                    'maxDepth' => 0, 
+                    'maxDepth' => 0,
                     'ulClass' => 'nav nav-pills' 
             ));
+
             
             // Bring back it's original visibility
             if ($wasInvisible)

@@ -1,13 +1,19 @@
-@import "variables.less";
-@import "mixins.less";
-@import "subnav.less";
-@import "forms.less";
-@import "navbar.less";
+// These two must be at the top to ensure our variables and mixins are available.
+@import "bootstrap/variables.less";
+@import "bootstrap/mixins.less";
+
+// Our organized styles
 @import "dropdown.less";
+@import "forms.less";
 @import "jqgrid.less";
+@import "navbar.less";
 @import "proposalForms.less";
-// Bring in global styles
-@import "global.less";
+@import "subnav.less";
+@import "tabbable.less";
+
 // Bring in module styles
 @import "module_styles/quotegen.less";
 @import "module_styles/proposalgen.less";
+
+// Bring in global styles to override everything else
+@import "global.less";
