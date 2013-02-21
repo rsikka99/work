@@ -349,8 +349,9 @@ input.addEditUnknownDevice {
   margin-bottom: 0;
 }
 .tabbable .nav-tabs > li > a {
-  border: 1px solid;
-  border-color: #eee #eee #ddd;
+  border: 1px dashed;
+  border-color: #eaeaea;
+  border-bottom-color: #eee;
   border-bottom-color: transparent;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
@@ -362,6 +363,7 @@ input.addEditUnknownDevice {
 .tabbable .nav-tabs > li.active > a {
   color: #000;
   border-color: #ddd;
+  border-style: solid;
 }
 .tabbable .tab-content {
   background-color: #f7f7f7;
