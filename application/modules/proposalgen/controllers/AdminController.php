@@ -5454,7 +5454,71 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         }
         $this->_helper->json($response);
     }
+    public function sellablemasterdevicesAction ()
+    {
+        $jqGrid                  = new Tangent_Service_JQGrid();
+        $masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
 
+        $jqGridParameters = array(
+            'sidx' => $this->_getParam('sidx', 'modelName'),
+            'sord' => $this->_getParam('sord', 'desc'),
+            'page' => $this->_getParam('page', 1),
+            'rows' => $this->_getParam('rows', 10),
+            'canSell' => $this->_getParam('canSell', false)
+        );
+        $canSell = ($jqGridParameters['canSell'] == "true");
+        $sortColumns = array();
+        if($canSell){
+            $sortColumns = array(
+                'modelName',
+                'oemSku',
+                'dealerSku',
+            );
+        }else
+        {
+            $sortColumns = array(
+                'modelName',
+            );
+        }
+        $jqGrid->setValidSortColumns($sortColumns);
+        $jqGrid->parseJQGridPagingRequest($jqGridParameters);
+        if ($jqGrid->sortingIsValid())
+        {
+            $searchCriteria = $this->_getParam('criteriaFilter', null);
+            $searchValue    = $this->_getParam('criteria', null);
+
+            $filterCriteriaValidator = new Zend_Validate_InArray(array(
+                                                              'haystack' => array(
+                                                                  'deviceName',
+                                                                  'oemSku',
+                                                                  'dealerSku'
+                                                              )
+                                                         ));
+
+            // If search criteria or value is null then we don't need either one of them. Same goes if our criteria is invalid.
+            if ($searchCriteria === null || $searchValue === null || !$filterCriteriaValidator->isValid($searchCriteria))
+            {
+                $searchCriteria = null;
+                $searchValue    = null;
+            }
+
+            $startRecord = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
+            $jqGrid->setRecordCount($masterDeviceMapper->getCanSellMasterDevices($jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $searchCriteria, $searchValue,  null, null,$canSell,true));
+            if ($jqGrid->getCurrentPage() < 1)
+            {
+                $jqGrid->setCurrentPage(1);
+            }
+            else if ($jqGrid->getCurrentPage() > $jqGrid->calculateTotalPages())
+            {
+                $jqGrid->setCurrentPage($jqGrid->calculateTotalPages());
+            }
+
+            $jqGrid->setRows($masterDeviceMapper->getCanSellMasterDevices($jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $searchCriteria, $searchValue, $jqGrid->getRecordsPerPage(), $startRecord,$canSell));
+
+
+        }
+        $this->_helper->json($jqGrid->createPagerResponseArray());
+    }
     public function userdevicesAction ()
     {
         // disable the default layout
@@ -6298,9 +6362,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                                                           'onlyUnmapped'
                                                                       )
                                                                  ));
-
             // If search criteria or value is null then we don't need either one of them. Same goes if our criteria is invalid.
-            if ($searchCriteria === null || $searchValue === null || !$filterCriteriaValidator->isValid($searchCriteria))
+            if ($searchCriteria != 'onlyUnmapped' &&( $searchCriteria === '' || $searchValue === '' || !$filterCriteriaValidator->isValid($searchCriteria)))
             {
                 $searchCriteria = null;
                 $searchValue    = null;
@@ -7092,4 +7155,5 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
         return false;
     }
+
 } //end class AdminController
