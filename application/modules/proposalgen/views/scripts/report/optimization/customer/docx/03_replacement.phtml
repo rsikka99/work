@@ -1,0 +1,46 @@
+<?php
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
+/* @var $section PHPWord_Section */
+$section = $this->section;
+$section->addPageBreak();
+
+$section->addTitle($this->translate('Suggested Replacement Device'), 2);
+$section->addText("The following devices have been targeted for replacements: ");
+
+
+$tcStyle = $this->styles->tables->acceptable;
+$table   = $section->addTable($tcStyle->tablestyle);
+// Table header
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial / Ip Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Mono AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText('Color AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('Mono CPP', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText('Color CPP', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addText('Monthly Cost', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+
+
+
+
+
+
+$section->addTextBreak();
+
+
+$section->addTitle($this->translate('Hardware Utilization and Capacity'), 2);
+$section->addImage($this->graphs[13], $this->styles->images->center);
+$section->addImage($this->graphs[14], $this->styles->images->center);
+$section->addTitle($this->translate('Print Volume and Number of Printing Devices'), 2);
+$section->addText(sprintf($this->translate('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.'), number_format($proposal->getDeviceCount()), number_format(($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->getDeviceCount())), number_format($proposal->getPageCounts()->Total->Combined->Monthly)));
+$section->addTextBreak();
+
+$imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
+$imageTable->addRow();
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($this->graphs [5]);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($this->graphs [6]);
+$imageTable->addRow();
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($this->graphs [7]);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($this->graphs [8]);
+$section->addTextBreak();

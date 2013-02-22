@@ -27,7 +27,15 @@ $titlepageSection = $phpWord->createSection(array(
                                                  'marginTop'    => 720,
                                                  'marginBottom' => 720
                                             ));
-$section          = $phpWord->createSection();
+$section = $phpWord->createSection();
+
+//array(
+//    'marginLeft' => 100,
+//    'marginRight' => 100,
+//    'marginTop' => 100,
+//    'marginBottom' => 100,
+//
+//)
 /**
  * Footer
  */
@@ -442,6 +450,99 @@ $styles = (object)array(
     ),
 );
 
+/* Tables for the device layouts */
+$widthTwips       = 15297;
+$standard_cell = (object)array(
+    "even"           => array(
+        "bgColor"          => $even_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20
+    ),
+    "odd"            => array(
+        "bgColor"          => $odd_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20
+    ),
+    "fontStyle"      => null,
+    "paragraphStyle" => array(
+        'spaceAfter' => 0,
+        'align'      => 'right'
+    )
+);
+$standard_cell_left = (object)array(
+    "even"           => array(
+        "bgColor"          => $even_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20
+    ),
+    "odd"            => array(
+        "bgColor"          => $odd_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20
+    ),
+    "fontStyle"      => null,
+    "paragraphStyle" => array(
+        'spaceAfter' => 0,
+        'align'      => 'left'
+    )
+);
+$standard_cell_no_right_border = (object)array(
+    "even"           => array(
+        "bgColor" => $even_color,
+    ),
+    "odd"            => array(
+        "bgColor" => $odd_color,
+    ),
+    "fontStyle"      => null,
+    "paragraphStyle" => array(
+        'spaceAfter' => 0,
+        'align'      => 'right'
+    )
+);
+$standard_header = (object)array(
+    "cellStyle"      => array(
+        'bgColor' => $header_color
+    ),
+    "fontStyle"      => array(
+        'bold' => true
+    ),
+    "paragraphStyle" => array(
+        'spaceAfter' => 0,
+        'align'      => 'center'
+    )
+);
+
+$suggestDevices = (object)array(
+    "tablestyle" => array(
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
+        'cellMarginBottom' => 50,
+        'cellMarginLeft'   => 50
+    ),
+    "col1Width"  => $widthTwips * 0.20,
+    "col2Width"  => $widthTwips * 0.20,
+    "col3Width"  => $widthTwips * 0.15,
+    "col4Width"  => $widthTwips * 0.30,
+    "col5Width"  => $widthTwips * 0.075,
+    "col6Width"  => $widthTwips * 0.075,
+    "body"       => (object)array(
+        "rowheight" => null,
+        "cell1"     => $standard_cell_left,
+        "cell2"     => $standard_cell_left,
+        "cell3"     => $standard_cell,
+        "cell4"     => $standard_cell,
+        "cell5"     => $standard_cell,
+        "cell6"     => $standard_cell_no_right_border,
+    ),
+    "header"     => (object)array(
+        'header'     => $standard_header,
+        'sub_header' => $standard_sub_header,
+    ),
+);
+$deviceTables = (object)array(
+    ""
+
+);
 $titleData = array(
     "phpword"  => $phpWord,
     "section"  => $titlepageSection,
@@ -459,8 +560,14 @@ $data = array(
 // Actual document pages
 $this->partial("report/optimization/customer/docx/01_titlepage.phtml", $titleData);
 $this->partial("report/optimization/customer/docx/02_optimizationsummary.phtml", $data);
+$this->partial("report/optimization/customer/docx/03_replacement.phtml", $data);
+$this->partial("report/optimization/customer/docx/04_flagged.phtml", $data);
+$this->partial("report/optimization/customer/docx/05_retire.phtml", $data);
+$this->partial("report/optimization/customer/docx/06_acceptable.phtml", $data);
+
+
+
 $this->partial("report/optimization/customer/docx/03_serviceandsupplies.phtml", $data);
-$this->partial("report/optimization/customer/docx/04_printinghardwareusage.phtml", $data);
 $this->partial("report/optimization/customer/docx/05_technologyandproductivity.phtml", $data);
 $objWriter = PHPWord_IOFactory::createWriter($phpWord, 'Word2007');
 $objWriter->save($this->savePath);
