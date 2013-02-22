@@ -7,15 +7,11 @@ $proposal = $this->proposal;
 // Initialize some properties
 $properties = $phpWord->getProperties();
 $properties->setCreator('MPS Toolbox');
-$properties->setCompany('Demo Report');
 $properties->setTitle('Hardware Optimization');
 $properties->setDescription('Hardware Optimization Report');
 $properties->setCategory('Report');
-$properties->setLastModifiedBy('Demo Report');
-$properties->setCreated();
-$properties->setModified();
-$properties->setSubject('Demo Report');
-$properties->setKeywords('demo, assessment, report');
+$properties->setLastModifiedBy('MPS Toolbox');
+
 
 /**
  * Define the different Sections
@@ -384,8 +380,7 @@ $styles               = (object)array(
         "flagged"     => $flaggedTable,
         "leased"      => $leasedTable,
         "excluded"    => $excludedTable
-    )
-);
+));
 $profitabilityDevices = new Proposalgen_Model_Optimization_Dealer($this->proposal);
 /**
  * An array of view variables to pass to the partial scripts

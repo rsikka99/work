@@ -3,11 +3,39 @@
 $proposal = $this->proposal;
 /* @var $section PHPWord_Section */
 $section = $this->section;
+/* @var $profitabiltyDevices Proposalgen_Model_Optimization_Dealer */
+$profitabiltyDevices = $this->profitabilityDevices;
 $section->addPageBreak();
 
 // Retired devices get rendered here
 
+// Table with values
+$deviceCount = count($profitabiltyDevices->retired);
+$totalPurchasedDevices = count($proposal->getPurchasedDevices());
+$section->addTitle($this->translate("Retired Devices ({$deviceCount} of {$totalPurchasedDevices}) "), 2);
+$section->addText("Devices with both low volume and age of over 8 years have been target for retirement. We suggest migrating the page volume into another device. ");
 
+$tcStyle = $this->devicetables->tables->retire;
+$table   = $section->addTable($tcStyle->tablestyle);
+// Table header
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial / Ip Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Life Page Count', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText('Age (Years)', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('JIT Compatible', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+
+// Begin with data rows
+foreach ($profitabiltyDevices->retired as $device)
+{
+    $style = ($this->cycle(array($tcStyle->body->cell1->even, $tcStyle->body->cell1->odd))->next()->current());
+    $table->addRow($tcStyle->body->rowheight);
+    $table->addCell($tcStyle->col1Width, $style)->addText($device->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+    $table->addCell($tcStyle->col2Width, $style)->addText($device->serialNumber . ' ' . $device->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+    $table->addCell($tcStyle->col3Width, $style)->addText($device->getLifePageCount(), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+    $table->addCell($tcStyle->col4Width, $style)->addText($device->getAge(), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+    $table->addCell($tcStyle->col5Width, $style)->addText(($device->reportsTonerLevels) ? 'Yes' : 'No', $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
+}
 
 $section->addTitle($this->translate('Age of Printing Device'), 2);
 $section->addText("The breakdown of the age of your printing devices is shown below:");

@@ -3,24 +3,41 @@
 $proposal = $this->proposal;
 /* @var $section PHPWord_Section */
 $section = $this->section;
-$section->addPageBreak();
+/* @var $profitabiltyDevices Proposalgen_Model_Optimization_Customer */
+$profitabiltyDevices = $this->profitabilityDevices;
 
-$section->addTitle($this->translate('Suggested Replacement Device'), 2);
+
+$section->addPageBreak();
+$deviceCount = count($profitabiltyDevices->replaced);
+$totalPurchasedDevices = count($proposal->getPurchasedDevices());
+$section->addTitle($this->translate("Suggested Replacement Devices ({$deviceCount} of {$totalPurchasedDevices}) "), 2);
 $section->addText("The following devices have been targeted for replacements: ");
 
-// Replacement Device Listing
-$tcStyle = $this->styles->tables->acceptable;
+$tcStyle = $this->devicetables->tables->replacement;
 $table   = $section->addTable($tcStyle->tablestyle);
 // Table header
 $table->addRow($tcStyle->body->rowheight);
-$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial / Ip Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Mono AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText('Color AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('Mono CPP', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText('Color CPP', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addText('Monthly Cost', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Current Device', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Replacement Device', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Serial / Ip Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText('Reason', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('Mono AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText('Color AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+// Begin with data rows
+foreach ($profitabiltyDevices->replaced as $device)
+{
+    $replacementDevice = $device->getReplacementMasterDevice();
+    $isColor           = $device->getMasterDevice()->isColor();
+    $style = ($this->cycle(array($tcStyle->body->cell1->even, $tcStyle->body->cell1->odd))->next()->current());
 
+    $table->addRow($tcStyle->body->rowheight);
+    $table->addCell($tcStyle->collWidth, $style)->addText($device->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+    $table->addCell($tcStyle->col2Width, $style)->addText($replacementDevice->getFullDeviceName(), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+    $table->addCell($tcStyle->col3Width, $style)->addText($device->serialNumber . ' ' . $device->ipAddress, $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+    $table->addCell($tcStyle->col4Width, $style)->addText($device->getReason(), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+    $table->addCell($tcStyle->col5Width, $style)->addText(number_format($device->getAverageMonthlyBlackAndWhitePageCount()), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
+    $table->addCell($tcStyle->col6Width, $style)->addText(($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A', $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
+}
 
 $section->addTextBreak();
 
