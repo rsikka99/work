@@ -1,0 +1,36 @@
+<?php
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
+/* @var $section PHPWord_Section */
+$section = $this->section;
+$section->addPageBreak();
+
+// Retired devices get rendered here
+$section->addTitle($this->translate('Number of Printing Device Models and Supply Types'), 2);
+$section->addText(sprintf($this->translate('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type. We estimate that %3$s of your printing devices are leased machines, for which supplies are included in your contract. The %4$s remaining machines consist of %5$s different models and use %6$s different supply types. If you hold two of each supply in inventory, you have an estimated $%7$s in operating cash held in printer supplies inventory at any given time.'), number_format($proposal->getPurchasedDeviceCount()), number_format($proposal->getNumberOfUniqueModels()), number_format(count($proposal->getLeasedDevices())), number_format(count($proposal->getPurchasedDevices())), number_format($proposal->getNumberOfUniquePurchasedModels()), number_format($proposal->getNumberOfUniquePurchasedToners()), number_format($proposal->getCashHeldInInventory())));
+$section->addImage($this->graphs[4],$this->styles->images->center);
+$section->addText("By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required.
+Office Depot can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.");
+
+$section->addTitle($this->translate('Printing Device Management Breakdown'), 2);
+$section->addText("Different types of printing devices are managed in different ways-newer networked printers can be managed with remote monitoring software; leased multifunction devices are
+typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them
+ with software. ");
+$section->addTextBreak();
+$imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
+$imageTable->addRow();
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($this->graphs [2]);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($this->graphs [3]);
+$section->addTextBreak();
+
+$section->addTitle($this->translate('Color Usage'), 2);
+$section->addText(sprintf($this->translate('You currently have %1$s color printing devices that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.'), number_format($proposal->getNumberOfColorCapableDevices()), number_format($proposal->getPageCounts()->Total->Color->Monthly), number_format(($proposal->getPercentages()->TotalColorPercentage * 100), 2)));
+
+$section->addText("Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your
+company's professional image, improve comprehension and increase readership. Office Depot can help you track your color printing and provide low-cost color hardware options.");
+$imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
+$imageTable->addRow();
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($this->graphs [9]);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($this->graphs [10]);
+$imageTable->addRow();
+$section->addTextBreak();

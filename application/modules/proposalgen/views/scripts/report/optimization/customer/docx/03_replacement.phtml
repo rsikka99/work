@@ -8,7 +8,7 @@ $section->addPageBreak();
 $section->addTitle($this->translate('Suggested Replacement Device'), 2);
 $section->addText("The following devices have been targeted for replacements: ");
 
-
+// Replacement Device Listing
 $tcStyle = $this->styles->tables->acceptable;
 $table   = $section->addTable($tcStyle->tablestyle);
 // Table header
@@ -20,10 +20,6 @@ $table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addTe
 $table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('Mono CPP', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText('Color CPP', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addText('Monthly Cost', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-
-
-
-
 
 
 $section->addTextBreak();

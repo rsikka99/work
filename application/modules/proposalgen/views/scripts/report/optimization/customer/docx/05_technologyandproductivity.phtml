@@ -6,23 +6,5 @@ $graphs = $proposal->getGraphs();
 $section = $this->section;
 $section->addPageBreak();
 $section->addTitle($this->translate('Analysis: Technology Reliability and User Productivity'), 1);
-$section->addTitle($this->translate('Color Usage'), 2);
-$section->addText(sprintf($this->translate('You currently have %1$s color printing devices that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.'), number_format($proposal->getNumberOfColorCapableDevices()), number_format($proposal->getPageCounts()->Total->Color->Monthly), number_format(($proposal->getPercentages()->TotalColorPercentage * 100), 2)));
 
-$section->addText("Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your
-company's professional image, improve comprehension and increase readership. Office Depot can help you track your color printing and provide low-cost color hardware options.");
-$imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
-$imageTable->addRow();
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($this->graphs [9]);
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($this->graphs [10]);
-$imageTable->addRow();
-$section->addTextBreak();
 
-$section->addTitle($this->translate('Age of Printing Device'), 2);
-$section->addText("The breakdown of the age of your printing devices is shown below:");
-$section->addImage($this->graphs[11],$this->styles->images->center);
-
-$section->addPageBreak();
-$section->addTitle($this->translate('Technology Features and Functionality'), 2);
-$section->addText("If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption
- by using a scanner to e-mail documents instead of printing copies for distribution. The following charts show how many of your printing devices have duplexing and scanning capabilities:");

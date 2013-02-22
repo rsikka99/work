@@ -1,0 +1,14 @@
+<?php
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
+/* @var $section PHPWord_Section */
+$section = $this->section;
+$section->addPageBreak();
+
+// Retired devices get rendered here
+
+
+
+$section->addTitle($this->translate('Age of Printing Device'), 2);
+$section->addText("The breakdown of the age of your printing devices is shown below:");
+$section->addImage($this->graphs[11],$this->styles->images->center);

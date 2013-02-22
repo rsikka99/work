@@ -558,17 +558,12 @@ $data = array(
     "graphs"   => $this->graphs
 );
 // Actual document pages
-$this->partial("report/optimization/customer/docx/01_titlepage.phtml", $titleData);
+//$this->partial("report/optimization/customer/docx/01_titlepage.phtml", $titleData);
 $this->partial("report/optimization/customer/docx/02_optimizationsummary.phtml", $data);
 $this->partial("report/optimization/customer/docx/03_replacement.phtml", $data);
 $this->partial("report/optimization/customer/docx/04_flagged.phtml", $data);
 $this->partial("report/optimization/customer/docx/05_retire.phtml", $data);
 $this->partial("report/optimization/customer/docx/06_acceptable.phtml", $data);
-
-
-
-$this->partial("report/optimization/customer/docx/03_serviceandsupplies.phtml", $data);
-$this->partial("report/optimization/customer/docx/05_technologyandproductivity.phtml", $data);
 $objWriter = PHPWord_IOFactory::createWriter($phpWord, 'Word2007');
 $objWriter->save($this->savePath);
 
