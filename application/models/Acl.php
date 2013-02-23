@@ -113,7 +113,6 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_QUOTEGEN_INDEX_CREATECLIENT        = "quotegen__index__create-client";
     const RESOURCE_QUOTEGEN_QUOTE_INDEX               = "quotegen__quote__index";
     const RESOURCE_QUOTEGEN_QUOTE_DELETE              = "quotegen__quote__delete";
-    const RESOURCE_QUOTEGEN_QUOTESETTING_EDIT         = "quotegen__quotesetting__edit";
 
 
     /**
@@ -379,7 +378,6 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_QUOTEGEN_INDEX_CREATECLIENT);
         $this->addResource(self::RESOURCE_QUOTEGEN_QUOTE_INDEX);
         $this->addResource(self::RESOURCE_QUOTEGEN_QUOTE_DELETE);
-        $this->addResource(self::RESOURCE_QUOTEGEN_QUOTESETTING_EDIT);
         $this->addResource(self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD);
 
         $this->addResource(self::RESOURCE_ADMIN_USER_PROFILE);
@@ -538,7 +536,6 @@ class Application_Model_Acl extends Zend_Acl
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_INDEX_CREATECLIENT, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTE_INDEX, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTE_DELETE, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTESETTING_EDIT, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_CLIENT_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD, self::PRIVILEGE_VIEW);
 
