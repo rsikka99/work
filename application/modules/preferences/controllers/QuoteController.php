@@ -13,7 +13,7 @@ class Preferences_QuoteController extends Zend_Controller_Action
 
         $form->populate($quoteSetting->toArray());
 
-        // update record if post
+        // Update record if post
         $request = $this->getRequest();
         if ($request->isPost())
         {
@@ -35,9 +35,9 @@ class Preferences_QuoteController extends Zend_Controller_Action
                         $quoteSetting->populate($values);
                         Quotegen_Model_Mapper_QuoteSetting::getInstance()->save($quoteSetting);
 
-                        // Rediret user with message
+                        // Redirect user with message
                         $this->_helper->flashMessenger(array(
-                                                            'success' => "Quote setting was updated sucessfully."
+                                                            'success' => "Your quote settings were updated successfully."
                                                        ));
                     }
                     else
@@ -54,7 +54,7 @@ class Preferences_QuoteController extends Zend_Controller_Action
                                                    ));
                 }
             }
-            else // Client hit cancel redicect
+            else // Client hit cancel redirect
             {
                 // User has cancelled. We could do a redirect here if we wanted.
                 $this->_helper->redirector('index');
@@ -100,16 +100,15 @@ class Preferences_QuoteController extends Zend_Controller_Action
                                 }
                             }
                         }
-                        // Update quoteSetting and message to comfirm
+                        // Update quoteSetting and message to confirm
                         $quoteSetting->populate($values);
                         $quoteSetting->id = $quoteSettingId;
 
                         $quoteSettingMapper->save($quoteSetting, $quoteSettingId);
                         $this->_helper->flashMessenger(array(
-                                                            'success' => "Default quote setting was updated sucessfully."
+                                                            'success' => "Default quote settings were updated successfully."
                                                        ));
 
-                        $this->_helper->redirector('editdefault');
                     }
                     else
                     {
@@ -126,7 +125,7 @@ class Preferences_QuoteController extends Zend_Controller_Action
                                                    ));
                 }
             }
-            else // Client hit cancel redicect
+            else // Client hit cancel redirect
             {
                 // User has cancelled. We could do a redirect here if we wanted.
                 $this->_helper->redirector('index');
