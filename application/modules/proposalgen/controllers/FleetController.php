@@ -282,6 +282,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             $this->_helper->flashMessenger(array(
                                                                 'success' => "Your file was imported successfully."
                                                            ));
+                            $this->saveReport();
+                            $this->gotoNextStep();
                         }
                     }
                     else
@@ -309,9 +311,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 }
                 else
                 {
-                    // Every time we save anything related to a report, we should save it (updates the modification date)
-                    $this->saveReport();
-
                     // Call the base controller to send us to the next logical step in the proposal.
                     $this->gotoNextStep();
                 }
@@ -324,7 +323,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $this->view->rmsExcludedRowCount = $rmsExcludedRowMapper->countRowsForReport($report->id);
         $this->view->hasPreviousUpload   = ($this->view->deviceInstanceCount > 0 || $this->view->rmsExcludedRowCount > 0);
 
-        $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation(Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT);
+        $navigationButtons = ($this->view->hasPreviousUpload) ? Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT : Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK;
+        $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation($navigationButtons);
 
     }
 

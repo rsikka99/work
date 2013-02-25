@@ -185,6 +185,10 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                                                        ));
                     }
                 }
+                else
+                {
+                    $this->_helper->flashMessenger(array('danger' => 'Please correct the errors below before continuing.'));
+                }
 
             }
         }

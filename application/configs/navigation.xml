@@ -233,45 +233,5 @@
 				</systemadmin>
             </pages>
         </sysadmin>
-        <preferences>
-            <order>999992</order>
-            <label>Preferences</label>
-            <module>proposalgen</module>
-            <controller>admin</controller>
-            <action>managemysettings</action>
-            <resource>proposalgen__admin__managemysettings</resource>
-            <class>dropdown></class>
-            <pages>
-                <defaultreportsettings>
-                    <label>System Report Settings</label>
-                    <module>proposalgen</module>
-                    <controller>admin</controller>
-                    <action>managesettings</action>
-                    <resource>proposalgen__admin__managesettings</resource>
-                </defaultreportsettings>
-                <configuration>
-                    <label>System Quote Settings</label>
-                    <module>quotegen</module>
-                    <controller>quotesetting</controller>
-                    <action>editdefault</action>
-                    <resource>quotegen__quotesetting__editdefault</resource>
-                </configuration>
-                <myreportsettings>
-                    <label>My Report Settings</label>
-                    <module>proposalgen</module>
-                    <controller>admin</controller>
-                    <action>managemysettings</action>
-                    <resource>proposalgen__admin__managemysettings</resource>
-                </myreportsettings>
-                <mypreferences>
-                    <label>My Quote Settings</label>
-                    <class></class>
-                    <module>quotegen</module>
-                    <controller>quotesetting</controller>
-                    <action>edit</action>
-                    <resource>quotegen__quotesetting__edit</resource>
-                </mypreferences>
-            </pages>
-        </preferences>
     </nav>
 </config>
