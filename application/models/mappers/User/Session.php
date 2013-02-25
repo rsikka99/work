@@ -5,6 +5,7 @@ class Application_Model_Mapper_User_Session extends My_Model_Mapper_Abstract
      * Column Definitions
      */
     public $col_id = 'id';
+    public $col_userId = 'userId';
 
     /**
      * The default db table class to use
@@ -195,6 +196,16 @@ class Application_Model_Mapper_User_Session extends My_Model_Mapper_Abstract
         }
 
         return $entries;
+    }
+
+    /**
+     * @param $userId int
+     *
+     * @return Application_Model_User_Session[]
+     */
+    public function fetchSessionsByUserId($userId)
+    {
+        return $this->fetchAll(array("{$this->col_userId} = ?" => $userId));
     }
 
     /**
