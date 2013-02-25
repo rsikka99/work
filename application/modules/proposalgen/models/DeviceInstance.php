@@ -604,12 +604,13 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $meters       = $this->getMeters();
             $avgPageCount = 0.0;
 
-            if (isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]) && $this->getMasterDevice()->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY)
+            // FIXME: Removed necessity to check master device for black only capability to allow none mapped devices to calculate page count properly.  May Break.
+            // if (isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]) && $this->getMasterDevice()->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY)
+            if (isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]))
             {
                 /* @var $meter Proposalgen_Model_DeviceInstanceMeter */
                 $meter        = $meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR];
                 $avgPageCount = $meter->calculateAverageDailyPageVolume();
-
             }
             $this->_averageDailyColorPageCount = $avgPageCount;
         }

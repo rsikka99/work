@@ -166,18 +166,11 @@ class Proposalgen_Model_Optimization_Customer extends
             {
                 $barGraph->addColors(array($color));
             }
-
             foreach (array_reverse($this->deviceAges) as $deviceCount)
             {
                 $barGraph->addDataSet(array($deviceCount));
-
             }
-
-
             $barGraph->setLegend(array_reverse(Proposalgen_Model_Optimization_Abstract::$ageRanks));
-
-
-
             $barGraph->setLegendPosition("b");
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);

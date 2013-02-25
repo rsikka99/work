@@ -7,11 +7,11 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/opti
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal             = $this->proposal;
 $costPerPageSetting   = $proposal->getCostPerPageSettingForDealer();
-$profitabilityDevices = new Proposalgen_Model_Optimization_Customer($proposal);
+$profitabilityDevices = new Proposalgen_Model_Optimization_Dealer($proposal);
+$graphs = $profitabilityDevices->getGraphs();
 // Get the count of all the devices used in the system
 $totalDevices = count($profitabilityDevices->kept) +
                 count($profitabilityDevices->replaced) +
-                count($profitabilityDevices->retired) +
                 count($profitabilityDevices->flagged);
 ?>
 <div class="container" id="htmlReportContainer">
@@ -75,71 +75,12 @@ $totalDevices = count($profitabilityDevices->kept) +
     <br />
 
     <h3>Device Summary</h3>
-    <table class="rDevices deviceSummary">
-        <tr class='header'>
-            <th colspan="4">Devices Analyzed For Report</th>
+        <table class='center'>
+        <tr>
+            <td><img src="<?php echo $graphs[0]; ?>" /></td>
+            <td><img src="<?php echo $graphs[1]; ?>" /></td>
         </tr>
-       <tr class='subHeader'>
-           <th colspan='2'>Current Fleet</th>
-           <th colspan='2'>Optimized Fleet</th>
-       </tr>
-       <tr>
-           <td><strong>Total Devices :</strong></td>
-           <td><?php echo number_format($totalDevices);?></td>
-           <td><strong>Total Devices :</strong></td>
-           <td><?php echo number_format($totalDevices);?></td>
-       </tr>
-       <tr>
-           <td><strong>Keep Devices:</strong></td>
-           <td><?php echo number_format($profitabilityDevices->actionKeepCount)?></td>
-           <td><strong>Keep Devices:</strong></td>
-           <td><?php echo number_format(count($profitabilityDevices->kept));?></td>
-       </tr>
-       <tr>
-           <td><strong>Flagged Devices:</strong></td>
-           <td><?php echo number_format($profitabilityDevices->actionReplaceCount)?></td>
-           <td><strong>Flagged Devices:</strong></td>
-           <td><?php echo number_format(count($profitabilityDevices->flagged));?></td>
-       </tr>
-       <tr>
-           <td><strong>Retired Devices:</strong></td>
-           <td><?php echo number_format($profitabilityDevices->actionRetireCount);?></td>
-           <td><strong>Retired Devices:</strong></td>
-           <td><?php echo number_format(count($profitabilityDevices->retired));?></td>
-        </tr>
-       <tr>
-           <td><strong>Replace Devices:</strong></td>
-           <td>0</td>
-           <td><strong>Replace Devices:</strong></td>
-           <td><?php echo number_format(count($profitabilityDevices->replaced));?></td>
-       </tr>
-       <tr class='header'>
-            <th colspan="4">Other Devices</th>
-        </tr>
-       <tr class='subHeader'>
-           <th colspan='2'>Current Fleet</th>
-           <th colspan='2'>Optimized Fleet</th>
-       </tr>
-       <tr>
-           <td><strong>Excess Devices:</strong></td>
-           <td>0</td>
-           <td><strong>Excess Devices:</strong></td>
-           <td><?php echo number_format(count($profitabilityDevices->excess));?></td>
-       </tr>
-       <tr>
-           <td><strong>Leased Devices:</strong></td>
-           <td><?php echo number_format(count($profitabilityDevices->leased));?></td>
-           <td><strong>Leased Devices:</strong></td>
-           <td><?php echo number_format(count($profitabilityDevices->leased));?></td>
-       </tr>
-       <tr>
-           <td><strong>Excluded Devices:</strong></td>
-           <td><?php echo number_format(count($profitabilityDevices->excluded));?></td>
-           <td><strong>Excluded Devices:</strong></td>
-           <td><?php echo number_format(count($profitabilityDevices->excluded));?></td>
-       </tr>
     </table>
-    <br />
 
     <h3>Suggested Replacement Devices<em><?php echo '(' . count($profitabilityDevices->replaced) . ' of ' . $totalDevices . ')'?></em></h3>
     <em>The following devices have been targeted for replacement, either for a monthly cost savings greater than $10.00 or manual replacement.</em>
@@ -345,12 +286,16 @@ $totalDevices = count($profitabilityDevices->kept) +
             <th style='width:175px;'>Device Name</th>
             <th>IP Address</th>
             <th>Serial Number</th>
+            <th>Mono AMPV</th>
+            <th>Color AMPV</th>
         </tr>
         <?php foreach ($profitabilityDevices->excluded as $device) : ?>
         <tr>
             <td class='deviceName'><?php echo $device->getDeviceName();?></td>
             <td><?php echo $device->ipAddress;?></td>
             <td><?php echo $device->serialNumber;?></td>
+            <td><?php echo number_format($device->getAverageMonthlyBlackAndWhitePageCount());?></td>
+            <td><?php echo number_format($device->getAverageMonthlyColorPageCount());?></td>
         </tr>
         <?php endforeach;?>
     </table>

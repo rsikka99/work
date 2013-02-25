@@ -72,7 +72,7 @@ $table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->even)->addText('Lease
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText(count($profitabiltyDevices->leased), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText('Exclude Devices', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText(count($profitabiltyDevices->excess), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText(count($profitabiltyDevices->excluded), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->odd)->addText('Exclude Devices', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText(count($profitabiltyDevices->excess), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText(count($profitabiltyDevices->excluded), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 ?>

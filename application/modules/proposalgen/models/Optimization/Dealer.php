@@ -15,119 +15,63 @@ class Proposalgen_Model_Optimization_Dealer extends
         {
             $numberValueMarker = "N *sz0";
 
-            // Hardware Optimization Device Summary Listing (before hardware optimization
-            $highest = $this->actionKeepCount;
-            $graph   = new gchart\gBarChart(520, 320, "g", "h");
-            $graph->setVisibleAxes(array(
-                                        'x'
-                                   ));
-            $graph->addDataSet(array(
-                                    $this->actionKeepCount
-                               ));
-            $graph->addColors(array(
-                                   "8064a2"
-                              ));
-            $graph->setVisibleAxes(array(
-                                        'x'
-                                   ));
-            $graph->addDataSet(array(
-                                    $this->actionReplaceCount
-                               ));
-            $graph->addColors(array(
-                                   "9bbb59"
-                              ));
-            $graph->setVisibleAxes(array(
-                                        'x'
-                                   ));
-            $graph->addDataSet(array(
-                                    $this->actionRetireCount
-                               ));
-            $graph->addColors(array(
-                                   "c0504d"
-                              ));
-            $graph->setVisibleAxes(array(
-                                        'x'
-                                   ));
-            $graph->addDataSet(array(
-                                    0
-                               ));
-            $graph->addColors(array(
-                                   "4f81bd"
-                              ));
-            $graph->addAxisRange(0, 0, $highest * 1.3);
-            $graph->setDataRange(0, $highest * 1.3);
-            $graph->setBarScale(50, 10);
-            $graph->setLegendPosition("r");
-            $graph->setLegend(array(
-                                   "Keep Devices",
-                                   "Flagged Devices",
-                                   "Retired Devices",
-                                   "Replaced Devices",
-                              ));
-            $graph->setTitle("Current Fleet Summary");
-            $graph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
-            $graph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
-            $graph->addValueMarkers($numberValueMarker, "000000", "2", "-1", "11");
-            $graph->addValueMarkers($numberValueMarker, "000000", "3", "-1", "11");
-            // Graphs[15]
-            $this->_graphs [] = $graph->getUrl();
+            /**
+             * -- Optimization Chart Summary
+             */
+            $highest           = (count($this->replaced) > count($this->kept)) ? count($this->replaced) : count($this->kept);
+            $highest           = (count($this->flagged) > $highest) ? count($this->flagged) : $highest;
+            $highest           = (count($this->retired) > $highest) ? count($this->retired) : $highest;
+            $barGraph          = new gchart\gBarChart(375, 250);
+            $barGraph->setTitle("Optimization Fleet Summary");
+            $barGraph->setVisibleAxes(array('y'));
+            $colors = array("009999", "1240AB", "FFAA00", "FF7400");
+            foreach ($colors as $color)
+            {
+                $barGraph->addColors(array($color));
+            }
+            $barGraph->addDataSet(array(count($this->kept)));
+            $barGraph->addDataSet(array(count($this->replaced)));
+            $barGraph->addDataSet(array(count($this->flagged)));
+            $barGraph->addDataSet(array(count($this->retired)));
 
-            // Hardware Optimization Device Summary Listing
-            $highest = $this->actionKeepCount;
-            $graph   = new gchart\gBarChart(520, 320, "g", "h");
-            $graph->setVisibleAxes(array(
-                                        'x'
-                                   ));
-            $graph->addDataSet(array(
-                                    count($this->kept)
-                               ));
-            $graph->addColors(array(
-                                   "8064a2"
-                              ));
-            $graph->setVisibleAxes(array(
-                                        'x'
-                                   ));
-            $graph->addDataSet(array(
-                                    count($this->flagged)
-                               ));
-            $graph->addColors(array(
-                                   "9bbb59"
-                              ));
-            $graph->setVisibleAxes(array(
-                                        'x'
-                                   ));
-            $graph->addDataSet(array(
-                                    count($this->retired)
-                               ));
-            $graph->addColors(array(
-                                   "c0504d"
-                              ));
-            $graph->setVisibleAxes(array(
-                                        'x'
-                                   ));
-            $graph->addDataSet(array(
-                                    count($this->replaced)
-                               ));
-            $graph->addColors(array(
-                                   "4f81bd"
-                              ));
-            $graph->addAxisRange(0, 0, $highest * 1.3);
-            $graph->setDataRange(0, $highest * 1.3);
-            $graph->setBarScale(50, 10);
-            $graph->setLegendPosition("r");
-            $graph->setLegend(array(
-                                   "Keep Devices",
-                                   "Flagged Devices",
-                                   "Retired Devices",
-                                   "Replaced Devices",
-                              ));
-            $graph->setTitle("Optimized Fleet Summary");
-            $graph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
-            $graph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
-            $graph->addValueMarkers($numberValueMarker, "000000", "2", "-1", "11");
-            $graph->addValueMarkers($numberValueMarker, "000000", "3", "-1", "11");
-            // Graphs[16]
-            $this->_graphs [] = $graph->getUrl();
+            $barGraph->setLegend(array("Keep","Replaced","Flagged","Retired"));
+            $barGraph->setLegendPosition("t");
+            $barGraph->addAxisRange(0, 0, $highest * 1.1);
+            $barGraph->setDataRange(0, $highest * 1.1);
+            $barGraph->setBarScale(65, 10);
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "2", "-1", "11");
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "3", "-1", "11");
+            $this->_graphs [] = $barGraph->getUrl();
+
+            /**
+             * -- Other devices that are in the fleet
+             */
+            $highest           = (count($this->excess) > count($this->excluded)) ? count($this->excess) : count($this->excluded);
+            $highest           = (count($this->leased) > $highest) ? count($this->leased) : $highest;
+            $barGraph          = new gchart\gBarChart(325, 250);
+            $barGraph->setTitle("Other Devices");
+            $barGraph->setVisibleAxes(array('y'));
+            $colors = array("009999", "1240AB", "FFAA00");
+            foreach ($colors as $color)
+            {
+                $barGraph->addColors(array($color));
+            }
+            $barGraph->addDataSet(array(count($this->excess)));
+            $barGraph->addDataSet(array(count($this->excluded)));
+            $barGraph->addDataSet(array(count($this->leased)));
+
+            $barGraph->setLegend(array("Excess","Excluded","Leased"));
+            $barGraph->setLegendPosition("t");
+            $barGraph->addAxisRange(0, 0, $highest * 1.1);
+            $barGraph->setDataRange(0, $highest * 1.1);
+            $barGraph->setBarScale(65, 10);
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "2", "-1", "11");
+            $this->_graphs [] = $barGraph->getUrl();
+
         }
         return $this->_graphs;
     }
