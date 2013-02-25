@@ -79,10 +79,24 @@ class Default_AuthController extends Zend_Controller_Action
                             }
                         }
 
-//                        $userSession         = new Application_Model_User_Session();
-//                        $userSession->userId = $userInfo->id;
-//                        $userSession->id     = $currentSessionId;
-//                        $sessionMapper->insert($userSession);
+                        $userSession = $sessionMapper->find($currentSessionId);
+                        // Do we have a session id that matches our current session
+                        if($userSession->id == $currentSessionId)
+                        {
+                          // If it's a new userId with this current session, update the userId for this sessionId
+                          if($userInfo->id != $userSession->userId)
+                          {
+                                $sessionMapper->save($userSession);
+                          }
+                        }
+                        else
+                        {
+                            // Create a new sessions for the new user
+                            $userSession         = new Application_Model_User_Session();
+                            $userSession->userId = $userInfo->id;
+                            $userSession->id     = $currentSessionId;
+                            $sessionMapper->insert($userSession);
+                        }
                     }
                     catch (Exception $e)
                     {
