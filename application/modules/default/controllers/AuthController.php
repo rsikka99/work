@@ -64,6 +64,31 @@ class Default_AuthController extends Zend_Controller_Action
                     $authStorage = $auth->getStorage();
                     $authStorage->write($userInfo);
 
+                    try
+                    {
+                        $currentSessionId = @session_id();
+                        // Get all the sessions attached to current user signed in
+                        $sessionMapper = Application_Model_Mapper_User_Session::getInstance();
+                        $userSessions  = $sessionMapper->fetchSessionsByUserId($userInfo->id);
+                        foreach ($userSessions as $userSession)
+                        {
+                            if ($userSession->id != $currentSessionId)
+                            {
+                                //@unlink($config->resources->session->save_path . '/sess_' . $session->SessionId);
+                                $sessionMapper->delete($userSession);
+                            }
+                        }
+
+//                        $userSession         = new Application_Model_User_Session();
+//                        $userSession->userId = $userInfo->id;
+//                        $userSession->id     = $currentSessionId;
+//                        $sessionMapper->insert($userSession);
+                    }
+                    catch (Exception $e)
+                    {
+                        throw new Exception('Passing up the chain', 0, $e);
+                    }
+
                     /*
                      * Redirect them to the home page now that they are logged in.
                      */
