@@ -41,10 +41,8 @@ class Proposalgen_Report_Optimization_CustomerController  extends Proposalgen_Li
             case "docx" :
                 require_once ('PHPWord.php');
                 $this->view->phpword = new PHPWord();
-                $proposal = $this->getProposal();
-                $customerProfitability = new Proposalgen_Model_Optimization_Customer($proposal);
-                $graphs   = $this->cachePNGImages($customerProfitability->getGraphs(), true);
-                $customerProfitability->setGraphs($graphs);
+                $customerOptimization = new Proposalgen_Model_Optimization_Customer($this->getProposal());
+                $graphs   = $this->cachePNGImages($customerOptimization->getGraphs(), true);
                 $this->view->graphs = $graphs;
                 $this->_helper->layout->disableLayout();
                 break;
