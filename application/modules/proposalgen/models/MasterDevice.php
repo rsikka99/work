@@ -1031,9 +1031,11 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             /* @var $toner Proposalgen_Model_Toner */
             foreach ($this->getCheapestTonerSet($costPerPageSetting->pricingConfiguration) as $toner)
             {
-                $tonerCostPerPage = $toner->calculateCostPerPage($costPerPageSetting);
+                if($toner){
+                    $tonerCostPerPage = $toner->calculateCostPerPage($costPerPageSetting);
 
-                $costPerPage->add($tonerCostPerPage);
+                    $costPerPage->add($tonerCostPerPage);
+                }
             }
 
             $this->_cachedCostPerPage [$cacheKey] = $costPerPage;

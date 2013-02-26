@@ -15,7 +15,7 @@ $graphs = $this->healthcheck->getGraphs();
 <br />
 <div class="pheader">Print Volume and Number of Printing Devices</div>
 <p>You currently have <strong><?php echo $proposal->getDeviceCount(); ?></strong> networked printing devices that print an average of <strong><?php echo number_format(($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->getDeviceCount())); ?>
-</strong>pages each per month, for an average total monthly print volume of <strong><?php echo number_format($proposal->getPageCounts()->Total->Combined->Monthly); ?></strong> pages.
+</strong> pages each per month, for an average total monthly print volume of <strong><?php echo number_format($proposal->getPageCounts()->Total->Combined->Monthly); ?></strong> pages.
 Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.</p>
 <br /> <br />
 <div class="center">
@@ -104,14 +104,14 @@ Ideally, you should have the minimum amount of printing hardware required to mee
 <br /> <br />
 
 <div class="pheader">Color Usage</div>
-<p>You currently have <strong><?php echo $proposal->getNumberOfColorCapableDevices(); ?></strong> color printing devices that print a monthly average of <strong><?php echo number_format($proposal->getPageCounts()->Total->Color->Monthly); ?></strong> color pages per month, which is <strong><?php echo number_format(($proposal->getPercentages()->TotalColorPercentage * 100),2); ?>%</strong> of your total monthly print volume.</p>
+<p>You currently have <strong><?php echo $proposal->getNumberOfColorCapablePurchasedDevices(); ?></strong> color printing devices(excluding leased devices) that print a monthly average of <strong><?php echo number_format($proposal->getPageCounts()->Purchased->Color->Monthly); ?></strong> color pages per month, which is <strong><?php echo number_format(($proposal->getPageCounts()->Purchased->Color->Monthly / $proposal->getPageCounts()->Purchased->Combined->Monthly  * 100),2); ?>%</strong> of your total monthly print volume.</p>
 <br />
     <div class="center">
     <table>
         <tbody>
             <tr>
-                <td><img src="<?php echo $graphs['healthCheck']['ColorCapablePrintingDevices']; ?>" /></td> <!-- Devices leased/Devices Purchased -->
-                <td><img src="<?php echo $graphs['healthCheck']['ColorVSBWPagesGraph']; ?>" /></td> <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
+                <td><img src="<?php echo $graphs['healthCheck']['ColorCapablePrintingDevices']; ?>" /></td> <!-- Devices Purchased -->
+                <td><img src="<?php echo $graphs['healthCheck']['ColorVSBWPagesGraph']; ?>" /></td> <!-- Monthly pages on devices not leased -->
             </tr>
         </tbody>
     </table>
@@ -135,15 +135,15 @@ Ideally, you should have the minimum amount of printing hardware required to mee
     <tbody>
         <?php
         $ctr = 0;
-        foreach ($proposal->getMonthlyHighCostColorDevices($proposal->getCostPerPageSettingForDealer()) as $deviceInstance): ?>
+        foreach ($proposal->getMonthlyHighCostColorDevices($proposal->getCostPerPageSettingForCustomer()) as $deviceInstance): ?>
             <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName());?>
         <tr>
             <td><div style="width: 160px; padding: 0;"><?php echo $deviceName; ?></div></td>
             <td class="center"><?php if($deviceInstance->serialNumber) echo $deviceInstance->serialNumber; else echo 'Unknown';?></td>
-            <td class="center"> <?php echo number_format((($deviceInstance->getAverageMonthlyColorPageCount() * $deviceInstance->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->colorCostPerPage) / $proposal->getGrossMarginTotalMonthlyCost()->Combined) * 100,2) ?>%</td>
+            <td class="center"> <?php echo number_format(($deviceInstance->calculateMonthlyColorCost($proposal->getCostPerPageSettingForCustomer(),$deviceInstance->getMasterDevice()) / $proposal->calculatePurchasedTotalMonthlyCost($proposal->getCostPerPageSettingForCustomer())) * 100,2) ?>%</td>
             <td class="center"><?php echo number_format($deviceInstance->getAverageMonthlyColorPageCount()); ?></td>
-            <td><?php echo $this->currency($deviceInstance->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->colorCostPerPage,array('precision' => 4)); ?></td>
-            <td><?php echo $this->currency($deviceInstance->getAverageMonthlyColorPageCount() * $deviceInstance->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->colorCostPerPage,array('precision' => 2)) ?></td>
+            <td><?php echo $this->currency($deviceInstance->calculateCostPerPage($proposal->getCostPerPageSettingForCustomer())->colorCostPerPage,array('precision' => 4)); ?></td>
+            <td><?php echo $this->currency($deviceInstance->calculateMonthlyColorCost($proposal->getCostPerPageSettingForCustomer()),array('precision' => 2)) ?></td>
         </tr>
             <?php $ctr++; if ($ctr > 2) break; endforeach; ?>
     </tbody>
