@@ -194,7 +194,7 @@ LEFT JOIN pgen_device_instance_master_devices ON pgen_device_instance_master_dev
 LEFT JOIN pgen_master_devices ON pgen_device_instance_master_devices.masterDeviceId = pgen_master_devices.id
 LEFT JOIN manufacturers ON pgen_master_devices.manufacturerId = manufacturers.id
 WHERE pgen_device_instances.rmsUploadId = {$rmsUploadId}
-GROUP BY pgen_device_instances.rmsUploadId, CONCAT(pgen_rms_upload_rows.manufacturer, ' ', pgen_rms_upload_rows.modelName)
+GROUP BY pgen_device_instances.rmsUploadRowId
 ORDER BY deviceCount DESC
 ) AS countTable";
             $justCountQuery = $db->query($justCountSql);
@@ -264,7 +264,7 @@ LEFT JOIN pgen_device_instance_master_devices ON pgen_device_instance_master_dev
 LEFT JOIN pgen_master_devices ON pgen_device_instance_master_devices.masterDeviceId = pgen_master_devices.id
 LEFT JOIN manufacturers ON pgen_master_devices.manufacturerId = manufacturers.id
 WHERE pgen_device_instances.rmsUploadId = {$rmsUploadId}
-GROUP BY CONCAT(pgen_rms_upload_rows.manufacturer, ' ', pgen_rms_upload_rows.modelName)
+GROUP BY pgen_device_instances.rmsUploadRowId
 ORDER BY $orderBy
 $limitStatement
 ";

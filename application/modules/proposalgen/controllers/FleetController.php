@@ -106,7 +106,15 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                      */
                                     $rmsUpload->invalidRowCount = count($uploadCsvService->invalidCsvLines);
                                     $rmsUpload->validRowCount   = count($uploadCsvService->validCsvLines);
-                                    Proposalgen_Model_Mapper_Rms_Upload::getInstance()->insert($rmsUpload);
+
+                                    if ($rmsUpload->id > 0)
+                                    {
+                                        Proposalgen_Model_Mapper_Rms_Upload::getInstance()->save($rmsUpload);
+                                    }
+                                    else
+                                    {
+                                        Proposalgen_Model_Mapper_Rms_Upload::getInstance()->insert($rmsUpload);
+                                    }
 
                                     $report->rmsUploadId = $rmsUpload->id;
                                     $report->setRmsUpload($rmsUpload);
@@ -118,6 +126,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                      * @var Proposalgen_Model_DeviceInstance[]
                                      */
                                     $deviceInstances = array();
+
                                     foreach ($uploadCsvService->validCsvLines as $line)
                                     {
                                         /*
@@ -144,8 +153,9 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                         /*
                                          * Save Rms Upload Row
                                          */
-                                        $rmsUploadRow                = new Proposalgen_Model_Rms_Upload_Row($lineArray);
-                                        $rmsUploadRow->rmsProviderId = $uploadProviderId;
+                                        $rmsUploadRow                 = new Proposalgen_Model_Rms_Upload_Row($lineArray);
+                                        $rmsUploadRow->fullDeviceName = "{$line->manufacturer} {$line->modelName}";
+                                        $rmsUploadRow->rmsProviderId  = $uploadProviderId;
 
                                         // Lets make an attempt at finding the manufacturer
                                         $manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->searchByName($rmsUploadRow->manufacturer);
@@ -155,6 +165,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                         }
 
                                         $rmsUploadRowMapper->insert($rmsUploadRow);
+
 
                                         /*
                                          * Save Device Instance
@@ -348,7 +359,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
         $this->view->rmsUpload = $rmsUpload;
 
-        $navigationButtons          = ($this->view->hasPreviousUpload) ? Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT : Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK;
+        $navigationButtons          = ($rmsUpload instanceof Proposalgen_Model_Rms_Upload) ? Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT : Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK;
         $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation($navigationButtons);
 
     }
@@ -696,14 +707,18 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             $rmsUploadRowMapper   = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance();
             $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
             $deviceInstance       = $deviceInstanceMapper->find($deviceInstanceIds[0]);
-            if ($deviceInstance)
+            if (!$deviceInstance instanceof Proposalgen_Model_DeviceInstance)
             {
-                $rmsUploadRow             = $deviceInstance->getRmsUploadRow();
-                $this->view->rmsUploadRow = $rmsUploadRow;
-                $form->populate(array('reportsTonerLevels' => $deviceInstance->isCapableOfReportingTonerLevels()));
-                $form->populate($rmsUploadRow->toArray());
+                $this->_helper->flashMessenger(array('danger' => 'There was an error selecting the device you wanted to add.'));
 
+                // Send back to the mapping page
+                $this->_helper->redirector('mapping');
             }
+
+            $rmsUploadRow             = $deviceInstance->getRmsUploadRow();
+            $this->view->rmsUploadRow = $rmsUploadRow;
+            $form->populate(array('reportsTonerLevels' => $deviceInstance->isCapableOfReportingTonerLevels()));
+            $form->populate($rmsUploadRow->toArray());
 
 
             /*
@@ -740,6 +755,13 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 }
                             }
 
+                            // Update the rms upload row
+                            $rmsUploadRow->populate($formValues);
+                            $rmsUploadRow->hasCompleteInformation = true;
+
+
+                            $rmsUploadRowMapper->save($rmsUploadRow);
+
                             /**
                              * Save each of our devices
                              */
@@ -747,13 +769,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             {
                                 $deviceInstance = $deviceInstanceMapper->find($deviceInstanceId);
 
-                                // Update the rms upload row
-                                $rmsUploadRow = $deviceInstance->getRmsUploadRow();
-                                $rmsUploadRow->populate($formValues);
-                                $rmsUploadRow->hasCompleteInformation = true;
-
-
-                                $rmsUploadRowMapper->save($rmsUploadRow);
 
                                 $deviceInstance->useUserData        = true;
                                 $deviceInstance->reportsTonerLevels = $formValues['reportsTonerLevels'];
@@ -910,8 +925,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $jsonResponse = array();
         $errorMessage = false;
 
-        // FIXME: Hard coded default of 24. Should be FALSE
-        $deviceInstanceId = $this->_getParam("deviceInstanceId", 28);
+        $deviceInstanceId = $this->_getParam("deviceInstanceId", false);
 
         /*
          * We must get a deviceInstanceId
@@ -927,7 +941,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 /*
                  * Devices must be part of our report
                  */
-                if ($deviceInstance->reportId == $this->getReport()->id)
+                if ($deviceInstance->rmsUploadId == $this->getReport()->getRmsUpload()->id)
                 {
                     /*
                      * Once we get here we can start populating our response
@@ -957,7 +971,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 $tonerArray                               = $toner->toArray();
                                 $tonerArray['cost']                       = $this->view->currency((float)$tonerArray['cost']);
                                 $tonerArray['yield']                      = number_format($tonerArray['yield']);
-                                $tonerArray['manufacturer']               = $toner->getManufacturer()->toArray();
+                                $tonerArray['manufacturer']               = ($toner->getManufacturer()) ? $toner->getManufacturer()->toArray() : "Unknown";
                                 $tonerArray['partTypeName']               = Proposalgen_Model_PartType::$PartTypeNames[$toner->partTypeId];
                                 $tonerArray['tonerColorName']             = Proposalgen_Model_TonerColor::$ColorNames[$toner->tonerColorId];
                                 $jsonResponse["masterDevice"]["toners"][] = $tonerArray;

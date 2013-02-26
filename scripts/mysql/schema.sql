@@ -82,7 +82,7 @@ ENGINE = InnoDB;
 -- Table `pgen_rms_uploads`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_rms_uploads` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `clientId` INT NOT NULL ,
   `rmsProviderId` INT NOT NULL ,
   `fileName` VARCHAR(255) NOT NULL ,
@@ -163,6 +163,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_upload_rows` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
   `rmsProviderId` INT(11) NOT NULL ,
   `rmsModelId` INT(11) NULL ,
+  `fullDeviceName` VARCHAR(255) NOT NULL ,
   `hasCompleteInformation` TINYINT(4) NOT NULL DEFAULT 0 ,
   `modelName` VARCHAR(255) NOT NULL DEFAULT '' ,
   `manufacturer` VARCHAR(255) NOT NULL DEFAULT '' ,
