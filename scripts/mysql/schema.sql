@@ -69,6 +69,42 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
+-- Table `pgen_rms_providers`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `pgen_rms_providers` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(255) NOT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `pgen_rms_uploads`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `pgen_rms_uploads` (
+  `id` INT NOT NULL ,
+  `clientId` INT NOT NULL ,
+  `rmsProviderId` INT NOT NULL ,
+  `fileName` VARCHAR(255) NOT NULL ,
+  `validRowCount` INT NOT NULL ,
+  `invalidRowCount` INT NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `rms_uploads_ibfk_1_idx` (`clientId` ASC) ,
+  INDEX `rms_uploads_ibfk_2_idx` (`rmsProviderId` ASC) ,
+  CONSTRAINT `rms_uploads_ibfk_1`
+    FOREIGN KEY (`clientId` )
+    REFERENCES `clients` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `rms_uploads_ibfk_2`
+    FOREIGN KEY (`rmsProviderId` )
+    REFERENCES `pgen_rms_providers` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `users`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `users` (
@@ -90,47 +126,6 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 13
 DEFAULT CHARACTER SET = latin1
 COMMENT = 'The users table stores basic information on a user';
-
-
--- -----------------------------------------------------
--- Table `pgen_reports`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_reports` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `userId` INT(11) NOT NULL ,
-  `clientId` INT NOT NULL ,
-  `userPricingOverride` TINYINT(4) NULL DEFAULT '0' ,
-  `reportStage` VARCHAR(255) NULL ,
-  `dateCreated` DATETIME NOT NULL ,
-  `lastModified` DATETIME NOT NULL ,
-  `reportDate` DATETIME NULL DEFAULT NULL ,
-  `devicesModified` TINYINT(4) NULL DEFAULT '0' ,
-  PRIMARY KEY (`id`) ,
-  INDEX `user_id` (`userId` ASC) ,
-  INDEX `proposalgenerator_reports_ibfk_3_idx` (`clientId` ASC) ,
-  CONSTRAINT `proposalgenerator_reports_ibfk_1`
-    FOREIGN KEY (`userId` )
-    REFERENCES `users` (`id` )
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT,
-  CONSTRAINT `proposalgenerator_reports_ibfk_3`
-    FOREIGN KEY (`clientId` )
-    REFERENCES `clients` (`id` )
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
-AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `pgen_rms_providers`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_rms_providers` (
-  `id` INT NOT NULL AUTO_INCREMENT ,
-  `name` VARCHAR(255) NOT NULL ,
-  PRIMARY KEY (`id`) )
-ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -257,7 +252,7 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_device_instances` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `reportId` INT(11) NOT NULL ,
+  `rmsUploadId` INT(11) NOT NULL ,
   `rmsUploadRowId` INT(11) NOT NULL ,
   `ipAddress` VARCHAR(255) NOT NULL DEFAULT '' ,
   `isExcluded` TINYINT(4) NOT NULL DEFAULT 0 ,
@@ -266,14 +261,14 @@ CREATE  TABLE IF NOT EXISTS `pgen_device_instances` (
   `serialNumber` VARCHAR(255) NOT NULL DEFAULT '' ,
   `useUserData` TINYINT(4) NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`id`) ,
-  INDEX `report_id` (`reportId` ASC) ,
-  INDEX `upload_data_collector_id` (`rmsUploadRowId` ASC) ,
-  CONSTRAINT `proposalgenerator_device_instances_ibfk_1`
-    FOREIGN KEY (`reportId` )
-    REFERENCES `pgen_reports` (`id` )
+  INDEX `rmsUploadRowId` (`rmsUploadRowId` ASC) ,
+  INDEX `device_instances_ibfk_1_idx` (`rmsUploadId` ASC) ,
+  CONSTRAINT `device_instances_ibfk_1`
+    FOREIGN KEY (`rmsUploadId` )
+    REFERENCES `pgen_rms_uploads` (`id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `proposalgenerator_device_instances_ibfk_3`
+  CONSTRAINT `device_instances_ibfk_2`
     FOREIGN KEY (`rmsUploadRowId` )
     REFERENCES `pgen_rms_upload_rows` (`id` )
     ON DELETE CASCADE
@@ -506,6 +501,44 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
+-- Table `assessments`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `assessments` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `userId` INT(11) NOT NULL ,
+  `clientId` INT NOT NULL ,
+  `rmsUploadId` INT(11) NULL ,
+  `userPricingOverride` TINYINT(4) NULL DEFAULT '0' ,
+  `stepName` VARCHAR(255) NULL ,
+  `dateCreated` DATETIME NOT NULL ,
+  `lastModified` DATETIME NOT NULL ,
+  `reportDate` DATETIME NULL DEFAULT NULL ,
+  `devicesModified` TINYINT(4) NULL DEFAULT '0' ,
+  PRIMARY KEY (`id`) ,
+  INDEX `user_id` (`userId` ASC) ,
+  INDEX `proposalgenerator_reports_ibfk_3_idx` (`clientId` ASC) ,
+  INDEX `assessments_ibfk_3_idx` (`rmsUploadId` ASC) ,
+  CONSTRAINT `assessments_ibfk_1`
+    FOREIGN KEY (`userId` )
+    REFERENCES `users` (`id` )
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
+  CONSTRAINT `assessments_ibfk_2`
+    FOREIGN KEY (`clientId` )
+    REFERENCES `clients` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `assessments_ibfk_3`
+    FOREIGN KEY (`rmsUploadId` )
+    REFERENCES `pgen_rms_uploads` (`id` )
+    ON DELETE SET NULL
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
 -- Table `pgen_report_settings`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_report_settings` (
@@ -553,7 +586,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_report_report_settings` (
   INDEX `report_setting_id` (`reportSettingId` ASC) ,
   CONSTRAINT `proposalgenerator_report_report_settings_ibfk_1`
     FOREIGN KEY (`reportId` )
-    REFERENCES `pgen_reports` (`id` )
+    REFERENCES `assessments` (`id` )
     ON DELETE RESTRICT
     ON UPDATE RESTRICT,
   CONSTRAINT `proposalgenerator_report_report_settings_ibfk_2`
@@ -588,7 +621,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_report_survey_settings` (
   INDEX `survey_setting_id` (`surveySettingId` ASC) ,
   CONSTRAINT `proposalgenerator_report_survey_settings_ibfk_1`
     FOREIGN KEY (`reportId` )
-    REFERENCES `pgen_reports` (`id` ),
+    REFERENCES `assessments` (`id` ),
   CONSTRAINT `proposalgenerator_report_survey_settings_ibfk_2`
     FOREIGN KEY (`surveySettingId` )
     REFERENCES `pgen_survey_settings` (`id` ))
@@ -1394,7 +1427,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_rms_excluded_rows` (
   `id` INT NOT NULL AUTO_INCREMENT ,
-  `reportId` INT NOT NULL ,
+  `rmsUploadId` INT NOT NULL ,
   `rmsProviderId` INT NULL ,
   `rmsModelId` INT NULL ,
   `serialNumber` VARCHAR(255) NULL ,
@@ -1404,10 +1437,10 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_excluded_rows` (
   `reason` VARCHAR(255) NOT NULL ,
   `csvLineNumber` INT(11) NOT NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `rms_e_idx` (`reportId` ASC) ,
-  CONSTRAINT `pgen_rms_excluded_rows_ibfk_1`
-    FOREIGN KEY (`reportId` )
-    REFERENCES `pgen_reports` (`id` )
+  INDEX `rms_excluded_rows_ibfk_1_idx` (`rmsUploadId` ASC) ,
+  CONSTRAINT `rms_excluded_rows_ibfk_1`
+    FOREIGN KEY (`rmsUploadId` )
+    REFERENCES `pgen_rms_uploads` (`id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
@@ -1454,405 +1487,34 @@ CREATE  TABLE IF NOT EXISTS `assessment_surveys` (
   PRIMARY KEY (`reportId`) ,
   CONSTRAINT `assessment_surveys_ibfk_1`
     FOREIGN KEY (`reportId` )
-    REFERENCES `pgen_reports` (`id` )
+    REFERENCES `assessments` (`id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Placeholder table for view `pgen_map_device_instances`
+-- Table `user_sessions`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `pgen_map_device_instances` (`rmsProviderId` INT, `rmsModelId` INT, `manufacturer` INT, `modelName` INT, `useUserData` INT, `reportId` INT, `masterDeviceId` INT, `isMapped` INT, `mappedManufacturer` INT, `mappedModelName` INT, `deviceCount` INT, `deviceInstanceIds` INT);
+CREATE  TABLE IF NOT EXISTS `user_sessions` (
+  `sessionId` CHAR(32) NOT NULL ,
+  `userId` INT NOT NULL ,
+  INDEX `user_sessions_ibfk_1` (`userId` ASC) ,
+  UNIQUE INDEX `sessionId_UNIQUE` (`sessionId` ASC) ,
+  UNIQUE INDEX `userId_UNIQUE` (`userId` ASC) ,
+  PRIMARY KEY (`sessionId`) ,
+  CONSTRAINT `user_sessions_ibfk_1`
+    FOREIGN KEY (`userId` )
+    REFERENCES `users` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `user_sessions_ibfk_2`
+    FOREIGN KEY (`sessionId` )
+    REFERENCES `sessions` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
 
--- -----------------------------------------------------
--- procedure clone_report
--- -----------------------------------------------------
-
-DELIMITER $$
-CREATE PROCEDURE `clone_report`(IN reportToBeCloned INT(11), IN userToBeClonedTo INT(11))
-BEGIN
-	declare newdiid integer(11);
-	declare rmsid integer(11);
-	declare finished boolean default false;
-	
-	-- Cursor
-	declare uploadcursor cursor for
-		SELECT `rmsUploadRowId` FROM pgen_device_instances WHERE `reportId` = reportToBeCloned;
-	declare continue handler for not found set finished = true;
-	SET @reportIdToClone = reportToBeCloned;
-	SET @userIdToCloneTo = userToBeClonedTo;
-	
-	-- Clone report
-	INSERT INTO pgen_reports (
-		`userId`, 
-		`customerCompanyName`,
-		`userPricingOverride`,
-		`reportStage`,
-		`dateCreated`,
-		`lastModified`,
-		`reportDate`,
-		`devicesModified`
-	) 
-	SELECT 
-		@userIdToCloneTo, 
-		`customerCompanyName`,
-		`userPricingOverride`,
-		`reportStage`,
-		`dateCreated`,
-		`lastModified`,
-		`reportDate`,
-		`devicesModified`
-	FROM `pgen_reports`
-	WHERE `id` = @reportIdToClone;
-	
-	SET @newReportId = last_insert_id();
-	
-	-- Clones rms excluded rows WHERE `reportId` = reportid
-	INSERT INTO pgen_rms_excluded_rows (
-		`reportId`, 
-		`rmsProviderId`,
-		`rmsModelId`,
-		`serialNumber`,
-		`ipAddress`,
-		`modelName`,
-		`manufacturerName`,
-		`reason`,
-		`csvLineNumber`
-	)
-	SELECT
-		@newReportId,
-		`rmsProviderId`,
-		`rmsModelId`,
-		`serialNumber`,
-		`ipAddress`,
-		`modelName`,
-		`manufacturerName`,
-		`reason`,
-		`csvLineNumber`
-	FROM `pgen_rms_excluded_rows`
-	WHERE `reportId` = @reportIdToClone;
-	
-	-- Start the loop up
-	open uploadcursor;
-	curloop: loop
-		fetch uploadcursor into rmsid;
-		if finished then
-			close uploadcursor;
-			set finished = false;
-			leave curloop;
-		end if;
-		-- Clone upload rows WHERE `id` = the fetched id from the cursor(deviceinstanceid)
-		INSERT INTO pgen_rms_upload_rows (
-			`id`,
-			`rmsProviderId`,
-			`rmsModelId`,
-			`hasCompleteInformation`,
-			`modelName`,
-			`manufacturer`,
-      `manufacturerId`,
-			`cost`,
-			`dutyCycle`,
-			`isColor`,
-			`isCopier`,
-			`isFax`,
-			`isLeased`,
-			`isScanner`,
-			`launchDate`,
-			`leasedTonerYield`,
-			`ppmBlack`,
-			`ppmColor`,
-			`serviceCostPerPage`,
-			`tonerConfigId`,
-			`wattsPowerNormal`,
-			`wattsPowerIdle`,
-			`oemBlackTonerSku`,
-			`oemBlackTonerYield`,
-			`oemBlackTonerCost`,
-			`oemCyanTonerSku`,
-			`oemCyanTonerYield`,
-			`oemCyanTonerCost`,
-			`oemMagentaTonerSku`,
-			`oemMagentaTonerYield`,
-			`oemMagentaTonerCost`,
-			`oemYellowTonerSku`,
-			`oemYellowTonerYield`,
-			`oemYellowTonerCost`,
-			`oemThreeColorTonerSku`,
-			`oemThreeColorTonerYield`,
-			`oemThreeColorTonerCost`,
-			`oemFourColorTonerSku`,
-			`oemFourColorTonerYield`,
-			`oemFourColorTonerCost`,
-      `compBlackTonerSku`,
-			`compBlackTonerYield`,
-			`compBlackTonerCost`,
-			`compCyanTonerSku`,
-			`compCyanTonerYield`,
-			`compCyanTonerCost`,
-			`compMagentaTonerSku`,
-			`compMagentaTonerYield`,
-			`compMagentaTonerCost`,
-			`compYellowTonerSku`,
-			`compYellowTonerYield`,
-			`compYellowTonerCost`,
-			`compThreeColorTonerSku`,
-			`compThreeColorTonerYield`,
-			`compThreeColorTonerCost`,
-			`compFourColorTonerSku`,
-			`compFourColorTonerYield`,
-			`compFourColorTonerCost`,
-      `tonerLevelBlack`,
-			`tonerLevelCyan`,
-			`tonerLevelMagenta`,
-			`tonerLevelYellow`
-		)
-		SELECT 
-			0,
-			`rmsProviderId`,
-			`rmsModelId`,
-			`hasCompleteInformation`,
-			`modelName`,
-			`manufacturer`,
-      `manufacturerId`,
-			`cost`,
-			`dutyCycle`,
-			`isColor`,
-			`isCopier`,
-			`isFax`,
-			`isLeased`,
-			`isScanner`,
-			`launchDate`,
-			`leasedTonerYield`,
-			`ppmBlack`,
-			`ppmColor`,
-			`serviceCostPerPage`,
-			`tonerConfigId`,
-			`wattsPowerNormal`,
-			`wattsPowerIdle`,
-			`oemBlackTonerSku`,
-			`oemBlackTonerYield`,
-			`oemBlackTonerCost`,
-			`oemCyanTonerSku`,
-			`oemCyanTonerYield`,
-			`oemCyanTonerCost`,
-			`oemMagentaTonerSku`,
-			`oemMagentaTonerYield`,
-			`oemMagentaTonerCost`,
-			`oemYellowTonerSku`,
-			`oemYellowTonerYield`,
-			`oemYellowTonerCost`,
-			`oemThreeColorTonerSku`,
-			`oemThreeColorTonerYield`,
-			`oemThreeColorTonerCost`,
-			`oemFourColorTonerSku`,
-			`oemFourColorTonerYield`,
-			`oemFourColorTonerCost`,
-      `compBlackTonerSku`,
-			`compBlackTonerYield`,
-			`compBlackTonerCost`,
-			`compCyanTonerSku`,
-			`compCyanTonerYield`,
-			`compCyanTonerCost`,
-			`compMagentaTonerSku`,
-			`compMagentaTonerYield`,
-			`compMagentaTonerCost`,
-			`compYellowTonerSku`,
-			`compYellowTonerYield`,
-			`compYellowTonerCost`,
-			`compThreeColorTonerSku`,
-			`compThreeColorTonerYield`,
-			`compThreeColorTonerCost`,
-			`compFourColorTonerSku`,
-			`compFourColorTonerYield`,
-			`compFourColorTonerCost`,
-      `tonerLevelBlack`,
-			`tonerLevelCyan`,
-			`tonerLevelMagenta`,
-			`tonerLevelYellow`
-		FROM pgen_rms_upload_rows
-		WHERE `id` = rmsid;
-		-- Gets the new upload row id(rmsUploadRows)
-		SET @newrmsid = last_insert_id();
-			
-		-- Clone device instances, uses new reportid and new rmsid
-		INSERT INTO pgen_device_instances (
-			`reportId`,
-			`rmsUploadRowId`,
-			`ipAddress`,
-			`isExcluded`,
-			`mpsDiscoveryDate`,
-			`reportsTonerLevels`,
-			`serialNumber`,
-			`useUserData`
-		) SELECT 
-			@newReportId,
-			@newrmsid,
-			`ipAddress`,
-			`isExcluded`,
-			`mpsDiscoveryDate`,
-			`reportsTonerLevels`,
-			`serialNumber`,
-			`useUserData`
-		FROM pgen_device_instances
-		WHERE `reportId` = @reportIdToClone AND rmsUploadRowId = rmsid;
-			
-		-- The new Device Instance Id
-		SET newdiid = last_insert_id();
-		-- Get the current Device Instance id we are looping through
-		SET @diid = (SELECT id from `pgen_device_instances` WHERE `reportId` = @reportIdToClone and `rmsUploadRowId` = rmsid);
-			
-		-- Clone Device Instance Meters
-		INSERT INTO `pgen_device_instance_meters` (
-			`deviceInstanceId`,
-			`meterType`,
-			`startMeter`,
-			`endMeter`,
-			`monitorStartDate`,
-			`monitorEndDate`
-		) 
-		SELECT
-			newdiid,
-			`meterType`,
-			`startMeter`,
-			`endMeter`,
-			`monitorStartDate`,
-			`monitorEndDate`
-		FROM `pgen_device_instance_meters`
-		WHERE `deviceInstanceId` = @diid;
-			
-			-- Clone Device Instance Master Devices
-		INSERT INTO `pgen_device_instance_master_devices` (
-			`deviceInstanceId`,
-			`masterDeviceId`
-		)
-		SELECT
-			newdiid,
-			`masterDeviceId`
-		FROM `pgen_device_instance_master_devices`
-		WHERE `deviceInstanceId` = @diid;
-			
-		-- Clone Device Instance Replacement Master Devices
-		INSERT INTO device_instance_replacement_master_devices (
-			`deviceInstanceId`,
-			`masterDeviceId`
-		)
-		SELECT
-			newdiid,
-			`masterDeviceId`
-		FROM `device_instance_replacement_master_devices`
-		WHERE `deviceInstanceId` = @diid;
-		
-	end loop curloop;
-
-	SET @reportSettingIdToClone = (Select `reportSettingId` FROM `pgen_report_report_settings` WHERE `reportId` = @reportIdToClone);
-	
-	INSERT INTO pgen_report_settings (
-		`actualPageCoverageMono`,
-		`actualPageCoverageColor`,
-		`serviceCostPerPage`,
-		`adminCostPerPage`,
-		`assessmentReportMargin`,
-		`grossMarginReportMargin`,
-		`monthlyLeasePayment`,
-		`defaultPrinterCost`,
-		`leasedBwCostPerPage`,
-		`leasedColorCostPerPage`,
-		`mpsBwCostPerPage`,
-		`mpsColorCostPerPage`,
-		`kilowattsPerHour`,
-		`assessmentPricingConfigId`,
-		`grossMarginPricingConfigId`,
-		`reportDate`,
-		`targetMonochrome`,
-		`targetColor`,
-		`costThreshold`
-	)
-	SELECT 
-		`actualPageCoverageMono`,
-		`actualPageCoverageColor`,
-		`serviceCostPerPage`,
-		`adminCostPerPage`,
-		`assessmentReportMargin`,
-		`grossMarginReportMargin`,
-		`monthlyLeasePayment`,
-		`defaultPrinterCost`,
-		`leasedBwCostPerPage`,
-		`leasedColorCostPerPage`,
-		`mpsBwCostPerPage`,
-		`mpsColorCostPerPage`,
-		`kilowattsPerHour`,
-		`assessmentPricingConfigId`,
-		`grossMarginPricingConfigId`,
-		`reportDate`,
-		`targetMonochrome`,
-		`targetColor`,
-		`costThreshold`
-	FROM `pgen_report_settings`
-	WHERE `id` = @reportSettingIdToClone;
-
-	SET @newreportsettingid = last_insert_id();
-	
-	INSERT INTO `pgen_report_report_settings` (
-		`reportId`,
-		`reportSettingId`
-	)
-	SELECT 
-		@newReportId,
-		@newreportsettingid
-	FROM `pgen_report_report_settings`
-	WHERE `reportId` = @reportIdToClone;
-	
-	SET @surveySettingIdToClone = (Select `surveySettingId` FROM `pgen_report_survey_settings` WHERE `reportId` = @reportIdToClone);
-	INSERT INTO pgen_survey_settings (
-		`pageCoverageMono`,
-		`pageCoverageColor`
-		)
-	SELECT
-		`pageCoverageMono`,
-		`pageCoverageColor`
-	FROM `pgen_survey_settings`
-	WHERE `id` = @surveySettingIdToClone;
-	
-	SET @newsurveysettingid = last_insert_id();
-	INSERT INTO `pgen_report_survey_settings` (
-		`reportId`,
-		`surveySettingId`
-	)
-	SELECT 
-		@newReportId,
-		@newsurveysettingid
-	FROM `pgen_report_survey_settings`
-	WHERE `reportId` = @reportIdToClone;
-			
-END$$
-
--- -----------------------------------------------------
--- View `pgen_map_device_instances`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `pgen_map_device_instances`;
-CREATE  OR REPLACE VIEW `pgen_map_device_instances` AS
-SELECT
-pgen_rms_upload_rows.rmsProviderId,
-pgen_rms_upload_rows.rmsModelId,
-pgen_rms_upload_rows.manufacturer,
-pgen_rms_upload_rows.modelName,
-pgen_device_instances.useUserData,
-pgen_device_instances.reportId,
-pgen_device_instance_master_devices.masterDeviceId,
-pgen_device_instance_master_devices.masterDeviceId IS NOT NULL AS isMapped,
-manufacturers.displayname mappedManufacturer,
-pgen_master_devices.modelName AS mappedModelName,
-COUNT(*) as deviceCount,
-GROUP_CONCAT(pgen_device_instances.id) as deviceInstanceIds
-FROM pgen_device_instances
-
-JOIN pgen_rms_upload_rows ON pgen_device_instances.rmsUploadRowId = pgen_rms_upload_rows.id
-LEFT JOIN pgen_device_instance_master_devices ON pgen_device_instance_master_devices.deviceInstanceId = pgen_device_instances.id
-LEFT JOIN pgen_master_devices ON pgen_device_instance_master_devices.masterDeviceId = pgen_master_devices.id
-LEFT JOIN manufacturers ON pgen_master_devices.manufacturerId = manufacturers.id
-
-GROUP BY CONCAT(pgen_rms_upload_rows.manufacturer, " ", pgen_rms_upload_rows.modelName);
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

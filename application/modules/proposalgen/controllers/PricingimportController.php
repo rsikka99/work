@@ -141,7 +141,7 @@ class Proposalgen_PricingimportController extends Zend_Controller_Action
                 Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->delete("TRUE");
                 Proposalgen_Model_Mapper_MasterDevice::getInstance()->delete("TRUE");
                 Proposalgen_Model_Mapper_Manufacturer::getInstance()->delete("TRUE");
-                Proposalgen_Model_Mapper_Report::getInstance()->delete("TRUE");
+                Proposalgen_Model_Mapper_Assessment::getInstance()->delete("TRUE");
 
                 $manufacturers = array();
                 $globalToners  = array();

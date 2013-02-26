@@ -40,7 +40,7 @@ class Proposalgen_Form_SelectReport extends EasyBib_Form
 
         $select = new Zend_Form_Element_Select('reportId');
         //$select->setLabel("Please select a report:");
-        /* @var $report Proposalgen_Model_Report */
+        /* @var $report Proposalgen_Model_Assessment */
         foreach ( $this->_reports as $report )
         {
             $reportName = $report-> getClient()->companyName;

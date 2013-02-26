@@ -7,12 +7,14 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     public function indexAction ()
     {
         // Mark the step we're on as active
-        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FLEETDATA_UPLOAD);
+        $this->setActiveReportStep(Proposalgen_Model_Assessment_Step::STEP_FLEETDATA_UPLOAD);
 
         $report               = $this->getReport();
         $form                 = new Proposalgen_Form_ImportRmsCsv(array('csv'), "1B", "8MB");
         $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
         $rmsExcludedRowMapper = Proposalgen_Model_Mapper_Rms_Excluded_Row::getInstance();
+
+        $rmsUpload = $report->getRmsUpload();
 
         if ($this->getRequest()->isPost())
         {
@@ -31,6 +33,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     $filename = $form->getUploadedFilename();
                     if ($filename !== false)
                     {
+
                         /*
                          * Process the csv file
                          */
@@ -71,11 +74,24 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 $deviceInstanceMeterMapper = Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance();
                                 $rmsDeviceMapper           = Proposalgen_Model_Mapper_Rms_Device::getInstance();
 
-                                /*
-                                 * Delete all previously uploaded lines
-                                 */
-                                $rmsUploadRowMapper->deleteAllForReport($report->id);
-                                $rmsExcludedRowMapper->deleteAllForReport($report->id);
+
+                                if ($rmsUpload instanceof Proposalgen_Model_Rms_Upload)
+                                {
+                                    /**
+                                     * Delete all previously uploaded lines
+                                     */
+                                    $rmsUploadRowMapper->deleteAllForRmsUpload($rmsUpload->id);
+                                    $rmsExcludedRowMapper->deleteAllForRmsUpload($report->id);
+
+                                    Proposalgen_Model_Mapper_Rms_Upload::getInstance()->delete($rmsUpload);
+                                }
+
+                                $rmsUpload                  = new Proposalgen_Model_Rms_Upload();
+                                $rmsUpload->fileName        = basename($filename);
+                                $rmsUpload->clientId        = $report->clientId;
+                                $rmsUpload->rmsProviderId   = $uploadProviderId;
+                                $rmsUpload->invalidRowCount = 0;
+                                $rmsUpload->validRowCount   = 0;
 
 
                                 /*
@@ -84,6 +100,17 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 $processCsvMessage = $uploadCsvService->processCsvFile($filename);
                                 if ($processCsvMessage === true)
                                 {
+
+                                    /**
+                                     * Save our upload object
+                                     */
+                                    $rmsUpload->invalidRowCount = count($uploadCsvService->invalidCsvLines);
+                                    $rmsUpload->validRowCount   = count($uploadCsvService->validCsvLines);
+                                    Proposalgen_Model_Mapper_Rms_Upload::getInstance()->insert($rmsUpload);
+
+                                    $report->rmsUploadId = $rmsUpload->id;
+                                    $report->setRmsUpload($rmsUpload);
+
                                     /**
                                      * Valid Lines
                                      */
@@ -133,7 +160,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                          * Save Device Instance
                                          */
                                         $deviceInstance                 = new Proposalgen_Model_DeviceInstance($lineArray);
-                                        $deviceInstance->reportId       = $report->id;
+                                        $deviceInstance->rmsUploadId    = $rmsUpload->id;
                                         $deviceInstance->rmsUploadRowId = $rmsUploadRow->id;
                                         $deviceInstanceMapper->insert($deviceInstance);
 
@@ -237,7 +264,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
                                         // Set values that have different names than in $line
                                         $rmsExcludedRow->manufacturerName = $line->manufacturer;
-                                        $rmsExcludedRow->reportId         = $report->id;
+                                        $rmsExcludedRow->rmsUploadId      = $rmsUpload->id;
                                         $rmsExcludedRow->reason           = $line->validationErrorMessage;
 
                                         // Set values that are none existent in $line
@@ -302,7 +329,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             }
             else if (isset($values ["saveAndContinue"]))
             {
-                $count = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->countRowsForReport($report->id);
+                $count = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->countRowsForRmsUpload($report->getRmsUpload()->id);
                 if ($count < 2)
                 {
                     $this->_helper->flashMessenger(array(
@@ -319,11 +346,9 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
         $this->view->form = $form;
 
-        $this->view->deviceInstanceCount = $deviceInstanceMapper->countRowsForReport($report->id);
-        $this->view->rmsExcludedRowCount = $rmsExcludedRowMapper->countRowsForReport($report->id);
-        $this->view->hasPreviousUpload   = ($this->view->deviceInstanceCount > 0 || $this->view->rmsExcludedRowCount > 0);
+        $this->view->rmsUpload = $rmsUpload;
 
-        $navigationButtons = ($this->view->hasPreviousUpload) ? Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT : Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK;
+        $navigationButtons          = ($this->view->hasPreviousUpload) ? Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT : Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK;
         $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation($navigationButtons);
 
     }
@@ -334,7 +359,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     public function mappingAction ()
     {
         // Mark the step we're on as active
-        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FLEETDATA_MAPDEVICES);
+        $this->setActiveReportStep(Proposalgen_Model_Assessment_Step::STEP_FLEETDATA_MAPDEVICES);
 
         if ($this->getRequest()->isPost())
         {
@@ -385,7 +410,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
         if ($jqGrid->sortingIsValid())
         {
-            $jqGrid->setRecordCount($mapDeviceInstanceMapper->fetchAllForReport($this->getReport()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), null, null, true));
+            $jqGrid->setRecordCount($mapDeviceInstanceMapper->fetchAllForRmsUpload($this->getReport()->getRmsUpload()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), null, null, true));
 
             // Validate current page number since we don't want to be out of bounds
             if ($jqGrid->getCurrentPage() < 1)
@@ -399,7 +424,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
             // Return a small subset of the results based on the jqGrid parameters
             $startRecord = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
-            $jqGrid->setRows($mapDeviceInstanceMapper->fetchAllForReport($this->getReport()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord));
+            $jqGrid->setRows($mapDeviceInstanceMapper->fetchAllForRmsUpload($this->getReport()->getRmsUpload()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord));
 
             // Send back jqGrid json data
             $this->_helper->json($jqGrid->createPagerResponseArray());
@@ -501,7 +526,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     public function summaryAction ()
     {
         // Mark the step we're on as active
-        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FLEETDATA_SUMMARY);
+        $this->setActiveReportStep(Proposalgen_Model_Assessment_Step::STEP_FLEETDATA_SUMMARY);
 
         if ($this->getRequest()->isPost())
         {
@@ -552,7 +577,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
         if ($jqGrid->sortingIsValid())
         {
-            $jqGrid->setRecordCount($deviceInstanceMapper->getMappedDeviceInstances($this->getReport()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), null, null, true));
+            $jqGrid->setRecordCount($deviceInstanceMapper->getMappedDeviceInstances($this->getReport()->getRmsUpload()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), null, null, true));
 
             // Validate current page number since we don't want to be out of bounds
             if ($jqGrid->getCurrentPage() < 1)
@@ -566,7 +591,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
             // Return a small subset of the results based on the jqGrid parameters
             $startRecord     = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
-            $deviceInstances = $deviceInstanceMapper->getMappedDeviceInstances($this->getReport()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord);
+            $deviceInstances = $deviceInstanceMapper->getMappedDeviceInstances($this->getReport()->getRmsUpload()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord);
 
             $rows = array();
             foreach ($deviceInstances as $deviceInstance)
@@ -613,7 +638,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     public function reportsettingsAction ()
     {
         // Mark the step we're on as active
-        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_REPORTSETTINGS);
+        $this->setActiveReportStep(Proposalgen_Model_Assessment_Step::STEP_REPORTSETTINGS);
 
         $reportSettingsService = new Proposalgen_Service_ReportSettings($this->getReport()->id, $this->_userId);
 

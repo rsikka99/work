@@ -19,7 +19,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
             {
                 $reportSteps = $this->getReportSteps();
                 $lastStep    = null;
-                /* @var $step Proposalgen_Model_Report_Step */
+                /* @var $step Proposalgen_Model_Assessment_Step */
                 foreach ($reportSteps as $step)
                 {
                     if (!$step->canAccess)
@@ -51,7 +51,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
      */
     public function surveyAction ()
     {
-        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_SURVEY);
+        $this->setActiveReportStep(Proposalgen_Model_Assessment_Step::STEP_SURVEY);
 
         /**
          * Fetch Survey Settings

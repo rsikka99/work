@@ -11,7 +11,7 @@ class Proposalgen_Report_PrintingdevicelistController extends Proposalgen_Librar
     public function indexAction ()
     {
         // Mark the step we're on as active
-        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FINISHED);
+        $this->setActiveReportStep(Proposalgen_Model_Assessment_Step::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();

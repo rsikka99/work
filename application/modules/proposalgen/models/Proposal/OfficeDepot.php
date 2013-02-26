@@ -135,9 +135,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     protected $UniquePurchasedDeviceList;
 
     /**
-     * @param Proposalgen_Model_Report $report
+     * @param Proposalgen_Model_Assessment $report
      */
-    public function __construct (Proposalgen_Model_Report $report)
+    public function __construct (Proposalgen_Model_Assessment $report)
     {
         parent::__construct($report);
         $this->DealerCompany = "Office Depot Inc.";

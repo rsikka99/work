@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Model_Report_Step extends My_Model_Abstract
+class Proposalgen_Model_Assessment_Step extends My_Model_Abstract
 {
     const STEP_SURVEY               = 'survey';
     const STEP_FLEETDATA_UPLOAD     = 'upload';
@@ -55,14 +55,14 @@ class Proposalgen_Model_Report_Step extends My_Model_Abstract
     );
 
     /**
-     * @var Proposalgen_Model_Report_Step[]
+     * @var Proposalgen_Model_Assessment_Step[]
      */
     private static $steps;
 
     /**
      * Gets the report steps
      *
-     * @return Proposalgen_Model_Report_Step[]
+     * @return Proposalgen_Model_Assessment_Step[]
      */
     public static function getSteps ()
     {
@@ -78,11 +78,11 @@ class Proposalgen_Model_Report_Step extends My_Model_Abstract
                 $previousStep = $currentStep;
 
                 // Create our new step
-                $currentStep            = new Proposalgen_Model_Report_Step($step);
+                $currentStep            = new Proposalgen_Model_Assessment_Step($step);
                 $currentStep->enumValue = $stepName;
 
                 // Set the previous step of our current step
-                if ($previousStep instanceof Proposalgen_Model_Report_Step)
+                if ($previousStep instanceof Proposalgen_Model_Assessment_Step)
                 {
                     $currentStep->previousStep = $previousStep;
 
@@ -100,14 +100,14 @@ class Proposalgen_Model_Report_Step extends My_Model_Abstract
     /**
      * The previous step in a proposal
      *
-     * @var Proposalgen_Model_Report_Step
+     * @var Proposalgen_Model_Assessment_Step
      */
     public $previousStep = null;
 
     /**
      * The next step in a proposal
      *
-     * @var Proposalgen_Model_Report_Step
+     * @var Proposalgen_Model_Assessment_Step
      */
     public $nextStep = null;
 
@@ -244,7 +244,7 @@ class Proposalgen_Model_Report_Step extends My_Model_Abstract
     public static function updateAccessibleSteps ($steps, $stepName)
     {
         $canAccess = true;
-        /* @var $step Proposalgen_Model_Report_Step */
+        /* @var $step Proposalgen_Model_Assessment_Step */
         foreach ($steps as $step)
         {
             $step->canAccess = $canAccess;

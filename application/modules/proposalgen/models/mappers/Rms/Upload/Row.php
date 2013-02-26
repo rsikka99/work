@@ -230,11 +230,11 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
     /**
      * Deletes all rows related to a report
      *
-     * @param int $reportId The report id
+     * @param int $rmsUploadId The report id
      *
      * @return int The number of rows  deleted
      */
-    public function deleteAllForReport ($reportId)
+    public function deleteAllForRmsUpload ($rmsUploadId)
     {
         $deviceInstanceMapper    = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
         $rmsUploadRowTableName   = $this->getTableName();
@@ -243,9 +243,9 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
         $sql   = "
             DELETE {$rmsUploadRowTableName} FROM {$rmsUploadRowTableName}
             INNER JOIN {$deviceInstanceTableName} ON {$deviceInstanceTableName}.{$deviceInstanceMapper->col_rmsUploadRowId} = {$rmsUploadRowTableName}.{$this->col_id}
-            WHERE {$deviceInstanceTableName}.{$deviceInstanceMapper->col_reportId} = ?;
+            WHERE {$deviceInstanceTableName}.{$deviceInstanceMapper->col_rmsUploadId} = ?;
         ";
-        $query = $this->getDbTable()->getAdapter()->query($sql, $reportId);
+        $query = $this->getDbTable()->getAdapter()->query($sql, $rmsUploadId);
 
         return $query->execute();
     }

@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Model_Report extends My_Model_Abstract
+class Proposalgen_Model_Assessment extends My_Model_Abstract
 {
     /**
      * @var int
@@ -16,6 +16,12 @@ class Proposalgen_Model_Report extends My_Model_Abstract
      */
     public $clientId;
 
+
+    /**
+     * @var int
+     */
+    public $rmsUploadId;
+
     /**
      * @var int
      */
@@ -24,7 +30,7 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     /**
      * @var string
      */
-    public $reportStage;
+    public $stepName;
 
     /**
      * @var string
@@ -57,7 +63,7 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     /**
      * The report steps for this proposal
      *
-     * @var Proposalgen_Model_Report_Step
+     * @var Proposalgen_Model_Assessment_Step
      */
     protected $_reportSteps;
 
@@ -75,6 +81,11 @@ class Proposalgen_Model_Report extends My_Model_Abstract
      * @var Proposalgen_Model_Assessment_Survey
      */
     protected $_survey;
+
+    /**
+     * @var Proposalgen_Model_Rms_Upload
+     */
+    protected $_rmsUpload;
 
     /**
      * @param array $params An array of data to populate the model with
@@ -101,14 +112,19 @@ class Proposalgen_Model_Report extends My_Model_Abstract
             $this->clientId = $params->clientId;
         }
 
+        if (isset($params->rmsUploadId) && !is_null($params->rmsUploadId))
+        {
+            $this->rmsUploadId = $params->rmsUploadId;
+        }
+
         if (isset($params->userPricingOverride) && !is_null($params->userPricingOverride))
         {
             $this->userPricingOverride = $params->userPricingOverride;
         }
 
-        if (isset($params->reportStage) && !is_null($params->reportStage))
+        if (isset($params->stepName) && !is_null($params->stepName))
         {
-            $this->reportStage = $params->reportStage;
+            $this->stepName = $params->stepName;
         }
 
         if (isset($params->dateCreated) && !is_null($params->dateCreated))
@@ -142,8 +158,9 @@ class Proposalgen_Model_Report extends My_Model_Abstract
             "id"                  => $this->id,
             "userId"              => $this->userId,
             "clientId"            => $this->clientId,
+            "rmsUploadId"         => $this->rmsUploadId,
             "userPricingOverride" => $this->userPricingOverride,
-            "reportStage"         => $this->reportStage,
+            "stepName"            => $this->stepName,
             "dateCreated"         => $this->dateCreated,
             "lastModified"        => $this->lastModified,
             "reportDate"          => $this->reportDate,
@@ -171,7 +188,7 @@ class Proposalgen_Model_Report extends My_Model_Abstract
      *
      * @param Proposalgen_Model_Report_Setting $_reportSettings
      *
-     * @return \Proposalgen_Model_Report
+     * @return \Proposalgen_Model_Assessment
      */
     public function setReportSettings ($_reportSettings)
     {
@@ -183,16 +200,16 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     /**
      * Gets the report steps for this report
      *
-     * @return Proposalgen_Model_Report_Step
+     * @return Proposalgen_Model_Assessment_Step
      */
     public function getReportSteps ()
     {
         if (!isset($this->_reportSteps))
         {
-            $stage = ($this->reportStage) ? : Proposalgen_Model_Report_Step::STEP_SURVEY;
+            $stage = ($this->stepName) ? : Proposalgen_Model_Assessment_Step::STEP_SURVEY;
 
-            $this->_reportSteps = Proposalgen_Model_Report_Step::getSteps();
-            Proposalgen_Model_Report_Step::updateAccessibleSteps($this->_reportSteps, $stage);
+            $this->_reportSteps = Proposalgen_Model_Assessment_Step::getSteps();
+            Proposalgen_Model_Assessment_Step::updateAccessibleSteps($this->_reportSteps, $stage);
         }
 
         return $this->_reportSteps;
@@ -201,9 +218,9 @@ class Proposalgen_Model_Report extends My_Model_Abstract
     /**
      * Sets the report steps for this report
      *
-     * @param Proposalgen_Model_Report_Step $ReportSteps
+     * @param Proposalgen_Model_Assessment_Step $ReportSteps
      *
-     * @return \Proposalgen_Model_Report
+     * @return \Proposalgen_Model_Assessment
      */
     public function setReportSteps ($ReportSteps)
     {
@@ -257,7 +274,7 @@ class Proposalgen_Model_Report extends My_Model_Abstract
      *
      * @param Quotegen_Model_Client $client
      *
-     * @return Proposalgen_Model_Report
+     * @return Proposalgen_Model_Assessment
      */
     public function setClient ($client)
     {
@@ -286,11 +303,40 @@ class Proposalgen_Model_Report extends My_Model_Abstract
      *
      * @param Proposalgen_Model_Assessment_Survey $survey
      *
-     * @return Proposalgen_Model_Report
+     * @return Proposalgen_Model_Assessment
      */
     public function setSurvey ($survey)
     {
         $this->_survey = $survey;
+
+        return $this;
+    }
+
+    /**
+     * Gets the rms upload
+     *
+     * @return Proposalgen_Model_Rms_Upload
+     */
+    public function getRmsUpload ()
+    {
+        if (!isset($this->_rmsUpload))
+        {
+            $this->_rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($this->rmsUploadId);
+        }
+
+        return $this->_rmsUpload;
+    }
+
+    /**
+     * Sets the rms upload
+     *
+     * @param Proposalgen_Model_Rms_Upload $rmsUpload
+     *
+     * @return Proposalgen_Model_Assessment
+     */
+    public function setRmsUpload ($rmsUpload)
+    {
+        $this->_rmsUpload = $rmsUpload;
 
         return $this;
     }

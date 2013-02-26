@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
+class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
 {
     /*
      * Column name definitions. Define all columns up here and use them down below.
@@ -7,8 +7,9 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
     public $col_id = 'id';
     public $col_userId = 'userId';
     public $col_clientId = 'clientId';
+    public $col_rmsUploadId = 'rmsUploadId';
     public $col_dateCreated = 'dateCreated';
-    public $col_reportStage = 'reportStage';
+    public $col_stepName = 'stepName';
 
     /*
      * Mapper Definitions
@@ -19,12 +20,12 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Proposalgen_Model_DbTable_Report';
+    protected $_defaultDbTable = 'Proposalgen_Model_DbTable_Assessment';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Proposalgen_Model_Mapper_Report
+     * @return Proposalgen_Model_Mapper_Assessment
      */
     public static function getInstance ()
     {
@@ -35,7 +36,7 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
      * Saves an instance of Proposalgen_Model_Report to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Proposalgen_Model_Report
+     * @param $object Proposalgen_Model_Assessment
      *                The object to insert
      *
      * @return int The primary key of the new row
@@ -62,7 +63,7 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Proposalgen_Model_Report to the database.
      *
-     * @param $object     Proposalgen_Model_Report
+     * @param $object     Proposalgen_Model_Assessment
      *                    The report model to save to the database
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
@@ -100,7 +101,7 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
      */
     public function delete ($object)
     {
-        if ($object instanceof Proposalgen_Model_Report)
+        if ($object instanceof Proposalgen_Model_Assessment)
         {
             $whereClause = array(
                 "{$this->col_id} = ?" => $object->id
@@ -124,13 +125,13 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
      * @param $id int
      *            The id of the report to find
      *
-     * @return Proposalgen_Model_Report
+     * @return Proposalgen_Model_Assessment
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Proposalgen_Model_Report)
+        if ($result instanceof Proposalgen_Model_Assessment)
         {
             return $result;
         }
@@ -142,7 +143,7 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
             return false;
         }
         $row    = $result->current();
-        $object = new Proposalgen_Model_Report($row->toArray());
+        $object = new Proposalgen_Model_Assessment($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -160,7 +161,7 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL: A SQL OFFSET value.
      *
-     * @return Proposalgen_Model_Report
+     * @return Proposalgen_Model_Assessment
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -170,7 +171,7 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
             return false;
         }
 
-        $object = new Proposalgen_Model_Report($row->toArray());
+        $object = new Proposalgen_Model_Assessment($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -179,7 +180,7 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches all reports
+     * Fetches all assessments
      *
      * @param $where  string|array|Zend_Db_Table_Select
      *                OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
@@ -190,7 +191,7 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL: A SQL LIMIT offset.
      *
-     * @return Proposalgen_Model_Report[]
+     * @return Proposalgen_Model_Assessment[]
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -198,7 +199,7 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
         $entries   = array();
         foreach ($resultSet as $row)
         {
-            $object = new Proposalgen_Model_Report($row->toArray());
+            $object = new Proposalgen_Model_Assessment($row->toArray());
 
             // Save the object into the cache
             $this->saveItemToCache($object);
@@ -210,13 +211,13 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches all reports for a given user regardless of the report stage
+     * Fetches all assessments for a given user regardless of the report stage
      *
      * @param int $userId
      *
-     * @return Proposalgen_Model_Report[]
+     * @return Proposalgen_Model_Assessment[]
      */
-    public function fetchAllReportsForUser ($userId)
+    public function fetchAllAssessmentsForUser ($userId)
     {
         return $this->fetchAll(array(
                                     "{$this->col_userId} = ?" => $userId
@@ -224,74 +225,74 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches all finished reports for a given user
+     * Fetches all finished assessments for a given user
      *
      * @param int $userId
      *
-     * @return Proposalgen_Model_Report[]
+     * @return Proposalgen_Model_Assessment[]
      */
-    public function fetchAllFinishedReportsForUser ($userId)
+    public function fetchAllFinishedAssessmentsForUser ($userId)
     {
         return $this->fetchAll(array(
                                     "{$this->col_userId} = ?"      => $userId,
-                                    "{$this->col_reportStage} = ?" => Proposalgen_Model_Report_Step::STEP_FINISHED
+                                    "{$this->col_stepName} = ?" => Proposalgen_Model_Assessment_Step::STEP_FINISHED
                                ));
     }
 
     /**
-     * Fetches all unfinished reports for a given user
+     * Fetches all unfinished assessments for a given user
      *
      * @param int $userId
      *
-     * @return Proposalgen_Model_Report[]
+     * @return Proposalgen_Model_Assessment[]
      */
-    public function fetchAllUnfinishedReportsForUser ($userId)
+    public function fetchAllUnfinishedAssessmentsForUser ($userId)
     {
         return $this->fetchAll(array(
                                     "{$this->col_userId} = ?"       => $userId,
-                                    "{$this->col_reportStage} <> ?" => Proposalgen_Model_Report_Step::STEP_FINISHED
+                                    "{$this->col_stepName} <> ?" => Proposalgen_Model_Assessment_Step::STEP_FINISHED
                                ));
     }
 
 
     /**
-     * Fetches all unfinished reports for a given client
+     * Fetches all unfinished assessments for a given client
      *
      * @param int $clientId
      *
-     * @return Proposalgen_Model_Report[]
+     * @return Proposalgen_Model_Assessment[]
      */
-    public function fetchAllUnfinishedReportsForClient ($clientId)
+    public function fetchAllUnfinishedAssessmentsForClient ($clientId)
     {
         return $this->fetchAll(array(
                                     "{$this->col_userId} = ?"       => $clientId,
-                                    "{$this->col_reportStage} <> ?" => Proposalgen_Model_Report_Step::STEP_FINISHED
+                                    "{$this->col_stepName} <> ?" => Proposalgen_Model_Assessment_Step::STEP_FINISHED
                                ));
     }
 
     /**
-     * Fetches all reports for a given client
+     * Fetches all assessments for a given client
      *
      * @param int $clientId
      *
-     * @return Proposalgen_Model_Report[]
+     * @return Proposalgen_Model_Assessment[]
      */
-    public function fetchAllFinishedReportsForClient ($clientId)
+    public function fetchAllFinishedAssessmentsForClient ($clientId)
     {
         return $this->fetchAll(array(
                                     "{$this->col_userId} = ?"      => $clientId,
-                                    "{$this->col_reportStage} = ?" => Proposalgen_Model_Report_Step::STEP_FINISHED
+                                    "{$this->col_stepName} = ?" => Proposalgen_Model_Assessment_Step::STEP_FINISHED
                                ));
     }
 
     /**
-     * Fetches all reports for a given client
+     * Fetches all assessments for a given client
      *
      * @param int $clientId
      *
-     * @return Proposalgen_Model_Report[]
+     * @return Proposalgen_Model_Assessment[]
      */
-    public function fetchAllReportsForClient ($clientId)
+    public function fetchAllAssessmentsForClient ($clientId)
     {
         return $this->fetchAll(array("{$this->col_userId} = ?" => $clientId), "{$this->col_dateCreated} DESC", 100);
     }
@@ -309,7 +310,7 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
     }
 
     /**
-     * @param Proposalgen_Model_Report $object
+     * @param Proposalgen_Model_Assessment $object
      *
      * @return int
      */
@@ -319,19 +320,19 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
     }
 
     /**
-     * This finds all reports that have a master device using the $masterDeviceId and
+     * This finds all assessments that have a master device using the $masterDeviceId and
      * sets the deviceModified field to 1
      *
      * @param int $masterDeviceId
      *
      * @return bool
      */
-    public function setDevicesModifiedFlagOnReports ($masterDeviceId)
+    public function setDevicesModifiedFlagOnAssessments ($masterDeviceId)
     {
         $sql    = "
-    UPDATE pgen_reports AS rp
-	SET rp.devicesModified=1
-	WHERE rp.id IN (
+    UPDATE assessments
+	SET assessments.devicesModified=1
+	WHERE assessments.id IN (
 		SELECT di.reportId FROM pgen_device_instances AS di
         LEFT JOIN pgen_device_instance_master_devices AS dimd ON di.id = dimd.deviceInstanceId
         WHERE dimd.masterDeviceId = ?

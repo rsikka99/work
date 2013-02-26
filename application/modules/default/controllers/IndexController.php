@@ -48,7 +48,7 @@ class Default_IndexController extends Zend_Controller_Action
     {
         if ($this->_selectedClientId > 0)
         {
-            $availableReports                 = Proposalgen_Model_Mapper_Report::getInstance()->fetchAllReportsForClient($this->_selectedClientId);
+            $availableReports                 = Proposalgen_Model_Mapper_Assessment::getInstance()->fetchAllAssessmentsForClient($this->_selectedClientId);
             $this->view->availableAssessments = $availableReports;
 
             $availableQuotes             = Quotegen_Model_Mapper_Quote::getInstance()->fetchAllForClient($this->_selectedClientId);
