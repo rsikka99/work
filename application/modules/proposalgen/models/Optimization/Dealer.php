@@ -7,7 +7,7 @@ class Proposalgen_Model_Optimization_Dealer extends
      *
      * @var string []
      */
-    protected  $_graphs;
+    protected $_graphs;
 
     public function getGraphs ()
     {
@@ -18,10 +18,10 @@ class Proposalgen_Model_Optimization_Dealer extends
             /**
              * -- Optimization Chart Summary
              */
-            $highest           = (count($this->replaced) > count($this->kept)) ? count($this->replaced) : count($this->kept);
-            $highest           = (count($this->flagged) > $highest) ? count($this->flagged) : $highest;
-            $highest           = (count($this->retired) > $highest) ? count($this->retired) : $highest;
-            $barGraph          = new gchart\gBarChart(375, 250);
+            $highest  = (count($this->replaced) > count($this->kept)) ? count($this->replaced) : count($this->kept);
+            $highest  = (count($this->flagged) > $highest) ? count($this->flagged) : $highest;
+            $highest  = (count($this->retired) > $highest) ? count($this->retired) : $highest;
+            $barGraph = new gchart\gBarChart(375, 250);
             $barGraph->setTitle("Optimization Fleet Summary");
             $barGraph->setVisibleAxes(array('y'));
             $colors = array("009999", "1240AB", "FFAA00", "FF7400");
@@ -34,7 +34,7 @@ class Proposalgen_Model_Optimization_Dealer extends
             $barGraph->addDataSet(array(count($this->flagged)));
             $barGraph->addDataSet(array(count($this->retired)));
 
-            $barGraph->setLegend(array("Keep","Replaced","Flagged","Retired"));
+            $barGraph->setLegend(array("Keep", "Replaced", "Flagged", "Retired"));
             $barGraph->setLegendPosition("t");
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
@@ -48,9 +48,9 @@ class Proposalgen_Model_Optimization_Dealer extends
             /**
              * -- Other devices that are in the fleet
              */
-            $highest           = (count($this->excess) > count($this->excluded)) ? count($this->excess) : count($this->excluded);
-            $highest           = (count($this->leased) > $highest) ? count($this->leased) : $highest;
-            $barGraph          = new gchart\gBarChart(325, 250);
+            $highest  = (count($this->excess) > count($this->excluded)) ? count($this->excess) : count($this->excluded);
+            $highest  = (count($this->leased) > $highest) ? count($this->leased) : $highest;
+            $barGraph = new gchart\gBarChart(325, 250);
             $barGraph->setTitle("Other Devices");
             $barGraph->setVisibleAxes(array('y'));
             $colors = array("009999", "1240AB", "FFAA00");
@@ -62,7 +62,7 @@ class Proposalgen_Model_Optimization_Dealer extends
             $barGraph->addDataSet(array(count($this->excluded)));
             $barGraph->addDataSet(array(count($this->leased)));
 
-            $barGraph->setLegend(array("Excess","Excluded","Leased"));
+            $barGraph->setLegend(array("Excess", "Excluded", "Leased"));
             $barGraph->setLegendPosition("t");
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
@@ -73,6 +73,7 @@ class Proposalgen_Model_Optimization_Dealer extends
             $this->_graphs [] = $barGraph->getUrl();
 
         }
+
         return $this->_graphs;
     }
 }

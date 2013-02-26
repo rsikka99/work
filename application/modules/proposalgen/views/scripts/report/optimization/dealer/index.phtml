@@ -7,12 +7,10 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/opti
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal             = $this->proposal;
 $costPerPageSetting   = $proposal->getCostPerPageSettingForDealer();
-$profitabilityDevices = new Proposalgen_Model_Optimization_Dealer($proposal);
-$graphs = $profitabilityDevices->getGraphs();
+$optimizationDevices = new Proposalgen_Model_Optimization_Dealer($proposal);
+$graphs = $optimizationDevices->getGraphs();
 // Get the count of all the devices used in the system
-$totalDevices = count($profitabilityDevices->kept) +
-                count($profitabilityDevices->replaced) +
-                count($profitabilityDevices->flagged);
+$totalDevices = $optimizationDevices->getDeviceCount();
 ?>
 <div class="container" id="htmlReportContainer">
     <h2>MPS Dealer Optimization Report For <?php echo $proposal->report->getClient()->companyName;?> - Not For Customer Distribution </h2>
@@ -82,10 +80,10 @@ $totalDevices = count($profitabilityDevices->kept) +
         </tr>
     </table>
 
-    <h3>Suggested Replacement Devices<em><?php echo '(' . count($profitabilityDevices->replaced) . ' of ' . $totalDevices . ')'?></em></h3>
+    <h3>Suggested Replacement Devices<em><?php echo '(' . count($optimizationDevices->replaced) . ' of ' . $totalDevices . ')'?></em></h3>
     <em>The following devices have been targeted for replacement, either for a monthly cost savings greater than $10.00 or manual replacement.</em>
     <!-- Only display table if there are replacement devices assigned -->
-    <?php if ($profitabilityDevices->replaced) : ?>
+    <?php if ($optimizationDevices->replaced) : ?>
     <table class="rDevices">
         <tr class='header'>
            <th colspan='5' class='header'>Current</th>
@@ -106,7 +104,7 @@ $totalDevices = count($profitabilityDevices->kept) +
             <th>Color AMPV</th>
             <th>Cost Delta</th>
        </tr>
-        <?php foreach ($profitabilityDevices->replaced as $device) :
+        <?php foreach ($optimizationDevices->replaced as $device) :
         $masterDevice      = $device->getMasterDevice();
         $replacementDevice = $device->getReplacementMasterDevice();
         $isColor           = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
@@ -134,7 +132,7 @@ $totalDevices = count($profitabilityDevices->kept) +
         <?php endif; ?>
     <br />
 
-    <h3>Acceptable Devices<em><?php echo '(' . count($profitabilityDevices->kept) . ' of ' . $totalDevices . ')'?></em></h3>
+    <h3>Acceptable Devices<em><?php echo '(' . count($optimizationDevices->kept) . ' of ' . $totalDevices . ')'?></em></h3>
     <em>The following devices have been deemed productive and fall within the target costs per pages.</em>
     <table class="rDevices">
         <tr class='header'>
@@ -146,7 +144,7 @@ $totalDevices = count($profitabilityDevices->kept) +
             <th>Color CPP</th>
             <th>Monthly Cost</th>
         </tr>
-        <?php foreach ($profitabilityDevices->kept as $device) :
+        <?php foreach ($optimizationDevices->kept as $device) :
         $masterDevice = $device->getMasterDevice();
         $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
         ?>
@@ -163,7 +161,7 @@ $totalDevices = count($profitabilityDevices->kept) +
     </table>
     <br />
 
-    <h3>Excess Inventory<em><?php echo '(' . count($profitabilityDevices->excess) . ')'?></em></h3>
+    <h3>Excess Inventory<em><?php echo '(' . count($optimizationDevices->excess) . ')'?></em></h3>
     <em>The following devices are excess devices that can still be used inside your fleet.</em>
     <table class="rDevices">
         <tr class='header'>
@@ -174,7 +172,7 @@ $totalDevices = count($profitabilityDevices->kept) +
             <th>Mono CPP</th>
             <th>Color CPP</th>
         </tr>
-        <?php foreach ($profitabilityDevices->excess as $device) :
+        <?php foreach ($optimizationDevices->excess as $device) :
         $masterDevice = $device->getMasterDevice();
         $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
         ?>
@@ -190,7 +188,7 @@ $totalDevices = count($profitabilityDevices->kept) +
     </table>
     <br />
 
-    <h3>Retired <em><?php echo '(' . count($profitabilityDevices->retired) . ' of ' . $totalDevices . ')'?></em></h3>
+    <h3>Retired <em><?php echo '(' . count($optimizationDevices->retired) . ' of ' . $totalDevices . ')'?></em></h3>
     <em>Devices with both low volume and age of over 8 years have been targeted for retirement. We suggest migrating the page volume to another device in your fleet. </em>
     <table class="rDevices">
         <tr class='header'>
@@ -206,7 +204,7 @@ $totalDevices = count($profitabilityDevices->kept) +
             <th>Monthly Cost</th>
 
         </tr>
-        <?php foreach ($profitabilityDevices->retired as $device) :
+        <?php foreach ($optimizationDevices->retired as $device) :
         $masterDevice = $device->getMasterDevice();
         $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
         ?>
@@ -226,7 +224,7 @@ $totalDevices = count($profitabilityDevices->kept) +
     </table>
     <br />
 
-    <h3>Flagged Devices<em><?php echo '(' . count($profitabilityDevices->flagged) . ' of ' . $totalDevices . ')'?></em></h3>
+    <h3>Flagged Devices<em><?php echo '(' . count($optimizationDevices->flagged) . ' of ' . $totalDevices . ')'?></em></h3>
     <em>These devices have been flagged for replacement based on operation reliabilty and not financial consideration.</em>
     <table class="rDevices">
         <tr class='header'>
@@ -238,7 +236,7 @@ $totalDevices = count($profitabilityDevices->kept) +
             <th>Color CPP</th>
             <th>Monthly Cost</th>
         </tr>
-        <?php foreach ($profitabilityDevices->flagged as $device) :
+        <?php foreach ($optimizationDevices->flagged as $device) :
         $masterDevice = $device->getMasterDevice();
         $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
         ?>
@@ -280,7 +278,7 @@ $totalDevices = count($profitabilityDevices->kept) +
     <!--    </tr>-->
     <!--</table>-->
     <br />
-    <h3>Excluded<em><?php echo '(' . count($profitabilityDevices->excluded) . ')'?></em></h3>
+    <h3>Excluded<em><?php echo '(' . count($optimizationDevices->excluded) . ')'?></em></h3>
     <table class="rDevices">
         <tr class='header'>
             <th style='width:175px;'>Device Name</th>
@@ -289,7 +287,7 @@ $totalDevices = count($profitabilityDevices->kept) +
             <th>Mono AMPV</th>
             <th>Color AMPV</th>
         </tr>
-        <?php foreach ($profitabilityDevices->excluded as $device) : ?>
+        <?php foreach ($optimizationDevices->excluded as $device) : ?>
         <tr>
             <td class='deviceName'><?php echo $device->getDeviceName();?></td>
             <td><?php echo $device->ipAddress;?></td>

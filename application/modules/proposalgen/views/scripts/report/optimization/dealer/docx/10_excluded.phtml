@@ -10,11 +10,15 @@
 $section = $this->section;
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
-/* @var $profitabiltyDevices Proposalgen_Model_Optimization_Dealer */
-$profitabiltyDevices = $this->profitabilityDevices;
+/* @var $optimizationDevices Proposalgen_Model_Optimization_Dealer */
+$optimizationDevices = $this->profitabilityDevices;
+
 
 $section->addTextBreak();
-$section->addText('Excluded Devices', array('bold' => true, 'size' => 12));
+$headerTextRun = $section->createTextRun();
+$headerTextRun->addText('Excluded Devices','titlepageHeaderFont');
+$headerTextRun->addText(' (' . count($optimizationDevices->excluded).  ')');
+$section->addText($headerTextRun);
 
 // Table with values
 $tcStyle = $this->styles->tables->excluded;
@@ -28,7 +32,7 @@ $table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addTe
 $table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('Serial Number', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 
 // Begin with data rows
-foreach ($profitabiltyDevices->excluded as $device)
+foreach ($optimizationDevices->excluded as $device)
 {
     $masterDevice = $device->getMasterDevice();
     $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;

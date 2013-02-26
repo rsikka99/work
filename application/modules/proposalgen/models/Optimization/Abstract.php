@@ -89,6 +89,13 @@ abstract class Proposalgen_Model_Optimization_Abstract
     public $deviceCategories = array();
 
     /**
+     * The number of the devices that are used in hardware optimization
+     *
+     * @var int
+     */
+    protected $_deviceCount;
+
+    /**
      * The ages that are shown inside the age graph inside the customer facing report.
      *
      * @var array
@@ -130,9 +137,9 @@ abstract class Proposalgen_Model_Optimization_Abstract
         }
 
         // Initialize the categories variables count to 0
-        $this->deviceCategories["copy"]  = 0;
-        $this->deviceCategories["scan"] = 0;
-        $this->deviceCategories["duplex"]  = 0;
+        $this->deviceCategories["copy"]   = 0;
+        $this->deviceCategories["scan"]   = 0;
+        $this->deviceCategories["duplex"] = 0;
 
         // Go through each purchase devices that rank it's classifications
         /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
@@ -215,5 +222,20 @@ abstract class Proposalgen_Model_Optimization_Abstract
         $this->leased             = $leasedDevices;
         $this->replaced           = $replacedDevices;
         $this->retired            = $retiredDevices;
+    }
+
+    /**
+     * Returns the amount of devices that are considered to be used in this report
+     *
+     * @return int
+     */
+    public function getDeviceCount ()
+    {
+        if (!isset($this->_deviceCount))
+        {
+            $this->_deviceCount = count($this->kept) + count($this->replaced) + count($this->flagged);
+        }
+
+        return $this->_deviceCount;
     }
 }
