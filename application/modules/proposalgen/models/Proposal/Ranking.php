@@ -302,36 +302,6 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
         return $text;
     }
 
-
-    /**
-     * Gets the overall paragraph
-     * TODO HEALTH CHECK FIX ME!
-     * @param float  $rank
-     * @param string $sectionName
-     *
-     * @return string Returns the overall paragraph
-     */
-    public function getCompatibleATRRankingText ($rank, $sectionName)
-    {
-        $text    = "";
-        $ratings = array(
-            "poor"          => 2.0,
-            "below average" => 4.0,
-            "average"       => 6.0,
-            "above average" => 8.0,
-            "excellent"     => 10.0
-        );
-        foreach ($ratings as $ratingText => $rating)
-        {
-            if ($rank <= $rating)
-            {
-                break;
-            }
-        }
-        $text = "Overall, your score in {$sectionName} is {$ratingText} compared to other companies. ";
-
-        return $text;
-    }
     /**
      * @return array
      */

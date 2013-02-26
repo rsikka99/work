@@ -1038,6 +1038,39 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
+     * @param $monthlyTotalCost
+     * @return float
+     */
+    public function getMonthlyRatePercentage ($monthlyTotalCost)
+    {
+        return ($this->getMonthlyRate() / $monthlyTotalCost) * 100;
+    }
+
+    /**
+     * @param $monthlyLeasePayment
+     * @param $monochromeCostPerPage
+     * @param $colorCostPerPage
+     *
+     * @return float
+     */
+    public function getLeasedMonthlyRate($monthlyLeasePayment, $monochromeCostPerPage, $colorCostPerPage)
+    {
+        return $monthlyLeasePayment + ($monochromeCostPerPage * $this->getAverageMonthlyBlackAndWhitePageCount()) + ($colorCostPerPage * $this->getAverageMonthlyColorPageCount());
+    }
+    /**
+     * @param $monthlyLeasePayment
+     * @param $monochromeCostPerPage
+     * @param $colorCostPerPage
+     * @param $totalMonthlyCost
+     *
+     * @return float
+     */
+    public function getLeasedMonthlyRatePercentage($monthlyLeasePayment, $monochromeCostPerPage, $colorCostPerPage, $totalMonthlyCost)
+    {
+        return ($this->getLeasedMonthlyRate($monthlyLeasePayment,$monochromeCostPerPage,$colorCostPerPage) / $totalMonthlyCost) * 100;
+    }
+
+    /**
      * @return float
      */
     public static function getITCostPerPage ()

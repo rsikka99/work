@@ -383,44 +383,6 @@ class Proposalgen_Model_HealthCheck_HealthCheck
             $healthgraphs['AgeBarGraph'] = $barGraph->getUrl();
 
             /**
-             * -- UniqueDevicesGraph
-             */
-            $uniqueModelArray = array();
-            $labels = array();
-            foreach ($this->proposal->getPurchasedDevices() as $device)
-            {
-                if (array_key_exists($device->getMasterDevice()->modelName, $uniqueModelArray))
-                {
-                    $uniqueModelArray [$device->getMasterDevice()->modelName] += 1;
-                }
-                else
-                {
-                    $uniqueModelArray [$device->getMasterDevice()->modelName] = 1;
-                }
-            }
-            $uniqueDevicesGraph = new gchart\gPie3DChart(850, 230);
-            $uniqueDevicesGraph->addDataSet($uniqueModelArray);
-            $uniqueDevicesGraph->addColors(array(
-                                                "E21736",
-                                                "b0bb21",
-                                                "5c3f9b",
-                                                "0191d3",
-                                                "f89428",
-                                                "e4858f",
-                                                "fcc223",
-                                                "B3C6FF",
-                                                "ECFFB3",
-                                                "386AFF",
-                                                "FFB3EC",
-                                                "cccccc",
-                                                "00ff00",
-                                                "000000"
-                                           ));
-            // $uniqueDevicesGraph->setLegend($legendItems);
-            // UniqueDevicesGraph
-            $healthgraphs ['UniqueDevicesGraph'] = $uniqueDevicesGraph->getUrl();
-
-            /**
              * -- DuplexCapableDevicesGraph
              */
             $duplexPercentage = 0;
