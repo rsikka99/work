@@ -11,7 +11,7 @@ class Proposalgen_Model_Optimization_Customer extends
 
     public function getGraphs ()
     {
-        if (!isset($this->graphs))
+        if (!isset($this->_graphs))
         {
             $proposalGraphs      = $this->proposal->getGraphs();
             $purchaseDeviceCount = count($this->proposal->getPurchasedDevices());
@@ -61,36 +61,35 @@ class Proposalgen_Model_Optimization_Customer extends
             $graph->addValueMarkers($percentValueMarker4, "000000", "3", "-1", "11");
             $this->_graphs [] = $graph->getUrl();
 
-
             /**
              * -- Hardware Optimization Device Summary Listing
              */
-            $graph   = new gchart\gBarChart(280, 350, "g", "h");
+            $graph   = new gchart\gBarChart(425, 325, "g", "h");
             $graph->setVisibleAxes(array('x'));
 
             $count = count($this->kept);
             $graph->addDataSet(array(($count / $purchaseDeviceCount)));
             $percentValueMarker1 = "N  *p0* ({$count})";
-            $graph->addColors(array("0CC2D2"));
+            $graph->addColors(array("009999"));
 
             $count = count($this->replaced);
             $graph->addDataSet(array($count / $purchaseDeviceCount));
-            $percentValueMarker2 = "N  *p0* ({$count})";
+            $percentValueMarker2 = "N  *1240AB* ({$count})";
             $graph->addColors(array("9bbb59"));
 
             $count = count($this->flagged);
             $graph->addDataSet(array(count($this->flagged) / $purchaseDeviceCount));
             $percentValueMarker3 = "N  *p0* ({$count})";
-            $graph->addColors(array("4f81bd"));
+            $graph->addColors(array("FFAA00"));
 
             $count = count($this->retired);
             $graph->addDataSet(array($count / $purchaseDeviceCount));
             $percentValueMarker4 = "N  *p0* ({$count})";
-            $graph->addColors(array("c0504d"));
+            $graph->addColors(array("FF7400"));
 
             $graph->setDataRange(0, 1);
             $graph->setBarScale(50, 10);
-            $graph->setLegendPosition("b");
+            $graph->setLegendPosition("t");
             $graph->setLegend(array(
                                    "Keep",
                                    "Replace",
@@ -256,7 +255,7 @@ class Proposalgen_Model_Optimization_Customer extends
             $barGraph->setDataRange(0, $highest);
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
-            $dotProperties = '@o,E21736,0,.5:' . number_format($percentage,2) . ',23|';
+            $dotProperties = '@d,E21736,0,.5:' . number_format($percentage,2) . ',23|';
 //            $barGraph->setProperty('chm',$dotProperties);
             $dotProperties .= '@t' . number_format($percentage * 100,2) . '%,000000,0,-2.5:' . number_format($percentage - .03,2)  . ',10';
             $barGraph->setProperty('chm',$dotProperties);
@@ -312,7 +311,7 @@ class Proposalgen_Model_Optimization_Customer extends
             $barGraph->setDataRange(0, $highest);
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
-            $dotProperties = '@o,E21736,0,.5:' . number_format($percentage,2) . ',23|';
+            $dotProperties = '@d,E21736,0,.5:' . number_format($percentage,2) . ',23|';
 //            $barGraph->setProperty('chm',$dotProperties);
             $dotProperties .= '@t' . number_format($percentage * 100,2) . '%,000000,0,-4.5:' . number_format($percentage - .03,2)  . ',10,,:0:110';
             $barGraph->setProperty('chm',$dotProperties);
