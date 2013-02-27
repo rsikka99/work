@@ -124,6 +124,7 @@ abstract class Proposalgen_Model_Optimization_Abstract
         $keepDevices              = array();
         $excessDevices            = array();
         $flaggedDevices           = array();
+        $leasedDevices            = array();
         $actionKeep               = 0;
         $actionReplace            = 0;
         $actionRetire             = 0;
@@ -207,10 +208,15 @@ abstract class Proposalgen_Model_Optimization_Abstract
             {
                 $keepDevices [] = $deviceInstance;
             }
+
+//            if ($deviceInstance->getMasterDevice()->isLeased)
+//            {
+//                $leasedDevices [] = $deviceInstance;
+//            }
         }
 
-        $leasedDevices   = $proposal->getLeasedDevices();
         $excludedDevices = $proposal->getExcludedDevices();
+        $leasedDevices = $proposal->getLeasedDevices();
 
         $this->actionKeepCount    = $actionKeep;
         $this->actionReplaceCount = $actionReplace;

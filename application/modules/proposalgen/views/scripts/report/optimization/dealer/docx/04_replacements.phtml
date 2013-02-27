@@ -19,6 +19,8 @@ $headerTextRun = $section->createTextRun();
 $headerTextRun->addText('Suggested Replacement Devices','titlepageHeaderFont');
 $headerTextRun->addText(' (' . count($optimizationDevices->replaced). ' of ' . $optimizationDevices->getDeviceCount() . ')');
 $section->addText($headerTextRun,null,array('spaceAfter' => 0));
+$costThreshold = number_format($proposal->report->getReportSettings()->costThreshold);
+$section->addText("The following devices have been targeted for replacement, either for a monthly cost savings greater than {$costThreshold} or manual replacement.");
 
 // Table with values
 $tcStyle = $this->styles->tables->replacement;

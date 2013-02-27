@@ -18,6 +18,7 @@ $headerTextRun = $section->createTextRun();
 $headerTextRun->addText('Excess Devices','titlepageHeaderFont');
 $headerTextRun->addText(' (' . count($optimizationDevices->excess). ')');
 $section->addText($headerTextRun,null,array('spaceAfter' => 0));
+$section->addText("The following devices are excess devices that can still be used inside your clients fleet.");
 
 // Table with values
 $tcStyle = $this->styles->tables->excess;
