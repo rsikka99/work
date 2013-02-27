@@ -10,7 +10,7 @@ $section = $this->section;
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
 
-$section->addTitle($this->translate('MPS Dealer Optimization Report - Not For Customer Distribution'),1);
+$section->addText($this->translate('MPS Dealer Optimization Report - Not For Customer Distribution'),'documentHeader','documentHeader');
 $textRun = $section->createTextRun();
 $textRun->addText($this->translate('The following dealer optimization provides an overview of '));
 $textRun->addText($proposal->report->getClient()->companyName, 'bold_text');
@@ -22,12 +22,12 @@ $table = $section->addTable($tcStyle->tablestyle);
 
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText($this->translate('Target Monochrome CPP:'), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText(number_format($proposal->Report->ReportSettings->ActualPageCoverageMono, 2) . '%', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle );
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText($this->currency($proposal->report->getReportSettings()->targetMonochromeCostPerPage, array('precision' => 4)), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle );
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->odd)->addText($this->translate('Target Color CPP:'), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText($this->translate( ), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText($this->currency($proposal->report->getReportSettings()->targetColorCostPerPage, array('precision' => 4)), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText($this->translate('Monthly Monochrome Page Count:'), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText(number_format($proposal->Report->ReportSettings->ActualPageCoverageMono, 2) . '%', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle );
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText(number_format($proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle );
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->even)->addText($this->translate('Monthly Color Page Count:'), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText($this->translate( ), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText(number_format($proposal->getPageCounts()->Purchased->Color->Monthly), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);

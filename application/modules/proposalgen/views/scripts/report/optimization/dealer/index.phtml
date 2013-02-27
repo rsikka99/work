@@ -46,9 +46,9 @@ $totalDevices = $optimizationDevices->getDeviceCount();
     </tr>
     <tr>
         <td style='width:150px;'><strong>Color CPP:</strong></td>
-        <td><?php echo $this->currency((float)$proposal->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array('precision' => 4))?></td>
+        <td><?php echo ($proposal->getPageCounts()->Purchased->Color->Monthly > 0) ? $this->currency((float)$proposal->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array('precision' => 4)) : 'No print volume'; ?></td>
         <td style='width:150px;'><strong>Color CPP:</strong></td>
-        <td style='width:250px;'><?php echo $this->currency((float)$proposal->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array('precision' => 4))?></td>
+        <td style='width:250px;'><?php echo ($proposal->getPageCounts()->Purchased->Color->Monthly > 0) ?$this->currency((float)$proposal->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array('precision' => 4)) : 'No print volume'; ?></td>
     </tr>
     <tr>
         <td style='width:150px;'><strong>Total Cost:</strong></td>

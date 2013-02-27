@@ -16,13 +16,13 @@ $costPerPageSetting  = $proposal->getCostPerPageSettingForDealer();
 
 $section->addTextBreak();
 $headerTextRun = $section->createTextRun();
-$headerTextRun->addText('Acceptable Devices','titlepageHeaderFont');
-$headerTextRun->addText(' (' . count($optimizationDevices->kept). ' of ' . $optimizationDevices->getDeviceCount() . ')');
+$headerTextRun->addText('Leased Devices','titlepageHeaderFont');
+$headerTextRun->addText(' (' . count($optimizationDevices->leased). ' of ' . $optimizationDevices->getDeviceCount() . ')');
 $section->addText($headerTextRun,null,array('spaceAfter' => 0));
 $section->addText("The following devices have been deemed productive and fall within the target costs per pages.");
 
 // Table with values
-$tcStyle = $this->styles->tables->acceptable;
+$tcStyle = $this->styles->tables->leased;
 $table   = $section->addTable($tcStyle->tablestyle);
 // Table header
 $table->addRow($tcStyle->body->rowheight);
@@ -30,12 +30,9 @@ $table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addTe
 $table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial / Ip Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Mono AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText('Color AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('Mono CPP', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText('Color CPP', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addText('Monthly Cost', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 
 // Begin with data rows
-foreach ($optimizationDevices->kept as $device)
+foreach ($optimizationDevices->leased as $device)
 {
     $masterDevice = $device->getMasterDevice();
     $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
@@ -47,7 +44,4 @@ foreach ($optimizationDevices->kept as $device)
     $table->addCell($tcStyle->col2Width, $style)->addText($device->serialNumber . ' ' . $device->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
     $table->addCell($tcStyle->col3Width, $style)->addText(number_format($device->getAverageMonthlyBlackAndWhitePageCount()), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
     $table->addCell($tcStyle->col4Width, $style)->addText(($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-    $table->addCell($tcStyle->col5Width, $style)->addText($this->currency($device->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array('precision' => 4)), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
-    $table->addCell($tcStyle->col6Width, $style)->addText(($isColor) ? $this->currency($device->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, array('precision' => 4)) : 'N/A', $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
-    $table->addCell($tcStyle->col7Width, $style)->addText($this->currency($device->calculateMonthlyCost($costPerPageSetting)), $tcStyle->body->cell7->fontStyle, $tcStyle->body->cell7->paragraphStyle);
 }

@@ -38,6 +38,8 @@ $footer_color     = "b8cce3";
 $highlight_color  = "ebc7a4";
 
 $phpWord->addFontStyle('titlepageHeaderFont', array('bold' => true,'size' => 12));
+$phpWord->addFontStyle('documentHeader', array('bold' => true,'size' => 16));
+$phpWord->addParagraphStyle('documentHeader', array('align' => 'center'));
 
 // Classes that describe standard cells
 $standard_cell                 = (object)array(
@@ -267,7 +269,6 @@ $excessTable     = (object)array(
     ),
     "header"     => (object)array(
         'header'     => $standard_header,
-        'sub_header' => $standard_sub_header,
     ),
 );
 $retireTable     = (object)array(
@@ -302,7 +303,6 @@ $retireTable     = (object)array(
     ),
     "header"     => (object)array(
         'header'     => $standard_header,
-        'sub_header' => $standard_sub_header,
     ),
 );
 $flaggedTable    = (object)array(
@@ -331,7 +331,6 @@ $flaggedTable    = (object)array(
     ),
     "header"     => (object)array(
         'header'     => $standard_header,
-        'sub_header' => $standard_sub_header,
     ),
 );
 $leasedTable     = (object)array(
@@ -339,8 +338,22 @@ $leasedTable     = (object)array(
         'cellMarginTop'    => 50,
         'cellMarginRight'  => 50,
         'cellMarginBottom' => 50,
-        'cellMarginLeft'   => 50
-    )
+        'cellMarginLeft'   => 50,
+    ),
+    "col1Width" => $widthTwips * 0.25,
+    "col2Width" => $widthTwips * 0.25,
+    "col3Width" => $widthTwips * 0.25,
+    "col4Width" => $widthTwips * 0.25,
+    "body" => (object)array(
+        "rowheight" => null,
+        "cell1" => $standard_cell_left,
+        "cell1" => $standard_cell_left,
+        "cell3" => $standard_cell,
+        "cell4" => $standard_cell_no_right_border,
+    ),
+    "header"     => (object)array(
+        'header'     => $standard_header,
+    ),
 );
 $excludedTable   = (object)array(
     "tablestyle" => array(
@@ -364,7 +377,6 @@ $excludedTable   = (object)array(
     ),
     "header"     => (object)array(
         'header'     => $standard_header,
-        'sub_header' => $standard_sub_header,
     ),
 );
 $doubleCenterTable = (object)array(
@@ -430,7 +442,7 @@ $this->partial("report/optimization/dealer/docx/05_acceptable.phtml", $data);
 $this->partial("report/optimization/dealer/docx/06_excess.phtml", $data);
 $this->partial("report/optimization/dealer/docx/07_retired.phtml", $data);
 $this->partial("report/optimization/dealer/docx/08_flagged.phtml", $data);
-//$this->partial("report/optimization/dealer/docx/09_leased.phtml", $data);
+$this->partial("report/optimization/dealer/docx/09_leased.phtml", $data);
 $this->partial("report/optimization/dealer/docx/10_excluded.phtml", $data);
 
 $objWriter = PHPWord_IOFactory::createWriter($this->phpword, 'Word2007');

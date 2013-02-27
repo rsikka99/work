@@ -100,18 +100,23 @@ $phpWord->addFontStyle('heading3', array(
                                         'bold'  => true
                                    ));
 
+$phpWord->addFontStyle('pageHeader', array(
+                                          'size' => 15,
+                                          'bold' => true,
+                                     ));
+
 /**
  * Setup some styles to be used across the report
  */
 $styles = (object)array(
     "tables" => (object)array(
-        "singleimage"         => (object)array(
+        "singleimage"        => (object)array(
             "tablestyle" => array(),
             "cell1"      => array(
                 "valign" => "center"
             )
         ),
-        "doubleimage"         => (object)array(
+        "doubleimage"        => (object)array(
             "tablestyle" => array(),
             "cell1"      => array(
                 "valign" => "center"
@@ -120,7 +125,7 @@ $styles = (object)array(
                 "valign" => "center"
             )
         ),
-        "tripleimage"         => (object)array(
+        "tripleimage"        => (object)array(
             "tablestyle" => array(),
             "cell1"      => array(
                 "valign" => "center"
@@ -132,7 +137,7 @@ $styles = (object)array(
                 "valign" => "center"
             )
         ),
-        "twoColumnDataTable"  => (object)array(
+        "twoColumnDataTable" => (object)array(
             "tablestyle" => array(
                 'cellMarginTop'    => 100,
                 'cellMarginRight'  => 100,
@@ -156,7 +161,7 @@ $styles = (object)array(
 );
 
 /* Tables for the device layouts */
-$widthTwips                    = 15297;
+$widthTwips       = 15297;
 $header_color     = "B8CCE3";
 $sub_header_color = "EAF0F7";
 $even_color       = "EFEFEF";
@@ -251,7 +256,7 @@ $suggestedDevices = (object)array(
         'sub_header' => $standard_sub_header,
     ),
 );
-$flaggedDevices = (object)array(
+$flaggedDevices   = (object)array(
     "tablestyle" => array(
         'cellMarginTop'    => 50,
         'cellMarginRight'  => 50,
@@ -280,7 +285,7 @@ $flaggedDevices = (object)array(
         'sub_header' => $standard_sub_header,
     ),
 );
-$retiredDevices = (object)array(
+$retiredDevices   = (object)array(
     "tablestyle" => array(
         'cellMarginTop'    => 50,
         'cellMarginRight'  => 50,
@@ -330,7 +335,7 @@ $acceptableDevices = (object)array(
     ),
 );
 
-$deviceTables     = (object)array(
+$deviceTables = (object)array(
     "tables" => (object)array(
         "replacement" => $suggestedDevices,
         "acceptable"  => $acceptableDevices,
@@ -348,12 +353,12 @@ $titleData = array(
 $profitabilityDevices = new Proposalgen_Model_Optimization_Customer($this->proposal);
 
 $data = array(
-    "phpword"      => $phpWord,
-    "section"      => $section,
-    "proposal"     => $this->proposal,
-    "styles"       => $styles,
-    "graphs"       => $this->graphs,
-    "devicetables" => $deviceTables,
+    "phpword"              => $phpWord,
+    "section"              => $section,
+    "proposal"             => $this->proposal,
+    "styles"               => $styles,
+    "graphs"               => $this->graphs,
+    "devicetables"         => $deviceTables,
     "profitabilityDevices" => $profitabilityDevices,
 
 );

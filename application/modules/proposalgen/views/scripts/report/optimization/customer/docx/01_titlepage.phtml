@@ -18,7 +18,7 @@ $cell = $table->addCell(5818);
 $cell->addTextBreak(3);
 $cell->addImage(PUBLIC_PATH . $this->theme("proposalgenerator/reports/images/docx/cell2.jpg"));
 $cell->addTextBreak(5);
-$cell->addText($this->translate('Prepared For:') . " " . $proposal->report->_customerCompanyName, 'titlepageHeaderFont', 'titlepageHeaderParagraph');
+$cell->addText($this->translate('Prepared For: ' . $proposal->report->_customerCompanyName), 'pageHeader');
 $cell->addText($proposal->getDateReportPrepared(), 'titlepageHeaderFont', 'titlepageHeaderParagraph');
 $cell->addTextBreak(4);
 // Parse the address

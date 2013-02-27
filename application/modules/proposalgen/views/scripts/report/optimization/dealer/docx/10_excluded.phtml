@@ -15,7 +15,7 @@ $optimizationDevices = $this->profitabilityDevices;
 
 
 $section->addTextBreak();
-$headerTextRun = $section->createTextRun();
+$headerTextRun = $section->createTextRun(array("spaceAfter" => 0));
 $headerTextRun->addText('Excluded Devices','titlepageHeaderFont');
 $headerTextRun->addText(' (' . count($optimizationDevices->excluded).  ')');
 $section->addText($headerTextRun);
@@ -39,7 +39,7 @@ foreach ($optimizationDevices->excluded as $device)
     $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
 
     $table->addRow($tcStyle->body->rowheight);
-    $style = ($this->cycle(array($tcStyle->body->cell1->even, $tcStyle->body->cell1->odd))->next()->current());
+    $style = ($this->cycle(array($tcStyle->body->cell1->odd,$tcStyle->body->cell1->even))->next()->current());
 
     $table->addRow($tcStyle->body->rowheight);
     $table->addCell($tcStyle->col1Width, $style)->addText($device->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
