@@ -17,7 +17,6 @@ $section->addTextBreak();
 $headerTextRun = $section->createTextRun();
 $headerTextRun->addText('Retired Devices','titlepageHeaderFont');
 $headerTextRun->addText(' (' . count($optimizationDevices->retired). ' of ' . $optimizationDevices->getDeviceCount() . ')');
-$section->addText($headerTextRun,null,array('spaceAfter' => 0));
 $section->addText("Devices with both low volume and age of over 8 years have been targeted for retirement. We suggest migrating the page volume to another device in your fleet. ");
 
 // Table with values
@@ -26,7 +25,7 @@ $table   = $section->addTable($tcStyle->tablestyle);
 // Table header
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial / Ip Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial / IP Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Life Page Count', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText('Age (years)', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('JIT Compatible', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);

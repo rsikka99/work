@@ -68,6 +68,13 @@ abstract class Proposalgen_Model_Optimization_Abstract
      * @var int
      */
     public $jitCompatibleCount;
+
+    /**
+     * Gets the amount of replacement devices that are JIT compatible
+     *
+     * @var int
+     */
+    public $replacementJitCompatibleCount;
     /**
      * Stores the proposal object for future use
      *
@@ -119,16 +126,16 @@ abstract class Proposalgen_Model_Optimization_Abstract
         $this->proposal = $proposal;
 
         // Set up the arrays of devices to be produced
-        $retiredDevices           = array();
-        $replacedDevices          = array();
-        $keepDevices              = array();
-        $excessDevices            = array();
-        $flaggedDevices           = array();
-        $leasedDevices            = array();
-        $actionKeep               = 0;
-        $actionReplace            = 0;
-        $actionRetire             = 0;
-        $this->jitCompatibleCount = 0;
+        $retiredDevices                      = array();
+        $replacedDevices                     = array();
+        $keepDevices                         = array();
+        $excessDevices                       = array();
+        $flaggedDevices                      = array();
+        $actionKeep                          = 0;
+        $actionReplace                       = 0;
+        $actionRetire                        = 0;
+        $this->replacementJitCompatibleCount = 0;
+        $this->jitCompatibleCount            = 0;
 
 
         // Initialize the values for each age rank
@@ -139,7 +146,7 @@ abstract class Proposalgen_Model_Optimization_Abstract
 
         // Initialize the categories variables count to 0
         $this->deviceCategories["copy"]   = 0;
-        $this->deviceCategories["scan"]   = 0;
+        $this->deviceCategories["color"]   = 0;
         $this->deviceCategories["duplex"] = 0;
 
         // Go through each purchase devices that rank it's classifications
@@ -160,9 +167,9 @@ abstract class Proposalgen_Model_Optimization_Abstract
             {
                 $this->deviceCategories["copy"]++;
             }
-            if ($deviceInstance->getMasterDevice()->isScanner)
+            if ($deviceInstance->getMasterDevice()->isColor())
             {
-                $this->deviceCategories["scan"]++;
+                $this->deviceCategories["color"]++;
             }
             if ($deviceInstance->getMasterDevice()->isDuplex)
             {
@@ -195,6 +202,10 @@ abstract class Proposalgen_Model_Optimization_Abstract
             {
                 $excessDevices []   = $deviceInstance;
                 $replacedDevices [] = $deviceInstance;
+                if ($replacementDevice->reportsTonerLevels)
+                {
+                    $this->replacementJitCompatibleCount++;
+                }
             }
             else if ($deviceInstance->getAction() === Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
             {
@@ -216,7 +227,7 @@ abstract class Proposalgen_Model_Optimization_Abstract
         }
 
         $excludedDevices = $proposal->getExcludedDevices();
-        $leasedDevices = $proposal->getLeasedDevices();
+        $leasedDevices   = $proposal->getLeasedDevices();
 
         $this->actionKeepCount    = $actionKeep;
         $this->actionReplaceCount = $actionReplace;

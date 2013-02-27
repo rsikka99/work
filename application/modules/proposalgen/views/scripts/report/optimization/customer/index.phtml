@@ -16,6 +16,18 @@ $totalPurchasedDevices = count($proposal->getPurchasedDevices());
     <div class="h1">
         Your Hardware Optimization
     </div>
+    <div class="pheader">
+        Current Fleet Statistics (before replacements)
+    </div>
+    <table class='center'>
+        <tr>
+            <td><img src="<?php echo $graphs[0]; ?>" /></td>
+            <td><img src="<?php echo $graphs[1]; ?>" /></td>
+            <td><img src="<?php echo $graphs[2]; ?>" /></td>
+        </tr>
+    </table>
+
+
 
     <div class="pheader">
         Optimization Summary
@@ -24,10 +36,10 @@ $totalPurchasedDevices = count($proposal->getPurchasedDevices());
     <br/>
     <table class='center'>
         <tr>
-            <td><img src="<?php echo $graphs[0]; ?>" /></td>
-            <td><img src="<?php echo $graphs[1]; ?>" /></td>
+            <td><img src="<?php echo $graphs[3]; ?>" /></td>
         </tr>
     </table>
+
     <br/><br/>
 
     <div class="pheader">
@@ -74,12 +86,11 @@ $totalPurchasedDevices = count($proposal->getPurchasedDevices());
     <div class="pheader">
         Hardware Utilization and Capacity
     </div>
-        <table class='center'>
+    <p>A good measure of the recommended maximum monthly page volume for a printing device is the manufacturer's stated yield of a single print cartridge. In essence, you should not have to change the same toner cartridge more than once per month.
+        Using this definition of maximum monthly page volume, the total capacity of your printing fleet is the sum of the maximum page volumes for all of your printing devices. As a guide we suggest that company printing should range between 30 and 50% of maximum fleet capacity. The closer you are to printing at maximum capacity, the more return you are getting on your printing assets. Most find that they have more printing hardware than they need. The following chart displays your estimated monthly page volume compared to your maximum monthly page capacity.</p>
+    <table class='center'>
         <tr>
-            <td><img src="<?php echo $graphs[13]; ?>" /></td>
-        </tr>
-        <tr>
-            <td><img src="<?php echo $graphs[14]; ?>" /></td>
+            <td><img src="<?php echo $graphs[4]; ?>" /></td>
         </tr>
     </table>
 
@@ -93,10 +104,9 @@ $totalPurchasedDevices = count($proposal->getPurchasedDevices());
         <tr>
             <td><img src="<?php echo $graphs[5]; ?>" /></td>
             <td><img src="<?php echo $graphs[6]; ?>" /></td>
-        </tr>
-        <tr>
+            <!--<div class="pheader"> Printing Device Management Breakdown </div>-->
+            <!--    <p>Different types of printing devices are managed in different ways-newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.</p>-->
             <td><img src="<?php echo $graphs[7]; ?>" /></td>
-            <td><img src="<?php echo $graphs[8]; ?>" /></td>
         </tr>
     </table>
     <br/>
@@ -137,7 +147,7 @@ $totalPurchasedDevices = count($proposal->getPurchasedDevices());
     <p>If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption by using a scanner to e-mail documents instead of printing copies for distribution. The following charts show how many of your printing devices have duplexing and scanning capabilities:</p>
     <table class='center'>
         <tr>
-            <td><img src="<?php echo $graphs[12]; ?>" /></td>
+            <td><img src="<?php echo $graphs[8]; ?>" /></td>
         </tr>
     </table>
 
@@ -181,7 +191,7 @@ $totalPurchasedDevices = count($proposal->getPurchasedDevices());
     <p>The breakdown of the age of your printing devices is shown below: </p>
     <table class='center'>
         <tr>
-            <td><img src="<?php echo $graphs[11]; ?>" /></td>
+            <td><img src="<?php echo $graphs[9]; ?>" /></td>
         </tr>
     </table>
     <br/>
@@ -224,37 +234,21 @@ $totalPurchasedDevices = count($proposal->getPurchasedDevices());
     <p>Out of your <strong><?php echo $proposal->getDeviceCount(); ?></strong> networked printing devices, you have of <strong><?php echo $proposal->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type. We estimate that <strong><?php echo count($proposal->getLeasedDevices()); ?></strong> of your printing devices are leased machines, for which supplies are included in your contract. The <strong><?php echo $totalPurchasedDevices; ?></strong> remaining machines consist of <strong><?php echo $proposal->getNumberOfUniquePurchasedModels(); ?></strong> different models and use <strong><?php echo $proposal->getNumberOfUniquePurchasedToners(); ?></strong> different supply types. If you hold two of each supply in inventory, you have an estimated <strong>$<?php echo number_format($proposal->getCashHeldInInventory()); ?> in operating cash held in printer supplies inventory</strong> at any given time.</p>
     <table class='center'>
         <tr>
-            <td><img src="<?php echo $graphs[4]; ?>" /></td>
+            <td><img src="<?php echo $graphs[10]; ?>" /></td>
         </tr>
     </table>
     <p>By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. Office Depot can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.</p>
-    <div class="pheader">
-        Printing Device Management Breakdown
-    </div>
-    <p>Different types of printing devices are managed in different ways-newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.</p>
-    <table class='center'>
-        <tr>
-            <td><img src="<?php echo $graphs[2]; ?>" /></td>
-            <td><img src="<?php echo $graphs[3]; ?>" /></td>
-        </tr>
-    </table>    <div class="pheader">
-        Printing Device Management Breakdown
-    </div>
-    <p>Different types of printing devices are managed in different ways-newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.</p>
-    <table class='center'>
-        <tr>
-            <td><img src="<?php echo $graphs[2]; ?>" /></td>
-            <td><img src="<?php echo $graphs[3]; ?>" /></td>
-        </tr>
-    </table>
+
+
+
     <div class="pheader">
         Color Usage
     </div>
     <p>You currently have <strong><?php echo $proposal->getNumberOfColorCapableDevices(); ?></strong> color printing devices that print a monthly average of <strong><?php echo number_format($proposal->getPageCounts()->Total->Color->Monthly); ?></strong> color pages per month, which is <strong><?php echo number_format(($proposal->getPercentages()->TotalColorPercentage * 100),2); ?>%</strong> of your total monthly print volume.</p>
     <table class='center'>
         <tr>
-            <td><img src="<?php echo $graphs[9]; ?>" /></td>
-            <td><img src="<?php echo $graphs[10]; ?>" /></td>
+            <td><img src="<?php echo $graphs[11]; ?>" /></td>
+            <td><img src="<?php echo $graphs[12]; ?>" /></td>
         </tr>
     </table>
     <p>Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your company's professional image, improve comprehension and increase readership.
