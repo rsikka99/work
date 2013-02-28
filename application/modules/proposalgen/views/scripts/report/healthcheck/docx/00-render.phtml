@@ -19,7 +19,7 @@ $properties->setCreated(time());
 $properties->setModified(time());
 $properties->setSubject('Demo Report');
 $properties->setKeywords('demo, assessment, report');
-$pageWidth = 9428;
+$pageWidth        = 9428;
 $titlepageSection = $phpWord->createSection(array(
                                                  'orientation'  => null,
                                                  'marginLeft'   => 720,
@@ -111,6 +111,10 @@ $phpWord->addFontStyle('savingsFont', array(
                                            'bold' => true,
                                            'size' => 11
                                       ));
+$phpWord->addFontStyle('forestWaterFont', array(
+                                               'bold' => true,
+                                               'size' => 14
+                                          ));
 
 $phpWord->addFontStyle('savingsAmountFont', array(
                                                  'color' => 'F0003C',
@@ -207,15 +211,15 @@ $styles = (object)array(
             "tablestyle" => array(),
             "cell1"      => array(
                 "valign" => "center",
-                'align' => "center"
+                'align'  => "center"
             ),
             "cell2"      => array(
                 "valign" => "center",
-                'align' => "center"
+                'align'  => "center"
             ),
             "cell3"      => array(
                 "valign" => "center",
-                'align' => "center"
+                'align'  => "center"
             )
         ),
         "savings"             => (object)array(
@@ -242,6 +246,14 @@ $styles = (object)array(
                 'cellMarginLeft'   => 100
             ),
             "rowheight"  => 400,
+            "cellHeader" => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center",
+                "bgColor"          => "F0F0F0",
+            ),
             "cell1"      => array(
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
@@ -400,39 +412,39 @@ $styles = (object)array(
             )
         ),
         "mostexpensive"       => (object)array(
-            "tablestyle"          => array(
+            "tablestyle" => array(
                 'cellMarginTop'    => 100,
                 'cellMarginRight'  => 100,
                 'cellMarginBottom' => 100,
                 'cellMarginLeft'   => 100
             ),
-            "rowheight"           => 400,
-            "col1Width"           => 3611.2,
-            "col2Width"           => 1805.6,
-            "col3Width"           => 1805.6,
-            "col4Width"           => 1805.6,
-            "cell1"               => array(
+            "rowheight"  => 400,
+            "col1Width"  => 3611.2,
+            "col2Width"  => 1805.6,
+            "col3Width"  => 1805.6,
+            "col4Width"  => 1805.6,
+            "cell1"      => array(
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
                 "borderLeftSize"   => 1,
                 "valign"           => "center"
             ),
-            "cell2"               => array(
+            "cell2"      => array(
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
                 "borderLeftSize"   => 1,
                 "valign"           => "center"
             ),
-            "cell3"               => array(
+            "cell3"      => array(
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
                 "borderLeftSize"   => 1,
                 "valign"           => "center"
             ),
-            "cell4"               => array(
+            "cell4"      => array(
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
@@ -495,41 +507,41 @@ $styles = (object)array(
         ),
         "twoColumnHeader"     => (object)array(
             "tablestyle" => array(
-                'cellMarginRight'  => 50,
-                'cellMarginLeft'   => 50
+                'cellMarginRight' => 50,
+                'cellMarginLeft'  => 50
             ),
             'cell1Width' => $pageWidth / 2,
 //            'cell1Width' => 4514,
             'cell2Width' => $pageWidth / 2,
             'rowheight'  => 200,
             'cell1'      => (object)array(
-                'fontStyle'       => array(
+                'fontStyle'      => array(
                     'size'   => 12,
                     'color'  => 'FFFFFF',
                     'bold'   => true,
                     'italic' => true
                 ),
                 'paragraphStyle' => array(
-                    'align'  => 'left',
+                    'align'      => 'left',
                     'spaceAfter' => 0
                 ),
-                'cellStyle' => array(
+                'cellStyle'      => array(
                     'bgColor' => 'F0003C'
                 )
 
             ),
             'cell2'      => (object)array(
-                'fontStyle'       => array(
+                'fontStyle'      => array(
                     'size'   => 12,
                     'color'  => 'FFFFFF',
                     'bold'   => true,
                     'italic' => true
                 ),
                 'paragraphStyle' => array(
-                    'align'  => 'right',
+                    'align'      => 'right',
                     'spaceAfter' => 0
                 ),
-                'cellStyle' => array(
+                'cellStyle'      => array(
                     'bgColor' => 'F0003C'
                 )
             ),
@@ -557,8 +569,8 @@ $this->partial("report/healthcheck/docx/01_titlepage.phtml", $titledata);
 $this->partial("report/healthcheck/docx/02_reportcard.phtml", $data);
 $this->partial("report/healthcheck/docx/03_serviceandsupplieslogistics.phtml", $data);
 $this->partial("report/healthcheck/docx/04_printinghardwareusage.phtml", $data);
-//$this->partial("report/healthcheck/docx/05_techandproductivity.phtml", $data);
-//$this->partial("report/healthcheck/docx/06_environmental.phtml", $data);
+$this->partial("report/healthcheck/docx/05_techandproductivity.phtml", $data);
+$this->partial("report/healthcheck/docx/06_environmental.phtml", $data);
 //$this->partial("report/healthcheck/docx/07_fleetattributes.phtml", $data);
 //$this->partial("report/healthcheck/docx/08_summary.phtml", $data);
 

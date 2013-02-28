@@ -11,8 +11,8 @@ $section = $this->section;
 $section->addPageBreak();
 
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-$proposal = $this->proposal;
-$graphs = $proposal->getGraphs();
+$proposal = $this->healthcheck->proposal;
+$graphs   = $this->graphs;
 
 $section->addTitle($this->translate("Analysis: Environmental Impact"), 1);
 $gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
@@ -21,6 +21,22 @@ $gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($propo
 $gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number_format($proposal->getRanking()->EnvironmentalFriendliness->Rank, 1), "gradeFont", "gradeParagraph");
 
 $section->addTextBreak();
+
+$section->addTitle($this->translate('Forest and Water Consumption'), 2);
+$section->addText($this->translate('Did you know that it takes one average-sized tree to produce 7,800 pages of standard 20lb office paper? Paper production also uses a tremendous amount of water and other solvents to produce traditional white copy paper. Based on your annual page volume we estimate the following tree and water requirements to produce documents for Sample Company:'));
+$cellWidths = array (
+    0,
+    1000
+);
+$imageTable = $section->addTable($this->styles->tables->tripleimage->tablestyle);
+$imageTable->addRow();
+$imageTable->addCell($cellWidths[0])->addImage(PUBLIC_PATH . "/img/tree.jpg",500);
+$imageTable->addCell($cellWidths[0])->addImage(PUBLIC_PATH . "/img/tree.jpg",500);
+$imageTable->addCell($cellWidths[1])->addText(sprintf($this->translate(' %1$s trees',number_format($proposal->getPageCounts()->Total->Combined->Yearly / 7800))),"forestWaterFont",2000);
+$imageTable->addCell($cellWidths[0], $this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/img/droplet.jpg",500);
+$imageTable->addCell($cellWidths[0], $this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/img/droplet.jpg",500);
+$imageTable->addCell($cellWidths[0])->addText(sprintf($this->translate(' %1$s gallons water',number_format($proposal->getPageCounts()->Total->Combined->Yearly / 8.2186))),"forestWaterFont");
+
 
 $section->addTitle($this->translate('Energy Consumption'), 2);
 $section->addText(sprintf($this->translate('You are currently using an estimated average of %1$s kWh per month to operate printing devices at an estimated monthly cost of $%2$s, assuming a cost of $%3$s per kWh.'), number_format($proposal->getAveragePowerUsagePerMonth()), number_format($proposal->getAveragePowerCostPerMonth()), number_format($proposal->Report->ReportKilowattsPerHour, 2)));
