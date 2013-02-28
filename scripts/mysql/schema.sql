@@ -1449,14 +1449,41 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `hardware_optimizations`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `hardware_optimizations` (
+  `id` INT NOT NULL ,
+  `clientId` INT(11) NOT NULL ,
+  `rmsUploadId` INT(11) NULL ,
+  `name` VARCHAR(255) NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `hardware_optimization_ibfk_1_idx` (`clientId` ASC) ,
+  INDEX `hardware_optimization_ibfk_2_idx` (`rmsUploadId` ASC) ,
+  CONSTRAINT `hardware_optimization_ibfk_1`
+    FOREIGN KEY (`clientId` )
+    REFERENCES `clients` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `hardware_optimization_ibfk_2`
+    FOREIGN KEY (`rmsUploadId` )
+    REFERENCES `pgen_rms_uploads` (`id` )
+    ON DELETE SET NULL
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `device_instance_replacement_master_devices`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `device_instance_replacement_master_devices` (
-  `masterDeviceId` INT NOT NULL ,
-  `deviceInstanceId` INT NOT NULL ,
+  `deviceInstanceId` INT(11) NOT NULL ,
+  `hardwareOptimizationId` INT(11) NOT NULL ,
+  `masterDeviceId` INT(11) NOT NULL ,
   INDEX `device_instance_replacement_master_devices_ibfk1_idx` (`masterDeviceId` ASC) ,
   INDEX `device_instance_replacement_master_devices_ibfk2_idx` (`deviceInstanceId` ASC) ,
   PRIMARY KEY (`deviceInstanceId`) ,
+  UNIQUE INDEX `deviceInstanceId_UNIQUE` (`deviceInstanceId` ASC, `hardwareOptimizationId` ASC) ,
+  INDEX `device_instance_replacement_master_devices_ibfk_3_idx` (`hardwareOptimizationId` ASC) ,
   CONSTRAINT `device_instance_replacement_master_devices_ibfk1`
     FOREIGN KEY (`masterDeviceId` )
     REFERENCES `pgen_master_devices` (`id` )
@@ -1466,7 +1493,12 @@ CREATE  TABLE IF NOT EXISTS `device_instance_replacement_master_devices` (
     FOREIGN KEY (`deviceInstanceId` )
     REFERENCES `pgen_device_instances` (`id` )
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE NO ACTION,
+  CONSTRAINT `device_instance_replacement_master_devices_ibfk_3`
+    FOREIGN KEY (`hardwareOptimizationId` )
+    REFERENCES `hardware_optimizations` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -1514,6 +1546,30 @@ CREATE  TABLE IF NOT EXISTS `user_sessions` (
     FOREIGN KEY (`sessionId` )
     REFERENCES `sessions` (`id` )
     ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `health_checks`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `health_checks` (
+  `id` INT NOT NULL ,
+  `clientId` INT(11) NOT NULL ,
+  `rmsUploadId` INT(11) NULL ,
+  `name` VARCHAR(255) NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `health_check_ibfk_1_idx` (`clientId` ASC) ,
+  INDEX `health_check_ibfk_2_idx` (`rmsUploadId` ASC) ,
+  CONSTRAINT `health_check_ibfk_1`
+    FOREIGN KEY (`clientId` )
+    REFERENCES `clients` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `health_check_ibfk_2`
+    FOREIGN KEY (`rmsUploadId` )
+    REFERENCES `pgen_rms_uploads` (`id` )
+    ON DELETE SET NULL
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
