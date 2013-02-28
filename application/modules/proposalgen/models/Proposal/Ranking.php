@@ -401,16 +401,16 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
                         10 => 6149
                     ),
                     "AverageMonthlyPrintVolumePerEmployee" => array(
-                        10 => 328,
-                        9  => 365,
-                        8  => 405,
-                        7  => 450,
-                        6  => 500,
-                        5  => 550,
-                        4  => 605,
-                        3  => 666,
-                        2  => 732,
-                        1  => 805
+                        10 => 80,
+                        9  => 100,
+                        8  => 120,
+                        7  => 140,
+                        6  => 160,
+                        5  => 180,
+                        4  => 200,
+                        3  => 220,
+                        2  => 240,
+                        1  => 260
                     ),
                     "NumberOfEmployeesPerDevice"           => array(
                         1  => 1.95,

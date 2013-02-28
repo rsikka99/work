@@ -1586,7 +1586,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->Graphs))
         {
             // Variables that could be settings
-            $OD_AverageMonthlyPagesPerEmployee = 500;
+            $OD_AverageMonthlyPagesPerEmployee = 200;
             $OD_AverageMonthlyPages            = 4200;
             $OD_AverageEmployeesPerDevice      = 4.4;
 
