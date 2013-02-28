@@ -13,7 +13,7 @@ if (!is_dir($savePath))
 }
 $savePath = $savePath . $filename;
 
-$linkToFile = $this->baseUrl("/downloads/client/{$this->clientId}/quote/{$this->quoteId}/{$filename}");
+$linkToFile = $this->baseUrl("/downloads/client/{$this->clientId}/orderlist/{$this->quoteId}/{$filename}");
 
 
 $quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
