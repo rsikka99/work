@@ -266,9 +266,11 @@ abstract class Proposalgen_Model_Optimization_Abstract
             }
             $this->deviceAges[$ageRank]++;
 
-            $this->supplyTypeCount      = $proposal->getNumberOfUniquePurchasedToners();
-            $this->optimizedSupplyCount = '';
+
             $this->averageSupplyCount   = '';
+            $this->supplyTypeCount      = count($this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($this->proposal->getPurchasedDevices())));
+            $this->optimizedSupplyCount = count($this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($this->getAllMasterDevicesWithReplacements())));
+
 
             if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
             {
@@ -327,64 +329,105 @@ abstract class Proposalgen_Model_Optimization_Abstract
     /**
      * Get unique purchased master devices for the fleet
      *
-     * @return Proposalgen_Model_MasterDevice []
+     *
+     * @param $devices Proposalgen_Model_MasterDevice [] | Proposalgen_Model_DeviceInstance []
+     *
+     * @return Proposalgen_Model_MasterDevice [] | bool
      */
-    protected function getUniquePurchasedMasterDevices ()
+    protected function getUniquePurchasedMasterDevices ($devices)
     {
         $masterDeviceList = array();
-        foreach ($this->proposal->getPurchasedDevices() as $deviceInstance)
+
+        if ($devices[0] instanceof Proposalgen_Model_DeviceInstance)
         {
-            $masterDeviceModel = $deviceInstance->getMasterDevice();
-            // Does the master device exist in the array
-            // if not add in it.
-            if (!in_array($masterDeviceModel, $masterDeviceList))
+            foreach ($devices as $deviceInstance)
             {
-                $masterDeviceList [] = $masterDeviceModel;
+                if ($deviceInstance->getAction() !== Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
+                {
+                    $masterDeviceModel = $deviceInstance->getMasterDevice();
+                    // Does the master device exist in the array
+                    // if not add in it.
+                    if (!in_array($masterDeviceModel, $masterDeviceList))
+                    {
+                        $masterDeviceList [] = $masterDeviceModel;
+                    }
+                }
             }
+        }
+        else if ($devices[0] instanceof Proposalgen_Model_MasterDevice)
+        {
+            foreach ($devices as $masterDevice)
+            {
+                // Does the master device exist in the array
+                // if not add in it.
+                if (!in_array($masterDevice, $masterDeviceList))
+                {
+                    $masterDeviceList [] = $masterDevice;
+                }
+            }
+        }
+        else
+        {
+            $masterDeviceList = false;
         }
 
         return $masterDeviceList;
     }
 
     /**
-     * Get unique purchased master devices with replacement devices for the fleet
+     * Gets a list of all master devices and replacement devices
      *
      * @return Proposalgen_Model_MasterDevice []
      */
-    protected function getUniquePurchasedMasterDevicesWithReplacements ()
+    protected function getAllMasterDevicesWithReplacements ()
     {
-        $masterDeviceList = array();
-        // Go through each purchase device, if the device has a replacement device check if unique
-        // If it is not unique check to if the device instance is unique
+        $masterDevices = array();
         foreach ($this->proposal->getPurchasedDevices() as $deviceInstance)
         {
-            $replacementDevice = $deviceInstance->getReplacementMasterDevice();
-            if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
+            if ($deviceInstance->getAction() !== Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
             {
-
-                if (!in_array($replacementDevice, $masterDeviceList))
+                $replacementDevice = $deviceInstance->getReplacementMasterDevice();
+                if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
                 {
-                    $masterDeviceList [] = $replacementDevice;
+                    $masterDevices [] = $replacementDevice;
                 }
-            }
-            else
-            {
-                $masterDeviceModel = $deviceInstance->getMasterDevice();
-                // Does the master device exist in the array if not add in it.
-                if (!in_array($masterDeviceModel, $masterDeviceList))
+                else
                 {
-                    $masterDeviceList [] = $masterDeviceModel;
+                    $masterDevices [] = $deviceInstance->getMasterDevice();
                 }
             }
         }
-
-        return $masterDeviceList;
+        return $masterDevices;
     }
 
-    protected function calculateSupplyTypeCount ()
+
+    /**
+     * Gets a list of unique toners for a list of master devices
+     * Toners users are toners that will be used in the assessment
+     *
+     * @param $devices Proposalgen_Model_MasterDevice []
+     *
+     * @return Proposalgen_Model_Toner []
+     */
+    protected function getUniqueTonerList ($devices)
     {
-        //            $this->averageSupplyCount   = '';
-        //            $this->supplyTypeCount      = '';
-        //            $this->optimizedSupplyCount = '';
+        $uniqueTonerList = array();
+
+        foreach ($devices as $masterDevices)
+        {
+            $toners = $masterDevices->getTonersForAssessment();
+
+            foreach ($toners as $toner)
+            {
+                if (!in_array($toner, $uniqueTonerList))
+                {
+                    $uniqueTonerList [] = $toner;
+                }
+            }
+
+        }
+
+        return $uniqueTonerList;
     }
+
 }
