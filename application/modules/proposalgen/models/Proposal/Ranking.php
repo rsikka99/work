@@ -30,49 +30,41 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
         if (!isset($this->SuppliesAndServiceLogistics))
         {
 
-            // Service and supplies logistics
-            $criteria                         = $this->getRankingCriteria();
-            $criteria                         = $criteria ["ServiceAndSuppliesLogistics"];
-            $ranking ["inkjetRanking"]        = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getPercentPrintingDoneOnInkjet(), $criteria ["InkJetPrinting"]);
-            $ranking ["breakdownRanking"]     = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getNumberOfRepairs() / $this->proposal->getDeviceCount() * 100, $criteria ["EfficiencyOfBreakFix"]);
-            $ranking ["repairTimeRanking"]    = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getAverageTimeBetweenBreakdownAndFix(), $criteria ["TimeToRepair"]);
-            $ranking ["vendorCountRanking"]   = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getUniqueVendorCount(), $criteria ["VendorCount"]);
-            $ranking ["monthlyOrdersRanking"] = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getNumberOfOrdersPerMonth(), $criteria ["OrdersPerMonth"]);
-            $ranking ["uniqueModelsRanking"]  = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getNumberOfUniqueModels() / $this->proposal->getDeviceCount() * 100, $criteria ["ModelPercentage"]);
 
-            $totalRanking = round(((($ranking ["inkjetRanking"]) + (($ranking ["breakdownRanking"] + $ranking ["repairTimeRanking"]) / 2) + (($ranking ["vendorCountRanking"] + $ranking ["monthlyOrdersRanking"] + $ranking ["uniqueModelsRanking"]) / 3)) / 3), 1);
+            // Service and supplies logistics
+            $criteria = $this->getRankingCriteria();
+            $criteria = $criteria ["ServiceAndSuppliesLogistics"];
+
+            $ranking["averageAgeRanking"]           = Tangent_Functions::getValueFromRangeStepTable($this->proposal->calculateAverageAgeOfPurchasedDevices(), $criteria ["AverageAge"]);
+            $ranking["differentSupplyTypesRanking"] = Tangent_Functions::getValueFromRangeStepTable($this->proposal->calculateNumberOfSupplyTypeScore(), $criteria ["DifferentSupplyTypes"], false);
+            $ranking ["reportsTonerLevelsRanking"]  = Tangent_Functions::getValueFromRangeStepTable($this->proposal->calculatePercentageOfFleetReportingTonerLevels(), $criteria ["ReportsTonerLevels"]);
+
+            $totalRanking = round(
+                ($ranking["averageAgeRanking"] + ($ranking["differentSupplyTypesRanking"] * 2) + $ranking ["reportsTonerLevelsRanking"]) / 4
+                , 1);
 
             $rankingText    = $this->getOverallRankingText($totalRanking, "supplies and service logistics");
             $areasToImprove = array();
-            if ($ranking ["inkjetRanking"] <= $totalRanking)
+
+            if ($ranking ["averageAgeRanking"] <= $totalRanking)
             {
-                $areasToImprove [] = "reduce the number of pages printed to desktop inkjet devices";
+                $areasToImprove [] = "replace old devices with newer devices that don't break down as often and can be serviced easily";
             }
-            if ($ranking ["breakdownRanking"] <= $totalRanking)
-            {
-                $areasToImprove [] = "update  your printing devices to more reliable machines";
-            }
-            if ($ranking ["repairTimeRanking"] <= $totalRanking)
-            {
-                $areasToImprove [] = "use a managed print program to increase efficiency of service";
-            }
-            if ($ranking ["vendorCountRanking"] <= $totalRanking)
-            {
-                $areasToImprove [] = "consolidate service and supplies vendors for simpler, more efficient processes";
-            }
-            if ($ranking ["uniqueModelsRanking"] <= $totalRanking)
+
+            if ($ranking ["differentSupplyTypesRanking"] <= $totalRanking)
             {
                 $areasToImprove [] = "streamline print devices to reduce the amount of different supplies and parts required";
+            }
+
+            if ($ranking ["reportsTonerLevelsRanking"] <= $totalRanking)
+            {
+                $areasToImprove [] = "replace old devices with new devices that are capable of reporting toner levels";
             }
 
             if (count($areasToImprove) > 0)
             {
                 $rankingText .= " To improve your score in this area, " . $this->proposal->report->getClient()->companyName . " could ";
-                foreach ($areasToImprove as $improvementText)
-                {
-                    $rankingText .= $improvementText . ", ";
-                }
-                $rankingText = trim(trim($rankingText), ",") . ".";
+                $rankingText .= implode(', ', $areasToImprove) . ".";
             }
 
             $this->SuppliesAndServiceLogistics = (object)array(
@@ -222,7 +214,7 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
 
             if (count($areasToImprove) > 0)
             {
-                $rankingText .= " To improve your score in this area, " . $this->proposal->report->getClient()->companyName. " could ";
+                $rankingText .= " To improve your score in this area, " . $this->proposal->report->getClient()->companyName . " could ";
                 foreach ($areasToImprove as $improvementText)
                 {
                     $rankingText .= $improvementText . ", ";
@@ -338,14 +330,38 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
                         3 => 5,
                         1 => 365
                     ),
-                    "VendorCount"          => array(
-                        10 => 1,
-                        8  => 2,
-                        6  => 3,
-                        4  => 4,
-                        2  => 5,
-                        1  => 6
+                    "AverageAge"           => array(
+                        2  => 10,
+                        3  => 9,
+                        4  => 8,
+                        5  => 7,
+                        6  => 6,
+                        7  => 5,
+                        8  => 4,
+                        9  => 3,
+                        10 => 0
                     ),
+                    "DifferentSupplyTypes" => array(
+                        1  => 60,
+                        2  => 50,
+                        3  => 45,
+                        4  => 40,
+                        5  => 35,
+                        6  => 30,
+                        7  => 25,
+                        8  => 20,
+                        9  => 15,
+                        10 => 0,
+                    ),
+                    "ReportsTonerLevels"   => array(
+                        1  => 75,
+                        2  => 80,
+                        4  => 85,
+                        6  => 90,
+                        8  => 95,
+                        10 => 99,
+                    ),
+
                     "OrdersPerMonth"       => array(
                         10 => 1,
                         9  => 2,

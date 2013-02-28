@@ -91,8 +91,8 @@ $cellWidths = array (
 
 $table = $section->addTable($this->styles->tables->twoColumnDataTable->tablestyle);
 $table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
-$table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText($this->translate('Number of vendors used to source printing hardware, supplies and service'), 'bold_text', 'nospacing');
-$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($proposal->getNumberOfVendors()), 'bold_text', 'nospacing_rightalign');
+$table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText($this->translate('Percentage of fleet capable of report toner levels'), 'bold_text', 'nospacing');
+$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($proposal->calculatePercentageOfFleetReportingTonerLevels(), 2) . "%", 'bold_text', 'nospacing_rightalign');
 $table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
 $table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText($this->translate('Number of orders for ink and toner executed annually'), 'bold_text', 'nospacing');
 $table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($proposal->getNumberOfAnnualInkTonerOrders()), 'bold_text', 'nospacing_rightalign');

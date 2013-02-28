@@ -1444,7 +1444,6 @@ CREATE  TABLE IF NOT EXISTS `assessment_surveys` (
   `costOfLabor` DOUBLE NULL ,
   `costToExecuteSuppliesOrder` DOUBLE NOT NULL DEFAULT 50.00 ,
   `averageItHourlyRate` DOUBLE NOT NULL DEFAULT 40.00 ,
-  `numberOfSuppliesVendors` INT NOT NULL ,
   `numberOfSupplyOrdersPerMonth` DOUBLE NOT NULL ,
   `hoursSpentOnIt` INT NULL ,
   `averageMonthlyBreakdowns` DOUBLE NULL ,
