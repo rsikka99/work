@@ -25,21 +25,23 @@ $section->addTextBreak();
 $section->addTitle($this->translate('Forest and Water Consumption'), 2);
 $section->addText($this->translate('Did you know that it takes one average-sized tree to produce 7,800 pages of standard 20lb office paper? Paper production also uses a tremendous amount of water and other solvents to produce traditional white copy paper. Based on your annual page volume we estimate the following tree and water requirements to produce documents for Sample Company:'));
 $cellWidths = array (
-    0,
-    1000
+    350,
+    1500
 );
+$imageWidth = 100;
+$imageHeight = 170;
 $imageTable = $section->addTable($this->styles->tables->tripleimage->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell($cellWidths[0])->addImage(PUBLIC_PATH . "/img/tree.jpg",500);
-$imageTable->addCell($cellWidths[0])->addImage(PUBLIC_PATH . "/img/tree.jpg",500);
-$imageTable->addCell($cellWidths[1])->addText(sprintf($this->translate(' %1$s trees',number_format($proposal->getPageCounts()->Total->Combined->Yearly / 7800))),"forestWaterFont",2000);
-$imageTable->addCell($cellWidths[0], $this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/img/droplet.jpg",500);
-$imageTable->addCell($cellWidths[0], $this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/img/droplet.jpg",500);
-$imageTable->addCell($cellWidths[0])->addText(sprintf($this->translate(' %1$s gallons water',number_format($proposal->getPageCounts()->Total->Combined->Yearly / 8.2186))),"forestWaterFont");
+$imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/tree.jpg",array('width'=>$imageWidth,'height' => $imageHeight));
+$imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/tree.jpg",array('width'=>$imageWidth,'height' => $imageHeight));
+$imageTable->addCell($cellWidths[1],$this->styles->tables->tripleimage->cell1)->addText(sprintf($this->translate(' %1$s trees',number_format($proposal->getPageCounts()->Total->Combined->Yearly / 7800))),"forestWaterFont",array('align' => 'center', 'valign' => 'center'));
+$imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/droplet.jpg",array('width'=>$imageWidth,'height' => $imageHeight));
+$imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/droplet.jpg",array('width'=>$imageWidth,'height' => $imageHeight));
+$imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addText(sprintf($this->translate(' %1$s gallons water',number_format($proposal->getPageCounts()->Total->Combined->Yearly / 8.2186))),"forestWaterFont");
 
 
 $section->addTitle($this->translate('Energy Consumption'), 2);
-$section->addText(sprintf($this->translate('You are currently using an estimated average of %1$s kWh per month to operate printing devices at an estimated monthly cost of $%2$s, assuming a cost of $%3$s per kWh.'), number_format($proposal->getAveragePowerUsagePerMonth()), number_format($proposal->getAveragePowerCostPerMonth()), number_format($proposal->Report->ReportKilowattsPerHour, 2)));
+$section->addText(sprintf($this->translate('You are currently using an estimated average of %1$s kWh per month to operate printing devices at an estimated monthly cost of $%2$s, assuming a cost of $%3$s per kWh.'), number_format($proposal->getAveragePowerUsagePerMonth()), number_format($proposal->getAveragePowerCostPerMonth()), number_format($proposal->report->getReportSettings()->kilowattsPerHour, 2)));
 $section->addText($this->translate('The following lists the devices with the highest average power consumption per month.'));
 
 $cellWidths = array (
@@ -51,10 +53,10 @@ $cellWidths = array (
 
 $highEnergyTable = $section->addTable($this->styles->tables->highenergy->tablestyle);
 $highEnergyTable->addRow($this->styles->tables->highriskdevices->rowheight);
-$highEnergyTable->addCell($cellWidths [0], $this->styles->tables->highriskdevices->cell1)->addText($this->translate('High Risk Devices'), 'bold_text', 'nospacing_centeralign');
-$highEnergyTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText($this->translate('Serial No.'), 'bold_text', 'nospacing_centeralign');
-$highEnergyTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText($this->translate('Avg. kWh Consumption Per Month Count'), 'bold_text', 'nospacing_centeralign');
-$highEnergyTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText($this->translate('Avg. Power Cost per Month'), 'bold_text', 'nospacing_centeralign');
+$highEnergyTable->addCell($cellWidths [0], $this->styles->tables->utilization->cellHeader)->addText($this->translate('High Risk Devices'), 'bold_text', 'nospacing_centeralign');
+$highEnergyTable->addCell($cellWidths [1], $this->styles->tables->utilization->cellHeader)->addText($this->translate('Serial No.'), 'bold_text', 'nospacing_centeralign');
+$highEnergyTable->addCell($cellWidths [2], $this->styles->tables->utilization->cellHeader)->addText($this->translate('Avg. kWh Consumption Per Month Count'), 'bold_text', 'nospacing_centeralign');
+$highEnergyTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText($this->translate('Avg. Power Cost per Month'), 'bold_text', 'nospacing_centeralign');
 /* @var $device Proposalgen_Model_DeviceInstance */
 $rowCount = 0;
 foreach ( $proposal->getHighPowerConsumptionDevices() as $device )
@@ -73,7 +75,9 @@ $section->addTextBreak();
 
 $section->addTitle($this->translate('Green Features: Duplexing and Scanning'), 2);
 
-$section->addText($this->translate('If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption by using a scanner to e-mail documents instead of printing copies for distribution. The following charts show how many of your printing devices have duplexing and scanning capabilities:'));
+$section->addText($this->translate('If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption by using a scanner to e-mail documents instead of printing copies for distribution.'));
+$section->addText(sprintf($this->translate('By printing 25% more documents on both sides of the page than you are now, you could save %1$s trees and %2$s gallons of water used in paper production per year.'),number_format(($proposal->getPageCounts()->Total->Combined->Yearly * .25) / 7800),number_format(($proposal->getPageCounts()->Total->Combined->Yearly * .25) / 8.2186)));
+$section->addText($this->translate('The following charts show how many of your printing devices have duplexing and scanning capabilities:'));
 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
