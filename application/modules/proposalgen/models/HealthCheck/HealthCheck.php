@@ -26,7 +26,11 @@ class Proposalgen_Model_HealthCheck_HealthCheck
             $numberValueMarker   = "N *sz0";
             $currencyValueMarker = "N $*sz0";
             $pageCounts          = $this->proposal->getPageCounts();
-
+            $companyName   = $this->proposal->report->getClient()->companyName;
+            $OD_AverageMonthlyPagesPerEmployee = 500;
+            $OD_AverageMonthlyPages            = 4200;
+            $OD_AverageEmployeesPerDevice      = 4.4;
+            $employeeCount = $this->proposal->report->getClient()->employeeCount;
             /**
              * -- PagesPrinterATRPieGraph
              */
@@ -424,6 +428,114 @@ class Proposalgen_Model_HealthCheck_HealthCheck
             $duplexCapableGraph->setLegendPosition("bv");
             // DuplexCapableDevicesGraph
             $healthgraphs['DuplexCapableDevicesGraph'] = $duplexCapableGraph->getUrl();
+
+            /**
+             * -- AverageMonthlyPagesBarGraph
+             */
+            $averagePageCount = round($pageCounts->Total->Combined->Monthly / $this->proposal->getDeviceCount(), 0);
+            $highest          = ($averagePageCount > $OD_AverageMonthlyPages) ? $averagePageCount : $OD_AverageMonthlyPages;
+            $barGraph         = new gchart\gBarChart(150, 300);
+            $barGraph->setTitle("Average monthly pages|per networked printer");
+            $barGraph->setVisibleAxes(array(
+                                           'y'
+                                      ));
+            $barGraph->addDataSet(array(
+                                       $averagePageCount
+                                  ));
+            $barGraph->addColors(array(
+                                      "E21736"
+                                 ));
+            $barGraph->addDataSet(array(
+                                       $OD_AverageMonthlyPages
+                                  ));
+            $barGraph->addAxisRange(0, 0, $highest * 1.1);
+            $barGraph->setDataRange(0, $highest * 1.1);
+            $barGraph->setBarScale(40, 10);
+            $barGraph->setLegendPosition("bv");
+            $barGraph->addColors(array(
+                                      "0194D2"
+                                 ));
+            $barGraph->setLegend(array(
+                                      $companyName,
+                                      "Average"
+                                 ));
+
+            $barGraph->setProperty('chxs', '0N*sz0*');
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
+            // Graphs[4]   //AverageMonthlyPagesBarGraph
+            $healthgraphs['AverageMonthlyPagesBarGraph'] = $barGraph->getUrl();
+
+            /**
+             * -- AverageMonthlyPagesPerEmployeeBarGraph
+             */
+            $pagesPerEmployee = round($pageCounts->Total->Combined->Monthly / $employeeCount);
+            $highest          = ($OD_AverageMonthlyPagesPerEmployee > $pagesPerEmployee) ? $OD_AverageMonthlyPagesPerEmployee : $pagesPerEmployee;
+            $barGraph         = new gchart\gBarChart(150, 300);
+            $barGraph->setTitle("Average monthly pages|per employee");
+            $barGraph->setVisibleAxes(array(
+                                           'y'
+                                      ));
+            $barGraph->addDataSet(array(
+                                       $pagesPerEmployee
+                                  ));
+            $barGraph->addColors(array(
+                                      "E21736"
+                                 ));
+            $barGraph->addDataSet(array(
+                                       $OD_AverageMonthlyPagesPerEmployee
+                                  ));
+            $barGraph->addAxisRange(0, 0, $highest * 1.1);
+            $barGraph->setDataRange(0, $highest * 1.1);
+            $barGraph->setBarScale(40, 10);
+            $barGraph->setLegendPosition("bv");
+            $barGraph->addColors(array(
+                                      "0194D2"
+                                 ));
+            $barGraph->setLegend(array(
+                                      $companyName,
+                                      "Average"
+                                 ));
+            $barGraph->setProperty('chxs', '0N*sz0*');
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
+            // Graphs[5] //AverageMonthlyPagesPerEmployeeBarGraph
+            $healthgraphs ['AverageMonthlyPagesPerEmployeeBarGraph'] = $barGraph->getUrl();
+
+            /**
+             * -- EmployeesPerDeviceBarGraph
+             */
+            $devicesPerEmployee = round($employeeCount / $this->proposal->getDeviceCount(), 2);
+            $highest            = ($devicesPerEmployee > $OD_AverageEmployeesPerDevice) ? $devicesPerEmployee : $OD_AverageEmployeesPerDevice;
+            $barGraph           = new gchart\gBarChart(150, 300);
+            $barGraph->setTitle("Employees per|printing device");
+            $barGraph->setVisibleAxes(array(
+                                           'y'
+                                      ));
+            $barGraph->addDataSet(array(
+                                       $devicesPerEmployee
+                                  ));
+            $barGraph->addColors(array(
+                                      "E21736"
+                                 ));
+            $barGraph->addDataSet(array(
+                                       $OD_AverageEmployeesPerDevice
+                                  ));
+            $barGraph->addAxisRange(0, 0, $highest * 1.1);
+            $barGraph->setDataRange(0, $highest * 1.1);
+            $barGraph->setBarScale(40, 10);
+            $barGraph->setLegendPosition("bv");
+            $barGraph->addColors(array(
+                                      "0194D2"
+                                 ));
+            $barGraph->setLegend(array(
+                                      $companyName,
+                                      "Average"
+                                 ));
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
+            // Graphs[6] //EmployeesPerDeviceBarGraph
+            $healthgraphs['EmployeesPerDeviceBarGraph'] = $barGraph->getUrl();
 
             $this->_graphs = array_merge($healthgraphs,$this->_graphs);
         }

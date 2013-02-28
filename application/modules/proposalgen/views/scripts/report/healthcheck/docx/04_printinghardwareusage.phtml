@@ -11,7 +11,7 @@ $section = $this->section;
 
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->healthcheck->proposal;
-$graphs = $this->healthcheck->getGraphs();
+$graphs   = $this->graphs;
 
 $section->addTitle($this->translate("Analysis: Printing Hardware Usage"), 1);
 $gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
@@ -21,24 +21,63 @@ $gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number
 
 $section->addTextBreak();
 $section->addTitle($this->translate('Print Volume and Number of Printing Devices'), 2);
-$section->addText(sprintf($this->translate('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.'), number_format(count($proposal->getDevices())), number_format(($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->DeviceCount)), number_format($proposal->getPageCounts()->Total->Combined->Monthly)));
+$section->addText(sprintf($this->translate('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.'), number_format($proposal->getDeviceCount()), number_format(($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->getDeviceCount())), number_format($proposal->getPageCounts()->Total->Combined->Monthly)));
 
-$imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
+$imageTable = $section->addTable($this->styles->tables->tripleimage->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell1)->addImage($graphs [4]);
-$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell2)->addImage($graphs [5]);
-$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell3)->addImage($graphs [6]);
+$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell1)->addImage($graphs ['AverageMonthlyPagesBarGraph'],array('align' => 'center'));
+$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell2)->addImage($graphs ['AverageMonthlyPagesPerEmployeeBarGraph'],array('align' => 'center'));
+$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell3)->addImage($graphs ['EmployeesPerDeviceBarGraph'],array('align' => 'center'));
+
+$section->addTitle($this->translate('Hardware Utilization and Capacity'), 2);
+$section->addText($this->translate('Based on information collected with our monitoring software, we detected the following number of networked printers and have estimated your average page volumes:'));
+$cellWidths = array(
+    6018,
+    3009
+);
+
+
+$estimatedTonerCostsTable = $section->addTable($this->styles->tables->estimatedTonerCosts->tablestyle);
+
+$estimatedTonerCostsTable->addRow();
+$estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText($this->translate('Number of networked printing devices'), null, null);
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText($proposal->getDeviceCount(), null, 'nospacing_rightalign');
+
+$estimatedTonerCostsTable->addRow();
+$estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText($this->translate('Average number of total printed pages, per month'), null,null);
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText(number_format($proposal->getPageCounts()->Total->Combined->Monthly),null , 'nospacing_rightalign');
+
+$estimatedTonerCostsTable->addRow();
+$estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText($this->translate('Average number of pages per device, per month'), null,null);
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText(number_format($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->getDeviceCount()),null , 'nospacing_rightalign');
+$section->addTextBreak();
+$section->addText($this->translate('A good measure of the recommended maximum monthly page volume for a printing device is the manufacturer\'s stated yield of a single print cartridge. In essence, you should not have to change the same toner cartridge more than once per month.'), null, array('spaceAfter' => 20));
+$section->addText($this->translate('Using this definition of maximum monthly page volume, the total capacity of your printing fleet is the sum of the maximum page volumes for all of your printing devices. As a guide we suggest that company printing should range between 30 and 50% of maximum fleet capacity. The closer you are to printing at maximum capacity, the more return you are getting on your printing assets. Most find that they have more printing hardware than they need. The following chart displays your estimated monthly page volume compared to your maximum monthly page capacity.'), null, 'nospacing');
+
+$section->addTextBreak(2);
+$imageTable = $section->addTable($this->styles->tables->singleimage->tablestyle);
+$imageTable->addRow();
+$imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage($graphs['HardwareUtilizationCapacityBar'], array('align' => 'center'));
+
+$imageTable = $section->addTable($this->styles->tables->singleimage->tablestyle);
+$imageTable->addRow();
+$imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage($graphs['HardwareUtilizationCapacityPercent'], array('align' => 'center'));
 
 $section->addTextBreak();
 $section->addTitle($this->translate('Underused and Overused Printing Devices'), 2);
 $section->addText(sprintf($this->translate('Currently, %1$s%% of your printing devices are printing less than one quarter of our recommended monthly print volume, and %2$s%% are printing above our recommended monthly print volume. Our recommended monthly print volumes are equal to the manufacturer\'s stated yield for a single print cartridge (for monochrome devices, the black cartridge, and for color devices, a single color cartridge unless the device is not being used for color).'), number_format($proposal->getPercentDevicesUnderused()), number_format($proposal->getPercentDevicesOverused())));
-$section->addText($this->translate('Underused printing devices can be consolidated or retired to free up floor and desk space, reduce the amount of cash held in unused supplies inventory, and reduce the energy costs associated with powering underused machines. Overused printing devices risk having increased breakdowns and should have a portion of their print volumes moved to underused printers or be replaced with higher-capacity machines.'));
+$section->addText($this->translate('Underused printing devices can be consolidated or retired to free up floor and desk space, reduce the amount of cash held in unused supplies inventory, and reduce the energy costs associated with powering underused machines. Devices printing fewer than 250 pages per month are likely performing less than 3 print jobs per day, and that volume can easily be accommodated by any nearby device.'));
+$section->addText($this->translate('Overused printing devices risk having increased breakdowns and should have a portion of their print volumes moved to underused printers or be replaced with higher-capacity machines. As an example small print devices can have paper trays of fewer than 250 pages, and may result in several paper tray changes per day which can lead to user frustration and machine failure.'));
 $section->addPageBreak();
+
+
+
+
 $cellWidths = array (
-    3611, 
-    1805, 
-    1805, 
-    1805 
+    3611,
+    1805,
+    1805,
+    1805
 );
 $lowestUtilizationTable = $section->addTable($this->styles->tables->utilization->tablestyle);
 $lowestUtilizationTable->addRow();

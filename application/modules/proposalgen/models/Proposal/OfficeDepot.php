@@ -3441,4 +3441,18 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         return ($this->getEstimatedAnnualCostOfLeaseMachines() + $this->getTotalPurchasedAnnualCost()) / 12;
     }
+
+    /**
+     * @return float
+     */
+    public function calculateEstimatedCompTonerCostAnnually(){
+        return ($this->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->getPageCounts()->Purchased->Color->Monthly + ($this->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12;
+    }
+
+    /**
+     * @return float
+     */
+    public function calculateEstimatedOemTonerCostAnnually(){
+        return ($this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getPageCounts()->Purchased->Color->Monthly + ($this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12;
+    }
 }
