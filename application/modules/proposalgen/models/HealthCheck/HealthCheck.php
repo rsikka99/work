@@ -27,7 +27,7 @@ class Proposalgen_Model_HealthCheck_HealthCheck
             $currencyValueMarker = "N $*sz0";
             $pageCounts          = $this->proposal->getPageCounts();
             $companyName   = $this->proposal->report->getClient()->companyName;
-            $OD_AverageMonthlyPagesPerEmployee = 500;
+            $OD_AverageMonthlyPagesPerEmployee = 200;
             $OD_AverageMonthlyPages            = 4200;
             $OD_AverageEmployeesPerDevice      = 4.4;
             $employeeCount = $this->proposal->report->getClient()->employeeCount;

@@ -1,6 +1,6 @@
 <?php
 
-class Proposalgen_Report_HealthCheckController extends Proposalgen_Library_Controller_Proposal
+class Proposalgen_Report_HealthcheckController extends Proposalgen_Library_Controller_Proposal
 {
 
     /**
