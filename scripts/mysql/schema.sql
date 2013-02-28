@@ -88,6 +88,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_uploads` (
   `fileName` VARCHAR(255) NOT NULL ,
   `validRowCount` INT NOT NULL ,
   `invalidRowCount` INT NOT NULL ,
+  `uploadDate` DATETIME NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `rms_uploads_ibfk_1_idx` (`clientId` ASC) ,
   INDEX `rms_uploads_ibfk_2_idx` (`rmsProviderId` ASC) ,

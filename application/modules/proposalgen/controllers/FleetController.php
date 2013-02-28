@@ -87,6 +87,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 }
 
                                 $rmsUpload                  = new Proposalgen_Model_Rms_Upload();
+                                $rmsUpload->uploadDate      = new Zend_Db_Expr('NOW()');
                                 $rmsUpload->fileName        = basename($filename);
                                 $rmsUpload->clientId        = $report->clientId;
                                 $rmsUpload->rmsProviderId   = $uploadProviderId;

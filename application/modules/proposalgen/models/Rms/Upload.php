@@ -17,7 +17,7 @@ class Proposalgen_Model_Rms_Upload extends My_Model_Abstract
     public $rmsProviderId;
 
     /**
-     * @var int
+     * @var string
      */
     public $fileName;
 
@@ -30,6 +30,11 @@ class Proposalgen_Model_Rms_Upload extends My_Model_Abstract
      * @var int
      */
     public $invalidRowCount;
+
+    /**
+     * @var string
+     */
+    public $uploadDate;
 
     /**
      * @var Proposalgen_Model_DeviceInstance[]
@@ -87,6 +92,11 @@ class Proposalgen_Model_Rms_Upload extends My_Model_Abstract
             $this->invalidRowCount = $params->invalidRowCount;
         }
 
+        if (isset($params->uploadDate) && !is_null($params->uploadDate))
+        {
+            $this->uploadDate = $params->uploadDate;
+        }
+
     }
 
     /**
@@ -101,6 +111,7 @@ class Proposalgen_Model_Rms_Upload extends My_Model_Abstract
             "fileName"        => $this->fileName,
             "validRowCount"   => $this->validRowCount,
             "invalidRowCount" => $this->invalidRowCount,
+            "uploadDate"      => $this->uploadDate,
         );
     }
 
