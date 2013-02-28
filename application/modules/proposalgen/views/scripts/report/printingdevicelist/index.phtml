@@ -15,26 +15,26 @@ echo '<style type="text/css">
 			}
 		 </style>';
 
-$data = array (
-    "proposal" => $this->proposal,
-    "isPDF" => $this->isPDF,
-    "backleft" => $this->backleft,
-    "backright" => $this->backright,
-    "backtop" => $this->backtop,
-    "backbottom" => $this->backbottom,
-    "footer" => $this->footer,
-    "pagestyle" => $this->pagestyle,
+$data = array(
+    "proposal"       => $this->proposal,
+    "isPDF"          => $this->isPDF,
+    "backleft"       => $this->backleft,
+    "backright"      => $this->backright,
+    "backtop"        => $this->backtop,
+    "backbottom"     => $this->backbottom,
+    "footer"         => $this->footer,
+    "pagestyle"      => $this->pagestyle,
     "titlePageStart" => $this->titlePageStart,
-    "pageStart" => $this->pageStart,
-    "pageEnd" => $this->pageEnd,
-    "noBreakStart" => $this->noBreakStart,
-    "noBreakEnd" => $this->noBreakEnd,
-    "orientation" => $this->orientation
+    "pageStart"      => $this->pageStart,
+    "pageEnd"        => $this->pageEnd,
+    "noBreakStart"   => $this->noBreakStart,
+    "noBreakEnd"     => $this->noBreakEnd,
+    "orientation"    => $this->orientation
 );
 ?>
 <div class="container" id="htmlReportContainer">
-<?php
-echo $this->partial('report/solution/html/07_Appendix.phtml', $data);
-echo $this->partial('report/solution/html/08_ExcludedDevices.phtml', $data);
-?>
+    <?php
+    echo $this->partial('report/printingdevicelist/html/01_Appendix.phtml', $data);
+    echo $this->partial('report/printingdevicelist/html/02_ExcludedDevices.phtml', $data);
+    ?>
 </div>
