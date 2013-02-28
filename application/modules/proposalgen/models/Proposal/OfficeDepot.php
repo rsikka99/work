@@ -770,12 +770,12 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         return $this->MaximumMonthlyPrintVolume;
     }
 
-    public function calculateMaximumMonthlyPrintVolumeWithReplacements()
+    public function calculateMaximumMonthlyPrintVolumeWithReplacements ()
     {
         $maxVolume = 0;
         foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
         {
-            if($deviceInstance->getReplacementMasterDevice())
+            if ($deviceInstance->getReplacementMasterDevice())
             {
                 $maxVolume += $deviceInstance->getReplacementMasterDevice()->getMaximumMonthlyPageVolume();
             }
@@ -784,6 +784,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                 $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume();
             }
         }
+
         return $maxVolume;
     }
 
@@ -845,6 +846,33 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         }
 
         return $this->_numberOfColorCapablePurchasedDevices;
+    }
+
+    /**
+     * Gets the amount of color capable devices with replacement devices
+     *
+     * @return int
+     */
+    public function getNumberOfColorCapableDevicesWithReplacements ()
+    {
+        $numberOfDevices = 0;
+        foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
+        {
+            $replacementDevice = $device->getReplacementMasterDevice();
+            if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
+            {
+                if ($replacementDevice->isColor())
+                {
+                    $numberOfDevices++;
+                }
+            }
+            else if ($device->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY)
+            {
+                $numberOfDevices++;
+            }
+        }
+
+        return $numberOfDevices;
     }
 
     /**
@@ -3698,19 +3726,21 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      */
     public function calculateDealerMonthlyCostWithReplacements ()
     {
-        if (! isset($this->_dealerMonthlyCostWithReplacements))
+        if (!isset($this->_dealerMonthlyCostWithReplacements))
         {
             $this->_dealerMonthlyCostWithReplacements = 0;
 
             $costPerPageSetting = $this->getCostPerPageSettingForDealer();
 
-            foreach ( $this->getPurchasedDevices() as $deviceInstance )
+            foreach ($this->getPurchasedDevices() as $deviceInstance)
             {
                 $this->_dealerMonthlyCostWithReplacements += $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getReplacementMasterDevice());
             }
         }
+
         return $this->_dealerMonthlyCostWithReplacements;
     }
+
     /**
      * The weighted average monthly cost per page when using replacements
      *
@@ -3725,17 +3755,17 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      */
     public function calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements ()
     {
-        if (! isset($this->_dealerWeightedAverageMonthlyCostPerPageWithReplacements))
+        if (!isset($this->_dealerWeightedAverageMonthlyCostPerPageWithReplacements))
         {
             $this->_dealerWeightedAverageMonthlyCostPerPageWithReplacements = new Proposalgen_Model_CostPerPage();
 
-            $costPerPageSetting = $this->getCostPerPageSettingForDealer();
-            $totalMonthlyMonoPagesPrinted = $this->getPageCounts()->Purchased->BlackAndWhite->Monthly;
+            $costPerPageSetting            = $this->getCostPerPageSettingForDealer();
+            $totalMonthlyMonoPagesPrinted  = $this->getPageCounts()->Purchased->BlackAndWhite->Monthly;
             $totalMonthlyColorPagesPrinted = $this->getPageCounts()->Purchased->Color->Monthly;
-            $colorCpp = 0;
-            $monoCpp = 0;
+            $colorCpp                      = 0;
+            $monoCpp                       = 0;
 
-            foreach ( $this->getPurchasedDevices() as $deviceInstance )
+            foreach ($this->getPurchasedDevices() as $deviceInstance)
             {
                 $costPerPage = $deviceInstance->calculateCostPerPageWithReplacement($costPerPageSetting);
                 $monoCpp += ($deviceInstance->getAverageMonthlyBlackAndWhitePageCount() / $totalMonthlyMonoPagesPrinted) * $costPerPage->monochromeCostPerPage;
@@ -3746,8 +3776,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             }
 
             $this->_dealerWeightedAverageMonthlyCostPerPageWithReplacements->monochromeCostPerPage = $monoCpp;
-            $this->_dealerWeightedAverageMonthlyCostPerPageWithReplacements->colorCostPerPage =$colorCpp;
+            $this->_dealerWeightedAverageMonthlyCostPerPageWithReplacements->colorCostPerPage      = $colorCpp;
         }
+
         return $this->_dealerWeightedAverageMonthlyCostPerPageWithReplacements;
     }
 

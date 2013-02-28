@@ -148,6 +148,7 @@ $totalPurchasedDevices = count($proposal->getPurchasedDevices());
     <table class='center'>
         <tr>
             <td><img src="<?php echo $graphs[8]; ?>" /></td>
+            <td><img src="<?php echo $graphs[9]; ?>" /></td>
         </tr>
     </table>
 
@@ -191,7 +192,8 @@ $totalPurchasedDevices = count($proposal->getPurchasedDevices());
     <p>The breakdown of the age of your printing devices is shown below: </p>
     <table class='center'>
         <tr>
-            <td><img src="<?php echo $graphs[9]; ?>" /></td>
+            <td><img src="<?php echo $graphs[10]; ?>" /></td>
+            <td><img src="<?php echo $graphs[11]; ?>" /></td>
         </tr>
     </table>
     <br/>
@@ -234,21 +236,19 @@ $totalPurchasedDevices = count($proposal->getPurchasedDevices());
     <p>Out of your <strong><?php echo $proposal->getDeviceCount(); ?></strong> networked printing devices, you have of <strong><?php echo $proposal->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type. We estimate that <strong><?php echo count($proposal->getLeasedDevices()); ?></strong> of your printing devices are leased machines, for which supplies are included in your contract. The <strong><?php echo $totalPurchasedDevices; ?></strong> remaining machines consist of <strong><?php echo $proposal->getNumberOfUniquePurchasedModels(); ?></strong> different models and use <strong><?php echo $proposal->getNumberOfUniquePurchasedToners(); ?></strong> different supply types. If you hold two of each supply in inventory, you have an estimated <strong>$<?php echo number_format($proposal->getCashHeldInInventory()); ?> in operating cash held in printer supplies inventory</strong> at any given time.</p>
     <table class='center'>
         <tr>
-            <td><img src="<?php echo $graphs[10]; ?>" /></td>
+            <td><img src="<?php echo $graphs[12]; ?>" /></td>
+            <td><img src="<?php echo $graphs[13]; ?>" /></td>
         </tr>
     </table>
     <p>By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. Office Depot can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.</p>
-
-
-
     <div class="pheader">
         Color Usage
     </div>
     <p>You currently have <strong><?php echo $proposal->getNumberOfColorCapableDevices(); ?></strong> color printing devices that print a monthly average of <strong><?php echo number_format($proposal->getPageCounts()->Total->Color->Monthly); ?></strong> color pages per month, which is <strong><?php echo number_format(($proposal->getPercentages()->TotalColorPercentage * 100),2); ?>%</strong> of your total monthly print volume.</p>
     <table class='center'>
         <tr>
-            <td><img src="<?php echo $graphs[11]; ?>" /></td>
-            <td><img src="<?php echo $graphs[12]; ?>" /></td>
+            <td><img src="<?php echo $graphs[14]; ?>" /></td>
+            <td><img src="<?php echo $graphs[15]; ?>" /></td>
         </tr>
     </table>
     <p>Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your company's professional image, improve comprehension and increase readership.

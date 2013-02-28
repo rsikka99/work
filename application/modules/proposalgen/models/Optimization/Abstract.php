@@ -1,6 +1,9 @@
 <?php
 abstract class Proposalgen_Model_Optimization_Abstract
 {
+    // Used to calculate the average supply count for a fleet
+    const SUPPLY_TYPE_THRESHOLD = 0.30;
+
     /**
      * Devices that have replacement devices attached to them
      *
@@ -87,6 +90,12 @@ abstract class Proposalgen_Model_Optimization_Abstract
      * @var array
      */
     public $deviceAges = array();
+    /**
+     * Stores count of devices based on age ranking
+     *
+     * @var array
+     */
+    public $deviceAgesOptimized = array();
 
     /**
      * Stores the count of devices based on categories required
@@ -94,6 +103,25 @@ abstract class Proposalgen_Model_Optimization_Abstract
      * @var array
      */
     public $deviceCategories = array();
+
+    /**
+     * What a client should be a for average supplies
+     *
+     * @var int
+     */
+    public $averageSupplyType;
+    /**
+     * The number of supply types used the clients fleet
+     *
+     * @var int
+     */
+    public $supplyTypeCount;
+    /**
+     * The number of supply types used in a fleet after optimized
+     *
+     * @var int
+     */
+    public $optimizedSupplyType;
 
     /**
      * The number of the devices that are used in hardware optimization
@@ -115,11 +143,16 @@ abstract class Proposalgen_Model_Optimization_Abstract
     );
 
     /**
-     * Array of purchased devices as device instances
+     * The ages that are shown inside the age graph inside the customer facing report.
      *
-     * @var Proposalgen_Model_DeviceInstance []
+     * @var array
      */
-    protected $_purchasedDevices;
+    public static $ageRankTable = array(
+        8 => 8,
+        4 => 4,
+        2 => 2,
+        0 => 0,
+    );
 
     public function __construct (Proposalgen_Model_Proposal_OfficeDepot $proposal)
     {
@@ -141,39 +174,33 @@ abstract class Proposalgen_Model_Optimization_Abstract
         // Initialize the values for each age rank
         foreach (self::$ageRanks as $ageRank => $ageRankName)
         {
-            $this->deviceAges[$ageRank] = 0;
+            $this->deviceAges[$ageRank]          = 0;
+            $this->deviceAgesOptimized[$ageRank] = 0;
         }
 
         // Initialize the categories variables count to 0
-        $this->deviceCategories["copy"]   = 0;
-        $this->deviceCategories["color"]   = 0;
-        $this->deviceCategories["duplex"] = 0;
+        $this->deviceCategories["current"]["copy"]     = 0;
+        $this->deviceCategories["current"]["color"]    = 0;
+        $this->deviceCategories["current"]["duplex"]   = 0;
+        $this->deviceCategories["optimized"]["copy"]   = 0;
+        $this->deviceCategories["optimized"]["color"]  = 0;
+        $this->deviceCategories["optimized"]["duplex"] = 0;
 
         // Go through each purchase devices that rank it's classifications
         /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
         foreach ($proposal->getPurchasedDevices() as $deviceInstance)
         {
-            // For each age rank, check if device is greater than range.
-            foreach (self::$ageRanks as $ageRank => $ageRankName)
-            {
-                if ($deviceInstance->getMasterDevice()->getAge() >= $ageRank)
-                {
-                    $this->deviceAges[$ageRank]++;
-                    break;
-                }
-            }
-
             if ($deviceInstance->getMasterDevice()->isCopier)
             {
-                $this->deviceCategories["copy"]++;
+                $this->deviceCategories["current"]["copy"]++;
             }
             if ($deviceInstance->getMasterDevice()->isColor())
             {
-                $this->deviceCategories["color"]++;
+                $this->deviceCategories["current"]["color"]++;
             }
             if ($deviceInstance->getMasterDevice()->isDuplex)
             {
-                $this->deviceCategories["duplex"]++;
+                $this->deviceCategories["current"]["duplex"]++;
             }
 
             // Checks to see if the device is JIT Compatible
@@ -196,12 +223,58 @@ abstract class Proposalgen_Model_Optimization_Abstract
                 $actionKeep++;
             }
 
+            // Get the age rank of the device instance
+            $ageRank = Tangent_Functions::getValueFromRangeStepTable($deviceInstance->getMasterDevice()->getAge(), self::$ageRankTable, false);
+            // Get the replacement device of the device instance if there is one
             $replacementDevice = $deviceInstance->getReplacementMasterDevice();
+            if ($deviceInstance->getAction() !== Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
+            {
+                // Assigned the optimized age rank if replacement device exists
+                if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
+                {
+                    $optimizedAgeRank = Tangent_Functions::getValueFromRangeStepTable($replacementDevice->getAge(), self::$ageRankTable, false);
+                    if ($replacementDevice->isCopier)
+                    {
+                        $this->deviceCategories["optimized"]["copy"]++;
+                    }
+                    if ($replacementDevice->isColor())
+                    {
+                        $this->deviceCategories["optimized"]["color"]++;
+                    }
+                    if ($replacementDevice->isDuplex)
+                    {
+                        $this->deviceCategories["optimized"]["duplex"]++;
+                    }
+                }
+                else
+                {
+                    $optimizedAgeRank = $ageRank;
+                    if ($deviceInstance->getMasterDevice()->isCopier)
+                    {
+                        $this->deviceCategories["optimized"]["copy"]++;
+                    }
+                    if ($deviceInstance->getMasterDevice()->isColor())
+                    {
+                        $this->deviceCategories["optimized"]["color"]++;
+                    }
+                    if ($deviceInstance->getMasterDevice()->isDuplex)
+                    {
+                        $this->deviceCategories["optimized"]["duplex"]++;
+                    }
+                }
+                $this->deviceAgesOptimized[$optimizedAgeRank]++;
+            }
+            $this->deviceAges[$ageRank]++;
+
+            $this->supplyTypeCount      = $proposal->getNumberOfUniquePurchasedToners();
+            $this->optimizedSupplyCount = '';
+            $this->averageSupplyCount   = '';
 
             if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
             {
                 $excessDevices []   = $deviceInstance;
                 $replacedDevices [] = $deviceInstance;
+
                 if ($replacementDevice->reportsTonerLevels)
                 {
                     $this->replacementJitCompatibleCount++;
@@ -219,11 +292,6 @@ abstract class Proposalgen_Model_Optimization_Abstract
             {
                 $keepDevices [] = $deviceInstance;
             }
-
-//            if ($deviceInstance->getMasterDevice()->isLeased)
-//            {
-//                $leasedDevices [] = $deviceInstance;
-//            }
         }
 
         $excludedDevices = $proposal->getExcludedDevices();
@@ -254,5 +322,69 @@ abstract class Proposalgen_Model_Optimization_Abstract
         }
 
         return $this->_deviceCount;
+    }
+
+    /**
+     * Get unique purchased master devices for the fleet
+     *
+     * @return Proposalgen_Model_MasterDevice []
+     */
+    protected function getUniquePurchasedMasterDevices ()
+    {
+        $masterDeviceList = array();
+        foreach ($this->proposal->getPurchasedDevices() as $deviceInstance)
+        {
+            $masterDeviceModel = $deviceInstance->getMasterDevice();
+            // Does the master device exist in the array
+            // if not add in it.
+            if (!in_array($masterDeviceModel, $masterDeviceList))
+            {
+                $masterDeviceList [] = $masterDeviceModel;
+            }
+        }
+
+        return $masterDeviceList;
+    }
+
+    /**
+     * Get unique purchased master devices with replacement devices for the fleet
+     *
+     * @return Proposalgen_Model_MasterDevice []
+     */
+    protected function getUniquePurchasedMasterDevicesWithReplacements ()
+    {
+        $masterDeviceList = array();
+        // Go through each purchase device, if the device has a replacement device check if unique
+        // If it is not unique check to if the device instance is unique
+        foreach ($this->proposal->getPurchasedDevices() as $deviceInstance)
+        {
+            $replacementDevice = $deviceInstance->getReplacementMasterDevice();
+            if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
+            {
+
+                if (!in_array($replacementDevice, $masterDeviceList))
+                {
+                    $masterDeviceList [] = $replacementDevice;
+                }
+            }
+            else
+            {
+                $masterDeviceModel = $deviceInstance->getMasterDevice();
+                // Does the master device exist in the array if not add in it.
+                if (!in_array($masterDeviceModel, $masterDeviceList))
+                {
+                    $masterDeviceList [] = $masterDeviceModel;
+                }
+            }
+        }
+
+        return $masterDeviceList;
+    }
+
+    protected function calculateSupplyTypeCount ()
+    {
+        //            $this->averageSupplyCount   = '';
+        //            $this->supplyTypeCount      = '';
+        //            $this->optimizedSupplyCount = '';
     }
 }

@@ -73,22 +73,22 @@ class Proposalgen_Model_Optimization_Customer extends
             $count = count($this->kept);
             $graph->addDataSet(array(($count / $purchaseDeviceCount)));
             $percentValueMarker1 = "N  *p0* ({$count})";
-            $graph->addColors(array("009999"));
+            $graph->addColors(array("E21736"));
 
             $count = count($this->replaced);
             $graph->addDataSet(array($count / $purchaseDeviceCount));
             $percentValueMarker2 = "N  *p0* ({$count})";
-            $graph->addColors(array("9bbb59"));
+            $graph->addColors(array("0194D2"));
 
             $count = count($this->flagged);
             $graph->addDataSet(array(count($this->flagged) / $purchaseDeviceCount));
             $percentValueMarker3 = "N  *p0* ({$count})";
-            $graph->addColors(array("FFAA00"));
+            $graph->addColors(array("EF6B18"));
 
             $count = count($this->retired);
             $graph->addDataSet(array($count / $purchaseDeviceCount));
             $percentValueMarker4 = "N  *p0* ({$count})";
-            $graph->addColors(array("FF7400"));
+            $graph->addColors(array("FFCF00"));
 
             $graph->setDataRange(0, 1);
             $graph->setBarScale(50, 10);
@@ -131,7 +131,7 @@ class Proposalgen_Model_Optimization_Customer extends
                                       "0194D2"
                                  ));
             $barGraph->addColors(array(
-                                      "000000"
+                                      "EF6B18"
                                  ));
             $barGraph->addDataSet(array(
                                        0
@@ -155,18 +155,18 @@ class Proposalgen_Model_Optimization_Customer extends
             $barGraph->setLegend(array(
                                       "Your Estimated Monthly Usage (% of Capacity)",
                                       "Your Estimated Optimized Monthly Usage (% of Capacity)",
-                                      "Optimal Monthly Fleet Usage Range"
+                                      "Optimal Monthly Fleet Usage (% of Capacity)"
                                  ));
             $barGraph->addAxisRange(0, 0, $highest);
             $barGraph->setDataRange(0, $highest);
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
 
-            $dotProperties = '@d,AB12AA,0,.5:' . number_format($percentage, 2) . ',30|';
-            $dotProperties .= '@t' . number_format($percentage * 100, 2) . '%,AB12AA,0,1:' . number_format($percentage - .03, 2) . ',10|';
-            $percentage = ($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->calculateMaximumMonthlyPrintVolumeWithReplacements());
-            $dotProperties .= '@d,000000,0,.5:' . number_format($percentage, 2) . ',20|';
-            $dotProperties .= '@t' . number_format($percentage * 100, 2) . '%,000000,0,-2.5:' . number_format($percentage - .03, 2) . ',10';
+            $dotProperties = '@d,E21736,0,.5:' . number_format($percentage, 2) . ',30|';
+            $dotProperties .= '@t' . number_format($percentage * 100, 2) . '%,E21736,0,1:' . number_format($percentage - .03, 2) . ',10|';
+//            $percentage = ($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->calculateMaximumMonthlyPrintVolumeWithReplacements());
+            $dotProperties .= '@d,EF6B18,0,.5:' . number_format($percentage, 2) . ',20|';
+            $dotProperties .= '@t' . number_format($percentage * 100, 2) . '%,EF6B18,0,-2.5:' . number_format($percentage - .03, 2) . ',10';
             $barGraph->setProperty('chm', $dotProperties);
 
             $barGraph->addColors(array("0194D2"));
@@ -181,8 +181,8 @@ class Proposalgen_Model_Optimization_Customer extends
             $employeeCount            = $proposal->report->getClient()->employeeCount;
             $averageEmployeePerDevice = 4.4;
 
-            $devicesPerEmployee          = round($employeeCount / ($this->getDeviceCount() + count($this->retired) + count($this->leased) + count($this->excluded)), 2);
-            $devicesPerEmployeeOptimized = round($employeeCount / ($this->getDeviceCount() + count($this->leased) + count($this->excluded)), 2);
+            $devicesPerEmployee          = round($employeeCount / ($this->getDeviceCount() + count($this->retired) + count($this->leased) + count($this->excluded)), 1);
+            $devicesPerEmployeeOptimized = round($employeeCount / ($this->getDeviceCount() + count($this->leased) + count($this->excluded)), 1);
             $highest                     = ($devicesPerEmployee > $averageEmployeePerDevice) ? $devicesPerEmployee : $averageEmployeePerDevice;
             $barGraph                    = new gchart\gBarChart(200, 300);
             $barGraph->setTitle("Employees per device");
@@ -248,7 +248,7 @@ class Proposalgen_Model_Optimization_Customer extends
             /**
              * -- LeasedVsPurchasedBarGraph
              */
-            $highest  = ($proposal->getLeasedDeviceCount() > $proposal->getPurchasedDeviceCount()) ? $proposal->getLeasedDeviceCount() : $proposal->getPurchasedDeviceCount();
+            $highest = ($proposal->getLeasedDeviceCount() > $proposal->getPurchasedDeviceCount()) ? $proposal->getLeasedDeviceCount() : $proposal->getPurchasedDeviceCount();
 
             $barGraph = new gchart\gBarChart(200, 300);
             $barGraph->setTitle('Leased / purchased devices ');
@@ -275,21 +275,22 @@ class Proposalgen_Model_Optimization_Customer extends
             $barGraph->addValueMarkers($numberValueMarker, "000000", "2", "-1", "11");
             // Graph7
             $this->_graphs [] = $barGraph->getUrl();
+
             /**
              * -- Categories of technology features
              */
-            $barGraph = new gchart\gBarChart(375, 300);
-            $barGraph->setTitle(" Green Features");
+            $barGraph = new gchart\gBarChart(200, 300);
+            $barGraph->setTitle("Technology Features");
             $barGraph->setVisibleAxes(array('y'));
-            $barGraph->addDataSet(array($this->deviceCategories["copy"] / $purchaseDeviceCount));
+            $barGraph->addDataSet(array($this->deviceCategories["current"]["copy"] / $purchaseDeviceCount));
             $barGraph->addColors(array("E21736"));
-            $barGraph->addDataSet(array($this->deviceCategories["duplex"] / $purchaseDeviceCount));
-            $barGraph->addColors(array("A21736"));
-            $barGraph->addDataSet(array($this->deviceCategories["color"] / $purchaseDeviceCount));
-            $barGraph->addColors(array("6277A6"));
+            $barGraph->addDataSet(array($this->deviceCategories["current"]["duplex"] / $purchaseDeviceCount));
+            $barGraph->addColors(array("0194D2"));
+            $barGraph->addDataSet(array($this->deviceCategories["current"]["color"] / $purchaseDeviceCount));
+            $barGraph->addColors(array("EF6B18"));
             $barGraph->setDataRange(0, 1);
-            $barGraph->setBarScale(100, 10);
-            $barGraph->setLegendPosition("b");
+            $barGraph->setBarScale(40, 10);
+            $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
                                       "0194D2"
                                  ));
@@ -301,8 +302,36 @@ class Proposalgen_Model_Optimization_Customer extends
             $barGraph->addValueMarkers($percentValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($percentValueMarker, "000000", "1", "-1", "11");
             $barGraph->addValueMarkers($percentValueMarker, "000000", "2", "-1", "11");
-
             // Graph8
+            $this->_graphs [] = $barGraph->getUrl();
+
+            /**
+             * -- Categories of technology features
+             */
+            $barGraph = new gchart\gBarChart(200, 300);
+            $barGraph->setTitle("Technology Features");
+            $barGraph->setVisibleAxes(array('y'));
+            $barGraph->addDataSet(array($this->deviceCategories["optimized"]["copy"] / $purchaseDeviceCount));
+            $barGraph->addColors(array("E21736"));
+            $barGraph->addDataSet(array($this->deviceCategories["optimized"]["duplex"] / $purchaseDeviceCount));
+            $barGraph->addColors(array("0194D2"));
+            $barGraph->addDataSet(array($this->deviceCategories["optimized"]["color"] / $purchaseDeviceCount));
+            $barGraph->addColors(array("EF6B18"));
+            $barGraph->setDataRange(0, 1);
+            $barGraph->setBarScale(40, 10);
+            $barGraph->setLegendPosition("bv");
+            $barGraph->addColors(array(
+                                      "0194D2"
+                                 ));
+            $barGraph->setLegend(array(
+                                      "Copy Capable ",
+                                      "Duplex Capable",
+                                      "Color Capable"
+                                 ));
+            $barGraph->addValueMarkers($percentValueMarker, "000000", "0", "-1", "11");
+            $barGraph->addValueMarkers($percentValueMarker, "000000", "1", "-1", "11");
+            $barGraph->addValueMarkers($percentValueMarker, "000000", "2", "-1", "11");
+            // Graph9
             $this->_graphs [] = $barGraph->getUrl();
 
             /**
@@ -311,11 +340,15 @@ class Proposalgen_Model_Optimization_Customer extends
             $highest  = ($this->deviceAges[0] > $this->deviceAges[2]) ? $this->deviceAges[0] : $this->deviceAges[2];
             $highest  = ($this->deviceAges[4] > $highest) ? $this->deviceAges[4] : $highest;
             $highest  = ($this->deviceAges[8] > $highest) ? $this->deviceAges[8] : $highest;
-            $barGraph = new gchart\gBarChart(375, 250);
-            $barGraph->setTitle("Age of printing devices");
+            $highestOptimized = ($this->deviceAgesOptimized[0] > $this->deviceAgesOptimized[2]) ? $this->deviceAgesOptimized[0] : $this->deviceAgesOptimized[2];
+            $highestOptimized = ($this->deviceAgesOptimized[4] > $highestOptimized) ? $this->deviceAgesOptimized[4] : $highestOptimized;
+            $highestOptimized = ($this->deviceAgesOptimized[8] > $highestOptimized) ? $this->deviceAgesOptimized[8] : $highestOptimized;
+            $highest = ($highest > $highestOptimized) ? $highest : $highestOptimized;
+            $barGraph = new gchart\gBarChart(225, 325);
+            $barGraph->setTitle("Age of devices");
             $barGraph->setVisibleAxes(array('y'));
 
-            $colors = array("E21736", "A21746", "12AB36", "A2CB36");
+            $colors = array("E21736", "0194D2", "EF6B18", "FFCF00");
             foreach ($colors as $color)
             {
                 $barGraph->addColors(array($color));
@@ -328,20 +361,140 @@ class Proposalgen_Model_Optimization_Customer extends
             $barGraph->setLegendPosition("b");
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
-            $barGraph->setBarScale(65, 10);
+            $barGraph->setBarScale(40, 10);
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "2", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "3", "-1", "11");
-
-            // Graph9
-            $this->_graphs [] = $barGraph->getUrl();
             // Graph10
-            $this->_graphs [] = $proposalGraphs[3];
+            $this->_graphs [] = $barGraph->getUrl();
+
+            /**
+             * -- Age vertical bar chart optimized
+             */
+
+            $barGraph         = new gchart\gBarChart(225, 325);
+            $barGraph->setTitle("Age of optimized devices");
+            $barGraph->setVisibleAxes(array('y'));
+
+            $colors = array("E21736", "0194D2", "EF6B18", "FFCF00");
+            foreach ($colors as $color)
+            {
+                $barGraph->addColors(array($color));
+            }
+            foreach (array_reverse($this->deviceAgesOptimized) as $deviceCount)
+            {
+                $barGraph->addDataSet(array($deviceCount));
+            }
+            $barGraph->setLegend(array_reverse(Proposalgen_Model_Optimization_Abstract::$ageRanks));
+            $barGraph->setLegendPosition("b");
+            $barGraph->addAxisRange(0, 0, $highest * 1.1);
+            $barGraph->setDataRange(0, $highest * 1.1);
+            $barGraph->setBarScale(40, 10);
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "2", "-1", "11");
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "3", "-1", "11");
             // Graph11
-            $this->_graphs [] = $proposalGraphs[7];
+            $this->_graphs [] = $barGraph->getUrl();
+
+            /**
+             * -- UniqueDevicesGraph
+             */
             // Graph12
-            $this->_graphs [] = $proposalGraphs[8];
+            $this->_graphs [] = $proposalGraphs[3];
+
+            /**
+             * -- UniqueDevicesGraph With Replacements
+             */
+            $uniqueModelArray = array();
+            foreach ($proposal->getPurchasedDevices() as $device)
+            {
+                if ($device->getReplacementMasterDevice() instanceof Proposalgen_Model_MasterDevice)
+                {
+                    $replacementDevice = $device->getReplacementMasterDevice();
+                    if (array_key_exists($replacementDevice->modelName, $uniqueModelArray))
+                    {
+                        $uniqueModelArray [$replacementDevice->modelName] += 1;
+                    }
+                    else
+                    {
+                        $uniqueModelArray [$replacementDevice->modelName] = 1;
+                    }
+                }
+                else
+                {
+                    if (array_key_exists($device->getMasterDevice()->modelName, $uniqueModelArray))
+                    {
+                        $uniqueModelArray [$device->getMasterDevice()->modelName] += 1;
+                    }
+                    else
+                    {
+                        $uniqueModelArray [$device->getMasterDevice()->modelName] = 1;
+                    }
+                }
+            }
+            $uniqueDevicesGraph = new gchart\gPie3DChart(350, 270);
+            $uniqueDevicesGraph->addDataSet($uniqueModelArray);
+            $uniqueDevicesGraph->addColors(array(
+                                                "E21736",
+                                                "b0bb21",
+                                                "5c3f9b",
+                                                "0191d3",
+                                                "f89428",
+                                                "e4858f",
+                                                "fcc223",
+                                                "B3C6FF",
+                                                "ECFFB3",
+                                                "386AFF",
+                                                "FFB3EC",
+                                                "cccccc",
+                                                "00ff00",
+                                                "000000"
+                                           ));
+            // Graph13
+            $this->_graphs [] = $uniqueDevicesGraph->getUrl();
+
+            /**
+             * -- Color Capable Devices Graph
+             */
+            // Graph14
+            $this->_graphs [] = $proposalGraphs[7];
+
+            /**
+             * -- Color Capable Devices Graph With Replacements
+             */
+            $colorPercentage = 0;
+            if ($this->getDeviceCount())
+            {
+                $colorPercentage = round((($proposal->getNumberOfColorCapableDevicesWithReplacements() / $this->getDeviceCount()) * 100), 2);
+            }
+
+            $notColorPercentage = 100 - $colorPercentage;
+            $colorCapableGraph  = new gchart\gPie3DChart(305, 210);
+            $colorCapableGraph->setTitle("Color-Capable Printing Devices");
+            $colorCapableGraph->addDataSet(array(
+                                                $colorPercentage,
+                                                $notColorPercentage
+                                           ));
+            $colorCapableGraph->setLegend(array(
+                                               "Color-capable",
+                                               "Black-and-white only"
+                                          ));
+            $colorCapableGraph->setLabels(array(
+                                               "$colorPercentage%"
+                                          ));
+            $colorCapableGraph->addColors(array(
+                                               "E21736",
+                                               "0194D2"
+                                          ));
+            $colorCapableGraph->setLegendPosition("bv");
+
+            /**
+             * -- Color Capable Devices Graph With Replacement
+             */
+            // Graph15
+            $this->_graphs [] = $colorCapableGraph->getUrl();
         }
 
         return $this->_graphs;
