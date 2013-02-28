@@ -81,16 +81,14 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         $formDataFromAnswers ["labor_cost"]            = ($survey->costOfLabor > 0) ? $survey->costOfLabor : null;
         $formDataFromAnswers ["avg_purchase"]          = ($survey->costToExecuteSuppliesOrder > 0) ? $survey->costToExecuteSuppliesOrder : Proposalgen_Model_Assessment_Survey::DEFAULT_SUPPLIES_ORDER_COST;
         $formDataFromAnswers ["it_hourlyRate"]         = ($survey->averageItHourlyRate > 0) ? $survey->averageItHourlyRate : Proposalgen_Model_Assessment_Survey::DEFAULT_IT_HOURLY_RATE;
-        $formDataFromAnswers ["numb_vendors"]          = ($survey->numberOfSuppliesVendors > 0) ? $survey->numberOfSuppliesVendors : null;
-        $formDataFromAnswers ["numb_vendors"]          = ($survey->numberOfSuppliesVendors > 0) ? $survey->numberOfSuppliesVendors : null;
         $formDataFromAnswers ["itHoursRadio"]          = ($survey->hoursSpentOnIt > 0) ? 'exact' : 'guess';
         $formDataFromAnswers ["itHours"]               = ($survey->hoursSpentOnIt > 0) ? $survey->hoursSpentOnIt : null;
         $formDataFromAnswers ["monthlyBreakdownRadio"] = ($survey->averageMonthlyBreakdowns > 0) ? 'exact' : 'guess';
         $formDataFromAnswers ["monthlyBreakdown"]      = ($survey->averageMonthlyBreakdowns > 0) ? $survey->averageMonthlyBreakdowns : null;
         $formDataFromAnswers ["pageCoverage_BW"]       = ($survey->pageCoverageMonochrome > 0) ? $survey->pageCoverageMonochrome : $surveySetting->pageCoverageMono;
         $formDataFromAnswers ["pageCoverage_Color"]    = ($survey->pageCoverageColor > 0) ? $survey->pageCoverageColor : $surveySetting->pageCoverageColor;
-        $formDataFromAnswers ["printVolume"]           = $survey->percentageOfInkjetPrintVolume;
-        $formDataFromAnswers ["repairTime"]            = $survey->averageRepairTime;
+        $formDataFromAnswers ["printVolume"]           = ($survey->percentageOfInkjetPrintVolume > 0) ? $survey->percentageOfInkjetPrintVolume : 5;
+        $formDataFromAnswers ["repairTime"]            = ($survey->averageRepairTime > 0.0) ? $survey->averageRepairTime : 0.5;
 
         /**
          * Number of monthly supply orders
@@ -110,6 +108,10 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                     $formDataFromAnswers ["numb_monthlyOrders"] = $survey->numberOfSupplyOrdersPerMonth;
                     break;
             }
+        }
+        else
+        {
+            $formDataFromAnswers ["inkTonerOrderRadio"] = "Daily";
         }
 
         $form->populate($formDataFromAnswers);
@@ -133,7 +135,6 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                     $survey->costOfLabor                   = ($form->getValue('labor_cost')) ? : new Zend_Db_Expr('NULL');
                     $survey->costToExecuteSuppliesOrder    = $form->getValue('avg_purchase');
                     $survey->averageItHourlyRate           = $form->getValue('it_hourlyRate');
-                    $survey->numberOfSuppliesVendors       = $form->getValue('numb_vendors');
                     $survey->hoursSpentOnIt                = ($form->getValue('itHours')) ? : new Zend_Db_Expr('NULL');
                     $survey->averageMonthlyBreakdowns      = ($form->getValue('monthlyBreakdown')) ? : new Zend_Db_Expr('NULL');
                     $survey->pageCoverageMonochrome        = $form->getValue('pageCoverage_BW');

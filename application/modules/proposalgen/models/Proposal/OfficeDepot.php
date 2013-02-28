@@ -88,7 +88,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     protected $NumberOfRepairs;
     protected $AverageTimeBetweenBreakdownAndFix;
     protected $AnnualDowntimeFromBreakdowns;
-    protected $NumberOfVendors;
     protected $NumberOfAnnualInkTonerOrders;
     protected $NumberOfUniquePurchasedToners;
     protected $PercentPrintingDoneOnInkjet;
@@ -1759,19 +1758,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     /**
      * @return float
      */
-    public function getNumberOfVendors ()
-    {
-        if (!isset($this->NumberOfVendors))
-        {
-            $this->NumberOfVendors = $this->report->getSurvey()->numberOfSuppliesVendors;
-        }
-
-        return $this->NumberOfVendors;
-    }
-
-    /**
-     * @return float
-     */
     public function getNumberOfAnnualInkTonerOrders ()
     {
         if (!isset($this->NumberOfAnnualInkTonerOrders))
@@ -2004,7 +1990,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->Graphs))
         {
             // Variables that could be settings
-            $OD_AverageMonthlyPagesPerEmployee = 500;
+            $OD_AverageMonthlyPagesPerEmployee = 200;
             $OD_AverageMonthlyPages            = 4200;
             $OD_AverageEmployeesPerDevice      = 4.4;
 
@@ -2709,19 +2695,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     /**
      * @return float
      */
-    public function getUniqueVendorCount ()
-    {
-        if (!isset($this->UniqueVendorCount))
-        {
-            $this->UniqueVendorCount = $this->report->getSurvey()->numberOfSuppliesVendors;
-        }
-
-        return $this->UniqueVendorCount;
-    }
-
-    /**
-     * @return float
-     */
     public function getNumberOfOrdersPerMonth ()
     {
         if (!isset($this->NumberOfOrdersPerMonth))
@@ -3373,8 +3346,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
 
         return $this->UniqueDeviceList;
     }
-
-    /**
+     /**
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *
      * @return float
@@ -3454,5 +3426,113 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      */
     public function calculateEstimatedOemTonerCostAnnually(){
         return ($this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getPageCounts()->Purchased->Color->Monthly + ($this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12;
+    }
+    /**
+     * Calculates the percentage of the fleet which is capable of reporting toner levels. This includes both purchased and leased devices.
+     *
+     * @return float
+     */
+    public function calculatePercentageOfFleetReportingTonerLevels ()
+    {
+        $percentage       = 0;
+        $totalDeviceCount = count($this->getDevices()->allIncludedDeviceInstances);
+        if ($totalDeviceCount > 0)
+        {
+            $deviceCount = 0;
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            {
+                if ($deviceInstance->isCapableOfReportingTonerLevels())
+                {
+                    $deviceCount++;
+                }
+            }
+
+            $percentage = $deviceCount / $totalDeviceCount * 100;
+        }
+
+        return $percentage;
+    }
+
+    /**
+     * Calculates a score between 0 and 100 based on the number of supplies. 100 is bad, 0 is perfect
+     *
+     * @return float
+     */
+    public function calculateNumberOfSupplyTypeScore ()
+    {
+        $maximumNumberOfSupplyTypes = 0;
+        $minimumNumberOfSupplyTypes = 0;
+        $score                      = 0;
+
+        $hasMonoDevices               = false;
+        $hasColorDevices              = false;
+        $hasThreeColorCombinedDevices = false;
+        $hasFourColorCombinedDevices  = false;
+
+
+        foreach ($this->getDevices()->purchasedDeviceInstances as $deviceInstance)
+        {
+            switch ($deviceInstance->getMasterDevice()->tonerConfigId)
+            {
+                case Proposalgen_Model_TonerConfig::BLACK_ONLY:
+                    $maximumNumberOfSupplyTypes += 1;
+                    $hasMonoDevices = true;
+                    break;
+                case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED:
+                    $maximumNumberOfSupplyTypes += 4;
+                    $hasColorDevices = true;
+                    break;
+                case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED:
+                    $maximumNumberOfSupplyTypes += 2;
+                    $hasThreeColorCombinedDevices = true;
+                    break;
+                case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED:
+                    $maximumNumberOfSupplyTypes += 1;
+                    $hasFourColorCombinedDevices = true;
+                    break;
+
+            }
+        }
+
+        /**
+         * Determine the maximum number of supply types
+         */
+
+        $minimumNumberOfSupplyTypes += ($hasMonoDevices) ? 1 : 0;
+        $minimumNumberOfSupplyTypes += ($hasColorDevices) ? 4 : 0;
+        $minimumNumberOfSupplyTypes += ($hasThreeColorCombinedDevices) ? 2 : 0;
+        $minimumNumberOfSupplyTypes += ($hasFourColorCombinedDevices) ? 1 : 0;
+
+        $currentNumberOfSupplyTypes = $this->getNumberOfUniquePurchasedToners();
+
+        if ($minimumNumberOfSupplyTypes > 0 && $maximumNumberOfSupplyTypes > 0 && $currentNumberOfSupplyTypes > 0)
+        {
+            $score = ($currentNumberOfSupplyTypes - $minimumNumberOfSupplyTypes) / ($maximumNumberOfSupplyTypes - $minimumNumberOfSupplyTypes);
+        }
+
+        return $score * 100;
+    }
+
+    /**
+     * Gets the average age of the purchased devices
+     *
+     * @return float
+     */
+    public function calculateAverageAgeOfPurchasedDevices ()
+    {
+        $averageAge = 0;
+
+        $totalAge    = 0;
+        $deviceCount = $this->getPurchasedDeviceCount();
+        if ($deviceCount > 0)
+        {
+            foreach ($this->getDevices()->purchasedDeviceInstances as $deviceInstance)
+            {
+                $totalAge += $deviceInstance->getAge();
+            }
+            $averageAge = $totalAge / $deviceCount;
+        }
+
+        return $averageAge;
     }
 }

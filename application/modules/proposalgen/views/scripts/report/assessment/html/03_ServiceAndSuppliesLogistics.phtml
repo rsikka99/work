@@ -73,8 +73,8 @@ else if ($proposal->getPercentPrintingDoneOnInkjet() == 18)
 <p>Based on your questionnaire responses, we discovered the following:</p>
 <table cellspacing="0" class="bold" style="font-size: 10.5pt">
     <tr>
-        <td style="width: 500px;">Number of vendors used to source printing hardware, supplies and service</td>
-        <td style="width: 145px;" class="right"><?php echo $proposal->getNumberOfVendors(); ?></td>
+        <td style="width: 500px;">Percentage of fleet capable of report toner levels</td>
+        <td style="width: 145px;" class="right"><?php echo number_format($proposal->calculatePercentageOfFleetReportingTonerLevels(), 2); ?>%</td>
     </tr>
     <tr>
         <td>Number of orders for ink and toner executed annually</td>

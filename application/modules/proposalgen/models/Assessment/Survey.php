@@ -34,11 +34,6 @@ class Proposalgen_Model_Assessment_Survey extends My_Model_Abstract
     /**
      * @var int
      */
-    public $numberOfSuppliesVendors;
-
-    /**
-     * @var int
-     */
     public $numberOfSupplyOrdersPerMonth;
 
     /**
@@ -107,11 +102,6 @@ class Proposalgen_Model_Assessment_Survey extends My_Model_Abstract
             $this->averageItHourlyRate = $params->averageItHourlyRate;
         }
 
-        if (isset($params->numberOfSuppliesVendors) && !is_null($params->numberOfSuppliesVendors))
-        {
-            $this->numberOfSuppliesVendors = $params->numberOfSuppliesVendors;
-        }
-
         if (isset($params->numberOfSupplyOrdersPerMonth) && !is_null($params->numberOfSupplyOrdersPerMonth))
         {
             $this->numberOfSupplyOrdersPerMonth = $params->numberOfSupplyOrdersPerMonth;
@@ -160,7 +150,6 @@ class Proposalgen_Model_Assessment_Survey extends My_Model_Abstract
             "costOfLabor"                   => $this->costOfLabor,
             "costToExecuteSuppliesOrder"    => $this->costToExecuteSuppliesOrder,
             "averageItHourlyRate"           => $this->averageItHourlyRate,
-            "numberOfSuppliesVendors"       => $this->numberOfSuppliesVendors,
             "numberOfSupplyOrdersPerMonth"  => $this->numberOfSupplyOrdersPerMonth,
             "hoursSpentOnIt"                => $this->hoursSpentOnIt,
             "averageMonthlyBreakdowns"      => $this->averageMonthlyBreakdowns,
