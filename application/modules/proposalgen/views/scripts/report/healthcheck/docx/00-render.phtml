@@ -447,18 +447,19 @@ $titledata = array (
 $data = array (
     "phpword" => $phpWord,
     "section" => $section, 
-    "proposal" => $this->proposal, 
+    "healthcheck" => $this->healthcheck,
+    "graphs" => $this->graphs,
     "styles" => $styles 
 );
 // Actual document pages
-$this->partial("report/assessment/docx/01_titlepage.phtml", $titledata);
-$this->partial("report/assessment/docx/02_reportcard.phtml", $data);
-$this->partial("report/assessment/docx/03_serviceandsupplieslogistics.phtml", $data);
-$this->partial("report/assessment/docx/04_printinghardwareusage.phtml", $data);
-$this->partial("report/assessment/docx/05_techandproductivity.phtml", $data);
-$this->partial("report/assessment/docx/06_environmental.phtml", $data);
-$this->partial("report/assessment/docx/07_expense.phtml", $data);
-$this->partial("report/assessment/docx/08_summary.phtml", $data);
+$this->partial("report/healthcheck/docx/01_titlepage.phtml", $titledata);
+$this->partial("report/healthcheck/docx/02_reportcard.phtml", $data);
+$this->partial("report/healthcheck/docx/03_serviceandsupplieslogistics.phtml", $data);
+//$this->partial("report/healthcheck/docx/04_printinghardwareusage.phtml", $data);
+//$this->partial("report/healthcheck/docx/05_techandproductivity.phtml", $data);
+//$this->partial("report/healthcheck/docx/06_environmental.phtml", $data);
+//$this->partial("report/healthcheck/docx/07_fleetattributes.phtml", $data);
+//$this->partial("report/healthcheck/docx/08_summary.phtml", $data);
 
 $objWriter = PHPWord_IOFactory::createWriter($phpWord, 'Word2007');
 $objWriter->save($this->savePath);

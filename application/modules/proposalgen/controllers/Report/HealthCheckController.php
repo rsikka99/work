@@ -47,7 +47,7 @@ class Proposalgen_Report_HealthCheckController extends Proposalgen_Library_Contr
             }
             else
             {
-                throw new Exception("Proposal is false");
+                throw new Exception("The proposal cannot be found.");
             }
             $this->view->healthcheck = $healthCheck;
         }
@@ -73,9 +73,10 @@ class Proposalgen_Report_HealthCheckController extends Proposalgen_Library_Contr
             case "docx" :
                 require_once ('PHPWord.php');
                 $this->view->phpword = new PHPWord();
-                $proposal = $this->getProposal();
-                $graphs   = $this->cachePNGImages($proposal->getGraphs(), true);
-                $proposal->setGraphs($graphs);
+                $healthCheck = new Proposalgen_Model_HealthCheck_HealthCheck($this->getProposal());
+                $this->view->healthcheck = $healthCheck;
+                $graphs   = $this->cachePNGImages($healthCheck->getGraphs(), true);
+                $this->view->graphs = $graphs;
                 $this->_helper->layout->disableLayout();
                 break;
             case "pdf" :

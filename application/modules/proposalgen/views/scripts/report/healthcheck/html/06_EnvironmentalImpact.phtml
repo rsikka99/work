@@ -31,7 +31,7 @@ $graphs = $this->healthcheck->getGraphs();
 <p>The following lists the devices with the highest average power consumption per month.</p>
 <table cellspacing="0" class="genericTable" style="font-size: 10pt;">
     <thead>
-        <tr>
+        <tr class="shaded">
             <th style="width: 160px;">Model</th>
             <th style="width: 110px;" class="center">Serial No.</th>
             <th style="width: 170px;" class="center">Avg. kWh Consumption<br/>Per Month Count</th>
@@ -54,7 +54,7 @@ $graphs = $this->healthcheck->getGraphs();
 <?php } else echo "<p>".$proposal->getNumberOfDevicesReportingPower()." of your ".$proposal->getDeviceCount()." printer(s) report power usage.  Not enough information is available to accurately calculate energy consumption for your fleet.</p>";?>
 <div class="pheader">Green Features: Duplexing and Scanning</div>
 <p>If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption by using a scanner to e-mail documents instead of printing copies for distribution.</p>
-<p>By printing 25% more documents on both sides of the page than you are now, you could save <strong><?php echo number_format(($proposal->getPageCounts()->Total->Combined->Yearly * .25) / 7800) ?> trees</strong> and <strong><?php echo number_format(($proposal->getPageCounts()->Total->Combined->Yearly * .25) / 8.2186) ?> gallons of water</strong> used in paper production per year</p>
+<p>By printing 25% more documents on both sides of the page than you are now, you could save <strong><?php echo number_format(($proposal->getPageCounts()->Total->Combined->Yearly * .25) / 7800) ?> trees</strong> and <strong><?php echo number_format(($proposal->getPageCounts()->Total->Combined->Yearly * .25) / 8.2186) ?> gallons of water</strong> used in paper production per year.</p>
 <p>The following charts show how many of your printing devices have duplexing and scanning capabilities:</p>
 <div class="center">
     <img src="<?php echo $graphs[13]; ?>" style="width: 270px; height: 175px;" />

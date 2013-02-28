@@ -3,8 +3,9 @@ class Proposalgen_Model_HealthCheck_HealthCheck
 {
     /**@var Proposalgen_Model_Proposal_OfficeDepot */
     public $proposal;
-    public $graphs = array();
+    protected $_graphs = array();
     public $reportSettings;
+
     /**
      * @param Proposalgen_Model_Proposal_OfficeDepot $Proposal
      */
@@ -14,28 +15,34 @@ class Proposalgen_Model_HealthCheck_HealthCheck
         // Get the report settings
         $this->reportSettings = $this->proposal->report->getReportSettings();
     }
-    public function getGraphs(){
 
-        if($this->graphs == null){
-            $this->graphs = $this->proposal->getGraphs();
-            $healthgraphs = array();
-            $numberValueMarker                          = "N *sz0";
+    public function getGraphs ()
+    {
+
+        if ($this->_graphs == null)
+        {
+            $this->_graphs       = $this->proposal->getGraphs();
+            $healthgraphs        = array();
+            $numberValueMarker   = "N *sz0";
             $currencyValueMarker = "N $*sz0";
-            $pageCounts    = $this->proposal->getPageCounts();
+            $pageCounts          = $this->proposal->getPageCounts();
 
             /**
              * -- PagesPrinterATRPieGraph
              */
             $deviceAges = array(
-                "Pages Printed on ATR devices" => 0,
-                "Pages Printed on non-ATR devices"         => 0
+                "Pages Printed on ATR devices"     => 0,
+                "Pages Printed on non-ATR devices" => 0
             );
             foreach ($this->proposal->getPurchasedDevices() as $device)
             {
-                if($device->reportsTonerLevels == 1){
+                if ($device->reportsTonerLevels == 1)
+                {
                     $deviceAges ["Pages Printed on ATR devices"] += $device->getAverageMonthlyPageCount();
-                }else{
-                    $deviceAges ["Pages Printed on non-ATR devices"]+= $device->getAverageMonthlyPageCount();
+                }
+                else
+                {
+                    $deviceAges ["Pages Printed on non-ATR devices"] += $device->getAverageMonthlyPageCount();
                 }
             }
             $dataSet     = array();
@@ -101,12 +108,11 @@ class Proposalgen_Model_HealthCheck_HealthCheck
             $healthgraphs['HardwareUtilizationCapacityBar'] = $barGraph->getUrl();
 
 
-
             /**
              * -- ColorCapablePrintingDevices
              */
-            $highest          = ($this->proposal->getPurchasedDeviceCount() - $this->proposal->getNumberOfColorCapablePurchasedDevices() > $this->proposal->getNumberOfColorCapablePurchasedDevices()) ? ($this->proposal->getPurchasedDeviceCount() - $this->proposal->getNumberOfColorCapablePurchasedDevices()) : $this->proposal->getNumberOfColorCapablePurchasedDevices();
-            $barGraph         = new gchart\gBarChart(280, 210);
+            $highest  = ($this->proposal->getPurchasedDeviceCount() - $this->proposal->getNumberOfColorCapablePurchasedDevices() > $this->proposal->getNumberOfColorCapablePurchasedDevices()) ? ($this->proposal->getPurchasedDeviceCount() - $this->proposal->getNumberOfColorCapablePurchasedDevices()) : $this->proposal->getNumberOfColorCapablePurchasedDevices();
+            $barGraph = new gchart\gBarChart(280, 210);
             $barGraph->setTitle("Color-Capable Printing Devices");
             $barGraph->setVisibleAxes(array(
                                            'y'
@@ -143,8 +149,8 @@ class Proposalgen_Model_HealthCheck_HealthCheck
              */
             $blackAndWhitePageCount = $pageCounts->Purchased->Combined->Monthly - $pageCounts->Purchased->Color->Monthly;
 
-            $highest          = ($pageCounts->Purchased->Color->Monthly > $blackAndWhitePageCount) ? $pageCounts->Purchased->Color->Monthly : $blackAndWhitePageCount;
-            $barGraph         = new gchart\gBarChart(280, 210);
+            $highest  = ($pageCounts->Purchased->Color->Monthly > $blackAndWhitePageCount) ? $pageCounts->Purchased->Color->Monthly : $blackAndWhitePageCount;
+            $barGraph = new gchart\gBarChart(280, 210);
             $barGraph->setTitle("Color vs Black/White Pages");
             $barGraph->setVisibleAxes(array(
                                            'y'
@@ -209,8 +215,8 @@ class Proposalgen_Model_HealthCheck_HealthCheck
             // CompatibleATRBarGraph
             $healthgraphs['CompatibleATRBarGraph'] = $barGraph->getUrl();
 
-            $oemCost = ($this->proposal->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->proposal->getPageCounts()->Purchased->Color->Monthly + ($this->proposal->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12;
-            $compCost =($this->proposal->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->proposal->getPageCounts()->Purchased->Color->Monthly + ($this->proposal->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12;
+            $oemCost  = ($this->proposal->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->proposal->getPageCounts()->Purchased->Color->Monthly + ($this->proposal->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12;
+            $compCost = ($this->proposal->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->proposal->getPageCounts()->Purchased->Color->Monthly + ($this->proposal->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12;
             /**
              * -- DifferenceBarGraph
              */
@@ -232,7 +238,7 @@ class Proposalgen_Model_HealthCheck_HealthCheck
             $barGraph->setDataRange(0, $highest * 1.1);
             $barGraph->setBarScale(70, 10);
             $barGraph->setLegendPosition("b");
-            $barGraph->setProperty('chxs','0N*cUSD*');
+            $barGraph->setProperty('chxs', '0N*cUSD*');
             $barGraph->addColors(array(
                                       "0194D2"
                                  ));
@@ -247,8 +253,8 @@ class Proposalgen_Model_HealthCheck_HealthCheck
              * -- HardwareUtilizationCapacityPercent
              */
             $percentage = ($pageCounts->Total->Combined->Monthly / $this->proposal->getMaximumMonthlyPrintVolume());
-            $highest  = 100;
-            $barGraph = new gchart\gStackedBarChart(600, 160);
+            $highest    = 100;
+            $barGraph   = new gchart\gStackedBarChart(600, 160);
             $barGraph->setHorizontal(true);
             $barGraph->setVisibleAxes(array(
                                            'x'
@@ -290,10 +296,10 @@ class Proposalgen_Model_HealthCheck_HealthCheck
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
             //Create a circle object, color E21736,0,height, position on axis, size, | means another statement in this string
-            $dotProperties = '@o,E21736,0,.5:' . number_format($percentage,2) . ',15|';
+            $dotProperties = '@d,E21736,0,.5:' . number_format($percentage, 2) . ',15|';
             //Add onto the last property, @t = a text message, color,0,height,positon - halfish of the text width, size
-            $dotProperties .= '@t' . number_format($percentage * 100,2) . '%,000000,0,-2.5:' . number_format($percentage - .03,2)  . ',10';
-            $barGraph->setProperty('chm',$dotProperties);
+            $dotProperties .= '@t' . number_format($percentage * 100) . '%,000000,0,-2.0:' . number_format($percentage - .01, 2) . ',10';
+            $barGraph->setProperty('chm', $dotProperties);
             $barGraph->addColors(array(
                                       "0194D2"
                                  ));
@@ -330,12 +336,18 @@ class Proposalgen_Model_HealthCheck_HealthCheck
                 }
             }
             $highest = $deviceAges ["Less than 3 years old"];
-            if($highest < $deviceAges["3-5 years old"])
+            if ($highest < $deviceAges["3-5 years old"])
+            {
                 $highest = $deviceAges["3-5 years old"];
-            if($highest < $deviceAges["6-8 years old"])
+            }
+            if ($highest < $deviceAges["6-8 years old"])
+            {
                 $highest = $deviceAges["6-8 years old"];
-            if($highest < $deviceAges["More than 8 years old"])
+            }
+            if ($highest < $deviceAges["More than 8 years old"])
+            {
                 $highest = $deviceAges["More than 8 years old"];
+            }
             $barGraph = new gchart\gBarChart(320, 230);
             $barGraph->setVisibleAxes(array(
                                            'y'
@@ -413,9 +425,8 @@ class Proposalgen_Model_HealthCheck_HealthCheck
             // DuplexCapableDevicesGraph
             $healthgraphs['DuplexCapableDevicesGraph'] = $duplexCapableGraph->getUrl();
 
-            $this->graphs['healthCheck'] = $healthgraphs;
+            $this->_graphs = array_merge($healthgraphs,$this->_graphs);
         }
-
-        return $this->graphs;
+        return $this->_graphs;
     }
 }

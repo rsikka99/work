@@ -4,7 +4,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     /**
      * All devices printing less than this are considered underutilized.
      */
-    const UNDERUTILIZED_THRESHHOLD_PERCENTAGE = 0.25;
+    const UNDERUTILIZED_THRESHHOLD_PERCENTAGE = 0.05;
     /**
      * All devices that have ages older than this are considered old/
      */
@@ -73,7 +73,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     protected $PercentColorDevices;
     protected $AverageAgeOfDevices;
     protected $HighPowerConsumptionDevices;
-    protected $HighCostColorDevices;
     protected $HighCostMonochromeDevices;
     protected $MostExpensiveDevices;
     protected $DateReportPrepared;
@@ -153,6 +152,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     protected $_purchasedColorMonthlyCost;
     protected $_purchasedMonochromeMonthlyCost;
     protected $_optimizedDevices;
+    protected $_numberOfDevicesNotReportingTonerLevels;
 
     /**
      * @param Proposalgen_Model_Report $report
@@ -1604,7 +1604,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     public function getDevicesNotReportingTonerLevels ()
     {
         $devicesNotReportingTonerLevels = array();
-        foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
+        foreach ($this->getDevices()->purchasedDeviceInstances as $device)
         {
             if ($device->reportsTonerLevels != 1)
             {
@@ -1626,6 +1626,19 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         }
 
         return $_numberOfDevicesReportingTonerLevels;
+    }
+
+    /**
+     * @return Proposalgen_Model_DeviceInstance[]
+     */
+    public function getNumberOfDevicesNotReportingTonerLevels ()
+    {
+        if (!isset($this->_numberOfDevicesNotReportingTonerLevels))
+        {
+            $_numberOfDevicesNotReportingTonerLevels = count($this->getDevicesNotReportingTonerLevels());
+        }
+
+        return $_numberOfDevicesNotReportingTonerLevels;
     }
 
     /**

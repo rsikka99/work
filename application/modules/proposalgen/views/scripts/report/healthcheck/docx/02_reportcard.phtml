@@ -1,7 +1,5 @@
 <?php
-/**
- * Assessment - Report Card
- */
+/** Health Check - Report Card */
 
 /* @var $phpword PHPWord */
 $phpword = $this->phpword;
@@ -10,10 +8,22 @@ $phpword = $this->phpword;
 $section = $this->section;
 
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-$proposal = $this->proposal;
+$proposal = $this->healthcheck->proposal;
 
-$section->addTitle($this->translate('Your PrintIQ� Smart Assessment'), 1);
-$section->addText($this->translate('It can be a challenge to understand your printing needs, and there are many factors to consider: hardware functionality, supplies delivery, service, parts, maintenance kits, IT time spent supporting printers -- and the cost for all of this. This free PrintIQ Smart Assessment will allow you to make sense of your printing needs and costs. Office Depot can help you get your office print under control with our smart and flexible managed print services solutions.'));
+$section->addTitle($this->translate('Your PrintIQ� Health Check'), 1);
+$textrun = $section->createTextRun();
+$textrun->addText('Does your fleet of printing hardware deliver your users and business the greatest return on investment? How many trees and how much water are you using per year? This free PrintIQ Health Check will break down your current fleet and show you how you can ');
+$textrun->addText('lower your supplies costs',"bold_text");
+$textrun->addText(', which devices are ');
+$textrun->addText('printing too much',"bold_text");
+$textrun->addText(' and which devices are ');
+$textrun->addText('printing too little',"bold_text");
+$textrun->addText(', and the ');
+$textrun->addText('environmental impact',"bold_text");
+$textrun->addText(' of your fleet.');
+//$section->addText($textrun);
+
+$section->addText("Data used in this Health Check is compiled using remote monitoring software, from the past 30 days.");
 
 $section->addTitle($this->translate('Score Card'), 2);
 $section->addText($this->translate('Your office printing environment was graded across five categories on a scale of 1 to 10. A score of 1 indicates a low-efficiency or high-cost scenario. A score of 10 indicates a high-efficiency or low-cost scenario. Your results are below:'));
@@ -24,7 +34,7 @@ $rowHeight = 800;
 $reportCardTable->addRow($rowHeight);
 $cell = $reportCardTable->addCell(8028, $this->styles->tables->grades->cell1);
 $cell->addText($this->translate('Supplies and Service Logistics'), 'gradeTitleFont', 'nospacing');
-$cell->addText($this->translate('Management breakdown, efficiency of break-fix service, number of vendors used for print, and number of different models and associated supply types.'), null, 'nospacing');
+$cell->addText($this->translate('Printing device management, number of various printer device models, and compatibility with Office Depot™ ATR (Auto Toner Replenishment).'), null, 'nospacing');
 $cell = $reportCardTable->addCell(1000, $this->styles->tables->grades->cell2);
 $cell->addText(number_format($proposal->getRanking()->SuppliesAndServiceLogistics->Rank, 1), 'gradeFont', 'gradeParagraph');
 
@@ -52,42 +62,5 @@ $cell->addText($this->translate('Energy consumption from printing hardware and a
 $cell = $reportCardTable->addCell(1000, $this->styles->tables->grades->cell2);
 $cell->addText(number_format($proposal->getRanking()->EnvironmentalFriendliness->Rank, 1), 'gradeFont', 'gradeParagraph');
 
-// Row 5
-$reportCardTable->addRow($rowHeight);
-$cell = $reportCardTable->addCell(8028, $this->styles->tables->grades->cell1);
-$cell->addText($this->translate('Expense'), 'gradeTitleFont', 'nospacing');
-$cell->addText($this->translate('Your estimated annual expenses for print-related hardware, supplies, service, and internal support and administration.'), null, 'nospacing');
-$cell = $reportCardTable->addCell(1000, $this->styles->tables->grades->cell2);
-$cell->addText(number_format($proposal->getRanking()->Expense->Rank, 1), 'gradeFont', 'gradeParagraph');
-
 // Textbreak fix to ensure the tables don't merge into each other
 $section->addTextBreak();
-
-$imageTable = $section->addTable();
-$imageTable->addRow();
-$cell = $imageTable->addCell(9028, $this->styles->tables->singleimage->cell1);
-$graphs = $proposal->getGraphs();
-$cell->addImage($graphs[0]);
-
-// Textbreak fix to ensure the tables don't merge into each other
-$section->addTextBreak();
-$savingsTable = $section->addTable($this->styles->tables->savings->tablestyle);
-$savingsTable->addRow(720);
-$cell = $savingsTable->addCell(9028, $this->styles->tables->savings->cell1);
-
-$textrun = $cell->createTextRun('savingsParagraph');
-$textrun->addText($this->translate('Our PrintIQ� program could provide you with annual savings of up to '), 'savingsFont');
-$textrun->addText('$' . number_format($proposal->getPrintIQSavings()), 'savingsAmountFont');
-$textrun->addText('.', 'savingsFont');
-/*
-$cell->addText(sprintf($this->translate('Our PrintIQ� program could provide you with annual savings of up to $%1$s.'), number_format(128060)), array (
-    'size' => 11, 
-    'bold' => true 
-), array (
-    'align' => 'center', 
-    'bgColor' => 'F0F0F0', 
-    'borderTopSize' => 1, 
-    'borderRightSize' => 1, 
-    'borderBottomSize' => 1, 
-    'borderLeftSize' => 1 
-));*/

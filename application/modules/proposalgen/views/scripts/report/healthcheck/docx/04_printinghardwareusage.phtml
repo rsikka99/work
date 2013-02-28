@@ -8,11 +8,10 @@ $phpword = $this->phpword;
 
 /* @var $section PHPWord_Section */
 $section = $this->section;
-$section->addPageBreak();
 
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-$proposal = $this->proposal;
-$graphs = $proposal->getGraphs();
+$proposal = $this->healthcheck->proposal;
+$graphs = $this->healthcheck->getGraphs();
 
 $section->addTitle($this->translate("Analysis: Printing Hardware Usage"), 1);
 $gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
@@ -22,7 +21,7 @@ $gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number
 
 $section->addTextBreak();
 $section->addTitle($this->translate('Print Volume and Number of Printing Devices'), 2);
-$section->addText(sprintf($this->translate('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.'), number_format(count($this->proposal->getDevices())), number_format(($this->proposal->getPageCounts()->Total->Combined->Monthly / $this->proposal->DeviceCount)), number_format($this->proposal->getPageCounts()->Total->Combined->Monthly)));
+$section->addText(sprintf($this->translate('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.'), number_format(count($proposal->getDevices())), number_format(($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->DeviceCount)), number_format($proposal->getPageCounts()->Total->Combined->Monthly)));
 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
@@ -48,7 +47,7 @@ $lowestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utiliza
 $lowestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText($this->translate('Avg. Monthly Volume'), 'bold_text', 'nospacing_centeralign');
 $lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->translate('Recommended Max. Volume'), 'bold_text', 'nospacing_centeralign');
 /* @var $device Proposalgen_Model_DeviceInstance */
-foreach ( $this->proposal->getLeastUsedDevices() as $device )
+foreach ( $proposal->getLeastUsedDevices() as $device )
 {
     $lowestUtilizationTable->addRow($this->styles->tables->utilization->rowheight);
     $lowestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($device->getDeviceName(), null, 'nospacing');
@@ -68,7 +67,7 @@ $highestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utiliz
 $highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->translate('Recommended Max. Volume'), 'bold_text', 'nospacing_centeralign');
 
 /* @var $device Proposalgen_Model_DeviceInstance */
-foreach ( $this->proposal->getMostUsedDevices() as $device )
+foreach ($proposal->getMostUsedDevices() as $device )
 {
     $highestUtilizationTable->addRow();
     $highestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($device->getDeviceName(), null, 'nospacing');

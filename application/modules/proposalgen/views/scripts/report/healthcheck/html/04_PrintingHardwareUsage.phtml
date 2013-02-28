@@ -43,10 +43,10 @@ Ideally, you should have the minimum amount of printing hardware required to mee
 </table>
     <br />
 <p>A good measure of the recommended maximum monthly page volume for a printing device is the manufacturer's stated yield of a single print cartridge. In essence, you should not have to change the same toner cartridge more than once per month.</p>
-<p>Using this definition of maximum monthly page volume, the total capacity of your printing fleet is the sum of the maximum page volumes for all of your printing devices.  As a guide we suggest that company printing should range between 35 and 50% of maximum  fleet capacity. The closer you are to printing at maximum capacity, the more return you are getting on your printing assets. Most find that they have more printing hardware than they need. The following chart displays your estimated monthly page volume compared to your maximum monthly page capacity.</p>
+<p>Using this definition of maximum monthly page volume, the total capacity of your printing fleet is the sum of the maximum page volumes for all of your printing devices.  As a guide we suggest that company printing should range between 30 and 50% of maximum  fleet capacity. The closer you are to printing at maximum capacity, the more return you are getting on your printing assets. Most find that they have more printing hardware than they need. The following chart displays your estimated monthly page volume compared to your maximum monthly page capacity.</p>
 <div class="center">
-<img src="<?php echo $graphs['healthCheck']['HardwareUtilizationCapacityBar']; ?>"  /> <!-- Monthly Usage compared to maximum fleet capacity -->
-<img src="<?php echo $graphs['healthCheck']['HardwareUtilizationCapacityPercent']; ?>"  /> <!-- Monthly Usage compared to optimal fleet capacity -->
+<img src="<?php echo $graphs['HardwareUtilizationCapacityBar']; ?>"  /> <!-- Monthly Usage compared to maximum fleet capacity -->
+<img src="<?php echo $graphs['HardwareUtilizationCapacityPercent']; ?>"  /> <!-- Monthly Usage compared to optimal fleet capacity -->
 </div>
 <div class="pheader">Underused and Overused Printing Devices</div>
 <p>Currently, <strong><?php echo number_format($proposal->getPercentDevicesUnderused()); ?>%</strong> of your printing devices are printing less than one quarter of our recommended monthly print volume, and <strong><?php echo number_format($proposal->getPercentDevicesOverused());?>%</strong> are printing above our recommended monthly print volume. Our recommended monthly print volumes are equal to the manufacturer's stated yield for a single print cartridge (for monochrome devices, the black cartridge, and for color devices, a single color cartridge unless the device is not being used for color).</p>
@@ -55,17 +55,17 @@ Ideally, you should have the minimum amount of printing hardware required to mee
 <br/>
 <table cellspacing="0" class="genericTable" id="LeastUsedDevicesTable" >
     <thead>
-        <tr>
+        <tr class="shaded">
             <th class="column1">Lowest Utilization</th>
             <th class="column2 center">Serial No.</th>
             <th class="column3 center">Avg. Monthly<br/>Volume</th>
             <th class="column4 center">Recommended <br />Max. Volume</th>
-            <th class="column5 center">% of Recommended Max. Volumne</th>
+            <th class="column5 center">% of Recommended Max. Volume</th>
         </tr>
     </thead>
     <tbody>
         <?php foreach ($proposal->getLeastUsedDevices() as $deviceInstance) : ?>
-        <tr>
+        <tr >
             <td class="column1"><div ><?php echo $deviceInstance->getDeviceName() ?></div></td>
             <td class="column2"><div class=" center"><?php echo ($deviceInstance->serialNumber) ?: 'Unknown'; ?></div></td>
             <td class="column3"><div class=" center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()) ?></div></td>
@@ -79,12 +79,12 @@ Ideally, you should have the minimum amount of printing hardware required to mee
 <em>Only takes into account devices for which expected cartridge yields are known.</em>
 <table cellspacing="0" class="genericTable" style="margin-top: 10px;" id="MostUsedDevicesTable">
     <thead>
-        <tr>
+        <tr class="shaded">
             <th class="column1">Highest Utilization</th>
             <th class="column2 center">Serial No.</th>
             <th class="column3 center">Avg. Monthly<br/>Volume</th>
             <th class="column4 center">Recommended <br />Max. Volume</th>
-            <th class="column5 center">% of Recommended Max. Volumne</th>
+            <th class="column5 center">% of Recommended Max. Volume</th>
         </tr>
     </thead>
     <tbody>
@@ -110,8 +110,8 @@ Ideally, you should have the minimum amount of printing hardware required to mee
     <table>
         <tbody>
             <tr>
-                <td><img src="<?php echo $graphs['healthCheck']['ColorCapablePrintingDevices']; ?>" /></td> <!-- Devices Purchased -->
-                <td><img src="<?php echo $graphs['healthCheck']['ColorVSBWPagesGraph']; ?>" /></td> <!-- Monthly pages on devices not leased -->
+                <td><img src="<?php echo $graphs['ColorCapablePrintingDevices']; ?>" /></td> <!-- Devices Purchased -->
+                <td><img src="<?php echo $graphs['ColorVSBWPagesGraph']; ?>" /></td> <!-- Monthly pages on devices not leased -->
             </tr>
         </tbody>
     </table>
@@ -122,7 +122,7 @@ Ideally, you should have the minimum amount of printing hardware required to mee
     ?>
 <table cellspacing="0" class="genericTable" style="font-size: 10pt;">
     <thead>
-        <tr>
+        <tr class="shaded">
             <th style="width: 160px;">Device Name</th>
             <th style="width: 110px;" class="center">Serial No.</th>
             <th style="width: 170px;" class="center">% of Monthly Cost</th>

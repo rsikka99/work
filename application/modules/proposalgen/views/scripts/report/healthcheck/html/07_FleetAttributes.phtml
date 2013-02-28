@@ -46,8 +46,8 @@ $proposal = $this->healthcheck->proposal;
             <th style="width: 30px;vertical-align: middle"><strong>Device Name</th>
             <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
             <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
-            <th style="width: 51px;vertical-align: middle" class="center"><strong>Recommended Max. Volume</strong></th>
-            <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Total Page Volume</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Suggested Max. Volume</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Suggested Max. Volume</strong></th>
             <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Monthly Cost</strong></th>
             <th style="width: 51px;vertical-align: middle" class="center"><strong>Office Depot™ ATR Compatible</strong></th>
             <th style="vertical-align: middle" class="center"><strong>Suggested Action</strong></th>
@@ -68,7 +68,7 @@ $proposal = $this->healthcheck->proposal;
             <td class="center"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
             <td class="center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
             <td class="center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume(), 0) ?></td>
-            <td class="center"><?php echo number_format(($deviceInstance->getAverageMonthlyPageCount() / $proposal->getPageCounts()->Total->Combined->Monthly) * 100, 2) ?>
+            <td class="center"><?php echo number_format(($deviceInstance->getAverageMonthlyPageCount() / $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume())*100,2) ?>
                 %</td>
             <td><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) ?>
                 %</td>
@@ -85,8 +85,8 @@ $proposal = $this->healthcheck->proposal;
             <th style="width: 170px;vertical-align: middle"><strong>Device Name</th>
             <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
             <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
-            <th style="width: 51px;vertical-align: middle" class="center"><strong>Recommended Max. Volume</strong></th>
-            <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Total Volume</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Suggested Max. Volume</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Suggested Max. Volume</strong></th>
             <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Monthly Cost</strong></th>
             <th style="width: 51px;vertical-align: middle" class="center"><strong>Office Depot™ ATR Compatible</strong></th>
             <th style="width: 220px;vertical-align: middle" class="center"><strong>Suggested Action</strong></th>
@@ -107,7 +107,7 @@ $proposal = $this->healthcheck->proposal;
             <td class="center"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
             <td class="center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
             <td class="center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume(), 0) ?></td>
-            <td class="center"><?php echo number_format(($deviceInstance->getAverageMonthlyPageCount() / $proposal->getPageCounts()->Total->Combined->Monthly) * 100, 2) ?>
+            <td class="center"><?php echo number_format(($deviceInstance->getAverageMonthlyPageCount() / $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume())*100,2) ?>
                 %</td>
             <td><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) ?>
                 %</td>
@@ -166,10 +166,8 @@ $proposal = $this->healthcheck->proposal;
         </tr>
     </thead>
     <tbody>
-        <?php /** FIXME  Devices Not Reporting Toner Levels*/
+        <?php
         foreach ($proposal->getDevicesNotReportingTonerLevels() as $deviceInstance):
-            if ($deviceInstance->getIsLeased() == false)
-            {
                 ?>
                 <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
             <tr class="<?php
@@ -187,6 +185,6 @@ $proposal = $this->healthcheck->proposal;
             <td class="center"> <?php echo ($deviceInstance->getIsLeased() ? 'N' : ($deviceInstance->reportsTonerLevels == 1 ? 'Y' : 'N')) ?></td>
             <td>Migrate all page volume to ATR compatible device.</td>
         </tr>
-                <?php } endforeach; ?>
+                <?php endforeach; ?>
     </tbody>
 </table>

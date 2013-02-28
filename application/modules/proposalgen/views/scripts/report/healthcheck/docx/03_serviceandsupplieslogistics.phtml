@@ -7,10 +7,9 @@
 $phpWord = $this->phpword;
 /* @var $section PHPWord_Section */
 $section = $this->section;
-$section->addPageBreak();
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-$proposal = $this->proposal;
-$graphs = $proposal->getGraphs();
+$proposal = $this->healthcheck->proposal;
+$graphs = $this->graphs;
 
 $section->addTitle($this->translate('Analysis: Service and Supplies Logistics'), 1);
 $gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
@@ -42,69 +41,28 @@ else if ($proposal->getPercentPrintingDoneOnInkjet() == 18)
     $inkJetString = $this->translate('10% to 25%');
 }
 
-$textRun = $section->createTextRun();
-$textRun->addText($this->translate('Based on your questionnaire, '));
-$textRun->addText(sprintf($this->translate('%1$s of your printing is done on inkjet devices. '), $inkJetString), array (
-    'bold' => true
-));
-$textRun->addText($this->translate('We did not monitor inkjet machines that are not connected to the network, and on average, pages printed to inkjet printers cost three times more than pages printed to laser devices. Without being on the network, users also cannot share these devices. There are some instances where desktop printers are appropriate, for instance, if a single user requires confidential, high-convenience printing. We can help you consolidate desktop hardware where appropriate, and where desktop printing is required, we can help you select network-capable equipment so your desktop printing can be managed with the rest of your office print.'));
-$excludedDeviceCount = count($proposal->getExcludedDevices());
-if ($excludedDeviceCount > 0)
-{
-    $section->addTextBreak();
-    $section->addText(sprintf($this->translate('%1$s devices were not included in the analysis due to lack of data or model information. See the Appendix in the PrintIQ Your Solution document for the list of excluded device(s).'), number_format($excludedDeviceCount)));
-}
 
-$section->addPageBreak();
+$section->addTitle($this->translate('Number of Printing Device Models and Supply Types'), 2);
 
-$section->addTitle('Efficiency of Break-Fix Service', 2);
-$section->addText($this->translate('Based on your questionnaire responses, we discovered the following:'));
-// Efficiency of Break-Fix Service table
-$cellWidths = array (
-    7500, 
-    1528 
-);
-$table = $section->addTable($this->styles->tables->twoColumnDataTable->tablestyle);
-$table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
-$table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText($this->translate('Number of printer repairs per month'), 'bold_text', 'nospacing');
-$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($proposal->getNumberOfRepairs()), 'bold_text', 'nospacing_rightalign');
-$table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
-$table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText($this->translate('Average time between printer breaking down and printer being fixed'), 'bold_text', 'nospacing');
-$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($proposal->getAverageTimeBetweenBreakdownAndFix()) . 'day(s)', 'bold_text', 'nospacing_rightalign');
-$table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
-$cell = $table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1);
-$cell->addText($this->translate('Annual downtime resulting from printer breakdowns'), 'bold_text', 'nospacing');
-$cell->addText($this->translate('(Based on an 8 hour work day)'), 'bold_text', 'nospacing');
-$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($proposal->getAnnualDowntimeFromBreakdowns()), 'bold_text', 'nospacing_rightalign');
+$textrun = $section->createTextRun();
+$textrun->addText($this->translate('Out of your '));
+$textrun->addText(number_format(count($proposal->getDevices()->allIncludedDeviceInstances)),"bold_text");
+$textrun->addText($this->translate(' networked printing devices, you have of '));
+$textrun->addText(number_format($proposal->getNumberOfUniqueModels()),"bold_text");
+$textrun->addText($this->translate(' different models. Each section of the chart below represents a single model type. We estimate that '));
+$textrun->addText(number_format(count($proposal->getLeasedDevices())),"bold_text");
+$textrun->addText($this->translate(' of your printing devices are leased machines, for which supplies are included in your contract. The '));
+$textrun->addText(number_format(count($proposal->getPurchasedDevices())),"bold_text");
+$textrun->addText($this->translate(' remaining machines consist of '));
+$textrun->addText(number_format($proposal->getNumberOfUniquePurchasedModels()),"bold_text");
+$textrun->addText($this->translate(' different models and use '));
+$textrun->addText(number_format($proposal->getNumberOfUniquePurchasedToners()),"bold_text");
+$textrun->addText($this->translate(' different supply types. If you hold two of each supply in inventory, you have an estimated '));
+$textrun->addText($this->translate('$'),"bold_text");
+$textrun->addText(number_format($proposal->getCashHeldInInventory()),"bold_text");
+$textrun->addText($this->translate(' in operating cash held in printer supplies inventory'),'bold_text');
+$textrun->addText($this->translate(' at any given time.'));
 
-$section->addText($this->translate('Office Depot can provide next-day service for your printer fleet.'), 'small_italic_text');
-
-
-$section->addTitle('Number of Vendors', 2);
-$section->addText($this->translate('Based on your questionnaire responses, we discovered the following:'));
-
-// Number of Vendors table
-$cellWidths = array (
-    7500, 
-    1528 
-);
-
-$table = $section->addTable($this->styles->tables->twoColumnDataTable->tablestyle);
-$table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
-$table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText($this->translate('Number of vendors used to source printing hardware, supplies and service'), 'bold_text', 'nospacing');
-$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($proposal->getNumberOfVendors()), 'bold_text', 'nospacing_rightalign');
-$table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
-$table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText($this->translate('Number of orders for ink and toner executed annually'), 'bold_text', 'nospacing');
-$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($proposal->getNumberOfAnnualInkTonerOrders()), 'bold_text', 'nospacing_rightalign');
-$table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
-$table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText($this->translate('Estimated annual cost to execute ink and toner orders'), 'bold_text', 'nospacing');
-$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText('$' . number_format($proposal->getCostOfExecutingSuppliesOrders()), 'bold_text', 'nospacing_rightalign');
-$section->addText($this->translate('Time spent dealing with multiple vendors could be better spent focusing on your core business tasks. Office Depot can bundle your supplies and service into a single invoice - and if you need new hardware, that can be included too.'), 'small_italic_text');
-
-
-
-$section->addTitle('Number of Printing Device Models and Supply Types', 2);
-$section->addText(sprintf($this->translate('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type. We estimate that %3$s of your printing devices are leased machines, for which supplies are included in your contract. The %4$s remaining machines consist of %5$s different models and use %6$s different supply types. If you hold two of each supply in inventory, you have an estimated $%7$s in operating cash held in printer supplies inventory at any given time.'), number_format($proposal->getPurchasedDeviceCount()), number_format($proposal->getNumberOfUniqueModels()), number_format(count($proposal->getLeasedDevices())), number_format(count($proposal->getPurchasedDevices())), number_format($proposal->getNumberOfUniquePurchasedModels()), number_format($proposal->getNumberOfUniquePurchasedToners()), number_format($proposal->getCashHeldInInventory())));
 
 $imageTable = $section->addTable(array (
     'borderBottomSize' => 1 
@@ -119,3 +77,35 @@ $cell->addImage($graphs[3], array (
 ));
 
 $section->addText($this->translate('By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. Office Depot can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.'));
+
+$section->addTitle($this->translate('Number of Printing Devices Compatible with Office Depot™ ATR'), 2);
+$textrun = $section->createTextRun();
+$textrun->addText($this->translate("Out of your " . $proposal->getPurchasedDeviceCount() . " networked printing devices(excluding leased devices), you have "));
+$textrun->addText($proposal->getNumberOfDevicesReportingTonerLevels(),"bold_text");
+$textrun->addText($this->translate(" that are compatible with Office Depot™ Auto Toner Replenishment (ATR) and " . $proposal->getNumberOfDevicesNotReportingTonerLevels() . " devices that are not compatible. These incompatible devices are shown in the fleet attributes section below. A complete list of all devices and their ATR compatibility can be found in the Appendix."));
+
+$section->addTextBreak(2);
+$imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
+$imageTable->addRow();
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs['CompatibleATRBarGraph']);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs['PagesPrinterATRPieGraph']);
+
+$section->addTitle($this->translate('Estimated OEM Toner Costs vs. Estimated Compatible Toner Costs'), 2);
+$estimateTonerCostsTable = $section->addTable($this->styles->tables->utilization->tablestyle);
+$estimateTonerCostsTable->addRow();
+$estimateTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($this->translate('Lowest Utilization'), 'bold_text', 'nospacing_centeralign');
+$estimateTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText($this->translate('Serial No.'), 'bold_text', 'nospacing_centeralign');
+$estimateTonerCostsTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText($this->translate('Avg. Monthly Volume'), 'bold_text', 'nospacing_centeralign');
+$estimateTonerCostsTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->translate('Recommended Max. Volume'), 'bold_text', 'nospacing_centeralign');
+/* @var $device Proposalgen_Model_DeviceInstance */
+foreach ( $proposal->getLeastUsedDevices() as $device )
+{
+    $estimateTonerCostsTable->addRow($this->styles->tables->utilization->rowheight);
+    $estimateTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($device->getDeviceName(), null, 'nospacing');
+    $estimateTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText(($device->serialNumber) ?  : "Unknown", null, 'nospacing');
+    $estimateTonerCostsTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText(number_format($device->getAverageMonthlyPageCount()), null, 'nospacing');
+    $estimateTonerCostsTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->getMasterDevice()->getMaximumMonthlyPageVolume()), null, 'nospacing');
+}
+
+$section->addText($this->translate('Only takes into account devices for which expected cartridge yields are known.'), 'small_italic_text', 'nospacing');
+$section->addTextBreak();

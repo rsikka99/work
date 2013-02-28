@@ -14,10 +14,11 @@ $graphs = $this->healthcheck->getGraphs();
 </table>
 <br />
 <div class="pheader">Age of Printing Devices</div>
-    <p>The breakdown of the age of your printing devices is shown below:</p>
+<p>We estimate the average age of your printing devices is <?php echo number_format($proposal->getAverageAgeOfDevices())?> years old, a good industry average is 3 years. Devices over 5 years old receive on average one repair per year.</p>
 <div class="center">
-    <img src="<?php echo $graphs['healthCheck']['AgeBarGraph']; ?>" />
+    <img src="<?php echo $graphs['AgeBarGraph']; ?>" />
 </div>
+<p>The breakdown of the age of your printing devices is shown above:</p>
 <br />
 <br />
 <?php echo $this->noBreakEnd; ?>
@@ -27,7 +28,7 @@ $graphs = $this->healthcheck->getGraphs();
 <p>The charts below show the percent of your printing devices that are capable of scanning, faxing, and color printing.</p>
 <br />
         <img src="<?php echo $graphs[10]; ?>" style="width: 190px; height: 150px;" /> <!-- Scan capable devices -->
-        <img src="<?php echo $graphs['healthCheck']['DuplexCapableDevicesGraph']; ?>" style="width: 190px; height: 150px;" /> <!-- Fax capable devices -->
+        <img src="<?php echo $graphs['DuplexCapableDevicesGraph']; ?>" style="width: 190px; height: 150px;" /> <!-- Fax capable devices -->
         <img src="<?php echo $graphs[12]; ?>" style="width: 190px; height: 150px;" /> <!-- Color capable devices -->
 <br />
     <br />
