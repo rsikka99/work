@@ -247,24 +247,24 @@ $form   = new Zend_Form();
 
                 <!-- Target Monochrome $ --------------------------------------------------------------------------------------- -->
             <tr>
-                <td><?php echo $this->element->targetMonochrome->renderLabel();?></td>
-                <td align="left" style="padding-left: 10"><?php echo ($this->dealerData["targetMonochrome"]) ? "$" . $this->dealerData["targetMonochrome"] . " / page" : ""; ?></td>
-                <td <?php echo ($this->element->targetMonochrome->hasErrors()) ? "class='error'" : ""; ?> align="right">$<?php echo $this->element->targetMonochrome->renderViewHelper(); ?></td>
+                <td><?php echo $this->element->targetMonochromeCostPerPage->renderLabel();?></td>
+                <td align="left" style="padding-left: 10"><?php echo ($this->dealerData["targetMonochromeCostPerPage"]) ? "$" . $this->dealerData["targetMonochromeCostPerPage"] . " / page" : ""; ?></td>
+                <td <?php echo ($this->element->targetMonochromeCostPerPage->hasErrors()) ? "class='error'" : ""; ?> align="right">$<?php echo $this->element->targetMonochromeCostPerPage->renderViewHelper(); ?></td>
                 <td>&nbsp;/ page</td>
             </tr>
-            <?php if ($this->element->targetMonochrome->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><?php echo $this->element->targetMonochrome->renderErrors(); ?></td>
+            <?php if ($this->element->targetMonochromeCostPerPage->hasErrors()) : ?>
+            <tr><td colspan="2"></td><td colspan="2"><?php echo $this->element->targetMonochromeCostPerPage->renderErrors(); ?></td>
                 <?php endif; ?>
 
                 <!-- Target Color $ --------------------------------------------------------------------------------------- -->
             <tr>
-                <td><?php echo $this->element->targetColor->renderLabel();?></td>
-                <td align="left" style="padding-left: 10"><?php echo ($this->dealerData["targetColor"]) ? "$" . $this->dealerData["targetColor"] . " / page" : ""; ?></td>
-                <td <?php echo ($this->element->targetColor->hasErrors()) ? "class='error'" : ""; ?> align="right">$<?php echo $this->element->targetColor->renderViewHelper(); ?></td>
+                <td><?php echo $this->element->targetColorCostPerPage->renderLabel();?></td>
+                <td align="left" style="padding-left: 10"><?php echo ($this->dealerData["targetColorCostPerPage"]) ? "$" . $this->dealerData["targetColorCostPerPage"] . " / page" : ""; ?></td>
+                <td <?php echo ($this->element->targetColorCostPerPage->hasErrors()) ? "class='error'" : ""; ?> align="right">$<?php echo $this->element->targetColorCostPerPage->renderViewHelper(); ?></td>
                 <td>&nbsp;/ page</td>
             </tr>
-            <?php if ($this->element->targetColor->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><?php echo $this->element->targetColor->renderErrors(); ?></td>
+            <?php if ($this->element->targetColorCostPerPage->hasErrors()) : ?>
+            <tr><td colspan="2"></td><td colspan="2"><?php echo $this->element->targetColorCostPerPage->renderErrors(); ?></td>
                 <?php endif; ?>
         </tbody>
 	</table>
