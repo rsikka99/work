@@ -738,7 +738,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             $db->commit();
 
                             $this->_helper->flashMessenger(array("success" => "Device successfully mapped!"));
-                            $this->_helper->redirector("mapping");
+                            $this->redirector("mapping");
                         }
                         catch (Exception $e)
                         {
@@ -764,7 +764,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         else
         {
             $this->_helper->flashMessenger(array("warning" => "Invalid Device Specified."));
-            $this->_helper->redirector("mapping");
+            $this->redirector("mapping");
         }
     }
 

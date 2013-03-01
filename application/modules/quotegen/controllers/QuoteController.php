@@ -28,7 +28,7 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a quote to delete first.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         $quoteMapper = new Quotegen_Model_Mapper_Quote();
@@ -39,7 +39,7 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error selecting the quote to delete.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         $client = Quotegen_Model_Mapper_Client::getInstance()->find($quote->clientId);
@@ -61,12 +61,12 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
                     $this->_helper->flashMessenger(array (
                             'success' => "Quote was deleted successfully." 
                     ));
-                    $this->_helper->redirector('index');
+                    $this->redirector('index');
                 }
             }
             else
             {
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;

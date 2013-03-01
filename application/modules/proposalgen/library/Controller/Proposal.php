@@ -626,7 +626,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
             $nextStep = $this->_activeStep->nextStep;
             if ($nextStep)
             {
-                $this->_helper->redirector($nextStep->action, $nextStep->controller);
+                $this->redirector($nextStep->action, $nextStep->controller);
             }
         }
     }
@@ -642,7 +642,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
             $prevStep = $this->_activeStep->previousStep;
             if ($prevStep)
             {
-                $this->_helper->redirector($prevStep->action, $prevStep->controller);
+                $this->redirector($prevStep->action, $prevStep->controller);
             }
         }
     }

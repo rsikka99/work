@@ -64,7 +64,7 @@ class Quotegen_QuotesettingController extends Tangent_Controller_Action
             else // Client hit cancel redicect
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;
@@ -116,7 +116,7 @@ class Quotegen_QuotesettingController extends Tangent_Controller_Action
                                 'success' => "Default quote setting was updated sucessfully." 
                         ));
                         
-                        $this->_helper->redirector('editdefault');
+                        $this->redirector('editdefault');
                     }
                     else
                     {
@@ -136,7 +136,7 @@ class Quotegen_QuotesettingController extends Tangent_Controller_Action
             else // Client hit cancel redicect
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         

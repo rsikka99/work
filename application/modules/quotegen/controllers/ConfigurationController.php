@@ -41,7 +41,7 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a device configuration to delete first.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         $mapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
@@ -56,14 +56,14 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
             if ($page == "configurations")
             {
                 // User has cancelled. Go back to the edit page
-                $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+                $this->redirector('configurations', 'devicesetup', 'quotegen', array (
                         'id' => $id 
                 ));
             }
             else
             {
                 // User has cancelled. Go back to the edit page
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         
@@ -87,14 +87,14 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
 		            if ($page == "configurations")
 		            {
 		                // User has cancelled. Go back to the edit page
-		                $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+		                $this->redirector('configurations', 'devicesetup', 'quotegen', array (
 		                        'id' => $id 
 		                ));
 		            }
 		            else
 		            {
 		                // User has cancelled. Go back to the edit page
-		                $this->_helper->redirector('index');
+		                $this->redirector('index');
 		            }
                 }
             }
@@ -103,14 +103,14 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
 	            if ($page == "configurations")
 	            {
 	                // User has cancelled. Go back to the edit page
-	                $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+	                $this->redirector('configurations', 'devicesetup', 'quotegen', array (
 	                        'id' => $id 
 	                ));
 	            }
 	            else
 	            {
 	                // User has cancelled. Go back to the edit page
-	                $this->_helper->redirector('index');
+	                $this->redirector('index');
 	            }
             }
         }
@@ -131,7 +131,7 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
         if (count($form->getElement('masterDeviceId')->getMultiOptions()) < 1)
         {
             $this->_helper->flashMessenger(array("warning" => "There are no available devices to configure."));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         // Prep the device dropdown
@@ -225,14 +225,14 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
                         if ($page == "configurations")
                         {
                             // User has cancelled. Go back to the edit page
-                            $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+                            $this->redirector('configurations', 'devicesetup', 'quotegen', array (
                                     'id' => $masterDeviceId 
                             ));
                         }
                         else
                         {
                             // User has cancelled. Go back to the edit page
-                            $this->_helper->redirector('index');
+                            $this->redirector('index');
                         }
                     }
                     else
@@ -257,14 +257,14 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
                 if ($page == "configurations")
                 {
                     // User has cancelled. Go back to the edit page
-                    $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+                    $this->redirector('configurations', 'devicesetup', 'quotegen', array (
                             'id' => $masterDeviceId 
                     ));
                 }
                 else
                 {
                     // User has cancelled. Go back to the edit page
-                    $this->_helper->redirector('index');
+                    $this->redirector('index');
                 }
             }
         }
@@ -301,14 +301,14 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
             if ($page == "configurations")
             {
                 // User has cancelled. Go back to the edit page
-                $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+                $this->redirector('configurations', 'devicesetup', 'quotegen', array (
                         'id' => $id 
                 ));
             }
             else
             {
                 // User has cancelled. Go back to the edit page
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         
@@ -326,14 +326,14 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
             if ($page == "configurations")
             {
                 // User has cancelled. Go back to the edit page
-                $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+                $this->redirector('configurations', 'devicesetup', 'quotegen', array (
                         'id' => $id
                 ));
             }
             else
             {
                 // User has cancelled. Go back to the edit page
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         
@@ -368,14 +368,14 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
                 if ($page == "configurations")
                 {
                     // User has cancelled. Go back to the edit page
-                    $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+                    $this->redirector('configurations', 'devicesetup', 'quotegen', array (
                             'id' => $id 
                     ));
                 }
                 else
                 {
                     // User has cancelled. Go back to the edit page
-                    $this->_helper->redirector('index');
+                    $this->redirector('index');
                 }
             }
             else
@@ -435,14 +435,14 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
                         if ($page == "configurations")
                         {
                             // User has cancelled. Go back to the edit page
-                            $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+                            $this->redirector('configurations', 'devicesetup', 'quotegen', array (
                                     'id' => $id
                             ));
                         }
                         else
                         {
                             // User has cancelled. Go back to the edit page
-                            $this->_helper->redirector('index');
+                            $this->redirector('index');
                         }
                     }
                     else
@@ -494,14 +494,14 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
             if ($page == "configurations")
             {
                 // User has cancelled. Go back to the edit page
-                $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+                $this->redirector('configurations', 'devicesetup', 'quotegen', array (
                         'id' => $id 
                 ));
             }
             else
             {
                 // User has cancelled. Go back to the edit page
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         
@@ -570,14 +570,14 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
 			            if ($page == "configurations")
 			            {
 			                // User has cancelled. Go back to the edit page
-			                $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+			                $this->redirector('configurations', 'devicesetup', 'quotegen', array (
 			                        'id' => $id 
 			                ));
 			            }
 			            else
 			            {
 			                // User has cancelled. Go back to the edit page
-			                $this->_helper->redirector('index');
+			                $this->redirector('index');
 			            }
                     }
                     else
@@ -597,14 +597,14 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
 	            if ($page == "configurations")
 	            {
 	                // User has cancelled. Go back to the edit page
-	                $this->_helper->redirector('configurations', 'devicesetup', 'quotegen', array (
+	                $this->redirector('configurations', 'devicesetup', 'quotegen', array (
 	                        'id' => $id 
 	                ));
 	            }
 	            else
 	            {
 	                // User has cancelled. Go back to the edit page
-	                $this->_helper->redirector('index');
+	                $this->redirector('index');
 	            }
             }
         }
@@ -637,7 +637,7 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
             ));
         }
         
-        $this->_helper->redirector('edit', null, null, array (
+        $this->redirector('edit', null, null, array (
                 'id' => $id 
         ));
     }

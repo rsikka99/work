@@ -90,7 +90,7 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
                 $this->_helper->flashMessenger(array (
                         'danger' => 'Could not find the selected quote.' 
                 ));
-                $this->_helper->redirector('index', 'index');
+                $this->redirector('index', 'index');
             }
         }
         else
@@ -365,7 +365,7 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a device to edit first.' 
             ));
-            $this->_helper->redirector('index', null, null, array (
+            $this->redirector('index', null, null, array (
                     'quoteId' => $this->_quoteId 
             ));
         }
@@ -378,7 +378,7 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'You may only edit devices associated with this quote.' 
             ));
-            $this->_helper->redirector('index', null, null, array (
+            $this->redirector('index', null, null, array (
                     'quoteId' => $this->_quoteId 
             ));
         }
@@ -398,7 +398,7 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error getting the quote you previously selected. Please try selecting a quote again and contact the system administrator if the issue persists.' 
             ));
-            $this->_helper->redirector('index', 'index');
+            $this->redirector('index', 'index');
         }
     }
 
@@ -414,7 +414,7 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array (
                     'danger' => 'Invalid quote group selected!' 
             ));
-            $this->_helper->redirector('index', null, null, array (
+            $this->redirector('index', null, null, array (
                     'quoteId' => $this->_quoteId 
             ));
         }
