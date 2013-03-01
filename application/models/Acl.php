@@ -31,7 +31,7 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_DEFAULT_WILDCARD                = "default__%__%";
     const RESOURCE_PROPOSALGEN_WILDCARD            = "proposalgen__%__%";
     const RESOURCE_PROPOSALGEN_SURVEY_WILDCARD     = "proposalgen__survey__%";
-    const RESOURCE_PROPOSALGEN_REPORT_WILDCARD     = "proposalgen__report_assessment__%";
+    const RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD     = "proposalgen__report_assessment__%";
     const RESOURCE_QUOTEGEN_WILDCARD               = "quotegen__%__%";
     const RESOURCE_QUOTEGEN_CLIENT_WILDCARD        = "quotegen__client__%";
     const RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD = "quotegen__configuration__%";
@@ -83,7 +83,7 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO                  = "proposalgen__fleet__set-mapped-to";
     const RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD              = "proposalgen__manufacturer__%";
     const RESOURCE_PROPOSALGEN_REPORT_INDEX                       = "proposalgen__report_index__index";
-    const RESOURCE_PROPOSALGEN_REPORT_SOLUTION                    = "proposalgen__report_solution__%";
+    const RESOURCE_PROPOSALGEN_REPORT_SOLUTION_WILDCARD                    = "proposalgen__report_solution__%";
     const RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN_WILDCARD        = "proposalgen__report_grossmargin__%";
     const RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST_WILDCARD = "proposalgen__report_printingdevicelist__%";
     const RESOURCE_PROPOSALGEN_REPORT_PIQESSENTIALS_WILDCARD      = "proposalgen__report_piqessentials__%";
@@ -360,8 +360,8 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO);
 
         $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_INDEX);
-        $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_WILDCARD);
-        $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_SOLUTION);
+        $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD);
+        $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_SOLUTION_WILDCARD);
         $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN_WILDCARD);
         $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST_WILDCARD);
         $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_PIQESSENTIALS_WILDCARD);
@@ -483,8 +483,8 @@ class Application_Model_Acl extends Zend_Acl
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_INDEX, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_WILDCARD, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_SOLUTION, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_SOLUTION_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_PIQESSENTIALS_WILDCARD, self::PRIVILEGE_VIEW);
