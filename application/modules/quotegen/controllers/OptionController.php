@@ -1,7 +1,7 @@
 
 <?php
 
-class Quotegen_OptionController extends Zend_Controller_Action
+class Quotegen_OptionController extends Tangent_Controller_Action
 {
 
     public function init ()

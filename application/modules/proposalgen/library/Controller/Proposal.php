@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
+class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
 {
     /**
      * @var Proposalgen_Model_Report

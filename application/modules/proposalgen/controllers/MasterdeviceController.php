@@ -1,6 +1,6 @@
 <?php
 
-class Proposalgen_MasterdeviceController extends Zend_Controller_Action
+class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
 {
 
     public function init ()

@@ -5,7 +5,7 @@
  *
  * @author Chris Garrah
  */
-class Proposalgen_AdminController extends Zend_Controller_Action
+class Proposalgen_AdminController extends Tangent_Controller_Action
 {
     protected $config;
 
@@ -486,7 +486,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 ''
             );
         }
-        $this->_helper->json($response);
+        $this->sendJson($response);
     }
 
     /**
@@ -581,7 +581,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             Throw new exception("Critical Error: Unable to find device.", 0, $e);
         } // end catch
 
-        $this->_helper->json($formData);
+        $this->sendJson($formData);
     }
 
     public function devicereportsAction ()
@@ -3216,7 +3216,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         /*
          * Send json response
          */
-        $this->_helper->json($formData);
+        $this->sendJson($formData);
     }
 
     /**
@@ -5262,7 +5262,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         {
             Throw new Exception($e->getMessage);
         }
-        $this->_helper->json($response);
+        $this->sendJson($response);
     }
 
     public function userdevicesAction ()
@@ -5607,7 +5607,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             throw new Exception("Passing Exception Up The Chain", null, $e);
         }
 
-        $this->_helper->json($formData);
+        $this->sendJson($formData);
     }
 
     public function usertonersAction ()
@@ -6050,13 +6050,13 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         if ($errorMessage)
         {
             $this->_response->setHttpResponseCode(500);
-            $this->_helper->json(array(
+            $this->sendJson(array(
                                       'error' => $errorMessage
                                  ));
         }
         else
         {
-            $this->_helper->json(array(
+            $this->sendJson(array(
                                       'success' => true
                                  ));
         }
@@ -6133,12 +6133,12 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $jqGrid->setRows($rmsDeviceMapper->getMatchupDevices($jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $searchCriteria, $searchValue, $jqGrid->getRecordsPerPage(), $startRecord));
 
             // Send back jqGrid json data
-            $this->_helper->json($jqGrid->createPagerResponseArray());
+            $this->sendJson($jqGrid->createPagerResponseArray());
         }
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $this->_helper->json(array(
+            $this->sendJson(array(
                                       'error' => 'Sorting parameters are invalid'
                                  ));
         }
@@ -6360,7 +6360,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             // validations are automatically added)
             $this->view->message = $validation;
         }
-        $this->_helper->json($this->view->message);
+        $this->sendJson($this->view->message);
     }
 
     public function replacementprinterslistAction ()
@@ -6398,7 +6398,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             Throw new exception("Error: Unable to find replacement device.", 0, $e);
         }
 
-        $this->_helper->json($formData);
+        $this->sendJson($formData);
     }
 
     public function replacementdetailsAction ()
@@ -6871,7 +6871,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
         $jsonResponse = Proposalgen_Model_Mapper_MasterDevice::getInstance()->searchByName($searchTerm, $filterByManufacturer);
 
-        $this->_helper->json($jsonResponse);
+        $this->sendJson($jsonResponse);
 
     }
 

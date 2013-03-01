@@ -5,7 +5,7 @@
  *
  * @author Chris Garrah
  */
-class Proposalgen_IndexController extends Zend_Controller_Action
+class Proposalgen_IndexController extends Tangent_Controller_Action
 {
 
     function init ()

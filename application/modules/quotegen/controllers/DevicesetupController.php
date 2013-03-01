@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_DevicesetupController extends Zend_Controller_Action
+class Quotegen_DevicesetupController extends Tangent_Controller_Action
 {
 
     public function init ()
@@ -86,7 +86,7 @@ class Quotegen_DevicesetupController extends Zend_Controller_Action
 
 
         }
-        $this->_helper->json($jqGrid->createPagerResponseArray());
+        $this->sendJson($jqGrid->createPagerResponseArray());
     }
 
     /**

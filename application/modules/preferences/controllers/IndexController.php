@@ -1,5 +1,5 @@
 <?php
-class Preferences_IndexController extends Zend_Controller_Action
+class Preferences_IndexController extends Tangent_Controller_Action
 {
     /**
      * This is the main landing page for preferences.

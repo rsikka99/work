@@ -1,5 +1,5 @@
 <?php
-class Admin_TonerController extends Zend_Controller_Action
+class Admin_TonerController extends Tangent_Controller_Action
 {
     /**
      * Displays all the toners in the system in  a table
