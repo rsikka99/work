@@ -77,7 +77,7 @@ $cell->addImage($graphs[3], array(
                             ));
 
 $section->addText($this->translate('By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. Office Depot can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.'));
-
+$section->addTextBreak(2);
 $section->addTitle($this->translate('Number of Printing Devices Compatible with Office Depot™ ATR'), 2);
 $textrun = $section->createTextRun();
 $textrun->addText($this->translate("Out of your " . $proposal->getPurchasedDeviceCount() . " networked printing devices(excluding leased devices), you have "));
@@ -90,9 +90,11 @@ $imageTable->addRow();
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs['CompatibleATRBarGraph']);
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs['PagesPrinterATRPieGraph']);
 $cellWidths = array(
-    7500,
-    1528
+    1528,
+    1800
 );
+$section->addTextBreak(2);
+$section->addTextBreak(2);
 $section->addTitle($this->translate('Estimated OEM Toner Costs vs. Estimated Compatible Toner Costs'), 2);
 $estimatedTonerCostsTable = $section->addTable($this->styles->tables->estimatedTonerCosts->tablestyle);
 $estimatedTonerCostsTable->addRow();
