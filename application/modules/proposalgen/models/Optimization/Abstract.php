@@ -267,9 +267,7 @@ abstract class Proposalgen_Model_Optimization_Abstract
             $this->deviceAges[$ageRank]++;
 
 
-            $this->averageSupplyCount   = '';
-            $this->supplyTypeCount      = count($this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($proposal->getPurchasedDevices())));
-            $this->optimizedSupplyCount = count($this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($this->getAllMasterDevicesWithReplacements())));
+
 
 
             if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
@@ -295,6 +293,10 @@ abstract class Proposalgen_Model_Optimization_Abstract
                 $keepDevices [] = $deviceInstance;
             }
         }
+
+//        $this->averageSupplyCount   = '';
+//        $this->supplyTypeCount      = count($this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($proposal->getPurchasedDevices())));
+//        $this->optimizedSupplyCount = count($this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($this->getAllMasterDevicesWithReplacements())));
 
         $excludedDevices = $proposal->getExcludedDevices();
         $leasedDevices   = $proposal->getLeasedDevices();

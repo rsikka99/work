@@ -14,8 +14,8 @@ $proposal = $this->proposal;
 $optimizationDevices = $this->profitabilityDevices;
 
 $headerTextRun = $section->createTextRun();
-$headerTextRun->addText('Flagged Devices','titlepageHeaderFont');
-$headerTextRun->addText(' (' . count($optimizationDevices->flagged). ' of ' . $optimizationDevices->getDeviceCount() . ')');
+$headerTextRun->addText($this->translate('Flagged Devices'),'titlepageHeaderFont');
+$headerTextRun->addText(' (' . count($optimizationDevices->flagged). $this->translate(' of ') . $optimizationDevices->getDeviceCount() . ')');
 
 $section->addText("These devices have been flagged for replacement based on operation reliability and not financial consideration.");
 
@@ -25,13 +25,13 @@ $tcStyle = $this->styles->tables->flagged;
 $table   = $section->addTable($tcStyle->tablestyle);
 // Table header
 $table->addRow($tcStyle->body->rowheight);
-$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial / IP Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Mono AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText('Color AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('Mono CPP', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText('Color CPP', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addText('Monthly Cost', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Device Name'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Serial / IP Address'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Mono AMPV'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Color AMPV'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Mono CPP'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Color CPP'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Monthly Cost'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 
 // Begin with data rows
 foreach ($optimizationDevices->flagged as $device)

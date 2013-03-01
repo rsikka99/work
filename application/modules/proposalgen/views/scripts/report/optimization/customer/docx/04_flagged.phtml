@@ -9,22 +9,22 @@ $profitabiltyDevices = $this->profitabilityDevices;
 
 $section->addPageBreak();
 $deviceCount = count($profitabiltyDevices->flagged);
-$totalPurchasedDevices = count($proposal->getPurchasedDevices());
-$section->addTitle($this->translate("Flagged Devices ({$deviceCount} of {$totalPurchasedDevices}) "), 2);
-$section->addText("The following devices have been targeted for replacements: ");
+$totalPurchasedDevices = count($proposal->getPurchasedDevices());;
+$section->addTitle(sprintf($this->translate('Flagged Devices (%1$s of %2$s)'), $deviceCount, $totalPurchasedDevices), 2);
+$section->addText($this->translate('The following devices have been targeted for replacements: '));
 
 // Table with values
 $tcStyle = $this->devicetables->tables->flagged;
 $table   = $section->addTable($tcStyle->tablestyle);
 // Table header
 $table->addRow($tcStyle->body->rowheight);
-$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial / Ip Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Mono AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText('Color AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('Mono CPP', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText('Color CPP', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addText('Monthly Cost', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Device Name'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Serial / Ip Address'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Mono AMPV'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Color AMPV'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Mono CPP'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Color CPP'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Monthly Cost'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 
 // Begin with data rows
 foreach ($profitabiltyDevices->flagged as $device)
@@ -43,6 +43,6 @@ foreach ($profitabiltyDevices->flagged as $device)
 }
 
 $section->addTitle($this->translate('Technology Features and Functionality'), 2);
-$section->addText("If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption
-by using a scanner to e-mail documents instead of printing copies for distribution. The following charts show how many of your printing devices have duplexing and scanning capabilities:");
+$section->addText($this->translate('If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption
+by using a scanner to e-mail documents instead of printing copies for distribution. The following charts show how many of your printing devices have duplex and scanning capabilities:'));
 $section->addImage($this->graphs[12], $this->styles->images->center);

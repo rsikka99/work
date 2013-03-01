@@ -16,8 +16,8 @@ $costPerPageSetting  = $proposal->getCostPerPageSettingForDealer();
 
 $section->addTextBreak();
 $headerTextRun = $section->createTextRun();
-$headerTextRun->addText('Leased Devices','titlepageHeaderFont');
-$headerTextRun->addText(' (' . count($optimizationDevices->leased). ' of ' . $optimizationDevices->getDeviceCount() . ')');
+$headerTextRun->addText($this->translate('Leased Devices'),'titlepageHeaderFont');
+$headerTextRun->addText(' (' . count($optimizationDevices->leased). $this->translate(' of ') . $optimizationDevices->getDeviceCount() . ')');
 $section->addText("The following devices have been deemed productive and fall within the target costs per pages.");
 
 // Table with values
@@ -25,10 +25,11 @@ $tcStyle = $this->styles->tables->leased;
 $table   = $section->addTable($tcStyle->tablestyle);
 // Table header
 $table->addRow($tcStyle->body->rowheight);
-$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial / IP Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Mono AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText('Color AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Device Name'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Serial Number'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText($this->translate('IP Address'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Mono AMPV'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Color AMPV'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 
 // Begin with data rows
 foreach ($optimizationDevices->leased as $device)
@@ -40,11 +41,8 @@ foreach ($optimizationDevices->leased as $device)
     $style = ($this->cycle(array($tcStyle->body->cell1->odd,$tcStyle->body->cell1->even))->next()->current());
 
     $table->addCell($tcStyle->col1Width, $style)->addText($device->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-
-    $cell2 = $table->addCell($tcStyle->col2Width, $style);
-    $cell2->addText($device->serialNumber, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
-    $cell2->addText($device->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
-
-    $table->addCell($tcStyle->col3Width, $style)->addText(number_format($device->getAverageMonthlyBlackAndWhitePageCount()), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-    $table->addCell($tcStyle->col4Width, $style)->addText(($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+    $table->addCell($tcStyle->col2Width, $style)->addText($device->serialNumber, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+    $table->addCell($tcStyle->col3Width, $style)->addText($device->ipAddress, $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+    $table->addCell($tcStyle->col4Width, $style)->addText(number_format($device->getAverageMonthlyBlackAndWhitePageCount()), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+    $table->addCell($tcStyle->col5Width, $style)->addText(($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A', $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
 }

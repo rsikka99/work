@@ -13,7 +13,7 @@ $proposal = $this->proposal;
 $profitabiltyDevices = $this->profitabilityDevices;
 
 $section->addTextBreak();
-$section->addText('Device Summary', array('bold' => true, 'size' => 12));
+$section->addText($this->translate('Device Summary'), array('bold' => true, 'size' => 12));
 
 $tcStyle = $this->styles->tables->twocenter;
 $imageTable = $section->addTable($tcStyle->tablestyle);

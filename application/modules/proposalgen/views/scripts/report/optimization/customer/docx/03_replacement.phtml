@@ -10,19 +10,19 @@ $profitabiltyDevices = $this->profitabilityDevices;
 $section->addPageBreak();
 $deviceCount = count($profitabiltyDevices->replaced);
 $totalPurchasedDevices = count($proposal->getPurchasedDevices());
-$section->addTitle($this->translate("Suggested Replacement Devices ({$deviceCount} of {$totalPurchasedDevices}) "), 2);
-$section->addText("The following devices have been targeted for replacements: ");
+$section->addTitle(sprintf($this->translate('Suggested Replacement Devices (%1$s of %2$s)'), $deviceCount, $totalPurchasedDevices), 2);
+$section->addText($this->translate('The following devices have been targeted for replacements: '));
 
 $tcStyle = $this->devicetables->tables->replacement;
 $table   = $section->addTable($tcStyle->tablestyle);
 // Table header
 $table->addRow($tcStyle->body->rowheight);
-$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Current Device', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Replacement Device', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Serial / Ip Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText('Reason', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('Mono AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText('Color AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Current Device'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Replacement Device'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Serial / Ip Address'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Reason'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Mono AMPV'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Color AMPV'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 // Begin with data rows
 foreach ($profitabiltyDevices->replaced as $device)
 {
