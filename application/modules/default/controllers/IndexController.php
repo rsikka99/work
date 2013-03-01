@@ -207,7 +207,7 @@ class Default_IndexController extends Zend_Controller_Action
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();
-            if (isset($values ['cancel']))
+            if (isset($values ['Cancel']))
             {
                 $this->_helper->redirector('index');
             }
