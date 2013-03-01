@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_DeviceConfigurationController extends Zend_Controller_Action
+class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
 {
 
     public function init ()

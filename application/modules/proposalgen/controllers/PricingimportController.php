@@ -1,6 +1,6 @@
 <?php
 
-class Proposalgen_PricingimportController extends Zend_Controller_Action
+class Proposalgen_PricingimportController extends Tangent_Controller_Action
 {
 
     public function postDispatch ()

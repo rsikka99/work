@@ -1,6 +1,6 @@
 <?php
 
-class Proposalgen_ManufacturerController extends Zend_Controller_Action
+class Proposalgen_ManufacturerController extends Tangent_Controller_Action
 {
 
     public function init ()

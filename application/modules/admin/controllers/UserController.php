@@ -1,6 +1,6 @@
 <?php
 
-class Admin_UserController extends Zend_Controller_Action
+class Admin_UserController extends Tangent_Controller_Action
 {
     /**
      * Whether or not the current user has root access

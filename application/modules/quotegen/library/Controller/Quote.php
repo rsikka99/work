@@ -6,7 +6,7 @@
  *
  * @author Lee Robert
  */
-class Quotegen_Library_Controller_Quote extends Zend_Controller_Action
+class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
 {
     const QUOTE_SESSION_NAMESPACE = 'quotegen';
     

@@ -1,5 +1,5 @@
 <?php
-class Default_IndexController extends Zend_Controller_Action
+class Default_IndexController extends Tangent_Controller_Action
 {
     /**
      * @var int
@@ -62,11 +62,11 @@ class Default_IndexController extends Zend_Controller_Action
 
             if (isset($postData['createClient']))
             {
-                $this->_helper->redirector('create-client');
+                $this->redirector('create-client');
             }
             else if (isset($postData['editClient']))
             {
-                $this->_helper->redirector('edit-client');
+                $this->redirector('edit-client');
             }
             else if (isset($postData['selectClient']))
             {
@@ -77,7 +77,7 @@ class Default_IndexController extends Zend_Controller_Action
                     $this->_mpsSession->selectedClientId = $newClientId;
 
                     // Reload the page
-                    $this->_helper->redirector();
+                    $this->redirector();
                 }
                 else
                 {
@@ -101,7 +101,7 @@ class Default_IndexController extends Zend_Controller_Action
                 if ($inArray->isValid($selectedReportId))
                 {
                     $this->_proposalSession->reportId = $selectedReportId;
-                    $this->_helper->redirector('index', 'survey', 'proposalgen');
+                    $this->redirector('index', 'survey', 'proposalgen');
                 }
             }
             else if (isset($postData['selectQuote']))
@@ -117,7 +117,7 @@ class Default_IndexController extends Zend_Controller_Action
 
                 if ($inArray->isValid($selectedQuoteId))
                 {
-                    $this->_helper->redirector('index', 'quote_devices', 'quotegen', array('quoteId' => $selectedQuoteId));
+                    $this->redirector('index', 'quote_devices', 'quotegen', array('quoteId' => $selectedQuoteId));
                 }
                 else
                 {
@@ -129,12 +129,12 @@ class Default_IndexController extends Zend_Controller_Action
             else if (isset($postData['createLeasedQuote']))
             {
                 $selectedQuoteId = $this->_createNewQuote(Quotegen_Model_Quote::QUOTE_TYPE_LEASED);
-                $this->_helper->redirector('index', 'quote_devices', 'quotegen', array('quoteId' => $selectedQuoteId));
+                $this->redirector('index', 'quote_devices', 'quotegen', array('quoteId' => $selectedQuoteId));
             }
             else if (isset($postData['createPurchasedQuote']))
             {
                 $selectedQuoteId = $this->_createNewQuote(Quotegen_Model_Quote::QUOTE_TYPE_PURCHASED);
-                $this->_helper->redirector('index', 'quote_devices', 'quotegen', array('quoteId' => $selectedQuoteId));
+                $this->redirector('index', 'quote_devices', 'quotegen', array('quoteId' => $selectedQuoteId));
             }
         }
 
@@ -209,7 +209,7 @@ class Default_IndexController extends Zend_Controller_Action
             $values = $this->getRequest()->getPost();
             if (isset($values ['Cancel']))
             {
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
 
             // Create Client
@@ -223,7 +223,7 @@ class Default_IndexController extends Zend_Controller_Action
                 $this->_mpsSession->selectedClientId = $clientId;
 
                 // Redirect with client id so that the client is preselected
-                $this->_helper->redirector('index', null, null);
+                $this->redirector('index', null, null);
             }
         }
 
@@ -243,7 +243,7 @@ class Default_IndexController extends Zend_Controller_Action
         if (!$client)
         {
             $this->_helper->flashMessenger(array('warning' => 'Please select a client first.'));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
 
         // Start the client service
@@ -255,7 +255,7 @@ class Default_IndexController extends Zend_Controller_Action
             $values = $this->getRequest()->getPost();
             if (isset($values ['Cancel']))
             {
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
 
             try
@@ -274,7 +274,7 @@ class Default_IndexController extends Zend_Controller_Action
                                                     'success' => "Client {$client->companyName} successfully updated."
                                                ));
                 // Redirect with client id so that the client is preselected
-                $this->_helper->redirector('index', null, null, array(
+                $this->redirector('index', null, null, array(
                                                                      'clientId' => $clientId
                                                                 ));
             }
@@ -308,6 +308,6 @@ class Default_IndexController extends Zend_Controller_Action
             }
         }
 
-        $this->_helper->json($results);
+        $this->sendJson($results);
     }
 }

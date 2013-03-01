@@ -1,7 +1,7 @@
 
 <?php
 
-class Quotegen_CategoryController extends Zend_Controller_Action
+class Quotegen_CategoryController extends Tangent_Controller_Action
 {
 
     public function init ()

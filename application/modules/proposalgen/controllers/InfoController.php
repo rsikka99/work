@@ -7,7 +7,7 @@
  *
  * @author Kevin Jervis
  */
-class Proposalgen_InfoController extends Zend_Controller_Action
+class Proposalgen_InfoController extends Tangent_Controller_Action
 {
 
     function init ()

@@ -5,7 +5,7 @@
  *
  * @author Chris Garrah
  */
-class Proposalgen_ErrorController extends Zend_Controller_Action
+class Proposalgen_ErrorController extends Tangent_Controller_Action
 {
 
     /**

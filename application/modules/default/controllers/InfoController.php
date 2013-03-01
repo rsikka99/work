@@ -1,5 +1,5 @@
 <?php
-class Default_InfoController extends Zend_Controller_Action
+class Default_InfoController extends Tangent_Controller_Action
 {
 
     /**

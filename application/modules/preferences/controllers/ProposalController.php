@@ -1,5 +1,5 @@
 <?php
-class Preferences_ProposalController extends Zend_Controller_Action
+class Preferences_ProposalController extends Tangent_Controller_Action
 {
     /**
      * This is where the user can edit their proposal preferences
