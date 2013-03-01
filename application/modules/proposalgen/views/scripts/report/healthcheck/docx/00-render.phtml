@@ -112,8 +112,8 @@ $phpWord->addFontStyle('savingsFont', array(
                                            'size' => 11
                                       ));
 $phpWord->addFontStyle('forestWaterFont', array(
-                                               'bold' => true,
-                                               'size' => 14,
+                                               'bold'      => true,
+                                               'size'      => 14,
                                                'textalign' => 'center'
                                           ));
 
@@ -546,7 +546,88 @@ $styles = (object)array(
                     'bgColor' => 'F0003C'
                 )
             ),
-        )
+
+        ),
+        "fleetattributes"     => (object)array(
+            "tablestyle"      => array(
+                'cellMarginTop'    => 100,
+                'cellMarginRight'  => 100,
+                'cellMarginBottom' => 100,
+                'cellMarginLeft'   => 100
+            ),
+            "rowheight"       => 100,
+            "cellHeader"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center",
+                "bgColor"          => "F0F0F0",
+            ),
+            "cell1"           => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "cell2"           => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center",
+            ),
+            "cell3"           => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "cell4"           => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "cellshaded"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center",
+                "bgColor"          => "F0F0F0"
+            ),
+
+            "cellshadedright" => (object)array(
+                'fontStyle'      => array(
+                    'size'   => 12,
+                    'color'  => 'FFFFFF',
+                    'bold'   => true,
+                    'italic' => true
+                ),
+                'paragraphStyle' => array(
+                    'align'      => 'right',
+                    'spaceAfter' => 0
+                ),
+                'cellStyle'      => array(
+                    'bgColor' => 'F0F0F0'
+                )
+            ),
+
+            "cellshadedleft"  => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center",
+                "align"            => "left",
+                "bgColor"          => "F0F0F0"
+            )
+
+        ),
     )
 );
 
@@ -572,8 +653,8 @@ $this->partial("report/healthcheck/docx/03_serviceandsupplieslogistics.phtml", $
 $this->partial("report/healthcheck/docx/04_printinghardwareusage.phtml", $data);
 $this->partial("report/healthcheck/docx/05_techandproductivity.phtml", $data);
 $this->partial("report/healthcheck/docx/06_environmental.phtml", $data);
-//$this->partial("report/healthcheck/docx/07_fleetattributes.phtml", $data);
-//$this->partial("report/healthcheck/docx/08_summary.phtml", $data);
+$this->partial("report/healthcheck/docx/07_fleetattributes.phtml", $data);
+$this->partial("report/healthcheck/docx/08_summary.phtml", $data);
 
 $objWriter = PHPWord_IOFactory::createWriter($phpWord, 'Word2007');
 $objWriter->save($this->savePath);

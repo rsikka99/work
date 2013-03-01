@@ -25,9 +25,9 @@ $graphs = $this->healthcheck->getGraphs();
 <?php echo $this->noBreakStart; ?>
 <div class="pheader">Technology Features and Functionality</div>
 <p>The ability to scan and fax documents from convenient locations helps to improve document workflow and productivity, and scanning can also help reduce the amount of pages printed. Color printing capabilities are important if you are generating client-facing or other important documents in-house.</p>
-<p>The charts below show the percent of your printing devices that are capable of scanning, duplexing, and color printing.</p>
+<p>The charts below show the percent of your printing devices that are capable of copying, duplexing, and color printing.</p>
 <br />
-        <img src="<?php echo $graphs[10]; ?>" style="width: 190px; height: 150px;" /> <!-- Scan capable devices -->
+        <img src="<?php echo $graphs['CopyCapableDevicesGraph']; ?>" style="width: 190px; height: 150px;" /> <!-- Copy capable devices -->
         <img src="<?php echo $graphs['DuplexCapableDevicesGraph']; ?>" style="width: 190px; height: 150px;" /> <!-- Fax capable devices -->
         <img src="<?php echo $graphs[12]; ?>" style="width: 190px; height: 150px;" /> <!-- Color capable devices -->
 <br />

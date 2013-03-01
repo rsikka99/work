@@ -12,7 +12,7 @@ $section = $this->section;
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->healthcheck->proposal;
 $graphs   = $this->graphs;
-
+$section->addPageBreak();
 $section->addTitle($this->translate("Analysis: Printing Hardware Usage"), 1);
 $gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
 $gradeTable->addRow();
@@ -121,7 +121,7 @@ $section->addTextBreak();
 
 $section->addTitle($this->translate('Color Usage'), 2);
 
-$section->addText(sprintf($this->translate('You currently have %1$s color printing devices(excluding leased devices) that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.'), number_format($proposal->getNumberOfColorCapablePurchasedDevices()), number_format($proposal->getPageCounts()->Purchased->Color->Monthly), number_format(($proposal->getPageCounts()->Purchased->Color->Monthly / $proposal->getPageCounts()->Purchased->Combined->Monthly * 100), 2)));
+$section->addText(sprintf($this->translate('You currently have %1$s color printing devices (excluding leased devices) that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.'), number_format($proposal->getNumberOfColorCapablePurchasedDevices()), number_format($proposal->getPageCounts()->Purchased->Color->Monthly), number_format(($proposal->getPageCounts()->Purchased->Color->Monthly / $proposal->getPageCounts()->Purchased->Combined->Monthly * 100), 2)));
 
 $section->addTextBreak();
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);

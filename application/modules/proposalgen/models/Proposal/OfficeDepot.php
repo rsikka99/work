@@ -152,7 +152,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     protected $_purchasedMonochromeMonthlyCost;
     protected $_optimizedDevices;
     protected $_numberOfDevicesNotReportingTonerLevels;
-
+    protected $_numberOfCopyCapableDevices;
     /**
      * @param Proposalgen_Model_Report $report
      */
@@ -641,6 +641,27 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         }
 
         return $this->NumberOfScanCapableDevices;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfCopyCapableDevices ()
+    {
+        if (!isset($this->_numberOfCopyCapableDevices))
+        {
+            $numberOfDevices = 0;
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            {
+                if ($deviceInstance->getMasterDevice()->isCopier)
+                {
+                    $numberOfDevices++;
+                }
+            }
+            $this->_numberOfCopyCapableDevices = $numberOfDevices;
+        }
+
+        return $this->_numberOfCopyCapableDevices;
     }
 
     /**

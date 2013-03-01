@@ -11,12 +11,12 @@
             class="icon-white icon-plus-sign"></i> Create new
     </a>
 
-    <form id="editMasterDeviceForm" class ="form-inline"action="<?php echo $this->url(array("action" => "edit-unknown-device")); ?>" method="POST">
+    <form id="editMasterDeviceForm" class ="form-inline" onsubmit="javascript: updateGrid('search');return false">
             <div id="filter_container">
 				<div id="criteria_container" style="display: inline; padding: 0px 0px 0px 0px;">
 					<label for="criteria_filter" >Filter:</label>
 					<select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 200px; margin: 0px 0px 0px 26px;">
-                        <option value="deviceName">Full Device name</option>
+                        <option value="deviceName">Device Name</option>
 						<option value="oemSku">OEM SKU</option>
 						<option value="dealerSku">Dealer Sku</option>
 					</select>

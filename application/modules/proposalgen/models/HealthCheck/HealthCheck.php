@@ -434,7 +434,7 @@ class Proposalgen_Model_HealthCheck_HealthCheck
              */
             $averagePageCount = round($pageCounts->Total->Combined->Monthly / $this->proposal->getDeviceCount(), 0);
             $highest          = ($averagePageCount > $OD_AverageMonthlyPages) ? $averagePageCount : $OD_AverageMonthlyPages;
-            $barGraph         = new gchart\gBarChart(150, 300);
+            $barGraph         = new gchart\gBarChart(165, 300);
             $barGraph->setTitle("Average monthly pages|per networked printer");
             $barGraph->setVisibleAxes(array(
                                            'y'
@@ -471,7 +471,7 @@ class Proposalgen_Model_HealthCheck_HealthCheck
              */
             $pagesPerEmployee = round($pageCounts->Total->Combined->Monthly / $employeeCount);
             $highest          = ($OD_AverageMonthlyPagesPerEmployee > $pagesPerEmployee) ? $OD_AverageMonthlyPagesPerEmployee : $pagesPerEmployee;
-            $barGraph         = new gchart\gBarChart(150, 300);
+            $barGraph         = new gchart\gBarChart(165, 300);
             $barGraph->setTitle("Average monthly pages|per employee");
             $barGraph->setVisibleAxes(array(
                                            'y'
@@ -507,7 +507,7 @@ class Proposalgen_Model_HealthCheck_HealthCheck
              */
             $devicesPerEmployee = round($employeeCount / $this->proposal->getDeviceCount(), 2);
             $highest            = ($devicesPerEmployee > $OD_AverageEmployeesPerDevice) ? $devicesPerEmployee : $OD_AverageEmployeesPerDevice;
-            $barGraph           = new gchart\gBarChart(150, 300);
+            $barGraph           = new gchart\gBarChart(165, 300);
             $barGraph->setTitle("Employees per|printing device");
             $barGraph->setVisibleAxes(array(
                                            'y'
@@ -536,6 +536,39 @@ class Proposalgen_Model_HealthCheck_HealthCheck
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             // Graphs[6] //EmployeesPerDeviceBarGraph
             $healthgraphs['EmployeesPerDeviceBarGraph'] = $barGraph->getUrl();
+
+            /**
+             * -- CopyCapableDevicesGraph
+             */
+            if ($this->proposal->getDeviceCount())
+            {
+                $copyPercentage = round((($this->proposal->getNumberOfCopyCapableDevices() / $this->proposal->getDeviceCount()) * 100), 2);
+            }
+            else
+            {
+                $copyPercentage = 0;
+            }
+            $notScanPercentage = 100 - $copyPercentage;
+            $copyCapableGraph  = new gchart\gPie3DChart(200, 160);
+            $copyCapableGraph->setTitle("Copy-Capable Printing Devices");
+            $copyCapableGraph->addDataSet(array(
+                                               $copyPercentage,
+                                               $notScanPercentage
+                                          ));
+            $copyCapableGraph->setLegend(array(
+                                              "Copy capable",
+                                              "Not copy capable"
+                                         ));
+            $copyCapableGraph->setLabels(array(
+                                              "$copyPercentage%"
+                                         ));
+            $copyCapableGraph->addColors(array(
+                                              "E21736",
+                                              "0194D2"
+                                         ));
+            $copyCapableGraph->setLegendPosition("bv");
+            // Graphs CopyCapableDevicesGraph
+            $healthgraphs['CopyCapableDevicesGraph'] = $copyCapableGraph->getUrl();
 
             $this->_graphs = array_merge($healthgraphs,$this->_graphs);
         }

@@ -12,7 +12,7 @@ $section = $this->section;
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->healthcheck->proposal;
 $graphs   = $this->graphs;
-
+$section->addPageBreak();
 $section->addTitle($this->translate("Analysis: Technology Reliability and User Productivity"), 1);
 $gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
 $gradeTable->addRow();
@@ -39,11 +39,11 @@ $section->addTextBreak();
 
 $section->addTitle($this->translate('Technology Features and Functionality'), 2);
 $section->addText($this->translate('The ability to scan and fax documents from convenient locations helps to improve document workflow and productivity, and scanning can also help reduce the amount of pages printed. Color printing capabilities are important if you are generating client-facing or other important documents in-house.'));
-$section->addText($this->translate('The charts below show the percent of your printing devices that are capable of scanning, duplexing, and color printing.'));
+$section->addText($this->translate('The charts below show the percent of your printing devices that are capable of copying, duplexing, and color printing.'));
 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell1)->addImage($graphs [10]);
+$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell1)->addImage($graphs ['CopyCapableDevicesGraph']);
 $imageTable->addCell(3010, $this->styles->tables->tripleimage->cell2)->addImage($graphs ['DuplexCapableDevicesGraph']);
 $imageTable->addCell(3010, $this->styles->tables->tripleimage->cell3)->addImage($graphs [12]);
 

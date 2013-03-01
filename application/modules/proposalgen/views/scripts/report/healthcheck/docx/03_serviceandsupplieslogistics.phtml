@@ -10,7 +10,7 @@ $section = $this->section;
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->healthcheck->proposal;
 $graphs   = $this->graphs;
-
+$section->addPageBreak();
 $section->addTitle($this->translate('Analysis: Service and Supplies Logistics'), 1);
 $gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
 $gradeTable->addRow();
@@ -145,7 +145,10 @@ $twoColumnHeader = $section->addTable($tcStyle->tablestyle);
 $twoColumnHeader->addRow(null);
 $twoColumnHeader->addCell($tcStyle->cell1Width, $tcStyle->cell1->cellStyle)->addText($this->translate('DIFFERENCE '), $tcStyle->cell1->fontStyle, $tcStyle->cell1->paragraphStyle);
 $twoColumnHeader->addCell($tcStyle->cell2Width, $tcStyle->cell2->cellStyle)->addText($this->currency($proposal->calculateEstimatedOemTonerCostAnnually() - $proposal->calculateEstimatedCompTonerCostAnnually()), $tcStyle->cell2->fontStyle, $tcStyle->cell2->paragraphStyle);
-
+$textrun = $section->createTextRun();
+$textrun->addText($this->translate("Where compatible substitutes are available, we estimate that by switching even 50% of your OEM toner, you can save approximately "));
+$textrun->addText($this->translate($this->currency((($proposal->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12 - ($proposal->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12) / 2, array('precision' => 2)) . " per year"),'bold_text');
+$textrun->addText($this->translate(" in toner costs."));
 $section->addTextBreak(2);
 $imageTable = $section->addTable($this->styles->tables->singleimage->tablestyle);
 $imageTable->addRow();

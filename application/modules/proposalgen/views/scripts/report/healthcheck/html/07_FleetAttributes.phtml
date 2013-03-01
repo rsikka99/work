@@ -29,10 +29,10 @@ $proposal = $this->healthcheck->proposal;
             ?>">
             <td><?php echo $deviceName?>
                 <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?></td>
-            <td class="center"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
-            <td class="center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
-            <td class="center"><?php echo number_format(($deviceInstance->getAverageMonthlyPageCount() / $proposal->getPageCounts()->Total->Combined->Monthly) * 100, 2) ?>%</td>
-            <td><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) ?>
+            <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
+            <td class="right"><?php echo number_format(($deviceInstance->getAverageMonthlyPageCount() / $proposal->getPageCounts()->Total->Combined->Monthly) * 100, 2) ?>%</td>
+            <td class="right"><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) ?>
                 %</td>
             <td class="center"> <?php echo ($deviceInstance->getIsLeased() ? 'N' : ($deviceInstance->reportsTonerLevels == 1 ? 'Y' : 'N')) ?></td>
         </tr>
@@ -65,12 +65,12 @@ $proposal = $this->healthcheck->proposal;
                 echo ' shaded';
             }?>">
             <td><?php echo $deviceName?><br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?></td>
-            <td class="center"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
-            <td class="center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
-            <td class="center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume(), 0) ?></td>
-            <td class="center"><?php echo number_format(($deviceInstance->getAverageMonthlyPageCount() / $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume())*100,2) ?>
+            <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume(), 0) ?></td>
+            <td class="right"><?php echo number_format(($deviceInstance->getAverageMonthlyPageCount() / $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume())*100,2) ?>
                 %</td>
-            <td><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) ?>
+            <td class="right"><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) ?>
                 %</td>
             <td class="center"> <?php echo ($deviceInstance->getIsLeased() ? 'N' : ($deviceInstance->reportsTonerLevels == 1 ? 'Y' : 'N')) ?></td>
             <td>Migrate all page volume to ATR compatible device.</td>
@@ -104,12 +104,12 @@ $proposal = $this->healthcheck->proposal;
             }?>">
             <td><?php echo $deviceName?>
                 <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?></td>
-            <td class="center"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
-            <td class="center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
-            <td class="center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume(), 0) ?></td>
-            <td class="center"><?php echo number_format(($deviceInstance->getAverageMonthlyPageCount() / $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume())*100,2) ?>
+            <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume(), 0) ?></td>
+            <td class="right"><?php echo number_format(($deviceInstance->getAverageMonthlyPageCount() / $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume())*100,2) ?>
                 %</td>
-            <td><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) ?>
+            <td class="right"><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) ?>
                 %</td>
             <td class="center"> <?php echo ($deviceInstance->getIsLeased() ? 'N' : ($deviceInstance->reportsTonerLevels == 1 ? 'Y' : 'N')) ?></td>
             <td>Migrate excess page volume to an ATR compatible device.</td>
@@ -141,10 +141,10 @@ $proposal = $this->healthcheck->proposal;
             }?>">
             <td><?php echo $deviceName?>
                 <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?></td>
-            <td class="center"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
-            <td class="center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
-            <td class="center"><?php echo number_format(($deviceInstance->getAverageMonthlyPageCount() / $proposal->getPageCounts()->Total->Combined->Monthly) * 100, 2) ?>%</td>
-            <td><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) ?>
+            <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
+            <td class="right"><?php echo number_format(($deviceInstance->getAverageMonthlyPageCount() / $proposal->getPageCounts()->Total->Combined->Monthly) * 100, 2) ?>%</td>
+            <td class="right"><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) ?>
                 %</td>
             <td class="center"> <?php echo ($deviceInstance->getIsLeased() ? 'N' : ($deviceInstance->reportsTonerLevels == 1 ? 'Y' : 'N')) ?></td>
             <td>Migrate all page volume to a newer ATR compatible device.</td>
@@ -177,10 +177,10 @@ $proposal = $this->healthcheck->proposal;
                 }?>">
             <td><?php echo $deviceName?>
                 <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?></td>
-            <td class="center"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
-            <td class="center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
-            <td class="center"><?php echo number_format(($deviceInstance->getAverageMonthlyPageCount() / $proposal->getPageCounts()->Total->Combined->Monthly) * 100, 2) ?>%</td>
-            <td><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) ?>
+            <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
+            <td class="right"><?php echo number_format(($deviceInstance->getAverageMonthlyPageCount() / $proposal->getPageCounts()->Total->Combined->Monthly) * 100, 2) ?>%</td>
+            <td class="right"><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) ?>
                 %</td>
             <td class="center"> <?php echo ($deviceInstance->getIsLeased() ? 'N' : ($deviceInstance->reportsTonerLevels == 1 ? 'Y' : 'N')) ?></td>
             <td>Migrate all page volume to ATR compatible device.</td>

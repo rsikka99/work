@@ -8,12 +8,11 @@ $phpWord = $this->phpword;
 
 /* @var $section PHPWord_Section */
 $section = $this->section;
-$section->addPageBreak();
 
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->healthcheck->proposal;
 $graphs   = $this->graphs;
-
+$section->addPageBreak();
 $section->addTitle($this->translate("Analysis: Environmental Impact"), 1);
 $gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
 $gradeTable->addRow();
@@ -76,7 +75,9 @@ $section->addTextBreak();
 $section->addTitle($this->translate('Green Features: Duplexing and Scanning'), 2);
 
 $section->addText($this->translate('If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption by using a scanner to e-mail documents instead of printing copies for distribution.'));
-$section->addText(sprintf($this->translate('By printing 25% more documents on both sides of the page than you are now, you could save %1$s trees and %2$s gallons of water used in paper production per year.'),number_format(($proposal->getPageCounts()->Total->Combined->Yearly * .25) / 7800),number_format(($proposal->getPageCounts()->Total->Combined->Yearly * .25) / 8.2186)));
+$textrun = $section->createTextRun();
+$textrun->addText($this->translate('By printing 25% more documents on both sides of the page than you are now, you could save '));
+$textrun->addText(sprintf($this->translate('%1$s trees and %2$s gallons of water used in paper production per year.'),number_format(($proposal->getPageCounts()->Total->Combined->Yearly * .25) / 7800),number_format(($proposal->getPageCounts()->Total->Combined->Yearly * .25) / 8.2186)));
 $section->addText($this->translate('The following charts show how many of your printing devices have duplexing and scanning capabilities:'));
 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
