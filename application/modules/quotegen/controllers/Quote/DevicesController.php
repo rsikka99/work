@@ -39,7 +39,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                     $newQuoteDeviceId = $this->cloneFavoriteDeviceToQuote($deviceConfigurationId, $quoteSetting->deviceMargin);
                     if ($newQuoteDeviceId)
                     {
-                        $this->_helper->redirector(null, null, null, array (
+                        $this->redirector(null, null, null, array (
                                 'quoteId' => $this->_quoteId
                         ));
                     }
@@ -95,7 +95,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                                     'success' => "Device was added to your quote successfully. Please make any modifications that you wish now."
                             ));
 
-                            $this->_helper->redirector('edit-quote-device', null, null, array (
+                            $this->redirector('edit-quote-device', null, null, array (
                                     'id' => $quoteDeviceId,
                                     'quoteId' => $this->_quoteId
                             ));
@@ -116,7 +116,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             }
             else if (isset($values ['saveAndContinue']))
             {
-                $this->_helper->redirector('index', 'quote_groups', null, array (
+                $this->redirector('index', 'quote_groups', null, array (
                         'quoteId' => $this->_quoteId
                 ));
             }
@@ -153,7 +153,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                 'success' => 'Device deleted successfully.'
         ));
 
-        $this->_helper->redirector('index', null, null, array (
+        $this->redirector('index', null, null, array (
                 'quoteId' => $this->_quoteId
         ));
     }
@@ -178,7 +178,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             $this->_helper->flashMessenger(array (
                     'danger' => 'This device no longer has a device attached to it.'
             ));
-            $this->_helper->redirector('index', null, null, array (
+            $this->redirector('index', null, null, array (
                     'quoteId' => $this->_quoteId
             ));
         }
@@ -202,7 +202,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             if (isset($values ['goBack']))
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index', null, null, array (
+                $this->redirector('index', null, null, array (
                         'quoteId' => $this->_quoteId
                 ));
             }
@@ -253,7 +253,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             ));
 
                             // Send to the add options page like they asked
-                            $this->_helper->redirector('add-options-to-quote-device', null, null, array (
+                            $this->redirector('add-options-to-quote-device', null, null, array (
                                     'id' => $quoteDevice->id,
                                     'quoteId' => $this->_quoteId
                             ));
@@ -267,7 +267,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             // Send back to the main list if they are finished
                             if (isset($values ['saveAndContinue']))
                             {
-                                $this->_helper->redirector('index', null, null, array (
+                                $this->redirector('index', null, null, array (
                                         'quoteId' => $this->_quoteId
                                 ));
                             }
@@ -314,7 +314,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             $this->_helper->flashMessenger(array (
                     'info' => "Invalid device selected or the device no longer has the ability to be configured."
             ));
-            $this->_helper->redirector('edit-quote-device', null, null, array (
+            $this->redirector('edit-quote-device', null, null, array (
                     'id' => $quoteDevice->id,
                     'quoteId' => $this->_quoteId
             ));
@@ -326,7 +326,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             $this->_helper->flashMessenger(array (
                     'info' => "There are no more options to add to this device."
             ));
-            $this->_helper->redirector('edit-quote-device', null, null, array (
+            $this->redirector('edit-quote-device', null, null, array (
                     'id' => $quoteDevice->id,
                     'quoteId' => $this->_quoteId
             ));
@@ -401,7 +401,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         $this->_helper->flashMessenger(array (
                                 'success' => "Successfully added {$insertedOptions} options."
                         ));
-                        $this->_helper->redirector('edit-quote-device', null, null, array (
+                        $this->redirector('edit-quote-device', null, null, array (
                                 'id' => $quoteDevice->id,
                                 'quoteId' => $this->_quoteId
                         ));
@@ -421,7 +421,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             else
             {
                 // User has cancelled. Go back to the edit page
-                $this->_helper->redirector('edit-quote-device', null, null, array (
+                $this->redirector('edit-quote-device', null, null, array (
                         'id' => $quoteDevice->id,
                         'quoteId' => $this->_quoteId
                 ));
@@ -475,7 +475,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                     'warning' => "You forgot to select an option to delete."
             ));
         }
-        $this->_helper->redirector('edit-quote-device', null, null, array (
+        $this->redirector('edit-quote-device', null, null, array (
                 'id' => $quoteDevice->id,
                 'quoteId' => $this->_quoteId
         ));
@@ -501,7 +501,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             ));
         }
 
-        $this->_helper->redirector('index', null, null, array (
+        $this->redirector('index', null, null, array (
                 'quoteId' => $this->_quoteId
         ));
     }
@@ -539,7 +539,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                     'warning' => 'No device configurations were synced. This could be caused by the devices no longer being in the system.'
             ));
         }
-        $this->_helper->redirector('index', null, null, array (
+        $this->redirector('index', null, null, array (
                 'quoteId' => $this->_quoteId
         ));
     }

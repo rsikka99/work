@@ -33,7 +33,7 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a manufacturer to delete first.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         $mapper = new Proposalgen_Model_Mapper_Manufacturer();
@@ -44,7 +44,7 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error selecting the manufacturer to delete.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         $message = "Are you sure you want to delete {$manufacturer->fullname}? This is VERY DESTRUCTIVE! Please edit the manufacturer and mark it as deleted if you want to preserve anything that relies on the manufacturer instead.";
@@ -63,12 +63,12 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
                     $this->_helper->flashMessenger(array (
                             'success' => "Manufacturer  {$this->view->escape ($manufacturer->fullname )} was deleted successfully." 
                     ));
-                    $this->_helper->redirector('index');
+                    $this->redirector('index');
                 }
             }
             else // go back
             {
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;
@@ -152,7 +152,7 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;
@@ -169,7 +169,7 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a manufacturer to edit first.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         // Get the manufacturer
@@ -181,7 +181,7 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error selecting the manufacturer to edit.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         // Create a new form with the mode and roles set
@@ -232,7 +232,7 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;

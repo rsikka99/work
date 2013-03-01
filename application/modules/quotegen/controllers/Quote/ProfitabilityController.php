@@ -23,7 +23,7 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
             
             if (isset($values ['goBack']))
             {
-                $this->_helper->redirector('index', 'quote_pages', null, array (
+                $this->redirector('index', 'quote_pages', null, array (
                         'quoteId' => $this->_quoteId 
                 ));
             }
@@ -134,14 +134,14 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                         
                         if (isset($values ['saveAndContinue']))
                         {
-                            $this->_helper->redirector('index', 'quote_reports', null, array (
+                            $this->redirector('index', 'quote_reports', null, array (
                                     'quoteId' => $this->_quoteId 
                             ));
                         }
                         else
                         {
                             // Refresh the page
-                            $this->_helper->redirector(null, null, null, array (
+                            $this->redirector(null, null, null, array (
                                     'quoteId' => $this->_quoteId 
                             ));
                         }

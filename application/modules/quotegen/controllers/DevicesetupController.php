@@ -287,7 +287,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                                                ));
 
                                 // Redirect them here so that the form reloads
-                                $this->_helper->redirector('edit', null, null, array(
+                                $this->redirector('edit', null, null, array(
                                                                                     'id' => $masterDeviceId
                                                                                ));
                             }
@@ -316,7 +316,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
 
@@ -363,7 +363,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'warning' => 'Please select a master device to edit first.'
                                            ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
 
         // Get the masterDevice
@@ -377,7 +377,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'danger' => 'There was an error selecting the master device to edit.'
                                            ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
 
         // Create a new form with the mode and roles set
@@ -491,7 +491,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;
@@ -509,7 +509,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'warning' => 'Please select a device to delete first.'
                                            ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
 
         $device = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($deviceId);
@@ -518,7 +518,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'danger' => 'There was an error selecting the device to delete.'
                                            ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
 
         // Get the device name
@@ -562,12 +562,12 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                     $this->_helper->flashMessenger(array(
                                                         'success' => "{$deviceName} was deleted successfully."
                                                    ));
-                    $this->_helper->redirector('index');
+                    $this->redirector('index');
                 }
             }
             else
             {
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;
@@ -593,7 +593,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'warning' => 'Please select a master device to edit first.'
                                            ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
 
         // Get the master device
@@ -607,7 +607,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'danger' => 'There was an error selecting the master device to edit.'
                                            ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         $tonerConfig = $masterDevice->getTonerConfig()->tonerConfigName;
 
@@ -798,7 +798,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
 
@@ -881,7 +881,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'warning' => 'Please select a master device to edit first.'
                                            ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
 
         // Get the device and assigned options
@@ -989,7 +989,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
 
@@ -1078,7 +1078,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'warning' => 'Please select a master device to edit first.'
                                            ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
 
         // Get the device
@@ -1125,7 +1125,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
 

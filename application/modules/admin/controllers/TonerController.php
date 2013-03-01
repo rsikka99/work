@@ -32,7 +32,7 @@ class Admin_TonerController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'warning' => 'Please select a toner to delete first.'
                                            ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
 
         $tonerMapper = Proposalgen_Model_Mapper_Toner::getInstance();
@@ -43,7 +43,7 @@ class Admin_TonerController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'danger' => 'There was an error selecting the toner to delete.'
                                            ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
 
         $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchDeviceTonersByTonerId($tonerId);
@@ -63,12 +63,12 @@ class Admin_TonerController extends Tangent_Controller_Action
                         $tonerMapper->delete($toner);
 
                         $this->_helper->flashMessenger(array('success' => "The toner was deleted successfully."));
-                        $this->_helper->redirector('index');
+                        $this->redirector('index');
                     }
                 }
                 else // go back
                 {
-                    $this->_helper->redirector('index');
+                    $this->redirector('index');
                 }
             }
             $this->view->form = $form;
@@ -76,7 +76,7 @@ class Admin_TonerController extends Tangent_Controller_Action
         else
         {
             $this->_helper->flashMessenger(array('warning' => "This toner is being used by devices. Please remove it from devices before proceeding."));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
     }
 
@@ -111,7 +111,7 @@ class Admin_TonerController extends Tangent_Controller_Action
                         $mapper->insert($toner);
 
                         // Redirect client back to index
-                        $this->_helper->redirector('index');
+                        $this->redirector('index');
                     }
                     else // Values in form data aren't valid. 
                     {
@@ -127,7 +127,7 @@ class Admin_TonerController extends Tangent_Controller_Action
             }
             else // Cancel was hit: redirect user
             {
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
 
@@ -150,7 +150,7 @@ class Admin_TonerController extends Tangent_Controller_Action
                                                 'warning' => 'Please select a toner first'
                                            ));
             // Redirect
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
 
         // Find client and pass form object
@@ -182,7 +182,7 @@ class Admin_TonerController extends Tangent_Controller_Action
                                                             'success' => "The toner was updated sucessfully."
                                                        ));
 
-                        $this->_helper->redirector('index');
+                        $this->redirector('index');
                     }
                     else
                     {
@@ -199,7 +199,7 @@ class Admin_TonerController extends Tangent_Controller_Action
             else // Client hit cancel redicect
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
 

@@ -93,14 +93,14 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                     // saveAndContinue is clicked : to to quote_profitability
                     if (isset($values ['saveAndContinue']))
                     {
-                        $this->_helper->redirector('index', 'quote_profitability', null, array (
+                        $this->redirector('index', 'quote_profitability', null, array (
                                 'quoteId' => $this->_quoteId 
                         ));
                     }
                     else
                     {
                         // Refresh the page
-                        $this->_helper->redirector(null, null, null, array (
+                        $this->redirector(null, null, null, array (
                                 'quoteId' => $this->_quoteId 
                         ));
                     }
@@ -116,7 +116,7 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
             // Go back button is clicked : got back to qoute_groups
             else
             {
-                $this->_helper->redirector('index', 'quote_groups', null, array (
+                $this->redirector('index', 'quote_groups', null, array (
                         'quoteId' => $this->_quoteId 
                 ));
             }

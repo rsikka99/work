@@ -32,7 +32,7 @@ class Proposalgen_IndexController extends Tangent_Controller_Action
         $session->reportId = null;
         
         // Redirect to the survey controller of our current module
-        $this->_helper->redirector('index', 'survey');
+        $this->redirector('index', 'survey');
     }
 
     /**
@@ -55,7 +55,7 @@ class Proposalgen_IndexController extends Tangent_Controller_Action
                 
                 // Set the session report id and send to the survey index page.
                 $session->reportId = $reportId;
-                $this->_helper->redirector('index', 'survey');
+                $this->redirector('index', 'survey');
             }
         }
         

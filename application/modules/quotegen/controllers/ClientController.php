@@ -39,7 +39,7 @@ class Quotegen_ClientController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a client to delete first.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         $clientMapper = Quotegen_Model_Mapper_Client::getInstance();
@@ -49,7 +49,7 @@ class Quotegen_ClientController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error selecting the client to delete.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         $message = "Are you sure you want to completely delete {$client->companyName} including all quotes, assessments and proposals? <br/>This is an irreversible operation";
@@ -74,18 +74,18 @@ class Quotegen_ClientController extends Tangent_Controller_Action
                         $this->_helper->flashMessenger(array (
                                 'danger' => "Client {$client->companyName} cannot be deleted since there are  quote(s) attached."
                         ));
-                        $this->_helper->redirector('index');
+                        $this->redirector('index');
                     }
                     
                     $this->_helper->flashMessenger(array (
                             'success' => "Client  {$client->companyName} was deleted successfully."
                     ));
-                    $this->_helper->redirector('index');
+                    $this->redirector('index');
                 }
             }
             else // User has selected cancel button, go back. 
             {
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;
@@ -102,7 +102,7 @@ class Quotegen_ClientController extends Tangent_Controller_Action
             $values = $this->getRequest()->getPost();
             if (isset($values ['Cancel']))
             {
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
             
             try
@@ -121,7 +121,7 @@ class Quotegen_ClientController extends Tangent_Controller_Action
                         'success' => "Client successfully created." 
                 ));
                 // Redirect with client id so that the client is preselected
-                $this->_helper->redirector('index', null, null, array (
+                $this->redirector('index', null, null, array (
                         'clientId' => $clientId 
                 ));
             }
@@ -150,14 +150,14 @@ class Quotegen_ClientController extends Tangent_Controller_Action
         }
         else
         {
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();
             if (isset($values ['Cancel']))
             {
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
             
             try
@@ -176,7 +176,7 @@ class Quotegen_ClientController extends Tangent_Controller_Action
                         'success' => "Client {$client->companyName} successfully updated."
                 ));
                 // Redirect with client id so that the client is preselected
-                $this->_helper->redirector('index', null, null, array (
+                $this->redirector('index', null, null, array (
                         'clientId' => $clientId 
                 ));
             }
@@ -197,7 +197,7 @@ class Quotegen_ClientController extends Tangent_Controller_Action
     {
         $this->view->client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_getParam('id', false));
         if (! $this->view->client)
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         $this->view->address = Quotegen_Model_Mapper_Address::getInstance()->find($this->_getParam('id', false));
         $contact = Quotegen_Model_Mapper_Contact::getInstance()->getContactByClientId($this->_getParam('id', false));
         if (!$contact)

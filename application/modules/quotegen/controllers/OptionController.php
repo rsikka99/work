@@ -33,7 +33,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select an option to delete first.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         $optionMapper = Quotegen_Model_Mapper_Option::getInstance();
@@ -44,7 +44,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error finding that option to delete.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         $message = "Are you sure you want to delete {$option->name}?";
@@ -65,12 +65,12 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                     $this->_helper->flashMessenger(array (
                             'success' => "Option  {$this->view->escape ( $option->name )} was deleted successfully."
                     ));
-                    $this->_helper->redirector('index');
+                    $this->redirector('index');
                 }
             }
             else // go back
             {
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;
@@ -118,14 +118,14 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                         if ($page == "options")
                         {
                             // User has cancelled. Go back to the edit page
-                            $this->_helper->redirector('options', 'devicesetup', 'quotegen', array (
+                            $this->redirector('options', 'devicesetup', 'quotegen', array (
                                     'id' => $id 
                             ));
                         }
                         else
                         {
                             // User has cancelled. Go back to the edit page
-                            $this->_helper->redirector('index');
+                            $this->redirector('index');
                         }
                     }
                     else // Values in form data aren't valid.
@@ -145,14 +145,14 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                 if ($page == "options")
                 {
                     // User has cancelled. Go back to the edit page
-                    $this->_helper->redirector('options', 'devicesetup', 'quotegen', array (
+                    $this->redirector('options', 'devicesetup', 'quotegen', array (
                             'id' => $id 
                     ));
                 }
                 else
                 {
                     // User has cancelled. Go back to the edit page
-                    $this->_helper->redirector('index');
+                    $this->redirector('index');
                 }
             }
         }
@@ -171,7 +171,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                     'warning' => 'Please select an option first.' 
             ));
             // Redirect
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         // Load the form for use
@@ -239,7 +239,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                                 'success' => "Category setting was updated sucessfully." 
                         ));
                         
-                        $this->_helper->redirector('index');
+                        $this->redirector('index');
                     }
                     else
                     {
@@ -256,7 +256,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
             else // Client hit cancel redicect
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         

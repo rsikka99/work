@@ -57,7 +57,7 @@ class Preferences_QuoteController extends Tangent_Controller_Action
             else // Client hit cancel redirect
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;
@@ -128,7 +128,7 @@ class Preferences_QuoteController extends Tangent_Controller_Action
             else // Client hit cancel redirect
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
 

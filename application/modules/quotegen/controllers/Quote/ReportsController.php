@@ -58,7 +58,7 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
             }
             else
             {
-                $this->_helper->redirector('index', 'quote_profitability', null, array (
+                $this->redirector('index', 'quote_profitability', null, array (
                         'quoteId' => $this->_quoteId 
                 ));
             }

@@ -162,7 +162,7 @@ class Admin_UserController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'warning' => 'Please select a user to delete first.'
                                            ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
 
         if ($userId === '1')
@@ -170,7 +170,7 @@ class Admin_UserController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'danger' => 'Insufficient Privilege: You cannot delete the root user.'
                                            ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
 
         $mapper = new Application_Model_Mapper_User();
@@ -182,7 +182,7 @@ class Admin_UserController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'danger' => 'There was an error selecting the user to delete.'
                                            ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
 
         $form = new Application_Form_Delete("Are you sure you want to delete {$user->username} ({$user->firstname} {$user->lastname})?");
@@ -204,20 +204,20 @@ class Admin_UserController extends Tangent_Controller_Action
                                                         'success' => "User deleted."
                                                    ));
 
-                    $this->_helper->redirector('index');
+                    $this->redirector('index');
                 }
                 else
                 {
                     $this->_helper->flashMessenger(array(
                                                         'danger' => 'There was an error while deleting the user'
                                                    ));
-                    $this->_helper->redirector('index');
+                    $this->redirector('index');
                 }
             }
             else
             {
                 // User has cancelled.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
 
@@ -237,7 +237,7 @@ class Admin_UserController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'warning' => 'Please select a user to delete first.'
                                            ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
 
         if ($userId == '1' && !$this->_currentUserIsRoot)
@@ -245,7 +245,7 @@ class Admin_UserController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'danger' => 'Insufficient Privilege: You cannot edit the root user.'
                                            ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
 
         // Get the user
@@ -274,7 +274,7 @@ class Admin_UserController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'danger' => 'There was an error selecting the user to delete.'
                                            ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
 
         // Create a new form with the mode and roles set
@@ -438,7 +438,7 @@ class Admin_UserController extends Tangent_Controller_Action
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
 
@@ -483,7 +483,7 @@ class Admin_UserController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array(
                                                 'warning' => 'Please select a user to delete first.'
                                            ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
 
         // Get the user
@@ -534,7 +534,7 @@ class Admin_UserController extends Tangent_Controller_Action
             else
             {
                 // Redirect user back to the home page
-                $this->_helper->redirector('index', 'index', 'default');
+                $this->redirector('index', 'index', 'default');
             }
         }
         $this->view->form = $form;

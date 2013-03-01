@@ -55,7 +55,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a device configuration to delete first.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         $mapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
@@ -66,7 +66,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error selecting the device configuration to delete.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         $message = "Are you sure you want to delete {$deviceConfiguration->id}?";
@@ -85,12 +85,12 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                     $this->_helper->flashMessenger(array (
                             'success' => "Device configuration  {$deviceConfiguration->id} was deleted successfully."
                     ));
-                    $this->_helper->redirector('index');
+                    $this->redirector('index');
                 }
             }
             else // go back
             {
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;
@@ -128,7 +128,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                                     'success' => "Device configuration {$deviceConfiguration->id} was added successfully."
                             ));
                             
-                            $this->_helper->redirector('edit', null, null, array (
+                            $this->redirector('edit', null, null, array (
                                     'id' => $deviceConfigurationId 
                             ));
                         }
@@ -173,7 +173,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;
@@ -192,7 +192,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a device configuration to edit first.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         // Get the deviceConfiguration
@@ -205,7 +205,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error selecting the device configuration to edit.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         $this->view->deviceConfiguration = $deviceConfiguration;
@@ -227,7 +227,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
             if (isset($values ['cancel']))
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
             else
             {
@@ -264,7 +264,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                             ));
                             
                             // Send to the add options page like they asked
-                            $this->_helper->redirector('addoptions', null, null, array (
+                            $this->redirector('addoptions', null, null, array (
                                     'id' => $deviceConfigurationId 
                             ));
                         }
@@ -275,7 +275,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                             ));
                             
                             // Send back to the main list
-                            $this->_helper->redirector('index');
+                            $this->redirector('index');
                         }
                     }
                     else
@@ -307,7 +307,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
             $this->_helper->flashMessenger(array (
                     'info' => "There are no more options to add to this device." 
             ));
-            $this->_helper->redirector('edit', null, null, array (
+            $this->redirector('edit', null, null, array (
                     'id' => $id 
             ));
         }
@@ -356,7 +356,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                         $this->_helper->flashMessenger(array (
                                 'success' => "Successfully added {$insertedOptions} options to {$deviceConfiguration->getDevice()->getMasterDevice()->getFullDeviceName()} successfully." 
                         ));
-                        $this->_helper->redirector('edit', null, null, array (
+                        $this->redirector('edit', null, null, array (
                                 'id' => $id 
                         ));
                     }
@@ -375,7 +375,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
             else
             {
                 // User has cancelled. Go back to the edit page
-                $this->_helper->redirector('edit', null, null, array (
+                $this->redirector('edit', null, null, array (
                         'id' => $id 
                 ));
             }
@@ -409,7 +409,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
             ));
         }
         
-        $this->_helper->redirector('edit', null, null, array (
+        $this->redirector('edit', null, null, array (
                 'id' => $id 
         ));
     }

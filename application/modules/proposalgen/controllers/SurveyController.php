@@ -13,7 +13,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         {
             if ($this->_reportSession->reportId === 0)
             {
-                $this->_helper->redirector('finance');
+                $this->redirector('finance');
             }
             else
             {
@@ -32,17 +32,17 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                 if ($lastStep !== null)
                 {
                     // Send to latest page
-                    $this->_helper->redirector($lastStep->action, $lastStep->controller);
+                    $this->redirector($lastStep->action, $lastStep->controller);
                 }
                 else
                 {
-                    $this->_helper->redirector('finance');
+                    $this->redirector('finance');
                 }
             }
         }
         else
         {
-            $this->_helper->redirector('index', 'index');
+            $this->redirector('index', 'index');
         }
     }
 
