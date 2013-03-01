@@ -190,7 +190,7 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
                 /*
                  * We should only save if we have a new master device id and the device isn't supposed to be retired
                  */
-                if ((int)$masterDeviceId !== 0 && $deviceInstance->getAction() !== 'Retire')
+                if ((int)$masterDeviceId !== 0 && $deviceInstance->getAction() !== Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
                 {
                     if ($currentReplacementMasterDevice && (int)$currentReplacementMasterDevice->id === (int)$masterDeviceId)
                     {

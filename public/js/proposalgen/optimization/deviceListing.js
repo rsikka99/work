@@ -25,7 +25,7 @@ $(function ()
         datatype    : 'local',
         data        : jsonRows,
         colModel    : [
-            { label: 'Device', name: 'device', index: 'device', align: 'left', width: 148 },
+            { label: 'Device', name: 'device', index: 'device', align: 'left', width: 148 , frozen: true},
             { label: 'Mono AMPV', name: 'monoAmpv', index: 'monoAmpv', align: 'right', width: 60, sorttype: 'int', firstsortorder: 'desc' },
             { label: 'Color AMPV', name: 'colorAmpv', index: 'colorAmpv', align: 'right', width: 60, sorttype: 'int', firstsortorder: 'desc' },
             { label: 'Mono CPP', name: 'monoCpp', index: 'monoCpp', align: 'right', width: 60, sorttype: 'int', firstsortorder: 'desc' },
@@ -315,4 +315,5 @@ $(function ()
         }
 
     });
+    jQuery("#replacementDeviceTable").jqGrid('setFrozenColumns');
 });

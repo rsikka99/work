@@ -1,9 +1,8 @@
 <?php
-class Proposalgen_Model_Optimization_Customer extends
-    Proposalgen_Model_Optimization_Abstract
+class Proposalgen_Model_Optimization_Customer extends Proposalgen_Model_Optimization_Abstract
 {
     /**
-     * a list of string to image resources to the graphs
+     * A list of string to image resources to the graphs
      *
      * @var string []
      */
@@ -33,18 +32,10 @@ class Proposalgen_Model_Optimization_Customer extends
             $highest    = ($pageCounts->Leased->Combined->Monthly > $pageCounts->Purchased->Combined->Monthly) ? $pageCounts->Leased->Combined->Monthly : $pageCounts->Purchased->Combined->Monthly;
             $barGraph   = new gchart\gBarChart(200, 300);
             $barGraph->setTitle("Leased Vs Purchase|Page Counts");
-            $barGraph->setVisibleAxes(array(
-                                           'y'
-                                      ));
-            $barGraph->addDataSet(array(
-                                       round($pageCounts->Leased->Combined->Monthly)
-                                  ));
-            $barGraph->addColors(array(
-                                      "E21736"
-                                 ));
-            $barGraph->addDataSet(array(
-                                       round($pageCounts->Purchased->Combined->Monthly)
-                                  ));
+            $barGraph->setVisibleAxes( array('y') );
+            $barGraph->addDataSet( array(round($pageCounts->Leased->Combined->Monthly)) );
+            $barGraph->addColors( array("E21736") );
+            $barGraph->addDataSet( array(round($pageCounts->Purchased->Combined->Monthly)) );
             $barGraph->addAxisRange(0, 0, $highest * 1.20);
             $barGraph->setDataRange(0, $highest * 1.20);
             $barGraph->setBarScale(40, 10);
@@ -115,43 +106,18 @@ class Proposalgen_Model_Optimization_Customer extends
             $highest    = 100;
             $barGraph   = new gchart\gStackedBarChart(600, 160);
             $barGraph->setHorizontal(true);
-            $barGraph->setVisibleAxes(array(
-                                           'x'
-                                      ));
-            $barGraph->addDataSet(array(
-                                       0
-                                  ));
-            $barGraph->addColors(array(
-                                      "E21736"
-                                 ));
-            $barGraph->addDataSet(array(
-                                       0
-                                  ));
-            $barGraph->addColors(array(
-                                      "0194D2"
-                                 ));
-            $barGraph->addColors(array(
-                                      "EF6B18"
-                                 ));
-            $barGraph->addDataSet(array(
-                                       0
-                                  ));
-            $barGraph->addDataSet(array(
-                                       30
-                                  ));
-            $barGraph->addColors(array(
-                                      "FFFFFF"
-                                 ));
-            $barGraph->addDataSet(array(
-                                       0
-                                  ));
-
-            $barGraph->addDataSet(array(
-                                       20
-                                  ));
-            $barGraph->addColors(array(
-                                      "FFFFFF"
-                                 ));
+            $barGraph->setVisibleAxes(array('x'));
+            $barGraph->addDataSet(array(0));
+            $barGraph->addDataSet(array(0));
+            $barGraph->addDataSet(array(0));
+            $barGraph->addDataSet(array(30));
+            $barGraph->addDataSet(array(0));
+            $barGraph->addDataSet(array(20));
+            $barGraph->addColors(array("E21736"));
+            $barGraph->addColors(array("0194D2"));
+            $barGraph->addColors(array("EF6B18"));
+            $barGraph->addColors(array("FFFFFF"));
+            $barGraph->addColors(array("FFFFFF"));
             $barGraph->setLegend(array(
                                       "Your Estimated Monthly Usage (% of Capacity)",
                                       "Your Estimated Optimized Monthly Usage (% of Capacity)",

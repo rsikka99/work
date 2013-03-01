@@ -268,7 +268,7 @@ abstract class Proposalgen_Model_Optimization_Abstract
 
 
             $this->averageSupplyCount   = '';
-            $this->supplyTypeCount      = count($this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($this->proposal->getPurchasedDevices())));
+            $this->supplyTypeCount      = count($this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($proposal->getPurchasedDevices())));
             $this->optimizedSupplyCount = count($this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($this->getAllMasterDevicesWithReplacements())));
 
 
