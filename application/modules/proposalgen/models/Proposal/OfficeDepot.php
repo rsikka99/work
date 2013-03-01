@@ -153,6 +153,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     protected $_optimizedDevices;
     protected $_numberOfDevicesNotReportingTonerLevels;
     protected $_numberOfCopyCapableDevices;
+
     /**
      * @param Proposalgen_Model_Report $report
      */
@@ -1402,6 +1403,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             $costPerPageSetting                       = clone $this->getCostPerPageSettingForCustomer();
             $costPerPageSetting->pricingConfiguration = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::OEM);
             $costPerPage                              = new Proposalgen_Model_CostPerPage();
+            $costPerPage->monochromeCostPerPage       = 0;
+            $costPerPage->colorCostPerPage            = 0;
             $numberOfColorDevices                     = 0;
             foreach ($this->getDevices()->purchasedDeviceInstances as $deviceInstance)
             {
@@ -1415,7 +1418,10 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             if ($numberOfDevices > 0)
             {
                 $costPerPage->monochromeCostPerPage = $costPerPage->monochromeCostPerPage / $numberOfDevices;
-                $costPerPage->colorCostPerPage      = $costPerPage->colorCostPerPage / $numberOfColorDevices;
+                if ($numberOfColorDevices > 0)
+                {
+                    $costPerPage->colorCostPerPage = $costPerPage->colorCostPerPage / $numberOfColorDevices;
+                }
             }
             $this->_averageOemOnlyCostPerPage = $costPerPage;
         }
@@ -1448,7 +1454,10 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             if ($numberOfDevices > 0)
             {
                 $costPerPage->monochromeCostPerPage = $costPerPage->monochromeCostPerPage / $numberOfDevices;
-                $costPerPage->colorCostPerPage      = $costPerPage->colorCostPerPage / $numberOfDevices;
+                if ($numberOfColorDevices > 0)
+                {
+                    $costPerPage->colorCostPerPage = $costPerPage->colorCostPerPage / $numberOfDevices;
+                }
             }
 
             $this->_averageCompatibleOnlyCostPerPage = $costPerPage;
@@ -3367,7 +3376,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
 
         return $this->UniqueDeviceList;
     }
-     /**
+
+    /**
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *
      * @return float
@@ -3438,16 +3448,19 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     /**
      * @return float
      */
-    public function calculateEstimatedCompTonerCostAnnually(){
+    public function calculateEstimatedCompTonerCostAnnually ()
+    {
         return ($this->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->getPageCounts()->Purchased->Color->Monthly + ($this->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12;
     }
 
     /**
      * @return float
      */
-    public function calculateEstimatedOemTonerCostAnnually(){
+    public function calculateEstimatedOemTonerCostAnnually ()
+    {
         return ($this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getPageCounts()->Purchased->Color->Monthly + ($this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12;
     }
+
     /**
      * Calculates the percentage of the fleet which is capable of reporting toner levels. This includes both purchased and leased devices.
      *
