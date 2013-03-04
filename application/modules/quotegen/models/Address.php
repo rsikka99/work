@@ -170,7 +170,7 @@ class Quotegen_Model_Address extends My_Model_Abstract
             $address .= "\n";
         }
 
-        $address .= "{$this->city}, {$this->getRegionName()}\n {$this->postCode}";
+        $address .= "{$this->city}, {$this->getRegionName()}\n{$this->postCode}";
 
         return $address;
     }
