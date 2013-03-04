@@ -2,12 +2,6 @@
 $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
 $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
 $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/solution/solution_html.css"));
-// Title page image
-echo '<style type="text/css">
-        #htmlReportContainer div.titlepage {
-            height: 500px;
-        }
-     </style>';
 
 
 $data = array(
@@ -30,6 +24,16 @@ $data = array(
 ?>
 <div class="container" id="htmlReportContainer">
 <?php
+    $theme = $this->theme("");
+
+    if (array_search("default", explode('/', $theme)))
+    {
+        $this->reportName = "MPSToolbox.com";
+    }
+    else
+    {
+        $this->reportName = "PrintIQ";
+    }
 echo $this->partial('report/solution/' . $this->App()->theme . '/html/01_Title.phtml', $data);
 echo $this->partial('report/solution/' . $this->App()->theme . '/html/02_Description.phtml', $data);
 echo $this->partial('report/solution/' . $this->App()->theme . '/html/03_PrintIQ.phtml', $data);

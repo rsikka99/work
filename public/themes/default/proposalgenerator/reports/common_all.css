@@ -83,10 +83,42 @@
 }
 
 /* TITLE PAGE */
-#htmlReportContainer .title-page-logo {
-    margin  : auto;
-    display : block;
+#htmlReportContainer .title-page-logo-box-wrapper {
+    display : table;
+    width   : 100%;
 }
+
+#htmlReportContainer .title-page-logo-box {
+    display        : table-cell;
+    vertical-align : middle;
+    height         : 300px;
+    width          : 100%;
+    text-align     : center;
+}
+
+#htmlReportContainer .title-page-logo {
+
+    display : block;
+    margin  : auto;
+
+}
+
+#htmlReportContainer .title-page-report-title {
+    background-color : #58595b;
+    color            : #FFF;
+    margin-bottom    : 20px;
+    padding          : 5px 5px 5px 30px;
+}
+
+#htmlReportContainer .title-page-customer-details {
+    background-color : #808285;
+    color            : #FFF;
+    min-height       : 300px;
+    padding          : 10px;
+
+}
+
+/* TITLE PAGE */
 
 /* PAGE FOOTER */
 #htmlReportContainer  table.footertable td {

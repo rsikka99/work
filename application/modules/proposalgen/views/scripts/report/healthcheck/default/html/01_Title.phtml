@@ -4,7 +4,16 @@ $proposal = $this->healthcheck->proposal;
 ?>
 <div class="titlepage">
     <div class="header">
-        <img class="title-page-logo" src="<?php echo $this->serverUrl($this->theme("proposalgenerator/reports/images/595x300.gif")) ?> " />
+        <div class="title-page-logo-box-wrapper">
+            <div class="title-page-logo-box">
+                <img class="title-page-logo" src="<?php echo $this->serverUrl($this->theme("proposalgenerator/reports/images/mpstoolbox_logo.jpg")) ?> " />
+            </div>
+        </div>
+    </div>
+    <div class="title-page-report-title">
+        <h2>Health Check</h2>
+    </div>
+    <div class="title-page-customer-details">
         <h3>Prepared for:
             <?php
             if (strlen($proposal->report->getClient()->companyName) > 26)
@@ -15,9 +24,9 @@ $proposal = $this->healthcheck->proposal;
             echo $proposal->report->getClient()->companyName;
             ?>
         </h3>
+
         <h3><?php echo $proposal->getDateReportPrepared(); ?></h3>
-    </div>
-    <div class="customerdetails">
+
         <p><?php echo nl2br($proposal->report->getClient()->getAddress()); ?></p>
     </div>
 </div>

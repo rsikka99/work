@@ -1,23 +1,25 @@
-<?php
-$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
-$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
-$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/healthcheck/healthcheck_html.css"));
-// Title page image
-echo '<style type="text/css">
-        #htmlReportContainer div.titlepage {
-            height: 500px;
-        }
-     </style>';
-?>
 <div class="container" id="htmlReportContainer">
-<?php
-echo $this->render('report/healthcheck/' . $this->App()->theme . '/html/01_Title.phtml');
-echo $this->render('report/healthcheck/' . $this->App()->theme . '/html/02_Scorecard.phtml');
-echo $this->render('report/healthcheck/' . $this->App()->theme . '/html/03_ServiceAndSuppliesLogistics.phtml');
-echo $this->render('report/healthcheck/' . $this->App()->theme . '/html/04_PrintingHardwareUsage.phtml');
-echo $this->render('report/healthcheck/' . $this->App()->theme . '/html/05_TechnologyReliabilityAndUserProductivity.phtml');
-echo $this->render('report/healthcheck/' . $this->App()->theme . '/html/06_EnvironmentalImpact.phtml');
-echo $this->render('report/healthcheck/' . $this->App()->theme . '/html/07_FleetAttributes.phtml');
-echo $this->render('report/healthcheck/' . $this->App()->theme . '/html/08_Summary.phtml');
+    <?php
+    $theme = $this->theme("");
+
+    if (array_search("default", explode('/', $theme)))
+    {
+        $this->reportName = "MPSToolbox.com";
+    }
+    else
+    {
+        $this->reportName = "PrintIQ";
+    }
+    $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
+    $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
+    $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/healthcheck/healthcheck_html.css"));
+    echo $this->render('report/healthcheck/' . $this->App()->theme . '/html/01_Title.phtml');
+    echo $this->render('report/healthcheck/' . $this->App()->theme . '/html/02_Scorecard.phtml');
+    echo $this->render('report/healthcheck/' . $this->App()->theme . '/html/03_ServiceAndSuppliesLogistics.phtml');
+    echo $this->render('report/healthcheck/' . $this->App()->theme . '/html/04_PrintingHardwareUsage.phtml');
+    echo $this->render('report/healthcheck/' . $this->App()->theme . '/html/05_TechnologyReliabilityAndUserProductivity.phtml');
+    echo $this->render('report/healthcheck/' . $this->App()->theme . '/html/06_EnvironmentalImpact.phtml');
+    echo $this->render('report/healthcheck/' . $this->App()->theme . '/html/07_FleetAttributes.phtml');
+    echo $this->render('report/healthcheck/' . $this->App()->theme . '/html/08_Summary.phtml');
     ?>
 </div>
