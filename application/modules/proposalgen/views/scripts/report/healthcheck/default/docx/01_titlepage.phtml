@@ -13,15 +13,13 @@ $section = $this->section;
 // Table to get the images working properly
 $table = $section->addTable();
 $table->addRow();
-$cell = $table->addCell(3209);
-$cell->addImage(ASSETS_PATH . "/docx/quote/images/cell1.jpg");
 $cell = $table->addCell(5818);
-$cell->addTextBreak(3);
-$cell->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/healthcheck_cell.jpg");
-$cell->addTextBreak(5);
+$cell->addTextBreak(2);
+$cell->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/595x300.gif");
+$cell->addTextBreak(2);
 $cell->addText($this->translate('Prepared For:') . " " . $proposal->report->getClient()->companyName, 'titlepageHeaderFont', 'titlepageHeaderParagraph');
 $cell->addText($proposal->getDateReportPrepared(), 'titlepageHeaderFont', 'titlepageHeaderParagraph');
-$cell->addTextBreak(4);
+$cell->addTextBreak(2);
 // Parse the address
 $addressLines = explode("\n", $proposal->report->getClient()->getAddress()->getFullAddressMultipleLines());
 foreach ( $addressLines as $line )
