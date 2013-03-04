@@ -38,6 +38,13 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
      */
     protected $_activeStep;
 
+    /**
+     * Report name is the title behind the reports that are being generated.
+     *
+     * @var string
+     */
+    public $reportName;
+
 
     /**
      * The current proposal
@@ -90,7 +97,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
     {
         // This is a list of reports that we can view.
         $this->view->availableReports = (object)array(
-            "Reports"         => (object)array(
+            "Reports"            => (object)array(
                 "pagetitle" => "Select a report...",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_index/index')
@@ -650,5 +657,38 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
                 $this->redirector($prevStep->action, $prevStep->controller);
             }
         }
+    }
+
+    protected function getThemeName ()
+    {
+        $theme = explode("/", $this->view->theme());
+
+        if (array_search("default", $theme))
+        {
+            $themeName = "default";
+        }
+        else
+        {
+            $themeName = "printiq";
+        }
+
+        return $themeName;
+    }
+
+    protected function getReportName($themeName)
+    {
+        if(!isset($this->reportName))
+        {
+            if($themeName === "default")
+            {
+
+            }
+            else
+            {
+
+            }
+        }
+
+        return $this->reportName;
     }
 }
