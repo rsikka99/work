@@ -83,13 +83,9 @@
 }
 
 /* TITLE PAGE */
-#htmlReportContainer  div.titlepage {
-    padding-left : 250px;
-    padding-top  : 390px;
-}
-
-#htmlReportContainer  div.titlepage div.customerdetails {
-    padding-top : 150px;
+#htmlReportContainer .title-page-logo {
+    margin  : auto;
+    display : block;
 }
 
 /* PAGE FOOTER */

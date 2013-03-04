@@ -2,12 +2,9 @@
 
     font-size   : 9.5pt;
     font-family : arial, verdana, arial, tahoma, verdana, sans-serif;
-}
-
-#htmlReportContainer {
-    width    : 920px;
-    overflow : auto;
-    height: 300px;
+    width       : 920px;
+    overflow    : auto;
+    height      : 300px;
 }
 
 #htmlReportContainer .right {
@@ -30,20 +27,20 @@
     Print IQ essentials device summary
 */
 
-.essentialsTable th {
+#htmlReportContainer .essentialsTable th {
     padding          : 2px;
     background-color : #f2f2f2;
 }
 
-.essentialsTable th, .essentialsTable td {
+#htmlReportContainer .essentialsTable th, .essentialsTable td {
     border : 1px solid #ccc;
 }
 
-.essentialsTable .topleftcell {
+#htmlReportContainer .essentialsTable .topleftcell {
     border           : 0;
     background-color : transparent;
 }
 
-.essentialsTable td {
+#htmlReportContainer .essentialsTable td {
     padding : 0 3px;
 }

@@ -2,101 +2,96 @@
     Styles specific to the gross margin report 
     Last revised: January 18, 2013
 */
-html, body {
-    background-color: #FFF;
+#htmlReportContainer {
+
+    font-size   : 9.5pt;
+    font-family : arial, verdana, arial, tahoma, verdana, sans-serif;
+    width       : 920px;
+    overflow    : auto;
+    height      : 300px;
 }
 
-body {
-    width: 842px;
-    min-width: 842px;
-    font-size: 9.5pt;
-    font-family: arial, verdana, arial, tahoma, verdana, serif;
-    margin : auto auto 500px auto;
+#htmlReportContainer .right {
+    text-align : right;
 }
 
-.right {
-	text-align: right;
+#htmlReportContainer .center {
+    text-align : center;
 }
 
-.center {
-	text-align: center;
+#htmlReportContainer h2.reportTitle {
+    color           : red;
+    margin-bottom   : 0;
+    letter-spacing  : 2px;
+    font-style      : italic;
+    text-decoration : underline;
 }
-
-
-h2.reportTitle {
-	color: red;
-    margin-bottom: 0;
-	letter-spacing: 2px;
-	font-style: italic;
-    text-decoration: underline;
-}
-
 
 /*
     Gross Margin Device Summary
 */
-#grossMarginDeviceSummary {
-	border-collapse: collapse;
+#htmlReportContainer #grossMarginDeviceSummary {
+    border-collapse : collapse;
 }
 
-#grossMarginDeviceSummary,#grossMarginDeviceSummary td,#grossMarginDeviceSummary th {
-	border: 1px solid #ccc;
+#htmlReportContainer #grossMarginDeviceSummary, #htmlReportContainer #grossMarginDeviceSummary td, #htmlReportContainer #grossMarginDeviceSummary th {
+    border : 1px solid #ccc;
 }
 
-#grossMarginDeviceSummary td {
-	padding: 0 3px;
+#htmlReportContainer #grossMarginDeviceSummary td {
+    padding : 0 3px;
 }
 
-#grossMarginDeviceSummary tr.nonCompliantMono td.mono,
-#grossMarginDeviceSummary tr.nonCompliantColor td.color {
-    background-color: #F6FF8F;
+#htmlReportContainer #grossMarginDeviceSummary tr.nonCompliantMono td.mono,
+#htmlReportContainer #grossMarginDeviceSummary tr.nonCompliantColor td.color {
+    background-color : #F6FF8F;
 }
 
-#grossMarginDeviceSummary th {
-	padding: 2px;
-	background-color: #f2f2f2;
+#htmlReportContainer #grossMarginDeviceSummary th {
+    padding          : 2px;
+    background-color : #f2f2f2;
 }
 
-#grossMarginDeviceSummary tr.totals {
-	color: red;
-	font-weight: bold;
-	background-color: #f2f2f2;
+#htmlReportContainer #grossMarginDeviceSummary tr.totals {
+    color            : red;
+    font-weight      : bold;
+    background-color : #f2f2f2;
 }
 
-#grossMarginDeviceSummary thead,#grossMarginDeviceSummary tfoot {
-	font-weight: bold;
+#htmlReportContainer #grossMarginDeviceSummary thead, #htmlReportContainer #grossMarginDeviceSummary tfoot {
+    font-weight : bold;
 }
-
-
-
 
 /*
     Gross Margin Information
 */
-#grossMarginInformation {
-	margin: auto;
-	border-spacing: 0;
+#htmlReportContainer #grossMarginInformation {
+    margin         : auto;
+    border-spacing : 0;
 }
 
-#grossMarginInformation tr td {
-	padding: 2px;
+#htmlReportContainer #grossMarginInformation tr td {
+    padding : 2px;
 }
 
-#grossMarginInformation .heading {
-	text-align: right;
-	padding-right: 10px;
-	font-weight: bold;
+#htmlReportContainer #grossMarginInformation .heading {
+    text-align    : right;
+    padding-right : 10px;
+    font-weight   : bold;
 }
 
-#grossMarginInformation td.column1 div {
-    width: 200px;   
+#htmlReportContainer #grossMarginInformation td.column1 div {
+    width : 200px;
 }
-#grossMarginInformation td.column2 div {
-    width: 70px;   
+
+#htmlReportContainer #grossMarginInformation td.column2 div {
+    width : 70px;
 }
-#grossMarginInformation td.column3 div {
-    width: 200px;   
+
+#htmlReportContainer #grossMarginInformation td.column3 div {
+    width : 200px;
 }
-#grossMarginInformation td.column4 div {
-    width: 70px;   
+
+#htmlReportContainer #grossMarginInformation td.column4 div {
+    width : 70px;
 }

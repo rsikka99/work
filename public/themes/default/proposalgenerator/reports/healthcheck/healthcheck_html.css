@@ -1,28 +1,29 @@
 /**
  * Least/Most Used Devices
  */
-#MostUsedDevicesTable .column1,#LeastUsedDevicesTable .column1 {
+#htmlReportContainer #MostUsedDevicesTable .column1, #htmlReportContainer #LeastUsedDevicesTable .column1 {
 
 }
 
-#MostUsedDevicesTable .column2,#LeastUsedDevicesTable .column2 {
-    width: 105px;
+#htmlReportContainer #MostUsedDevicesTable .column2, #htmlReportContainer #LeastUsedDevicesTable .column2 {
+    width : 105px;
 }
 
-#MostUsedDevicesTable .column3,#LeastUsedDevicesTable .column3 {
-    width: 105px;
+#htmlReportContainer #MostUsedDevicesTable .column3, #htmlReportContainer #LeastUsedDevicesTable .column3 {
+    width : 105px;
 }
 
-#MostUsedDevicesTable .column4,#LeastUsedDevicesTable .column4 {
-    width: 105px;
+#htmlReportContainer #MostUsedDevicesTable .column4, #htmlReportContainer #LeastUsedDevicesTable .column4 {
+    width : 105px;
 }
 
-.annualSavings {
-    line-height: 40px;
-    height: auto;
-    padding: 5px;
+#htmlReportContainer .annualSavings {
+    line-height : 40px;
+    height      : auto;
+    padding     : 5px;
 }
-.shaded{
-    background-color:#F0F0F0;
+
+#htmlReportContainer .shaded {
+    background-color : #F0F0F0;
 }
 

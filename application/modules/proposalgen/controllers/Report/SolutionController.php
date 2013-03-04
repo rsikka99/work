@@ -72,7 +72,7 @@ class Proposalgen_Report_SolutionController extends Proposalgen_Library_Controll
         // Render early
         try
         {
-            $this->render($format . "/00_render");
+            $this->render($this->getThemeName() . '/' . $format  . "/00_render");
         }
         catch (Exception $e)
         {

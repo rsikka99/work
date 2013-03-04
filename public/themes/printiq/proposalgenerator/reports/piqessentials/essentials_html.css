@@ -3,60 +3,60 @@
     Last revised: July 10, 2012
 */
 
-body {
-	width: 940px;
-	margin: auto;
-	font-size: 9.5pt;
-	font-family: arial, verdana, arial, tahoma, verdana;
-	margin-bottom: 500px;
+#htmlReportContainer {
+    font-size   : 9.5pt;
+    font-family : arial, verdana, arial, tahoma, verdana, sans-serif;
+    width       : 920px;
+    overflow    : auto;
+    height      : 300px;
 }
 
-.right {
-	text-align: right;
+#htmlReportContainer .right {
+    text-align : right;
 }
 
-.center {
-	text-align: center;
+#htmlReportContainer .center {
+    text-align : center;
 }
 
-h2.reportTitle {
-	color: red;
-    margin-bottom: 0;
-	letter-spacing: 2px;
-	font-style: italic;
-    text-decoration: underline;
+#htmlReportContainer h2.reportTitle {
+    color           : red;
+    margin-bottom   : 0;
+    letter-spacing  : 2px;
+    font-style      : italic;
+    text-decoration : underline;
 }
 
 /*
     print iq essentials Device Summary
 */
 
-.essentialsTable th {
-	padding: 2px;
-	background-color: #f2f2f2;
+#htmlReportContainer .essentialsTable th {
+    padding          : 2px;
+    background-color : #f2f2f2;
 }
 
-.essentialsTable th, .essentialsTable td{
-	border: 1px solid #ccc;
+#htmlReportContainer .essentialsTable th, #htmlReportContainer .essentialsTable td {
+    border : 1px solid #ccc;
 }
 
-.essentialsTable .topleftcell {
-	border: 0;
-	background-color: transparent;
+#htmlReportContainer .essentialsTable .topleftcell {
+    border           : 0;
+    background-color : transparent;
 }
 
-.essentialsTable td {
-	padding: 0px 3px;
+#htmlReportContainer .essentialsTable td {
+    padding : 0px 3px;
 }
-
 
 /*
     Add horizontal scroll bar so that all table columns fit within 940px width
-    NOTE: This is not a good way of acheiving the desired result.  Look for a way
+    NOTE: This is not a good way of achieving the desired result.  Look for a way
     to have the table adjust to the full viewing width with the browser providing
-    horizonal scroll bars.
+    horizontal scroll bars.
 */
-.table_horizontal_scroll {
-overflow: auto; overflow-y: hidden; -ms-overflow-y: hidden;
-
+#htmlReportContainer .table_horizontal_scroll {
+    overflow       : auto;
+    overflow-y     : hidden;
+    -ms-overflow-y : hidden;
 }

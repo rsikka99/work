@@ -1,20 +1,5 @@
 <?php
 $this->placeholder('extraNavbar')->set($this->render('_partials/reportMenu.phtml'));
-
-$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
-$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
-$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/solution/solution_html.css"));
-// Title page image
-echo '<style type="text/css">
-			div.titlepage {
-				height: 500px;
-				padding-left: 300px;
-				padding-top: 350px;
-				background-image: url(' . $this->serverUrl($this->theme("proposalgenerator/reports/images/solution.jpg")) . ');
-				background-repeat: no-repeat;
-			}
-		 </style>';
-
 $data = array(
     "proposal"       => $this->proposal,
     "isPDF"          => $this->isPDF,
@@ -31,10 +16,4 @@ $data = array(
     "noBreakEnd"     => $this->noBreakEnd,
     "orientation"    => $this->orientation
 );
-?>
-<div class="container" id="htmlReportContainer">
-    <?php
-    echo $this->partial('report/printingdevicelist/html/01_Appendix.phtml', $data);
-    echo $this->partial('report/printingdevicelist/html/02_ExcludedDevices.phtml', $data);
-    ?>
-</div>
+    echo $this->partial('report/printingdevicelist/' . $this->App()->theme . '/html/00_Render.phtml',$data);

@@ -3,121 +3,121 @@
     Last revised: December 1, 2011
 */
 
-h2.reportTitle {
-	color: red;
-	margin-bottom: 5px;
-	letter-spacing: 2px;
-	font-style: italic;
-	text-decoration: underline;
+#htmlReportContainer h2.reportTitle {
+    color           : red;
+    margin-bottom   : 5px;
+    letter-spacing  : 2px;
+    font-style      : italic;
+    text-decoration : underline;
 }
 
 /*
     Gross Margin Device Summary
 */
-#grossMarginDeviceSummary,#grossMarginDeviceSummary td,#grossMarginDeviceSummary th {
-	border: 1px solid #ccc;
+#htmlReportContainer #grossMarginDeviceSummary, #htmlReportContainer #grossMarginDeviceSummary td, #htmlReportContainer #grossMarginDeviceSummary th {
+    border : 1px solid #ccc;
 }
 
-#grossMarginDeviceSummary td {
-	padding: 0px 3px;
-	font-size: 9.5pt;
+#htmlReportContainer #grossMarginDeviceSummary td {
+    padding   : 0px 3px;
+    font-size : 9.5pt;
 }
 
-#grossMarginDeviceSummary tr.nonCompliantMono td.mono,
-#grossMarginDeviceSummary tr.nonCompliantColor td.color {
-	background-color: #F6FF8F;
+#htmlReportContainer #grossMarginDeviceSummary tr.nonCompliantMono td.mono,
+#htmlReportContainer #grossMarginDeviceSummary tr.nonCompliantColor td.color {
+    background-color : #F6FF8F;
 }
 
-
-#grossMarginDeviceSummary th {
-	padding: 2px;
-	background-color: #f2f2f2;
+#htmlReportContainer #grossMarginDeviceSummary th {
+    padding          : 2px;
+    background-color : #f2f2f2;
 }
 
-#grossMarginDeviceSummary tr.totals {
-	color: red;
-	font-weight: bold;
-	background-color: #f2f2f2;
+#htmlReportContainer #grossMarginDeviceSummary tr.totals {
+    color            : red;
+    font-weight      : bold;
+    background-color : #f2f2f2;
 }
 
-#grossMarginDeviceSummary thead,#grossMarginDeviceSummary tfoot {
-	font-weight: bold;
+#htmlReportContainer #grossMarginDeviceSummary thead, #htmlReportContainer #grossMarginDeviceSummary tfoot {
+    font-weight : bold;
 }
 
-#grossMarginDeviceSummary td.column1 div {
-	width: 165px;
+#htmlReportContainer #grossMarginDeviceSummary td.column1 div {
+    width : 165px;
 }
 
-#grossMarginDeviceSummary td.column2 div {
-	width: 90px;
+#htmlReportContainer #grossMarginDeviceSummary td.column2 div {
+    width : 90px;
 }
 
-#grossMarginDeviceSummary td.column3 div {
-	width: 60px;
+#htmlReportContainer #grossMarginDeviceSummary td.column3 div {
+    width : 60px;
 }
 
-#grossMarginDeviceSummary td.column4 div {
-	width: 50px;
+#htmlReportContainer #grossMarginDeviceSummary td.column4 div {
+    width : 50px;
 }
 
-#grossMarginDeviceSummary td.column5 div {
-	width: 50px;
+#htmlReportContainer #grossMarginDeviceSummary td.column5 div {
+    width : 50px;
 }
 
-#grossMarginDeviceSummary td.column6 div {
-	width: 80px;
+#htmlReportContainer #grossMarginDeviceSummary td.column6 div {
+    width : 80px;
 }
 
-#grossMarginDeviceSummary td.column7 div {
-	width: 50px;
+#htmlReportContainer #grossMarginDeviceSummary td.column7 div {
+    width : 50px;
 }
 
-#grossMarginDeviceSummary td.column8 div {
-	width: 50px;
+#htmlReportContainer #grossMarginDeviceSummary td.column8 div {
+    width : 50px;
 }
 
-#grossMarginDeviceSummary td.column9 div {
-	width: 50px;
+#htmlReportContainer #grossMarginDeviceSummary td.column9 div {
+    width : 50px;
 }
 
-#grossMarginDeviceSummary td.column10 div {
-	width: 50px;
+#htmlReportContainer #grossMarginDeviceSummary td.column10 div {
+    width : 50px;
 }
 
-#grossMarginDeviceSummary td.column11 div {
-	width: 80px;
+#htmlReportContainer #grossMarginDeviceSummary td.column11 div {
+    width : 80px;
 }
-
-
 
 /*
     Gross Margin Information
 */
-#grossMarginInformation {
+#htmlReportContainer #grossMarginInformation {
 
-	border-spacing: 0px;
-	margin: auto;
-}
-
-#grossMarginInformation tr td {
-	padding: 2px;
+    border-spacing : 0px;
+    margin         : auto;
 }
 
-#grossMarginInformation .heading{
-	text-align: right;
-	padding-right: 10px;
-	font-weight: bold;
+#htmlReportContainer #grossMarginInformation tr td {
+    padding : 2px;
 }
 
-#grossMarginInformation .column1 div {
-    width: 200px;	
+#htmlReportContainer #grossMarginInformation .heading {
+    text-align    : right;
+    padding-right : 10px;
+    font-weight   : bold;
 }
-#grossMarginInformation .column2 div {
-    width: 70px;   
+
+#htmlReportContainer #grossMarginInformation .column1 div {
+    width : 200px;
 }
-#grossMarginInformation .column3 div {
-    width: 200px;   
+
+#htmlReportContainer #grossMarginInformation .column2 div {
+    width : 70px;
 }
-#grossMarginInformation .column4 div {
-    width: 70px;   
+
+#htmlReportContainer #grossMarginInformation .column3 div {
+    width : 200px;
+}
+
+#htmlReportContainer #grossMarginInformation .column4 div {
+    width : 70px;
 }

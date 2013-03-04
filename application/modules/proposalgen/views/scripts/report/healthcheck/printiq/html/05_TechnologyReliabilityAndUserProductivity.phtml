@@ -1,0 +1,35 @@
+<?php
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->healthcheck->proposal;
+$graphs = $this->healthcheck->getGraphs();
+?>
+<div class="h1">Analysis: Technology Reliability and User Productivity</div>
+<table cellspacing="0" class="gradesTable">
+    <tr>
+        <td class="gradeDescription">
+            <p><?php echo $proposal->getRanking()->getTechnologyReliabilityAndUserProductivity()->RankingText; ?></p>
+        </td>
+        <td class="gradeNumber"><?php echo number_format($proposal->getRanking()->getTechnologyReliabilityAndUserProductivity()->Rank, 1); ?></td>
+    </tr>
+</table>
+<br />
+<div class="pheader">Age of Printing Devices</div>
+<p>We estimate the average age of your printing devices is <?php echo number_format($proposal->getAverageAgeOfDevices(),1)?> years old, a good industry average is 3 years. Devices over 5 years old receive on average one repair per year.</p>
+<div class="center">
+    <img src="<?php echo $graphs['AgeBarGraph']; ?>" />
+</div>
+<p>The breakdown of the age of your printing devices is shown above:</p>
+<br />
+<br />
+<?php echo $this->noBreakEnd; ?>
+<?php echo $this->noBreakStart; ?>
+<div class="pheader">Technology Features and Functionality</div>
+<p>The ability to scan and fax documents from convenient locations helps to improve document workflow and productivity, and scanning can also help reduce the amount of pages printed. Color printing capabilities are important if you are generating client-facing or other important documents in-house.</p>
+<p>The charts below show the percent of your printing devices that are capable of copying, duplexing, and color printing.</p>
+<br />
+        <img src="<?php echo $graphs['CopyCapableDevicesGraph']; ?>" style="width: 190px; height: 150px;" /> <!-- Copy capable devices -->
+        <img src="<?php echo $graphs['DuplexCapableDevicesGraph']; ?>" style="width: 190px; height: 150px;" /> <!-- Fax capable devices -->
+        <img src="<?php echo $graphs[12]; ?>" style="width: 190px; height: 150px;" /> <!-- Color capable devices -->
+<br />
+    <br />
+<p>If you are in need of additional features and functionality to improve workflow and print quality, Office Depot has a variety of printing devices that can meet your specific business needs. If you already have everything you need, we can manage the printing assets you have.</p>

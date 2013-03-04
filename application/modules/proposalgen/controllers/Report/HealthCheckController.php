@@ -64,7 +64,6 @@ class Proposalgen_Report_HealthcheckController extends Proposalgen_Library_Contr
     public function generateAction ()
     {
         $format = $this->_getParam("format", "docx");
-
         switch ($format)
         {
             case "csv" :
@@ -93,7 +92,7 @@ class Proposalgen_Report_HealthcheckController extends Proposalgen_Library_Contr
         // Render early
         try
         {
-            $this->render($format . "/00_render");
+            $this->render($this->getThemeName() . '/' . $format  . "/00_render");
         }
         catch (Exception $e)
         {
