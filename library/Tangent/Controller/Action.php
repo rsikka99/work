@@ -80,6 +80,6 @@ class Tangent_Controller_Action extends Zend_Controller_Action
      */
     public function redirector ($action, $controller = null, $module = null, array $params = array())
     {
-        $this->redirector($action, $controller, $module, $params);
+        $this->_helper->redirector($action, $controller, $module, $params);
     }
 }
