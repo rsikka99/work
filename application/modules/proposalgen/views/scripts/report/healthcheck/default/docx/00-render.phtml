@@ -38,8 +38,43 @@ $section          = $phpWord->createSection();
 /**
  * Paragraph styles
  */
+// Title page
+$this->phpword->addParagraphStyle('titleStyle1', array (
+                                                       'align' => 'center',
+                                                       'spaceAfter' => 100,
+                                                       'bgColor' => '004990'
+                                                 ));
+$this->phpword->addParagraphStyle('titleStyle2', array (
+                                                       'spaceAfter' => 50,
+                                                       'spaceBefore' => 50,
+                                                       'bgColor' => '4C4C4C'
+                                                 ));
+$this->phpword->addParagraphStyle('titleStyle3', array (
+                                                       'spaceAfter' => 100,
+                                                       'bgColor' => '7F7F7F'
+                                                 ));
+$this->phpword->addFontStyle('titlepage_title', array (
+                                                      'size' => 24,
+                                                      'bold' => true,
+                                                      'color' => 'FFFFFF'
+                                                ));
+
+$this->phpword->addFontStyle('titlepage_subtitle', array (
+                                                         'size' => 16,
+                                                         'bold' => true,
+                                                         'color' => 'FFFFFF'
+                                                   ));
+
+$this->phpword->addFontStyle('titlepage_address', array (
+                                                        'size' => 12,
+                                                        'color' => 'FFFFFF'
+                                                  ));
 $phpWord->addParagraphStyle('titlepageHeaderParagraph', array(
                                                              'spaceAfter' => 200
+                                                        ));
+$phpWord->addParagraphStyle('titlepageHeader1', array(
+                                                             'spaceAfter' => 0,
+
                                                         ));
 
 $phpWord->addParagraphStyle('nospacing', array(
@@ -81,6 +116,11 @@ $phpWord->addParagraphStyle('savingsParagraph', array(
 $phpWord->addFontStyle('titlepageHeaderFont', array(
                                                    'bold' => true,
                                                    'size' => 16
+                                              ));
+$phpWord->addFontStyle('titlepageHeaderFont1', array(
+                                                   'bold' => true,
+                                                   'size' => 16,
+                                                   'color' => 'FFFFFF'
                                               ));
 
 $phpWord->addFontStyle('bold_text', array(
