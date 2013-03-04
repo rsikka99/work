@@ -252,7 +252,7 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
             $totalRanking = round((((($LeasedBWPerPage + $LeasedColorPerPage) / 2) + (($PurchasedBWPerPage + $PurchasedColorPerPage) / 2)) / 2), 1);
 
             $rankingText = $this->getOverallRankingText($totalRanking, "expense");
-            $rankingText .= " Under the PrintIQ� program, we estimate that we can save " . $this->proposal->report->getClient()->companyName . " up to $" . number_format($this->proposal->getPrintIQSavings()) . " annually.";
+            $rankingText .= " Under the reportName program, we estimate that we can save " . $this->proposal->report->getClient()->companyName . " up to $" . number_format($this->proposal->getPrintIQSavings()) . " annually.";
 
             $this->Expense = (object)array(
                 "Rank"        => $totalRanking,

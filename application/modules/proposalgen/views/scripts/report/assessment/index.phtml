@@ -15,14 +15,26 @@ echo '<style type="text/css">
      </style>';
 ?>
 <div class="container" id="htmlReportContainer">
-<?php
-echo $this->render('report/assessment/html/01_Title.phtml');
-echo $this->render('report/assessment/html/02_Scorecard.phtml');
-echo $this->render('report/assessment/html/03_ServiceAndSuppliesLogistics.phtml');
-echo $this->render('report/assessment/html/04_PrintingHardwareUsage.phtml');
-echo $this->render('report/assessment/html/05_TechnologyReliabilityAndUserProductivity.phtml');
-echo $this->render('report/assessment/html/06_EnvironmentalImpact.phtml');
-echo $this->render('report/assessment/html/07_Expense.phtml');
-echo $this->render('report/assessment/html/08_Summary.phtml');
-?>
+    <?php
+
+    $theme = $this->theme("");
+
+    if (array_search("default", explode('/', $theme)))
+    {
+        $this->reportName = "MPSToolbox.com";
+    }
+    else
+    {
+        $this->reportName = "PrintIQ";
+    }
+
+    echo $this->render('report/assessment/html/01_Title.phtml');
+    echo $this->render('report/assessment/html/02_Scorecard.phtml');
+    echo $this->render('report/assessment/html/03_ServiceAndSuppliesLogistics.phtml');
+    echo $this->render('report/assessment/html/04_PrintingHardwareUsage.phtml');
+    echo $this->render('report/assessment/html/05_TechnologyReliabilityAndUserProductivity.phtml');
+    echo $this->render('report/assessment/html/06_EnvironmentalImpact.phtml');
+    echo $this->render('report/assessment/html/07_Expense.phtml');
+    echo $this->render('report/assessment/html/08_Summary.phtml');
+    ?>
 </div>

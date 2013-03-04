@@ -16,7 +16,7 @@ $proposal = $this->proposal;
     <li>Foster your eco-smart objectives</li>
 </ul>
 <div class="pheader">Step 1: Assess</div>
-<p>This complimentary PrintIQ Smart Assessment will help us determine what your needs are for office print. By combining data collected from your printing devices with questionnaire responses, we can determine what is working and what isn't in your office print environment. From this information, we can build a managed print solution that meets your business needs.</p>
+<p>This complimentary <?php echo $this->reportName; ?> Smart Assessment will help us determine what your needs are for office print. By combining data collected from your printing devices with questionnaire responses, we can determine what is working and what isn't in your office print environment. From this information, we can build a managed print solution that meets your business needs.</p>
 <div class="pheader">Step 2: Optimize</div>
 <p><strong>Increase Hardware Efficiency: </strong>Whether you choose to maintain your existing printer fleet or refresh inefficient devices, your managed print program delivers benefits that meet your specific needs. We will make sure your printing equipment meets your needs and help you optimize the placement of your equipment to make sure you are getting the most out of your assets.</p>
 <p><strong>Just-in-Time Supplies & Efficient Service: </strong>Our just-in-time supplies fulfillment and 4-hour response repair service will get you the supplies and service you need, when you need it. By remotely monitoring your printers, we can help you minimize downtime and reduce the amount of working capital held in supplies inventory. Next-day service is available for all printers under a managed print contract so your IT staff will be free from handling printer-related issues.</p>
@@ -25,20 +25,20 @@ $proposal = $this->proposal;
 <div class="pheader">Step 3: Manage</div>
 <p>Ongoing management of your print environment enables you to focus on your core business, while we take care of print. By monitoring your print environment on an ongoing basis, we can help you decide if and when your managed print strategy needs to be updated to accommodate new needs.</p>
 
-<div class="pheader">Potential Savings with PrintIQ&reg;</div>
-<p>Office Depot can manage your existing printing devices that are not currently on a lease with another vendor. Note that while we have included all of your purchased equipment in the following calculations, not all of them may qualify for managed print services or just-in-time supplies fulfillment. Please refer to the PrintIQ&reg; Your Solution document for a complete list of qualified devices.</p>
+<div class="pheader">Potential Savings with <?php echo $this->reportName; ?>&reg;</div>
+<p>Office Depot can manage your existing printing devices that are not currently on a lease with another vendor. Note that while we have included all of your purchased equipment in the following calculations, not all of them may qualify for managed print services or just-in-time supplies fulfillment. Please refer to the <?php echo $this->reportName; ?>&reg; Your Solution document for a complete list of qualified devices.</p>
 <br />
 <table cellspacing="0" style="font-size: 10pt;">
     <tr>
-        <td style="width: 565px;" class="bold red">Estimated Costs: Printing Devices Managed with PrintIQ&reg;</td>
+        <td style="width: 565px;" class="bold red">Estimated Costs: Printing Devices Managed with <?php echo $this->reportName; ?>&reg;</td>
         <td style="width: 80px;" class="right">&nbsp;</td>
     </tr>
     <tr>
-        <td>PrintIQ&reg; monochrome cost per page</td>
+        <td><?php echo $this->reportName; ?>&reg; monochrome cost per page</td>
         <td class="right">$<?php echo number_format($proposal->getMPSBlackAndWhiteCPP(), 5); ?></td>
     </tr>
     <tr>
-        <td>PrintIQ&reg; color cost per page</td>
+        <td><?php echo $this->reportName; ?>&reg; color cost per page</td>
         <td class="right">$<?php echo number_format($proposal->getMPSColorCPP(), 5); ?></td>
     </tr>
     <tr>
@@ -74,7 +74,7 @@ $proposal = $this->proposal;
         <td class="right">$<?php echo number_format($proposal->getAnnualCostOfHardwarePurchases());?></td>
     </tr>
     <tr>
-        <td class="bold topborder">PrintIQ&reg; estimated annual cost of purchased devices</td>
+        <td class="bold topborder"><?php echo $this->reportName; ?>&reg; estimated annual cost of purchased devices</td>
         <td class="right bold topborder">$<?php echo number_format($proposal->getPrintIQTotalCost());?></td>
     </tr>
     <tr>
@@ -82,7 +82,7 @@ $proposal = $this->proposal;
         <td class="right bold topborder">$<?php echo number_format($proposal->getTotalPurchasedAnnualCost());?></td>
     </tr>
     <tr>
-        <td class="bold topborder red">POTENTIAL ANNUAL SAVINGS USING PrintIQ&reg;</td>
+        <td class="bold topborder red">POTENTIAL ANNUAL SAVINGS USING <?php echo $this->reportName; ?>&reg;</td>
         <td class="right bold topborder red">$<?php echo number_format($proposal->getPrintIQSavings());?></td>
     </tr>
 </table>
