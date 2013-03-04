@@ -29,8 +29,7 @@ body {
   background: transparent;
 }
 html {
-  background-image: url('../img/bg_repeat.png');
-  background-attachment: fixed;
+  background: #515151;
 }
 div.wrapper {
   background-image: url('../img/background-repeat.png');
