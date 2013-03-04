@@ -36,6 +36,15 @@ div.wrapper {
   background-image: url('../img/background-repeat.png');
   background-repeat: repeat-x;
 }
+#headerLogo {
+  background-image: url('../img/headerLogo.png');
+}
+#header-background {
+  background: url('../img/headerBg.png') repeat-x;
+  -webkit-box-shadow: 0px 5px 5px #000000;
+  -moz-box-shadow: 0px 5px 5px #000000;
+  box-shadow: 0px 5px 5px #000000;
+}
 .pageHeader div.headerSpace {
   height: 175px;
 }
