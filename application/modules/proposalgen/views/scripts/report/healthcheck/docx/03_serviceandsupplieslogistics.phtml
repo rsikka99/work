@@ -17,7 +17,7 @@ $gradeTable->addRow();
 $gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($proposal->getRanking()->SuppliesAndServiceLogistics->RankingText, null, 'nospacing');
 $gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number_format($proposal->getRanking()->SuppliesAndServiceLogistics->Rank, 1), 'gradeFont', 'gradeParagraph');
 $section->addTextBreak();
-$section->addTitle('Printing Device Management Breakdown', 2);
+$section->addTitle($this->translate('Printing Device Management Breakdown'), 2);
 $section->addText($this->translate('Different types of printing devices are managed in different ways-newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.'));
 
 $section->addTextBreak(2);
@@ -42,27 +42,16 @@ else if ($proposal->getPercentPrintingDoneOnInkjet() == 18)
 }
 
 
-$section->addTitle($this->translate('Number of Printing Device Models and Supply Types'), 2);
-
-$textrun = $section->createTextRun();
-$textrun->addText($this->translate('Out of your '));
-$textrun->addText(number_format(count($proposal->getDevices()->allIncludedDeviceInstances)), "bold_text");
-$textrun->addText($this->translate(' networked printing devices, you have of '));
-$textrun->addText(number_format($proposal->getNumberOfUniqueModels()), "bold_text");
-$textrun->addText($this->translate(' different models. Each section of the chart below represents a single model type. We estimate that '));
-$textrun->addText(number_format(count($proposal->getLeasedDevices())), "bold_text");
-$textrun->addText($this->translate(' of your printing devices are leased machines, for which supplies are included in your contract. The '));
-$textrun->addText(number_format(count($proposal->getPurchasedDevices())), "bold_text");
-$textrun->addText($this->translate(' remaining machines consist of '));
-$textrun->addText(number_format($proposal->getNumberOfUniquePurchasedModels()), "bold_text");
-$textrun->addText($this->translate(' different models and use '));
-$textrun->addText(number_format($proposal->getNumberOfUniquePurchasedToners()), "bold_text");
-$textrun->addText($this->translate(' different supply types. If you hold two of each supply in inventory, you have an estimated '));
-$textrun->addText($this->translate('$'), "bold_text");
-$textrun->addText(number_format($proposal->getCashHeldInInventory()), "bold_text");
-$textrun->addText($this->translate(' in operating cash held in printer supplies inventory'), 'bold_text');
-$textrun->addText($this->translate(' at any given time.'));
-
+$section->addTitle($this->translate('Number of Printing Device Models and Supply Types'), 2); //
+$section->addText(sprintf($this->translate('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type. We estimate that %3$s of your printing devices are leased machines, for which supplies are included in your contract. The %4$s remaining machines consist of %5$s different models and use %6$s different supply types. If you hold two of each supply in inventory, you have an estimated $%7$s in operating cash held in printer supplies inventory at any given time.')
+    , number_format(count($proposal->getDevices()->allIncludedDeviceInstances)) //1
+    , number_format($proposal->getNumberOfUniqueModels()) //2
+    , count($proposal->getLeasedDevices()) //3
+    , number_format(count($proposal->getPurchasedDevices())) //4
+    , number_format($proposal->getNumberOfUniquePurchasedModels()) //5
+    , number_format($proposal->getNumberOfUniquePurchasedToners()) //6
+    , number_format($proposal->getCashHeldInInventory())//7
+));
 
 $imageTable = $section->addTable(array(
                                       'borderBottomSize' => 1
@@ -148,9 +137,7 @@ $twoColumnHeader->addRow(null);
 $twoColumnHeader->addCell($tcStyle->cell1Width, $tcStyle->cell1->cellStyle)->addText($this->translate('DIFFERENCE '), $tcStyle->cell1->fontStyle, $tcStyle->cell1->paragraphStyle);
 $twoColumnHeader->addCell($tcStyle->cell2Width, $tcStyle->cell2->cellStyle)->addText($this->currency($proposal->calculateEstimatedOemTonerCostAnnually() - $proposal->calculateEstimatedCompTonerCostAnnually()), $tcStyle->cell2->fontStyle, $tcStyle->cell2->paragraphStyle);
 $textrun = $section->createTextRun();
-$textrun->addText($this->translate("Where compatible substitutes are available, we estimate that by switching even 50% of your OEM toner, you can save approximately "));
-$textrun->addText($this->translate($this->currency((($proposal->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12 - ($proposal->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12) / 2, array('precision' => 2)) . " per year"),'bold_text');
-$textrun->addText($this->translate(" in toner costs."));
+$textrun->addText(sprintf($this->translate('Where compatible substitutes are available, we estimate that by switching even 50%% of your OEM toner, you can save approximately %1$s per year in toner costs.'), $this->currency((($proposal->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12 - ($proposal->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12) / 2, array('precision' => 2))));
 $section->addTextBreak(2);
 $imageTable = $section->addTable($this->styles->tables->singleimage->tablestyle);
 $imageTable->addRow();
