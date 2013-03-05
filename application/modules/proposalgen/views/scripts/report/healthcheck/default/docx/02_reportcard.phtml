@@ -22,7 +22,7 @@ $rowHeight       = 800;
 $reportCardTable->addRow($rowHeight);
 $cell = $reportCardTable->addCell(8028, $this->styles->tables->grades->cell1);
 $cell->addText($this->translate('Supplies and Service Logistics'), 'gradeTitleFont', 'nospacing');
-$cell->addText($this->translate('Printing device management, number of various printer device models, and compatibility with Office Depot™ ATR (Auto Toner Replenishment).'), null, 'nospacing');
+$cell->addText(sprintf($this->translate('Printing device management, number of various printer device models, and compatibility with %1$s.'),$this->jitFullName), null, 'nospacing');
 $cell = $reportCardTable->addCell(1000, $this->styles->tables->grades->cell2);
 $cell->addText(number_format($proposal->getRanking()->SuppliesAndServiceLogistics->Rank, 1), 'gradeFont', 'gradeParagraph');
 

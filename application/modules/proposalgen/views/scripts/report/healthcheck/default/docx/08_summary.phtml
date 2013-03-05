@@ -15,7 +15,7 @@ $proposal = $this->proposal;
 
 $section->addTitle($this->translate("Next Steps"), 1);
 
-$section->addListItem($this->translate('Financial: Review your toner usage and costs, and whether you can switch any of your OEM toners to Office Depot\'s compatible toners.'),null,null,array('listType' => PHPWord_Style_ListItem::TYPE_NUMBER));
+$section->addListItem(sprintf($this->translate('Financial: Review your toner usage and costs, and whether you can switch any of your OEM toners to %1$s\'s compatible toners.'),$this->companyName),null,null,array('listType' => PHPWord_Style_ListItem::TYPE_NUMBER));
 $section->addListItem($this->translate("Environmental: Review how many pages you are printing on both sides of the page, and consider how much you could decrease your environmental impact by printing more on both sides."),null,null,array('listType' => PHPWord_Style_ListItem::TYPE_NUMBER));
 $section->addListItem($this->translate("Hardware Usage: Review your devices to see where some of your page volumes could be shifted to other devices, and which devices could be replaced or removed from your fleet."),null,null,array('listType' => PHPWord_Style_ListItem::TYPE_NUMBER));
 $section->addListItem($this->translate("MPS: Consider a managed print program that will allow your printing devices to be remotely managed with a set cost per page, saving you time and money and allowing you to focus more on your business."),null,null,array('listType' => PHPWord_Style_ListItem::TYPE_NUMBER));
@@ -23,7 +23,3 @@ $section->addListItem($this->translate("MPS: Consider a managed print program th
 $section->addTextBreak();
 
 $section->addText($this->translate('Whether you are looking for a comprehensive managed print services plan that includes new equipment, or are looking for assistance in maintaining your existing printer fleet, we can design a solution that meets your specific business needs. Let us take care of your print so you can get back to business.'));
-$section->addText($this->translate('1-855-OD-GO-MPS'), 'bold_text');
-$section->addText($this->translate('1-855-634-6677 '), 'small_italic_text');
-$section->addText($this->translate('� 2013 Office Depot, Inc. All Rights Reserved.'), 'small_italic_text');
-$section->addText($this->translate('The Office Depot name and logo are the registered trademarks of The Office Club, Inc.'), 'small_italic_text');

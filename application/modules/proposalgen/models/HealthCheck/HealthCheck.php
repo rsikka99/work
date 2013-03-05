@@ -211,8 +211,8 @@ class Proposalgen_Model_HealthCheck_HealthCheck
                                       "0194D2"
                                  ));
             $barGraph->setLegend(array(
-                                      "Compatible with auto toner replenishment",
-                                      "Not compatible with auto toner replenishment"
+                                      "Compatible with JIT",
+                                      "Not compatible with JIT"
                                  ));
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");

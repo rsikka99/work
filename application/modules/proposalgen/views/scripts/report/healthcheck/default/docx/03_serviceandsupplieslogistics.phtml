@@ -65,13 +65,14 @@ $cell->addImage($graphs[3], array(
                                  'align' => 'center'
                             ));
 
-$section->addText($this->translate('By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. Office Depot can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.'));
+$section->addText(sprintf($this->translate('By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. %1$s can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.'),$this->companyName));
 $section->addTextBreak(2);
-$section->addTitle($this->translate('Number of Printing Devices Compatible with Office Depot™ ATR'), 2);
-$section->addText(sprintf($this->translate('Out of your %1$s networked printing devices (excluding leased devices), you have %2$s that are compatible with Office Depot™ Auto Toner Replenishment (ATR) and %3$s devices that are not compatible. These non compatible devices are shown in the fleet attributes section below. A complete list of all devices and their ATR compatibility can be found in the Appendix.')
-    ,$proposal->getPurchasedDeviceCount()
-    ,$proposal->getNumberOfDevicesReportingTonerLevels()
-    ,$proposal->getNumberOfDevicesNotReportingTonerLevels()
+$section->addTitle(sprintf($this->translate('Number of Printing Devices Compatible with %1$s'), $this->jitName), 2);
+$section->addText(sprintf($this->translate('Out of your %1$s networked printing devices (excluding leased devices), you have %2$s that are compatible with %4$s and %3$s devices that are not compatible. These non compatible devices are shown in the fleet attributes section below. A complete list of all devices and their JIT compatibility can be found in the Appendix.')
+    , $proposal->getPurchasedDeviceCount()
+    , $proposal->getNumberOfDevicesReportingTonerLevels()
+    , $proposal->getNumberOfDevicesNotReportingTonerLevels()
+    , $this->jitFullName
 ));
 
 $section->addTextBreak(2);
