@@ -3,9 +3,7 @@
 $proposal = $this->proposal;
 $this->brandName  = "MPSToolbox.com";
 $this->companyName = "MPSToolbox.com";
-  	echo $this->pageStart;
 ?>
-	<?php echo $this->noBreakStart; ?>
 		<div class="h1">Solution 1: <?php echo $this->brandName; ?></div>
 		<p>Get the most out of your existing printing assets with the <?php echo $this->brandName; ?> program. <?php echo $this->companyName;?> will take over the management of your current printing equipment
 		and wrap your supplies and service into a single invoice.</p>
@@ -126,7 +124,3 @@ $this->companyName = "MPSToolbox.com";
 				</tbody>
 			</table>
 		</div>
-	<?php echo $this->noBreakEnd; ?>
-<?php
-    // Page End is handled in 04_PrintIQPlus_Replacements.phtml since if that file is not displayed, a disclaimer is added to the end of this page
-?>

@@ -3,9 +3,7 @@
 $proposal = $this->proposal;
 $this->brandName  = "MPSToolbox.com";
 $this->companyName = "MPSToolbox.com";
-  	echo $this->pageStart;
 ?>
-	<?php echo $this->noBreakStart; ?>
 		<div class="h1">Let <?php echo $this->companyName;?> Take Care of Your Business Print</div>
 		<p>With <?php echo $this->companyName;?> as your single point of contact for your office printing needs, your business will be taken
 		care of:</p>
@@ -40,12 +38,6 @@ $this->companyName = "MPSToolbox.com";
 		<p>From day-to-day management of your office print to leveraging your existing assets or choosing to obtain new hardware on a flat-rate program, <?php echo $this->companyName;?> provides a variety of options that enable
 		you to maintain your flexibility as your needs change.</p>
 		
-	<?php echo $this->noBreakEnd; ?>
-<?php
-    echo $this->pageEnd;
-  	echo $this->pageStart;
-?>
-	<?php echo $this->noBreakStart; ?>
 		<div class="h1">Next Steps</div>
 		<p>We recommend the following implementation plan for your managed print services program:</p>
 		
@@ -96,25 +88,5 @@ $this->companyName = "MPSToolbox.com";
 		your specific business needs.</p>
 		
 		<p>Let us take care of your print so you can get back to business.</p>
-		<br />
-		<span class="bold">1-855-OD-GO-MPS</span> <br />
-		<span>1-855-634-6677</span>
-		
-		<br /> <br />
-		
 		<p id="copyright">&copy; 2011 <?php echo $this->companyName;?>, Inc. All Rights Reserved. <br />
 		The <?php echo $this->companyName;?> name and logo are the registered trademarks of The Office Club, Inc.</p>
-		
-		<?php if (!$this->isPDF):?>
-		<div style="
-			background-image: url('<?php echo$this->serverUrl('images/officedepot/report/officedepotLogo.jpg')?>');
-			background-repeat: no-repeat;
-			background-position: right top;
-			height: 45px;
-			margin-top: 40px;">
-		</div>
-		<?php endif; ?>
-	<?php echo $this->noBreakEnd; ?>
-<?php
-    echo $this->pageEnd;
-?>
