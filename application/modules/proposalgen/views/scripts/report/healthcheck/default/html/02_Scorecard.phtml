@@ -2,9 +2,9 @@
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->healthcheck->proposal;
 ?>
-<div class="h1">Your PrintIQ&reg; Health Check</div>
+<div class="h1">Your <?php echo $this->reportName?> Health Check</div>
 <p>Does your fleet of printing hardware deliver your users and business the greatest return on investment?
-    How many trees and how much water are you using per year? This free PrintIQ Health Check
+    How many trees and how much water are you using per year? This free <?php echo $this->reportName?> Health Check
     will break down your current fleet and show you how you can <strong>lower your supplies costs</strong>,
     which devices are <strong>printing too much</strong> and which devices are <strong>printing too little</strong>, and the <strong>environmental impact</strong> of your fleet.</p>
     <p>
@@ -17,7 +17,7 @@ $proposal = $this->healthcheck->proposal;
     <tr>
         <td class="gradeDescription">
             <h4>Supplies and Service Logistics</h4>
-            <p>Printing device management, number of various printer device models, and compatibility with Office Depot™ ATR (Auto Toner Replenishment).</p>
+            <p>Printing device management, number of various printer device models, and compatibility with <?php echo $this->jitFullName ?>.</p>
         </td>
 
         <td class="gradeNumber"><?php echo number_format($proposal->getRanking()->getSuppliesAndServiceLogistics()->Rank, 1); ?></td>

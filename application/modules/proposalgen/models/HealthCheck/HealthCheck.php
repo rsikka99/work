@@ -35,18 +35,18 @@ class Proposalgen_Model_HealthCheck_HealthCheck
              * -- PagesPrinterATRPieGraph
              */
             $deviceAges = array(
-                "Pages Printed on ATR devices"     => 0,
-                "Pages Printed on non-ATR devices" => 0
+                "Pages Printed on JIT devices"     => 0,
+                "Pages Printed on non-JIT devices" => 0
             );
             foreach ($this->proposal->getPurchasedDevices() as $device)
             {
                 if ($device->reportsTonerLevels == 1)
                 {
-                    $deviceAges ["Pages Printed on ATR devices"] += $device->getAverageMonthlyPageCount();
+                    $deviceAges ["Pages Printed on JIT devices"] += $device->getAverageMonthlyPageCount();
                 }
                 else
                 {
-                    $deviceAges ["Pages Printed on non-ATR devices"] += $device->getAverageMonthlyPageCount();
+                    $deviceAges ["Pages Printed on non-JIT devices"] += $device->getAverageMonthlyPageCount();
                 }
             }
             $dataSet     = array();

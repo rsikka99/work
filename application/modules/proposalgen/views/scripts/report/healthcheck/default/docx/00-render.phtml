@@ -668,7 +668,9 @@ $data = array(
     "section"     => $section,
     "healthcheck" => $this->healthcheck,
     "graphs"      => $this->graphs,
-    "styles"      => $styles
+    "styles"      => $styles,
+    "brandName" => "MPSToolbox.com",
+    "companayName" => "MPSToolbox.com"
 );
 // Actual document pages
 $this->partial("report/healthcheck/" . $this->App()->theme . "/docx/01_titlepage.phtml", $titledata);
