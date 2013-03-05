@@ -95,7 +95,7 @@ class Proposalgen_Report_AssessmentController extends Proposalgen_Library_Contro
         // Render early
         try
         {
-            $this->render($this->getThemeName() . '/' . $format  . "/00_render");
+            $this->render($this->view->App()->theme . '/' . $format  . "/00_render");
         }
         catch (Exception $e)
         {
