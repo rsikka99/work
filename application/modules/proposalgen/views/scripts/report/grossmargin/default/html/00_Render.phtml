@@ -1,7 +1,8 @@
 <?php
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-$proposal = $this->proposal;
-
+$proposal    = $this->proposal;
+$reportName  = 'MPSToolbox.com';
+$companyName = 'MPSToolbox.com';
 $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/grossmargin/grossmargin_html.css"));
 ?>
 <div class="container" id="htmlReportContainer">
@@ -16,7 +17,7 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
     <tbody>
     <tr>
         <td class="column1">
-            <div class="heading">PrintIQ Black And White CPP:</div>
+            <div class="heading"><?php echo $reportName ?> Black And White CPP:</div>
         </td>
         <td class="column2">
             <div>$<?php echo number_format($proposal->getMPSBlackAndWhiteCPP(), 4); ?></div>
@@ -30,7 +31,7 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
     </tr>
     <tr>
         <td class="column1">
-            <div class="heading">PrintIQ Color CPP:</div>
+            <div class="heading"><?php echo $reportName ?> Color CPP:</div>
         </td>
         <td class="column2">
             <div>$<?php echo number_format($proposal->getMPSColorCPP(), 4); ?></div>
