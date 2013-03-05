@@ -141,8 +141,6 @@ class Proposalgen_Report_GrossmarginController extends Proposalgen_Library_Contr
             {
                 $tonerConfig              = $device->getMasterDevice()->tonerConfigId;
                 $grossMarginPricingConfig = Proposalgen_Model_MasterDevice::getGrossMarginPricingConfig();
-                $completeMonoToners       = $device->getMasterDevice()->HasValidMonoGrossMarginToners;
-                $completeColorToners      = $device->getMasterDevice()->HasValidColorGrossMarginToners;
                 $blackToner               = null;
                 $colorToner               = null;
 
@@ -182,7 +180,7 @@ class Proposalgen_Report_GrossmarginController extends Proposalgen_Library_Contr
 
                 // Create an array of purchased devices (this will be the dynamic CSV body)
                 $fieldList    = array();
-                $fieldList [] = str_ireplace("hewlett-packard", "HP", $device->getDeviceName()) . " (" . $device->IPAddress . " - " . $device->serialNumber . ")";
+                $fieldList [] = str_ireplace("hewlett-packard", "HP", $device->getDeviceName()) . " (" . $device->ipAddress . " - " . $device->serialNumber . ")";
                 $fieldList [] = number_format($device->getAverageMonthlyBlackAndWhitePageCount(), 0, '.', '');
                 $fieldList [] = $blackCost;
                 $fieldList [] = $blackYield;
