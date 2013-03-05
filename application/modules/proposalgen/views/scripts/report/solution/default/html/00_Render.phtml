@@ -24,24 +24,14 @@ $data = array(
 ?>
 <div class="container" id="htmlReportContainer">
 <?php
-    $theme = $this->theme("");
-
-    if (array_search("default", explode('/', $theme)))
-    {
-        $this->reportName = "MPSToolbox.com";
-    }
-    else
-    {
-        $this->reportName = "PrintIQ";
-    }
-echo $this->partial('report/solution/' . $this->App()->theme . '/html/01_Title.phtml', $data);
-echo $this->partial('report/solution/' . $this->App()->theme . '/html/02_Description.phtml', $data);
-echo $this->partial('report/solution/' . $this->App()->theme . '/html/03_PrintIQ.phtml', $data);
-echo $this->partial('report/solution/' . $this->App()->theme . '/html/04_PrintIQPlus_Replacements.phtml', $data);
-/* 
-	PrintIQ Plus Summary, does not appear in newest solution
-	echo $this->partial('report/solution/05_PrintIQPlus_Summary.phtml', $data);
-*/
-echo $this->partial('report/solution/' . $this->App()->theme . '/html/06_Summary.phtml', $data);
+    echo $this->partial('report/solution/' . $this->App()->theme . '/html/01_Title.phtml', $data);
+    echo $this->partial('report/solution/' . $this->App()->theme . '/html/02_Description.phtml', $data);
+    echo $this->partial('report/solution/' . $this->App()->theme . '/html/03_PrintIQ.phtml', $data);
+    echo $this->partial('report/solution/' . $this->App()->theme . '/html/04_PrintIQPlus_Replacements.phtml', $data);
+    /*
+        PrintIQ Plus Summary, does not appear in newest solution
+        echo $this->partial('report/solution/05_PrintIQPlus_Summary.phtml', $data);
+    */
+    echo $this->partial('report/solution/' . $this->App()->theme . '/html/06_Summary.phtml', $data);
 ?>
 </div>

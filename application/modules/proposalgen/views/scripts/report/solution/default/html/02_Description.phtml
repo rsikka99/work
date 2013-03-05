@@ -1,11 +1,14 @@
 <?php
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
+$this->brandName  = "MPSToolbox.com";
+$this->companyName = "MPSToolbox.com";
+
   	echo $this->pageStart;
 ?>
 <?php echo $this->noBreakStart; ?>
-    <div class="h1">Your PrintIQ&reg; Solution</div>
-    <p>Based on your PrintIQ&reg; Smart Assessment, we have developed a choice of managed print solutions to meet your specific business needs.</p><br/>
+    <div class="h1">Your <?php echo $this->brandName;?> Solution</div>
+    <p>Based on your <?php echo $this->brandName;?> Smart Assessment, we have developed a choice of managed print solutions to meet your specific business needs.</p><br/>
     
     <div class="pheader">Managed Print Solution Objectives</div>
     <p style="margin-bottom: 10pt;">Your managed print solution is designed to meet the following objectives:</p>
@@ -73,7 +76,7 @@ $proposal = $this->proposal;
 			<tr>
 				<th style="width: 100px;">Question</th>
 				<th style="width: 250px;">Why It's Important to Ask</th>
-				<th style="width: 250px;">How Office Depot MPS Works</th>
+				<th style="width: 250px;">How <?php echo $this->companyName; ?> MPS Works</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -81,32 +84,32 @@ $proposal = $this->proposal;
 				<td class="column1 red bold"><div>What happens at the  end of the contract?</div></td>
 				<td class="column2"><div >Copier leases may carry a large residual at the end of the contract. While this can decrease the monthly payment,
 				it may cost you thousands of  dollars at the end of the contract if you  want to own the hardware.</div></td>
-				<td class="column3"><div >Office Depot provides a wide range of options at the end of our hardware contracts. You can upgrade to new equipment, or continue on with the current hardware as is.</div></td>
+				<td class="column3"><div ><?php echo $this->companyName; ?> provides a wide range of options at the end of our hardware contracts. You can upgrade to new equipment, or continue on with the current hardware as is.</div></td>
 			</tr>
 			<tr>
 				<td class="column1 red bold"><div>Who in the area can  service and supply  the hardware?</div></td>
 				<td class="column2"><div >Many copier dealers sell hardware that can only be serviced and supplied by a limited number of authorized dealers.
 				If you decide to purchase the hardware at the end of the lease, you may find that supplies, parts and service are not widely available from other vendors.</div></td>
-				<td class="column3"><div >Office Depot offers hardware from channel friendly manufacturers, such as HP and Xerox, which means you will have many options for acquiring supplies and service.
+				<td class="column3"><div ><?php echo $this->companyName; ?> offers hardware from channel friendly manufacturers, such as HP and Xerox, which means you will have many options for acquiring supplies and service.
 				While we hope you continue with one of our managed print options, you are free to have another vendor service and supply your device at the end of the contract.</div></td>
 			</tr>
 			<tr>
 				<td class="column1 red bold"><div>How long is the  lease term?</div></td>
 				<td class="column2"><div >Longer lease terms decrease the monthly payment but increase the amount you pay over the life of the contract. If the monthly payment seems small, it is likely that the lease term is long or the residual is high.</div></td>
-				<td class="column3"><div >Office Depot typically recommends a 3-year contract term, but we can customize an agreement to meet your specific needs.</div></td>
+				<td class="column3"><div ><?php echo $this->companyName; ?> typically recommends a 3-year contract term, but we can customize an agreement to meet your specific needs.</div></td>
 			</tr>
 			<tr>
 				<td class="column1 red bold"><div>What is included and  not included in the  contract?</div></td>
 				<td class="column2"><div >Many contracts have a variety of hidden charges. Does your rate include toner, maintenance kits, parts, service and labor? Can fuel surcharges be billed separately?
 				Are there are minimum page charges or overage rates? Do rates increase over the lease term? Ask these questions to determine the total cost of the contract.</div></td>
-				<td class="column3"><div >Our PrintIQ Plus program includes hardware, supplies, parts, service and labor for a flat monthly rate. If you want us to manage your existing hardware, our PrintIQ program includes supplies, parts, service and labor for a standard per-page rate.
+				<td class="column3"><div >Our <?php echo $this->brandName;?> Plus program includes hardware, supplies, parts, service and labor for a flat monthly rate. If you want us to manage your existing hardware, our <?php echo $this->brandName;?> program includes supplies, parts, service and labor for a standard per-page rate.
 				There are no minimum page charges, overage rates or fuel surcharges, and our rates do not increase over the contract term.</div></td>
 			</tr>
 			<tr>
 				<td class="column1 red bold"><div>What features are  included in the  hardware?</div></td>
 				<td class="column2"><div >Hardware with many features, such as tabloid printing and stapling, drive up the cost. While some businesses may require these features, many do not.
 				Know what features you require and do not pay for anything additional that you do not need.</div></td>
-				<td class="column3"><div >Office Depot works with you to determine your hardware needs, so you do not end up paying for unnecessary features.</div></td>
+				<td class="column3"><div ><?php echo $this->companyName; ?> works with you to determine your hardware needs, so you do not end up paying for unnecessary features.</div></td>
 			</tr>
 		</tbody>
 	</table>
