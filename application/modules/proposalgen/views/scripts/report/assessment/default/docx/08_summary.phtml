@@ -116,7 +116,7 @@ $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $t
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText(sprintf($this->translate('POTENTIAL ANNUAL SAVINGS USING %1$s'), $this->reportName), 'bold_red_text', 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->getPrintIQSavings()), 'bold_red_text', 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->getPrintIQSavings()), 'bold_highlight_text', 'nospacing_rightalign');
 
 $section->addTextBreak();
 

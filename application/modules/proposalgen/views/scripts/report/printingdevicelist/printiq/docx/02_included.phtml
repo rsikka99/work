@@ -33,7 +33,7 @@ $table->addCell($tcStyle->col3Width, $tcStyle->header->cell)->addText($this->tra
 $table->addCell($tcStyle->col3Width, $tcStyle->header->cell)->addText($this->translate('Serial No.'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
 $table->addCell($tcStyle->col4Width, $tcStyle->header->cell)->addText($this->translate('Purchased or Leased'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
 $table->addCell($tcStyle->col5Width, $tcStyle->header->cell)->addText($this->translate('AMPV'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->col6Width, $tcStyle->header->cell)->addText($this->translate('JIT Compatible'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col6Width, $tcStyle->header->cell)->addText($this->translate('Office Depot ATR Compatible'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
 
 foreach($proposal->getDevices()->allIncludedDeviceInstances as $deviceInstance) /* @var $deviceInstance Proposalgen_Model_DeviceInstance */ {
     $table->addRow($tcStyle->cell->rowheight);
