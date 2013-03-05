@@ -21,7 +21,7 @@ $gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($propo
 $gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number_format($proposal->getRanking()->Expense->Rank, 1), "gradeFont", "gradeParagraph");
 
 $section->addTextBreak();
-$section->addText(sprintf($this->translate('Gartner Group called office printing the last great hidden expense in the office. They estimate the companies spend 1% to 3% of their revenue on office printing. Based on data collected from your printing devices and your questionnaire responses, we have estimated your annual printing expenses. We have separated your expenses into the cost of your leased printing devices and the cost of your purchased devices. Your leased devices are typically large multifunction devices and are assumed to be on an existing service contract. Your purchased devices are ones that can typically be transferred to our %1$s program and be managed by Office Depot.'), $this->reportName));
+$section->addText(sprintf($this->translate('Gartner Group called office printing the last great hidden expense in the office. They estimate the companies spend 1% to 3% of their revenue on office printing. Based on data collected from your printing devices and your questionnaire responses, we have estimated your annual printing expenses. We have separated your expenses into the cost of your leased printing devices and the cost of your purchased devices. Your leased devices are typically large multifunction devices and are assumed to be on an existing service contract. Your purchased devices are ones that can typically be transferred to our %1$s program and be managed by %2$s.'), $this->reportName, $this->companyName));
 
 $section->addTitle($this->translate('Total Estimated Annual Printing Costs'), 2);
 $section->addText($this->translate('Combining all costs, your current estimated annual printing expenses are as follows. Please note that our estimated costs may not match your actual purchases, due to factors including inventory on hand, returns, timing of the assessment, etc., but our estimates should be a good representation of your average costs since they are based on actual observed usage.'));
@@ -87,7 +87,7 @@ $suppliesTable = $section->addTable($this->styles->tables->expenseSummaryTable->
 $suppliesTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $cell = $suppliesTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1);
 $cell->addText($this->translate('Annual cost of ink and toner'), null, 'nospacing');
-$cell->addText($this->translate('Based on data collected by Office Depot.'), 'small_italic_text', 'nospacing');
+$cell->addText(sprintf($this->translate('Based on data collected by %1$s.'),$this->companyName), 'small_italic_text', 'nospacing');
 $suppliesTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->getCostOfInkAndToner()), null, 'nospacing_rightalign');
 
 $suppliesTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
@@ -147,7 +147,7 @@ $hardwareTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $
 $hardwareTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->getEstimatedAllInColorCPP(), 4), 'bold_text', 'nospacing_rightalign');
 
 $section->addTextBreak();
-$section->addText(sprintf($this->translate('Through our %1$s program, we can wrap supplies and service for these machines into a single cost-per-page rate. By partnering with Office Depot as your single-source provider, your printing devices will be efficiently managed and your staff can get back to concentrating on their core responsibilities. Out of these devices, below are the top three most expensive to operate:'), $this->reportName));
+$section->addText(sprintf($this->translate('Through our %1$s program, we can wrap supplies and service for these machines into a single cost-per-page rate. By partnering with %2$s as your single-source provider, your printing devices will be efficiently managed and your staff can get back to concentrating on their core responsibilities. Out of these devices, below are the top three most expensive to operate:'), $this->reportName, $this->companyName));
 
 $expensiveTable = $section->addTable($this->styles->tables->mostexpensive->tablestyle);
 $expensiveTable->addRow($this->styles->tables->mostexpensive->rowheight);
