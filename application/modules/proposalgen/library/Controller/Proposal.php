@@ -123,7 +123,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
                 "url"       => $this->view->baseUrl('/proposalgen/report_printingdevicelist/index')
             ),
             "PIQEssentials" => (object)array(
-                "pagetitle" => "Print IQ Essentials",
+                "pagetitle" => "JIT Supply and Toner SKU Report",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_piqessentials/index')
             ),
@@ -667,38 +667,5 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
                 $this->redirector($prevStep->action, $prevStep->controller);
             }
         }
-    }
-
-    protected function getThemeName ()
-    {
-        $theme = explode("/", $this->view->theme());
-
-        if (array_search("default", $theme))
-        {
-            $themeName = "default";
-        }
-        else
-        {
-            $themeName = "printiq";
-        }
-
-        return $themeName;
-    }
-
-    protected function getReportName($themeName)
-    {
-        if(!isset($this->reportName))
-        {
-            if($themeName === "default")
-            {
-
-            }
-            else
-            {
-
-            }
-        }
-
-        return $this->reportName;
     }
 }

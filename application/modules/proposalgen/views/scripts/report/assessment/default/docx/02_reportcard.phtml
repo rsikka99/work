@@ -76,7 +76,7 @@ $savingsTable->addRow(720);
 $cell = $savingsTable->addCell(9028, $this->styles->tables->savings->cell1);
 
 $textrun = $cell->createTextRun('savingsParagraph');
-$textrun->addText($this->translate('Our PrintIQ� program could provide you with annual savings of up to '), 'savingsFont');
+$textrun->addText($this->translate('Our PrintIQ program could provide you with annual savings of up to '), 'savingsFont');
 $textrun->addText('$' . number_format($proposal->getPrintIQSavings()), 'savingsAmountFont');
 $textrun->addText('.', 'savingsFont');
 /*

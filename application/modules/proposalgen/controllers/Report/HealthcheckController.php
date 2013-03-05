@@ -10,6 +10,9 @@ class Proposalgen_Report_HealthcheckController extends Proposalgen_Library_Contr
      */
     public function indexAction ()
     {
+        // Mark the step we're on as active
+        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FINISHED);
+
         $this->initReportList();
         $this->initHtmlReport();
 
@@ -71,11 +74,11 @@ class Proposalgen_Report_HealthcheckController extends Proposalgen_Library_Contr
                 break;
             case "docx" :
                 require_once ('PHPWord.php');
-                $this->view->phpword = new PHPWord();
-                $healthCheck = new Proposalgen_Model_HealthCheck_HealthCheck($this->getProposal());
+                $this->view->phpword     = new PHPWord();
+                $healthCheck             = new Proposalgen_Model_HealthCheck_HealthCheck($this->getProposal());
                 $this->view->healthcheck = $healthCheck;
-                $graphs   = $this->cachePNGImages($healthCheck->getGraphs(), true);
-                $this->view->graphs = $graphs;
+                $graphs                  = $this->cachePNGImages($healthCheck->getGraphs(), true);
+                $this->view->graphs      = $graphs;
                 $this->_helper->layout->disableLayout();
                 break;
             case "pdf" :
@@ -92,7 +95,7 @@ class Proposalgen_Report_HealthcheckController extends Proposalgen_Library_Contr
         // Render early
         try
         {
-            $this->render($this->getThemeName() . '/' . $format  . "/00_render");
+            $this->render($this->getThemeName() . '/' . $format . "/00_render");
         }
         catch (Exception $e)
         {
