@@ -365,6 +365,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_PROPOSALGEN_OPTIMIZATION_WILDCARD);
         $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_INDEX);
         $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD);
+        $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_HEALTHCHECK_WILDCARD);
         $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_SOLUTION_WILDCARD);
         $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN_WILDCARD);
         $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST_WILDCARD);
