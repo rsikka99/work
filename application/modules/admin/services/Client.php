@@ -219,7 +219,7 @@ class Admin_Service_Client
         {
             
             $valid = false;
-            $phoneErrors [] = "<br />Fill in all phone number fields";
+            $phoneErrors [] = "Fill in all phone number fields";
         }
         else if ($countValidNumbers == 3)
         {
@@ -232,7 +232,7 @@ class Admin_Service_Client
         
         $this->getForm()
             ->getElement('phoneErrors')
-            ->addError(implode('<br/>', $phoneErrors));
+            ->addError(implode(', ', $phoneErrors));
         
         //validate and get the valid the postCode
         $postCode = $this->validatePostCode($validData ['postCode'], $validData ['countryId']);
