@@ -289,13 +289,13 @@
                                     <action>index</action>
                                     <resource>proposalgen__report_printingdevicelist__index</resource>
                                 </printingdevicelist>
-                                <piqessentials>
+                                <toners>
                                     <label>Essentials</label>
                                     <module>proposalgen</module>
-                                    <controller>report_piqessentials</controller>
+                                    <controller>report_toners</controller>
                                     <action>index</action>
-                                    <resource>proposalgen__report_piqessentials__index</resource>
-                                </piqessentials>
+                                    <resource>proposalgen__report_toners__index</resource>
+                                </toners>
                                 <dealerhardwareoptimization>
                                     <label>Dealer Hardware Optimization</label>
                                     <module>proposalgen</module>

@@ -23,7 +23,7 @@ $listParagraphStyle = array (
  */
 $section->addTitle($this->translate('Your Solution'), 1);
 
-$section->addText($this->translate('Based on your PrintIQ� Smart Assessment, we have developed a choice of managed print solutions to meet your specific business needs.'));
+$section->addText(sprintf($this->translate('Based on your %1$s Smart Assessment, we have developed a choice of managed print solutions to meet your specific business needs.'),$this->brandName));
 
 $section->addTitle($this->translate('Managed Print Solution Objectives'), 2);
 $section->addText($this->translate('Your managed print solution is designed to meet the following objectives:'), 0, null, null, $listParagraphStyle);

@@ -71,7 +71,7 @@ class Proposalgen_Report_PrintingdevicelistController extends Proposalgen_Librar
         // Render early
         try
         {
-            $this->render($this->getThemeName() . '/' . $format  . "/00_render");
+            $this->render($this->view->App()->theme . '/' . $format  . "/00_render");
         }
         catch (Exception $e)
         {
@@ -100,9 +100,9 @@ class Proposalgen_Report_PrintingdevicelistController extends Proposalgen_Librar
         // Instantiate the proposal and
         // assign to a view variable
         $this->view->proposal = $proposal;
-
         // Define our field titles
-        $this->view->appendix_titles = "Manufacturer,Model,IP Address,Serial,Purchased or Leased,AMPV,JIT Compatible";
+        $jitcompat = ($this->view->App()->theme === 'printiq' ? 'Office Depot ATR Compatible' : 'JIT Compatible');
+        $this->view->appendix_titles = "Manufacturer,Model,IP Address,Serial,Purchased or Leased,AMPV," . $jitcompat;
 
         $appendix_values = "";
         try

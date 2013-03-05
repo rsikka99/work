@@ -1,9 +1,7 @@
 <?php
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
-echo $this->titlePageStart;
 ?>
-<?php echo $this->noBreakStart; ?>
 <div class="titlepage">
     <div class="header">
         <div class="title-page-logo-box-wrapper">
@@ -32,7 +30,3 @@ echo $this->titlePageStart;
         <p><?php echo nl2br($proposal->report->getClient()->getAddress()); ?></p>
     </div>
 </div>
-<?php echo $this->noBreakEnd; ?>
-<?php
-echo $this->pageEnd;
-?>

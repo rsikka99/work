@@ -9,14 +9,14 @@ $proposal = $this->proposal;
 
             <p><?php echo
             // FIXME: The way we change the reportname
-                $rankingText = str_replace("reportName",$this->reportName, $proposal->getRanking()->getExpense()->RankingText);
+                $rankingText = str_replace("reportName",$this->brandName, $proposal->getRanking()->getExpense()->RankingText);
                 htmlentities($rankingText); ?></p>
         </td>
         <td class="gradeNumber"><?php echo number_format($proposal->getRanking()->getExpense()->Rank, 1); ?></td>
     </tr>
 </table>
 <br />
-<p>Gartner Group called office printing the last great hidden expense in the office. They estimate the companies spend 1% to 3% of their revenue on office printing. Based on data collected from your printing devices and your questionnaire responses, we have estimated your annual printing expenses. We have separated your expenses into the cost of your leased printing devices and the cost of your purchased devices. Your leased devices are typically large multifunction devices and are assumed to be on an existing service contract. Your purchased devices are ones that can typically be transferred to our <?php echo $this->reportName; ?> program and be managed by <?php echo $this->companyName;?>.</p>
+<p>Gartner Group called office printing the last great hidden expense in the office. They estimate the companies spend 1% to 3% of their revenue on office printing. Based on data collected from your printing devices and your questionnaire responses, we have estimated your annual printing expenses. We have separated your expenses into the cost of your leased printing devices and the cost of your purchased devices. Your leased devices are typically large multifunction devices and are assumed to be on an existing service contract. Your purchased devices are ones that can typically be transferred to our <?php echo $this->brandName; ?> program and be managed by <?php echo $this->companyName;?>.</p>
 <br />
 <div class="pheader">Total Estimated Annual Printing Costs</div>
 <p>Combining all costs, your current estimated annual printing expenses are as follows. Please note that our estimated costs may not match your actual purchases, due to factors including inventory on hand, returns, timing of the assessment, etc., but our estimates should be a good representation of your average costs since they are based on actual observed usage.</p>
@@ -154,7 +154,7 @@ $proposal = $this->proposal;
     </tr>
 </table>
 <br />
-<p>Through our <?php echo $this->reportName; ?> program, we can wrap supplies and service for these machines into a single cost-per-page rate. By partnering with <?php echo $this->companyName;?> as your single-source provider, your printing devices will be efficiently managed and your staff can get back to concentrating on their core responsibilities. Out of these devices, below are the top three most expensive to operate:</p>
+<p>Through our <?php echo $this->brandName; ?> program, we can wrap supplies and service for these machines into a single cost-per-page rate. By partnering with <?php echo $this->companyName;?> as your single-source provider, your printing devices will be efficiently managed and your staff can get back to concentrating on their core responsibilities. Out of these devices, below are the top three most expensive to operate:</p>
 <br />
 <table cellspacing="0" class="genericTable">
     <thead>

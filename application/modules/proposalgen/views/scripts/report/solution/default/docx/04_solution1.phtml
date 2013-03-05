@@ -19,22 +19,22 @@ $listParagraphStyle = array (
  * Section Start
  */
 $section->addPageBreak();
-$section->addTitle($this->translate('Solution 1: PrintIQ�'), 1);
-$section->addText($this->translate('Get the most out of your existing printing assets with the PrintIQ� program. Office Depot will take over the management of your current printing equipment and wrap your supplies and service into a single invoice.'));
+$section->addTitle(sprintf($this->translate('Solution 1: %1$s'),$this->brandName), 1);
+$section->addText(sprintf($this->translate('Get the most out of your existing printing assets with the %1$s program. %2$s will take over the management of your current printing equipment and wrap your supplies and service into a single invoice.'),$this->brandName,$this->companyName));
 
 $section->addTitle($this->translate('Program Components'), 2);
-$section->addText($this->translate('Pay by the page with the PrintIQ� program:'));
+$section->addText(sprintf($this->translate('Pay by the page with the %1$s program:'),$this->brandName));
 $section->addListItem(sprintf($this->translate('$%1$s for monochrome pages'), $this->NumberFormat($proposal->getMPSBlackAndWhiteCPP(), 8)), 0, 'bold_text', null, $listParagraphStyle);
 $section->addListItem(sprintf($this->translate('$%1$s for color pages'), $this->NumberFormat($proposal->getMPSColorCPP(), 8)), 0, 'bold_text', null, $listParagraphStyle);
 $section->addListItem($this->translate('Includes supplies and service for your existing equipment'), 0, 'bold_text', null, $listParagraphStyle);
 
-$section->addText($this->translate('The PrintIQ� program uses remote monitoring software to provide you with:'));
+$section->addText(sprintf($this->translate('The %1$s program uses remote monitoring software to provide you with:'),$this->brandName));
 $section->addListItem($this->translate('Just-in-time supplies fulfillment'), 0, null, null, $listParagraphStyle);
 $section->addListItem($this->translate('Efficient maintenance and break-fix service'), 0, null, null, $listParagraphStyle);
 $section->addListItem($this->translate('Monthly business intelligence reports'), 0, null, null, $listParagraphStyle);
 
 $section->addTitle($this->translate('Estimated Annual Savings'), 2);
-$section->addText($this->translate('Based on information from your PrintIQ� Smart Assessment, we have estimated your annual cost savings:'));
+$section->addText(sprintf($this->translate('Based on information from your %1$s Smart Assessment, we have estimated your annual cost savings:'),$this->brandName));
 
 // Insert Table
 $tc = $this->styles->tables->estimatedAnnualSavings;
@@ -111,13 +111,13 @@ $cell = $table->addCell($tc->col3Width, $tc->footer->cell3->cellStyle)->addText(
 $cell = $table->addCell($tc->col4Width, $tc->footer->cell4->cellStyle)->addText('$' . number_format($proposal->getPrintIQTotalCost()), $tc->footer->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
 
 
-$section->addText($this->translate('Note that although the page volumes from all of your purchased devices were included in our savings calculations, not all of them may qualify for our managed print services program or just-in-time supplies fulfillment. Volumes from unqualified devices would have to be merged to an existing or new qualified device to be included in the program. Please see the Appendix for a complete printing device list with details on compatibility with the PrintIQ� program.'), 'small_italic_text');
+$section->addText(sprintf($this->translate('Note that although the page volumes from all of your purchased devices were included in our savings calculations, not all of them may qualify for our managed print services program or just-in-time supplies fulfillment. Volumes from unqualified devices would have to be merged to an existing or new qualified device to be included in the program. Please see the Appendix for a complete printing device list with details on compatibility with the %1$s program.'),$this->brandName), 'small_italic_text');
 
 $tc = $this->styles->tables->totalAnnualSavings;
 $table = $section->addTable($tc->tablestyle);
 
 $table->addRow($tc->body->rowheight);
-$table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText($this->translate('Total annual savings with PrintIQ�'), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
+$table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText(sprintf($this->translate('Total annual savings with %1$s'),$this->brandName), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
 $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($proposal->getPrintIQSavings()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
 
 
