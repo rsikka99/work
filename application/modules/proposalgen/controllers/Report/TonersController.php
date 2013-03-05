@@ -6,7 +6,7 @@
  * Time: 2:56 PM
  */
 
-class Proposalgen_Report_PiqessentialsController extends Proposalgen_Library_Controller_Proposal
+class Proposalgen_Report_TonersController extends Proposalgen_Library_Controller_Proposal
 {
     /**
      * The solution Action will be used to display the solution report
@@ -21,10 +21,10 @@ class Proposalgen_Report_PiqessentialsController extends Proposalgen_Library_Con
         $this->initReportList();
         $this->initHtmlReport();
 
-        $this->view->availableReports->PIQEssentials->active = true;
+        $this->view->availableReports->Toners->active = true;
 
         $this->view->formats = array(
-            "/proposalgen/report_piqessentials/generate/format/csv" => $this->_csvFormat,
+            "/proposalgen/report_toners/generate/format/csv" => $this->_csvFormat,
         );
 
         try
@@ -64,7 +64,7 @@ class Proposalgen_Report_PiqessentialsController extends Proposalgen_Library_Con
                 break;
         }
 
-        $filename = "piqessentials.$format";
+        $filename = "toners.$format";
 
         $this->initReportVariables($filename);
 

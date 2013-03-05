@@ -102,7 +102,8 @@ class Proposalgen_Report_PrintingdevicelistController extends Proposalgen_Librar
         $this->view->proposal = $proposal;
 
         // Define our field titles
-        $this->view->appendix_titles = "Manufacturer,Model,IP Address,Serial,Purchased or Leased,AMPV,JIT Compatible";
+        $jitcompat = ($this->getThemeName() === 'printiq' ? 'Office Depot ATR Compatible' : 'JIT Compatible');
+        $this->view->appendix_titles = "Manufacturer,Model,IP Address,Serial,Purchased or Leased,AMPV," . $jitcompat;
 
         $appendix_values = "";
         try
