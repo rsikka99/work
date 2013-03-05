@@ -3,9 +3,9 @@
 $proposal = $this->proposal;
 $graphs = $proposal->getGraphs();
 ?>
-<div class="h1">Your <?php echo $this->reportName;?> Smart Assessment</div>
+<div class="h1">Your <?php echo $this->brandName;?> Smart Assessment</div>
 <p>It can be a challenge to understand your printing needs, and there are many factors to consider: hardware functionality, supplies delivery, service, parts, maintenance kits,
-IT time spent supporting printers -- and the cost for all of this. This free <?php echo $this->reportName; ?> Smart Assessment will allow you to make sense of your printing needs and costs. <?php echo $this->companyName;?>
+IT time spent supporting printers -- and the cost for all of this. This free <?php echo $this->brandName; ?> Smart Assessment will allow you to make sense of your printing needs and costs. <?php echo $this->companyName;?>
 can help you get your office print under control with our smart and flexible managed print services solutions.</p>
 <br />
 <div class="pheader">Score Card</div>
@@ -54,5 +54,5 @@ can help you get your office print under control with our smart and flexible man
 </div>
 <br /> <br />
 <div class="annualSavings">
-    Our <?php echo $this->reportName; ?> program could provide you with annual savings of up to <strong>&#36;<?php echo number_format($proposal->getPrintIQSavings(), 0); ?></strong>.
+    Our <?php echo $this->brandName; ?> program could provide you with annual savings of up to <strong>&#36;<?php echo number_format($proposal->getPrintIQSavings(), 0); ?></strong>.
 </div>

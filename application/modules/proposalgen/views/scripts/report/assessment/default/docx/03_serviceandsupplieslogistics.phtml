@@ -52,7 +52,7 @@ $excludedDeviceCount = count($proposal->getExcludedDevices());
 if ($excludedDeviceCount > 0)
 {
     $section->addTextBreak();
-    $section->addText(sprintf($this->translate('%1$s devices were not included in the analysis due to lack of data or model information. See the Appendix in the %2$s Your Solution document for the list of excluded device(s).'), number_format($excludedDeviceCount), $this->reportName));
+    $section->addText(sprintf($this->translate('%1$s devices were not included in the analysis due to lack of data or model information. See the Appendix in the %2$s Your Solution document for the list of excluded device(s).'), number_format($excludedDeviceCount), $this->brandName));
 }
 
 $section->addPageBreak();

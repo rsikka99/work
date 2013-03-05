@@ -1,7 +1,6 @@
 <?php
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
-    //echo $this->pageStart;
 ?>
 <h4 class="paraHeader">Other Printing Devices Not Included in Assessment:</h4>
 	<?php if (count($proposal->getExcludedDevices()) > 0) :?>
@@ -37,9 +36,3 @@ $proposal = $this->proposal;
 	<?php else: ?>
 		<br/><p><em>No devices were excluded from this report.</em></p>
 	<?php endif?>
-
-	
-<?php echo $this->noBreakEnd; ?>
-<?php
-    echo $this->pageEnd;
-?>

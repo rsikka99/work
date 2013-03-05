@@ -28,7 +28,7 @@ $section->addListItem("Improve productivity and user satisfaction");
 $section->addListItem("Foster your eco-smart objectives");
 
 $section->addTitle($this->translate('Step 1: Assess'), 2);
-$section->addText(sprintf($this->translate('This complimentary %1$s Smart Assessment will help us determine what your needs are for office print. By combining data collected from your printing devices with questionnaire responses, we can determine what is working and what isn\'t in your office print environment. From this information, we can build a managed print solution that meets your business needs.'), $this->reportName));
+$section->addText(sprintf($this->translate('This complimentary %1$s Smart Assessment will help us determine what your needs are for office print. By combining data collected from your printing devices with questionnaire responses, we can determine what is working and what isn\'t in your office print environment. From this information, we can build a managed print solution that meets your business needs.'), $this->brandName));
 
 $section->addTitle($this->translate('Step 2: Optimize'), 2);
 $tr = $section->createTextRun();
@@ -52,18 +52,18 @@ $section->addTitle($this->translate('Step 3: Manage'), 2);
 
 $section->addText($this->translate('Ongoing management of your print environment enables you to focus on your core business, while we take care of print. By monitoring your print environment on an ongoing basis, we can help you decide if and when your managed print strategy needs to be updated to accommodate new needs.'));
 
-$section->addTitle(sprintf($this->translate('Potential Savings with %1$s'), $this->reportName), 2);
+$section->addTitle(sprintf($this->translate('Potential Savings with %1$s'), $this->brandName), 2);
 
-$section->addText(sprintf($this->translate('%1$s can manage your existing printing devices that are not currently on a lease with another vendor. Note that while we have included all of your purchased equipment in the following calculations, not all of them may qualify for managed print services or just-in-time supplies fulfillment. Please refer to the %2$s Your Solution document for a complete list of qualified devices.'), $this->companyName, $this->reportName));
+$section->addText(sprintf($this->translate('%1$s can manage your existing printing devices that are not currently on a lease with another vendor. Note that while we have included all of your purchased equipment in the following calculations, not all of them may qualify for managed print services or just-in-time supplies fulfillment. Please refer to the %2$s Your Solution document for a complete list of qualified devices.'), $this->companyName, $this->brandName));
 
-$section->addTitle(sprintf($this->translate('Estimated Costs: Printing Devices Managed with %1$s'), $this->reportName), 3);
+$section->addTitle(sprintf($this->translate('Estimated Costs: Printing Devices Managed with %1$s'), $this->brandName), 3);
 $summaryTable = $section->addTable($this->styles->tables->expenseSummaryTable->tablestyle);
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText(sprintf($this->translate('%1$s monochrome cost per page'), $this->reportName), null, 'nospacing');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText(sprintf($this->translate('%1$s monochrome cost per page'), $this->brandName), null, 'nospacing');
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->getMPSBlackAndWhiteCPP(), 5), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText(sprintf($this->translate('%1$s color cost per page'), $this->reportName), null, 'nospacing');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText(sprintf($this->translate('%1$s color cost per page'), $this->brandName), null, 'nospacing');
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->getMPSColorCPP(), 5), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
@@ -107,7 +107,7 @@ $cell->addText($this->translate('Assume no change'), 'small_italic_text', 'nospa
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText('$' . number_format($proposal->getAnnualCostOfHardwarePurchases()), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1Border)->addText(sprintf($this->translate('%1$s estimated annual cost of purchased devices'), $this->reportName), 'bold_text', 'nospacing');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1Border)->addText(sprintf($this->translate('%1$s estimated annual cost of purchased devices'), $this->brandName), 'bold_text', 'nospacing');
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText('$' . number_format($proposal->getPrintIQTotalCost()), 'bold_text', 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
@@ -115,7 +115,7 @@ $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $t
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText('$' . number_format($proposal->getTotalPurchasedAnnualCost()), 'bold_text', 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText(sprintf($this->translate('POTENTIAL ANNUAL SAVINGS USING %1$s'), $this->reportName), 'bold_red_text', 'nospacing');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText(sprintf($this->translate('POTENTIAL ANNUAL SAVINGS USING %1$s'), $this->brandName), 'bold_red_text', 'nospacing');
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->getPrintIQSavings()), 'bold_highlight_text', 'nospacing_rightalign');
 
 $section->addTextBreak();

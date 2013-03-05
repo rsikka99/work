@@ -1,6 +1,6 @@
 <?php
-/* @var $phpWord PHPWord */
-$phpWord = $this->phpword;
+/* @var $phpword PHPWord */
+$phpword = $this->phpword;
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
 
@@ -11,14 +11,13 @@ $proposal = $this->proposal;
 $h1Color      = "0096D6";
 $h2Background = "0096D6";
 $h2Color      = "FFFFFF";
-$h3Color      = "0096D6";
+$h3Color      = "000000";
 
-$textHighlightColor = "0096D6";
 
 /**
  * Document Properties
  */
-$properties = $phpWord->getProperties();
+$properties = $phpword->getProperties();
 $properties->setCreator('Demo Report');
 $properties->setCompany('Demo Report');
 $properties->setTitle('Demo Report');
@@ -30,14 +29,14 @@ $properties->setModified(time());
 $properties->setSubject('Demo Report');
 $properties->setKeywords('demo, assessment, report');
 
-$titlepageSection = $phpWord->createSection(array(
+$titlepageSection = $phpword->createSection(array(
                                                  'orientation'  => null,
                                                  'marginLeft'   => 1420,
                                                  'marginRight'  => 720,
                                                  'marginTop'    => 720,
                                                  'marginBottom' => 720
                                             ));
-$section          = $phpWord->createSection();
+$section          = $phpword->createSection();
 /**
  * Footer
  */
@@ -81,38 +80,38 @@ $this->phpword->addFontStyle('titlepage_address', array(
                                                        'size'  => 12,
                                                        'color' => 'FFFFFF'
                                                   ));
-$phpWord->addParagraphStyle('titlepageHeaderParagraph', array(
+$phpword->addParagraphStyle('titlepageHeaderParagraph', array(
                                                              'spaceAfter' => 200
                                                         ));
 
-$phpWord->addParagraphStyle('nospacing', array(
+$phpword->addParagraphStyle('nospacing', array(
                                               'spaceBefore' => 0,
                                               'spaceAfter'  => 0
                                          ));
 
-$phpWord->addParagraphStyle('nospacing_rightalign', array(
+$phpword->addParagraphStyle('nospacing_rightalign', array(
                                                          'align'       => 'right',
                                                          'spaceBefore' => 0,
                                                          'spaceAfter'  => 0
                                                     ));
 
-$phpWord->addParagraphStyle('nospacing_centeralign', array(
+$phpword->addParagraphStyle('nospacing_centeralign', array(
                                                           'align'       => 'center',
                                                           'spaceBefore' => 0,
                                                           'spaceAfter'  => 0
                                                      ));
 
-$phpWord->addParagraphStyle('rightalign', array(
+$phpword->addParagraphStyle('rightalign', array(
                                                'align' => 'right'
                                           ));
 
-$phpWord->addParagraphStyle('gradeParagraph', array(
+$phpword->addParagraphStyle('gradeParagraph', array(
                                                    'align'       => 'center',
                                                    'spaceBefore' => 0,
                                                    'spaceAfter'  => 0
                                               ));
 
-$phpWord->addParagraphStyle('savingsParagraph', array(
+$phpword->addParagraphStyle('savingsParagraph', array(
                                                      'align'       => 'center',
                                                      'spaceBefore' => 0,
                                                      'spaceAfter'  => 0
@@ -121,42 +120,42 @@ $phpWord->addParagraphStyle('savingsParagraph', array(
 /**
  * Font Styles
  */
-$phpWord->addFontStyle('titlepageHeaderFont', array(
+$phpword->addFontStyle('titlepageHeaderFont', array(
                                                    'bold' => true,
                                                    'size' => 16
                                               ));
 
-$phpWord->addFontStyle('bold_text', array(
+$phpword->addFontStyle('bold_text', array(
                                          'bold' => true
                                     ));
 
-$phpWord->addFontStyle('bold_highlight_text', array(
-                                             'bold'  => true,
-                                             'color' => $textHighlightColor
-                                        ));
+$phpword->addFontStyle('bold_highlight_text', array(
+                                                   'bold'  => true,
+                                                   'color' => $h3Color
+                                              ));
 
-$phpWord->addFontStyle('gradeFont', array(
+$phpword->addFontStyle('gradeFont', array(
                                          'bold' => true,
                                          'size' => 18
                                     ));
 
-$phpWord->addFontStyle('gradeTitleFont', array(
+$phpword->addFontStyle('gradeTitleFont', array(
                                               'bold' => true,
                                               'size' => 12
                                          ));
 
-$phpWord->addFontStyle('savingsFont', array(
+$phpword->addFontStyle('savingsFont', array(
                                            'bold' => true,
                                            'size' => 11
                                       ));
 
-$phpWord->addFontStyle('savingsAmountFont', array(
-                                                 'color' => 'F0003C',
+$phpword->addFontStyle('savingsAmountFont', array(
+                                                 'color' => $h3Color,
                                                  'bold'  => true,
                                                  'size'  => 11
                                             ));
 
-$phpWord->addFontStyle('small_italic_text', array(
+$phpword->addFontStyle('small_italic_text', array(
                                                  'italic' => true,
                                                  'size'   => 9
                                             ));
@@ -165,7 +164,7 @@ $phpWord->addFontStyle('small_italic_text', array(
  * Header/Title Styles
  */
 // H1 Style
-$phpWord->addTitleStyle(1, array(
+$phpword->addTitleStyle(1, array(
                                 'size'  => 15,
                                 'color' => $h1Color,
                                 'bold'  => true
@@ -173,7 +172,7 @@ $phpWord->addTitleStyle(1, array(
                                    'borderBottomSize' => 1
                               ));
 // H2 Style #5881BC
-$phpWord->addTitleStyle(2, array(
+$phpword->addTitleStyle(2, array(
                                 'size'   => 12,
                                 'color'  => $h2Color,
                                 'bold'   => true,
@@ -182,7 +181,7 @@ $phpWord->addTitleStyle(2, array(
                                    'bgColor' => $h2Background
                               ));
 // H3 Style #5881BC
-$phpWord->addTitleStyle(3, array(
+$phpword->addTitleStyle(3, array(
                                 'size'  => 10,
                                 'color' => $h3Color,
                                 'bold'  => true
@@ -192,9 +191,9 @@ $phpWord->addTitleStyle(3, array(
                               ));
 
 // H3 Style #5881BC
-$phpWord->addFontStyle('heading3', array(
+$phpword->addFontStyle('heading3', array(
                                         'size'  => 10,
-                                        'color' => 'FF0000',
+                                        'color' => $h3Color,
                                         'bold'  => true
                                    ));
 
@@ -479,18 +478,18 @@ $styles = (object)array(
 );
 
 $titledata = array(
-    "phpword"  => $phpWord,
+    "phpword"  => $phpword,
     "section"  => $titlepageSection,
     "proposal" => $this->proposal,
     "styles"   => $styles
 );
 
 $data = array(
-    "phpword"    => $phpWord,
+    "phpword"    => $phpword,
     "section"    => $section,
     "proposal"   => $this->proposal,
     "styles"     => $styles,
-    "reportName" => "MPSToolbox.com",
+    "brandName" => "MPSToolbox.com",
     "companayName" => "MPSToolbox.com"
 );
 // Actual document pages
@@ -503,7 +502,7 @@ $this->partial("report/assessment/" . $this->App()->theme . "/docx/06_environmen
 $this->partial("report/assessment/" . $this->App()->theme . "/docx/07_expense.phtml", $data);
 $this->partial("report/assessment/" . $this->App()->theme . "/docx/08_summary.phtml", $data);
 
-$objWriter = PHPWord_IOFactory::createWriter($phpWord, 'Word2007');
+$objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
 $objWriter->save($this->savePath);
 
 echo $this->baseUrl($this->publicFileName);
