@@ -17,7 +17,7 @@
 }
 
 #htmlReportContainer h2.reportTitle {
-    color           : red;
+    color           : #0096d6;
     margin-bottom   : 0;
     letter-spacing  : 2px;
     font-style      : italic;
@@ -50,7 +50,6 @@
 }
 
 #htmlReportContainer #grossMarginDeviceSummary tr.totals {
-    color            : red;
     font-weight      : bold;
     background-color : #f2f2f2;
 }
