@@ -5,7 +5,7 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/asse
 ?>
 <div class="container" id="htmlReportContainer">
     <?php
-    $this->reportName = "MPSToolbox.com";
+    $this->brandName = "MPSToolbox.com";
     $this->companyName = "MPSToolbox.com";
     echo $this->render('report/assessment/' . $this->App()->theme . '/html/01_Title.phtml');
     echo $this->render('report/assessment/' . $this->App()->theme . '/html/02_Scorecard.phtml');

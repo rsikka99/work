@@ -12,8 +12,8 @@ $section = $this->section;
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
 
-$section->addTitle(sprintf($this->translate('Your %1$s Smart Assessment'), $this->reportName), 1);
-$section->addText(sprintf($this->translate('It can be a challenge to understand your printing needs, and there are many factors to consider: hardware functionality, supplies delivery, service, parts, maintenance kits, IT time spent supporting printers -- and the cost for all of this. This free %1$s Smart Assessment will allow you to make sense of your printing needs and costs. %2$s can help you get your office print under control with our smart and flexible managed print services solutions.'), $this->reportName, $this->companyName));
+$section->addTitle(sprintf($this->translate('Your %1$s Smart Assessment'), $this->brandName), 1);
+$section->addText(sprintf($this->translate('It can be a challenge to understand your printing needs, and there are many factors to consider: hardware functionality, supplies delivery, service, parts, maintenance kits, IT time spent supporting printers -- and the cost for all of this. This free %1$s Smart Assessment will allow you to make sense of your printing needs and costs. %2$s can help you get your office print under control with our smart and flexible managed print services solutions.'), $this->brandName, $this->companyName));
 
 $section->addTitle($this->translate('Score Card'), 2);
 $section->addText($this->translate('Your office printing environment was graded across five categories on a scale of 1 to 10. A score of 1 indicates a low-efficiency or high-cost scenario. A score of 10 indicates a high-efficiency or low-cost scenario. Your results are below:'));
@@ -76,6 +76,6 @@ $savingsTable->addRow(720);
 $cell = $savingsTable->addCell(9028, $this->styles->tables->savings->cell1);
 
 $textrun = $cell->createTextRun('savingsParagraph');
-$textrun->addText(sprintf($this->translate('Our %1$s program could provide you with annual savings of up to '), $this->reportName), 'savingsFont');
+$textrun->addText(sprintf($this->translate('Our %1$s program could provide you with annual savings of up to '), $this->brandName), 'savingsFont');
 $textrun->addText('$' . number_format($proposal->getPrintIQSavings()), 'savingsAmountFont');
 $textrun->addText('.', 'savingsFont');
