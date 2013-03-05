@@ -81,7 +81,7 @@ $phpWord->addTitleStyle(2, array(
                                 'bold'   => true,
                                 'italic' => true
                            ), array(
-                                   'bgColor' => 'F0003C'
+                                   'bgColor' => '0096d6'
                               ));
 // H3 Style #5881BC
 $phpWord->addTitleStyle(3, array(
@@ -162,8 +162,8 @@ $styles = (object)array(
 
 /* Tables for the device layouts */
 $widthTwips       = 15297;
-$header_color     = "B8CCE3";
-$sub_header_color = "EAF0F7";
+$header_color     = "0096d6";
+$sub_header_color = "0096A6";
 $even_color       = "EFEFEF";
 $odd_color        = "FCFCFC";
 $footer_color     = "b8cce3";
@@ -343,6 +343,28 @@ $deviceTables = (object)array(
         "flagged"     => $flaggedDevices,
     ));
 
+$doubleCenterTable = (object)array(
+    "tablestyle" => array(),
+    "col1Width"  => $widthTwips * 0.50,
+    "col2Width"  => $widthTwips * 0.50,
+    "body"       => (object)array(
+        "cell1" => array(
+            "valign" => "center"
+        ),
+        "cell2" => array(
+            "valign" => "center"
+        )
+    ),
+    "image"      => (object)array(
+        "cell1" => array(
+            'align' => 'right'
+        ),
+        "cell2" => array(
+            'align' => 'left'
+        ),
+    )
+);
+
 $titleData = array(
     "phpword"  => $phpWord,
     "section"  => $titlepageSection,
@@ -360,6 +382,7 @@ $data = array(
     "graphs"               => $this->graphs,
     "devicetables"         => $deviceTables,
     "profitabilityDevices" => $profitabilityDevices,
+    "twocenter"            => $doubleCenterTable,
 
 );
 // Actual document pages

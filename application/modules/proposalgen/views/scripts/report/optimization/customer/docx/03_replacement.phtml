@@ -6,8 +6,6 @@ $section = $this->section;
 /* @var $profitabiltyDevices Proposalgen_Model_Optimization_Customer */
 $profitabiltyDevices = $this->profitabilityDevices;
 
-
-$section->addPageBreak();
 $deviceCount = count($profitabiltyDevices->replaced);
 $totalPurchasedDevices = count($proposal->getPurchasedDevices());
 $section->addTitle(sprintf($this->translate('Suggested Replacement Devices (%1$s of %2$s)'), $deviceCount, $totalPurchasedDevices), 2);
@@ -43,8 +41,7 @@ $section->addTextBreak();
 
 
 $section->addTitle($this->translate('Hardware Utilization and Capacity'), 2);
-$section->addImage($this->graphs[13], $this->styles->images->center);
-$section->addImage($this->graphs[14], $this->styles->images->center);
+$section->addImage($this->graphs[4], $this->styles->images->center);
 $section->addTitle($this->translate('Print Volume and Number of Printing Devices'), 2);
 $section->addText(sprintf($this->translate('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.'), number_format($proposal->getDeviceCount()), number_format(($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->getDeviceCount())), number_format($proposal->getPageCounts()->Total->Combined->Monthly)));
 $section->addTextBreak();
@@ -53,7 +50,5 @@ $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle)
 $imageTable->addRow();
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($this->graphs [5]);
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($this->graphs [6]);
-$imageTable->addRow();
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($this->graphs [7]);
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($this->graphs [8]);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($this->graphs [7]);
 $section->addTextBreak();

@@ -7,7 +7,6 @@ $section = $this->section;
 /* @var $profitabiltyDevices Proposalgen_Model_Optimization_Dealer */
 $profitabiltyDevices = $this->profitabilityDevices;
 
-$section->addPageBreak();
 $deviceCount = count($profitabiltyDevices->flagged);
 $totalPurchasedDevices = count($proposal->getPurchasedDevices());;
 $section->addTitle(sprintf($this->translate('Flagged Devices (%1$s of %2$s)'), $deviceCount, $totalPurchasedDevices), 2);
@@ -45,4 +44,10 @@ foreach ($profitabiltyDevices->flagged as $device)
 $section->addTitle($this->translate('Technology Features and Functionality'), 2);
 $section->addText($this->translate('If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption
 by using a scanner to e-mail documents instead of printing copies for distribution. The following charts show how many of your printing devices have duplex and scanning capabilities:'));
-$section->addImage($this->graphs[12], $this->styles->images->center);
+
+$tcStyle = $this->twocenter;
+$imageTable = $section->addTable($tcStyle->tablestyle);
+$imageTable->addRow();
+$imageTable->addCell($tcStyle->col1Width, $tcStyle->body->cell1)->addImage($this->graphs [8], $tcStyle->image->cell1);
+$imageTable->addCell($tcStyle->col2Width, $tcStyle->body->cell2)->addImage($this->graphs [9], $tcStyle->image->cell2);
+$section->addTextBreak();
