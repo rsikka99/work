@@ -1056,7 +1056,9 @@ $data = array(
     "phpword"  => $phpword,
     "section"  => $section,
     "proposal" => $this->proposal,
-    "styles"   => $styles
+    "styles"   => $styles,
+    "reportName" => 'MPSToolbox.com',
+    "companyName" => 'MPSToolbox.com'
 );
 // Actual document pages
 $this->partial("report/solution/" . $this->App()->theme . "/docx/01_titlepage.phtml", $titledata);
