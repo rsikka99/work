@@ -115,8 +115,8 @@ $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $t
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText('$' . number_format($proposal->getTotalPurchasedAnnualCost()), 'bold_text', 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText($this->translate('POTENTIAL ANNUAL SAVINGS USING PrintIQ�'), 'bold_red_text', 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->getPrintIQSavings()), 'bold_red_text', 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText($this->translate('POTENTIAL ANNUAL SAVINGS USING PrintIQ�'), 'bold_highlight_text', 'nospacing');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->getPrintIQSavings()), 'bold_highlight_text', 'nospacing_rightalign');
 
 $section->addTextBreak();
 
