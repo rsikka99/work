@@ -6,6 +6,16 @@ $proposal = $this->proposal;
 
 
 /**
+ * Styles
+ */
+$h1Color      = "0096D6";
+$h2Background = "0096D6";
+$h2Color      = "FFFFFF";
+$h3Color      = "0096D6";
+
+$textHighlightColor = "0096D6";
+
+/**
  * Document Properties
  */
 $properties = $phpWord->getProperties();
@@ -120,9 +130,9 @@ $phpWord->addFontStyle('bold_text', array(
                                          'bold' => true
                                     ));
 
-$phpWord->addFontStyle('bold_red_text', array(
+$phpWord->addFontStyle('bold_highlight_text', array(
                                              'bold'  => true,
-                                             'color' => 'F00001'
+                                             'color' => $textHighlightColor
                                         ));
 
 $phpWord->addFontStyle('gradeFont', array(
@@ -157,7 +167,7 @@ $phpWord->addFontStyle('small_italic_text', array(
 // H1 Style
 $phpWord->addTitleStyle(1, array(
                                 'size'  => 15,
-                                'color' => 'F0003C',
+                                'color' => $h1Color,
                                 'bold'  => true
                            ), array(
                                    'borderBottomSize' => 1
@@ -165,16 +175,16 @@ $phpWord->addTitleStyle(1, array(
 // H2 Style #5881BC
 $phpWord->addTitleStyle(2, array(
                                 'size'   => 12,
-                                'color'  => 'FFFFFF',
+                                'color'  => $h2Color,
                                 'bold'   => true,
                                 'italic' => true
                            ), array(
-                                   'bgColor' => 'F0003C'
+                                   'bgColor' => $h2Background
                               ));
 // H3 Style #5881BC
 $phpWord->addTitleStyle(3, array(
                                 'size'  => 10,
-                                'color' => 'FF0000',
+                                'color' => $h3Color,
                                 'bold'  => true
                            ), array(
                                    'spaceBefore' => 100,
@@ -480,7 +490,8 @@ $data = array(
     "section"    => $section,
     "proposal"   => $this->proposal,
     "styles"     => $styles,
-    "reportName" => "MPSToolbox.com"
+    "reportName" => "MPSToolbox.com",
+    "companayName" => "MPSToolbox.com"
 );
 // Actual document pages
 $this->partial("report/assessment/" . $this->App()->theme . "/docx/01_titlepage.phtml", $titledata);

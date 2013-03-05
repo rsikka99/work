@@ -14,7 +14,7 @@ $section->addPageBreak();
 $proposal = $this->proposal;
 $graphs = $proposal->getGraphs();
 
-$section->addTitle($this->translate("Analysis: Printing Hardware Usage"), 1);
+$section->addTitle(sprintf($this->translate('Analysis: %1$s Hardware Usage'), $this->reportName), 1);
 $gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
 $gradeTable->addRow();
 $gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($proposal->getRanking()->PrintingHardwareUsage->RankingText);
@@ -91,4 +91,4 @@ $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage(
 $section->addTextBreak();
 
 $section->addText($this->translate('Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your company\'s professional image, improve comprehension and increase readership.'));
-$section->addText($this->translate('Office Depot can help you track your color printing and provide low-cost color hardware options.'));
+$section->addText(sprintf($this->translate('%1$s can help you track your color printing and provide low-cost color hardware options.'), $this->companyName));

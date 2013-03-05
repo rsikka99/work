@@ -92,6 +92,7 @@ class Proposalgen_Report_AssessmentController extends Proposalgen_Library_Contro
         $filename = "assessment.$format";
 
         $this->initReportVariables($filename);
+
         // Render early
         try
         {
