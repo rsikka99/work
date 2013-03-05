@@ -658,37 +658,4 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
             }
         }
     }
-
-    protected function getThemeName ()
-    {
-        $theme = explode("/", $this->view->theme());
-
-        if (array_search("default", $theme))
-        {
-            $themeName = "default";
-        }
-        else
-        {
-            $themeName = "printiq";
-        }
-
-        return $themeName;
-    }
-
-    protected function getReportName($themeName)
-    {
-        if(!isset($this->reportName))
-        {
-            if($themeName === "default")
-            {
-
-            }
-            else
-            {
-
-            }
-        }
-
-        return $this->reportName;
-    }
 }
