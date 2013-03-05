@@ -14,7 +14,7 @@ $section->addPageBreak();
 $proposal = $this->proposal;
 $graphs = $proposal->getGraphs();
 
-$section->addTitle($this->translate("Analysis: Printing Hardware Usage"), 1);
+$section->addTitle(sprintf($this->translate('Analysis: %1$s Hardware Usage'), $this->reportName), 1);
 $gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
 $gradeTable->addRow();
 $gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($proposal->getRanking()->PrintingHardwareUsage->RankingText);

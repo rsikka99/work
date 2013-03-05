@@ -28,7 +28,7 @@ $section->addListItem("Improve productivity and user satisfaction");
 $section->addListItem("Foster your eco-smart objectives");
 
 $section->addTitle($this->translate('Step 1: Assess'), 2);
-$section->addText($this->translate('This complimentary PrintIQ Smart Assessment will help us determine what your needs are for office print. By combining data collected from your printing devices with questionnaire responses, we can determine what is working and what isn\'t in your office print environment. From this information, we can build a managed print solution that meets your business needs.'));
+$section->addText(sprintf($this->translate('This complimentary %1$s Smart Assessment will help us determine what your needs are for office print. By combining data collected from your printing devices with questionnaire responses, we can determine what is working and what isn\'t in your office print environment. From this information, we can build a managed print solution that meets your business needs.'), $this->reportName));
 
 $section->addTitle($this->translate('Step 2: Optimize'), 2);
 $tr = $section->createTextRun();
@@ -52,18 +52,18 @@ $section->addTitle($this->translate('Step 3: Manage'), 2);
 
 $section->addText($this->translate('Ongoing management of your print environment enables you to focus on your core business, while we take care of print. By monitoring your print environment on an ongoing basis, we can help you decide if and when your managed print strategy needs to be updated to accommodate new needs.'));
 
-$section->addTitle($this->translate("Potential Savings with PrintIQ�"), 2);
+$section->addTitle(sprintf($this->translate('Potential Savings with %1$s'), $this->reportName), 2);
 
-$section->addText($this->translate('Office Depot can manage your existing printing devices that are not currently on a lease with another vendor. Note that while we have included all of your purchased equipment in the following calculations, not all of them may qualify for managed print services or just-in-time supplies fulfillment. Please refer to the PrintIQ� Your Solution document for a complete list of qualified devices.'));
+$section->addText(sprintf($this->translate('Office Depot can manage your existing printing devices that are not currently on a lease with another vendor. Note that while we have included all of your purchased equipment in the following calculations, not all of them may qualify for managed print services or just-in-time supplies fulfillment. Please refer to the %1$s Your Solution document for a complete list of qualified devices.'),$this->reportName));
 
-$section->addTitle($this->translate('Estimated Costs: Printing Devices Managed with PrintIQ�'), 3);
+$section->addTitle(sprintf($this->translate('Estimated Costs: Printing Devices Managed with %1$s'),$this->reportName), 3);
 $summaryTable = $section->addTable($this->styles->tables->expenseSummaryTable->tablestyle);
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText($this->translate('PrintIQ� monochrome cost per page'), null, 'nospacing');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText(sprintf($this->translate('%1$s monochrome cost per page'),$this->reportName), null, 'nospacing');
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->getMPSBlackAndWhiteCPP(), 5), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText($this->translate('PrintIQ� color cost per page'), null, 'nospacing');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText(sprintf($this->translate('%1$s color cost per page'),$this->reportName), null, 'nospacing');
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->getMPSColorCPP(), 5), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
@@ -107,7 +107,7 @@ $cell->addText($this->translate('Assume no change'), 'small_italic_text', 'nospa
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText('$' . number_format($proposal->getAnnualCostOfHardwarePurchases()), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1Border)->addText($this->translate('PrintIQ� estimated annual cost of purchased devices'), 'bold_text', 'nospacing');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1Border)->addText(sprintf($this->translate('%1$s estimated annual cost of purchased devices'), $this->reportName), 'bold_text', 'nospacing');
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText('$' . number_format($proposal->getPrintIQTotalCost()), 'bold_text', 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
@@ -115,13 +115,9 @@ $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $t
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText('$' . number_format($proposal->getTotalPurchasedAnnualCost()), 'bold_text', 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText($this->translate('POTENTIAL ANNUAL SAVINGS USING PrintIQ�'), 'bold_red_text', 'nospacing');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText(sprintf($this->translate('POTENTIAL ANNUAL SAVINGS USING %1$s'),$this->reportName), 'bold_red_text', 'nospacing');
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->getPrintIQSavings()), 'bold_red_text', 'nospacing_rightalign');
 
 $section->addTextBreak();
 
 $section->addText($this->translate('Whether you are looking for a comprehensive managed print services plan that includes new equipment, or are looking for assistance in maintaining your existing printer fleet, we can design a solution that meets your specific business needs. Let us take care of your print so you can get back to business.'));
-$section->addText($this->translate('1-855-OD-GO-MPS'), 'bold_text');
-$section->addText($this->translate('1-855-634-6677 '), 'small_italic_text');
-$section->addText($this->translate('� 2011 Office Depot, Inc. All Rights Reserved.'), 'small_italic_text');
-$section->addText($this->translate('The Office Depot name and logo are the registered trademarks of The Office Club, Inc.'), 'small_italic_text');
