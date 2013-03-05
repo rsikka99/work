@@ -296,6 +296,13 @@
                                     <action>index</action>
                                     <resource>proposalgen__report_piqessentials__index</resource>
                                 </piqessentials>
+                                <healthcheck>
+                                    <label>Health Check</label>
+                                    <module>proposalgen</module>
+                                    <controller>report_healthcheck</controller>
+                                    <action>index</action>
+                                    <resource>proposalgen__report_healthcheck__index</resource>
+                                </healthcheck>
                             </pages>
                         </reports>
                     </pages>

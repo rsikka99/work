@@ -123,7 +123,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
                 "url"       => $this->view->baseUrl('/proposalgen/report_printingdevicelist/index')
             ),
             "PIQEssentials"      => (object)array(
-                "pagetitle" => "Print IQ Essentials",
+                "pagetitle" => "JIT Supply and Toner SKU Report",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_piqessentials/index')
             ),
