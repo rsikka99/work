@@ -1115,7 +1115,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                         if ($deviceInstance->getAge() < self::OLD_DEVICE_THRESHHOLD)
                         {
                             //Check to see if it is reporting toner levels
-                            if ($deviceInstance->reportsTonerLevels == 1 || $deviceInstance->getIsLeased())
+                            if ($deviceInstance->isCapableOfReportingTonerLevels() || $deviceInstance->getIsLeased())
                             {
                                 /**
                                  * We are a fully optimized device!
@@ -1618,7 +1618,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         $devicesReportingTonerLevels = array();
         foreach ($this->getPurchasedDevices() as $device)
         {
-            if ($device->reportsTonerLevels == 1)
+            if ($device->isCapableOfReportingTonerLevels())
             {
                 $devicesReportingTonerLevels[] = $device;
             }
@@ -1635,7 +1635,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         $devicesNotReportingTonerLevels = array();
         foreach ($this->getDevices()->purchasedDeviceInstances as $device)
         {
-            if ($device->reportsTonerLevels != 1)
+            if ($device->isCapableOfReportingTonerLevels() == false)
             {
                 $devicesNotReportingTonerLevels[] = $device;
             }

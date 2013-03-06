@@ -40,7 +40,7 @@ class Proposalgen_Model_HealthCheck_HealthCheck
             );
             foreach ($this->proposal->getPurchasedDevices() as $device)
             {
-                if ($device->reportsTonerLevels == 1)
+                if ($device->isCapableOfReportingTonerLevels())
                 {
                     $deviceAges ["Pages Printed on JIT devices"] += $device->getAverageMonthlyPageCount();
                 }
@@ -189,7 +189,7 @@ class Proposalgen_Model_HealthCheck_HealthCheck
             /**
              * -- CompatibleATRBarGraph
              */
-            $highest  = ($this->proposal->getNumberOfDevicesReportingTonerLevels() > ($this->proposal->getPurchasedDeviceCount() - $this->proposal->getNumberOfDevicesReportingTonerLevels()) ? $this->proposal->getNumberOfDevicesReportingTonerLevels() : ($this->proposal->getPurchasedDeviceCount() - $this->proposal->getNumberOfDevicesReportingTonerLevels()));
+            $highest  = ($this->proposal->getNumberOfDevicesReportingTonerLevels() > $this->proposal->getNumberOfDevicesNotReportingTonerLevels() ? $this->proposal->getNumberOfDevicesReportingTonerLevels() : ($this->proposal->getNumberOfDevicesNotReportingTonerLevels()));
             $barGraph = new gchart\gBarChart(220, 220);
             $barGraph->setVisibleAxes(array(
                                            'y'
@@ -201,7 +201,7 @@ class Proposalgen_Model_HealthCheck_HealthCheck
                                       "E21736"
                                  ));
             $barGraph->addDataSet(array(
-                                       ($this->proposal->getPurchasedDeviceCount() - $this->proposal->getNumberOfDevicesReportingTonerLevels())
+                                       ($this->proposal->getNumberOfDevicesNotReportingTonerLevels())
                                   ));
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
