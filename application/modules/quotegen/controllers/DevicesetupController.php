@@ -132,10 +132,10 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         $cboCriteria             = $values ['cboCriteria'];
                         $this->view->cboCriteria = $cboCriteria;
 
-                        if ($filter == 'oemSku')
+                        if ($filter == 'sku')
                         {
                             $where = array_merge((array)$where, array(
-                                                                     'oemSku LIKE ( ? )' => '%' . $txtCriteria . '%'
+                                                                     'sku LIKE ( ? )' => '%' . $txtCriteria . '%'
                                                                 ));
                         }
                         else
@@ -768,10 +768,10 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             );
                         }
 
-                        else if ($filter == 'oemSku')
+                        else if ($filter == 'sku')
                         {
                             $where = array_merge((array)$where, array(
-                                                                     'oemSku LIKE ( ? )' => '%' . $txtCriteria . '%'
+                                                                     'sku LIKE ( ? )' => '%' . $txtCriteria . '%'
                                                                 ));
                         }
                         else
