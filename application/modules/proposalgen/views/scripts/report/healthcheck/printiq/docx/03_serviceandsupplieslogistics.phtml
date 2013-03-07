@@ -18,7 +18,7 @@ $gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($propo
 $gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number_format($proposal->getRanking()->SuppliesAndServiceLogistics->Rank, 1), 'gradeFont', 'gradeParagraph');
 $section->addTextBreak();
 $section->addTitle($this->translate('Printing Device Management Breakdown'), 2);
-$section->addText($this->translate('Different types of printing devices are managed in different ways-newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.'));
+$section->addText($this->translate('Different types of printing devices are managed in different ways: newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.'));
 
 $section->addTextBreak(2);
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);

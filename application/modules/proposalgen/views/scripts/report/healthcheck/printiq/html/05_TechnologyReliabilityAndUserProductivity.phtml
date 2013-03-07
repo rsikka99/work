@@ -14,11 +14,11 @@ $graphs = $this->healthcheck->getGraphs();
 </table>
 <br />
 <div class="pheader">Age of Printing Devices</div>
-<p>We estimate the average age of your printing devices is <?php echo number_format($proposal->getAverageAgeOfDevices(),1)?> years(s); a good industry average is 3 years. Devices over 5 years old receive on average one repair per year.</p>
+<p>We estimate the average age of your printing devices is <?php echo number_format($proposal->getAverageAgeOfDevices(),1)?> years(s); a good industry average is 3 years. Devices over 5 years old receive, on average, one repair per year.</p>
 <div class="center">
     <img src="<?php echo $graphs['AgeBarGraph']; ?>" />
 </div>
-<p>The breakdown of the age of your printing devices is shown above:</p>
+<p>The breakdown of the age of your printing devices is shown above.</p>
 <br />
 <br />
 <?php echo $this->noBreakEnd; ?>
