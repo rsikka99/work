@@ -185,6 +185,36 @@ class Proposalgen_Model_HealthCheck_HealthCheck
             // ColorVSBWPagesGraph
             $healthgraphs['ColorVSBWPagesGraph'] = $barGraph->getUrl();
 
+            /**
+             * -- colorCapablePieChart
+             */
+            $colorPercentage = 0;
+            if ($this->proposal->getDeviceCount())
+            {
+                $colorPercentage = round((($this->proposal->getNumberOfColorCapableDevices() / $this->proposal->getDeviceCount()) * 100), 2);
+            }
+
+            $notColorPercentage = 100 - $colorPercentage;
+            $colorCapableGraph  = new gchart\gPie3DChart(210, 150);
+            $colorCapableGraph->setTitle("Color-Capable Printing Devices");
+            $colorCapableGraph->addDataSet(array(
+                                                $colorPercentage,
+                                                $notColorPercentage
+                                           ));
+            $colorCapableGraph->setLegend(array(
+                                               "Color capable",
+                                               "Black and white only"
+                                          ));
+            $colorCapableGraph->setLabels(array(
+                                               "$colorPercentage%"
+                                          ));
+            $colorCapableGraph->addColors(array(
+                                               "E21736",
+                                               "0194D2"
+                                          ));
+            $colorCapableGraph->setLegendPosition("bv");
+            // colorCapablePieChart
+            $healthgraphs['colorCapablePieChart'] = $colorCapableGraph->getUrl();
 
             /**
              * -- CompatibleATRBarGraph
@@ -408,7 +438,7 @@ class Proposalgen_Model_HealthCheck_HealthCheck
             }
 
             $notDuplexPercentage = 100 - $duplexPercentage;
-            $duplexCapableGraph  = new gchart\gPie3DChart(203, 160);
+            $duplexCapableGraph  = new gchart\gPie3DChart(210, 150);
             $duplexCapableGraph->setTitle("Duplex-Capable Printing Devices");
             $duplexCapableGraph->addDataSet(array(
                                                  $duplexPercentage,
@@ -549,7 +579,7 @@ class Proposalgen_Model_HealthCheck_HealthCheck
                 $copyPercentage = 0;
             }
             $notScanPercentage = 100 - $copyPercentage;
-            $copyCapableGraph  = new gchart\gPie3DChart(200, 160);
+            $copyCapableGraph  = new gchart\gPie3DChart(210, 150);
             $copyCapableGraph->setTitle("Copy-Capable Printing Devices");
             $copyCapableGraph->addDataSet(array(
                                                $copyPercentage,
