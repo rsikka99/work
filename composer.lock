@@ -1,5 +1,5 @@
 {
-    "hash": "df22cf40dff9c914e719e04d481d4fd3",
+    "hash": "506ca018dc1c9ecbafff8e3ac3f3e3cd",
     "packages": [
         {
             "name": "gChartPhp/gChartPhp",
@@ -166,9 +166,9 @@
         "phpexcel/phpexcel": 20,
         "gchartphp/gchartphp": 20
     },
-    "platform": [
-
-    ],
+    "platform": {
+        "php": ">5.4.0"
+    },
     "platform-dev": [
 
     ]
