@@ -4,18 +4,27 @@
         {
             "name" : "Lee Robert",
             "email": "lrobert@tangentmtw.com"
-        }
+        },
+        {
+            "name" : "Shawn Wilder",
+            "email": "swilder@tangentmtw.com"
+        },
+        {
+            "name" : "Tyson Riehl",
+            "email": "triehl@tangentmtw.com"
+        },
     ],
     "description" : "MPS Tools",
-    "license" : "proprietary",
+    "license"     : "proprietary",
     "repositories": [
         {
-            "type"   : "vcs",
-            "url": "https://github.com/lrobert/PHPWord"
+            "type": "vcs",
+            "url" : "https://github.com/lrobert/PHPWord"
         }
     ],
     "require"     : {
-        "webino/zf1": "dev-master",
+        "php"                : ">5.4.0",
+        "webino/zf1"         : "dev-master",
         "lrobert/phpword"    : "dev-master",
         "phpexcel/phpexcel"  : "dev-master",
         "gChartPhp/gChartPhp": "dev-master"

@@ -16,9 +16,9 @@ elseif (get_cfg_var('zf_path'))
     // Support for zf2_path directive value
     $zendFrameworkPath = get_cfg_var('zf_path');
 }
-elseif (is_dir(APPLICATION_BASE_PATH . '/vendor/webino/zf1/library'))
+elseif (is_dir(APPLICATION_BASE_PATH . '/vendor/webino/zf1/src'))
 {
-    $zendFrameworkPath = APPLICATION_BASE_PATH . '/vendor/webino/zf1/library';
+    $zendFrameworkPath = APPLICATION_BASE_PATH . '/vendor/webino/zf1/src';
 }
 
 if ($zendFrameworkPath)
