@@ -176,61 +176,6 @@
                         </view>
                     </pages>
                 </UserManagement>
-                <systemadmin>
-					<label>System Administration</label>
-					<class>dropdown</class>
-					<module>proposalgen</module>
-					<controller>admin</controller>
-					<action>index</action>
-					<resource>proposalgen__admin__index</resource>
-					<pages>
-						<managemanufacturers>
-							<label>Manage Manufacturers</label>
-							<module>proposalgen</module>
-							<controller>admin</controller>
-							<action>manufacturers</action>
-							<resource>proposalgen__admin__manufacturers</resource>
-						</managemanufacturers>
-						<manageprinterandtoner>
-							<label>Manage Master Printer And Toner Properties</label>
-							<module>proposalgen</module>
-							<controller>managedevices</controller>
-							<action>managedevices</action>
-							<resource>proposalgen__managedevices__managedevices</resource>
-						</manageprinterandtoner>
-						<updatepricing>
-							<label>Update Pricing</label>
-							<module>proposalgen</module>
-							<controller>admin</controller>
-							<action>bulkdevicepricing</action>
-							<resource>proposalgen__admin__bulkdevicepricing</resource>
-							<pages>
-								<bulkfilepricing>
-									<label>Import and Export Pricing</label>
-									<module>proposalgen</module>
-									<controller>admin</controller>
-									<action>bulkfilepricing</action>
-									<resource>proposalgen__admin__bulkfilepricing</resource>
-									<visible>0</visible>
-								</bulkfilepricing>
-							</pages>
-						</updatepricing>
-						<managereplacements>
-							<label>Manage Replacement Printers</label>
-							<module>proposalgen</module>
-							<controller>admin</controller>
-							<action>managereplacements</action>
-							<resource>proposalgen__admin__managereplacements</resource>
-						</managereplacements>
-						<managematchups>
-							<label>Manage Printer Matchups</label>
-							<module>proposalgen</module>
-							<controller>admin</controller>
-							<action>managematchups</action>
-							<resource>proposalgen__admin__managematchups</resource>
-						</managematchups>
-					</pages>
-				</systemadmin>
             </pages>
         </sysadmin>
     </nav>
