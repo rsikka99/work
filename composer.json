@@ -7,30 +7,11 @@
         }
     ],
     "description" : "MPS Tools",
+    "license" : "proprietary",
     "repositories": [
         {
-            "type"   : "package",
-            "package": {
-                "name"   : "lrobert/phpword",
-                "version": "dev-master",
-                "source" : {
-                    "url"      : "git@github.com:lrobert/PHPWord.git",
-                    "type"     : "git",
-                    "reference": "master"
-                }
-            }
-        },
-        {
-            "type"   : "package",
-            "package": {
-                "name"   : "lrobert/zf1",
-                "version": "dev-master",
-                "source" : {
-                    "url"      : "git@github.com:lrobert/zf1.git",
-                    "type"     : "git",
-                    "reference": "master"
-                }
-            }
+            "type"   : "vcs",
+            "url": "https://github.com/lrobert/PHPWord"
         }
     ],
     "require"     : {
