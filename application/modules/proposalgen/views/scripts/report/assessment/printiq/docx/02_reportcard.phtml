@@ -12,7 +12,7 @@ $section = $this->section;
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
 
-$section->addTitle($this->translate('Your PrintIQ� Smart Assessment'), 1);
+$section->addTitle($this->translate('Your PrintIQ Smart Assessment'), 1);
 $section->addText($this->translate('It can be a challenge to understand your printing needs, and there are many factors to consider: hardware functionality, supplies delivery, service, parts, maintenance kits, IT time spent supporting printers -- and the cost for all of this. This free PrintIQ Smart Assessment will allow you to make sense of your printing needs and costs. Office Depot can help you get your office print under control with our smart and flexible managed print services solutions.'));
 
 $section->addTitle($this->translate('Score Card'), 2);
@@ -76,7 +76,7 @@ $savingsTable->addRow(720);
 $cell = $savingsTable->addCell(9028, $this->styles->tables->savings->cell1);
 
 $textrun = $cell->createTextRun('savingsParagraph');
-$textrun->addText($this->translate('Our PrintIQ� program could provide you with annual savings of up to '), 'savingsFont');
+$textrun->addText($this->translate('Our PrintIQ program could provide you with annual savings of up to '), 'savingsFont');
 $textrun->addText('$' . number_format($proposal->getPrintIQSavings()), 'savingsAmountFont');
 $textrun->addText('.', 'savingsFont');
 /*
