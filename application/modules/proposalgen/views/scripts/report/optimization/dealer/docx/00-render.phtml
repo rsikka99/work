@@ -41,6 +41,45 @@ $phpWord->addFontStyle('titlepageHeaderFont', array('bold' => true, 'size' => 12
 $phpWord->addFontStyle('documentHeader', array('bold' => true, 'size' => 16));
 $phpWord->addParagraphStyle('documentHeader', array('align' => 'center'));
 
+// Title page
+$phpWord->addParagraphStyle('titleStyle1', array(
+                                                      'align'      => 'center',
+                                                      'spaceAfter' => 100,
+                                                      'bgColor'    => '004990'
+                                                 ));
+$phpWord->addParagraphStyle('titleStyle2', array(
+                                                      'spaceAfter'  => 50,
+                                                      'spaceBefore' => 50,
+                                                      'bgColor'     => '4C4C4C'
+                                                 ));
+$phpWord->addParagraphStyle('titleStyle3', array(
+                                                      'spaceAfter' => 100,
+                                                      'bgColor'    => '7F7F7F'
+                                                 ));
+$phpWord->addFontStyle('titlepage_title', array(
+                                                     'size'  => 24,
+                                                     'bold'  => true,
+                                                     'color' => 'FFFFFF'
+                                                ));
+
+$phpWord->addFontStyle('titlepage_subtitle', array(
+                                                        'size'  => 16,
+                                                        'bold'  => true,
+                                                        'color' => 'FFFFFF'
+                                                   ));
+
+$phpWord->addFontStyle('titlepage_address', array(
+                                                       'size'  => 12,
+                                                       'color' => 'FFFFFF'
+                                                  ));
+$phpWord->addParagraphStyle('titlepageHeaderParagraph', array(
+                                                             'spaceAfter' => 200
+                                                        ));
+$phpWord->addParagraphStyle('titlepageHeader1', array(
+                                                     'spaceAfter' => 0,
+
+                                                ));
+
 // Classes that describe standard cells
 $standard_cell                  = (object)array(
     "even"           => array(
@@ -462,7 +501,7 @@ $data = array(
  * Render each of the view scripts for different parts of the document
  */
 
-$this->partial("report/optimization/dealer/docx/01_header.phtml", $data);
+$this->partial("report/optimization/dealer/docx/01_titlepage.phtml", $data);
 $this->partial("report/optimization/dealer/docx/02_costanalysis.phtml", $data);
 $this->partial("report/optimization/dealer/docx/03_devicesummary.phtml", $data);
 $this->partial("report/optimization/dealer/docx/04_replacements.phtml", $data);

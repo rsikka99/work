@@ -12,6 +12,37 @@ $customerOptimization = new Proposalgen_Model_Optimization_Customer($proposal);
 $graphs = $customerOptimization->getGraphs();
 $totalPurchasedDevices = count($proposal->getPurchasedDevices());
 ?>
+
+<div class="container" id="htmlReportContainer">
+    <div class="titlepage">
+        <div class="header">
+            <div class="title-page-logo-box-wrapper">
+                <div class="title-page-logo-box">
+                    <img class="title-page-logo" src="<?php echo $this->serverUrl($this->theme("proposalgenerator/reports/images/mpstoolbox_logo.jpg")) ?> " />
+                </div>
+            </div>
+        </div>
+        <div class="title-page-report-title">
+            <h2>Hardware Optimization</h2>
+        </div>
+        <div class="title-page-customer-details">
+            <h3>Prepared for:
+                <?php
+                if (strlen($proposal->report->getClient()->companyName) > 26)
+                {
+                    echo "<br/>";
+                }
+
+                echo $proposal->report->getClient()->companyName;
+                ?>
+            </h3>
+
+            <h3><?php echo $proposal->getDateReportPrepared(); ?></h3>
+
+            <p><?php echo nl2br($proposal->report->getClient()->getAddress()); ?></p>
+        </div>
+    </div>
+</div>
 <div class="container" id="htmlReportContainer">
     <div class="h1">
         Your Hardware Optimization
