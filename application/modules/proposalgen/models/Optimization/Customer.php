@@ -32,10 +32,10 @@ class Proposalgen_Model_Optimization_Customer extends Proposalgen_Model_Optimiza
             $highest    = ($pageCounts->Leased->Combined->Monthly > $pageCounts->Purchased->Combined->Monthly) ? $pageCounts->Leased->Combined->Monthly : $pageCounts->Purchased->Combined->Monthly;
             $barGraph   = new gchart\gBarChart(200, 300);
             $barGraph->setTitle("Leased Vs Purchase|Page Counts");
-            $barGraph->setVisibleAxes( array('y') );
-            $barGraph->addDataSet( array(round($pageCounts->Leased->Combined->Monthly)) );
-            $barGraph->addColors( array("E21736") );
-            $barGraph->addDataSet( array(round($pageCounts->Purchased->Combined->Monthly)) );
+            $barGraph->setVisibleAxes(array('y'));
+            $barGraph->addDataSet(array(round($pageCounts->Leased->Combined->Monthly)));
+            $barGraph->addColors(array("E21736"));
+            $barGraph->addDataSet(array(round($pageCounts->Purchased->Combined->Monthly)));
             $barGraph->addAxisRange(0, 0, $highest * 1.20);
             $barGraph->setDataRange(0, $highest * 1.20);
             $barGraph->setBarScale(40, 10);
@@ -114,7 +114,7 @@ class Proposalgen_Model_Optimization_Customer extends Proposalgen_Model_Optimiza
             $barGraph->addDataSet(array(0));
             $barGraph->addDataSet(array(20));
             $barGraph->addColors(array("E21736"));
-            $barGraph->addColors(array("0194D2"));
+            $barGraph->addColors(array("000000"));
             $barGraph->addColors(array("EF6B18"));
             $barGraph->addColors(array("FFFFFF"));
             $barGraph->addColors(array("FFFFFF"));
@@ -130,9 +130,9 @@ class Proposalgen_Model_Optimization_Customer extends Proposalgen_Model_Optimiza
 
             $dotProperties = '@d,E21736,0,.5:' . number_format($percentage, 2) . ',30|';
             $dotProperties .= '@t' . number_format($percentage * 100, 2) . '%,E21736,0,1:' . number_format($percentage - .03, 2) . ',10|';
-//            $percentage = ($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->calculateMaximumMonthlyPrintVolumeWithReplacements());
-            $dotProperties .= '@d,EF6B18,0,.5:' . number_format($percentage, 2) . ',20|';
-            $dotProperties .= '@t' . number_format($percentage * 100, 2) . '%,EF6B18,0,-2.5:' . number_format($percentage - .03, 2) . ',10';
+            $percentage = ($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->calculateMaximumMonthlyPrintVolumeWithReplacements());
+            $dotProperties .= '@d,000000,0,.5:' . number_format($percentage, 2) . ',20|';
+            $dotProperties .= '@t' . number_format($percentage * 100, 2) . '%,000000,0,-2.5:' . number_format($percentage - .03, 2) . ',10';
             $barGraph->setProperty('chm', $dotProperties);
 
             $barGraph->addColors(array("0194D2"));
@@ -303,14 +303,14 @@ class Proposalgen_Model_Optimization_Customer extends Proposalgen_Model_Optimiza
             /**
              * -- Age vertical bar chart
              */
-            $highest  = ($this->deviceAges[0] > $this->deviceAges[2]) ? $this->deviceAges[0] : $this->deviceAges[2];
-            $highest  = ($this->deviceAges[4] > $highest) ? $this->deviceAges[4] : $highest;
-            $highest  = ($this->deviceAges[8] > $highest) ? $this->deviceAges[8] : $highest;
+            $highest          = ($this->deviceAges[0] > $this->deviceAges[2]) ? $this->deviceAges[0] : $this->deviceAges[2];
+            $highest          = ($this->deviceAges[4] > $highest) ? $this->deviceAges[4] : $highest;
+            $highest          = ($this->deviceAges[8] > $highest) ? $this->deviceAges[8] : $highest;
             $highestOptimized = ($this->deviceAgesOptimized[0] > $this->deviceAgesOptimized[2]) ? $this->deviceAgesOptimized[0] : $this->deviceAgesOptimized[2];
             $highestOptimized = ($this->deviceAgesOptimized[4] > $highestOptimized) ? $this->deviceAgesOptimized[4] : $highestOptimized;
             $highestOptimized = ($this->deviceAgesOptimized[8] > $highestOptimized) ? $this->deviceAgesOptimized[8] : $highestOptimized;
-            $highest = ($highest > $highestOptimized) ? $highest : $highestOptimized;
-            $barGraph = new gchart\gBarChart(225, 325);
+            $highest          = ($highest > $highestOptimized) ? $highest : $highestOptimized;
+            $barGraph         = new gchart\gBarChart(225, 325);
             $barGraph->setTitle("Age of devices");
             $barGraph->setVisibleAxes(array('y'));
 
@@ -338,8 +338,7 @@ class Proposalgen_Model_Optimization_Customer extends Proposalgen_Model_Optimiza
             /**
              * -- Age vertical bar chart optimized
              */
-
-            $barGraph         = new gchart\gBarChart(225, 325);
+            $barGraph = new gchart\gBarChart(225, 325);
             $barGraph->setTitle("Age of optimized devices");
             $barGraph->setVisibleAxes(array('y'));
 
@@ -365,61 +364,88 @@ class Proposalgen_Model_Optimization_Customer extends Proposalgen_Model_Optimiza
             $this->_graphs [] = $barGraph->getUrl();
 
             /**
-             * -- UniqueDevicesGraph
+             * -- Unique Supply Types
              */
             // Graph12
-            $this->_graphs [] = $proposalGraphs[3];
+            $uniqueSupplyTypes = $this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($this->proposal->getPurchasedDevices()));
+            $highest           = $this->getMaximumSupplyCount($this->getUniquePurchasedMasterDevices($this->proposal->getPurchasedDevices()));
+            $diamond           = count($uniqueSupplyTypes) / $highest;
+
+            $targetUniqueness = $highest * 0.15;
+
+
+            $barGraph = new gchart\gStackedBarChart(600, 160);
+            $barGraph->setHorizontal(true);
+            $barGraph->setVisibleAxes(array('x'));
+            $barGraph->setTitle("Unique Supply Types");
+
+
+            $barGraph->addColors(array("0194D2"));
+            $barGraph->addDataSet(array(0));
+            $barGraph->addColors(array("E21736"));
+            $barGraph->addDataSet(array(0));
+            $barGraph->addColors(array("FFFFFF"));
+            $barGraph->addDataSet(array(15));
+
+            $barGraph->addColors(array("0194D2"));
+            $barGraph->addDataSet(array($targetUniqueness));
+
+
+            $barGraph->setLegend(array(
+                                      "Ideal Supply Uniqueness",
+                                      "Your Supply Uniqueness"
+                                 ));
+            $barGraph->addAxisRange(0, 5, $highest);
+            $barGraph->setDataRange(0, $highest);
+            $barGraph->setBarScale(40, 5);
+            $barGraph->setLegendPosition("t");
+
+            $dotProperties = '@d,E21736,0,.5:' . number_format($diamond, 7) . ',30|';
+            $dotProperties .= '@t' . count($uniqueSupplyTypes) . ',E21736,0,-1:' . number_format($diamond - 0.012, 7) . ',10';
+            $barGraph->setProperty('chm', $dotProperties);
+            $barGraph->addColors(array("0194D2"));
+            $barGraph->setProperty('chxs', '0N*sz0*');
+            $this->_graphs [] = $barGraph->getUrl();
 
             /**
-             * -- UniqueDevicesGraph With Replacements
+             * -- Unique Supply Types With Replacements
              */
-            $uniqueModelArray = array();
-            foreach ($proposal->getPurchasedDevices() as $device)
-            {
-                if ($device->getReplacementMasterDevice() instanceof Proposalgen_Model_MasterDevice)
-                {
-                    $replacementDevice = $device->getReplacementMasterDevice();
-                    if (array_key_exists($replacementDevice->modelName, $uniqueModelArray))
-                    {
-                        $uniqueModelArray [$replacementDevice->modelName] += 1;
-                    }
-                    else
-                    {
-                        $uniqueModelArray [$replacementDevice->modelName] = 1;
-                    }
-                }
-                else
-                {
-                    if (array_key_exists($device->getMasterDevice()->modelName, $uniqueModelArray))
-                    {
-                        $uniqueModelArray [$device->getMasterDevice()->modelName] += 1;
-                    }
-                    else
-                    {
-                        $uniqueModelArray [$device->getMasterDevice()->modelName] = 1;
-                    }
-                }
-            }
-            $uniqueDevicesGraph = new gchart\gPie3DChart(350, 270);
-            $uniqueDevicesGraph->addDataSet($uniqueModelArray);
-            $uniqueDevicesGraph->addColors(array(
-                                                "E21736",
-                                                "b0bb21",
-                                                "5c3f9b",
-                                                "0191d3",
-                                                "f89428",
-                                                "e4858f",
-                                                "fcc223",
-                                                "B3C6FF",
-                                                "ECFFB3",
-                                                "386AFF",
-                                                "FFB3EC",
-                                                "cccccc",
-                                                "00ff00",
-                                                "000000"
-                                           ));
+            $uniqueSupplyTypes = $this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($this->getAllMasterDevicesWithReplacements()));
+            $highest           = $this->getMaximumSupplyCount($this->getUniquePurchasedMasterDevices($this->getAllMasterDevicesWithReplacements()));
+            $diamond           = count($uniqueSupplyTypes) / $highest;
+            $targetUniqueness  = $highest * 0.15;
+
+
+            $barGraph = new gchart\gStackedBarChart(600, 160);
+            $barGraph->setTitle("Unique Supply Types (Optimized)");
+            $barGraph->setHorizontal(true);
+            $barGraph->setVisibleAxes(array('x'));
+            $barGraph->addColors(array("0194D2"));
+            $barGraph->addDataSet(array(0));
+            $barGraph->addColors(array("E21736"));
+            $barGraph->addDataSet(array(0));
+            $barGraph->addColors(array("FFFFFF"));
+            $barGraph->addDataSet(array(15));
+
+            $barGraph->addColors(array("0194D2"));
+            $barGraph->addDataSet(array($targetUniqueness));
+            $barGraph->setLegend(array(
+                                      "Ideal Supply Uniqueness",
+                                      "Your Optimized Supply Uniqueness"
+                                 ));
+            $barGraph->addAxisRange(0, 5, $highest);
+            $barGraph->setDataRange(0, $highest);
+            $barGraph->setBarScale(40, 5);
+            $barGraph->setLegendPosition("t");
+
+            $dotProperties = '@d,E21736,0,.5:' . number_format($diamond, 7) . ',30|';
+            $dotProperties .= '@t' . count($uniqueSupplyTypes) . ',E21736,0,-1:' . number_format($diamond - 0.012, 7) . ',10';
+            $barGraph->setProperty('chm', $dotProperties);
+            $barGraph->addColors(array("0194D2"));
+            $barGraph->setProperty('chxs', $numberValueMarker);
             // Graph13
-            $this->_graphs [] = $uniqueDevicesGraph->getUrl();
+            $this->_graphs [] = $barGraph->getUrl();
+
 
             /**
              * -- Color Capable Devices Graph

@@ -8,7 +8,7 @@ $profitabiltyDevices = $this->profitabilityDevices;
 
 $deviceCount           = count($profitabiltyDevices->kept);
 $totalPurchasedDevices = count($proposal->getPurchasedDevices());
-$section->addTitle($this->translate("Retired Devices ({$deviceCount} of {$totalPurchasedDevices}) "), 2);
+$section->addTitle($this->translate("Acceptable Devices ({$deviceCount} of {$totalPurchasedDevices}) "), 2);
 $section->addText($this->translate('The following devices have been deemed productive and we suggest keeping these devices.'));
 
 // Table with values
@@ -28,8 +28,14 @@ foreach ($profitabiltyDevices->kept as $device)
     $style   = ($this->cycle(array($tcStyle->body->cell1->even, $tcStyle->body->cell1->odd))->next()->current());
 
     $table->addRow($tcStyle->body->rowheight);
-    $table->addCell($tcStyle->col1Width, $style)->addText($device->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-    $table->addCell($tcStyle->col2Width, $style)->addText($device->serialNumber . ' ' . $device->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+
+    $cell = $table->addCell($tcStyle->collWidth, $style);
+    $cell->addText($device->getMasterDevice()->getManufacturer()->fullname, $tcStyle->body->cell1->manufacturerName->fontStyle, $tcStyle->body->cell1->manufacturerName->paragraphStyle);
+    $cell->addText($device->getMasterDevice()->modelName, $tcStyle->body->cell1->modelName->fontStyle, $tcStyle->body->cell1->modelName->paragraphStyle);
+
+    $cell2 = $table->addCell($tcStyle->col2Width, $style);
+    $cell2->addText($device->serialNumber, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+    $cell2->addText($device->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
     $table->addCell($tcStyle->col3Width, $style)->addText(number_format($device->getAverageMonthlyBlackAndWhitePageCount()), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
     $table->addCell($tcStyle->col4Width, $style)->addText(($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 }
@@ -37,11 +43,9 @@ foreach ($profitabiltyDevices->kept as $device)
 $section->addTitle($this->translate('Number of Printing Device Models and Supply Types'), 2);
 $section->addText(sprintf($this->translate('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type. We estimate that %3$s of your printing devices are leased machines, for which supplies are included in your contract. The %4$s remaining machines consist of %5$s different models and use %6$s different supply types. If you hold two of each supply in inventory, you have an estimated $%7$s in operating cash held in printer supplies inventory at any given time.'), number_format($proposal->getPurchasedDeviceCount()), number_format($proposal->getNumberOfUniqueModels()), number_format(count($proposal->getLeasedDevices())), number_format(count($proposal->getPurchasedDevices())), number_format($proposal->getNumberOfUniquePurchasedModels()), number_format($proposal->getNumberOfUniquePurchasedToners()), number_format($proposal->getCashHeldInInventory())));
 $section->addTextBreak();
-$imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
-$imageTable->addRow();
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($this->graphs [12]);
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($this->graphs [13]);
-$section->addTextBreak();
+
+$section->addImage($this->graphs [12]);
+$section->addImage($this->graphs [13]);
 
 $section->addText($this->translate('By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required.
 Office Depot can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.'));

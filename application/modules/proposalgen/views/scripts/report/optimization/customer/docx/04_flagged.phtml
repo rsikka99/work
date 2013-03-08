@@ -32,15 +32,22 @@ foreach ($profitabiltyDevices->flagged as $device)
     $style = ($this->cycle(array($tcStyle->body->cell1->even, $tcStyle->body->cell1->odd))->next()->current());
 
     $table->addRow($tcStyle->body->rowheight);
-    $table->addCell($tcStyle->col1Width, $style)->addText($device->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-    $table->addCell($tcStyle->col2Width, $style)->addText($device->serialNumber . ' ' . $device->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+
+    $cell1 = $table->addCell($tcStyle->collWidth, $style);
+    $cell1->addText($device->getMasterDevice()->getManufacturer()->fullname, $tcStyle->body->cell1->manufacturerName->fontStyle, $tcStyle->body->cell1->manufacturerName->paragraphStyle);
+    $cell1->addText($device->getMasterDevice()->modelName, $tcStyle->body->cell1->modelName->fontStyle, $tcStyle->body->cell1->modelName->paragraphStyle);
+
+    $cell2 = $table->addCell($tcStyle->col2Width, $style);
+    $cell2->addText($device->serialNumber, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+    $cell2->addText($device->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+
     $table->addCell($tcStyle->col3Width, $style)->addText(number_format($device->getAverageMonthlyBlackAndWhitePageCount()), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
     $table->addCell($tcStyle->col4Width, $style)->addText(($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
     $table->addCell($tcStyle->col5Width, $style)->addText($this->currency($device->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->monochromeCostPerPage,array('precision' => 4)), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
     $table->addCell($tcStyle->col6Width, $style)->addText(($isColor) ? $this->currency($device->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->colorCostPerPage,array('precision' => 4)) : 'N/A', $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
     $table->addCell($tcStyle->col7Width, $style)->addText($this->currency($device->calculateMonthlyCost($proposal->getCostPerPageSettingForDealer())), $tcStyle->body->cell7->fontStyle, $tcStyle->body->cell7->paragraphStyle);
 }
-
+$section->addTextBreak();
 $section->addTitle($this->translate('Technology Features and Functionality'), 2);
 $section->addText($this->translate('If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption
 by using a scanner to e-mail documents instead of printing copies for distribution. The following charts show how many of your printing devices have duplex and scanning capabilities:'));

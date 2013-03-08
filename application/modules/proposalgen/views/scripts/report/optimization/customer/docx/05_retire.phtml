@@ -28,13 +28,20 @@ foreach ($profitabiltyDevices->retired as $device)
 {
     $style = ($this->cycle(array($tcStyle->body->cell1->even, $tcStyle->body->cell1->odd))->next()->current());
     $table->addRow($tcStyle->body->rowheight);
-    $table->addCell($tcStyle->col1Width, $style)->addText($device->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-    $table->addCell($tcStyle->col2Width, $style)->addText($device->serialNumber . ' ' . $device->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+
+    $cell = $table->addCell($tcStyle->col1Width, $style);
+    $cell->addText($device->getMasterDevice()->getManufacturer()->fullname, $tcStyle->body->cell1->manufacturerName->fontStyle, $tcStyle->body->cell1->manufacturerName->paragraphStyle);
+    $cell->addText($device->getMasterDevice()->modelName, $tcStyle->body->cell1->modelName->fontStyle, $tcStyle->body->cell1->modelName->paragraphStyle);
+
+    $cell2 = $table->addCell($tcStyle->col2Width, $style);
+    $cell2->addText($device->serialNumber, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+    $cell2->addText($device->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+
     $table->addCell($tcStyle->col3Width, $style)->addText($device->getLifePageCount(), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
     $table->addCell($tcStyle->col4Width, $style)->addText($device->getAge(), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
     $table->addCell($tcStyle->col5Width, $style)->addText(($device->reportsTonerLevels) ? 'Yes' : 'No', $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
 }
-
+$section->addTextBreak();
 $tcStyle = $this->twocenter;
 $imageTable = $section->addTable($tcStyle->tablestyle);
 $imageTable->addRow();

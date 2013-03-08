@@ -3,6 +3,7 @@
 $proposal = $this->proposal;
 /* @var $section PHPWord_Section */
 $section = $this->section;
+$section->addPageBreak();
 /* @var $profitabiltyDevices Proposalgen_Model_Optimization_Customer */
 $profitabiltyDevices = $this->profitabilityDevices;
 
@@ -29,9 +30,19 @@ foreach ($profitabiltyDevices->replaced as $device)
     $style = ($this->cycle(array($tcStyle->body->cell1->even, $tcStyle->body->cell1->odd))->next()->current());
 
     $table->addRow($tcStyle->body->rowheight);
-    $table->addCell($tcStyle->collWidth, $style)->addText($device->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-    $table->addCell($tcStyle->col2Width, $style)->addText($replacementDevice->getFullDeviceName(), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
-    $table->addCell($tcStyle->col3Width, $style)->addText($device->serialNumber . ' ' . $device->ipAddress, $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+    // Device Instance
+    $cell = $table->addCell($tcStyle->collWidth, $style);
+    $cell->addText($device->getMasterDevice()->getManufacturer()->fullname, $tcStyle->body->cell1->manufacturerName->fontStyle, $tcStyle->body->cell1->manufacturerName->paragraphStyle);
+    $cell->addText($device->getMasterDevice()->modelName, $tcStyle->body->cell1->modelName->fontStyle, $tcStyle->body->cell1->modelName->paragraphStyle);
+    // Replacement device
+    $cell = $table->addCell($tcStyle->col2Width, $style);
+    $cell->addText($device->getMasterDevice()->getManufacturer()->fullname, $tcStyle->body->cell2->manufacturerName->fontStyle, $tcStyle->body->cell2->manufacturerName->paragraphStyle);
+    $cell->addText($device->getMasterDevice()->modelName, $tcStyle->body->cell2->modelName->fontStyle, $tcStyle->body->cell2->modelName->paragraphStyle);
+
+    $cell3 = $table->addCell($tcStyle->col3Width, $style);
+    $cell3->addText($device->serialNumber, $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+    $cell3->addText($device->ipAddress, $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+
     $table->addCell($tcStyle->col4Width, $style)->addText($device->getReason(), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
     $table->addCell($tcStyle->col5Width, $style)->addText(number_format($device->getAverageMonthlyBlackAndWhitePageCount()), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
     $table->addCell($tcStyle->col6Width, $style)->addText(($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A', $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);

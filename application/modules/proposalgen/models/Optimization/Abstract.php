@@ -267,9 +267,6 @@ abstract class Proposalgen_Model_Optimization_Abstract
             $this->deviceAges[$ageRank]++;
 
 
-
-
-
             if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
             {
                 $excessDevices []   = $deviceInstance;
@@ -399,6 +396,7 @@ abstract class Proposalgen_Model_Optimization_Abstract
                 }
             }
         }
+
         return $masterDevices;
     }
 
@@ -407,15 +405,15 @@ abstract class Proposalgen_Model_Optimization_Abstract
      * Gets a list of unique toners for a list of master devices
      * Toners users are toners that will be used in the assessment
      *
-     * @param $devices Proposalgen_Model_MasterDevice []
+     * @param $masterDevices Proposalgen_Model_MasterDevice []
      *
      * @return Proposalgen_Model_Toner []
      */
-    protected function getUniqueTonerList ($devices)
+    protected function getUniqueTonerList ($masterDevices)
     {
         $uniqueTonerList = array();
 
-        foreach ($devices as $masterDevices)
+        foreach ($masterDevices as $masterDevices)
         {
             $toners = $masterDevices->getTonersForAssessment();
 
@@ -430,6 +428,41 @@ abstract class Proposalgen_Model_Optimization_Abstract
         }
 
         return $uniqueTonerList;
+    }
+
+
+    /**
+     * Gets the maximum supply devices for the list of master devices provided.
+     *
+     * @param Proposalgen_Model_MasterDevice [] $masterDevices
+     *
+     * @return int
+     */
+    protected function getMaximumSupplyCount ($masterDevices)
+    {
+
+        $maximumSupplyCount = 0;
+        foreach ($masterDevices as $masterDevices)
+        {
+            switch ($masterDevices->tonerConfigId)
+            {
+                case Proposalgen_Model_TonerConfig::BLACK_ONLY:
+                    $maximumSupplyCount += 1;
+                    break;
+                case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED:
+                    $maximumSupplyCount += 4;
+                    break;
+                case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED:
+                    $maximumSupplyCount += 2;
+                    break;
+                case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED:
+                    $maximumSupplyCount += 1;
+                    break;
+
+            }
+        }
+
+        return $maximumSupplyCount;
     }
 
 }
