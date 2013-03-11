@@ -69,9 +69,7 @@ $totalPurchasedDevices = count($proposal->getPurchasedDevices());
             <td><img src="<?php echo $graphs[3]; ?>" /></td>
         </tr>
     </table>
-
     <br/><br/>
-
     <div class="pheader">
         Suggested Replacement Devices <em><?php echo '(' . count($customerOptimization->replaced) . ' of ' . $totalPurchasedDevices .')' ?></em>
     </div>
@@ -100,7 +98,7 @@ $totalPurchasedDevices = count($proposal->getPurchasedDevices());
                 <!-- Replacement Devices -->
                 <td class='deviceName'><?php echo '<em>' . $replacementDevice->getManufacturer()->fullname . '</em><br/><strong>' . $replacementDevice->modelName;?></td>
                 <td><?php echo $deviceInstance->serialNumber . "<br/>" . $deviceInstance->ipAddress; ?> </td>
-                <td><?php echo $deviceInstance->getCustomerReason();?>
+                <td style="text-align: center"><?php echo $deviceInstance->getCustomerReason();?>
                 <!-- Monthly Statistics -->
                 <td><?php echo number_format($deviceInstance->getAverageMonthlyBlackAndWhitePageCount()); ?></td>
                 <td><?php echo ($isColor) ? number_format($deviceInstance->getAverageMonthlyColorPageCount()) : 'N/A'; ?></td>

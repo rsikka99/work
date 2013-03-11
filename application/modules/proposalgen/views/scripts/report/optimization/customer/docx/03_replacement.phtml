@@ -27,7 +27,18 @@ foreach ($profitabiltyDevices->replaced as $device)
 {
     $replacementDevice = $device->getReplacementMasterDevice();
     $isColor           = $device->getMasterDevice()->isColor();
-    $style = ($this->cycle(array($tcStyle->body->cell1->even, $tcStyle->body->cell1->odd))->next()->current());
+    $cycle   = ($this->cycle(array(true, false))->next()->current());
+    if ($cycle)
+    {
+        $ampvStyle = $tcStyle->body->cell5->even;
+        $style     = $tcStyle->body->cell1->even;
+    }
+    else
+    {
+        $ampvStyle = $tcStyle->body->cell5->odd;
+        $style     = $tcStyle->body->cell1->odd;
+    }
+
 
     $table->addRow($tcStyle->body->rowheight);
     // Device Instance
@@ -43,9 +54,9 @@ foreach ($profitabiltyDevices->replaced as $device)
     $cell3->addText($device->serialNumber, $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
     $cell3->addText($device->ipAddress, $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
 
-    $table->addCell($tcStyle->col4Width, $style)->addText($device->getCustomerReason(), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-    $table->addCell($tcStyle->col5Width, $style)->addText(number_format($device->getAverageMonthlyBlackAndWhitePageCount()), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
-    $table->addCell($tcStyle->col6Width, $style)->addText(($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A', $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
+    $table->addCell($tcStyle->col4Width, $ampvStyle)->addText($device->getCustomerReason(), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+    $table->addCell($tcStyle->col5Width, $ampvStyle)->addText(number_format($device->getAverageMonthlyBlackAndWhitePageCount()), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
+    $table->addCell($tcStyle->col6Width, $ampvStyle)->addText(($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A', $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
 }
 
 $section->addTextBreak();

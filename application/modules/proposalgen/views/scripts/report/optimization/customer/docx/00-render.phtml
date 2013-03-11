@@ -19,36 +19,26 @@ $section          = $phpWord->createSection(array(
                                                  'marginTop'    => 375,
                                                  'marginBottom' => 375
                                             ));
-
 $titlepageSection = $section;
 
 /**
  * Paragraph styles
  */
-$phpWord->addParagraphStyle('titlepageHeaderParagraph', array(
-                                                             'spaceAfter' => 200
-                                                        ));
-
-$phpWord->addParagraphStyle('nospacing', array(
-                                              'spaceBefore' => 0,
-                                              'spaceAfter'  => 0
-                                         ));
+$phpWord->addParagraphStyle('titlepageHeaderParagraph', array('spaceAfter' => 200));
+$phpWord->addParagraphStyle('nospacing', array('spaceBefore' => 0, 'spaceAfter' => 0));
 
 $phpWord->addParagraphStyle('nospacing_rightalign', array(
                                                          'align'       => 'right',
                                                          'spaceBefore' => 0,
                                                          'spaceAfter'  => 0
                                                     ));
-
 $phpWord->addParagraphStyle('nospacing_centeralign', array(
                                                           'align'       => 'center',
                                                           'spaceBefore' => 0,
                                                           'spaceAfter'  => 0
                                                      ));
 
-$phpWord->addParagraphStyle('rightalign', array(
-                                               'align' => 'right'
-                                          ));
+$phpWord->addParagraphStyle('rightalign', array('align' => 'right'));
 
 $phpWord->addParagraphStyle('gradeParagraph', array(
                                                    'align'       => 'center',
@@ -61,8 +51,6 @@ $phpWord->addParagraphStyle('savingsParagraph', array(
                                                      'spaceBefore' => 0,
                                                      'spaceAfter'  => 0
                                                 ));
-
-
 /**
  * Header/Title Styles
  */
@@ -208,11 +196,11 @@ $odd_color        = "FCFCFC";
 $footer_color     = "b8cce3";
 $highlight_color  = "ebc7a4";
 
-$standard_cell                 = (object)array(
+$standard_cell = (object)array(
     "even"           => array(
         "bgColor"          => $even_color,
         "borderRightColor" => 'FFFFFF',
-        "borderRightSize"  => 20
+        "borderRightSize"  => 20,
     ),
     "odd"            => array(
         "bgColor"          => $odd_color,
@@ -225,19 +213,57 @@ $standard_cell                 = (object)array(
         'align'      => 'right'
     )
 );
-$standard_cell_left            = (object)array(
+
+$standard_cell_vcenter = (object)array(
     "even"           => array(
         "bgColor"          => $even_color,
         "borderRightColor" => 'FFFFFF',
-        "borderRightSize"  => 20
+        "borderRightSize"  => 20,
+        "valign"           => 'center'
     ),
     "odd"            => array(
         "bgColor"          => $odd_color,
         "borderRightColor" => 'FFFFFF',
-        "borderRightSize"  => 20
+        "borderRightSize"  => 20,
+        "valign"           => 'center'
     ),
     "fontStyle"      => null,
     "paragraphStyle" => array(
+        'spaceAfter' => 0,
+        'align'      => 'center',
+    )
+);
+
+$standard_cell_vcenter_no_right_border = (object)array(
+    "even"           => array(
+        "bgColor" => $even_color,
+        "valign"  => 'center'
+    ),
+    "odd"            => array(
+        "bgColor" => $odd_color,
+        "valign"  => 'center'
+    ),
+    "fontStyle"      => null,
+    "paragraphStyle" => array(
+        'spaceAfter' => 0,
+        'align'      => 'center',
+    )
+);
+
+
+$standard_cell_left = (object)array(
+    "even"             => array(
+        "bgColor"          => $even_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20
+    ),
+    "odd"              => array(
+        "bgColor"          => $odd_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20
+    ),
+    "fontStyle"        => null,
+    "paragraphStyle"   => array(
         'spaceAfter' => 0,
         'align'      => 'left'
     ),
@@ -256,6 +282,7 @@ $standard_cell_left            = (object)array(
         ),
     ),
 );
+
 $standard_cell_no_right_border = (object)array(
     "even"           => array(
         "bgColor" => $even_color,
@@ -269,7 +296,8 @@ $standard_cell_no_right_border = (object)array(
         'align'      => 'right'
     )
 );
-$standard_header               = (object)array(
+
+$standard_header = (object)array(
     "cellStyle"      => array(
         'bgColor' => $header_color
     ),
@@ -300,9 +328,9 @@ $suggestedDevices = (object)array(
         "cell1"     => $standard_cell_left,
         "cell2"     => $standard_cell_left,
         "cell3"     => $standard_cell,
-        "cell4"     => $standard_cell,
-        "cell5"     => $standard_cell,
-        "cell6"     => $standard_cell_no_right_border,
+        "cell4"     => $standard_cell_vcenter,
+        "cell5"     => $standard_cell_vcenter,
+        "cell6"     => $standard_cell_vcenter_no_right_border
     ),
     "header"     => (object)array(
         'header'     => $standard_header,
@@ -327,11 +355,11 @@ $flaggedDevices   = (object)array(
         "rowheight" => null,
         "cell1"     => $standard_cell_left,
         "cell2"     => $standard_cell_left,
-        "cell3"     => $standard_cell,
-        "cell4"     => $standard_cell,
-        "cell5"     => $standard_cell,
-        "cell6"     => $standard_cell,
-        "cell7"     => $standard_cell_no_right_border,
+        "cell3"     => $standard_cell_vcenter,
+        "cell4"     => $standard_cell_vcenter,
+        "cell5"     => $standard_cell_vcenter,
+        "cell6"     => $standard_cell_vcenter,
+        "cell7"     => $standard_cell_vcenter_no_right_border,
     ),
     "header"     => (object)array(
         'header'     => $standard_header,
@@ -354,9 +382,9 @@ $retiredDevices   = (object)array(
         "rowheight" => null,
         "cell1"     => $standard_cell_left,
         "cell2"     => $standard_cell_left,
-        "cell3"     => $standard_cell,
-        "cell4"     => $standard_cell,
-        "cell5"     => $standard_cell_no_right_border,
+        "cell3"     => $standard_cell_vcenter,
+        "cell4"     => $standard_cell_vcenter,
+        "cell5"     => $standard_cell_vcenter_no_right_border,
     ),
     "header"     => (object)array(
         'header'     => $standard_header,
@@ -379,8 +407,8 @@ $acceptableDevices = (object)array(
         "rowheight" => null,
         "cell1"     => $standard_cell_left,
         "cell2"     => $standard_cell_left,
-        "cell3"     => $standard_cell,
-        "cell4"     => $standard_cell_no_right_border,
+        "cell3"     => $standard_cell_vcenter,
+        "cell4"     => $standard_cell_vcenter_no_right_border,
     ),
     "header"     => (object)array(
         'header'     => $standard_header,

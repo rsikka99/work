@@ -26,7 +26,18 @@ $table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addTe
 // Begin with data rows
 foreach ($profitabiltyDevices->retired as $device)
 {
-    $style = ($this->cycle(array($tcStyle->body->cell1->even, $tcStyle->body->cell1->odd))->next()->current());
+    $cycle   = ($this->cycle(array(true, false))->next()->current());
+    if ($cycle)
+    {
+        $ampvStyle = $tcStyle->body->cell3->even;
+        $style     = $tcStyle->body->cell1->even;
+    }
+    else
+    {
+        $ampvStyle = $tcStyle->body->cell3->odd;
+        $style     = $tcStyle->body->cell1->odd;
+    }
+
     $table->addRow($tcStyle->body->rowheight);
 
     $cell = $table->addCell($tcStyle->col1Width, $style);
@@ -37,9 +48,9 @@ foreach ($profitabiltyDevices->retired as $device)
     $cell2->addText($device->serialNumber, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
     $cell2->addText($device->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 
-    $table->addCell($tcStyle->col3Width, $style)->addText($device->getLifePageCount(), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-    $table->addCell($tcStyle->col4Width, $style)->addText($device->getAge(), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-    $table->addCell($tcStyle->col5Width, $style)->addText(($device->reportsTonerLevels) ? 'Yes' : 'No', $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
+    $table->addCell($tcStyle->col3Width, $ampvStyle)->addText($device->getLifePageCount(), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+    $table->addCell($tcStyle->col4Width, $ampvStyle)->addText($device->getAge(), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+    $table->addCell($tcStyle->col5Width, $ampvStyle)->addText(($device->reportsTonerLevels) ? 'Yes' : 'No', $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
 }
 $section->addTextBreak();
 $tcStyle = $this->twocenter;
