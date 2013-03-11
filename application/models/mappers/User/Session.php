@@ -4,7 +4,7 @@ class Application_Model_Mapper_User_Session extends My_Model_Mapper_Abstract
     /*
      * Column Definitions
      */
-    public $col_id = 'id';
+    public $col_sessionId = 'sessionId';
     public $col_userId = 'userId';
 
     /**
@@ -40,12 +40,12 @@ class Application_Model_Mapper_User_Session extends My_Model_Mapper_Abstract
         $data = $this->unsetNullValues($object->toArray());
 
         // Insert the data
-        $this->getDbTable()->insert($data);
+        $data = $this->getDbTable()->insert($data);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
 
-        return $data->id;
+        return $data;
     }
 
     /**
@@ -64,12 +64,12 @@ class Application_Model_Mapper_User_Session extends My_Model_Mapper_Abstract
 
         if ($primaryKey === null)
         {
-            $primaryKey = $data [$this->col_id];
+            $primaryKey = $data [$this->col_sessionId];
         }
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_id} = ?" => $primaryKey
+                                                                "{$this->col_sessionId} = ?" => $primaryKey
                                                            ));
 
         // Save the object into the cache
@@ -92,13 +92,13 @@ class Application_Model_Mapper_User_Session extends My_Model_Mapper_Abstract
         if ($object instanceof Application_Model_User_Session)
         {
             $whereClause = array(
-                "{$this->col_id} = ?" => $object->id
+                "{$this->col_sessionId} = ?" => $object->sessionId
             );
         }
         else
         {
             $whereClause = array(
-                "{$this->col_id} = ?" => $object
+                "{$this->col_sessionId} = ?" => $object
             );
         }
 
@@ -218,7 +218,7 @@ class Application_Model_Mapper_User_Session extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array(
-            "{$this->col_id} = ?" => $id
+            "{$this->col_sessionId} = ?" => $id
         );
     }
 
@@ -229,6 +229,6 @@ class Application_Model_Mapper_User_Session extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return $object->id;
+        return $object->sessionId;
     }
 }
