@@ -72,7 +72,7 @@ class Default_AuthController extends Tangent_Controller_Action
                         $userSessions  = $sessionMapper->fetchSessionsByUserId($userInfo->id);
                         foreach ($userSessions as $userSession)
                         {
-                            if ($userSession->id != $currentSessionId)
+                            if ($userSession->sessionId != $currentSessionId)
                             {
                                 //@unlink($config->resources->session->save_path . '/sess_' . $session->SessionId);
                                 $sessionMapper->delete($userSession);
@@ -81,7 +81,7 @@ class Default_AuthController extends Tangent_Controller_Action
 
                         $userSession = $sessionMapper->find($currentSessionId);
                         // Do we have a session id that matches our current session
-                        if($userSession->id == $currentSessionId)
+                        if($userSession->sessionId == $currentSessionId)
                         {
                           // If it's a new userId with this current session, update the userId for this sessionId
                           if($userInfo->id != $userSession->userId)
@@ -94,7 +94,7 @@ class Default_AuthController extends Tangent_Controller_Action
                             // Create a new sessions for the new user
                             $userSession         = new Application_Model_User_Session();
                             $userSession->userId = $userInfo->id;
-                            $userSession->id     = $currentSessionId;
+                            $userSession->sessionId     = $currentSessionId;
                             $sessionMapper->insert($userSession);
                         }
                     }

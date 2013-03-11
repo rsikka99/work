@@ -5,7 +5,7 @@ class Application_Model_User_Session extends My_Model_Abstract
      * Id of the session
      * @var int
      */
-    public $id;
+    public $sessionId;
 
     /**
      * User id from the represent and id of user
@@ -22,9 +22,9 @@ class Application_Model_User_Session extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        if (isset($params->id) && !is_null($params->id))
+        if (isset($params->sessionId) && !is_null($params->sessionId))
         {
-            $this->id = $params->id;
+            $this->sessionId = $params->sessionId;
         }
         if (isset($params->userId) && !is_null($params->userId))
         {
@@ -38,7 +38,7 @@ class Application_Model_User_Session extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "id" => $this->id,
+            "sessionId" => $this->sessionId,
             "userId" => $this->userId,
         );
     }
