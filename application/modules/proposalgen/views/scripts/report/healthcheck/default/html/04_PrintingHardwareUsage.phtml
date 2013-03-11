@@ -134,7 +134,7 @@ Ideally, you should have the minimum amount of printing hardware required to mee
     <tbody>
         <?php
         $ctr = 0;
-        foreach ($proposal->getMonthlyHighCostColorDevices($proposal->getCostPerPageSettingForCustomer()) as $deviceInstance): ?>
+        foreach ($proposal->getMonthlyHighCostPurchasedColorDevices($proposal->getCostPerPageSettingForCustomer()) as $deviceInstance): ?>
             <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName());?>
         <tr>
             <td><?php echo $deviceName?>

@@ -367,13 +367,12 @@ class Proposalgen_Model_Optimization_Customer extends Proposalgen_Model_Optimiza
              * -- Unique Supply Types
              */
             // Graph12
+
             $uniqueSupplyTypes = $this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($this->proposal->getPurchasedDevices()));
             $highest           = $this->getMaximumSupplyCount($this->getUniquePurchasedMasterDevices($this->proposal->getPurchasedDevices()));
             $diamond           = count($uniqueSupplyTypes) / $highest;
 
             $targetUniqueness = $highest * 0.15;
-
-
             $barGraph = new gchart\gStackedBarChart(600, 160);
             $barGraph->setHorizontal(true);
             $barGraph->setVisibleAxes(array('x'));
@@ -395,7 +394,7 @@ class Proposalgen_Model_Optimization_Customer extends Proposalgen_Model_Optimiza
                                       "Ideal Supply Uniqueness",
                                       "Your Supply Uniqueness"
                                  ));
-            $barGraph->addAxisRange(0, 5, $highest);
+            $barGraph->addAxisRange(0, 0, $highest, 5);
             $barGraph->setDataRange(0, $highest);
             $barGraph->setBarScale(40, 5);
             $barGraph->setLegendPosition("t");
@@ -433,7 +432,7 @@ class Proposalgen_Model_Optimization_Customer extends Proposalgen_Model_Optimiza
                                       "Ideal Supply Uniqueness",
                                       "Your Optimized Supply Uniqueness"
                                  ));
-            $barGraph->addAxisRange(0, 5, $highest);
+            $barGraph->addAxisRange(0, 0, $highest, 5);
             $barGraph->setDataRange(0, $highest);
             $barGraph->setBarScale(40, 5);
             $barGraph->setLegendPosition("t");

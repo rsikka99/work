@@ -40,12 +40,14 @@ foreach ($profitabiltyDevices->kept as $device)
     $table->addCell($tcStyle->col4Width, $style)->addText(($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 }
 
+$section->addTextBreak();
 $section->addTitle($this->translate('Number of Printing Device Models and Supply Types'), 2);
 $section->addText(sprintf($this->translate('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type. We estimate that %3$s of your printing devices are leased machines, for which supplies are included in your contract. The %4$s remaining machines consist of %5$s different models and use %6$s different supply types. If you hold two of each supply in inventory, you have an estimated $%7$s in operating cash held in printer supplies inventory at any given time.'), number_format($proposal->getPurchasedDeviceCount()), number_format($proposal->getNumberOfUniqueModels()), number_format(count($proposal->getLeasedDevices())), number_format(count($proposal->getPurchasedDevices())), number_format($proposal->getNumberOfUniquePurchasedModels()), number_format($proposal->getNumberOfUniquePurchasedToners()), number_format($proposal->getCashHeldInInventory())));
 $section->addTextBreak();
 
-$section->addImage($this->graphs [12]);
-$section->addImage($this->graphs [13]);
+$section->addImage($this->graphs [12], array('align' => 'center'));
+$section->addImage($this->graphs [13], array('align' => 'center'));
+$section->addTextBreak();
 
 $section->addText($this->translate('By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required.
 Office Depot can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.'));
@@ -55,8 +57,9 @@ $section->addText(sprintf($this->translate('You currently have %1$s color printi
 
 $section->addText($this->translate('Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your
 company\'s professional image, improve comprehension and increase readership. Office Depot can help you track your color printing and provide low-cost color hardware options.'));
-$imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
+
+$tcStyle = $this->twocenter;
+$imageTable = $section->addTable($tcStyle->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($this->graphs [14]);
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($this->graphs [15]);
-$imageTable->addRow();
+$imageTable->addCell($tcStyle->col1Width)->addImage($this->graphs [14], $tcStyle->image->cell1);
+$imageTable->addCell($tcStyle->col2Width)->addImage($this->graphs [15], $tcStyle->image->cell2);

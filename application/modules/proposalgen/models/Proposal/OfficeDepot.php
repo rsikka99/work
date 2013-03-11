@@ -154,6 +154,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     protected $_numberOfDevicesNotReportingTonerLevels;
     protected $_numberOfCopyCapableDevices;
 
+    public $highCostPurchasedDevices;
+
     /**
      * @param Proposalgen_Model_Report $report
      */
@@ -1251,13 +1253,15 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     }
 
     /**
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
      * @return Proposalgen_Model_DeviceInstance[]
      */
     public function getMonthlyHighCostColorDevices (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
     {
         if (!isset($this->HighCostDevices))
         {
-            $deviceArray = $this->getDevices()->purchasedDeviceInstances;
+            $deviceArray = $this->getDevices()->allIncludedDeviceInstances;
             $costArray   = array();
             /**@var $value Proposalgen_Model_DeviceInstance */
             foreach ($deviceArray as $key => $deviceInstance)
@@ -1283,7 +1287,40 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         return $this->HighCostDevices;
     }
 
+
+    public function getMonthlyHighCostPurchasedDevice (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    {
+        if (!isset($this->highCostPurchasedDevices))
+        {
+            $deviceArray = $this->getPurchasedDevices();
+            $costArray   = array();
+            /**@var $value Proposalgen_Model_DeviceInstance */
+            foreach ($deviceArray as $key => $deviceInstance)
+            {
+                $costArray[] = array($key, ($deviceInstance->getAverageMonthlyColorPageCount() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage) + ($deviceInstance->getAverageMonthlyBlackAndWhitePageCount() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage));
+            }
+
+            usort($costArray, array(
+                                   $this,
+                                   "descendingSortDevicesByColorCost"
+                              ));
+            $highCostDevices = array();
+
+            foreach ($costArray as $costs)
+            {
+                $highCostDevices[] = $deviceArray[$costs[0]];
+            }
+
+            $this->highCostPurchasedDevices = $highCostDevices;
+        }
+
+        return $this->highCostPurchasedDevices;
+    }
+
+
     /**
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
      * @return Proposalgen_Model_DeviceInstance[]
      */
     public function getMonthlyHighCostPurchasedColorDevices (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
@@ -1317,6 +1354,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     }
 
     /**
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
      * @return Proposalgen_Model_DeviceInstance[]
      */
     public function getMonthlyHighCostMonochromeDevices (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)

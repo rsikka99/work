@@ -188,7 +188,7 @@ abstract class Proposalgen_Model_Optimization_Abstract
 
         // Go through each purchase devices that rank it's classifications
         /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
-        foreach ($proposal->getPurchasedDevices() as $deviceInstance)
+        foreach ($proposal->getMonthlyHighCostPurchasedDevice($proposal->getCostPerPageSettingForDealer()) as $deviceInstance)
         {
             if ($deviceInstance->getMasterDevice()->isCopier)
             {
@@ -341,16 +341,14 @@ abstract class Proposalgen_Model_Optimization_Abstract
         {
             foreach ($devices as $deviceInstance)
             {
-                if ($deviceInstance->getAction() !== Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
+                $masterDeviceModel = $deviceInstance->getMasterDevice();
+                // Does the master device exist in the array
+                // if not add in it.
+                if (!in_array($masterDeviceModel, $masterDeviceList))
                 {
-                    $masterDeviceModel = $deviceInstance->getMasterDevice();
-                    // Does the master device exist in the array
-                    // if not add in it.
-                    if (!in_array($masterDeviceModel, $masterDeviceList))
-                    {
-                        $masterDeviceList [] = $masterDeviceModel;
-                    }
+                    $masterDeviceList [] = $masterDeviceModel;
                 }
+
             }
         }
         else if ($devices[0] instanceof Proposalgen_Model_MasterDevice)
