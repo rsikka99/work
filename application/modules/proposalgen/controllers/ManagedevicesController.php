@@ -1186,14 +1186,24 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
                                                 $deviceInstance = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($deviceSplitIds[0]);
 
+                                                // If we have a model id then we can add a matchup for it
                                                 if ($deviceInstance->getRmsUploadRow()->rmsModelId)
                                                 {
-                                                    $rmsMasterMatchUp                 = new Proposalgen_Model_Rms_Master_Matchup();
-                                                    $rmsMasterMatchUp->rmsProviderId  = $deviceInstance->getRmsUploadRow()->rmsProviderId;
-                                                    $rmsMasterMatchUp->rmsModelId     = $deviceInstance->getRmsUploadRow()->rmsModelId;
-                                                    $rmsMasterMatchUp->masterDeviceId = $master_device_id;
-                                                    Proposalgen_Model_Mapper_Rms_Master_Matchup::getInstance()->insert($rmsMasterMatchUp);
+                                                    $rmsMasterMatchUp = Proposalgen_Model_Mapper_Rms_Master_Matchup::getInstance()->find(array($deviceInstance->getRmsUploadRow()->rmsProviderId, $deviceInstance->getRmsUploadRow()->rmsModelId));
+                                                    if (!$rmsMasterMatchUp instanceof Proposalgen_Model_Rms_Master_Matchup)
+                                                    {
+                                                        /**
+                                                         * We only add a matchup if it did not exist before.
+                                                         */
+                                                        $rmsMasterMatchUp                 = new Proposalgen_Model_Rms_Master_Matchup();
+                                                        $rmsMasterMatchUp->rmsProviderId  = $deviceInstance->getRmsUploadRow()->rmsProviderId;
+                                                        $rmsMasterMatchUp->rmsModelId     = $deviceInstance->getRmsUploadRow()->rmsModelId;
+                                                        $rmsMasterMatchUp->masterDeviceId = $master_device_id;
+                                                        Proposalgen_Model_Mapper_Rms_Master_Matchup::getInstance()->insert($rmsMasterMatchUp);
+                                                    }
                                                 }
+
+
                                                 foreach ($deviceSplitIds as $deviceInstanceId)
                                                 {
                                                     $deviceInstance                               = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($deviceInstanceId);
