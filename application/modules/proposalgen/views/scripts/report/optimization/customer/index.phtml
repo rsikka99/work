@@ -95,13 +95,12 @@ $totalPurchasedDevices = count($proposal->getPurchasedDevices());
         $replacementDevice = $deviceInstance->getReplacementMasterDevice();
         $isColor = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
         ?>
-
         <tr>
                 <td class='deviceName'><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/>';?></td>
                 <!-- Replacement Devices -->
                 <td class='deviceName'><?php echo '<em>' . $replacementDevice->getManufacturer()->fullname . '</em><br/><strong>' . $replacementDevice->modelName;?></td>
                 <td><?php echo $deviceInstance->serialNumber . "<br/>" . $deviceInstance->ipAddress; ?> </td>
-                <td><?php echo $deviceInstance->getReason();?>
+                <td><?php echo $deviceInstance->getCustomerReason();?>
                 <!-- Monthly Statistics -->
                 <td><?php echo number_format($deviceInstance->getAverageMonthlyBlackAndWhitePageCount()); ?></td>
                 <td><?php echo ($isColor) ? number_format($deviceInstance->getAverageMonthlyColorPageCount()) : 'N/A'; ?></td>

@@ -43,7 +43,7 @@ foreach ($profitabiltyDevices->replaced as $device)
     $cell3->addText($device->serialNumber, $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
     $cell3->addText($device->ipAddress, $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
 
-    $table->addCell($tcStyle->col4Width, $style)->addText($device->getReason(), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+    $table->addCell($tcStyle->col4Width, $style)->addText($device->getCustomerReason(), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
     $table->addCell($tcStyle->col5Width, $style)->addText(number_format($device->getAverageMonthlyBlackAndWhitePageCount()), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
     $table->addCell($tcStyle->col6Width, $style)->addText(($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A', $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
 }

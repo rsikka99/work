@@ -5,16 +5,16 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /*
      *
         */
-    const ACTION_KEEP = 'Keep';
+    const ACTION_KEEP    = 'Keep';
     const ACTION_REPLACE = 'Replace';
-    const ACTION_RETIRE = 'Retire';
+    const ACTION_RETIRE  = 'Retire';
 
     /*
      *
      */
-    const RETIREMENT_AGE = 10;
-    const RETIREMENT_MAXPAGECOUNT = 500;
-    const REPLACEMENT_AGE = 10;
+    const RETIREMENT_AGE           = 10;
+    const RETIREMENT_MAXPAGECOUNT  = 500;
+    const REPLACEMENT_AGE          = 10;
     const REPLACEMENT_MINPAGECOUNT = 500;
     /**
      * An array used to determine how many hours a device is running based on its average volume per day
@@ -307,6 +307,20 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * @var string
      */
     public $_exclusionReason;
+
+    /**
+     * The reason why we are replacing a device.
+     *
+     * @var string
+     */
+    public $_reason;
+
+    /**
+     * The reason why we are replacing a device based on a customer report.
+     *
+     * @var string
+     */
+    public $_customerReason;
 
     /**
      * @var bool
@@ -1061,6 +1075,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 
     /**
      * @param $monthlyTotalCost
+     *
      * @return float
      */
     public function getMonthlyRatePercentage ($monthlyTotalCost)
@@ -1075,10 +1090,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      *
      * @return float
      */
-    public function getLeasedMonthlyRate($monthlyLeasePayment, $monochromeCostPerPage, $colorCostPerPage)
+    public function getLeasedMonthlyRate ($monthlyLeasePayment, $monochromeCostPerPage, $colorCostPerPage)
     {
         return $monthlyLeasePayment + ($monochromeCostPerPage * $this->getAverageMonthlyBlackAndWhitePageCount()) + ($colorCostPerPage * $this->getAverageMonthlyColorPageCount());
     }
+
     /**
      * @param $monthlyLeasePayment
      * @param $monochromeCostPerPage
@@ -1087,9 +1103,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      *
      * @return float
      */
-    public function getLeasedMonthlyRatePercentage($monthlyLeasePayment, $monochromeCostPerPage, $colorCostPerPage, $totalMonthlyCost)
+    public function getLeasedMonthlyRatePercentage ($monthlyLeasePayment, $monochromeCostPerPage, $colorCostPerPage, $totalMonthlyCost)
     {
-        return ($this->getLeasedMonthlyRate($monthlyLeasePayment,$monochromeCostPerPage,$colorCostPerPage) / $totalMonthlyCost) * 100;
+        return ($this->getLeasedMonthlyRate($monthlyLeasePayment, $monochromeCostPerPage, $colorCostPerPage) / $totalMonthlyCost) * 100;
     }
 
     /**
@@ -1232,7 +1248,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function getReplacementMasterDevice ()
     {
-        if($this->id == 183)
+        if ($this->id == 183)
         {
             $blah = 33;
         }
@@ -1316,7 +1332,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_reason))
         {
-            $this->_reason = "Okay. ";
+            $this->_reason = "Okay.";
 
             if ($this->getReplacementMasterDevice())
             {
@@ -1333,6 +1349,64 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         }
 
         return $this->_reason;
+    }
+
+    /**
+     * Gets the reason for the customer replacement
+     *
+     * @return string
+     */
+    public function getCustomerReason ()
+    {
+        if (!isset($this->_customerReason))
+        {
+            $replacementDevice          = $this->getReplacementMasterDevice();
+            $deviceInstanceMasterDevice = $this->getMasterDevice();
+            // $newFeatures is used to store all of the new features of the new device
+            $newFeatures = array();
+
+            $this->_customerReason = "";
+
+            if ($deviceInstanceMasterDevice instanceof Proposalgen_Model_MasterDevice)
+            {
+                if (!$deviceInstanceMasterDevice->reportsTonerLevels && $replacementDevice->reportsTonerLevels)
+                {
+                    $newFeatures [] = "JIT compatibility";
+                }
+                if (!$deviceInstanceMasterDevice->isCopier && $replacementDevice->isCopier || !$deviceInstanceMasterDevice->isScanner && $replacementDevice->isScanner)
+                {
+                    $newFeatures [] = "copying / scanning";
+                }
+                if (!$deviceInstanceMasterDevice->isDuplex && $replacementDevice->isDuplex)
+                {
+                    $newFeatures [] = "duplex capabilities";
+                }
+                if (!$deviceInstanceMasterDevice->isColor() && $replacementDevice->isColor())
+                {
+                    $newFeatures [] = "color compatibility";
+                }
+
+                if (empty($newFeatures))
+                {
+                    $this->_customerReason = "Device has a high cost per page.";
+                }
+                else
+                {
+                    $this->_customerReason = "Replacement device adds " . implode(", ", $newFeatures) . ". ";
+
+                    $deviceAgeDifference = $deviceInstanceMasterDevice->getAge() - $replacementDevice->getAge();
+                    if ($deviceAgeDifference > 5)
+                    {
+                        $this->_customerReason .= "Device was at least 5+ years old.  Replaced with a newer device to lessen breakdowns.";
+                    }
+
+                }
+            }
+        }
+
+
+
+        return $this->_customerReason;
     }
 
     /*****************************************************
@@ -1402,13 +1476,15 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 
         return $reportsTonerLevels;
     }
+
     /**
      * Calculates the monthly cost for this instance
      *
      * @param Application_Model_CostPerPageSetting $costPerPageSetting
      *            The settings to use when calculating cost per page
-     * @param Application_Model_MasterDevice $masterDevice
+     * @param Application_Model_MasterDevice       $masterDevice
      *            The master device to use
+     *
      * @return number
      */
     public function calculateMonthlyCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null)
@@ -1421,13 +1497,15 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      *
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *            The setting used to calculate cost per page
-     * @param Proposalgen_Model_MasterDevice $masterDevice
+     * @param Proposalgen_Model_MasterDevice       $masterDevice
      *            the master device to us
+     *
      * @return number
      */
     public function calculateMonthlyMonoCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null)
     {
         $monoCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->monochromeCostPerPage;
+
         return $monoCostPerPage * $this->getAverageMonthlyBlackAndWhitePageCount();
     }
 
@@ -1436,13 +1514,15 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      *
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *            the setting used to calculate cost per page
-     * @param Proposalgen_Model_MasterDevice $masterDevice
+     * @param Proposalgen_Model_MasterDevice       $masterDevice
      *            the master device to use, or null for current instance of device
+     *
      * @return number
      */
     public function calculateMonthlyColorCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null)
     {
         $colorCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->colorCostPerPage;
+
         return $colorCostPerPage * $this->getAverageMonthlyColorPageCount();
     }
 
