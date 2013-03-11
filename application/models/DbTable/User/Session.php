@@ -2,5 +2,5 @@
 class Application_Model_DbTable_User_Session extends Zend_Db_Table_Abstract
 {
     protected $_name = 'user_sessions';
-    protected $_primary = 'id';
+    protected $_primary = 'sessionId';
 }
