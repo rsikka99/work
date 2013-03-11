@@ -10,14 +10,14 @@
             <order>999991</order>
             <pages>
                 <quotegenmanagement>
-                    <label>Sellable Device Administration</label>
+                    <label>Hardware Quote Devices</label>
                     <module>hardwarelibrary</module>
                     <controller>quotegen_index</controller>
                     <action>index</action>
                     <class>dropdown</class>
                     <pages>
                         <viewalldevices>
-                            <label>All Sellable Devices</label>
+                            <label>All Devices</label>
                             <module>quotegen</module>
                             <controller>devicesetup</controller>
                             <action>index</action>
