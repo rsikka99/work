@@ -68,34 +68,48 @@ class Default_AuthController extends Tangent_Controller_Action
                     {
                         $currentSessionId = @session_id();
                         // Get all the sessions attached to current user signed in
-                        $sessionMapper = Application_Model_Mapper_User_Session::getInstance();
-                        $userSessions  = $sessionMapper->fetchSessionsByUserId($userInfo->id);
+                        $userSessionMapper = Application_Model_Mapper_User_Session::getInstance();
+                        $sessionMapper     = new Application_Model_DbTable_Session();
+                        $config            = Zend_Registry::get('config');
+
+                        $userSessions = $userSessionMapper->fetchSessionsByUserId($userInfo->id);
                         foreach ($userSessions as $userSession)
                         {
                             if ($userSession->sessionId != $currentSessionId)
                             {
-                                //@unlink($config->resources->session->save_path . '/sess_' . $session->SessionId);
-                                $sessionMapper->delete($userSession);
+                                // If we are saving the session to the database or to the file system,
+                                if ($config->resources->session->saveHandler->class == "Zend_Session_SaveHandler_DbTable")
+                                {
+                                    $sessionMapper->deleteSession($userSession->sessionId);
+                                }
+                                else
+                                {
+                                    if (file_exists($config->resources->session->save_path . '/sess_' . $userSession->sessionId))
+                                    {
+                                        @unlink($config->resources->session->save_path . '/sess_' . $userSession->sessionId);
+                                    }
+                                }
+                                $userSessionMapper->delete($userSession);
                             }
                         }
 
-                        $userSession = $sessionMapper->find($currentSessionId);
+                        $userSession = $userSessionMapper->find($currentSessionId);
                         // Do we have a session id that matches our current session
-                        if($userSession->sessionId == $currentSessionId)
+                        if ($userSession->sessionId == $currentSessionId)
                         {
-                          // If it's a new userId with this current session, update the userId for this sessionId
-                          if($userInfo->id != $userSession->userId)
-                          {
-                                $sessionMapper->save($userSession);
-                          }
+                            // If it's a new userId with this current session, update the userId for this sessionId
+                            if ($userInfo->id != $userSession->userId)
+                            {
+                                $userSessionMapper->save($userSession);
+                            }
                         }
                         else
                         {
                             // Create a new sessions for the new user
-                            $userSession         = new Application_Model_User_Session();
-                            $userSession->userId = $userInfo->id;
-                            $userSession->sessionId     = $currentSessionId;
-                            $sessionMapper->insert($userSession);
+                            $userSession            = new Application_Model_User_Session();
+                            $userSession->userId    = $userInfo->id;
+                            $userSession->sessionId = $currentSessionId;
+                            $userSessionMapper->insert($userSession);
                         }
                     }
                     catch (Exception $e)
