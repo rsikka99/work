@@ -73,9 +73,9 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
             ->setDescription($this->currency->getSymbol())
             ->setAllowEmpty(false)
             ->addValidator(new Custom_Validate_FieldDependsOnValue('toner_cost_radio', 'exact', array(
-                                                                                                                       new Zend_Validate_NotEmpty(),
-                                                                                                                       new Zend_Validate_Float()
-                                                                                                                  )), true);
+                                                                                                     new Zend_Validate_NotEmpty(),
+                                                                                                     new Zend_Validate_Float()
+                                                                                                )), true);
 
         $tonerQst = "How much did you spend last year on ink and toner for your printer fleet (excluding the cost of leased copiers)?";
         $toner_cost->setLabel($tonerQst);
@@ -96,9 +96,9 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
             ->setDescription($this->currency->getSymbol())
             ->setAllowEmpty(false)
             ->addValidator(new Custom_Validate_FieldDependsOnValue('labor_cost_radio', 'exact', array(
-                                                                                                                       new Zend_Validate_NotEmpty(),
-                                                                                                                       new Zend_Validate_Float()
-                                                                                                                  )), true);
+                                                                                                     new Zend_Validate_NotEmpty(),
+                                                                                                     new Zend_Validate_Float()
+                                                                                                )), true);
         $laborQst = "How much did you spend last year on service from outside vendors for your printer fleet, including maintenance kits, parts and labor (excluding the cost of leased copiers)? If you select \"I don't know\", an average of $200 per printer per year will be used.";
         $labor_cost->setLabel($laborQst);
         $this->addElement($labor_cost);
@@ -148,21 +148,6 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
         $itQst = "What is the average hourly rate for IT personnel involved in managing printing devices? The average rate is $40/hour.";
         $it_hourlyRate->setLabel($itQst);
         $this->addElement($it_hourlyRate);
-
-        /**
-         * Number of supply vendors
-         */
-        $numb_vendors = $this->createElement('text', 'numb_vendors');
-        $numb_vendors->setRequired(true)
-            ->setAttrib('maxlength', 3)
-            ->setAttrib('class', 'span1')
-            ->setAutoInsertNotEmptyValidator(false)
-            ->addValidator('greaterThan', true, array(
-                                                     'min' => 0
-                                                ))
-            ->setLabel("How many vendors do you currently deal with for printer supplies, service and hardware?")
-            ->getValidator('greaterThan')->setMessage('Must be greater than zero');
-        $this->addElement($numb_vendors);
 
         /**
          * Ink and toner
@@ -223,9 +208,9 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
             ->setDescription('breakdowns per month')
             ->setAllowEmpty(false)
             ->addValidator(new Custom_Validate_FieldDependsOnValue('monthlyBreakdownRadio', 'exact', array(
-                                                                                                                            new Zend_Validate_NotEmpty(),
-                                                                                                                            new Zend_Validate_Float()
-                                                                                                                       )), true)
+                                                                                                          new Zend_Validate_NotEmpty(),
+                                                                                                          new Zend_Validate_Float()
+                                                                                                     )), true)
             ->setLabel("How many times per month, on average, does your internal IT staff or an external service company need to be called to repair a broken printer in your fleet? If you select \"I don't know\", an average of 1 repair per month for every 20 printers will be used.");
         $this->addElement($monthlyBreakdown);
 
@@ -283,16 +268,15 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
          * Repair Time Question
          */
         $repairTimeRadio = $this->createElement('radio', 'repairTime');
-        $repairTimeRadio->setLabel("How long does it take, on average, for a printer to
-    {be
-} fixed after it has broken down
-        ?")
-            ->setMultiOptions(self::$repairTimeOptions)
+        $repairTimeRadio->setLabel("How long does it take, on average, for a printer to {be} fixed after it has broken down?")
+
             ->setRequired(true)
             ->addFilter('StringTrim')
             ->addValidator('InArray', false, array(
                                                   array_keys(self::$repairTimeOptions)
-                                             ));
+                                             ))
+            ->setMultiOptions(self::$repairTimeOptions);
+
         $this->addElement($repairTimeRadio);
 
         /**

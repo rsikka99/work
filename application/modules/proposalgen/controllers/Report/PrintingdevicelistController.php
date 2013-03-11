@@ -71,7 +71,7 @@ class Proposalgen_Report_PrintingdevicelistController extends Proposalgen_Librar
         // Render early
         try
         {
-            $this->render($format . "/00_render");
+            $this->render($this->view->App()->theme . '/' . $format  . "/00_render");
         }
         catch (Exception $e)
         {
@@ -100,9 +100,9 @@ class Proposalgen_Report_PrintingdevicelistController extends Proposalgen_Librar
         // Instantiate the proposal and
         // assign to a view variable
         $this->view->proposal = $proposal;
-
         // Define our field titles
-        $this->view->appendix_titles = "Manufacturer,Model,IP Address,Serial,Purchased or Leased,AMPV,JIT Compatible";
+        $jitcompat = ($this->view->App()->theme === 'printiq' ? 'Office Depot ATR Compatible' : 'JIT Compatible');
+        $this->view->appendix_titles = "Manufacturer,Model,IP Address,Serial,Purchased or Leased,AMPV," . $jitcompat;
 
         $appendix_values = "";
         try
@@ -115,9 +115,9 @@ class Proposalgen_Report_PrintingdevicelistController extends Proposalgen_Librar
                 $row [] = $device->getMasterDevice()->modelName;
                 $row [] = ($device->ipAddress) ? $device->ipAddress : "Unknown";
                 $row [] = ($device->serialNumber) ? $device->serialNumber : "Unknown";
-                $row [] = ($device->MasterDevice->IsLeased) ? "Leased" : "Purchased";
-                $row [] = $device->AverageMonthlyPageCount;
-                $row [] = ($device->reportsTonerLevels) ? "Yes" : "No";
+                $row [] = ($device->getMasterDevice()->isLeased) ? "Leased" : "Purchased";
+                $row [] = $device->getAverageMonthlyPageCount();
+                $row [] = ($device->isCapableOfReportingTonerLevels()) ? "Yes" : "No";
                 $appendix_values .= implode(",", $row) . "\n";
             } // end Purchased Devices foreach
         }

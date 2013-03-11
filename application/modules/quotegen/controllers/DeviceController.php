@@ -1,6 +1,6 @@
 <?php
 
-class Quotegen_DeviceController extends Zend_Controller_Action
+class Quotegen_DeviceController extends Tangent_Controller_Action
 {
 
     public function init ()
@@ -58,7 +58,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a device to delete first.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         $device = $this->getDevice($deviceId);
@@ -67,7 +67,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error selecting the device to delete.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         // Get all the deviceConfiguration associated with the masterDeviceId
@@ -105,12 +105,12 @@ class Quotegen_DeviceController extends Zend_Controller_Action
                     $this->_helper->flashMessenger(array (
                             'success' => "Device  '{$device->getMasterDevice()->getFullDeviceName()}' was deleted successfully." 
                     ));
-                    $this->_helper->redirector('index');
+                    $this->redirector('index');
                 }
             }
             else
             {
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;
@@ -146,7 +146,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
                             ));
                             
                             // Redirect them here so that the form reloads
-                            $this->_helper->redirector('edit', null, null, array (
+                            $this->redirector('edit', null, null, array (
                                     'id' => $deviceId 
                             ));
                         }
@@ -171,7 +171,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;
@@ -190,7 +190,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a device to edit first.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         // Get the device
@@ -203,7 +203,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error selecting the device to edit.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         // Create a new form with the mode and roles set
@@ -251,7 +251,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
                         
                         if (isset($values ['addOption']))
                         {
-                            $this->_helper->redirector('addoptions', null, null, array (
+                            $this->redirector('addoptions', null, null, array (
                                     'deviceId' => $deviceId
                             ));
                         }
@@ -272,7 +272,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;
@@ -291,7 +291,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'info' => "There are no more options to add to this device." 
             ));
-            $this->_helper->redirector('edit', null, null, array (
+            $this->redirector('edit', null, null, array (
                     'id' => $deviceId 
             ));
         }
@@ -342,7 +342,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
                         $this->_helper->flashMessenger(array (
                                 'success' => "Successfully added {$insertedOptions} options to {$device->getMasterDevice()->getFullDeviceName()} successfully." 
                         ));
-                        $this->_helper->redirector('edit', null, null, array (
+                        $this->redirector('edit', null, null, array (
                                 'id' => $deviceId 
                         ));
                     }
@@ -361,7 +361,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
             else
             {
                 // User has cancelled. Go back to the edit page
-                $this->_helper->redirector('edit', null, null, array (
+                $this->redirector('edit', null, null, array (
                         'id' => $deviceId 
                 ));
             }
@@ -396,7 +396,7 @@ class Quotegen_DeviceController extends Zend_Controller_Action
             ));
         }
         
-        $this->_helper->redirector('edit', null, null, array (
+        $this->redirector('edit', null, null, array (
                 'id' => $id 
         ));
     }

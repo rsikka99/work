@@ -1,0 +1,83 @@
+<?php
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
+$graphs = $proposal->getGraphs();
+?>
+<div class="h1">Analysis: Printing Hardware Usage</div>
+<table cellspacing="0" class="gradesTable">
+    <tr>
+        <td class="gradeDescription">
+            <p><?php echo $proposal->getRanking()->getPrintingHardwareUsage()->RankingText; ?></p>
+        </td>
+        <td class="gradeNumber"><?php echo number_format($proposal->getRanking()->getPrintingHardwareUsage()->Rank, 1); ?></td>
+    </tr>
+</table>
+<br />
+<div class="pheader">Print Volume and Number of Printing Devices</div>
+<p>You currently have <strong><?php echo $proposal->getDeviceCount(); ?></strong> networked printing devices that print an average of <strong><?php echo number_format(($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->getDeviceCount())); ?>
+</strong>pages each per month, for an average total monthly print volume of <strong><?php echo number_format($proposal->getPageCounts()->Total->Combined->Monthly); ?></strong> pages.
+Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.</p>
+<br /> <br />
+<div class="center graphs">
+    <img src="<?php echo $graphs[4]; ?>" style="width: 30%; height: 30%;" /> <!-- Average monthly pages per networked printer -->
+    <img src="<?php echo $graphs[5]; ?>" style="width: 30%; height: 30%;" /> <!-- Average monthly pages per employee -->
+    <img src="<?php echo $graphs[6]; ?>" style="width: 30%; height: 30%;" /> <!-- Employees per printing device -->
+</div>
+<br /> <br />
+<div class="pheader">Underused and Overused Printing Devices</div>
+<p>Currently, <strong><?php echo number_format($proposal->getPercentDevicesUnderused()); ?>%</strong> of your printing devices are printing less than one quarter of our recommended monthly print volume, and <strong><?php echo number_format($proposal->getPercentDevicesOverused());?>%</strong> are printing above our recommended monthly print volume. Our recommended monthly print volumes are equal to the manufacturer's stated yield for a single print cartridge (for monochrome devices, the black cartridge, and for color devices, a single color cartridge unless the device is not being used for color).</p>
+<p>Underused printing devices can be consolidated or retired to free up floor and desk space, reduce the amount of cash held in unused supplies inventory, and reduce the energy costs associated with powering underused machines. Overused printing devices risk having increased breakdowns and should have a portion of their print volumes moved to underused printers or be replaced with higher-capacity machines.</p>
+<br/>
+<table cellspacing="0" class="genericTable" id="LeastUsedDevicesTable" >
+    <thead>
+        <tr>
+            <th class="column1">Lowest Utilization</th>
+            <th class="column2 center">Serial No.</th>
+            <th class="column3 center">Avg. Monthly<br/>Volume</th>
+            <th class="column4 center">Recommended <br />Max. Volume</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($proposal->getLeastUsedDevices() as $deviceInstance) : ?>
+        <tr>
+            <td class="column1"><div ><?php echo $deviceInstance->getDeviceName() ?></div></td>
+            <td class="column2"><div class=" center"><?php echo ($deviceInstance->serialNumber) ?: 'Unknown'; ?></div></td>
+            <td class="column3"><div class=" center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()) ?></div></td>
+            <td class="column4"><div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume()) ?></div></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<table cellspacing="0" class="genericTable" style="margin-top: 10px;" id="MostUsedDevicesTable">
+    <thead>
+        <tr>
+            <th class="column1">Highest Utilization</th>
+            <th class="column2 center">Serial No.</th>
+            <th class="column3 center">Avg. Monthly<br/>Volume</th>
+            <th class="column4 center">Recommended <br />Max. Volume</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($proposal->getMostUsedDevices() as $deviceInstance) : ?>
+        <tr>
+            <td class="column1"><div ><?php echo $deviceInstance->getDeviceName() ?></div></td>
+            <td class="column2"><div class=" center"><?php echo ($deviceInstance->serialNumber) ?: 'Unknown' ?></div></td>
+            <td class="column3"><div class=" center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()) ?></div></td>
+            <td class="column4"><div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume()) ?></div></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<em>Only takes into account devices for which expected cartridge yields are known.</em>
+<br /> <br />
+
+<div class="pheader">Color Usage</div>
+<p>You currently have <strong><?php echo $proposal->getNumberOfColorCapableDevices(); ?></strong> color printing devices that print a monthly average of <strong><?php echo number_format($proposal->getPageCounts()->Total->Color->Monthly); ?></strong> color pages per month, which is <strong><?php echo number_format(($proposal->getPercentages()->TotalColorPercentage * 100),2); ?>%</strong> of your total monthly print volume.</p>
+<br />
+    <div class="center">
+        <img src="<?php echo $graphs[7]; ?>" style="width: 45%; height: 20%;" />
+        <img src="<?php echo $graphs[8]; ?>" style="width: 45%; height: 20%;" />
+    </div>
+<br />
+<p>Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your company's professional image, improve comprehension and increase readership.</p>
+<p><?php echo $this->companyName;?> can help you track your color printing and provide low-cost color hardware options.</p>

@@ -1,6 +1,15 @@
 <?php
 class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_Abstract
 {
+    /**
+     * All devices printing less than this are considered underutilized.
+     */
+    const UNDERUTILIZED_THRESHHOLD_PERCENTAGE = 0.05;
+    /**
+     * All devices that have ages older than this are considered old/
+     */
+    const OLD_DEVICE_THRESHHOLD = 10;
+
     public static $Proposal;
 
     // New Separated Proposal
@@ -64,6 +73,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     protected $PercentColorDevices;
     protected $AverageAgeOfDevices;
     protected $HighPowerConsumptionDevices;
+    protected $HighCostMonochromeDevices;
     protected $MostExpensiveDevices;
     protected $DateReportPrepared;
     protected $AveragePowerUsagePerMonth;
@@ -78,7 +88,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     protected $NumberOfRepairs;
     protected $AverageTimeBetweenBreakdownAndFix;
     protected $AnnualDowntimeFromBreakdowns;
-    protected $NumberOfVendors;
     protected $NumberOfAnnualInkTonerOrders;
     protected $NumberOfUniquePurchasedToners;
     protected $PercentPrintingDoneOnInkjet;
@@ -101,7 +110,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     protected $PrintIQSavings;
     protected $CostOfExecutingSuppliesOrder;
     protected $Graphs;
-
     // Device Replacement
     protected $DevicesToBeReplaced;
     protected $UniqueVendorCount;
@@ -134,6 +142,17 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     protected $UniquePurchasedTonerList;
     protected $UniqueDeviceList;
     protected $UniquePurchasedDeviceList;
+    protected $_averageCompatibleOnlyCostPerPage;
+    protected $_averageOemOnlyCostPerPage;
+    protected $_numberOfDevicesReportingTonerLevels;
+    protected $_numberOfColorCapablePurchasedDevices;
+    protected $_maximumMonthlyPurchasedPrintVolume;
+    protected $_purchasedTotalMonthlyCost;
+    protected $_purchasedColorMonthlyCost;
+    protected $_purchasedMonochromeMonthlyCost;
+    protected $_optimizedDevices;
+    protected $_numberOfDevicesNotReportingTonerLevels;
+    protected $_numberOfCopyCapableDevices;
 
     /**
      * @param Proposalgen_Model_Report $report
@@ -537,7 +556,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->EstimatedAnnualCostOfLeaseMachines))
         {
-            $this->EstimatedAnnualCostOfLeaseMachines = $this->getCombinedAnnualLeasePayments() + ($this->getLeasedBlackAndWhiteCharge() * $this->getPageCounts()->Leased->BlackAndWhite->Yearly) + ($this->getLeasedColorCharge() * $this->getLeasedColorCharge());
+            $this->EstimatedAnnualCostOfLeaseMachines = $this->getCombinedAnnualLeasePayments() + ($this->getLeasedBlackAndWhiteCharge() * $this->getPageCounts()->Leased->BlackAndWhite->Yearly) + ($this->getPageCounts()->Leased->Color->Yearly * $this->getLeasedColorCharge());
         }
 
         return $this->EstimatedAnnualCostOfLeaseMachines;
@@ -623,6 +642,27 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         }
 
         return $this->NumberOfScanCapableDevices;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfCopyCapableDevices ()
+    {
+        if (!isset($this->_numberOfCopyCapableDevices))
+        {
+            $numberOfDevices = 0;
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            {
+                if ($deviceInstance->getMasterDevice()->isCopier)
+                {
+                    $numberOfDevices++;
+                }
+            }
+            $this->_numberOfCopyCapableDevices = $numberOfDevices;
+        }
+
+        return $this->_numberOfCopyCapableDevices;
     }
 
     /**
@@ -733,6 +773,24 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     /**
      * @return int
      */
+    public function getMaximumMonthlyPurchasedPrintVolume ()
+    {
+        if (!isset($this->_maximumMonthlyPurchasedPrintVolume))
+        {
+            $maxVolume = 0;
+            foreach ($this->getDevices()->purchasedDeviceInstances as $deviceInstance)
+            {
+                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume();
+            }
+            $this->_maximumMonthlyPurchasedPrintVolume = $maxVolume;
+        }
+
+        return $this->_maximumMonthlyPurchasedPrintVolume;
+    }
+
+    /**
+     * @return int
+     */
     public function getNumberOfColorCapableDevices ()
     {
         if (!isset($this->NumberOfColorCapableDevices))
@@ -749,6 +807,27 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         }
 
         return $this->NumberOfColorCapableDevices;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfColorCapablePurchasedDevices ()
+    {
+        if (!isset($this->_numberOfColorCapablePurchasedDevices))
+        {
+            $numberOfDevices = 0;
+            foreach ($this->getDevices()->purchasedDeviceInstances as $device)
+            {
+                if ($device->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY)
+                {
+                    $numberOfDevices++;
+                }
+            }
+            $this->_numberOfColorCapablePurchasedDevices = $numberOfDevices;
+        }
+
+        return $this->_numberOfColorCapablePurchasedDevices;
     }
 
     /**
@@ -883,7 +962,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             $devicesUnderusedCount = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume() * 0.25))
+                if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume() * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE))
                 {
                     $devicesUnderusedCount++;
                 }
@@ -914,6 +993,46 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
 
         return $this->PercentDevicesOverused;
     }
+
+    /**
+     * @return Proposalgen_Model_DeviceInstance[]
+     */
+    public function getUnderutilizedDevices ()
+    {
+        if (!isset($this->_underutilizedDevices))
+        {
+            $devicesArray = array();
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            {
+                if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume() * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE))
+                {
+                    $devicesArray[] = $deviceInstance;
+                }
+            }
+            $this->_underutilizedDevices = $devicesArray;
+        }
+
+        return $this->_underutilizedDevices;
+    }
+
+    public function getOverutilizedDevices ()
+    {
+        if (!isset($this->_overutilizedDevices))
+        {
+            $devicesArray = array();
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            {
+                if ($deviceInstance->getUsage() > 1)
+                {
+                    $devicesArray[] = $deviceInstance;
+                }
+            }
+            $this->_overutilizedDevices = $devicesArray;
+        }
+
+        return $this->_overutilizedDevices;
+    }
+
 
     /**
      * @return \Proposalgen_Model_DeviceInstance[]
@@ -974,6 +1093,45 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         return ($deviceA->getUsage() > $deviceB->getUsage()) ? -1 : 1;
     }
 
+    /**
+     * @return Proposalgen_Model_DeviceInstance[]
+     */
+    public function getOptimizedDevices ()
+    {
+        if (!isset($this->_optimizedDevices))
+        {
+            $deviceArray = array();
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            {
+
+                //Check to see if it is not underutilized
+                if (($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume() * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE)) == false)
+                {
+                    //Check to see if it is not overUtilized
+                    if ($deviceInstance->getUsage() < 1)
+                    {
+
+                        //Check to see if it is under the age requirements
+                        if ($deviceInstance->getAge() < self::OLD_DEVICE_THRESHHOLD)
+                        {
+                            //Check to see if it is reporting toner levels
+                            if ($deviceInstance->isCapableOfReportingTonerLevels() || $deviceInstance->getIsLeased())
+                            {
+                                /**
+                                 * We are a fully optimized device!
+                                 */
+                                $deviceArray[] = $deviceInstance;
+                            }
+
+                        }
+                    }
+                }
+            }
+            $this->_optimizedDevices = $deviceArray;
+        }
+
+        return $this->_optimizedDevices;
+    }
 
     /**
      * @return Proposalgen_Model_DeviceInstance[]
@@ -1048,6 +1206,102 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     }
 
     /**
+     * @return Proposalgen_Model_DeviceInstance[]
+     */
+    public function getMonthlyHighCostColorDevices (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    {
+        if (!isset($this->HighCostDevices))
+        {
+            $deviceArray = $this->getDevices()->purchasedDeviceInstances;
+            $costArray   = array();
+            /**@var $value Proposalgen_Model_DeviceInstance */
+            foreach ($deviceArray as $key => $deviceInstance)
+            {
+                if ($deviceInstance->getMasterDevice()->isColor())
+                {
+                    $costArray[] = array($key, $deviceInstance->getAverageMonthlyColorPageCount() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage);
+                }
+            }
+
+            usort($costArray, array(
+                                   $this,
+                                   "descendingSortDevicesByColorCost"
+                              ));
+            $highCostDevices = array();
+            foreach ($costArray as $costs)
+            {
+                $highCostDevices[] = $deviceArray[$costs[0]];
+            }
+            $this->HighCostDevices = $highCostDevices;
+        }
+
+        return $this->HighCostDevices;
+    }
+
+    /**
+     * @return Proposalgen_Model_DeviceInstance[]
+     */
+    public function getMonthlyHighCostPurchasedColorDevices (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    {
+        if (!isset($this->HighCostDevices))
+        {
+            $deviceArray = $this->getDevices()->purchasedDeviceInstances;
+            $costArray   = array();
+            /**@var $value Proposalgen_Model_DeviceInstance */
+            foreach ($deviceArray as $key => $deviceInstance)
+            {
+                if ($deviceInstance->getMasterDevice()->isColor())
+                {
+                    $costArray[] = array($key, $deviceInstance->getAverageMonthlyColorPageCount() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage);
+                }
+            }
+
+            usort($costArray, array(
+                                   $this,
+                                   "descendingSortDevicesByColorCost"
+                              ));
+            $highCostDevices = array();
+            foreach ($costArray as $costs)
+            {
+                $highCostDevices[] = $deviceArray[$costs[0]];
+            }
+            $this->HighCostDevices = $highCostDevices;
+        }
+
+        return $this->HighCostDevices;
+    }
+
+    /**
+     * @return Proposalgen_Model_DeviceInstance[]
+     */
+    public function getMonthlyHighCostMonochromeDevices (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    {
+        if (!isset($this->HighCostMonochromeDevices))
+        {
+            $deviceArray = $this->getDevices()->purchasedDeviceInstances;
+            $costArray   = array();
+            /**@var $value Proposalgen_Model_DeviceInstance */
+            foreach ($deviceArray as $key => $deviceInstance)
+            {
+                $costArray[] = array($key, $deviceInstance->getAverageMonthlyBlackAndWhitePageCount() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage);
+            }
+
+            usort($costArray, array(
+                                   $this,
+                                   "descendingSortDevicesByColorCost"
+                              ));
+            $highCostDevices = array();
+            foreach ($costArray as $costs)
+            {
+                $highCostDevices[] = $deviceArray[$costs[0]];
+            }
+            $this->HighCostMonochromeDevices = $highCostDevices;
+        }
+
+        return $this->HighCostMonochromeDevices;
+    }
+
+    /**
      * Callback function for uSort when we want to sort a device based on power
      * consumption
      *
@@ -1064,6 +1318,25 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         }
 
         return ($deviceA->getAverageDailyPowerConsumption() > $deviceB->getAverageDailyPowerConsumption()) ? -1 : 1;
+    }
+
+    /**
+     * Callback function for uSort when we want to sort a device based on power
+     * consumption
+     *
+     * @param Proposalgen_Model_DeviceInstance $deviceA
+     * @param Proposalgen_Model_DeviceInstance $deviceB
+     *
+     * @return int
+     */
+    public function descendingSortDevicesByColorCost ($deviceA, $deviceB)
+    {
+        if ($deviceA[0] == $deviceB[0])
+        {
+            return 0;
+        }
+
+        return ($deviceA[1] > $deviceB[1]) ? -1 : 1;
     }
 
     /**
@@ -1116,6 +1389,81 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         }
 
         return $this->DateReportPrepared;
+    }
+
+    /**
+     * Calculates the average cost per page for only toners that are Oem.
+     *
+     * @return Proposalgen_Model_CostPerPage
+     */
+    public function calculateAverageOemOnlyCostPerPage ()
+    {
+        if (!isset($this->_averageOemOnlyCostPerPage))
+        {
+            $costPerPageSetting                       = clone $this->getCostPerPageSettingForCustomer();
+            $costPerPageSetting->pricingConfiguration = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::OEM);
+            $costPerPage                              = new Proposalgen_Model_CostPerPage();
+            $costPerPage->monochromeCostPerPage       = 0;
+            $costPerPage->colorCostPerPage            = 0;
+            $numberOfColorDevices                     = 0;
+            foreach ($this->getDevices()->purchasedDeviceInstances as $deviceInstance)
+            {
+                $costPerPage->add($deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSetting));
+                if ($deviceInstance->getMasterDevice()->isColor())
+                {
+                    $numberOfColorDevices++;
+                }
+            }
+            $numberOfDevices = count($this->getDevices()->purchasedDeviceInstances);
+            if ($numberOfDevices > 0)
+            {
+                $costPerPage->monochromeCostPerPage = $costPerPage->monochromeCostPerPage / $numberOfDevices;
+                if ($numberOfColorDevices > 0)
+                {
+                    $costPerPage->colorCostPerPage = $costPerPage->colorCostPerPage / $numberOfColorDevices;
+                }
+            }
+            $this->_averageOemOnlyCostPerPage = $costPerPage;
+        }
+
+        return $this->_averageOemOnlyCostPerPage;
+    }
+
+    /**
+     * Calculates the average cost per page for only toners that are Comp.
+     *
+     * @return Proposalgen_Model_CostPerPage
+     */
+    public function calculateAverageCompatibleOnlyCostPerPage ()
+    {
+        if (!isset($this->_averageCompatibleOnlyCostPerPage))
+        {
+            $costPerPageSetting                       = clone $this->getCostPerPageSettingForCustomer();
+            $costPerPageSetting->pricingConfiguration = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::COMP);
+            $costPerPage                              = new Proposalgen_Model_CostPerPage();
+            $numberOfColorDevices                     = 0;
+            foreach ($this->getDevices()->purchasedDeviceInstances as $deviceInstance)
+            {
+                $costPerPage->add($deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSetting));
+                if ($deviceInstance->getMasterDevice()->isColor())
+                {
+                    $numberOfColorDevices++;
+                }
+            }
+            $numberOfDevices = count($this->getDevices()->purchasedDeviceInstances);
+            if ($numberOfDevices > 0)
+            {
+                $costPerPage->monochromeCostPerPage = $costPerPage->monochromeCostPerPage / $numberOfDevices;
+                if ($numberOfColorDevices > 0)
+                {
+                    $costPerPage->colorCostPerPage = $costPerPage->colorCostPerPage / $numberOfDevices;
+                }
+            }
+
+            $this->_averageCompatibleOnlyCostPerPage = $costPerPage;
+        }
+
+        return $this->_averageCompatibleOnlyCostPerPage;
     }
 
     /**
@@ -1263,6 +1611,66 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     }
 
     /**
+     * @return Proposalgen_Model_DeviceInstance[]
+     */
+    public function getDevicesReportingTonerLevels ()
+    {
+        $devicesReportingTonerLevels = array();
+        foreach ($this->getPurchasedDevices() as $device)
+        {
+            if ($device->isCapableOfReportingTonerLevels())
+            {
+                $devicesReportingTonerLevels[] = $device;
+            }
+        }
+
+        return $devicesReportingTonerLevels;
+    }
+
+    /**
+     * @return Proposalgen_Model_DeviceInstance[]
+     */
+    public function getDevicesNotReportingTonerLevels ()
+    {
+        $devicesNotReportingTonerLevels = array();
+        foreach ($this->getDevices()->purchasedDeviceInstances as $device)
+        {
+            if ($device->isCapableOfReportingTonerLevels() == false)
+            {
+                $devicesNotReportingTonerLevels[] = $device;
+            }
+        }
+
+        return $devicesNotReportingTonerLevels;
+    }
+
+    /**
+     * @return Proposalgen_Model_DeviceInstance[]
+     */
+    public function getNumberOfDevicesReportingTonerLevels ()
+    {
+        if (!isset($this->_numberOfDevicesReportingTonerLevels))
+        {
+            $_numberOfDevicesReportingTonerLevels = count($this->getDevicesReportingTonerLevels());
+        }
+
+        return $_numberOfDevicesReportingTonerLevels;
+    }
+
+    /**
+     * @return Proposalgen_Model_DeviceInstance[]
+     */
+    public function getNumberOfDevicesNotReportingTonerLevels ()
+    {
+        if (!isset($this->_numberOfDevicesNotReportingTonerLevels))
+        {
+            $_numberOfDevicesNotReportingTonerLevels = count($this->getDevicesNotReportingTonerLevels());
+        }
+
+        return $_numberOfDevicesNotReportingTonerLevels;
+    }
+
+    /**
      * @return float
      */
     public function getPercentageOfDevicesReportingPower ()
@@ -1375,19 +1783,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         }
 
         return $this->AnnualDowntimeFromBreakdowns;
-    }
-
-    /**
-     * @return float
-     */
-    public function getNumberOfVendors ()
-    {
-        if (!isset($this->NumberOfVendors))
-        {
-            $this->NumberOfVendors = $this->report->getSurvey()->numberOfSuppliesVendors;
-        }
-
-        return $this->NumberOfVendors;
     }
 
     /**
@@ -1537,6 +1932,31 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     }
 
     /**
+     *
+     */
+    public function getOldDevices ()
+    {
+        if (!isset($this->_oldDevices))
+        {
+            $devices = array();
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
+            {
+                if ($device->getAge() > self::OLD_DEVICE_THRESHHOLD)
+                {
+                    $devices[] = $device;
+                }
+            }
+            usort($devices, array(
+                                 $this,
+                                 "sortDevicesByAge"
+                            ));
+            $this->_oldDevices = $devices;
+        }
+
+        return $this->_oldDevices;
+    }
+
+    /**
      * @return float
      */
     public function getWeeklyITHours ()
@@ -1600,7 +2020,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->Graphs))
         {
             // Variables that could be settings
-            $OD_AverageMonthlyPagesPerEmployee = 500;
+            $OD_AverageMonthlyPagesPerEmployee = 200;
             $OD_AverageMonthlyPages            = 4200;
             $OD_AverageEmployeesPerDevice      = 4.4;
 
@@ -2091,6 +2511,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             $scanCapableGraph->setDimensions(305, 210);
             // Graphs[14]
             $this->Graphs [] = $scanCapableGraph->getUrl();
+
+
         }
 
         return $this->Graphs;
@@ -2298,19 +2720,6 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         }
 
         return $this->PrintIQSavings;
-    }
-
-    /**
-     * @return float
-     */
-    public function getUniqueVendorCount ()
-    {
-        if (!isset($this->UniqueVendorCount))
-        {
-            $this->UniqueVendorCount = $this->report->getSurvey()->numberOfSuppliesVendors;
-        }
-
-        return $this->UniqueVendorCount;
     }
 
     /**
@@ -2966,5 +3375,198 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         }
 
         return $this->UniqueDeviceList;
+    }
+
+    /**
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
+     * @return float
+     */
+    public function calculatePurchasedTotalMonthlyCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    {
+        if (!isset($this->_purchasedTotalMonthlyCost))
+        {
+            $total = 0;
+            foreach ($this->getPurchasedDevices() as $deviceInstance)
+            {
+                $total += $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getMasterDevice());
+            }
+            $this->_purchasedTotalMonthlyCost = $total;
+        }
+
+        return $this->_purchasedTotalMonthlyCost;
+    }
+
+    /**
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
+     * @return float
+     */
+    public function calculatePurchasedColorMonthlyCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    {
+        if (!isset($this->_purchasedColorMonthlyCost))
+        {
+            $total = 0;
+            foreach ($this->getPurchasedDevices() as $deviceInstance)
+            {
+                $total += $deviceInstance->calculateMonthlyColorCost($costPerPageSetting, $deviceInstance->getMasterDevice());
+            }
+            $this->_purchasedColorMonthlyCost = $total;
+        }
+
+        return $this->_purchasedColorMonthlyCost;
+    }
+
+    /**
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
+     * @return float
+     */
+    public function calculatePurchasedMonochromeMonthlyCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    {
+        if (!isset($this->_purchasedMonochromeMonthlyCost))
+        {
+            $total = 0;
+            foreach ($this->getPurchasedDevices() as $deviceInstance)
+            {
+                $total += $deviceInstance->calculateMonthlyMonoCost($costPerPageSetting, $deviceInstance->getMasterDevice());
+            }
+            $this->_purchasedMonochromeMonthlyCost = $total;
+        }
+
+        return $this->_purchasedMonochromeMonthlyCost;
+    }
+
+    /**
+     * @return float
+     */
+    public function calculateTotalMonthlyCost ()
+    {
+        return ($this->getEstimatedAnnualCostOfLeaseMachines() + $this->getTotalPurchasedAnnualCost()) / 12;
+    }
+
+    /**
+     * @return float
+     */
+    public function calculateEstimatedCompTonerCostAnnually ()
+    {
+        return ($this->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->getPageCounts()->Purchased->Color->Monthly + ($this->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12;
+    }
+
+    /**
+     * @return float
+     */
+    public function calculateEstimatedOemTonerCostAnnually ()
+    {
+        return ($this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getPageCounts()->Purchased->Color->Monthly + ($this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12;
+    }
+
+    /**
+     * Calculates the percentage of the fleet which is capable of reporting toner levels. This includes both purchased and leased devices.
+     *
+     * @return float
+     */
+    public function calculatePercentageOfFleetReportingTonerLevels ()
+    {
+        $percentage       = 0;
+        $totalDeviceCount = count($this->getDevices()->allIncludedDeviceInstances);
+        if ($totalDeviceCount > 0)
+        {
+            $deviceCount = 0;
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            {
+                if ($deviceInstance->isCapableOfReportingTonerLevels())
+                {
+                    $deviceCount++;
+                }
+            }
+
+            $percentage = $deviceCount / $totalDeviceCount * 100;
+        }
+
+        return $percentage;
+    }
+
+    /**
+     * Calculates a score between 0 and 100 based on the number of supplies. 100 is bad, 0 is perfect
+     *
+     * @return float
+     */
+    public function calculateNumberOfSupplyTypeScore ()
+    {
+        $maximumNumberOfSupplyTypes = 0;
+        $minimumNumberOfSupplyTypes = 0;
+        $score                      = 0;
+
+        $hasMonoDevices               = false;
+        $hasColorDevices              = false;
+        $hasThreeColorCombinedDevices = false;
+        $hasFourColorCombinedDevices  = false;
+
+
+        foreach ($this->getDevices()->purchasedDeviceInstances as $deviceInstance)
+        {
+            switch ($deviceInstance->getMasterDevice()->tonerConfigId)
+            {
+                case Proposalgen_Model_TonerConfig::BLACK_ONLY:
+                    $maximumNumberOfSupplyTypes += 1;
+                    $hasMonoDevices = true;
+                    break;
+                case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED:
+                    $maximumNumberOfSupplyTypes += 4;
+                    $hasColorDevices = true;
+                    break;
+                case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED:
+                    $maximumNumberOfSupplyTypes += 2;
+                    $hasThreeColorCombinedDevices = true;
+                    break;
+                case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED:
+                    $maximumNumberOfSupplyTypes += 1;
+                    $hasFourColorCombinedDevices = true;
+                    break;
+
+            }
+        }
+
+        /**
+         * Determine the maximum number of supply types
+         */
+
+        $minimumNumberOfSupplyTypes += ($hasMonoDevices) ? 1 : 0;
+        $minimumNumberOfSupplyTypes += ($hasColorDevices) ? 4 : 0;
+        $minimumNumberOfSupplyTypes += ($hasThreeColorCombinedDevices) ? 2 : 0;
+        $minimumNumberOfSupplyTypes += ($hasFourColorCombinedDevices) ? 1 : 0;
+
+        $currentNumberOfSupplyTypes = $this->getNumberOfUniquePurchasedToners();
+
+        if ($minimumNumberOfSupplyTypes > 0 && $maximumNumberOfSupplyTypes > 0 && $currentNumberOfSupplyTypes > 0)
+        {
+            $score = ($currentNumberOfSupplyTypes - $minimumNumberOfSupplyTypes) / ($maximumNumberOfSupplyTypes - $minimumNumberOfSupplyTypes);
+        }
+
+        return $score * 100;
+    }
+
+    /**
+     * Gets the average age of the purchased devices
+     *
+     * @return float
+     */
+    public function calculateAverageAgeOfPurchasedDevices ()
+    {
+        $averageAge = 0;
+
+        $totalAge    = 0;
+        $deviceCount = $this->getPurchasedDeviceCount();
+        if ($deviceCount > 0)
+        {
+            foreach ($this->getDevices()->purchasedDeviceInstances as $deviceInstance)
+            {
+                $totalAge += $deviceInstance->getAge();
+            }
+            $averageAge = $totalAge / $deviceCount;
+        }
+
+        return $averageAge;
     }
 }

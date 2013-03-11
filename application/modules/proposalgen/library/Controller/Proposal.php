@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
+class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
 {
     /**
      * @var Proposalgen_Model_Report
@@ -37,6 +37,13 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
      * @var Proposalgen_Model_Report_Step
      */
     protected $_activeStep;
+
+    /**
+     * Report name is the title behind the reports that are being generated.
+     *
+     * @var string
+     */
+    public $reportName;
 
 
     /**
@@ -90,7 +97,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
     {
         // This is a list of reports that we can view.
         $this->view->availableReports = (object)array(
-            "Reports"         => (object)array(
+            "Reports"            => (object)array(
                 "pagetitle" => "Select a report...",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_index/index')
@@ -115,10 +122,15 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_printingdevicelist/index')
             ),
-            "PIQEssentials"      => (object)array(
-                "pagetitle" => "Print IQ Essentials",
+            "Toners"      => (object)array(
+                "pagetitle" => "JIT Supply and Toner SKU Report",
                 "active"    => false,
-                "url"       => $this->view->baseUrl('/proposalgen/report_piqessentials/index')
+                "url"       => $this->view->baseUrl('/proposalgen/report_toners/index')
+            ),
+            "HealthCheck"      => (object)array(
+                "pagetitle" => "Health Check",
+                "active"    => false,
+                "url"       => $this->view->baseUrl('/proposalgen/report_healthcheck/index')
             ),
         );
     }
@@ -626,7 +638,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
             $nextStep = $this->_activeStep->nextStep;
             if ($nextStep)
             {
-                $this->_helper->redirector($nextStep->action, $nextStep->controller);
+                $this->redirector($nextStep->action, $nextStep->controller);
             }
         }
     }
@@ -642,7 +654,7 @@ class Proposalgen_Library_Controller_Proposal extends Zend_Controller_Action
             $prevStep = $this->_activeStep->previousStep;
             if ($prevStep)
             {
-                $this->_helper->redirector($prevStep->action, $prevStep->controller);
+                $this->redirector($prevStep->action, $prevStep->controller);
             }
         }
     }

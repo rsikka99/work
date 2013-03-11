@@ -293,7 +293,7 @@ class Proposalgen_Model_Mapper_Report extends My_Model_Mapper_Abstract
      */
     public function fetchAllReportsForClient ($clientId)
     {
-        return $this->fetchAll(array("{$this->col_userId} = ?" => $clientId), "{$this->col_dateCreated} DESC", 100);
+        return $this->fetchAll(array("{$this->col_clientId} = ?" => $clientId), "{$this->col_dateCreated} DESC", 100);
     }
 
     /**

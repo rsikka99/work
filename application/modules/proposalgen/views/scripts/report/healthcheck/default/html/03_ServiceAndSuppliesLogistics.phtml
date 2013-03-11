@@ -1,0 +1,108 @@
+<?php
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->healthcheck->proposal;
+$graphs   = $this->healthcheck->getGraphs();
+?>
+<div class="h1">Analysis: Service and Supplies Logistics</div>
+<br />
+<table cellspacing="0" class="gradesTable">
+    <tr>
+        <td class="gradeDescription">
+            <p><?php echo $proposal->getRanking()->getSuppliesAndServiceLogistics()->RankingText; ?></p>
+        </td>
+        <td class="gradeNumber"><?php echo number_format($proposal->getRanking()->getSuppliesAndServiceLogistics()->Rank, 1); ?></td>
+    </tr>
+</table>
+<br />
+<div class="pheader">Printing Device Management Breakdown</div>
+<p>Different types of printing devices are managed in different ways: newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.</p>
+<br />
+<div class="center">
+    <table>
+        <tbody>
+            <tr>
+                <td><img src="<?php echo $graphs[1]; ?>" /></td> <!-- Devices leased/Devices Purchased -->
+                <td><img src="<?php echo $graphs[2]; ?>" /></td> <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="pheader">Number of Printing Device Models and Supply Types</div>
+<p>Out of your <strong><?php echo count($proposal->getDevices()->allIncludedDeviceInstances) ?></strong> networked printing devices, you have of <strong><?php echo $proposal->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type. We estimate that <strong><?php echo count($proposal->getLeasedDevices()); ?></strong> of your printing devices are leased machines, for which supplies are included in your contract. The <strong><?php echo count($proposal->getPurchasedDevices()); ?></strong> remaining machines consist of <strong><?php echo $proposal->getNumberOfUniquePurchasedModels(); ?></strong> different models and use <strong><?php echo $proposal->getNumberOfUniquePurchasedToners(); ?></strong> different supply types. If you hold two of each supply in inventory, you have an estimated <strong>$<?php echo number_format($proposal->getCashHeldInInventory()); ?>
+    in operating cash held in printer supplies inventory</strong> at any given time.</p>
+<div class="center">
+    <img src="<?php echo $graphs[3] ?>" /> <!--  Giant pie chart -->
+</div>
+<p>By using printing devices that use the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. <?php echo $this->reportName ?> can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.</p>
+
+<div class="pheader">Number of Printing Devices Compatible with <?php echo $this->jitName ?></div>
+<p>Out of your <?php echo $proposal->getPurchasedDeviceCount(); ?>
+    networked printing devices(excluding leased devices), you have <strong><?php echo $proposal->getNumberOfDevicesReportingTonerLevels(); ?></strong> that are compatible with <?php echo $this->jitFullName ?> and <?php echo $proposal->getNumberOfDevicesNotReportingTonerLevels()?>
+    devices that are not compatible. These non-compatible devices are shown in the fleet attributes section below. A complete list of all devices and their JIT compatibility can be found in the Appendix.</p>
+<br />
+<div class="center">
+    <table>
+        <tbody>
+            <tr>
+                <td><img src="<?php echo $graphs['CompatibleATRBarGraph']; ?>" /></td> <!-- Devices leased/Devices Purchased -->
+                <td><img src="<?php echo $graphs['PagesPrinterATRPieGraph']; ?>" /></td> <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="pheader">Estimated OEM Toner Costs vs. Estimated Compatible Toner Costs</div>
+<table cellspacing="0">
+    <thead>
+        <tr>
+            <th class="noborder" width="150px"></th>
+            <th class="noborder"><strong>Monthly Volume</strong></th>
+            <th class="noborder"><strong>Cost per Page (OEM)</strong></th>
+            <th class="noborder shaded"><strong>Total Cost (OEM)</strong></th>
+            <th class="noborder"><strong>Cost per Page (Comp.)</strong></th>
+            <th class="noborder shaded"><strong>Total Cost (Comp.)</strong></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Black Toner</strong></td>
+            <td class="right"><?php echo number_format($proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly) ?></td>
+            <td class="right"><?php echo $this->currency($proposal->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage, array('precision' => 4)) ?></td>
+            <td class="shaded right"><?php echo $this->currency($proposal->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly, array('precision' => 2)) ?></td>
+            <td class="right"><?php echo $this->currency($proposal->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage, array('precision' => 4)) ?></td>
+            <td class="shaded right"><?php echo $this->currency($proposal->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly, array('precision' => 2)) ?></td>
+        </tr>
+        <tr>
+            <td><strong>Color Toner</strong></td>
+            <td class="right"><?php echo number_format($proposal->getPageCounts()->Purchased->Color->Monthly) ?></td>
+            <td class="right"><?php echo $this->currency($proposal->calculateAverageOemOnlyCostPerPage()->colorCostPerPage, array('precision' => 4)) ?></td>
+            <td class="shaded right"><?php echo $this->currency($proposal->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly, array('precision' => 2)) ?></td>
+            <td class="right"><?php echo $this->currency($proposal->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage, array('precision' => 4)) ?></td>
+            <td class="shaded right"><?php echo $this->currency($proposal->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly, array('precision' => 2)) ?></td>
+        </tr>
+        <tr>
+            <td><strong>TOTAL (Monthly)</strong></td>
+            <td class="right"></td>
+            <td class="right"></td>
+            <td class="shaded right"><strong><?php echo $this->currency($proposal->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly), array('precision' => 2)) ?></strong></td>
+            <td class="right"></td>
+            <td class="shaded right"><strong><?php echo $this->currency($proposal->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly), array('precision' => 2)) ?></strong></td>
+        </tr>
+        <tr>
+            <td><strong>TOTAL (Annual)</strong></td>
+            <td class="right"></td>
+            <td class="right"></td>
+            <td class="shaded right"><strong><?php echo $this->currency($proposal->calculateEstimatedOemTonerCostAnnually(), array('precision' => 2)); ?></strong></td>
+            <td class="right"></td>
+            <td class="shaded right"><strong><?php echo $this->currency($proposal->calculateEstimatedCompTonerCostAnnually(), array('precision' => 2)); ?></strong></td>
+        </tr>
+    </tbody>
+</table>
+<div class="pheader">DIFFERENCE<span style="text-align:right;float:right"><?php echo $this->currency(($proposal->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12 - ($proposal->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12, array('precision' => 2)) ?></span></div>
+<p>
+        Where compatible substitutes are available, we estimate that by switching even 50% of your OEM toner to compatible toner, you can save an estimated <strong><?php echo $this->currency((($proposal->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12 - ($proposal->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12) / 2, array('precision' => 0)) ?>
+    per year</strong> in toner costs.
+    </p>
+<div class="center">
+<img src="<?php echo $graphs['DifferenceBarGraph']; ?>" />
+</div>

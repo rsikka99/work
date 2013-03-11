@@ -1,0 +1,31 @@
+<?php
+/**
+ * Solution - Let Office Depot Take Care of Your Business Print
+ */
+/* @var $section PHPWord_Section */
+$section = $this->section;
+
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
+
+$section->addPageBreak();
+$section->addTitle(sprintf($this->translate('Let %1$s Take Care of Your Business Print'),$this->companyName), 1);
+$section->addText(sprintf($this->translate('With %1$s as your single point of contact for your office printing needs, your business will be taken care of:'),$this->companyName));
+
+$section->addTitle($this->translate('Just-in-Time Supplies'), 2);
+$section->addText(sprintf($this->translate('%1$s monitors your supplies levels and ships toner immediately through our world class logistics and distribution network. This allows you to reduce the amount of cash held in supplies inventory, and increase uptime by always having the right supplies when you need them. Remember, sourcing and delivering supplies is our core business.'),$this->companyName));
+
+$section->addTitle($this->translate('Proactive Maintenance and Service'), 2);
+$section->addText(sprintf($this->translate('%1$s provides same-day support for service and printer maintenance, and under the %2$s program, all of your parts and labor are included (maintenance kits, fusers, etc.). We provide next-day repair for all printing devices under your managed print services contract so your IT staff will be free from handling printer-related issues.'),$this->companyName,$this->brandName));
+
+$section->addTitle($this->translate('Cost Control and Business Intelligence Reporting'), 2);
+$section->addText(sprintf($this->translate('Under the %1$s and %1$s Plus� programs, you\'ll have a single contact and receive one monthly invoice for all of your managed print services. Now you can easily predict and budget for your printing expenses.'),$this->brandName));
+
+$section->addTitle($this->translate('Eco Smart Solutions'), 2);
+$section->addText(sprintf($this->translate('%1$s was recognized by Newsweek as the No. 1 Green Retailer. Our eco-preferable initiatives include recycling programs for supplies and equipment, and product lines of refurbished printers and remanufactured supplies. Through our managed print services program, we can help you determine which inefficient devices should be removed and if duplex, scanning and secure-print features should be implemented to reduce paper waste.'),$this->companyName));
+
+$section->addTitle($this->translate('Your Total Print Solution'), 2);
+$section->addText(sprintf($this->translate('With %1$s, you get more than managed print services. Leverage our Copy & Print Depot locations for large or multiple print jobs. E-mail files to Copy & Print Depot for same-day pickup, delivery, or to ship to multiple locations. Use our digital file cabinet to store files on our secure server for staff or customers to access and print on demand. We also offer commercial printing, large format printing, banner printing, custom printing, and have a variety of finishing capabilities for all of your office printing needs.'),$this->companyName));
+
+$section->addTitle($this->translate('Flexible Options'), 2);
+$section->addText(sprintf($this->translate('From day-to-day management of your office print to leveraging your existing assets or choosing to obtain new hardware on a flat-rate program, %1$s provides a variety of options that enable you to maintain your flexibility as your needs change.'),$this->companyName));

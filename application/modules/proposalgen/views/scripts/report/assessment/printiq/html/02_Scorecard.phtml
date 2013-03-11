@@ -1,0 +1,56 @@
+<?php
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
+$graphs = $proposal->getGraphs();
+?>
+<div class="h1">Your <?php echo $this->reportName; ?>&reg; Smart Assessment</div>
+<p>It can be a challenge to understand your printing needs, and there are many factors to consider: hardware functionality, supplies delivery, service, parts, maintenance kits,
+IT time spent supporting printers -- and the cost for all of this. This free <?php echo $this->reportName; ?> Smart Assessment will allow you to make sense of your printing needs and costs. Office Depot
+can help you get your office print under control with our smart and flexible managed print services solutions.</p>
+<br />
+<div class="pheader">Score Card</div>
+<p style="margin: 10pt 0pt;">Your office printing environment was graded across five categories on a scale of 1 to 10. A score of 1 indicates a low-efficiency or high-cost scenario. A score of 10 indicates a high-efficiency or low-cost scenario. Your results are below:</p>
+<table cellspacing="0" class="gradesTable">
+    <tr>
+        <td class="gradeDescription">
+            <h4>Supplies and Service Logistics</h4>
+            <p>Management breakdown, efficiency of break-fix service, number of vendors used for print, and number of different models and associated supply types.</p>
+        </td>
+
+        <td class="gradeNumber"><?php echo number_format($proposal->getRanking()->getSuppliesAndServiceLogistics()->Rank, 1); ?></td>
+    </tr>
+    <tr>
+        <td class="gradeDescription">
+            <h4>Printing Hardware Usage</h4>
+            <p>Total number of printing devices, average print volumes, underused and overused equipment, and color print usage.</p>
+        </td>
+        <td class="gradeNumber"><?php echo number_format($proposal->getRanking()->getPrintingHardwareUsage()->Rank, 1); ?></td>
+    </tr>
+    <tr>
+        <td class="gradeDescription">
+            <h4>Technology Reliability and User Productivity</h4>
+            <p>Age of printing devices, IT time spent managing printers, and availability of technology features that improve workflow and productivity.</p>
+        </td>
+        <td class="gradeNumber"><?php echo number_format($proposal->getRanking()->getTechnologyReliabilityAndUserProductivity()->Rank, 1); ?></td>
+    </tr>
+    <tr>
+        <td class="gradeDescription">
+            <h4>Environmental Impact</h4>
+            <p>Energy consumption from printing hardware and availability of green print technology features.</p>
+        </td>
+        <td class="gradeNumber"><?php echo number_format($proposal->getRanking()->getEnvironmentalFriendliness()->Rank, 1); ?></td>
+    </tr>
+    <tr>
+        <td class="gradeDescription">
+            <h4>Expense</h4>
+            <p>Your estimated annual expenses for print-related hardware, supplies, service, and internal support and administration.</p>
+        </td>
+        <td class="gradeNumber"><?php echo number_format($proposal->getRanking()->getExpense()->Rank, 1); ?></td>
+    </tr>
+</table>
+<br />
+<div class="center">
+    <img src="<?php echo $graphs[0]; ?>" /> <!-- Annual printing costs for purchased hardware -->
+</div>
+<br /> <br />
+<div class="annualSavings">Our <?php echo $this->reportName; ?>&reg; program could provide you with annual savings of up to <strong>&#36;<?php echo number_format($proposal->getPrintIQSavings(), 0); ?></strong>.</div>

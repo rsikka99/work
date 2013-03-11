@@ -5,7 +5,7 @@
  *
  * @author Chris Garrah
  */
-class Proposalgen_AdminController extends Zend_Controller_Action
+class Proposalgen_AdminController extends Tangent_Controller_Action
 {
     protected $config;
 
@@ -486,7 +486,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                 ''
             );
         }
-        $this->_helper->json($response);
+        $this->sendJson($response);
     }
 
     /**
@@ -581,7 +581,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             Throw new exception("Critical Error: Unable to find device.", 0, $e);
         } // end catch
 
-        $this->_helper->json($formData);
+        $this->sendJson($formData);
     }
 
     public function devicereportsAction ()
@@ -2282,196 +2282,6 @@ class Proposalgen_AdminController extends Zend_Controller_Action
     }
 
     /**
-     * Allows system admins to set the default settings for the system
-     * BOOKMARK: SYSTEMADMIN SETTINGS
-     */
-    public function managesettingsAction ()
-    {
-        $this->view->title = 'Manage Settings';
-        $db                = Zend_Db_Table::getDefaultAdapter();
-
-        // Row #1 of Report Settings has all the system defaults
-        $systemReportSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->find(1);
-        $systemSurveySettings = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->find(1);
-        $form                 = new Proposalgen_Form_Settings_SystemAdmin();
-
-        if ($this->_request->isPost())
-        {
-            // Get the data that has been posted
-            $formData = $this->_request->getPost();
-
-            if ($form->isValid($formData))
-            {
-                if (isset($formData ['save_settings']))
-                {
-                    $db->beginTransaction();
-                    try
-                    {
-                        // Make all empty values = null
-                        foreach ($formData as &$value)
-                        {
-                            if (strlen($value) === 0)
-                            {
-                                $value = null;
-                            }
-                        }
-                        // Save page coverage settings (survey settings)
-                        $systemSurveySettings->populate($formData);
-                        Proposalgen_Model_Mapper_Survey_Setting::getInstance()->save($systemSurveySettings, $systemSurveySettings->id);
-                        // Save report settings (all other)
-                        $systemReportSettings->populate($formData);
-                        Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($systemReportSettings, $systemReportSettings->id);
-
-                        $this->_helper->flashMessenger(array(
-                                                            "success" => "Your settings have been updated."
-                                                       ));
-                        $db->commit();
-                    }
-                    catch (Zend_Db_Exception $e)
-                    {
-                        $db->rollback();
-                        $this->_helper->flashMessenger(array("error" => "An error occured while saving your settings."));
-                    }
-                    catch (Exception $e)
-                    {
-                        $db->rollback();
-                        $this->_helper->flashMessenger(array("error" => "An error occured while saving your settings."));
-                    }
-                }
-            }
-            else
-            {
-                $this->_helper->flashMessenger(array(
-                                                    "error" => "Please review the errors below."
-                                               ));
-                $form->populate($formData);
-            }
-        }
-
-        // Add form to page
-        $form->setDecorators(array(array('ViewScript', array('viewScript' => 'forms/settings/systemadmin.phtml'))));
-        // Populate the form wif data
-        $form->populate($systemReportSettings->toArray());
-        $form->populate($systemSurveySettings->toArray());
-        $this->view->settingsForm = $form;
-    }
-
-    /**
-     * Allows the user to set their own settings in the override hierarchy
-     * BOOKMARK: USER SETTINGS
-     */
-    public function managemysettingsAction ()
-    {
-        /** @noinspection PhpUndefinedFieldInspection */
-        $this->view->title = 'Manage My Settings';
-        $db                = Zend_Db_Table::getDefaultAdapter();
-        $message           = '';
-
-        // Get system overrides
-        $userId         = Zend_Auth::getInstance()->getIdentity()->id;
-        $reportSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchUserReportSetting($userId);
-        $surveySettings = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchUserSurveySetting($userId);
-        $pricingConfigs = Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll();
-        $form           = new Proposalgen_Form_Settings_User();
-        // Add all the pricing configs
-        /* @var $pricingConfig Proposalgen_Model_PricingConfig */
-        foreach ($pricingConfigs as $pricingConfig)
-        {
-            $form->getElement('assessmentPricingConfigId')->addMultiOption($pricingConfig->pricingConfigId, ($pricingConfig->pricingConfigId !== 1) ? $pricingConfig->configName : "");
-        }
-
-
-        // Populate the values in the form.
-        $form->populate($surveySettings->toArray());
-        $form->populate($reportSettings->toArray());
-
-        // Get the system defaults and unset the id's.  Merge the two system settings and set the dropdowns.
-        $systemReportSettings      = Proposalgen_Model_Mapper_Report_Setting::getInstance()->find(1);
-        $systemSurveySetting       = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->find(1);
-        $systemReportSettingsArray = $systemReportSettings->toArray();
-        $systemSurveySettingArray  = $systemSurveySetting->toArray();
-        unset($systemReportSettingsArray ['id']);
-        unset($systemSurveySettingArray ['id']);
-        $defaultSettings = array_merge($systemReportSettingsArray, $systemSurveySettingArray);
-
-        if ($defaultSettings ["assessmentPricingConfigId"] !== Proposalgen_Model_PricingConfig::NONE)
-        {
-            $defaultSettings ["assessmentPricingConfigId"] = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($defaultSettings ["assessmentPricingConfigId"])->configName;
-        }
-        else
-        {
-            $defaultSettings ["assessmentPricingConfigId"] = "";
-        }
-
-
-        if ($this->_request->isPost())
-        {
-            // get form values
-            $formData = $this->_request->getPost();
-
-            if ($form->isValid($formData))
-            {
-                if (isset($formData ['save_settings']))
-                {
-                    $db->beginTransaction();
-                    try
-                    {
-                        // Make all empty values = null
-                        foreach ($formData as &$value)
-                        {
-                            if (strlen($value) === 0)
-                            {
-                                $value = new Zend_Db_Expr("NULL");
-                            }
-                        }
-
-                        // Save page coverage settings (survey settings)
-                        $surveySettings->populate($formData);
-                        Proposalgen_Model_Mapper_Survey_Setting::getInstance()->save($surveySettings, $surveySettings->id);
-
-                        // Save report settings (all other)
-                        $reportSettings->populate($formData);
-                        Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($reportSettings, $reportSettings->id);
-
-                        $this->_helper->flashMessenger(array("success" => "Your settings have been updated."));
-                        $db->commit();
-                    }
-                    catch (Zend_Db_Exception $e)
-                    {
-                        $db->rollback();
-                        $this->_helper->flashMessenger(array("error" => "An error occurred while saving your settings.{$e->getMessage()}"));
-                    }
-                    catch (Exception $e)
-                    {
-                        $db->rollback();
-                        $this->_helper->flashMessenger(array("error" => "An error occurred while saving your settings."));
-                    }
-                }
-            }
-            else
-            {
-                $this->_helper->flashMessenger(array("error" => "Please review the errors below."));
-                $form->populate($formData);
-            }
-        }
-
-
-        // add form to page
-        $form->setDecorators(array(
-                                  array(
-                                      'ViewScript',
-                                      array(
-                                          'viewScript' => 'forms/settings/user.phtml',
-                                          'dealerData' => $defaultSettings,
-//                                          'dealerName' => $dealerName,
-                                          'message'    => $message
-                                      )
-                                  )
-                             ));
-        $this->view->settingsForm = $form;
-    }
-
-    /**
      */
     public function managemypricingAction ()
     {
@@ -3406,7 +3216,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         /*
          * Send json response
          */
-        $this->_helper->json($formData);
+        $this->sendJson($formData);
     }
 
     /**
@@ -5452,7 +5262,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         {
             Throw new Exception($e->getMessage);
         }
-        $this->_helper->json($response);
+        $this->sendJson($response);
     }
 
     public function userdevicesAction ()
@@ -5797,7 +5607,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             throw new Exception("Passing Exception Up The Chain", null, $e);
         }
 
-        $this->_helper->json($formData);
+        $this->sendJson($formData);
     }
 
     public function usertonersAction ()
@@ -6240,13 +6050,13 @@ class Proposalgen_AdminController extends Zend_Controller_Action
         if ($errorMessage)
         {
             $this->_response->setHttpResponseCode(500);
-            $this->_helper->json(array(
+            $this->sendJson(array(
                                       'error' => $errorMessage
                                  ));
         }
         else
         {
-            $this->_helper->json(array(
+            $this->sendJson(array(
                                       'success' => true
                                  ));
         }
@@ -6298,9 +6108,8 @@ class Proposalgen_AdminController extends Zend_Controller_Action
                                                                           'onlyUnmapped'
                                                                       )
                                                                  ));
-
             // If search criteria or value is null then we don't need either one of them. Same goes if our criteria is invalid.
-            if ($searchCriteria === null || $searchValue === null || !$filterCriteriaValidator->isValid($searchCriteria))
+            if ($searchCriteria != 'onlyUnmapped' &&( $searchCriteria === '' || $searchValue === '' || !$filterCriteriaValidator->isValid($searchCriteria)))
             {
                 $searchCriteria = null;
                 $searchValue    = null;
@@ -6324,12 +6133,12 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             $jqGrid->setRows($rmsDeviceMapper->getMatchupDevices($jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $searchCriteria, $searchValue, $jqGrid->getRecordsPerPage(), $startRecord));
 
             // Send back jqGrid json data
-            $this->_helper->json($jqGrid->createPagerResponseArray());
+            $this->sendJson($jqGrid->createPagerResponseArray());
         }
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $this->_helper->json(array(
+            $this->sendJson(array(
                                       'error' => 'Sorting parameters are invalid'
                                  ));
         }
@@ -6551,7 +6360,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             // validations are automatically added)
             $this->view->message = $validation;
         }
-        $this->_helper->json($this->view->message);
+        $this->sendJson($this->view->message);
     }
 
     public function replacementprinterslistAction ()
@@ -6589,7 +6398,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
             Throw new exception("Error: Unable to find replacement device.", 0, $e);
         }
 
-        $this->_helper->json($formData);
+        $this->sendJson($formData);
     }
 
     public function replacementdetailsAction ()
@@ -7062,7 +6871,7 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
         $jsonResponse = Proposalgen_Model_Mapper_MasterDevice::getInstance()->searchByName($searchTerm, $filterByManufacturer);
 
-        $this->_helper->json($jsonResponse);
+        $this->sendJson($jsonResponse);
 
     }
 
@@ -7092,4 +6901,5 @@ class Proposalgen_AdminController extends Zend_Controller_Action
 
         return false;
     }
+
 } //end class AdminController

@@ -1,23 +1,23 @@
-#DescriptionQuestionTable td {
+#htmlReportContainer #DescriptionQuestionTable td {
 	vertical-align: top;
 }
 
-#ExcludedDevicesTable {
+#htmlReportContainer #ExcludedDevicesTable {
 	width: 100%;
 }
 
-#ExcludedDevicesTable .column1 {
+#htmlReportContainer #ExcludedDevicesTable .column1 {
     width: 190px;
 }
 
-#ExcludedDevicesTable .column2 {
+#htmlReportContainer #ExcludedDevicesTable .column2 {
     width: 95px;
     word-wrap: break-word;
 }
 
-#ExcludedDevicesTable .column3 {
+#htmlReportContainer #ExcludedDevicesTable .column3 {
     width: 85px;
 }
 
-#ExcludedDevicesTable .column4 {
+#htmlReportContainer #ExcludedDevicesTable .column4 {
 }

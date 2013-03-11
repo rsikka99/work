@@ -83,14 +83,42 @@
 }
 
 /* TITLE PAGE */
-#htmlReportContainer  div.titlepage {
-    padding-left : 250px;
-    padding-top  : 390px;
+#htmlReportContainer .title-page-logo-box-wrapper {
+    display : table;
+    width   : 100%;
 }
 
-#htmlReportContainer  div.titlepage div.customerdetails {
-    padding-top : 150px;
+#htmlReportContainer .title-page-logo-box {
+    display        : table-cell;
+    vertical-align : middle;
+    height         : 300px;
+    width          : 100%;
+    text-align     : center;
 }
+
+#htmlReportContainer .title-page-logo {
+
+    display : block;
+    margin  : auto;
+
+}
+
+#htmlReportContainer .title-page-report-title {
+    background-color : #58595b;
+    color            : #FFF;
+    margin-bottom    : 20px;
+    padding          : 5px 5px 5px 30px;
+}
+
+#htmlReportContainer .title-page-customer-details {
+    background-color : #808285;
+    color            : #FFF;
+    min-height       : 300px;
+    padding          : 10px;
+
+}
+
+/* TITLE PAGE */
 
 /* PAGE FOOTER */
 #htmlReportContainer  table.footertable td {
@@ -105,7 +133,7 @@
 /* GENERAL PAGE ITEM DEFINITIONS */
 #htmlReportContainer  div.h1 {
     border-bottom : 1px solid #000000;
-    color         : #F0003C;
+    color         : #0096D6;
     font-size     : 14.5pt;
     font-weight   : bold;
     margin-bottom : 15px;
@@ -113,7 +141,7 @@
 
 /* Paragraph header */
 #htmlReportContainer  div.pheader {
-    background-color : #F0003C;
+    background-color : #0096D6;
     padding          : 2px;
     margin-top       : 5px;
     margin-bottom    : 5px;
@@ -144,13 +172,13 @@
 
 /* Annual savings */
 #htmlReportContainer div.annualSavings strong {
-    color : #F0003C;
+    color : #0096D6;
 }
 
 #htmlReportContainer div.annualSavings {
     background-color : #F0F0F0;
     border           : 1pt solid #999;
-    height           : 40px;
+
     font-weight      : bold;
     font-size        : 13pt;
     text-align       : center;

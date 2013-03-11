@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_ManagedevicesController extends Zend_Controller_Action
+class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 {
 
     function init ()

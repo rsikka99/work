@@ -1,0 +1,28 @@
+<?php
+/**
+ * Cost Analysis - Header information
+ *
+ * This script contains everything that comes before the big table of
+ * information in the cost analysis.
+ */
+/* @var $section PHPWord_Section */
+$section = $this->section;
+
+/* @var $proposal Proposalgen_Model_Proposal_Abstract */
+$proposal = $this->proposal;
+
+/**
+ * Variables
+ */
+// Add any variables that are needed throughout the page here.
+
+
+/**
+ * Section starts here
+ */
+
+$section->addTitle($this->translate('Printing Device List'));
+
+$textRun = $section->createTextRun();
+$textRun->addText($this->translate('Below is a list of your printing device models and whether or not they are qualified for just-in-time supplies fulfillment. For devices not qualified for just-in-time supplies fulfillment, you can call into our office to order supplies for next-day delivery. Consider upgrading these devices to be on a 100% just-in-time supplies fulfillment model. Devices not included in the report are listed in a subsequent table. These devices are typically older models that are not compatible with remote monitoring software or do not qualify for the PrintIQ program.'));
+

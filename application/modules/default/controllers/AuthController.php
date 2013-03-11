@@ -1,5 +1,5 @@
 <?php
-class Default_AuthController extends Zend_Controller_Action
+class Default_AuthController extends Tangent_Controller_Action
 {
 
     /**
@@ -41,7 +41,7 @@ class Default_AuthController extends Zend_Controller_Action
         {
             if ($request->getParam('forgotPassword', false))
             {
-                $this->_helper->redirector('forgotpassword', null, null, array('username' => $request->getParam('username', '')));
+                $this->redirector('forgotpassword', null, null, array('username' => $request->getParam('username', '')));
             }
             if ($form->isValid($request->getPost()))
             {
@@ -106,7 +106,7 @@ class Default_AuthController extends Zend_Controller_Action
                     /*
                      * Redirect them to the home page now that they are logged in.
                      */
-                    $this->_helper->redirector('index', 'index', 'index');
+                    $this->redirector('index', 'index', 'index');
                 }
                 else
                 {
@@ -142,7 +142,7 @@ class Default_AuthController extends Zend_Controller_Action
     public function logoutAction ()
     {
         $this->logout();
-        $this->_helper->redirector('login');
+        $this->redirector('login');
     } // end logoutAction
 
 
@@ -235,11 +235,11 @@ class Default_AuthController extends Zend_Controller_Action
                 if ($identity->resetPasswordOnNextLogin)
                 {
                     $this->logout();
-                    $this->_helper->redirector('login');
+                    $this->redirector('login');
                 }
                 else
                 {
-                    $this->_helper->redirector('index', 'index');
+                    $this->redirector('index', 'index');
                 }
             }
         }

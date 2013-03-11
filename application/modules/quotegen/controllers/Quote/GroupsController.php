@@ -23,7 +23,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
             
             if (isset($values ['goBack']))
             {
-                $this->_helper->redirector('index', 'quote_devices', null, array (
+                $this->redirector('index', 'quote_devices', null, array (
                         'quoteId' => $this->_quoteId 
                 ));
             }
@@ -51,7 +51,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                         ));
                         
                         // Redirect to ourselves
-                        $this->_helper->redirector(null, null, null, array (
+                        $this->redirector(null, null, null, array (
                                 'quoteId' => $this->_quoteId 
                         ));
                     }
@@ -76,7 +76,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                         ));
                         
                         // Redirect to ourselves
-                        $this->_helper->redirector(null, null, null, array (
+                        $this->redirector(null, null, null, array (
                                 'quoteId' => $this->_quoteId 
                         ));
                     }
@@ -130,7 +130,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                         ));
                         
                         // Redirect to ourselves
-                        $this->_helper->redirector(null, null, null, array (
+                        $this->redirector(null, null, null, array (
                                 'quoteId' => $this->_quoteId 
                         ));
                     }
@@ -155,7 +155,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                         ));
                         
                         // Redirect to ourselves
-                        $this->_helper->redirector(null, null, null, array (
+                        $this->redirector(null, null, null, array (
                                 'quoteId' => $this->_quoteId 
                         ));
                     }
@@ -218,7 +218,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                             // Redirect?
                             if (isset($values ['saveAndContinue']))
                             {
-                                $this->_helper->redirector('index', 'quote_pages', null, array (
+                                $this->redirector('index', 'quote_pages', null, array (
                                         'quoteId' => $this->_quoteId 
                                 ));
                             }

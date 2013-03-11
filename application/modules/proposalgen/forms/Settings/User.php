@@ -20,6 +20,7 @@ class Proposalgen_Form_Settings_User extends Zend_Form
     {
         //call parent contsructor
         parent::__construct($options);
+        $this->setAttrib('id', 'settings_table');
 
         $elements       = array();
         $elementCounter = 0;

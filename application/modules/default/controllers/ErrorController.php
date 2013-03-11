@@ -1,6 +1,6 @@
 <?php
 
-class Default_ErrorController extends Zend_Controller_Action
+class Default_ErrorController extends Tangent_Controller_Action
 {
 
     public function init ()

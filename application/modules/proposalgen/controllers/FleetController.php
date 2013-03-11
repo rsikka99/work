@@ -282,6 +282,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             $this->_helper->flashMessenger(array(
                                                                 'success' => "Your file was imported successfully."
                                                            ));
+                            $this->saveReport();
+                            $this->gotoNextStep();
                         }
                     }
                     else
@@ -309,9 +311,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 }
                 else
                 {
-                    // Every time we save anything related to a report, we should save it (updates the modification date)
-                    $this->saveReport();
-
                     // Call the base controller to send us to the next logical step in the proposal.
                     $this->gotoNextStep();
                 }
@@ -324,7 +323,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $this->view->rmsExcludedRowCount = $rmsExcludedRowMapper->countRowsForReport($report->id);
         $this->view->hasPreviousUpload   = ($this->view->deviceInstanceCount > 0 || $this->view->rmsExcludedRowCount > 0);
 
-        $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation(Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT);
+        $navigationButtons = ($this->view->hasPreviousUpload) ? Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT : Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK;
+        $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation($navigationButtons);
 
     }
 
@@ -402,12 +402,12 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             $jqGrid->setRows($mapDeviceInstanceMapper->fetchAllForReport($this->getReport()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord));
 
             // Send back jqGrid json data
-            $this->_helper->json($jqGrid->createPagerResponseArray());
+            $this->sendJson($jqGrid->createPagerResponseArray());
         }
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $this->_helper->json(array(
+            $this->sendJson(array(
                                       'error' => 'Sorting parameters are invalid'
                                  ));
         }
@@ -487,11 +487,11 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         if ($errorMessage !== null)
         {
             $this->getResponse()->setHttpResponseCode(500);
-            $this->_helper->json(array("error" => true, "message" => $errorMessage));
+            $this->sendJson(array("error" => true, "message" => $errorMessage));
         }
         else
         {
-            $this->_helper->json(array("success" => true, "message" => $successMessage));
+            $this->sendJson(array("success" => true, "message" => $successMessage));
         }
     }
 
@@ -596,12 +596,12 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             $jqGrid->setRows($rows);
 
             // Send back jqGrid json data
-            $this->_helper->json($jqGrid->createPagerResponseArray());
+            $this->sendJson($jqGrid->createPagerResponseArray());
         }
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $this->_helper->json(array(
+            $this->sendJson(array(
                                       'error' => 'Sorting parameters are invalid'
                                  ));
         }
@@ -738,7 +738,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             $db->commit();
 
                             $this->_helper->flashMessenger(array("success" => "Device successfully mapped!"));
-                            $this->_helper->redirector("mapping");
+                            $this->redirector("mapping");
                         }
                         catch (Exception $e)
                         {
@@ -764,7 +764,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         else
         {
             $this->_helper->flashMessenger(array("warning" => "Invalid Device Specified."));
-            $this->_helper->redirector("mapping");
+            $this->redirector("mapping");
         }
     }
 
@@ -809,7 +809,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             $jsonResponse = array("error" => true, "message" => "There was an error removing the unknown device. Reference #" . My_Log::getUniqueId());
         }
 
-        $this->_helper->json($jsonResponse);
+        $this->sendJson($jsonResponse);
     }
 
     /**
@@ -863,16 +863,16 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
         if ($errorMessage !== false)
         {
-            $this->_helper->json(array("error" => true, "message" => $errorMessage));
+            $this->sendJson(array("error" => true, "message" => $errorMessage));
         }
 
         if ($isExcluded)
         {
-            $this->_helper->json(array("success" => true, "message" => "Device is now excluded."));
+            $this->sendJson(array("success" => true, "message" => "Device is now excluded."));
         }
         else
         {
-            $this->_helper->json(array("success" => true, "message" => "Device is now included. "));
+            $this->sendJson(array("success" => true, "message" => "Device is now included. "));
         }
 
     }
@@ -962,6 +962,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             $this->getResponse()->setHttpResponseCode(500);
         }
 
-        $this->_helper->json($jsonResponse);
+        $this->sendJson($jsonResponse);
     }
 }

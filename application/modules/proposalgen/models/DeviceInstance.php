@@ -1038,6 +1038,39 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
+     * @param $monthlyTotalCost
+     * @return float
+     */
+    public function getMonthlyRatePercentage ($monthlyTotalCost)
+    {
+        return ($this->getMonthlyRate() / $monthlyTotalCost) * 100;
+    }
+
+    /**
+     * @param $monthlyLeasePayment
+     * @param $monochromeCostPerPage
+     * @param $colorCostPerPage
+     *
+     * @return float
+     */
+    public function getLeasedMonthlyRate($monthlyLeasePayment, $monochromeCostPerPage, $colorCostPerPage)
+    {
+        return $monthlyLeasePayment + ($monochromeCostPerPage * $this->getAverageMonthlyBlackAndWhitePageCount()) + ($colorCostPerPage * $this->getAverageMonthlyColorPageCount());
+    }
+    /**
+     * @param $monthlyLeasePayment
+     * @param $monochromeCostPerPage
+     * @param $colorCostPerPage
+     * @param $totalMonthlyCost
+     *
+     * @return float
+     */
+    public function getLeasedMonthlyRatePercentage($monthlyLeasePayment, $monochromeCostPerPage, $colorCostPerPage, $totalMonthlyCost)
+    {
+        return ($this->getLeasedMonthlyRate($monthlyLeasePayment,$monochromeCostPerPage,$colorCostPerPage) / $totalMonthlyCost) * 100;
+    }
+
+    /**
      * @return float
      */
     public static function getITCostPerPage ()
@@ -1280,15 +1313,52 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function isCapableOfReportingTonerLevels ()
     {
-        // Use the device instance's value at all times. We assume it to be the most accurate when its set to true.
-        $reportsTonerLevels = $this->reportsTonerLevels;
-
-        // In the case that our device instance says it cannot report toner levels we will go with whatever the master device says it can do.
-        if (!$reportsTonerLevels && $this->getMasterDevice() instanceof Proposalgen_Model_MasterDevice)
-        {
-            $reportsTonerLevels = $this->getMasterDevice()->reportsTonerLevels;
-        }
+        // Always use the master device record. This way administrators can control which devices can and can not report toner levels.
+        $reportsTonerLevels = $this->getMasterDevice()->reportsTonerLevels;
 
         return $reportsTonerLevels;
+    }
+    /**
+     * Calculates the monthly cost for this instance
+     *
+     * @param Application_Model_CostPerPageSetting $costPerPageSetting
+     *            The settings to use when calculating cost per page
+     * @param Application_Model_MasterDevice $masterDevice
+     *            The master device to use
+     * @return number
+     */
+    public function calculateMonthlyCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null)
+    {
+        return $this->calculateMonthlyMonoCost($costPerPageSetting, $masterDevice) + $this->calculateMonthlyColorCost($costPerPageSetting, $masterDevice);
+    }
+
+    /**
+     * Calculates the monthly cost for monochrome printing
+     *
+     * @param Application_Model_CostPerPageSetting $costPerPageSetting
+     *            The setting used to calculate cost per page
+     * @param Application_Model_MasterDevice $masterDevice
+     *            the master device to us
+     * @return number
+     */
+    public function calculateMonthlyMonoCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null)
+    {
+        $monoCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->monochromeCostPerPage;
+        return $monoCostPerPage * $this->getAverageMonthlyBlackAndWhitePageCount();
+    }
+
+    /**
+     * Calculates the monthly cost for color printing
+     *
+     * @param Application_Model_CostPerPageSetting $costPerPageSetting
+     *            the setting used to calculate cost per page
+     * @param Application_Model_MasterDevice $masterDevice
+     *            the master device to use, or null for current instance of device
+     * @return number
+     */
+    public function calculateMonthlyColorCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null)
+    {
+        $colorCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->colorCostPerPage;
+        return $colorCostPerPage * $this->getAverageMonthlyColorPageCount();
     }
 }

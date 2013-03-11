@@ -1,6 +1,6 @@
 <?php
 
-class Proposalgen_MasterdeviceController extends Zend_Controller_Action
+class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
 {
 
     public function init ()
@@ -33,7 +33,7 @@ class Proposalgen_MasterdeviceController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a master device to delete first.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         $mapper = new Proposalgen_Model_Mapper_MasterDevice();
@@ -44,7 +44,7 @@ class Proposalgen_MasterdeviceController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error selecting the master device to delete.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         $message = "Are you sure you want to delete {$masterDevice->getFullDeviceName()}?";
@@ -63,12 +63,12 @@ class Proposalgen_MasterdeviceController extends Zend_Controller_Action
                     $this->_helper->flashMessenger(array (
                             'success' => "Master device  '{$masterDevice->getFullDeviceName()}' was deleted successfully." 
                     ));
-                    $this->_helper->redirector('index');
+                    $this->redirector('index');
                 }
             }
             else // go back
             {
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;
@@ -138,7 +138,7 @@ class Proposalgen_MasterdeviceController extends Zend_Controller_Action
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;
@@ -155,7 +155,7 @@ class Proposalgen_MasterdeviceController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a masterDevice to edit first.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         // Get the masterDevice
@@ -168,7 +168,7 @@ class Proposalgen_MasterdeviceController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error selecting the masterDevice to edit.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         // Create a new form with the mode and roles set
@@ -224,7 +224,7 @@ class Proposalgen_MasterdeviceController extends Zend_Controller_Action
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;

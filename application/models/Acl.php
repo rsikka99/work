@@ -28,22 +28,22 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_ADMIN_TONER_WILDCARD = "admin__toner__%";
 
 
-    const RESOURCE_DEFAULT_WILDCARD                = "default__%__%";
-    const RESOURCE_PROPOSALGEN_WILDCARD            = "proposalgen__%__%";
-    const RESOURCE_PROPOSALGEN_SURVEY_WILDCARD     = "proposalgen__survey__%";
-    const RESOURCE_PROPOSALGEN_REPORT_WILDCARD     = "proposalgen__report_assessment__%";
-    const RESOURCE_QUOTEGEN_WILDCARD               = "quotegen__%__%";
-    const RESOURCE_QUOTEGEN_CLIENT_WILDCARD        = "quotegen__client__%";
-    const RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD = "quotegen__configuration__%";
-    const RESOURCE_QUOTEGEN_QUOTEDEVICES_WILDCARD  = "quotegen__quote_devices__%";
-    const RESOURCE_QUOTEGEN_QUOTEREPORTS_WILDCARD  = "quotegen__quote_reports__%";
+    const RESOURCE_DEFAULT_WILDCARD                       = "default__%__%";
+    const RESOURCE_PROPOSALGEN_WILDCARD                   = "proposalgen__%__%";
+    const RESOURCE_PROPOSALGEN_SURVEY_WILDCARD            = "proposalgen__survey__%";
+    const RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD = "proposalgen__report_assessment__%";
+    const RESOURCE_QUOTEGEN_WILDCARD                      = "quotegen__%__%";
+    const RESOURCE_QUOTEGEN_CLIENT_WILDCARD               = "quotegen__client__%";
+    const RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD        = "quotegen__configuration__%";
+    const RESOURCE_QUOTEGEN_QUOTEDEVICES_WILDCARD         = "quotegen__quote_devices__%";
+    const RESOURCE_QUOTEGEN_QUOTEREPORTS_WILDCARD         = "quotegen__quote_reports__%";
 
 
     /**
      * Admin Constants
      */
-    const RESOURCE_ADMIN_INDEX_INDEX  = "admin__index__index";
-    const RESOURCE_ADMIN_USER_PROFILE = "admin__user__profile";
+    const RESOURCE_ADMIN_INDEX_INDEX   = "admin__index__index";
+    const RESOURCE_ADMIN_USER_PROFILE  = "admin__user__profile";
     const RESOURCE_ADMIN_USER_WILDCARD = "admin__user__%";
 
     /**
@@ -54,38 +54,60 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_DEFAULT_AUTH_FORGOTPASSWORD = "default__auth__forgotpassword";
 
     /**
+     * Hardware Library Constants
+     */
+    const RESOURCE_HARDWARELIBRARY_INDEX_INDEX = "hardwarelibrary__index__index";
+
+    /**
      * Proposalgen Constants
      */
-    const RESOURCE_PROPOSALGEN_INDEX_INDEX                        = "proposalgen__index__index";
-    const RESOURCE_PROPOSALGEN_ADMIN_INDEX                        = "proposalgen__admin__index";
-    const RESOURCE_PROPOSALGEN_ADMIN_BULKUSERPRICING              = "proposalgen__admin__bulkuserpricing";
-    const RESOURCE_PROPOSALGEN_ADMIN_USERDEVICES                  = "proposalgen__admin__userdevices";
-    const RESOURCE_PROPOSALGEN_ADMIN_USERTONERS                   = "proposalgen__admin__usertoners";
-    const RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS              = "proposalgen__admin__filterlistitems";
-    const RESOURCE_PROPOSALGEN_ADMIN_TRANSFERREPORTS              = "proposalgen__admin__transferreports";
-    const RESOURCE_PROPOSALGEN_ADMIN_MANAGEMYSETTINGS             = "proposalgen__admin__managemysettings";
-    const RESOURCE_PROPOSALGEN_ADMIN_MANAGEMYREPORTS              = "proposalgen__admin__managemyreports";
-    const RESOURCE_PROPOSALGEN_ADMIN_MYREPORTSLIST                = "proposalgen__admin__myreportslist";
-    const RESOURCE_PROPOSALGEN_ADMIN_FILTERREPORTSLIST            = "proposalgen__admin__filterreportslist";
-    const RESOURCE_PROPOSALGEN_ADMIN_FILTERUSERSLIST              = "proposalgen__admin__filteruserslist";
-    const RESOURCE_PROPOSALGEN_ADMIN_SEARCHFORDEVICE              = "proposalgen__admin__search-for-device";
-    const RESOURCE_PROPOSALGEN_FLEET                              = "proposalgen__fleet__index";
-    const RESOURCE_PROPOSALGEN_FLEET_MAPPING                      = "proposalgen__fleet__mapping";
-    const RESOURCE_PROPOSALGEN_FLEET_SUMMARY                      = "proposalgen__fleet__summary";
-    const RESOURCE_PROPOSALGEN_FLEET_DEVICESUMMARYLIST            = "proposalgen__fleet__device-summary-list";
-    const RESOURCE_PROPOSALGEN_FLEET_REPORTSETTINGS               = "proposalgen__fleet__reportsettings";
-    const RESOURCE_PROPOSALGEN_FLEET_EDITUNKNOWNDEVICES           = "proposalgen__fleet__edit-unknown-device";
-    const RESOURCE_PROPOSALGEN_FLEET_DEVICEMAPPINGLIST            = "proposalgen__fleet__device-mapping-list";
-    const RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS        = "proposalgen__fleet__device-instance-details";
-    const RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG           = "proposalgen__fleet__toggle-excluded-flag";
-    const RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE          = "proposalgen__fleet__remove-unknown-device";
-    const RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO                  = "proposalgen__fleet__set-mapped-to";
-    const RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD              = "proposalgen__manufacturer__%";
-    const RESOURCE_PROPOSALGEN_REPORT_INDEX                       = "proposalgen__report_index__index";
-    const RESOURCE_PROPOSALGEN_REPORT_SOLUTION                    = "proposalgen__report_solution__%";
-    const RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN_WILDCARD        = "proposalgen__report_grossmargin__%";
-    const RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST_WILDCARD = "proposalgen__report_printingdevicelist__%";
-    const RESOURCE_PROPOSALGEN_REPORT_PIQESSENTIALS_WILDCARD      = "proposalgen__report_piqessentials__%";
+    const RESOURCE_PROPOSALGEN_INDEX_INDEX           = "proposalgen__index__index";
+    const RESOURCE_PROPOSALGEN_ADMIN_INDEX           = "proposalgen__admin__index";
+    const RESOURCE_PROPOSALGEN_ADMIN_BULKUSERPRICING = "proposalgen__admin__bulkuserpricing";
+    const RESOURCE_PROPOSALGEN_ADMIN_USERDEVICES     = "proposalgen__admin__userdevices";
+    const RESOURCE_PROPOSALGEN_ADMIN_USERTONERS      = "proposalgen__admin__usertoners";
+    const RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS = "proposalgen__admin__filterlistitems";
+    const RESOURCE_PROPOSALGEN_ADMIN_TRANSFERREPORTS = "proposalgen__admin__transferreports";
+
+
+    const RESOURCE_PROPOSALGEN_ADMIN_MANAGEMYREPORTS                 = "proposalgen__admin__managemyreports";
+    const RESOURCE_PROPOSALGEN_ADMIN_MYREPORTSLIST                   = "proposalgen__admin__myreportslist";
+    const RESOURCE_PROPOSALGEN_ADMIN_FILTERREPORTSLIST               = "proposalgen__admin__filterreportslist";
+    const RESOURCE_PROPOSALGEN_ADMIN_FILTERUSERSLIST                 = "proposalgen__admin__filteruserslist";
+    const RESOURCE_PROPOSALGEN_ADMIN_SEARCHFORDEVICE                 = "proposalgen__admin__search-for-device";
+    const RESOURCE_PROPOSALGEN_FLEET                                 = "proposalgen__fleet__index";
+    const RESOURCE_PROPOSALGEN_FLEET_MAPPING                         = "proposalgen__fleet__mapping";
+    const RESOURCE_PROPOSALGEN_FLEET_SUMMARY                         = "proposalgen__fleet__summary";
+    const RESOURCE_PROPOSALGEN_FLEET_DEVICESUMMARYLIST               = "proposalgen__fleet__device-summary-list";
+    const RESOURCE_PROPOSALGEN_FLEET_REPORTSETTINGS                  = "proposalgen__fleet__reportsettings";
+    const RESOURCE_PROPOSALGEN_FLEET_EDITUNKNOWNDEVICES              = "proposalgen__fleet__edit-unknown-device";
+    const RESOURCE_PROPOSALGEN_FLEET_DEVICEMAPPINGLIST               = "proposalgen__fleet__device-mapping-list";
+    const RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS           = "proposalgen__fleet__device-instance-details";
+    const RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG              = "proposalgen__fleet__toggle-excluded-flag";
+    const RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE             = "proposalgen__fleet__remove-unknown-device";
+    const RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO                     = "proposalgen__fleet__set-mapped-to";
+    const RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD                 = "proposalgen__manufacturer__%";
+    const RESOURCE_PROPOSALGEN_REPORT_INDEX                          = "proposalgen__report_index__index";
+    const RESOURCE_PROPOSALGEN_REPORT_SOLUTION_WILDCARD              = "proposalgen__report_solution__%";
+    const RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN_WILDCARD           = "proposalgen__report_grossmargin__%";
+    const RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST_WILDCARD    = "proposalgen__report_printingdevicelist__%";
+    const RESOURCE_PROPOSALGEN_REPORT_TONERS_WILDCARD                = "proposalgen__report_toners__%";
+    const RESOURCE_PROPOSALGEN_REPORT_HEALTHCHECK_WILDCARD           = "proposalgen__report_healthcheck__%";
+    const RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_DEALER_WILDCARD   = "proposalgen__report_optimization_dealer__%";
+    const RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_CUSTOMER_WILDCARD = "proposalgen__report_optimization_customer__%";
+
+    /**
+     * Preferences Constants
+     */
+    const RESOURCE_PREFERENCES_WILDCARD          = "preferences__%";
+    const RESOURCE_PREFERENCES_INDEX_INDEX       = "preferences__index__index";
+    const RESOURCE_PREFERENCES_PROPOSAL_WILDCARD = "preferences__proposal__%";
+    const RESOURCE_PREFERENCES_PROPOSAL_INDEX    = "preferences__proposal__index";
+    const RESOURCE_PREFERENCES_PROPOSAL_SYSTEM   = "preferences__proposal__system";
+    const RESOURCE_PREFERENCES_QUOTE_WILDCARD    = "preferences__quote__%";
+    const RESOURCE_PREFERENCES_QUOTE_INDEX       = "preferences__quote__index";
+    const RESOURCE_PREFERENCES_QUOTE_SYSTEM      = "preferences__quote__system";
+
 
     /**
      * Quotegen constants
@@ -99,7 +121,6 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_QUOTEGEN_INDEX_CREATECLIENT        = "quotegen__index__create-client";
     const RESOURCE_QUOTEGEN_QUOTE_INDEX               = "quotegen__quote__index";
     const RESOURCE_QUOTEGEN_QUOTE_DELETE              = "quotegen__quote__delete";
-    const RESOURCE_QUOTEGEN_QUOTESETTING_EDIT         = "quotegen__quotesetting__edit";
 
 
     /**
@@ -318,6 +339,12 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_DEFAULT_AUTH_LOGOUT);
         $this->addResource(self::RESOURCE_DEFAULT_AUTH_FORGOTPASSWORD);
 
+
+        /**
+         * Hardware Library
+         */
+        $this->addResource(self::RESOURCE_HARDWARELIBRARY_INDEX_INDEX);
+
         //Assessment User
         $this->addResource(self::RESOURCE_PROPOSALGEN_INDEX_INDEX);
         $this->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_INDEX);
@@ -326,7 +353,6 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_USERTONERS);
         $this->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS);
 
-        $this->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_MANAGEMYSETTINGS);
         $this->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_MANAGEMYREPORTS);
         $this->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_MYREPORTSLIST);
         $this->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_FILTERREPORTSLIST);
@@ -348,11 +374,14 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO);
 
         $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_INDEX);
-        $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_WILDCARD);
-        $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_SOLUTION);
+        $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD);
+        $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_SOLUTION_WILDCARD);
         $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN_WILDCARD);
         $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST_WILDCARD);
-        $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_PIQESSENTIALS_WILDCARD);
+        $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_TONERS_WILDCARD);
+        $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_HEALTHCHECK_WILDCARD);
+        $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_DEALER_WILDCARD);
+        $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_CUSTOMER_WILDCARD);
 
         //Quote User
         $this->addResource(self::RESOURCE_QUOTEGEN);
@@ -366,13 +395,26 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_QUOTEGEN_INDEX_CREATECLIENT);
         $this->addResource(self::RESOURCE_QUOTEGEN_QUOTE_INDEX);
         $this->addResource(self::RESOURCE_QUOTEGEN_QUOTE_DELETE);
-        $this->addResource(self::RESOURCE_QUOTEGEN_QUOTESETTING_EDIT);
         $this->addResource(self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD);
 
         $this->addResource(self::RESOURCE_ADMIN_USER_PROFILE);
         $this->addResource(self::RESOURCE_ADMIN_USER_WILDCARD);
 
         $this->addResource(self::RESOURCE_ADMIN_INDEX_INDEX);
+
+
+        /**
+         * Preference Resources
+         */
+        $this->addResource(self::RESOURCE_PREFERENCES_WILDCARD);
+        $this->addResource(self::RESOURCE_PREFERENCES_INDEX_INDEX);
+        $this->addResource(self::RESOURCE_PREFERENCES_PROPOSAL_WILDCARD);
+        $this->addResource(self::RESOURCE_PREFERENCES_PROPOSAL_INDEX);
+        $this->addResource(self::RESOURCE_PREFERENCES_PROPOSAL_SYSTEM);
+        $this->addResource(self::RESOURCE_PREFERENCES_QUOTE_WILDCARD);
+        $this->addResource(self::RESOURCE_PREFERENCES_QUOTE_INDEX);
+        $this->addResource(self::RESOURCE_PREFERENCES_QUOTE_SYSTEM);
+
     }
 
     /**
@@ -417,6 +459,8 @@ class Application_Model_Acl extends Zend_Acl
         $this->allow(self::ROLE_PROPOSAL_ADMIN, self::RESOURCE_PROPOSALGEN_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_TRANSFERREPORTS, self::PRIVILEGE_ADMIN);
         $this->allow(self::ROLE_PROPOSAL_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_FILTERUSERSLIST, self::PRIVILEGE_ADMIN);
+
+        $this->allow(self::ROLE_PROPOSAL_ADMIN, self::RESOURCE_PREFERENCES_PROPOSAL_WILDCARD, self::PRIVILEGE_VIEW);
     }
 
     /**
@@ -430,11 +474,16 @@ class Application_Model_Acl extends Zend_Acl
         // Add our privileges
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
 
+        /**
+         * Hardware Library
+         */
+        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_HARDWARELIBRARY_INDEX_INDEX, self::PRIVILEGE_VIEW);
+
 //        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN_BULKUSERPRICING, self::PRIVILEGE_VIEW);
 //        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN_USERDEVICES, self::PRIVILEGE_VIEW);
 //        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN_USERTONERS, self::PRIVILEGE_VIEW);
 //        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN_MANAGEMYSETTINGS, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PREFERENCES_INDEX_INDEX, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN_MANAGEMYREPORTS, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN_MYREPORTSLIST, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN_TRANSFERREPORTS, self::PRIVILEGE_VIEW);
@@ -456,11 +505,17 @@ class Application_Model_Acl extends Zend_Acl
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_INDEX, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_WILDCARD, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_SOLUTION, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_SOLUTION_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST_WILDCARD, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_PIQESSENTIALS_WILDCARD, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_TONERS_WILDCARD, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_HEALTHCHECK_WILDCARD, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_DEALER_WILDCARD, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_CUSTOMER_WILDCARD, self::PRIVILEGE_VIEW);
+
+        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PREFERENCES_INDEX_INDEX, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PREFERENCES_PROPOSAL_INDEX, self::PRIVILEGE_VIEW);
 
 
     }
@@ -479,6 +534,8 @@ class Application_Model_Acl extends Zend_Acl
         $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_ADMIN_TONER_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_ADMIN_INDEX_INDEX, self::PRIVILEGE_VIEW);
+
+        $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_PREFERENCES_QUOTE_WILDCARD, self::PRIVILEGE_VIEW);
     }
 
     /**
@@ -493,6 +550,11 @@ class Application_Model_Acl extends Zend_Acl
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
         //$this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_WILDCARD, self::PRIVILEGE_VIEW)
 
+        /**
+         * Hardware Library
+         */
+        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_HARDWARELIBRARY_INDEX_INDEX, self::PRIVILEGE_VIEW);
+
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTEDEVICES_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTEGROUPS_INDEX, self::PRIVILEGE_VIEW);
@@ -504,11 +566,13 @@ class Application_Model_Acl extends Zend_Acl
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_INDEX_CREATECLIENT, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTE_INDEX, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTE_DELETE, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTESETTING_EDIT, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_CLIENT_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD, self::PRIVILEGE_VIEW);
 
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_ADMIN_INDEX_INDEX, self::PRIVILEGE_VIEW);
+
+        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_PREFERENCES_INDEX_INDEX, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_PREFERENCES_QUOTE_INDEX, self::PRIVILEGE_VIEW);
     }
 
     /**

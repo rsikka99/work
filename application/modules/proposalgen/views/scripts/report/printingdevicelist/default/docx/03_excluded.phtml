@@ -1,0 +1,59 @@
+<?php
+/**
+ * Cost Analysis - Main Table
+ *
+ * This script contains everything for the main table of the cost analysis.
+ */
+/* @var $section PHPWord_Section */
+$section = $this->section;
+
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
+
+/**
+ * Variables
+ */
+// Add any variables that are needed throughout the page here.
+
+
+/**
+ * Section starts here
+ */
+// You would normally put this here if you needed it but in the cost analysis we do not need it.
+// $section->addPageBreak();
+
+$textRun = $section->createTextRun();
+$textRun = $section->createTextRun();
+$textRun->addText($this->translate('Other Printing Devices Not Included in Assessment'), 'bold_text');
+
+$tcStyle = $this->styles->tables->excludeTable;
+
+// Excluded Table header
+$table = $section->addTable($tcStyle->tablestyle);
+$table->addRow($tcStyle->header->rowheight, $tcStyle->header->fontStyle);
+$table->addCell($tcStyle->col1Width, $tcStyle->header->cell)->addText($this->translate('Manufacturer'), $tcStyle->header->fontStyle, $tcStyle->leftalign);
+$table->addCell($tcStyle->col1Width, $tcStyle->header->cell)->addText($this->translate('Model'), $tcStyle->header->fontStyle, $tcStyle->leftalign);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->cell)->addText($this->translate('Serial Number'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->cell)->addText($this->translate('IP Address'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col4Width, $tcStyle->header->cell)->addText($this->translate('Exclusion Reason'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
+
+/* @var $device Proposalgen_Model_DeviceInstance */
+foreach($proposal->getExcludedDevices() as $device) {
+    $SerialNumber = (strlen($device->serialNumber) == 0) ? 'Unknown Serial' : $device->serialNumber;
+    
+    $table->addRow($tcStyle->cell->rowheight);
+    if($device->getIsMappedToMasterDevice())
+    {
+        $table->addCell($tcStyle->col1Width, $tcStyle->row->cell)->addText($this->translate($device->getMasterDevice()->getManufacturer()->fullname), $tcStyle->row->fontStyle, $tcStyle->leftalign);
+        $table->addCell($tcStyle->col1Width, $tcStyle->row->cell)->addText($this->translate($device->getMasterDevice()->modelName), $tcStyle->row->fontStyle, $tcStyle->leftalign);
+    }
+    else
+    {
+        $table->addCell($tcStyle->col1Width, $tcStyle->row->cell)->addText($this->translate($device->getRmsUploadRow()->manufacturer), $tcStyle->row->fontStyle, $tcStyle->leftalign);
+        $table->addCell($tcStyle->col1Width, $tcStyle->row->cell)->addText($this->translate($device->getRmsUploadRow()->modelName), $tcStyle->row->fontStyle, $tcStyle->leftalign);
+    }
+    $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText($this->translate($SerialNumber), $tcStyle->row->fontStyle, $tcStyle->centeralign);
+    $table->addCell($tcStyle->col3Width, $tcStyle->row->cell)->addText($this->translate(($device->ipAddress) ? $device->ipAddress : 'Unknown IP'), $tcStyle->row->fontStyle, $tcStyle->centeralign);
+    $table->addCell($tcStyle->col4Width, $tcStyle->row->cell)->addText($this->translate($device->isExcluded) ? 'Manually excluded.' : 'Not Mapped.', $tcStyle->row->fontStyle);
+}
+

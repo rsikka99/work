@@ -1,7 +1,7 @@
 
 <?php
 
-class Quotegen_CategoryController extends Zend_Controller_Action
+class Quotegen_CategoryController extends Tangent_Controller_Action
 {
 
     public function init ()
@@ -34,7 +34,7 @@ class Quotegen_CategoryController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a category to delete first.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         // Get a Quotegen_Model_Category object from the id that was passed.
@@ -45,7 +45,7 @@ class Quotegen_CategoryController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'danger' => 'There was an error selecting the category to delete.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         $message = "Are you sure you want to delete {$category->name}?";
@@ -71,7 +71,7 @@ class Quotegen_CategoryController extends Zend_Controller_Action
                         ));
                         
                         // Redirect the user back to index action of this controller.
-                        $this->_helper->redirector('index');
+                        $this->redirector('index');
                     }
                 }
                 catch ( Exception $e )
@@ -84,7 +84,7 @@ class Quotegen_CategoryController extends Zend_Controller_Action
             else
             {
                 // Redirect the user back to index action of this controller.
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;
@@ -111,7 +111,7 @@ class Quotegen_CategoryController extends Zend_Controller_Action
                         Quotegen_Model_Mapper_Category::getInstance()->insert($category);
                         
                         // Redirect client back to index
-                        $this->_helper->redirector('index');
+                        $this->redirector('index');
                     }
                     else
                     {
@@ -129,7 +129,7 @@ class Quotegen_CategoryController extends Zend_Controller_Action
             }
             else // If user has selected cancel send user back to the index pages of this Controller
             {
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;
@@ -144,7 +144,7 @@ class Quotegen_CategoryController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array (
                     'warning' => 'Please select a category first.' 
             ));
-            $this->_helper->redirector('index');
+            $this->redirector('index');
         }
         
         // Find client and pass form object
@@ -172,7 +172,7 @@ class Quotegen_CategoryController extends Zend_Controller_Action
                                 'success' => "Category was updated sucessfully." 
                         ));
                         
-                        $this->_helper->redirector('index');
+                        $this->redirector('index');
                     }
                     else
                     {
@@ -191,7 +191,7 @@ class Quotegen_CategoryController extends Zend_Controller_Action
             else
             {
                 // User has cancelled - redirect
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
         }
         $this->view->form = $form;

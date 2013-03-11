@@ -79,7 +79,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 }
                 
                 // Redirect to the first page of the quote workflow
-                $this->_helper->redirector('index', 'quote_devices', null, array (
+                $this->redirector('index', 'quote_devices', null, array (
                         'quoteId' => $quoteId 
                 ));
             }
@@ -110,7 +110,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 if ($existingQuoteForm->isValid($values))
                 {
                     // Redirect to the build controller
-                    $this->_helper->redirector('index', 'quote_devices', null, array (
+                    $this->redirector('index', 'quote_devices', null, array (
                             'quoteId' => $values ['quoteId'] 
                     ));
                 }
@@ -176,7 +176,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
             $values = $this->getRequest()->getPost();
             if (isset($values ['cancel']))
             {
-                $this->_helper->redirector('index');
+                $this->redirector('index');
             }
             
             // Create Client
@@ -189,7 +189,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 ));
                 
                 // Redirect with client id so that the client is preselected
-                $this->_helper->redirector('index', null, null, array (
+                $this->redirector('index', null, null, array (
                         'clientId' => $clientId 
                 ));
             }
