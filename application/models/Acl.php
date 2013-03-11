@@ -52,6 +52,7 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_DEFAULT_AUTH_LOGIN          = "default__auth__login";
     const RESOURCE_DEFAULT_AUTH_LOGOUT         = "default__auth__logout";
     const RESOURCE_DEFAULT_AUTH_FORGOTPASSWORD = "default__auth__forgotpassword";
+    const RESOURCE_DEFAULT_AUTH_RESETPASSWORD = "default__auth__resetpassword";
 
     /**
      * Hardware Library Constants
@@ -338,6 +339,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_DEFAULT_AUTH_LOGIN);
         $this->addResource(self::RESOURCE_DEFAULT_AUTH_LOGOUT);
         $this->addResource(self::RESOURCE_DEFAULT_AUTH_FORGOTPASSWORD);
+        $this->addResource(self::RESOURCE_DEFAULT_AUTH_RESETPASSWORD);
 
 
         /**
@@ -429,6 +431,7 @@ class Application_Model_Acl extends Zend_Acl
         //$this->allow(self::ROLE_GUEST, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_GUEST, self::RESOURCE_DEFAULT_AUTH_LOGIN, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_GUEST, self::RESOURCE_DEFAULT_AUTH_FORGOTPASSWORD, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_GUEST, self::RESOURCE_DEFAULT_AUTH_RESETPASSWORD, self::PRIVILEGE_VIEW);
     }
 
     /**

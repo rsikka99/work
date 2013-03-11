@@ -1,21 +1,22 @@
 <?php
-class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
+
+class Application_Model_Mapper_User_PasswordResetRequest extends My_Model_Mapper_Abstract
 {
     // Column Names
     public $col_id = "id";
-
+    public $userId = "userId";
     /**
      * The default db table class to use
      *
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Application_Model_DbTable_User';
+    protected $_defaultDbTable = 'Application_Model_DbTable_user_passwordresetrequests';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Application_Model_Mapper_User
+     * @return Application_Model_Mapper_User_PasswordResetRequest
      */
     public static function getInstance ()
     {
@@ -45,7 +46,7 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
         $object->id = $id;
 
         // Save the object into the cache
-        $this->saveItemToCache($object);
+        //$this->saveItemToCache($object);
 
         return $id;
     }
@@ -75,7 +76,7 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
                                                            ));
 
         // Save the object into the cache
-        $this->saveItemToCache($object);
+        //$this->saveItemToCache($object);
 
         return $rowsAffected;
     }
@@ -161,107 +162,52 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
             return false;
         }
 
-        $object = new Application_Model_User($row->toArray());
+        $object = new Application_Model_User_PasswordResetRequest($row->toArray());
 
         // Save the object into the cache
-        $this->saveItemToCache($object);
+//        $this->saveItemToCache($object);
 
         return $object;
     }
 
     /**
-     * Fetches all users
+     * Takes an object and returns a proper value for the primary key
      *
-     * @param $where  string|array|Zend_Db_Table_Select
-     *                OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
-     * @param $order  string|array
-     *                OPTIONAL An SQL ORDER clause.
-     * @param $count  int
-     *                OPTIONAL An SQL LIMIT count. (Defaults to 150)
-     * @param $offset int
-     *                OPTIONAL An SQL LIMIT offset.
-     *
-     * @return Application_Model_User[]
-     */
-    public function fetchAll ($where = null, $order = null, $count = 150, $offset = null)
-    {
-        $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
-        foreach ($resultSet as $row)
-        {
-            $object = new Application_Model_User($row->toArray());
-
-            // Save the object into the cache
-            $this->saveItemToCache($object);
-
-            $entries [] = $object;
-        }
-
-        return $entries;
-    }
-
-    public function fetchAllExceptRoot ()
-    {
-        return $this->fetchAll(array("{$this->col_id} != 1"));
-    }
-
-    /**
-     * Gets a where clause for filtering by id
-     *
-     * @param int $id
-     *
-     * @return array
-     */
-    public function getWhereId ($id)
-    {
-        return array(
-            "{$this->col_id} = ?" => $id
-        );
-    }
-
-    /**
-     * Gets a where clause for filtering by username
-     *
-     * @param string $username
-     *
-     * @return array
-     */
-    public function getWhereUsername ($username)
-    {
-        return array(
-            "username = ?" => $username
-        );
-    }
-
-    /**
-     * @param Application_Model_User $object
-     *
-     * @return int
+     * @param My_Model_Abstract $object
      */
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->id;
     }
 
-    /**
-     * Fetches a list of users in the system
-     * @param bool $includeRootUser
-     *
-     * @return Application_Model_User[]
-     */
-    public function fetchUserList ($includeRootUser = false)
+    public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
-        $users = array();
-        if ($includeRootUser)
-        {
-            $users = $this->fetchAll();
-        }
-        else
-        {
-            $users = $this->fetchAll(array("{$this->col_id} != ?" => 1));
-        }
+        // TODO: Implement fetchAll() method.
+    }
 
-        return $users;
+    /**
+     * Deletes all objects with the userId given
+     *
+     * @param $userId
+     */
+    public function deleteByUserId ($userId)
+    {
+        $whereClause  = array(
+            "{$this->userId} = ?" => $userId
+        );
+        $rowsAffected = $this->getDbTable()->delete($whereClause);
+
+        return $rowsAffected;
+    }
+
+    public function clearAllTokensForUser ($username)
+    {
+        $user = Application_Model_Mapper_User::getInstance()->fetch(Application_Model_Mapper_User::getInstance()->getWhereUsername($username));
+        if ($user)
+        {
+           return $this->deleteByUserId($user->id);
+
+        }
+        return false;
     }
 }
-

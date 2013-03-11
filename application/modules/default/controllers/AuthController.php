@@ -124,7 +124,97 @@ class Default_AuthController extends Tangent_Controller_Action
      */
     public function forgotpasswordAction ()
     {
-        // TODO: Code the forgot password action
+
+        $request = $this->getRequest();
+        if ($request->isGet())
+        {
+            $values = $request->getParam('username');
+            if ($values)
+            {
+                $username = $this->_request->getParam('username');
+                // find user by username
+                $user = Application_Model_Mapper_User::getInstance()->fetch(Application_Model_Mapper_User::getInstance()->getWhereUsername($username));
+
+                if ($user)
+                {
+                    $db = Zend_Db_Table::getDefaultAdapter();
+
+                    $db->beginTransaction();
+                    try
+                    {
+                        Application_Model_Mapper_User_PasswordResetRequest::getInstance()->deleteByUserId($user->id);
+                        $time                                = date("Y-m-d H:i:s");
+                        $passwordResetRequest                = new Application_Model_User_PasswordResetRequest();
+                        $passwordResetRequest->dateRequested = $time;
+                        $passwordResetRequest->ipAddress     = $_SERVER ['REMOTE_ADDR'];
+                        $passwordResetRequest->resetVerified = false;
+                        $passwordResetRequest->userId        = $user->id;
+                        $passwordResetRequest->resetUsed     = false;
+                        // Create a unique hash for the reset token
+                        // Random number + user id + unique id
+                        $passwordResetRequest->resetToken = uniqid($this->getRandom(0, 12800) . $user->id, true);
+
+                        Application_Model_Mapper_User_PasswordResetRequest::getInstance()->insert($passwordResetRequest);
+                        $db->commit();
+                        $this->sendForgotPasswordEmail($user,$passwordResetRequest->resetToken);
+                        $this->view->forgotMessage = "A verification email has been sent!";
+//                        $this->view->forgotMessage = "<p>To Reset your password please <a href='/auth/resetpassword/verify/" . $passwordResetRequest->resetToken . "'>Click Here</a></p>";
+                    }
+                    catch (Exception $e)
+                    {
+                        $db->rollback();
+                        throw new Exception("Error saving password reset request", 0, $e);
+                        // prepare error message stating user not found
+                        $this->view->message = "An error has occurred updating the database. The password was not reset and no email was sent.";
+                    }
+                }
+                else
+                {
+                    $this->_helper->flashMessenger(array(
+                                                        'danger' => "There are no users with the username '" . $username . "'"
+                                                   ));
+                    $this->redirector('index', 'index');
+                }
+
+            }
+            else
+            {
+                $this->_helper->flashMessenger(array(
+                                                    'danger' => 'A username is required to use forgot password'
+                                               ));
+                $this->redirector('index', 'index');
+            }
+        }
+
+    }
+
+    /**
+     * Gets a random number from /dev/urandom
+     *
+     * @param int $min The minimum number generated
+     * @param int $max The maximum number generated
+     */
+    function getRandom ($min, $max)
+    {
+        $bits = '';
+
+        $diff  = $max - $min;
+        $bytes = ceil($diff / 256);
+
+        $fp = @fopen('/dev/urandom', 'rb');
+        if ($fp !== false)
+        {
+            $bits .= @fread($fp, $bytes);
+            @fclose($fp);
+        }
+        $bitlength = strlen($bits);
+        $int       = 0;
+        for ($i = 0; $i < $bitlength; $i++)
+        {
+            $int = 1 + (ord($bits [$i]) % (($max - $min) + 1));
+        }
+
+        return $int;
     }
 
     /**
@@ -206,6 +296,197 @@ class Default_AuthController extends Tangent_Controller_Action
         }
 
         $this->view->form = $form;
+    }
+
+    /**
+     * This function takes care of verifying the users reset token and
+     * providing them with a form to reset their password.
+     */
+    function resetpasswordAction ()
+    {
+        $validVerification = false;
+        $form              = new Default_Form_ResetPassword();
+        // Step 1. Get the reset id
+
+        if ($this->_getParam("verify"))
+        {
+
+            $verification            = $this->_getParam("verify");
+            $this->view->reset_token = $verification;
+            // Get the password reset object
+            $passwordRequest = $this->verifyPasswordReset($verification);
+            if ($passwordRequest !== false)
+            {
+
+                $validVerification = true;
+                if (!$passwordRequest->resetVerified)
+                {
+
+                    $passwordRequest->resetVerified = true;
+                    Application_Model_Mapper_User_PasswordResetRequest::getInstance()->save($passwordRequest);
+                }
+
+                if ($this->getRequest()->isPost())
+                {
+                    $request = $this->getRequest();
+                    $values  = $request->getPost();
+                    if ($form->isValid($values))
+                    {
+                        $filter   = new Zend_Filter_StripTags();
+                        $password = $filter->filter($this->_request->getParam('password'));
+                        $confirm  = $filter->filter($this->_request->getParam('password_confirm'));
+
+                        if (!empty($password) && strcmp($password, $confirm) === 0)
+                        {
+
+                            $passwordRequest->resetUsed = true;
+                            Application_Model_Mapper_User_PasswordResetRequest::getInstance()->save($passwordRequest);
+                            $user           = Application_Model_Mapper_User::getInstance()->find($passwordRequest->userId);
+                            $user->password = ($this->cryptPassword($this->_request->getParam('password')));
+                            Application_Model_Mapper_User::getInstance()->save($user);
+                            Application_Model_Mapper_User_PasswordResetRequest::getInstance()->deleteByUserId($user->id);
+                            $this->_helper->flashMessenger(array(
+                                                                "success" => 'Password has been updated'
+                                                           ));
+                            $this->redirector('index', 'index');
+                        }
+                    }
+                }
+                $this->view->form = $form;
+            }
+            else
+            {
+                echo "<h3>Link Expired</h3>";
+            }
+
+        }
+
+        // TODO: We should probably make this page display an error if it is not valid instead of sending them on their way
+//        // Send them on their way if they aren't supposed to be here
+//        if (! $validVerification)
+//        {
+//            $this->_redirect("/");
+//        }
+    }
+
+    /**
+     * Encrypts a password using a salt.
+     *
+     * @param string $password
+     *
+     * @throws Exception
+     * @return string
+     */
+    private function cryptPassword ($password)
+    {
+        if (!defined("CRYPT_SHA512") || CRYPT_SHA512 != 1)
+        {
+            throw new Exception("Error, SHA512 encryption not available");
+        }
+
+        // What method to use (6 is SHA512)
+        $method = '6';
+        // How many rounds to do.
+        $rounds = 'rounds=5000';
+        // Random string to make it better
+        $pepper = 'lunchisdabest';
+
+        // Combine them all '$6$rounds=5000$randomstring$'
+        $salt = sprintf('$%1$s$%2$s$%3$s$', $method, $rounds, $pepper);
+
+        return crypt($password, $salt);
+    }
+
+    /**
+     * Checks the validity of a password reset hash uid
+     *
+     * @param string $resetUid
+     *
+     * @return Application_Model_User_PasswordResetRequest
+     */
+    function verifyPasswordReset ($resetUid)
+    {
+        $passwordresetrequest = false;
+        if ($resetUid !== null)
+        {
+            // Step 2. Verify the reset id and update the request
+            $passwordresetrequest = Application_Model_Mapper_User_PasswordResetRequest::getInstance()->fetch(array(
+                                                                                                                  "resetToken = ?" => $resetUid
+                                                                                                             ));
+            if ($passwordresetrequest)
+            {
+                // If we already reset our password with this hash, then it should no longer be valid
+                if ($passwordresetrequest->resetUsed == false)
+                {
+                    //Check to see if we are the same ip address
+                    $currentIp = $_SERVER ['REMOTE_ADDR'];
+                    if ($passwordresetrequest->ipAddress != $currentIp)
+                    {
+
+
+                        /*
+                         * Check the timeframe of the password reset.
+                         * This should be within 24 hours of the request
+                         */
+                        $timeRequested = new DateTime($passwordresetrequest->dateRequested);
+                        $currentTime   = new DateTime();
+                        $timeDiff      = $currentTime->diff($timeRequested, true);
+                        //Check to see if it has expired
+                        if ($timeDiff->h > 24 || $timeDiff->d > 0 || $timeDiff->m > 0 || $timeDiff->y > 0)
+                        {
+                            $passwordresetrequest = false;
+                        }
+                    }
+                }
+                else
+                {
+                    $passwordresetrequest = false;
+                }
+            }
+            else
+            {
+                $passwordresetrequest = false;
+            }
+
+        }
+
+        return $passwordresetrequest;
+    }
+
+    /**
+     * @param $user  Application_Model_User
+     * @param $token String
+     */
+    public function sendForgotPasswordEmail ($user,$token)
+    {
+        $config = Zend_Registry::get('config');
+        $email  = $config->email;
+
+        //grab the email configuration settings from application.ini
+        $emailConfig = array(
+            'auth'     => 'login',
+            'username' => $email->username,
+            'password' => $email->password,
+            'ssl'      => $email->ssl,
+            'port'     => $email->port);
+
+        //grab the email host from application.ini
+        $mailTransport = new Zend_Mail_Transport_Smtp('smtp.gmail.com', $emailConfig);
+        Zend_Mail::setDefaultTransport($mailTransport);
+        $SmtpServer = $email->host;
+
+        $mail = new Zend_Mail ();
+        $mail->setFrom($email->username, 'Forgot Password');
+        $mail->addTo($user->email, "Tyson Riehl");
+        $mail->setSubject('Password Reset Request');
+        $link = $this->view->ServerUrl() . '/auth/resetpassword/verify/' . $token;
+        $body = "<body>";
+        $body .= "<h2>" . Zend_Registry::get('config')->app->title . " Password Reset Request</h2>";
+        $body .= "<p>A password reset request for your " . $this->view->App . " account has been submitted. If you did not make this request, please contact your system administrator immediately.</p>";
+        $body .= "To reset your password please <a href='$link'>Click Here</a>";
+        $body .= "</body>";
+        $mail->setBodyHtml($body);
+        $mail->send();
     }
 }
 
