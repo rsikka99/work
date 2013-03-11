@@ -156,7 +156,7 @@ class Default_AuthController extends Tangent_Controller_Action
 
                         Application_Model_Mapper_User_PasswordResetRequest::getInstance()->insert($passwordResetRequest);
                         $db->commit();
-                        $this->sendForgotPasswordEmail($user,$passwordResetRequest->resetToken);
+                        $this->sendForgotPasswordEmail($user, $passwordResetRequest->resetToken);
                         $this->view->forgotMessage = "A verification email has been sent!";
 //                        $this->view->forgotMessage = "<p>To Reset your password please <a href='/auth/resetpassword/verify/" . $passwordResetRequest->resetToken . "'>Click Here</a></p>";
                     }
@@ -250,9 +250,8 @@ class Default_AuthController extends Tangent_Controller_Action
                     // Check that the user has entered in the correct password
                     if (strcmp($password, $user->password) === 0)
                     {
-
                         // Process password change and remove change flag
-                        $user->password                 = (crypt($form->getValue("password"), $user->password));
+                        $user->password                 = (Application_Model_User::cryptPassword($form->getValue("password")));
                         $user->resetPasswordOnNextLogin = 0;
                         $userMapper->save($user);
 
@@ -304,97 +303,72 @@ class Default_AuthController extends Tangent_Controller_Action
      */
     function resetpasswordAction ()
     {
+        $this->logout();
         $validVerification = false;
         $form              = new Default_Form_ResetPassword();
         // Step 1. Get the reset id
-
-        if ($this->_getParam("verify"))
+        $request = $this->getRequest();
+        $values  = $request->getPost();
+        //IF Cancel IS NOT SELECTED
+        if (!isset($values ['cancel']))
         {
-
-            $verification            = $this->_getParam("verify");
-            $this->view->reset_token = $verification;
-            // Get the password reset object
-            $passwordRequest = $this->verifyPasswordReset($verification);
-            if ($passwordRequest !== false)
+            if ($this->_getParam("verify"))
             {
-
-                $validVerification = true;
-                if (!$passwordRequest->resetVerified)
+                $verification            = $this->_getParam("verify");
+                $this->view->reset_token = $verification;
+                // Get the password reset object
+                $passwordRequest = $this->verifyPasswordReset($verification);
+                if ($passwordRequest !== false)
                 {
-
-                    $passwordRequest->resetVerified = true;
-                    Application_Model_Mapper_User_PasswordResetRequest::getInstance()->save($passwordRequest);
-                }
-
-                if ($this->getRequest()->isPost())
-                {
-                    $request = $this->getRequest();
-                    $values  = $request->getPost();
-                    if ($form->isValid($values))
+                    if (!$passwordRequest->resetVerified)
                     {
-                        $filter   = new Zend_Filter_StripTags();
-                        $password = $filter->filter($this->_request->getParam('password'));
-                        $confirm  = $filter->filter($this->_request->getParam('password_confirm'));
-
-                        if (!empty($password) && strcmp($password, $confirm) === 0)
+                        $passwordRequest->resetVerified = true;
+                        Application_Model_Mapper_User_PasswordResetRequest::getInstance()->save($passwordRequest);
+                    }
+                    if ($request->isPost())
+                    {
+                        $request = $this->getRequest();
+                        $values  = $request->getPost();
+                        if ($form->isValid($values))
                         {
+                            $filter   = new Zend_Filter_StripTags();
+                            $password = $filter->filter($this->_request->getParam('password'));
+                            $confirm  = $filter->filter($this->_request->getParam('password_confirm'));
 
-                            $passwordRequest->resetUsed = true;
-                            Application_Model_Mapper_User_PasswordResetRequest::getInstance()->save($passwordRequest);
-                            $user           = Application_Model_Mapper_User::getInstance()->find($passwordRequest->userId);
-                            $user->password = ($this->cryptPassword($this->_request->getParam('password')));
-                            Application_Model_Mapper_User::getInstance()->save($user);
-                            Application_Model_Mapper_User_PasswordResetRequest::getInstance()->deleteByUserId($user->id);
-                            $this->_helper->flashMessenger(array(
-                                                                "success" => 'Password has been updated'
-                                                           ));
-                            $this->redirector('index', 'index');
+                            if (!empty($password) && strcmp($password, $confirm) === 0)
+                            {
+                                $passwordRequest->resetUsed = true;
+                                Application_Model_Mapper_User_PasswordResetRequest::getInstance()->save($passwordRequest);
+                                $user           = Application_Model_Mapper_User::getInstance()->find($passwordRequest->userId);
+                                $user->password = (Application_Model_User::cryptPassword($this->_request->getParam('password')));
+                                Application_Model_Mapper_User::getInstance()->save($user);
+                                Application_Model_Mapper_User_PasswordResetRequest::getInstance()->deleteByUserId($user->id);
+                                $this->_helper->flashMessenger(array(
+                                                                    "success" => 'Password has been updated'
+                                                               ));
+                                $this->redirector('index', 'index');
+
+                            }
                         }
                     }
+                    $this->view->form = $form;
                 }
-                $this->view->form = $form;
-            }
-            else
+                else
+                {
+                    $this->view->errors = "<h3>Link Expired</h3>";
+                }
+
+            }else
             {
-                echo "<h3>Link Expired</h3>";
+                $this->redirector('index', 'index');
             }
 
         }
-
-        // TODO: We should probably make this page display an error if it is not valid instead of sending them on their way
-//        // Send them on their way if they aren't supposed to be here
-//        if (! $validVerification)
-//        {
-//            $this->_redirect("/");
-//        }
-    }
-
-    /**
-     * Encrypts a password using a salt.
-     *
-     * @param string $password
-     *
-     * @throws Exception
-     * @return string
-     */
-    private function cryptPassword ($password)
-    {
-        if (!defined("CRYPT_SHA512") || CRYPT_SHA512 != 1)
+        else
         {
-            throw new Exception("Error, SHA512 encryption not available");
+            $this->redirector('index', 'index');
         }
 
-        // What method to use (6 is SHA512)
-        $method = '6';
-        // How many rounds to do.
-        $rounds = 'rounds=5000';
-        // Random string to make it better
-        $pepper = 'lunchisdabest';
-
-        // Combine them all '$6$rounds=5000$randomstring$'
-        $salt = sprintf('$%1$s$%2$s$%3$s$', $method, $rounds, $pepper);
-
-        return crypt($password, $salt);
     }
 
     /**
@@ -457,7 +431,8 @@ class Default_AuthController extends Tangent_Controller_Action
      * @param $user  Application_Model_User
      * @param $token String
      */
-    public function sendForgotPasswordEmail ($user,$token)
+    public
+    function sendForgotPasswordEmail ($user, $token)
     {
         $config = Zend_Registry::get('config');
         $email  = $config->email;
@@ -468,21 +443,22 @@ class Default_AuthController extends Tangent_Controller_Action
             'username' => $email->username,
             'password' => $email->password,
             'ssl'      => $email->ssl,
-            'port'     => $email->port);
+            'port'     => $email->port,
+            'host'     => $email->host
+        );
 
         //grab the email host from application.ini
         $mailTransport = new Zend_Mail_Transport_Smtp('smtp.gmail.com', $emailConfig);
         Zend_Mail::setDefaultTransport($mailTransport);
-        $SmtpServer = $email->host;
 
         $mail = new Zend_Mail ();
         $mail->setFrom($email->username, 'Forgot Password');
-        $mail->addTo($user->email, "Tyson Riehl");
+        $mail->addTo($user->email, $user->firstname . ' ' . $user->lastname);
         $mail->setSubject('Password Reset Request');
-        $link = $this->view->ServerUrl() . '/auth/resetpassword/verify/' . $token;
+        $link = $this->view->ServerUrl('/auth/resetpassword/verify/' . $token);
         $body = "<body>";
-        $body .= "<h2>" . Zend_Registry::get('config')->app->title . " Password Reset Request</h2>";
-        $body .= "<p>A password reset request for your " . $this->view->App . " account has been submitted. If you did not make this request, please contact your system administrator immediately.</p>";
+        $body .= "<h2>" . $this->view->App()->title . " Password Reset Request</h2>";
+        $body .= "<p>A password reset request for your " . $this->view->App()->title . " account has been submitted. If you did not make this request, please contact your system administrator immediately.</p>";
         $body .= "To reset your password please <a href='$link'>Click Here</a>";
         $body .= "</body>";
         $mail->setBodyHtml($body);

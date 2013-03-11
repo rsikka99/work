@@ -57,7 +57,7 @@ class Admin_UserController extends Tangent_Controller_Action
                         $mapper = new Application_Model_Mapper_User();
                         $user   = new Application_Model_User();
                         $user->populate($values);
-                        $user->password = $this->cryptPassword($user->password);
+                        $user->password = Application_Model_User::cryptPassword($user->password);
                         $userId         = $mapper->insert($user);
                         // Save changes to the user roles
                         if (isset($values ["userRoles"]))
@@ -331,7 +331,7 @@ class Admin_UserController extends Tangent_Controller_Action
                         if (isset($formValues ["password"]) && !empty($formValues ["password"]) && $formValues ["reset_password"])
                         {
                             unset($formValues ["passwordconfirm"]);
-                            $formValues ["password"] = $this->cryptPassword($formValues ["password"]);
+                            $formValues ["password"] = Application_Model_User::cryptPassword($formValues ["password"]);
                         }
                         else
                         {
@@ -444,34 +444,6 @@ class Admin_UserController extends Tangent_Controller_Action
 
 
         $this->view->form = $form;
-    }
-
-    /**
-     * Encrypts a password using a salt.
-     *
-     * @param string $password
-     *
-     * @throws Exception
-     * @return string
-     */
-    private function cryptPassword ($password)
-    {
-        if (!defined("CRYPT_SHA512") || CRYPT_SHA512 != 1)
-        {
-            throw new Exception("Error, SHA512 encryption not available");
-        }
-
-        // What method to use (6 is SHA512)
-        $method = '6';
-        // How many rounds to do.
-        $rounds = 'rounds=5000';
-        // Random string to make it better
-        $pepper = 'lunchisdabest';
-
-        // Combine them all '$6$rounds=5000$randomstring$'
-        $salt = sprintf('$%1$s$%2$s$%3$s$', $method, $rounds, $pepper);
-
-        return crypt($password, $salt);
     }
 
     public function profileAction ()
