@@ -1472,11 +1472,6 @@ CREATE  TABLE IF NOT EXISTS `user_sessions` (
   CONSTRAINT `user_sessions_ibfk_1`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `user_sessions_ibfk_2`
-    FOREIGN KEY (`sessionId` )
-    REFERENCES `sessions` (`id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
