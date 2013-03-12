@@ -79,11 +79,11 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
             }
         }
 
-        $this->view->form     = $form;
-        $this->view->devices  = $devices;
-        $this->view->proposal = $this->getProposal();
+        $this->view->form           = $form;
+        $this->view->devices        = $devices;
+        $this->view->proposal       = $this->getProposal();
         $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation(Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT);
-        $this->view->title = 'Hardware Optimization';
+        $this->view->title          = 'Hardware Optimization';
     }
 
 
@@ -196,7 +196,6 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
                     {
                         continue;
                     }
-
                     // Save / update replacement devices
                     $deviceInstanceReplacement = $deviceInstanceReplacementMapper->find($deviceInstance->id);
                     if ($deviceInstanceReplacement instanceof Proposalgen_Model_Device_Instance_Replacement_Master_Device)
@@ -214,13 +213,12 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
                         $deviceInstanceReplacement->deviceInstanceId = $deviceInstance->id;
                         $deviceInstanceReplacementMapper->insert($deviceInstanceReplacement);
                     }
-
                 }
                 else
+                    // 1635
                 {
                     if ($currentReplacementMasterDevice)
                     {
-
                         $deviceInstanceReplacement                   = new Proposalgen_Model_Device_Instance_Replacement_Master_Device();
                         $deviceInstanceReplacement->deviceInstanceId = $deviceInstance->id;
                         $deviceInstanceReplacementMapper->delete($deviceInstanceReplacement);
@@ -235,6 +233,7 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
         catch (Exception $e)
         {
             $db->rollBack();
+
             return false;
         }
 
@@ -261,7 +260,7 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
         foreach ($replacementDevices as $masterDevice)
         {
             $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($costPerPageSetting, $masterDevice);
-            $costDelta = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
+            $costDelta             = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
             if ($costDelta > $costSavingsThreshold && $costDelta > $greatestSavings)
             {
                 $suggestedDevice = $masterDevice;

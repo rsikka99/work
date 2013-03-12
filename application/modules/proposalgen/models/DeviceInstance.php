@@ -1248,10 +1248,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function getReplacementMasterDevice ()
     {
-        if ($this->id == 183)
-        {
-            $blah = 33;
-        }
         if (!isset($this->_replacementMasterDevice))
         {
             $deviceInstanceReplacementMasterDevice = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance()->find($this->id);
@@ -1480,9 +1476,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * Calculates the monthly cost for this instance
      *
-     * @param Application_Model_CostPerPageSetting $costPerPageSetting
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *            The settings to use when calculating cost per page
-     * @param Application_Model_MasterDevice       $masterDevice
+     * @param Proposalgen_Model_MasterDevice       $masterDevice
      *            The master device to use
      *
      * @return number

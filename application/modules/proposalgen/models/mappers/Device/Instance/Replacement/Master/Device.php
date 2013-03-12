@@ -96,19 +96,21 @@ class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends
     {
         if ($object instanceof Proposalgen_Model_Device_Instance_Replacement_Master_Device)
         {
-
+            $id = $object->deviceInstanceId;
             $whereClause = array(
                 "{$this->col_deviceInstanceId} = ?" => $object->deviceInstanceId
             );
         }
         else
         {
+            $id = $object;
             $whereClause = array(
                 "{$this->col_deviceInstanceId} = ?" => $object
             );
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
+        $this->deleteItemFromCache($id);
 
         return $rowsAffected;
     }
