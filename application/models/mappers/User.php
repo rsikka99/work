@@ -220,6 +220,20 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
     }
 
     /**
+     * Gets a where clause for filtering by username
+     *
+     * @param string $username
+     *
+     * @return array
+     */
+    public function getWhereUsername ($username)
+    {
+        return array(
+            "username = ?" => $username
+        );
+    }
+
+    /**
      * @param Application_Model_User $object
      *
      * @return int

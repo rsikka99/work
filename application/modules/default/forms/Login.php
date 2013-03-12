@@ -5,6 +5,8 @@ class Default_Form_Login extends Twitter_Bootstrap_Form_Horizontal
 
     public function init ()
     {
+        // Set the method for the display form to POST
+        $this->setMethod('POST');
         // Add an email element
         $this->addElement('text', 'username', array(
                                                    'label'      => 'Username:',
@@ -51,16 +53,16 @@ class Default_Form_Login extends Twitter_Bootstrap_Form_Horizontal
                                                                      'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY
                                                                 ));
 
-//        /*
-//         * Forgot password action
-//         */
-//        if ($this->getView()->IsAllowed(Application_Model_Acl::RESOURCE_DEFAULT_AUTH_FORGOTPASSWORD, Application_Model_Acl::PRIVILEGE_VIEW))
-//        {
-//            $formActions[] = $this->createElement('submit', 'forgotPassword', array(
-//                                                                                   'label'  => 'Forgot Password',
-//                                                                                   'ignore' => true,
-//                                                                              ));
-//        }
+        /*
+         * Forgot password action
+         */
+        if ($this->getView()->IsAllowed(Application_Model_Acl::RESOURCE_DEFAULT_AUTH_FORGOTPASSWORD, Application_Model_Acl::PRIVILEGE_VIEW))
+        {
+            $formActions[] = $this->createElement('submit', 'forgotPassword', array(
+                                                                                   'label'  => 'Forgot Password',
+                                                                                   'ignore' => true,
+                                                                              ));
+        }
 
         $this->addDisplayGroup($formActions, 'actions', array(
                                                              'disableLoadDefaultDecorators' => true,

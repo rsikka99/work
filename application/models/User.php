@@ -214,4 +214,32 @@ class Application_Model_User extends My_Model_Abstract
 
         return $this;
     }
+
+    /**
+     * Encrypts a password using a salt.
+     *
+     * @param string $password
+     *
+     * @throws Exception
+     * @return string
+     */
+    public static function cryptPassword ($password)
+    {
+        if (!defined("CRYPT_SHA512") || CRYPT_SHA512 != 1)
+        {
+            throw new Exception("Error, SHA512 encryption not available");
+        }
+
+        // What method to use (6 is SHA512)
+        $method = '6';
+        // How many rounds to do.
+        $rounds = 'rounds=5000';
+        // Random string to make it better
+        $pepper = 'lunchisdabest';
+
+        // Combine them all '$6$rounds=5000$randomstring$'
+        $salt = sprintf('$%1$s$%2$s$%3$s$', $method, $rounds, $pepper);
+
+        return crypt($password, $salt);
+    }
 }

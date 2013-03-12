@@ -144,7 +144,7 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
             $areasToImprove = array();
             if ($Averageage <= $totalRanking)
             {
-                $areasToImprove [] = "update your printing devices to newer, more reliable machines";
+                $areasToImprove [] = "update its printing devices to newer, more reliable machines";
             }
             if ($PercentITTime <= $totalRanking)
             {
@@ -152,7 +152,7 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
             }
             if ($technologyFeatures <= $totalRanking)
             {
-                $areasToImprove [] = "consolidate single-function printers, standalone copiers, scanners and fax machines into fewer multifunction devices";
+                $areasToImprove [] = "consolidate single-function printers, standalone copiers, scanners and fax machines into a smaller number of multifunction devices";
             }
 
             if (count($areasToImprove) > 0)
@@ -205,7 +205,7 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
             $areasToImprove = array();
             if ($AverageKWHPerDevicePerMonth <= $totalRanking || $AverageOperatingWatts <= $totalRanking)
             {
-                $areasToImprove [] = "retire equipment that consumes a lot of energy or move page volumes to more energy-efficient machines";
+                $areasToImprove [] = "retire equipment that consumes a large amount of energy or move page volumes to more energy-efficient machines";
             }
             if ($greenFeatures <= $totalRanking)
             {

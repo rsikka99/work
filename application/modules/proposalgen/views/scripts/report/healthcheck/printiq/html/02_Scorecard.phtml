@@ -4,7 +4,7 @@ $proposal = $this->healthcheck->proposal;
 ?>
 <div class="h1">Your PrintIQ&reg; Health Check</div>
 <p>Does your fleet of printing hardware deliver your users and business the greatest return on investment?
-    How many trees and how much water are you using per year? This free PrintIQ Health Check
+    How many trees and how much water is consumed by the paper you use every year? This free PrintIQ Health Check
     will break down your current fleet and show you how you can <strong>lower your supplies costs</strong>,
     which devices are <strong>printing too much</strong> and which devices are <strong>printing too little</strong>, and the <strong>environmental impact</strong> of your fleet.</p>
     <p>
@@ -39,7 +39,7 @@ $proposal = $this->healthcheck->proposal;
     <tr>
         <td class="gradeDescription">
             <h4>Environmental Impact</h4>
-            <p>Energy consumption from printing hardware and availability of green print technology features.</p>
+            <p>Energy consumption from printing hardware, forest and water consumption from paper used in printing, availability of green print technology features.</p>
         </td>
         <td class="gradeNumber"><?php echo number_format($proposal->getRanking()->getEnvironmentalFriendliness()->Rank, 1); ?></td>
     </tr>

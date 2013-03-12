@@ -52,7 +52,7 @@ $estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estim
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText(number_format($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->getDeviceCount()), null, 'nospacing_rightalign');
 $section->addTextBreak();
 $section->addText($this->translate('A good measure of the recommended maximum monthly page volume for a printing device is the manufacturer\'s stated yield of a single print cartridge. In essence, you should not have to change the same toner cartridge more than once per month.'), null, array('spaceAfter' => 20));
-$section->addText($this->translate('Using this definition of maximum monthly page volume, the total capacity of your printing fleet is the sum of the maximum page volumes for all of your printing devices. As a guide we suggest that company printing should range between 30 and 50% of maximum fleet capacity. The closer you are to printing at maximum capacity, the more return you are getting on your printing assets. Most find that they have more printing hardware than they need. The following chart displays your estimated monthly page volume compared to your maximum monthly page capacity.'), null, 'nospacing');
+$section->addText($this->translate('Using this definition of maximum monthly page volume, the total capacity of your printing fleet is the sum of the maximum page volumes for all of your printing devices. As a guide we suggest that total company printing should range between 30 and 50% of maximum fleet capacity. The closer you are to printing at maximum capacity, the more return you are getting on your printing assets. Most companies find that they have more printing hardware than they need. The following chart displays your estimated monthly page volume compared to your maximum monthly page capacity.'), null, 'nospacing');
 
 $section->addTextBreak(2);
 $imageTable = $section->addTable($this->styles->tables->singleimage->tablestyle);
@@ -67,7 +67,7 @@ $section->addTextBreak();
 $section->addTitle($this->translate('Underused and Overused Printing Devices'), 2);
 $section->addText(sprintf($this->translate('Currently, %1$s%% of your printing devices are printing less than one quarter of our recommended monthly print volume, and %2$s%% are printing above our recommended monthly print volume. Our recommended monthly print volumes are equal to the manufacturer\'s stated yield for a single print cartridge (for monochrome devices, the black cartridge, and for color devices, a single color cartridge unless the device is not being used for color).'), number_format($proposal->getPercentDevicesUnderused()), number_format($proposal->getPercentDevicesOverused())));
 $section->addText($this->translate('Underused printing devices can be consolidated or retired to free up floor and desk space, reduce the amount of cash held in unused supplies inventory, and reduce the energy costs associated with powering underused machines. Devices printing fewer than 250 pages per month are likely performing less than 3 print jobs per day, and that volume can easily be accommodated by any nearby device.'));
-$section->addText($this->translate('Overused printing devices risk having increased breakdowns and should have a portion of their print volumes moved to underused printers or be replaced with higher-capacity machines. As an example small print devices can have paper trays of fewer than 250 pages, and may result in several paper tray changes per day which can lead to user frustration and machine failure.'));
+$section->addText($this->translate('Overused printing devices risk having more frequent breakdowns and should have a portion of their print volumes moved to underused printers, or they can be replaced with higher-capacity machines. As an example, small print devices can have paper trays of fewer than 250 pages, and may result in several paper tray changes per day which can lead to user frustration and machine failure.'));
 $section->addPageBreak();
 
 
@@ -128,7 +128,7 @@ $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle)
 $imageTable->addRow();
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs ['ColorCapablePrintingDevices']);
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs ['ColorVSBWPagesGraph']);
-$section->addTextBreak();
+$section->addPageBreak();
 
 $section->addText($this->translate('The following are the most expensive color devices currently in your fleet:'), null, 'nospacing');
 $expensiveColorDevicesTable = $section->addTable($this->styles->tables->utilization->tablestyle);
@@ -159,5 +159,5 @@ foreach ($proposal->getMonthlyHighCostColorDevices($proposal->getCostPerPageSett
 }
 
 
-$section->addText($this->translate('Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your company\'s professional image, improve comprehension and increase readership.'));
+$section->addText($this->translate('In general, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your company\'s professional image, improve comprehension and increase readership.'));
 $section->addText($this->translate('Office Depot can help you track your color printing and provide low-cost color hardware options.'));

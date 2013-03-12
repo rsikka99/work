@@ -38,7 +38,7 @@ $optimizedDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText(
 $optimizedDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText($this->translate('Monthly Page Volume'), 'bold_text', 'nospacing_centeralign');
 $optimizedDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText($this->translate('Percent of Total Page Volume'), 'bold_text', 'nospacing_centeralign');
 $optimizedDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText($this->translate('Percent of Monthly Cost'), 'bold_text', 'nospacing_centeralign');
-$optimizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText($this->translate('Office Depot™ ATR Compatible'), 'bold_text', 'nospacing_centeralign');
+$optimizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText($this->translate('Office Depot ATR Compatible'), 'bold_text', 'nospacing_centeralign');
 
 /* @var $device Proposalgen_Model_DeviceInstance */
 foreach ($proposal->getOptimizedDevices() as $device)
@@ -55,7 +55,7 @@ foreach ($proposal->getOptimizedDevices() as $device)
     $optimizedDevicesTable->addCell($cellWidths [2], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell3))->addText(number_format($device->getAverageMonthlyPageCount(), 0), null, 'nospacing_rightalign');
     $optimizedDevicesTable->addCell($cellWidths [3], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format(($device->getAverageMonthlyPageCount() / $proposal->getPageCounts()->Total->Combined->Monthly) * 100, 2) . '%'), null, 'nospacing_rightalign');
     $optimizedDevicesTable->addCell($cellWidths [4], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format(($device->getIsLeased() ? $device->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $device->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) . "%"), null, 'nospacing_rightalign');
-    $optimizedDevicesTable->addCell($cellWidths [5], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->translate(($device->getIsLeased() ? 'N' : ($device->reportsTonerLevels == 1 ? 'Y' : 'N'))), null, 'nospacing_centeralign');
+    $optimizedDevicesTable->addCell($cellWidths [5], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->translate(($device->getIsLeased() ? 'N' : ($device->isCapableOfReportingTonerLevels() ? 'Y' : 'N'))), null, 'nospacing_centeralign');
 }
 $section->addPageBreak();
 
@@ -82,7 +82,7 @@ $UnderutilizedDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addT
 $UnderutilizedDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText($this->translate('Suggested Max. Volume'), 'bold_text', 'nospacing_centeralign');
 $UnderutilizedDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText($this->translate('Percent of Suggested Max. Volume'), 'bold_text', 'nospacing_centeralign');
 $UnderutilizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText($this->translate('Percent of Monthly Cost'), 'bold_text', 'nospacing_centeralign');
-$UnderutilizedDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText($this->translate('Office Depot™ ATR Compatible'), 'bold_text', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText($this->translate('Office Depot ATR Compatible'), 'bold_text', 'nospacing_centeralign');
 $UnderutilizedDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText($this->translate('Suggested Action'), 'bold_text', 'nospacing_centeralign');
 
 /* @var $device Proposalgen_Model_DeviceInstance */
@@ -101,7 +101,7 @@ foreach ($proposal->getUnderutilizedDevices() as $device)
     $UnderutilizedDevicesTable->addCell($cellWidths [3], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell4))->addText(number_format($device->getMasterDevice()->getMaximumMonthlyPageVolume(), 0), null, 'nospacing_rightalign');
     $UnderutilizedDevicesTable->addCell($cellWidths [4], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell4))->addText(number_format(($device->getAverageMonthlyPageCount() / $device->getMasterDevice()->getMaximumMonthlyPageVolume()) * 100, 2) . '%', null, 'nospacing_rightalign');
     $UnderutilizedDevicesTable->addCell($cellWidths [5], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell4))->addText(number_format(($device->getIsLeased() ? $device->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $device->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) . "%", null, 'nospacing_rightalign');
-    $UnderutilizedDevicesTable->addCell($cellWidths [6], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(($device->getIsLeased() ? 'N' : ($device->reportsTonerLevels == 1 ? 'Y' : 'N')), null, 'nospacing_centeralign');
+    $UnderutilizedDevicesTable->addCell($cellWidths [6], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(($device->getIsLeased() ? 'N' : ($device->isCapableOfReportingTonerLevels() ? 'Y' : 'N')), null, 'nospacing_centeralign');
     $UnderutilizedDevicesTable->addCell($cellWidths [6], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell2))->addText('Migrate all page volume to ATR compatible device.', null, 'nospacing_leftalign');
 }
 $section->addPageBreak();
@@ -118,7 +118,7 @@ $OverutilizedDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addTe
 $OverutilizedDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText($this->translate('Suggested Max. Volume'), 'bold_text', 'nospacing_centeralign');
 $OverutilizedDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText($this->translate('Percent of Suggested Max. Volume'), 'bold_text', 'nospacing_centeralign');
 $OverutilizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText($this->translate('Percent of Monthly Cost'), 'bold_text', 'nospacing_centeralign');
-$OverutilizedDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText($this->translate('Office Depot™ ATR Compatible'), 'bold_text', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText($this->translate('Office Depot ATR Compatible'), 'bold_text', 'nospacing_centeralign');
 $OverutilizedDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText($this->translate('Suggested Action'), 'bold_text', 'nospacing_centeralign');
 
 /* @var $device Proposalgen_Model_DeviceInstance */
@@ -137,7 +137,7 @@ foreach ($proposal->getOverutilizedDevices() as $device)
     $OverutilizedDevicesTable->addCell($cellWidths [3], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell4))->addText(number_format($device->getMasterDevice()->getMaximumMonthlyPageVolume(), 0), null, 'nospacing_rightalign');
     $OverutilizedDevicesTable->addCell($cellWidths [4], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell4))->addText(number_format(($device->getAverageMonthlyPageCount() / $device->getMasterDevice()->getMaximumMonthlyPageVolume()) * 100, 2) . '%', null, 'nospacing_rightalign');
     $OverutilizedDevicesTable->addCell($cellWidths [5], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell4))->addText(number_format(($device->getIsLeased() ? $device->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $device->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) . "%", null, 'nospacing_rightalign');
-    $OverutilizedDevicesTable->addCell($cellWidths [6], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(($device->getIsLeased() ? 'N' : ($device->reportsTonerLevels == 1 ? 'Y' : 'N')), null, 'nospacing_centeralign');
+    $OverutilizedDevicesTable->addCell($cellWidths [6], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(($device->getIsLeased() ? 'N' : ($device->isCapableOfReportingTonerLevels() ? 'Y' : 'N')), null, 'nospacing_centeralign');
     $OverutilizedDevicesTable->addCell($cellWidths [6], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell2))->addText('Migrate excess page volume to an ATR compatible device.', null, 'nospacing_leftalign');
 }
 
@@ -163,7 +163,7 @@ $oldDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText($this-
 $oldDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText($this->translate('Monthly Page Volume'), 'bold_text', 'nospacing_centeralign');
 $oldDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText($this->translate('Percent of Total Volume'), 'bold_text', 'nospacing_centeralign');
 $oldDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText($this->translate('Percent of Monthly Cost'), 'bold_text', 'nospacing_centeralign');
-$oldDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText($this->translate('Office Depot™ ATR Compatible'), 'bold_text', 'nospacing_centeralign');
+$oldDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText($this->translate('Office Depot ATR Compatible'), 'bold_text', 'nospacing_centeralign');
 $oldDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText($this->translate('Suggested Action'), 'bold_text', 'nospacing_centeralign');
 
 /* @var $device Proposalgen_Model_DeviceInstance */
@@ -181,7 +181,7 @@ foreach ($proposal->getOldDevices() as $device)
     $oldDevicesTable->addCell($cellWidths [2], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell3))->addText(number_format($device->getAverageMonthlyPageCount(), 0), null, 'nospacing_rightalign');
     $oldDevicesTable->addCell($cellWidths [3], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format(($device->getAverageMonthlyPageCount() / $proposal->getPageCounts()->Total->Combined->Monthly) * 100, 2) . '%'), null, 'nospacing_rightalign');
     $oldDevicesTable->addCell($cellWidths [4], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format(($device->getIsLeased() ? $device->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $device->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) . "%"), null, 'nospacing_rightalign');
-    $oldDevicesTable->addCell($cellWidths [5], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(($device->getIsLeased() ? 'N' : ($device->reportsTonerLevels == 1 ? 'Y' : 'N')), null, 'nospacing_centeralign');
+    $oldDevicesTable->addCell($cellWidths [5], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(($device->getIsLeased() ? 'N' : ($device->isCapableOfReportingTonerLevels() ? 'Y' : 'N')), null, 'nospacing_centeralign');
     $oldDevicesTable->addCell($cellWidths [6], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell2))->addText('Migrate all page volume to a newer ATR compatible device.', null, 'nospacing_leftalign');
 }
 $section->addTextBreak();
@@ -198,7 +198,7 @@ $notReportingTonerDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->
 $notReportingTonerDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText($this->translate('Monthly Page Volume'), 'bold_text', 'nospacing_centeralign');
 $notReportingTonerDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText($this->translate('Percent of Total Volume'), 'bold_text', 'nospacing_centeralign');
 $notReportingTonerDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText($this->translate('Percent of Monthly Cost'), 'bold_text', 'nospacing_centeralign');
-$notReportingTonerDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText($this->translate('Office Depot™ ATR Compatible'), 'bold_text', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText($this->translate('Office Depot ATR Compatible'), 'bold_text', 'nospacing_centeralign');
 $notReportingTonerDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText($this->translate('Suggested Action'), 'bold_text', 'nospacing_centeralign');
 
 /* @var $device Proposalgen_Model_DeviceInstance */
@@ -216,7 +216,7 @@ foreach ($proposal->getDevicesNotReportingTonerLevels() as $device)
     $notReportingTonerDevicesTable->addCell($cellWidths [2], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell3))->addText(number_format($device->getAverageMonthlyPageCount(), 0), null, 'nospacing_rightalign');
     $notReportingTonerDevicesTable->addCell($cellWidths [3], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format(($device->getAverageMonthlyPageCount() / $proposal->getPageCounts()->Total->Combined->Monthly) * 100, 2) . '%'), null, 'nospacing_rightalign');
     $notReportingTonerDevicesTable->addCell($cellWidths [4], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format(($device->getIsLeased() ? $device->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $device->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) . "%"), null, 'nospacing_rightalign');
-    $notReportingTonerDevicesTable->addCell($cellWidths [5], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(($device->getIsLeased() ? 'N' : ($device->reportsTonerLevels == 1 ? 'Y' : 'N')), null, 'nospacing_centeralign');
-    $notReportingTonerDevicesTable->addCell($cellWidths [6], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell2))->addText('Migrate all page volume to a newer ATR compatible device.', null, 'nospacing_leftalign');
+    $notReportingTonerDevicesTable->addCell($cellWidths [5], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(($device->getIsLeased() ? 'N' : ($device->isCapableOfReportingTonerLevels() ? 'Y' : 'N')), null, 'nospacing_centeralign');
+    $notReportingTonerDevicesTable->addCell($cellWidths [6], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell2))->addText('Migrate all page volume to ATR compatible device.', null, 'nospacing_leftalign');
 }
 $section->addTextBreak();

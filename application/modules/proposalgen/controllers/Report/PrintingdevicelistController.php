@@ -117,7 +117,7 @@ class Proposalgen_Report_PrintingdevicelistController extends Proposalgen_Librar
                 $row [] = ($device->serialNumber) ? $device->serialNumber : "Unknown";
                 $row [] = ($device->getMasterDevice()->isLeased) ? "Leased" : "Purchased";
                 $row [] = $device->getAverageMonthlyPageCount();
-                $row [] = ($device->reportsTonerLevels) ? "Yes" : "No";
+                $row [] = ($device->isCapableOfReportingTonerLevels()) ? "Yes" : "No";
                 $appendix_values .= implode(",", $row) . "\n";
             } // end Purchased Devices foreach
         }
