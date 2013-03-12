@@ -111,8 +111,8 @@ CREATE  TABLE IF NOT EXISTS `pgen_reports` (
   CONSTRAINT `proposalgenerator_reports_ibfk_1`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `proposalgenerator_reports_ibfk_3`
     FOREIGN KEY (`clientId` )
     REFERENCES `clients` (`id` )
@@ -554,8 +554,8 @@ CREATE  TABLE IF NOT EXISTS `pgen_report_report_settings` (
   CONSTRAINT `proposalgenerator_report_report_settings_ibfk_1`
     FOREIGN KEY (`reportId` )
     REFERENCES `pgen_reports` (`id` )
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `proposalgenerator_report_report_settings_ibfk_2`
     FOREIGN KEY (`reportSettingId` )
     REFERENCES `pgen_report_settings` (`id` )
