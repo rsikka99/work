@@ -327,14 +327,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->LeasedDevices))
         {
-            $this->LeasedDevices = array();
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
-            {
-                if ($deviceInstance->getMasterDevice()->isLeased)
-                {
-                    $this->LeasedDevices [] = $deviceInstance;
-                }
-            }
+            $this->LeasedDevices [] = $this->getDevices()->leasedDeviceInstances;
         }
 
         return $this->LeasedDevices;
@@ -363,14 +356,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->PurchasedDevices))
         {
-            $this->PurchasedDevices = array();
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
-            {
-                if ($deviceInstance->getMasterDevice()->isLeased === 0)
-                {
-                    $this->PurchasedDevices [] = $deviceInstance;
-                }
-            }
+            $this->PurchasedDevices = $this->getDevices()->purchasedDeviceInstances;
         }
 
         return $this->PurchasedDevices;
