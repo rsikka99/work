@@ -788,7 +788,10 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         if (!isset($this->_usage))
         {
             // Calculate device usage by dividing it's current monthly volume by its maximum
-            $this->_usage = $this->getAverageMonthlyPageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume();
+            if ($this->getMasterDevice()->getMaximumMonthlyPageVolume() > 0)
+            {
+                $this->_usage = $this->getAverageMonthlyPageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume();
+            }
         }
 
         return $this->_usage;

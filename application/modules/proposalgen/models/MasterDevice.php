@@ -912,7 +912,11 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $toners = array();
             foreach ($this->getRequiredTonerColors() as $tonerColor)
             {
-                $toners [$tonerColor] = $this->getCheapestToner($tonerColor, self::getPricingConfig());
+                $toner = $this->getCheapestToner($tonerColor, self::getPricingConfig());
+                if ($toner instanceof Proposalgen_Model_Toner)
+                {
+                    $toners [$tonerColor] = $toner;
+                }
             }
             $this->_tonersForAssessment = $toners;
         }
