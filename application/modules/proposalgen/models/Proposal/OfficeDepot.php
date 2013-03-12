@@ -327,7 +327,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->LeasedDevices))
         {
-            $this->LeasedDevices [] = $this->getDevices()->leasedDeviceInstances;
+            $this->LeasedDevices = $this->getDevices()->leasedDeviceInstances;
         }
 
         return $this->LeasedDevices;
