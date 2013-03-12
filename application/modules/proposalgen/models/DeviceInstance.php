@@ -804,7 +804,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             // Calculate device life usage by dividing it's current life count
             // by it's estimated max life page count (maximum monthly page
             // volume * 36 months)
-            $this->_lifeUsage = $this->getLifePageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume() * 36;
+            $maximumLifeCount = $this->getMasterDevice()->getMaximumMonthlyPageVolume() * 36;
+            if ($maximumLifeCount > 0)
+            {
+                $this->_lifeUsage = $this->getLifePageCount() / $maximumLifeCount;
+            }
         }
 
         return $this->_lifeUsage;
@@ -1039,6 +1043,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 
     /**
      * @param $monthlyTotalCost
+     *
      * @return float
      */
     public function getMonthlyRatePercentage ($monthlyTotalCost)
@@ -1053,10 +1058,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      *
      * @return float
      */
-    public function getLeasedMonthlyRate($monthlyLeasePayment, $monochromeCostPerPage, $colorCostPerPage)
+    public function getLeasedMonthlyRate ($monthlyLeasePayment, $monochromeCostPerPage, $colorCostPerPage)
     {
         return $monthlyLeasePayment + ($monochromeCostPerPage * $this->getAverageMonthlyBlackAndWhitePageCount()) + ($colorCostPerPage * $this->getAverageMonthlyColorPageCount());
     }
+
     /**
      * @param $monthlyLeasePayment
      * @param $monochromeCostPerPage
@@ -1065,9 +1071,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      *
      * @return float
      */
-    public function getLeasedMonthlyRatePercentage($monthlyLeasePayment, $monochromeCostPerPage, $colorCostPerPage, $totalMonthlyCost)
+    public function getLeasedMonthlyRatePercentage ($monthlyLeasePayment, $monochromeCostPerPage, $colorCostPerPage, $totalMonthlyCost)
     {
-        return ($this->getLeasedMonthlyRate($monthlyLeasePayment,$monochromeCostPerPage,$colorCostPerPage) / $totalMonthlyCost) * 100;
+        return ($this->getLeasedMonthlyRate($monthlyLeasePayment, $monochromeCostPerPage, $colorCostPerPage) / $totalMonthlyCost) * 100;
     }
 
     /**
@@ -1318,13 +1324,15 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 
         return $reportsTonerLevels;
     }
+
     /**
      * Calculates the monthly cost for this instance
      *
      * @param Application_Model_CostPerPageSetting $costPerPageSetting
      *            The settings to use when calculating cost per page
-     * @param Application_Model_MasterDevice $masterDevice
+     * @param Application_Model_MasterDevice       $masterDevice
      *            The master device to use
+     *
      * @return number
      */
     public function calculateMonthlyCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null)
@@ -1337,13 +1345,15 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      *
      * @param Application_Model_CostPerPageSetting $costPerPageSetting
      *            The setting used to calculate cost per page
-     * @param Application_Model_MasterDevice $masterDevice
+     * @param Application_Model_MasterDevice       $masterDevice
      *            the master device to us
+     *
      * @return number
      */
     public function calculateMonthlyMonoCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null)
     {
         $monoCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->monochromeCostPerPage;
+
         return $monoCostPerPage * $this->getAverageMonthlyBlackAndWhitePageCount();
     }
 
@@ -1352,13 +1362,15 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      *
      * @param Application_Model_CostPerPageSetting $costPerPageSetting
      *            the setting used to calculate cost per page
-     * @param Application_Model_MasterDevice $masterDevice
+     * @param Application_Model_MasterDevice       $masterDevice
      *            the master device to use, or null for current instance of device
+     *
      * @return number
      */
     public function calculateMonthlyColorCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null)
     {
         $colorCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->colorCostPerPage;
+
         return $colorCostPerPage * $this->getAverageMonthlyColorPageCount();
     }
 }
