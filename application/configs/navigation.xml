@@ -176,6 +176,13 @@
                         </view>
                     </pages>
                 </UserManagement>
+                <DealerManagement>
+                    <label>Dealers</label>
+                    <module>admin</module>
+                    <controller>dealer</controller>
+                    <action>index</action>
+                    <resource>admin__dealer__index</resource>
+                </DealerManagement>
             </pages>
         </sysadmin>
     </nav>
