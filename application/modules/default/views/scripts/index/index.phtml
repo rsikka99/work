@@ -91,12 +91,12 @@
                                     <button name="selectAssessment" value="0" class="btn btn-success btn-mini">Start New</button>
                                 </td>
                             </tr>
-                            <?php foreach ($this->availableAssessments as $report) : /* @var $report Proposalgen_Model_Report */ ?>
-                            <tr class="<?php echo ($report->reportStage == Proposalgen_Model_Report_Step::STEP_FINISHED) ? "success" : "warning"; ?>">
+                            <?php foreach ($this->availableAssessments as $report) : /* @var $report Proposalgen_Model_Assessment */ ?>
+                            <tr class="<?php echo ($report->stepName == Proposalgen_Model_Assessment_Step::STEP_FINISHED) ? "success" : "warning"; ?>">
                                 <td><?php echo strftime("%B %d, %Y", strtotime($report->dateCreated)); ?></td>
                                 <td><?php echo strftime("%B %d, %Y", strtotime($report->lastModified)); ?></td>
 
-                                <?php if ($report->reportStage == Proposalgen_Model_Report_Step::STEP_FINISHED) : ?>
+                                <?php if ($report->stepName == Proposalgen_Model_Assessment_Step::STEP_FINISHED) : ?>
                                 <td>Finished</td>
 
                                 <?php else : ?>

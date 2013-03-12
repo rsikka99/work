@@ -9,7 +9,7 @@ class Proposalgen_Model_Rms_Excluded_Row extends My_Model_Abstract
     /**
      * @var int
      */
-    public $reportId;
+    public $rmsUploadId;
 
     /**
      * @var int
@@ -66,9 +66,9 @@ class Proposalgen_Model_Rms_Excluded_Row extends My_Model_Abstract
             $this->id = $params->id;
         }
 
-        if (isset($params->reportId) && !is_null($params->reportId))
+        if (isset($params->rmsUploadId) && !is_null($params->rmsUploadId))
         {
-            $this->reportId = $params->reportId;
+            $this->rmsUploadId = $params->rmsUploadId;
         }
 
         if (isset($params->rmsProviderId) && !is_null($params->rmsProviderId))
@@ -119,7 +119,7 @@ class Proposalgen_Model_Rms_Excluded_Row extends My_Model_Abstract
     {
         return array(
             "id"               => $this->id,
-            "reportId"         => $this->reportId,
+            "rmsUploadId"      => $this->rmsUploadId,
             "rmsProviderId"    => $this->rmsProviderId,
             "rmsModelId"       => $this->rmsModelId,
             "serialNumber"     => $this->serialNumber,

@@ -4,7 +4,7 @@ class Proposalgen_Model_Mapper_Map_Device_Instance extends My_Model_Mapper_Abstr
     /*
      * Column Definitions
      */
-    public $col_reportId = 'reportId';
+    public $col_rmsUploadId = 'rmsUploadId';
     public $col_modelName = 'modelName';
     public $col_manufacturer = 'manufacturer';
 
@@ -41,7 +41,7 @@ class Proposalgen_Model_Mapper_Map_Device_Instance extends My_Model_Mapper_Abstr
         $data = $this->unsetNullValues($object->toArray());
 
         // Remove the id
-        unset($data ["{$this->col_reportId}"]);
+        unset($data ["{$this->col_rmsUploadId}"]);
 
         // Insert the data
         $id = $this->getDbTable()->insert($data);
@@ -65,10 +65,7 @@ class Proposalgen_Model_Mapper_Map_Device_Instance extends My_Model_Mapper_Abstr
      * @throws BadMethodCallException
      * @return int The number of rows affected
      */
-    public function save ($object, $primaryKey = null)
-    {
-        throw new BadMethodCallException("This method is not available for this mapper.");
-    }
+    public function save ($object, $primaryKey = null) { throw new BadMethodCallException("This method is not available for this mapper."); }
 
     /**
      * Deletes rows from the database.
@@ -80,10 +77,7 @@ class Proposalgen_Model_Mapper_Map_Device_Instance extends My_Model_Mapper_Abstr
      * @throws BadMethodCallException
      * @return int The number of rows deleted
      */
-    public function delete ($object)
-    {
-        throw new BadMethodCallException("This method is not available for this mapper.");
-    }
+    public function delete ($object) { throw new BadMethodCallException("This method is not available for this mapper."); }
 
     /**
      * Finds a Map_Device_Instance based on it's primaryKey
@@ -94,10 +88,7 @@ class Proposalgen_Model_Mapper_Map_Device_Instance extends My_Model_Mapper_Abstr
      * @throws BadMethodCallException
      * @return Proposalgen_Model_Map_Device_Instance
      */
-    public function find ($id)
-    {
-        throw new BadMethodCallException("This method is not available for this mapper.");
-    }
+    public function find ($id) { throw new BadMethodCallException("This method is not available for this mapper."); }
 
     /**
      * Fetches a Map_Device_Instance
@@ -112,10 +103,7 @@ class Proposalgen_Model_Mapper_Map_Device_Instance extends My_Model_Mapper_Abstr
      * @throws BadMethodCallException
      * @return Proposalgen_Model_Map_Device_Instance
      */
-    public function fetch ($where = null, $order = null, $offset = null)
-    {
-        throw new BadMethodCallException("This method is not available for this mapper.");
-    }
+    public function fetch ($where = null, $order = null, $offset = null) { throw new BadMethodCallException("This method is not available for this mapper."); }
 
     /**
      * Fetches all Proposalgen_Map_Device_Instances
@@ -132,19 +120,7 @@ class Proposalgen_Model_Mapper_Map_Device_Instance extends My_Model_Mapper_Abstr
      * @throws BadMethodCallException
      * @return Proposalgen_Model_Map_Device_Instance[]
      */
-    public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
-    {
-        throw new BadMethodCallException("This method is not available for this mapper.");
-        $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
-        foreach ($resultSet as $row)
-        {
-            $object     = new Proposalgen_Model_Map_Device_Instance($row->toArray());
-            $entries [] = $object;
-        }
-
-        return $entries;
-    }
+    public function fetchAll ($where = null, $order = null, $count = 25, $offset = null) { throw new BadMethodCallException("This method is not available for this mapper."); }
 
     /**
      * Gets a where clause for filtering by id
@@ -156,7 +132,7 @@ class Proposalgen_Model_Mapper_Map_Device_Instance extends My_Model_Mapper_Abstr
     public function getWhereId ($id)
     {
         return array(
-            "{$this->col_reportId} = ?" => $id
+            "{$this->col_rmsUploadId} = ?" => $id
         );
     }
 
@@ -173,7 +149,7 @@ class Proposalgen_Model_Mapper_Map_Device_Instance extends My_Model_Mapper_Abstr
     /**
      * This function fetches device instances to map
      *
-     * @param int     $reportId
+     * @param int     $rmsUploadId
      * @param string  $sortColumn
      *            The column to sort by
      * @param string  $sortDirection
@@ -188,11 +164,11 @@ class Proposalgen_Model_Mapper_Map_Device_Instance extends My_Model_Mapper_Abstr
      * @return number|Proposalgen_Model_DeviceInstance[] Returns an array, or if justCount is true then it will count how many rows are
      *           available
      */
-    public function fetchAllForReport ($reportId, $sortColumn, $sortDirection, $limit = null, $offset = null, $justCount = false)
+    public function fetchAllForRmsUpload ($rmsUploadId, $sortColumn, $sortDirection, $limit = null, $offset = null, $justCount = false)
     {
 
-        $db = $this->getDbTable()->getAdapter();
-        $reportId = $db->quote($reportId, 'INTEGER');
+        $db          = $this->getDbTable()->getAdapter();
+        $rmsUploadId = $db->quote($rmsUploadId, 'INTEGER');
 
         // If we're just counting we only need to return the count
         if ($justCount)
@@ -205,7 +181,7 @@ SELECT
     pgen_rms_upload_rows.manufacturer,
     pgen_rms_upload_rows.modelName,
     pgen_device_instances.useUserData,
-    pgen_device_instances.reportId,
+    pgen_device_instances.rmsUploadId,
     pgen_device_instance_master_devices.masterDeviceId,
     pgen_device_instance_master_devices.masterDeviceId IS NOT NULL AS isMapped,
     manufacturers.displayname mappedManufacturer,
@@ -217,8 +193,8 @@ JOIN pgen_rms_upload_rows ON pgen_device_instances.rmsUploadRowId = pgen_rms_upl
 LEFT JOIN pgen_device_instance_master_devices ON pgen_device_instance_master_devices.deviceInstanceId = pgen_device_instances.id
 LEFT JOIN pgen_master_devices ON pgen_device_instance_master_devices.masterDeviceId = pgen_master_devices.id
 LEFT JOIN manufacturers ON pgen_master_devices.manufacturerId = manufacturers.id
-WHERE pgen_device_instances.reportId = {$reportId}
-GROUP BY pgen_device_instances.reportId, CONCAT(pgen_rms_upload_rows.manufacturer, ' ', pgen_rms_upload_rows.modelName)
+WHERE pgen_device_instances.rmsUploadId = {$rmsUploadId}
+GROUP BY pgen_device_instances.rmsUploadRowId
 ORDER BY deviceCount DESC
 ) AS countTable";
             $justCountQuery = $db->query($justCountSql);
@@ -268,14 +244,14 @@ ORDER BY deviceCount DESC
                 $limitStatement = "LIMIT 25";
             }
 
-            $sql   = "
+            $sql = "
 SELECT
     pgen_rms_upload_rows.rmsProviderId,
     pgen_rms_upload_rows.rmsModelId,
     pgen_rms_upload_rows.manufacturer,
     pgen_rms_upload_rows.modelName,
     pgen_device_instances.useUserData,
-    pgen_device_instances.reportId,
+    pgen_device_instances.rmsUploadId,
     pgen_device_instance_master_devices.masterDeviceId,
     pgen_device_instance_master_devices.masterDeviceId IS NOT NULL AS isMapped,
     manufacturers.displayname mappedManufacturer,
@@ -287,8 +263,8 @@ JOIN pgen_rms_upload_rows ON pgen_device_instances.rmsUploadRowId = pgen_rms_upl
 LEFT JOIN pgen_device_instance_master_devices ON pgen_device_instance_master_devices.deviceInstanceId = pgen_device_instances.id
 LEFT JOIN pgen_master_devices ON pgen_device_instance_master_devices.masterDeviceId = pgen_master_devices.id
 LEFT JOIN manufacturers ON pgen_master_devices.manufacturerId = manufacturers.id
-WHERE pgen_device_instances.reportId = {$reportId}
-GROUP BY CONCAT(pgen_rms_upload_rows.manufacturer, ' ', pgen_rms_upload_rows.modelName)
+WHERE pgen_device_instances.rmsUploadId = {$rmsUploadId}
+GROUP BY pgen_device_instances.rmsUploadRowId
 ORDER BY $orderBy
 $limitStatement
 ";

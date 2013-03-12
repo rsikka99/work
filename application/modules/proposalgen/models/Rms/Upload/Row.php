@@ -17,6 +17,11 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
     public $rmsModelId;
 
     /**
+     * @var string
+     */
+    public $fullDeviceName;
+
+    /**
      * @var bool
      */
     public $hasCompleteInformation;
@@ -347,6 +352,11 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             $this->rmsModelId = $params->rmsModelId;
         }
 
+        if (isset($params->fullDeviceName) && !is_null($params->fullDeviceName))
+        {
+            $this->fullDeviceName = $params->fullDeviceName;
+        }
+
         if (isset($params->hasCompleteInformation) && !is_null($params->hasCompleteInformation))
         {
             $this->hasCompleteInformation = $params->hasCompleteInformation;
@@ -659,6 +669,7 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             "id"                       => $this->id,
             "rmsProviderId"            => $this->rmsProviderId,
             "rmsModelId"               => $this->rmsModelId,
+            "fullDeviceName"           => $this->fullDeviceName,
             "hasCompleteInformation"   => $this->hasCompleteInformation,
             "modelName"                => $this->modelName,
             "manufacturer"             => $this->manufacturer,

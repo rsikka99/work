@@ -5,7 +5,7 @@ abstract class My_Controller_Report extends Zend_Controller_Action
     /**
      * The current report
      *
-     * @var Proposalgen_Model_Report
+     * @var Proposalgen_Model_Assessment
      */
     protected $_report;
 

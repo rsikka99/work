@@ -40,7 +40,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * @var int
      */
-    public $reportId;
+    public $rmsUploadId;
 
     /**
      * @var int
@@ -301,7 +301,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * Applies overrides to settings, device prices, toner prices
      *
-     * @param Proposalgen_Model_Report $report
+     * @param Proposalgen_Model_Assessment $report
      */
     public function processOverrides ($report)
     {
@@ -342,9 +342,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $this->id = $params->id;
         }
 
-        if (isset($params->reportId) && !is_null($params->reportId))
+        if (isset($params->rmsUploadId) && !is_null($params->rmsUploadId))
         {
-            $this->reportId = $params->reportId;
+            $this->rmsUploadId = $params->rmsUploadId;
         }
 
         if (isset($params->rmsUploadRowId) && !is_null($params->rmsUploadRowId))
@@ -391,7 +391,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         return array(
             "id"                 => $this->id,
-            "reportId"           => $this->reportId,
+            "rmsUploadId"        => $this->rmsUploadId,
             "rmsUploadRowId"     => $this->rmsUploadRowId,
             "ipAddress"          => $this->ipAddress,
             "isExcluded"         => $this->isExcluded,

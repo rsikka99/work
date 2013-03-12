@@ -3167,7 +3167,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
         try
         {
-            $reportsMapper = Proposalgen_Model_Mapper_Report::getInstance();
+            $reportsMapper = Proposalgen_Model_Mapper_Assessment::getInstance();
             if ($filter == '1')
             {
                 $reports = $reportsMapper->fetchAllFinishedReportsForUser($this->user_id);
@@ -3188,7 +3188,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             {
                 foreach ($reports as $report)
                 {
-                    $finishedString = (strcasecmp($report->reportStage, Proposalgen_Model_Report_Step::STEP_FINISHED) === 0) ? "YES" : "NO";
+                    $finishedString = (strcasecmp($report->reportStage, Proposalgen_Model_Assessment_Step::STEP_FINISHED) === 0) ? "YES" : "NO";
 
                     $row = array(
                         'id'   => $report->id,
@@ -3231,7 +3231,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
     {
         $db                  = Zend_Db_Table::getDefaultAdapter();
         $rmsUploadRowMapper  = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance();
-        $reportMapper        = Proposalgen_Model_Mapper_Report::getInstance();
+        $reportMapper        = Proposalgen_Model_Mapper_Assessment::getInstance();
         $reportSettingMapper = Proposalgen_Model_Mapper_Report_Setting::getInstance();
         $report              = $reportMapper->find($reportId);
 
@@ -3245,7 +3245,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                  * Report Report Settings
                  * Report Settings
                  */
-                $rmsUploadRowMapper->deleteAllForReport($reportId);
+                $rmsUploadRowMapper->deleteAllForRmsUpload($reportId);
                 $reportSettingMapper->delete($report->getReportSettings());
                 $reportMapper->delete($report);
                 $db->commit();
@@ -6478,7 +6478,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
         if ($this->_request->isPost())
         {
-            $reportTable = new Proposalgen_Model_DbTable_Report();
+            $reportTable = new Proposalgen_Model_DbTable_Assessment();
             $formData    = $this->_request->getPost();
             // print_r($formData); die;
 
@@ -6486,7 +6486,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             $db->beginTransaction();
             try
             {
-                $reportMapper = Proposalgen_Model_Mapper_Report::getInstance();
+                $reportMapper = Proposalgen_Model_Mapper_Assessment::getInstance();
                 $report_id    = $formData ['reportlist'];
 
                 // check transfer type
@@ -6497,8 +6497,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     // update report
 
 
-                    $reportMapper   = Proposalgen_Model_Mapper_Report::getInstance();
-                    $report         = Proposalgen_Model_Mapper_Report::getInstance()->find($report_id);
+                    $reportMapper   = Proposalgen_Model_Mapper_Assessment::getInstance();
+                    $report         = Proposalgen_Model_Mapper_Assessment::getInstance()->find($report_id);
                     $report->id     = $report_id;
                     $report->userId = $new_user_id;
                     $reportMapper->save($report);
@@ -6623,7 +6623,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             $where = 'userId=' . $this->user_id;
         }
         $order                    = 'dateCreated DESC';
-        $reportTable              = new Proposalgen_Model_DbTable_Report();
+        $reportTable              = new Proposalgen_Model_DbTable_Assessment();
         $reports                  = $reportTable->fetchAll($where, $order, $count, $offset);
         $this->view->reports_list = $reports;
     }

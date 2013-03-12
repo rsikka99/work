@@ -135,7 +135,7 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
     /**
      * Handles processing overrides for a toner
      *
-     * @param Proposalgen_Model_Report $report
+     * @param Proposalgen_Model_Assessment $report
      */
     public function processOverrides ($report)
     {

@@ -69,6 +69,43 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
+-- Table `pgen_rms_providers`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `pgen_rms_providers` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(255) NOT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `pgen_rms_uploads`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `pgen_rms_uploads` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `clientId` INT NOT NULL ,
+  `rmsProviderId` INT NOT NULL ,
+  `fileName` VARCHAR(255) NOT NULL ,
+  `validRowCount` INT NOT NULL ,
+  `invalidRowCount` INT NOT NULL ,
+  `uploadDate` DATETIME NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `rms_uploads_ibfk_1_idx` (`clientId` ASC) ,
+  INDEX `rms_uploads_ibfk_2_idx` (`rmsProviderId` ASC) ,
+  CONSTRAINT `rms_uploads_ibfk_1`
+    FOREIGN KEY (`clientId` )
+    REFERENCES `clients` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `rms_uploads_ibfk_2`
+    FOREIGN KEY (`rmsProviderId` )
+    REFERENCES `pgen_rms_providers` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `users`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `users` (
@@ -93,47 +130,8 @@ COMMENT = 'The users table stores basic information on a user';
 
 
 -- -----------------------------------------------------
--- Table `pgen_reports`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_reports` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `userId` INT(11) NOT NULL ,
-  `clientId` INT NOT NULL ,
-  `userPricingOverride` TINYINT(4) NULL DEFAULT '0' ,
-  `reportStage` VARCHAR(255) NULL ,
-  `dateCreated` DATETIME NOT NULL ,
-  `lastModified` DATETIME NOT NULL ,
-  `reportDate` DATETIME NULL DEFAULT NULL ,
-  `devicesModified` TINYINT(4) NULL DEFAULT '0' ,
-  PRIMARY KEY (`id`) ,
-  INDEX `user_id` (`userId` ASC) ,
-  INDEX `proposalgenerator_reports_ibfk_3_idx` (`clientId` ASC) ,
-  CONSTRAINT `proposalgenerator_reports_ibfk_1`
-    FOREIGN KEY (`userId` )
-    REFERENCES `users` (`id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `proposalgenerator_reports_ibfk_3`
-    FOREIGN KEY (`clientId` )
-    REFERENCES `clients` (`id` )
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
-AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `pgen_rms_providers`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_rms_providers` (
-  `id` INT NOT NULL AUTO_INCREMENT ,
-  `name` VARCHAR(255) NOT NULL ,
-  PRIMARY KEY (`id`) )
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `pgen_rms_devices`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_rms_devices` (
@@ -168,6 +166,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_upload_rows` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
   `rmsProviderId` INT(11) NOT NULL ,
   `rmsModelId` INT(11) NULL ,
+  `fullDeviceName` VARCHAR(255) NOT NULL ,
   `hasCompleteInformation` TINYINT(4) NOT NULL DEFAULT 0 ,
   `modelName` VARCHAR(255) NOT NULL DEFAULT '' ,
   `manufacturer` VARCHAR(255) NOT NULL DEFAULT '' ,
@@ -257,7 +256,7 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_device_instances` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `reportId` INT(11) NOT NULL ,
+  `rmsUploadId` INT(11) NOT NULL ,
   `rmsUploadRowId` INT(11) NOT NULL ,
   `ipAddress` VARCHAR(255) NOT NULL DEFAULT '' ,
   `isExcluded` TINYINT(4) NOT NULL DEFAULT 0 ,
@@ -266,14 +265,14 @@ CREATE  TABLE IF NOT EXISTS `pgen_device_instances` (
   `serialNumber` VARCHAR(255) NOT NULL DEFAULT '' ,
   `useUserData` TINYINT(4) NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`id`) ,
-  INDEX `report_id` (`reportId` ASC) ,
-  INDEX `upload_data_collector_id` (`rmsUploadRowId` ASC) ,
-  CONSTRAINT `proposalgenerator_device_instances_ibfk_1`
-    FOREIGN KEY (`reportId` )
-    REFERENCES `pgen_reports` (`id` )
+  INDEX `rmsUploadRowId` (`rmsUploadRowId` ASC) ,
+  INDEX `device_instances_ibfk_1_idx` (`rmsUploadId` ASC) ,
+  CONSTRAINT `device_instances_ibfk_1`
+    FOREIGN KEY (`rmsUploadId` )
+    REFERENCES `pgen_rms_uploads` (`id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `proposalgenerator_device_instances_ibfk_3`
+  CONSTRAINT `device_instances_ibfk_2`
     FOREIGN KEY (`rmsUploadRowId` )
     REFERENCES `pgen_rms_upload_rows` (`id` )
     ON DELETE CASCADE
@@ -506,6 +505,44 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
+-- Table `assessments`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `assessments` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `userId` INT(11) NOT NULL ,
+  `clientId` INT NOT NULL ,
+  `rmsUploadId` INT(11) NULL ,
+  `userPricingOverride` TINYINT(4) NULL DEFAULT '0' ,
+  `stepName` VARCHAR(255) NULL ,
+  `dateCreated` DATETIME NOT NULL ,
+  `lastModified` DATETIME NOT NULL ,
+  `reportDate` DATETIME NULL DEFAULT NULL ,
+  `devicesModified` TINYINT(4) NULL DEFAULT '0' ,
+  PRIMARY KEY (`id`) ,
+  INDEX `user_id` (`userId` ASC) ,
+  INDEX `proposalgenerator_reports_ibfk_3_idx` (`clientId` ASC) ,
+  INDEX `assessments_ibfk_3_idx` (`rmsUploadId` ASC) ,
+  CONSTRAINT `assessments_ibfk_1`
+    FOREIGN KEY (`userId` )
+    REFERENCES `users` (`id` )
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
+  CONSTRAINT `assessments_ibfk_2`
+    FOREIGN KEY (`clientId` )
+    REFERENCES `clients` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `assessments_ibfk_3`
+    FOREIGN KEY (`rmsUploadId` )
+    REFERENCES `pgen_rms_uploads` (`id` )
+    ON DELETE SET NULL
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
 -- Table `pgen_report_settings`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_report_settings` (
@@ -553,7 +590,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_report_report_settings` (
   INDEX `report_setting_id` (`reportSettingId` ASC) ,
   CONSTRAINT `proposalgenerator_report_report_settings_ibfk_1`
     FOREIGN KEY (`reportId` )
-    REFERENCES `pgen_reports` (`id` )
+    REFERENCES `assessments` (`id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `proposalgenerator_report_report_settings_ibfk_2`
@@ -588,7 +625,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_report_survey_settings` (
   INDEX `survey_setting_id` (`surveySettingId` ASC) ,
   CONSTRAINT `proposalgenerator_report_survey_settings_ibfk_1`
     FOREIGN KEY (`reportId` )
-    REFERENCES `pgen_reports` (`id` ),
+    REFERENCES `assessments` (`id` ),
   CONSTRAINT `proposalgenerator_report_survey_settings_ibfk_2`
     FOREIGN KEY (`surveySettingId` )
     REFERENCES `pgen_survey_settings` (`id` ))
@@ -1394,7 +1431,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_rms_excluded_rows` (
   `id` INT NOT NULL AUTO_INCREMENT ,
-  `reportId` INT NOT NULL ,
+  `rmsUploadId` INT NOT NULL ,
   `rmsProviderId` INT NULL ,
   `rmsModelId` INT NULL ,
   `serialNumber` VARCHAR(255) NULL ,
@@ -1404,11 +1441,35 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_excluded_rows` (
   `reason` VARCHAR(255) NOT NULL ,
   `csvLineNumber` INT(11) NOT NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `rms_e_idx` (`reportId` ASC) ,
-  CONSTRAINT `pgen_rms_excluded_rows_ibfk_1`
-    FOREIGN KEY (`reportId` )
-    REFERENCES `pgen_reports` (`id` )
+  INDEX `rms_excluded_rows_ibfk_1_idx` (`rmsUploadId` ASC) ,
+  CONSTRAINT `rms_excluded_rows_ibfk_1`
+    FOREIGN KEY (`rmsUploadId` )
+    REFERENCES `pgen_rms_uploads` (`id` )
     ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hardware_optimizations`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `hardware_optimizations` (
+  `id` INT NOT NULL ,
+  `clientId` INT(11) NOT NULL ,
+  `rmsUploadId` INT(11) NULL ,
+  `name` VARCHAR(255) NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `hardware_optimization_ibfk_1_idx` (`clientId` ASC) ,
+  INDEX `hardware_optimization_ibfk_2_idx` (`rmsUploadId` ASC) ,
+  CONSTRAINT `hardware_optimization_ibfk_1`
+    FOREIGN KEY (`clientId` )
+    REFERENCES `clients` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `hardware_optimization_ibfk_2`
+    FOREIGN KEY (`rmsUploadId` )
+    REFERENCES `pgen_rms_uploads` (`id` )
+    ON DELETE SET NULL
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
@@ -1417,11 +1478,14 @@ ENGINE = InnoDB;
 -- Table `device_instance_replacement_master_devices`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `device_instance_replacement_master_devices` (
-  `masterDeviceId` INT NOT NULL ,
-  `deviceInstanceId` INT NOT NULL ,
+  `deviceInstanceId` INT(11) NOT NULL ,
+  `hardwareOptimizationId` INT(11) NOT NULL ,
+  `masterDeviceId` INT(11) NOT NULL ,
   INDEX `device_instance_replacement_master_devices_ibfk1_idx` (`masterDeviceId` ASC) ,
   INDEX `device_instance_replacement_master_devices_ibfk2_idx` (`deviceInstanceId` ASC) ,
   PRIMARY KEY (`deviceInstanceId`) ,
+  UNIQUE INDEX `deviceInstanceId_UNIQUE` (`deviceInstanceId` ASC, `hardwareOptimizationId` ASC) ,
+  INDEX `device_instance_replacement_master_devices_ibfk_3_idx` (`hardwareOptimizationId` ASC) ,
   CONSTRAINT `device_instance_replacement_master_devices_ibfk1`
     FOREIGN KEY (`masterDeviceId` )
     REFERENCES `pgen_master_devices` (`id` )
@@ -1431,7 +1495,12 @@ CREATE  TABLE IF NOT EXISTS `device_instance_replacement_master_devices` (
     FOREIGN KEY (`deviceInstanceId` )
     REFERENCES `pgen_device_instances` (`id` )
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE NO ACTION,
+  CONSTRAINT `device_instance_replacement_master_devices_ibfk_3`
+    FOREIGN KEY (`hardwareOptimizationId` )
+    REFERENCES `hardware_optimizations` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -1454,12 +1523,11 @@ CREATE  TABLE IF NOT EXISTS `assessment_surveys` (
   PRIMARY KEY (`reportId`) ,
   CONSTRAINT `assessment_surveys_ibfk_1`
     FOREIGN KEY (`reportId` )
-    REFERENCES `pgen_reports` (`id` )
+    REFERENCES `assessments` (`id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
--- -----------------------------------------------------
 -- Table `user_password_reset_requests`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `user_password_reset_requests` (
@@ -1478,6 +1546,8 @@ CREATE  TABLE IF NOT EXISTS `user_password_reset_requests` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `user_sessions`
@@ -1493,6 +1563,25 @@ CREATE  TABLE IF NOT EXISTS `user_sessions` (
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
     ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+CREATE  TABLE IF NOT EXISTS `health_checks` (
+  `id` INT NOT NULL ,
+  `clientId` INT(11) NOT NULL ,
+  `rmsUploadId` INT(11) NULL ,
+  `name` VARCHAR(255) NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `health_check_ibfk_1_idx` (`clientId` ASC) ,
+  INDEX `health_check_ibfk_2_idx` (`rmsUploadId` ASC) ,
+  CONSTRAINT `health_check_ibfk_1`
+    FOREIGN KEY (`clientId` )
+    REFERENCES `clients` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `health_check_ibfk_2`
+    FOREIGN KEY (`rmsUploadId` )
+    REFERENCES `pgen_rms_uploads` (`id` )
+    ON DELETE SET NULL
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
