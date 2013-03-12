@@ -228,9 +228,12 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
                 foreach ($requiredToners as $tonerColor)
                 {
                     $toner = $this->getCheapestToner($tonerColor, self::$PricingConfig);
-                    if ($toner->yield < $smallestYield || is_null($smallestYield))
+                    if ($toner instanceof Proposalgen_Model_Toner)
                     {
-                        $smallestYield = $toner->yield;
+                        if ($toner->yield < $smallestYield || is_null($smallestYield))
+                        {
+                            $smallestYield = $toner->yield;
+                        }
                     }
                 }
             }
@@ -1031,7 +1034,8 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             /* @var $toner Proposalgen_Model_Toner */
             foreach ($this->getCheapestTonerSet($costPerPageSetting->pricingConfiguration) as $toner)
             {
-                if($toner){
+                if ($toner)
+                {
                     $tonerCostPerPage = $toner->calculateCostPerPage($costPerPageSetting);
 
                     $costPerPage->add($tonerCostPerPage);
