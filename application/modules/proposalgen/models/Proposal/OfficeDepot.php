@@ -2537,7 +2537,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->CostOfExecutingSuppliesOrders))
         {
-            $this->CostOfExecutingSuppliesOrders = $this->report->getSurvey()->costToExecuteSuppliesOrder * $this->report->getSurvey()->numberOfSupplyOrdersPerMonth;
+            $this->CostOfExecutingSuppliesOrders = $this->report->getSurvey()->costToExecuteSuppliesOrder * $this->report->getSurvey()->numberOfSupplyOrdersPerMonth * 12;
         }
 
         return $this->CostOfExecutingSuppliesOrders;
