@@ -137,14 +137,14 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      *
      * @var int
      */
-    public $targetMonochrome;
+    public $targetMonochromeCostPerPage;
 
     /**
      *  Target Color is the desired cost per page looking to obtain for the fleet
      *
      * @var int
      */
-    public $targetColor;
+    public $targetColorCostPerPage;
     /**
      * The assessment pricing configuration
      *
@@ -270,14 +270,14 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
             $this->costThreshold = $params->costThreshold;
         }
 
-        if (isset($params->targetMonochrome) && !is_null($params->targetMonochrome))
+        if (isset($params->targetMonochromeCostPerPage) && !is_null($params->targetMonochromeCostPerPage))
         {
-            $this->targetMonochrome = $params->targetMonochrome;
+            $this->targetMonochromeCostPerPage = $params->targetMonochromeCostPerPage;
         }
 
-        if (isset($params->targetColor) && !is_null($params->targetColor))
+        if (isset($params->targetColorCostPerPage) && !is_null($params->targetColorCostPerPage))
         {
-            $this->targetColor = $params->targetColor;
+            $this->targetColorCostPerPage = $params->targetColorCostPerPage;
         }
     }
 
@@ -287,25 +287,25 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "id"                         => $this->id,
-            "actualPageCoverageMono"     => $this->actualPageCoverageMono,
-            "actualPageCoverageColor"    => $this->actualPageCoverageColor,
-            "serviceCostPerPage"         => $this->serviceCostPerPage,
-            "adminCostPerPage"           => $this->adminCostPerPage,
-            "assessmentReportMargin"     => $this->assessmentReportMargin,
-            "grossMarginReportMargin"    => $this->grossMarginReportMargin,
-            "monthlyLeasePayment"        => $this->monthlyLeasePayment,
-            "defaultPrinterCost"         => $this->defaultPrinterCost,
-            "leasedBwCostPerPage"        => $this->leasedBwCostPerPage,
-            "leasedColorCostPerPage"     => $this->leasedColorCostPerPage,
-            "mpsBwCostPerPage"           => $this->mpsBwCostPerPage,
-            "mpsColorCostPerPage"        => $this->mpsColorCostPerPage,
-            "kilowattsPerHour"           => $this->kilowattsPerHour,
-            "assessmentPricingConfigId"  => $this->assessmentPricingConfigId,
-            "grossMarginPricingConfigId" => $this->grossMarginPricingConfigId,
-            "costThreshold"              => $this->costThreshold,
-            "targetMonochrome"           => $this->targetMonochrome,
-            "targetColor"                => $this->targetColor,
+            "id"                          => $this->id,
+            "actualPageCoverageMono"      => $this->actualPageCoverageMono,
+            "actualPageCoverageColor"     => $this->actualPageCoverageColor,
+            "serviceCostPerPage"          => $this->serviceCostPerPage,
+            "adminCostPerPage"            => $this->adminCostPerPage,
+            "assessmentReportMargin"      => $this->assessmentReportMargin,
+            "grossMarginReportMargin"     => $this->grossMarginReportMargin,
+            "monthlyLeasePayment"         => $this->monthlyLeasePayment,
+            "defaultPrinterCost"          => $this->defaultPrinterCost,
+            "leasedBwCostPerPage"         => $this->leasedBwCostPerPage,
+            "leasedColorCostPerPage"      => $this->leasedColorCostPerPage,
+            "mpsBwCostPerPage"            => $this->mpsBwCostPerPage,
+            "mpsColorCostPerPage"         => $this->mpsColorCostPerPage,
+            "kilowattsPerHour"            => $this->kilowattsPerHour,
+            "assessmentPricingConfigId"   => $this->assessmentPricingConfigId,
+            "grossMarginPricingConfigId"  => $this->grossMarginPricingConfigId,
+            "costThreshold"               => $this->costThreshold,
+            "targetMonochromeCostPerPage" => $this->targetMonochromeCostPerPage,
+            "targetColorCostPerPage"      => $this->targetColorCostPerPage,
         );
     }
 
