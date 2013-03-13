@@ -33,7 +33,7 @@ class Proposalgen_Model_Proposal_Devices
     public $unmappedDeviceInstances = array();
 
     /**
-     * @var Proposalgen_Model_Report
+     * @var Proposalgen_Model_Assessment
      */
     protected $_report;
 
@@ -45,26 +45,26 @@ class Proposalgen_Model_Proposal_Devices
     /**
      * Constructor
      *
-     * @param Proposalgen_Model_Report $report
+     * @param Proposalgen_Model_Assessment $report
      */
-    public function __construct (Proposalgen_Model_Report $report)
+    public function __construct (Proposalgen_Model_Assessment $report)
     {
         $this->_report = $report;
-        $this->_fetchAndSortAllDevices($report->id);
+        $this->_fetchAndSortAllDevices($report->getRmsUpload()->id);
     }
 
     /**
      * Fetches and sorts all of our device instances
      *
-     * @param $reportId
+     * @param $rmsUploadId
      *
      * @return bool
      */
-    public function _fetchAndSortAllDevices ($reportId)
+    public function _fetchAndSortAllDevices ($rmsUploadId)
     {
         if (!$this->_devicesFetchedAndSorted)
         {
-            $this->allDeviceInstances = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchAllForReport($reportId);
+            $this->allDeviceInstances = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchAllForRmsUpload($rmsUploadId);
 
             /*
              * Sort our devices into their categories

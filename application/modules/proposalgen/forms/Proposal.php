@@ -68,6 +68,3 @@ class Proposalgen_Form_Proposal extends Zend_Form
         $this->addElements($elements);
     } // end function __construct
 } // end class forms_locationForm
-
-
-?>

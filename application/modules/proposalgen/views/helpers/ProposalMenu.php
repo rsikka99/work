@@ -3,7 +3,7 @@ class Proposalgen_View_Helper_ProposalMenu extends Zend_View_Helper_Abstract
 {
 
     /**
-     * @param Proposalgen_Model_Report_Step[] $reportSteps
+     * @param Proposalgen_Model_Assessment_Step[] $reportSteps
      *
      * @return string
      */

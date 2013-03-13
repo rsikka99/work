@@ -29,7 +29,7 @@ INSERT INTO `pgen_toner_colors` (`id`, `name`) VALUES
 (6,'4 COLOR');
 
 /* Default System Report Settings */
-INSERT INTO `pgen_report_settings` (`id`,`actualPageCoverageMono`,`actualPageCoverageColor`,`serviceCostPerPage`,`adminCostPerPage`,`assessmentReportMargin`,`grossMarginReportMargin`,`monthlyLeasePayment`,`defaultPrinterCost`,`leasedBwCostPerPage`,`leasedColorCostPerPage`,`mpsBwCostPerPage`,`mpsColorCostPerPage`,`kilowattsPerHour`,`assessmentPricingConfigId`,`grossMarginPricingConfigId`,`costThreshold`, `targetMonochrome`,`targetColor`) VALUES
+INSERT INTO `pgen_report_settings` (`id`,`actualPageCoverageMono`,`actualPageCoverageColor`,`serviceCostPerPage`,`adminCostPerPage`,`assessmentReportMargin`,`grossMarginReportMargin`,`monthlyLeasePayment`,`defaultPrinterCost`,`leasedBwCostPerPage`,`leasedColorCostPerPage`,`mpsBwCostPerPage`,`mpsColorCostPerPage`,`kilowattsPerHour`,`assessmentPricingConfigId`,`grossMarginPricingConfigId`,`costThreshold`, `targetMonochromeCostPerPage`,`targetColorCostPerPage`) VALUES
 (1,6,24,0.0035,0.0006,20,20,250,1000,0.015,0.08,0.02,0.09,0.1,2,3,10,0.018,0.02);
 
 /* Default System Survey Settings */

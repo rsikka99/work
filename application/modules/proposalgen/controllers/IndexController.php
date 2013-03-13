@@ -71,21 +71,21 @@ class Proposalgen_IndexController extends Tangent_Controller_Action
         // Get the list of reports
         if (strcmp($proposalOptions, 'ViewUnfinishedStartNewProposal') === 0)
         {
-            $reports = Proposalgen_Model_Mapper_Report::getInstance()->fetchAll(array (
+            $reports = Proposalgen_Model_Mapper_Assessment::getInstance()->fetchAll(array (
                     "(userId = ? AND questionSetId = 1" => $this->userId, 
                     "reportStage != ?) OR reportStage IS NULL" => "finished" 
             ), array (
                     "dateCreated DESC" 
             ));
             // Tack on a proposal that handles creating a new one
-            $newReport = new Proposalgen_Model_Report();
+            $newReport = new Proposalgen_Model_Assessment();
             $newReport->id = 0;
             $newReport->getClient()->companyName = "Start New Proposal";
             array_unshift($reports, $newReport);
         }
         else
         {
-            $reports = Proposalgen_Model_Mapper_Report::getInstance()->fetchAll(array (
+            $reports = Proposalgen_Model_Mapper_Assessment::getInstance()->fetchAll(array (
                     "userId = ? AND questionSetId = 1" => $this->userId, 
                     "reportStage = ?" => "finished" 
             ), array (

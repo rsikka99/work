@@ -1,11 +1,12 @@
 <?php
-class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
+class Proposalgen_Model_Mapper_Rms_Upload extends My_Model_Mapper_Abstract
 {
     /*
      * Column Definitions
      */
     public $col_id = 'id';
-    public $col_rmsUploadId = 'rmsUploadId';
+    public $col_clientId = 'clientId';
+    public $col_rmsProviderId = 'rmsProviderId';
 
     /**
      * The default db table class to use
@@ -13,12 +14,12 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Proposalgen_Model_DbTable_Rms_Excluded_Row';
+    protected $_defaultDbTable = 'Proposalgen_Model_DbTable_Rms_Upload';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Proposalgen_Model_Mapper_Rms_Excluded_Row
+     * @return Proposalgen_Model_Mapper_Rms_Upload
      */
     public static function getInstance ()
     {
@@ -26,10 +27,10 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves an instance of Proposalgen_Model_Rms_Excluded_Row to the database.
+     * Saves an instance of Proposalgen_Model_Rms_Upload to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Proposalgen_Model_Rms_Excluded_Row
+     * @param $object Proposalgen_Model_Rms_Upload
      *                The object to insert
      *
      * @return int The primary key of the new row
@@ -54,10 +55,10 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves (updates) an instance of Proposalgen_Model_Rms_Excluded_Row to the database.
+     * Saves (updates) an instance of Proposalgen_Model_Rms_Upload to the database.
      *
-     * @param $object     Proposalgen_Model_Rms_Excluded_Row
-     *                    The Rms_Excluded_Row model to save to the database
+     * @param $object     Proposalgen_Model_Rms_Upload
+     *                    The Rms_Upload model to save to the database
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
      *
@@ -87,14 +88,14 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
      * Deletes rows from the database.
      *
      * @param $object mixed
-     *                This can either be an instance of Proposalgen_Model_Rms_Excluded_Row or the
+     *                This can either be an instance of Proposalgen_Model_Rms_Upload or the
      *                primary key to delete
      *
-     * @return mixed The number of rows deleted
+     * @return int The number of rows deleted
      */
     public function delete ($object)
     {
-        if ($object instanceof Proposalgen_Model_Rms_Excluded_Row)
+        if ($object instanceof Proposalgen_Model_Rms_Upload)
         {
             $whereClause = array(
                 "{$this->col_id} = ?" => $object->id
@@ -113,18 +114,18 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Finds a Rms_Excluded_Row based on it's primaryKey
+     * Finds a Rms_Upload based on it's primaryKey
      *
      * @param $id int
-     *            The id of the Rms_Excluded_Row to find
+     *            The id of the Rms_Upload to find
      *
-     * @return Proposalgen_Model_Rms_Excluded_Row
+     * @return Proposalgen_Model_Rms_Upload
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Proposalgen_Model_Rms_Excluded_Row)
+        if ($result instanceof Proposalgen_Model_Rms_Upload)
         {
             return $result;
         }
@@ -136,7 +137,7 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
             return false;
         }
         $row    = $result->current();
-        $object = new Proposalgen_Model_Rms_Excluded_Row($row->toArray());
+        $object = new Proposalgen_Model_Rms_Upload($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -145,7 +146,7 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches a Rms_Excluded_Row
+     * Fetches a Rms_Upload
      *
      * @param $where  string|array|Zend_Db_Table_Select
      *                OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -154,7 +155,7 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL An SQL OFFSET value.
      *
-     * @return Proposalgen_Model_Rms_Excluded_Row
+     * @return Proposalgen_Model_Rms_Upload
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -164,7 +165,7 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
             return false;
         }
 
-        $object = new Proposalgen_Model_Rms_Excluded_Row($row->toArray());
+        $object = new Proposalgen_Model_Rms_Upload($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -173,7 +174,7 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches all Rms_Excluded_Rows
+     * Fetches all Rms_Uploads
      *
      * @param $where  string|array|Zend_Db_Table_Select
      *                OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -184,7 +185,7 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL An SQL LIMIT offset.
      *
-     * @return Proposalgen_Model_Rms_Excluded_Row[]
+     * @return Proposalgen_Model_Rms_Upload[]
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -192,7 +193,7 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
         $entries   = array();
         foreach ($resultSet as $row)
         {
-            $object = new Proposalgen_Model_Rms_Excluded_Row($row->toArray());
+            $object = new Proposalgen_Model_Rms_Upload($row->toArray());
 
             // Save the object into the cache
             $this->saveItemToCache($object);
@@ -218,36 +219,12 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
     }
 
     /**
-     * @param Proposalgen_Model_Rms_Excluded_Row $object
+     * @param Proposalgen_Model_Rms_Upload $object
      *
      * @return int
      */
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->id;
-    }
-
-    /**
-     * Deletes all rows related to a report
-     *
-     * @param int $rmsUploadId The report id
-     *
-     * @return int The number of rows  deleted
-     */
-    public function deleteAllForRmsUpload ($rmsUploadId)
-    {
-        return $this->getDbTable()->delete(array("{$this->col_rmsUploadId} = ?" => $rmsUploadId));
-    }
-
-    /**
-     * Counts how many excluded rows we have for the report
-     *
-     * @param $rmsUploadId
-     *
-     * @return int
-     */
-    public function countRowsForRmsUpload ($rmsUploadId)
-    {
-        return $this->count(array("{$this->col_rmsUploadId} = ?" => $rmsUploadId));
     }
 }

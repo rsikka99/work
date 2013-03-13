@@ -137,14 +137,14 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      *
      * @var int
      */
-    public $targetMonochrome;
+    public $targetMonochromeCostPerPage;
 
     /**
      *  Target Color is the desired cost per page looking to obtain for the fleet
      *
      * @var int
      */
-    public $targetColor;
+    public $targetColorCostPerPage;
     /**
      * The assessment pricing configuration
      *
@@ -274,22 +274,22 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "id"                         => $this->id,
-            "actualPageCoverageMono"     => $this->actualPageCoverageMono,
-            "actualPageCoverageColor"    => $this->actualPageCoverageColor,
-            "serviceCostPerPage"         => $this->serviceCostPerPage,
-            "adminCostPerPage"           => $this->adminCostPerPage,
-            "assessmentReportMargin"     => $this->assessmentReportMargin,
-            "grossMarginReportMargin"    => $this->grossMarginReportMargin,
-            "monthlyLeasePayment"        => $this->monthlyLeasePayment,
-            "defaultPrinterCost"         => $this->defaultPrinterCost,
-            "leasedBwCostPerPage"        => $this->leasedBwCostPerPage,
-            "leasedColorCostPerPage"     => $this->leasedColorCostPerPage,
-            "mpsBwCostPerPage"           => $this->mpsBwCostPerPage,
-            "mpsColorCostPerPage"        => $this->mpsColorCostPerPage,
-            "kilowattsPerHour"           => $this->kilowattsPerHour,
-            "assessmentPricingConfigId"  => $this->assessmentPricingConfigId,
-            "grossMarginPricingConfigId" => $this->grossMarginPricingConfigId,
+            "id"                          => $this->id,
+            "actualPageCoverageMono"      => $this->actualPageCoverageMono,
+            "actualPageCoverageColor"     => $this->actualPageCoverageColor,
+            "serviceCostPerPage"          => $this->serviceCostPerPage,
+            "adminCostPerPage"            => $this->adminCostPerPage,
+            "assessmentReportMargin"      => $this->assessmentReportMargin,
+            "grossMarginReportMargin"     => $this->grossMarginReportMargin,
+            "monthlyLeasePayment"         => $this->monthlyLeasePayment,
+            "defaultPrinterCost"          => $this->defaultPrinterCost,
+            "leasedBwCostPerPage"         => $this->leasedBwCostPerPage,
+            "leasedColorCostPerPage"      => $this->leasedColorCostPerPage,
+            "mpsBwCostPerPage"            => $this->mpsBwCostPerPage,
+            "mpsColorCostPerPage"         => $this->mpsColorCostPerPage,
+            "kilowattsPerHour"            => $this->kilowattsPerHour,
+            "assessmentPricingConfigId"   => $this->assessmentPricingConfigId,
+            "grossMarginPricingConfigId"  => $this->grossMarginPricingConfigId,
         );
     }
 

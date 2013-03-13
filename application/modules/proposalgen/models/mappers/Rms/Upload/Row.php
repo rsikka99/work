@@ -5,6 +5,7 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
      * Column Definitions
      */
     public $col_id = 'id';
+    public $col_userId = 'userId';
 
     /**
      * The default db table class to use
@@ -13,6 +14,14 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
      *
      */
     protected $_defaultDbTable = 'Proposalgen_Model_DbTable_Rms_Upload_Row';
+
+
+    /**
+     * An array of cached master devices that have been created from upload rows
+     *
+     * @var Proposalgen_Model_MasterDevice[]
+     */
+    protected $_convertedMasterDeviceCache = array();
 
     /**
      * Gets an instance of the mapper
@@ -230,11 +239,11 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
     /**
      * Deletes all rows related to a report
      *
-     * @param int $reportId The report id
+     * @param int $rmsUploadId The report id
      *
      * @return int The number of rows  deleted
      */
-    public function deleteAllForReport ($reportId)
+    public function deleteAllForRmsUpload ($rmsUploadId)
     {
         $deviceInstanceMapper    = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
         $rmsUploadRowTableName   = $this->getTableName();
@@ -243,9 +252,9 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
         $sql   = "
             DELETE {$rmsUploadRowTableName} FROM {$rmsUploadRowTableName}
             INNER JOIN {$deviceInstanceTableName} ON {$deviceInstanceTableName}.{$deviceInstanceMapper->col_rmsUploadRowId} = {$rmsUploadRowTableName}.{$this->col_id}
-            WHERE {$deviceInstanceTableName}.{$deviceInstanceMapper->col_reportId} = ?;
+            WHERE {$deviceInstanceTableName}.{$deviceInstanceMapper->col_rmsUploadId} = ?;
         ";
-        $query = $this->getDbTable()->getAdapter()->query($sql, $reportId);
+        $query = $this->getDbTable()->getAdapter()->query($sql, $rmsUploadId);
 
         return $query->execute();
     }
@@ -260,38 +269,42 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
      */
     public function convertUploadRowToMasterDevice ($rmsUploadRow)
     {
-        $masterDevice = false;
-        if ($rmsUploadRow->hasCompleteInformation)
+        if (!array_key_exists($rmsUploadRow->id, $this->_convertedMasterDeviceCache))
         {
-            $masterDevice = new Proposalgen_Model_MasterDevice();
-
-            $masterDevice->populate($rmsUploadRow->toArray());
-
-            // Unset the id for the master device to ensure that this device is a 'user mapped' master device
-            $masterDevice->id = null;
-
-            $toners = array();
-
-            $requiredTonerColorList = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($rmsUploadRow->tonerConfigId);
-
-            foreach ($requiredTonerColorList as $tonerColorName => $tonerColorId)
+            $masterDevice = false;
+            if ($rmsUploadRow->hasCompleteInformation)
             {
-                $toner = $this->createTonerFromRmsUploadRow($rmsUploadRow->{"oem{$tonerColorName}TonerSku"}, $rmsUploadRow->{"oem{$tonerColorName}TonerYield"}, $rmsUploadRow->{"oem{$tonerColorName}TonerCost"}, $tonerColorId);
-                if ($toner !== false)
-                {
-                    $toners[Proposalgen_Model_PartType::OEM][$tonerColorId][] = $toner;
-                }
+                $masterDevice = new Proposalgen_Model_MasterDevice();
 
-                $toner = $this->createTonerFromRmsUploadRow($rmsUploadRow->{"comp{$tonerColorName}TonerSku"}, $rmsUploadRow->{"comp{$tonerColorName}TonerYield"}, $rmsUploadRow->{"comp{$tonerColorName}TonerCost"}, $tonerColorId);
-                if ($toner !== false)
+                $masterDevice->populate($rmsUploadRow->toArray());
+
+                // Unset the id for the master device to ensure that this device is a 'user mapped' master device
+                $masterDevice->id = null;
+
+                $toners = array();
+
+                $requiredTonerColorList = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($rmsUploadRow->tonerConfigId);
+
+                foreach ($requiredTonerColorList as $tonerColorName => $tonerColorId)
                 {
-                    $toners[Proposalgen_Model_PartType::COMP][$tonerColorId][] = $toner;
+                    $toner = $this->createTonerFromRmsUploadRow($rmsUploadRow->{"oem{$tonerColorName}TonerSku"}, $rmsUploadRow->{"oem{$tonerColorName}TonerYield"}, $rmsUploadRow->{"oem{$tonerColorName}TonerCost"}, $tonerColorId);
+                    if ($toner !== false)
+                    {
+                        $toners[Proposalgen_Model_PartType::OEM][$tonerColorId][] = $toner;
+                    }
+
+                    $toner = $this->createTonerFromRmsUploadRow($rmsUploadRow->{"comp{$tonerColorName}TonerSku"}, $rmsUploadRow->{"comp{$tonerColorName}TonerYield"}, $rmsUploadRow->{"comp{$tonerColorName}TonerCost"}, $tonerColorId);
+                    if ($toner !== false)
+                    {
+                        $toners[Proposalgen_Model_PartType::COMP][$tonerColorId][] = $toner;
+                    }
                 }
+                $masterDevice->setToners($toners);
             }
-            $masterDevice->setToners($toners);
+            $this->_convertedMasterDeviceCache[$rmsUploadRow->id] = $masterDevice;
         }
 
-        return $masterDevice;
+        return $this->_convertedMasterDeviceCache[$rmsUploadRow->id];
     }
 
     /**
@@ -320,5 +333,24 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
 
 
         return $toner;
+    }
+
+
+    /**
+     * Fetches an array with the key as the full device name and the value as the id of the rms upload rows.
+     *
+     * @return array
+     */
+    public function fetchRmsUploadRowArray ()
+    {
+        $results       = array();
+        $rmsUploadRows = $this->fetchAll();
+        foreach ($rmsUploadRows as $rmsUploadRow)
+        {
+            $results[$rmsUploadRow->fullDeviceName] = $rmsUploadRow->id;
+        }
+
+        return $results;
+
     }
 }
