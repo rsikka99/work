@@ -42,18 +42,14 @@ class Admin_UserController extends Tangent_Controller_Action
         if ($request->isPost())
         {
             $values = $request->getPost();
-
             if (!isset($values ['cancel']))
             {
-
                 if ($form->isValid($values))
                 {
                     // Save to the database
                     try
                     {
                         $db->beginTransaction();
-
-
                         $mapper = new Application_Model_Mapper_User();
                         $user   = new Application_Model_User();
                         $user->populate($values);
@@ -96,15 +92,8 @@ class Admin_UserController extends Tangent_Controller_Action
                             // Reset the form after everything is saved successfully
                             $form->reset();
                         }
-
                         $db->commit();
-
-                        /*
-                         * Send Email
-                         */
-
-
-                    }
+}
                     catch (Zend_Db_Statement_Mysqli_Exception $e)
                     {
                         $db->rollBack();

@@ -87,6 +87,13 @@ class Application_Model_User extends My_Model_Abstract
     public $resetPasswordOnNextLogin = 0;
 
     /**
+     * The id that relates to the dealer id
+     *
+     * @var int
+     */
+    public $dealerId;
+
+    /**
      * @var Admin_Model_UserRole[]
      */
     protected $_userRoles;
@@ -109,60 +116,53 @@ class Application_Model_User extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-
         if (isset($params->id) && !is_null($params->id))
         {
             $this->id = $params->id;
         }
-
         if (isset($params->username) && !is_null($params->username))
         {
             $this->username = $params->username;
         }
-
         if (isset($params->password) && !is_null($params->password))
         {
             $this->password = $params->password;
         }
-
         if (isset($params->firstname) && !is_null($params->firstname))
         {
             $this->firstname = $params->firstname;
         }
-
         if (isset($params->lastname) && !is_null($params->lastname))
         {
             $this->lastname = $params->lastname;
         }
-
         if (isset($params->email) && !is_null($params->email))
         {
             $this->email = $params->email;
         }
-
         if (isset($params->frozenUntil) && !is_null($params->frozenUntil))
         {
             $this->frozenUntil = $params->frozenUntil;
         }
-
         if (isset($params->loginAttempts) && !is_null($params->loginAttempts))
         {
             $this->loginAttempts = $params->loginAttempts;
         }
-
         if (isset($params->locked) && !is_null($params->locked))
         {
             $this->locked = $params->locked;
         }
-
         if (isset($params->eulaAccepted) && !is_null($params->eulaAccepted))
         {
             $this->eulaAccepted = $params->eulaAccepted;
         }
-
         if (isset($params->resetPasswordOnNextLogin) && !is_null($params->resetPasswordOnNextLogin))
         {
             $this->resetPasswordOnNextLogin = $params->resetPasswordOnNextLogin;
+        }
+        if (isset($params->dealerId) && !is_null($params->dealerId))
+        {
+            $this->dealerId = $params->dealerId;
         }
     }
 
@@ -182,7 +182,8 @@ class Application_Model_User extends My_Model_Abstract
             'loginAttempts'            => $this->loginAttempts,
             'resetPasswordOnNextLogin' => $this->resetPasswordOnNextLogin,
             'eulaAccepted'             => $this->eulaAccepted,
-            'locked'                   => $this->locked
+            'locked'                   => $this->locked,
+            "dealerId"                 => $this->dealerId
         );
     }
 
@@ -203,7 +204,7 @@ class Application_Model_User extends My_Model_Abstract
     /**
      * Sets the users privileges
      *
-     * @param $userRoles Admin_Model_UserRole[]
+     * @param $userRoles  Admin_Model_UserRole[]
      *                    The users roles
      *
      * @return Application_Model_User
