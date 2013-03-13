@@ -2550,7 +2550,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->AnnualCostOfOutSourcing))
         {
             $this->AnnualCostOfOutSourcing = $this->report->getSurvey()->costOfLabor;
-            if (!$this->AnnualCostOfOutSourcing)
+            if ($this->AnnualCostOfOutSourcing === null)
             {
                 $this->AnnualCostOfOutSourcing = $this->getPurchasedDeviceCount() * 200;
             }

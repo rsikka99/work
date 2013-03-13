@@ -25,20 +25,20 @@ $proposal = $this->proposal;
 <div class="pheader">Step 3: Manage</div>
 <p>Ongoing management of your print environment enables you to focus on your core business, while we take care of print. By monitoring your print environment on an ongoing basis, we can help you decide if and when your managed print strategy needs to be updated to accommodate new needs.</p>
 
-<div class="pheader">Potential Savings with <?php echo $this->reportName; ?></div>
-<p><?php echo $this->companyName;?> can manage your existing printing devices that are not currently on a lease with another vendor. Note that while we have included all of your purchased equipment in the following calculations, not all of them may qualify for managed print services or just-in-time supplies fulfillment. Please refer to the <?php echo $this->reportName; ?> Your Solution document for a complete list of qualified devices.</p>
+<div class="pheader">Potential Savings with <?php echo $this->brandName; ?></div>
+<p><?php echo $this->companyName;?> can manage your existing printing devices that are not currently on a lease with another vendor. Note that while we have included all of your purchased equipment in the following calculations, not all of them may qualify for managed print services or just-in-time supplies fulfillment. Please refer to the <?php echo $this->brandName; ?> Your Solution document for a complete list of qualified devices.</p>
 <br />
 <table cellspacing="0" style="font-size: 10pt;">
     <tr>
-        <td style="width: 565px;" class="bold">Estimated Costs: Printing Devices Managed with <?php echo $this->reportName; ?>;</td>
+        <td style="width: 565px;" class="bold">Estimated Costs: Printing Devices Managed with <?php echo $this->brandName; ?>;</td>
         <td style="width: 80px;" class="right">&nbsp;</td>
     </tr>
     <tr>
-        <td><?php echo $this->reportName; ?> monochrome cost per page</td>
+        <td><?php echo $this->brandName; ?> monochrome cost per page</td>
         <td class="right">$<?php echo number_format($proposal->getMPSBlackAndWhiteCPP(), 5); ?></td>
     </tr>
     <tr>
-        <td><?php echo $this->reportName; ?> color cost per page</td>
+        <td><?php echo $this->brandName; ?> color cost per page</td>
         <td class="right">$<?php echo number_format($proposal->getMPSColorCPP(), 5); ?></td>
     </tr>
     <tr>
@@ -74,7 +74,7 @@ $proposal = $this->proposal;
         <td class="right">$<?php echo number_format($proposal->getAnnualCostOfHardwarePurchases());?></td>
     </tr>
     <tr>
-        <td class="bold topborder"><?php echo $this->reportName; ?> estimated annual cost of purchased devices</td>
+        <td class="bold topborder"><?php echo $this->brandName; ?> estimated annual cost of purchased devices</td>
         <td class="right bold topborder">$<?php echo number_format($proposal->getPrintIQTotalCost());?></td>
     </tr>
     <tr>
@@ -82,7 +82,7 @@ $proposal = $this->proposal;
         <td class="right bold topborder">$<?php echo number_format($proposal->getTotalPurchasedAnnualCost());?></td>
     </tr>
     <tr>
-        <td class="bold topborder">POTENTIAL ANNUAL SAVINGS USING <?php echo $this->reportName; ?></td>
+        <td class="bold topborder">POTENTIAL ANNUAL SAVINGS USING <?php echo $this->brandName; ?></td>
         <td class="right bold topborder">$<?php echo number_format($proposal->getPrintIQSavings());?></td>
     </tr>
 </table>

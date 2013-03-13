@@ -77,8 +77,8 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
 
         $formDataFromAnswers ["toner_cost_radio"]      = ($survey->costOfInkAndToner > 0) ? 'exact' : 'guess';
         $formDataFromAnswers ["toner_cost"]            = ($survey->costOfInkAndToner > 0) ? $survey->costOfInkAndToner : null;
-        $formDataFromAnswers ["labor_cost_radio"]      = ($survey->costOfLabor > 0) ? 'exact' : 'guess';
-        $formDataFromAnswers ["labor_cost"]            = ($survey->costOfLabor > 0) ? $survey->costOfLabor : null;
+        $formDataFromAnswers ["labor_cost_radio"]      = ($survey->costOfLabor !== null) ? 'exact' : 'guess';
+        $formDataFromAnswers ["labor_cost"]            = ($survey->costOfLabor !== null) ? $survey->costOfLabor : null;
         $formDataFromAnswers ["avg_purchase"]          = ($survey->costToExecuteSuppliesOrder > 0) ? $survey->costToExecuteSuppliesOrder : Proposalgen_Model_Assessment_Survey::DEFAULT_SUPPLIES_ORDER_COST;
         $formDataFromAnswers ["it_hourlyRate"]         = ($survey->averageItHourlyRate > 0) ? $survey->averageItHourlyRate : Proposalgen_Model_Assessment_Survey::DEFAULT_IT_HOURLY_RATE;
         $formDataFromAnswers ["itHoursRadio"]          = ($survey->hoursSpentOnIt > 0) ? 'exact' : 'guess';
@@ -131,8 +131,9 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
             {
                 if ($form->isValid($postData))
                 {
+                    $laborCost                             = $form->getValue('labor_cost');
                     $survey->costOfInkAndToner             = ($form->getValue('toner_cost')) ? : new Zend_Db_Expr('NULL');
-                    $survey->costOfLabor                   = ($form->getValue('labor_cost')) ? : new Zend_Db_Expr('NULL');
+                    $survey->costOfLabor                   = (empty($laborCost)) ? $laborCost : new Zend_Db_Expr('NULL');
                     $survey->costToExecuteSuppliesOrder    = $form->getValue('avg_purchase');
                     $survey->averageItHourlyRate           = $form->getValue('it_hourlyRate');
                     $survey->hoursSpentOnIt                = ($form->getValue('itHours')) ? : new Zend_Db_Expr('NULL');
