@@ -133,7 +133,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                 {
                     $laborCost                             = $form->getValue('labor_cost');
                     $survey->costOfInkAndToner             = ($form->getValue('toner_cost')) ? : new Zend_Db_Expr('NULL');
-                    $survey->costOfLabor                   = (!empty($laborCost)) ? $laborCost : new Zend_Db_Expr('NULL');
+                    $survey->costOfLabor                   = ($laborCost != NULL) ? $laborCost : new Zend_Db_Expr('NULL');
                     $survey->costToExecuteSuppliesOrder    = $form->getValue('avg_purchase');
                     $survey->averageItHourlyRate           = $form->getValue('it_hourlyRate');
                     $survey->hoursSpentOnIt                = ($form->getValue('itHours')) ? : new Zend_Db_Expr('NULL');
