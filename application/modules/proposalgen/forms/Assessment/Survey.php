@@ -178,9 +178,9 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
         $itHoursRadio = $this->createElement('radio', 'itHoursRadio');
         $itHoursRadio->addMultiOptions(array(
                                             'guess'                   => 'I don\'t know',
-                                            'I know the exact amount' => 'I know the exact amount'
+                                            'exact' => 'I know the exact amount'
                                        ))
-            ->setValue('I know the exact amount');
+            ->setValue('exact');
 
         $this->addElement($itHoursRadio);
 
@@ -192,7 +192,7 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
             ->setAttrib('class', 'span1')
             ->setDescription('hours')
             ->setAllowEmpty(false)
-            ->addValidator(new Custom_Validate_FieldDependsOnValue('itHoursRadio', 'I know the exact amount', array(
+            ->addValidator(new Custom_Validate_FieldDependsOnValue('itHoursRadio', 'exact', array(
                                                                                                                    new Zend_Validate_NotEmpty(),
                                                                                                                    new Zend_Validate_Float()
                                                                                                               )), true)

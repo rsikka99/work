@@ -81,7 +81,7 @@ $(document).ready(function ()
         $("#itHours").val('');
     });
 
-    $("#itHoursRadio-Iknowtheexactamount").click(function ()
+    $("#itHoursRadio-exact").click(function ()
     {
         $("#itHours").removeAttr('disabled');
     });
