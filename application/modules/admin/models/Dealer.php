@@ -32,6 +32,13 @@ class Admin_Model_Dealer extends My_Model_Abstract
      */
     public $dateCreated;
 
+    /**
+     * Gets a report setting object for the dealer.
+     *
+     * @var Proposalgen_Model_Report_Setting
+     */
+    protected $_reportSetting;
+
 
     /**
      * @param array $params An array of data to populate the model with
@@ -58,9 +65,9 @@ class Admin_Model_Dealer extends My_Model_Abstract
         {
             $this->dealerName = $params->dealerName;
         }
-        if (isset($params->id) && !is_null($params->id))
+        if (isset($params->dateCreated) && !is_null($params->dateCreated))
         {
-            $this->id = $params->dateCreated;
+            $this->dateCreated = $params->dateCreated;
         }
     }
 
@@ -77,4 +84,21 @@ class Admin_Model_Dealer extends My_Model_Abstract
             "dateCreated" => $this->dateCreated,
         );
     }
+
+    /**
+     * Gets the Proposalgen_Model_Report_Setting objet that relates to the dealer instance
+     *
+     * @return \Proposalgen_Model_Report_Setting
+     */
+    public function getReportSetting ()
+    {
+        if(!isset($this->_reportSetting))
+        {
+            // FIXME: Actually code this function
+            // $this->_reportSetting = Proposalgen_Model_Mapper_Report_Setting::getInstance()->findReportSettingByDealerId($this->id);
+        }
+        return $this->_reportSetting;
+    }
+
+
 }

@@ -54,7 +54,7 @@ class Quotegen_ClientController extends Tangent_Controller_Action
         
         $message = "Are you sure you want to completely delete {$client->companyName} including all quotes, assessments and proposals? <br/>This is an irreversible operation";
         $form = new Application_Form_Delete($message);
-        
+
         $request = $this->getRequest();
         if ($request->isPost())
         {

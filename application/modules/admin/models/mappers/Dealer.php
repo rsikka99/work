@@ -17,7 +17,7 @@ class Admin_Model_Mapper_Dealer extends My_Model_Mapper_Abstract
     /**
      * Gets an instance of the mapper
      *
-     * @return Admin_Model_Dealer
+     * @return Admin_Model_Mapper_Dealer
      */
     public static function getInstance ()
     {

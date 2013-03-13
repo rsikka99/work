@@ -182,6 +182,34 @@
                     <controller>dealer</controller>
                     <action>index</action>
                     <resource>admin__dealer__index</resource>
+                    <pages>
+                         <create>
+                            <label>Create Dealer</label>
+                            <module>admin</module>
+                            <controller>dealer</controller>
+                            <action>create</action>
+                            <resource>admin__dealer__create</resource>
+                            <icon>plus-sign</icon>
+                            <visible>0</visible>
+                        </create>
+                        <edit>
+                            <label>Edit Dealer</label>
+                            <module>admin</module>
+                            <controller>dealer</controller>
+                            <action>edit</action>
+                            <resource>admin__dealer__create</resource>
+                            <icon>pencil</icon>
+                            <visible>0</visible>
+                        </edit>
+                        <delete>
+                            <label>Delete Dealer</label>
+                            <module>admin</module>
+                            <controller>dealer</controller>
+                            <action>delete</action>
+                            <resource>admin__dealer__delete</resource>
+                            <visible>0</visible>
+                        </delete>
+                    </pages>
                 </DealerManagement>
             </pages>
         </sysadmin>
