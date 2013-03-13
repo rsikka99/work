@@ -1581,19 +1581,6 @@ CREATE  TABLE IF NOT EXISTS `user_password_reset_requests` (
     ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `dealers`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `dealers` (
-    `id` INT NOT NULL AUTO_INCREMENT ,
-    `dealerName` VARCHAR(255) NOT NULL ,
-    `userLicenses` INT NOT NULL ,
-    `reportSettingId` INT NOT NULL ,
-    `dateCreated` DATE NOT NULL ,
-    PRIMARY KEY (`id`) )
-    ENGINE = InnoDB;
-
-
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
