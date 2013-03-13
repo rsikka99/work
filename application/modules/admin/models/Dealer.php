@@ -33,11 +33,25 @@ class Admin_Model_Dealer extends My_Model_Abstract
     public $dateCreated;
 
     /**
+     * The id that relates to the quote setting object table.
+     *
+     * @var int
+     */
+    public $quoteSettingId;
+
+    /**
      * Gets a report setting object for the dealer.
      *
      * @var Proposalgen_Model_Report_Setting
      */
     protected $_reportSetting;
+
+    /**
+     * Gets a quote setting object for the dealer object.
+     *
+     * @var Quotegen_Model_QuoteSetting
+     */
+    protected $_quoteSetting;
 
 
     /**
@@ -69,6 +83,10 @@ class Admin_Model_Dealer extends My_Model_Abstract
         {
             $this->dateCreated = $params->dateCreated;
         }
+        if (isset($params->quoteSettingId) && !is_null($params->quoteSettingId))
+        {
+            $this->quoteSettingId = $params->quoteSettingId;
+        }
     }
 
     /**
@@ -77,11 +95,12 @@ class Admin_Model_Dealer extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "id" => $this->id,
+            "id"              => $this->id,
             "reportSettingId" => $this->reportSettingId,
-            "userLicenses" => $this->userLicenses,
-            "dealerName" => $this->dealerName,
-            "dateCreated" => $this->dateCreated,
+            "userLicenses"    => $this->userLicenses,
+            "dealerName"      => $this->dealerName,
+            "dateCreated"     => $this->dateCreated,
+            "quoteSettingId"  => $this->quoteSettingId,
         );
     }
 
@@ -92,12 +111,28 @@ class Admin_Model_Dealer extends My_Model_Abstract
      */
     public function getReportSetting ()
     {
-        if(!isset($this->_reportSetting))
+        if (!isset($this->_reportSetting))
         {
             // FIXME: Actually code this function
             // $this->_reportSetting = Proposalgen_Model_Mapper_Report_Setting::getInstance()->findReportSettingByDealerId($this->id);
         }
+
         return $this->_reportSetting;
+    }
+
+    /**
+     * Getter for _quoteSetting
+     *
+     * @return \Quotegen_Model_QuoteSetting
+     */
+    public function getQuoteSetting ()
+    {
+        if (!isset($this->_quoteSetting))
+        {
+            // FIXME: Actually code this function
+        }
+
+        return $this->_quoteSetting;
     }
 
 

@@ -265,20 +265,7 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
             $this->grossMarginPricingConfigId = $params->grossMarginPricingConfigId;
         }
 
-        if (isset($params->costThreshold) && !is_null($params->costThreshold))
-        {
-            $this->costThreshold = $params->costThreshold;
-        }
 
-        if (isset($params->targetMonochrome) && !is_null($params->targetMonochrome))
-        {
-            $this->targetMonochrome = $params->targetMonochrome;
-        }
-
-        if (isset($params->targetColor) && !is_null($params->targetColor))
-        {
-            $this->targetColor = $params->targetColor;
-        }
     }
 
     /**
@@ -303,9 +290,6 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
             "kilowattsPerHour"           => $this->kilowattsPerHour,
             "assessmentPricingConfigId"  => $this->assessmentPricingConfigId,
             "grossMarginPricingConfigId" => $this->grossMarginPricingConfigId,
-            "costThreshold"              => $this->costThreshold,
-            "targetMonochrome"           => $this->targetMonochrome,
-            "targetColor"                => $this->targetColor,
         );
     }
 

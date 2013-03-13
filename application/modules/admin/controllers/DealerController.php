@@ -18,7 +18,64 @@ class Admin_DealerController extends Tangent_Controller_Action
 
     public function editAction ()
     {
+        $dealerId = $this->_getParam('id');
 
+        if (!$dealerId)
+        {
+            $this->_helper->flashMessenger(array('warning' => 'Error select dealer to delete.'));
+            $this->redirect('index');
+        }
+
+    }
+
+    public function createAction ()
+    {
+
+        $form = new Admin_Form_Dealer();
+
+        $request = $this->getRequest();
+        if ($request->isPost())
+        {
+            $values = $request->getPost();
+            if ($form->isValid($values))
+            {
+                // Create a new dealer object
+                $dealer = new Admin_Model_Dealer();
+                $dealer->populate($values);
+                $dealer->dateCreated = date("Y-m-d");
+
+                // Create a new report setting based on the system default report setting
+                // Then assigned the dealer object the new id.
+                $reportSetting = new Proposalgen_Model_Report_Setting();
+                $reportSetting->ApplyOverride(Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchSystemReportSetting());
+                $dealer->reportSettingId = Proposalgen_Model_Mapper_Report_Setting::getInstance()->insert($reportSetting);
+
+                // Create a new quote setting based on the system default quote setting
+                // Then assigned the dealer quote setting id object it's new id
+                $quoteSetting = new Quotegen_Model_QuoteSetting();
+                $quoteSetting->applyOverride(Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting());
+                $dealer->quoteSettingId = Quotegen_Model_Mapper_QuoteSetting::getInstance()->insert($quoteSetting);
+
+                // Save the dealer with the id to the database
+                $dealerId = Admin_Model_Mapper_Dealer::getInstance()->insert($dealer);
+
+                if ($dealerId)
+                {
+                    $this->_helper->flashMessenger(array('success' => "Dealer {$dealer->dealerName} successfully created"));
+                    $this->redirector('index');
+                }
+                else
+                {
+                    $this->_helper->flashMessenger(array('danger' => "Error saving dealer to database.  If problem persists please contact your system administrator."));
+                }
+            }
+            else
+            {
+                $this->_helper->flashMessenger(array('danger' => 'Errors on form, please correct and try again'));
+            }
+        }
+
+        $this->view->form = $form;
     }
 
     public function deleteAction ()
@@ -37,11 +94,13 @@ class Admin_DealerController extends Tangent_Controller_Action
             {
                 if (!isset($values ['cancel']))
                 {
-                    // Delete the dealer
-                    $rowsAffected = Admin_Model_Mapper_Dealer::getInstance()->delete($dealer);
+                    // Delete the dealer and the related report setting
+                    $reportSettingDeleted = Proposalgen_Model_Mapper_Report_Setting::getInstance()->delete($dealer->reportSettingId);
+                    $quoteSettingDeleted = Quotegen_Model_Mapper_QuoteSetting::getInstance()->delete($dealer->quoteSettingId);
+                    $dealerDeleted  = Admin_Model_Mapper_Dealer::getInstance()->delete($dealer);
 
                     // If we have successfully deleted it then redirect and display message
-                    if ($rowsAffected > 0)
+                    if ($dealerDeleted > 0 && $reportSettingDeleted > 0 && $quoteSettingDeleted > 0)
                     {
                         $this->_helper->flashMessenger(array("success" => "Successfully delete {$dealer->dealerName}."));
                     }
