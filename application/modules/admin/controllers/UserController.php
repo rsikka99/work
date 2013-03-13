@@ -54,6 +54,7 @@ class Admin_UserController extends Tangent_Controller_Action
                         $user   = new Application_Model_User();
                         $user->populate($values);
                         $user->password = Application_Model_User::cryptPassword($user->password);
+                        $user->dealerId = 2;
                         $userId         = $mapper->insert($user);
                         // Save changes to the user roles
                         if (isset($values ["userRoles"]))
