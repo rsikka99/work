@@ -507,7 +507,6 @@ CREATE  TABLE IF NOT EXISTS `pgen_replacement_devices` (
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `assessments` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
-    `userId` INT(11) NOT NULL ,
     `clientId` INT NOT NULL ,
     `rmsUploadId` INT(11) NULL ,
     `userPricingOverride` TINYINT(4) NULL DEFAULT '0' ,
@@ -517,14 +516,8 @@ CREATE  TABLE IF NOT EXISTS `assessments` (
     `reportDate` DATETIME NULL DEFAULT NULL ,
     `devicesModified` TINYINT(4) NULL DEFAULT '0' ,
     PRIMARY KEY (`id`) ,
-    INDEX `user_id` (`userId` ASC) ,
     INDEX `proposalgenerator_reports_ibfk_3_idx` (`clientId` ASC) ,
     INDEX `assessments_ibfk_3_idx` (`rmsUploadId` ASC) ,
-    CONSTRAINT `assessments_ibfk_1`
-    FOREIGN KEY (`userId` )
-    REFERENCES `users` (`id` )
-        ON DELETE RESTRICT
-        ON UPDATE RESTRICT,
     CONSTRAINT `assessments_ibfk_2`
     FOREIGN KEY (`clientId` )
     REFERENCES `clients` (`id` )
@@ -1006,7 +999,6 @@ CREATE  TABLE IF NOT EXISTS `qgen_quotes` (
     `dateCreated` DATETIME NOT NULL ,
     `dateModified` DATETIME NOT NULL ,
     `quoteDate` DATETIME NOT NULL ,
-    `userId` INT(11) NOT NULL ,
     `clientDisplayName` VARCHAR(45) NULL DEFAULT NULL ,
     `leaseRate` DOUBLE NULL ,
     `leaseTerm` INT(11) NULL ,
@@ -1022,18 +1014,12 @@ CREATE  TABLE IF NOT EXISTS `qgen_quotes` (
     `colorOverageMargin` DOUBLE NOT NULL ,
     PRIMARY KEY (`id`) ,
     INDEX `clientId` (`clientId` ASC) ,
-    INDEX `quotegen_quotes_ibfk_2_idx` (`userId` ASC) ,
     INDEX `quotegen_quotes_ibfk_3_idx` (`pricingConfigId` ASC) ,
     CONSTRAINT `quotegen_quotes_ibfk_1`
     FOREIGN KEY (`clientId` )
     REFERENCES `clients` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `quotegen_quotes_ibfk_2`
-    FOREIGN KEY (`userId` )
-    REFERENCES `users` (`id` )
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION,
     CONSTRAINT `quotegen_quotes_ibfk_3`
     FOREIGN KEY (`pricingConfigId` )
     REFERENCES `pgen_pricing_configs` (`id` )

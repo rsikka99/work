@@ -6,10 +6,6 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
      */
     public $id;
 
-    /**
-     * @var int
-     */
-    public $userId;
 
     /**
      * @var int
@@ -68,11 +64,6 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
     protected $_reportSteps;
 
     /**
-     * @var Application_Model_User
-     */
-    protected $_user;
-
-    /**
      * @var Quotegen_Model_Client
      */
     protected $_client;
@@ -100,11 +91,6 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
         if (isset($params->id) && !is_null($params->id))
         {
             $this->id = $params->id;
-        }
-
-        if (isset($params->userId) && !is_null($params->userId))
-        {
-            $this->userId = $params->userId;
         }
 
         if (isset($params->clientId) && !is_null($params->clientId))
@@ -156,7 +142,6 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
     {
         return array(
             "id"                  => $this->id,
-            "userId"              => $this->userId,
             "clientId"            => $this->clientId,
             "rmsUploadId"         => $this->rmsUploadId,
             "userPricingOverride" => $this->userPricingOverride,
@@ -229,30 +214,6 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
         return $this;
     }
 
-    /**
-     * Getter for _user
-     *
-     * @return \Application_Model_User
-     */
-    public function getUser ()
-    {
-        if (!isset($this->_user) && $this->userId > 0)
-        {
-            $this->_user = Application_Model_Mapper_User::getInstance()->find($this->userId);
-        }
-
-        return $this->_user;
-    }
-
-    /**
-     * Setter for _user
-     *
-     * @param \Application_Model_User $user
-     */
-    public function setUser ($user)
-    {
-        $this->_user = $user;
-    }
 
     /**
      * Gets the client

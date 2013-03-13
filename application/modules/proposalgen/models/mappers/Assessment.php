@@ -5,7 +5,6 @@ class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
      * Column name definitions. Define all columns up here and use them down below.
      */
     public $col_id = 'id';
-    public $col_userId = 'userId';
     public $col_clientId = 'clientId';
     public $col_rmsUploadId = 'rmsUploadId';
     public $col_dateCreated = 'dateCreated';
@@ -211,51 +210,6 @@ class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches all assessments for a given user regardless of the report stage
-     *
-     * @param int $userId
-     *
-     * @return Proposalgen_Model_Assessment[]
-     */
-    public function fetchAllAssessmentsForUser ($userId)
-    {
-        return $this->fetchAll(array(
-                                    "{$this->col_userId} = ?" => $userId
-                               ));
-    }
-
-    /**
-     * Fetches all finished assessments for a given user
-     *
-     * @param int $userId
-     *
-     * @return Proposalgen_Model_Assessment[]
-     */
-    public function fetchAllFinishedAssessmentsForUser ($userId)
-    {
-        return $this->fetchAll(array(
-                                    "{$this->col_userId} = ?"      => $userId,
-                                    "{$this->col_stepName} = ?" => Proposalgen_Model_Assessment_Step::STEP_FINISHED
-                               ));
-    }
-
-    /**
-     * Fetches all unfinished assessments for a given user
-     *
-     * @param int $userId
-     *
-     * @return Proposalgen_Model_Assessment[]
-     */
-    public function fetchAllUnfinishedAssessmentsForUser ($userId)
-    {
-        return $this->fetchAll(array(
-                                    "{$this->col_userId} = ?"       => $userId,
-                                    "{$this->col_stepName} <> ?" => Proposalgen_Model_Assessment_Step::STEP_FINISHED
-                               ));
-    }
-
-
-    /**
      * Fetches all unfinished assessments for a given client
      *
      * @param int $clientId
@@ -265,7 +219,7 @@ class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
     public function fetchAllUnfinishedAssessmentsForClient ($clientId)
     {
         return $this->fetchAll(array(
-                                    "{$this->col_userId} = ?"       => $clientId,
+                                    "{$this->col_clientId} = ?"       => $clientId,
                                     "{$this->col_stepName} <> ?" => Proposalgen_Model_Assessment_Step::STEP_FINISHED
                                ));
     }
@@ -280,7 +234,7 @@ class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
     public function fetchAllFinishedAssessmentsForClient ($clientId)
     {
         return $this->fetchAll(array(
-                                    "{$this->col_userId} = ?"      => $clientId,
+                                    "{$this->col_clientId} = ?"      => $clientId,
                                     "{$this->col_stepName} = ?" => Proposalgen_Model_Assessment_Step::STEP_FINISHED
                                ));
     }
