@@ -111,8 +111,8 @@ CREATE  TABLE IF NOT EXISTS `pgen_reports` (
   CONSTRAINT `proposalgenerator_reports_ibfk_1`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `proposalgenerator_reports_ibfk_3`
     FOREIGN KEY (`clientId` )
     REFERENCES `clients` (`id` )
@@ -554,8 +554,8 @@ CREATE  TABLE IF NOT EXISTS `pgen_report_report_settings` (
   CONSTRAINT `proposalgenerator_report_report_settings_ibfk_1`
     FOREIGN KEY (`reportId` )
     REFERENCES `pgen_reports` (`id` )
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `proposalgenerator_report_report_settings_ibfk_2`
     FOREIGN KEY (`reportSettingId` )
     REFERENCES `pgen_report_settings` (`id` )
@@ -1455,6 +1455,26 @@ CREATE  TABLE IF NOT EXISTS `assessment_surveys` (
   CONSTRAINT `assessment_surveys_ibfk_1`
     FOREIGN KEY (`reportId` )
     REFERENCES `pgen_reports` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `user_password_reset_requests`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `user_password_reset_requests` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `dateRequested` DATETIME NOT NULL ,
+  `resetToken` VARCHAR(255) NOT NULL ,
+  `ipAddress` VARCHAR(255) NOT NULL ,
+  `resetVerified` TINYINT(1) NOT NULL ,
+  `userId` INT NOT NULL ,
+  `resetUsed` TINYINT(1) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `user_password_reset_requests_ibfk1_idx` (`userId` ASC) ,
+  CONSTRAINT `user_password_reset_requests_ibfk1`
+    FOREIGN KEY (`userId` )
+    REFERENCES `users` (`id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;

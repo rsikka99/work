@@ -329,14 +329,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->LeasedDevices))
         {
-            $this->LeasedDevices = array();
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
-            {
-                if ($deviceInstance->getMasterDevice()->isLeased)
-                {
-                    $this->LeasedDevices [] = $deviceInstance;
-                }
-            }
+            $this->LeasedDevices = $this->getDevices()->leasedDeviceInstances;
         }
 
         return $this->LeasedDevices;
@@ -365,14 +358,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->PurchasedDevices))
         {
-            $this->PurchasedDevices = array();
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
-            {
-                if ($deviceInstance->getMasterDevice()->isLeased === 0)
-                {
-                    $this->PurchasedDevices [] = $deviceInstance;
-                }
-            }
+            $this->PurchasedDevices = $this->getDevices()->purchasedDeviceInstances;
         }
 
         return $this->PurchasedDevices;
@@ -558,7 +544,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->EstimatedAnnualCostOfLeaseMachines))
         {
-            $this->EstimatedAnnualCostOfLeaseMachines = $this->getCombinedAnnualLeasePayments() + ($this->getLeasedBlackAndWhiteCharge() * $this->getPageCounts()->Leased->BlackAndWhite->Yearly) + ($this->getPageCounts()->Leased->Color->Yearly * $this->getLeasedColorCharge());
+            $this->EstimatedAnnualCostOfLeaseMachines = $this->getCombinedAnnualLeasePayments() + ($this->getPageCounts()->Leased->BlackAndWhite->Yearly * $this->getLeasedBlackAndWhiteCharge()) + ($this->getPageCounts()->Leased->Color->Yearly * $this->getLeasedColorCharge());
         }
 
         return $this->EstimatedAnnualCostOfLeaseMachines;
@@ -2621,7 +2607,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->CostOfExecutingSuppliesOrders))
         {
-            $this->CostOfExecutingSuppliesOrders = $this->report->getSurvey()->costToExecuteSuppliesOrder * $this->report->getSurvey()->numberOfSupplyOrdersPerMonth;
+            $this->CostOfExecutingSuppliesOrders = $this->report->getSurvey()->costToExecuteSuppliesOrder * $this->report->getSurvey()->numberOfSupplyOrdersPerMonth * 12;
         }
 
         return $this->CostOfExecutingSuppliesOrders;
@@ -2648,7 +2634,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         if (!isset($this->AnnualCostOfOutSourcing))
         {
             $this->AnnualCostOfOutSourcing = $this->report->getSurvey()->costOfLabor;
-            if (!$this->AnnualCostOfOutSourcing)
+            if ($this->AnnualCostOfOutSourcing === null)
             {
                 $this->AnnualCostOfOutSourcing = $this->getPurchasedDeviceCount() * 200;
             }

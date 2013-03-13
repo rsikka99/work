@@ -824,7 +824,10 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         if (!isset($this->_usage))
         {
             // Calculate device usage by dividing it's current monthly volume by its maximum
-            $this->_usage = $this->getAverageMonthlyPageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume();
+            if ($this->getMasterDevice()->getMaximumMonthlyPageVolume() > 0)
+            {
+                $this->_usage = $this->getAverageMonthlyPageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume();
+            }
         }
 
         return $this->_usage;
@@ -840,7 +843,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             // Calculate device life usage by dividing it's current life count
             // by it's estimated max life page count (maximum monthly page
             // volume * 36 months)
-            $this->_lifeUsage = $this->getLifePageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume() * 36;
+            $maximumLifeCount = $this->getMasterDevice()->getMaximumMonthlyPageVolume() * 36;
+            if ($maximumLifeCount > 0)
+            {
+                $this->_lifeUsage = $this->getLifePageCount() / $maximumLifeCount;
+            }
         }
 
         return $this->_lifeUsage;

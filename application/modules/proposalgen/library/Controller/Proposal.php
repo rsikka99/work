@@ -69,8 +69,23 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
     public function init ()
     {
         $this->_mpsSession = new Zend_Session_Namespace('mps-tools');
-        $this->_clientId   = (int)$this->_mpsSession->selectedClientId;
 
+        if (isset($this->_mpsSession->selectedClientId))
+        {
+            $client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_mpsSession->selectedClientId);
+            if ($client)
+            {
+                $this->_clientId = (int)$this->_mpsSession->selectedClientId;
+            }
+            else
+            {
+                $this->_helper->flashMessenger(array(
+                                                    "error" => "A client is not selected."
+                                               ));
+                $this->_redirect('/');
+            }
+
+        }
 
         $this->_reportSession    = new Zend_Session_Namespace('proposalgenerator_report');
         $this->_reportId         = (int)$this->_reportSession->reportId;
@@ -122,7 +137,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_printingdevicelist/index')
             ),
-            "Toners"      => (object)array(
+            "Toners"             => (object)array(
                 "pagetitle" => "JIT Supply and Toner SKU Report",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_toners/index')
@@ -137,7 +152,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_optimization_customer/index')
             ),
-            "HealthCheck"      => (object)array(
+            "HealthCheck"        => (object)array(
                 "pagetitle" => "Health Check",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_healthcheck/index')

@@ -36,8 +36,12 @@ class Default_IndexController extends Tangent_Controller_Action
 
         if (isset($this->_mpsSession->selectedClientId))
         {
-            $this->_selectedClientId      = $this->_mpsSession->selectedClientId;
-            $this->view->selectedClientId = $this->_selectedClientId;
+            $client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_mpsSession->selectedClientId);
+            if ($client)
+            {
+                $this->_selectedClientId      = $this->_mpsSession->selectedClientId;
+                $this->view->selectedClientId = $this->_selectedClientId;
+            }
         }
     }
 
@@ -275,8 +279,8 @@ class Default_IndexController extends Tangent_Controller_Action
                                                ));
                 // Redirect with client id so that the client is preselected
                 $this->redirector('index', null, null, array(
-                                                                     'clientId' => $clientId
-                                                                ));
+                                                            'clientId' => $clientId
+                                                       ));
             }
             else
             {
