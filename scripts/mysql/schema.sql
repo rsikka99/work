@@ -1331,11 +1331,11 @@ CREATE  TABLE IF NOT EXISTS `contacts` (
     `clientId` INT NOT NULL ,
     `firstName` VARCHAR(255) NOT NULL ,
     `lastName` VARCHAR(255) NOT NULL ,
-    `countryCode` SMALLINT NULL ,
-    `areaCode` SMALLINT NULL ,
-    `exchangeCode` SMALLINT NULL ,
-    `number` SMALLINT NULL ,
-    `extension` SMALLINT NULL ,
+    `countryCode` CHAR(4) NULL ,
+    `areaCode` CHAR(3) NULL ,
+    `exchangeCode` CHAR(3) NULL ,
+    `number` CHAR(4) NULL ,
+    `extension` VARCHAR(255) NULL ,
     PRIMARY KEY (`id`) ,
     INDEX `contacts_ibfk_1_idx` (`clientId` ASC) ,
     CONSTRAINT `contacts_ibfk_1`
@@ -1573,6 +1573,28 @@ CREATE  TABLE IF NOT EXISTS `health_checks` (
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `user_password_reset_requests`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `user_password_reset_requests` (
+    `id` INT NOT NULL AUTO_INCREMENT ,
+    `dateRequested` DATETIME NOT NULL ,
+    `resetToken` VARCHAR(255) NOT NULL ,
+    `ipAddress` VARCHAR(255) NOT NULL ,
+    `resetVerified` TINYINT(1) NOT NULL ,
+    `userId` INT NOT NULL ,
+    `resetUsed` TINYINT(1) NOT NULL ,
+    PRIMARY KEY (`id`) ,
+    INDEX `user_password_reset_requests_ibfk1_idx` (`userId` ASC) ,
+    CONSTRAINT `user_password_reset_requests_ibfk1`
+    FOREIGN KEY (`userId` )
+    REFERENCES `users` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE)
+    ENGINE = InnoDB;
+
+
 -- -----------------------------------------------------
 -- Table `dealers`
 -- -----------------------------------------------------
@@ -1584,6 +1606,7 @@ CREATE  TABLE IF NOT EXISTS `dealers` (
     `dateCreated` DATE NOT NULL ,
     PRIMARY KEY (`id`) )
     ENGINE = InnoDB;
+
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
