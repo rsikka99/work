@@ -10,36 +10,78 @@
             <resource>preferences__index__index</resource>
             <class>dropdown></class>
             <pages>
-                <myreportsettings>
+                <usersettings>
                     <label>My Report Settings</label>
                     <module>preferences</module>
                     <controller>proposal</controller>
-                    <action>index</action>
-                    <resource>preferences__proposal__index</resource>
-                </myreportsettings>
-
-                <defaultreportsettings>
+                    <action>user</action>
+                    <resource>preferences__proposal__user</resource>
+                    <class>dropdown></class>
+                    <pages>
+                        <userreportsettings>
+                            <label>Report</label>
+                            <module>preferences</module>
+                            <controller>proposal</controller>
+                            <action>user</action>
+                            <resource>preferences__proposal__user</resource>
+                        </userreportsettings>
+                        <userquotesettings>
+                            <label>Quote</label>
+                            <module>preferences</module>
+                            <controller>quote</controller>
+                            <action>user</action>
+                            <resource>preferences__quote__user</resource>
+                        </userquotesettings>
+                    </pages>
+                </usersettings>
+                <dealersettings>
+                    <label>Dealer Report Settings</label>
+                    <module>preferences</module>
+                    <controller>proposal</controller>
+                    <action>dealer</action>
+                    <resource>preferences__proposal__dealer</resource>
+                    <class>dropdown></class>
+                    <pages>
+                        <dealerreportsettings>
+                            <label>Report</label>
+                            <module>preferences</module>
+                            <controller>proposal</controller>
+                            <action>dealer</action>
+                            <resource>preferences__proposal__dealer</resource>
+                        </dealerreportsettings>
+                        <dealerquotesettings>
+                            <label>Quote</label>
+                            <module>preferences</module>
+                            <controller>quote</controller>
+                            <action>dealer</action>
+                            <resource>preferences__quote__dealer</resource>
+                        </dealerquotesettings>
+                    </pages>
+                </dealersettings>
+                <systemsettings>
                     <label>System Report Settings</label>
                     <module>preferences</module>
                     <controller>proposal</controller>
                     <action>system</action>
                     <resource>preferences__proposal__system</resource>
-                </defaultreportsettings>
-                <mypreferences>
-                    <label>My Quote Settings</label>
-                    <module>preferences</module>
-                    <controller>quote</controller>
-                    <action>index</action>
-                    <resource>preferences__quote__index</resource>
-                </mypreferences>
-                <configuration>
-                    <label>System Quote Settings</label>
-                    <module>preferences</module>
-                    <controller>quote</controller>
-                    <action>system</action>
-                    <resource>preferences__quote__system</resource>
-                </configuration>
-
+                    <class>dropdown></class>
+                    <pages>
+                        <systemreportsettings>
+                            <label>Report</label>
+                            <module>preferences</module>
+                            <controller>proposal</controller>
+                            <action>system</action>
+                            <resource>preferences__proposal__system</resource>
+                        </systemreportsettings>
+                        <systemquotesettings>
+                            <label>Quote</label>
+                            <module>preferences</module>
+                            <controller>quote</controller>
+                            <action>system</action>
+                            <resource>preferences__quote__system</resource>
+                        </systemquotesettings>
+                    </pages>
+                </systemsettings>
             </pages>
         </preferences>
     </nav>
