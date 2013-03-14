@@ -28,7 +28,8 @@ $proposal = $this->healthcheck->proposal;
             }
             ?>">
             <td><?php echo $deviceName?>
-                <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?></td>
+            <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
+            <br /> <?php echo $deviceInstance->ipAddress; ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
             <td class="right"><?php echo number_format(($deviceInstance->getAverageMonthlyPageCount() / $proposal->getPageCounts()->Total->Combined->Monthly) * 100, 2) ?>%</td>
@@ -63,7 +64,9 @@ $proposal = $this->healthcheck->proposal;
             {
                 echo ' shaded';
             }?>">
-            <td><?php echo $deviceName?><br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?></td>
+            <td><?php echo $deviceName?>
+                <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
+                <br /> <?php echo $deviceInstance->ipAddress; ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume(), 0) ?></td>
@@ -100,7 +103,8 @@ $proposal = $this->healthcheck->proposal;
                 echo ' shaded';
             }?>">
             <td><?php echo $deviceName?>
-                <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?></td>
+                <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
+                <br /> <?php echo $deviceInstance->ipAddress; ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume(), 0) ?></td>
@@ -135,7 +139,8 @@ $proposal = $this->healthcheck->proposal;
                 echo ' shaded';
             }?>">
             <td><?php echo $deviceName?>
-                <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?></td>
+                <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
+                <br /> <?php echo $deviceInstance->ipAddress; ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
             <td class="right"><?php echo number_format(($deviceInstance->getAverageMonthlyPageCount() / $proposal->getPageCounts()->Total->Combined->Monthly) * 100, 2) ?>%</td>
@@ -169,8 +174,9 @@ $proposal = $this->healthcheck->proposal;
                 {
                     echo ' shaded';
                 }?>">
-            <td><?php echo $deviceName?>
-                <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?></td>
+                <td><?php echo $deviceName?>
+                    <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
+                    <br /> <?php echo $deviceInstance->ipAddress; ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
             <td class="right"><?php echo number_format(($deviceInstance->getAverageMonthlyPageCount() / $proposal->getPageCounts()->Total->Combined->Monthly) * 100, 2) ?>%</td>
