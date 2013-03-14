@@ -195,6 +195,7 @@ class Preferences_ProposalController extends Tangent_Controller_Action
 
     public function dealerAction ()
     {
-
+        $form = new Preferences_Form_ReportSetting();
+        $this->view->form = $form;
     }
 }

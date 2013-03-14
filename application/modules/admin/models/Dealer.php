@@ -113,8 +113,7 @@ class Admin_Model_Dealer extends My_Model_Abstract
     {
         if (!isset($this->_reportSetting))
         {
-            // FIXME: Actually code this function
-            // $this->_reportSetting = Proposalgen_Model_Mapper_Report_Setting::getInstance()->findReportSettingByDealerId($this->id);
+             $this->_reportSetting = Proposalgen_Model_Mapper_Report_Setting::getInstance()->find($this->reportSettingId);
         }
 
         return $this->_reportSetting;

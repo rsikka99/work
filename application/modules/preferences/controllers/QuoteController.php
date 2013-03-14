@@ -6,61 +6,6 @@ class Preferences_QuoteController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
-        // Find client and pass form object
-        $form = new Preferences_Form_QuoteSetting(true);
-
-        $quoteSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
-
-        $form->populate($quoteSetting->toArray());
-
-        // Update record if post
-        $request = $this->getRequest();
-        if ($request->isPost())
-        {
-            $values = $request->getPost();
-            if (!isset($values ['cancel']))
-            {
-                try
-                {
-                    // Validate the form
-                    if ($form->isValid($values))
-                    {
-                        foreach ($values as &$value)
-                        {
-                            if (strlen($value) === 0)
-                            {
-                                $value = new Zend_Db_Expr('NULL');
-                            }
-                        }
-                        $quoteSetting->populate($values);
-                        Quotegen_Model_Mapper_QuoteSetting::getInstance()->save($quoteSetting);
-
-                        // Redirect user with message
-                        $this->_helper->flashMessenger(array(
-                                                            'success' => "Your quote settings were updated successfully."
-                                                       ));
-                    }
-                    else
-                    {
-                        $this->_helper->flashMessenger(array(
-                                                            'danger' => 'Please correct the errors below.'
-                                                       ));
-                    }
-                }
-                catch (Exception $e)
-                {
-                    $this->_helper->flashMessenger(array(
-                                                        'danger' => 'Error editing quote setting.  Please try again.'
-                                                   ));
-                }
-            }
-            else // Client hit cancel redirect
-            {
-                // User has cancelled. We could do a redirect here if we wanted.
-                $this->redirector('index');
-            }
-        }
-        $this->view->form = $form;
     }
 
     /**
@@ -133,5 +78,69 @@ class Preferences_QuoteController extends Tangent_Controller_Action
         }
 
         $this->view->form = $form;
+    }
+
+    public function userAction ()
+    {
+        // Find client and pass form object
+        $form = new Preferences_Form_QuoteSetting(true);
+
+        $quoteSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
+
+        $form->populate($quoteSetting->toArray());
+
+        // Update record if post
+        $request = $this->getRequest();
+        if ($request->isPost())
+        {
+            $values = $request->getPost();
+            if (!isset($values ['cancel']))
+            {
+                try
+                {
+                    // Validate the form
+                    if ($form->isValid($values))
+                    {
+                        foreach ($values as &$value)
+                        {
+                            if (strlen($value) === 0)
+                            {
+                                $value = new Zend_Db_Expr('NULL');
+                            }
+                        }
+                        $quoteSetting->populate($values);
+                        Quotegen_Model_Mapper_QuoteSetting::getInstance()->save($quoteSetting);
+
+                        // Redirect user with message
+                        $this->_helper->flashMessenger(array(
+                                                            'success' => "Your quote settings were updated successfully."
+                                                       ));
+                    }
+                    else
+                    {
+                        $this->_helper->flashMessenger(array(
+                                                            'danger' => 'Please correct the errors below.'
+                                                       ));
+                    }
+                }
+                catch (Exception $e)
+                {
+                    $this->_helper->flashMessenger(array(
+                                                        'danger' => 'Error editing quote setting.  Please try again.'
+                                                   ));
+                }
+            }
+            else // Client hit cancel redirect
+            {
+                // User has cancelled. We could do a redirect here if we wanted.
+                $this->redirector('index');
+            }
+        }
+        $this->view->form = $form;
+    }
+
+    public function dealerAction ()
+    {
+
     }
 }
