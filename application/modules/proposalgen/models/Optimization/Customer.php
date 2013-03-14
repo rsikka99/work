@@ -384,8 +384,7 @@ class Proposalgen_Model_Optimization_Customer extends Proposalgen_Model_Optimiza
             $barGraph->addColors(array("E21736"));
             $barGraph->addDataSet(array(0));
             $barGraph->addColors(array("FFFFFF"));
-            $barGraph->addDataSet(array(15));
-
+            $barGraph->addDataSet(array($targetUniqueness));
             $barGraph->addColors(array("0194D2"));
             $barGraph->addDataSet(array($targetUniqueness));
 
@@ -394,7 +393,7 @@ class Proposalgen_Model_Optimization_Customer extends Proposalgen_Model_Optimiza
                                       "Ideal Supply Uniqueness",
                                       "Your Supply Uniqueness"
                                  ));
-            $barGraph->addAxisRange(0, 0, $highest, 5);
+            $barGraph->addAxisRange(0, 0, $highest, 3);
             $barGraph->setDataRange(0, $highest);
             $barGraph->setBarScale(40, 5);
             $barGraph->setLegendPosition("t");
@@ -414,7 +413,6 @@ class Proposalgen_Model_Optimization_Customer extends Proposalgen_Model_Optimiza
             $diamond           = count($uniqueSupplyTypes) / $highest;
             $targetUniqueness  = $highest * 0.15;
 
-
             $barGraph = new gchart\gStackedBarChart(600, 160);
             $barGraph->setTitle("Unique Supply Types (Optimized)");
             $barGraph->setHorizontal(true);
@@ -424,15 +422,14 @@ class Proposalgen_Model_Optimization_Customer extends Proposalgen_Model_Optimiza
             $barGraph->addColors(array("E21736"));
             $barGraph->addDataSet(array(0));
             $barGraph->addColors(array("FFFFFF"));
-            $barGraph->addDataSet(array(15));
-
+            $barGraph->addDataSet(array($targetUniqueness));
             $barGraph->addColors(array("0194D2"));
             $barGraph->addDataSet(array($targetUniqueness));
             $barGraph->setLegend(array(
                                       "Ideal Supply Uniqueness",
                                       "Your Optimized Supply Uniqueness"
                                  ));
-            $barGraph->addAxisRange(0, 0, $highest, 5);
+            $barGraph->addAxisRange(0, 0, $highest, 3);
             $barGraph->setDataRange(0, $highest);
             $barGraph->setBarScale(40, 5);
             $barGraph->setLegendPosition("t");
