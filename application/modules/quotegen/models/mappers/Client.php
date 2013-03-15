@@ -250,9 +250,9 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
      * Fetches a list of clients for the dealer
      * @param int dealer id
      *
-     * @return Application_Model_User[]
+     * @return Application_Model_Client[]
      */
-    public function fetchUserListForDealer ($dealerId)
+    public function fetchClientListForDealer ($dealerId)
     {
         $users = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
         return $users;
