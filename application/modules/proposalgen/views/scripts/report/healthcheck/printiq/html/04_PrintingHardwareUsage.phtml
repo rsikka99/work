@@ -70,8 +70,7 @@ Ideally, you should have the minimum amount of printing hardware required to mee
             <td class="column2"><div class=" center"><?php echo ($deviceInstance->serialNumber) ?: 'Unknown'; ?></div></td>
             <td class="column3"><div class=" center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()) ?></div></td>
             <td class="column4"><div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume()) ?></div></td>
-            <td class="column5"><div class=" center"><?php echo number_format(($deviceInstance->getAverageMonthlyPageCount() / $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume())*100,1) ?>%</div></td>
-
+            <td class="column5"><div class=" center"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume(),1) ?>%</div></td>
         </tr>
         <?php endforeach; ?>
     </tbody>
