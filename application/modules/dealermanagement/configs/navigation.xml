@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <nav>
+        <dealermanagement>
+            <order>999992</order>
+            <label>Dealer Management</label>
+            <module>dealermanagement</module>
+            <controller>index</controller>
+            <action>index</action>
+            <resource>dealermanagement__index__index</resource>
+            <class>dropdown></class>
+            <pages>
+                <clients>
+                    <label>Clients</label>
+                    <module>dealermanagement</module>
+                    <controller>client</controller>
+                    <action>index</action>
+                    <resource>dealermanagement__client__index</resource>
+                    <pages>
+                        <create>
+                            <label>Create New</label>
+                            <module>dealermanagement</module>
+                            <controller>client</controller>
+                            <action>create</action>
+                            <visible>0</visible>
+                            <resource>dealermanagement__client__create</resource>
+                        </create>
+                        <editclient>
+                            <label>Edit Client</label>
+                            <module>dealermanagement</module>
+                            <controller>client</controller>
+                            <action>edit</action>
+                            <visible>0</visible>
+                            <resource>dealermanagement__client__edit</resource>
+                        </editclient>
+                        <viewclient>
+                            <label>View Client</label>
+                            <module>dealermanagement</module>
+                            <controller>client</controller>
+                            <action>view</action>
+                            <visible>0</visible>
+                            <resource>dealermanagement__client__view</resource>
+                        </viewclient>
+                        <deleteclient>
+                            <label>Delete Client</label>
+                            <module>dealermanagement</module>
+                            <controller>client</controller>
+                            <action>delete</action>
+                            <visible>0</visible>
+                            <resource>dealermanagement__client__delete</resource>
+                        </deleteclient>
+                    </pages>
+                </clients>
+                <leasing>
+                    <label>Leasing Rates</label>
+                    <module>dealermanagement</module>
+                    <controller>leasingschema</controller>
+                    <action>index</action>
+                    <resource>dealermanagement__leasingschema__index</resource>
+                    <pages>
+                        <viewschema>
+                            <label>View Provider</label>
+                            <class></class>
+                            <module>dealermanagement</module>
+                            <controller>leasingschema</controller>
+                            <action>index</action>
+                            <resource>dealermanagement__leasingschema__index</resource>
+                            <visible>0</visible>
+                        </viewschema>
+                        <addterm>
+                            <label>Add Term</label>
+                            <class></class>
+                            <module>dealermanagement</module>
+                            <controller>leasingschema</controller>
+                            <action>addterm</action>
+                            <resource>dealermanagement__leasingschema__addterm</resource>
+                            <visible>0</visible>
+                        </addterm>
+                        <editterm>
+                            <label>Edit Term</label>
+                            <class></class>
+                            <module>dealermanagement</module>
+                            <controller>leasingschema</controller>
+                            <action>editterm</action>
+                            <resource>dealermanagement__leasingschema__editterm</resource>
+                            <visible>0</visible>
+                        </editterm>
+                        <delterm>
+                            <label>Delete Term</label>
+                            <class></class>
+                            <module>dealermanagement</module>
+                            <controller>leasingschema</controller>
+                            <action>deleteterm</action>
+                            <resource>dealermanagement__leasingschema__deleteterm</resource>
+                            <visible>0</visible>
+                        </delterm>
+                        <addrange>
+                            <label>Add Range</label>
+                            <class></class>
+                            <module>dealermanagement</module>
+                            <controller>leasingschema</controller>
+                            <action>addrange</action>
+                            <resource>dealermanagement__leasingschema__addrange</resource>
+                            <visible>0</visible>
+                        </addrange>
+                        <editrange>
+                            <label>Edit Range</label>
+                            <class></class>
+                            <module>dealermanagement</module>
+                            <controller>leasingschema</controller>
+                            <action>editrange</action>
+                            <resource>dealermanagement__leasingschema__editrange</resource>
+                            <visible>0</visible>
+                        </editrange>
+                        <delrange>
+                            <label>Delete Range</label>
+                            <class></class>
+                            <module>dealermanagement</module>
+                            <controller>leasingschema</controller>
+                            <action>deleterange</action>
+                            <resource>dealermanagement__leasingschema__deleterange</resource>
+                            <visible>0</visible>
+                        </delrange>
+                        <resetschema>
+                            <label>Clear Provider</label>
+                            <class></class>
+                            <module>dealermanagement</module>
+                            <controller>leasingschema</controller>
+                            <action>resetschema</action>
+                            <resource>dealermanagement__leasingschema__resetschema</resource>
+                            <visible>0</visible>
+                        </resetschema>
+                    </pages>
+                </leasing>
+                <UserManagement>
+                    <label>Users</label>
+                    <module>dealermanagement</module>
+                    <controller>user</controller>
+                    <action>index</action>
+                    <resource>dealermanagement__user__index</resource>
+                    <pages>
+                        <create>
+                            <label>Create User</label>
+                            <module>dealermanagement</module>
+                            <controller>user</controller>
+                            <action>create</action>
+                            <resource>dealermanagement__user__create</resource>
+                            <icon>plus-sign</icon>
+                            <visible>0</visible>
+                        </create>
+                        <edit>
+                            <label>Edit User</label>
+                            <module>dealermanagement</module>
+                            <controller>user</controller>
+                            <action>edit</action>
+                            <resource>dealermanagement__user__create</resource>
+                            <icon>pencil</icon>
+                            <visible>0</visible>
+                        </edit>
+                        <delete>
+                            <label>Delete User</label>
+                            <module>dealermanagement</module>
+                            <controller>user</controller>
+                            <action>delete</action>
+                            <resource>dealermanagement__user__delete</resource>
+                            <visible>0</visible>
+                        </delete>
+                        <view>
+                            <label>View User</label>
+                            <module>dealermanagement</module>
+                            <controller>user</controller>
+                            <action>view</action>
+                            <resource>dealermanagement__user__view</resource>
+                            <visible>0</visible>
+                        </view>
+                    </pages>
+                </UserManagement>
+            </pages>
+        </dealermanagement>
+    </nav>
+</config>
